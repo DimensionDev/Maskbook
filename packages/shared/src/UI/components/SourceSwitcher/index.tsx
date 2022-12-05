@@ -6,7 +6,7 @@ import { useSharedI18N } from '@masknet/shared'
 import { FootnoteMenu, FootnoteMenuOption } from '../FootnoteMenu/index.js'
 import { SourceProviderIcon } from '../SourceProviderIcon/index.js'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{ isSingleDataProvider?: boolean }>()((theme, { isSingleDataProvider }) => {
     return {
         source: {
             justifyContent: 'space-between',
@@ -23,20 +23,23 @@ const useStyles = makeStyles()((theme) => {
             fontWeight: 700,
             color: theme.palette.mode === 'dark' ? '' : theme.palette.maskColor.publicMain,
         },
+        nameWrapper: {
+            flexDirection: isSingleDataProvider ? 'row-reverse' : 'row',
+        },
     }
 })
 
 export interface SourceSwitcherProps extends withClasses<'source' | 'sourceNote'> {
     sourceType?: SourceType
     sourceTypes?: SourceType[]
-    hideArrowDropDownIcon?: boolean
+    isSingleDataProvider?: boolean
     onSourceTypeChange?: (option: FootnoteMenuOption) => void
 }
 
 export function SourceSwitcher(props: SourceSwitcherProps) {
-    const { sourceType, sourceTypes = [], onSourceTypeChange, hideArrowDropDownIcon = false } = props
+    const { sourceType, sourceTypes = [], onSourceTypeChange, isSingleDataProvider = false } = props
     const t = useSharedI18N()
-    const { classes } = useStyles(undefined, { props })
+    const { classes } = useStyles({ isSingleDataProvider }, { props })
 
     return (
         <Box className={classes.source}>
@@ -50,14 +53,19 @@ export function SourceSwitcher(props: SourceSwitcherProps) {
                 <FootnoteMenu
                     options={sourceTypes.map((x) => ({
                         name: (
-                            <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
+                            <Stack
+                                display="inline-flex"
+                                flexDirection="row"
+                                alignItems="center"
+                                gap={0.5}
+                                className={classes.nameWrapper}>
                                 <SourceProviderIcon provider={x} size={20} />
                                 <Typography className={classes.sourceName}>{resolveSourceTypeName(x)}</Typography>
                             </Stack>
                         ),
                         value: x,
                     }))}
-                    hideArrowDropDownIcon={hideArrowDropDownIcon}
+                    isSingleDataProvider={isSingleDataProvider}
                     selectedIndex={typeof sourceType !== 'undefined' ? sourceTypes.indexOf(sourceType) : -1}
                     onChange={onSourceTypeChange}
                 />

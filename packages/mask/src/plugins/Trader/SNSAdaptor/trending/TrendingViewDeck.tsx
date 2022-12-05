@@ -119,18 +119,20 @@ const useStyles = makeStyles<{
             color: MaskColors.dark.maskColor.dark,
         },
         pluginDescriptorWrapper: {
-            padding: '0 12px 12px',
+            padding: '15px 17px 15px 13px',
             position: 'absolute',
             width: '100%',
             height: 48,
             left: 0,
-            bottom: 0,
+            bottom: 15,
             right: 0,
             display: 'flex',
             alignItems: 'center',
             background: theme.palette.mode === 'dark' ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.8)',
             backdropFilter: 'blur(5px)',
             boxSizing: 'border-box',
+            borderBottomRightRadius: '16px',
+            borderBottomLeftRadius: '16px',
             zIndex: 2,
         },
     }
@@ -146,6 +148,7 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     setDataProvider: (x: DataProvider) => void
     children?: React.ReactNode
     isPreciseSearch?: boolean
+    isNFTProjectPopper?: boolean
     showDataProviderIcon?: boolean
     isPopper?: boolean
     TrendingCardProps?: Partial<TrendingCardProps>
@@ -161,6 +164,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         stats,
         children,
         setDataProvider,
+        isNFTProjectPopper = false,
         showDataProviderIcon = false,
         TrendingCardProps,
         isPopper = true,
@@ -168,7 +172,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         isPreciseSearch = false,
     } = props
     const { coin, market } = trending
-
     const { t } = useI18N()
     const theme = useTheme()
     const { classes } = useStyles({ isPopper }, { props })
@@ -365,13 +368,13 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 </Paper>
                 {isPopper ? (
                     <section className={classes.pluginDescriptorWrapper}>
-                        <PluginDescriptor>
+                        <PluginDescriptor isNFTProjectPopper={isNFTProjectPopper}>
                             {showDataProviderIcon ? (
                                 <SourceSwitcher
                                     sourceType={dataProvider as unknown as SourceType}
                                     sourceTypes={dataProviders as unknown as SourceType[]}
                                     onSourceTypeChange={onDataProviderChange}
-                                    hideArrowDropDownIcon
+                                    isSingleDataProvider
                                 />
                             ) : null}
                         </PluginDescriptor>

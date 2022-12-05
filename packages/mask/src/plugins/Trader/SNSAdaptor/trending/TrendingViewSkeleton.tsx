@@ -18,17 +18,18 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface TrendingViewSkeletonProps extends withClasses<'content' | 'footer'> {
     TrendingCardProps?: Partial<TrendingCardProps>
+    isNFTProjectPopper?: boolean
 }
 
 export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
-    const { TrendingCardProps } = props
+    const { TrendingCardProps, isNFTProjectPopper } = props
     const { classes } = useStyles(undefined, { props })
     const { t } = useI18N()
 
     return (
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.root}>
-                <PluginDescriptor />
+                <PluginDescriptor isNFTProjectPopper />
                 <CardContent className={classes.content}>
                     <Stack height="100%" alignItems="center" justifyContent="center">
                         <LoadingBase />

@@ -7,13 +7,13 @@ import {
 } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
 interface StyleProps {
-    hideArrowDropDownIcon: boolean
+    isSingleDataProvider: boolean
 }
-const useStyles = makeStyles<StyleProps>()((theme, { hideArrowDropDownIcon }) => ({
+const useStyles = makeStyles<StyleProps>()((theme, { isSingleDataProvider }) => ({
     link: {
         display: 'inline-flex',
         alignItems: 'center',
-        cursor: hideArrowDropDownIcon ? 'default' : 'pointer',
+        cursor: isSingleDataProvider ? 'default' : 'pointer',
     },
     title: {
         display: 'inline-flex',
@@ -36,14 +36,14 @@ export interface FootnoteMenuProps {
     options: FootnoteMenuOption[]
     selectedIndex?: number
     children?: React.ReactNode
-    hideArrowDropDownIcon?: boolean
+    isSingleDataProvider?: boolean
     onChange?: (option: FootnoteMenuOption) => void
 }
 
 export function FootnoteMenu(props: FootnoteMenuProps) {
-    const { children, options, selectedIndex = -1, onChange, hideArrowDropDownIcon = false } = props
+    const { children, options, selectedIndex = -1, onChange, isSingleDataProvider = false } = props
 
-    const { classes, theme } = useStyles({ hideArrowDropDownIcon })
+    const { classes, theme } = useStyles({ isSingleDataProvider })
     const onSelect = (option: FootnoteMenuOption) => {
         onChange?.(option)
     }
@@ -92,10 +92,10 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
                 className={classes.link}
                 color="inherit"
                 underline="none"
-                onClick={hideArrowDropDownIcon ? undefined : openMenu}>
+                onClick={isSingleDataProvider ? undefined : openMenu}>
                 <Typography className={classes.title} variant="subtitle2">
                     {options[selectedIndex]?.name}
-                    {hideArrowDropDownIcon ? null : (
+                    {isSingleDataProvider ? null : (
                         <ArrowDropDownIcon style={{ fontSize: 16, cursor: 'pointer' }} className={classes.icon} />
                     )}
                 </Typography>

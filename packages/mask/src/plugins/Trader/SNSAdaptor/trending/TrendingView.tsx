@@ -308,6 +308,7 @@ export function TrendingView(props: TrendingViewProps) {
             <ThemeProvider theme={MaskLightTheme}>
                 <TrendingViewSkeleton
                     classes={{ footer: classes.footerSkeleton }}
+                    isNFTProjectPopper={isNFTProjectPopper}
                     TrendingCardProps={{ classes: { root: classes.root } }}
                 />
             </ThemeProvider>
@@ -315,7 +316,6 @@ export function TrendingView(props: TrendingViewProps) {
     // #endregion
 
     const { coin, tickers, market } = trending
-
     return (
         <TrendingViewDeck
             classes={{
@@ -325,6 +325,7 @@ export function TrendingView(props: TrendingViewProps) {
             }}
             keyword={name}
             setDataProvider={setDataProvider}
+            isNFTProjectPopper={isNFTProjectPopper}
             stats={stats}
             coins={coins}
             isPreciseSearch={!!searchedContractAddress}
