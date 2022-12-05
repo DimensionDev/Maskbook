@@ -12,11 +12,21 @@ import {
 } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
-import { makeStyles, MaskColors } from '@masknet/theme'
+import { makeStyles, MaskColors, MaskLightTheme } from '@masknet/theme'
 import type { TrendingAPI } from '@masknet/web3-providers'
 import { formatCurrency, TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { Avatar, Button, CardContent, IconButton, Paper, Stack, Typography, useTheme } from '@mui/material'
+import {
+    Avatar,
+    Button,
+    CardContent,
+    IconButton,
+    Paper,
+    Stack,
+    Typography,
+    useTheme,
+    ThemeProvider,
+} from '@mui/material'
 import stringify from 'json-stable-stringify'
 import { first, last } from 'lodash-es'
 import { useCallback, useMemo, useRef, useState } from 'react'
@@ -302,15 +312,17 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         {t('buy_now')}
                                     </Button>
                                 ) : null}
-                                <Button
-                                    color="primary"
-                                    className={classes.buyButton}
-                                    size="small"
-                                    endIcon={<Icons.LinkOut size={16} />}
-                                    variant="roundedContained"
-                                    onClick={() => window.open(first(coin.home_urls))}>
-                                    {t('open')}
-                                </Button>
+                                <ThemeProvider theme={MaskLightTheme}>
+                                    <Button
+                                        color="primary"
+                                        className={classes.buyButton}
+                                        size="small"
+                                        endIcon={<Icons.LinkOut size={16} />}
+                                        variant="roundedContained"
+                                        onClick={() => window.open(first(coin.home_urls))}>
+                                        {t('open')}
+                                    </Button>
+                                </ThemeProvider>
                             </Stack>
                             <Stack direction="row" justifyContent="space-between" marginTop={2}>
                                 <Stack direction="row" gap={1} alignItems="center">
