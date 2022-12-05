@@ -17,7 +17,7 @@ export interface SmartPayEntryProps {
 
 export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
     const t = useSharedI18N()
-    const [{ error }, queryQualification] = useQueryQualification()
+    const [{ error, loading }, queryQualification] = useQueryQualification()
 
     const { setDialog: setPersonaSelectPanelDialog } = useRemoteControlledDialog(
         CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
@@ -39,7 +39,8 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
     }, [])
 
     const handleClick = useCallback(async () => {
-        const { hasPersona, eligibility } = (await queryQualification()) ?? {}
+        const value = await queryQualification()
+        const { hasPersona, eligibility, isVerify } = value ?? {}
 
         if (!hasPersona) {
             setCreatePersonaConfirmDialog({
@@ -62,9 +63,8 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
 
         setSmartPayDeployDialog({
             open: true,
-            inWhiteList: true,
+            inWhiteList: isVerify ?? false,
         })
-        // openSmartPayDialog()
     }, [])
 
     return (

@@ -4,6 +4,8 @@ import { Box, Button, Popover, Typography } from '@mui/material'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { Icon } from '@masknet/shared'
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useAsync } from 'react-use'
+import { SmartPayFunder } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -52,7 +54,10 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
     const t = useI18N()
     const { classes } = useStyles()
     const currentProfile = useLastRecognizedIdentity()
-
+    const { value = 0 } = useAsync(async () => {
+        if (!currentProfile?.identifier?.userId) return 0
+        return SmartPayFunder.queryRemainFrequency(currentProfile.identifier.userId)
+    }, [currentProfile])
     return usePortalShadowRoot((container) => (
         <Popover
             container={container}
@@ -77,7 +82,7 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
                     <Typography className={classes.identifier}>@{currentProfile?.identifier?.userId}</Typography>
                 </Box>
             </Box>
-            <Typography className={classes.tips}>{t.remain_times_tips({ times: '1' })}</Typography>
+            <Typography className={classes.tips}>{t.remain_times_tips({ times: value.toString() ?? '-' })}</Typography>
             <Button fullWidth variant="roundedContained">
                 {t.create()}
             </Button>

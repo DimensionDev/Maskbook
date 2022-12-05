@@ -101,6 +101,12 @@ export class SmartPayFunderAPI implements FunderAPI.Provider {
         if (!chainIds.includes(chainId)) throw new Error(`Not supported ${chainId}.`)
     }
 
+    private async queryWhiteList(handler: string) {
+        const response = await fetch(urlcat(FUNDER_ROOT, '/whitelist', { twitterHandler: handler }))
+        const json: FunderAPI.WhiteList = await response.json()
+        return json
+    }
+
     getSupportedChainIds(): Promise<ChainId[]> {
         return Promise.resolve([ChainId.Matic, ChainId.Mumbai])
     }
@@ -116,7 +122,27 @@ export class SmartPayFunderAPI implements FunderAPI.Provider {
         return json
     }
 
-    async queryWhiteList(handler: string) {}
+    async verify(handler: string) {
+        try {
+            const result = await this.queryWhiteList(handler)
+            if (result.twitterHandler === handler && result.totalCount > 0) {
+                return true
+            }
+            return false
+        } catch {
+            return false
+        }
+    }
+
+    async queryRemainFrequency(handler: string) {
+        try {
+            const result = await this.queryWhiteList(handler)
+            if (!result.totalCount || result.twitterHandler !== handler) return 0
+            return result.totalCount - result.usedCount
+        } catch {
+            return 0
+        }
+    }
 }
 
 export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPluginID.PLUGIN_EVM> {
@@ -162,22 +188,17 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
      * @returns
      */
     private async getOwnedAccountsFromMulticall(chainId: ChainId, owner: string, options: string[]) {
-        try {
-            const contracts = options.map((x) => this.createWalletContract(chainId, x)!)
-            const names = Array.from<'owner'>({ length: options.length }).fill('owner')
-            const calls = this.multicall.createMultipleContractSingleData(contracts, names, [])
+        const contracts = options.map((x) => this.createWalletContract(chainId, x)!)
+        const names = Array.from<'owner'>({ length: options.length }).fill('owner')
+        const calls = this.multicall.createMultipleContractSingleData(contracts, names, [])
 
-            const results = await this.multicall.call(chainId, contracts, names, calls)
-            const accounts = results.flatMap((x) => (x.succeed && x.value ? x.value : []))
+        const results = await this.multicall.call(chainId, contracts, names, calls)
+        const accounts = results.flatMap((x) => (x.succeed && x.value ? x.value : []))
 
-            // if the owner didn't derive any account before, then use the first account.
-            return accounts.length === 0
-                ? options.slice(0, 1).map((x) => this.createContractAccount(chainId, x, owner, false))
-                : accounts.map((x) => this.createContractAccount(chainId, x, owner))
-        } catch (error) {
-            console.log(error)
-            return []
-        }
+        // if the owner didn't derive any account before, then use the first account.
+        return accounts.length === 0
+            ? options.slice(0, 1).map((x) => this.createContractAccount(chainId, x, owner, false))
+            : accounts.map((x) => this.createContractAccount(chainId, x, owner))
     }
 
     /**

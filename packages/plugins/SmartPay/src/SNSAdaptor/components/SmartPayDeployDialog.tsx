@@ -172,12 +172,12 @@ export const SmartPayDeployDialog = memo(() => {
     // #endregion
 
     const { value: contractAccount, error } = useAsync(async () => {
-        if (!signAccount?.identity || !signAccount?.address) return
+        if (!signAccount?.identity || !signAccount?.address || !open) return
 
         const accounts = await SmartPayAccount.getAccounts(ChainId.Mumbai, [signAccount?.address])
 
         return first(accounts)
-    }, [signAccount])
+    }, [signAccount, open])
 
     const [{ loading }, handleDeploy] = useAsyncFn(async () => {
         if (!currentVisitingProfile?.identifier?.userId || !currentPersona || !signAccount?.address) return
@@ -346,9 +346,11 @@ export const SmartPayDeployDialog = memo(() => {
                     avatar={avatar !== null ? avatar : undefined}
                     currentPersona={currentPersona}
                     currentVisitingProfile={currentVisitingProfile}>
-                    <ActionButton onClick={handleDeploy} loading={loading} variant="roundedOutlined">
-                        {t.deploy()}
-                    </ActionButton>
+                    {inWhiteList ? (
+                        <ActionButton onClick={handleDeploy} loading={loading} variant="roundedOutlined">
+                            {t.deploy()}
+                        </ActionButton>
+                    ) : null}
                 </PersonaAction>
             </DialogActions>
         </InjectedDialog>

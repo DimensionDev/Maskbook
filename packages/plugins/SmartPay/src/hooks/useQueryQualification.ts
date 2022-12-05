@@ -1,7 +1,7 @@
 import { useAllPersonas, useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { useWallets } from '@masknet/web3-hooks-base'
-import { NextIDProof } from '@masknet/web3-providers'
+import { NextIDProof, SmartPayFunder } from '@masknet/web3-providers'
 import { isSameAddress, Wallet } from '@masknet/web3-shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { first, intersectionWith } from 'lodash-es'
@@ -17,11 +17,13 @@ export function useQueryQualification(): AsyncFnReturn<
               personas: PersonaInformation[]
               signablePersonas?: SignablePersona[]
               signableWallets?: Wallet[]
+              isVerify: boolean
           }
         | undefined
     >
 > {
     const currentIdentity = useLastRecognizedIdentity()
+
     const personas = useAllPersonas()
     const wallets = useWallets()
     const { generateSignResult } = useSNSAdaptorContext()
@@ -75,7 +77,9 @@ export function useQueryQualification(): AsyncFnReturn<
             (a, b) => isSameAddress(a.identity, b.identity),
         )
 
+        const isVerify = await SmartPayFunder.verify(currentIdentity.identifier.userId)
         return {
+            isVerify,
             hasPersona: !!personas.length,
             eligibility: !!signablePersonas?.length || !!signableWallets.length,
             signablePersonas,

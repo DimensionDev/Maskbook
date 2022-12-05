@@ -19,10 +19,18 @@ export namespace FunderAPI {
         tx: string
     }
 
+    export interface WhiteList {
+        totalCount: number
+        twitterHandler: string
+        usedCount: number
+    }
+
     export interface Provider {
         /** Get all supported chain ids. */
         getSupportedChainIds(): Promise<ChainId[]>
         /** Fund token for a NextID public-derived EOA account. */
         fund(chainId: ChainId, proof: Proof): Promise<Fund>
+        verify(handler: string): Promise<boolean>
+        queryRemainFrequency(handler: string): Promise<number>
     }
 }
