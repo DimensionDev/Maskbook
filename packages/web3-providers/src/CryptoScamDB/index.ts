@@ -28,9 +28,11 @@ export class CryptoScamDBAPI implements ScamWarningAPI.Provider {
             const result = await fetchJSON<ScamWarningAPI.Info>(urlcat(baseURL, `${url.host}.json`))
             if (!result) return
 
-            if (!url.pathname || url.pathname === '/') return result
-
             const scamURL = new URL(result.url)
+
+            if ((!url.pathname || url.pathname === '/') && (!scamURL.pathname || scamURL.pathname === '/'))
+                return result
+
             if (
                 url.pathname.toLowerCase() === scamURL.pathname.toLowerCase() &&
                 url.search.toLowerCase() === scamURL.search.toLowerCase()
