@@ -38,8 +38,8 @@ const dashboard: Plugin.Dashboard.Definition<
     Web3
 > = {
     ...base,
-    init(signal, context) {
-        const Web3State = createWeb3State(context)
+    async init(signal, context) {
+        const Web3State = await createWeb3State(context)
 
         dashboard.Web3State = Web3State
         Web3StateSettings.value = Web3State

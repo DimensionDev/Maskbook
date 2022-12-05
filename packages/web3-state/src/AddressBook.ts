@@ -24,9 +24,8 @@ export class AddressBookState<
             formatAddress(a: string): string
         },
     ) {
-        const defaultValue = Object.fromEntries(chainIds.map((x) => [x, []] as [ChainId, string[]])) as AddressBook
         const { storage } = this.context.createKVStorage('persistent', {}).createSubScope('AddressBook', {
-            value: defaultValue,
+            value: Object.fromEntries(chainIds.map((x) => [x, []] as [ChainId, string[]])) as AddressBook,
         })
         this.storage = storage.value
 

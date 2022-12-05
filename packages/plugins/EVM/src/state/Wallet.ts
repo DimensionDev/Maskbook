@@ -33,10 +33,7 @@ export class Wallet extends WalletState<ChainId, ProviderType, Transaction> {
             this.wallets = mapSubscription(
                 mergeSubscription(this.subscriptions.providerType, this.storage.subscription, this.subscription),
                 ([providerType, storage, wallets]) => {
-                    if (providerType === ProviderType.MaskWallet) {
-                        return wallets
-                    }
-                    return storage[providerType] ?? EMPTY_LIST
+                    return providerType === ProviderType.MaskWallet ? wallets : storage[providerType] ?? EMPTY_LIST
                 },
             )
         }
@@ -45,7 +42,7 @@ export class Wallet extends WalletState<ChainId, ProviderType, Transaction> {
     }
 
     private setupSubscriptions() {
-        this.context.wallets.subscribe(async () => {
+        const update = async () => {
             const wallets = this.context.wallets.getCurrentValue()
 
             if (this.providerType === ProviderType.MaskWallet && this.chainId === ChainId.Matic) {
@@ -71,7 +68,10 @@ export class Wallet extends WalletState<ChainId, ProviderType, Transaction> {
             } else {
                 this.ref.value = wallets
             }
-        })
+        }
+
+        update()
+        this.context.wallets.subscribe(update)
     }
 
     override async addWallet(wallet: WalletItem): Promise<void> {
