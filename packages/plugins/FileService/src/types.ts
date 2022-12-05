@@ -1,11 +1,11 @@
 export enum Provider {
-    arweave = 'arweave',
-    ipfs = 'ipfs',
+    Arweave = 'arweave',
+    IPFS = 'ipfs',
 }
 
 export interface ProviderConfig {
-    provider: Provider
     name: string
+    provider: Provider
 }
 
 export interface LandingPageMetadata {
@@ -40,8 +40,10 @@ export interface FileInfo {
     createdAt: Date
 
     key: string | undefined
-    payloadTxID: string
-    landingTxID: string
+    /** Doesn't exist in uploading file info */
+    payloadTxID?: string
+    /** Doesn't exist in uploading file info */
+    landingTxID?: string
 }
 
 export type FileInfoV1 = Omit<FileInfo, 'type' | 'provider'> & {

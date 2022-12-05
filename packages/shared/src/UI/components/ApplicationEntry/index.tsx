@@ -25,7 +25,7 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
             },
         },
         title: {
-            fontSize: 15,
+            fontSize: 14,
         },
         disabled: {
             opacity: 0.4,

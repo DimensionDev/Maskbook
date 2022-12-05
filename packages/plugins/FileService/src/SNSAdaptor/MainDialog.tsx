@@ -1,32 +1,27 @@
-import { Button, DialogActions, DialogContent } from '@mui/material'
-import { makeStyles, MaskDialog, useCustomSnackbar } from '@masknet/theme'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { isNil } from 'lodash-es'
-import { useState } from 'react'
-import { useI18N } from '../locales/i18n_generated.js'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { Entry } from './components/index.js'
-import { META_KEY_2 } from '../constants.js'
-import { Exchange } from './hooks/Exchange.js'
-import type { FileInfo, DialogCloseCallback } from '../types.js'
-import { useCompositionContext } from '@masknet/plugin-infra/content-script'
+import { makeStyles } from '@masknet/theme'
+import { DialogContent } from '@mui/material'
+import type { InitialEntry } from '@remix-run/router'
+import { useMemo } from 'react'
+import { MemoryRouter } from 'react-router-dom'
+import urlcat from 'urlcat'
+import { RoutePaths } from '../constants.js'
+import { RouterDialog } from './components/RouterDialog.js'
+import { FileManagementProvider, UIProvider } from './contexts/index.js'
+import { FileRoutes } from './Routes.js'
+import { useTermsConfirmed } from './storage.js'
 
-interface Props {
+export interface FileServiceDialogProps {
     onClose: () => void
     open: boolean
     isOpenFromApplicationBoard?: boolean
+    selectedFileIds?: string[]
 }
 
 const useStyles = makeStyles()((theme) => ({
-    actions: {
-        alignSelf: 'center',
-    },
-    button: {
-        marginTop: 24,
-    },
     paper: {
-        width: '600px !important',
+        width: 600,
         maxWidth: 'none',
+        height: 620,
         boxShadow: 'none',
         backgroundImage: 'none',
         [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
@@ -34,75 +29,53 @@ const useStyles = makeStyles()((theme) => ({
             margin: 12,
         },
     },
+    content: {
+        padding: 0,
+        overflow: 'auto',
+        boxSizing: 'border-box',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
+    },
 }))
 
-const FileServiceDialog: React.FC<Props> = (props) => {
-    const t = useI18N()
+const FileServiceDialog: React.FC<FileServiceDialogProps> = ({
+    onClose,
+    isOpenFromApplicationBoard,
+    selectedFileIds,
+}) => {
     const { classes } = useStyles()
-    const { showSnackbar } = useCustomSnackbar()
-    const [uploading, setUploading] = useState(false)
-    const [selectedFileInfo, setSelectedFileInfo] = useState<FileInfo | null>(null)
-    const { attachMetadata, dropMetadata } = useCompositionContext()
-    const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
-    )
-    const onInsert = () => {
-        if (isNil(selectedFileInfo)) {
-            return
-        }
-        if (selectedFileInfo) {
-            attachMetadata(META_KEY_2, JSON.parse(JSON.stringify(selectedFileInfo)))
-        } else {
-            dropMetadata(META_KEY_2)
-        }
-        closeApplicationBoardDialog()
-        props.onClose()
-    }
+    const [confirmed] = useTermsConfirmed()
 
-    let onDialogCloseCallback: DialogCloseCallback | null
-    const callDialogClose = () => {
-        try {
-            onDialogCloseCallback?.()
-        } catch (error) {}
-        onDialogCloseCallback = null
-    }
+    const initialEntries = useMemo(() => {
+        const OpenEntry: InitialEntry = isOpenFromApplicationBoard
+            ? RoutePaths.Browser
+            : {
+                  pathname: RoutePaths.FileSelector,
+                  search: '?' + urlcat('', { selectedFileIds }),
+              }
+        return [RoutePaths.Exit, OpenEntry, RoutePaths.Terms]
+    }, [isOpenFromApplicationBoard, selectedFileIds])
+    const initialIndex = confirmed ? 1 : 2
 
-    const onDecline = () => {
-        if (onDialogCloseCallback) {
-            callDialogClose()
-            return
-        }
-        if (!uploading) {
-            props.onClose()
-            return
-        }
-        showSnackbar(t.uploading_on_cancel())
-    }
-    const onDialogClose = (cb: DialogCloseCallback) => {
-        onDialogCloseCallback = cb
-    }
     return (
-        <MaskDialog
-            isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
-            DialogProps={{ scroll: 'paper', classes: { paper: classes.paper } }}
-            open={props.open}
-            title={t.__display_name()}
-            onClose={onDecline}>
-            <DialogContent>
-                <Exchange onDialogClose={onDialogClose} onUploading={setUploading} onInsert={setSelectedFileInfo}>
-                    <Entry />
-                </Exchange>
-            </DialogContent>
-            <DialogActions classes={{ root: classes.actions }}>
-                <Button
-                    variant="contained"
-                    classes={{ root: classes.button }}
-                    onClick={onInsert}
-                    disabled={isNil(selectedFileInfo)}>
-                    {t.on_insert()}
-                </Button>
-            </DialogActions>
-        </MaskDialog>
+        <MemoryRouter initialEntries={initialEntries} initialIndex={initialIndex}>
+            <FileManagementProvider>
+                <RouterDialog
+                    open
+                    onClose={onClose}
+                    classes={{ paper: classes.paper }}
+                    maxWidth="xs"
+                    fullWidth
+                    independent>
+                    <DialogContent className={classes.content}>
+                        <UIProvider>
+                            <FileRoutes />
+                        </UIProvider>
+                    </DialogContent>
+                </RouterDialog>
+            </FileManagementProvider>
+        </MemoryRouter>
     )
 }
 

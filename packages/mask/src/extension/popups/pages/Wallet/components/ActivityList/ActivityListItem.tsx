@@ -68,7 +68,7 @@ export const ActivityListItem = memo<ActivityListItemProps>(
                         formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
                         formatterTransaction.title === 'Transfer Token'
                     )
-                        return <Icons.Upload color="#FFB915" />
+                        return <Icons.TxOut color="#FFB915" />
                     return <Icons.InteractionCircle color="#1C68F3" />
                 case TransactionStatusType.FAILED:
                 default:

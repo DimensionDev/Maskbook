@@ -2,7 +2,7 @@ import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeText } from '@masknet/kit'
 import { create, IPFSHTTPClient } from 'ipfs-http-client'
 import { isEmpty } from 'lodash-es'
-import { landing } from '../constants.js'
+import { LANDING_PAGE } from '../constants.js'
 import urlcat from 'urlcat'
 import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types.js'
 import { makeFileKeySigned } from '../helpers.js'
@@ -52,7 +52,7 @@ class IPFSAgent implements ProviderAgent {
             signed: await makeFileKeySigned(metadata.key),
             createdAt: new Date().toISOString(),
         })
-        const response = await fetch(landing)
+        const response = await fetch(LANDING_PAGE)
         const text = await response.text()
         const replaced = text
             .replace('Arweave', IPFSAgent.providerName)

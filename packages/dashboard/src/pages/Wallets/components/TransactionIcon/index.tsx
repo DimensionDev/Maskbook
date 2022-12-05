@@ -76,9 +76,9 @@ export const TransactionIconUI = memo<TransactionIconUIProps>(({ isFailed, isRed
 
         switch (type) {
             case HistoryAPI.TransactionType.SEND:
-                return <Icons.Upload color={MaskColorVar.warning} className={classes.icon} />
+                return <Icons.TxOut color={MaskColorVar.warning} className={classes.icon} />
             case HistoryAPI.TransactionType.TRANSFER:
-                return <Icons.Upload color={MaskColorVar.warning} className={classes.icon} />
+                return <Icons.TxOut color={MaskColorVar.warning} className={classes.icon} />
             case HistoryAPI.TransactionType.WITHDRAW:
             case HistoryAPI.TransactionType.RECEIVE:
                 return <Icons.Download color={MaskColorVar.success} className={classes.icon} />
