@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { ScalableBloomFilter } from 'bloom-filters'
+import type { ScalableBloomFilter } from 'bloom-filters'
 import type { ScamWarningAPI } from '../types/ScamWarning.js'
 import { fetchJSON } from '../helpers.js'
 
@@ -12,6 +12,7 @@ export class CryptoScamDBAPI implements ScamWarningAPI.Provider {
         if (this.bloomFilter) return this.bloomFilter
         const filter = await fetchJSON<JSON>(urlcat(baseURL, 'filter/config.json'))
 
+        const { ScalableBloomFilter } = await import('bloom-filters')
         this.bloomFilter = ScalableBloomFilter.fromJSON(filter)
         return this.bloomFilter as ScalableBloomFilter
     }
