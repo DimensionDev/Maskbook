@@ -6,40 +6,49 @@ import { useSharedI18N } from '@masknet/shared'
 import { FootnoteMenu, FootnoteMenuOption } from '../FootnoteMenu/index.js'
 import { SourceProviderIcon } from '../SourceProviderIcon/index.js'
 
-const useStyles = makeStyles<{ isSingleDataProvider?: boolean }>()((theme, { isSingleDataProvider }) => {
-    return {
-        source: {
-            justifyContent: 'space-between',
-        },
-        sourceNote: {
-            color: theme.palette.maskColor.secondaryDark,
-            fontWeight: 700,
-        },
-        sourceMenu: {
-            fontSize: 14,
-            fontWeight: 700,
-        },
-        sourceName: {
-            fontWeight: 700,
-            color: theme.palette.mode === 'dark' ? '' : theme.palette.maskColor.publicMain,
-        },
-        nameWrapper: {
-            flexDirection: isSingleDataProvider ? 'row-reverse' : 'row',
-        },
-    }
-})
+const useStyles = makeStyles<{ isSingleDataProvider?: boolean; isNFTProjectPopper?: boolean }>()(
+    (theme, { isSingleDataProvider, isNFTProjectPopper }) => {
+        return {
+            source: {
+                justifyContent: 'space-between',
+            },
+            sourceNote: {
+                color: theme.palette.maskColor.secondaryDark,
+                fontWeight: 700,
+            },
+            sourceMenu: {
+                fontSize: 14,
+                fontWeight: 700,
+            },
+            sourceName: {
+                fontWeight: 700,
+                color: theme.palette.mode === 'dark' && !isNFTProjectPopper ? '' : theme.palette.maskColor.main,
+            },
+            nameWrapper: {
+                flexDirection: isSingleDataProvider ? 'row-reverse' : 'row',
+            },
+        }
+    },
+)
 
 export interface SourceSwitcherProps extends withClasses<'source' | 'sourceNote'> {
     sourceType?: SourceType
     sourceTypes?: SourceType[]
     isSingleDataProvider?: boolean
+    isNFTProjectPopper?: boolean
     onSourceTypeChange?: (option: FootnoteMenuOption) => void
 }
 
 export function SourceSwitcher(props: SourceSwitcherProps) {
-    const { sourceType, sourceTypes = [], onSourceTypeChange, isSingleDataProvider = false } = props
+    const {
+        sourceType,
+        sourceTypes = [],
+        onSourceTypeChange,
+        isSingleDataProvider = false,
+        isNFTProjectPopper = false,
+    } = props
     const t = useSharedI18N()
-    const { classes } = useStyles({ isSingleDataProvider }, { props })
+    const { classes } = useStyles({ isSingleDataProvider, isNFTProjectPopper }, { props })
 
     return (
         <Box className={classes.source}>

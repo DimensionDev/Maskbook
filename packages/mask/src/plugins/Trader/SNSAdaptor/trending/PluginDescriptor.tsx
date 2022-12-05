@@ -28,7 +28,7 @@ export const PluginDescriptor = ({ children, isNFTProjectPopper }: PluginHeaderP
                 ) : (
                     <Icons.DecentralizedSearch />
                 )}
-                <Typography color={theme.palette.maskColor.dark} fontWeight="bolder">
+                <Typography color={isNFTProjectPopper ? undefined : theme.palette.maskColor.dark} fontWeight="bolder">
                     {isNFTProjectPopper ? t.profile_card_name() : t.decentralized_search_name()}
                 </Typography>
             </Stack>

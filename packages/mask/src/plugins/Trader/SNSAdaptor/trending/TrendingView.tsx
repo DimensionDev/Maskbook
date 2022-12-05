@@ -62,8 +62,8 @@ const useStyles = makeStyles<{
         },
         body: props.isPopper
             ? {
-                  minHeight: props.isNFTProjectPopper ? 383 : 374,
-                  maxHeight: props.isNFTProjectPopper ? 383 : 'unset',
+                  minHeight: 374,
+                  maxHeight: props.isNFTProjectPopper ? 374 : 'unset',
                   overflow: 'hidden',
                   display: 'flex',
                   flexDirection: 'column',
@@ -148,7 +148,6 @@ export function TrendingView(props: TrendingViewProps) {
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UniswapInfo ? 1 : 0)
     const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
-
     const site = getSiteType()
     const pluginIDs = useValueRef(pluginIDSettings)
     const context = { pluginID: site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM }

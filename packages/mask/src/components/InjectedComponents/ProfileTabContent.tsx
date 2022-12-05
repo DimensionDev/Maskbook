@@ -298,11 +298,9 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     if (NFTProjectAddress)
         return (
-            <ThemeProvider theme={MaskLightTheme}>
-                <div className={classes.root}>
-                    <SearchResultInspector keyword={NFTProjectAddress} />
-                </div>
-            </ThemeProvider>
+            <div className={classes.root}>
+                <SearchResultInspector keyword={NFTProjectAddress} />
+            </div>
         )
 
     if (lackHostPermission?.size) {
