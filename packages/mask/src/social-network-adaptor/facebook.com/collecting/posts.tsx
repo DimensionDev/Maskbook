@@ -3,7 +3,7 @@ import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/h
 import { creator } from '../../../social-network/utils.js'
 import { isMobileFacebook } from '../utils/isMobile.js'
 import { getProfileIdentifierAtFacebook } from '../utils/getProfileIdentifier.js'
-import { TypedMessage, makeTypedMessageText, makeTypedMessageImage } from '@masknet/typed-message'
+import { TypedMessage, makeTypedMessageText, makeTypedMessageTuple } from '@masknet/typed-message'
 import { clickSeeMore } from '../injection/PostInspector.js'
 import { startWatch } from '../../../utils/watcher.js'
 import { facebookShared } from '../shared.js'
@@ -103,8 +103,8 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
                 const images = getMetadataImages(metadata)
                 for (const url of images) {
                     info.postMetadataImages.add(url)
-                    nextTypedMessage.push(makeTypedMessageImage(url))
                 }
+                info.postMessage.value = makeTypedMessageTuple(nextTypedMessage)
             }
             collectPostInfo()
             return {
