@@ -7,7 +7,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { DataProvider } from '@masknet/public-api'
-import { NFTList } from '@masknet/shared'
+import { NFTList, PluginCardFrameMini } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
 import { ActionButton, makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { TrendingAPI } from '@masknet/web3-providers'
@@ -36,6 +36,7 @@ import { TrendingViewError } from './TrendingViewError.js'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
+import { PluginEnableBoundary } from '../../../../components/shared/PluginEnableBoundary.js'
 
 const useStyles = makeStyles<{
     isPopper: boolean
@@ -146,6 +147,7 @@ export function TrendingView(props: TrendingViewProps) {
     const { classes } = useStyles({ isPopper, isNFTProjectPopper })
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
+    const isWeb3ProfileMinimalMode = useIsMinimalMode(PluginID.Web3Profile)
     const [dataProvider, setDataProvider] = useState(dataProviders[0])
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UniswapInfo ? 1 : 0)
     const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -318,7 +320,7 @@ export function TrendingView(props: TrendingViewProps) {
     // #endregion
 
     const { coin, tickers, market } = trending
-    return (
+    const component = (
         <TrendingViewDeck
             classes={{
                 body: classes.body,
@@ -418,4 +420,16 @@ export function TrendingView(props: TrendingViewProps) {
             </Stack>
         </TrendingViewDeck>
     )
+
+    if (isProfilePage && isWeb3ProfileMinimalMode) {
+        return (
+            <PluginCardFrameMini>
+                <ThemeProvider theme={MaskLightTheme}>
+                    <PluginEnableBoundary pluginID={PluginID.Web3Profile}>{component}</PluginEnableBoundary>
+                </ThemeProvider>
+            </PluginCardFrameMini>
+        )
+    }
+
+    return component
 }
