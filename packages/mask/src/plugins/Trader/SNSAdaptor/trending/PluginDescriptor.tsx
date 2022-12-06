@@ -21,16 +21,20 @@ export const PluginDescriptor = ({ children, isNFTProjectPopper, isProfilePage }
     const theme = useTheme()
     const { classes } = useStyles()
     const t = useSharedI18N()
-    const isWeb3Profile = isNFTProjectPopper || isProfilePage
     return (
         <Stack flexDirection="row" justifyContent="space-between" alignItems="center" width="100%">
             <Stack flexDirection="row" justifyContent="space-between" gap={0.5} alignItems="center">
-                {isWeb3Profile ? (
+                {isNFTProjectPopper ? (
                     <Icons.Web3ProfileCard className={classes.cardIcon} size={24} />
+                ) : isProfilePage ? (
+                    <Icons.Web3Profile className={classes.cardIcon} size={24} />
                 ) : (
                     <Icons.DecentralizedSearch />
                 )}
-                <Typography color={isNFTProjectPopper ? undefined : theme.palette.maskColor.dark} fontWeight="bolder">
+                <Typography
+                    color={isNFTProjectPopper ? undefined : theme.palette.maskColor.dark}
+                    fontWeight="bolder"
+                    fontSize={16}>
                     {isNFTProjectPopper
                         ? t.avatar_profile_card_name()
                         : isProfilePage
