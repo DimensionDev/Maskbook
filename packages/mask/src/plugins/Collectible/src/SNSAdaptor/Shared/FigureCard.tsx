@@ -2,10 +2,8 @@ import { AssetPreviewer } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { VerifiedUser as VerifiedUserIcon } from '@mui/icons-material'
-import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { Context } from '../Context/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -67,8 +65,6 @@ export interface FigureCardProps {
 export function FigureCard(props: FigureCardProps) {
     const { asset, hideSubTitle, timeline } = props
     const { classes, cx } = useStyles()
-    const { pluginID } = Context.useContainer()
-    const { Others } = useWeb3State()
 
     return (
         <div className={classes.root}>

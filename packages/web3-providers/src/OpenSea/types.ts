@@ -9,6 +9,10 @@ export enum EventType {
 }
 
 export interface OpenSeaFees {
+    /**
+     * @deprecated
+     * use fee instead
+     */
     opensea_seller_fee_basis_points: number
     opensea_buyer_fee_basis_points: number
     dev_seller_fee_basis_points: number

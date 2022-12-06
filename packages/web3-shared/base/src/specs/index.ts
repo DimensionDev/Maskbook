@@ -371,6 +371,7 @@ export interface NonFungibleTokenContract<ChainId, SchemaType> {
     owner?: string
     logoURL?: string
     iconURL?: string
+    /** @example 2.5% */
     creatorEarning?: string
     /** source type */
     source?: SourceType
