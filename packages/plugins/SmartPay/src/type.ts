@@ -10,6 +10,7 @@ export interface SignAccount {
     identity?: string
     name?: string
     address?: string
+    raw?: SignablePersona
 }
 
 export type SignablePersona = PersonaInformation & { address?: string }

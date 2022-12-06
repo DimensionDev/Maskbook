@@ -25,6 +25,16 @@ export namespace FunderAPI {
         usedCount: number
     }
 
+    export interface Operation {
+        tokenTransferTx: string
+        twitterHandler: string
+        // eg: 1669970510248
+        createAt: number
+        nonce: number
+        id: string
+        walletAddress: string
+    }
+
     export interface Provider {
         /** Get all supported chain ids. */
         getSupportedChainIds(): Promise<ChainId[]>

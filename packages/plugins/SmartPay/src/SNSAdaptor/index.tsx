@@ -8,12 +8,8 @@ import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import {
-    ApproveMaskDialog,
-    SmartPayDescriptionDialog,
-    SmartPayDeployDialog,
-    SmartPayDialog,
-} from './components/index.js'
+import { ApproveMaskDialog, SmartPayDescriptionDialog, SmartPayDialog } from './components/index.js'
+import { SmartPayContext } from '../context/SmartPayContext.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -24,10 +20,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return (
             <SNSAdaptorContext.Provider value={context}>
                 <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mumbai }}>
-                    <SmartPayDialog />
-                    <SmartPayDeployDialog />
-                    <SmartPayDescriptionDialog />
-                    <ApproveMaskDialog />
+                    <SmartPayContext.Provider>
+                        <SmartPayDialog />
+                        <SmartPayDescriptionDialog />
+                        <ApproveMaskDialog />
+                    </SmartPayContext.Provider>
                 </Web3ContextProvider>
             </SNSAdaptorContext.Provider>
         )

@@ -61,7 +61,6 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
 
     private async assetChainId(chainId: ChainId) {
         const chainIds = await this.getSupportedChainIds()
-        console.log(chainIds)
         if (!chainIds.includes(chainId)) throw new Error(`Not supported ${chainId}.`)
     }
 
@@ -117,9 +116,10 @@ export class SmartPayFunderAPI implements FunderAPI.Provider {
         const response = await fetch(urlcat(FUNDER_ROOT, '/verify'), {
             method: 'POST',
             body: JSON.stringify(proof),
+            headers: { 'Content-Type': 'application/json' },
         })
-        const json: FunderAPI.Fund = await response.json()
-        return json
+        const json = await response.json()
+        return json.message as FunderAPI.Fund
     }
 
     async verify(handler: string) {
@@ -149,7 +149,6 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
     private web3 = new Web3API()
     private multicall = new MulticallAPI()
     private bundler = new SmartPayBundlerAPI()
-
     private async getEntryPoint(chainId: ChainId) {
         const entryPoints = await this.bundler.getSupportedEntryPoints(chainId)
         return first(entryPoints)
@@ -244,7 +243,6 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         owners: string[],
     ): Promise<Array<ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM>>> {
         const allSettled = await Promise.allSettled(owners.map((x) => this.getOwnedAccounts(chainId, x)))
-        console.log(allSettled)
         return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
     }
 }

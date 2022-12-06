@@ -1,26 +1,23 @@
 import { useAllPersonas, useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { useWallets } from '@masknet/web3-hooks-base'
-import { NextIDProof, SmartPayFunder } from '@masknet/web3-providers'
+import { NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress, Wallet } from '@masknet/web3-shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { first, intersectionWith } from 'lodash-es'
-import { useAsyncFn } from 'react-use'
-import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn.js'
+import { useAsync } from 'react-use'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import type { SignablePersona } from '../type.js'
 
-export function useQueryQualification(): AsyncFnReturn<
-    () => Promise<
-        | {
-              hasPersona: boolean
-              eligibility: boolean
-              personas: PersonaInformation[]
-              signablePersonas?: SignablePersona[]
-              signableWallets?: Wallet[]
-              isVerify: boolean
-          }
-        | undefined
-    >
+export function useQueryQualification(): AsyncState<
+    | {
+          hasPersona: boolean
+          eligibility: boolean
+          personas: PersonaInformation[]
+          signablePersonas?: SignablePersona[]
+          signableWallets?: Wallet[]
+      }
+    | undefined
 > {
     const currentIdentity = useLastRecognizedIdentity()
 
@@ -28,7 +25,7 @@ export function useQueryQualification(): AsyncFnReturn<
     const wallets = useWallets()
     const { generateSignResult } = useSNSAdaptorContext()
 
-    return useAsyncFn(async () => {
+    return useAsync(async () => {
         if (!currentIdentity?.identifier?.userId) return
         const response = await NextIDProof.queryAllExistedBindingsByPlatform(
             NextIDPlatform.Twitter,
@@ -77,9 +74,7 @@ export function useQueryQualification(): AsyncFnReturn<
             (a, b) => isSameAddress(a.identity, b.identity),
         )
 
-        const isVerify = await SmartPayFunder.verify(currentIdentity.identifier.userId)
         return {
-            isVerify,
             hasPersona: !!personas.length,
             eligibility: !!signablePersonas?.length || !!signableWallets.length,
             signablePersonas,

@@ -100,6 +100,7 @@ export const ManagePopover = memo<ManagePopoverProps>(
                                     identity: persona.identifier.publicKeyAsHex,
                                     name: persona.nickname,
                                     address: persona.address,
+                                    raw: persona,
                                 })
                             }>
                             <Box display="flex" alignItems="center" columnGap={0.5}>

@@ -17,7 +17,7 @@ export interface SmartPayEntryProps {
 
 export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
     const t = useSharedI18N()
-    const [{ error, loading }, queryQualification] = useQueryQualification()
+    const { value } = useQueryQualification()
 
     const { setDialog: setPersonaSelectPanelDialog } = useRemoteControlledDialog(
         CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
@@ -27,9 +27,6 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
         CrossIsolationMessages.events.openPageConfirm,
     )
 
-    const { setDialog: setSmartPayDeployDialog } = useRemoteControlledDialog(
-        PluginSmartPayMessages.smartPayDeployDialogEvent,
-    )
     const { openDialog: openSmartPayDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
 
     useEffect(() => {
@@ -39,10 +36,8 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
     }, [])
 
     const handleClick = useCallback(async () => {
-        const value = await queryQualification()
-        const { hasPersona, eligibility, isVerify } = value ?? {}
-
-        if (!hasPersona) {
+        if (!value) return
+        if (!value.hasPersona) {
             setCreatePersonaConfirmDialog({
                 open: true,
                 target: 'dashboard',
@@ -53,7 +48,7 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
                 position: 'center',
             })
             return
-        } else if (!eligibility) {
+        } else if (!value.eligibility) {
             setPersonaSelectPanelDialog({
                 open: true,
                 enableVerify: true,
@@ -61,11 +56,8 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
             return
         }
 
-        setSmartPayDeployDialog({
-            open: true,
-            inWhiteList: isVerify ?? false,
-        })
-    }, [])
+        openSmartPayDialog()
+    }, [value])
 
     return (
         <ApplicationEntry

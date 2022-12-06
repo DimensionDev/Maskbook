@@ -34,10 +34,13 @@ interface PersonaActionProps extends PropsWithChildren {
     currentPersona?: PersonaInformation
     currentVisitingProfile?: IdentityResolved
     avatar?: string
+    classes?: {
+        bottomFixed: string
+    }
 }
 
 export function PersonaAction(props: PersonaActionProps) {
-    const { classes } = useStyles()
+    const { classes } = useStyles(undefined, { props })
     const { currentPersona, avatar, children } = props
     const t = useSharedI18N()
 

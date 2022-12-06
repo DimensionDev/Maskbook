@@ -1976,6 +1976,9 @@ importers:
       date-fns:
         specifier: 2.29.3
         version: 2.29.3
+      react-router-dom:
+        specifier: 6.4.3
+        version: 6.4.3
       react-use:
         specifier: ^17.4.0
         version: 17.4.0
