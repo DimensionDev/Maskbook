@@ -187,7 +187,7 @@ export function ProfileTabAtTwitter() {
 
     useEffect(() => {
         if (!collection?.contract_address) return
-        return MaskMessages.events.NFTProjectTwitterDetect.sendToAll({
+        return MaskMessages.events.NFTProjectTwitterDetect.sendToLocal({
             address: collection.contract_address,
         })
     }, [collection?.contract_address])

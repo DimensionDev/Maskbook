@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { useAsyncFn } from 'react-use'
 import { Icons } from '@masknet/icons'
 import type { PluginID } from '@masknet/shared-base'
-import { useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
+import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import Services from '../../extension/service.js'
@@ -29,7 +29,6 @@ export const PluginEnableBoundary = memo<PluginEnableBoundaryProps>((props) => {
     const { classes } = useStyles(undefined, { props })
 
     const disabled = useIsMinimalMode(pluginID)
-    const plugins = useActivatedPluginsSNSAdaptor(true)
 
     const [{ loading }, onEnablePlugin] = useAsyncFn(async () => {
         await Services.Settings.setPluginMinimalModeEnabled(pluginID, false)
