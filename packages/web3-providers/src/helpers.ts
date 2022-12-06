@@ -20,70 +20,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { FungibleAsset, isSameAddress, ActivityType } from '@masknet/web3-shared-base'
 
-export async function fetchJSON<T = unknown>(
-    requestInfo: string,
-    requestInit?: RequestInit,
-    options?: {
-        fetch: typeof globalThis.fetch
-    },
-): Promise<T> {
-    const fetch = options?.fetch ?? globalThis.fetch
-    const response = await fetch(requestInfo, requestInit)
-    if (!response.ok) throw new Error('Failed to fetch.')
-    return response.json()
-}
-
-export async function fetchCache(info: RequestInfo, init?: RequestInit) {
-    const request = new Request(info, init)
-
-    if (request.method !== 'GET') return fetch(request)
-    if (!request.url.startsWith('http')) return fetch(request)
-
-    // hit a cached request
-    const cache = await caches.open(new URL(request.url).host)
-    const hit = await cache.match(request)
-    const date = hit?.headers.get('x-cache-date')
-
-    if (hit && date) {
-        // cache for a half an hour
-        const expired = new Date(date).getTime() + 30 * 60 * 1000 > Date.now()
-        if (!expired) return hit
-    }
-
-    const response = await fetch(request)
-    const body = response.clone().body
-
-    if (response.ok && response.status === 200 && body) {
-        await cache.put(
-            request.clone(),
-            new Response(body, {
-                status: response.status,
-                statusText: response.statusText,
-                headers: {
-                    ...Object.fromEntries(response.headers.entries()),
-                    // store the cached date as a UTC string
-                    'x-cache-date': new Date().toUTCString(),
-                },
-            }),
-        )
-    }
-    return response
-}
-
-export async function staleCache(info: RequestInfo, init?: RequestInit) {
-    const request = new Request(info, init)
-
-    if (request.method !== 'GET') return
-    if (!request.url.startsWith('http')) return
-
-    const { host } = new URL(request.url)
-    const cache = await caches.open(host)
-    const hit = await cache.match(request)
-    if (!hit) return
-
-    await cache.delete(request)
-    return hit
-}
+export * from './helpers/index.js'
 
 export function getAllEVMNativeAssets(): Array<FungibleAsset<ChainId, SchemaType>> {
     return NETWORK_DESCRIPTORS.filter((x) => x.isMainnet).map((x) => ({
