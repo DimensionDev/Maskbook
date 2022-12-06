@@ -68,7 +68,7 @@ export function useTradeCallback(
             transactionValue = trade.outputAmount.toFixed()
 
         // send transaction and wait for hash
-        const tx = await new ContractTransaction(exchangeProxyContract).encodeWithGas(
+        const tx = await new ContractTransaction(exchangeProxyContract).fillAll(
             trade.strategy === TradeStrategy.ExactIn
                 ? exchangeProxyContract.methods.multihopBatchSwapExactIn(
                       swap_,

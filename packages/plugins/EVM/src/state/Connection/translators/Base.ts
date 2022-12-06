@@ -1,15 +1,14 @@
 import { BigNumber } from 'bignumber.js'
 import { toHex } from 'web3-utils'
 import { GasOptionType, isLessThan, toFixed } from '@masknet/web3-shared-base'
-import { addGasMargin, chainResolver, formatWeiToGwei } from '@masknet/web3-shared-evm'
+import { addGasMargin, chainResolver, formatWeiToGwei, PayloadEditor } from '@masknet/web3-shared-evm'
 import type { Context, Translator } from '../types.js'
 import { Web3StateSettings } from '../../../settings/index.js'
-import { isReadOnlyMethod } from '../connection.js'
 
 export class Base implements Translator {
     async encode(context: Context) {
         const config = context.config
-        if (!config || isReadOnlyMethod(context.method)) return
+        if (!config || PayloadEditor.fromPayload(context.request).readonly) return
 
         // #region polyfill transaction config
         try {
@@ -43,11 +42,7 @@ export class Base implements Translator {
                 delete config.maxFeePerGas
                 delete config.maxPriorityFeePerGas
 
-                if (
-                    slowOption &&
-                    normalOption &&
-                    isLessThan((config.gasPrice as string) ?? 0, slowOption.suggestedMaxFeePerGas)
-                ) {
+                if (slowOption && normalOption && isLessThan(config.gasPrice ?? 0, slowOption.suggestedMaxFeePerGas)) {
                     config.gasPrice = toHex(toFixed(normalOption.suggestedMaxFeePerGas, 0))
                 }
             }

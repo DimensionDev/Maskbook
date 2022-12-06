@@ -3,10 +3,10 @@ import { getEnumAsArray } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { TransactionWatcherState } from '@masknet/web3-state'
 import { ChainId, Transaction } from '@masknet/web3-shared-evm'
+import { getSubscriptionCurrentValue } from '@masknet/shared-base'
 import { RecentTransaction, TransactionStatusType } from '@masknet/web3-shared-base'
 import { TransactionCheckers } from './TransactionWatcher/checker.js'
 import { Web3StateSettings } from '../settings/index.js'
-import { getSubscriptionCurrentValue } from '@masknet/shared-base'
 
 export class TransactionWatcher extends TransactionWatcherState<ChainId, Transaction> {
     constructor(
@@ -23,7 +23,7 @@ export class TransactionWatcher extends TransactionWatcherState<ChainId, Transac
             subscriptions,
             {
                 defaultBlockDelay: 15,
-                getTransactionCreator: (tx) => (tx.from as string | undefined) ?? '',
+                getTransactionCreator: (tx) => tx.from ?? '',
             },
         )
     }

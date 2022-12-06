@@ -1,7 +1,7 @@
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, ChainIdOptionalRecord, SchemaType } from '../types/index.js'
-import { chainResolver } from '../utils/resolver.js'
-import { createERC20Tokens } from '../utils/token.js'
+import { chainResolver } from '../helpers/resolver.js'
+import { createERC20Tokens } from '../helpers/token.js'
 
 export type ERC20AgainstToken = Readonly<ChainIdOptionalRecord<Array<FungibleToken<ChainId, SchemaType.ERC20>>>>
 

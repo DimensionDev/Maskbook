@@ -1,7 +1,7 @@
 import { omit } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import type { JsonRpcPayload } from 'web3-core-helpers'
 import { Emitter } from '@servie/events'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 import { getSubscriptionCurrentValue, StorageItem } from '@masknet/shared-base'
 import {
     TransactionChecker,
@@ -54,7 +54,7 @@ class Watcher<ChainId, Transaction> {
             ...this.storage.value,
             // @ts-ignore
             [chainId]: {
-                ...this.storage.value[chainId],
+                ...this.getStorage(chainId),
                 [item.id]: item,
             },
         })
@@ -64,7 +64,7 @@ class Watcher<ChainId, Transaction> {
         await this.storage.setValue({
             ...this.storage.value,
             // @ts-ignore
-            [chainId]: omit(this.storage.value[chainId], [id]),
+            [chainId]: omit(this.getStorage(chainId), [id]),
         })
     }
 
@@ -158,10 +158,10 @@ class Watcher<ChainId, Transaction> {
 export class TransactionWatcherState<ChainId, Transaction>
     implements Web3TransactionWatcherState<ChainId, Transaction>
 {
-    protected storage: StorageItem<TransactionWatcher<ChainId, Transaction>> = null!
     private watchers: Map<ChainId, Watcher<ChainId, Transaction>> = new Map()
 
-    emitter: Emitter<WatchEvents<Transaction>> = new Emitter()
+    public storage: StorageItem<TransactionWatcher<ChainId, Transaction>> = null!
+    public emitter: Emitter<WatchEvents<Transaction>> = new Emitter()
 
     constructor(
         protected context: Plugin.Shared.SharedContext,
@@ -178,14 +178,9 @@ export class TransactionWatcherState<ChainId, Transaction>
             getTransactionCreator: (transaction: Transaction) => string
         },
     ) {
-        const defaultValue = Object.fromEntries(chainIds.map((x) => [x, {}])) as TransactionWatcher<
-            ChainId,
-            Transaction
-        >
         const { storage } = this.context.createKVStorage('memory', {}).createSubScope('TransactionWatcher', {
-            value: defaultValue,
+            value: Object.fromEntries(chainIds.map((x) => [x, {}])) as TransactionWatcher<ChainId, Transaction>,
         })
-
         this.storage = storage.value
 
         const resume = async () => {

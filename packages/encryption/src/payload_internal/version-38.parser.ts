@@ -92,7 +92,7 @@ function splitFields(raw: string) {
         encryptedText,
         iv,
         // "_" is used as placeholder
-        signature: (signature === '_' ? undefined : signature) as string | undefined,
+        signature: signature === '_' ? undefined : signature,
         authorPublicKey: authorPublicKey as string | undefined,
         authorUserID,
         isPublic: isPublic === '1',

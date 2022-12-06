@@ -7,7 +7,7 @@
     "yarn": ">=999.0.0",
     "npm": ">=999.0.0"
   },
-  "version": "2.16.0",
+  "version": "2.16.2",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
@@ -37,6 +37,7 @@
     "@emotion/styled": "11.10.4",
     "@emotion/utils": "1.2.0",
     "@masknet/kit": "0.1.0",
+    "@mui/base": "5.0.0-alpha.100",
     "@mui/icons-material": "5.10.6",
     "@mui/lab": "5.0.0-alpha.102",
     "@mui/material": "5.10.8",
@@ -87,7 +88,7 @@
     "prettier": "^2.8.0",
     "svgo": "^3.0.0",
     "ts-node": "^10.9.1",
-    "typescript": "5.0.0-dev.20221118",
+    "typescript": "5.0.0-dev.20221202",
     "vite": "^3.2.4",
     "vitest": "^0.25.3"
   },

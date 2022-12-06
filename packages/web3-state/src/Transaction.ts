@@ -1,11 +1,11 @@
 import type { Subscription } from 'use-subscription'
+import type { Plugin } from '@masknet/plugin-infra'
 import { mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
 import {
     RecentTransaction,
     TransactionStatusType,
     TransactionState as Web3TransactionState,
 } from '@masknet/web3-shared-base'
-import type { Plugin } from '@masknet/plugin-infra'
 
 export type TransactionStorage<ChainId, Transaction> = Record<
     // @ts-ignore
@@ -22,7 +22,7 @@ export type TransactionStorage<ChainId, Transaction> = Record<
 export class TransactionState<ChainId, Transaction> implements Web3TransactionState<ChainId, Transaction> {
     static MAX_RECORD_SIZE = 20
 
-    protected storage: StorageItem<TransactionStorage<ChainId, Transaction>> = null!
+    public storage: StorageItem<TransactionStorage<ChainId, Transaction>> = null!
     public transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
 
     constructor(
@@ -37,12 +37,8 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
             isValidChainId(chainId?: ChainId): boolean
         },
     ) {
-        const defaultValue = Object.fromEntries(chainIds.map((x) => [x, {}])) as TransactionStorage<
-            ChainId,
-            Transaction
-        >
         const { storage } = this.context.createKVStorage('persistent', {}).createSubScope('Transaction', {
-            value: defaultValue,
+            value: Object.fromEntries(chainIds.map((x) => [x, {}])) as TransactionStorage<ChainId, Transaction>,
         })
         this.storage = storage.value
 

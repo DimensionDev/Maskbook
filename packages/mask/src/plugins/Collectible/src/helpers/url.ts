@@ -152,7 +152,7 @@ const RULES = [
     },
 ]
 
-export function getPayloadFromURLs(urls: string[]): CollectiblePayload | undefined {
+export function getPayloadFromURLs(urls: readonly string[]): CollectiblePayload | undefined {
     for (const url of urls) {
         const payload = getPayloadFromURL(url)
         if (payload) return payload

@@ -1,15 +1,23 @@
 import { useMemo } from 'react'
-import { useSubscription } from 'use-subscription'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { EMPTY_ARRAY, NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from './useContext.js'
-import { useWeb3State } from './useWeb3State.js'
+import { useWallets } from './useWallets.js'
 
-export function useWallet<T extends NetworkPluginID>(pluginID?: T) {
+/**
+ * Use the currently selected wallet.
+ * @param pluginID
+ * @returns
+ */
+export function useWallet<T extends NetworkPluginID>(
+    pluginID?: T,
+    providerType?: Web3Helper.Definition[T]['ProviderType'],
+) {
     const { account } = useChainContext()
-    const { Wallet } = useWeb3State(pluginID)
-    const wallets = useSubscription(Wallet?.wallets ?? EMPTY_ARRAY)
+    const wallets = useWallets(pluginID, providerType)
+
     return useMemo(() => {
         return account ? wallets.find((x) => isSameAddress?.(x.address, account)) ?? null : null
-    }, [account, wallets?.map((x) => x.address.toLowerCase()).join()])
+    }, [account, wallets.map((x) => x.address.toLowerCase()).join()])
 }

@@ -81,9 +81,8 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const { pluginID } = useNetworkContext()
     const ITO_Definition = useActivatedPlugin(PluginID.ITO, 'any')
     const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
-    const [chainId, setChainId] = useState<ChainId>(currentChainId)
 
-    const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
+    const { ITO2_CONTRACT_ADDRESS } = useITOConstants(currentChainId)
     const [showHistory, setShowHistory] = useState(false)
     const state = useState<DialogTabs>(DialogTabs.create)
     // #region step
@@ -150,7 +149,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             seller: {
                 address: FillSuccess.creator,
             },
-            chain_id: chainId,
+            chain_id: currentChainId,
             start_time: settings.startTime.getTime(),
             end_time: settings.endTime.getTime(),
             unlock_time: settings.unlockTime?.getTime() ?? 0,
@@ -223,7 +222,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             const [, setValue] = state
             setValue(DialogTabs.create)
         },
-        [account, chainId, props.onConfirm, state],
+        [account, props.onConfirm, state],
     )
 
     // #endregion
@@ -248,12 +247,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
                             <div className={classes.abstractTabWrapper}>
                                 <NetworkTab classes={{ tabs: classes.tabs }} chains={chainIdList} />
                             </div>
-                            <CreateForm
-                                onNext={onNext}
-                                chainId={chainId}
-                                origin={poolSettings}
-                                onChangePoolSettings={setPoolSettings}
-                            />
+                            <CreateForm onNext={onNext} origin={poolSettings} onChangePoolSettings={setPoolSettings} />
                         </>
                     ) : (
                         <PoolList onSend={onCreateOrSelect} />

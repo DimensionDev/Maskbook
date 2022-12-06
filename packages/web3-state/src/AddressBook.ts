@@ -1,15 +1,15 @@
 import { uniqBy } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
+import type { Plugin } from '@masknet/plugin-infra'
 import { mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
 import type { AddressBookState as Web3AddressBookState } from '@masknet/web3-shared-base'
-import type { Plugin } from '@masknet/plugin-infra'
 
 export class AddressBookState<
     ChainId extends number,
     AddressBook extends Record<ChainId, string[]> = Record<ChainId, string[]>,
 > implements Web3AddressBookState<ChainId>
 {
-    protected storage: StorageItem<AddressBook> = null!
+    public storage: StorageItem<AddressBook> = null!
     public addressBook?: Subscription<string[]>
 
     constructor(
@@ -24,16 +24,15 @@ export class AddressBookState<
             formatAddress(a: string): string
         },
     ) {
-        const defaultValue = Object.fromEntries(chainIds.map((x) => [x, []] as [ChainId, string[]])) as AddressBook
         const { storage } = this.context.createKVStorage('persistent', {}).createSubScope('AddressBook', {
-            value: defaultValue,
+            value: Object.fromEntries(chainIds.map((x) => [x, []] as [ChainId, string[]])) as AddressBook,
         })
         this.storage = storage.value
 
         if (this.subscriptions.chainId) {
             this.addressBook = mapSubscription(
                 mergeSubscription(this.subscriptions.chainId, this.storage.subscription),
-                ([chainId, addressBook]) => addressBook[chainId],
+                ([chainId, storage]) => storage[chainId],
             )
         }
     }

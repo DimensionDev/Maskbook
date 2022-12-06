@@ -58,6 +58,7 @@ const useStyles = makeStyles()((theme) => ({
     icon: {
         width: 16,
         height: 16,
+        color: theme.palette.maskColor.publicSecond,
     },
     PopupLink: {
         width: 16,
@@ -68,19 +69,35 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(2),
         width: '100%',
     },
-    tab: {
+    panel: {
         padding: theme.spacing(2),
         backgroundColor: theme.palette.maskColor.white,
         '::-webkit-scrollbar': {
             display: 'none',
         },
         height: 400,
+        overflowY: 'auto',
     },
     statusBox: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         height: 400,
+    },
+    tab: {
+        whiteSpace: 'nowrap',
+        background: 'transparent',
+        color: theme.palette.maskColor.publicSecond,
+        '&:hover': {
+            background: 'transparent',
+        },
+    },
+    tabActive: {
+        background: '#fff',
+        color: theme.palette.maskColor.publicMain,
+        '&:hover': {
+            background: '#fff',
+        },
     },
 }))
 const Profile = ({ url }: { url: string }) => {
@@ -109,6 +126,7 @@ const Profile = ({ url }: { url: string }) => {
             </Box>
         )
     }
+
     return (
         <TabContext value={currentTab}>
             <div className={classes.root}>
@@ -127,15 +145,17 @@ const Profile = ({ url }: { url: string }) => {
                             <LoadingBase />
                         ) : (
                             <Stack className={classes.address}>
-                                <FormattedAddress
-                                    address={identity?.address}
-                                    formatter={formatEthereumAddress}
-                                    size={4}
-                                />
+                                <Typography>
+                                    <FormattedAddress
+                                        address={identity?.address}
+                                        formatter={formatEthereumAddress}
+                                        size={4}
+                                    />
+                                </Typography>
                                 <Link
                                     onClick={(event) => event.stopPropagation()}
                                     style={{ width: 12, height: 12 }}
-                                    href={explorerResolver.addressLink(ChainId.Mainnet, identity?.address ?? '') ?? ''}
+                                    href={explorerResolver.addressLink(ChainId.Mainnet, identity?.address ?? '')}
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     <Icons.PopupLink className={classes.PopupLink} />
@@ -155,10 +175,18 @@ const Profile = ({ url }: { url: string }) => {
                 ) : (
                     <Stack className={classes.follow}>
                         <MaskTabList variant="base" onChange={onChange} aria-label="CyberConnection">
-                            <Tab label={t.followings()} value={tabs.Followings} />
-                            <Tab label={t.followers()} value={tabs.Followers} />
+                            <Tab
+                                label={t.followings()}
+                                value={tabs.Followings}
+                                className={tabs.Followings === currentTab ? classes.tabActive : classes.tab}
+                            />
+                            <Tab
+                                label={t.followers()}
+                                value={tabs.Followers}
+                                className={tabs.Followers === currentTab ? classes.tabActive : classes.tab}
+                            />
                         </MaskTabList>
-                        <TabPanel value={tabs.Followings} className={classes.tab}>
+                        <TabPanel value={tabs.Followings} className={classes.panel}>
                             {identity.followings.list.length ? (
                                 identity.followings.list.map((f: IFollowIdentity) => {
                                     return <FollowRow key={f.address} identity={f} />
@@ -167,7 +195,7 @@ const Profile = ({ url }: { url: string }) => {
                                 <Nodata />
                             )}
                         </TabPanel>
-                        <TabPanel value={tabs.Followers} className={classes.tab}>
+                        <TabPanel value={tabs.Followers} className={classes.panel}>
                             {identity.followers.list.length ? (
                                 identity.followers.list.map((f: IFollowIdentity) => {
                                     return <FollowRow key={f.address} identity={f} />

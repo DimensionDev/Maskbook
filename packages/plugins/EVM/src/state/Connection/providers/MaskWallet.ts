@@ -1,7 +1,7 @@
 import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
-import { ChainId, createPayload, chainResolver, ProviderType, isValidAddress } from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver, ProviderType, isValidAddress, PayloadEditor } from '@masknet/web3-shared-evm'
 import { ExtensionSite, getSiteType, isEnhanceableSiteType, PopupRoutes } from '@masknet/shared-base'
 import type { ProviderOptions } from '@masknet/web3-shared-base'
 import { BaseProvider } from './Base.js'
@@ -61,7 +61,7 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
         options?: ProviderOptions<ChainId>,
     ): Promise<T> {
         const response = await SharedContextSettings.value.send(
-            createPayload(0, requestArguments.method, requestArguments.params),
+            PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
             {
                 chainId: this.chainId,
                 popupsWindow: getSiteType() === ExtensionSite.Dashboard || isEnhanceableSiteType(),
@@ -73,7 +73,6 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
 
     override async connect(chainId: ChainId) {
         const siteType = getSiteType()
-        if (siteType === ExtensionSite.Popup) throw new Error('Cannot connect wallet')
 
         // connected
         if (chainId === this.chainId && isValidAddress(this.account)) {

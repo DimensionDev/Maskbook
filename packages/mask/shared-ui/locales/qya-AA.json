@@ -80,6 +80,7 @@
     "persona_boundary_verify_persona": "crwdns18598:0crwdne18598:0",
     "persona_load_failed": "crwdns18600:0crwdne18600:0",
     "enable_plugin_boundary": "crwdns18602:0crwdne18602:0",
+    "enable_plugin_boundary_description": "crwdns19131:0crwdne19131:0",
     "close_check_security": "crwdns17716:0crwdne17716:0",
     "check_security_intro": "crwdns17718:0crwdne17718:0",
     "check_security_close_warning": "crwdns17720:0crwdne17720:0",
@@ -1054,12 +1055,8 @@
     "plugin_avatar_feature_token_description": "crwdns19109:0crwdne19109:0",
     "plugin_avatar_feature_nft_name": "crwdns19111:0crwdne19111:0",
     "plugin_avatar_feature_nft_description": "crwdns19113:0crwdne19113:0",
-    "plugin_avatar_feature_crypto_exchange_name": "crwdns19115:0crwdne19115:0",
-    "plugin_avatar_feature_crypto_exchange_description": "crwdns19117:0crwdne19117:0",
     "plugin_web3_profile_feature_general_user_name": "crwdns19119:0crwdne19119:0",
     "plugin_web3_profile_feature_general_user_description": "crwdns19121:0crwdne19121:0",
     "plugin_web3_profile_feature_nft_name": "crwdns19123:0crwdne19123:0",
-    "plugin_web3_profile_feature_nft_description": "crwdns19125:0crwdne19125:0",
-    "plugin_web3_profile_feature_crypto_exchange_name": "crwdns19127:0crwdne19127:0",
-    "plugin_web3_profile_feature_crypto_exchange_description": "crwdns19129:0crwdne19129:0"
+    "plugin_web3_profile_feature_nft_description": "crwdns19125:0crwdne19125:0"
 }

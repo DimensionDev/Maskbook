@@ -9,7 +9,6 @@
     "uploading_on_cancel": "上傳中… 請勿關閉這個頁面。",
     "recent_files": "最近的檔案",
     "show_more": "顯示更多",
-    "file_key": "檔案金鑰：",
     "unencrypted": "這個檔案未加密",
     "signing_failed": "服務無法使用。 請稍等幾分鐘，然後重試。",
     "on_encrypt_it": "加密它",
@@ -19,7 +18,6 @@
     "drop_hint_1": "檔案大小限制：{{limit}}。",
     "drop_hint_2": "檔案將立即被上傳而且無法取消。",
     "drop_here": "在這裡拖入一個檔案以上傳",
-    "error_101": "輸入的檔案不是單一檔案",
-    "error_102": "檔案太大; 檔案大小限制是 {{limit}}。",
-    "on_change_file": "更改檔案"
+    "on_change_file": "更改檔案",
+    "file_key": "檔案金鑰："
 }

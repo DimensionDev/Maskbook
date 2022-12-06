@@ -1,6 +1,3 @@
-import type { PersonaInformation } from '@masknet/shared-base'
+import { PersonaInformation, ValueRef } from '@masknet/shared-base'
 
-export let initialPersonaInformation: PersonaInformation[] | undefined = undefined
-export function setInitialPersonaInformation(data: PersonaInformation[]) {
-    initialPersonaInformation = data
-}
+export const initialPersonaInformation = new ValueRef<PersonaInformation[]>([])

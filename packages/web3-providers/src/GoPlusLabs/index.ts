@@ -1,16 +1,21 @@
 import urlcat from 'urlcat'
 import { first, isEmpty, parseInt, uniqBy } from 'lodash-es'
-import { ChainId, isValidChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, getGoPlusLabsConstants, isValidChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { AuthorizationAPI, SecurityAPI } from '../index.js'
 import { fetchJSON } from '../helpers.js'
 import { GO_PLUS_LABS_ROOT_URL, INFINITE_VALUE } from './constants.js'
 import { SecurityMessageLevel } from './types.js'
 import { SecurityMessages } from './rules.js'
+import { FungibleTokenSpender, isSameAddress, NonFungibleContractSpender } from '@masknet/web3-shared-base'
 import { getAllMaskDappContractInfo } from '../Rabby/helpers.js'
 import type { GoPlusNFTInfo, GoPlusTokenInfo, GoPlusTokenSpender, NFTSpenderInfo } from './type.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { FungibleTokenSpender, isSameAddress, NonFungibleContractSpender } from '@masknet/web3-shared-base'
 import { BigNumber } from 'bignumber.js'
+
+function checkInWhitelist(chainId = ChainId.Mainnet, address: string) {
+    const { WHITE_LISTS } = getGoPlusLabsConstants(chainId)
+    return WHITE_LISTS?.some((x) => isSameAddress(x, address))
+}
 
 export interface SupportedChainResponse {
     id: string
@@ -18,15 +23,25 @@ export interface SupportedChainResponse {
 }
 
 export class GoPlusAuthorizationAPI implements AuthorizationAPI.Provider<ChainId> {
+    async getSupportChainIds() {
+        return [ChainId.Mainnet, ChainId.BSC]
+    }
     async getNonFungibleTokenSpenders(chainId: ChainId, addresses: string) {
+        const supportedChainIds = await this.getSupportChainIds()
+        if (!supportedChainIds.includes(chainId)) return EMPTY_LIST
+
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'nft')
         const response = await fetchJSON<{
             result: GoPlusNFTInfo[]
         }>(urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v2/nft721_approval_security/:chainId', { chainId, addresses }))
 
-        if (!response.result?.length) return EMPTY_LIST
+        const nft1155Response = await fetchJSON<{
+            result: GoPlusNFTInfo[]
+        }>(urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v2/nft1155_approval_security/:chainId', { chainId, addresses }))
 
-        return response.result
+        if (!response.result?.length && !nft1155Response.result?.length) return EMPTY_LIST
+
+        return [...response.result, ...nft1155Response.result]
             .reduce<NFTSpenderInfo[]>((acc, cur) => {
                 return acc.concat(
                     cur.approved_list.map((rawSpender) => {
@@ -70,6 +85,9 @@ export class GoPlusAuthorizationAPI implements AuthorizationAPI.Provider<ChainId
     }
 
     async getFungibleTokenSpenders(chainId: ChainId, addresses: string) {
+        const supportedChainIds = await this.getSupportChainIds()
+        if (!supportedChainIds.includes(chainId)) return EMPTY_LIST
+
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'token')
 
         const response = await fetchJSON<{
@@ -185,11 +203,12 @@ export const createTokenSecurity = (
     const makeMessageList = getMessageList(tokenSecurity)
     const risk_item_quantity = makeMessageList.filter((x) => x.level === SecurityMessageLevel.High).length
     const warn_item_quantity = makeMessageList.filter((x) => x.level === SecurityMessageLevel.Medium).length
+    const inWhitelist = checkInWhitelist(chainId, tokenSecurity.contract)
     return {
         ...tokenSecurity,
-        is_high_risk,
-        risk_item_quantity,
-        warn_item_quantity,
+        is_high_risk: inWhitelist ? false : is_high_risk,
+        risk_item_quantity: inWhitelist ? 0 : risk_item_quantity,
+        warn_item_quantity: inWhitelist ? 0 : warn_item_quantity,
         message_list: makeMessageList,
     }
 }
