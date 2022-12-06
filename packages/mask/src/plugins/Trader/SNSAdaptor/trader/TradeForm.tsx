@@ -554,7 +554,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                         {settings ? (
                             <ChainBoundary
                                 expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                expectedChainId={chainId === ChainId.Optimism ? ChainId.Mainnet : (chainId as ChainId)}>
+                                expectedChainId={chainId as ChainId}>
                                 <WalletConnectedBoundary offChain>
                                     <EthereumERC20TokenApprovedBoundary
                                         onlyInfiniteUnlock
