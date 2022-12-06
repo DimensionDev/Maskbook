@@ -43,3 +43,5 @@ export const UploadingFile: FC<UploadingFileProps> = memo(({ file, progress, ...
         </FileFrame>
     )
 })
+
+UploadingFile.displayName = 'UploadingFile'

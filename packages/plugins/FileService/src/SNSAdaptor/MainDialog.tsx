@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 620,
         boxShadow: 'none',
         backgroundImage: 'none',
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+        [theme.breakpoints.down('sm')]: {
             display: 'block !important',
             margin: 12,
         },
