@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -12,7 +11,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        minHeight: 300,
     },
     info: {
         width: '100%',
@@ -29,24 +27,22 @@ export function DetailsTab(props: DetailsTabProps) {
     const { classes } = useStyles()
     const { sourceType, rarity } = Context.useContainer()
 
-    return useMemo(() => {
-        if (asset.loading || !asset.value || rarity.loading)
-            return (
-                <CollectibleCard>
-                    <div className={classes.body}>
-                        <LoadingBase />
-                    </div>
-                </CollectibleCard>
-            )
+    if (asset.loading || !asset.value || rarity.loading)
         return (
             <CollectibleCard>
                 <div className={classes.body}>
-                    <div className={classes.info}>
-                        <DetailsCard sourceType={sourceType} asset={asset.value} />
-                    </div>
-                    <PropertiesCard rank={rarity.value?.rank} asset={asset.value} />
+                    <LoadingBase />
                 </div>
             </CollectibleCard>
         )
-    }, [asset, classes])
+    return (
+        <CollectibleCard>
+            <div className={classes.body}>
+                <div className={classes.info}>
+                    <DetailsCard sourceType={sourceType} asset={asset.value} />
+                </div>
+                <PropertiesCard rank={rarity.value?.rank} asset={asset.value} />
+            </div>
+        </CollectibleCard>
+    )
 }
