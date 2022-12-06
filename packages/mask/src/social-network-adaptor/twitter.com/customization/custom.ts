@@ -24,6 +24,13 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
             theme.breakpoints.values = { xs: 0, sm: 687, md: 1024, lg: 1280, xl: 1920 }
             theme.components = theme.components || {}
 
+            theme.components.MuiTypography = {
+                styleOverrides: {
+                    root: {
+                        fontFamily: 'TwitterChirp',
+                    },
+                },
+            }
             theme.components.MuiPaper = {
                 defaultProps: {
                     elevation: 0,
