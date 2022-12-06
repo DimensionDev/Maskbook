@@ -106,10 +106,30 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
                 }
                 info.postMessage.value = makeTypedMessageTuple(nextTypedMessage)
             }
-            collectPostInfo()
+
+            function collectLinks() {
+                if (metadata.destroyed) return
+                if (signal?.aborted) return
+                const linkElements = metadata.current.querySelectorAll<HTMLLinkElement>('[role=article] [id] a')
+                const links = [...Array.from(linkElements).filter((x) => x.href)]
+
+                const seen = new Set<string>()
+                for (const x of links) {
+                    if (seen.has(x.href)) continue
+                    seen.add(x.href)
+                    info.postMetadataMentionedLinks.set(x, x.href)
+                }
+            }
+
+            function run() {
+                collectPostInfo()
+                collectLinks()
+            }
+
+            run()
             return {
-                onNodeMutation: collectPostInfo,
-                onTargetChanged: collectPostInfo,
+                onNodeMutation: run,
+                onTargetChanged: run,
                 onRemove: () => store.delete(metadata),
             }
         }),
