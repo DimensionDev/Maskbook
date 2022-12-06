@@ -1,5 +1,5 @@
-import { StrictMode } from 'react'
-import { createRoot, hydrateRoot } from 'react-dom/client'
+import { createContext, StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
 import { DisableShadowRootContext } from '@masknet/theme'
 
 function cleanup() {
@@ -29,8 +29,24 @@ export function createNormalReactRoot(jsx: JSX.Element, dom?: HTMLElement) {
     return createRoot(container).render(Root(jsx))
 }
 
+// Note: we should not really do this. the normal way is to call hydrateRoot.
+// but we have too many useSyncExternalStore calls that does not provides onHydrate (3rd argument)
+// therefore hydrate actually works worse than render.
 export function hydrateNormalReactRoot(jsx: JSX.Element, dom?: HTMLElement) {
     cleanup()
     const container = getContainer(dom)
-    return hydrateRoot(container, Root(jsx))
+    container.style.display = 'none'
+    let called = false
+    function replace() {
+        if (called) return
+        called = true
+        const old = document.getElementById('root-ssr')
+        if (old) old.style.display = 'none'
+        container.style.display = 'initial'
+    }
+    setTimeout(replace, 250)
+    return createRoot(container).render(
+        <HydrateFinished.Provider value={replace}>{Root(jsx)}</HydrateFinished.Provider>,
+    )
 }
+export const HydrateFinished = createContext(() => {})

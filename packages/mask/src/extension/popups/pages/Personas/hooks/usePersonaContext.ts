@@ -14,14 +14,18 @@ import { NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP } from '@masknet/shared'
 
 function useSSRPersonaInformation() {
     const [personas, setPersonas] = useState(useValueRef(initialPersonaInformation))
-    const revalidate = useCallback(
-        () => void Services.Identity.queryOwnedPersonaInformation(false).then(setPersonas),
-        [],
-    )
+    const revalidate = useCallback(() => {
+        Services.Identity.queryOwnedPersonaInformation(false)
+            .then(setPersonas)
+            .then(() => set(false))
+    }, [])
+    const [useServerSnapshot, set] = useState(true)
     useEffect(() => void initialPersonaInformation ?? revalidate(), [])
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(revalidate), [])
 
-    return { personas }
+    return {
+        personas: useServerSnapshot && !personas.length ? initialPersonaInformation.getServerSnapshot() : personas,
+    }
 }
 
 function usePersonaContext() {
