@@ -18,7 +18,6 @@ import {
 import { ChainId, createContract, getRPCConstants, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL, NFTSCAN_API, NFTSCAN_RESTFUL_API } from '../constants.js'
 import type { EVM } from '../types/EVM.js'
-import type { TrendingAPI } from '../../types/index.js'
 import { parseJSON, resolveActivityType, getPaymentToken, getAssetFullName } from '../../helpers.js'
 
 export type NFTScanChainId = ChainId.Mainnet | ChainId.Matic | ChainId.BSC | ChainId.Arbitrum | ChainId.Optimism
@@ -220,7 +219,7 @@ export function createNonFungibleCollectionFromGroup(
 
 export function createNonFungibleCollectionFromCollection(
     chainId: ChainId,
-    collection: TrendingAPI.Collection,
+    collection: NonFungibleTokenAPI.Collection,
 ): NonFungibleCollection<ChainId, SchemaType> {
     return {
         chainId,
@@ -238,7 +237,7 @@ export function createNonFungibleCollectionFromCollection(
 
 export function createNonFungibleTokenContract(
     chainId: ChainId,
-    collection: TrendingAPI.Collection,
+    collection: NonFungibleTokenAPI.Collection,
 ): NonFungibleTokenContract<ChainId, SchemaType> {
     return {
         chainId,

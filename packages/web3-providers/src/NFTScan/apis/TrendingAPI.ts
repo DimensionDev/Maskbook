@@ -9,7 +9,7 @@ import {
     NonFungibleTokenActivity,
 } from '@masknet/web3-shared-base'
 import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
-import { TrendingAPI } from '../../types/index.js'
+import { NonFungibleTokenAPI, TrendingAPI } from '../../types/index.js'
 import type { EVM, Response } from '../types/index.js'
 import {
     fetchFromNFTScanV2,
@@ -48,19 +48,22 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     private looksrare = new LooksRareAPI()
     private opensea = new OpenSeaAPI()
 
-    private async getCollection(chainId: ChainId, address: string): Promise<TrendingAPI.Collection | undefined> {
+    private async getCollection(
+        chainId: ChainId,
+        address: string,
+    ): Promise<NonFungibleTokenAPI.Collection | undefined> {
         if (!isValidChainId(chainId)) return
         const path = urlcat('/api/v2/collections/:address', {
             address,
             contract_address: address,
         })
-        const response = await fetchFromNFTScanV2<Response<TrendingAPI.Collection>>(chainId, path)
+        const response = await fetchFromNFTScanV2<Response<NonFungibleTokenAPI.Collection>>(chainId, path)
         return response?.data
     }
 
-    async getCollectionByTwitterHandler(twitterHandler: string): Promise<TrendingAPI.Collection | undefined> {
+    async getCollectionByTwitterHandler(twitterHandler: string): Promise<NonFungibleTokenAPI.Collection | undefined> {
         const path = '/api/v2/collections/filters'
-        const response = await fetchFromNFTScanRestFulAPI<Response<TrendingAPI.Collection[]>>(
+        const response = await fetchFromNFTScanRestFulAPI<Response<NonFungibleTokenAPI.Collection[]>>(
             path,
             JSON.stringify({ twitter: twitterHandler }),
         )
@@ -77,10 +80,10 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         return response.data
     }
 
-    private async searchNFTCollection(chainId: ChainId, keyword: string): Promise<TrendingAPI.Collection[]> {
+    private async searchNFTCollection(chainId: ChainId, keyword: string): Promise<NonFungibleTokenAPI.Collection[]> {
         if (!isValidChainId(chainId)) return EMPTY_LIST
         const path = '/api/v2/collections/filters'
-        const response = await fetchFromNFTScanV2<Response<TrendingAPI.Collection[]>>(chainId, path, {
+        const response = await fetchFromNFTScanV2<Response<NonFungibleTokenAPI.Collection[]>>(chainId, path, {
             method: 'POST',
             body: JSON.stringify({
                 name: keyword,

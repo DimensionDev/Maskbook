@@ -12,7 +12,7 @@ import {
     Pageable,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
-import type { NonFungibleTokenAPI, TrendingAPI } from '../../types/index.js'
+import type { NonFungibleTokenAPI } from '../../types/index.js'
 import { EVM, PageableResponse, Response } from '../types/index.js'
 import {
     createNonFungibleAsset,
@@ -90,7 +90,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, HubIndicator>> {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = '/api/v2/collections/filters'
-        const response = await fetchFromNFTScanV2<Response<TrendingAPI.Collection[]>>(chainId, path, {
+        const response = await fetchFromNFTScanV2<Response<NonFungibleTokenAPI.Collection[]>>(chainId, path, {
             method: 'POST',
             body: JSON.stringify({
                 name: keyword,
@@ -114,7 +114,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
             address,
             contract_address: address,
         })
-        const response = await fetchFromNFTScanV2<Response<TrendingAPI.Collection>>(chainId, path)
+        const response = await fetchFromNFTScanV2<Response<NonFungibleTokenAPI.Collection>>(chainId, path)
         if (!response?.data) return
         return createNonFungibleCollectionFromCollection(chainId, response.data)
     }
@@ -126,7 +126,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
         const path = urlcat('/api/v2/collections/:address', {
             address,
         })
-        const response = await fetchFromNFTScanV2<Response<TrendingAPI.Collection>>(chainId, path)
+        const response = await fetchFromNFTScanV2<Response<NonFungibleTokenAPI.Collection>>(chainId, path)
         if (!response?.data) return
         return createNonFungibleTokenContract(chainId, response.data)
     }

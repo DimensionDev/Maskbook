@@ -3,7 +3,14 @@ import { getEnumAsArray, unreachable } from '@masknet/kit'
 import { DataProvider } from '@masknet/public-api'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { NonFungibleCollectionOverview, NonFungibleTokenActivity } from '@masknet/web3-shared-base'
-import { CoinGeckoTrending, CoinMarketCap, NFTScanTrending, TrendingAPI, UniSwap } from '@masknet/web3-providers'
+import {
+    CoinGeckoTrending,
+    CoinMarketCap,
+    NFTScanTrending,
+    TrendingAPI,
+    UniSwap,
+    NonFungibleTokenAPI,
+} from '@masknet/web3-providers'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import type { Coin, Currency, Stat, TagType, Trending } from '../../types/index.js'
 import { isBlockedAddress, isBlockedKeyword, resolveKeyword, resolveCoinId } from './hotfix.js'
@@ -127,7 +134,7 @@ export async function getNonFungibleTokenActivities(
 
 export async function getCollectionByTwitterHandler(
     twitterHandler: string,
-): Promise<TrendingAPI.Collection | undefined> {
+): Promise<NonFungibleTokenAPI.Collection | undefined> {
     return NFTScanTrending.getCollectionByTwitterHandler(twitterHandler)
 }
 
