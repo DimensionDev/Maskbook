@@ -13,6 +13,5 @@ export {
     hasHostPermission,
     requestHostPermission,
 } from './request-permission.js'
-export { saveFileFromBuffer, type SaveFileOptions } from '../../../shared/helpers/download.js'
 export { r2d2Fetch } from './r2d2Fetch.js'
 export { queryRemoteI18NBundle, type Bundle } from './i18n-cache-query.js'
