@@ -113,8 +113,8 @@ export class ConnectionState<
     }
 
     async getConnection(options?: Web3ConnectionOptions) {
-        const chainId =
-            options?.chainId ?? this.subscription.chainId?.getCurrentValue() ?? this.options.getDefaultChainId()
+        const _chainId = options?.chainId ?? this.subscription.chainId?.getCurrentValue()
+        const chainId = !_chainId ? this.options.getDefaultChainId() : _chainId
         const account = options?.account ?? this.subscription.account?.getCurrentValue()
         const providerType =
             options?.providerType ??
