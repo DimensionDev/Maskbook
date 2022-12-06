@@ -112,7 +112,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
             name: asset.name ?? asset.collection.name,
             symbol: asset.asset_contract.symbol,
             owner: asset.owner.address,
-            creatorEarning: asset.asset_contract.dev_seller_fee_basis_points.toString() ?? '0',
+            creatorEarning: asset.asset_contract.dev_seller_fee_basis_points.toString(),
         },
         collection: {
             address: asset.token_address ?? asset.asset_contract.address,

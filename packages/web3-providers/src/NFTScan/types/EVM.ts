@@ -52,6 +52,10 @@ export namespace EVM {
         verified: boolean
         items_total: number
         owners_total: number
+        /**
+         * OpenSea royalty
+         * @example 250 means 2.5%
+         */
         royalty: number
         opensea_floor_price: number
         floor_price: number
@@ -93,7 +97,7 @@ export namespace EVM {
     export interface AssetsGroup {
         contract_address: string
         contract_name: string
-        logo_url: string | null
+        logo_url?: string
         owns_total: number
         items_total: number
         description: string
