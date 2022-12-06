@@ -33,6 +33,7 @@ const useStyles = makeStyles<ButtonProps>()((theme, props) => ({
     text: {
         fontWeight: 700,
         fontSize: props.fontSize,
+        fontFamily: props.fontFamily,
     },
 }))
 
