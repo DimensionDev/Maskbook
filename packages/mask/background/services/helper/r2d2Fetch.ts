@@ -85,13 +85,18 @@ async function squashedFetch(request: Request, init?: RequestInit): Promise<Resp
 
     // send the request & cache the response
     const response = await originalFetch(request.clone(), init)
-    if (response.ok && response.status === 200) {
-        const request_ = request.clone()
-        const response_ = response.clone()
+    const body = response.clone().body?.tee()[0]
 
-        // store the cached date as a UTC string
-        response_.headers.set('x-cache-date', new Date().toUTCString())
-        await cache.put(request_, response_)
+    if (response.ok && response.status === 200 && body) {
+        await cache.put(
+            request.clone(),
+            new Response(body, {
+                headers: {
+                    // store the cached date as a UTC string
+                    'x-cache-date': new Date().toUTCString(),
+                },
+            }),
+        )
     }
     return response
 }
@@ -108,16 +113,17 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
 
     // hotfix image requests
     if (request.method === 'GET' && request.headers.get('accept')?.includes('image/')) {
-        const blob = await attemptUntil<Blob | null>(
-            [async () => (await originalFetch(url, request)).blob(), async () => fetchImageViaDOM(url)],
-            null,
-        )
-
-        return new Response(blob, {
-            headers: {
-                'Content-Type': 'image/png',
+        return new Response(
+            await attemptUntil<Blob | null>(
+                [async () => (await originalFetch(url, request)).blob(), async () => fetchImageViaDOM(url)],
+                null,
+            ),
+            {
+                headers: {
+                    'Content-Type': 'image/png',
+                },
             },
-        })
+        )
     }
 
     // r2d2

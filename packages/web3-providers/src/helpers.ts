@@ -39,8 +39,8 @@ export async function fetchCache(info: RequestInfo, init?: RequestInit) {
     if (request.method !== 'GET') return fetch(request)
     if (!request.url.startsWith('http')) return fetch(request)
 
-    const { host } = new URL(request.url)
-    const cache = await caches.open(host)
+    // hit a cached request
+    const cache = await caches.open(new URL(request.url).host)
     const hit = await cache.match(request)
     const date = hit?.headers.get('x-cache-date')
 
@@ -51,14 +51,18 @@ export async function fetchCache(info: RequestInfo, init?: RequestInit) {
     }
 
     const response = await fetch(request)
+    const body = response.clone().body?.tee()[0]
 
-    if (response.ok && response.status === 200) {
-        const request_ = request.clone()
-        const response_ = response.clone()
-
-        // store the cached date as a UTC string
-        response_.headers.set('x-cache-cate', new Date().toUTCString())
-        await cache.put(request_, response_)
+    if (response.ok && response.status === 200 && body) {
+        await cache.put(
+            request.clone(),
+            new Response(body, {
+                headers: {
+                    // store the cached date as a UTC string
+                    'x-cache-date': new Date().toUTCString(),
+                },
+            }),
+        )
     }
     return response
 }
