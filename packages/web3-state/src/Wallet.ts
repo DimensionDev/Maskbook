@@ -1,22 +1,17 @@
 import { omit } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
-import { EMPTY_ARRAY, EMPTY_LIST, mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
+import { EMPTY_LIST, mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
 import { isSameAddress, Wallet, WalletState as Web3WalletState } from '@masknet/web3-shared-base'
 
 export type WalletStorage<ProviderType extends string> = Partial<Record<ProviderType, Wallet[]>>
 
-export class WalletState<ChainId, ProviderType extends string, Transaction> implements Web3WalletState<Transaction> {
-    public wallets?: Subscription<Wallet[]> = EMPTY_ARRAY
-
-    protected storage: StorageItem<WalletStorage<ProviderType>> = null!
+export class WalletState<ProviderType extends string, Transaction> implements Web3WalletState<Transaction> {
+    public storage: StorageItem<WalletStorage<ProviderType>> = null!
+    public wallets?: Subscription<Wallet[]>
 
     protected get all() {
         return this.wallets?.getCurrentValue() ?? EMPTY_LIST
-    }
-
-    protected get chainId() {
-        return this.subscriptions.chainId?.getCurrentValue() ?? this.options.getDefaultChainId()
     }
 
     protected get providerType() {
@@ -30,20 +25,16 @@ export class WalletState<ChainId, ProviderType extends string, Transaction> impl
         protected context: Plugin.Shared.SharedUIContext,
         protected providers: ProviderType[],
         protected subscriptions: {
-            account?: Subscription<string>
-            chainId?: Subscription<ChainId>
             providerType?: Subscription<ProviderType>
         },
         protected options: {
-            getDefaultChainId: () => ChainId
             formatAddress: (address: string) => string
         },
     ) {
-        const defaultValue = Object.fromEntries(
-            this.providers.map((x) => [x, []] as [string, Wallet[]]),
-        ) as WalletStorage<ProviderType>
         const { storage } = this.context.createKVStorage('persistent', {}).createSubScope('Wallet', {
-            value: defaultValue,
+            value: Object.fromEntries(
+                this.providers.map((x) => [x, []] as [string, Wallet[]]),
+            ) as WalletStorage<ProviderType>,
         })
         this.storage = storage.value
 

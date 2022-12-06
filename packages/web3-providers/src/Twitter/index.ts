@@ -10,6 +10,7 @@ import {
     getDefaultUserSettings,
     getUserSettingsCached,
     getUserViaTwitterIdentity,
+    staleUserViaWebAPI,
 } from './apis/index.js'
 import { fetchJSON } from '../helpers.js'
 
@@ -140,5 +141,9 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             [() => getUserViaWebAPI(screenName), () => getUserViaTwitterIdentity(screenName)],
             null,
         )
+    }
+
+    async staleUserByScreenName(screenName: string): Promise<TwitterBaseAPI.User | null> {
+        return staleUserViaWebAPI(screenName)
     }
 }

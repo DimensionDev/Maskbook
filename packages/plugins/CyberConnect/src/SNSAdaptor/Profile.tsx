@@ -58,6 +58,7 @@ const useStyles = makeStyles()((theme) => ({
     icon: {
         width: 16,
         height: 16,
+        color: theme.palette.maskColor.publicSecond,
     },
     PopupLink: {
         width: 16,
@@ -75,6 +76,7 @@ const useStyles = makeStyles()((theme) => ({
             display: 'none',
         },
         height: 400,
+        overflowY: 'auto',
     },
     statusBox: {
         display: 'flex',

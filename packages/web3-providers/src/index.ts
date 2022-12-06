@@ -53,6 +53,7 @@ import { SpaceID_API } from './SpaceID/index.js'
 import { LensAPI } from './Lens/index.js'
 
 export * from './types/index.js'
+export * from './helpers.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()

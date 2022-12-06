@@ -38,6 +38,7 @@ import {
     AddressType,
     ContractTransaction,
     AccountTransaction,
+    PayloadEditor,
 } from '@masknet/web3-shared-evm'
 import {
     Account,
@@ -56,6 +57,7 @@ import {
     resolveIPFS_URL,
     resolveCrossOriginURL,
 } from '@masknet/web3-shared-base'
+import { fetchJSON } from '@masknet/web3-providers'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
 import { createContext, dispatch } from './composer.js'
 import { Providers } from './provider.js'
@@ -65,38 +67,6 @@ import { Web3StateSettings } from '../../settings/index.js'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
-
-export function isReadOnlyMethod(method: EthereumMethodType) {
-    return [
-        EthereumMethodType.ETH_GET_CODE,
-        EthereumMethodType.ETH_GAS_PRICE,
-        EthereumMethodType.ETH_BLOCK_NUMBER,
-        EthereumMethodType.ETH_GET_BALANCE,
-        EthereumMethodType.ETH_GET_BLOCK_BY_NUMBER,
-        EthereumMethodType.ETH_GET_BLOCK_BY_HASH,
-        EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH,
-        EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
-        EthereumMethodType.ETH_GET_TRANSACTION_COUNT,
-        EthereumMethodType.ETH_GET_FILTER_CHANGES,
-        EthereumMethodType.ETH_NEW_PENDING_TRANSACTION_FILTER,
-        EthereumMethodType.ETH_ESTIMATE_GAS,
-        EthereumMethodType.ETH_CALL,
-        EthereumMethodType.ETH_GET_LOGS,
-    ].includes(method)
-}
-
-async function fetchJSON<T extends unknown>(
-    input: RequestInfo,
-    init?: RequestInit | undefined,
-    options?: {
-        fetch?: (input: RequestInfo, init?: RequestInit | undefined) => Promise<Response>
-    },
-) {
-    const fetch_ = options?.fetch ?? globalThis.fetch
-    const response = await fetch_(input, init)
-    if (!response.ok) throw new Error('Failed to fetch.')
-    return response.json() as Promise<T>
-}
 
 class Connection implements EVM_Connection {
     constructor(
@@ -139,7 +109,7 @@ class Connection implements EVM_Connection {
                                 default: {
                                     const provider =
                                         Providers[
-                                            isReadOnlyMethod(context.method)
+                                            PayloadEditor.fromPayload(context.request).readonly
                                                 ? ProviderType.MaskWallet
                                                 : options.providerType
                                         ]

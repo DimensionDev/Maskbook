@@ -12,9 +12,13 @@ import { IdentityService } from './IdentityService.js'
 import { NameService } from './NameService.js'
 import { Storage } from './Storage/index.js'
 
-export function createWeb3State(context: Plugin.Shared.SharedUIContext): SolanaWeb3State {
+export async function createWeb3State(context: Plugin.Shared.SharedUIContext): Promise<SolanaWeb3State> {
     const Provider_ = new Provider(context)
     const Settings_ = new Settings(context)
+
+    await Provider_.storage.account.initializedPromise
+    await Provider_.storage.providerType.initializedPromise
+    await Settings_.storage.currencyType.initializedPromise
 
     return {
         AddressBook: new AddressBook(context, {
@@ -39,8 +43,6 @@ export function createWeb3State(context: Plugin.Shared.SharedUIContext): SolanaW
             providerType: Provider_.providerType,
         }),
         Wallet: new Wallet(context, {
-            chainId: Provider_.chainId,
-            account: Provider_.account,
             providerType: Provider_.providerType,
         }),
         Others: new Others(context),

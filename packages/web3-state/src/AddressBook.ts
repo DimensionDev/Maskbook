@@ -9,7 +9,7 @@ export class AddressBookState<
     AddressBook extends Record<ChainId, string[]> = Record<ChainId, string[]>,
 > implements Web3AddressBookState<ChainId>
 {
-    protected storage: StorageItem<AddressBook> = null!
+    public storage: StorageItem<AddressBook> = null!
     public addressBook?: Subscription<string[]>
 
     constructor(
@@ -24,9 +24,8 @@ export class AddressBookState<
             formatAddress(a: string): string
         },
     ) {
-        const defaultValue = Object.fromEntries(chainIds.map((x) => [x, []] as [ChainId, string[]])) as AddressBook
         const { storage } = this.context.createKVStorage('persistent', {}).createSubScope('AddressBook', {
-            value: defaultValue,
+            value: Object.fromEntries(chainIds.map((x) => [x, []] as [ChainId, string[]])) as AddressBook,
         })
         this.storage = storage.value
 

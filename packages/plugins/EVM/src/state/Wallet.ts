@@ -10,22 +10,19 @@ import {
 } from '@masknet/shared-base'
 import { SmartPayAccount } from '@masknet/web3-providers'
 import type { Wallet as WalletItem } from '@masknet/web3-shared-base'
-import { ChainId, formatEthereumAddress, getDefaultChainId, ProviderType, Transaction } from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress, ProviderType, Transaction } from '@masknet/web3-shared-evm'
 
-export class Wallet extends WalletState<ChainId, ProviderType, Transaction> {
+export class Wallet extends WalletState<ProviderType, Transaction> {
     private ref = new ValueRef<WalletItem[]>(EMPTY_LIST)
     private subscription = createSubscriptionFromValueRef(this.ref)
 
     constructor(
         context: Plugin.Shared.SharedUIContext,
         subscriptions: {
-            chainId?: Subscription<ChainId>
-            account?: Subscription<string>
             providerType?: Subscription<ProviderType>
         },
     ) {
         super(context, [ProviderType.MaskWallet], subscriptions, {
-            getDefaultChainId,
             formatAddress: formatEthereumAddress,
         })
 
@@ -33,10 +30,7 @@ export class Wallet extends WalletState<ChainId, ProviderType, Transaction> {
             this.wallets = mapSubscription(
                 mergeSubscription(this.subscriptions.providerType, this.storage.subscription, this.subscription),
                 ([providerType, storage, wallets]) => {
-                    if (providerType === ProviderType.MaskWallet) {
-                        return wallets
-                    }
-                    return storage[providerType] ?? EMPTY_LIST
+                    return providerType === ProviderType.MaskWallet ? wallets : storage[providerType] ?? EMPTY_LIST
                 },
             )
         }
@@ -45,15 +39,15 @@ export class Wallet extends WalletState<ChainId, ProviderType, Transaction> {
     }
 
     private setupSubscriptions() {
-        this.context.wallets.subscribe(async () => {
+        const update = async () => {
             const wallets = this.context.wallets.getCurrentValue()
 
-            if (this.providerType === ProviderType.MaskWallet && this.chainId === ChainId.Matic) {
-                const now = new Date()
+            if (this.providerType === ProviderType.MaskWallet) {
                 const accounts = await SmartPayAccount.getAccounts(
-                    this.chainId,
+                    ChainId.Matic,
                     wallets.map((x) => x.address),
                 )
+                const now = new Date()
                 this.ref.value = [
                     ...wallets,
                     ...accounts.map((x) => ({
@@ -71,7 +65,10 @@ export class Wallet extends WalletState<ChainId, ProviderType, Transaction> {
             } else {
                 this.ref.value = wallets
             }
-        })
+        }
+
+        update()
+        this.context.wallets.subscribe(update)
     }
 
     override async addWallet(wallet: WalletItem): Promise<void> {

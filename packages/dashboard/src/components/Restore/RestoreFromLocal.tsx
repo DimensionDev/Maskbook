@@ -17,6 +17,7 @@ import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext.js'
 import { LoadingButton } from '../LoadingButton/index.js'
 import PasswordField from '../PasswordField/index.js'
 import { useCustomSnackbar } from '@masknet/theme'
+import { delay } from '@masknet/kit'
 
 enum RestoreStatus {
     WaitingInput = 0,
@@ -90,8 +91,9 @@ export const RestoreFromLocal = memo(() => {
                 await changeCurrentPersona(lastedPersona)
             }
         }
+        await delay(1000)
         navigate(DashboardRoutes.Personas, { replace: true })
-    }, [currentPersona, changeCurrentPersona])
+    }, [currentPersona, changeCurrentPersona, navigate])
 
     const restoreDB = useCallback(async () => {
         try {
