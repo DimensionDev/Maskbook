@@ -61,37 +61,38 @@ export function OfferCard(props: OfferCardProps) {
     const { Others } = useWeb3State()
     const { t } = useI18N()
 
+    const renderTokenIcon = () => {
+        if (offer.priceInToken?.token.logoURL)
+            return <img width={18} height={18} src={offer.priceInToken?.token.logoURL} alt="" />
+
+        if (offer.priceInToken?.token.symbol.toUpperCase() === 'WETH') return <Icons.WETH size={18} />
+
+        return offer.priceInToken?.token.address ? (
+            <TokenIcon
+                name={offer.priceInToken.token.name}
+                symbol={offer.priceInToken.token.symbol}
+                address={offer.priceInToken.token.address}
+                AvatarProps={{
+                    style: {
+                        width: 18,
+                        height: 18,
+                        fontSize: 12,
+                    },
+                }}
+            />
+        ) : (
+            <Typography className={classes.fallbackSymbol}>
+                {offer.priceInToken?.token.symbol || offer.priceInToken?.token.name}
+            </Typography>
+        )
+    }
+
     return (
         <div className={classes.wrapper}>
             {offer.source ? <CollectibleProviderIcon active={false} provider={offer.source} /> : null}
             <div className={classes.offerDetail}>
                 <div className={classes.flex}>
-                    {(offer.priceInToken?.token.logoURL && (
-                        <img width={18} height={18} src={offer.priceInToken?.token.logoURL} alt="" />
-                    )) ||
-                        (offer.priceInToken?.token.symbol.toUpperCase() === 'WETH' ? (
-                            <Icons.WETH size={18} />
-                        ) : (
-                            <>
-                                {offer.priceInToken?.token.address ? (
-                                    <TokenIcon
-                                        name={offer.priceInToken.token.name}
-                                        symbol={offer.priceInToken.token.symbol}
-                                        address={offer.priceInToken.token.address}
-                                        AvatarProps={{
-                                            style: {
-                                                width: 18,
-                                                height: 18,
-                                            },
-                                        }}
-                                    />
-                                ) : (
-                                    <Typography className={classes.fallbackSymbol}>
-                                        {offer.priceInToken?.token.symbol || offer.priceInToken?.token.name}
-                                    </Typography>
-                                )}
-                            </>
-                        ))}
+                    {renderTokenIcon()}
                     <div className={classes.flex}>
                         <Typography className={classes.textBase}>
                             <strong>
@@ -112,20 +113,21 @@ export function OfferCard(props: OfferCardProps) {
                     <Typography className={classes.textBase}>{t('plugin_collectible_from')}</Typography>
 
                     <Typography className={classes.textBase} style={{ marginRight: 6 }}>
-                        {(offer.maker?.address && (
+                        {offer.maker?.address ? (
                             <strong style={{ margin: '0px 4px' }}>
                                 {Others?.formatAddress(offer.maker.address, 4)}
                             </strong>
-                        )) ||
-                            '-'}
+                        ) : (
+                            '-'
+                        )}
                     </Typography>
 
                     <Typography className={classes.textBase}>
-                        {(isValidTimestamp(offer.createdAt) &&
-                            formatDistanceToNow(Math.ceil(offer.createdAt!), {
-                                addSuffix: true,
-                            })) ||
-                            '-'}
+                        {isValidTimestamp(offer.createdAt)
+                            ? formatDistanceToNow(Math.ceil(offer.createdAt!), {
+                                  addSuffix: true,
+                              })
+                            : '-'}
                         {isValidTimestamp(offer.expiredAt) && (
                             <>
                                 <span style={{ margin: '0 4px' }}>{t('plugin_collectible_expires_in')}</span>
