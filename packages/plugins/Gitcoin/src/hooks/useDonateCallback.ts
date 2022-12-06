@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
+import { compact } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { FungibleToken, toFixed } from '@masknet/web3-shared-base'
@@ -22,27 +23,24 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
     const bulkCheckoutContract = useBulkCheckoutContract(chainId)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
-    const donations = useMemo((): Donation[] => {
+    const donations = useMemo<Donation[]>(() => {
         if (!connection || !address || !token || !GITCOIN_ETH_ADDRESS || !GITCOIN_TIP_PERCENTAGE) return EMPTY_LIST
         const tipAmount = new BigNumber(GITCOIN_TIP_PERCENTAGE / 100).multipliedBy(amount)
         const grantAmount = new BigNumber(amount).minus(tipAmount)
-        const result: Donation[] = [
+        return compact([
             [
                 token.schema === SchemaType.Native ? GITCOIN_ETH_ADDRESS : token.address,
                 grantAmount.toFixed(0),
                 address, // dest
             ],
-        ]
-
-        if (GITCOIN_MAINTAINER_ADDRESS && tipAmount.isGreaterThan(0)) {
-            result.push([
-                token.schema === SchemaType.Native ? GITCOIN_ETH_ADDRESS : token.address,
-                tipAmount.toFixed(0),
-                GITCOIN_MAINTAINER_ADDRESS, // dest
-            ])
-        }
-
-        return result
+            GITCOIN_MAINTAINER_ADDRESS && tipAmount.isGreaterThan(0)
+                ? [
+                      token.schema === SchemaType.Native ? GITCOIN_ETH_ADDRESS : token.address,
+                      tipAmount.toFixed(0),
+                      GITCOIN_MAINTAINER_ADDRESS, // dest
+                  ]
+                : undefined,
+        ])
     }, [address, amount, token, GITCOIN_MAINTAINER_ADDRESS])
 
     return useAsyncFn(async () => {
