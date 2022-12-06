@@ -57,7 +57,6 @@ function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider
 
             function collectLinks() {
                 if (!activityNode) return
-                if (signal?.aborted) return
 
                 const links = [...activityNode.querySelectorAll('a')].filter((x) => x.rel)
                 const seen = new Set<string>()

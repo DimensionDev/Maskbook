@@ -109,7 +109,6 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
 
             function collectLinks() {
                 if (metadata.destroyed) return
-                if (signal?.aborted) return
                 const linkElements = metadata.current.querySelectorAll<HTMLLinkElement>('[role=article] [id] a')
                 const links = [...Array.from(linkElements).filter((x) => x.href)]
 
