@@ -1,14 +1,14 @@
 {
     "GITCOIN_MAINTAINER_ADDRESS": {
-        "Mainnet": "0x00De4B13153673BCAE2616b67bf822500d325Fc3",
+        "Mainnet": "0xde21F729137C5Af1b01d73aF1dC21eFfa2B8a0d6",
         "Ropsten": "",
-        "Rinkeby": "0x00De4B13153673BCAE2616b67bf822500d325Fc3",
+        "Rinkeby": "0xde21F729137C5Af1b01d73aF1dC21eFfa2B8a0d6",
         "Kovan": "",
         "Gorli": "",
         "BSC": "",
         "BSCT": "",
-        "Matic": "0x00De4B13153673BCAE2616b67bf822500d325Fc3",
-        "Mumbai": "0x00De4B13153673BCAE2616b67bf822500d325Fc3",
+        "Matic": "0x366adf5b96ee15aff5d66b0fa44a56330b55e97b",
+        "Mumbai": "0x366adf5b96ee15aff5d66b0fa44a56330b55e97b",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
