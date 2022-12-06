@@ -50,7 +50,7 @@ const CACHE_RULES = {
     'https://vcent-agent.r2d2.to': CACHE_DURATION.SHORT,
     'https://rss3.domains/name': CACHE_DURATION.SHORT,
     // avatar on RSS3 kv queries
-    'https://kv.r2d2.to/api/com.maskbook.user_twitter.com': CACHE_DURATION.SHORT,
+    'https://kv.r2d2.to/api/com.maskbook': CACHE_DURATION.SHORT,
     'https://discovery.attrace.com': CACHE_DURATION.SHORT,
     // mask-x
     '7x16bogxfb.execute-api.us-east-1.amazonaws.com': CACHE_DURATION.SHORT,
