@@ -36,19 +36,25 @@ interface FileFrameProps extends FileBaseProps {
     operations?: ReactNode
 }
 
-export const FileFrame: FC<PropsWithChildren<FileFrameProps>> = memo(
-    ({ className, children, file, operations, ...rest }) => {
-        const { classes, cx } = useStyles()
+export const FileFrame: FC<PropsWithChildren<FileFrameProps>> = memo(function FileFrame({
+    className,
+    children,
+    file,
+    operations,
+    ...rest
+}) {
+    const { classes, cx } = useStyles()
 
-        return (
-            <div className={cx(className, classes.file)} {...rest}>
-                <Icons.Message size={24} />
-                <div className={classes.content}>
-                    <Typography className={classes.name}>{file.name}</Typography>
-                    {children}
-                </div>
-                {operations}
+    return (
+        <div className={cx(className, classes.file)} {...rest}>
+            <Icons.Message size={24} />
+            <div className={classes.content}>
+                <Typography className={classes.name}>{file.name}</Typography>
+                {children}
             </div>
-        )
-    },
-)
+            {operations}
+        </div>
+    )
+})
+
+FileFrame.displayName = 'FileFrame'

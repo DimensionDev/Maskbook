@@ -61,73 +61,76 @@ export const FileManagementProvider: FC<React.PropsWithChildren<{}>> = memo(({ c
         })
     }, [])
 
-    const removeUnloadingFile = (id: string) => {
-        setUploadingFiles((files) => files.filter((x) => x.id !== id))
-        setUploadStateMap((map) => omit(map, [id]))
-    }
+    const uploadFile = useCallback(
+        async (file: File, provider: Provider, useCDN: boolean, encrypted: boolean) => {
+            const key = encrypted ? makeFileKey() : undefined
+            const block = new Uint8Array(await file.arrayBuffer())
+            const checksum = encodeArrayBuffer(await Attachment.checksum(block))
+            const createdAt = new Date()
 
-    const uploadFile = useCallback(async (file: File, provider: Provider, useCDN: boolean, encrypted: boolean) => {
-        const key = encrypted ? makeFileKey() : undefined
-        const block = new Uint8Array(await file.arrayBuffer())
-        const checksum = encodeArrayBuffer(await Attachment.checksum(block))
-        const createdAt = new Date()
+            const removeUnloadingFile = (id: string) => {
+                setUploadingFiles((files) => files.filter((x) => x.id !== id))
+                setUploadStateMap((map) => omit(map, [id]))
+            }
 
-        setUploadingFiles((files) => [
-            ...files,
-            {
+            setUploadingFiles((files) => [
+                ...files,
+                {
+                    type: 'file',
+                    key,
+                    provider,
+                    id: checksum,
+                    name: file.name,
+                    size: file.size,
+                    createdAt,
+                },
+            ])
+            setUploadProgress(checksum, 0)
+
+            const payloadTxID = await timeout(
+                PluginFileServiceRPC.makeAttachment(provider, {
+                    key,
+                    name: file.name,
+                    type: file.type,
+                    block,
+                }),
+                60000,
+            )
+            // Uploading
+            for await (const progress of PluginFileServiceRPCGenerator.upload(provider, payloadTxID)) {
+                setUploadProgress(checksum, progress)
+            }
+
+            const landingTxID = await timeout(
+                PluginFileServiceRPC.uploadLandingPage(provider, {
+                    name: file.name,
+                    size: file.size,
+                    txId: payloadTxID,
+                    type: file.type,
+                    key,
+                    useCDN,
+                }),
+                300000, // = 5 minutes
+            )
+
+            const fileInfo: FileInfo = {
                 type: 'file',
-                key,
                 provider,
                 id: checksum,
                 name: file.name,
                 size: file.size,
                 createdAt,
-            },
-        ])
-        setUploadProgress(checksum, 0)
-
-        const payloadTxID = await timeout(
-            PluginFileServiceRPC.makeAttachment(provider, {
                 key,
-                name: file.name,
-                type: file.type,
-                block,
-            }),
-            60000,
-        )
-        // Uploading
-        for await (const progress of PluginFileServiceRPCGenerator.upload(provider, payloadTxID)) {
-            setUploadProgress(checksum, progress)
-        }
-
-        const landingTxID = await timeout(
-            PluginFileServiceRPC.uploadLandingPage(provider, {
-                name: file.name,
-                size: file.size,
-                txId: payloadTxID,
-                type: file.type,
-                key,
-                useCDN,
-            }),
-            300000, // = 5 minutes
-        )
-
-        const fileInfo: FileInfo = {
-            type: 'file',
-            provider,
-            id: checksum,
-            name: file.name,
-            size: file.size,
-            createdAt,
-            key,
-            payloadTxID,
-            landingTxID,
-        }
-        await PluginFileServiceRPC.setFileInfo(fileInfo)
-        removeUnloadingFile(checksum)
-        refetchFiles()
-        return fileInfo
-    }, [])
+                payloadTxID,
+                landingTxID,
+            }
+            await PluginFileServiceRPC.setFileInfo(fileInfo)
+            removeUnloadingFile(checksum)
+            refetchFiles()
+            return fileInfo
+        },
+        [refetchFiles],
+    )
 
     const { attachMetadata } = useCompositionContext()
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
@@ -154,7 +157,7 @@ export const FileManagementProvider: FC<React.PropsWithChildren<{}>> = memo(({ c
             setUploadingFiles,
             attachToPost,
         }
-    }, [files, uploadStateMap, uploadingFiles, attachToPost])
+    }, [files, uploadStateMap, uploadingFiles, attachToPost, refetchFiles])
 
     return <FileManagementContext.Provider value={contextValue}>{children}</FileManagementContext.Provider>
 })

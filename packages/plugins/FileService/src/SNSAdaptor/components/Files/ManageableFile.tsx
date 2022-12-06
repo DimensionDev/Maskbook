@@ -125,3 +125,5 @@ export const ManageableFile: FC<ManageableFileProps> = memo(
         )
     },
 )
+
+ManageableFile.displayName = 'ManageableFile'
