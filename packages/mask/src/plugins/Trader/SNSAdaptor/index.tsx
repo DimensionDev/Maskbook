@@ -1,6 +1,7 @@
 import { Trans } from 'react-i18next'
 import { Box } from '@mui/material'
 import type { Plugin } from '@masknet/plugin-infra'
+import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { base } from '../base.js'
 import { TraderDialog } from './trader/TraderDialog.js'
 import { SearchResultInspector } from './trending/SearchResultInspector.js'
@@ -117,7 +118,13 @@ const sns: Plugin.SNSAdaptor.Definition<
         UI: {
             Decorator({ identity }) {
                 const { value: collection } = useCollectionByTwitterHandler(identity?.identifier?.userId)
-                if (!identity?.identifier?.userId || !collection) return null
+                const plugins = useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode()
+                if (
+                    !identity?.identifier?.userId ||
+                    !collection ||
+                    !plugins.find((x) => x.ID === PluginID.Web3ProfileCard)
+                )
+                    return null
 
                 return (
                     <Box display="flex" alignItems="top" justifyContent="center">
