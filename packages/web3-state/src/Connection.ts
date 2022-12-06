@@ -113,18 +113,18 @@ export class ConnectionState<
     }
 
     async getConnection(options?: Web3ConnectionOptions) {
-        const _chainId = options?.chainId ?? this.subscription.chainId?.getCurrentValue()
-        const chainId = !_chainId ? this.options.getDefaultChainId() : _chainId
-        const account = options?.account ?? this.subscription.account?.getCurrentValue()
+        const account = options?.account || this.subscription.account?.getCurrentValue()
+        const chainId =
+            options?.chainId || this.subscription.chainId?.getCurrentValue() || this.options.getDefaultChainId()
         const providerType =
-            options?.providerType ??
-            this.subscription.providerType?.getCurrentValue() ??
+            options?.providerType ||
+            this.subscription.providerType?.getCurrentValue() ||
             this.options.getDefaultProviderType()
 
         if (!this.options.isValidChainId(chainId)) return
         return this.createConnectionCached?.(this.context, {
-            chainId,
             account,
+            chainId,
             providerType,
         })
     }
