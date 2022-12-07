@@ -14,5 +14,4 @@ export {
     hasHostPermission,
     requestHostPermission,
 } from './request-permission.js'
-export { saveFileFromBuffer, type SaveFileOptions } from '../../../shared/helpers/download.js'
 export { queryRemoteI18NBundle, type Bundle } from './i18n-cache-query.js'
