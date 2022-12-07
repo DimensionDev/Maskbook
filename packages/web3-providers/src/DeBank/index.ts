@@ -15,7 +15,7 @@ import { ChainId, formatGweiToWei, getDeBankConstants, SchemaType, GasOption } f
 import { formatAssets, formatTransactions } from './helpers.js'
 import type { WalletTokenRecord, GasPriceDictResponse, HistoryRecord } from './types.js'
 import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../types/index.js'
-import { getAllEVMNativeAssets } from '../helpers.js'
+import { getNativeAssets } from '../helpers/getNativeAssets.js'
 
 const DEBANK_OPEN_API = 'https://debank-proxy.r2d2.to'
 
@@ -93,7 +93,7 @@ export class DeBankAPI
                                 : x.logo_url,
                     })),
                 ),
-                getAllEVMNativeAssets(),
+                getNativeAssets(),
                 (a, z) => isSameAddress(a.address, z.address) && a.chainId === z.chainId,
             ),
             createIndicator(options?.indicator),

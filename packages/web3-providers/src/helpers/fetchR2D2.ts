@@ -1,3 +1,4 @@
+/* cspell:disable */
 import { attemptUntil, fetchImageViaDOM } from '@masknet/web3-shared-base'
 import { fetchBlob } from './fetchBlob.js'
 

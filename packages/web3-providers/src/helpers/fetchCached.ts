@@ -70,14 +70,13 @@ export async function fetchCached(
     return response
 }
 
-export async function staleCache(info: RequestInfo, init?: RequestInit) {
+export async function staleCached(info: RequestInfo | URL, init?: RequestInit): Promise<Response | void> {
     const request = new Request(info, init)
 
     if (request.method !== 'GET') return
     if (!request.url.startsWith('http')) return
 
-    const { host } = new URL(request.url)
-    const cache = await caches.open(host)
+    const cache = await caches.open(new URL(request.url).host)
     const hit = await cache.match(request)
     if (!hit) return
 

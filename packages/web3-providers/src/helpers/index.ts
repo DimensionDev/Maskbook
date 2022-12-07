@@ -1,7 +1,0 @@
-export * from './fetch.js'
-export * from './fetchBlob.js'
-export * from './fetchCached.js'
-export * from './fetchJSON.js'
-export * from './fetchR2D2.js'
-export * from './fetchSquashed.js'
-export * from './fetchText.js'

@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import { getTokens } from './getTokens.js'
-import { fetchCache, staleCache } from '../../helpers.js'
 import type { TwitterBaseAPI } from '../../types/Twitter.js'
+import { fetchCached, staleCached } from '../../helpers/fetchCached.js'
 
 const features = {
     verified_phone_label_enabled: false,
@@ -35,7 +35,7 @@ async function createRequest(screenName: string) {
 
 export async function getUserViaWebAPI(screenName: string, times = 0): Promise<TwitterBaseAPI.User | null> {
     const request = await createRequest(screenName)
-    const response = await fetchCache(request)
+    const response = await fetchCached(request)
     if (!response.ok) {
         if (times >= 3) return null
         const patchingFeatures: string[] = []
@@ -61,7 +61,7 @@ export async function getUserViaWebAPI(screenName: string, times = 0): Promise<T
 
 export async function staleUserViaWebAPI(screenName: string): Promise<TwitterBaseAPI.User | null> {
     const request = await createRequest(screenName)
-    const response = await staleCache(request)
+    const response = await staleCached(request)
     if (!response?.ok) return null
 
     const json: TwitterBaseAPI.UserByScreenNameResponse = await response.json()
