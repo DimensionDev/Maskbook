@@ -51,7 +51,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         flexDirection: 'column',
-        backgroundColor: theme.palette.maskColor.publicBg,
         color: theme.palette.maskColor.publicMain,
         position: 'relative',
     },
