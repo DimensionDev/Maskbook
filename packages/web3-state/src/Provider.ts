@@ -156,7 +156,7 @@ export class ProviderState<
         const provider = this.providers[providerType]
 
         // compose the connection result
-        const result = await provider.connect(chainId, providerType, address)
+        const result = await provider.connect(chainId, address)
 
         // failed to connect provider
         if (!result.account) throw new Error('Failed to connect provider.')

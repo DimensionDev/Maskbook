@@ -841,7 +841,7 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     /** Create an instance that implement the wallet protocol. */
     createWeb3Provider(options?: ProviderOptions<ChainId>): Promise<Web3Provider>
     /** Create the connection. */
-    connect(chainId?: ChainId, providerType?: ProviderType, address?: string): Promise<Account<ChainId>>
+    connect(chainId?: ChainId, address?: string): Promise<Account<ChainId>>
     /** Dismiss the connection. */
     disconnect(): Promise<void>
 }
