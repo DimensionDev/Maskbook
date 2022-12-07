@@ -14,5 +14,5 @@ export function useTransactions<S extends 'all' | void = void, T extends Network
     return useAsyncRetry<Array<Web3Helper.TransactionScope<S, T>> | undefined>(async () => {
         const response = await hub?.getTransactions(options?.chainId ?? chainId, options?.account ?? account)
         return response?.data
-    }, [account, chainId, JSON.stringify(hub)])
+    }, [account, chainId, hub])
 }

@@ -17,5 +17,5 @@ export function useNonFungibleTokenPrice<S extends 'all' | void = void, T extend
         if (!chainId || !address || !tokenId) return 0
         const price = await hub?.getNonFungibleTokenPrice?.(chainId, address, tokenId)
         return price ?? 0
-    }, [chainId, address, tokenId, JSON.stringify(hub)])
+    }, [chainId, address, tokenId, hub])
 }

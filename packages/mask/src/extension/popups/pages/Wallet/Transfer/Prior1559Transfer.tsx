@@ -258,7 +258,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
             const gasPrice = formatWeiToGwei(gasOptions[GasOptionType.FAST].suggestedMaxFeePerGas)
             methods.setValue('gasPrice', gasPrice.toString())
         }
-    }, [methods.setValue, methods.getValues, chainId, JSON.stringify(hub)])
+    }, [methods.setValue, methods.getValues, chainId, hub])
     // #endregion
 
     // #region Get min gas limit with amount and recipient address

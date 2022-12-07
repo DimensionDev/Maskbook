@@ -15,5 +15,5 @@ export function useNonFungibleTokenSecurity<S extends 'all' | void = void, T ext
     return useAsyncRetry<Web3Helper.FungibleTokenSecurityScope<S, T> | undefined>(async () => {
         if (!address) return
         return hub?.getNonFungibleTokenSecurity?.(chainId, address)
-    }, [chainId, address, JSON.stringify(hub)])
+    }, [chainId, address, hub])
 }
