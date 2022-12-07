@@ -6,6 +6,7 @@ export {
     openDashboard,
     queryCurrentActiveTab,
     openPopupConnectWindow,
+    openWalletStartUpWindow,
 } from './popup-opener.js'
 export {
     queryExtensionPermission,

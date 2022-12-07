@@ -71,9 +71,26 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
         return response?.result as T
     }
 
-    override async connect(chainId: ChainId) {
+    override async connect(chainId: ChainId, _: ProviderType, address?: string) {
         const siteType = getSiteType()
 
+        if (siteType === ExtensionSite.Popup) {
+            if (address) {
+                await SharedContextSettings.value.updateAccount({
+                    account: address,
+                    chainId,
+                })
+
+                return {
+                    account: address,
+                    chainId,
+                }
+            }
+            return {
+                account: this.account,
+                chainId: this.chainId,
+            }
+        }
         // connected
         if (chainId === this.chainId && isValidAddress(this.account)) {
             if (siteType) SharedContextSettings.value.recordConnectedSites(siteType, true)
