@@ -204,6 +204,9 @@ export function FileBrowser({ selectMode, selectedFileIds = EMPTY_LIST }: Props)
                                     setKeyword(event.currentTarget.value)
                                 }
                             },
+                            onBlur: (event) => {
+                                setKeyword(event.currentTarget.value)
+                            },
                         }}
                         onChange={(event) => {
                             setInput(event.currentTarget.value)
