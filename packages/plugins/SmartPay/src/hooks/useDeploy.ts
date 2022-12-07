@@ -1,3 +1,6 @@
+import { first } from 'lodash-es'
+import { useAsyncFn } from 'react-use'
+import getUnixTime from 'date-fns/getUnixTime'
 import {
     useLastRecognizedIdentity,
     useCurrentPersonaInformation,
@@ -8,12 +11,9 @@ import { useWeb3Connection } from '@masknet/web3-hooks-base'
 import { SmartPayFunder } from '@masknet/web3-providers'
 import type { ContractAccountAPI } from '@masknet/web3-providers/types'
 import { ProviderType, ChainId, getSmartPayConstants, ContractWallet } from '@masknet/web3-shared-evm'
-import getUnixTime from 'date-fns/getUnixTime'
-import { first } from 'lodash-es'
-import { useAsyncFn } from 'react-use'
 import { SignAccount, SignAccountType } from '../type.js'
 
-export function useDepoly(
+export function useDeploy(
     signAccount?: SignAccount,
     contractAccount?: ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM>,
 ) {

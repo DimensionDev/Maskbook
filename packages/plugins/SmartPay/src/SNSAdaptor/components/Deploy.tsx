@@ -1,27 +1,27 @@
+import { useCallback, useState } from 'react'
+import { useAsync, useBoolean, useCopyToClipboard, useUpdateEffect } from 'react-use'
+import { useNavigate } from 'react-router-dom'
+import { first } from 'lodash-es'
+import { useContainer } from 'unstated-next'
 import { Icons } from '@masknet/icons'
 import { ImageIcon, PersonaAction, useSnackbarCallback, WalletDescription } from '@masknet/shared'
 import { formatPersonaFingerprint, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Typography, alpha, Box } from '@mui/material'
+import { useNetworkDescriptor, useProviderDescriptor } from '@masknet/web3-hooks-base'
+import { SmartPayAccount } from '@masknet/web3-providers'
+import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 import { useI18N } from '../../locales/index.js'
-import { useCallback, useState } from 'react'
 import { ManagePopover } from './ManagePopover.js'
 import { SmartPayBanner } from './SmartPayBanner.js'
 import { ActionButton, LoadingBase, makeStyles } from '@masknet/theme'
 import { SmartPayContext } from '../../context/SmartPayContext.js'
-import { useContainer } from 'unstated-next'
-import { useNetworkDescriptor, useProviderDescriptor } from '@masknet/web3-hooks-base'
-import { useAsync, useBoolean, useCopyToClipboard, useUpdateEffect } from 'react-use'
 import { SignAccount, SignAccountType } from '../../type.js'
-import { SmartPayAccount } from '@masknet/web3-providers'
-import { first } from 'lodash-es'
-import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 import { CreateSuccessDialog } from './CreateSuccessDialog.js'
-import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
-import { useDepoly } from '../../hooks/useDeploy.js'
+import { useDeploy } from '../../hooks/useDeploy.js'
 
 const useStyles = makeStyles()((theme) => ({
     walletDescription: {
@@ -145,7 +145,7 @@ export function Deploy({ open }: { open: boolean }) {
     })
     // #endregion
 
-    const [{ loading: deployLoading }, handleDeploy] = useDepoly(signAccount, contractAccount)
+    const [{ loading: deployLoading }, handleDeploy] = useDeploy(signAccount, contractAccount)
 
     const handleSelectSignAccount = useCallback((signAccount: SignAccount) => {
         setSignAccount(signAccount)
