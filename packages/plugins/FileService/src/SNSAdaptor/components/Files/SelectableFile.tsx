@@ -57,3 +57,5 @@ export const SelectableFile: FC<SelectableFileProps> = memo(({ file, selected, o
         </FileFrame>
     )
 })
+
+SelectableFile.displayName = 'SelectableFile'

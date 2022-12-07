@@ -89,7 +89,7 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
                     </Button>
                 )
             return null
-        }, [t, status, statusLoading, customHint, isFnChildren])
+        }, [t, status, statusLoading, customHint, isFnChildren, children])
 
         const handleClick = useCallback(() => {
             beforeAction?.(status)

@@ -1,6 +1,6 @@
 import { Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { RSS3BaseAPI } from '@masknet/web3-providers'
+import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'

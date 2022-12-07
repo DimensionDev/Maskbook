@@ -1,5 +1,5 @@
 import MIRRORED_TOKENS from './mirrored_tokens.json'
-import type { TrendingAPI } from '../types/index.js'
+import type { TrendingAPI } from '../entry-types.js'
 
 export function isMirroredKeyword(symbol: string) {
     return MIRRORED_TOKENS.map((x) => x.symbol).some((x) => x.toUpperCase() === symbol.toUpperCase())

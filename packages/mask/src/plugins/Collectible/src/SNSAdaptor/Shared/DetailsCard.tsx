@@ -84,9 +84,7 @@ export function DetailsCard(props: DetailsCardProps) {
         { title: t('token_standard'), value: Others?.formatSchemaType(asset.schema || asset.contract?.schema) },
         {
             title: t('plugin_collectible_creator_earning'),
-            value: asset.contract?.creatorEarning
-                ? `${Number.parseInt(asset.contract.creatorEarning, 10) / 100}%`
-                : '-',
+            value: asset.contract?.creatorEarning ?? '-',
         },
     )
     if (sourceType && PLATFORM_COSTS[sourceType]) {

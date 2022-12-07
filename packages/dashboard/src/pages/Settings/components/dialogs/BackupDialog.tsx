@@ -65,11 +65,12 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
                 // local backup, no account
                 const encrypted = await encryptBackup(encode(backupPassword), encode(file))
                 const now = formatDateTime(Date.now(), 'yyyy-MM-dd')
-                await Services.Helper.saveFileFromBuffer({
-                    fileContent: encrypted,
-                    fileName: `mask-network-keystore-backup-${now}.bin`,
-                    mimeType: MimeTypes.Binary,
-                })
+                const blob = new Blob([encrypted], { type: MimeTypes.Binary })
+                const url = URL.createObjectURL(blob)
+                const a = document.createElement('a')
+                a.href = url
+                a.download = `mask-network-keystore-backup-${now}.bin`
+                a.click()
             } else if (params) {
                 const abstract = personaNickNames.join(', ')
                 const uploadUrl = await fetchUploadLink({ ...params, abstract })

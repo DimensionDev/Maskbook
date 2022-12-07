@@ -1,12 +1,12 @@
 import { memo, useMemo } from 'react'
+import { Box } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useRedPacketConstants } from '@masknet/web3-shared-evm'
-import { Box } from '@mui/material'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { HistoryAPI } from '@masknet/web3-providers'
+import { HistoryAPI } from '@masknet/web3-providers/types'
 
 const useStyles = makeStyles()(() => ({
     container: {

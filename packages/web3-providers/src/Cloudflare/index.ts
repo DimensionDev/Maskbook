@@ -6,8 +6,8 @@ import {
     getTokenAssetBaseURLConstants,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import type { TokenIconAPI } from '../types/TokenIcon.js'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
+import type { TokenIconAPI } from '../entry-types.js'
 
 export class CloudflareAPI implements TokenIconAPI.Provider<ChainId> {
     async getFungibleTokenIconURLs(chainId: ChainId, address: string): Promise<string[]> {

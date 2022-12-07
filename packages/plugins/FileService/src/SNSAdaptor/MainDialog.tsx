@@ -1,7 +1,8 @@
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import type { InitialEntry } from '@remix-run/router'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { RoutePaths } from '../constants.js'
@@ -24,8 +25,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 620,
         boxShadow: 'none',
         backgroundImage: 'none',
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            display: 'block !important',
+        [theme.breakpoints.down('sm')]: {
             margin: 12,
         },
     },
@@ -58,12 +58,22 @@ const FileServiceDialog: React.FC<FileServiceDialogProps> = ({
     }, [isOpenFromApplicationBoard, selectedFileIds])
     const initialIndex = confirmed ? 1 : 2
 
+    const handleClose = useCallback(() => {
+        if (isOpenFromApplicationBoard) {
+            CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
+                reason: 'timeline',
+                open: false,
+            })
+        }
+        onClose?.()
+    }, [isOpenFromApplicationBoard, onClose])
+
     return (
         <MemoryRouter initialEntries={initialEntries} initialIndex={initialIndex}>
             <FileManagementProvider>
                 <RouterDialog
                     open
-                    onClose={onClose}
+                    onClose={handleClose}
                     classes={{ paper: classes.paper }}
                     maxWidth="xs"
                     fullWidth

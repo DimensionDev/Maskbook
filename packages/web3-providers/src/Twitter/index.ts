@@ -1,7 +1,6 @@
 import urlcat from 'urlcat'
 import { timeout } from '@masknet/kit'
 import { attemptUntil } from '@masknet/web3-shared-base'
-import type { TwitterBaseAPI } from '../types/index.js'
 import {
     getSettings,
     getTokens,
@@ -12,7 +11,8 @@ import {
     getUserViaTwitterIdentity,
     staleUserViaWebAPI,
 } from './apis/index.js'
-import { fetchJSON } from '../helpers.js'
+import type { TwitterBaseAPI } from '../entry-types.js'
+import { fetchJSON } from '../entry-helpers.js'
 
 const UPLOAD_AVATAR_URL = 'https://upload.twitter.com/i/media/upload.json'
 const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/

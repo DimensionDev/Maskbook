@@ -1,4 +1,5 @@
-export { fetch, fetchJSON } from './fetch.js'
+export { fetchBlob, fetchJSON, fetchText } from '@masknet/web3-providers/helpers'
+export { r2d2Fetch } from './r2d2Fetch.js'
 export { resolveTCOLink } from './short-link-resolver.js'
 export {
     openPopupWindow,
@@ -6,6 +7,7 @@ export {
     openDashboard,
     queryCurrentActiveTab,
     openPopupConnectWindow,
+    openWalletStartUpWindow,
 } from './popup-opener.js'
 export {
     queryExtensionPermission,
@@ -13,6 +15,4 @@ export {
     hasHostPermission,
     requestHostPermission,
 } from './request-permission.js'
-export { saveFileFromBuffer, type SaveFileOptions } from '../../../shared/helpers/download.js'
-export { r2d2Fetch } from './r2d2Fetch.js'
 export { queryRemoteI18NBundle, type Bundle } from './i18n-cache-query.js'

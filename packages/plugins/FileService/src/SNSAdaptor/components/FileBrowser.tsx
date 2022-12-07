@@ -204,6 +204,9 @@ export function FileBrowser({ selectMode, selectedFileIds = EMPTY_LIST }: Props)
                                     setKeyword(event.currentTarget.value)
                                 }
                             },
+                            onBlur: (event) => {
+                                setKeyword(event.currentTarget.value)
+                            },
                         }}
                         onChange={(event) => {
                             setInput(event.currentTarget.value)
@@ -242,18 +245,25 @@ export function FileBrowser({ selectMode, selectedFileIds = EMPTY_LIST }: Props)
             {visibleFiles.length ? (
                 renderList()
             ) : (
-                <div className={classes.emptyBox}>
-                    <Icons.EmptySimple size={36} />
-                    <Typography className={classes.emptyMessage}>{t.empty()}</Typography>
-                </div>
+                <>
+                    <div className={classes.emptyBox}>
+                        <Icons.EmptySimple size={36} />
+                        <Typography className={classes.emptyMessage}>
+                            {files.length ? t.empty() : t.no_uploaded_files()}
+                        </Typography>
+                    </div>
+                    {files.length ? null : (
+                        <div className={classes.actions}>
+                            <Button fullWidth onClick={() => navigate(RoutePaths.UploadFile)}>
+                                {t.upload_file()}
+                            </Button>
+                        </div>
+                    )}
+                </>
             )}
-            {selectMode ? (
+            {selectMode && files.length ? (
                 <div className={classes.actions}>
-                    <Button
-                        fullWidth
-                        className={classes.confirmButton}
-                        disabled={!selectedIds.length}
-                        onClick={() => attachToPost(selectedFiles)}>
+                    <Button fullWidth disabled={!selectedIds.length} onClick={() => attachToPost(selectedFiles)}>
                         {t.confirm()}
                     </Button>
                 </div>

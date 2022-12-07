@@ -11,16 +11,10 @@ import {
     Rarible,
     Zerion,
     Rabby,
-    AuthorizationAPI,
-    FungibleTokenAPI,
-    NonFungibleTokenAPI,
-    TokenListAPI,
-    TokenIconAPI,
     LooksRare,
     Gem,
     Zora,
     R2D2,
-    PriceAPI,
     Cloudflare,
     CoinGeckoPriceEVM,
     ChainbaseFungibleToken,
@@ -29,6 +23,14 @@ import {
     X2Y2,
     GoPlusAuthorization,
 } from '@masknet/web3-providers'
+import type {
+    AuthorizationAPI,
+    FungibleTokenAPI,
+    NonFungibleTokenAPI,
+    TokenListAPI,
+    TokenIconAPI,
+    PriceAPI,
+} from '@masknet/web3-providers/types'
 import {
     SourceType,
     HubOptions,

@@ -3,25 +3,29 @@ import { useAsyncRetry } from 'react-use'
 import { head, unionWith } from 'lodash-es'
 import { createContainer } from 'unstated-next'
 import { useValueRef } from '@masknet/shared-base-ui'
+import { NextIDProof } from '@masknet/web3-providers'
 import { ECKeyIdentifier, EMPTY_LIST, isSameProfile, PersonaInformation, ProfileIdentifier } from '@masknet/shared-base'
 import { currentPersonaIdentifier } from '../../../../../../shared/legacy-settings/settings.js'
 import Services from '../../../../service.js'
 import { MaskMessages } from '../../../../../utils/index.js'
-import { NextIDProof } from '@masknet/web3-providers'
 import type { Account } from '../type.js'
 import { initialPersonaInformation } from './PersonaContextInitialData.js'
 import { NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP } from '@masknet/shared'
 
 function useSSRPersonaInformation() {
     const [personas, setPersonas] = useState(useValueRef(initialPersonaInformation))
-    const revalidate = useCallback(
-        () => void Services.Identity.queryOwnedPersonaInformation(false).then(setPersonas),
-        [],
-    )
+    const revalidate = useCallback(() => {
+        Services.Identity.queryOwnedPersonaInformation(false)
+            .then(setPersonas)
+            .then(() => set(false))
+    }, [])
+    const [useServerSnapshot, set] = useState(true)
     useEffect(() => void initialPersonaInformation ?? revalidate(), [])
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(revalidate), [])
 
-    return { personas }
+    return {
+        personas: useServerSnapshot && !personas.length ? initialPersonaInformation.getServerSnapshot() : personas,
+    }
 }
 
 function usePersonaContext() {

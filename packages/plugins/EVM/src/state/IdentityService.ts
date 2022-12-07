@@ -14,7 +14,8 @@ import {
 } from '@masknet/shared-base'
 import { KVStorage } from '@masknet/shared'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
-import { Lens, MaskX, MaskX_BaseAPI, NextIDProof, NextIDStorage, RSS3, Twitter } from '@masknet/web3-providers'
+import { Lens, MaskX, NextIDProof, NextIDStorage, RSS3, Twitter } from '@masknet/web3-providers'
+import { MaskX_BaseAPI } from '@masknet/web3-providers/types'
 import { ENS_Resolver } from './NameService/ENS.js'
 import { ChainbaseResolver } from './NameService/Chainbase.js'
 import { Web3StateSettings } from '../settings/index.js'
@@ -26,6 +27,7 @@ const ADDRESS_FULL = /0x\w{40,}/i
 const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/
 const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/
 const LENS_RE = /[^\t\n\v()[\]]{1,256}\.lens\b/i
+const LENS_URL_RE = /https?:\/\/.+\/(\w+\.lens)/
 
 function getENSNames(userId: string, nickname: string, bio: string) {
     return [userId.match(ENS_RE), nickname.match(ENS_RE), bio.match(ENS_RE)]
@@ -34,9 +36,9 @@ function getENSNames(userId: string, nickname: string, bio: string) {
 }
 
 function getLensNames(nickname: string, bio: string, homepage: string) {
-    return [nickname.match(LENS_RE), bio.match(LENS_RE), homepage.match(LENS_RE)]
-        .map((result) => result?.[0] ?? '')
-        .filter(Boolean)
+    const homepageNames = homepage.match(LENS_URL_RE)
+    const names = [nickname.match(LENS_RE), bio.match(LENS_RE)].map((result) => result?.[0] ?? '').filter(Boolean)
+    return homepageNames === null || !homepageNames?.[1] ? names : [...names, homepageNames[1]]
 }
 
 function getSIDNames(userId: string, nickname: string, bio: string) {

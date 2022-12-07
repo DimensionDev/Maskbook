@@ -1,8 +1,8 @@
 import { memo, ReactNode } from 'react'
 import { Box, Stack, Typography } from '@mui/material'
-import { useI18N } from '../../locales/index.js'
 import { makeStyles } from '@masknet/theme'
-import type { SecurityMessage, SecurityAPI } from '@masknet/web3-providers'
+import type { SecurityMessage, SecurityAPI } from '@masknet/web3-providers/types'
+import { useI18N } from '../../locales/index.js'
 import { DefineMapping } from '../constants.js'
 
 const useStyles = makeStyles()((theme) => ({

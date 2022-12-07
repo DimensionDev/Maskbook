@@ -860,7 +860,6 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                     overflow: 'unset!important',
                     borderRadius: 8,
                     backgroundColor: colors.maskColor.input,
-                    border: 'solid 1px transparent',
                     [`&.${inputBaseClasses.focused}`]: {
                         outline: `2px solid ${alpha(colors.maskColor.primary, 0.2)}`,
                         border: `1px solid ${alpha(colors.maskColor.primary, 0.5)}`,

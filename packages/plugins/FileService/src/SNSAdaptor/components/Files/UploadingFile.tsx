@@ -39,7 +39,9 @@ export const UploadingFile: FC<UploadingFileProps> = memo(({ file, progress, ...
                 variant={progress === 0 ? 'indeterminate' : 'determinate'}
                 value={progress}
             />
-            <Typography className={classes.desc}>{formatFileSize(file.size)}</Typography>
+            <Typography className={classes.desc}>{formatFileSize(file.size, true)}</Typography>
         </FileFrame>
     )
 })
+
+UploadingFile.displayName = 'UploadingFile'

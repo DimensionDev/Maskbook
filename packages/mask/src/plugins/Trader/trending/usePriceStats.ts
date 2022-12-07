@@ -5,7 +5,7 @@ import { isUndefined } from 'lodash-es'
 import { PluginTraderRPC } from '../messages.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { TrendingAPI } from '@masknet/web3-providers'
+import { TrendingAPI } from '@masknet/web3-providers/types'
 
 interface Options {
     coinId?: string

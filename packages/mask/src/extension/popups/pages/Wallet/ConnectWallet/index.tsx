@@ -13,6 +13,7 @@ import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { useWalletLockStatus } from '../hooks/useWalletLockStatus.js'
+import Services from '../../../../service.js'
 
 const useStyles = makeStyles()((theme) => ({
     box: {
@@ -85,7 +86,10 @@ const ConnectWalletPage = memo(() => {
                 }
 
                 if (!wallets.length) {
-                    navigate(PopupRoutes.Wallet, { replace: true })
+                    await Services.Helper.openWalletStartUpWindow({
+                        toBeClose: 1,
+                    })
+
                     return
                 }
 

@@ -11,7 +11,13 @@ import {
     FungibleTokenSpender,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import type { AuthorizationAPI, FungibleTokenAPI, TokenListAPI, TokenIconAPI, PriceAPI } from '@masknet/web3-providers'
+import type {
+    AuthorizationAPI,
+    FungibleTokenAPI,
+    TokenListAPI,
+    TokenIconAPI,
+    PriceAPI,
+} from '@masknet/web3-providers/types'
 import { HubStateBaseClient } from '../Hub.js'
 
 export class HubStateFungibleClient<ChainId, SchemaType> extends HubStateBaseClient<ChainId> {

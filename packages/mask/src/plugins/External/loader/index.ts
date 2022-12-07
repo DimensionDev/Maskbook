@@ -17,7 +17,7 @@ export function useExternalPluginTemplate(url: string, manifest: Manifest | unde
 // TODO: support suspense, cache
 async function fetchTemplate(url: string | null) {
     if (!url) return
-    const blob = await Services.Helper.fetch(url)
+    const blob = await Services.Helper.fetchBlob(url)
     const text = await blob.text()
     // TODO: support TrustedTypes
     const parser = new DOMParser()

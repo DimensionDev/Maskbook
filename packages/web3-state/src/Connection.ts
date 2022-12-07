@@ -102,17 +102,17 @@ export class ConnectionState<
         )
     }
 
-    async getWeb3(options?: Web3ConnectionOptions) {
-        const connection = await this.getConnection(options)
+    getWeb3(options?: Web3ConnectionOptions) {
+        const connection = this.getConnection(options)
         return connection.getWeb3(options)
     }
 
-    async getWeb3Provider(options?: Web3ConnectionOptions) {
-        const connection = await this.getConnection(options)
+    getWeb3Provider(options?: Web3ConnectionOptions) {
+        const connection = this.getConnection(options)
         return connection.getWeb3Provider(options)
     }
 
-    async getConnection(options?: Web3ConnectionOptions) {
+    getConnection(options?: Web3ConnectionOptions) {
         const account = options?.account || this.subscription.account?.getCurrentValue()
         const chainId =
             options?.chainId || this.subscription.chainId?.getCurrentValue() || this.options.getDefaultChainId()

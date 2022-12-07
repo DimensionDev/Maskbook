@@ -1,5 +1,6 @@
 import urlcat from 'urlcat'
 import { GraphQLClient } from 'graphql-request'
+import type { Variables } from 'graphql-request/dist/types.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     createIndicator,
@@ -28,11 +29,10 @@ import {
     TransferEventProperty,
     V3AskEventProperty,
 } from './types.js'
-import { getAssetFullName, resolveActivityType } from '../helpers.js'
-import type { NonFungibleTokenAPI } from '../types/index.js'
 import { GetCollectionsByKeywordQuery, GetEventsQuery, GetTokenQuery } from './queries.js'
 import { ZORA_MAINNET_GRAPHQL_URL } from './constants.js'
-import type { Variables } from 'graphql-request/dist/types.js'
+import type { NonFungibleTokenAPI } from '../entry-types.js'
+import { getAssetFullName, resolveActivityType } from '../entry-helpers.js'
 
 export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     private client = new GraphQLClient(ZORA_MAINNET_GRAPHQL_URL)

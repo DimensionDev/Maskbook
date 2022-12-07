@@ -26,7 +26,6 @@ import {
     SourceType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, createNativeToken, createERC20Token, isValidChainId } from '@masknet/web3-shared-evm'
-import type { NonFungibleTokenAPI } from '../types/index.js'
 import {
     OpenSeaAssetContract,
     OpenSeaAssetEvent,
@@ -38,7 +37,8 @@ import {
 } from './types.js'
 import { getOrderUSDPrice } from './utils.js'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants.js'
-import { resolveActivityType, getPaymentToken, getAssetFullName } from '../helpers.js'
+import { getAssetFullName, getPaymentToken, resolveActivityType } from '../entry-helpers.js'
+import type { NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, init?: RequestInit) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
@@ -112,7 +112,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
             name: asset.name ?? asset.collection.name,
             symbol: asset.asset_contract.symbol,
             owner: asset.owner.address,
-            creatorEarning: asset.asset_contract.dev_seller_fee_basis_points.toString() ?? '0',
+            creatorEarning: asset.asset_contract.dev_seller_fee_basis_points.toString(),
         },
         collection: {
             address: asset.token_address ?? asset.asset_contract.address,

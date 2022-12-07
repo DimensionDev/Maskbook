@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { RSS3BaseAPI } from '@masknet/web3-providers'
+import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 import { base } from '../base.js'

@@ -1,3 +1,4 @@
+import { fetchText } from '@masknet/web3-providers/helpers'
 import type { Storage } from 'webextension-polyfill'
 // TODO: those types are defined in the plugin/External
 type MaskSDK_SNS_ContextIdentifier = string
@@ -9,17 +10,15 @@ import {
 } from '../../../shared/definitions/routes.js'
 
 export async function fetchManifest(addr: string): Promise<Manifest> {
-    const response = await fetch(addr + 'mask-manifest.json')
-    const json = await response.text().then(JSONC)
-    // TODO: verify manifest
-    return JSON.parse(json)
+    const text = await fetchText(addr + 'mask-manifest.json')
 
-    function JSONC(x: string) {
-        return x
+    // TODO: verify manifest
+    return JSON.parse(
+        text
             .split('\n')
             .filter((x) => !x.match(/^ +\/\//))
-            .join('\n')
-    }
+            .join('\n'),
+    )
 }
 const hostedMeta = new Map<MaskSDK_SNS_ContextIdentifier, [string, unknown]>()
 export async function getHostedMeta(context: MaskSDK_SNS_ContextIdentifier) {

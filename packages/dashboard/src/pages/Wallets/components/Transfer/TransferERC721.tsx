@@ -18,7 +18,6 @@ import {
     explorerResolver,
     isValidAddress,
 } from '@masknet/web3-shared-evm'
-// import { useERC721TokenDetailedOwnerList } from '@masknet/web3-providers'
 import { FormattedAddress } from '@masknet/shared'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { WalletMessages } from '@masknet/plugin-wallet'

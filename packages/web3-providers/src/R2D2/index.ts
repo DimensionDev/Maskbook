@@ -9,7 +9,7 @@ import {
     chainResolver,
     getTokenListConstants,
 } from '@masknet/web3-shared-evm'
-import type { TokenListAPI } from '../types/index.js'
+import type { TokenListAPI } from '../entry-types.js'
 
 const fetchTokenList = memoizePromise(
     memoize,

@@ -411,27 +411,4 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         backgroundGradient:
             'linear-gradient(90deg, rgba(104, 81, 255, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
-    {
-        ID: `${PLUGIN_ID}_torus`,
-        providerAdaptorPluginID: PLUGIN_ID,
-        type: ProviderType.Torus,
-        name: 'Torus',
-        icon: new URL('../assets/torus.png', import.meta.url),
-        enableRequirements: {
-            supportedChainIds: [
-                ChainId.Mainnet,
-                ChainId.BSC,
-                ChainId.Matic,
-                ChainId.xDai,
-                ChainId.Optimism,
-                ChainId.Arbitrum,
-                ChainId.Avalanche,
-            ],
-            supportedEnhanceableSites: [],
-            supportedExtensionSites: [],
-        },
-        homeLink: 'https://app.tor.us/',
-        shortenLink: 'tor.us',
-        downloadLink: 'https://app.tor.us/',
-    },
 ]

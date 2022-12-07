@@ -1,3 +1,4 @@
+import urlcat from 'urlcat'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     createIndicator,
@@ -11,8 +12,6 @@ import {
     Pageable,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-solana'
-import urlcat from 'urlcat'
-import type { NonFungibleTokenAPI } from '../../types/index.js'
 import {
     createNonFungibleAsset,
     createNonFungibleCollection,
@@ -21,6 +20,7 @@ import {
     fetchFromNFTScanV2,
 } from '../helpers/Solana.js'
 import type { PageableResponse, Response, Solana } from '../types/index.js'
+import type { NonFungibleTokenAPI } from '../../entry-types.js'
 
 export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, _?: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {

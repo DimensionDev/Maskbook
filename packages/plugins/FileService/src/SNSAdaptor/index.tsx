@@ -4,6 +4,8 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
+import { MaskLightTheme } from '@masknet/theme'
+import { ThemeProvider } from '@mui/material'
 import { truncate } from 'lodash-es'
 import { base } from '../base.js'
 import { META_KEY_1, META_KEY_2, META_KEY_3 } from '../constants.js'
@@ -24,7 +26,11 @@ const definition: Plugin.SNSAdaptor.Definition = {
     DecryptedInspector(props) {
         const metadata = FileInfoMetadataReader(props.message.meta)
         if (!metadata.ok) return null
-        return <FileViewer files={metadata.val} />
+        return (
+            <ThemeProvider theme={MaskLightTheme}>
+                <FileViewer files={metadata.val} />
+            </ThemeProvider>
+        )
     },
     CompositionDialogMetadataBadgeRender: new Map<string, BadgeRenderer<FileInfo> | BadgeRenderer<FileInfo[]>>([
         [META_KEY_1, onAttachedFile],

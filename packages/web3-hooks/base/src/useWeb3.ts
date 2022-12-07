@@ -1,5 +1,5 @@
 /// <reference types="web3" />
-import { useAsyncRetry } from 'react-use'
+import { useMemo } from 'react'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from './useContext.js'
@@ -12,7 +12,7 @@ export function useWeb3<S extends 'all' | void = void, T extends NetworkPluginID
     const { Connection } = useWeb3State(pluginID)
     const { account, chainId, providerType } = useChainContext()
 
-    const { value: web3 = null } = useAsyncRetry(async () => {
+    const web3 = useMemo(() => {
         return Connection?.getWeb3?.({
             account,
             chainId,

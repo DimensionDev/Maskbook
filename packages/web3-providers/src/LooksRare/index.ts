@@ -17,10 +17,10 @@ import {
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, createERC20Token, formatWeiToEther, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
-import type { NonFungibleTokenAPI } from '../types/index.js'
 import type { Collection, Event, Order, Stats, Token } from './types.js'
-import { resolveActivityType } from '../helpers.js'
 import { LOOKSRARE_API_URL, LOOKSRARE_PAGE_SIZE } from './constants.js'
+import { resolveActivityType } from '../entry-helpers.js'
+import type { NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromLooksRare<T>(chainId: ChainId, url: string) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return

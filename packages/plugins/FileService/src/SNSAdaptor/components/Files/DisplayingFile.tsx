@@ -75,3 +75,5 @@ export const DisplayingFile: FC<DisplayingFileProps> = memo(({ file, onSave, onD
         </FileFrame>
     )
 })
+
+DisplayingFile.displayName = 'DisplayingFile'

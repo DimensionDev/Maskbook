@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
-import type { ExplorerAPI } from '../types/index.js'
 import type { Transaction } from './types.js'
 import { toTransaction } from './helpers.js'
+import type { ExplorerAPI } from '../entry-types.js'
 
 export class NativeExplorerAPI implements ExplorerAPI.Provider {
     async getLatestTransactions(

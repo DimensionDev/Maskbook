@@ -3,7 +3,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { DataProvider } from '@masknet/public-api'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import type { TrendingAPI } from '@masknet/web3-providers'
+import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { TagType } from '../types/index.js'
 import { useTrendingById, useCoinInfoByAddress } from '../trending/useTrending.js'
 

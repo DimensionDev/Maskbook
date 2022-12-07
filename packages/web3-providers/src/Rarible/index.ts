@@ -18,8 +18,8 @@ import {
 import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import { RaribleEventType, RaribleOrder, RaribleHistory, RaribleNFTItemMapResponse } from './types.js'
 import { RaribleURL } from './constants.js'
-import type { NonFungibleTokenAPI } from '../types/index.js'
-import { resolveActivityType, getPaymentToken, getAssetFullName } from '../helpers.js'
+import { getPaymentToken, getAssetFullName, resolveActivityType } from '../entry-helpers.js'
+import type { NonFungibleTokenAPI } from '../entry-types.js'
 
 const resolveRaribleBlockchain = createLookupTableResolver<number, string>(
     {

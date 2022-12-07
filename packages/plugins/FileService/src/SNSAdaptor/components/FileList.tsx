@@ -25,6 +25,9 @@ const useStyles = makeStyles()((theme) => ({
         flexGrow: 1,
         overflow: 'auto',
         paddingTop: theme.spacing(1),
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     listRoot: {
         padding: 0,
@@ -87,7 +90,7 @@ export const FileList: FC<FileListProps> = ({ files, onLoadMore, className, onDo
                 }
             }
         },
-        [showConfirm, t],
+        [showConfirm, refetchFiles, t],
     )
     const showPrompt = useShowRenameDialog()
     const handleRename = useCallback(
@@ -101,7 +104,7 @@ export const FileList: FC<FileListProps> = ({ files, onLoadMore, className, onDo
                 refetchFiles()
             }
         },
-        [showPrompt, t],
+        [showPrompt, refetchFiles, t],
     )
 
     return (

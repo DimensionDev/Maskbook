@@ -1,6 +1,6 @@
 import { first } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
-import type { BundlerAPI } from '@masknet/web3-providers'
+import type { BundlerAPI } from '@masknet/web3-providers/types'
 import {
     createContract,
     EthereumMethodType,
@@ -19,8 +19,8 @@ import type { BaseContractWalletProvider } from '../providers/BaseContractWallet
 export class ContractWallet implements Middleware<Context> {
     constructor(protected bundler: BundlerAPI.Provider) {}
 
-    private async createWeb3(context: Context) {
-        const web3 = await Web3StateSettings.value.Connection?.getWeb3?.({
+    private createWeb3(context: Context) {
+        const web3 = Web3StateSettings.value.Connection?.getWeb3?.({
             chainId: context.chainId,
             providerType: ProviderType.MaskWallet,
         })
@@ -33,8 +33,8 @@ export class ContractWallet implements Middleware<Context> {
         return Providers[context.providerType] as BaseContractWalletProvider | undefined
     }
 
-    private async createWallet(context: Context) {
-        const web3 = await this.createWeb3(context)
+    private createWallet(context: Context) {
+        const web3 = this.createWeb3(context)
         const contract = createContract<WalletContract>(web3, context.account, WalletABI as AbiItem[])
         if (!contract) throw new Error('Failed to create wallet contract.')
         return contract
@@ -88,7 +88,7 @@ export class ContractWallet implements Middleware<Context> {
                 break
             case EthereumMethodType.ETH_GET_TRANSACTION_COUNT:
                 try {
-                    const walletContract = await this.createWallet(context)
+                    const walletContract = this.createWallet(context)
                     const nonce = walletContract.methods.nonce()
                     context.write(nonce ?? 0)
                 } catch (error) {

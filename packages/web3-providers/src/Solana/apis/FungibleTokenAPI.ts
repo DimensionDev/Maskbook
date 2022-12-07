@@ -16,10 +16,10 @@ import {
 import { ChainId, SchemaType, createNativeToken, isValidChainId } from '@masknet/web3-shared-solana'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { CoinGeckoPriceSolanaAPI } from '../../CoinGecko/index.js'
-import type { FungibleTokenAPI, TokenListAPI } from '../../types/index.js'
 import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants.js'
 import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers.js'
 import type { GetAccountInfoResponse, GetProgramAccountsResponse, RaydiumTokenList } from '../types.js'
+import type { FungibleTokenAPI, TokenListAPI } from '../../entry-types.js'
 
 const fetchTokenList = memoizePromise(
     memoize,
