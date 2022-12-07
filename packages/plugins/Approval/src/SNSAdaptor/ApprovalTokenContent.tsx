@@ -142,7 +142,7 @@ export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
 
     const { value: spenders, loading } = useAsync(
         async () => hub?.getFungibleTokenSpenders?.(chainId, account),
-        [chainId, account, hub],
+        [chainId, account, JSON.stringify(hub)],
     )
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const { classes } = useStyles({
