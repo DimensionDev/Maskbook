@@ -16,5 +16,5 @@ export function useNativeTokenPrice<S extends 'all' | void = void, T extends Net
     return useAsyncRetry(async () => {
         if (!nativeTokenAddress) return
         return hub?.getFungibleTokenPrice?.(chainId, nativeTokenAddress)
-    }, [chainId, nativeTokenAddress, hub])
+    }, [chainId, nativeTokenAddress, JSON.stringify(hub)])
 }

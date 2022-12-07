@@ -14,5 +14,5 @@ export function useGasOptions<S extends 'all' | void = void, T extends NetworkPl
     return useAsyncRetry(async () => {
         if (!chainId) return
         return hub?.getGasOptions?.(chainId)
-    }, [chainId, hub])
+    }, [chainId, JSON.stringify(hub)])
 }

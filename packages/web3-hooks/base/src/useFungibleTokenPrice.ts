@@ -15,5 +15,5 @@ export function useFungibleTokenPrice<S extends 'all' | void = void, T extends N
     return useAsyncRetry(async () => {
         if (!chainId || !hub || !address) return 0
         return hub.getFungibleTokenPrice?.(chainId, address.toLowerCase())
-    }, [chainId, address, hub])
+    }, [chainId, address, JSON.stringify(hub)])
 }

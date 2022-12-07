@@ -17,7 +17,6 @@ export function useNonFungibleEvents<S extends 'all' | void = void, T extends Ne
     })
 
     return useAsyncRetry(async () => {
-        if (!hub) return
-        return hub.getNonFungibleTokenEvents?.(address ?? '', id ?? '', options)
-    }, [address, id, hub])
+        return hub?.getNonFungibleTokenEvents?.(address ?? '', id ?? '', options)
+    }, [address, id, JSON.stringify(hub)])
 }

@@ -13,5 +13,5 @@ export function useFungibleTokensFromTokenList<
 
     return useAsyncRetry<Array<Web3Helper.FungibleTokenScope<S, T>> | undefined>(async () => {
         return hub?.getFungibleTokensFromTokenList?.(chainId)
-    }, [chainId, hub])
+    }, [chainId, JSON.stringify(hub)])
 }

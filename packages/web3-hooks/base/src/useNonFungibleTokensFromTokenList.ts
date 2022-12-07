@@ -15,5 +15,5 @@ export function useNonFungibleTokensFromTokenList<
 
     return useAsyncRetry<Array<Web3Helper.NonFungibleTokenScope<S, T>> | undefined>(async () => {
         return hub?.getNonFungibleTokensFromTokenList?.(chainId)
-    }, [chainId, hub])
+    }, [chainId, JSON.stringify(hub)])
 }

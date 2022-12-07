@@ -17,7 +17,6 @@ export function useNonFungibleOrders<S extends 'all' | void = void, T extends Ne
     })
 
     return useAsyncRetry(async () => {
-        if (!hub) return
-        return hub.getNonFungibleTokenOffers?.(address ?? '', id ?? '', options)
-    }, [address, id, hub])
+        return hub?.getNonFungibleTokenOffers?.(address ?? '', id ?? '', options)
+    }, [address, id, JSON.stringify(hub)])
 }
