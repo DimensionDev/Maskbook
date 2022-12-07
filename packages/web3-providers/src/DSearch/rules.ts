@@ -54,4 +54,21 @@ export const getHandlers = <ChainId, SchemaType>(): Array<handler<ChainId, Schem
         ],
         type: SearchResultType.FungibleToken,
     },
+    {
+        rules: [
+            {
+                key: 'twitter',
+                type: 'exact',
+                filter: (
+                    data: SearchResult<ChainId, SchemaType>,
+                    keyword: string,
+                    all: Array<SearchResult<ChainId, SchemaType>>,
+                ) => {
+                    if (data.type !== SearchResultType.NonFungibleCollection) return false
+                    return data.socialLinks?.twitter === keyword
+                },
+            },
+        ],
+        type: SearchResultType.NonFungibleCollection,
+    },
 ]

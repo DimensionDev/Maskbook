@@ -81,6 +81,7 @@ export const DSearchHandlers = [
                         instagram: null,
                         medium: null,
                     },
+                    type: 'NonFungibleCollection',
                 },
                 {
                     address: '0x7bd29408f11d2bfc23c34f18275bbf23bb716bc7',
@@ -101,6 +102,7 @@ export const DSearchHandlers = [
                         instagram: null,
                         medium: null,
                     },
+                    type: 'NonFungibleCollection',
                 },
             ]),
         )

@@ -633,6 +633,16 @@ export interface NonFungibleCollectionResult<ChainId, SchemaType> extends Result
     chain?: ChainId
     source: SourceType 
     type: SearchResultType.NonFungibleCollection
+    socialLinks?: {
+        website?: string
+        email?: string
+        twitter?: string
+        discord?: string
+        telegram?: string
+        github?: string
+        instagram?: string
+        medium?: string
+      }
     collection?: NonFungibleCollection<ChainId, SchemaType>
 }
 

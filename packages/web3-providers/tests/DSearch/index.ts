@@ -1,3 +1,4 @@
+import { NonFungibleCollectionResult } from '@masknet/web3-shared-base'
 import { describe, expect, test } from 'vitest'
 import { DSearchAPI } from '../../src/DSearch/index.js'
 
@@ -40,6 +41,7 @@ describe('DSearch test', () => {
         const DSearch = new DSearchAPI()
         const result = await DSearch.search('twitter:mathcastles')
 
-        expect(result[0]).toStrictEqual({ name: 'eth1', symbol: 'eth', type: 'FungibleToken' })
+        expect(result.length).toBe(1)
+        expect((result[0] as NonFungibleCollectionResult<any, any>)?.name).toBe('Terraforms')
     })
 })
