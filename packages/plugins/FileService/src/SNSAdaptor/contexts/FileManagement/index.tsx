@@ -66,7 +66,8 @@ export const FileManagementProvider: FC<React.PropsWithChildren<{}>> = memo(({ c
             const key = encrypted ? makeFileKey() : undefined
             const block = new Uint8Array(await file.arrayBuffer())
             const checksum = encodeArrayBuffer(await Attachment.checksum(block))
-            const createdAt = new Date()
+            const id = JSON.stringify([provider, useCDN, encrypted, checksum])
+            const createdAt = Date.now()
 
             const removeUnloadingFile = (id: string) => {
                 setUploadingFiles((files) => files.filter((x) => x.id !== id))
@@ -79,13 +80,13 @@ export const FileManagementProvider: FC<React.PropsWithChildren<{}>> = memo(({ c
                     type: 'file',
                     key,
                     provider,
-                    id: checksum,
+                    id,
                     name: file.name,
                     size: file.size,
                     createdAt,
                 },
             ])
-            setUploadProgress(checksum, 0)
+            setUploadProgress(id, 0)
 
             const payloadTxID = await timeout(
                 PluginFileServiceRPC.makeAttachment(provider, {
@@ -98,7 +99,7 @@ export const FileManagementProvider: FC<React.PropsWithChildren<{}>> = memo(({ c
             )
             // Uploading
             for await (const progress of PluginFileServiceRPCGenerator.upload(provider, payloadTxID)) {
-                setUploadProgress(checksum, progress)
+                setUploadProgress(id, progress)
             }
 
             const landingTxID = await timeout(
@@ -116,7 +117,7 @@ export const FileManagementProvider: FC<React.PropsWithChildren<{}>> = memo(({ c
             const fileInfo: FileInfo = {
                 type: 'file',
                 provider,
-                id: checksum,
+                id,
                 name: file.name,
                 size: file.size,
                 createdAt,
@@ -125,7 +126,7 @@ export const FileManagementProvider: FC<React.PropsWithChildren<{}>> = memo(({ c
                 landingTxID,
             }
             await PluginFileServiceRPC.setFileInfo(fileInfo)
-            removeUnloadingFile(checksum)
+            removeUnloadingFile(id)
             refetchFiles()
             return fileInfo
         },
