@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     message: {
         marginTop: theme.spacing(1.5),
-        lineHeight: '20px',
+        lineHeight: '18px',
         color: theme.palette.maskColor.second,
     },
     inputBox: {
@@ -42,6 +42,10 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         color: theme.palette.maskColor.second,
         marginTop: theme.spacing(4),
+        boxSizing: 'border-box',
+    },
+    input: {
+        boxSizing: 'border-box',
     },
     button: {
         marginTop: theme.spacing(2),

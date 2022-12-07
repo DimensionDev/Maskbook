@@ -25,6 +25,9 @@ const useStyles = makeStyles()((theme) => ({
         flexGrow: 1,
         overflow: 'auto',
         paddingTop: theme.spacing(1),
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     listRoot: {
         padding: 0,
