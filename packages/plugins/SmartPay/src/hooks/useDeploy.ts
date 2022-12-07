@@ -78,16 +78,10 @@ export function useDeploy(
             ChainId.Mumbai,
         )
         if (!contractWallet.initCode) throw new Error('Failed to create initCode.')
-        await connection?.deployContractWallet?.(
-            {
-                initCode: contractWallet.initCode,
-                sender: contractAccount.address,
-            },
-            {
-                account: contractAccount?.address,
-                chainId: ChainId.Mumbai,
-                providerType: ProviderType.MaskWallet,
-            },
-        )
+        await connection?.deployContractWallet?.(contractAccount.owner, {
+            account: contractAccount?.address,
+            chainId: ChainId.Mumbai,
+            providerType: ProviderType.MaskWallet,
+        })
     }, [connection, signAccount, currentVisitingProfile?.identifier, currentPersona, contractAccount])
 }
