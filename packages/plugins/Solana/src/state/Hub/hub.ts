@@ -3,13 +3,11 @@ import { HubStateBaseClient, HubStateFungibleClient, HubStateNonFungibleClient }
 import {
     CoinGeckoPriceSolana,
     MagicEden,
-    FungibleTokenAPI,
-    NonFungibleTokenAPI,
     SolanaFungible,
     SolanaNonFungible,
-    PriceAPI,
     NFTScanNonFungibleTokenSolana,
 } from '@masknet/web3-providers'
+import type { FungibleTokenAPI, NonFungibleTokenAPI, PriceAPI } from '@masknet/web3-providers/types'
 import { CurrencyType, GasOptionType, HubOptions, Pageable, SourceType, Transaction } from '@masknet/web3-shared-base'
 import { ChainId, GasOption, SchemaType } from '@masknet/web3-shared-solana'
 import type { SolanaHub } from './types.js'

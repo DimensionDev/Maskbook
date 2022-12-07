@@ -1,6 +1,5 @@
 import { escapeRegExp } from 'lodash-es'
-import { fetchCached } from '../../helpers/fetchCached.js'
-import { fetchText } from '../../helpers/fetchText.js'
+import { fetchCached, fetchText } from '../../entry-helpers.js'
 
 function getScriptURL(content: string, name: string) {
     const matchURL = new RegExp(

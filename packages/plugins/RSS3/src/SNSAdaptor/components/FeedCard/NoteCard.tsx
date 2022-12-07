@@ -1,6 +1,6 @@
 import { Image, Markdown } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { RSS3BaseAPI } from '@masknet/web3-providers'
+import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import { FC, useCallback } from 'react'

@@ -5,9 +5,9 @@ import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
 import { Err, Ok, Result } from 'ts-results-es'
 import type { NextIDStoragePayload, NextIDPlatform } from '@masknet/shared-base'
-import { deleteCache, fetchJSON } from './helpers.js'
-import type { NextIDBaseAPI } from '../types/index.js'
 import { KV_BASE_URL_DEV, KV_BASE_URL_PROD } from './constants.js'
+import { deleteCache, fetchJSON } from './helpers.js'
+import type { NextIDBaseAPI } from '../entry-types.js'
 
 interface CreatePayloadResponse {
     uuid: string

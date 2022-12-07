@@ -11,9 +11,9 @@ import {
     getEthereumConstant,
     UnboxTransactionObject,
 } from '@masknet/web3-shared-evm'
-import type { MulticallBaseAPI } from '../types/Multicall.js'
 import { CONSERVATIVE_BLOCK_GAS_LIMIT, DEFAULT_GAS_LIMIT, DEFAULT_GAS_REQUIRED } from './constants.js'
 import { Web3API } from '../EVM/index.js'
+import type { MulticallBaseAPI } from '../entry-types.js'
 
 export class MulticallAPI implements MulticallBaseAPI.Provider {
     private web3 = new Web3API()

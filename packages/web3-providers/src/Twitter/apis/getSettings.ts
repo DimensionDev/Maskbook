@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { getTokens } from './getTokens.js'
-import type { TwitterBaseAPI } from '../../types/Twitter.js'
+import type { TwitterBaseAPI } from '../../entry-types.js'
 
 export async function getSettings(): Promise<TwitterBaseAPI.Settings> {
     const { bearerToken, csrfToken } = await getTokens()

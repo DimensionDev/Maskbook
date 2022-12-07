@@ -1,3 +1,5 @@
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useAsyncRetry } from 'react-use'
 import {
     EnhanceableSite,
     isSameProfile,
@@ -6,16 +8,14 @@ import {
     ProfileIdentifier,
     resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
-import { currentSetupGuideStatus, userPinExtension } from '../../../../shared/legacy-settings/settings.js'
 import { useValueRef } from '@masknet/shared-base-ui'
+import type { IdentityResolved } from '@masknet/plugin-infra'
+import { NextIDProof } from '@masknet/web3-providers'
+import { currentSetupGuideStatus, userPinExtension } from '../../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { SetupGuideContext, SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useAsyncRetry } from 'react-use'
-import { NextIDProof } from '@masknet/web3-providers'
 import Services from '../../../extension/service.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
-import type { IdentityResolved } from '@masknet/plugin-infra'
 import { MaskMessages } from '../../../../shared/index.js'
 
 export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {

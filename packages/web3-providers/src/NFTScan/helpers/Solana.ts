@@ -14,7 +14,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { NFTSCAN_BASE_SOLANA, NFTSCAN_URL } from '../constants.js'
 import type { Solana } from '../types/index.js'
-import { resolveActivityType, parseJSON, getAssetFullName } from '../../helpers.js'
+import { resolveActivityType, parseJSON, getAssetFullName } from '../../entry-helpers.js'
 
 export function createPermalink(chainId: ChainId, address?: string) {
     if (!address) return

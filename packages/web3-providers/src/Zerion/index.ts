@@ -19,7 +19,6 @@ import {
 import { ChainId, createNativeToken, GasOption, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import type { ZerionNonFungibleTokenItem, ZerionNonFungibleCollection, ZerionCoin } from './types.js'
 import { formatAsset, formatTransactions } from './helpers.js'
-import type { FungibleTokenAPI, GasOptionAPI, HistoryAPI, NonFungibleTokenAPI, TrendingAPI } from '../types/index.js'
 import {
     getAssetsList,
     getCoinsByKeyword,
@@ -30,8 +29,8 @@ import {
     getTransactionList,
     zerionChainIdResolver,
 } from './base-api.js'
-import { getNativeAssets } from '../helpers/getNativeAssets.js'
-import { getAssetFullName } from '../helpers/getAssetFullName.js'
+import { getAssetFullName, getNativeAssets } from '../entry-helpers.js'
+import type { FungibleTokenAPI, GasOptionAPI, HistoryAPI, NonFungibleTokenAPI, TrendingAPI } from '../entry-types.js'
 
 const ZERION_NFT_DETAIL_URL = 'https://app.zerion.io/nfts/'
 const filterAssetType = ['compound', 'trash', 'uniswap', 'uniswap-v2', 'nft']

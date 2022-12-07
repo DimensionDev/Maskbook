@@ -33,9 +33,8 @@ import {
 } from '@masknet/web3-shared-evm'
 import { formatAddress } from '@masknet/web3-shared-solana'
 import type { ENSRecord, FT, FT_Price, NFT, NFT_FloorPrice, NFT_Metadata, NFT_TransferEvent, Tx } from './types.js'
-import type { FungibleTokenAPI, HistoryAPI, NonFungibleTokenAPI } from '../types/index.js'
 import { CHAINBASE_API_URL } from './constants.js'
-import type { DomainAPI } from '../types/Domain.js'
+import type { FungibleTokenAPI, HistoryAPI, NonFungibleTokenAPI, DomainAPI } from '../entry-types.js'
 
 async function fetchFromChainbase<T>(pathname: string) {
     const response = await fetch(urlcat(CHAINBASE_API_URL, pathname))

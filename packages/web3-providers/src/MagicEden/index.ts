@@ -14,7 +14,6 @@ import {
     SourceType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-solana'
-import type { NonFungibleTokenAPI } from '../types/index.js'
 import { MAGIC_EDEN_API_URL } from './constants.js'
 import type {
     Auction,
@@ -24,7 +23,8 @@ import type {
     TokenActivity,
     WalletOffer,
 } from './types.js'
-import { getAssetFullName } from '../helpers.js'
+import { getAssetFullName } from '../entry-helpers.js'
+import type { NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromMagicEden<T>(chainId: ChainId, path: string) {
     if (chainId !== ChainId.Mainnet) return

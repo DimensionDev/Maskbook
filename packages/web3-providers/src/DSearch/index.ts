@@ -2,7 +2,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { SearchResult, SearchResultType, SearchSourceType } from '@masknet/web3-shared-base'
 import { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
-import type { DSearchBaseAPI } from '../types/DSearch.js'
+import type { DSearchBaseAPI } from '../entry-types.js'
 
 export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.SchemaTypeAll>
     implements DSearchBaseAPI.Provider<ChainId, SchemaType>

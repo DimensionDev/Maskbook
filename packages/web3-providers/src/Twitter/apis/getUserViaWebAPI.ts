@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import { getTokens } from './getTokens.js'
-import type { TwitterBaseAPI } from '../../types/Twitter.js'
-import { fetchCached, staleCached } from '../../helpers/fetchCached.js'
+import type { TwitterBaseAPI } from '../../entry-types.js'
+import { fetchCached, staleCached } from '../../entry-helpers.js'
 
 const features = {
     verified_phone_label_enabled: false,

@@ -14,8 +14,8 @@ import {
 import { ChainId, formatGweiToWei, getDeBankConstants, SchemaType, GasOption } from '@masknet/web3-shared-evm'
 import { formatAssets, formatTransactions } from './helpers.js'
 import type { WalletTokenRecord, GasPriceDictResponse, HistoryRecord } from './types.js'
-import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../types/index.js'
-import { getNativeAssets } from '../helpers/getNativeAssets.js'
+import { getNativeAssets } from '../entry-helpers.js'
+import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../entry-types.js'
 
 const DEBANK_OPEN_API = 'https://debank-proxy.r2d2.to'
 

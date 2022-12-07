@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import type { RSS3BaseAPI } from '@masknet/web3-providers'
+import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import type { FC, HTMLProps, ReactNode } from 'react'

@@ -18,7 +18,7 @@ import {
     PriceInToken,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import type { AuthorizationAPI, NonFungibleTokenAPI, TokenListAPI } from '@masknet/web3-providers'
+import type { AuthorizationAPI, NonFungibleTokenAPI, TokenListAPI } from '@masknet/web3-providers/types'
 import { HubStateBaseClient } from '../Hub.js'
 
 export class HubStateNonFungibleClient<ChainId, SchemaType> extends HubStateBaseClient<ChainId> {

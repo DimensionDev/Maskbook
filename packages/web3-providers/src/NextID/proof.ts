@@ -11,8 +11,8 @@ import {
     toBase64,
 } from '@masknet/shared-base'
 import { deleteCache, fetchJSON } from './helpers.js'
-import type { NextIDBaseAPI } from '../types/index.js'
 import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
+import type { NextIDBaseAPI } from '../entry-types.js'
 
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV

@@ -19,7 +19,10 @@ import {
 import { ChainId, createContract, getRPCConstants, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
 import type { EVM } from '../types/EVM.js'
-import { parseJSON, resolveActivityType, getPaymentToken, getAssetFullName } from '../../helpers.js'
+import { getAssetFullName } from '../../helpers/getAssetFullName.js'
+import { resolveActivityType } from '../../helpers/resolveActivityType.js'
+import { getPaymentToken } from '../../helpers/getPaymentToken.js'
+import { parseJSON } from '../../helpers/parseJSON.js'
 
 type NFTScanChainId = ChainId.Mainnet | ChainId.Matic | ChainId.BSC | ChainId.Arbitrum | ChainId.Optimism
 

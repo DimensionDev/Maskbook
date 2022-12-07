@@ -1,17 +1,17 @@
+import { useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography, ListItemButton } from '@mui/material'
+import type { BindingProof } from '@masknet/shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { TokenType } from '@masknet/web3-shared-base'
+import { Twitter } from '@masknet/web3-providers'
+import { Icons } from '@masknet/icons'
 import { NFTAvatar } from './NFTAvatar.js'
 import { NFTInfo } from './NFTInfo.js'
 import { RSS3_KEY_SNS } from '../constants.js'
-import { useCallback } from 'react'
-import type { BindingProof } from '@masknet/shared-base'
 import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar.js'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { TokenType } from '@masknet/web3-shared-base'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { useI18N } from '../locales/index.js'
-import { Twitter } from '@masknet/web3-providers'
-import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

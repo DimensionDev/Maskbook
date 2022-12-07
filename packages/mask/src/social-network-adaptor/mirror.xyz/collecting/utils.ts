@@ -1,8 +1,8 @@
-import { ProfileIdentifier } from '@masknet/shared-base'
-import type { Writer } from '@masknet/web3-providers'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { last } from 'lodash-es'
 import urlcat from 'urlcat'
+import { ProfileIdentifier } from '@masknet/shared-base'
+import type { Writer } from '@masknet/web3-providers/types'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { mirrorBase } from '../base.js'
 
 export const getMirrorProfileUrl = (id: string) => urlcat('https://mirror.xyz/:id', { id })

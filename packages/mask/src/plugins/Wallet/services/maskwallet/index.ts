@@ -1,4 +1,4 @@
-import type { MaskBaseAPI } from '@masknet/web3-providers'
+import type { MaskBaseAPI } from '@masknet/web3-providers/types'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { OnDemandWorker } from '@masknet/shared-base'
 

@@ -1,7 +1,8 @@
-import { RSS3, RSS3BaseAPI } from '@masknet/web3-providers'
-import type { HubIndicator } from '@masknet/web3-shared-base'
-import { uniqBy } from 'lodash-es'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { uniqBy } from 'lodash-es'
+import { RSS3 } from '@masknet/web3-providers'
+import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
+import type { HubIndicator } from '@masknet/web3-shared-base'
 
 export function useFeeds(address?: string, tag?: RSS3BaseAPI.Tag) {
     const indicatorRef = useRef<HubIndicator>()

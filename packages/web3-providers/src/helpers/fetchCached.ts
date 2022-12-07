@@ -1,3 +1,4 @@
+/* cspell:disable */
 const { fetch: originalFetch } = globalThis
 
 enum Duration {
