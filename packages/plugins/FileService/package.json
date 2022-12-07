@@ -21,6 +21,7 @@
     "@masknet/typed-message": "workspace:^",
     "@masknet/typed-message-react": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
+    "@masknet/web3-providers": "workspace:^",
     "@msgpack/msgpack": "^2.8.0",
     "@remix-run/router": "^1.0.4",
     "arweave": "^1.11.4",
