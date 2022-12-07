@@ -161,7 +161,7 @@ export class UserTransaction {
                 )
             }
         }
-        // TODO: if initcode is exsist, nonce = getAccounts
+        // TODO: if initCode exists, nonce = getAccounts
         if (!this.userOperation.nonce) {
             try {
                 // ca nonce
