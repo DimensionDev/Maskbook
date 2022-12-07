@@ -1029,9 +1029,11 @@ export interface Connection<
     /** Get all supported entry points */
     supportedEntryPoints?: () => Promise<string[]>
     /** Call a operation */
-    callUserOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<string>
+    callUserOperation?: (owner: string, operation: Operation, initial?: Web3ConnectionOptions) => Promise<string>
     /** Send a operation */
-    sendUserOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<TransactionSignature>
+    sendUserOperation?: (owner: string, operation: Operation, initial?: Web3ConnectionOptions) => Promise<TransactionSignature>
+    /** Deploy Contract Wallet */
+    deployContractWallet?: (owner: string, initial?: Web3ConnectionOptions) => Promise<string>
     /** Deploy a new SC account */
     createSmartContractAccount?: () => Promise<string>
     /** Change owner of SC account */
@@ -1060,8 +1062,6 @@ export interface Connection<
     replaceTransaction(hash: string, config: Transaction, initial?: Web3ConnectionOptions): Promise<void>
     /** Cancel transaction */
     cancelTransaction(hash: string, config: Transaction, initial?: Web3ConnectionOptions): Promise<void>
-    /** Deploy Contract Wallet */
-    deployContractWallet?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<string>
 }
 
 export interface HubIndicator {

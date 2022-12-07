@@ -11,7 +11,7 @@ import { ContractWallet } from '../interceptors/ContractWallet.js'
 export class Interceptor implements Middleware<Context> {
     private interceptors: Partial<Record<ProviderType, Array<Middleware<Context>>>> = {
         [ProviderType.None]: [new NoneWallet()],
-        [ProviderType.MaskWallet]: [new ContractWallet(SmartPayBundler), new MaskWallet()],
+        [ProviderType.MaskWallet]: [new ContractWallet(ProviderType.MaskWallet, SmartPayBundler), new MaskWallet()],
         [ProviderType.MetaMask]: [new MetaMask()],
         [ProviderType.WalletConnect]: [new WalletConnect()],
         [ProviderType.Coin98]: [new MetaMask()],
