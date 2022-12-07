@@ -12,8 +12,9 @@ import { MaskMessages } from '../../../../shared/index.js'
 import { PersonaIdentifier, fromBase64URL, PopupRoutes, ECKeyIdentifier } from '@masknet/shared-base'
 import { queryPersonasWithPrivateKey } from '../../../../background/database/persona/db.js'
 import { openPopupWindow } from '../../../../background/services/helper/index.js'
-import { delay, encodeText } from '@masknet/kit'
+import { delay, encodeText, timeout } from '@masknet/kit'
 import { personalSign } from '@metamask/eth-sig-util'
+import { v4 as uuid } from 'uuid'
 export interface SignRequest {
     /** Use that who to sign this message. */
     identifier?: PersonaIdentifier
@@ -44,21 +45,22 @@ export async function signWithPersona({ message, method, identifier }: SignReque
     const requestID = Math.random().toString(16).slice(3)
     await openPopupWindow(PopupRoutes.PersonaSignRequest, { message, requestID, identifier: identifier?.toText() })
 
-    const waitForApprove = new Promise<PersonaIdentifier>((resolve, reject) => {
-        delay(1000 * 60).then(() => reject(new Error('Timeout')))
-        MaskMessages.events.personaSignRequest.on((approval) => {
-            if (approval.requestID !== requestID) return
-            if (!approval.selectedPersona) reject(new Error('Persona Rejected'))
-            resolve(approval.selectedPersona!)
-        })
-    })
-    const signer = await waitForApprove
+    const signer = await timeout(
+        new Promise<PersonaIdentifier>((resolve, reject) => {
+            MaskMessages.events.personaSignRequest.on((approval) => {
+                if (approval.requestID !== requestID) return
+                if (!approval.selectedPersona) reject(new Error('Persona Rejected'))
+                resolve(approval.selectedPersona!)
+            })
+        }),
+        60 * 1000,
+        'Timeout',
+    )
     return generateSignResult(signer, message)
 }
 
 export async function signPayWithPersona({ message, identifier }: Omit<SignRequest, 'method'>): Promise<string> {
-    const requestID = Math.random().toString(16).slice(3)
-    await openPopupWindow(PopupRoutes.PersonaSignRequest, { message, requestID, identifier: identifier?.toText() })
+    const requestID = uuid()
 
     const waitForApprove = new Promise<PersonaIdentifier>((resolve, reject) => {
         delay(1000 * 60).then(() => reject(new Error('Timeout')))

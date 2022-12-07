@@ -1,14 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { ImageIcon, PersonaAction, useSnackbarCallback, WalletDescription } from '@masknet/shared'
 import { formatPersonaFingerprint, NetworkPluginID } from '@masknet/shared-base'
-import {
-    ChainId,
-    ContractWallet,
-    explorerResolver,
-    formatEthereumAddress,
-    getSmartPayConstants,
-    ProviderType,
-} from '@masknet/web3-shared-evm'
+import { ChainId, explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Typography, alpha, Box } from '@mui/material'
 
 import { useI18N } from '../../locales/index.js'
@@ -18,20 +11,17 @@ import { SmartPayBanner } from './SmartPayBanner.js'
 import { ActionButton, LoadingBase, makeStyles } from '@masknet/theme'
 import { SmartPayContext } from '../../context/SmartPayContext.js'
 import { useContainer } from 'unstated-next'
-import { useNetworkDescriptor, useProviderDescriptor, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { useAsync, useAsyncFn, useBoolean, useCopyToClipboard, useUpdateEffect } from 'react-use'
+import { useNetworkDescriptor, useProviderDescriptor } from '@masknet/web3-hooks-base'
+import { useAsync, useBoolean, useCopyToClipboard, useUpdateEffect } from 'react-use'
 import { SignAccount, SignAccountType } from '../../type.js'
-import { SmartPayAccount, SmartPayFunder } from '@masknet/web3-providers'
+import { SmartPayAccount } from '@masknet/web3-providers'
 import { first } from 'lodash-es'
-import {
-    useCurrentPersonaInformation,
-    useLastRecognizedIdentity,
-    useSNSAdaptorContext,
-} from '@masknet/plugin-infra/content-script'
-import getUnixTime from 'date-fns/getUnixTime'
+import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+
 import { CreateSuccessDialog } from './CreateSuccessDialog.js'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
+import { useDepoly } from '../../hooks/useDeploy.js'
 
 const useStyles = makeStyles()((theme) => ({
     walletDescription: {
@@ -121,18 +111,12 @@ export function Deploy({ open }: { open: boolean }) {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [signAccount, setSignAccount] = useState<SignAccount | undefined>()
 
-    const { personaSignPayMessage, getPersonaAvatar } = useSNSAdaptorContext()
+    const { getPersonaAvatar } = useSNSAdaptorContext()
     const { signablePersonas, signableWallets } = useContainer(SmartPayContext)
-
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, {
-        providerType: ProviderType.MaskWallet,
-        chainId: ChainId.Mumbai,
-    })
 
     const maskProviderDescriptor = useProviderDescriptor(NetworkPluginID.PLUGIN_EVM, ProviderType.MaskWallet)
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Mumbai)
     const currentVisitingProfile = useLastRecognizedIdentity()
-    const currentPersona = useCurrentPersonaInformation()
 
     const { value: avatar } = useAsync(async () => {
         if (signAccount?.type === SignAccountType.Persona && signAccount?.raw?.identifier)
@@ -161,70 +145,7 @@ export function Deploy({ open }: { open: boolean }) {
     })
     // #endregion
 
-    const [{ loading: deployLoading }, handleDeploy] = useAsyncFn(async () => {
-        if (!currentVisitingProfile?.identifier?.userId || !currentPersona || !signAccount?.address || !contractAccount)
-            return
-
-        const payload = JSON.stringify({
-            twitterHandler: currentVisitingProfile.identifier.userId,
-            ts: getUnixTime(new Date()),
-            publicKey: currentPersona?.identifier.publicKeyAsHex,
-            nonce: 4,
-        })
-
-        let signature
-
-        if (signAccount.type === SignAccountType.Persona && signAccount?.raw?.identifier) {
-            signature = await personaSignPayMessage({
-                message: payload,
-                identifier: signAccount.raw.identifier,
-            })
-        } else if (signAccount.type === SignAccountType.Wallet) {
-            await connection?.connect({ providerType: ProviderType.MaskWallet, account: signAccount.address })
-            signature = await connection?.signMessage(payload, 'personalSign', {
-                account: signAccount.address,
-                providerType: ProviderType.MaskWallet,
-            })
-        } else return
-
-        if (!signature) return
-
-        const response = await SmartPayFunder.fund(ChainId.Mumbai, {
-            ownerAddress: signAccount.address,
-            signature,
-            payload,
-        })
-
-        if (!response.walletAddress) return
-
-        const entryPoints = await connection?.supportedEntryPoints?.()
-        const entryPoint = first(entryPoints)
-
-        if (!entryPoint) return
-
-        const { LOGIC_WALLET_CONTRACT_ADDRESS } = getSmartPayConstants(ChainId.Mumbai)
-
-        if (!LOGIC_WALLET_CONTRACT_ADDRESS) throw new Error('No logic wallet contract.')
-
-        const contractWallet = new ContractWallet(
-            signAccount.address,
-            LOGIC_WALLET_CONTRACT_ADDRESS,
-            entryPoint,
-            ChainId.Mumbai,
-        )
-        if (!contractWallet.initCode) throw new Error('Failed to create initCode.')
-        await connection?.deployContractWallet?.(
-            {
-                initCode: contractWallet.initCode,
-                sender: contractAccount.address,
-            },
-            {
-                account: contractAccount?.address,
-                chainId: ChainId.Mumbai,
-                providerType: ProviderType.MaskWallet,
-            },
-        )
-    }, [connection, signAccount, currentVisitingProfile?.identifier, currentPersona, toggle, contractAccount])
+    const [{ loading: deployLoading }, handleDeploy] = useDepoly(signAccount, contractAccount)
 
     const handleSelectSignAccount = useCallback((signAccount: SignAccount) => {
         setSignAccount(signAccount)

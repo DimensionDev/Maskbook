@@ -63,7 +63,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
     },
     disabled: {
-        backgroundColor: '#B5B7BB!important',
+        backgroundColor: `${theme.palette.maskColor.primaryMain}!important`,
         color: '#ffffff!important',
     },
 }))
