@@ -1,6 +1,7 @@
 import { useActivatedPlugin, useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog, InjectedDialogProps, useOpenShareTxDialog, NetworkTab } from '@masknet/shared'
 import { PluginID, EMPTY_LIST, EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useWeb3Connection, useChainIdValid, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, useITOConstants } from '@masknet/web3-shared-evm'
@@ -19,7 +20,6 @@ import { ConfirmDialog } from './ConfirmDialog.js'
 import { CreateForm } from './CreateForm.js'
 import { payloadOutMask } from './helpers.js'
 import { PoolList } from './PoolList.js'
-import { useChainContext, useNetworkContext, useWeb3Connection, useChainIdValid } from '@masknet/web3-hooks-base'
 import { PoolSettings, useFillCallback } from './hooks/useFill.js'
 import { Icons } from '@masknet/icons'
 
@@ -78,9 +78,10 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: currentChainId })
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const { attachMetadata, dropMetadata } = useCompositionContext()
-    const { pluginID } = useNetworkContext()
+
     const ITO_Definition = useActivatedPlugin(PluginID.ITO, 'any')
-    const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
+    const chainIdList =
+        ITO_Definition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? EMPTY_LIST
 
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(currentChainId)
     const [showHistory, setShowHistory] = useState(false)
@@ -228,41 +229,47 @@ export function CompositionDialog(props: CompositionDialogProps) {
     // #endregion
 
     return (
-        <InjectedDialog
-            titleTail={
-                step === ITOCreateFormPageStep.NewItoPage && !showHistory ? (
-                    <Icons.History onClick={() => setShowHistory((history) => !history)} className={classes.tail} />
-                ) : null
-            }
-            isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
-            disableBackdropClick
-            isOnBack={showHistory || step === ITOCreateFormPageStep.ConfirmItoPage}
-            open={props.open}
-            title={t('plugin_ito_display_name')}
-            onClose={() => (showHistory ? setShowHistory(false) : onBack())}>
-            <DialogContent className={classes.content}>
-                {step === ITOCreateFormPageStep.NewItoPage ? (
-                    !showHistory ? (
-                        <>
-                            <div className={classes.abstractTabWrapper}>
-                                <NetworkTab classes={{ tabs: classes.tabs }} chains={chainIdList} />
-                            </div>
-                            <CreateForm onNext={onNext} origin={poolSettings} onChangePoolSettings={setPoolSettings} />
-                        </>
-                    ) : (
-                        <PoolList onSend={onCreateOrSelect} />
-                    )
-                ) : null}
-                {step === ITOCreateFormPageStep.ConfirmItoPage ? (
-                    <ConfirmDialog
-                        poolSettings={poolSettings}
-                        loading={filling}
-                        onBack={onBack}
-                        onDone={fill}
-                        onClose={onClose}
-                    />
-                ) : null}
-            </DialogContent>
-        </InjectedDialog>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: currentChainId }}>
+            <InjectedDialog
+                titleTail={
+                    step === ITOCreateFormPageStep.NewItoPage && !showHistory ? (
+                        <Icons.History onClick={() => setShowHistory((history) => !history)} className={classes.tail} />
+                    ) : null
+                }
+                isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
+                disableBackdropClick
+                isOnBack={showHistory || step === ITOCreateFormPageStep.ConfirmItoPage}
+                open={props.open}
+                title={t('plugin_ito_display_name')}
+                onClose={() => (showHistory ? setShowHistory(false) : onBack())}>
+                <DialogContent className={classes.content}>
+                    {step === ITOCreateFormPageStep.NewItoPage ? (
+                        !showHistory ? (
+                            <>
+                                <div className={classes.abstractTabWrapper}>
+                                    <NetworkTab classes={{ tabs: classes.tabs }} chains={chainIdList} />
+                                </div>
+                                <CreateForm
+                                    onNext={onNext}
+                                    origin={poolSettings}
+                                    onChangePoolSettings={setPoolSettings}
+                                />
+                            </>
+                        ) : (
+                            <PoolList onSend={onCreateOrSelect} />
+                        )
+                    ) : null}
+                    {step === ITOCreateFormPageStep.ConfirmItoPage ? (
+                        <ConfirmDialog
+                            poolSettings={poolSettings}
+                            loading={filling}
+                            onBack={onBack}
+                            onDone={fill}
+                            onClose={onClose}
+                        />
+                    ) : null}
+                </DialogContent>
+            </InjectedDialog>
+        </Web3ContextProvider>
     )
 }
