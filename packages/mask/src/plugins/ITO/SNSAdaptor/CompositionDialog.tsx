@@ -229,19 +229,19 @@ export function CompositionDialog(props: CompositionDialogProps) {
     // #endregion
 
     return (
-        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: currentChainId }}>
-            <InjectedDialog
-                titleTail={
-                    step === ITOCreateFormPageStep.NewItoPage && !showHistory ? (
-                        <Icons.History onClick={() => setShowHistory((history) => !history)} className={classes.tail} />
-                    ) : null
-                }
-                isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
-                disableBackdropClick
-                isOnBack={showHistory || step === ITOCreateFormPageStep.ConfirmItoPage}
-                open={props.open}
-                title={t('plugin_ito_display_name')}
-                onClose={() => (showHistory ? setShowHistory(false) : onBack())}>
+        <InjectedDialog
+            titleTail={
+                step === ITOCreateFormPageStep.NewItoPage && !showHistory ? (
+                    <Icons.History onClick={() => setShowHistory((history) => !history)} className={classes.tail} />
+                ) : null
+            }
+            isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
+            disableBackdropClick
+            isOnBack={showHistory || step === ITOCreateFormPageStep.ConfirmItoPage}
+            open={props.open}
+            title={t('plugin_ito_display_name')}
+            onClose={() => (showHistory ? setShowHistory(false) : onBack())}>
+            <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: currentChainId }}>
                 <DialogContent className={classes.content}>
                     {step === ITOCreateFormPageStep.NewItoPage ? (
                         !showHistory ? (
@@ -269,7 +269,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
                         />
                     ) : null}
                 </DialogContent>
-            </InjectedDialog>
-        </Web3ContextProvider>
+            </Web3ContextProvider>
+        </InjectedDialog>
     )
 }
