@@ -63,17 +63,15 @@ export class HubState<ChainId, SchemaType, GasOption> implements Web3HubState<Ch
         const sourceType = options?.sourceType ?? this.subscription.sourceType?.getCurrentValue()
         const currencyType = options?.currencyType ?? this.subscription.currencyType?.getCurrentValue()
 
-        if (!this.options.isValidChainId(chainId)) return Promise.resolve()
+        if (!this.options.isValidChainId(chainId)) return
 
-        return Promise.resolve(
-            this.createHubCached?.(
-                chainId,
-                account,
-                sourceType,
-                currencyType,
-                HubState.SIZE_PER_PAGE,
-                HubState.MAX_PAGE_SIZE,
-            ),
+        return this.createHubCached?.(
+            chainId,
+            account,
+            sourceType,
+            currencyType,
+            HubState.SIZE_PER_PAGE,
+            HubState.MAX_PAGE_SIZE,
         )
     }
 }

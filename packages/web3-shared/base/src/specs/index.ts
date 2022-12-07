@@ -837,9 +837,9 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     /** Switch to the designate chain. */
     switchChain(chainId?: ChainId): Promise<void>
     /** Create an instance from the network SDK. */
-    createWeb3(options?: ProviderOptions<ChainId>): Promise<Web3>
+    createWeb3(options?: ProviderOptions<ChainId>): Web3
     /** Create an instance that implement the wallet protocol. */
-    createWeb3Provider(options?: ProviderOptions<ChainId>): Promise<Web3Provider>
+    createWeb3Provider(options?: ProviderOptions<ChainId>): Web3Provider
     /** Create the connection. */
     connect(chainId?: ChainId, address?: string): Promise<Account<ChainId>>
     /** Dismiss the connection. */
@@ -882,9 +882,9 @@ export interface Connection<
     Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>,
 > {
     /** Get web3 instance */
-    getWeb3(initial?: Web3ConnectionOptions): Promise<Web3>
+    getWeb3(initial?: Web3ConnectionOptions): Web3
     /** Get web3 provider instance */
-    getWeb3Provider(initial?: Web3ConnectionOptions): Promise<Web3Provider>
+    getWeb3Provider(initial?: Web3ConnectionOptions): Web3Provider
     /** Get gas price */
     getGasPrice(initial?: Web3ConnectionOptions): Promise<string>
     /** Get address type of given address. */
@@ -1303,7 +1303,7 @@ export interface HubState<
     Web3Hub = Hub<ChainId, SchemaType, GasOption>,
 > {
     /** Get external data hub */
-    getHub?: (options: Web3HubOptions) => Promise<Web3Hub>
+    getHub?: (options: Web3HubOptions) => Web3Hub
 }
 
 export interface Web3StorageServiceState {
@@ -1485,11 +1485,11 @@ export interface ConnectionState<
     >,
 > {
     /** Get web3 SDK */
-    getWeb3?: (initial?: Web3ConnectionOptions) => Promise<Web3>
+    getWeb3?: (initial?: Web3ConnectionOptions) => Web3
     /** Get web3 provider instance */
-    getWeb3Provider?: (initial?: Web3ConnectionOptions) => Promise<Web3Provider>
+    getWeb3Provider?: (initial?: Web3ConnectionOptions) => Web3Provider
     /** Get connection */
-    getConnection?: (initial?: Web3ConnectionOptions) => Promise<Web3Connection>
+    getConnection?: (initial?: Web3ConnectionOptions) => Web3Connection
 }
 export interface WalletState<Transaction> {
     /** The currently stored wallet by MaskWallet. */

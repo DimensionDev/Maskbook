@@ -4,12 +4,12 @@ import type { FlowProvider } from '../types.js'
 import { BaseProvider } from './Base.js'
 
 export class BloctoProvider extends BaseProvider implements FlowProvider {
-    override async createWeb3(options?: ProviderOptions<ChainId>) {
+    override createWeb3(options?: ProviderOptions<ChainId>) {
         return createClient(options?.chainId ?? ChainId.Mainnet)
     }
 
     override async connect(chainId = ChainId.Mainnet) {
-        const fcl = await this.createWeb3({
+        const fcl = this.createWeb3({
             chainId,
         })
         const user = await fcl.logIn()

@@ -95,13 +95,12 @@ export class BaseProvider implements EVM_Provider {
     }
 
     // Create a web3 instance from the external provider by default.
-    async createWeb3(options?: ProviderOptions<ChainId>) {
-        return createWeb3(await this.createWeb3Provider(options))
+    createWeb3(options?: ProviderOptions<ChainId>) {
+        return createWeb3(this.createWeb3Provider(options))
     }
 
     // Create an external provider from the basic request method.
-    async createWeb3Provider(options?: ProviderOptions<ChainId>) {
-        await this.readyPromise
+    createWeb3Provider(options?: ProviderOptions<ChainId>) {
         return createWeb3Provider((requestArguments: RequestArguments) => this.request(requestArguments, options))
     }
 

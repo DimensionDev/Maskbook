@@ -130,7 +130,7 @@ class Connection implements EVM_Connection {
                                         await this.Provider?.connect(options.chainId, options.providerType)
                                     }
 
-                                    const web3Provider = await provider.createWeb3Provider({
+                                    const web3Provider = provider.createWeb3Provider({
                                         account: options.account,
                                         chainId: options.chainId,
                                     })
@@ -173,19 +173,17 @@ class Connection implements EVM_Connection {
     }
 
     getWeb3(initial?: EVM_Web3ConnectionOptions) {
-        const web3 = createWeb3(
+        return createWeb3(
             createWeb3Provider((requestArguments: RequestArguments) =>
                 this.hijackedRequest(requestArguments, this.getOptions(initial)),
             ),
         )
-        return Promise.resolve(web3)
     }
 
     getWeb3Provider(initial?: EVM_Web3ConnectionOptions) {
-        const web3Provider = createWeb3Provider((requestArguments: RequestArguments) =>
+        return createWeb3Provider((requestArguments: RequestArguments) =>
             this.hijackedRequest(requestArguments, this.getOptions(initial)),
         )
-        return Promise.resolve(web3Provider)
     }
 
     async connect(initial?: EVM_Web3ConnectionOptions): Promise<Account<ChainId>> {

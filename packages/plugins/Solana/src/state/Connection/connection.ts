@@ -73,7 +73,7 @@ class Connection implements BaseConnection {
         return transaction
     }
 
-    async getWeb3(initial?: SolanaWeb3ConnectionOptions) {
+    getWeb3(initial?: SolanaWeb3ConnectionOptions) {
         const options = this.getOptions(initial)
         return this._getWeb3Provider(options).createWeb3(options)
     }
