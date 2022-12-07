@@ -106,6 +106,9 @@ class Connection implements EVM_Connection {
                                 case EthereumMethodType.MASK_LOGOUT:
                                     context.write(await this.Provider?.disconnect(options.providerType))
                                     break
+                                case EthereumMethodType.ETH_SUPPORTED_ENTRY_POINTS:
+                                case EthereumMethodType.SC_WALLET_DEPLOY:
+                                    break
                                 default: {
                                     const provider =
                                         Providers[
@@ -944,6 +947,29 @@ class Connection implements EVM_Connection {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_USER_OPERATION,
+                params: [
+                    {
+                        ...operation,
+                        sender: options.account,
+                    },
+                ],
+                entryPoint,
+            },
+            options,
+        )
+    }
+
+    async deployContractWallet(
+        operation: UserOperation,
+        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ) {
+        const options = this.getOptions(initial)
+        const entryPoint = first(await this.supportedEntryPoints(initial))
+        if (!isValidAddress(entryPoint)) throw new Error('No entry point.')
+
+        return this.hijackedRequest<string>(
+            {
+                method: EthereumMethodType.SC_WALLET_DEPLOY,
                 params: [
                     {
                         ...operation,

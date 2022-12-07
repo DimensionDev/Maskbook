@@ -48,7 +48,7 @@ export class ContractWallet implements Middleware<Context> {
     ): Promise<string> {
         if (!userOperation) throw new Error('Invalid user operation.')
 
-        if (owner || !ownerProviderType || ownerProviderType === ProviderType.None)
+        if (!owner || !ownerProviderType || ownerProviderType === ProviderType.None)
             throw new Error('Failed to sign user operation.')
 
         const entryPoints = await this.bundler.getSupportedEntryPoints(context.chainId)
@@ -127,7 +127,8 @@ export class ContractWallet implements Middleware<Context> {
                 context.write(await this.bundler.getSupportedChainIds())
                 break
             case EthereumMethodType.ETH_SUPPORTED_ENTRY_POINTS:
-                context.write(await this.bundler.getSupportedEntryPoints(context.chainId))
+                const result = await this.bundler.getSupportedEntryPoints(context.chainId)
+                context.write(result)
                 break
             case EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN:
                 context.abort(new Error('Not supported by SC wallet.'))
@@ -139,7 +140,14 @@ export class ContractWallet implements Middleware<Context> {
                 context.abort(new Error('Not implemented.'))
                 break
             case EthereumMethodType.SC_WALLET_DEPLOY:
-                context.abort(new Error('Not implemented.'))
+                context.write(
+                    await this.sendUserOperation(
+                        context,
+                        context.userOperation,
+                        context.userOperation?.sender,
+                        ProviderType.MaskWallet,
+                    ),
+                )
                 break
             default:
                 break

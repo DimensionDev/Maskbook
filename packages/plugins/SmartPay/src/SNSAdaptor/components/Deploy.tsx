@@ -1,7 +1,14 @@
 import { Icons } from '@masknet/icons'
 import { ImageIcon, PersonaAction, useSnackbarCallback, WalletDescription } from '@masknet/shared'
 import { formatPersonaFingerprint, NetworkPluginID } from '@masknet/shared-base'
-import { ChainId, explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    ContractWallet,
+    explorerResolver,
+    formatEthereumAddress,
+    getSmartPayConstants,
+    ProviderType,
+} from '@masknet/web3-shared-evm'
 import { Typography, alpha, Box } from '@mui/material'
 
 import { useI18N } from '../../locales/index.js'
@@ -117,7 +124,10 @@ export function Deploy({ open }: { open: boolean }) {
     const { personaSignPayMessage, getPersonaAvatar } = useSNSAdaptorContext()
     const { signablePersonas, signableWallets } = useContainer(SmartPayContext)
 
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { providerType: ProviderType.MaskWallet })
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, {
+        providerType: ProviderType.MaskWallet,
+        chainId: ChainId.Mumbai,
+    })
 
     const maskProviderDescriptor = useProviderDescriptor(NetworkPluginID.PLUGIN_EVM, ProviderType.MaskWallet)
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Mumbai)
@@ -151,8 +161,9 @@ export function Deploy({ open }: { open: boolean }) {
     })
     // #endregion
 
-    const [{ loading: deployLoading, error }, handleDeploy] = useAsyncFn(async () => {
-        if (!currentVisitingProfile?.identifier?.userId || !currentPersona || !signAccount?.address) return
+    const [{ loading: deployLoading }, handleDeploy] = useAsyncFn(async () => {
+        if (!currentVisitingProfile?.identifier?.userId || !currentPersona || !signAccount?.address || !contractAccount)
+            return
 
         const payload = JSON.stringify({
             twitterHandler: currentVisitingProfile.identifier.userId,
@@ -183,10 +194,37 @@ export function Deploy({ open }: { open: boolean }) {
             signature,
             payload,
         })
-        if (response.walletAddress) {
-            toggle()
-        }
-    }, [connection, signAccount, currentVisitingProfile?.identifier, currentPersona, toggle])
+
+        if (!response.walletAddress) return
+
+        const entryPoints = await connection?.supportedEntryPoints?.()
+        const entryPoint = first(entryPoints)
+
+        if (!entryPoint) return
+
+        const { LOGIC_WALLET_CONTRACT_ADDRESS } = getSmartPayConstants(ChainId.Mumbai)
+
+        if (!LOGIC_WALLET_CONTRACT_ADDRESS) throw new Error('No logic wallet contract.')
+
+        const contractWallet = new ContractWallet(
+            signAccount.address,
+            LOGIC_WALLET_CONTRACT_ADDRESS,
+            entryPoint,
+            ChainId.Mumbai,
+        )
+        if (!contractWallet.initCode) throw new Error('Failed to create initCode.')
+        await connection?.deployContractWallet?.(
+            {
+                initCode: contractWallet.initCode,
+                sender: contractAccount.address,
+            },
+            {
+                account: contractAccount?.address,
+                chainId: ChainId.Mumbai,
+                providerType: ProviderType.MaskWallet,
+            },
+        )
+    }, [connection, signAccount, currentVisitingProfile?.identifier, currentPersona, toggle, contractAccount])
 
     const handleSelectSignAccount = useCallback((signAccount: SignAccount) => {
         setSignAccount(signAccount)
