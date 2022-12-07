@@ -6,14 +6,14 @@ describe('DSearch test', () => {
         const DSearch = new DSearchAPI()
         const result = await DSearch.search('token:eth')
 
-        expect(result[0]).toStrictEqual({ name: 'eth1', symbol: 'eth' })
+        expect(result[0]).toStrictEqual({ name: 'eth1', symbol: 'eth', type: 'FungibleToken' })
     })
 
     test('should return by name', async () => {
         const DSearch = new DSearchAPI()
         const result = await DSearch.search('token:eth1')
 
-        expect(result[0]).toStrictEqual({ name: 'eth1', symbol: 'eth' })
+        expect(result[0]).toStrictEqual({ name: 'eth1', symbol: 'eth', type: 'FungibleToken' })
     })
     test('should return by fuzzy search', async () => {
         const DSearch = new DSearchAPI()
@@ -22,6 +22,7 @@ describe('DSearch test', () => {
         expect(result[0]).toStrictEqual({
             name: 'test thefuzzy search',
             symbol: 'thefuzzy',
+            type: 'FungibleToken',
         })
     })
     test('should return by fuzzy search without empty string', async () => {
@@ -31,6 +32,14 @@ describe('DSearch test', () => {
         expect(result[0]).toStrictEqual({
             name: 'test thefuzzy search empty',
             symbol: 'fuzzy',
+            type: 'FungibleToken',
         })
+    })
+
+    test('should return collection by twitter handle', async () => {
+        const DSearch = new DSearchAPI()
+        const result = await DSearch.search('twitter:mathcastles')
+
+        expect(result[0]).toStrictEqual({ name: 'eth1', symbol: 'eth', type: 'FungibleToken' })
     })
 })

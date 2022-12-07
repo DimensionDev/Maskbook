@@ -593,10 +593,8 @@ export interface FungibleTokenSecurity {}
 export interface NonFungibleTokenSecurity {}
 
  export interface Result<ChainId> {
-    pluginID: NetworkPluginID
-    chainId: ChainId
+    chainId?: ChainId
     type: SearchResultType
-    keyword: string
 }
 
 export interface AddressResult<ChainId> extends Result<ChainId> {
@@ -609,21 +607,32 @@ export interface DomainResult<ChainId> extends Result<ChainId> {
 }
 
 export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
+    //  This id on the provider platfrom
+    id?: string
+    name: string
+    symbol: string
     type: SearchResultType.FungibleToken
-    address: string
+    source: SourceType 
     token?: FungibleToken<ChainId, SchemaType>
 }
 
 export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
-    type: SearchResultType.NonFungibleToken
+    name: string,
     address: string
-    tokenId: string
+    tokenId?: string
+    chain?: ChainId
+    type: SearchResultType.NonFungibleToken
+    source: SourceType 
     token?: NonFungibleToken<ChainId, SchemaType>
 }
 
 export interface NonFungibleCollectionResult<ChainId, SchemaType> extends Result<ChainId> {
-    type: SearchResultType.NonFungibleCollection
+    name: string,
     address: string
+    tokenId?: string
+    chain?: ChainId
+    source: SourceType 
+    type: SearchResultType.NonFungibleCollection
     collection?: NonFungibleCollection<ChainId, SchemaType>
 }
 
