@@ -36,6 +36,7 @@
     "delete": "crwdns19151:0crwdne19151:0",
     "delete_file": "crwdns19153:0crwdne19153:0",
     "rename_validation": "crwdns19155:0crwdne19155:0",
+    "no_uploaded_files": "crwdns19197:0crwdne19197:0",
     "empty": "crwdns19157:0crwdne19157:0",
     "drag_n_drop": "crwdns19159:0crwdne19159:0",
     "size_limit": "crwdns19161:0crwdne19161:0",
