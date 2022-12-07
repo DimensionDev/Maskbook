@@ -31,7 +31,7 @@ export async function fetchSquashed(
     if (!rule) return next(request, init)
 
     const hit = DB.get(url)
-    if (hit && hit.timestamp + 600 < Date.now()) return hit.response
+    if (hit && hit.timestamp + 600 > Date.now()) return hit.response
 
     const responsePromise = next(request, init)
 
