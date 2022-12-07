@@ -105,7 +105,7 @@ export class BaseProvider implements EVM_Provider {
         return createWeb3Provider((requestArguments: RequestArguments) => this.request(requestArguments, options))
     }
 
-    async connect(expectedChainId: ChainId): Promise<Account<ChainId>> {
+    async connect(expectedChainId: ChainId, address?: string): Promise<Account<ChainId>> {
         const accounts = await this.request<string[]>({
             method: EthereumMethodType.ETH_REQUEST_ACCOUNTS,
             params: [],

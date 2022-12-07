@@ -101,7 +101,13 @@ class Connection implements EVM_Connection {
                         try {
                             switch (context.method) {
                                 case EthereumMethodType.MASK_LOGIN:
-                                    context.write(await this.Provider?.connect(options.chainId, options.providerType))
+                                    context.write(
+                                        await this.Provider?.connect(
+                                            options.chainId,
+                                            options.providerType,
+                                            options.account,
+                                        ),
+                                    )
                                     break
                                 case EthereumMethodType.MASK_LOGOUT:
                                     context.write(await this.Provider?.disconnect(options.providerType))

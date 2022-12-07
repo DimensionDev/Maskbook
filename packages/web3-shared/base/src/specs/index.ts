@@ -841,7 +841,7 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     /** Create an instance that implement the wallet protocol. */
     createWeb3Provider(options?: ProviderOptions<ChainId>): Promise<Web3Provider>
     /** Create the connection. */
-    connect(chainId?: ChainId): Promise<Account<ChainId>>
+    connect(chainId?: ChainId, address?: string): Promise<Account<ChainId>>
     /** Dismiss the connection. */
     disconnect(): Promise<void>
 }
@@ -1448,7 +1448,7 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
     /** Wait until a provider ready */
     untilReady: (providerType: ProviderType) => Promise<void>
     /** Connect with the provider and set chain id. */
-    connect: (chainId: ChainId, providerType: ProviderType) => Promise<Account<ChainId>>
+    connect: (chainId: ChainId, providerType: ProviderType, account?: string) => Promise<Account<ChainId>>
     /** Disconnect with the provider. */
     disconnect: (providerType: ProviderType) => Promise<void>
 }
