@@ -147,7 +147,7 @@ export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
     const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
     const { value: spenderList, loading } = useAsync(
         async () => hub?.getNonFungibleTokenSpenders?.(chainId, account),
-        [chainId, account, hub],
+        [chainId, account],
     )
 
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
