@@ -2,9 +2,9 @@
  * Prefer function declaration than const f = () => ...
  * in this file please.
  */
+import { first, isNull } from 'lodash-es'
 import { pasteImage } from '@masknet/injected-script'
 import type { NextIDPersonaBindings } from '@masknet/shared-base'
-import { first, isNull } from 'lodash-es'
 import Services from '../extension/service.js'
 /**
  * Download given url return as Blob
@@ -12,7 +12,7 @@ import Services from '../extension/service.js'
 export async function downloadUrl(url: string) {
     try {
         if (url.startsWith(browser.runtime.getURL(''))) {
-            return Services.Helper.fetch(url)
+            return Services.Helper.fetchBlob(url)
         }
     } catch {}
     const res = await fetch(url)
