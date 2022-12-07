@@ -63,3 +63,25 @@ export function downloadFile(file: FileInfo) {
     const link = urlcat(gateway, '/:txId', { txId: file.landingTxID })
     openWindow(file.key ? `${link}#${file.key}` : link)
 }
+
+async function digestFile(file: File) {
+    const buffer = await file.arrayBuffer()
+    const hashBuffer = await crypto.subtle.digest('SHA-256', buffer)
+    const hashHex = Array.from(new Uint8Array(hashBuffer)).map((b) => b.toString(16).padStart(2, '0'))
+    return hashHex
+}
+
+async function digestMessage(message: string) {
+    const buffer = new TextEncoder().encode(message)
+    const hashBuffer = await crypto.subtle.digest('SHA-256', buffer)
+    const hashHex = Array.from(new Uint8Array(hashBuffer))
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('')
+    return hashHex
+}
+
+export async function digest(file: File, extraData: Array<number | string | boolean | null>) {
+    const fileDigest = await digestFile(file)
+    const dataDgiest = await digestMessage(JSON.stringify(extraData))
+    return digestMessage(JSON.stringify([fileDigest, dataDgiest]))
+}

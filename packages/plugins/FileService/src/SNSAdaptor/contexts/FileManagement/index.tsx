@@ -1,5 +1,4 @@
-import { Attachment } from '@dimensiondev/common-protocols'
-import { encodeArrayBuffer, timeout } from '@masknet/kit'
+import { timeout } from '@masknet/kit'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -9,7 +8,7 @@ import { createContext, Dispatch, FC, memo, SetStateAction, useCallback, useCont
 import { useNavigate } from 'react-router-dom'
 import { useAsyncRetry } from 'react-use'
 import { META_KEY_3, RoutePaths } from '../../../constants.js'
-import { makeFileKey } from '../../../helpers.js'
+import { digest, makeFileKey } from '../../../helpers.js'
 import type { FileInfo, Provider } from '../../../types.js'
 import { PluginFileServiceRPC, PluginFileServiceRPCGenerator } from '../../../Worker/rpc.js'
 
@@ -64,9 +63,8 @@ export const FileManagementProvider: FC<React.PropsWithChildren<{}>> = memo(({ c
     const uploadFile = useCallback(
         async (file: File, provider: Provider, useCDN: boolean, encrypted: boolean) => {
             const key = encrypted ? makeFileKey() : undefined
-            const block = new Uint8Array(await file.arrayBuffer())
-            const checksum = encodeArrayBuffer(await Attachment.checksum(block))
-            const id = JSON.stringify([provider, useCDN, encrypted, checksum])
+            const buffer = new Uint8Array(await file.arrayBuffer())
+            const id = await digest(file, [provider, useCDN, encrypted])
             const createdAt = Date.now()
 
             const removeUnloadingFile = (id: string) => {
@@ -93,7 +91,7 @@ export const FileManagementProvider: FC<React.PropsWithChildren<{}>> = memo(({ c
                     key,
                     name: file.name,
                     type: file.type,
-                    block,
+                    block: buffer,
                 }),
                 60000,
             )
