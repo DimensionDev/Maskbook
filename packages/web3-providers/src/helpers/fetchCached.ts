@@ -19,6 +19,8 @@ const RULES = {
     '7x16bogxfb.execute-api.us-east-1.amazonaws.com': Duration.SHORT,
     // coingecko
     'https://coingecko-agent.r2d2.to/api/v3': Duration.SHORT,
+    // chainbase ENS
+    'https://chainbase-proxy.r2d2.to/v1/ens': Duration.SHORT,
 }
 const URLS = Object.keys(RULES) as unknown as Array<keyof typeof RULES>
 
