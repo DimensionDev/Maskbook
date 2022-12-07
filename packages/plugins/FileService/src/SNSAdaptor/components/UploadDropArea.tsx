@@ -102,7 +102,7 @@ export const UploadDropArea: React.FC<Props> = memo(({ maxFileSize, onSelectFile
 
                 break
             case 102:
-                const MAX_FILE_SIZE = formatFileSize(maxFileSize)
+                const MAX_FILE_SIZE = formatFileSize(maxFileSize, true)
                 showSnackbar(t.error({ context: 'oversized', limit: MAX_FILE_SIZE }), { variant: 'error' })
         }
     }

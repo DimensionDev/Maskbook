@@ -31,18 +31,14 @@ const useStyles = makeStyles()((theme) => ({
         textAlign: 'center',
     },
     message: {
-        marginTop: theme.spacing(1.5),
+        margin: theme.spacing(1.5, 0),
         lineHeight: '20px',
         color: theme.palette.maskColor.second,
     },
     desc: {
         flexGrow: 1,
         textAlign: 'center',
-        marginTop: theme.spacing(1.5),
         color: theme.palette.maskColor.second,
-    },
-    button: {
-        marginTop: theme.spacing(4),
     },
     closeButton: {
         position: 'absolute',
@@ -72,7 +68,7 @@ export const ConfirmDialog: FC<ConfirmDialogProps> = memo(
                     </Typography>
                     <Typography className={classes.message}>{message}</Typography>
                     <Typography className={classes.desc}>{description}</Typography>
-                    <Button className={classes.button} fullWidth color="error" onClick={() => onSubmit?.(true)}>
+                    <Button fullWidth color="error" onClick={() => onSubmit?.(true)}>
                         {confirmLabel}
                     </Button>
                     <Icons.Close className={classes.closeButton} size={24} onClick={onClose} />

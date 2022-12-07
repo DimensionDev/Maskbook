@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         flexShrink: 0,
         margin: theme.spacing(2, 2, 0),
     },
-    checkItems: {
+    options: {
         display: 'flex',
         fontSize: 18,
         justifyContent: 'start',
@@ -31,17 +31,22 @@ const useStyles = makeStyles()((theme) => ({
         height: 'fit-content',
         margin: theme.spacing(1.5, 2, 0),
     },
-    encrypted: {
-        userSelect: 'none',
+    control: {
+        padding: 0,
+        marginRight: theme.spacing(1),
     },
-    usedCDN: {
+    checked: {
+        boxShadow: '0px 4px 10px rgba(28, 104, 243, 0.2)',
+    },
+    label: {
         userSelect: 'none',
+        marginLeft: 0,
     },
     heading: {
         fontSize: 14,
         fontWeight: 700,
         color: theme.palette.text.primary,
-        margin: theme.spacing(0, 2, 0.5),
+        margin: theme.spacing(3, 2, 0.5),
     },
     fileList: {
         flexGrow: 1,
@@ -97,6 +102,7 @@ export const UploadFile: React.FC = () => {
             <FormControlLabel
                 control={
                     <Checkbox
+                        classes={{ root: classes.control, checked: classes.checked }}
                         color="primary"
                         checked={useCDN}
                         icon={<Icons.CheckboxBlank size={18} />}
@@ -104,7 +110,7 @@ export const UploadFile: React.FC = () => {
                         onChange={(event) => setUseCDN(event.target.checked)}
                     />
                 }
-                className={classes.usedCDN}
+                className={classes.label}
                 label={t.use_cdn()}
             />
         ) : null
@@ -112,12 +118,13 @@ export const UploadFile: React.FC = () => {
     return (
         <section className={classes.container}>
             <UploadDropArea className={classes.uploadArea} maxFileSize={MAX_FILE_SIZE} onSelectFile={onSelectFile} />
-            <div className={classes.checkItems}>
+            <div className={classes.options}>
                 {providers.map((config: ProviderConfig) => (
                     <FormControlLabel
                         key={config.provider}
                         control={
                             <Radio
+                                classes={{ root: classes.control, checked: classes.checked }}
                                 color="primary"
                                 checked={provider === config.provider}
                                 icon={<Icons.RadioButtonUnChecked size={18} />}
@@ -125,15 +132,16 @@ export const UploadFile: React.FC = () => {
                                 onChange={() => setProvider(config.provider)}
                             />
                         }
-                        className={classes.encrypted}
+                        className={classes.label}
                         label={config.name}
                     />
                 ))}
             </div>
-            <section className={classes.checkItems}>
+            <section className={classes.options}>
                 <FormControlLabel
                     control={
                         <Checkbox
+                            classes={{ root: classes.control, checked: classes.checked }}
                             size="small"
                             color="primary"
                             checked={encrypted}
@@ -142,7 +150,7 @@ export const UploadFile: React.FC = () => {
                             onChange={(event) => setEncrypted(event.target.checked)}
                         />
                     }
-                    className={classes.encrypted}
+                    className={classes.label}
                     label={t.on_encrypt_it()}
                 />
                 {cdnButton}

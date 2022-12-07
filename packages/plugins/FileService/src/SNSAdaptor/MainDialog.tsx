@@ -26,7 +26,6 @@ const useStyles = makeStyles()((theme) => ({
         boxShadow: 'none',
         backgroundImage: 'none',
         [theme.breakpoints.down('sm')]: {
-            display: 'block !important',
             margin: 12,
         },
     },
