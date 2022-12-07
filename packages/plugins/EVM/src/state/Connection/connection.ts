@@ -130,7 +130,7 @@ class Connection implements EVM_Connection {
                                         await this.Provider?.connect(options.chainId, options.providerType)
                                     }
 
-                                    const web3Provider = await provider.createWeb3Provider({
+                                    const web3Provider = provider.createWeb3Provider({
                                         account: options.account,
                                         chainId: options.chainId,
                                     })

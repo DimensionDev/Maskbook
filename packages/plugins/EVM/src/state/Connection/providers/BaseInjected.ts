@@ -46,14 +46,14 @@ export class BaseInjectedProvider extends BaseProvider implements EVM_Provider {
         requestArguments: RequestArguments,
         options?: ProviderOptions<ChainId>,
     ): Promise<T> {
-        const provider = await this.createWeb3Provider(options)
+        const provider = this.createWeb3Provider(options)
         return provider.request(requestArguments) as Promise<T>
     }
 
     override async connect() {
         await this.readyPromise
 
-        const provider = await this.createWeb3Provider()
+        const provider = this.createWeb3Provider()
         const accounts = await provider.request<string[]>({
             method: EthereumMethodType.ETH_REQUEST_ACCOUNTS,
             params: [],

@@ -51,7 +51,7 @@ export class BaseInjectedProvider extends BaseProvider implements SolanaProvider
     override async connect(chainId: ChainId): Promise<Account<ChainId>> {
         await this.readyPromise
 
-        const provider = await this.createWeb3Provider()
+        const provider = this.createWeb3Provider()
         const { publicKey } = await provider.connect()
 
         return {
@@ -63,7 +63,7 @@ export class BaseInjectedProvider extends BaseProvider implements SolanaProvider
     override async disconnect(): Promise<void> {
         await this.readyPromise
 
-        const provider = await this.createWeb3Provider()
+        const provider = this.createWeb3Provider()
         await provider.disconnect()
     }
 }
