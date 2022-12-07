@@ -1,6 +1,6 @@
+import { useAsyncFn } from 'react-use'
 import { ECKeyIdentifier, NextIDAction, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { useAsyncFn } from 'react-use'
 import { Services, Messages } from '../../../API.js'
 
 export function useDeleteBound() {

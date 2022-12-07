@@ -13,11 +13,9 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import { BUNDLER_ROOT, FUNDER_ROOT, MAX_ACCOUNT_LENGTH } from './constants.js'
-import type { BundlerAPI } from '../types/Bundler.js'
-import type { FunderAPI } from '../types/Funder.js'
-import type { ContractAccountAPI } from '../types/index.js'
-import { MulticallAPI } from '../Multicall/index.js'
 import { Web3API } from '../EVM/index.js'
+import { MulticallAPI } from '../Multicall/index.js'
+import type { BundlerAPI, FunderAPI, ContractAccountAPI } from '../entry-types.js'
 
 export class SmartPayBundlerAPI implements BundlerAPI.Provider {
     private async healthz() {

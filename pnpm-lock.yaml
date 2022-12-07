@@ -1602,6 +1602,9 @@ importers:
       '@masknet/typed-message-react':
         specifier: workspace:^
         version: link:../../typed-message/react
+      '@masknet/web3-providers':
+        specifier: workspace:^
+        version: link:../../web3-providers
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../../web3-shared/base

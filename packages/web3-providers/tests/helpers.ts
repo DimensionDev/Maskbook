@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { getAssetFullName } from '../src/helpers.js'
+import { getAssetFullName } from '../src/helpers/getAssetFullName.js'
 
 describe('helpers', () => {
     test.each([

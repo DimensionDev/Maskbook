@@ -1,8 +1,8 @@
 import urlcat from 'urlcat'
 import { GasOptionType } from '@masknet/web3-shared-base'
 import { ChainId, formatGweiToWei, GasOption, isValidChainId } from '@masknet/web3-shared-evm'
-import type { GasOptionAPI } from '../types/index.js'
 import type { EstimateSuggestResponse } from './types.js'
+import type { GasOptionAPI } from '../entry-types.js'
 
 const METASWAP_API = 'https://gas-api.metaswap.codefi.network/'
 

@@ -2,20 +2,22 @@ import { EnhanceableSite } from '@masknet/shared-base'
 import Services from '../extension/service.js'
 
 const { fetch: original_fetch } = globalThis
-export function contentFetch(input: RequestInfo, init?: RequestInit) {
-    const info = new Request(input, init)
 
-    if (canAccessAsContent(info.url)) {
+export function contentFetch(input: RequestInfo, init?: RequestInit) {
+    const request = new Request(input, init)
+
+    if (canAccessAsContent(request.url)) {
         if (process.env.engine === 'firefox' && process.env.manifest === '2' && typeof content === 'object') {
-            return content.fetch(info, init)
+            return content.fetch(request, init)
         } else {
-            return original_fetch(info, init)
+            return original_fetch(request, init)
         }
     }
 
     const signal = init?.signal
     if (init) delete init.signal
-    return Services.Helper.r2d2Fetch(info, init).then((response) => {
+
+    return Services.Helper.r2d2Fetch(request, init).then((response) => {
         signal?.throwIfAborted()
         return response
     })

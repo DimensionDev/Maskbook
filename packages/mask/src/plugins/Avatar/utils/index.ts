@@ -1,5 +1,5 @@
-import { BigNumber } from 'bignumber.js'
 import { isNull } from 'lodash-es'
+import { BigNumber } from 'bignumber.js'
 import {
     attemptUntil,
     fetchImageViaDOM,
@@ -18,7 +18,7 @@ import { PLUGIN_ID } from '../constants.js'
 import { sortPersonaBindings } from '../../../utils/index.js'
 
 export async function getImage(image: string): Promise<string> {
-    const blob = await Services.Helper.fetch(image)
+    const blob = await Services.Helper.fetchBlob(image)
     return (await blobToBase64(blob)) as string
 }
 

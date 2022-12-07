@@ -13,7 +13,7 @@ import {
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog, useValueRefJSON } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColors, MaskLightTheme } from '@masknet/theme'
-import type { TrendingAPI } from '@masknet/web3-providers'
+import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { formatCurrency, TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import {

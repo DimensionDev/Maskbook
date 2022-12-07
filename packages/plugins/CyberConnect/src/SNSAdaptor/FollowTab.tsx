@@ -1,10 +1,10 @@
+import Avatar from 'boring-avatars'
 import { Link, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import Avatar from 'boring-avatars'
 import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import type { IFollowIdentity } from '../Worker/apis/index.js'
 import { Icons } from '@masknet/icons'
 import { CopyIconButton, FormattedAddress } from '@masknet/shared'
+import type { IFollowIdentity } from '../Worker/apis/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     followRow: { display: 'flex', alignItems: 'center', height: '60px', overflow: 'hidden', textOverflow: 'ellipsis' },

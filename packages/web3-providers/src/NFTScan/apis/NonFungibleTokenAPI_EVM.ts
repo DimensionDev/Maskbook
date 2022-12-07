@@ -12,7 +12,6 @@ import {
     Pageable,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
-import type { NonFungibleTokenAPI } from '../../types/index.js'
 import { EVM, PageableResponse, Response } from '../types/index.js'
 import {
     createNonFungibleAsset,
@@ -22,6 +21,7 @@ import {
     createNonFungibleCollectionFromGroup,
     createNonFungibleCollectionFromCollection,
 } from '../helpers/EVM.js'
+import type { NonFungibleTokenAPI } from '../../entry-types.js'
 
 export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {

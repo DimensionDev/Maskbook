@@ -57,7 +57,7 @@ import {
     resolveIPFS_URL,
     resolveCrossOriginURL,
 } from '@masknet/web3-shared-base'
-import { fetchJSON } from '@masknet/web3-providers'
+import { fetchJSON } from '@masknet/web3-providers/helpers'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
 import { createContext, dispatch } from './composer.js'
 import { Providers } from './provider.js'

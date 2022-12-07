@@ -1,9 +1,9 @@
 import urlcat from 'urlcat'
 import { CurrencyType, Price } from '@masknet/web3-shared-base'
-import type { TrendingAPI } from '../../types/index.js'
-import { fetchJSON } from '../../helpers.js'
+import { fetchJSON } from '../../helpers/fetchJSON.js'
 import { COINGECKO_URL_BASE } from '../constants.js'
 import type { Category, CoinInfo, Exchange, ThumbCoin, ThumbCollection } from '../types.js'
+import type { TrendingAPI } from '../../entry-types.js'
 
 // #region coins
 export async function getAllCoins() {

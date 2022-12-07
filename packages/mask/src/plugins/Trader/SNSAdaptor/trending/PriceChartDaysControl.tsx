@@ -1,7 +1,7 @@
 import { Link, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { TrendingAPI } from '@masknet/web3-providers/types'
 import { resolveDaysName } from '../../pipes.js'
-import { TrendingAPI } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

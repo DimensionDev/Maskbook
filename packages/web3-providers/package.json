@@ -4,12 +4,32 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "mask-src": "./src/index.ts",
-      "default": "./dist/index.js"
+      "types": "./dist/entry.d.ts",
+      "mask-src": "./src/entry.ts",
+      "default": "./dist/entry.js"
+    },
+    "./helpers": {
+      "types": "./dist/entry-helpers.d.ts",
+      "mask-src": "./src/entry-helpers.ts",
+      "default": "./dist/entry-helpers.js"
+    },
+    "./types": {
+      "types": "./dist/entry-types.d.ts",
+      "mask-src": "./src/entry-types.ts",
+      "default": "./dist/entry-types.js"
     }
   },
-  "types": "./dist/index.d.ts",
+  "types": "./dist/entry.d.ts",
+  "typesVersions": {
+    "*": {
+      "helpers": [
+        "./dist/entry-helpers.d.ts"
+      ],
+      "types": [
+        "./dist/entry-types.d.ts"
+      ]
+    }
+  },
   "dependencies": {
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
     "@ensdomains/eth-ens-namehash": "^2.0.15",

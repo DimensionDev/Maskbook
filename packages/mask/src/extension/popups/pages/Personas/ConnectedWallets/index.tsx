@@ -1,6 +1,7 @@
 import { memo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
+import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
 import { useChainContext, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
@@ -14,7 +15,6 @@ import { PersonaContext } from '../hooks/usePersonaContext.js'
 import type { ConnectedWalletInfo } from '../type.js'
 import Service from '../../../../service.js'
 import { MaskMessages } from '../../../../../../shared/messages.js'
-import urlcat from 'urlcat'
 
 const ConnectedWallets = memo(() => {
     const { t } = useI18N()

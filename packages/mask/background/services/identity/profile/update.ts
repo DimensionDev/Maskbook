@@ -7,6 +7,7 @@ import {
     ProfileInformationFromNextID,
     RelationFavor,
 } from '@masknet/shared-base'
+import { NextIDProof } from '@masknet/web3-providers'
 import { MaskMessages } from '../../../../shared/messages.js'
 import { storeAvatar } from '../../../database/avatar-cache/avatar.js'
 import {
@@ -22,7 +23,6 @@ import {
     queryProfileDB,
     queryProfilesDB,
 } from '../../../database/persona/db.js'
-import { NextIDProof } from '@masknet/web3-providers'
 import { createOrUpdatePersonaDB, createOrUpdateRelationDB } from '../../../database/persona/web.js'
 
 export interface UpdateProfileInfo {

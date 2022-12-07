@@ -4,13 +4,13 @@ import { DataProvider } from '@masknet/public-api'
 import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import { TokenType, attemptUntil } from '@masknet/web3-shared-base'
 import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
-import { TrendingAPI } from '../../types/index.js'
+import { COIN_RECOMMENDATION_SIZE } from '../../Trending/constants.js'
 import type { EVM, Response } from '../types/index.js'
 import { fetchFromNFTScanV2, getContractSymbol } from '../helpers/EVM.js'
 import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
 import { LooksRareLogo, OpenSeaLogo } from '../../Resources/index.js'
-import { COIN_RECOMMENDATION_SIZE } from '../../Trending/constants.js'
+import { TrendingAPI } from '../../entry-types.js'
 
 enum NonFungibleMarketplace {
     OpenSea = 'OpenSea',

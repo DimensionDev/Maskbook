@@ -1,6 +1,6 @@
 import { first } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
-import type { BundlerAPI } from '@masknet/web3-providers'
+import type { BundlerAPI } from '@masknet/web3-providers/types'
 import {
     createContract,
     EthereumMethodType,

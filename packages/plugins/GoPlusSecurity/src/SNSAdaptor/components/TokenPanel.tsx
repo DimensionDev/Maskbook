@@ -1,12 +1,12 @@
-import { Link, Stack, Tooltip, Typography } from '@mui/material'
-import { useI18N } from '../../locales/index.js'
 import React from 'react'
+import { Link, Stack, Tooltip, Typography } from '@mui/material'
 import { useTheme } from '@mui/system'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { formatMarketCap, formatSupply } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
-import type { SecurityAPI } from '@masknet/web3-providers'
+import type { SecurityAPI } from '@masknet/web3-providers/types'
+import { useI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {

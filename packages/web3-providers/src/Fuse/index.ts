@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js'
 import type { FuseAPI } from '../types/Fuse.js'
-import type { TrendingAPI } from '../types/Trending.js'
+import type { TrendingAPI } from '../entry-types.js'
 
 export class FuseTrendingAPI implements FuseAPI.Provider<TrendingAPI.Coin> {
     private searchableItems: Fuse<TrendingAPI.Coin> | null = null
