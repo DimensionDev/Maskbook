@@ -34,6 +34,7 @@ const SetPaymentPassword = lazy(() => import('./SetPaymentPassword/index.js'))
 const WalletRecovery = lazy(() => import('./WalletRecovery/index.js'))
 const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery/index.js'))
 const ReplaceTransaction = lazy(() => import('./ReplaceTransaction/index.js'))
+const CreatePassword = lazy(() => import('./CreatePassword/index.js'))
 
 const exclusionDetectLocked = [PopupRoutes.Unlock]
 

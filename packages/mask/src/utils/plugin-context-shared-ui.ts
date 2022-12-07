@@ -58,6 +58,7 @@ export const RestPartOfPluginUIContextShared: Omit<
     recordConnectedSites: WalletRPC.recordConnectedSites,
 
     personaSignMessage: Services.Identity.signWithPersona,
+    personaSignPayMessage: Services.Identity.signPayWithPersona,
     generateSignResult: Services.Identity.generateSignResult,
 
     signTransaction: WalletRPC.signTransaction,

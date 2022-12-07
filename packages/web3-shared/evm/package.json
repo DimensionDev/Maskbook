@@ -12,8 +12,10 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@ensdomains/address-encoder": "^0.2.6",
+    "ethers": "^5.7.2",
     "@ethersproject/keccak256": "5.7.0",
     "@ethersproject/strings": "5.7.0",
+    "@ethersproject/bytes": "5.7.0",
     "@masknet/shared-base": "workspace:^",
     "@masknet/web3-constants": "workspace:^",
     "@masknet/web3-contracts": "workspace:^",

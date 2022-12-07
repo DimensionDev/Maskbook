@@ -1060,6 +1060,8 @@ export interface Connection<
     replaceTransaction(hash: string, config: Transaction, initial?: Web3ConnectionOptions): Promise<void>
     /** Cancel transaction */
     cancelTransaction(hash: string, config: Transaction, initial?: Web3ConnectionOptions): Promise<void>
+    /** Deploy Contract Wallet */
+    deployContractWallet?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<string>
 }
 
 export interface HubIndicator {

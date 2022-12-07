@@ -66,7 +66,8 @@ const DEFAULT_USER_OPERATION: Required<UserOperation> = {
     signature: '0x',
 }
 
-const web3 = new Web3()
+// TODO: replace to sdk
+const web3 = new Web3('https://polygon-mumbai.infura.io/v3/d65858b010d249419cf8687eca12b094')
 const coder = ABICoder as unknown as ABICoder.AbiCoder
 
 /**
@@ -160,9 +161,16 @@ export class UserTransaction {
                 )
             }
         }
+        // TODO: if initCode exists, nonce = getAccounts
         if (!this.userOperation.nonce) {
-            if (!this.walletContract) throw new Error('Failed to create wallet contract.')
-            this.userOperation.nonce = toNumber(await this.walletContract.methods.nonce().call())
+            try {
+                // ca nonce
+                if (!this.walletContract) throw new Error('Failed to create wallet contract.')
+                this.userOperation.nonce = toNumber(await this.walletContract.methods.nonce().call())
+                // 0x
+            } catch (error) {
+                console.log(error)
+            }
         }
         if (!callGas && callData && callData !== '0x') {
             this.userOperation.callGas = toFixed(

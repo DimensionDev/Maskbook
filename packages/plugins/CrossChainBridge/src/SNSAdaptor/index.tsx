@@ -36,7 +36,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         </>
                     )
                 },
-                appBoardSortingDefaultPriority: 5,
+                appBoardSortingDefaultPriority: 6,
                 name,
                 icon,
                 iconFilterColor,

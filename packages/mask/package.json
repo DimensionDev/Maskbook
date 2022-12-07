@@ -43,6 +43,7 @@
     "@masknet/plugin-wallet": "workspace:^",
     "@masknet/plugin-web3-profile": "workspace:^",
     "@masknet/public-api": "workspace:^",
+    "@masknet/plugin-smart-pay": "workspace:^",
     "@masknet/sandboxed-plugin-runtime": "workspace:^",
     "@masknet/sdk": "workspace:^",
     "@masknet/secp256k1-webcrypto": "1.0.0",

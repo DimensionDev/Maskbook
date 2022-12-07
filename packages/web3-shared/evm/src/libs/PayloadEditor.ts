@@ -59,6 +59,7 @@ export class PayloadEditor {
     get userOperation() {
         const { method, params } = this.payload
         switch (method) {
+            case EthereumMethodType.SC_WALLET_DEPLOY:
             case EthereumMethodType.ETH_SEND_USER_OPERATION:
                 const [userOperation] = params as [UserOperation]
                 return userOperation

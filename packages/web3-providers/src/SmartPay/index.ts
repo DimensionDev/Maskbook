@@ -26,7 +26,6 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
 
         return {
             ...json,
-            chain_id: '137',
         }
     }
 
@@ -99,8 +98,14 @@ export class SmartPayFunderAPI implements FunderAPI.Provider {
         if (!chainIds.includes(chainId)) throw new Error(`Not supported ${chainId}.`)
     }
 
+    private async queryWhiteList(handler: string) {
+        const response = await fetch(urlcat(FUNDER_ROOT, '/whitelist', { twitterHandler: handler }))
+        const json: FunderAPI.WhiteList = await response.json()
+        return json
+    }
+
     getSupportedChainIds(): Promise<ChainId[]> {
-        return Promise.resolve([ChainId.Matic])
+        return Promise.resolve([ChainId.Matic, ChainId.Mumbai])
     }
 
     async fund(chainId: ChainId, proof: FunderAPI.Proof): Promise<FunderAPI.Fund> {
@@ -109,9 +114,32 @@ export class SmartPayFunderAPI implements FunderAPI.Provider {
         const response = await fetch(urlcat(FUNDER_ROOT, '/verify'), {
             method: 'POST',
             body: JSON.stringify(proof),
+            headers: { 'Content-Type': 'application/json' },
         })
-        const json: FunderAPI.Fund = await response.json()
-        return json
+        const json = await response.json()
+        return json.message as FunderAPI.Fund
+    }
+
+    async verify(handler: string) {
+        try {
+            const result = await this.queryWhiteList(handler)
+            if (result.twitterHandler === handler && result.totalCount > 0) {
+                return true
+            }
+            return false
+        } catch {
+            return false
+        }
+    }
+
+    async queryRemainFrequency(handler: string) {
+        try {
+            const result = await this.queryWhiteList(handler)
+            if (!result.totalCount || result.twitterHandler !== handler) return 0
+            return result.totalCount - result.usedCount
+        } catch {
+            return 0
+        }
     }
 }
 
@@ -119,7 +147,6 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
     private web3 = new Web3API()
     private multicall = new MulticallAPI()
     private bundler = new SmartPayBundlerAPI()
-
     private async getEntryPoint(chainId: ChainId) {
         const entryPoints = await this.bundler.getSupportedEntryPoints(chainId)
         return first(entryPoints)
@@ -193,7 +220,7 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         if (!LOGIC_WALLET_CONTRACT_ADDRESS) throw new Error('No logic wallet contract.')
         if (!CREATE2_FACTORY_CONTRACT_ADDRESS) throw new Error('No create2 contract.')
 
-        const contractWallet = new ContractWallet(owner, LOGIC_WALLET_CONTRACT_ADDRESS, entryPoint)
+        const contractWallet = new ContractWallet(owner, LOGIC_WALLET_CONTRACT_ADDRESS, entryPoint, chainId)
         const create2Factory = new Create2Factory(CREATE2_FACTORY_CONTRACT_ADDRESS)
 
         if (!contractWallet.initCode) throw new Error('Failed to create initCode.')
