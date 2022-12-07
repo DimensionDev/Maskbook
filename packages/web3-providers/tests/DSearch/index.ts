@@ -44,4 +44,16 @@ describe('DSearch test', () => {
         expect(result.length).toBe(1)
         expect((result[0] as NonFungibleCollectionResult<any, any>)?.name).toBe('Terraforms')
     })
+
+    test('should return all the data wihout prefix', async () => {
+        const DSearch = new DSearchAPI()
+        const result = await DSearch.search('eth')
+
+        expect(result.length).toBe(5)
+        expect((result[0] as NonFungibleCollectionResult<any, any>)?.name).toBe('eth1')
+        expect((result[1] as NonFungibleCollectionResult<any, any>)?.name).toBe('eth1')
+        expect((result[2] as NonFungibleCollectionResult<any, any>)?.name).toBe('ethInCMC')
+        expect((result[3] as NonFungibleCollectionResult<any, any>)?.name).toBe('ethInCoinGeoko')
+        expect((result[4] as NonFungibleCollectionResult<any, any>)?.name).toBe('TestEth')
+    })
 })
