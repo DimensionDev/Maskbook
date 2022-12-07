@@ -43,9 +43,7 @@ export class BaseInjectedProvider extends BaseProvider implements SolanaProvider
         this.emitter.emit('disconnect', this.providerType)
     }
 
-    override async createWeb3Provider(options?: ProviderOptions<ChainId>) {
-        await this.readyPromise
-
+    override createWeb3Provider(options?: ProviderOptions<ChainId>) {
         if (!this.bridge) throw new Error('Failed to detect in-page provider.')
         return this.bridge as unknown as Web3Provider
     }

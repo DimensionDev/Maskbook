@@ -837,9 +837,9 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     /** Switch to the designate chain. */
     switchChain(chainId?: ChainId): Promise<void>
     /** Create an instance from the network SDK. */
-    createWeb3(options?: ProviderOptions<ChainId>): Promise<Web3>
+    createWeb3(options?: ProviderOptions<ChainId>): Web3
     /** Create an instance that implement the wallet protocol. */
-    createWeb3Provider(options?: ProviderOptions<ChainId>): Promise<Web3Provider>
+    createWeb3Provider(options?: ProviderOptions<ChainId>): Web3Provider
     /** Create the connection. */
     connect(chainId?: ChainId, address?: string): Promise<Account<ChainId>>
     /** Dismiss the connection. */
@@ -882,9 +882,9 @@ export interface Connection<
     Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>,
 > {
     /** Get web3 instance */
-    getWeb3(initial?: Web3ConnectionOptions): Promise<Web3>
+    getWeb3(initial?: Web3ConnectionOptions): Web3
     /** Get web3 provider instance */
-    getWeb3Provider(initial?: Web3ConnectionOptions): Promise<Web3Provider>
+    getWeb3Provider(initial?: Web3ConnectionOptions): Web3Provider
     /** Get gas price */
     getGasPrice(initial?: Web3ConnectionOptions): Promise<string>
     /** Get address type of given address. */

@@ -22,10 +22,10 @@ export class BaseProvider implements FlowProvider {
     switchChain(chainId?: ChainId): Promise<void> {
         throw new Error('Method not implemented.')
     }
-    createWeb3(options?: ProviderOptions<ChainId>): Promise<Web3> {
+    createWeb3(options?: ProviderOptions<ChainId>): Web3 {
         throw new Error('Method not implemented.')
     }
-    createWeb3Provider(options?: ProviderOptions<ChainId>): Promise<Web3Provider> {
+    createWeb3Provider(options?: ProviderOptions<ChainId>): Web3Provider {
         throw new Error('Method not implemented.')
     }
     connect(chainId?: ChainId): Promise<Account<ChainId>> {

@@ -22,12 +22,12 @@ export function useGasLimit(fallback = 50000) {
         if (isNativeToken || !isTippingToken) {
             return MIN_GAS_LIMIT
         }
-        const connection = await Connection?.getConnection?.({
+        const connection = Connection?.getConnection?.({
             chainId,
             account,
         })
         if (!connection || !token?.address) return fallback
-        const web3 = await connection.getWeb3({
+        const web3 = connection.getWeb3({
             chainId,
             account,
         })

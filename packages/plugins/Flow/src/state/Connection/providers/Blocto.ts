@@ -4,7 +4,7 @@ import type { FlowProvider } from '../types.js'
 import { BaseProvider } from './Base.js'
 
 export class BloctoProvider extends BaseProvider implements FlowProvider {
-    override async createWeb3(options?: ProviderOptions<ChainId>) {
+    override createWeb3(options?: ProviderOptions<ChainId>) {
         return createClient(options?.chainId ?? ChainId.Mainnet)
     }
 
