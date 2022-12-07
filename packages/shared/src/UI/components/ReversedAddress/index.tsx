@@ -20,7 +20,6 @@ export const ReversedAddress = memo<ReverseAddressProps>(({ address, pluginID, s
     const showDomain = !!domain && !!Others?.formatDomainName && Others?.isValidDomain?.(domain)
     const uiLabel = showDomain ? Others.formatDomainName(domain) : Others?.formatAddress?.(address, size) ?? address
     const hasEllipsis = showDomain ? uiLabel !== domain : !isSameAddress(uiLabel, address)
-    console.log({ address, uiLabel, pluginID, domain })
     const node = (
         <Typography fontWeight={700} {...rest}>
             {uiLabel}
