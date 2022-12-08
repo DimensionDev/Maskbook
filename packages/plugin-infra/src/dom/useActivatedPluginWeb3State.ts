@@ -4,5 +4,6 @@ import { useActivatedPlugin } from './useActivatedPlugin.js'
 
 export function useActivatedPluginWeb3State<T extends NetworkPluginID>(pluginID: T) {
     const activatedPlugin = useActivatedPlugin(pluginID, 'any')
+    console.log(activatedPlugin)
     return (activatedPlugin?.Web3State ?? {}) as Web3Helper.Web3State<T>
 }

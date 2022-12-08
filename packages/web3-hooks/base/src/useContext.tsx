@@ -58,6 +58,7 @@ function ChainContextProvider({ value, children }: React.ProviderProps<ChainCont
     const [networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
     const [providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
 
+    console.log(globalAccount)
     return (
         <ChainContext.Provider
             value={{
