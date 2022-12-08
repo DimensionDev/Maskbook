@@ -91,7 +91,7 @@ export class ContractWallet implements Middleware<Context> {
 
         return this.sendUserOperation(context, owner, {
             sender: context.account,
-            // TOOD:
+            // TODO:
             nonce: 0,
             initCode,
         })

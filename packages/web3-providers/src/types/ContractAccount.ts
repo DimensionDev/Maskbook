@@ -12,6 +12,13 @@ export namespace ContractAccountAPI {
     }
 
     export interface Provider<T extends NetworkPluginID> {
-        getAccounts(chainId: Web3Helper.Definition[T]['ChainId'], owners: string[]): Promise<Array<ContractAccount<T>>>
+        getAccountsByOwner(
+            chainId: Web3Helper.Definition[T]['ChainId'],
+            owner: string,
+        ): Promise<Array<ContractAccount<T>>>
+        getAccountsByOwners(
+            chainId: Web3Helper.Definition[T]['ChainId'],
+            owners: string[],
+        ): Promise<Array<ContractAccount<T>>>
     }
 }
