@@ -7,12 +7,10 @@ import {
     Create2Factory,
     createContract,
     getSmartPayConstants,
-    isValidAddress,
     UserOperation,
 } from '@masknet/web3-shared-evm'
-import { toBase64, fromHex } from '@masknet/shared-base'
+import { toBase64, fromHex, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import { BUNDLER_ROOT, FUNDER_ROOT, MAX_ACCOUNT_LENGTH } from './constants.js'
@@ -216,7 +214,7 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         const calls = this.multicall.createMultipleContractSingleData(contracts, names, [])
         const results = await this.multicall.call(chainId, contracts, names, calls)
 
-        const owners = results.flatMap((x) => (x.succeed && x.value ? x.value : ''))
+        const owners = compact(results.flatMap((x) => (x.succeed && x.value ? x.value : '')))
 
         // the owner didn't deploy any account before.
         if (!owners.length) {
@@ -224,7 +222,6 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         }
 
         const operations = await this.funder.queryOperationByOwner(owner)
-
         return compact(
             owners.map((x, index) => {
                 // ensure the contract account has been deployed
@@ -253,10 +250,7 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         return []
     }
 
-    async getAccountsByOwner(
-        chainId: ChainId,
-        owner: string,
-    ): Promise<Array<ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM>>> {
+    private async getCreate2Factory(chainId: ChainId, owner: string) {
         if (!owner) throw new Error('No owner address.')
 
         const { LOGIC_WALLET_CONTRACT_ADDRESS, CREATE2_FACTORY_CONTRACT_ADDRESS } = getSmartPayConstants(chainId)
@@ -267,16 +261,40 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         const contractWallet = new ContractWallet(chainId, owner, LOGIC_WALLET_CONTRACT_ADDRESS, entryPoint)
         if (!contractWallet.initCode) throw new Error('Failed to create initCode.')
 
-        const create2Factory = new Create2Factory(CREATE2_FACTORY_CONTRACT_ADDRESS)
+        return {
+            create2Factory: new Create2Factory(CREATE2_FACTORY_CONTRACT_ADDRESS),
+            initCode: contractWallet.initCode,
+        }
+    }
+
+    async getAccountsByOwner(
+        chainId: ChainId,
+        owner: string,
+    ): Promise<Array<ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM>>> {
+        const { create2Factory, initCode } = await this.getCreate2Factory(chainId, owner)
         const allSettled = await Promise.allSettled([
-            this.getAccountsFromMulticall(
-                chainId,
-                owner,
-                create2Factory.derive(contractWallet.initCode, MAX_ACCOUNT_LENGTH),
-            ),
+            this.getAccountsFromMulticall(chainId, owner, create2Factory.deriveAll(initCode, MAX_ACCOUNT_LENGTH)),
             this.getAccountsFromChainbase(chainId, owner),
         ])
         return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
+    }
+
+    async getAccountByNonce(chainId: ChainId, owner: string, nonce: number) {
+        const { create2Factory, initCode } = await this.getCreate2Factory(chainId, owner)
+
+        const address = create2Factory.derive(initCode, nonce)
+
+        const operations = await this.funder.queryOperationByOwner(owner)
+
+        // TODO: ensure account is deployed
+        return this.createContractAccount(
+            chainId,
+            address,
+            owner,
+            owner,
+            false,
+            operations.some((operation) => isSameAddress(operation.walletAddress, address)),
+        )
     }
 
     async getAccountsByOwners(
