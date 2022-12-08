@@ -63,7 +63,7 @@ export class ContractWallet implements Middleware<Context> {
         return contractWallet.initCode
     }
 
-    private async getDeployedAcounts(chainId: ChainId, owner: string) {
+    private async getDeployedAccounts(chainId: ChainId, owner: string) {
         const accounts = await this.contractAccount.getAccountsByOwner(chainId, owner)
         return accounts.filter((x) => isSameAddress(x.creator, owner))
     }
@@ -97,13 +97,13 @@ export class ContractWallet implements Middleware<Context> {
     }
 
     private async changeOwner(context: Context, recipient?: string) {
-        if (!recipient) throw new Error('No receipient address.')
+        if (!recipient) throw new Error('No recipient address.')
         return new ContractTransaction(this.createWallet(context)).send((x) => x.methods.changeOwner(recipient))
     }
 
     private async deploy(context: Context, owner: string) {
         const initCode = await this.getInitCode(context.chainId, owner)
-        const accounts = await this.getDeployedAcounts(context.chainId, owner)
+        const accounts = await this.getDeployedAccounts(context.chainId, owner)
 
         return this.sendUserOperation(context, owner, {
             sender: context.account,
