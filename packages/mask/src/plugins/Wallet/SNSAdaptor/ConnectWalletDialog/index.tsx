@@ -66,7 +66,10 @@ export function ConnectWalletDialog() {
             const walletConnectConnection = Connection.getConnection?.({
                 providerType: ProviderType.WalletConnect,
             })
-            if (walletConnectConnection) await walletConnectConnection.disconnect()
+
+            if (await walletConnectConnection?.getAccount()) {
+                await walletConnectConnection?.disconnect()
+            }
         }
 
         await connection.connect()
