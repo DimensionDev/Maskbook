@@ -32,6 +32,10 @@ const useStyles = makeStyles()((theme) => ({
     menuButton: {
         color: theme.palette.maskColor.second,
     },
+    menuLabel: {
+        fontWeight: 700,
+        lineHeight: '18px',
+    },
     menu: {
         minWidth: 229,
     },
@@ -89,21 +93,23 @@ export const ManageableFile: FC<ManageableFileProps> = memo(
                                     onDownload?.(file)
                                     setMenuOpen(false)
                                 }}>
-                                {t.download()}
+                                <Typography className={classes.menuLabel}>{t.download()}</Typography>
                             </MenuItem>
                             <MenuItem
                                 onClick={() => {
                                     onRename?.(file)
                                     setMenuOpen(false)
                                 }}>
-                                {t.rename()}
+                                <Typography className={classes.menuLabel}>{t.rename()}</Typography>
                             </MenuItem>
                             <MenuItem
                                 onClick={() => {
                                     onDelete?.(file)
                                     setMenuOpen(false)
                                 }}>
-                                <Typography component="span" color={(theme) => theme.palette.maskColor.danger}>
+                                <Typography
+                                    className={classes.menuLabel}
+                                    color={(theme) => theme.palette.maskColor.danger}>
                                     {t.delete()}
                                 </Typography>
                             </MenuItem>
