@@ -607,7 +607,7 @@ export interface DomainResult<ChainId> extends Result<ChainId> {
 }
 
 export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
-    //  This id on the provider platfrom
+    //  This id on the provider platform
     id?: string
     name: string
     symbol: string

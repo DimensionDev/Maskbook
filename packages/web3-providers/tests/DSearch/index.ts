@@ -2,6 +2,7 @@ import { NonFungibleCollectionResult } from '@masknet/web3-shared-base'
 import { describe, expect, test } from 'vitest'
 import { DSearchAPI } from '../../src/DSearch/index.js'
 
+/* cspell:disable */
 describe('DSearch test', () => {
     test('should return by sysmbol from specific list', async () => {
         const DSearch = new DSearchAPI()
@@ -45,7 +46,7 @@ describe('DSearch test', () => {
         expect((result[0] as NonFungibleCollectionResult<any, any>)?.name).toBe('Terraforms')
     })
 
-    test('should return all the data wihout prefix', async () => {
+    test('should return all the data without prefix', async () => {
         const DSearch = new DSearchAPI()
         const result = await DSearch.search('eth')
 
@@ -53,7 +54,7 @@ describe('DSearch test', () => {
         expect((result[0] as NonFungibleCollectionResult<any, any>)?.name).toBe('eth1')
         expect((result[1] as NonFungibleCollectionResult<any, any>)?.name).toBe('eth1')
         expect((result[2] as NonFungibleCollectionResult<any, any>)?.name).toBe('ethInCMC')
-        expect((result[3] as NonFungibleCollectionResult<any, any>)?.name).toBe('ethInCoinGeoko')
+        expect((result[3] as NonFungibleCollectionResult<any, any>)?.name).toBe('ethInCoinGecko')
         expect((result[4] as NonFungibleCollectionResult<any, any>)?.name).toBe('TestEth')
     })
 })

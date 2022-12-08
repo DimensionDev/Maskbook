@@ -2,6 +2,7 @@ import { rest } from 'msw'
 
 const baseURL = 'http://mask.io'
 
+/* cspell:disable */
 export const DSearchHandlers = [
     rest.get(`${baseURL}/output/fungible-tokens/specific-list.json`, (req, res, ctx) => {
         return res(
@@ -21,12 +22,12 @@ export const DSearchHandlers = [
     rest.get(`${baseURL}/output/non-fungible-collections/specific-list.json`, (req, res, ctx) => {
         return res(ctx.status(200), ctx.json([]))
     }),
-    rest.get(`${baseURL}/output/fungible-tokens/coin-geoko.json`, (req, res, ctx) => {
+    rest.get(`${baseURL}/output/fungible-tokens/coin-gecko.json`, (req, res, ctx) => {
         return res(
             ctx.status(200),
             ctx.json([
                 {
-                    name: 'ethInCoinGeoko',
+                    name: 'ethInCoinGecko',
                     symbol: 'eth',
                     type: 'FungibleToken',
                 },

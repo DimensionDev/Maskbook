@@ -20,7 +20,7 @@ const BASE_URL = 'http://mask.io'
 
 export class CoinGeckoSearchAPI<ChainId, SchemaType> implements DSearchBaseAPI.DataSourceProvider<ChainId, SchemaType> {
     async get(): Promise<Array<SearchResult<ChainId, SchemaType>>> {
-        const tokensURL = urlcat(BASE_URL, '/output/fungible-tokens/coin-geoko.json')
+        const tokensURL = urlcat(BASE_URL, '/output/fungible-tokens/coin-gecko.json')
         return fetchJSON<Array<NonFungibleTokenResult<ChainId, SchemaType>>>(tokensURL)
     }
 }

@@ -8,7 +8,7 @@ import urlcat from 'urlcat'
 import { CoinGeckoSearchAPI } from '../CoinGecko/apis/DSearchAPI.js'
 import { CoinMarketCapSearchAPI } from '../CoinMarketCap/DSearchAPI.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
-import { NFTSCANDSearchAPI } from '../NFTScan/index.js'
+import { NFTScanSearchAPI } from '../NFTScan/index.js'
 import type { DSearchBaseAPI } from '../types/DSearch.js'
 import { getHandlers } from './rules.js'
 import type { handler } from './type.js'
@@ -24,7 +24,7 @@ export class DSearchAPI<ChainId, SchemaType> implements DSearchBaseAPI.Provider<
 
     constructor() {
         this.handlers = getHandlers<ChainId, SchemaType>()
-        this.NFTScanClient = new NFTSCANDSearchAPI<ChainId, SchemaType>()
+        this.NFTScanClient = new NFTScanSearchAPI<ChainId, SchemaType>()
         this.CoinGeckoClient = new CoinGeckoSearchAPI<ChainId, SchemaType>()
         this.CoinMarketCapClient = new CoinMarketCapSearchAPI<ChainId, SchemaType>()
     }
@@ -41,7 +41,7 @@ export class DSearchAPI<ChainId, SchemaType> implements DSearchBaseAPI.Provider<
 
         const NFTScanRequest = this.NFTScanClient.get()
         const CoinGeckoRequest = this.CoinGeckoClient.get()
-        const CoinMarketCapRequset = this.CoinMarketCapClient.get()
+        const CoinMarketCapRequest = this.CoinMarketCapClient.get()
 
         return (
             await Promise.allSettled([
@@ -49,7 +49,7 @@ export class DSearchAPI<ChainId, SchemaType> implements DSearchBaseAPI.Provider<
                 nftsRequest,
                 collectionsRequest,
                 NFTScanRequest,
-                CoinMarketCapRequset,
+                CoinMarketCapRequest,
                 CoinGeckoRequest,
             ])
         )
@@ -57,8 +57,8 @@ export class DSearchAPI<ChainId, SchemaType> implements DSearchBaseAPI.Provider<
             .flat()
     }
 
-    private parseKeywork(keywork: string): { word: string; field?: string } {
-        const works = keywork.split(':')
+    private parseKeyword(keyword: string): { word: string; field?: string } {
+        const works = keyword.split(':')
         if (works.length === 1) {
             return {
                 word: works[0],
@@ -73,7 +73,7 @@ export class DSearchAPI<ChainId, SchemaType> implements DSearchBaseAPI.Provider<
     /**
      *
      * Search DSearch info
-     * @param keywork A hint for searching the localKey.
+     * @param keyword A hint for searching the localKey.
      * @returns SearchResult List
      *
      * params e.g.
@@ -81,11 +81,11 @@ export class DSearchAPI<ChainId, SchemaType> implements DSearchBaseAPI.Provider<
      * "token:eth"
      * "collection:punk"
      * "twitter:mask"
-     * "addrsss:0x"
+     * "address:0x"
      *
      */
     async search(keyword: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {
-        const { word, field } = this.parseKeywork(keyword)
+        const { word, field } = this.parseKeyword(keyword)
         const data = await this.init()
 
         let result: Array<SearchResult<ChainId, SchemaType>> = []
