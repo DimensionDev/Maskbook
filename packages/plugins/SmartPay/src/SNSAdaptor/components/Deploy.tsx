@@ -131,8 +131,7 @@ export function Deploy({ open }: { open: boolean }) {
 
         // TODO: filter by deployed
         const deployAccounts = await SmartPayAccount.getAccountsByOwners(ChainId.Mumbai, [signAccount?.address])
-        const nonce = deployAccounts.length
-        return SmartPayAccount.getAccountByNonce(ChainId.Mumbai, signAccount?.address, nonce)
+        return SmartPayAccount.getAccountByNonce(ChainId.Mumbai, signAccount?.address, 0)
     }, [signAccount, open])
     // #endregion
 

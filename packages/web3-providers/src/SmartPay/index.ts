@@ -63,8 +63,9 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
                 ],
             }),
         })
-        const json: { tx_hash: string } = await response.json()
-        return json.tx_hash
+        const { tx_hash, message = 'Unknown Error' }: { tx_hash: string; message?: string } = await response.json()
+        if (tx_hash) return tx_hash
+        throw new Error(message)
     }
 
     private async assetChainId(chainId: ChainId) {
@@ -182,6 +183,25 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         return createContract<Wallet>(this.createWeb3(chainId), address, WalletABI as AbiItem[])
     }
 
+    private async createContractWallet(chainId: ChainId, owner: string) {
+        if (!owner) throw new Error('No owner address.')
+
+        const { LOGIC_WALLET_CONTRACT_ADDRESS } = getSmartPayConstants(chainId)
+        if (!LOGIC_WALLET_CONTRACT_ADDRESS) throw new Error('No logic wallet contract.')
+
+        const entryPoint = await this.getEntryPoint(chainId)
+        return new ContractWallet(chainId, owner, LOGIC_WALLET_CONTRACT_ADDRESS, entryPoint)
+    }
+
+    private async createCreate2Factory(chainId: ChainId, owner: string) {
+        if (!owner) throw new Error('No owner address.')
+
+        const { CREATE2_FACTORY_CONTRACT_ADDRESS } = getSmartPayConstants(chainId)
+        if (!CREATE2_FACTORY_CONTRACT_ADDRESS) throw new Error('No create2 contract.')
+
+        return new Create2Factory(CREATE2_FACTORY_CONTRACT_ADDRESS)
+    }
+
     private createContractAccount(
         chainId: ChainId,
         address: string,
@@ -250,39 +270,10 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         return []
     }
 
-    private async getCreate2Factory(chainId: ChainId, owner: string) {
-        if (!owner) throw new Error('No owner address.')
-
-        const { LOGIC_WALLET_CONTRACT_ADDRESS, CREATE2_FACTORY_CONTRACT_ADDRESS } = getSmartPayConstants(chainId)
-        if (!LOGIC_WALLET_CONTRACT_ADDRESS) throw new Error('No logic wallet contract.')
-        if (!CREATE2_FACTORY_CONTRACT_ADDRESS) throw new Error('No create2 contract.')
-
-        const entryPoint = await this.getEntryPoint(chainId)
-        const contractWallet = new ContractWallet(chainId, owner, LOGIC_WALLET_CONTRACT_ADDRESS, entryPoint)
-        if (!contractWallet.initCode) throw new Error('Failed to create initCode.')
-
-        return {
-            create2Factory: new Create2Factory(CREATE2_FACTORY_CONTRACT_ADDRESS),
-            initCode: contractWallet.initCode,
-        }
-    }
-
-    async getAccountsByOwner(
-        chainId: ChainId,
-        owner: string,
-    ): Promise<Array<ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM>>> {
-        const { create2Factory, initCode } = await this.getCreate2Factory(chainId, owner)
-        const allSettled = await Promise.allSettled([
-            this.getAccountsFromMulticall(chainId, owner, create2Factory.deriveAll(initCode, MAX_ACCOUNT_LENGTH)),
-            this.getAccountsFromChainbase(chainId, owner),
-        ])
-        return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
-    }
-
     async getAccountByNonce(chainId: ChainId, owner: string, nonce: number) {
-        const { create2Factory, initCode } = await this.getCreate2Factory(chainId, owner)
-
-        const address = create2Factory.derive(initCode, nonce)
+        const create2Factory = await this.createCreate2Factory(chainId, owner)
+        const contractWallet = await this.createContractWallet(chainId, owner)
+        const address = create2Factory.derive(contractWallet.initCode, nonce)
 
         const operations = await this.funder.queryOperationByOwner(owner)
 
@@ -295,6 +286,23 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
             false,
             operations.some((operation) => isSameAddress(operation.walletAddress, address)),
         )
+    }
+
+    async getAccountsByOwner(
+        chainId: ChainId,
+        owner: string,
+    ): Promise<Array<ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM>>> {
+        const create2Factory = await this.createCreate2Factory(chainId, owner)
+        const contractWallet = await this.createContractWallet(chainId, owner)
+        const allSettled = await Promise.allSettled([
+            this.getAccountsFromMulticall(
+                chainId,
+                owner,
+                create2Factory.deriveUntil(contractWallet.initCode, MAX_ACCOUNT_LENGTH),
+            ),
+            this.getAccountsFromChainbase(chainId, owner),
+        ])
+        return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
     }
 
     async getAccountsByOwners(

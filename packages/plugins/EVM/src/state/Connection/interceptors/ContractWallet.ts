@@ -16,7 +16,7 @@ import {
 import { isSameAddress } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
-import { Web3StateSettings } from '../../../settings/index.js'
+import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
 import type { Middleware, Context } from '../types.js'
 import { Providers } from '../provider.js'
 import type { BaseContractWalletProvider } from '../providers/BaseContractWallet.js'
@@ -96,17 +96,16 @@ export class ContractWallet implements Middleware<Context> {
             userOperation,
         )
         await userTransaction.sign(async (message: string) => {
-            return message
-            // if (identifier) {
-            //     return SharedContextSettings.value.personaSignPayMessage({
-            //         message: userTransaction.pack,
-            //         identifier,
-            //     })
-            // }
-            // return context.connection.signMessage(message, 'personalSign', {
-            //     account: owner,
-            //     providerType: this.providerType,
-            // })
+            if (identifier) {
+                return SharedContextSettings.value.personaSignPayMessage({
+                    message,
+                    identifier,
+                })
+            }
+            return context.connection.signMessage(message, 'personalSign', {
+                account: owner,
+                providerType: this.providerType,
+            })
         })
         return this.bundler.sendUserOperation(context.chainId, userTransaction.toUserOperation())
     }

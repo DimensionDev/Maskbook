@@ -9,9 +9,10 @@ import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import type { EntryPoint } from '@masknet/web3-contracts/types/EntryPoint.js'
 import type { ChainId, Transaction, UserOperation } from '../types/index.js'
 import { createContract, getZeroAddress, isZeroString, isEmptyHex, isZeroAddress } from '../helpers/index.js'
+import { getSmartPayConstants } from '../index.js'
 
-const CALL_OP_TYPE = {
-    callOp: {
+const USER_OP_TYPE = {
+    userOp: {
         sender: 'address',
         nonce: 'uint256',
         initCode: 'bytes',
@@ -102,7 +103,7 @@ export class UserTransaction {
      * Pack everything without signature
      */
     get pack() {
-        const encoded = coder.encodeParameter(CALL_OP_TYPE, {
+        const encoded = coder.encodeParameter(USER_OP_TYPE, {
             ...this.userOperation,
             signature: '0x',
         })
@@ -113,7 +114,7 @@ export class UserTransaction {
      * Pack everything include signature
      */
     get packAll() {
-        const encoded = coder.encodeParameter(CALL_OP_TYPE, this.userOperation)
+        const encoded = coder.encodeParameter(USER_OP_TYPE, this.userOperation)
         return `0x${encoded.slice(66, encoded.length - 64)}`
     }
 
@@ -143,6 +144,7 @@ export class UserTransaction {
             preVerificationGas,
             maxFeePerGas,
             maxPriorityFeePerGas,
+            paymaster,
         } = this.userOperation
 
         if (!isEmptyHex(initCode)) {
@@ -184,6 +186,9 @@ export class UserTransaction {
                 ),
             )
         }
+        if (isZeroString(maxPriorityFeePerGas)) {
+            this.userOperation.maxPriorityFeePerGas = DEFAULT_USER_OPERATION.maxPriorityFeePerGas
+        }
         if (isZeroString(verificationGas)) {
             this.userOperation.verificationGas = toFixed(DEFAULT_USER_OPERATION.verificationGas)
         }
@@ -194,8 +199,11 @@ export class UserTransaction {
                     .reduce((sum, x) => sum + x),
             )
         }
-        if (isZeroString(maxPriorityFeePerGas)) {
-            this.userOperation.maxPriorityFeePerGas = DEFAULT_USER_OPERATION.maxPriorityFeePerGas
+        if (!paymaster || isZeroAddress(paymaster)) {
+            const { PAYMASTER_CONTRACT_ADDRESS } = getSmartPayConstants(this.chainId)
+            if (!PAYMASTER_CONTRACT_ADDRESS) throw new Error('No paymaster address.')
+
+            this.userOperation.paymaster = PAYMASTER_CONTRACT_ADDRESS
         }
         return this
     }
@@ -217,16 +225,17 @@ export class UserTransaction {
     }
 
     toUserOperation(): UserOperation {
-        const { nonce, callGas, verificationGas, preVerificationGas, maxFeePerGas, maxPriorityFeePerGas } =
+        const { nonce, callGas, verificationGas, preVerificationGas, maxFeePerGas, maxPriorityFeePerGas, signature } =
             this.userOperation
         return {
             ...this.userOperation,
             nonce,
-            callGas: callGas ? toHex(callGas) : undefined,
-            verificationGas: verificationGas ? toHex(verificationGas) : undefined,
-            preVerificationGas: preVerificationGas ? toHex(preVerificationGas) : undefined,
-            maxFeePerGas: maxFeePerGas ? toHex(maxFeePerGas) : undefined,
-            maxPriorityFeePerGas: maxPriorityFeePerGas ? toHex(maxPriorityFeePerGas) : undefined,
+            callGas: callGas ? toFixed(callGas) : '0',
+            verificationGas: verificationGas ? toFixed(verificationGas) : '0',
+            preVerificationGas: preVerificationGas ? toFixed(preVerificationGas) : '0',
+            maxFeePerGas: maxFeePerGas ? toFixed(maxFeePerGas) : '0',
+            maxPriorityFeePerGas: maxPriorityFeePerGas ? toFixed(maxPriorityFeePerGas) : '0',
+            signature,
         }
     }
 

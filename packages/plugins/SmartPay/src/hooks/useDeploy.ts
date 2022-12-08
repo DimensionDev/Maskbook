@@ -10,7 +10,7 @@ import { useWeb3Connection } from '@masknet/web3-hooks-base'
 import { SmartPayFunder } from '@masknet/web3-providers'
 import type { ContractAccountAPI } from '@masknet/web3-providers/types'
 import { ProviderType, ChainId } from '@masknet/web3-shared-evm'
-import { SignAccount, SignAccountType } from '../type.js'
+import type { SignAccount, SignAccountType } from '../type.js'
 
 export function useDeploy(
     signAccount?: SignAccount,
@@ -29,36 +29,36 @@ export function useDeploy(
         if (!lastRecognizedIdentity?.identifier?.userId || !currentPersona || !signAccount?.address || !contractAccount)
             return
 
-        const payload = JSON.stringify({
-            twitterHandler: lastRecognizedIdentity.identifier.userId,
-            ts: getUnixTime(new Date()),
-            publicKey: currentPersona?.identifier.publicKeyAsHex,
-            nonce: 4,
-        })
+        // const payload = JSON.stringify({
+        //     twitterHandler: lastRecognizedIdentity.identifier.userId,
+        //     ts: getUnixTime(new Date()),
+        //     publicKey: currentPersona?.identifier.publicKeyAsHex,
+        //     nonce: 2,
+        // })
 
-        let signature
+        // let signature
 
-        if (signAccount.type === SignAccountType.Persona && signAccount?.raw?.identifier) {
-            signature = await personaSignPayMessage({
-                message: payload,
-                identifier: signAccount.raw.identifier,
-            })
-        } else if (signAccount.type === SignAccountType.Wallet) {
-            signature = await connection?.signMessage(payload, 'personalSign', {
-                account: signAccount.address,
-                providerType: ProviderType.MaskWallet,
-            })
-        } else return
+        // if (signAccount.type === SignAccountType.Persona && signAccount?.raw?.identifier) {
+        //     signature = await personaSignPayMessage({
+        //         message: payload,
+        //         identifier: signAccount.raw.identifier,
+        //     })
+        // } else if (signAccount.type === SignAccountType.Wallet) {
+        //     signature = await connection?.signMessage(payload, 'personalSign', {
+        //         account: signAccount.address,
+        //         providerType: ProviderType.MaskWallet,
+        //     })
+        // } else return
 
-        if (!signature) return
+        // if (!signature) return
 
-        const response = await SmartPayFunder.fund(ChainId.Mumbai, {
-            ownerAddress: signAccount.address,
-            signature,
-            payload,
-        })
+        // const response = await SmartPayFunder.fund(ChainId.Mumbai, {
+        //     ownerAddress: signAccount.address,
+        //     signature,
+        //     payload,
+        // })
 
-        if (!response.walletAddress) return
+        // if (!response.walletAddress) return
 
         await connection?.deployContractWallet?.(contractAccount.owner, {
             account: contractAccount?.address,
