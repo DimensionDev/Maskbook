@@ -1,6 +1,7 @@
 import { lazy, useEffect, useState } from 'react'
+import { Navigate, Route, Routes, HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { NetworkPluginID, queryRemoteI18NBundle } from '@masknet/shared-base'
+import { NetworkPluginID, PopupRoutes, queryRemoteI18NBundle } from '@masknet/shared-base'
 import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
 import '../../social-network-adaptor/browser-action/index.js'
 import { PopupContext } from './hook/usePopupContext.js'
@@ -43,7 +44,25 @@ export default function Popups() {
                 value={{ pluginID: NetworkPluginID.PLUGIN_EVM, providerType: ProviderType.MaskWallet }}>
                 <PopupContext.Provider>
                     <PageTitleContext.Provider value={{ title, setTitle }}>
-                        <div>test</div>
+                        <HashRouter>
+                            <Routes>
+                                <Route path={PopupRoutes.Personas + '/*'} element={frame(<Personas />)} />
+                                <Route path={PopupRoutes.Wallet + '/*'} element={frame(<Wallet />)} />
+                                <Route path={PopupRoutes.Swap} element={<SwapPage />} />
+                                <Route path={PopupRoutes.RequestPermission} element={<RequestPermissionPage />} />
+                                <Route
+                                    path={PopupRoutes.PermissionAwareRedirect}
+                                    element={<PermissionAwareRedirect />}
+                                />
+                                <Route
+                                    path={PopupRoutes.ThirdPartyRequestPermission}
+                                    element={<ThirdPartyRequestPermission />}
+                                />
+                                <Route path="*" element={<Navigate replace to={PopupRoutes.Personas} />} />
+                            </Routes>
+                            {/* TODO: Should only load plugins when the page is plugin-aware. */}
+                            <PluginRenderDelayed />
+                        </HashRouter>
                     </PageTitleContext.Provider>
                 </PopupContext.Provider>
             </Web3ContextProvider>

@@ -42,13 +42,11 @@ const r = relativeRouteOf(PopupRoutes.Wallet)
 
 export default function Wallet() {
     const wallet = useWallet()
-
     const location = useLocation()
     const navigate = useNavigate()
-    const { chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { TransactionFormatter, Provider } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
-
     const { loading, retry } = useAsyncRetry(async () => {
         if (
             [
