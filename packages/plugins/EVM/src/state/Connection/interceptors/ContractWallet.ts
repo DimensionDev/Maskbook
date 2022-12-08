@@ -7,8 +7,8 @@ import {
     EthereumMethodType,
     isValidAddress,
     ProviderType,
-    UserOperation,
     UserTransaction,
+    ContractWallet as ContractWalletLib,
 } from '@masknet/web3-shared-evm'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
@@ -18,7 +18,12 @@ import { Providers } from '../provider.js'
 import type { BaseContractWalletProvider } from '../providers/BaseContractWallet.js'
 
 export class ContractWallet implements Middleware<Context> {
-    constructor(protected providerType: ProviderType, protected bundler: BundlerAPI.Provider) {}
+    constructor(
+        /** The address of logic contract. */
+        protected address: string,
+        protected providerType: ProviderType,
+        protected bundler: BundlerAPI.Provider,
+    ) {}
 
     private createWeb3(context: Context) {
         const web3 = Web3StateSettings.value.Connection?.getWeb3?.({
@@ -48,7 +53,17 @@ export class ContractWallet implements Middleware<Context> {
         return entryPoint
     }
 
-    private async sendUserOperation(context: Context, owner?: string, userOperation?: UserOperation): Promise<string> {
+    private async getInitCode(chainId: ChainId, owner: string) {
+        const contractWallet = new ContractWalletLib(chainId, owner, this.address, await this.getEntryPoint(chainId))
+        if (!contractWallet.initCode) throw new Error('Failed to create initCode.')
+        return contractWallet.initCode
+    }
+
+    private async sendUserOperation(
+        context: Context,
+        owner = context.owner,
+        userOperation = context.userOperation,
+    ): Promise<string> {
         if (!owner) throw new Error('Failed to sign user operation.')
         if (!userOperation) throw new Error('Invalid user operation.')
 
@@ -67,11 +82,19 @@ export class ContractWallet implements Middleware<Context> {
         return this.bundler.sendUserOperation(context.chainId, userTransaction.toUserOperation())
     }
 
-    private async deploy(context: Context, owner: string) {
-        const entryPoint = await this.getEntryPoint(context.chainId)
-        if (!entryPoint) throw new Error(`Not supported ${context.chainId}`)
+    private async changeOwner(context: Context) {
+        context.abort(new Error('Not implemented.'))
+    }
 
-        return ''
+    private async deploy(context: Context, owner: string) {
+        const initCode = await this.getInitCode(context.chainId, owner)
+
+        return this.sendUserOperation(context, owner, {
+            sender: context.account,
+            // TOOD:
+            nonce: 0,
+            initCode,
+        })
     }
 
     async fn(context: Context, next: () => Promise<void>) {

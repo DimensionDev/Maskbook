@@ -1,4 +1,3 @@
-import { first } from 'lodash-es'
 import { useAsyncFn } from 'react-use'
 import getUnixTime from 'date-fns/getUnixTime'
 import {
@@ -10,7 +9,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3Connection } from '@masknet/web3-hooks-base'
 import { SmartPayFunder } from '@masknet/web3-providers'
 import type { ContractAccountAPI } from '@masknet/web3-providers/types'
-import { ProviderType, ChainId, getSmartPayConstants, ContractWallet } from '@masknet/web3-shared-evm'
+import { ProviderType, ChainId } from '@masknet/web3-shared-evm'
 import { SignAccount, SignAccountType } from '../type.js'
 
 export function useDeploy(
@@ -18,8 +17,8 @@ export function useDeploy(
     contractAccount?: ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM>,
 ) {
     const { personaSignPayMessage } = useSNSAdaptorContext()
-    const currentVisitingProfile = useLastRecognizedIdentity()
     const currentPersona = useCurrentPersonaInformation()
+    const lastRecognizedIdentity = useLastRecognizedIdentity()
 
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, {
         providerType: ProviderType.MaskWallet,
@@ -27,11 +26,11 @@ export function useDeploy(
     })
 
     return useAsyncFn(async () => {
-        if (!currentVisitingProfile?.identifier?.userId || !currentPersona || !signAccount?.address || !contractAccount)
+        if (!lastRecognizedIdentity?.identifier?.userId || !currentPersona || !signAccount?.address || !contractAccount)
             return
 
         const payload = JSON.stringify({
-            twitterHandler: currentVisitingProfile.identifier.userId,
+            twitterHandler: lastRecognizedIdentity.identifier.userId,
             ts: getUnixTime(new Date()),
             publicKey: currentPersona?.identifier.publicKeyAsHex,
             nonce: 4,
@@ -45,7 +44,6 @@ export function useDeploy(
                 identifier: signAccount.raw.identifier,
             })
         } else if (signAccount.type === SignAccountType.Wallet) {
-            await connection?.connect({ providerType: ProviderType.MaskWallet, account: signAccount.address })
             signature = await connection?.signMessage(payload, 'personalSign', {
                 account: signAccount.address,
                 providerType: ProviderType.MaskWallet,
@@ -62,26 +60,10 @@ export function useDeploy(
 
         if (!response.walletAddress) return
 
-        const entryPoints = await connection?.supportedEntryPoints?.()
-        const entryPoint = first(entryPoints)
-
-        if (!entryPoint) return
-
-        const { LOGIC_WALLET_CONTRACT_ADDRESS } = getSmartPayConstants(ChainId.Mumbai)
-
-        if (!LOGIC_WALLET_CONTRACT_ADDRESS) throw new Error('No logic wallet contract.')
-
-        const contractWallet = new ContractWallet(
-            signAccount.address,
-            LOGIC_WALLET_CONTRACT_ADDRESS,
-            entryPoint,
-            ChainId.Mumbai,
-        )
-        if (!contractWallet.initCode) throw new Error('Failed to create initCode.')
         await connection?.deployContractWallet?.(contractAccount.owner, {
             account: contractAccount?.address,
             chainId: ChainId.Mumbai,
             providerType: ProviderType.MaskWallet,
         })
-    }, [connection, signAccount, currentVisitingProfile?.identifier, currentPersona, contractAccount])
+    }, [connection, signAccount, lastRecognizedIdentity?.identifier, currentPersona, contractAccount])
 }
