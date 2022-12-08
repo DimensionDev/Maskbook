@@ -9,7 +9,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
 import { WalletMessages } from '../../messages.js'
 import { ConnectionProgress } from './ConnectionProgress.js'
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils/index.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 
@@ -67,7 +67,7 @@ export function ConnectWalletDialog() {
                 providerType: ProviderType.WalletConnect,
             })
 
-            if (await walletConnectConnection?.getAccount()) {
+            if (isValidAddress(await walletConnectConnection?.getAccount())) {
                 await walletConnectConnection?.disconnect()
             }
         }
