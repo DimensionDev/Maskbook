@@ -40,7 +40,7 @@ export const useNetworkSelector = (pluginID?: NetworkPluginID) => {
     const onConnect = useCallback(
         async (chainId: Web3Helper.ChainIdAll) => {
             if (!chainId || !Connection) throw new Error('Failed to connect to provider.')
-            const connection = await Connection.getConnection?.({
+            const connection = Connection.getConnection?.({
                 providerType: providerDescriptor?.type,
             })
             if (!connection) throw new Error('Failed to build connection.')
