@@ -24,6 +24,15 @@ describe('UserTransaction', async () => {
         userOperation,
     )
 
+    const userTransaction2 = new UserTransaction(
+        ChainId.Mainnet,
+        '0x0000000000000000000000000000000000000000',
+        userOperation,
+    )
+
+    console.log(userTransaction.toUserOperation())
+    console.log(userTransaction2.toUserOperation())
+
     test('hasPaymaster', () => {
         expect(userTransaction.hasPaymaster).toBe(false)
     })
