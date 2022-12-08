@@ -58,7 +58,7 @@ const SwitchWallet = memo(() => {
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
 
     const handleClickCreate = useCallback(() => {
-        if (!wallet) {
+        if (!wallets.filter((x) => x.hasDerivationPath).length) {
             browser.tabs.create({
                 active: true,
                 url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet'),
@@ -66,7 +66,7 @@ const SwitchWallet = memo(() => {
         } else {
             navigate(PopupRoutes.CreateWallet)
         }
-    }, [wallet, history])
+    }, [wallets, history])
 
     const handleSelect = useCallback(
         async (address: string | undefined) => {
