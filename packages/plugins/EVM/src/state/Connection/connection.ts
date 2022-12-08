@@ -977,7 +977,7 @@ class Connection implements EVM_Connection {
         const options = this.getOptions(initial)
         return this.hijackedRequest<string>(
             {
-                method: EthereumMethodType.SC_WALLET_DEPLOY,
+                method: EthereumMethodType.SC_WALLET_CHANGE_OWNER,
                 params: [recipient],
             },
             options,

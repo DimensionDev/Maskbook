@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { first, omit } from 'lodash-es'
+import { compact, first, omit } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import {
     ChainId,
@@ -7,6 +7,7 @@ import {
     Create2Factory,
     createContract,
     getSmartPayConstants,
+    isValidAddress,
     UserOperation,
 } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -217,15 +218,18 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
 
         const operations = await this.funder.queryOperationByOwner(owner)
 
-        return owners.map((x, index) =>
-            this.createContractAccount(
-                chainId,
-                options[index],
-                x,
-                x,
-                true,
-                operations.some((operation) => isSameAddress(operation.walletAddress, x)),
-            ),
+        return compact(
+            owners.map((x, index) => {
+                if (!isValidAddress(x)) return
+                return this.createContractAccount(
+                    chainId,
+                    options[index],
+                    x,
+                    x,
+                    true,
+                    operations.some((operation) => isSameAddress(operation.walletAddress, x)),
+                )
+            }),
         )
     }
 

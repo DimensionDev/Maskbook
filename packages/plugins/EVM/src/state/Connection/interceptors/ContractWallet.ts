@@ -11,6 +11,7 @@ import {
     UserTransaction,
     ContractWallet as ContractWalletLib,
     ContractTransaction,
+    isEmptyHex,
 } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
@@ -53,13 +54,13 @@ export class ContractWallet implements Middleware<Context> {
     private async getEntryPoint(chainId: ChainId) {
         const entryPoints = await this.bundler.getSupportedEntryPoints(chainId)
         const entryPoint = first(entryPoints)
-        if (!entryPoint || isValidAddress(entryPoint)) throw new Error(`Not supported ${chainId}`)
+        if (!entryPoint || !isValidAddress(entryPoint)) throw new Error(`Not supported ${chainId}`)
         return entryPoint
     }
 
     private async getInitCode(chainId: ChainId, owner: string) {
         const contractWallet = new ContractWalletLib(chainId, owner, this.address, await this.getEntryPoint(chainId))
-        if (!contractWallet.initCode) throw new Error('Failed to create initCode.')
+        if (isEmptyHex(contractWallet.initCode)) throw new Error('Failed to create initCode.')
         return contractWallet.initCode
     }
 
