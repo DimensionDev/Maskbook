@@ -35,6 +35,14 @@ export namespace FunderAPI {
         walletAddress: string
     }
 
+    export enum ScanKey {
+        TwitterHandler = 'twitterHandler',
+        OwnerAddress = 'ownerAddress',
+        TokenTransferTx = 'tokenTransferTx',
+        Id = 'id',
+        WalletAddress = 'walletAddress',
+    }
+
     export interface Provider {
         /** Get all supported chain ids. */
         getSupportedChainIds(): Promise<ChainId[]>
@@ -42,5 +50,6 @@ export namespace FunderAPI {
         fund(chainId: ChainId, proof: Proof): Promise<Fund>
         verify(handler: string): Promise<boolean>
         queryRemainFrequency(handler: string): Promise<number>
+        queryOperationByOwner(owner: string): Promise<Operation[]>
     }
 }

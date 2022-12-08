@@ -9,13 +9,16 @@ import {
     getSmartPayConstants,
     UserOperation,
 } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import { BUNDLER_ROOT, FUNDER_ROOT, MAX_ACCOUNT_LENGTH } from './constants.js'
-import { Web3API } from '../EVM/index.js'
+import type { BundlerAPI } from '../types/Bundler.js'
+import { FunderAPI } from '../types/Funder.js'
 import { MulticallAPI } from '../Multicall/index.js'
-import type { BundlerAPI, FunderAPI, ContractAccountAPI } from '../entry-types.js'
+import { Web3API } from '../EVM/index.js'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import type { ContractAccountAPI } from '../entry-types.js'
 
 export class SmartPayBundlerAPI implements BundlerAPI.Provider {
     private async healthz() {
@@ -104,6 +107,12 @@ export class SmartPayFunderAPI implements FunderAPI.Provider {
         return json
     }
 
+    private async queryOperations(key: FunderAPI.ScanKey, value: string) {
+        const response = await fetch(urlcat(FUNDER_ROOT, '/operation', { scanKey: key, scanValue: value }))
+        const json: FunderAPI.Operation[] = await response.json()
+        return json
+    }
+
     async getSupportedChainIds(): Promise<ChainId[]> {
         return Promise.resolve([ChainId.Matic, ChainId.Mumbai])
     }
@@ -141,12 +150,21 @@ export class SmartPayFunderAPI implements FunderAPI.Provider {
             return 0
         }
     }
+
+    async queryOperationByOwner(owner: string) {
+        try {
+            return this.queryOperations(FunderAPI.ScanKey.OwnerAddress, owner)
+        } catch {
+            return EMPTY_LIST
+        }
+    }
 }
 
 export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPluginID.PLUGIN_EVM> {
     private web3 = new Web3API()
     private multicall = new MulticallAPI()
     private bundler = new SmartPayBundlerAPI()
+    private fund = new SmartPayFunderAPI()
     private async getEntryPoint(chainId: ChainId) {
         const entryPoints = await this.bundler.getSupportedEntryPoints(chainId)
         return first(entryPoints)
@@ -164,6 +182,7 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         chainId: ChainId,
         address: string,
         owner: string,
+        nonce: number,
         deployed = true,
         funded = false,
     ): ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM> {
@@ -175,6 +194,7 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
             owner,
             deployed,
             funded,
+            nonce,
         }
     }
 
@@ -188,14 +208,33 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         const contracts = options.map((x) => this.createWalletContract(chainId, x)!)
         const names = Array.from<'owner'>({ length: options.length }).fill('owner')
         const calls = this.multicall.createMultipleContractSingleData(contracts, names, [])
-
+        const operations = await this.fund.queryOperationByOwner(owner)
         const results = await this.multicall.call(chainId, contracts, names, calls)
         const accounts = results.flatMap((x) => (x.succeed && x.value ? x.value : []))
 
         // if the owner didn't derive any account before, then use the first account.
-        return accounts.length === 0
-            ? options.slice(0, 1).map((x) => this.createContractAccount(chainId, x, owner, false))
-            : accounts.map((x) => this.createContractAccount(chainId, x, owner))
+        if (!accounts.length && !operations.length)
+            return options.slice(0, 1).map((x) => this.createContractAccount(chainId, x, owner, 0, false))
+
+        // if the owner didn't derive any account before, but there are funded operation records
+        if (operations.length && !accounts.length) {
+            return options.map((x, index) => {
+                const operation = operations.find((y) => isSameAddress(y.walletAddress, x))
+
+                return this.createContractAccount(chainId, x, owner, operation?.nonce ?? index, false, !!operation)
+            })
+        }
+
+        return accounts.map((x, index) =>
+            this.createContractAccount(
+                chainId,
+                x,
+                owner,
+                index,
+                true,
+                operations.some((operation) => isSameAddress(operation.walletAddress, x)),
+            ),
+        )
     }
 
     /**
