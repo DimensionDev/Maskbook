@@ -1,6 +1,7 @@
 import { first } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
-import type { BundlerAPI } from '@masknet/web3-providers/types'
+import type { BundlerAPI, ContractAccountAPI } from '@masknet/web3-providers/types'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import {
     ChainId,
     createContract,
@@ -9,7 +10,9 @@ import {
     ProviderType,
     UserTransaction,
     ContractWallet as ContractWalletLib,
+    ContractTransaction,
 } from '@masknet/web3-shared-evm'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
 import { Web3StateSettings } from '../../../settings/index.js'
@@ -22,6 +25,7 @@ export class ContractWallet implements Middleware<Context> {
         /** The address of logic contract. */
         protected address: string,
         protected providerType: ProviderType,
+        protected contractAccount: ContractAccountAPI.Provider<NetworkPluginID.PLUGIN_EVM>,
         protected bundler: BundlerAPI.Provider,
     ) {}
 
@@ -59,6 +63,16 @@ export class ContractWallet implements Middleware<Context> {
         return contractWallet.initCode
     }
 
+    private async getDeployedAcounts(chainId: ChainId, owner: string) {
+        const accounts = await this.contractAccount.getAccountsByOwner(chainId, owner)
+        return accounts.filter((x) => isSameAddress(x.creator, owner))
+    }
+
+    private async getNonce(context: Context) {
+        const walletContract = this.createWallet(context)
+        return walletContract.methods.nonce()
+    }
+
     private async sendUserOperation(
         context: Context,
         owner = context.owner,
@@ -82,17 +96,18 @@ export class ContractWallet implements Middleware<Context> {
         return this.bundler.sendUserOperation(context.chainId, userTransaction.toUserOperation())
     }
 
-    private async changeOwner(context: Context) {
-        context.abort(new Error('Not implemented.'))
+    private async changeOwner(context: Context, recipient?: string) {
+        if (!recipient) throw new Error('No receipient address.')
+        return new ContractTransaction(this.createWallet(context)).send((x) => x.methods.changeOwner(recipient))
     }
 
     private async deploy(context: Context, owner: string) {
         const initCode = await this.getInitCode(context.chainId, owner)
+        const accounts = await this.getDeployedAcounts(context.chainId, owner)
 
         return this.sendUserOperation(context, owner, {
             sender: context.account,
-            // TODO:
-            nonce: 0,
+            nonce: accounts.length,
             initCode,
         })
     }
@@ -119,9 +134,7 @@ export class ContractWallet implements Middleware<Context> {
                 break
             case EthereumMethodType.ETH_GET_TRANSACTION_COUNT:
                 try {
-                    const walletContract = this.createWallet(context)
-                    const nonce = walletContract.methods.nonce()
-                    context.write(nonce ?? 0)
+                    context.write(await this.getNonce(context))
                 } catch (error) {
                     context.abort(error)
                 }
@@ -155,13 +168,17 @@ export class ContractWallet implements Middleware<Context> {
                 }
                 break
             case EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN:
-                context.abort(new Error('Not supported by SC wallet.'))
+                context.abort(new Error('Not supported by contract wallet.'))
                 break
             case EthereumMethodType.ETH_SEND_RAW_TRANSACTION:
-                context.abort(new Error('Not supported by SC wallet.'))
+                context.abort(new Error('Not supported by contract wallet.'))
                 break
             case EthereumMethodType.SC_WALLET_CHANGE_OWNER:
-                context.abort(new Error('Not implemented.'))
+                try {
+                    context.write(await this.changeOwner(context, first(context.requestArguments.params)))
+                } catch (error) {
+                    context.abort(error)
+                }
                 break
             case EthereumMethodType.SC_WALLET_DEPLOY:
                 try {

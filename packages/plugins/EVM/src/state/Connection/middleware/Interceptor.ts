@@ -1,11 +1,11 @@
 import { getSmartPayConstants, ProviderType } from '@masknet/web3-shared-evm'
+import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
 import type { Context, Middleware } from '../types.js'
 import { NoneWallet } from '../interceptors/None.js'
 import { MaskWallet } from '../interceptors/MaskWallet.js'
 import { WalletConnect } from '../interceptors/WalletConnect.js'
 import { MetaMask } from '../interceptors/MetaMask.js'
 import { Fortmatic } from '../interceptors/Fortmatic.js'
-import { SmartPayBundler } from '@masknet/web3-providers'
 import { ContractWallet } from '../interceptors/ContractWallet.js'
 
 export class Interceptor implements Middleware<Context> {
@@ -15,6 +15,7 @@ export class Interceptor implements Middleware<Context> {
             new ContractWallet(
                 getSmartPayConstants().LOGIC_WALLET_CONTRACT_ADDRESS ?? '',
                 ProviderType.MaskWallet,
+                SmartPayAccount,
                 SmartPayBundler,
             ),
             new MaskWallet(),

@@ -970,6 +970,20 @@ class Connection implements EVM_Connection {
         )
     }
 
+    async transferContractWallet(
+        recipient: string,
+        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ) {
+        const options = this.getOptions(initial)
+        return this.hijackedRequest<string>(
+            {
+                method: EthereumMethodType.SC_WALLET_DEPLOY,
+                params: [recipient],
+            },
+            options,
+        )
+    }
+
     async deployContractWallet(
         owner: string,
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,

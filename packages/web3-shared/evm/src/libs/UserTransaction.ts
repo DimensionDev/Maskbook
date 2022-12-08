@@ -162,7 +162,6 @@ export class UserTransaction {
             }
         }
 
-        // TODO: if initCode exists, nonce = getAccounts
         if (typeof this.userOperation.nonce === 'undefined') {
             if (!this.walletContract) throw new Error('Failed to create wallet contract.')
             this.userOperation.nonce = toNumber(await this.walletContract.methods.nonce().call())
