@@ -241,8 +241,8 @@ export function CompositionDialog(props: CompositionDialogProps) {
             open={props.open}
             title={t('plugin_ito_display_name')}
             onClose={() => (showHistory ? setShowHistory(false) : onBack())}>
-            <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: currentChainId }}>
-                <DialogContent className={classes.content}>
+            <DialogContent className={classes.content}>
+                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: currentChainId }}>
                     {step === ITOCreateFormPageStep.NewItoPage ? (
                         !showHistory ? (
                             <>
@@ -268,8 +268,8 @@ export function CompositionDialog(props: CompositionDialogProps) {
                             onClose={onClose}
                         />
                     ) : null}
-                </DialogContent>
-            </Web3ContextProvider>
+                </Web3ContextProvider>
+            </DialogContent>
         </InjectedDialog>
     )
 }
