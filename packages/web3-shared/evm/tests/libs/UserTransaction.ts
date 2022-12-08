@@ -4,7 +4,7 @@ import { ChainId, UserOperation } from '../../src/types/index.js'
 
 const userOperation: UserOperation = {
     sender: '0x0000000000000000000000000000000000000000',
-    nonce: '0x0000000000000000000000000000000000000000',
+    nonce: 0,
     initCode: '0x',
     callData: '0x',
     callGas: '0',
@@ -17,8 +17,8 @@ const userOperation: UserOperation = {
     signature: '0x',
 }
 
-describe('UserTransaction', () => {
-    const userTransaction = new UserTransaction(
+describe('UserTransaction', async () => {
+    const userTransaction = await UserTransaction.fromUserOperation(
         ChainId.Mainnet,
         '0x0000000000000000000000000000000000000000',
         userOperation,
@@ -30,6 +30,10 @@ describe('UserTransaction', () => {
 
     test('pack', () => {
         expect(userTransaction.pack).toBeTruthy()
+    })
+
+    test('packAll', () => {
+        expect(userTransaction.packAll).toBeTruthy()
     })
 
     test('hash', () => {

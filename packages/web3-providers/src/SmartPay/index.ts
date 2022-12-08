@@ -9,6 +9,7 @@ import {
     getSmartPayConstants,
     UserOperation,
 } from '@masknet/web3-shared-evm'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
@@ -17,8 +18,8 @@ import type { BundlerAPI } from '../types/Bundler.js'
 import { FunderAPI } from '../types/Funder.js'
 import { MulticallAPI } from '../Multicall/index.js'
 import { Web3API } from '../EVM/index.js'
-import { isSameAddress } from '@masknet/web3-shared-base'
 import type { ContractAccountAPI } from '../entry-types.js'
+import { fetchJSON } from '../entry-helpers.js'
 
 export class SmartPayBundlerAPI implements BundlerAPI.Provider {
     private async healthz() {
@@ -102,31 +103,25 @@ export class SmartPayFunderAPI implements FunderAPI.Provider {
     }
 
     private async queryWhiteList(handler: string) {
-        const response = await fetch(urlcat(FUNDER_ROOT, '/whitelist', { twitterHandler: handler }))
-        const json: FunderAPI.WhiteList = await response.json()
-        return json
+        return fetchJSON<FunderAPI.WhiteList>(urlcat(FUNDER_ROOT, '/whitelist', { twitterHandler: handler }))
     }
 
     private async queryOperations(key: FunderAPI.ScanKey, value: string) {
-        const response = await fetch(urlcat(FUNDER_ROOT, '/operation', { scanKey: key, scanValue: value }))
-        const json: FunderAPI.Operation[] = await response.json()
-        return json
+        return fetchJSON<FunderAPI.Operation[]>(urlcat(FUNDER_ROOT, '/operation', { scanKey: key, scanValue: value }))
     }
 
-    getSupportedChainIds(): Promise<ChainId[]> {
-        return Promise.resolve([ChainId.Matic, ChainId.Mumbai])
+    async getSupportedChainIds(): Promise<ChainId[]> {
+        return [ChainId.Matic, ChainId.Mumbai]
     }
 
     async fund(chainId: ChainId, proof: FunderAPI.Proof): Promise<FunderAPI.Fund> {
         await this.assetChainId(chainId)
 
-        const response = await fetch(urlcat(FUNDER_ROOT, '/verify'), {
+        return fetchJSON<FunderAPI.Fund>(urlcat(FUNDER_ROOT, '/verify'), {
             method: 'POST',
             body: JSON.stringify(proof),
             headers: { 'Content-Type': 'application/json' },
         })
-        const json = await response.json()
-        return json.message as FunderAPI.Fund
     }
 
     async verify(handler: string) {
@@ -164,10 +159,13 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
     private web3 = new Web3API()
     private multicall = new MulticallAPI()
     private bundler = new SmartPayBundlerAPI()
-    private fund = new SmartPayFunderAPI()
+    private funder = new SmartPayFunderAPI()
+
     private async getEntryPoint(chainId: ChainId) {
         const entryPoints = await this.bundler.getSupportedEntryPoints(chainId)
-        return first(entryPoints)
+        const entryPoint = first(entryPoints)
+        if (!entryPoint) throw new Error('No entry point contract.')
+        return entryPoint
     }
 
     private createWeb3(chainId: ChainId) {
@@ -182,7 +180,7 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         chainId: ChainId,
         address: string,
         owner: string,
-        nonce: number,
+        creator: string,
         deployed = true,
         funded = false,
     ): ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM> {
@@ -192,9 +190,9 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
             id: `${NetworkPluginID.PLUGIN_EVM}_${chainId}_${address}`,
             address,
             owner,
+            creator,
             deployed,
             funded,
-            nonce,
         }
     }
 
@@ -204,33 +202,27 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
      * @param options
      * @returns
      */
-    private async getOwnedAccountsFromMulticall(chainId: ChainId, owner: string, options: string[]) {
+    private async getAccountsFromMulticall(chainId: ChainId, owner: string, options: string[]) {
         const contracts = options.map((x) => this.createWalletContract(chainId, x)!)
         const names = Array.from<'owner'>({ length: options.length }).fill('owner')
         const calls = this.multicall.createMultipleContractSingleData(contracts, names, [])
-        const operations = await this.fund.queryOperationByOwner(owner)
         const results = await this.multicall.call(chainId, contracts, names, calls)
-        const accounts = results.flatMap((x) => (x.succeed && x.value ? x.value : []))
 
-        // if the owner didn't derive any account before, then use the first account.
-        if (!accounts.length && !operations.length)
-            return options.slice(0, 1).map((x) => this.createContractAccount(chainId, x, owner, 0, false))
+        const owners = results.flatMap((x) => (x.succeed && x.value ? x.value : ''))
 
-        // if the owner didn't derive any account before, but there are funded operation records
-        if (operations.length && !accounts.length) {
-            return options.map((x, index) => {
-                const operation = operations.find((y) => isSameAddress(y.walletAddress, x))
-
-                return this.createContractAccount(chainId, x, owner, operation?.nonce ?? index, false, !!operation)
-            })
+        // the owner didn't deploy any account before.
+        if (!owners.length) {
+            return []
         }
 
-        return accounts.map((x, index) =>
+        const operations = await this.funder.queryOperationByOwner(owner)
+
+        return owners.map((x, index) =>
             this.createContractAccount(
                 chainId,
+                options[index],
                 x,
-                owner,
-                index,
+                x,
                 true,
                 operations.some((operation) => isSameAddress(operation.walletAddress, x)),
             ),
@@ -243,43 +235,42 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
      * @param owner
      * @returns
      */
-    private async getOwnedAccountsFromChainbase(chainId: ChainId, owner: string) {
+    private async getAccountsFromChainbase(chainId: ChainId, owner: string) {
         // TODO: impl chainbase query
         return []
     }
 
-    private async getOwnedAccounts(
+    async getAccountsByOwner(
         chainId: ChainId,
         owner: string,
     ): Promise<Array<ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM>>> {
-        const entryPoint = await this.getEntryPoint(chainId)
-        if (!entryPoint) throw new Error('No entry point contract.')
+        if (!owner) throw new Error('No owner address.')
 
         const { LOGIC_WALLET_CONTRACT_ADDRESS, CREATE2_FACTORY_CONTRACT_ADDRESS } = getSmartPayConstants(chainId)
         if (!LOGIC_WALLET_CONTRACT_ADDRESS) throw new Error('No logic wallet contract.')
         if (!CREATE2_FACTORY_CONTRACT_ADDRESS) throw new Error('No create2 contract.')
 
-        const contractWallet = new ContractWallet(owner, LOGIC_WALLET_CONTRACT_ADDRESS, entryPoint, chainId)
-        const create2Factory = new Create2Factory(CREATE2_FACTORY_CONTRACT_ADDRESS)
-
+        const entryPoint = await this.getEntryPoint(chainId)
+        const contractWallet = new ContractWallet(chainId, owner, LOGIC_WALLET_CONTRACT_ADDRESS, entryPoint)
         if (!contractWallet.initCode) throw new Error('Failed to create initCode.')
 
+        const create2Factory = new Create2Factory(CREATE2_FACTORY_CONTRACT_ADDRESS)
         const allSettled = await Promise.allSettled([
-            this.getOwnedAccountsFromMulticall(
+            this.getAccountsFromMulticall(
                 chainId,
                 owner,
                 create2Factory.derive(contractWallet.initCode, MAX_ACCOUNT_LENGTH),
             ),
-            this.getOwnedAccountsFromChainbase(chainId, owner),
+            this.getAccountsFromChainbase(chainId, owner),
         ])
         return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
     }
 
-    async getAccounts(
+    async getAccountsByOwners(
         chainId: ChainId,
         owners: string[],
     ): Promise<Array<ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM>>> {
-        const allSettled = await Promise.allSettled(owners.map((x) => this.getOwnedAccounts(chainId, x)))
+        const allSettled = await Promise.allSettled(owners.map((x) => this.getAccountsByOwner(chainId, x)))
         return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
     }
 }

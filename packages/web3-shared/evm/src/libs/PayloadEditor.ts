@@ -37,6 +37,20 @@ export class PayloadEditor {
             : undefined
     }
 
+    get owner() {
+        const { method, params } = this.payload
+        switch (method) {
+            case EthereumMethodType.SC_WALLET_DEPLOY:
+                return first(params)
+            case EthereumMethodType.ETH_CALL_USER_OPERATION:
+            case EthereumMethodType.ETH_SEND_USER_OPERATION:
+                const [owner, _] = params as [string, UserOperation]
+                return owner
+            default:
+                return
+        }
+    }
+
     get config() {
         const { method, params } = this.payload
         switch (method) {
@@ -59,9 +73,9 @@ export class PayloadEditor {
     get userOperation() {
         const { method, params } = this.payload
         switch (method) {
-            case EthereumMethodType.SC_WALLET_DEPLOY:
+            case EthereumMethodType.ETH_CALL_USER_OPERATION:
             case EthereumMethodType.ETH_SEND_USER_OPERATION:
-                const [userOperation] = params as [UserOperation]
+                const [_, userOperation] = params as [string, UserOperation]
                 return userOperation
             default:
                 return
