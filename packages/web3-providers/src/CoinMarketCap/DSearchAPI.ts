@@ -1,6 +1,6 @@
 import type { NonFungibleTokenResult, SearchResult, SourceType } from '@masknet/web3-shared-base'
 import urlcat from 'urlcat'
-import { fetchJSON } from '../helpers.js'
+import { fetchJSON } from '../helpers/fetchJSON.js'
 import type { DSearchBaseAPI } from '../types/DSearch.js'
 
 export interface FungibleToken {

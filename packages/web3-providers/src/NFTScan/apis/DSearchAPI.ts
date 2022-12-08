@@ -5,8 +5,8 @@ import type {
     SourceType,
 } from '@masknet/web3-shared-base'
 import urlcat from 'urlcat'
-import { fetchJSON } from '../../helpers.js'
-import type { DSearchBaseAPI } from '../../index.js'
+import { fetchJSON } from '../../helpers/fetchJSON.js'
+import type { DSearchBaseAPI } from '../../types/DSearch.js'
 
 export interface FungibleToken {
     id: string | number

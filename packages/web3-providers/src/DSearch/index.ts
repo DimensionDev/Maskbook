@@ -7,7 +7,7 @@ import type {
 import urlcat from 'urlcat'
 import { CoinGeckoSearchAPI } from '../CoinGecko/apis/DSearchAPI.js'
 import { CoinMarketCapSearchAPI } from '../CoinMarketCap/DSearchAPI.js'
-import { fetchJSON } from '../helpers.js'
+import { fetchJSON } from '../helpers/fetchJSON.js'
 import { NFTSCANDSearchAPI } from '../NFTScan/index.js'
 import type { DSearchBaseAPI } from '../types/DSearch.js'
 import { getHandlers } from './rules.js'
