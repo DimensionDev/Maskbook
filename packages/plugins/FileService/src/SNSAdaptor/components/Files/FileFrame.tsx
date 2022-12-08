@@ -20,11 +20,15 @@ const useStyles = makeStyles()((theme) => ({
         flexGrow: 1,
         marginRight: 'auto',
         marginLeft: theme.spacing(1),
+        overflow: 'auto',
     },
     name: {
         color: theme.palette.maskColor.main,
         fontWeight: 700,
         lineHeight: '18px',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
     },
 }))
 
@@ -49,7 +53,9 @@ export const FileFrame: FC<PropsWithChildren<FileFrameProps>> = memo(function Fi
         <div className={cx(className, classes.file)} {...rest}>
             <Icons.Message size={24} />
             <div className={classes.content}>
-                <Typography className={classes.name}>{file.name}</Typography>
+                <Typography className={classes.name} title={file.name}>
+                    {file.name}
+                </Typography>
                 {children}
             </div>
             {operations}
