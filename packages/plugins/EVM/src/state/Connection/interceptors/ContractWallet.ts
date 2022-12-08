@@ -95,17 +95,18 @@ export class ContractWallet implements Middleware<Context> {
             await this.getEntryPoint(context.chainId),
             userOperation,
         )
-        await userTransaction.sign((message: string) => {
-            if (identifier) {
-                return SharedContextSettings.value.personaSignPayMessage({
-                    message: userTransaction.pack,
-                    identifier,
-                })
-            }
-            return context.connection.signMessage(message, 'personalSign', {
-                account: owner,
-                providerType: this.providerType,
-            })
+        await userTransaction.sign(async (message: string) => {
+            return message
+            // if (identifier) {
+            //     return SharedContextSettings.value.personaSignPayMessage({
+            //         message: userTransaction.pack,
+            //         identifier,
+            //     })
+            // }
+            // return context.connection.signMessage(message, 'personalSign', {
+            //     account: owner,
+            //     providerType: this.providerType,
+            // })
         })
         return this.bundler.sendUserOperation(context.chainId, userTransaction.toUserOperation())
     }

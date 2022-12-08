@@ -10,6 +10,7 @@ import {
     isValidAddress,
     UserOperation,
 } from '@masknet/web3-shared-evm'
+import { toBase64, fromHex } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
@@ -38,24 +39,30 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
         const response = await fetch(urlcat(BUNDLER_ROOT, '/handle'), {
             method: 'POST',
             body: JSON.stringify({
-                ...omit(userOperation, [
-                    'initCode',
-                    'callData',
-                    'callGas',
-                    'verificationGas',
-                    'preVerificationGas',
-                    'maxFeePerGas',
-                    'maxPriorityFeePerGas',
-                    'paymasterData',
-                ]),
-                init_code: userOperation.initCode,
-                call_data: userOperation.callData,
-                call_gas: userOperation.callGas,
-                verification_gas: userOperation.verificationGas,
-                pre_verification_gas: userOperation.preVerificationGas,
-                max_fee_per_gas: userOperation.maxFeePerGas,
-                max_priority_fee_per_gas: userOperation.maxPriorityFeePerGas,
-                paymaster_data: userOperation.paymasterData,
+                user_operations: [
+                    {
+                        ...omit(userOperation, [
+                            'initCode',
+                            'callData',
+                            'callGas',
+                            'verificationGas',
+                            'preVerificationGas',
+                            'maxFeePerGas',
+                            'maxPriorityFeePerGas',
+                            'paymasterData',
+                        ]),
+                        nonce: userOperation.nonce?.toFixed() ?? '0',
+                        init_code: toBase64(fromHex(userOperation.initCode ?? '0x')),
+                        call_data: toBase64(fromHex(userOperation.callData ?? '0x')),
+                        call_gas: userOperation.callGas,
+                        verification_gas: userOperation.verificationGas,
+                        pre_verification_gas: userOperation.preVerificationGas,
+                        max_fee_per_gas: userOperation.maxFeePerGas,
+                        max_priority_fee_per_gas: userOperation.maxPriorityFeePerGas,
+                        paymaster_data: toBase64(fromHex(userOperation.paymasterData ?? '0x')),
+                        signature: toBase64(fromHex(userOperation.signature ?? '0x')),
+                    },
+                ],
             }),
         })
         const json: { tx_hash: string } = await response.json()
