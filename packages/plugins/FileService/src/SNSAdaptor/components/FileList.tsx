@@ -140,7 +140,7 @@ interface SelectableFileListProps extends Omit<FileListBaseProps, 'onChange' | '
     onChange?(selectedIds: string[]): void
 }
 
-const FILE_LIMIT = 5
+const FILE_LIMIT = 3
 export const SelectableFileList: FC<SelectableFileListProps> = ({
     files,
     className,

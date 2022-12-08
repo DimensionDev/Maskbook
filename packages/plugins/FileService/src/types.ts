@@ -35,7 +35,7 @@ export interface FileInfo {
     provider: Provider
     /**
      * Before v3, it's checksum of the file.
-     * Since v3, it's JSON.stringify([provider, useCDN, encrypted, checksum])
+     * Since v3, it's digest(file, [provider, useCDN, encrypted])
      */
     id: string
 

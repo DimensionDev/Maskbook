@@ -82,6 +82,6 @@ async function digestMessage(message: string) {
 
 export async function digest(file: File, extraData: Array<number | string | boolean | null>) {
     const fileDigest = await digestFile(file)
-    const dataDgiest = await digestMessage(JSON.stringify(extraData))
-    return digestMessage(JSON.stringify([fileDigest, dataDgiest]))
+    const dataDigest = await digestMessage(JSON.stringify(extraData))
+    return digestMessage(JSON.stringify([fileDigest, dataDigest]))
 }
