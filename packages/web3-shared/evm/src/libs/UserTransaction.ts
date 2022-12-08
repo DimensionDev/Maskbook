@@ -161,17 +161,13 @@ export class UserTransaction {
                 )
             }
         }
+
         // TODO: if initCode exists, nonce = getAccounts
-        if (!this.userOperation.nonce) {
-            try {
-                // ca nonce
-                if (!this.walletContract) throw new Error('Failed to create wallet contract.')
-                this.userOperation.nonce = toNumber(await this.walletContract.methods.nonce().call())
-                // 0x
-            } catch (error) {
-                console.log(error)
-            }
+        if (typeof this.userOperation.nonce === 'undefined') {
+            if (!this.walletContract) throw new Error('Failed to create wallet contract.')
+            this.userOperation.nonce = toNumber(await this.walletContract.methods.nonce().call())
         }
+
         if (isZeroString(callGas) && !isEmptyHex(callData)) {
             this.userOperation.callGas = toFixed(
                 await web3.eth.estimateGas({
