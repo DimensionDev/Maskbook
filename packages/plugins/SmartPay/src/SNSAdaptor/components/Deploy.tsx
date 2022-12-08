@@ -131,7 +131,6 @@ export function Deploy({ open }: { open: boolean }) {
 
         const accounts = await SmartPayAccount.getAccounts(ChainId.Mumbai, [signAccount?.address])
 
-        console.log(accounts)
         return first(accounts)
     }, [signAccount, open])
     // #endregion
