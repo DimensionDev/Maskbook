@@ -8,7 +8,6 @@ export namespace ContractAccountAPI {
         deployed: boolean
         /** Has funded by sponsor */
         funded: boolean
-        nonce: number
     }
 
     export interface Provider<T extends NetworkPluginID> {

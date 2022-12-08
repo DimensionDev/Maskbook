@@ -180,7 +180,7 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         chainId: ChainId,
         address: string,
         owner: string,
-        nonce: number,
+        creator: string,
         deployed = true,
         funded = false,
     ): ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM> {
@@ -190,9 +190,9 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
             id: `${NetworkPluginID.PLUGIN_EVM}_${chainId}_${address}`,
             address,
             owner,
+            creator,
             deployed,
             funded,
-            nonce,
         }
     }
 
@@ -222,7 +222,7 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
                 chainId,
                 options[index],
                 x,
-                index,
+                x,
                 true,
                 operations.some((operation) => isSameAddress(operation.walletAddress, x)),
             ),
