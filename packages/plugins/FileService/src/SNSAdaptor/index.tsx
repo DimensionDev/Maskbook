@@ -3,7 +3,6 @@ import { formatFileSize } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
-import { CrossIsolationMessages } from '@masknet/shared-base'
 import { MaskLightTheme } from '@masknet/theme'
 import { ThemeProvider } from '@mui/material'
 import { truncate } from 'lodash-es'
@@ -13,8 +12,10 @@ import { FileInfoMetadataReader } from '../helpers.js'
 import type { FileInfo } from '../types.js'
 import { MultipleFileChip, SingleFileChip } from './components/index.js'
 import { FileViewer } from './FileViewer.js'
-import FileServiceDialog, { FileServiceDialogProps } from './MainDialog.js'
 import { setupStorage, StorageOptions } from './storage.js'
+import { openBrowser, openPicker } from './emitter.js'
+import { FileServiceInjection } from './FileServiceInjection.js'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 type BadgeRenderer<T> = (f: T) => Plugin.SNSAdaptor.BadgeDescriptor
 
@@ -37,6 +38,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
         [META_KEY_2, onAttachedFile],
         [META_KEY_3, onAttachedMultipleFile],
     ]),
+    GlobalInjection: FileServiceInjection,
     CompositionDialogEntry: {
         label: (
             <>
@@ -44,7 +46,8 @@ const definition: Plugin.SNSAdaptor.Definition = {
                 File Service
             </>
         ),
-        dialog: FileServiceDialog,
+        // TODO Open with selected files
+        onClick: () => openPicker(EMPTY_LIST),
     },
     ApplicationEntries: [
         (() => {
@@ -54,16 +57,6 @@ const definition: Plugin.SNSAdaptor.Definition = {
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
-                    const clickHandler = () =>
-                        CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
-                            reason: 'timeline',
-                            open: true,
-                            options: {
-                                startupPlugin: base.ID,
-                                isOpenFromApplicationBoard: true,
-                            },
-                        })
-
                     return (
                         <ApplicationEntry
                             title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
@@ -72,8 +65,8 @@ const definition: Plugin.SNSAdaptor.Definition = {
                             iconFilterColor={iconFilterColor}
                             onClick={
                                 EntryComponentProps.onClick
-                                    ? () => EntryComponentProps.onClick?.(clickHandler)
-                                    : clickHandler
+                                    ? () => EntryComponentProps.onClick?.(openBrowser)
+                                    : openBrowser
                             }
                         />
                     )
@@ -102,18 +95,6 @@ const definition: Plugin.SNSAdaptor.Definition = {
 
 export default definition
 
-function openDialog(props: Partial<FileServiceDialogProps>) {
-    CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
-        reason: 'timeline',
-        open: true,
-        options: {
-            startupPlugin: base.ID,
-            startupPluginProps: props,
-            isOpenFromApplicationBoard: false,
-        },
-    })
-}
-
 function onAttachedFile(file: FileInfo): Plugin.SNSAdaptor.BadgeDescriptor {
     const name = truncate(file.name, { length: 10 })
     const size = formatFileSize(file.size)
@@ -124,9 +105,7 @@ function onAttachedFile(file: FileInfo): Plugin.SNSAdaptor.BadgeDescriptor {
                 name={name}
                 size={size}
                 onClick={() => {
-                    openDialog({
-                        selectedFileIds: [file.id],
-                    })
+                    openPicker([file.id])
                 }}
             />
         ),
@@ -142,9 +121,7 @@ function onAttachedMultipleFile(files: FileInfo[]): Plugin.SNSAdaptor.BadgeDescr
                 count={files.length}
                 role="button"
                 onClick={() => {
-                    openDialog({
-                        selectedFileIds: files.map((file) => file.id),
-                    })
+                    openPicker(files.map((file) => file.id))
                 }}
             />
         ),

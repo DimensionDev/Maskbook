@@ -1,7 +1,6 @@
 import { timeout } from '@masknet/kit'
-import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { noop, omit } from 'lodash-es'
 import { createContext, Dispatch, FC, memo, SetStateAction, useCallback, useContext, useMemo, useState } from 'react'
@@ -131,17 +130,24 @@ export const FileManagementProvider: FC<React.PropsWithChildren<{}>> = memo(({ c
         [refetchFiles],
     )
 
-    const { attachMetadata } = useCompositionContext()
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
     )
     const attachToPost = useCallback(
         (fileInfo: FileInfo | FileInfo[]) => {
-            attachMetadata(META_KEY_3, Array.isArray(fileInfo) ? fileInfo : [fileInfo])
+            CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
+                reason: 'timeline',
+                open: true,
+                options: {
+                    initialMetas: {
+                        [META_KEY_3]: Array.isArray(fileInfo) ? fileInfo : [fileInfo],
+                    },
+                },
+            })
             closeApplicationBoardDialog()
             navigate(RoutePaths.Exit)
         },
-        [attachMetadata, closeApplicationBoardDialog, navigate],
+        [closeApplicationBoardDialog, navigate],
     )
 
     const contextValue: FileManagementContextOptions = useMemo(() => {

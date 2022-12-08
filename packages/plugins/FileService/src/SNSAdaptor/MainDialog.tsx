@@ -1,8 +1,7 @@
-import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import type { InitialEntry } from '@remix-run/router'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { RoutePaths } from '../constants.js'
@@ -14,7 +13,7 @@ import { useTermsConfirmed } from './storage.js'
 export interface FileServiceDialogProps {
     onClose: () => void
     open: boolean
-    isOpenFromApplicationBoard?: boolean
+    selectMode?: boolean
     selectedFileIds?: string[]
 }
 
@@ -39,41 +38,28 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const FileServiceDialog: React.FC<FileServiceDialogProps> = ({
-    onClose,
-    isOpenFromApplicationBoard,
-    selectedFileIds,
-}) => {
+const FileServiceDialog: React.FC<FileServiceDialogProps> = ({ onClose, selectMode, selectedFileIds }) => {
     const { classes } = useStyles()
     const [confirmed] = useTermsConfirmed()
 
+    console.log('selectMode', selectMode)
     const initialEntries = useMemo(() => {
-        const OpenEntry: InitialEntry = isOpenFromApplicationBoard
-            ? RoutePaths.Browser
-            : {
+        const OpenEntry: InitialEntry = selectMode
+            ? {
                   pathname: RoutePaths.FileSelector,
                   search: '?' + urlcat('', { selectedFileIds }),
               }
+            : RoutePaths.Browser
         return [RoutePaths.Exit, OpenEntry, RoutePaths.Terms]
-    }, [isOpenFromApplicationBoard, selectedFileIds])
+    }, [selectMode, selectedFileIds])
     const initialIndex = confirmed ? 1 : 2
-
-    const handleClose = useCallback(() => {
-        if (isOpenFromApplicationBoard) {
-            CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
-                reason: 'timeline',
-                open: false,
-            })
-        }
-        onClose?.()
-    }, [isOpenFromApplicationBoard, onClose])
 
     return (
         <MemoryRouter initialEntries={initialEntries} initialIndex={initialIndex}>
             <FileManagementProvider>
                 <RouterDialog
                     open
-                    onClose={handleClose}
+                    onClose={onClose}
                     classes={{ paper: classes.paper }}
                     maxWidth="xs"
                     fullWidth
