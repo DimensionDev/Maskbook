@@ -16,7 +16,7 @@ import {
 import { isSameAddress } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
-import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
+import { Web3StateSettings } from '../../../settings/index.js'
 import type { Middleware, Context } from '../types.js'
 import { Providers } from '../provider.js'
 import type { BaseContractWalletProvider } from '../providers/BaseContractWallet.js'

@@ -129,6 +129,7 @@ export function Deploy({ open }: { open: boolean }) {
     const { value: contractAccount, loading: queryContractLoading } = useAsync(async () => {
         if (!signAccount?.identity || !signAccount?.address || !open) return
 
+        // TODO: filter by deployed
         const deployAccounts = await SmartPayAccount.getAccountsByOwners(ChainId.Mumbai, [signAccount?.address])
         const nonce = deployAccounts.length
         return SmartPayAccount.getAccountByNonce(ChainId.Mumbai, signAccount?.address, nonce)
