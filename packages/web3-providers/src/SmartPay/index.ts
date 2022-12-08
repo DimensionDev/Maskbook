@@ -220,12 +220,14 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
 
         return compact(
             owners.map((x, index) => {
-                if (!isValidAddress(x)) return
+                // ensure the contract account has been deployed
+                // if (!isValidAddress(x)) return
+
                 return this.createContractAccount(
                     chainId,
                     options[index],
-                    x,
-                    x,
+                    owner,
+                    owner,
                     true,
                     operations.some((operation) => isSameAddress(operation.walletAddress, x)),
                 )

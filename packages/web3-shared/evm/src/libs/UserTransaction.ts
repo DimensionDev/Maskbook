@@ -148,7 +148,7 @@ export class UserTransaction {
         if (!isEmptyHex(initCode)) {
             // caution: the creator needs to set the latest index of the contract account.
             // otherwise, always treat the operation to create the initial account.
-            if (!nonce) this.userOperation.nonce = 0
+            if (typeof nonce === 'undefined') this.userOperation.nonce = 0
             if (!sender) {
                 if (!this.entryPointContract) throw new Error('Failed to create entry point contract.')
                 this.userOperation.sender = await this.entryPointContract.methods
@@ -254,7 +254,10 @@ export class UserTransaction {
         entryPoint: string,
         userOperation: UserOperation,
     ): Promise<UserTransaction> {
-        const userTransaction = new UserTransaction(chainId, entryPoint, userOperation)
+        const userTransaction = new UserTransaction(chainId, entryPoint, {
+            ...DEFAULT_USER_OPERATION,
+            ...userOperation,
+        })
         return userTransaction.fill()
     }
 }

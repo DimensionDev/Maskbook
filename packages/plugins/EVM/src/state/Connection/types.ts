@@ -1,6 +1,6 @@
 import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID, PersonaIdentifier } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { RecognizableError, WalletProvider } from '@masknet/web3-shared-base'
 import type {
@@ -44,7 +44,7 @@ export interface Context {
     readonly providerType: ProviderType
     readonly method: EthereumMethodType
     readonly connection: EVM_Connection
-    readonly requestOptions: EVM_Web3ConnectionOptions | undefined
+    readonly requestOptions?: EVM_Web3ConnectionOptions
 
     /**
      * JSON RPC request payload
@@ -54,10 +54,11 @@ export interface Context {
     /**
      * JSON RPC response object
      */
-    readonly response: JsonRpcResponse | undefined
+    readonly response?: JsonRpcResponse
 
-    config: Transaction | undefined
-    userOperation: UserOperation | undefined
+    config?: Transaction
+    identifier?: PersonaIdentifier
+    userOperation?: UserOperation
     requestArguments: RequestArguments
     result: unknown
     error: RecognizableError | null

@@ -1,4 +1,4 @@
-import { getSmartPayConstants, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, getSmartPayConstants, ProviderType } from '@masknet/web3-shared-evm'
 import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
 import type { Context, Middleware } from '../types.js'
 import { NoneWallet } from '../interceptors/None.js'
@@ -12,12 +12,11 @@ export class Interceptor implements Middleware<Context> {
     private interceptors: Partial<Record<ProviderType, Array<Middleware<Context>>>> = {
         [ProviderType.None]: [new NoneWallet()],
         [ProviderType.MaskWallet]: [
-            new ContractWallet(
-                getSmartPayConstants().LOGIC_WALLET_CONTRACT_ADDRESS ?? '',
-                ProviderType.MaskWallet,
-                SmartPayAccount,
-                SmartPayBundler,
-            ),
+            new ContractWallet(ProviderType.MaskWallet, SmartPayAccount, SmartPayBundler, {
+                getLogicContractAddress(chainId: ChainId) {
+                    return getSmartPayConstants(chainId).LOGIC_WALLET_CONTRACT_ADDRESS ?? ''
+                },
+            }),
             new MaskWallet(),
         ],
         [ProviderType.MetaMask]: [new MetaMask()],

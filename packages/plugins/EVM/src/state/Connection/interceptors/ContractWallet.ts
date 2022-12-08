@@ -1,7 +1,7 @@
 import { first } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import type { BundlerAPI, ContractAccountAPI } from '@masknet/web3-providers/types'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID, PersonaIdentifier } from '@masknet/shared-base'
 import {
     ChainId,
     createContract,
@@ -16,18 +16,19 @@ import {
 import { isSameAddress } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
-import { Web3StateSettings } from '../../../settings/index.js'
+import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
 import type { Middleware, Context } from '../types.js'
 import { Providers } from '../provider.js'
 import type { BaseContractWalletProvider } from '../providers/BaseContractWallet.js'
 
 export class ContractWallet implements Middleware<Context> {
     constructor(
-        /** The address of logic contract. */
-        protected address: string,
         protected providerType: ProviderType,
         protected contractAccount: ContractAccountAPI.Provider<NetworkPluginID.PLUGIN_EVM>,
         protected bundler: BundlerAPI.Provider,
+        protected options: {
+            getLogicContractAddress(chainId: ChainId): string
+        },
     ) {}
 
     private createWeb3(context: Context) {
@@ -59,7 +60,12 @@ export class ContractWallet implements Middleware<Context> {
     }
 
     private async getInitCode(chainId: ChainId, owner: string) {
-        const contractWallet = new ContractWalletLib(chainId, owner, this.address, await this.getEntryPoint(chainId))
+        const contractWallet = new ContractWalletLib(
+            chainId,
+            owner,
+            this.options.getLogicContractAddress(chainId),
+            await this.getEntryPoint(chainId),
+        )
         if (isEmptyHex(contractWallet.initCode)) throw new Error('Failed to create initCode.')
         return contractWallet.initCode
     }
@@ -78,6 +84,7 @@ export class ContractWallet implements Middleware<Context> {
         context: Context,
         owner = context.owner,
         userOperation = context.userOperation,
+        identifier?: PersonaIdentifier,
     ): Promise<string> {
         if (!owner) throw new Error('Failed to sign user operation.')
         if (!userOperation) throw new Error('Invalid user operation.')
@@ -88,12 +95,18 @@ export class ContractWallet implements Middleware<Context> {
             await this.getEntryPoint(context.chainId),
             userOperation,
         )
-        await userTransaction.sign((message: string) =>
-            context.connection.signMessage(message, 'personalSign', {
+        await userTransaction.sign((message: string) => {
+            if (identifier) {
+                return SharedContextSettings.value.personaSignPayMessage({
+                    message: userTransaction.pack,
+                    identifier,
+                })
+            }
+            return context.connection.signMessage(message, 'personalSign', {
                 account: owner,
                 providerType: this.providerType,
-            }),
-        )
+            })
+        })
         return this.bundler.sendUserOperation(context.chainId, userTransaction.toUserOperation())
     }
 
@@ -102,15 +115,21 @@ export class ContractWallet implements Middleware<Context> {
         return new ContractTransaction(this.createWallet(context)).send((x) => x.methods.changeOwner(recipient))
     }
 
-    private async deploy(context: Context, owner: string) {
+    private async deploy(context: Context, owner: string, identifier?: PersonaIdentifier) {
         const initCode = await this.getInitCode(context.chainId, owner)
         const accounts = await this.getDeployedAccounts(context.chainId, owner)
 
-        return this.sendUserOperation(context, owner, {
-            sender: context.account,
-            nonce: accounts.length,
-            initCode,
-        })
+        return this.sendUserOperation(
+            context,
+            owner,
+            {
+                sender: context.account,
+                // nonce: accounts.length,
+                nonce: 0,
+                initCode,
+            },
+            identifier,
+        )
     }
 
     async fn(context: Context, next: () => Promise<void>) {
@@ -174,16 +193,22 @@ export class ContractWallet implements Middleware<Context> {
             case EthereumMethodType.ETH_SEND_RAW_TRANSACTION:
                 context.abort(new Error('Not supported by contract wallet.'))
                 break
-            case EthereumMethodType.SC_WALLET_CHANGE_OWNER:
+            case EthereumMethodType.MASK_TRANSFER_CONTRACT_WALLET:
                 try {
                     context.write(await this.changeOwner(context, first(context.requestArguments.params)))
                 } catch (error) {
                     context.abort(error)
                 }
                 break
-            case EthereumMethodType.SC_WALLET_DEPLOY:
+            case EthereumMethodType.MASK_DEPLOY_CONTRACT_WALLET:
                 try {
-                    context.write(await this.deploy(context, first(context.requestArguments.params) ?? context.account))
+                    context.write(
+                        await this.deploy(
+                            context,
+                            first(context.requestArguments.params) ?? context.account,
+                            context.identifier,
+                        ),
+                    )
                 } catch (error) {
                     context.abort(error)
                 }
