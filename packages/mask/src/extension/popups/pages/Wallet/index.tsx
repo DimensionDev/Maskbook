@@ -11,9 +11,10 @@ import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages.j
 import SelectWallet from './SelectWallet/index.js'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus.js'
 import { WalletHeader } from './components/WalletHeader/index.js'
-import { useChainContext, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { TransactionDescriptorType } from '@masknet/web3-shared-base'
-import { EthereumMethodType, PayloadEditor } from '@masknet/web3-shared-evm'
+import { EthereumMethodType, getDefaultChainId, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
+import { first } from 'lodash-es'
 
 const ImportWallet = lazy(() => import('./ImportWallet/index.js'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet/index.js'))
@@ -42,8 +43,10 @@ const r = relativeRouteOf(PopupRoutes.Wallet)
 
 export default function Wallet() {
     const wallet = useWallet()
+    const wallets = useWallets()
     const location = useLocation()
     const navigate = useNavigate()
+    const connection = useWeb3Connection()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
@@ -97,6 +100,16 @@ export default function Wallet() {
             if (hasRequest) retry()
         })
     }, [retry])
+
+    useEffect(() => {
+        if (!wallet && wallets.length) {
+            connection?.connect({
+                account: first(wallets)?.address,
+                chainId: getDefaultChainId(),
+                providerType: ProviderType.MaskWallet,
+            })
+        }
+    }, [wallet, wallets, connection])
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
