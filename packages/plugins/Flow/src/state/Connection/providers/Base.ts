@@ -6,6 +6,10 @@ import type { FlowProvider } from '../types.js'
 export class BaseProvider implements FlowProvider {
     emitter = new Emitter<ProviderEvents<ChainId, ProviderType>>()
 
+    get connected() {
+        return false
+    }
+
     // No need to wait by default
     get ready() {
         return true

@@ -60,12 +60,13 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
         providerType: ProviderType,
         address?: string | undefined,
     ): Promise<Account<ChainId>> {
-        const walletConnectProvider = this.providers[ProviderType.WalletConnect] as WalletConnectProvider
-        if (walletConnectProvider.isConnected) {
-            // Disconnect WalletConnect, prevents its session lasting too long.
+        // Disconnect WalletConnect, prevents its session lasting too long.
+        if (this.providers[ProviderType.WalletConnect].connected) {
             try {
                 await super.disconnect(ProviderType.WalletConnect)
-            } catch {}
+            } catch {
+                // do nothing
+            }
         }
 
         return super.connect(chainId, providerType, address)

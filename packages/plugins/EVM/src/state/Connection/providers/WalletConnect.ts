@@ -42,7 +42,7 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
         super(ProviderType.WalletConnect)
     }
 
-    get isConnected() {
+    override get connected() {
         return this.connector.connected
     }
 
