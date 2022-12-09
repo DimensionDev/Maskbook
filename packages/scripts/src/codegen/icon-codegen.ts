@@ -125,7 +125,9 @@ async function generateIcons() {
         const args = [nameField, `[${variantsField}]`] as any[]
         const notSquare = intrinsicSize && intrinsicSize[0] !== intrinsicSize[1]
         if (notSquare) args.push(`[${intrinsicSize[0]}, ${intrinsicSize[1]}]`)
-        asJSX.js.push(`export const ${Ident} = /*#__PURE__*/ __createIcon(${args.join(', ')})`)
+        asJSX.js.push(
+            `export function ${Ident}(props) { ${Ident} = __createIcon(${args.join(', ')}); return ${Ident}(props); }`,
+        )
 
         const variantNames = [...new Set(variant.flatMap((x) => x.args[0]))].map((x) => JSON.stringify(x))
 
