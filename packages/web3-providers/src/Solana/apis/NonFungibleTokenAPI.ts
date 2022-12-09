@@ -1,5 +1,3 @@
-import { Connection } from '@metaplex/js'
-import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     createIndicator,
@@ -59,6 +57,8 @@ async function getNonFungibleAssets(
         ],
     })
     if (!data.result?.length) return EMPTY_LIST
+    const { Connection } = await import('@metaplex/js')
+    const { Metadata } = await import('@metaplex-foundation/mpl-token-metadata')
     const connection = new Connection('mainnet-beta')
     const nftTokens = data.result.filter((x) => x.account.data.parsed.info.tokenAmount.decimals === 0)
     const promises = nftTokens.map(async (x): Promise<NonFungibleAsset<ChainId, SchemaType> | null> => {
