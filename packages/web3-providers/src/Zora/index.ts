@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { GraphQLClient } from 'graphql-request'
+import type { GraphQLClient } from 'graphql-request'
 import type { Variables } from 'graphql-request/dist/types.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import {
@@ -29,13 +29,19 @@ import {
     TransferEventProperty,
     V3AskEventProperty,
 } from './types.js'
-import { GetCollectionsByKeywordQuery, GetEventsQuery, GetTokenQuery } from './queries.js'
 import { ZORA_MAINNET_GRAPHQL_URL } from './constants.js'
 import type { NonFungibleTokenAPI } from '../entry-types.js'
 import { getAssetFullName, resolveActivityType } from '../entry-helpers.js'
 
 export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    private client = new GraphQLClient(ZORA_MAINNET_GRAPHQL_URL)
+    private __client: GraphQLClient | undefined
+    private get client() {
+        if (this.__client) return Promise.resolve(this.__client)
+        return import('graphql-request').then(({ GraphQLClient }) => {
+            this.__client ??= new GraphQLClient(ZORA_MAINNET_GRAPHQL_URL)
+            return this.__client
+        })
+    }
 
     private createZoraLink(chainId: ChainId, address: string, tokenId: string) {
         return urlcat('https://zora.co/collections/:address/:tokenId', {
@@ -46,7 +52,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
 
     private async request<T>(chainId: ChainId, query: string, parameters: Variables) {
         if (chainId !== ChainId.Mainnet) return
-        const response = await this.client.request<T>(query, parameters)
+        const response = await (await this.client).request<T>(query, parameters)
         return response as T
     }
 
@@ -246,6 +252,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
 
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
         if (!isValidChainId(chainId)) return
+        const { GetTokenQuery } = await import('./queries.js')
         const token = await this.request<{
             token: {
                 token: Token
@@ -272,6 +279,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         eventTypes: EventType[],
     ) {
         if (!isValidChainId(chainId)) return []
+        const { GetEventsQuery } = await import('./queries.js')
         const response = await this.request<{
             events: {
                 nodes: Array<Event<T>>
@@ -331,6 +339,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         keyword: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ) {
+        const { GetCollectionsByKeywordQuery } = await import('./queries.js')
         const response = await this.request<{
             search: {
                 nodes: Collection[]
