@@ -6,10 +6,10 @@ import {
     AESJsonWebKey as Native_AESJsonWebKey,
     MobileProfile,
     MobileProfileRelation,
+    LaunchPage,
 } from '@masknet/public-api'
 import { Environment, assertEnvironment } from '@dimensiondev/holoflows-kit'
 import { convertIdentifierMapToRawMap, ECKeyIdentifier, ProfileIdentifier } from '@masknet/shared-base'
-import { launchPageSettings } from '../../../shared/legacy-settings/settings.js'
 import Services from '../../extension/service.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletRPC } from '../../plugins/Wallet/messages.js'
@@ -43,7 +43,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     },
     app_isPluginEnabled: ({ pluginID }) => Services.Settings.getPluginMinimalModeEnabled(pluginID).then((x) => !x),
     app_setPluginStatus: ({ pluginID, enabled }) => Services.Settings.setPluginMinimalModeEnabled(pluginID, !enabled),
-    settings_getLaunchPageSettings: async () => launchPageSettings.value,
+    // TODO: no use site?
+    settings_getLaunchPageSettings: async () => LaunchPage.dashboard,
     settings_getTheme: () => Services.Settings.getTheme(),
     settings_setTheme: ({ theme }) => Services.Settings.setTheme(theme),
     settings_getLanguage: () => Services.Settings.getLanguage(),

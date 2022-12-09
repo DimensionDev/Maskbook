@@ -9,7 +9,7 @@ export class RSS3Storage implements Storage {
     private cache: LRU<string, unknown> | undefined
     constructor(
         private address: string,
-        private getConnection?: () => Promise<Web3Helper.Web3Connection<NetworkPluginID>> | undefined,
+        private getConnection?: () => Web3Helper.Web3Connection<NetworkPluginID> | undefined,
     ) {
         const cache = caches.get(address)
         if (cache) {
@@ -27,7 +27,7 @@ export class RSS3Storage implements Storage {
     }
 
     private async getRSS3<T>() {
-        const connection = await this.getConnection?.()
+        const connection = this.getConnection?.()
         return RSS3.createRSS3(
             this.address,
             connection

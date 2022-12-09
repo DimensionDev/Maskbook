@@ -2,7 +2,7 @@ import { ReactNode, useCallback, useMemo, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps, ListChildComponentProps } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-es'
-import { Box, InputAdornment, Stack } from '@mui/material'
+import { Box, Stack } from '@mui/material'
 import { makeStyles } from '../../UIHelper/index.js'
 import { MaskTextField, MaskTextFieldProps } from '../TextField/index.js'
 import { Icons } from '@masknet/icons'
@@ -126,16 +126,9 @@ export function SearchableList<T extends {}>({
                         fullWidth
                         InputProps={{
                             style: { height: 40 },
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <Icons.Search />
-                                </InputAdornment>
-                            ),
-                            endAdornment: keyword ? (
-                                <InputAdornment position="end" className={classes.closeIcon} onClick={handleClear}>
-                                    <Icons.Clear size={18} />
-                                </InputAdornment>
-                            ) : null,
+                            inputProps: { style: { paddingLeft: 4 } },
+                            startAdornment: <Icons.Search size={18} />,
+                            endAdornment: keyword ? <Icons.Close size={18} onClick={handleClear} /> : null,
                             ...InputProps,
                         }}
                         onChange={handleChange}
@@ -200,9 +193,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     list: {
         scrollbarWidth: 'thin',
-    },
-    closeIcon: {
-        cursor: 'pointer',
     },
 }))
 

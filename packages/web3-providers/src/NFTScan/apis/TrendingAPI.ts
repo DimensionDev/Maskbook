@@ -9,7 +9,7 @@ import {
     NonFungibleTokenActivity,
 } from '@masknet/web3-shared-base'
 import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
-import { NonFungibleTokenAPI, TrendingAPI } from '../../types/index.js'
+import { COIN_RECOMMENDATION_SIZE } from '../../Trending/constants.js'
 import type { EVM, Response } from '../types/index.js'
 import {
     fetchFromNFTScanV2,
@@ -22,7 +22,7 @@ import {
 import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
 import { LooksRareLogo, OpenSeaLogo } from '../../Resources/index.js'
-import { COIN_RECOMMENDATION_SIZE } from '../../Trending/constants.js'
+import { TrendingAPI, NonFungibleTokenAPI } from '../../entry-types.js'
 
 enum NonFungibleMarketplace {
     OpenSea = 'OpenSea',

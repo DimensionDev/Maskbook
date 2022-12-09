@@ -1,32 +1,25 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useValueRef } from '@masknet/shared-base-ui'
-import stringify from 'json-stable-stringify'
+import { useValueRefJSON } from '@masknet/shared-base-ui'
 import { approvedTokensFromUniswap } from '../settings.js'
 import { APPROVED_TOKENS_MAX } from '../constants/index.js'
 
 export function useApprovedTokens(token_address: string | undefined) {
-    const [approvedTokens, setApprovedTokens] = useState<string[]>([])
-    const tokens = useValueRef(approvedTokensFromUniswap)
+    const [approvedTokens, setApprovedTokens] = useState<readonly string[]>([])
+    const tokens = useValueRefJSON(approvedTokensFromUniswap)
 
     const onApprove = useCallback(() => {
         if (!token_address?.length) return
 
-        const parsed = JSON.parse(tokens) as string[]
+        const next = [...tokens]
 
-        if (parsed.length === APPROVED_TOKENS_MAX) parsed.shift()
-        parsed.push(token_address)
+        if (tokens.length === APPROVED_TOKENS_MAX) next.shift()
+        next.push(token_address)
 
-        approvedTokensFromUniswap.value = stringify(parsed)
+        // @ts-ignore https://github.com/microsoft/TypeScript/issues/51676
+        approvedTokensFromUniswap.value = next
     }, [tokens, token_address])
 
-    useEffect(() => {
-        try {
-            if (!tokens) approvedTokensFromUniswap.value = stringify([])
-            else setApprovedTokens(JSON.parse(tokens))
-        } catch {
-            setApprovedTokens([])
-        }
-    }, [tokens])
+    useEffect(() => setApprovedTokens(tokens), [tokens])
 
     return {
         approvedTokens,

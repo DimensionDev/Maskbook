@@ -2,20 +2,13 @@ import { isEqual } from 'lodash-es'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
 import { EnhanceableSite, ExtensionSite, updateLanguage, NetworkPluginID } from '@masknet/shared-base'
-import { LaunchPage } from './types.js'
-import {
-    createGlobalSettings,
-    createNetworkSettings,
-    createComplexNetworkSettings,
-    createComplexGlobalSettings,
-    NetworkSettings,
-} from './createSettings.js'
+import { createGlobalSettings, createBulkSettings } from './createSettings.js'
 import { BooleanPreference } from '@masknet/plugin-infra'
 
 export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default)
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__)
 languageSettings.addListener(updateLanguage)
-export const pluginIDSettings = createComplexGlobalSettings<Record<EnhanceableSite | ExtensionSite, NetworkPluginID>>(
+export const pluginIDSettings = createGlobalSettings<Record<EnhanceableSite | ExtensionSite, NetworkPluginID>>(
     'PluginIdBySite',
     {
         [EnhanceableSite.Twitter]: NetworkPluginID.PLUGIN_EVM,
@@ -31,19 +24,12 @@ export const pluginIDSettings = createComplexGlobalSettings<Record<EnhanceableSi
     },
     isEqual,
 )
-export const userGuideVersion = createGlobalSettings('userGuideVersion', 'v2')
 
-export const currentSetupGuideStatus = createNetworkSettings('currentSetupGuideStatus', '')
-export const userGuideStatus = createNetworkSettings('userGuideStatus', '')
-export const sayHelloShowed = createNetworkSettings('sayHelloShowed', false)
+export const currentSetupGuideStatus = createBulkSettings('currentSetupGuideStatus', '')
+export const userGuideStatus = createBulkSettings('userGuideStatus', '')
+export const sayHelloShowed = createBulkSettings('sayHelloShowed', false)
 export const userPinExtension = createGlobalSettings('userPinExtension', false)
-export const dismissVerifyNextID = createComplexNetworkSettings(
-    'dismissVerifyNextID',
-    {} as Record<string, boolean>,
-    isEqual,
-)
-export const bioDescription = createNetworkSettings('bioDescription', '')
-export const personalHomepage = createNetworkSettings('personalHomepage', '')
+export const dismissVerifyNextID = createBulkSettings<Record<string, boolean>>('dismissVerifyNextID', {}, isEqual)
 
 /**
  * ! DO NOT use this directly to query the plugin status !
@@ -53,7 +39,7 @@ export const personalHomepage = createNetworkSettings('personalHomepage', '')
  * @deprecated DO NOT EXPORT THIS
  */
 // This was "currentPluginEnabled" before, but we used it to represent minimal mode now to make the settings be able to migrate.
-const pluginMinimalModeReversed: NetworkSettings<boolean | 'enabled'> = createNetworkSettings('pluginsEnabled', true)
+const pluginMinimalModeReversed = createBulkSettings<boolean | 'enabled'>('pluginsEnabled', true)
 export function getCurrentPluginMinimalMode(id: string) {
     if (pluginMinimalModeReversed['plugin:' + id].value === 'enabled') return BooleanPreference.False
     if (pluginMinimalModeReversed['plugin:' + id].value === false) return BooleanPreference.True
@@ -64,8 +50,6 @@ export function setCurrentPluginMinimalMode(id: string, value: BooleanPreference
     else if (value === BooleanPreference.True) pluginMinimalModeReversed['plugin:' + id].value = false
     else if (value === BooleanPreference.False) pluginMinimalModeReversed['plugin:' + id].value = 'enabled'
 }
-/** @deprecated No use site. */
-export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage', LaunchPage.dashboard)
 export const currentPersonaIdentifier = createGlobalSettings('currentPersonaIdentifier', '')
 
 try {

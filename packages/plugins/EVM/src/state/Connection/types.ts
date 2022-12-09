@@ -36,6 +36,7 @@ export interface ERC1155Metadata {
 
 export interface Context {
     readonly account: string
+    readonly owner?: string
     readonly chainId: ChainId
     readonly requestId: number
     readonly writeable: boolean

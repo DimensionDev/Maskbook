@@ -10,7 +10,7 @@ export class NameServiceState<
     DomainBooks extends Record<NameServiceID, DomainBook> = Record<NameServiceID, DomainBook>,
 > implements Web3NameServiceState<ChainId>
 {
-    protected storage: StorageItem<DomainBooks> = null!
+    public storage: StorageItem<DomainBooks> = null!
     public domainBook?: Subscription<DomainBook>
 
     constructor(
@@ -21,9 +21,8 @@ export class NameServiceState<
             formatAddress(a: string): string
         },
     ) {
-        const defaultValue = Object.fromEntries(getEnumAsArray(NameServiceID).map((x) => [x.value, {}])) as DomainBooks
         const { storage } = context.createKVStorage('memory', {}).createSubScope('NameServiceV2', {
-            value: defaultValue,
+            value: Object.fromEntries(getEnumAsArray(NameServiceID).map((x) => [x.value, {}])) as DomainBooks,
         })
         this.storage = storage.value
     }

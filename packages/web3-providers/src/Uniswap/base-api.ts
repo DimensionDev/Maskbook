@@ -1,4 +1,6 @@
 import { BigNumber } from 'bignumber.js'
+import { isGreaterThan, isLessThanOrEqualTo, TokenType } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Pair } from './uniswap-v2-subgraph.js'
 import {
     fetchEtherPriceByBlockNumber,
@@ -16,9 +18,7 @@ import {
     fetchBlockNumbersObjectByTimestamps,
 } from './blocks/index.js'
 import { fetchLatestBlocks } from './uniswap-health.js'
-import { isGreaterThan, isLessThanOrEqualTo, TokenType } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
-import type { TrendingAPI } from '../types/index.js'
+import type { TrendingAPI } from '../entry-types.js'
 
 type Value = string | number | BigNumber | undefined
 

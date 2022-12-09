@@ -1,6 +1,5 @@
-import { EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
+import { EthereumMethodType, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
 import type { Context } from '../types.js'
-import { isReadOnlyMethod } from '../connection.js'
 import { Base } from './Base.js'
 
 export class Polygon extends Base {
@@ -16,7 +15,7 @@ export class Polygon extends Base {
         const config = {
             ...context.config,
             // keep the legacy gasPrice
-            ...(isReadOnlyMethod(context.method)
+            ...(PayloadEditor.fromPayload(context.request)
                 ? {}
                 : { gasPrice: context.config.gasPrice ?? (await context.connection.getGasPrice()) }),
         }

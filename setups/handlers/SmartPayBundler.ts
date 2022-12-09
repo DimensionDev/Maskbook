@@ -12,4 +12,18 @@ export const BundlerHandlers = [
             }),
         )
     }),
+    rest.get('https://rrh4bmg4j9.execute-api.ap-east-1.amazonaws.com/Prod/operation', (request, response, context) => {
+        return response(
+            context.status(200),
+            context.json({
+                tokenTransferTx: '0xfc6e7a01101e17994538dd014628602a44b03a00980a66afbd1697c8095b18f4',
+                createdAt: 1669970510248,
+                twitterHandler: 'test',
+                nonce: 1,
+                id: '29fdf280-721d-11ed-a079-6f6f72e92e8a',
+                walletAddress: '0x7171C1fD1694bdfe79B6c38A8696CF7E8A96D9BE',
+                ownerAddress: '0x790116d0685eB197B886DAcAD9C247f785987A4a',
+            }),
+        )
+    }),
 ]

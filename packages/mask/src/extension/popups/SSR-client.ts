@@ -25,7 +25,7 @@ if (location.hash === '#/personas') {
 
         // Push SSR code
         document.head.insertAdjacentHTML('beforeend', trustedHTML(css))
-        document.body.innerHTML = trustedHTML('<div id="root">' + html + '</div>')
+        document.body.innerHTML = trustedHTML('<div id="root-ssr">' + html + '</div>')
         console.timeEnd('[SSR] Request')
 
         console.time('[SSR] Hydrate')

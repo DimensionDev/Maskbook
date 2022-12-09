@@ -1,3 +1,6 @@
+import { useEffect, useMemo, useState } from 'react'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
+import { compact } from 'lodash-es'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import {
     useChainContext,
@@ -5,19 +8,17 @@ import {
     useNonFungibleAssetsByCollection,
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
-import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { DataProvider } from '@masknet/public-api'
 import { NFTList, PluginCardFrameMini } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
 import { ActionButton, makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
-import { TrendingAPI } from '@masknet/web3-providers'
+import { TrendingAPI } from '@masknet/web3-providers/types'
 import { createFungibleToken, TokenType } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, isNativeTokenSymbol, SchemaType, ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Link, Stack, Tab, ThemeProvider } from '@mui/material'
 import { Box, useTheme } from '@mui/system'
-import { compact } from 'lodash-es'
-import { useEffect, useMemo, useState } from 'react'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../../utils/index.js'
 import { resolveDataProviderLink, resolveDataProviderName } from '../../pipes.js'
 import { useAvailableCoins } from '../../trending/useAvailableCoins.js'
@@ -34,7 +35,6 @@ import { NonFungibleTickersTable } from './NonFungibleTickersTable.js'
 import { TrendingViewDeck } from './TrendingViewDeck.js'
 import { TrendingViewError } from './TrendingViewError.js'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
-import { useValueRef } from '@masknet/shared-base-ui'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 import { PluginEnableBoundary } from '../../../../components/shared/PluginEnableBoundary.js'
 

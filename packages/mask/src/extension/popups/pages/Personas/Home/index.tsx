@@ -1,13 +1,16 @@
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback, useContext, useMemo } from 'react'
 import { PersonaHomeUI } from './UI.js'
 import { PersonaContext } from '../hooks/usePersonaContext.js'
 import { DashboardRoutes, NextIDPlatform } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle.js'
 import Services from '../../../../service.js'
+import { HydrateFinished } from '../../../../../utils/createNormalReactRoot.js'
 
 const PersonaHome = memo(() => {
     const { avatar, currentPersona, proofs, setSelectedPersona, fetchProofsLoading, personas, accounts } =
         PersonaContext.useContainer()
+
+    useContext(HydrateFinished)()
 
     const wallets = useMemo(() => {
         if (!proofs) return []

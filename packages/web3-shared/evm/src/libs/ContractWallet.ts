@@ -6,7 +6,8 @@ import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import WalletProxyABI from '@masknet/web3-contracts/abis/WalletProxy.json'
 import { WalletProxyByteCode } from '@masknet/web3-contracts/bytes/WalletProxy.js'
 import { createContract } from '../helpers/transaction.js'
-import { ZERO_ADDRESS } from '../constants/index.js'
+import { getSmartPayConstants, ZERO_ADDRESS } from '../constants/index.js'
+import { ChainId, getMaskTokenAddress } from '../index.js'
 
 export class ContractWallet {
     private web3 = new Web3()
@@ -19,7 +20,7 @@ export class ContractWallet {
      * @param address  the deployed logic contract address
      * @param entryPoint the entry point contract address
      */
-    constructor(private owner: string, private address: string, private entryPoint: string) {}
+    constructor(private chainId: ChainId, private owner: string, private address: string, private entryPoint: string) {}
 
     /**
      * The wallet proxy contract instance
@@ -32,14 +33,19 @@ export class ContractWallet {
      * Encoded initialize parameters of ContractWallet
      */
     private get data() {
+        const { PAYMASTER_CONTRACT_ADDRESS, PAYMASTER_MINIMAL_STAKE_AMOUNT } = getSmartPayConstants(this.chainId)
+
+        if (!PAYMASTER_CONTRACT_ADDRESS || !PAYMASTER_MINIMAL_STAKE_AMOUNT) return
+        const maskAddress = getMaskTokenAddress(this.chainId)
         const abi = WalletABI.find((x) => x.name === 'initialize' && x.type === 'function')
         if (!abi) throw new Error('Failed to load ABI.')
 
         return this.coder.encodeFunctionCall(abi as AbiItem, [
             this.entryPoint,
             this.owner,
-            '0x0000000000000000000000000000000000000000',
-            '0x',
+            maskAddress,
+            PAYMASTER_CONTRACT_ADDRESS,
+            PAYMASTER_MINIMAL_STAKE_AMOUNT,
         ])
     }
 

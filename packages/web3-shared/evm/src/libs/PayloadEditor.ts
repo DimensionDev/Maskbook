@@ -37,6 +37,20 @@ export class PayloadEditor {
             : undefined
     }
 
+    get owner() {
+        const { method, params } = this.payload
+        switch (method) {
+            case EthereumMethodType.SC_WALLET_DEPLOY:
+                return first(params)
+            case EthereumMethodType.ETH_CALL_USER_OPERATION:
+            case EthereumMethodType.ETH_SEND_USER_OPERATION:
+                const [owner, _] = params as [string, UserOperation]
+                return owner
+            default:
+                return
+        }
+    }
+
     get config() {
         const { method, params } = this.payload
         switch (method) {
@@ -59,8 +73,9 @@ export class PayloadEditor {
     get userOperation() {
         const { method, params } = this.payload
         switch (method) {
+            case EthereumMethodType.ETH_CALL_USER_OPERATION:
             case EthereumMethodType.ETH_SEND_USER_OPERATION:
-                const [userOperation] = params as [UserOperation]
+                const [_, userOperation] = params as [string, UserOperation]
                 return userOperation
             default:
                 return
@@ -95,6 +110,26 @@ export class PayloadEditor {
             EthereumMethodType.ETH_DECRYPT,
             EthereumMethodType.ETH_GET_ENCRYPTION_PUBLIC_KEY,
             EthereumMethodType.ETH_SEND_TRANSACTION,
+        ].includes(method as EthereumMethodType)
+    }
+
+    get readonly() {
+        const { method } = this.payload
+        return [
+            EthereumMethodType.ETH_GET_CODE,
+            EthereumMethodType.ETH_GAS_PRICE,
+            EthereumMethodType.ETH_BLOCK_NUMBER,
+            EthereumMethodType.ETH_GET_BALANCE,
+            EthereumMethodType.ETH_GET_BLOCK_BY_NUMBER,
+            EthereumMethodType.ETH_GET_BLOCK_BY_HASH,
+            EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH,
+            EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
+            EthereumMethodType.ETH_GET_TRANSACTION_COUNT,
+            EthereumMethodType.ETH_GET_FILTER_CHANGES,
+            EthereumMethodType.ETH_NEW_PENDING_TRANSACTION_FILTER,
+            EthereumMethodType.ETH_ESTIMATE_GAS,
+            EthereumMethodType.ETH_CALL,
+            EthereumMethodType.ETH_GET_LOGS,
         ].includes(method as EthereumMethodType)
     }
 

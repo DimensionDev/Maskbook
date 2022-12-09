@@ -3,7 +3,7 @@ import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/h
 import { creator } from '../../../social-network/utils.js'
 import { isMobileFacebook } from '../utils/isMobile.js'
 import { getProfileIdentifierAtFacebook } from '../utils/getProfileIdentifier.js'
-import { TypedMessage, makeTypedMessageText, makeTypedMessageImage } from '@masknet/typed-message'
+import { TypedMessage, makeTypedMessageText, makeTypedMessageTuple } from '@masknet/typed-message'
 import { clickSeeMore } from '../injection/PostInspector.js'
 import { startWatch } from '../../../utils/watcher.js'
 import { facebookShared } from '../shared.js'
@@ -103,13 +103,32 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
                 const images = getMetadataImages(metadata)
                 for (const url of images) {
                     info.postMetadataImages.add(url)
-                    nextTypedMessage.push(makeTypedMessageImage(url))
+                }
+                info.postMessage.value = makeTypedMessageTuple(nextTypedMessage)
+            }
+
+            function collectLinks() {
+                if (metadata.destroyed) return
+                const linkElements = metadata.current.querySelectorAll<HTMLLinkElement>('[role=article] [id] a')
+                const links = [...Array.from(linkElements).filter((x) => x.href)]
+
+                const seen = new Set<string>()
+                for (const x of links) {
+                    if (seen.has(x.href)) continue
+                    seen.add(x.href)
+                    info.postMetadataMentionedLinks.set(x, x.href)
                 }
             }
-            collectPostInfo()
+
+            function run() {
+                collectPostInfo()
+                collectLinks()
+            }
+
+            run()
             return {
-                onNodeMutation: collectPostInfo,
-                onTargetChanged: collectPostInfo,
+                onNodeMutation: run,
+                onTargetChanged: run,
                 onRemove: () => store.delete(metadata),
             }
         }),

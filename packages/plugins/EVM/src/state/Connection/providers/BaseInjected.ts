@@ -37,8 +37,7 @@ export class BaseInjectedProvider extends BaseProvider implements EVM_Provider {
         this.emitter.emit('disconnect', this.providerType)
     }
 
-    override async createWeb3Provider(options?: ProviderOptions<ChainId>) {
-        await this.readyPromise
+    override createWeb3Provider(options?: ProviderOptions<ChainId>) {
         if (!this.bridge) throw new Error('Failed to detect in-page provider.')
         return this.bridge as unknown as Web3Provider
     }
@@ -47,14 +46,14 @@ export class BaseInjectedProvider extends BaseProvider implements EVM_Provider {
         requestArguments: RequestArguments,
         options?: ProviderOptions<ChainId>,
     ): Promise<T> {
-        const provider = await this.createWeb3Provider(options)
+        const provider = this.createWeb3Provider(options)
         return provider.request(requestArguments) as Promise<T>
     }
 
     override async connect() {
         await this.readyPromise
 
-        const provider = await this.createWeb3Provider()
+        const provider = this.createWeb3Provider()
         const accounts = await provider.request<string[]>({
             method: EthereumMethodType.ETH_REQUEST_ACCOUNTS,
             params: [],

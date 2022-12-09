@@ -1,5 +1,5 @@
 import { PluginTraderMessages, PluginTraderRPC } from '../messages.js'
-import { TrendingAPI } from '@masknet/web3-providers'
+import { TrendingAPI } from '@masknet/web3-providers/types'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'

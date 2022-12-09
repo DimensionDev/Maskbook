@@ -1,14 +1,14 @@
 import { memo, ReactNode } from 'react'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { makeStyles } from '@masknet/theme'
-import { InjectedDialog } from '../../../contexts/index.js'
-import { useSharedI18N } from '../../../locales/index.js'
 import { Box, Card, DialogContent, Link, Typography } from '@mui/material'
-import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
+import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Icons } from '@masknet/icons'
 import { ChainId, explorerResolver, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { AssetPreviewer } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import { InjectedDialog } from '../../../contexts/index.js'
+import { useSharedI18N } from '../../../locales/index.js'
 
 interface CollectionDetailCardProps {
     img?: string

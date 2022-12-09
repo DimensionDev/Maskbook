@@ -3,8 +3,8 @@ import { type Option, None } from 'ts-results-es'
 export abstract class Identifier {
     abstract toText(): string
     abstract [Symbol.toStringTag]: string
-    /** We mark this as private because we encourage to use toText(). toString is for JavaScript runtime accidentally calling. */
-    private toString() {
+    /** @internal */
+    toString() {
         return this.toText()
     }
     static from(input: string | undefined | null): Option<Identifier> {

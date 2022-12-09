@@ -1,7 +1,7 @@
 import SID, { getSidAddress } from '@siddomains/sidjs'
 import { ChainId } from '@masknet/web3-shared-evm'
-import type { DomainAPI } from '../index.js'
 import { Web3API } from '../EVM/index.js'
+import type { DomainAPI } from '../entry-types.js'
 
 export class SpaceID_API implements DomainAPI.Provider<ChainId> {
     private web3 = new Web3API().createSDK(ChainId.BSC)

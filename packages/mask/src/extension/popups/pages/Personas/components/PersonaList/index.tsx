@@ -99,7 +99,7 @@ export const PersonaList = memo(() => {
 
 export interface PersonaListUIProps {
     currentPersona?: PersonaInformation
-    personas?: PersonaInformation[]
+    personas?: readonly PersonaInformation[]
     onChangeCurrentPersona: (identifier: ECKeyIdentifier) => void
     onLogout: (persona: PersonaInformation) => void
     onEdit: (persona: PersonaInformation) => void

@@ -1,10 +1,10 @@
-import { Stack, Typography } from '@mui/material'
-import { useSharedI18N } from '../../../locales/index.js'
 import { memo } from 'react'
-import { DefineMapping, SecurityMessageLevel } from './Common.js'
+import { Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import type { SecurityAPI } from '@masknet/web3-providers'
+import type { SecurityAPI } from '@masknet/web3-providers/types'
 import { CrossIsolationMessages } from '@masknet/shared-base'
+import { useSharedI18N } from '../../../locales/index.js'
+import { DefineMapping, SecurityMessageLevel } from './Common.js'
 
 interface TokenCardProps {
     tokenSecurity: SecurityAPI.TokenSecurityType

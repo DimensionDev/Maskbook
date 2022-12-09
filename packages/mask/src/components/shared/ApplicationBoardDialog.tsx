@@ -10,9 +10,8 @@ import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationBoard } from './ApplicationBoard.js'
 import { WalletMessages } from '../../plugins/Wallet/messages.js'
-import { MaskMessages, useI18N } from '../../utils/index.js'
+import { useI18N } from '../../utils/index.js'
 import { PersonaSelectPanelDialog } from './PersonaSelectPanel/PersonaSelectPanelDialog.js'
-import { PluginNextIDMessages } from '../../plugins/NextID/messages.js'
 
 const useStyles = makeStyles<{
     openSettings: boolean
@@ -68,7 +67,7 @@ export function ApplicationBoardDialog() {
     }, [])
 
     const { open: openPersonaSelectPanelDialog } = useRemoteControlledDialog(
-        PluginNextIDMessages.PersonaSelectPanelDialogUpdated,
+        CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
     )
 
     const closeDialog = useCallback(() => {
@@ -84,7 +83,7 @@ export function ApplicationBoardDialog() {
         reset()
     }, [openSettings, quickMode, reset])
 
-    const { open: personaDialogOpen } = useRemoteControlledDialog(MaskMessages.events.openPageConfirm)
+    const { open: personaDialogOpen } = useRemoteControlledDialog(CrossIsolationMessages.events.openPageConfirm)
 
     return open ? (
         <TabContext value={currentTab}>

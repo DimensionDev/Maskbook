@@ -1,19 +1,18 @@
-import { ECKeyIdentifier, PersonaIdentifier } from '@masknet/shared-base'
+import { ECKeyIdentifier, PersonaIdentifier, ValueRefWithReady } from '@masknet/shared-base'
 import { head } from 'lodash-es'
-import type { InternalSettings } from '../../../shared/legacy-settings/createSettings.js'
 import {
     appearanceSettings,
     currentPersonaIdentifier,
     languageSettings,
-    pluginIDSettings,
     getCurrentPluginMinimalMode,
     setCurrentPluginMinimalMode,
 } from '../../../shared/legacy-settings/settings.js'
 import { MaskMessages } from '../../../shared/messages.js'
 import { queryPersonasDB } from '../../../background/database/persona/db.js'
 import { BooleanPreference } from '@masknet/plugin-infra'
+import { __deprecated__getStorage } from '../../utils/deprecated-storage.js'
 
-function create<T>(settings: InternalSettings<T>) {
+function create<T>(settings: ValueRefWithReady<T>) {
     async function get() {
         await settings.readyPromise
         return settings.value
@@ -24,7 +23,6 @@ function create<T>(settings: InternalSettings<T>) {
     }
     return [get, set] as const
 }
-export const [getPluginID, setPluginID] = create(pluginIDSettings)
 export const [getTheme, setTheme] = create(appearanceSettings)
 export const [getLanguage, setLanguage] = create(languageSettings)
 
@@ -52,3 +50,5 @@ export async function setPluginMinimalModeEnabled(id: string, enabled: boolean) 
 
     MaskMessages.events.pluginMinimalModeChanged.sendToAll([id, enabled])
 }
+
+export { __deprecated__getStorage as getLegacySettingsInitialValue }

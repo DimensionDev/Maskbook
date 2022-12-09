@@ -106,8 +106,8 @@ export function ApprovalDialog({ open, onClose }: ApprovalDialogProps) {
                 classes={{ paper: classes.dialogRoot, dialogTitle: classes.dialogTitle }}
                 titleTabs={
                     <MaskTabList variant="base" onChange={onChange} aria-label="Savings">
-                        <Tab label={t.tokens()} value={t.tokens()} />
-                        <Tab label={t.collectibles()} value={t.collectibles()} />
+                        <Tab label={t.tokens()} value={Tabs.tokens} />
+                        <Tab label={t.collectibles()} value={Tabs.collectibles} />
                     </MaskTabList>
                 }>
                 <DialogContent className={classes.dialogContent}>

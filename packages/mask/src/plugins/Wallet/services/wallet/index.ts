@@ -129,7 +129,7 @@ export async function signTransaction(address: string, config: Transaction) {
     const sign_input = {
         amount: (config.value as string) ?? null,
         gas_limit: config.gas ? toHex(config.gas) : null,
-        gas_price: config.gasPrice?.toString() ?? null,
+        gas_price: config.gasPrice ?? null,
         chain_id: config.chainId,
         max_fee_per_gas: config.maxFeePerGas ?? null,
         max_inclusion_fee_per_gas: config.maxFeePerGas ?? null,

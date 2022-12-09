@@ -11,9 +11,9 @@ import {
     FootnoteMenuOption,
 } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
-import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
+import { useRemoteControlledDialog, useValueRefJSON } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColors, MaskLightTheme } from '@masknet/theme'
-import type { TrendingAPI } from '@masknet/web3-providers'
+import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { formatCurrency, TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import {
@@ -27,7 +27,6 @@ import {
     useTheme,
     ThemeProvider,
 } from '@mui/material'
-import stringify from 'json-stable-stringify'
 import { first, last } from 'lodash-es'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils/index.js'
@@ -214,14 +213,15 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     // #endregion
 
     // #region switch between coins with the same symbol
-    const currentPreferredCoinIdSettings = useValueRef(getCurrentPreferredCoinIdSettings(dataProvider))
+    const currentPreferredCoinIdSettings = useValueRefJSON(getCurrentPreferredCoinIdSettings(dataProvider))
     const onCoinMenuChange = useCallback(
         (type: TokenType, value: string) => {
-            const settings = JSON.parse(currentPreferredCoinIdSettings) as Record<string, string>
+            const settings = { ...currentPreferredCoinIdSettings }
             const coin = coins.find((x) => x.id === value && x.type === type)
             if (!coin) return
             settings[keyword.toLowerCase()] = value
-            getCurrentPreferredCoinIdSettings(dataProvider).value = stringify(settings)
+            // @ts-ignore https://github.com/microsoft/TypeScript/issues/51676
+            getCurrentPreferredCoinIdSettings(dataProvider).value = settings
         },
         [dataProvider, keyword, coins, currentPreferredCoinIdSettings],
     )

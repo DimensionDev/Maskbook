@@ -1,4 +1,3 @@
-import { deleteCache, fetchJSON } from './helpers.js'
 import urlcat from 'urlcat'
 import { first, uniqWith } from 'lodash-es'
 import {
@@ -11,8 +10,9 @@ import {
     NextIDPlatform,
     toBase64,
 } from '@masknet/shared-base'
-import type { NextIDBaseAPI } from '../types/index.js'
+import { deleteCache, fetchJSON } from './helpers.js'
 import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
+import type { NextIDBaseAPI } from '../entry-types.js'
 
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV

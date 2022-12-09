@@ -1,7 +1,7 @@
 import formatDateTime from 'date-fns/format'
 import fromUnixTime from 'date-fns/fromUnixTime'
-import type { MirrorBaseAPI, Writer, Publisher } from '../types/index.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import type { MirrorBaseAPI, Publisher, Writer } from '../entry-types.js'
 
 const MIRROR_API_URL = 'https://mirror-api.com/graphql'
 

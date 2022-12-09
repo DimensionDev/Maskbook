@@ -26,8 +26,8 @@ import {
     isZeroAddress as isZeroAddressSolana,
     isValidDomain as isValidDomainSolana,
 } from '@masknet/web3-shared-solana'
-import { ENS, SpaceID, ChainbaseDomain } from '../index.js'
-import type { DSearchBaseAPI } from '../types/DSearch.js'
+import { ENS, SpaceID, ChainbaseDomain } from '../entry.js'
+import type { DSearchBaseAPI } from '../entry-types.js'
 
 const CHAIN_ID_LIST = [ChainIdEVM.Mainnet, ChainIdEVM.BSC, ChainIdEVM.Matic]
 

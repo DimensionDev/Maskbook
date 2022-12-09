@@ -1,4 +1,5 @@
 import urlcat from 'urlcat'
+import { first, last } from 'lodash-es'
 import {
     OrderSide,
     HubOptions,
@@ -13,11 +14,10 @@ import {
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, createERC20Token, createNativeToken, isZeroAddress, SchemaType } from '@masknet/web3-shared-evm'
-import type { NonFungibleTokenAPI } from '../types/index.js'
 import { X2Y2_API_URL, X2Y2_PAGE_SIZE } from './constants.js'
 import type { Contract, Event, Order } from './types.js'
-import { first, last } from 'lodash-es'
-import { resolveActivityType } from '../helpers.js'
+import { resolveActivityType } from '../entry-helpers.js'
+import type { NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromX2Y2<T>(pathname: string) {
     const response = await globalThis.fetch(urlcat(X2Y2_API_URL, pathname))

@@ -1,12 +1,12 @@
-import { Box, Button, InputAdornment, MenuItem, Stack, Typography } from '@mui/material'
 import { memo, useMemo, useState } from 'react'
+import { Box, Button, InputAdornment, MenuItem, Stack, Typography } from '@mui/material'
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material'
 import { makeStyles, MaskTextField, ShadowRootMenu } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { useI18N } from '../../locales/index.js'
-import type { SecurityAPI } from '@masknet/web3-providers'
+import type { SecurityAPI } from '@masknet/web3-providers/types'
 import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import { WalletIcon } from '@masknet/shared'
+import { useI18N } from '../../locales/index.js'
 import { useSupportedChains } from '../hooks/useSupportedChains.js'
 
 const useStyles = makeStyles()((theme) => ({

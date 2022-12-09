@@ -304,6 +304,7 @@ export namespace TwitterBaseAPI {
     export interface Provider {
         getSettings: () => Promise<Settings | undefined>
         getUserSettings: () => Promise<UserSettings>
+        staleUserSettings: () => Promise<void>
         /**
          * @param screenName
          * @param checkNFTAvatar With `checkNFTAvatar` true, will get user via web API directly,
@@ -313,5 +314,6 @@ export namespace TwitterBaseAPI {
         getUserNftContainer: (screenName: string) => Promise<NFT | undefined>
         uploadUserAvatar: (screenName: string, image: Blob | File) => Promise<TwitterResult>
         updateProfileImage: (screenName: string, media_id_str: string) => Promise<AvatarInfo | undefined>
+        staleUserByScreenName: (screenName: string) => Promise<User | null>
     }
 }

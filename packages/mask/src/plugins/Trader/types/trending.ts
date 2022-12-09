@@ -1,4 +1,4 @@
-import type { TrendingAPI } from '@masknet/web3-providers'
+import type { TrendingAPI } from '@masknet/web3-providers/types'
 
 export type Settings = TrendingAPI.Settings
 

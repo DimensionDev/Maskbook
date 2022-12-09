@@ -27,7 +27,6 @@
     "@metamask/eth-sig-util": "^4.0.0",
     "@servie/events": "^3.0.0",
     "@siddomains/sidjs": "^0.1.16",
-    "@toruslabs/torus-embed": "^1.22.6",
     "@walletconnect/client": "1.7.8",
     "@walletconnect/types": "^1.7.7",
     "bignumber.js": "9.1.0",

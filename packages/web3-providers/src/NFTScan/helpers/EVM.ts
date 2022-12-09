@@ -6,6 +6,7 @@ import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
 import {
+    formatPercentage,
     NonFungibleAsset,
     NonFungibleCollection,
     NonFungibleTokenContract,
@@ -18,8 +19,11 @@ import {
 import { ChainId, createContract, getRPCConstants, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL, NFTSCAN_API, NFTSCAN_RESTFUL_API } from '../constants.js'
 import type { EVM } from '../types/EVM.js'
-import type { NonFungibleTokenAPI } from '../../types/index.js'
-import { parseJSON, resolveActivityType, getPaymentToken, getAssetFullName } from '../../helpers.js'
+import type { NonFungibleTokenAPI } from '../../entry-types.js'
+import { getAssetFullName } from '../../helpers/getAssetFullName.js'
+import { resolveActivityType } from '../../helpers/resolveActivityType.js'
+import { getPaymentToken } from '../../helpers/getPaymentToken.js'
+import { parseJSON } from '../../helpers/parseJSON.js'
 
 export type NFTScanChainId = ChainId.Mainnet | ChainId.Matic | ChainId.BSC | ChainId.Arbitrum | ChainId.Optimism
 
@@ -123,11 +127,11 @@ export function createPermalink(chainId: ChainId, address: string, tokenId: stri
 export function createNonFungibleAsset(
     chainId: ChainId,
     asset: EVM.Asset,
-    collection?: EVM.AssetsGroup,
+    collection?: EVM.Collection | EVM.AssetsGroup,
 ): NonFungibleAsset<ChainId, SchemaType> {
     const payload = parseJSON<EVM.Payload>(asset.metadata_json)
     const contractName = asset.contract_name
-    const description = payload?.description
+    const description = payload?.description ?? collection?.description
     const uri = asset.nftscan_uri ?? asset.image_uri
     const mediaURL = resolveResourceURL(uri)
 
@@ -181,6 +185,8 @@ export function createNonFungibleAsset(
             address: asset.contract_address,
             name: contractName,
             symbol,
+            creatorEarning:
+                collection && 'royalty' in collection ? formatPercentage(collection.royalty / 100 / 100) : undefined,
         },
         collection: {
             chainId,

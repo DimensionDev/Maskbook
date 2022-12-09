@@ -1,14 +1,8 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
+import stringify from 'json-stable-stringify'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { useI18N } from '../../utils/index.js'
-import { activatedSocialNetworkUI } from '../../social-network/index.js'
-import {
-    currentSetupGuideStatus,
-    userGuideStatus,
-    userGuideVersion,
-    userPinExtension,
-} from '../../../shared/legacy-settings/settings.js'
 import { makeTypedMessageText } from '@masknet/typed-message'
+import { NextIDProof } from '@masknet/web3-providers'
 import {
     PersonaIdentifier,
     ProfileIdentifier,
@@ -16,15 +10,17 @@ import {
     EnhanceableSite,
     EncryptionTargetType,
 } from '@masknet/shared-base'
+import { useI18N } from '../../utils/index.js'
+import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { currentSetupGuideStatus, userGuideStatus, userPinExtension } from '../../../shared/legacy-settings/settings.js'
 import Services from '../../extension/service.js'
 import { SetupGuideStep } from '../../../shared/legacy-settings/types.js'
 import { FindUsername } from './SetupGuide/FindUsername.js'
 import { VerifyNextID } from './SetupGuide/VerifyNextID.js'
 import { PinExtension } from './SetupGuide/PinExtension.js'
-import { NextIDProof } from '@masknet/web3-providers'
 import { useSetupGuideStepInfo } from './SetupGuide/useSetupGuideStepInfo.js'
-import stringify from 'json-stable-stringify'
 import { useNextIDVerify } from '../DataSource/useNextIDVerify.js'
+import { Flags } from '../../../shared/flags.js'
 
 // #region setup guide ui
 interface SetupGuideUIProps {
@@ -133,7 +129,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         if (!userPinExtension.value) {
             userPinExtension.value = true
         }
-        if (network === EnhanceableSite.Twitter && userGuideStatus[network].value !== userGuideVersion.value) {
+        if (network === EnhanceableSite.Twitter && userGuideStatus[network].value !== Flags.userGuideLevel) {
             userGuideStatus[network].value = '1'
         } else {
             onCreate()

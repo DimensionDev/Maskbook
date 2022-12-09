@@ -4,7 +4,7 @@ import { PageHeader } from '../components/PageHeader/index.js'
 import { MaskMessages, useI18N } from '../../../../../utils/index.js'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import Services from '../../../../service.js'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
 import { Typography } from '@mui/material'
@@ -18,8 +18,9 @@ import { PasswordField } from '../../../components/PasswordField/index.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { LoadingButton } from '@mui/lab'
 import { currentPersonaIdentifier } from '../../../../../../shared/legacy-settings/settings.js'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { first } from 'lodash-es'
 
 const useStyles = makeStyles()({
     container: {
@@ -81,7 +82,7 @@ const WalletRecovery = memo(() => {
     const navigate = useNavigate()
 
     const web3State = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-
+    const connection = useWeb3Connection()
     const currentPersona = useValueRef(currentPersonaIdentifier)
 
     const backupId = new URLSearchParams(location.search).get('backupId')
@@ -126,9 +127,15 @@ const WalletRecovery = memo(() => {
             const json = await Services.Backup.getUnconfirmedBackup(backupId)
             if (json) {
                 await Services.Backup.restoreUnconfirmedBackup({ id: backupId, action: 'confirm' })
+                const wallet = first(json.wallets)
 
                 // Set default wallet
-                if (json.wallets) await WalletRPC.setDefaultMaskAccount()
+                if (wallet) {
+                    connection?.connect({
+                        account: wallet.address,
+                        chainId: ChainId.Mainnet,
+                    })
+                }
 
                 // Send event after successful recovery
                 MaskMessages.events.restoreSuccess.sendToAll(undefined)

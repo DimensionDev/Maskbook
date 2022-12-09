@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
-import { ScalableBloomFilter } from 'bloom-filters'
+import type { ScalableBloomFilter } from 'bloom-filters'
 import type { ScamWarningAPI } from '../types/ScamWarning.js'
-import { fetchJSON } from '../helpers.js'
+import { fetchJSON } from '../entry-helpers.js'
 
 const baseURL = 'https://raw.githubusercontent.com/DimensionDev/Mask-Scam-List/main/providers/cryptoscam-db/'
 
@@ -12,6 +12,7 @@ export class CryptoScamDBAPI implements ScamWarningAPI.Provider {
         if (this.bloomFilter) return this.bloomFilter
         const filter = await fetchJSON<JSON>(urlcat(baseURL, 'filter/config.json'))
 
+        const { ScalableBloomFilter } = await import('bloom-filters')
         this.bloomFilter = ScalableBloomFilter.fromJSON(filter)
         return this.bloomFilter as ScalableBloomFilter
     }
@@ -27,9 +28,11 @@ export class CryptoScamDBAPI implements ScamWarningAPI.Provider {
             const result = await fetchJSON<ScamWarningAPI.Info>(urlcat(baseURL, `${url.host}.json`))
             if (!result) return
 
-            if (!url.pathname || url.pathname === '/') return result
-
             const scamURL = new URL(result.url)
+
+            if ((!url.pathname || url.pathname === '/') && (!scamURL.pathname || scamURL.pathname === '/'))
+                return result
+
             if (
                 url.pathname.toLowerCase() === scamURL.pathname.toLowerCase() &&
                 url.search.toLowerCase() === scamURL.search.toLowerCase()

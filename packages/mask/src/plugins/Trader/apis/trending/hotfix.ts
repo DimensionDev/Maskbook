@@ -1,7 +1,7 @@
 import { getEnumAsArray } from '@masknet/kit'
 import { ChainId, getCoinGeckoConstants, getCoinMarketCapConstants } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { TrendingAPI } from '@masknet/web3-providers'
+import { TrendingAPI } from '@masknet/web3-providers/types'
 import { DataProvider } from '@masknet/public-api'
 import STOCKS_KEYWORDS from './stocks.json'
 import CASHTAG_KEYWORDS from './cashtag.json'

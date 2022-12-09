@@ -12,14 +12,16 @@ import { MaskMessages } from '../../../../shared/index.js'
 import { PersonaIdentifier, fromBase64URL, PopupRoutes, ECKeyIdentifier } from '@masknet/shared-base'
 import { queryPersonasWithPrivateKey } from '../../../../background/database/persona/db.js'
 import { openPopupWindow } from '../../../../background/services/helper/index.js'
-import { delay, encodeText } from '@masknet/kit'
+import { delay, encodeText, timeout } from '@masknet/kit'
+import { personalSign } from '@metamask/eth-sig-util'
+import { v4 as uuid } from 'uuid'
 export interface SignRequest {
     /** Use that who to sign this message. */
     identifier?: PersonaIdentifier
     /** The message to be signed. */
     message: string
     /** Use what method to sign this message? */
-    method: 'eth'
+    method: 'eth' | 'personal'
 }
 export interface SignRequestResult {
     /** The persona user selected to sign the message */
@@ -43,6 +45,23 @@ export async function signWithPersona({ message, method, identifier }: SignReque
     const requestID = Math.random().toString(16).slice(3)
     await openPopupWindow(PopupRoutes.PersonaSignRequest, { message, requestID, identifier: identifier?.toText() })
 
+    const signer = await timeout(
+        new Promise<PersonaIdentifier>((resolve, reject) => {
+            MaskMessages.events.personaSignRequest.on((approval) => {
+                if (approval.requestID !== requestID) return
+                if (!approval.selectedPersona) reject(new Error('Persona Rejected'))
+                resolve(approval.selectedPersona!)
+            })
+        }),
+        60 * 1000,
+        'Timeout',
+    )
+    return generateSignResult(signer, message)
+}
+
+export async function signPayWithPersona({ message, identifier }: Omit<SignRequest, 'method'>): Promise<string> {
+    const requestID = uuid()
+
     const waitForApprove = new Promise<PersonaIdentifier>((resolve, reject) => {
         delay(1000 * 60).then(() => reject(new Error('Timeout')))
         MaskMessages.events.personaSignRequest.on((approval) => {
@@ -52,7 +71,8 @@ export async function signWithPersona({ message, method, identifier }: SignReque
         })
     })
     const signer = await waitForApprove
-    return generateSignResult(signer, message)
+
+    return generatePaySignResult(signer, message)
 }
 
 /**
@@ -77,4 +97,14 @@ export async function generateSignResult(signer: ECKeyIdentifier, message: strin
         address: bufferToHex(publicToAddress(privateToPublic(privateKey))),
         messageHex: bufferToHex(Buffer.from(new TextEncoder().encode(message))),
     }
+}
+
+export async function generatePaySignResult(signer: ECKeyIdentifier, message: string) {
+    const persona = (await queryPersonasWithPrivateKey()).find((x) => x.identifier === signer)
+    if (!persona) throw new Error('Persona not found')
+    const privateKey = Buffer.from(fromBase64URL(persona.privateKey.d!))
+    return personalSign({
+        privateKey,
+        data: message,
+    })
 }

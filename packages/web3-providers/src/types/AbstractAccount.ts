@@ -8,6 +8,7 @@ export namespace AbstractAccountAPI {
         id: string
         address: string
         owner: string
+        creator: string
     }
 
     export interface Provider<T extends NetworkPluginID> {

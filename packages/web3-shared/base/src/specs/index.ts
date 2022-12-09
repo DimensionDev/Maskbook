@@ -372,6 +372,7 @@ export interface NonFungibleTokenContract<ChainId, SchemaType> {
     owner?: string
     logoURL?: string
     iconURL?: string
+    /** @example 2.5% */
     creatorEarning?: string
     /** source type */
     source?: SourceType
@@ -755,8 +756,6 @@ export interface Wallet {
     derivationPath?: string
     /** the derivation path when wallet last was derived */
     latestDerivationPath?: string
-    /** eip-4337 compatible salt number using by create2Factory */
-    salt?: number
     /** the internal presentation of mask wallet sdk */
     storedKeyInfo?: api.IStoredKeyInfo
     /** the Mask SDK stored key info */
@@ -764,6 +763,8 @@ export interface Wallet {
     createdAt: Date
     /** record updated at */
     updatedAt: Date
+    /** an abstract wallet has a owner */
+    owner?: string
 }
 
 export interface Transaction<ChainId, SchemaType> {
@@ -868,11 +869,11 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     /** Switch to the designate chain. */
     switchChain(chainId?: ChainId): Promise<void>
     /** Create an instance from the network SDK. */
-    createWeb3(options?: ProviderOptions<ChainId>): Promise<Web3>
+    createWeb3(options?: ProviderOptions<ChainId>): Web3
     /** Create an instance that implement the wallet protocol. */
-    createWeb3Provider(options?: ProviderOptions<ChainId>): Promise<Web3Provider>
+    createWeb3Provider(options?: ProviderOptions<ChainId>): Web3Provider
     /** Create the connection. */
-    connect(chainId?: ChainId): Promise<Account<ChainId>>
+    connect(chainId?: ChainId, address?: string): Promise<Account<ChainId>>
     /** Dismiss the connection. */
     disconnect(): Promise<void>
 }
@@ -913,9 +914,9 @@ export interface Connection<
     Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>,
 > {
     /** Get web3 instance */
-    getWeb3(initial?: Web3ConnectionOptions): Promise<Web3>
+    getWeb3(initial?: Web3ConnectionOptions): Web3
     /** Get web3 provider instance */
-    getWeb3Provider(initial?: Web3ConnectionOptions): Promise<Web3Provider>
+    getWeb3Provider(initial?: Web3ConnectionOptions): Web3Provider
     /** Get gas price */
     getGasPrice(initial?: Web3ConnectionOptions): Promise<string>
     /** Get address type of given address. */
@@ -984,6 +985,8 @@ export interface Connection<
     ): Promise<Record<string, string>>
     /** Get the currently connected account. */
     getAccount(initial?: Web3ConnectionOptions): Promise<string>
+    /** Get all supported accounts with metadata. */
+    getWallets?: (initial?: Web3ConnectionOptions) =>  Promise<Wallet[]>
     /** Get the currently chain id. */
     getChainId(initial?: Web3ConnectionOptions): Promise<ChainId>
     /** Get the latest block by number. */
@@ -1058,13 +1061,13 @@ export interface Connection<
     /** Get all supported entry points */
     supportedEntryPoints?: () => Promise<string[]>
     /** Call a operation */
-    callUserOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<string>
+    callUserOperation?: (owner: string, operation: Operation, initial?: Web3ConnectionOptions) => Promise<string>
     /** Send a operation */
-    sendUserOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<TransactionSignature>
-    /** Deploy a new SC account */
-    createSmartContractAccount?: () => Promise<string>
-    /** Change owner of SC account */
-    transferSmartContractAccount?: (owner: string, signature: string) => Promise<void>
+    sendUserOperation?: (owner: string, operation: Operation, initial?: Web3ConnectionOptions) => Promise<TransactionSignature>
+    /** Change owner of contract Wallet */
+    transferContractWallet?: (recipient: string, initial?: Web3ConnectionOptions) => Promise<string>
+    /** Deploy contract Wallet */
+    deployContractWallet?: (owner: string, initial?: Web3ConnectionOptions) => Promise<string>
     /** Sign a transaction */
     signTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): Promise<TransactionSignature>
     /** Sign multiple transactions */
@@ -1332,7 +1335,7 @@ export interface HubState<
     Web3Hub = Hub<ChainId, SchemaType, GasOption>,
 > {
     /** Get external data hub */
-    getHub?: (options: Web3HubOptions) => Promise<Web3Hub>
+    getHub?: (options: Web3HubOptions) => Web3Hub
 }
 
 export interface Web3StorageServiceState {
@@ -1477,7 +1480,7 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
     /** Wait until a provider ready */
     untilReady: (providerType: ProviderType) => Promise<void>
     /** Connect with the provider and set chain id. */
-    connect: (chainId: ChainId, providerType: ProviderType) => Promise<Account<ChainId>>
+    connect: (chainId: ChainId, providerType: ProviderType, account?: string) => Promise<Account<ChainId>>
     /** Disconnect with the provider. */
     disconnect: (providerType: ProviderType) => Promise<void>
 }
@@ -1514,21 +1517,23 @@ export interface ConnectionState<
     >,
 > {
     /** Get web3 SDK */
-    getWeb3?: (initial?: Web3ConnectionOptions) => Promise<Web3>
+    getWeb3?: (initial?: Web3ConnectionOptions) => Web3
     /** Get web3 provider instance */
-    getWeb3Provider?: (initial?: Web3ConnectionOptions) => Promise<Web3Provider>
+    getWeb3Provider?: (initial?: Web3ConnectionOptions) => Web3Provider
     /** Get connection */
-    getConnection?: (initial?: Web3ConnectionOptions) => Promise<Web3Connection>
+    getConnection?: (initial?: Web3ConnectionOptions) => Web3Connection
 }
-export interface WalletState {
+export interface WalletState<Transaction> {
     /** The currently stored wallet by MaskWallet. */
     wallets?: Subscription<Wallet[]>
-    /** The default derivable wallet. */
-    walletPrimary?: Subscription<Wallet | null>
 
-    addWallet?: (id: string, wallet: Wallet) => Promise<void>
-    removeWallet?: (id: string, password?: string) => Promise<void>
-    getAllWallets?: () => Promise<Wallet[]>
+    addWallet(wallet: Wallet): Promise<void>
+    updateWallet(address: string, updates: Partial<Omit<Wallet, 'id' | 'address' | 'createdAt' | 'createdAt'>>): Promise<void>
+    renameWallet(address: string, name: string): Promise<void>
+    removeWallet(address: string, password?: string): Promise<void>
+
+    signTransaction(address: string, transaction: Transaction): Promise<string>
+    signMessage(address: string, type: string, message: string, password?: string): Promise<string>
 }
 export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
     // #region resolvers
@@ -1628,7 +1633,7 @@ export interface Web3State<
         Web3Provider
     >
     Provider?: ProviderState<ChainId, ProviderType, NetworkType>
-    Wallet?: WalletState
+    Wallet?: WalletState<Transaction>
     Others?: OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
     Storage?: Web3StorageServiceState
 }

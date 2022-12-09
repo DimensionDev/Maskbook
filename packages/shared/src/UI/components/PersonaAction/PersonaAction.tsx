@@ -5,7 +5,7 @@ import { PlatformAvatar } from './PlatformAvatar.js'
 import type { PersonaInformation } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { Icons } from '@masknet/icons'
-import { useCallback, useState } from 'react'
+import { PropsWithChildren, useCallback, useState } from 'react'
 import { formatPublicKey } from '../../../utils/index.js'
 import { useSharedI18N } from '../../../locales/index.js'
 
@@ -14,6 +14,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: 36,
         display: 'flex',
+        justifyContent: 'space-between',
         padding: 16,
         boxShadow: theme.palette.shadow.popup,
     },
@@ -29,15 +30,18 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface PersonaActionProps {
+interface PersonaActionProps extends PropsWithChildren {
     currentPersona?: PersonaInformation
     currentVisitingProfile?: IdentityResolved
     avatar?: string
+    classes?: {
+        bottomFixed: string
+    }
 }
 
 export function PersonaAction(props: PersonaActionProps) {
-    const { classes } = useStyles()
-    const { currentPersona, avatar } = props
+    const { classes } = useStyles(undefined, { props })
+    const { currentPersona, avatar, children } = props
     const t = useSharedI18N()
 
     const [open, setOpen] = useState(false)
@@ -60,26 +64,31 @@ export function PersonaAction(props: PersonaActionProps) {
 
     return (
         <div className={classes.bottomFixed}>
-            <PlatformAvatar networkIcon={avatar} size={36} />
-            <div style={{ marginLeft: '4px' }}>
-                <Typography style={{ fontSize: '14px', fontWeight: '700', display: 'flex' }}>
-                    {currentPersona?.nickname}
-                </Typography>
-                <Box sx={{ display: 'flex' }}>
-                    <Typography className={classes.personaKey}>
-                        {currentPersona?.identifier ? formatPublicKey(currentPersona?.identifier?.rawPublicKey) : '--'}
+            <Box display="flex">
+                <PlatformAvatar networkIcon={avatar} size={36} />
+                <div style={{ marginLeft: '4px' }}>
+                    <Typography style={{ fontSize: '14px', fontWeight: '700', display: 'flex' }}>
+                        {currentPersona?.nickname}
                     </Typography>
-                    <ShadowRootTooltip
-                        title={t.copied()}
-                        open={open}
-                        placement="top"
-                        onMouseLeave={() => setOpen(false)}
-                        disableFocusListener
-                        disableTouchListener>
-                        <Icons.Copy size={16} onClick={onCopy} className={classes.linkIcon} />
-                    </ShadowRootTooltip>
-                </Box>
-            </div>
+                    <Box sx={{ display: 'flex' }}>
+                        <Typography className={classes.personaKey}>
+                            {currentPersona?.identifier
+                                ? formatPublicKey(currentPersona?.identifier?.rawPublicKey)
+                                : '--'}
+                        </Typography>
+                        <ShadowRootTooltip
+                            title={t.copied()}
+                            open={open}
+                            placement="top"
+                            onMouseLeave={() => setOpen(false)}
+                            disableFocusListener
+                            disableTouchListener>
+                            <Icons.Copy size={16} onClick={onCopy} className={classes.linkIcon} />
+                        </ShadowRootTooltip>
+                    </Box>
+                </div>
+            </Box>
+            {children}
         </div>
     )
 }

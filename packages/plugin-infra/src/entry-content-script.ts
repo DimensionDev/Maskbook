@@ -42,3 +42,5 @@ export {
     useThemeSettings,
     useThemeSize,
 } from './sns-adaptor/index.js'
+
+export { useCurrentPersonaInformation } from './hooks/useCurrentPersonaInformation.js'

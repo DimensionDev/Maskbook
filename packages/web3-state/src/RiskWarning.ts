@@ -8,8 +8,7 @@ interface ConfirmationBook {
 }
 
 export class RiskWarningState implements Web3RiskWarningState {
-    protected storage: StorageItem<ConfirmationBook> = null!
-
+    public storage: StorageItem<ConfirmationBook> = null!
     public approved?: Subscription<boolean>
 
     constructor(
