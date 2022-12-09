@@ -44,3 +44,7 @@
 ## CSP
 
 - @protobufjs/inquire: We don't allow eval.
+
+## Performance
+
+- anchorme: <https://github.com/alexcorvi/anchorme.js/pull/127>
