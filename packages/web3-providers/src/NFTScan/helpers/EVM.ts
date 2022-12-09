@@ -11,12 +11,20 @@ import {
     NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
+    NonFungibleTokenTrait,
     resolveResourceURL,
     scale10,
     SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { ChainId, createContract, getRPCConstants, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    createContract,
+    getRPCConstants,
+    isENSContractAddress,
+    SchemaType,
+    WNATIVE,
+} from '@masknet/web3-shared-evm'
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
 import type { EVM } from '../types/EVM.js'
 import { getAssetFullName } from '../../helpers/getAssetFullName.js'
@@ -75,6 +83,28 @@ export function createPermalink(chainId: ChainId, address: string, tokenId: stri
     })
 }
 
+function getAssetTraits(asset: EVM.Asset): NonFungibleTokenTrait[] {
+    if (asset.attributes.length) {
+        return asset.attributes.map((x) => ({
+            type: x.attribute_name,
+            value: x.attribute_value,
+            rarity: x.percentage,
+        }))
+    }
+    // Manually get traits from metadata, since NFTScan doesn't return
+    // attributes at this time.
+    if (isENSContractAddress(asset.contract_address)) {
+        const payload = parseJSON<EVM.Payload>(asset.metadata_json)
+        return (
+            payload?.attributes?.map((x) => ({
+                type: x.trait_type,
+                value: x.value,
+            })) ?? EMPTY_LIST
+        )
+    }
+    return EMPTY_LIST
+}
+
 export function createNonFungibleAsset(
     chainId: ChainId,
     asset: EVM.Asset,
@@ -109,12 +139,7 @@ export function createNonFungibleAsset(
                   link: urlcat(NFTSCAN_BASE, owner),
               }
             : undefined,
-        traits:
-            asset.attributes?.map((x) => ({
-                type: x.attribute_name,
-                value: x.attribute_value,
-                rarity: x.percentage,
-            })) ?? EMPTY_LIST,
+        traits: getAssetTraits(asset),
         priceInToken: asset.latest_trade_price
             ? {
                   amount: scale10(asset.latest_trade_price, WNATIVE[chainId].decimals).toFixed(),
