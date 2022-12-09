@@ -154,9 +154,9 @@ export function FileBrowser({ selectMode, selectedFileIds = EMPTY_LIST }: Props)
     const visibleFiles = useMemo(() => {
         if (searching) {
             if (!keyword) return files
+            const kw = keyword.toLowerCase()
             return files.filter((x) => {
-                const kw = keyword.toLowerCase()
-                x.name.toLowerCase().includes(kw) || x.key?.toLowerCase().includes(kw)
+                return x.name.toLowerCase().includes(kw) || x.key?.toLowerCase().includes(kw)
             })
         }
         const provider = TabToProviderMap[tab]
