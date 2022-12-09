@@ -7,7 +7,7 @@ import {
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import RSS3 from 'rss3-next'
+import type RSS3 from 'rss3-next'
 import urlcat, { query } from 'urlcat'
 import { NEW_RSS3_ENDPOINT, RSS3_ENDPOINT } from './constants.js'
 import { TAG, TYPE } from './types.js'
@@ -22,12 +22,13 @@ type RSS3Result<T> = {
 }
 
 export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    createRSS3(
+    async createRSS3(
         address: string,
         sign: (message: string) => Promise<string> = () => {
             throw new Error('Not supported.')
         },
-    ): RSS3 {
+    ): Promise<RSS3> {
+        const { default: RSS3 } = await import('rss3-next')
         return new RSS3({
             endpoint: RSS3_ENDPOINT,
             address,

@@ -1,8 +1,8 @@
-import RSS3 from 'rss3-next'
 import { RSS3_ENDPOINT } from '../constants.js'
 import type { BoxMetadata } from '../type.js'
 
 async function createRSS(address: string) {
+    const { default: RSS3 } = await import('rss3-next')
     return new RSS3({
         endpoint: RSS3_ENDPOINT,
         address,

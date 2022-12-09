@@ -482,7 +482,7 @@ export namespace RSS3BaseAPI {
     }
 
     export interface Provider {
-        createRSS3(address: string): RSS3
+        createRSS3(address: string): Promise<RSS3>
         getFileData<T>(rss3: RSS3, address: string, key: string): Promise<T | undefined>
         setFileData<T>(rss3: RSS3, address: string, key: string, data: T): Promise<T>
         getDonations(address: string): Promise<Pageable<Donation>>

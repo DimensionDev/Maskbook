@@ -26,7 +26,7 @@ export class RSS3Storage implements Storage {
         }
     }
 
-    private async getRSS3<T>() {
+    private async getRSS3() {
         const connection = this.getConnection?.()
         return RSS3.createRSS3(
             this.address,
@@ -42,13 +42,13 @@ export class RSS3Storage implements Storage {
 
     async get<T>(key: string): Promise<T | undefined> {
         const cacheKey = `${this.address}_${key}`
-        const rss3 = await this.getRSS3<T>()
+        const rss3 = await this.getRSS3()
         const cache = this.cache?.get<T>(cacheKey)
         return cache ?? RSS3.getFileData(rss3, this.address, key)
     }
 
     async set<T>(key: string, value: T) {
-        const rss3 = await this.getRSS3<T>()
+        const rss3 = await this.getRSS3()
         await RSS3.setFileData<T>(rss3, this.address, key, value)
 
         this.delete(key)
