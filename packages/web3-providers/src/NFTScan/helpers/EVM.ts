@@ -127,7 +127,7 @@ export function createPermalink(chainId: ChainId, address: string, tokenId: stri
 export function createNonFungibleAsset(
     chainId: ChainId,
     asset: EVM.Asset,
-    collection?: EVM.Collection | EVM.AssetsGroup,
+    collection?: NonFungibleTokenAPI.Collection | EVM.AssetsGroup,
 ): NonFungibleAsset<ChainId, SchemaType> {
     const payload = parseJSON<EVM.Payload>(asset.metadata_json)
     const contractName = asset.contract_name
