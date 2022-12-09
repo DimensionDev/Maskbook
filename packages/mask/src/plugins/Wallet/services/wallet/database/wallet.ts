@@ -1,5 +1,5 @@
 import { omit } from 'lodash-es'
-import { api } from '@dimensiondev/mask-wallet-core/proto'
+import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { asyncIteratorToArray } from '@masknet/shared-base'
 import { formatEthereumAddress, isValidAddress } from '@masknet/web3-shared-evm'
@@ -7,10 +7,16 @@ import { PluginDB } from '../../../database/Plugin.db.js'
 import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings.js'
 import type { WalletRecord } from '../type.js'
 
-function WalletRecordOutDB(record: WalletRecord) {
+const StoredKeyTypeMnemonic: api.StoredKeyType.Mnemonic = 1
+export interface WalletRecordOut extends Omit<WalletRecord, 'type'> {
+    configurable: boolean
+    hasStoredKeyInfo: boolean
+    hasDerivationPath: boolean
+}
+function WalletRecordOutDB(record: WalletRecord): WalletRecordOut {
     return {
         ...omit(record, 'type'),
-        configurable: record.storedKeyInfo?.type ? record.storedKeyInfo.type !== api.StoredKeyType.Mnemonic : true,
+        configurable: record.storedKeyInfo?.type ? record.storedKeyInfo.type !== StoredKeyTypeMnemonic : true,
         hasStoredKeyInfo: !!record.storedKeyInfo,
         hasDerivationPath: !!record.derivationPath,
     }

@@ -17,7 +17,6 @@ import { R2D2API } from './R2D2/index.js'
 import { InstagramAPI } from './Instagram/index.js'
 import { DeBankAPI } from './DeBank/index.js'
 import { ZerionAPI, ZerionGasAPI, ZerionNonFungibleTokenAPI, ZerionTrendingAPI } from './Zerion/index.js'
-import { MaskAPI } from './Mask/index.js'
 import { MaskX_API } from './MaskX/index.js'
 import { MetaSwapAPI } from './MetaSwap/index.js'
 import { AstarAPI } from './Astar/index.js'
@@ -66,7 +65,6 @@ export const RiskWarning = new RiskWarningAPI()
 export const RSS3 = new RSS3API()
 export const KeyValue = new KeyValueAPI()
 export const Twitter = new TwitterAPI()
-export const Mask = new MaskAPI()
 export const MaskX = new MaskX_API()
 export const Minds = new MindsAPI()
 export const Instagram = new InstagramAPI()
