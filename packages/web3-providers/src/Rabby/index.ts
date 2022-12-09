@@ -2,10 +2,10 @@ import urlcat from 'urlcat'
 import { omit } from 'lodash-es'
 import { ChainId, chainResolver, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import { isSameAddress, NonFungibleContractSpender, FungibleTokenSpender } from '@masknet/web3-shared-base'
-import type { AuthorizationAPI } from '../types/index.js'
 import { getAllMaskDappContractInfo, resolveNetworkOnRabby } from './helpers.js'
 import { NON_FUNGIBLE_TOKEN_API_URL, FUNGIBLE_TOKEN_API_URL } from './constants.js'
 import type { NFTInfo, RawTokenInfo, TokenSpender } from './types.js'
+import type { AuthorizationAPI } from '../entry-types.js'
 
 export class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
     async getNonFungibleTokenSpenders(chainId: ChainId, account: string) {

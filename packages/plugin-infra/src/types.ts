@@ -165,8 +165,6 @@ export namespace Plugin.Shared {
         currentPersona: Subscription<PersonaIdentifier | undefined>
         /** Get all wallets */
         wallets: Subscription<Wallet[]>
-        /** Get the primary wallet */
-        walletPrimary: Subscription<Wallet | null>
 
         /** Native platform type */
         nativeType?: 'Android' | 'iOS'
@@ -215,6 +213,7 @@ export namespace Plugin.Shared {
         /** Sign a message with persona */
         personaSignMessage(payload: PersonaSignRequest): Promise<PersonaSignResult>
 
+        personaSignPayMessage(payload: Omit<PersonaSignRequest, 'method'>): Promise<string>
         /** Generate sign message with persona */
         generateSignResult(signer: ECKeyIdentifier, message: string): Promise<PersonaSignResult>
 
@@ -229,9 +228,6 @@ export namespace Plugin.Shared {
 
         /** Get all wallets */
         getWallets(): Promise<Wallet[]>
-
-        /** Get the primary wallet */
-        getWalletPrimary(): Promise<Wallet | null>
 
         /** Add a new wallet */
         addWallet(id: string, wallet: Wallet): Promise<void>
@@ -380,6 +376,7 @@ export namespace Plugin.Shared {
         message: string
         /** Use what method to sign this message? */
         method: 'eth'
+        identifier: PersonaIdentifier
     }
 
     export interface PersonaSignResult {

@@ -18,7 +18,6 @@ interface WalletSettingCardProps {
 
 export const WalletSettingCard = memo<WalletSettingCardProps>(({ wallet, checked, onSwitchChange }) => {
     const wallets = useWallets()
-
     const networkPluginId = resolveNextID_NetworkPluginID(wallet.platform)
     const chainId = useDefaultChainId(networkPluginId)
     const networkDescriptor = useNetworkDescriptor(networkPluginId, chainId)

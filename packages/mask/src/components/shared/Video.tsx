@@ -1,6 +1,6 @@
-import { Skeleton, SkeletonProps } from '@mui/lab'
 import { forwardRef, useMemo, useRef } from 'react'
 import { useAsync } from 'react-use'
+import { Skeleton, SkeletonProps } from '@mui/lab'
 import Services from '../../extension/service.js'
 
 export interface VideoRef {
@@ -18,9 +18,9 @@ export const Video = forwardRef<VideoRef, VideoProps>(function Video(props, outg
     const { src, component = 'video', VideoProps, SkeletonProps } = props
     const videoRef = useRef<HTMLVideoElement>(null)
 
-    const { loading, error, value } = useAsync(async () => {
+    const { loading, value } = useAsync(async () => {
         if (typeof src !== 'string') return src
-        return Services.Helper.fetch(src)
+        return Services.Helper.fetchBlob(src)
     }, [src])
 
     const blobURL = useMemo(() => {

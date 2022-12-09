@@ -19,7 +19,6 @@ export class MaskWallet implements Middleware<Context> {
             }
             return
         }
-
         switch (context.request.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
                 context.write(toHex(chainId.getCurrentValue()))

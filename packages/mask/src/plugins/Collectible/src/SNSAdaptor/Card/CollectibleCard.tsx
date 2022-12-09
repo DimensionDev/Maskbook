@@ -11,6 +11,7 @@ const useStyles = makeStyles()((theme) => {
         },
         overContent: {
             backgroundColor: theme.palette.maskColor.white,
+            boxSizing: 'border-box',
         },
     }
 })

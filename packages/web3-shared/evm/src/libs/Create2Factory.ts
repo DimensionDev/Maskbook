@@ -1,4 +1,5 @@
-import { keccak256, padLeft, toHex } from 'web3-utils'
+import { bytesToHex, hexToBytes, keccak256, padLeft, toHex } from 'web3-utils'
+import { formatEthereumAddress } from '../index.js'
 
 export class Create2Factory {
     static MAX_DERIVATION_NUM = 99
@@ -11,9 +12,11 @@ export class Create2Factory {
     constructor(private address: string) {}
 
     private getDeployAddress(initCode: string, salt: number): string {
-        const saltByte32 = padLeft(toHex(salt), 32)
-        const items = ['0xff', this.address, saltByte32, keccak256(initCode)].map((x) => toHex(x).slice(2))
-        return `0x${keccak256(items.join('')).slice(-40)}`
+        const saltByte32 = padLeft(toHex(salt), 64)
+        const items = ['0xff', formatEthereumAddress(this.address), saltByte32, keccak256(initCode)].flatMap((x) =>
+            hexToBytes(x),
+        )
+        return formatEthereumAddress(bytesToHex(hexToBytes(keccak256(bytesToHex(items))).slice(12)))
     }
 
     /** Derive all deploy addresses from the given initCode. */

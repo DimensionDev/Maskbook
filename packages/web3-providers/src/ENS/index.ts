@@ -1,8 +1,8 @@
 import ENS from 'ethjs-ens'
 import namehash from '@ensdomains/eth-ens-namehash'
 import { ChainId, isEmptyHex, isZeroAddress } from '@masknet/web3-shared-evm'
-import type { DomainAPI } from '../index.js'
 import { Web3API } from '../EVM/index.js'
+import type { DomainAPI } from '../entry-types.js'
 
 export class ENS_API implements DomainAPI.Provider<ChainId> {
     private get web3() {

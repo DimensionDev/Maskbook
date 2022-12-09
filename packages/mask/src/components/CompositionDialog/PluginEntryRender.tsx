@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 export interface PluginEntryRenderRef {
-    openPlugin(id: string): void
+    openPlugin(id: string, pluginProps?: any): void
 }
 export const PluginEntryRender = memo(
     forwardRef<
@@ -131,13 +131,13 @@ function useSetPluginEntryRenderRef(ref: React.ForwardedRef<PluginEntryRenderRef
     const pluginRefs = useRef<Record<string, PluginRef | undefined | null>>({})
     const refItem: PluginEntryRenderRef = useMemo(
         () => ({
-            openPlugin: function openPlugin(id: string, tryTimes = 4) {
+            openPlugin: function openPlugin(id: string, props: any = {}, tryTimes = 4) {
                 const ref = pluginRefs.current[id]
-                if (ref) return ref.open()
+                if (ref) return ref.open(props)
 
                 // If the plugin has not been loaded yet, we wait for at most 2000ms
                 if (tryTimes === 0) return
-                setTimeout(() => openPlugin(id, tryTimes - 1), 500)
+                setTimeout(() => openPlugin(id, props, tryTimes - 1), 500)
             },
         }),
         [],
@@ -148,13 +148,13 @@ function useSetPluginEntryRenderRef(ref: React.ForwardedRef<PluginEntryRenderRef
     }
     return [trackPluginRef]
 }
-function useSetPluginRef(ref: React.ForwardedRef<PluginRef>, onClick: () => void) {
+function useSetPluginRef(ref: React.ForwardedRef<PluginRef>, onClick: (props: any) => void) {
     const refItem = useMemo(() => ({ open: onClick }), [onClick])
     useImperativeHandle(ref, () => refItem, [refItem])
 }
 
 type PluginRef = {
-    open(): void
+    open(props: any): void
 }
 type ExtraPluginProps = {
     unstable: boolean
@@ -189,8 +189,12 @@ const DialogEntry = memo(
     forwardRef<PluginRef, Plugin.SNSAdaptor.CompositionDialogEntryDialog & ExtraPluginProps>((props, ref) => {
         const { classes } = useStyles()
         const { dialog: Dialog, id, label, unstable, keepMounted, isOpenFromApplicationBoard } = props
+        const [dialogProps, setDialogProps] = useState({})
         const [open, setOpen] = useState(false)
-        const opener = useCallback(() => setOpen(true), [])
+        const opener = useCallback((props: any = {}) => {
+            setDialogProps(props)
+            setOpen(true)
+        }, [])
         const close = useCallback(() => {
             setOpen(false)
         }, [])
@@ -217,10 +221,17 @@ const DialogEntry = memo(
                     {chip}
                     <span style={{ display: 'none' }}>
                         {/* Dialog should use portals to render. */}
-                        <Dialog open={open} onClose={close} isOpenFromApplicationBoard={isOpenFromApplicationBoard} />
+                        <Dialog
+                            open={open}
+                            onClose={close}
+                            isOpenFromApplicationBoard={isOpenFromApplicationBoard}
+                            {...dialogProps}
+                        />
                     </span>
                 </>
             )
         return chip
     }),
 )
+
+DialogEntry.displayName = 'DialogEntry'

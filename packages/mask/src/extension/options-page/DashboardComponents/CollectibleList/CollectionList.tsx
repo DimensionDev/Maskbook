@@ -1,10 +1,12 @@
+import { useEffect, useMemo, useState } from 'react'
+import { differenceWith, uniqBy } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { useNonFungibleAssets, useTrustedNonFungibleTokens } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, RetryHint, useWeb3ProfileHiddenSettings } from '@masknet/shared'
 import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { CollectionType } from '@masknet/web3-providers'
+import { CollectionType } from '@masknet/web3-providers/types'
 import {
     isSameAddress,
     NonFungibleAsset,
@@ -13,8 +15,6 @@ import {
     SocialIdentity,
 } from '@masknet/web3-shared-base'
 import { Box, Button, Stack, Typography, styled } from '@mui/material'
-import { differenceWith, uniqBy } from 'lodash-es'
-import { useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { CollectibleList } from './CollectibleList.js'
 import { CollectionIcon } from './CollectionIcon.js'

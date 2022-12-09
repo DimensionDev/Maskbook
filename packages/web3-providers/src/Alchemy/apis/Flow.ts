@@ -9,11 +9,11 @@ import {
     SourceType,
 } from '@masknet/web3-shared-base'
 import { ChainId, getContractAddress, SchemaType, isValidChainId } from '@masknet/web3-shared-flow'
-import type { NonFungibleTokenAPI } from '../../types/index.js'
-import { fetchJSON, getAssetFullName } from '../../helpers.js'
 import { Alchemy_FLOW_NetworkMap, FILTER_WORDS } from '../constants.js'
 import type { AlchemyNFT_FLOW, AlchemyResponse_FLOW, AlchemyResponse_FLOW_Metadata } from '../types.js'
 import { formatAlchemyTokenId, formatAlchemyTokenAddress } from '../helpers.js'
+import type { NonFungibleTokenAPI } from '../../entry-types.js'
+import { getAssetFullName, fetchJSON } from '../../entry-helpers.js'
 
 function createNonFungibleTokenImageURL(asset: AlchemyNFT_FLOW | AlchemyResponse_FLOW_Metadata) {
     return (

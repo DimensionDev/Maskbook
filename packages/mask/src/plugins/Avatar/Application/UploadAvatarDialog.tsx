@@ -102,6 +102,9 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 setDisabled(false)
                 return
             }
+
+            // clear cache
+            await Twitter.staleUserByScreenName(identifier?.identifier?.userId ?? '')
             showSnackbar(t.upload_avatar_success_message(), { variant: 'success' })
 
             onClose()

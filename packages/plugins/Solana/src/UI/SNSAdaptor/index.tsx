@@ -39,7 +39,7 @@ const sns: Plugin.SNSAdaptor.Definition<
 > = {
     ...base,
     async init(signal, context) {
-        const Web3State = createWeb3State(context)
+        const Web3State = await createWeb3State(context)
 
         sns.Web3State = Web3State
         Web3StateSettings.value = Web3State

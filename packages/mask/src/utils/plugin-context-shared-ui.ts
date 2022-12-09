@@ -52,17 +52,13 @@ export const RestPartOfPluginUIContextShared: Omit<
         EMPTY_LIST,
         WalletMessages.events.walletsUpdated.on,
     ),
-    walletPrimary: createSubscriptionFromAsync(
-        () => WalletRPC.getWalletPrimary(),
-        null,
-        WalletMessages.events.walletsUpdated.on,
-    ),
 
     updateAccount: WalletRPC.updateMaskAccount,
     selectAccount: WalletRPC.selectMaskAccount,
     recordConnectedSites: WalletRPC.recordConnectedSites,
 
     personaSignMessage: Services.Identity.signWithPersona,
+    personaSignPayMessage: Services.Identity.signPayWithPersona,
     generateSignResult: Services.Identity.generateSignResult,
 
     signTransaction: WalletRPC.signTransaction,
@@ -70,7 +66,6 @@ export const RestPartOfPluginUIContextShared: Omit<
     signPersonalMessage: WalletRPC.signPersonalMessage,
 
     getWallets: WalletRPC.getWallets,
-    getWalletPrimary: WalletRPC.getWalletPrimary,
     addWallet: WalletRPC.updateWallet,
     updateWallet: WalletRPC.updateWallet,
     removeWallet: WalletRPC.removeWallet,

@@ -15,7 +15,7 @@ import { useConnectedPersonas } from '../../DataSource/useConnectedPersonas.js'
 import Services from '../../../extension/service.js'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useNextIDVerify } from '../../DataSource/useNextIDVerify.js'
-import { MaskMessages, useI18N } from '../../../utils/index.js'
+import { useI18N } from '../../../utils/index.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
@@ -95,7 +95,9 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
         [],
     )
 
-    const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(MaskMessages.events.openPageConfirm)
+    const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(
+        CrossIsolationMessages.events.openPageConfirm,
+    )
 
     useEffect(() => {
         if (personas.length || !finishTarget || loading || error) return

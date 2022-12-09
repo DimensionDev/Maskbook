@@ -4,8 +4,8 @@ import { createNormalReactRoot, hydrateNormalReactRoot } from '../../utils/index
 import { createPluginHost, createPartialSharedUIContext } from '../../../shared/plugin-infra/host.js'
 import { Services } from '../service.js'
 import Popups from './UI.js'
-import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
-import { setInitialPersonaInformation } from './pages/Personas/hooks/PersonaContextInitialData.js'
+import { currentPersonaIdentifier, pluginIDSettings } from '../../../shared/legacy-settings/settings.js'
+import { initialPersonaInformation } from './pages/Personas/hooks/PersonaContextInitialData.js'
 import { RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
 
 if (location.hash === '#/personas') {
@@ -14,7 +14,10 @@ if (location.hash === '#/personas') {
         await Promise.all([
             status,
             currentPersonaIdentifier.readyPromise,
-            Services.Identity.queryOwnedPersonaInformation(false).then(setInitialPersonaInformation),
+            pluginIDSettings.readyPromise,
+            Services.Identity.queryOwnedPersonaInformation(false).then((value) =>
+                initialPersonaInformation.setServerSnapshot(value),
+            ),
         ])
         console.timeEnd('[SSR] Fill data')
 

@@ -1,3 +1,4 @@
+import { upperFirst } from 'lodash-es'
 import {
     TableContainer,
     Paper,
@@ -12,14 +13,13 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { DataProvider } from '@masknet/public-api'
+import { Icons } from '@masknet/icons'
+import type { TrendingAPI } from '@masknet/web3-providers/types'
+import { MoreHoriz as MoreHorizIcon } from '@mui/icons-material'
+import { Linking, useMenuConfig } from '@masknet/shared'
 import { useI18N } from '../../../../utils/index.js'
 import { ContractSection } from './ContractSection.js'
 import type { CommunityType } from '../../types/index.js'
-import { Icons } from '@masknet/icons'
-import { upperFirst } from 'lodash-es'
-import type { TrendingAPI } from '@masknet/web3-providers'
-import { MoreHoriz as MoreHorizIcon } from '@mui/icons-material'
-import { Linking, useMenuConfig } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

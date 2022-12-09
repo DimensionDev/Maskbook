@@ -1,16 +1,16 @@
 import urlcat from 'urlcat'
 import { first, isEmpty, parseInt, uniqBy } from 'lodash-es'
-import { ChainId, getGoPlusLabsConstants, isValidChainId, SchemaType } from '@masknet/web3-shared-evm'
-import type { AuthorizationAPI, SecurityAPI } from '../index.js'
-import { fetchJSON } from '../helpers.js'
-import { GO_PLUS_LABS_ROOT_URL, INFINITE_VALUE } from './constants.js'
-import { SecurityMessageLevel } from './types.js'
-import { SecurityMessages } from './rules.js'
-import { FungibleTokenSpender, isSameAddress, NonFungibleContractSpender } from '@masknet/web3-shared-base'
-import { getAllMaskDappContractInfo } from '../Rabby/helpers.js'
-import type { GoPlusNFTInfo, GoPlusTokenInfo, GoPlusTokenSpender, NFTSpenderInfo } from './type.js'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { BigNumber } from 'bignumber.js'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { ChainId, getGoPlusLabsConstants, isValidChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { FungibleTokenSpender, isSameAddress, NonFungibleContractSpender } from '@masknet/web3-shared-base'
+import type { AuthorizationAPI } from '../types/Authorization.js'
+import type { SecurityAPI } from '../types/Security.js'
+import { GO_PLUS_LABS_ROOT_URL, INFINITE_VALUE } from './constants.js'
+import { GoPlusNFTInfo, GoPlusTokenInfo, GoPlusTokenSpender, NFTSpenderInfo, SecurityMessageLevel } from './types.js'
+import { SecurityMessages } from './rules.js'
+import { getAllMaskDappContractInfo } from '../Rabby/helpers.js'
+import { fetchJSON } from '../entry-helpers.js'
 
 function checkInWhitelist(chainId = ChainId.Mainnet, address: string) {
     const { WHITE_LISTS } = getGoPlusLabsConstants(chainId)
@@ -23,7 +23,13 @@ export interface SupportedChainResponse {
 }
 
 export class GoPlusAuthorizationAPI implements AuthorizationAPI.Provider<ChainId> {
+    async getSupportChainIds() {
+        return [ChainId.Mainnet, ChainId.BSC]
+    }
     async getNonFungibleTokenSpenders(chainId: ChainId, addresses: string) {
+        const supportedChainIds = await this.getSupportChainIds()
+        if (!supportedChainIds.includes(chainId)) return EMPTY_LIST
+
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'nft')
         const response = await fetchJSON<{
             result: GoPlusNFTInfo[]
@@ -79,6 +85,9 @@ export class GoPlusAuthorizationAPI implements AuthorizationAPI.Provider<ChainId
     }
 
     async getFungibleTokenSpenders(chainId: ChainId, addresses: string) {
+        const supportedChainIds = await this.getSupportChainIds()
+        if (!supportedChainIds.includes(chainId)) return EMPTY_LIST
+
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'token')
 
         const response = await fetchJSON<{

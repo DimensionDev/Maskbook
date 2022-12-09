@@ -20,7 +20,6 @@ const worker: Plugin.Worker.Definition = {
         onRestore: async (files: FileInfo[]) => {
             return Result.wrap(() => {
                 files.map(async (file) => {
-                    file.createdAt = new Date(file.createdAt)
                     await setFileInfo(file)
                 })
             })

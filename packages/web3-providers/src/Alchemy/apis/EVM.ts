@@ -11,8 +11,6 @@ import {
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, ChainId as ChainId_EVM, SchemaType as SchemaType_EVM } from '@masknet/web3-shared-evm'
-import type { NonFungibleTokenAPI } from '../../types/index.js'
-import { fetchJSON, getAssetFullName } from '../../helpers.js'
 import { Alchemy_EVM_NetworkMap } from '../constants.js'
 import type {
     AlchemyNFT_EVM,
@@ -22,6 +20,8 @@ import type {
     AlchemyResponse_EVM_Owners,
 } from '../types.js'
 import { formatAlchemyTokenId } from '../helpers.js'
+import type { NonFungibleTokenAPI } from '../../entry-types.js'
+import { fetchJSON, getAssetFullName } from '../../entry-helpers.js'
 
 function createNonFungibleTokenLink(chainId: ChainId, address: string, tokenId: string) {
     if (chainId === ChainId.Matic) {

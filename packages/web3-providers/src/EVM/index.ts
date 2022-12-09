@@ -3,7 +3,7 @@ import Web3SDK from 'web3'
 import type { FeeHistoryResult } from 'web3-eth'
 import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
 import { ChainId, chainResolver, GasOption, getRPCConstants, Web3 } from '@masknet/web3-shared-evm'
-import type { GasOptionAPI, Web3BaseAPI } from '../types/index.js'
+import type { GasOptionAPI, Web3BaseAPI } from '../entry-types.js'
 
 export class Web3API implements Web3BaseAPI.Provider<ChainId, Web3> {
     createSDK(chainId: ChainId): Web3SDK {

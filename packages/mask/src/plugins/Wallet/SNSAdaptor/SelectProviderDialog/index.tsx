@@ -82,10 +82,8 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
 
             closeDialog()
 
-            // TODO: remove this after global dialog be implement
             await delay(500)
-            // TODO:
-            // refactor to use react-router-dom
+
             setConnectWalletDialog({
                 open: true,
                 network,

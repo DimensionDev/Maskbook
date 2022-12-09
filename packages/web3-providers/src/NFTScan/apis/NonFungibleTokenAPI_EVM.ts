@@ -12,7 +12,6 @@ import {
     Pageable,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
-import type { NonFungibleTokenAPI } from '../../types/index.js'
 import { EVM, PageableResponse, Response } from '../types/index.js'
 import {
     createNonFungibleAsset,
@@ -22,6 +21,7 @@ import {
     createNonFungibleCollectionFromGroup,
     createNonFungibleCollectionFromCollection,
 } from '../helpers/EVM.js'
+import type { NonFungibleTokenAPI } from '../../entry-types.js'
 
 export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
@@ -34,7 +34,9 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
         })
         const response = await fetchFromNFTScanV2<Response<EVM.Asset>>(chainId, path)
         if (!response?.data) return
-        return createNonFungibleAsset(chainId, response.data)
+
+        const collection = await this.getCollectionRaw(response.data.contract_address, { chainId })
+        return createNonFungibleAsset(chainId, response.data, collection)
     }
 
     async getAssets(account: string, { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {}) {
@@ -105,18 +107,25 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
         return createPageable(collections, createIndicator(indicator))
     }
 
+    async getCollectionRaw(
+        address: string,
+        { chainId = ChainId.Mainnet }: HubOptions<ChainId, HubIndicator> = {},
+    ): Promise<EVM.Collection | undefined> {
+        if (!isValidChainId(chainId)) return
+        const path = urlcat('/api/v2/collections/:address', {
+            address,
+        })
+        const response = await fetchFromNFTScanV2<Response<EVM.Collection>>(chainId, path)
+        return response?.data
+    }
+
     async getCollection(
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions<ChainId, HubIndicator> = {},
     ): Promise<NonFungibleCollection<ChainId, SchemaType> | undefined> {
-        if (!isValidChainId(chainId)) return
-        const path = urlcat('/v2/collections/:address', {
-            address,
-            contract_address: address,
-        })
-        const response = await fetchFromNFTScanV2<Response<EVM.Collection>>(chainId, path)
-        if (!response?.data) return
-        return createNonFungibleCollectionFromCollection(chainId, response.data)
+        const rawCollection = await this.getCollectionRaw(address, { chainId })
+        if (!rawCollection) return
+        return createNonFungibleCollectionFromCollection(chainId, rawCollection)
     }
 
     async getContract(

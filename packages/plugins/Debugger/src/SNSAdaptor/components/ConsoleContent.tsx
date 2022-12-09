@@ -1,4 +1,5 @@
 import { Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import {
     useBalance,
     useBlockNumber,
@@ -9,7 +10,6 @@ import {
     useWeb3State,
     useChainContext,
 } from '@masknet/web3-hooks-base'
-import { makeStyles } from '@masknet/theme'
 import {
     useLastRecognizedIdentity,
     useCurrentVisitingIdentity,

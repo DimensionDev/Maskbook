@@ -5,7 +5,7 @@ import { DataProvider } from '@masknet/public-api'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { FungibleTokenResult, SearchFungibleTokenResultSubType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { TrendingAPI } from '@masknet/web3-providers'
+import { TrendingAPI } from '@masknet/web3-providers/types'
 import { useTrendingById, useCoinInfoByAddress } from '../trending/useTrending.js'
 
 export interface TrendingSearchResult {

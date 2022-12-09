@@ -1,8 +1,10 @@
 import { makeStyles } from '@masknet/theme'
-import { Typography } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Rank } from './Rank.js'
+import { Typography } from '@mui/material'
+import format from 'date-fns/format'
+import isDate from 'date-fns/isDate'
 import { useI18N } from '../../../../../utils/index.js'
+import { Rank } from './Rank.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -97,7 +99,7 @@ export function PropertiesCard(props: PropertiesCardProps) {
                         <div key={x.type} className={classes.traitsItem}>
                             <Typography className={classes.traitTitle}>{x.type}</Typography>
                             <Typography className={classes.traitValue} title={x.value}>
-                                {x.value}
+                                {isDate(x.value) ? format(new Date(x.value), 'yyyy-MM-DD') : x.value}
                             </Typography>
                             {typeof x.rarity === 'string' ? (
                                 <Typography className={classes.traitRarity}>({x.rarity})</Typography>

@@ -1,5 +1,5 @@
 import { resolveResourceURL } from '@masknet/web3-shared-base'
-import type { RSS3BaseAPI } from '../types/index.js'
+import type { RSS3BaseAPI } from '../entry-types.js'
 
 /**
  * Normalize RSS3 feed.

@@ -1,123 +1,129 @@
+import { Icons } from '@masknet/icons'
 import { formatFileSize } from '@masknet/kit'
 import { useCustomSnackbar, makeStyles } from '@masknet/theme'
-import { Typography } from '@mui/material'
+import { alpha, Button, Typography } from '@mui/material'
 import { isNil } from 'lodash-es'
-import { UploadCloud } from 'react-feather'
+import { HTMLProps, memo, useRef } from 'react'
 import { useDropArea } from 'react-use'
 import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
-    label: {
+    dropArea: {
         display: 'flex',
+        height: 230,
         flexDirection: 'column',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        position: 'relative',
-        border: '1px dashed #C4C4C4',
-        boxSizing: 'border-box',
-        borderRadius: 4,
-        textAlign: 'center',
-        flex: 1,
-        padding: 12,
-        overflow: 'hidden',
-        userSelect: 'none',
-        height: 200,
-    },
-    here: {
-        fontSize: 12,
-        lineHeight: 2.5,
-        color: theme.palette.mode === 'dark' ? theme.palette.grey[100] : theme.palette.grey[500],
-        userSelect: 'none',
-    },
-    hint: {
-        margin: 0,
-        color: '#939393',
-        fontSize: 12,
-        lineHeight: 1.5,
-        userSelect: 'none',
-    },
-    over: {
-        borderColor: '#2CA4EF',
-        borderStyle: 'solid',
-        userSelect: 'none',
-    },
-    indicator: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        opacity: 0,
-        cursor: 'pointer',
-        transition: 'all 500ms ease-out',
-        height: '100%',
-        width: '100%',
-        display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        background: 'rgba(255, 255, 255, 0.85)',
-        fontSize: 30,
-        color: '#2CA4EF',
+        position: 'relative',
+        boxSizing: 'border-box',
+        borderRadius: 8,
+        textAlign: 'center',
+        padding: theme.spacing(3),
+        overflow: 'hidden',
         userSelect: 'none',
-        zIndex: 1,
+        background:
+            theme.palette.mode === 'dark'
+                ? 'linear-gradient(180deg, #202020 0%, #181818 100%)'
+                : 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
     },
-    uploader: {
-        userSelect: 'none',
-        cursor: 'pointer',
-        zIndex: 0,
+    dragOver: {
+        borderColor: theme.palette.maskColor.primary,
+    },
+    uploadIcon: {
+        height: 54,
+        width: 54,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: alpha(theme.palette.maskColor.bottom, 0.8),
+        borderRadius: '50%',
+        boxShadow:
+            theme.palette.mode === 'dark' ? '0px 4px 6px rgba(0, 0, 0, 0.1)' : '0px 4px 6px rgba(102, 108, 135, 0.1)',
+    },
+    tips: {
+        lineHeight: '18px',
+        fontSize: 14,
+        color: theme.palette.maskColor.third,
+        fontWeight: 700,
+        marginTop: 10,
+    },
+    limit: {
+        lineHeight: '18px',
+        fontSize: 14,
+        color: theme.palette.maskColor.third,
+    },
+    or: {
+        marginTop: 10,
+        color: theme.palette.maskColor.second,
+    },
+    button: {
+        width: 164,
+        marginTop: 10,
     },
 }))
 
-interface Props {
+interface Props extends HTMLProps<HTMLDivElement> {
     maxFileSize: number
-    onFile(file: File): void
+    onSelectFile(file: File): void
 }
 
-export const UploadDropArea: React.FC<Props> = ({ maxFileSize, onFile }) => {
+export const UploadDropArea: React.FC<Props> = memo(({ maxFileSize, onSelectFile, className, ...rest }) => {
     const t = useI18N()
     const { classes, cx } = useStyles()
     const { showSnackbar } = useCustomSnackbar()
+    const inputRef = useRef<HTMLInputElement>(null)
     const [bond, { over }] = useDropArea({
         onFiles(files) {
             if (files.length > 1) {
-                onError(101)
+                showMessage(101)
             } else if (files[0].size > maxFileSize) {
-                onError(102)
+                showMessage(102)
             } else {
-                onFile(files[0])
+                onSelectFile(files[0])
             }
         },
-        onText: () => onError(101),
-        onUri: () => onError(101),
+        onText: () => showMessage(101),
+        onUri: () => showMessage(101),
     })
-    const MAX_FILE_SIZE = formatFileSize(maxFileSize)
     const onInput = (event: React.FormEvent<HTMLInputElement>) => {
         const file = event.currentTarget.files?.item(0)
         if (isNil(file)) {
-            onError(101)
+            showMessage(101)
         } else if (file.size > maxFileSize) {
-            onError(102)
+            showMessage(102)
         } else {
-            onFile(file)
+            onSelectFile(file)
         }
     }
-    // error code definition:
-    // see https://confluence.dimension.chat/x/3IEf#Maskbook:Plugin:FileService-ErrorHandling
-    const onError = (code: number) => {
-        const messages: Record<number, string> = {
-            101: t.error_101(),
-            102: t.error_102({ limit: MAX_FILE_SIZE }),
-        }
-        if (code in messages) {
-            showSnackbar(`Error ${code}: ${messages[code]}`, { variant: 'error' })
+    const showMessage = (code: 101 | 102) => {
+        switch (code) {
+            case 101:
+                showSnackbar(t.error({ context: 'single', limit: '' }), { variant: 'error' })
+
+                break
+            case 102:
+                const MAX_FILE_SIZE = formatFileSize(maxFileSize, true)
+                showSnackbar(t.error({ context: 'oversized', limit: MAX_FILE_SIZE }), { variant: 'error' })
         }
     }
     return (
-        <Typography component="label" {...bond} className={cx(classes.label, { [classes.over]: over })}>
-            <input type="file" onInput={onInput} hidden />
-            <section className={classes.indicator}>{t.drop_indicator()}</section>
-            <UploadCloud className={classes.uploader} width={64} height={64} />
-            <b className={classes.here}>{t.drop_here()}</b>
-            <p className={classes.hint}>{t.drop_hint_1({ limit: MAX_FILE_SIZE })}</p>
-            <p className={classes.hint}>{t.drop_hint_2()}</p>
-        </Typography>
+        <div className={cx(classes.dropArea, { [classes.dragOver]: over }, className)} {...rest} {...bond}>
+            <input type="file" onInput={onInput} hidden ref={inputRef} />
+            <div className={classes.uploadIcon}>
+                <Icons.Upload size={30} />
+            </div>
+            <Typography className={classes.tips}>{t.drag_n_drop()}</Typography>
+            <Typography className={classes.limit}>{t.size_limit()}</Typography>
+            <Typography className={classes.or}>{t.or()}</Typography>
+            <Button
+                className={classes.button}
+                color="info"
+                variant="contained"
+                onClick={() => {
+                    inputRef.current?.click()
+                }}>
+                {t.browse_files()}
+            </Button>
+        </div>
     )
-}
+})

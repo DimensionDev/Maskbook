@@ -6,7 +6,7 @@ import { useNonFungibleAssets, useTrustedNonFungibleTokens } from '@masknet/web3
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { CollectionType } from '@masknet/web3-providers'
+import { CollectionType } from '@masknet/web3-providers/types'
 import {
     isSameAddress,
     NonFungibleAsset,

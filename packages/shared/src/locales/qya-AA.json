@@ -1,6 +1,9 @@
 {
     "approve": "crwdns18766:0crwdne18766:0",
     "authorization_descriptions": "crwdns18768:0crwdne18768:0",
+    "create_persona_hint": "crwdns19305:0crwdne19305:0",
+    "create_persona_title": "crwdns19307:0crwdne19307:0",
+    "create_persona_action": "crwdns19309:0crwdne19309:0",
     "domain_request": "crwdns18770:0crwdne18770:0",
     "available_balance": "crwdns18772:0crwdne18772:0",
     "snackbar_done": "crwdns1977:0crwdne1977:0",
@@ -47,6 +50,7 @@
     "share_dialog_transaction_confirmed": "crwdns16704:0crwdne16704:0",
     "load_failed": "crwdns17242:0crwdne17242:0",
     "load_retry": "crwdns17244:0crwdne17244:0",
+    "loading": "crwdns19075:0crwdne19075:0",
     "powered_by": "crwdns17746:0crwdne17746:0",
     "copied": "crwdns18350:0crwdne18350:0",
     "copy_wallet_address_success": "crwdns18840:0crwdne18840:0",

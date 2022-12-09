@@ -1,4 +1,10 @@
 import { memo, useCallback, useState } from 'react'
+import { useAsyncFn, useAsyncRetry } from 'react-use'
+import { useNavigate } from 'react-router-dom'
+import { compact } from 'lodash-es'
+import urlcat from 'urlcat'
+import { Icons } from '@masknet/icons'
+import { NextIDProof } from '@masknet/web3-providers'
 import { Avatar, Link, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { definedSocialNetworkUIs } from '../../../../../../social-network/index.js'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
@@ -10,17 +16,11 @@ import {
     NextIDPlatform,
     PopupRoutes,
 } from '@masknet/shared-base'
-import { compact } from 'lodash-es'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../../../utils/index.js'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
-import { useAsyncFn, useAsyncRetry } from 'react-use'
 import Services from '../../../../../service.js'
-import { Icons } from '@masknet/icons'
 import { DisconnectDialog } from '../DisconnectDialog/index.js'
-import { NextIDProof } from '@masknet/web3-providers'
-import { useNavigate } from 'react-router-dom'
-import urlcat from 'urlcat'
 import { MethodAfterPersonaSign } from '../../../Wallet/type.js'
 
 const useStyles = makeStyles()((theme) => ({

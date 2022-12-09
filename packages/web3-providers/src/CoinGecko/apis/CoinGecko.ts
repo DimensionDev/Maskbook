@@ -5,12 +5,12 @@ import { ChainId, getCoinGeckoConstants } from '@masknet/web3-shared-evm'
 import { COINGECKO_CHAIN_ID_LIST, COINGECKO_URL_BASE } from '../constants.js'
 import { getCommunityLink, isMirroredKeyword } from '../../Trending/helpers.js'
 import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../../Trending/constants.js'
-import { fetchJSON } from '../../helpers.js'
-import type { TrendingAPI } from '../../types/index.js'
 import { getAllCoins, getCoinInfo, getPriceStats as getStats, getThumbCoins } from './base.js'
 import type { Platform } from '../types.js'
 import { resolveCoinGeckoChainId } from '../helpers.js'
 import { FuseTrendingAPI } from '../../Fuse/index.js'
+import { fetchJSON } from '../../entry-helpers.js'
+import type { TrendingAPI } from '../../entry-types.js'
 
 export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
     private fuse = new FuseTrendingAPI()

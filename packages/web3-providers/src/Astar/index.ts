@@ -1,7 +1,7 @@
 import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
 import type { ChainId, GasOption } from '@masknet/web3-shared-evm'
-import type { GasOptionAPI } from '../types/index.js'
 import type { EstimateSuggestResponse } from './types.js'
+import type { GasOptionAPI } from '../entry-types.js'
 
 const ASTAR_API = 'https://gas.astar.network/api/gasnow?network=astar'
 

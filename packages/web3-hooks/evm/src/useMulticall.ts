@@ -156,7 +156,7 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
 
                             if (!outputType) return
 
-                            const web3 = await connection.getWeb3()
+                            const web3 = connection.getWeb3()
                             const decodeResult = decodeOutputString(web3, outputType, hex) as
                                 | UnboxTransactionObject<ReturnType<Multicall['methods']['multicall']>>
                                 | undefined

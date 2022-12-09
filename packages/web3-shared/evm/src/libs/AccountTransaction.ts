@@ -24,7 +24,6 @@ export class AccountTransaction {
 
     get data() {
         const data = this.transaction?.data
-        if (!data) return
         if (isEmptyHex(data)) return
         if (!data.startsWith('0x')) return `0x${data}`
         return data

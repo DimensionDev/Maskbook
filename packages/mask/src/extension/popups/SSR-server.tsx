@@ -3,7 +3,7 @@
 import { Suspense } from 'react'
 import { i18NextInstance, updateLanguage, PopupRoutes } from '@masknet/shared-base'
 import { once, noop } from 'lodash-es'
-import { MaskThemeProvider } from '@masknet/theme'
+import { DisableShadowRootContext, MaskThemeProvider } from '@masknet/theme'
 import { CacheProvider } from '@emotion/react'
 import { renderToString } from 'react-dom/server'
 import createCache from '@emotion/cache'
@@ -52,41 +52,46 @@ function PopupSSR(props: PopupSSR_Props) {
     }
     return (
         // MaskUIRoot
-        <Suspense fallback={null}>
+        <DisableShadowRootContext.Provider value>
             <Suspense fallback={null}>
-                <StaticRouter location={PopupRoutes.Personas}>
-                    <MaskThemeProvider useTheme={useTheme} CustomSnackbarOffsetY={0} useMaskIconPalette={() => 'light'}>
-                        <PopupFrame>
-                            {/* Persona */}
-                            <Suspense fallback={null}>
-                                {props.hasPersona ? (
-                                    <PersonaHeaderUI
-                                        isSelectPersonaPage={false}
-                                        onActionClick={noop}
+                <Suspense fallback={null}>
+                    <StaticRouter location={PopupRoutes.Personas}>
+                        <MaskThemeProvider
+                            useTheme={useTheme}
+                            CustomSnackbarOffsetY={0}
+                            useMaskIconPalette={() => 'light'}>
+                            <PopupFrame>
+                                {/* Persona */}
+                                <Suspense fallback={null}>
+                                    {props.hasPersona ? (
+                                        <PersonaHeaderUI
+                                            isSelectPersonaPage={false}
+                                            onActionClick={noop}
+                                            avatar={props.avatar}
+                                            fingerprint={props.currentFingerPrint || ''}
+                                            nickname={props.nickname}
+                                        />
+                                    ) : (
+                                        <NormalHeader onClose={noop} />
+                                    )}
+                                    <PersonaHomeUI
+                                        fetchProofsLoading
+                                        onEdit={noop}
+                                        onRestore={noop}
+                                        onCreatePersona={noop}
                                         avatar={props.avatar}
                                         fingerprint={props.currentFingerPrint || ''}
+                                        isEmpty={!props.hasPersona}
                                         nickname={props.nickname}
+                                        accountsCount={props.linkedProfilesCount}
+                                        walletsCount={0}
                                     />
-                                ) : (
-                                    <NormalHeader onClose={noop} />
-                                )}
-                                <PersonaHomeUI
-                                    fetchProofsLoading
-                                    onEdit={noop}
-                                    onRestore={noop}
-                                    onCreatePersona={noop}
-                                    avatar={props.avatar}
-                                    fingerprint={props.currentFingerPrint || ''}
-                                    isEmpty={!props.hasPersona}
-                                    nickname={props.nickname}
-                                    accountsCount={props.linkedProfilesCount}
-                                    walletsCount={0}
-                                />
-                            </Suspense>
-                        </PopupFrame>
-                    </MaskThemeProvider>
-                </StaticRouter>
+                                </Suspense>
+                            </PopupFrame>
+                        </MaskThemeProvider>
+                    </StaticRouter>
+                </Suspense>
             </Suspense>
-        </Suspense>
+        </DisableShadowRootContext.Provider>
     )
 }

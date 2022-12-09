@@ -1,7 +1,7 @@
+import { noop } from 'lodash-es'
 import type { TransactionReceipt } from 'web3-core'
 import { NonFungibleTokenMetadata, TransactionStatusType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { noop } from 'lodash-es'
 
 export function getReceiptStatus(receipt: TransactionReceipt | null) {
     if (!receipt) return TransactionStatusType.NOT_DEPEND
@@ -13,6 +13,7 @@ export function getReceiptStatus(receipt: TransactionReceipt | null) {
 
 const assetCache: Record<string, Promise<NonFungibleTokenMetadata<ChainId>> | NonFungibleTokenMetadata<ChainId>> =
     Object.create(null)
+
 const lazyVoid = Promise.resolve()
 
 const BASE64_PREFIX = 'data:application/json;base64,'
@@ -44,16 +45,17 @@ export async function getERC721TokenAssetFromChain(
     if (promise === lazyVoid) {
         try {
             // for some NFT tokens return an URL refers to a JSON file
-            promise = globalThis
-                .r2d2Fetch(tokenURI.startsWith(HTTP_PREFIX) ? `${CORS_PROXY}/?${tokenURI}` : tokenURI)
-                .then(async (r) => {
+            promise = fetch(tokenURI.startsWith(HTTP_PREFIX) ? `${CORS_PROXY}/?${tokenURI}` : tokenURI).then(
+                async (r) => {
                     const json = await r.json()
                     return {
                         ...json,
                         mediaUrl: json.image || json.animation_url,
                         imageURL: json.image || json.animation_url,
                     } as NonFungibleTokenMetadata<ChainId>
-                }, noop)
+                },
+                noop,
+            )
             assetCache[tokenURI] = await (promise as Promise<NonFungibleTokenMetadata<ChainId>>)
             return assetCache[tokenURI]
         } catch (err) {

@@ -273,7 +273,8 @@ export function RedPacket(props: RedPacketProps) {
                     </div>
                 </div>
             </Card>
-            {listOfStatus.includes(RedPacketStatus.empty) ? null : (
+            {listOfStatus.includes(RedPacketStatus.empty) ||
+            (!canRefund && listOfStatus.includes(RedPacketStatus.expired)) ? null : (
                 <OperationFooter
                     chainId={payload.token?.chainId ?? chainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet}
                     canClaim={canClaim}

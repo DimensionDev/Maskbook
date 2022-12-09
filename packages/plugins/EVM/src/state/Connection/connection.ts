@@ -38,6 +38,7 @@ import {
     AddressType,
     ContractTransaction,
     AccountTransaction,
+    PayloadEditor,
 } from '@masknet/web3-shared-evm'
 import {
     Account,
@@ -56,6 +57,7 @@ import {
     resolveIPFS_URL,
     resolveCrossOriginURL,
 } from '@masknet/web3-shared-base'
+import { fetchJSON } from '@masknet/web3-providers/helpers'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
 import { createContext, dispatch } from './composer.js'
 import { Providers } from './provider.js'
@@ -65,38 +67,6 @@ import { Web3StateSettings } from '../../settings/index.js'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
-
-export function isReadOnlyMethod(method: EthereumMethodType) {
-    return [
-        EthereumMethodType.ETH_GET_CODE,
-        EthereumMethodType.ETH_GAS_PRICE,
-        EthereumMethodType.ETH_BLOCK_NUMBER,
-        EthereumMethodType.ETH_GET_BALANCE,
-        EthereumMethodType.ETH_GET_BLOCK_BY_NUMBER,
-        EthereumMethodType.ETH_GET_BLOCK_BY_HASH,
-        EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH,
-        EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
-        EthereumMethodType.ETH_GET_TRANSACTION_COUNT,
-        EthereumMethodType.ETH_GET_FILTER_CHANGES,
-        EthereumMethodType.ETH_NEW_PENDING_TRANSACTION_FILTER,
-        EthereumMethodType.ETH_ESTIMATE_GAS,
-        EthereumMethodType.ETH_CALL,
-        EthereumMethodType.ETH_GET_LOGS,
-    ].includes(method)
-}
-
-async function fetchJSON<T extends unknown>(
-    input: RequestInfo,
-    init?: RequestInit | undefined,
-    options?: {
-        fetch?: (input: RequestInfo, init?: RequestInit | undefined) => Promise<Response>
-    },
-) {
-    const fetch_ = options?.fetch ?? globalThis.fetch
-    const response = await fetch_(input, init)
-    if (!response.ok) throw new Error('Failed to fetch.')
-    return response.json() as Promise<T>
-}
 
 class Connection implements EVM_Connection {
     constructor(
@@ -131,15 +101,24 @@ class Connection implements EVM_Connection {
                         try {
                             switch (context.method) {
                                 case EthereumMethodType.MASK_LOGIN:
-                                    context.write(await this.Provider?.connect(options.chainId, options.providerType))
+                                    context.write(
+                                        await this.Provider?.connect(
+                                            options.chainId,
+                                            options.providerType,
+                                            options.account,
+                                        ),
+                                    )
                                     break
                                 case EthereumMethodType.MASK_LOGOUT:
                                     context.write(await this.Provider?.disconnect(options.providerType))
                                     break
+                                case EthereumMethodType.ETH_SUPPORTED_ENTRY_POINTS:
+                                case EthereumMethodType.SC_WALLET_DEPLOY:
+                                    break
                                 default: {
                                     const provider =
                                         Providers[
-                                            isReadOnlyMethod(context.method)
+                                            PayloadEditor.fromPayload(context.request).readonly
                                                 ? ProviderType.MaskWallet
                                                 : options.providerType
                                         ]
@@ -154,7 +133,7 @@ class Connection implements EVM_Connection {
                                         await this.Provider?.connect(options.chainId, options.providerType)
                                     }
 
-                                    const web3Provider = await provider.createWeb3Provider({
+                                    const web3Provider = provider.createWeb3Provider({
                                         account: options.account,
                                         chainId: options.chainId,
                                     })
@@ -197,19 +176,17 @@ class Connection implements EVM_Connection {
     }
 
     getWeb3(initial?: EVM_Web3ConnectionOptions) {
-        const web3 = createWeb3(
+        return createWeb3(
             createWeb3Provider((requestArguments: RequestArguments) =>
                 this.hijackedRequest(requestArguments, this.getOptions(initial)),
             ),
         )
-        return Promise.resolve(web3)
     }
 
     getWeb3Provider(initial?: EVM_Web3ConnectionOptions) {
-        const web3Provider = createWeb3Provider((requestArguments: RequestArguments) =>
+        return createWeb3Provider((requestArguments: RequestArguments) =>
             this.hijackedRequest(requestArguments, this.getOptions(initial)),
         )
-        return Promise.resolve(web3Provider)
     }
 
     async connect(initial?: EVM_Web3ConnectionOptions): Promise<Account<ChainId>> {
@@ -929,6 +906,17 @@ class Connection implements EVM_Connection {
         return Promise.all(transactions.map((x) => this.signTransaction(x, initial)))
     }
 
+    supportedChainIds(initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
+        const options = this.getOptions(initial)
+        return this.hijackedRequest<ChainId[]>(
+            {
+                method: EthereumMethodType.ETH_SUPPORTED_CHAIN_IDS,
+                params: [],
+            },
+            options,
+        )
+    }
+
     supportedEntryPoints(initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<string[]>(
@@ -941,46 +929,70 @@ class Connection implements EVM_Connection {
     }
 
     async callUserOperation(
+        owner: string,
         operation: UserOperation,
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ) {
         const options = this.getOptions(initial)
-        const entryPoint = first(await this.supportedEntryPoints(initial))
-        if (!isValidAddress(entryPoint)) throw new Error('No entry point.')
-
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_CALL_USER_OPERATION,
                 params: [
+                    owner,
                     {
                         ...operation,
                         sender: options.account,
                     },
                 ],
-                entryPoint,
             },
             options,
         )
     }
 
     async sendUserOperation(
+        owner: string,
         operation: UserOperation,
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ) {
         const options = this.getOptions(initial)
-        const entryPoint = first(await this.supportedEntryPoints(initial))
-        if (!isValidAddress(entryPoint)) throw new Error('No entry point.')
-
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_USER_OPERATION,
                 params: [
+                    owner,
                     {
                         ...operation,
-                        sender: options.account,
+                        sender: operation.sender || options.account,
                     },
                 ],
-                entryPoint,
+            },
+            options,
+        )
+    }
+
+    async transferContractWallet(
+        recipient: string,
+        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ) {
+        const options = this.getOptions(initial)
+        return this.hijackedRequest<string>(
+            {
+                method: EthereumMethodType.SC_WALLET_DEPLOY,
+                params: [recipient],
+            },
+            options,
+        )
+    }
+
+    async deployContractWallet(
+        owner: string,
+        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ) {
+        const options = this.getOptions(initial)
+        return this.hijackedRequest<string>(
+            {
+                method: EthereumMethodType.SC_WALLET_DEPLOY,
+                params: [owner],
             },
             options,
         )

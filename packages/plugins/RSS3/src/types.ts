@@ -1,4 +1,4 @@
-import type { RSS3BaseAPI } from '@masknet/web3-providers'
+import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 
 export enum PageTags {
     WalletTag = 'Wallets',

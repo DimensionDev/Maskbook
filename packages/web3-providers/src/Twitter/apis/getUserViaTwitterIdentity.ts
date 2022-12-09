@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import type { TwitterBaseAPI } from '../../types/index.js'
+import type { TwitterBaseAPI } from '../../entry-types.js'
 
 const TWITTER_IDENTITY_URL = 'https://mr8asf7i4h.execute-api.us-east-1.amazonaws.com/prod/twitter-identity'
 

@@ -84,7 +84,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             setIsOpenFromApplicationBoard(Boolean(options?.isOpenFromApplicationBoard))
             if (content) UI.current?.setMessage(content)
             if (options?.target) UI.current?.setEncryptionKind(options.target)
-            if (options?.startupPlugin) UI.current?.startPlugin(options.startupPlugin)
+            if (options?.startupPlugin) UI.current?.startPlugin(options.startupPlugin, options.startupPluginProps)
         })
     }, [type])
     useEffect(() => {

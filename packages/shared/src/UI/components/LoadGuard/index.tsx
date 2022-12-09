@@ -1,4 +1,4 @@
-import React, { memo, PropsWithChildren } from 'react'
+import { memo, PropsWithChildren } from 'react'
 import { RetryHint } from '../LoadRetry/index.js'
 import { Stack, Typography } from '@mui/material'
 import { LoadingBase } from '@masknet/theme'
@@ -17,11 +17,7 @@ export const LoadGuard = memo<LoadGuardProps>(({ loading, error, retry, children
         return (
             <Stack gap={0.5} height="100%" justifyContent="center" alignItems="center">
                 <LoadingBase />
-                <Typography
-                    fontSize={14}
-                    fontWeight={400}
-                    lineHeight="18px"
-                    color={(t) => t.palette.maskColor.publicMain}>
+                <Typography fontSize={14} fontWeight={400} lineHeight="18px" color={(t) => t.palette.maskColor.main}>
                     {t.loading()}
                 </Typography>
             </Stack>

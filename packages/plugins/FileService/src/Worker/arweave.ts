@@ -1,10 +1,11 @@
+import { isEmpty } from 'lodash-es'
+import Arweave from 'arweave/web'
 import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeText } from '@masknet/kit'
-import Arweave from 'arweave/web'
 import type Transaction from 'arweave/web/lib/transaction.js'
 import type { JWKInterface } from 'arweave/web/lib/wallet.js'
-import { isEmpty } from 'lodash-es'
-import { landing, mesonPrefix } from '../constants.js'
+import { fetchText } from '@masknet/web3-providers/helpers'
+import { LANDING_PAGE, MESON_PREFIX } from '../constants.js'
 import { sign } from './remote-signing.js'
 import TOKEN from './arweave-token.json'
 import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types.js'
@@ -42,7 +43,7 @@ class ArweaveAgent implements ProviderAgent {
         this.init()
         let linkPrefix = 'https://arweave.net'
         if (metadata.useCDN) {
-            linkPrefix = mesonPrefix
+            linkPrefix = MESON_PREFIX
         }
         const encodedMetadata = JSON.stringify({
             name: metadata.name,
@@ -52,8 +53,7 @@ class ArweaveAgent implements ProviderAgent {
             signed: await makeFileKeySigned(metadata.key),
             createdAt: new Date().toISOString(),
         })
-        const response = await fetch(landing)
-        const text = await response.text()
+        const text = await fetchText(LANDING_PAGE)
         const replaced = text.replace('__METADATA__', encodedMetadata)
         const data = encodeText(replaced)
         const transaction = await this.makePayload(data, 'text/html')
