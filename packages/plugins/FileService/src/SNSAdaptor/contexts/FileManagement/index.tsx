@@ -41,6 +41,18 @@ export const FileManagementContext = createContext<FileManagementContextOptions>
 
 FileManagementContext.displayName = 'FileManagementContext'
 
+function openCompositionWithFiles(files: FileInfo[]) {
+    CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
+        reason: 'timeline',
+        open: true,
+        options: {
+            initialMetas: {
+                [META_KEY_3]: files,
+            },
+        },
+    })
+}
+
 export const FileManagementProvider: FC<React.PropsWithChildren<{}>> = memo(({ children }) => {
     const { value: files = EMPTY_LIST, retry: refetchFiles } = useAsyncRetry(
         () => PluginFileServiceRPC.getAllFiles(),
@@ -135,15 +147,7 @@ export const FileManagementProvider: FC<React.PropsWithChildren<{}>> = memo(({ c
     )
     const attachToPost = useCallback(
         (fileInfo: FileInfo | FileInfo[]) => {
-            CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
-                reason: 'timeline',
-                open: true,
-                options: {
-                    initialMetas: {
-                        [META_KEY_3]: Array.isArray(fileInfo) ? fileInfo : [fileInfo],
-                    },
-                },
-            })
+            openCompositionWithFiles(Array.isArray(fileInfo) ? fileInfo : [fileInfo])
             closeApplicationBoardDialog()
             navigate(RoutePaths.Exit)
         },

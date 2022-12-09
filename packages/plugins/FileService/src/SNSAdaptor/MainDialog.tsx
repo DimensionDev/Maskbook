@@ -42,7 +42,6 @@ const FileServiceDialog: React.FC<FileServiceDialogProps> = ({ onClose, selectMo
     const { classes } = useStyles()
     const [confirmed] = useTermsConfirmed()
 
-    console.log('selectMode', selectMode)
     const initialEntries = useMemo(() => {
         const OpenEntry: InitialEntry = selectMode
             ? {
