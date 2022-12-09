@@ -118,7 +118,8 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             keepMounted
             open={open}
             onClose={onClose}
-            title={t('post_dialog__title')}>
+            title={t('post_dialog__title')}
+            independent>
             <DialogContent classes={{ root: classes.dialogContent }}>
                 <CompositionDialogUI
                     version={version}

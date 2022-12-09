@@ -15,6 +15,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         padding: theme.spacing(1.5),
+        overflow: 'auto',
     },
     content: {
         flexGrow: 1,
