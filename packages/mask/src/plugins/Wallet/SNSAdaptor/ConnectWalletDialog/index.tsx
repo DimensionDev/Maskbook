@@ -9,7 +9,6 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
 import { WalletMessages } from '../../messages.js'
 import { ConnectionProgress } from './ConnectionProgress.js'
-import { isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils/index.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 
@@ -61,18 +60,6 @@ export function ConnectWalletDialog() {
             providerType,
         })
         if (!connection) throw new Error('Failed to build connection.')
-        // Quit WalletConnect session, prevents it lasts too long.
-        if (providerType !== ProviderType.WalletConnect) {
-            try {
-                const walletConnectConnection = Connection.getConnection?.({
-                    providerType: ProviderType.WalletConnect,
-                })
-
-                if (isValidAddress(await walletConnectConnection?.getAccount())) {
-                    await walletConnectConnection?.disconnect()
-                }
-            } catch {}
-        }
 
         await connection.connect()
 
