@@ -42,9 +42,6 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
         super(ProviderType.WalletConnect)
     }
 
-    get connected() {
-        return this.connector.connected
-    }
     /**
      * The ongoing walletconnect connection which the listeners use to resolve later.
      */
@@ -225,7 +222,6 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
     }
 
     override async disconnect() {
-        if (!this.connector.connected) return
         await this.logout()
     }
 }
