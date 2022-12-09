@@ -45,7 +45,7 @@ export default function PopupsConnect() {
                     <PersonaContext.Provider>
                         <PageTitleContext.Provider value={{ title, setTitle }}>
                             <HashRouter>
-                                <NormalHeader onClose={Services.Helper.removePopupWindow} />
+                                <NormalHeader onClose={() => Services.Helper.removePopupWindow()} />
                                 <Routes>
                                     <Route path={PopupRoutes.ConnectWallet} element={frame(<ConnectWallet />)} />
                                     <Route path={PopupRoutes.VerifyWallet} element={frame(<VerifyWallet />)} />

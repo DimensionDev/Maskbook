@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionButton, makeStyles, MaskColorVar } from '@masknet/theme'
-import { formatGweiToEther, formatGweiToWei, formatWeiToEther, useTokenConstants } from '@masknet/web3-shared-evm'
+import { formatGweiToWei, formatWeiToEther, formatWeiToGwei, useTokenConstants } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { isEmpty, noop } from 'lodash-es'
@@ -13,6 +13,7 @@ import { useI18N } from '../../../../utils/index.js'
 import type { GasSettingProps } from './types.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
+    formatCurrency,
     GasOptionType,
     isGreaterThan,
     isGreaterThanOrEqualTo,
@@ -20,7 +21,6 @@ import {
     isLessThanOrEqualTo,
     isPositive,
     multipliedBy,
-    toFixed,
 } from '@masknet/web3-shared-base'
 import { useChainContext, useFungibleTokenPrice, useGasOptions } from '@masknet/web3-hooks-base'
 
@@ -262,22 +262,30 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                             className={selectedGasOption === gasOption ? classes.selected : undefined}>
                             <Typography className={classes.optionsTitle}>{title}</Typography>
                             <Typography component="div">
-                                {toFixed(content?.suggestedMaxFeePerGas, 2)}
+                                {formatWeiToGwei(content?.suggestedMaxFeePerGas ?? 0).toFixed(2)}
                                 <Typography variant="inherit">Gwei</Typography>
                             </Typography>
                             <Typography className={classes.gasUSD}>
                                 {t('popups_wallet_gas_fee_settings_usd', {
-                                    usd: formatGweiToEther(content?.suggestedMaxFeePerGas ?? 0)
-                                        .times(nativeTokenPrice)
-                                        .times(21000)
-                                        .toFixed(2),
+                                    usd: formatCurrency(
+                                        formatWeiToEther(content?.suggestedMaxFeePerGas ?? 0)
+                                            .times(nativeTokenPrice)
+                                            .times(gasLimit ?? 21000),
+                                        'USD',
+                                        { boundaries: { min: 0.01 } },
+                                    ),
                                 })}
                             </Typography>
                         </div>
                     ))}
                 </div>
                 <form onSubmit={onSubmit}>
-                    <Typography className={classes.label}>{t('popups_wallet_gas_fee_settings_gas_limit')}</Typography>
+                    <Typography className={classes.label}>
+                        {t('popups_wallet_gas_fee_settings_gas_limit')}
+                        <Typography component="span" className={classes.price}>
+                            {gasLimit?.toString()}
+                        </Typography>
+                    </Typography>
                     <Controller
                         control={control}
                         render={({ field }) => {
