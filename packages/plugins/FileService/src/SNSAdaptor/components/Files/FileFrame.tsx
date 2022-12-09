@@ -1,7 +1,7 @@
-import { FC, HTMLProps, memo, PropsWithChildren, ReactNode } from 'react'
+import { FC, HTMLProps, memo, PropsWithChildren, ReactNode, useLayoutEffect, useRef, useState } from 'react'
 import { Icons } from '@masknet/icons'
 import { Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip, useBoundary } from '@masknet/theme'
 import type { FileInfo } from '../../../types.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -50,13 +50,43 @@ export const FileFrame: FC<PropsWithChildren<FileFrameProps>> = memo(function Fi
 }) {
     const { classes, cx } = useStyles()
 
+    const rootRef = useRef<HTMLDivElement>(null)
+
+    const nameRef = useRef<HTMLDivElement>(null)
+    const [showTooltip, setShowTooltip] = useState(false)
+    useLayoutEffect(() => {
+        if (nameRef.current) {
+            setShowTooltip(nameRef.current.offsetWidth !== nameRef.current.scrollWidth)
+        }
+    }, [nameRef.current])
+
+    const { boundaryRef } = useBoundary()
+
     return (
-        <div className={cx(className, classes.file)} {...rest}>
+        <div className={cx(className, classes.file)} {...rest} ref={rootRef}>
             <Icons.Message size={24} />
             <div className={classes.content}>
-                <Typography className={classes.name} title={file.name}>
-                    {file.name}
-                </Typography>
+                <ShadowRootTooltip
+                    title={showTooltip ? file.name : undefined}
+                    disableInteractive
+                    arrow
+                    PopperProps={{
+                        disablePortal: true,
+                        placement: 'top',
+                        modifiers: [
+                            {
+                                name: 'flip',
+                                options: {
+                                    rootBoundary: boundaryRef.current,
+                                    boundary: boundaryRef.current,
+                                },
+                            },
+                        ],
+                    }}>
+                    <Typography className={classes.name} ref={nameRef}>
+                        {file.name}
+                    </Typography>
+                </ShadowRootTooltip>
                 {children}
             </div>
             {operations}
