@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { DataProvider } from '@masknet/public-api'
-import { TrendingAPI } from '@masknet/web3-providers'
+import { TrendingAPI } from '@masknet/web3-providers/types'
 import { PluginTraderMessages } from '../messages.js'
 import { IconButton, IconButtonProps } from '@mui/material'
 import { FC, useEffect, useRef } from 'react'
