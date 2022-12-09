@@ -104,7 +104,7 @@ export class ConnectionState<
 
     getWeb3(options?: Web3ConnectionOptions) {
         const connection = this.getConnection(options)
-        return connection.getWeb3(options)
+        return connection?.getWeb3(options)
     }
 
     getWeb3Provider(options?: Web3ConnectionOptions) {

@@ -63,13 +63,15 @@ export function ConnectWalletDialog() {
         if (!connection) throw new Error('Failed to build connection.')
         // Quit WalletConnect session, prevents it lasts too long.
         if (providerType !== ProviderType.WalletConnect) {
-            const walletConnectConnection = Connection.getConnection?.({
-                providerType: ProviderType.WalletConnect,
-            })
+            try {
+                const walletConnectConnection = Connection.getConnection?.({
+                    providerType: ProviderType.WalletConnect,
+                })
 
-            if (isValidAddress(await walletConnectConnection?.getAccount())) {
-                await walletConnectConnection?.disconnect()
-            }
+                if (isValidAddress(await walletConnectConnection?.getAccount())) {
+                    await walletConnectConnection?.disconnect()
+                }
+            } catch {}
         }
 
         await connection.connect()
