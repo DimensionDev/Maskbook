@@ -1,6 +1,5 @@
-import { useCallback, useMemo, useState } from 'react'
+import { cache, use, useCallback, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import Fuse from 'fuse.js'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Avatar, Box, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
 import { SchemaType, explorerResolver, ChainId } from '@masknet/web3-shared-evm'
@@ -94,9 +93,21 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface SelectNftContractDialogProps {}
+const fuse = cache(async function (contractList: Array<NonFungibleTokenContract<ChainId, SchemaType>>) {
+    const { default: Fuse } = await import('fuse.js')
+    return new Fuse(contractList, {
+        shouldSort: true,
+        threshold: 0.45,
+        minMatchCharLength: 3,
+        keys: [
+            { name: 'name', weight: 0.5 },
+            { name: 'symbol', weight: 0.8 },
+            { name: 'address', weight: 1 },
+        ],
+    })
+})
 
-export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
+export function SelectNftContractDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -151,22 +162,8 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
         )
 
     // #region fuse
-    const fuse = useMemo(
-        () =>
-            new Fuse(contractList, {
-                shouldSort: true,
-                threshold: 0.45,
-                minMatchCharLength: 3,
-                keys: [
-                    { name: 'name', weight: 0.5 },
-                    { name: 'symbol', weight: 0.8 },
-                    { name: 'address', weight: 1 },
-                ],
-            }),
-        [contractList],
-    )
-
-    const searchedTokenList = fuse.search(keyword).map((x) => x.item)
+    const fuseInstance = use(fuse(contractList))
+    const searchedTokenList = fuseInstance.search(keyword).map((x) => x.item)
     // #endregion
 
     return (

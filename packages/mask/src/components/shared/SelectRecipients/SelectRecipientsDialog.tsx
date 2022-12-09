@@ -1,5 +1,4 @@
-import { startTransition, useDeferredValue, useEffect, useMemo, useState } from 'react'
-import Fuse from 'fuse.js'
+import { cache, startTransition, use, useDeferredValue, useEffect, useMemo, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
@@ -87,6 +86,23 @@ export interface SelectRecipientsDialogUIProps {
     onDeselect: (item: Profile) => void
     onSearch(v: string): void
 }
+
+const fuse = cache(async function (items: Profile[]) {
+    const { default: Fuse } = await import('fuse.js')
+    return new Fuse(items, {
+        keys: [
+            'identifier.userId',
+            'nickname',
+            'walletAddress',
+            'linkedPersona.rawPublicKey',
+            'linkedPersona.publicKeyAsHex',
+            'linkedTwitterNames',
+        ],
+        isCaseSensitive: false,
+        ignoreLocation: true,
+        threshold: 0,
+    })
+})
 export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const { t } = useI18N()
     const { classes, cx } = useStyles()
@@ -103,22 +119,14 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
         setSearch('')
         onSearch('')
     }, [props.open])
-    const searchedItems = useMemo(() => {
-        const fuse = new Fuse(items, {
-            keys: [
-                'identifier.userId',
-                'nickname',
-                'walletAddress',
-                'linkedPersona.rawPublicKey',
-                'linkedPersona.publicKeyAsHex',
-                'linkedTwitterNames',
-            ],
-            isCaseSensitive: false,
-            ignoreLocation: true,
-            threshold: 0,
-        })
-        return search === '' ? items : fuse.search(search).map((item) => item.item)
-    }, [search, items])
+
+    const fuseInstance = use(fuse(items))
+    let searchedItems = useMemo(() => {
+        const fuse = fuseInstance
+        return search === '' ? [] : fuse.search(search).map((item) => item.item)
+    }, [search, fuseInstance])
+    if (search === '') searchedItems = items
+
     return (
         <InjectedDialog
             className={classes.root}

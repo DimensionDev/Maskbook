@@ -1,6 +1,6 @@
-import { ReactNode, useCallback, useMemo, useState } from 'react'
+import { ReactNode, useCallback, useMemo, useState, use, cache } from 'react'
+import type {} from 'react/next'
 import { FixedSizeList, FixedSizeListProps, ListChildComponentProps } from 'react-window'
-import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-es'
 import { Box, Stack } from '@mui/material'
 import { makeStyles } from '../../UIHelper/index.js'
@@ -30,6 +30,17 @@ export interface MaskSearchableListProps<T> extends withClasses<'listBox'> {
     /** Show search bar */
     disableSearch?: boolean
 }
+
+const fuse = cache(async function <T extends object>(searchKey: string[] | undefined, data: T[]) {
+    const { default: Fuse } = await import('fuse.js')
+    return new Fuse(data, {
+        shouldSort: true,
+        isCaseSensitive: false,
+        threshold: 0.45,
+        minMatchCharLength: 1,
+        keys: searchKey ?? Object.keys(data.length > 0 ? data[0] : []),
+    })
+})
 
 /**
  * This component is used to provide a searchable list in Mask design.
@@ -66,26 +77,14 @@ export function SearchableList<T extends {}>({
     const { height = 300, itemSize, ...rest } = FixedSizeListProps
     const { InputProps, ...textFieldPropsRest } = SearchFieldProps ?? {}
 
-    // #region fuse
-    const fuse = useMemo(
-        () =>
-            new Fuse(data, {
-                shouldSort: true,
-                isCaseSensitive: false,
-                threshold: 0.45,
-                minMatchCharLength: 1,
-                keys: searchKey ?? Object.keys(data.length > 0 ? data[0] : []),
-            }),
-        [data, searchKey],
-    )
-    // #endregion
+    const fuseInstance = use(fuse(searchKey, data))
 
     // #region create searched data
     const readyToRenderData = useMemo(() => {
         if (!keyword) return data
-        const filtered = fuse.search(keyword).map((x: any) => x.item)
+        const filtered = fuseInstance.search(keyword).map((x: any) => x.item)
         return itemKey ? uniqBy(filtered, (x) => x[itemKey]) : filtered
-    }, [keyword, fuse, JSON.stringify(data)])
+    }, [keyword, fuseInstance, JSON.stringify(data)])
     // #endregion
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
