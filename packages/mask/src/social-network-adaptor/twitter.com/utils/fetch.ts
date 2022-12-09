@@ -39,7 +39,7 @@ export const postNameParser = (node: HTMLElement) => {
         tweetElement.querySelector<HTMLElement>('[data-testid="User-Names"] a[tabindex="-1"] span'),
     )
 
-    // post matched
+    // post matched, return the result
     if (name || handle) {
         return {
             name: name || '',
