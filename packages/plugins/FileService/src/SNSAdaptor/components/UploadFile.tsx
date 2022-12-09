@@ -36,6 +36,7 @@ const useStyles = makeStyles()((theme) => ({
         marginRight: theme.spacing(1),
     },
     checked: {
+        color: theme.palette.maskColor.primary,
         boxShadow: '0px 4px 10px rgba(28, 104, 243, 0.2)',
     },
     label: {
@@ -69,7 +70,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export const UploadFile: React.FC = () => {
     const t = useI18N()
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
     const [encrypted, setEncrypted] = useState(true)
     const [useCDN, setUseCDN] = useState(false)
     const [provider, setProvider] = useState<Provider>(Provider.Arweave)
@@ -106,7 +107,7 @@ export const UploadFile: React.FC = () => {
                         color="primary"
                         checked={useCDN}
                         icon={<Icons.CheckboxBlank size={18} />}
-                        checkedIcon={<Icons.Checkbox size={18} />}
+                        checkedIcon={<Icons.Checkbox color={theme.palette.maskColor.primary} size={18} />}
                         onChange={(event) => setUseCDN(event.target.checked)}
                     />
                 }
@@ -146,7 +147,7 @@ export const UploadFile: React.FC = () => {
                             color="primary"
                             checked={encrypted}
                             icon={<Icons.CheckboxBlank size={18} />}
-                            checkedIcon={<Icons.Checkbox size={18} />}
+                            checkedIcon={<Icons.Checkbox color={theme.palette.maskColor.primary} size={18} />}
                             onChange={(event) => setEncrypted(event.target.checked)}
                         />
                     }

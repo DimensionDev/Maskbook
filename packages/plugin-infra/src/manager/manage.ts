@@ -97,7 +97,7 @@ export function createManager<
 
         async function checkRequirementAndStartOrStop() {
             for (const [id] of registeredPlugins.getCurrentValue()) {
-                if (await meetRequirement(id)) activatePlugin(id).catch(console.error)
+                if (await meetRequirement(id)) await activatePlugin(id).catch(console.error)
                 else stopPlugin(id)
             }
         }

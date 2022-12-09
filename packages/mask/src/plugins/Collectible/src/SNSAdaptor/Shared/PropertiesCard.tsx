@@ -2,7 +2,8 @@ import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Typography } from '@mui/material'
 import format from 'date-fns/format'
-import isDate from 'date-fns/isDate'
+import isAfter from 'date-fns/isAfter'
+import isValid from 'date-fns/isValid'
 import { useI18N } from '../../../../../utils/index.js'
 import { Rank } from './Rank.js'
 
@@ -74,6 +75,13 @@ export interface PropertiesCardProps {
     timeline?: boolean
 }
 
+function isReasonableDate(value: string | number) {
+    const date = new Date(value)
+    if (!isValid(date)) return false
+    // 2015.7.30, Ethereum's birthday
+    return isAfter(date, new Date(2015, 7, 30))
+}
+
 export function PropertiesCard(props: PropertiesCardProps) {
     const { asset, rank, timeline } = props
     const { classes, cx } = useStyles()
@@ -99,7 +107,7 @@ export function PropertiesCard(props: PropertiesCardProps) {
                         <div key={x.type} className={classes.traitsItem}>
                             <Typography className={classes.traitTitle}>{x.type}</Typography>
                             <Typography className={classes.traitValue} title={x.value}>
-                                {isDate(x.value) ? format(new Date(x.value), 'yyyy-MM-DD') : x.value}
+                                {isReasonableDate(x.value) ? format(new Date(x.value), 'yyyy-MM-dd') : x.value}
                             </Typography>
                             {typeof x.rarity === 'string' ? (
                                 <Typography className={classes.traitRarity}>({x.rarity})</Typography>
