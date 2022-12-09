@@ -1,5 +1,6 @@
 export * from './ActionButton/index.js'
 export * from './Alert/index.js'
+export * from './Boundary/index.js'
 export * from './ButtonGroupTab/index.js'
 export * from './CountdownButton/index.js'
 export * from './Dialogs/index.js'
