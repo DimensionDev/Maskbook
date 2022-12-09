@@ -33,34 +33,31 @@ export const postIdParser = (node: HTMLElement) => {
 
 export const postNameParser = (node: HTMLElement) => {
     const tweetElement = node.querySelector<HTMLElement>('[data-testid="tweet"]') ?? node
-    const name = collectNodeText(tweetElement.querySelector<HTMLElement>('[data-testid="User-Names"] a span'))
+    const name = collectNodeText(tweetElement.querySelector<HTMLElement>('[data-testid="User-Names"] a div div > span'))
     // Note: quoted tweet has no [data-testid="User-Names"]
     const handle = collectNodeText(
         tweetElement.querySelector<HTMLElement>('[data-testid="User-Names"] a[tabindex="-1"] span'),
     )
 
-    if (name && handle) {
+    // post matched, return the result
+    if (name || handle) {
         return {
-            name,
-            handle: handle.slice(1),
+            name: name || '',
+            handle: handle ? handle.slice(1) : '',
         }
     }
     const quotedTweetName = collectNodeText(
-        tweetElement.querySelector<HTMLElement>('div[role="link"] div[dir="auto"] > span'),
+        tweetElement.querySelector<HTMLElement>(
+            'div[role="link"] div[data-testid="UserAvatar-Container-unknown"] + div > span',
+        ),
     )
     const quotedTweetHandle = collectNodeText(
-        tweetElement.querySelector<HTMLElement>('div[role="link"] div[dir="ltr"] > span'),
+        tweetElement.querySelector<HTMLElement>('div[role="link"] div[tabindex="-1"] div div > span'),
     )
-
-    if (quotedTweetName && quotedTweetHandle) {
-        return {
-            name: quotedTweetName,
-            handle: quotedTweetHandle.slice(1),
-        }
-    }
+    // quoted post matched
     return {
-        name: '',
-        handle: '',
+        name: quotedTweetName || '',
+        handle: quotedTweetHandle ? quotedTweetHandle.slice(1) : '',
     }
 }
 
