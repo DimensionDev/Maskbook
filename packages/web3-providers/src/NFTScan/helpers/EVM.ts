@@ -17,7 +17,14 @@ import {
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, createContract, getRPCConstants, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
-import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL, NFTSCAN_API, NFTSCAN_RESTFUL_API } from '../constants.js'
+import {
+    NFTSCAN_BASE,
+    NFTSCAN_LOGO_BASE,
+    NFTSCAN_URL,
+    NFTSCAN_API,
+    NFTSCAN_RESTFUL_API,
+    NFTSCAN_API_KEY,
+} from '../constants.js'
 import type { EVM } from '../types/EVM.js'
 import type { NonFungibleTokenAPI } from '../../entry-types.js'
 import { getAssetFullName } from '../../helpers/getAssetFullName.js'
@@ -55,18 +62,35 @@ export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, 
     return json as T
 }
 
-export async function fetchFromNFTScanRestFulAPI<T>(pathname: string, body: string, init?: RequestInit) {
+export async function postNFTScanRestFulAPI<T>(pathname: string, body: string, init?: RequestInit) {
     const response = await fetch(urlcat(NFTSCAN_RESTFUL_API, pathname), {
         ...init,
         method: 'POST',
         headers: {
             'content-type': 'application/json',
             ...init?.headers,
-            'x-api-key': 'YQ3S6KXZ',
+            'x-api-key': NFTSCAN_API_KEY,
         },
         cache: 'no-cache',
         body,
     })
+
+    const json = await response.json()
+    return json as T
+}
+
+export async function fetchFromNFTScanRestFulAPI<T>(pathname: string, init?: RequestInit) {
+    const response = await fetch(urlcat(NFTSCAN_RESTFUL_API, pathname), {
+        ...init,
+        method: 'GET',
+        headers: {
+            'content-type': 'application/json',
+            ...init?.headers,
+            'x-api-key': NFTSCAN_API_KEY,
+        },
+        cache: 'no-cache',
+    })
+
     const json = await response.json()
     return json as T
 }

@@ -138,53 +138,53 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
                         {t('plugin_trader_total_assets')}
                     </Typography>
-                    {formatSupply(overview?.items, '--')}
+                    {formatSupply(overview?.items_total, '--')}
                 </Grid>
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
                         {t('plugin_trader_owners_count')}
                     </Typography>
-                    {formatInteger(overview?.owners, '--')}
+                    {formatInteger(overview?.owners_total, '--')}
                 </Grid>
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
                         {t('plugin_trader_market_cap')}
                     </Typography>
-                    {formatInteger(overview?.marketCap, '--')}
+                    {formatInteger(overview?.market_cap, '--')}
                 </Grid>
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
                         {t('plugin_trader_highest_price')}
                     </Typography>
-                    {overview?.highestPrice ?? '--'}
+                    {overview?.highest_price ?? '--'}
                 </Grid>
 
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
                         {t('plugin_trader_total_volume')}
                     </Typography>
-                    {overview?.volume ?? '--'}
+                    {overview?.total_volume ?? '--'}
                 </Grid>
 
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
                         {t('plugin_trader_one_day_average_price')}
                     </Typography>
-                    {overview?.averagePrice24h ?? '--'}
+                    {overview?.average_price_24h ?? '--'}
                 </Grid>
 
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
                         {t('plugin_trader_one_day_traded_volume')}
                     </Typography>
-                    {overview?.volume24h ?? '--'}
+                    {overview?.volume_24h ?? '--'}
                 </Grid>
 
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
                         {t('plugin_trader_one_day_sale')}
                     </Typography>
-                    {overview?.sales24h ?? '--'}
+                    {overview?.sales_24h ?? '--'}
                 </Grid>
             </Grid>
         </Stack>

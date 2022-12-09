@@ -418,20 +418,14 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
 }
 
 export interface NonFungibleCollectionOverview {
-    floorPrice?: number
-    marketCap?: number
-    highestPrice?: number
-    volume24h?: number
-    averagePrice24h?: number
-    sales24h?: number
-    owners?: number
-    sales?: number
-    volume?:number
-    volumeIncrease24h?: string
-    sales24hLast?: number
-    sales24hIncrease?: string
-    averagePriceIncrease24h?: string
-    items?: number
+    market_cap?: number
+    highest_price?: number
+    volume_24h?: number
+    average_price_24h?: number
+    sales_24h?: number
+    owners_total?: number
+    total_volume?:number
+    items_total?: number
 }
 
 export interface NonFungibleTokenActivity {
