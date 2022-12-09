@@ -47,6 +47,8 @@
     "delete_message": "crwdns19171:0{{ name }}crwdne19171:0",
     "delete_description": "crwdns19173:0crwdne19173:0",
     "file_key": "crwdns10713:0{{key}}crwdne10713:0",
+    "upload_file_title$failed": "crwdns19311:0crwdne19311:0",
+    "upload_file_message$failed": "crwdns19313:0crwdne19313:0",
     "save_file_title$success": "crwdns19175:0crwdne19175:0",
     "save_file_title$failed": "crwdns19177:0crwdne19177:0",
     "save_file_message$success": "crwdns19179:0{{name}}crwdne19179:0",
