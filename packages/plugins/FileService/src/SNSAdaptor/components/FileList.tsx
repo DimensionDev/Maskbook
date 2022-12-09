@@ -173,7 +173,7 @@ export const SelectableFileList: FC<SelectableFileListProps> = ({
     return (
         <section className={cx(classes.container, className)} {...rest}>
             <Boundary boundaryRef={boundaryRef}>
-                <List className={classes.list} classes={{ root: classes.listRoot }}>
+                <List className={classes.list} classes={{ root: classes.listRoot }} ref={boundaryRef}>
                     {files.map((file) => (
                         <ListItem
                             key={file.id}
@@ -210,7 +210,7 @@ export const DisplayingFileList: FC<DisplayingFileFileListProps> = ({
     return (
         <section className={cx(classes.container, className)} {...rest}>
             <Boundary boundaryRef={boundaryRef}>
-                <List className={classes.list} classes={{ root: classes.listRoot }}>
+                <List className={classes.list} classes={{ root: classes.listRoot }} ref={boundaryRef}>
                     {files.map((file) => (
                         <ListItem key={file.id} className={classes.listItem} classes={{ root: classes.itemRoot }}>
                             <DisplayingFile
