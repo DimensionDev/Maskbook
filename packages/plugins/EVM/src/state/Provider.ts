@@ -1,6 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ProviderState } from '@masknet/web3-state'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { mapSubscription, mergeSubscription } from '@masknet/shared-base'
+import { Account, isSameAddress } from '@masknet/web3-shared-base'
 import {
     ChainId,
     isValidAddress,
@@ -16,7 +17,6 @@ import {
     getDefaultProviderType,
 } from '@masknet/web3-shared-evm'
 import { Providers } from './Connection/provider.js'
-import { mapSubscription, mergeSubscription } from '@masknet/shared-base'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
     constructor(context: Plugin.Shared.SharedUIContext) {
@@ -52,5 +52,22 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
                 return this.options.getNetworkTypeFromChainId(account.chainId)
             },
         )
+    }
+
+    override async connect(
+        chainId: ChainId,
+        providerType: ProviderType,
+        address?: string | undefined,
+    ): Promise<Account<ChainId>> {
+        // Disconnect WalletConnect, prevents its session lasting too long.
+        if (this.providers[ProviderType.WalletConnect].connected) {
+            try {
+                await super.disconnect(ProviderType.WalletConnect)
+            } catch {
+                // do nothing
+            }
+        }
+
+        return super.connect(chainId, providerType, address)
     }
 }

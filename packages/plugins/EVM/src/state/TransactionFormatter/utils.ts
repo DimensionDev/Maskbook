@@ -23,11 +23,11 @@ export class DescriptorWithTransactionDecodedReceipt {
         abi: AbiItem[] | undefined,
         hash: string | undefined,
     ) {
-        const connection = await Web3StateSettings.value.Connection?.getConnection?.({
+        const connection = Web3StateSettings.value.Connection?.getConnection?.({
             chainId,
         })
 
-        const web3 = await Web3StateSettings.value.Connection?.getWeb3?.({
+        const web3 = Web3StateSettings.value.Connection?.getWeb3?.({
             chainId,
         })
 

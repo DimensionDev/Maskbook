@@ -55,7 +55,7 @@ export function ConnectWalletDialog() {
         const chainId = Others?.networkResolver.networkChainId(networkType)
         if (!chainId) throw new Error('Failed to connect to provider.')
 
-        const connection = await Connection.getConnection?.({
+        const connection = Connection.getConnection?.({
             chainId,
             providerType,
         })
