@@ -47,6 +47,8 @@
     "delete_message": "Do you want to delete file <file>{{ name }}</file>",
     "delete_description": "Users can only delete local links of these files. Files on the decentralized storage protocols cannot be deleted.",
     "file_key": "File Key: <key>{{key}}</key>",
+    "upload_file_title$failed": "Failed to upload file",
+    "upload_file_message$failed": "Exceeded the maximum file size of 10MB.",
     "save_file_title$success": "File saved successfully",
     "save_file_title$failed": "Failed to save file",
     "save_file_message$success": "You’ve saved {{name}} to Web3 file service.",
