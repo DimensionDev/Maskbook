@@ -1,7 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { formatWeiToEther, formatWeiToGwei, ChainIdOptionalRecord, ChainId } from '@masknet/web3-shared-evm'
+import {
+    formatWeiToEther,
+    formatWeiToGwei,
+    ChainIdOptionalRecord,
+    ChainId,
+    formatGweiToEther,
+} from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { LoadingButton } from '@mui/lab'
 import { BigNumber } from 'bignumber.js'
 import { isEmpty, noop } from 'lodash-es'
 import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
@@ -15,7 +20,7 @@ import type { GasSettingProps } from './types.js'
 import { GasOptionType, pow10 } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useGasOptions, useNativeTokenPrice } from '@masknet/web3-hooks-base'
-import { makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles, MaskColorVar } from '@masknet/theme'
 
 const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
     [ChainId.BSC]: pow10(9).multipliedBy(5),
@@ -71,6 +76,11 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 10,
         padding: '9px 10px',
         borderRadius: 20,
+    },
+    price: {
+        fontSize: 12,
+        lineHeight: '16px',
+        color: MaskColorVar.normalText,
     },
 }))
 
@@ -141,7 +151,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
             },
         })
 
-        const [inputGasLimit] = watch(['gasLimit'])
+        const [inputGasLimit, gasPrice] = watch(['gasLimit', 'gasPrice'])
 
         useUpdateEffect(() => {
             if (gasLimit) setValue('gasLimit', new BigNumber(gasLimit).toString())
@@ -191,7 +201,12 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                     </div>
                 ) : null}
                 <form onSubmit={onSubmit}>
-                    <Typography className={classes.label}>{t('popups_wallet_gas_fee_settings_gas_limit')}</Typography>
+                    <Typography className={classes.label}>
+                        {t('popups_wallet_gas_fee_settings_gas_limit')}
+                        <Typography component="span" className={classes.price}>
+                            {gasLimit?.toString()}
+                        </Typography>
+                    </Typography>
                     <Controller
                         control={control}
                         render={({ field }) => {
@@ -213,7 +228,17 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                         }}
                         name="gasLimit"
                     />
-                    <Typography className={classes.label}>{t('popups_wallet_gas_price')}</Typography>
+                    <Typography className={classes.label}>
+                        {t('popups_wallet_gas_price')}
+                        <Typography component="span" className={classes.price}>
+                            {t('popups_wallet_gas_fee_settings_usd', {
+                                usd: formatGweiToEther(gasPrice ?? 0)
+                                    .times(nativeTokenPrice)
+                                    .times(inputGasLimit || 1)
+                                    .toFixed(2),
+                            })}
+                        </Typography>
+                    </Typography>
                     <Controller
                         control={control}
                         render={({ field }) => {
@@ -236,14 +261,14 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                         name="gasPrice"
                     />
                 </form>
-                <LoadingButton
+                <ActionButton
                     loading={getGasOptionsLoading}
                     fullWidth
                     className={classes.button}
                     disabled={!isEmpty(errors)}
                     onClick={onSubmit}>
                     {t('confirm')}
-                </LoadingButton>
+                </ActionButton>
             </>
         )
     },
