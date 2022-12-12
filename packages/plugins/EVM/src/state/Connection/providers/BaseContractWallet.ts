@@ -46,7 +46,7 @@ export class BaseContractWalletProvider extends BaseHostedProvider implements EV
 
         // ensure account switching is successful
         if (isSameAddress(this.account, account)) {
-            this.ownerStorage.setValue({
+            await this.ownerStorage.setValue({
                 account: owner,
                 identifier,
             })

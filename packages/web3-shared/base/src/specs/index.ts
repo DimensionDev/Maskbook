@@ -865,8 +865,6 @@ export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
     chainId?: ChainId
     /** Designate the provider to handle the transaction. */
     providerType?: ProviderType
-    /** Persona identity */
-    identifier?: PersonaIdentifier
     /** Fragments to merge into the transaction. */
     overrides?: Partial<Transaction>
 }

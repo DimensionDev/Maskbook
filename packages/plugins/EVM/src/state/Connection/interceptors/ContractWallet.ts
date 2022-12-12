@@ -81,19 +81,12 @@ export class ContractWallet implements Middleware<Context> {
     }
 
     private getOwner(context: Context) {
-        if (context.owner && context.identifier) {
-            return {
-                owner: context.owner,
-                identifier: context.identifier,
-            }
-        }
-
         const provider = this.createProvider(context)
         if (!provider) throw new Error('Invalid provider')
 
         return {
-            owner: context.owner ?? provider.owner,
-            identifier: context.identifier ?? provider.identifier,
+            owner: provider.owner,
+            identifier: provider.identifier,
         }
     }
 
