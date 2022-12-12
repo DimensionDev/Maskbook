@@ -10,7 +10,6 @@ import type {
     NextIDPlatform,
     NameServiceID,
     NetworkPluginID,
-    PersonaIdentifier,
 } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
