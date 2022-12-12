@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js'
 import Web3 from 'web3'
 import * as ABICoder from 'web3-eth-abi'
-import { AbiItem, bytesToHex, hexToBytes, keccak256, toHex, toNumber } from 'web3-utils'
+import { AbiItem, bytesToHex, hexToBytes, keccak256, padLeft, toHex, toNumber } from 'web3-utils'
 import { toFixed } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import EntryPointABI from '@masknet/web3-contracts/abis/EntryPoint.json'
@@ -157,11 +157,11 @@ export class UserTransaction {
                     .getSenderAddress(initCode, nonce)
                     .call()
             }
-            if (isZeroString(verificationGas)) {
-                this.userOperation.verificationGas = toFixed(
-                    new BigNumber(DEFAULT_USER_OPERATION.verificationGas).plus(32000 + (200 * initCode.length) / 2),
-                )
-            }
+
+            // add more verification gas
+            this.userOperation.verificationGas = toFixed(
+                new BigNumber(DEFAULT_USER_OPERATION.verificationGas).plus(32000 + (200 * initCode.length) / 2),
+            )
         }
 
         if (typeof this.userOperation.nonce === 'undefined') {
@@ -200,11 +200,14 @@ export class UserTransaction {
             )
         }
         if (!paymaster || isZeroAddress(paymaster)) {
-            const { PAYMASTER_CONTRACT_ADDRESS } = getSmartPayConstants(this.chainId)
+            const { PAYMASTER_CONTRACT_ADDRESS, PAYMENT_TOKEN_ADDRESS } = getSmartPayConstants(this.chainId)
             if (!PAYMASTER_CONTRACT_ADDRESS) throw new Error('No paymaster address.')
+            if (!PAYMENT_TOKEN_ADDRESS) throw new Error('No payment token address.')
 
             this.userOperation.paymaster = PAYMASTER_CONTRACT_ADDRESS
+            this.userOperation.paymasterData = padLeft(PAYMENT_TOKEN_ADDRESS, 32)
         }
+
         return this
     }
 
