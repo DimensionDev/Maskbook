@@ -27,7 +27,8 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
             theme.components.MuiTypography = {
                 styleOverrides: {
                     root: {
-                        fontFamily: 'TwitterChirp',
+                        fontFamily:
+                            'TwitterChirp, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
                     },
                 },
             }
