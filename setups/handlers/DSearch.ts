@@ -1,6 +1,6 @@
 import { rest } from 'msw'
 
-const baseURL = 'https://raw.githubusercontent.com/DimensionDev/Mask-Search-List/master/'
+const baseURL = 'https://raw.githubusercontent.com/DimensionDev/Mask-Search-List/master'
 
 /* cspell:disable */
 export const DSearchHandlers = [
@@ -72,15 +72,17 @@ export const DSearchHandlers = [
                     tokensTotal: 9909,
                     verified: false,
                     source: 'NFTScan',
-                    socialLinks: {
-                        website: 'http://mathcastles.xyz',
-                        email: null,
-                        twitter: 'mathcastles',
-                        discord: 'https://discord.gg/mathcastles',
-                        telegram: null,
-                        github: null,
-                        instagram: null,
-                        medium: null,
+                    collection: {
+                        socialLinks: {
+                            website: 'http://mathcastles.xyz',
+                            email: null,
+                            twitter: 'mathcastles',
+                            discord: 'https://discord.gg/mathcastles',
+                            telegram: null,
+                            github: null,
+                            instagram: null,
+                            medium: null,
+                        },
                     },
                     type: 'NonFungibleCollection',
                 },
@@ -93,15 +95,17 @@ export const DSearchHandlers = [
                     tokensTotal: 20000,
                     verified: false,
                     source: 'NFTScan',
-                    socialLinks: {
-                        website: null,
-                        email: 'meebits@larvalabs.com',
-                        twitter: null,
-                        discord: 'https://discord.com/invite/meebits',
-                        telegram: null,
-                        github: '',
-                        instagram: null,
-                        medium: null,
+                    collection: {
+                        socialLinks: {
+                            website: null,
+                            email: 'meebits@larvalabs.com',
+                            twitter: null,
+                            discord: 'https://discord.com/invite/meebits',
+                            telegram: null,
+                            github: '',
+                            instagram: null,
+                            medium: null,
+                        },
                     },
                     type: 'NonFungibleCollection',
                 },
@@ -114,15 +118,17 @@ export const DSearchHandlers = [
                     tokensTotal: 20000,
                     verified: false,
                     source: 'NFTScan',
-                    socialLinks: {
-                        website: null,
-                        email: 'meebits@larvalabs.com',
-                        twitter: 'eth',
-                        discord: 'https://discord.com/invite/meebits',
-                        telegram: null,
-                        github: '',
-                        instagram: null,
-                        medium: null,
+                    collection: {
+                        socialLinks: {
+                            website: null,
+                            email: 'meebits@larvalabs.com',
+                            twitter: 'eth',
+                            discord: 'https://discord.com/invite/meebits',
+                            telegram: null,
+                            github: '',
+                            instagram: null,
+                            medium: null,
+                        },
                     },
                     type: 'NonFungibleCollection',
                 },

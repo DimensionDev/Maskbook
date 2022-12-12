@@ -38,7 +38,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<handler<ChainId, Schem
                         keys: [
                             { name: 'symbol', weight: 0.5 },
                             { name: '__symbol', weight: 0.4 },
-                            { name: '__name', weight: 0.4 },
+                            { name: '__name', weight: 0.3 },
                             { name: 'name', weight: 0.3 },
                         ],
                         isCaseSensitive: false,

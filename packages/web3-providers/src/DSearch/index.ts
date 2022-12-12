@@ -112,7 +112,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                         if (!field) {
                             result = [...result, exactData]
                         } else {
-                            return [item]
+                            return [exactData]
                         }
                     }
                 }

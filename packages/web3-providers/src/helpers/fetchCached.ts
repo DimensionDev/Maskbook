@@ -31,6 +31,9 @@ export async function fetchCached(
     init?: RequestInit,
     next = originalFetch,
 ): Promise<Response> {
+    // why: the caches define in test env
+    if (process.env.NODE_ENV === 'test') return next(input, init)
+
     const request = new Request(input, init)
 
     // skip all side effect requests
