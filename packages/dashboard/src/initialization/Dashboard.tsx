@@ -40,7 +40,6 @@ export default function DashboardRoot() {
     }
     const theme = themes[appearance]
 
-
     applyMaskColorVars(document.body, appearance === 'default' ? mode : appearance)
     // #endregion
 
