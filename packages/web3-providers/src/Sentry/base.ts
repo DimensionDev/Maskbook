@@ -71,7 +71,7 @@ export enum LogMessage {
     ApplicationBoardAccess = 'application-board-access',
     PopupAccess = 'popup-access',
     PluginAccess = 'plugin-access',
-    Web3ProileDialogAccess = 'web3-profile-dialog-access',
+    Web3ProfileDialogAccess = 'web3-profile-dialog-access',
 }
 
 export enum LogPlatform {

@@ -48,7 +48,7 @@ export function Web3ProfileDialog() {
     const [open, setOpen] = useState(false)
     useEffect(() => {
         return CrossIsolationMessages.events.web3ProfileDialogEvent.on(({ open }) => {
-            if (open) logger?.captureMessage(LogMessage.Web3ProileDialogAccess)
+            if (open) logger?.captureMessage(LogMessage.Web3ProfileDialogAccess)
             setOpen(open)
         })
     }, [])
