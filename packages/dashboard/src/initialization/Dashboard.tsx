@@ -40,7 +40,6 @@ export default function DashboardRoot() {
     }
     const theme = themes[appearance]
 
-    // useEffect(() => logger.captureMessage(LogsType.DashboardAccess), [])
 
     applyMaskColorVars(document.body, appearance === 'default' ? mode : appearance)
     // #endregion

@@ -44,15 +44,12 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
 }
 export let globalUIState: Readonly<SocialNetworkUI.AutonomousState> = {} as any
 
-// export const SocialNetworkLogs = new LogHub('sns')
-
 export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.DeferredDefinition): Promise<void> {
     assertNotEnvironment(Environment.ManifestBackground)
 
     console.log('Activating provider', ui_deferred.networkIdentifier)
     setupReactShadowRootEnvironment()
     const ui = (activatedSocialNetworkUI = await loadSocialNetworkUI(ui_deferred.networkIdentifier))
-    // SocialNetworkLogs.platform = ui_deferred.networkIdentifier
 
     sharedUINetworkIdentifier.value = ui_deferred.networkIdentifier
     if (ui.customization.sharedComponentOverwrite) {
@@ -122,9 +119,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         if (!(ref.avatar && ref.identifier)) return
         Services.Identity.updateProfileInfo(ref.identifier, { avatarURL: ref.avatar, nickname: ref.nickname })
         const currentProfile = getCurrentIdentifier()
-        // SocialNetworkLogs.user = {
-        //     profile: currentProfile?.identifier,
-        // }
         if (currentProfile?.linkedPersona) {
             Services.Identity.createNewRelation(ref.identifier, currentProfile.linkedPersona)
         }
