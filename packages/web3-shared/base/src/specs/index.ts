@@ -603,6 +603,7 @@ export interface FungibleTokenSecurity {}
 export interface NonFungibleTokenSecurity {}
 
  export interface Result<ChainId> {
+    pluginID: NetworkPluginID
     chainId?: ChainId
     type: SearchResultType
     keyword: string
@@ -631,7 +632,6 @@ export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<Chai
     name: string,
     address: string
     tokenId?: string
-    chain?: ChainId
     type: SearchResultType.NonFungibleToken
     source: SourceType 
     token?: NonFungibleToken<ChainId, SchemaType>
@@ -640,7 +640,6 @@ export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<Chai
 export interface NonFungibleCollectionResult<ChainId, SchemaType> extends Result<ChainId> {
     name: string,
     address: string
-    chain?: ChainId
     source: SourceType 
     type: SearchResultType.NonFungibleCollection
     collection?: NonFungibleCollection<ChainId, SchemaType>

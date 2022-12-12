@@ -9,7 +9,13 @@ describe('DSearch test', () => {
         const result = await DSearch.search('token:eth')
 
         expect(result.length).toBe(1)
-        expect(result[0]).toStrictEqual({ name: 'eth1', symbol: 'eth', type: 'FungibleToken', keyword: 'eth' })
+        expect(result[0]).toStrictEqual({
+            name: 'eth1',
+            symbol: 'eth',
+            type: 'FungibleToken',
+            keyword: 'eth',
+            pluginID: 'com.mask.evm',
+        })
     })
 
     test('should return by name', async () => {
@@ -17,7 +23,13 @@ describe('DSearch test', () => {
         const result = await DSearch.search('token:eth1')
 
         expect(result.length).toBe(1)
-        expect(result[0]).toStrictEqual({ name: 'eth1', symbol: 'eth', type: 'FungibleToken', keyword: 'eth1' })
+        expect(result[0]).toStrictEqual({
+            name: 'eth1',
+            symbol: 'eth',
+            type: 'FungibleToken',
+            keyword: 'eth1',
+            pluginID: 'com.mask.evm',
+        })
     })
     test('should return by fuzzy search', async () => {
         const DSearch = new DSearchAPI()
@@ -29,12 +41,14 @@ describe('DSearch test', () => {
             symbol: 'thefuzzy',
             type: 'FungibleToken',
             keyword: 'efuzzy',
+            pluginID: 'com.mask.evm',
         })
         expect(result[1]).toStrictEqual({
             name: 'test thefuzzy search empty',
             symbol: 'fuzzy',
             type: 'FungibleToken',
             keyword: 'efuzzy',
+            pluginID: 'com.mask.evm',
         })
     })
     test('should return by fuzzy search without empty string', async () => {
@@ -47,6 +61,7 @@ describe('DSearch test', () => {
             symbol: 'fuzzy',
             type: 'FungibleToken',
             keyword: 'searchempty',
+            pluginID: 'com.mask.evm',
         })
     })
 

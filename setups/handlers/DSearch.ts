@@ -9,6 +9,7 @@ export const DSearchHandlers = [
             ctx.status(200),
             ctx.json([
                 {
+                    pluginID: 'com.mask.evm',
                     name: 'eth1',
                     symbol: 'eth',
                     type: 'FungibleToken',
@@ -27,11 +28,13 @@ export const DSearchHandlers = [
             ctx.status(200),
             ctx.json([
                 {
+                    pluginID: 'com.mask.evm',
                     name: 'ethInCoinGecko',
                     symbol: 'eth',
                     type: 'FungibleToken',
                 },
                 {
+                    pluginID: 'com.mask.evm',
                     name: 'test thefuzzy search empty',
                     symbol: 'fuzzy',
                     type: 'FungibleToken',
@@ -44,11 +47,13 @@ export const DSearchHandlers = [
             ctx.status(200),
             ctx.json([
                 {
+                    pluginID: 'com.mask.evm',
                     name: 'ethInCMC',
                     symbol: 'eth',
                     type: 'FungibleToken',
                 },
                 {
+                    pluginID: 'com.mask.evm',
                     name: 'test thefuzzy search',
                     symbol: 'thefuzzy',
                     type: 'FungibleToken',
@@ -64,15 +69,19 @@ export const DSearchHandlers = [
             ctx.status(200),
             ctx.json([
                 {
+                    pluginID: 'com.mask.evm',
                     address: '0x4e1f41613c9084fdb9e34e11fae9412427480e56',
                     name: 'Terraforms',
-                    chain: 'eth',
                     symbol: 'TERRAFORMS',
                     iconURL: 'https://logo.nftscan.com/logo/0x4e1f41613c9084fdb9e34e11fae9412427480e56.png',
                     tokensTotal: 9909,
                     verified: false,
                     source: 'NFTScan',
                     collection: {
+                        address: '0x4e1f41613c9084fdb9e34e11fae9412427480e56',
+                        name: 'Terraforms',
+                        symbol: 'TERRAFORMS',
+                        chain: 1,
                         socialLinks: {
                             website: 'http://mathcastles.xyz',
                             email: null,
@@ -87,15 +96,19 @@ export const DSearchHandlers = [
                     type: 'NonFungibleCollection',
                 },
                 {
+                    pluginID: 'com.mask.evm',
                     address: '0x7bd29408f11d2bfc23c34f18275bbf23bb716bc7',
                     name: 'Meebits',
-                    chain: 'eth',
                     symbol: '⚇',
                     iconURL: 'https://logo.nftscan.com/logo/0x7bd29408f11d2bfc23c34f18275bbf23bb716bc7.png',
                     tokensTotal: 20000,
                     verified: false,
                     source: 'NFTScan',
                     collection: {
+                        address: '0x7bd29408f11d2bfc23c34f18275bbf23bb716bc7',
+                        name: 'Meebits',
+                        symbol: '⚇',
+                        chain: 1,
                         socialLinks: {
                             website: null,
                             email: 'meebits@larvalabs.com',
@@ -110,15 +123,19 @@ export const DSearchHandlers = [
                     type: 'NonFungibleCollection',
                 },
                 {
+                    pluginID: 'com.mask.evm',
                     address: '0x7bd29408f11d2bfc23c34f18275bbf23bb716bc7',
                     name: 'TestEth',
-                    chain: 'eth',
                     symbol: '⚇',
                     iconURL: 'https://logo.nftscan.com/logo/0x7bd29408f11d2bfc23c34f18275bbf23bb716bc7.png',
                     tokensTotal: 20000,
                     verified: false,
                     source: 'NFTScan',
                     collection: {
+                        address: '0x7bd29408f11d2bfc23c34f18275bbf23bb716bc7',
+                        name: 'TestEth',
+                        symbol: '⚇',
+                        chain: 1,
                         socialLinks: {
                             website: null,
                             email: 'meebits@larvalabs.com',
