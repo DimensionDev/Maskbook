@@ -103,3 +103,31 @@ jobs:
         with:
           name: eslint
           path: reports/junit
+
+  pnpm-lockfile:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@v2.2.1
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "18"
+          cache: "pnpm"
+      - name: Authenticate NPM
+        uses: DimensionDev/github-token-action@latest
+        with:
+            registry: true
+      - name: pnpm install offline
+        run: |
+          pnpm install
+          CHANGES=$(git diff --name-only)
+          for f in $CHANGES
+          do
+            if [[ "$f" == "pnpm-lock.yaml" ]]
+            then
+              echo pnpm-lock.yaml gets updated during pnpm install,
+              echo please try running pnpm install locally and committing the changes as well.
+              git diff
+              exit 1
+            fi
+          done
