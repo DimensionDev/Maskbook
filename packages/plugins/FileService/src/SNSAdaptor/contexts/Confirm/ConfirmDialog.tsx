@@ -9,7 +9,6 @@ const useStyles = makeStyles()((theme) => ({
         minWidth: 320,
         width: 320,
         minHeight: 280,
-        height: 280,
     },
     title: {
         fontSize: 24,
@@ -34,11 +33,13 @@ const useStyles = makeStyles()((theme) => ({
         margin: theme.spacing(1.5, 0),
         lineHeight: '20px',
         color: theme.palette.maskColor.second,
+        wordBreak: 'break-all',
     },
     desc: {
         flexGrow: 1,
         textAlign: 'center',
         color: theme.palette.maskColor.second,
+        marginBottom: theme.spacing(1),
     },
     closeButton: {
         position: 'absolute',
