@@ -1,3 +1,4 @@
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type {
     FungibleTokenResult,
     NonFungibleCollectionResult,
@@ -12,23 +13,17 @@ import { fetchJSON } from '../helpers/fetchJSON.js'
 import { NFTScanSearchAPI } from '../NFTScan/index.js'
 import type { DSearchBaseAPI } from '../types/DSearch.js'
 import { getHandlers } from './rules.js'
-import type { handler } from './type.js'
 
 const BASE_URL = 'https://raw.githubusercontent.com/DimensionDev/Mask-Search-List/master/'
 
-export class DSearchAPI<ChainId, SchemaType> implements DSearchBaseAPI.Provider<ChainId, SchemaType> {
-    handlers: Array<handler<ChainId, SchemaType>>
+export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.SchemaTypeAll>
+    implements DSearchBaseAPI.Provider<ChainId, SchemaType>
+{
+    handlers = getHandlers<ChainId, SchemaType>()
 
-    NFTScanClient: DSearchBaseAPI.DataSourceProvider<ChainId, SchemaType>
-    CoinGeckoClient: DSearchBaseAPI.DataSourceProvider<ChainId, SchemaType>
-    CoinMarketCapClient: DSearchBaseAPI.DataSourceProvider<ChainId, SchemaType>
-
-    constructor() {
-        this.handlers = getHandlers<ChainId, SchemaType>()
-        this.NFTScanClient = new NFTScanSearchAPI<ChainId, SchemaType>()
-        this.CoinGeckoClient = new CoinGeckoSearchAPI<ChainId, SchemaType>()
-        this.CoinMarketCapClient = new CoinMarketCapSearchAPI<ChainId, SchemaType>()
-    }
+    NFTScanClient = new NFTScanSearchAPI<ChainId, SchemaType>()
+    CoinGeckoClient = new CoinGeckoSearchAPI<ChainId, SchemaType>()
+    CoinMarketCapClient = new CoinMarketCapSearchAPI<ChainId, SchemaType>()
 
     private async init() {
         const tokenSpecificList = urlcat(BASE_URL, '/output/fungible-tokens/specific-list.json')
@@ -110,21 +105,24 @@ export class DSearchAPI<ChainId, SchemaType> implements DSearchBaseAPI.Provider<
                 const filtered = data.filter((x) => (type ? type === x.type : true))
 
                 if (rule.type === 'exact') {
-                    const items = filtered.find((x) => rule.filter?.(x, word, filtered))
-                    if (items) {
+                    const item = filtered.find((x) => rule.filter?.(x, word, filtered))
+                    if (item) {
+                        const exactData = { ...item, keyword: word }
+
                         if (!field) {
-                            result = [...result, items]
+                            result = [...result, exactData]
                         } else {
-                            return [items]
+                            return [item]
                         }
                     }
                 }
                 if (rule.type === 'fuzzy') {
                     const items = rule.fullSearch?.(word, filtered) ?? []
+                    const fuzzyData = items.map((x) => ({ ...x, keyword: word }))
                     if (!field) {
-                        result = [...result, ...items]
+                        result = [...result, ...fuzzyData]
                     } else {
-                        if (items.length) return items
+                        if (items.length) return fuzzyData
                     }
                 }
             }

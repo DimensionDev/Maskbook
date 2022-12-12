@@ -65,7 +65,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<handler<ChainId, Schem
                     all: Array<SearchResult<ChainId, SchemaType>>,
                 ) => {
                     if (data.type !== SearchResultType.NonFungibleCollection) return false
-                    return data.socialLinks?.twitter === keyword
+                    return data.collection?.socialLinks?.twitter === keyword
                 },
             },
         ],
