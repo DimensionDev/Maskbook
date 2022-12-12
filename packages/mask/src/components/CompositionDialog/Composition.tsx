@@ -55,6 +55,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
 
     const onClose = useCallback(() => {
         setOpen(false)
+        setInitialMetas(EMPTY_OBJECT)
 
         UI.current?.reset()
     }, [])

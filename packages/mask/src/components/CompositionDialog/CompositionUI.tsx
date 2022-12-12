@@ -123,7 +123,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     props,
     ref,
 ) {
-    const { classes, cx, theme } = useStyles()
+    const { classes, cx } = useStyles()
     const { t } = useI18N()
     const id = useId()
 
