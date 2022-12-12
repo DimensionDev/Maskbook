@@ -41,6 +41,7 @@ export class PayloadEditor {
         const { method, params } = this.payload
         switch (method) {
             case EthereumMethodType.MASK_DEPLOY_CONTRACT_WALLET:
+            case EthereumMethodType.MASK_TRANSFER_CONTRACT_WALLET:
                 return first(params)
             case EthereumMethodType.ETH_CALL_USER_OPERATION:
             case EthereumMethodType.ETH_SEND_USER_OPERATION:

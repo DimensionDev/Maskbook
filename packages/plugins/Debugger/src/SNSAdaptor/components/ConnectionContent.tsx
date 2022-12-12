@@ -60,6 +60,10 @@ export function ConnectionContent(props: ConnectionContentProps) {
                 chainId: ChainId.Mumbai,
                 account: '0xF55e3d8e682071f67a67D6C04F8dFc2462f6a670',
                 providerType: EVM_ProviderType.MaskWallet,
+                overrides: {
+                    chainId: ChainId.Mumbai,
+                    from: '0xF55e3d8e682071f67a67D6C04F8dFc2462f6a670',
+                },
             },
         )
     }, [pluginID, connection])
@@ -162,7 +166,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                             </Typography>
                         </TableCell>
                         <TableCell>
-                            <Button size="small" sx={{ mb: 0.5 }} onClick={() => onTransferCallback()}>
+                            <Button size="small" onClick={() => onTransferCallback()}>
                                 Transfer
                             </Button>
                         </TableCell>

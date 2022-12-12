@@ -11,7 +11,6 @@ import { CloverProvider } from './providers/Clover.js'
 import FortmaticProvider from './providers/Fortmatic.js'
 import { OperaProvider } from './providers/Opera.js'
 import { NoneProvider } from './providers/None.js'
-import { SmartPayProvider } from './providers/SmartPay.js'
 
 /**
  * Register all supported providers
@@ -26,7 +25,6 @@ export const Providers: Record<ProviderType, BaseProvider> = {
     [ProviderType.MathWallet]: new MathWalletProvider(),
     [ProviderType.Clover]: new CloverProvider(),
     [ProviderType.Fortmatic]: new FortmaticProvider(),
-    [ProviderType.SmartPay]: new SmartPayProvider(),
     [ProviderType.Opera]: new OperaProvider(),
     [ProviderType.CustomNetwork]: new CustomNetworkProvider(),
 }
