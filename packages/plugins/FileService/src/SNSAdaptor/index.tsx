@@ -47,7 +47,9 @@ const definition: Plugin.SNSAdaptor.Definition = {
             </>
         ),
         // TODO Open with selected files
-        onClick: () => openPicker(EMPTY_LIST),
+        onClick: ({ compositionType }) => {
+            openPicker(EMPTY_LIST, compositionType)
+        },
     },
     ApplicationEntries: [
         (() => {
@@ -57,6 +59,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
+                    const clickHandler = () => openBrowser('popup')
                     return (
                         <ApplicationEntry
                             title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
@@ -65,8 +68,8 @@ const definition: Plugin.SNSAdaptor.Definition = {
                             iconFilterColor={iconFilterColor}
                             onClick={
                                 EntryComponentProps.onClick
-                                    ? () => EntryComponentProps.onClick?.(openBrowser)
-                                    : openBrowser
+                                    ? () => EntryComponentProps.onClick?.(clickHandler)
+                                    : clickHandler
                             }
                         />
                     )
@@ -104,8 +107,8 @@ function onAttachedFile(file: FileInfo): Plugin.SNSAdaptor.BadgeDescriptor {
             <SingleFileChip
                 name={name}
                 size={size}
-                onClick={() => {
-                    openPicker([file.id])
+                onClick={({ compositionType }) => {
+                    openPicker([file.id], compositionType)
                 }}
             />
         ),
@@ -120,8 +123,11 @@ function onAttachedMultipleFile(files: FileInfo[]): Plugin.SNSAdaptor.BadgeDescr
             <MultipleFileChip
                 count={files.length}
                 role="button"
-                onClick={() => {
-                    openPicker(files.map((file) => file.id))
+                onClick={({ compositionType }) => {
+                    openPicker(
+                        files.map((file) => file.id),
+                        compositionType,
+                    )
                 }}
             />
         ),

@@ -28,7 +28,7 @@
                     "title": "size"
                 },
                 "createdAt": {
-                    "type": "number",
+                    "type": ["number", "string"],
                     "title": "createdAt"
                 },
                 "key": {

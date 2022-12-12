@@ -1,42 +1,43 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
-import type React from 'react'
-import type { Option, Result } from 'ts-results-es'
-import type { Subscription } from 'use-subscription'
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import type { TypedMessage } from '@masknet/typed-message'
+import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import type {
-    ScopedStorage,
-    ProfileIdentifier,
-    PersonaIdentifier,
-    PopupRoutes,
-    PersonaInformation,
+    BindingProof,
     ECKeyIdentifier,
     EnhanceableSite,
     ExtensionSite,
-    BindingProof,
-    PluginID,
     NetworkPluginID,
     NextIDPlatform,
+    PersonaIdentifier,
+    PersonaInformation,
+    PluginID,
+    PopupRoutes,
     PostIdentifier,
+    ProfileIdentifier,
+    ScopedStorage,
 } from '@masknet/shared-base'
+import type { TypedMessage } from '@masknet/typed-message'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type {
     ChainDescriptor,
     NetworkDescriptor,
     ProviderDescriptor,
+    SearchKeywordType,
+    SearchResult,
+    SocialAccount,
     SocialIdentity,
+    ThemeSettings,
     Wallet,
     Web3EnableRequirement,
-    Web3UI,
     Web3State,
-    SocialAccount,
-    SearchResult,
-    SearchKeywordType,
-    ThemeSettings,
+    Web3UI,
 } from '@masknet/web3-shared-base'
 import type { ChainId as ChainIdEVM, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
-import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
-import type { Web3Helper } from '@masknet/web3-helpers'
+import type React from 'react'
+import type { Option, Result } from 'ts-results-es'
+import type { Subscription } from 'use-subscription'
+import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type { CompositionType } from './entry-content-script.js'
 
 export declare namespace Plugin {
     /**
@@ -556,7 +557,7 @@ export namespace Plugin.SNSAdaptor {
         label: I18NFieldOrReactNode
 
         /** This callback will be called when the user clicked on the chip. */
-        onClick(): void
+        onClick(options: { compositionType: CompositionType }): void
     }
 
     export interface CompositionDialogEntryDialog {

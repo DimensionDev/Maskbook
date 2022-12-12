@@ -1,3 +1,4 @@
+import type { CompositionType } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import type { InitialEntry } from '@remix-run/router'
@@ -15,6 +16,7 @@ export interface FileServiceDialogProps {
     open: boolean
     selectMode?: boolean
     selectedFileIds?: string[]
+    compositionType: CompositionType
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -38,7 +40,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const FileServiceDialog: React.FC<FileServiceDialogProps> = ({ onClose, selectMode, selectedFileIds }) => {
+const FileServiceDialog: React.FC<FileServiceDialogProps> = ({
+    onClose,
+    selectMode,
+    selectedFileIds,
+    compositionType,
+}) => {
     const { classes } = useStyles()
     const [confirmed] = useTermsConfirmed()
 
@@ -55,7 +62,7 @@ const FileServiceDialog: React.FC<FileServiceDialogProps> = ({ onClose, selectMo
 
     return (
         <MemoryRouter initialEntries={initialEntries} initialIndex={initialIndex}>
-            <FileManagementProvider>
+            <FileManagementProvider compositionType={compositionType}>
                 <RouterDialog
                     open
                     onClose={onClose}

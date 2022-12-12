@@ -1,9 +1,21 @@
 import { timeout } from '@masknet/kit'
+import type { CompositionType } from '@masknet/plugin-infra/content-script'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { noop, omit } from 'lodash-es'
-import { createContext, Dispatch, FC, memo, SetStateAction, useCallback, useContext, useMemo, useState } from 'react'
+import {
+    createContext,
+    Dispatch,
+    FC,
+    memo,
+    PropsWithChildren,
+    SetStateAction,
+    useCallback,
+    useContext,
+    useMemo,
+    useState,
+} from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncRetry } from 'react-use'
 import { META_KEY_3, RoutePaths } from '../../../constants.js'
@@ -41,9 +53,9 @@ export const FileManagementContext = createContext<FileManagementContextOptions>
 
 FileManagementContext.displayName = 'FileManagementContext'
 
-function openCompositionWithFiles(files: FileInfo[]) {
+function openCompositionWithFiles(type: CompositionType, files: FileInfo[]) {
     CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
-        reason: 'timeline',
+        reason: type,
         open: true,
         options: {
             initialMetas: {
@@ -53,7 +65,9 @@ function openCompositionWithFiles(files: FileInfo[]) {
     })
 }
 
-export const FileManagementProvider: FC<React.PropsWithChildren<{}>> = memo(({ children }) => {
+interface Props extends PropsWithChildren<{ compositionType: CompositionType }> {}
+
+export const FileManagementProvider: FC<Props> = memo(({ children, compositionType }) => {
     const { value: files = EMPTY_LIST, retry: refetchFiles } = useAsyncRetry(
         () => PluginFileServiceRPC.getAllFiles(),
         [],
@@ -147,11 +161,11 @@ export const FileManagementProvider: FC<React.PropsWithChildren<{}>> = memo(({ c
     )
     const attachToPost = useCallback(
         (fileInfo: FileInfo | FileInfo[]) => {
-            openCompositionWithFiles(Array.isArray(fileInfo) ? fileInfo : [fileInfo])
+            openCompositionWithFiles(compositionType, Array.isArray(fileInfo) ? fileInfo : [fileInfo])
             closeApplicationBoardDialog()
             navigate(RoutePaths.Exit)
         },
-        [closeApplicationBoardDialog, navigate],
+        [compositionType, closeApplicationBoardDialog, navigate],
     )
 
     const contextValue: FileManagementContextOptions = useMemo(() => {
