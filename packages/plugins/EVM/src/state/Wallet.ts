@@ -43,7 +43,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
             const wallets = this.context.wallets.getCurrentValue()
 
             if (this.providerType === ProviderType.MaskWallet) {
-                const accounts = await SmartPayAccount.getAccounts(
+                const accounts = await SmartPayAccount.getAccountsByOwners(
                     ChainId.Matic,
                     wallets.map((x) => x.address),
                 )

@@ -20,6 +20,7 @@ import { RaribleEventType, RaribleOrder, RaribleHistory, RaribleNFTItemMapRespon
 import { RaribleURL } from './constants.js'
 import { getPaymentToken, getAssetFullName, resolveActivityType } from '../entry-helpers.js'
 import type { NonFungibleTokenAPI } from '../entry-types.js'
+import compareDesc from 'date-fns/compareDesc'
 
 const resolveRaribleBlockchain = createLookupTableResolver<number, string>(
     {
@@ -226,8 +227,14 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             }),
         )
 
+        const sortedOrders = orders.sort((a, z) => {
+            if (a.createdAt === z.createdAt) return 0
+            if (!a.createdAt) return 1
+            if (!z.createdAt) return -1
+            return compareDesc(a.createdAt, z.createdAt)
+        })
         return createPageable(
-            orders,
+            sortedOrders,
             createIndicator(indicator),
             orders.length === size ? createNextIndicator(indicator, response.continuation) : undefined,
         )

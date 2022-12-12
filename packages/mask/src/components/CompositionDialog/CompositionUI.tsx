@@ -1,4 +1,14 @@
-import { forwardRef, useImperativeHandle, useMemo, useRef, useState, startTransition, useCallback, useId } from 'react'
+import {
+    forwardRef,
+    useImperativeHandle,
+    useMemo,
+    useRef,
+    useState,
+    startTransition,
+    useCallback,
+    useId,
+    useLayoutEffect,
+} from 'react'
 import { Typography, Chip, Button, Checkbox } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
@@ -95,6 +105,7 @@ export interface CompositionProps {
     onQueryClipboardPermission?(): void
     version: -38 | -37
     setVersion(version: -38 | -37): void
+    initialMetas?: Record<string, unknown>
 }
 export interface SubmitComposition {
     target: EncryptTargetPublic | EncryptTargetE2E
@@ -156,6 +167,13 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     )
 
     useImperativeHandle(ref, () => refItem, [refItem])
+
+    useLayoutEffect(() => {
+        if (!props.initialMetas || !Editor.current) return
+        for (const [meta, data] of Object.entries(props.initialMetas)) {
+            Editor.current.attachMetadata(meta, data)
+        }
+    }, [props.initialMetas, Editor.current])
 
     const context = useMemo(
         (): CompositionContext => ({

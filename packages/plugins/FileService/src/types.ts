@@ -33,11 +33,19 @@ export interface ProviderAgent {
 export interface FileInfo {
     type: 'file'
     provider: Provider
+    /**
+     * Before v3, it's checksum of the file.
+     * Since v3, it's digest(file, [provider, useCDN, encrypted])
+     */
     id: string
 
     name: string
     size: number
-    createdAt: Date
+    /**
+     * Before v3, it's Date
+     * Since v3, it's number
+     */
+    createdAt: number
 
     key: string | undefined
     /** Doesn't exist in uploading file info */

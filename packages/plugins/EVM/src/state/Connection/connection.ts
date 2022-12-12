@@ -906,6 +906,17 @@ class Connection implements EVM_Connection {
         return Promise.all(transactions.map((x) => this.signTransaction(x, initial)))
     }
 
+    supportedChainIds(initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
+        const options = this.getOptions(initial)
+        return this.hijackedRequest<ChainId[]>(
+            {
+                method: EthereumMethodType.ETH_SUPPORTED_CHAIN_IDS,
+                params: [],
+            },
+            options,
+        )
+    }
+
     supportedEntryPoints(initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<string[]>(
@@ -918,69 +929,70 @@ class Connection implements EVM_Connection {
     }
 
     async callUserOperation(
+        owner: string,
         operation: UserOperation,
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ) {
         const options = this.getOptions(initial)
-        const entryPoint = first(await this.supportedEntryPoints(initial))
-        if (!isValidAddress(entryPoint)) throw new Error('No entry point.')
-
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_CALL_USER_OPERATION,
                 params: [
+                    owner,
                     {
                         ...operation,
                         sender: options.account,
                     },
                 ],
-                entryPoint,
             },
             options,
         )
     }
 
     async sendUserOperation(
+        owner: string,
         operation: UserOperation,
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ) {
         const options = this.getOptions(initial)
-        const entryPoint = first(await this.supportedEntryPoints(initial))
-        if (!isValidAddress(entryPoint)) throw new Error('No entry point.')
-
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_USER_OPERATION,
                 params: [
+                    owner,
                     {
                         ...operation,
-                        sender: options.account,
+                        sender: operation.sender || options.account,
                     },
                 ],
-                entryPoint,
+            },
+            options,
+        )
+    }
+
+    async transferContractWallet(
+        recipient: string,
+        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ) {
+        const options = this.getOptions(initial)
+        return this.hijackedRequest<string>(
+            {
+                method: EthereumMethodType.SC_WALLET_DEPLOY,
+                params: [recipient],
             },
             options,
         )
     }
 
     async deployContractWallet(
-        operation: UserOperation,
+        owner: string,
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ) {
         const options = this.getOptions(initial)
-        const entryPoint = first(await this.supportedEntryPoints(initial))
-        if (!isValidAddress(entryPoint)) throw new Error('No entry point.')
-
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.SC_WALLET_DEPLOY,
-                params: [
-                    {
-                        ...operation,
-                        sender: options.account,
-                    },
-                ],
-                entryPoint,
+                params: [owner],
             },
             options,
         )

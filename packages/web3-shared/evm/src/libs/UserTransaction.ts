@@ -8,7 +8,7 @@ import EntryPointABI from '@masknet/web3-contracts/abis/EntryPoint.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import type { EntryPoint } from '@masknet/web3-contracts/types/EntryPoint.js'
 import type { ChainId, Transaction, UserOperation } from '../types/index.js'
-import { createContract, getZeroAddress, isZeroAddress } from '../helpers/index.js'
+import { createContract, getZeroAddress, isZeroString, isEmptyHex, isZeroAddress } from '../helpers/index.js'
 
 const CALL_OP_TYPE = {
     callOp: {
@@ -58,7 +58,7 @@ const DEFAULT_USER_OPERATION: Required<UserOperation> = {
     // default verification gas. will add create2 cost (3200 + 200 * length) if initCode exists
     verificationGas: '100000',
     // should also cover calldata cost.
-    preVerificationGas: '21000',
+    preVerificationGas: '0',
     maxFeePerGas: '0',
     maxPriorityFeePerGas: '1000000000',
     paymaster: getZeroAddress(),
@@ -145,7 +145,7 @@ export class UserTransaction {
             maxPriorityFeePerGas,
         } = this.userOperation
 
-        if (initCode && initCode !== '0x') {
+        if (!isEmptyHex(initCode)) {
             // caution: the creator needs to set the latest index of the contract account.
             // otherwise, always treat the operation to create the initial account.
             if (!nonce) this.userOperation.nonce = 0
@@ -155,24 +155,19 @@ export class UserTransaction {
                     .getSenderAddress(initCode, nonce)
                     .call()
             }
-            if (!verificationGas) {
+            if (isZeroString(verificationGas)) {
                 this.userOperation.verificationGas = toFixed(
                     new BigNumber(DEFAULT_USER_OPERATION.verificationGas).plus(32000 + (200 * initCode.length) / 2),
                 )
             }
         }
-        // TODO: if initCode exists, nonce = getAccounts
-        if (!this.userOperation.nonce) {
-            try {
-                // ca nonce
-                if (!this.walletContract) throw new Error('Failed to create wallet contract.')
-                this.userOperation.nonce = toNumber(await this.walletContract.methods.nonce().call())
-                // 0x
-            } catch (error) {
-                console.log(error)
-            }
+
+        if (typeof this.userOperation.nonce === 'undefined') {
+            if (!this.walletContract) throw new Error('Failed to create wallet contract.')
+            this.userOperation.nonce = toNumber(await this.walletContract.methods.nonce().call())
         }
-        if (!callGas && callData && callData !== '0x') {
+
+        if (isZeroString(callGas) && !isEmptyHex(callData)) {
             this.userOperation.callGas = toFixed(
                 await web3.eth.estimateGas({
                     from: this.entryPoint,
@@ -181,7 +176,7 @@ export class UserTransaction {
                 }),
             )
         }
-        if (!maxFeePerGas) {
+        if (isZeroString(maxFeePerGas)) {
             const block = await web3.eth.getBlock('latest')
             this.userOperation.maxFeePerGas = toFixed(
                 new BigNumber(block.baseFeePerGas ?? 0).plus(
@@ -189,17 +184,17 @@ export class UserTransaction {
                 ),
             )
         }
-        if (!verificationGas) {
+        if (isZeroString(verificationGas)) {
             this.userOperation.verificationGas = toFixed(DEFAULT_USER_OPERATION.verificationGas)
         }
-        if (!preVerificationGas) {
+        if (isZeroString(preVerificationGas)) {
             this.userOperation.preVerificationGas = toFixed(
                 hexToBytes(this.packAll)
                     .map<number>((x) => (x === 0 ? 4 : 16))
                     .reduce((sum, x) => sum + x),
             )
         }
-        if (!maxPriorityFeePerGas) {
+        if (isZeroString(maxPriorityFeePerGas)) {
             this.userOperation.maxPriorityFeePerGas = DEFAULT_USER_OPERATION.maxPriorityFeePerGas
         }
         return this
@@ -245,18 +240,13 @@ export class UserTransaction {
         if (!from) throw new Error('No sender address.')
         if (!to) throw new Error('No destination address.')
 
-        const userOperation: UserOperation = {
+        return UserTransaction.fromUserOperation(chainId, entryPoint, {
+            ...DEFAULT_USER_OPERATION,
             sender: from,
             nonce,
             callData: coder.encodeFunctionCall(CALL_WALLET_TYPE, [to, value, data]),
-            callGas: '0',
-            verificationGas: '0',
-            preVerificationGas: '0',
-            maxFeePerGas: '0',
-            maxPriorityFeePerGas: '0',
             signature: '0x',
-        }
-        return UserTransaction.fromUserOperation(chainId, entryPoint, userOperation)
+        })
     }
 
     static async fromUserOperation(

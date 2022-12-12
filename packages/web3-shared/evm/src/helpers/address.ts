@@ -5,8 +5,12 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { getENSConstants, getRedPacketConstants, getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
 import { ChainId, NetworkType, ProviderType } from '../types/index.js'
 
-export function isEmptyHex(hex?: string) {
+export function isEmptyHex(hex?: string): hex is undefined {
     return !hex || ['0x', '0x0'].includes(hex)
+}
+
+export function isZeroString(str?: string): str is undefined {
+    return !str || str === '0'
 }
 
 export function isValidAddress(address?: string): address is string {

@@ -14,6 +14,7 @@ import { PopupSnackbarProvider } from '@masknet/theme'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import Services from '../service.js'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { ProviderType } from '@masknet/web3-shared-evm'
 
 function usePopupTheme() {
     return usePopupFullPageTheme(useValueRef(languageSettings))
@@ -39,7 +40,8 @@ export default function Popups() {
     return MaskUIRootPage(
         usePopupTheme,
         <PopupSnackbarProvider>
-            <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+            <Web3ContextProvider
+                value={{ pluginID: NetworkPluginID.PLUGIN_EVM, providerType: ProviderType.MaskWallet }}>
                 <PopupContext.Provider>
                     <PageTitleContext.Provider value={{ title, setTitle }}>
                         <HashRouter>

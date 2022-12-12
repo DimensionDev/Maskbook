@@ -8,10 +8,12 @@ import { VerifyMnemonicDialog } from '../VerifyMnemonicDialog/index.js'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { PluginServices } from '../../../../API.js'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useMnemonicWordsPuzzle } from '../../../../hooks/useMnemonicWordsPuzzle.js'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
+import { useWeb3Connection } from '@masknet/web3-hooks-base'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -83,6 +85,7 @@ const CreateMnemonic = memo(() => {
     const [searchParams] = useSearchParams()
     const { value: hasPassword, loading, retry } = useAsyncRetry(PluginServices.Wallet.hasPassword, [])
 
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { providerType: ProviderType.MaskWallet })
     useEffect(() => {
         WalletMessages.events.walletLockStatusUpdated.on(retry)
     }, [retry])
@@ -111,11 +114,14 @@ const CreateMnemonic = memo(() => {
             `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
         )
 
-        await PluginServices.Wallet.updateMaskAccount({ account: address_ })
+        await connection?.connect({
+            account: address_,
+            chainId: ChainId.Mainnet,
+        })
         await PluginServices.Wallet.resolveMaskAccount([address_])
 
         return address_
-    }, [location.search, words, resetCallback, hasPassword, searchParams])
+    }, [location.search, words, resetCallback, hasPassword, searchParams, connection])
 
     const onClose = useCallback(() => {
         refreshCallback()

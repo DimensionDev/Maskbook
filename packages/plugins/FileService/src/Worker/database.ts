@@ -12,11 +12,14 @@ export function setupDatabase(_: typeof Database) {
 }
 
 let migrationDone = false
-async function migrationV1_V2() {
+async function migrationV1() {
     if (migrationDone) return
     for await (const x of Database.iterate_mutate('arweave')) {
         for (const file of migrateFileInfoV1(x.value)) {
-            await Database.add(file)
+            await Database.add({
+                ...file,
+                createdAt: typeof file.createdAt !== 'number' ? new Date(file.createdAt).getTime() : file.createdAt,
+            })
         }
         await x.delete()
     }
@@ -24,7 +27,7 @@ async function migrationV1_V2() {
 }
 
 export async function getAllFiles() {
-    await migrationV1_V2()
+    await migrationV1()
     const files: FileInfo[] = []
     for await (const { value } of Database.iterate('file')) {
         files.push(value)
@@ -38,12 +41,12 @@ export async function getRecentFiles() {
 }
 
 export async function getFileInfo(checksum: string) {
-    await migrationV1_V2()
+    await migrationV1()
     return Database.get('file', checksum)
 }
 
 export async function setFileInfo(info: FileInfo) {
-    await migrationV1_V2()
+    await migrationV1()
     return Database.add(info)
 }
 

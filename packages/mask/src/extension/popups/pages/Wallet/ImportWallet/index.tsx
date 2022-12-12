@@ -19,6 +19,7 @@ import { PageHeader } from '../components/PageHeader/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useTitle } from '../../../hook/useTitle.js'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
     container: {
@@ -160,6 +161,7 @@ const ImportWallet = memo(() => {
 
                             await connection?.connect({
                                 account: privateKeyWallet,
+                                chainId: ChainId.Mainnet,
                             })
 
                             await Services.Helper.removePopupWindow()
