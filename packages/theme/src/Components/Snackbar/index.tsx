@@ -45,6 +45,7 @@ export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, {
         alignItems: 'center',
         fontSize: 14,
         lineHeight: '18px',
+        wordBreak: 'break-all',
         '& > a': {
             display: 'flex',
             alignItems: 'center',
