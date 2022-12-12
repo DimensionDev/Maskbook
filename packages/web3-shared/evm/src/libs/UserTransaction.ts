@@ -96,6 +96,10 @@ export class UserTransaction {
     constructor(private chainId: ChainId, private entryPoint: string, private userOperation: UserOperation) {}
 
     get hasPaymaster() {
+        console.log({
+            paymaster: this.userOperation.paymaster,
+            isZero: isZeroAddress(this.userOperation.paymaster),
+        })
         return !!(this.userOperation.paymaster && !isZeroAddress(this.userOperation.paymaster))
     }
 
