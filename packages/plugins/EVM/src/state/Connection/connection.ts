@@ -112,9 +112,6 @@ class Connection implements EVM_Connection {
                                 case EthereumMethodType.MASK_LOGOUT:
                                     context.write(await this.Provider?.disconnect(options.providerType))
                                     break
-                                case EthereumMethodType.ETH_SUPPORTED_ENTRY_POINTS:
-                                case EthereumMethodType.MASK_DEPLOY_CONTRACT_WALLET:
-                                    break
                                 default: {
                                     const provider =
                                         Providers[

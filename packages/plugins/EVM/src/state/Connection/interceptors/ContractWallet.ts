@@ -187,6 +187,9 @@ export class ContractWallet implements Middleware<Context> {
                     context.abort(error)
                 }
                 break
+            case EthereumMethodType.ETH_ESTIMATE_GAS:
+                context.write('0x0')
+                break
             case EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN:
                 context.abort(new Error('Not supported by contract wallet.'))
                 break
