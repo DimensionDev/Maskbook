@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        padding: theme.spacing(2),
+        padding: 12,
         overflow: 'hidden',
     },
     avatar: {
@@ -77,6 +77,7 @@ const useStyles = makeStyles()((theme) => ({
         },
         height: 400,
         overflowY: 'auto',
+        borderRadius: '0 0 12px 12px',
     },
     statusBox: {
         display: 'flex',
