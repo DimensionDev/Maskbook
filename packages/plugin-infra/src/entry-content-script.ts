@@ -18,6 +18,7 @@ export {
     PostInfoContext,
     PostInfoProvider,
     usePostInfoDetails,
+    type CompositionType,
     CompositionContext,
     SNSAdaptorContext,
     Widget,

@@ -8,13 +8,14 @@ import { startWatch } from '../../../utils/watcher.js'
 import { postEditorInDialogSelector, postEditorInTimelineSelector } from '../utils/selector.js'
 import { isMinds } from '../base.js'
 import { activatedSocialNetworkUI } from '../../../social-network/ui.js'
+import type { CompositionType } from '@masknet/plugin-infra/content-script'
 
 export function injectPostDialogHintAtMinds(signal: AbortSignal) {
     renderPostDialogHintTo(postEditorInDialogSelector(), signal, 'popup')
     renderPostDialogHintTo(postEditorInTimelineSelector(), signal, 'timeline')
 }
 
-function renderPostDialogHintTo<T>(ls: LiveSelector<T, true>, signal: AbortSignal, reason: 'popup' | 'timeline') {
+function renderPostDialogHintTo<T>(ls: LiveSelector<T, true>, signal: AbortSignal, reason: CompositionType) {
     const watcher = new MutationObserverWatcher(ls)
     startWatch(watcher, signal)
 

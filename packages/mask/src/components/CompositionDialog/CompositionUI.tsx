@@ -1,32 +1,32 @@
+import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
+import { Icons } from '@masknet/icons'
+import { CompositionContext, CompositionType } from '@masknet/plugin-infra/content-script'
+import { EncryptionTargetType, ProfileInformation } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
+import { LoadingButton } from '@mui/lab'
+import { Button, Checkbox, Chip, Typography } from '@mui/material'
 import {
     forwardRef,
+    startTransition,
+    useCallback,
+    useEffect,
+    useId,
     useImperativeHandle,
     useMemo,
     useRef,
     useState,
-    startTransition,
-    useCallback,
-    useId,
-    useLayoutEffect,
 } from 'react'
-import { Typography, Chip, Button, Checkbox } from '@mui/material'
-import { LoadingButton } from '@mui/lab'
-import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
-import { makeStyles } from '@masknet/theme'
-import { Icons } from '@masknet/icons'
+import { useSubscription } from 'use-subscription'
+import { PersistentStorages } from '../../../shared/index.js'
+import { useI18N } from '../../utils/index.js'
+import { DebugMetadataInspector } from '../shared/DebugMetadataInspector.js'
+import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients.js'
+import { CharLimitIndicator } from './CharLimitIndicator.js'
+import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMethodSelector.js'
+import { EncryptionTargetSelector } from './EncryptionTargetSelector.js'
 import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender.js'
 import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor.js'
-import { CharLimitIndicator } from './CharLimitIndicator.js'
-import { useI18N } from '../../utils/index.js'
-import { PersistentStorages } from '../../../shared/index.js'
-import { ProfileInformation, EncryptionTargetType } from '@masknet/shared-base'
-import { CompositionContext } from '@masknet/plugin-infra/content-script'
-import { DebugMetadataInspector } from '../shared/DebugMetadataInspector.js'
-import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
-import { useSubscription } from 'use-subscription'
-import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients.js'
-import { EncryptionTargetSelector } from './EncryptionTargetSelector.js'
-import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMethodSelector.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -89,6 +89,7 @@ export interface LazyRecipients {
     recipients?: ProfileInformation[]
 }
 export interface CompositionProps {
+    type: CompositionType
     maxLength?: number
     onSubmit(data: SubmitComposition): Promise<void>
     onChange?(message: TypedMessage): void
@@ -168,7 +169,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
 
     useImperativeHandle(ref, () => refItem, [refItem])
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         if (!props.initialMetas || !Editor.current) return
         for (const [meta, data] of Object.entries(props.initialMetas)) {
             Editor.current.attachMetadata(meta, data)
@@ -177,10 +178,11 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
 
     const context = useMemo(
         (): CompositionContext => ({
+            type: props.type,
             attachMetadata: (meta, data) => Editor.current?.attachMetadata(meta, data),
             dropMetadata: (meta) => Editor.current?.dropMetadata(meta),
         }),
-        [],
+        [props.type],
     )
 
     const submitAvailable = currentPostSize > 0 && currentPostSize < (props.maxLength ?? Number.POSITIVE_INFINITY)
