@@ -415,6 +415,16 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     createdAt?: number
     /** source type */
     source?: SourceType
+    socialLinks?: {
+        website?: string
+        email?: string
+        twitter?: string
+        discord?: string
+        telegram?: string
+        github?: string
+        instagram?: string
+        medium?: string
+      }
 }
 
 export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {
@@ -595,7 +605,7 @@ export interface NonFungibleTokenSecurity {}
 
  export interface Result<ChainId> {
     pluginID: NetworkPluginID
-    chainId: ChainId
+    chainId?: ChainId
     type: SearchResultType
     keyword: string
 }
@@ -610,18 +620,29 @@ export interface DomainResult<ChainId> extends Result<ChainId> {
 }
 
 export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
-    address: string
+    //  This id on the provider platform
+    id?: string
+    name: string
+    symbol: string
+    type: SearchResultType.FungibleToken
+    source: SourceType 
     token?: FungibleToken<ChainId, SchemaType>
 }
 
 export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
+    name: string,
     address: string
-    tokenId: string
+    tokenId?: string
+    type: SearchResultType.NonFungibleToken
+    source: SourceType 
     token?: NonFungibleToken<ChainId, SchemaType>
 }
 
 export interface NonFungibleCollectionResult<ChainId, SchemaType> extends Result<ChainId> {
+    name: string,
     address: string
+    source: SourceType 
+    type: SearchResultType.NonFungibleCollection
     collection?: NonFungibleCollection<ChainId, SchemaType>
 }
 

@@ -28,7 +28,8 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
 
     const result = useAsyncRetry(async () => {
         if (!keyword) return
-        return DSearch.search(keyword)
+        const list = await DSearch.search(keyword)
+        return list[0]
     }, [keyword])
 
     const contentComponent = useMemo(() => {
