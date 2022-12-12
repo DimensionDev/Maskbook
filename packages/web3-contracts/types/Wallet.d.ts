@@ -62,7 +62,8 @@ export interface Wallet extends BaseContract {
             anEntryPoint: string,
             anOwner: string,
             gasToken: string,
-            functionData: string | number[],
+            paymaster: string,
+            amount: number | string | BN,
         ): NonPayableTransactionObject<void>
 
         nonce(): NonPayableTransactionObject<string>

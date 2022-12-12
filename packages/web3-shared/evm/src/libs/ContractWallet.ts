@@ -7,7 +7,7 @@ import WalletProxyABI from '@masknet/web3-contracts/abis/WalletProxy.json'
 import { WalletProxyByteCode } from '@masknet/web3-contracts/bytes/WalletProxy.js'
 import { createContract } from '../helpers/transaction.js'
 import { getSmartPayConstants, ZERO_ADDRESS } from '../constants/index.js'
-import { ChainId, getMaskTokenAddress } from '../index.js'
+import type { ChainId } from '../index.js'
 
 export class ContractWallet {
     private web3 = new Web3()
@@ -33,17 +33,25 @@ export class ContractWallet {
      * Encoded initialize parameters of ContractWallet
      */
     private get data() {
-        const { PAYMASTER_CONTRACT_ADDRESS, PAYMASTER_MINIMAL_STAKE_AMOUNT } = getSmartPayConstants(this.chainId)
+        const { PAYMASTER_CONTRACT_ADDRESS, PAYMASTER_MINIMAL_STAKE_AMOUNT, PAYMENT_TOKEN_ADDRESS } =
+            getSmartPayConstants(this.chainId)
+        if (!PAYMASTER_CONTRACT_ADDRESS || !PAYMASTER_MINIMAL_STAKE_AMOUNT || !PAYMENT_TOKEN_ADDRESS) return
 
-        if (!PAYMASTER_CONTRACT_ADDRESS || !PAYMASTER_MINIMAL_STAKE_AMOUNT) return
-        const maskAddress = getMaskTokenAddress(this.chainId)
         const abi = WalletABI.find((x) => x.name === 'initialize' && x.type === 'function')
         if (!abi) throw new Error('Failed to load ABI.')
+
+        console.log([
+            this.entryPoint,
+            this.owner,
+            PAYMENT_TOKEN_ADDRESS,
+            PAYMASTER_CONTRACT_ADDRESS,
+            PAYMASTER_MINIMAL_STAKE_AMOUNT,
+        ])
 
         return this.coder.encodeFunctionCall(abi as AbiItem, [
             this.entryPoint,
             this.owner,
-            maskAddress,
+            PAYMENT_TOKEN_ADDRESS,
             PAYMASTER_CONTRACT_ADDRESS,
             PAYMASTER_MINIMAL_STAKE_AMOUNT,
         ])
@@ -53,8 +61,9 @@ export class ContractWallet {
      * Encoded initCode for deploying a WalletProxy contract
      */
     get initCode() {
+        if (!this.contract) throw new Error('Failed to create proxy contract.')
         return this.contract
-            ?.deploy({
+            .deploy({
                 data: WalletProxyByteCode,
                 arguments: [this.owner, this.address, this.data],
             })

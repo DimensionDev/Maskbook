@@ -113,7 +113,7 @@ class Connection implements EVM_Connection {
                                     context.write(await this.Provider?.disconnect(options.providerType))
                                     break
                                 case EthereumMethodType.ETH_SUPPORTED_ENTRY_POINTS:
-                                case EthereumMethodType.SC_WALLET_DEPLOY:
+                                case EthereumMethodType.MASK_DEPLOY_CONTRACT_WALLET:
                                     break
                                 default: {
                                     const provider =
@@ -977,7 +977,7 @@ class Connection implements EVM_Connection {
         const options = this.getOptions(initial)
         return this.hijackedRequest<string>(
             {
-                method: EthereumMethodType.SC_WALLET_DEPLOY,
+                method: EthereumMethodType.MASK_TRANSFER_CONTRACT_WALLET,
                 params: [recipient],
             },
             options,
@@ -991,7 +991,7 @@ class Connection implements EVM_Connection {
         const options = this.getOptions(initial)
         return this.hijackedRequest<string>(
             {
-                method: EthereumMethodType.SC_WALLET_DEPLOY,
+                method: EthereumMethodType.MASK_DEPLOY_CONTRACT_WALLET,
                 params: [owner],
             },
             options,

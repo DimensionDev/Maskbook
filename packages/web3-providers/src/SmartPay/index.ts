@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { first, omit } from 'lodash-es'
+import { compact, first, omit } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import {
     ChainId,
@@ -9,8 +9,8 @@ import {
     getSmartPayConstants,
     UserOperation,
 } from '@masknet/web3-shared-evm'
+import { toBase64, fromHex, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import { BUNDLER_ROOT, FUNDER_ROOT, MAX_ACCOUNT_LENGTH } from './constants.js'
@@ -37,28 +37,35 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
         const response = await fetch(urlcat(BUNDLER_ROOT, '/handle'), {
             method: 'POST',
             body: JSON.stringify({
-                ...omit(userOperation, [
-                    'initCode',
-                    'callData',
-                    'callGas',
-                    'verificationGas',
-                    'preVerificationGas',
-                    'maxFeePerGas',
-                    'maxPriorityFeePerGas',
-                    'paymasterData',
-                ]),
-                init_code: userOperation.initCode,
-                call_data: userOperation.callData,
-                call_gas: userOperation.callGas,
-                verification_gas: userOperation.verificationGas,
-                pre_verification_gas: userOperation.preVerificationGas,
-                max_fee_per_gas: userOperation.maxFeePerGas,
-                max_priority_fee_per_gas: userOperation.maxPriorityFeePerGas,
-                paymaster_data: userOperation.paymasterData,
+                user_operations: [
+                    {
+                        ...omit(userOperation, [
+                            'initCode',
+                            'callData',
+                            'callGas',
+                            'verificationGas',
+                            'preVerificationGas',
+                            'maxFeePerGas',
+                            'maxPriorityFeePerGas',
+                            'paymasterData',
+                        ]),
+                        nonce: userOperation.nonce?.toFixed() ?? '0',
+                        init_code: toBase64(fromHex(userOperation.initCode ?? '0x')),
+                        call_data: toBase64(fromHex(userOperation.callData ?? '0x')),
+                        call_gas: userOperation.callGas,
+                        verification_gas: userOperation.verificationGas,
+                        pre_verification_gas: userOperation.preVerificationGas,
+                        max_fee_per_gas: userOperation.maxFeePerGas,
+                        max_priority_fee_per_gas: userOperation.maxPriorityFeePerGas,
+                        paymaster_data: toBase64(fromHex(userOperation.paymasterData ?? '0x')),
+                        signature: toBase64(fromHex(userOperation.signature ?? '0x')),
+                    },
+                ],
             }),
         })
-        const json: { tx_hash: string } = await response.json()
-        return json.tx_hash
+        const { tx_hash, message = 'Unknown Error' }: { tx_hash: string; message?: string } = await response.json()
+        if (tx_hash) return tx_hash
+        throw new Error(message)
     }
 
     private async assetChainId(chainId: ChainId) {
@@ -176,6 +183,25 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         return createContract<Wallet>(this.createWeb3(chainId), address, WalletABI as AbiItem[])
     }
 
+    private async createContractWallet(chainId: ChainId, owner: string) {
+        if (!owner) throw new Error('No owner address.')
+
+        const { LOGIC_WALLET_CONTRACT_ADDRESS } = getSmartPayConstants(chainId)
+        if (!LOGIC_WALLET_CONTRACT_ADDRESS) throw new Error('No logic wallet contract.')
+
+        const entryPoint = await this.getEntryPoint(chainId)
+        return new ContractWallet(chainId, owner, LOGIC_WALLET_CONTRACT_ADDRESS, entryPoint)
+    }
+
+    private async createCreate2Factory(chainId: ChainId, owner: string) {
+        if (!owner) throw new Error('No owner address.')
+
+        const { CREATE2_FACTORY_CONTRACT_ADDRESS } = getSmartPayConstants(chainId)
+        if (!CREATE2_FACTORY_CONTRACT_ADDRESS) throw new Error('No create2 contract.')
+
+        return new Create2Factory(CREATE2_FACTORY_CONTRACT_ADDRESS)
+    }
+
     private createContractAccount(
         chainId: ChainId,
         address: string,
@@ -208,7 +234,7 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         const calls = this.multicall.createMultipleContractSingleData(contracts, names, [])
         const results = await this.multicall.call(chainId, contracts, names, calls)
 
-        const owners = results.flatMap((x) => (x.succeed && x.value ? x.value : ''))
+        const owners = compact(results.flatMap((x) => (x.succeed && x.value ? x.value : '')))
 
         // the owner didn't deploy any account before.
         if (!owners.length) {
@@ -216,16 +242,20 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         }
 
         const operations = await this.funder.queryOperationByOwner(owner)
+        return compact(
+            owners.map((x, index) => {
+                // ensure the contract account has been deployed
+                // if (!isValidAddress(x)) return
 
-        return owners.map((x, index) =>
-            this.createContractAccount(
-                chainId,
-                options[index],
-                x,
-                x,
-                true,
-                operations.some((operation) => isSameAddress(operation.walletAddress, x)),
-            ),
+                return this.createContractAccount(
+                    chainId,
+                    options[index],
+                    owner,
+                    owner,
+                    true,
+                    operations.some((operation) => isSameAddress(operation.walletAddress, x)),
+                )
+            }),
         )
     }
 
@@ -240,26 +270,35 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         return []
     }
 
+    async getAccountByNonce(chainId: ChainId, owner: string, nonce: number) {
+        const create2Factory = await this.createCreate2Factory(chainId, owner)
+        const contractWallet = await this.createContractWallet(chainId, owner)
+        const address = create2Factory.derive(contractWallet.initCode, nonce)
+
+        const operations = await this.funder.queryOperationByOwner(owner)
+
+        // TODO: ensure account is deployed
+        return this.createContractAccount(
+            chainId,
+            address,
+            owner,
+            owner,
+            false,
+            operations.some((operation) => isSameAddress(operation.walletAddress, address)),
+        )
+    }
+
     async getAccountsByOwner(
         chainId: ChainId,
         owner: string,
     ): Promise<Array<ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM>>> {
-        if (!owner) throw new Error('No owner address.')
-
-        const { LOGIC_WALLET_CONTRACT_ADDRESS, CREATE2_FACTORY_CONTRACT_ADDRESS } = getSmartPayConstants(chainId)
-        if (!LOGIC_WALLET_CONTRACT_ADDRESS) throw new Error('No logic wallet contract.')
-        if (!CREATE2_FACTORY_CONTRACT_ADDRESS) throw new Error('No create2 contract.')
-
-        const entryPoint = await this.getEntryPoint(chainId)
-        const contractWallet = new ContractWallet(chainId, owner, LOGIC_WALLET_CONTRACT_ADDRESS, entryPoint)
-        if (!contractWallet.initCode) throw new Error('Failed to create initCode.')
-
-        const create2Factory = new Create2Factory(CREATE2_FACTORY_CONTRACT_ADDRESS)
+        const create2Factory = await this.createCreate2Factory(chainId, owner)
+        const contractWallet = await this.createContractWallet(chainId, owner)
         const allSettled = await Promise.allSettled([
             this.getAccountsFromMulticall(
                 chainId,
                 owner,
-                create2Factory.derive(contractWallet.initCode, MAX_ACCOUNT_LENGTH),
+                create2Factory.deriveUntil(contractWallet.initCode, MAX_ACCOUNT_LENGTH),
             ),
             this.getAccountsFromChainbase(chainId, owner),
         ])

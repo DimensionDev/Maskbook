@@ -33,7 +33,7 @@ export function useDeploy(
             twitterHandler: lastRecognizedIdentity.identifier.userId,
             ts: getUnixTime(new Date()),
             publicKey: currentPersona?.identifier.publicKeyAsHex,
-            nonce: 4,
+            nonce: 2,
         })
 
         let signature
@@ -64,6 +64,7 @@ export function useDeploy(
             account: contractAccount?.address,
             chainId: ChainId.Mumbai,
             providerType: ProviderType.MaskWallet,
+            identifier: signAccount.raw?.identifier,
         })
     }, [connection, signAccount, lastRecognizedIdentity?.identifier, currentPersona, contractAccount])
 }

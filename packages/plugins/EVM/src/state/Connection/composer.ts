@@ -108,6 +108,10 @@ class RequestContext implements Context {
         return this.editor.config
     }
 
+    get identifier() {
+        return this._options?.identifier
+    }
+
     get userOperation() {
         return this.editor.userOperation
     }

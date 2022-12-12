@@ -19,13 +19,13 @@ const userOperation: UserOperation = {
 
 describe('UserTransaction', async () => {
     const userTransaction = await UserTransaction.fromUserOperation(
-        ChainId.Mainnet,
+        ChainId.Matic,
         '0x0000000000000000000000000000000000000000',
         userOperation,
     )
 
     test('hasPaymaster', () => {
-        expect(userTransaction.hasPaymaster).toBe(false)
+        expect(userTransaction.hasPaymaster).toBe(true)
     })
 
     test('pack', () => {
@@ -37,12 +37,12 @@ describe('UserTransaction', async () => {
     })
 
     test('hash', () => {
-        const hash = '0x2714ac199129eaf48570adf18ce5c6849ac1203a6b92d72bdb52ae816cfc72a2'
+        const hash = '0x05a465d3001f59b9ddec7b1fb87454e4902c5b3bae0f020da88e4eea475f6516'
         expect(userTransaction.hash).toBe(hash)
     })
 
     test('requestId', () => {
-        const id = '0x1d3bc0ca567dd9b2c15d2cb24c54c2a6c61204b16c8cdae81dc56dc4e562f394'
+        const id = '0x6a955662926a9a874cd05d21ed9481ee5bade1669b40b804e347393c87981f3a'
         expect(userTransaction.requestId).toBe(id)
     })
 })
