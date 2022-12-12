@@ -11,7 +11,8 @@ import {
     currentMaskWalletChainIdSettings,
 } from '../legacy-settings/wallet-settings.js'
 import { logSettings } from '../legacy-settings/settings.js'
-import { LogHub, LogHubBase, LogPlatform } from '@masknet/web3-providers'
+import { LogHub, LogPlatform } from '@masknet/web3-providers'
+import type { LogHubBase } from '@masknet/web3-providers/types'
 
 export type PartialSharedUIContext = Pick<
     Plugin.Shared.SharedUIContext,
