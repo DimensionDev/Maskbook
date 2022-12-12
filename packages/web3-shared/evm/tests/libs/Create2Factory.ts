@@ -7,7 +7,7 @@ describe('Create2Factory', () => {
 
     test('getDeployedAddress', () => {
         expect(
-            create2Factory.deriveAll('0x0000000000000000000000000000000000000000').every(isValidAddress),
+            create2Factory.deriveUntil('0x0000000000000000000000000000000000000000').every(isValidAddress),
         ).toBeTruthy()
     })
 })
