@@ -1,6 +1,6 @@
 import { rest } from 'msw'
 
-const baseURL = 'http://mask.io'
+const baseURL = 'https://raw.githubusercontent.com/DimensionDev/Mask-Search-List/master/'
 
 /* cspell:disable */
 export const DSearchHandlers = [

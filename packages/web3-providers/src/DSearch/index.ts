@@ -7,13 +7,14 @@ import type {
 import urlcat from 'urlcat'
 import { CoinGeckoSearchAPI } from '../CoinGecko/apis/DSearchAPI.js'
 import { CoinMarketCapSearchAPI } from '../CoinMarketCap/DSearchAPI.js'
+import { fetchCached } from '../entry-helpers.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import { NFTScanSearchAPI } from '../NFTScan/index.js'
 import type { DSearchBaseAPI } from '../types/DSearch.js'
 import { getHandlers } from './rules.js'
 import type { handler } from './type.js'
 
-const BASE_URL = 'http://mask.io'
+const BASE_URL = 'https://raw.githubusercontent.com/DimensionDev/Mask-Search-List/master/'
 
 export class DSearchAPI<ChainId, SchemaType> implements DSearchBaseAPI.Provider<ChainId, SchemaType> {
     handlers: Array<handler<ChainId, SchemaType>>
@@ -34,10 +35,21 @@ export class DSearchAPI<ChainId, SchemaType> implements DSearchBaseAPI.Provider<
         const nftSpecificList = urlcat(BASE_URL, '/output/non-fungible-tokens/specific-list.json')
         const collectionSpecificList = urlcat(BASE_URL, '/output/non-fungible-collections/specific-list.json')
 
-        const tokensRequest = fetchJSON<Array<FungibleTokenResult<ChainId, SchemaType>>>(tokenSpecificList)
-        const nftsRequest = fetchJSON<Array<NonFungibleTokenResult<ChainId, SchemaType>>>(nftSpecificList)
-        const collectionsRequest =
-            fetchJSON<Array<NonFungibleCollectionResult<ChainId, SchemaType>>>(collectionSpecificList)
+        const tokensRequest = fetchJSON<Array<FungibleTokenResult<ChainId, SchemaType>>>(
+            tokenSpecificList,
+            undefined,
+            fetchCached,
+        )
+        const nftsRequest = fetchJSON<Array<NonFungibleTokenResult<ChainId, SchemaType>>>(
+            nftSpecificList,
+            undefined,
+            fetchCached,
+        )
+        const collectionsRequest = fetchJSON<Array<NonFungibleCollectionResult<ChainId, SchemaType>>>(
+            collectionSpecificList,
+            undefined,
+            fetchCached,
+        )
 
         const NFTScanRequest = this.NFTScanClient.get()
         const CoinGeckoRequest = this.CoinGeckoClient.get()

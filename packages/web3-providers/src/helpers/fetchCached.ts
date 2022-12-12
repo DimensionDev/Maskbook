@@ -21,6 +21,8 @@ const RULES = {
     'https://coingecko-agent.r2d2.to/api/v3': Duration.SHORT,
     // chainbase ENS
     'https://chainbase-proxy.r2d2.to/v1/ens': Duration.SHORT,
+    // Mask Search List
+    'https://raw.githubusercontent.com/DimensionDev/Mask-Search-List': Duration.LONG,
 }
 const URLS = Object.keys(RULES) as unknown as Array<keyof typeof RULES>
 
