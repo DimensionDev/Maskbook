@@ -1,6 +1,6 @@
 import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import type { NetworkPluginID, PersonaIdentifier } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { RecognizableError, WalletProvider } from '@masknet/web3-shared-base'
 import type {
@@ -36,7 +36,6 @@ export interface ERC1155Metadata {
 
 export interface Context {
     readonly account: string
-    readonly owner?: string
     readonly chainId: ChainId
     readonly requestId: number
     readonly writeable: boolean
@@ -57,7 +56,6 @@ export interface Context {
     readonly response?: JsonRpcResponse
 
     config?: Transaction
-    identifier?: PersonaIdentifier
     userOperation?: UserOperation
     requestArguments: RequestArguments
     result: unknown

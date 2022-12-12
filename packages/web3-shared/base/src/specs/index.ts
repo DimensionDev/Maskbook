@@ -10,7 +10,6 @@ import type {
     NextIDPlatform,
     NameServiceID,
     NetworkPluginID,
-    PersonaIdentifier,
 } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
@@ -886,8 +885,6 @@ export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
     chainId?: ChainId
     /** Designate the provider to handle the transaction. */
     providerType?: ProviderType
-    /** Persona identity */
-    identifier?: PersonaIdentifier
     /** Fragments to merge into the transaction. */
     overrides?: Partial<Transaction>
 }

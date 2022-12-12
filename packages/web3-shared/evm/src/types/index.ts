@@ -211,7 +211,6 @@ export enum ProviderType {
     MathWallet = 'MathWallet',
     Opera = 'Opera',
     WalletLink = 'WalletLink',
-    SmartPay = 'SmartPay',
     Clover = 'Clover',
     CustomNetwork = 'CustomNetwork',
 }
