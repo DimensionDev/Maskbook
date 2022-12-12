@@ -326,24 +326,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
                             fontSize={14}
                             fontWeight="bold"
                             color={(theme) => theme.palette.maskColor.main}>
-                            NFF
-                        </Typography>
-                        <Icons.Pets style={{ paddingRight: 4 }} />
-                        <Typography
-                            style={{ paddingRight: 4 }}
-                            variant="body1"
-                            fontSize={14}
-                            color={(theme) => theme.palette.maskColor.second}
-                            fontWeight="bold">
-                            &
-                        </Typography>
-
-                        <Typography
-                            style={{ paddingRight: 4 }}
-                            variant="body1"
-                            fontSize={14}
-                            fontWeight="bold"
-                            color={(theme) => theme.palette.maskColor.main}>
                             RSS3
                         </Typography>
                         <Icons.RSS3 />
