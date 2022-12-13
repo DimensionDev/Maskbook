@@ -110,12 +110,10 @@ export const FileList: FC<FileListProps> = ({ files, onLoadMore, className, onDo
         [showPrompt, refetchFiles, t],
     )
 
-    const boundaryRef = useRef<HTMLUListElement>(null)
-
     return (
         <section className={cx(classes.container, className)} {...rest}>
-            <Boundary boundaryRef={boundaryRef}>
-                <List className={classes.list} classes={{ root: classes.listRoot }} ref={boundaryRef}>
+            <Boundary>
+                <List className={classes.list} classes={{ root: classes.listRoot }}>
                     {files.map((file) => (
                         <ListItem key={file.id} className={classes.listItem} classes={{ root: classes.itemRoot }}>
                             {uploadStateMap[file.id] ? (
@@ -171,12 +169,10 @@ export const SelectableFileList: FC<SelectableFileListProps> = ({
         onChangeRef.current?.(newIds)
     }, [])
 
-    const boundaryRef = useRef<HTMLUListElement>(null)
-
     return (
         <section className={cx(classes.container, className)} {...rest}>
-            <Boundary boundaryRef={boundaryRef}>
-                <List className={classes.list} classes={{ root: classes.listRoot }} ref={boundaryRef}>
+            <Boundary>
+                <List className={classes.list} classes={{ root: classes.listRoot }}>
                     {files.map((file) => {
                         const disabled = selectedIds.length >= FILE_LIMIT && !selectedIds.includes(file.id)
                         return (
@@ -210,12 +206,10 @@ export const DisplayingFileList: FC<DisplayingFileFileListProps> = ({
 }) => {
     const { classes, cx } = useStyles()
 
-    const boundaryRef = useRef<HTMLUListElement>(null)
-
     return (
         <section className={cx(classes.container, className)} {...rest}>
-            <Boundary boundaryRef={boundaryRef}>
-                <List className={classes.list} classes={{ root: classes.listRoot }} ref={boundaryRef}>
+            <Boundary>
+                <List className={classes.list} classes={{ root: classes.listRoot }}>
                     {files.map((file) => (
                         <ListItem key={file.id} className={classes.listItem} classes={{ root: classes.itemRoot }}>
                             <DisplayingFile

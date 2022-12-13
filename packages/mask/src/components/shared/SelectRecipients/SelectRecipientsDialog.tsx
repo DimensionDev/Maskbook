@@ -10,7 +10,7 @@ import { useLookupAddress } from '@masknet/web3-hooks-base'
 import { Button, DialogActions, DialogContent, InputAdornment, InputBase, Typography } from '@mui/material'
 import Fuse from 'fuse.js'
 import { compact } from 'lodash-es'
-import { startTransition, useDeferredValue, useMemo, useRef, useState } from 'react'
+import { startTransition, useDeferredValue, useMemo, useState } from 'react'
 import { useI18N } from '../../../utils/index.js'
 import { ProfileInList } from './ProfileInList.js'
 
@@ -112,8 +112,6 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
         })
     }, [items])
 
-    const boundaryRef = useRef<HTMLDivElement>(null)
-
     const results = useMemo(() => {
         return keyword === '' ? items : fuse.search(keyword).map((item) => item.item)
     }, [fuse, keyword, items])
@@ -163,8 +161,8 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                         <Typography>{t('loading')}</Typography>
                     </div>
                 ) : (
-                    <Boundary boundaryRef={boundaryRef}>
-                        <div className={classes.list} ref={boundaryRef}>
+                    <Boundary>
+                        <div className={classes.list}>
                             {results.length === 0 ? (
                                 <div className={classes.empty}>
                                     <Icons.SearchEmpty size={36} />
