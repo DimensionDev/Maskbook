@@ -33,7 +33,7 @@ export function useDeploy(
             twitterHandler: lastRecognizedIdentity.identifier.userId,
             ts: getUnixTime(new Date()),
             publicKey: currentPersona?.identifier.publicKeyAsHex,
-            nonce: 4,
+            nonce: 2,
         })
 
         let signature

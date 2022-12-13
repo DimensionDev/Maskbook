@@ -84,10 +84,6 @@ class RequestContext implements Context {
         return this.editor.from ?? this._options?.account ?? this._account
     }
 
-    get owner() {
-        return this.editor.owner
-    }
-
     get chainId() {
         return this.editor.chainId ?? this._options?.chainId ?? this._chainId
     }

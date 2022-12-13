@@ -106,7 +106,7 @@ export class ProviderState<
 
                 if (!this.site) return
 
-                this.storage.providerType.setValue(this.options.getDefaultProviderType())
+                await this.storage.providerType.setValue(this.options.getDefaultProviderType())
             })
         })
     }

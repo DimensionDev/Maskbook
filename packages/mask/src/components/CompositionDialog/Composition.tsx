@@ -1,19 +1,20 @@
-import { useCallback, useEffect, useState, useRef } from 'react'
-import { DialogActions, DialogContent } from '@mui/material'
+import type { CompositionType } from '@masknet/plugin-infra/content-script'
+import { InjectedDialog } from '@masknet/shared'
+import { CrossIsolationMessages, EMPTY_OBJECT } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
+import { DialogActions, DialogContent } from '@mui/material'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useAsync } from 'react-use'
+import { Flags } from '../../../shared/index.js'
+import Services from '../../extension/service.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, useI18N } from '../../utils/index.js'
-import { CrossIsolationMessages } from '@masknet/shared-base'
-import { useRecipientsList } from './useRecipientsList.js'
-import { InjectedDialog } from '@masknet/shared'
-import { CompositionDialogUI, CompositionRef, E2EUnavailableReason } from './CompositionUI.js'
-import { useCompositionClipboardRequest } from './useCompositionClipboardRequest.js'
-import Services from '../../extension/service.js'
-import { useSubmit } from './useSubmit.js'
-import { useAsync } from 'react-use'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
-import { Flags } from '../../../shared/index.js'
+import { CompositionDialogUI, CompositionRef, E2EUnavailableReason } from './CompositionUI.js'
+import { useCompositionClipboardRequest } from './useCompositionClipboardRequest.js'
+import { useRecipientsList } from './useRecipientsList.js'
+import { useSubmit } from './useSubmit.js'
 
 const useStyles = makeStyles()({
     dialogRoot: {
@@ -31,7 +32,7 @@ const useStyles = makeStyles()({
     },
 })
 export interface PostDialogProps {
-    type?: 'popup' | 'timeline'
+    type?: CompositionType
     requireClipboardPermission?: boolean
 }
 let openOnInitAnswered = false
@@ -48,12 +49,14 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
 
     const [reason, setReason] = useState<'timeline' | 'popup' | 'reply'>('timeline')
     const [version, setVersion] = useState<-38 | -37>(Flags.v37PayloadDefaultEnabled ? -37 : -38)
+    const [initialMetas, setInitialMetas] = useState<Record<string, unknown>>(EMPTY_OBJECT)
     // #region Open
     const [open, setOpen] = useState(false)
     const [isOpenFromApplicationBoard, setIsOpenFromApplicationBoard] = useState(false)
 
     const onClose = useCallback(() => {
         setOpen(false)
+        setInitialMetas(EMPTY_OBJECT)
 
         UI.current?.reset()
     }, [])
@@ -82,6 +85,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             setOpen(open)
             setReason(reason)
             setIsOpenFromApplicationBoard(Boolean(options?.isOpenFromApplicationBoard))
+            setInitialMetas(options?.initialMetas ?? EMPTY_OBJECT)
             if (content) UI.current?.setMessage(content)
             if (options?.target) UI.current?.setEncryptionKind(options.target)
             if (options?.startupPlugin) UI.current?.startPlugin(options.startupPlugin, options.startupPluginProps)
@@ -118,9 +122,11 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             keepMounted
             open={open}
             onClose={onClose}
-            title={t('post_dialog__title')}>
+            title={t('post_dialog__title')}
+            independent>
             <DialogContent classes={{ root: classes.dialogContent }}>
                 <CompositionDialogUI
+                    type={type}
                     version={version}
                     setVersion={setVersion}
                     ref={UI}
@@ -134,6 +140,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                     supportTextEncoding={networkSupport?.image ?? false}
                     e2eEncryptionDisabled={isE2E_Disabled}
                     isOpenFromApplicationBoard={isOpenFromApplicationBoard}
+                    initialMetas={initialMetas}
                 />
             </DialogContent>
             <DialogActions sx={{ height: 68, padding: '0px !important' }} />

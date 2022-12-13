@@ -36,7 +36,6 @@ export interface ERC1155Metadata {
 
 export interface Context {
     readonly account: string
-    readonly owner?: string
     readonly chainId: ChainId
     readonly requestId: number
     readonly writeable: boolean
@@ -44,7 +43,7 @@ export interface Context {
     readonly providerType: ProviderType
     readonly method: EthereumMethodType
     readonly connection: EVM_Connection
-    readonly requestOptions: EVM_Web3ConnectionOptions | undefined
+    readonly requestOptions?: EVM_Web3ConnectionOptions
 
     /**
      * JSON RPC request payload
@@ -54,10 +53,10 @@ export interface Context {
     /**
      * JSON RPC response object
      */
-    readonly response: JsonRpcResponse | undefined
+    readonly response?: JsonRpcResponse
 
-    config: Transaction | undefined
-    userOperation: UserOperation | undefined
+    config?: Transaction
+    userOperation?: UserOperation
     requestArguments: RequestArguments
     result: unknown
     error: RecognizableError | null

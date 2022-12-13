@@ -15,8 +15,7 @@ export default {
         'com.maskbook.fileservice',
     '/[DimensionDev.Maskbook] develop/packages/plugins/ScamSniffer/src/locales/%locale%.json':
         'io.scamsniffer.mask-plugin',
-    '/[DimensionDev.Maskbook] develop/packages/plugins/CyberConnect/src/locales/%locale%.json':
-        'com.maskbook.cyberconnect',
+    '/[DimensionDev.Maskbook] develop/packages/plugins/CyberConnect/src/locales/%locale%.json': 'me.cyberconnect.app',
     '/[DimensionDev.Maskbook] develop/packages/plugins/RSS3/src/locales/%locale%.json': 'bio.rss3',
     '/[DimensionDev.Maskbook] develop/packages/plugins/EVM/src/locales/%locale%.json': 'com.mask.evm',
     '/[DimensionDev.Maskbook] develop/packages/plugins/Solana/src/locales/%locale%.json': 'com.maskbook.solana',
@@ -45,4 +44,5 @@ export default {
     '/[DimensionDev.Maskbook] develop/packages/plugins/DecentralizedSearch/src/locales/%locale%.json':
         'com.maskbook.decentralized-search',
     '/[DimensionDev.Maskbook] develop/packages/plugins/ScamWarning/src/locales/%locale%.json': 'com.mask.scam-warning',
+    '/[DimensionDev.Maskbook] develop/packages/plugins/SmartPay/src/locales/%locale%.json': 'com.mask.smart-pay',
 }

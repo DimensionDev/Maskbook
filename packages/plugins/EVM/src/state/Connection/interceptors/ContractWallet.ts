@@ -11,22 +11,24 @@ import {
     UserTransaction,
     ContractWallet as ContractWalletLib,
     ContractTransaction,
+    isEmptyHex,
 } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
-import { Web3StateSettings } from '../../../settings/index.js'
+import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
 import type { Middleware, Context } from '../types.js'
 import { Providers } from '../provider.js'
 import type { BaseContractWalletProvider } from '../providers/BaseContractWallet.js'
 
 export class ContractWallet implements Middleware<Context> {
     constructor(
-        /** The address of logic contract. */
-        protected address: string,
         protected providerType: ProviderType,
         protected contractAccount: ContractAccountAPI.Provider<NetworkPluginID.PLUGIN_EVM>,
         protected bundler: BundlerAPI.Provider,
+        protected options: {
+            getLogicContractAddress(chainId: ChainId): string
+        },
     ) {}
 
     private createWeb3(context: Context) {
@@ -53,13 +55,18 @@ export class ContractWallet implements Middleware<Context> {
     private async getEntryPoint(chainId: ChainId) {
         const entryPoints = await this.bundler.getSupportedEntryPoints(chainId)
         const entryPoint = first(entryPoints)
-        if (!entryPoint || isValidAddress(entryPoint)) throw new Error(`Not supported ${chainId}`)
+        if (!entryPoint || !isValidAddress(entryPoint)) throw new Error(`Not supported ${chainId}`)
         return entryPoint
     }
 
     private async getInitCode(chainId: ChainId, owner: string) {
-        const contractWallet = new ContractWalletLib(chainId, owner, this.address, await this.getEntryPoint(chainId))
-        if (!contractWallet.initCode) throw new Error('Failed to create initCode.')
+        const contractWallet = new ContractWalletLib(
+            chainId,
+            owner,
+            this.options.getLogicContractAddress(chainId),
+            await this.getEntryPoint(chainId),
+        )
+        if (isEmptyHex(contractWallet.initCode)) throw new Error('Failed to create initCode.')
         return contractWallet.initCode
     }
 
@@ -73,11 +80,18 @@ export class ContractWallet implements Middleware<Context> {
         return walletContract.methods.nonce()
     }
 
-    private async sendUserOperation(
-        context: Context,
-        owner = context.owner,
-        userOperation = context.userOperation,
-    ): Promise<string> {
+    private getOwner(context: Context) {
+        const provider = this.createProvider(context)
+        if (!provider) throw new Error('Invalid provider')
+
+        return {
+            owner: provider.owner,
+            identifier: provider.identifier,
+        }
+    }
+
+    private async sendUserOperation(context: Context, userOperation = context.userOperation): Promise<string> {
+        const { owner, identifier } = this.getOwner(context)
         if (!owner) throw new Error('Failed to sign user operation.')
         if (!userOperation) throw new Error('Invalid user operation.')
 
@@ -87,25 +101,34 @@ export class ContractWallet implements Middleware<Context> {
             await this.getEntryPoint(context.chainId),
             userOperation,
         )
-        await userTransaction.sign((message: string) =>
-            context.connection.signMessage(message, 'personalSign', {
+        await userTransaction.sign(async (message: string) => {
+            if (identifier) {
+                return SharedContextSettings.value.personaSignPayMessage({
+                    message,
+                    identifier,
+                })
+            }
+            return context.connection.signMessage(message, 'personalSign', {
                 account: owner,
                 providerType: this.providerType,
-            }),
-        )
+            })
+        })
         return this.bundler.sendUserOperation(context.chainId, userTransaction.toUserOperation())
     }
 
-    private async changeOwner(context: Context, recipient?: string) {
+    private async changeOwner(context: Context) {
+        const recipient = first<string>(context.requestArguments.params)
         if (!recipient) throw new Error('No recipient address.')
+
         return new ContractTransaction(this.createWallet(context)).send((x) => x.methods.changeOwner(recipient))
     }
 
-    private async deploy(context: Context, owner: string) {
+    private async deploy(context: Context) {
+        const { owner } = this.getOwner(context)
         const initCode = await this.getInitCode(context.chainId, owner)
         const accounts = await this.getDeployedAccounts(context.chainId, owner)
 
-        return this.sendUserOperation(context, owner, {
+        return this.sendUserOperation(context, {
             sender: context.account,
             nonce: accounts.length,
             initCode,
@@ -141,14 +164,14 @@ export class ContractWallet implements Middleware<Context> {
                 break
             case EthereumMethodType.ETH_SEND_TRANSACTION:
                 try {
-                    context.write(await this.sendUserOperation(context, context.owner, context.userOperation))
+                    context.write(await this.sendUserOperation(context, context.userOperation))
                 } catch (error) {
                     context.abort(error)
                 }
                 break
             case EthereumMethodType.ETH_SEND_USER_OPERATION:
                 try {
-                    context.write(await this.sendUserOperation(context, context.owner, context.userOperation))
+                    context.write(await this.sendUserOperation(context, context.userOperation))
                 } catch (error) {
                     context.abort(error)
                 }
@@ -167,22 +190,26 @@ export class ContractWallet implements Middleware<Context> {
                     context.abort(error)
                 }
                 break
+            case EthereumMethodType.ETH_ESTIMATE_GAS:
+                // fill later in UserTransaction.prototype.fill()
+                context.write('0x0')
+                break
             case EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN:
                 context.abort(new Error('Not supported by contract wallet.'))
                 break
             case EthereumMethodType.ETH_SEND_RAW_TRANSACTION:
                 context.abort(new Error('Not supported by contract wallet.'))
                 break
-            case EthereumMethodType.SC_WALLET_CHANGE_OWNER:
+            case EthereumMethodType.MASK_TRANSFER_CONTRACT_WALLET:
                 try {
-                    context.write(await this.changeOwner(context, first(context.requestArguments.params)))
+                    context.write(await this.changeOwner(context))
                 } catch (error) {
                     context.abort(error)
                 }
                 break
-            case EthereumMethodType.SC_WALLET_DEPLOY:
+            case EthereumMethodType.MASK_DEPLOY_CONTRACT_WALLET:
                 try {
-                    context.write(await this.deploy(context, first(context.requestArguments.params) ?? context.account))
+                    context.write(await this.deploy(context))
                 } catch (error) {
                     context.abort(error)
                 }

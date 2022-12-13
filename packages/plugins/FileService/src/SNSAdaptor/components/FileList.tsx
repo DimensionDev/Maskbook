@@ -1,5 +1,5 @@
 import { List, ListItem, Typography } from '@mui/material'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, Boundary, useCustomSnackbar } from '@masknet/theme'
 import type { FileInfo } from '../../types.js'
 import { FC, HTMLProps, useCallback, useRef } from 'react'
 import {
@@ -36,6 +36,9 @@ const useStyles = makeStyles()((theme) => ({
         width: 'auto',
         padding: 0,
         margin: theme.spacing(0, 2, 1.5),
+    },
+    disabled: {
+        opacity: 0.5,
     },
     file: {
         width: '100%',
@@ -107,30 +110,34 @@ export const FileList: FC<FileListProps> = ({ files, onLoadMore, className, onDo
         [showPrompt, refetchFiles, t],
     )
 
+    const boundaryRef = useRef<HTMLUListElement>(null)
+
     return (
         <section className={cx(classes.container, className)} {...rest}>
-            <List className={classes.list} classes={{ root: classes.listRoot }}>
-                {files.map((file) => (
-                    <ListItem key={file.id} className={classes.listItem} classes={{ root: classes.itemRoot }}>
-                        {uploadStateMap[file.id] ? (
-                            <UploadingFile
-                                className={classes.file}
-                                file={file}
-                                progress={uploadStateMap[file.id]?.progress ?? 0}
-                            />
-                        ) : (
-                            <ManageableFile
-                                className={classes.file}
-                                file={file}
-                                onDelete={handleDelete}
-                                onRename={handleRename}
-                                onDownload={onDownload}
-                                onSend={onSend}
-                            />
-                        )}
-                    </ListItem>
-                ))}
-            </List>
+            <Boundary boundaryRef={boundaryRef}>
+                <List className={classes.list} classes={{ root: classes.listRoot }} ref={boundaryRef}>
+                    {files.map((file) => (
+                        <ListItem key={file.id} className={classes.listItem} classes={{ root: classes.itemRoot }}>
+                            {uploadStateMap[file.id] ? (
+                                <UploadingFile
+                                    className={classes.file}
+                                    file={file}
+                                    progress={uploadStateMap[file.id]?.progress ?? 0}
+                                />
+                            ) : (
+                                <ManageableFile
+                                    className={classes.file}
+                                    file={file}
+                                    onDelete={handleDelete}
+                                    onRename={handleRename}
+                                    onDownload={onDownload}
+                                    onSend={onSend}
+                                />
+                            )}
+                        </ListItem>
+                    ))}
+                </List>
+            </Boundary>
         </section>
     )
 }
@@ -140,7 +147,7 @@ interface SelectableFileListProps extends Omit<FileListBaseProps, 'onChange' | '
     onChange?(selectedIds: string[]): void
 }
 
-const FILE_LIMIT = 3
+const FILE_LIMIT = 2
 export const SelectableFileList: FC<SelectableFileListProps> = ({
     files,
     className,
@@ -164,25 +171,32 @@ export const SelectableFileList: FC<SelectableFileListProps> = ({
         onChangeRef.current?.(newIds)
     }, [])
 
+    const boundaryRef = useRef<HTMLUListElement>(null)
+
     return (
         <section className={cx(classes.container, className)} {...rest}>
-            <List className={classes.list} classes={{ root: classes.listRoot }}>
-                {files.map((file) => (
-                    <ListItem
-                        key={file.id}
-                        className={classes.listItem}
-                        classes={{ root: classes.itemRoot }}
-                        data-id={file.id}>
-                        <SelectableFile
-                            disabled={selectedIds.length >= FILE_LIMIT && !selectedIds.includes(file.id)}
-                            className={classes.file}
-                            file={file}
-                            selected={selectedIds.includes(file.id)}
-                            onChange={handleChange}
-                        />
-                    </ListItem>
-                ))}
-            </List>
+            <Boundary boundaryRef={boundaryRef}>
+                <List className={classes.list} classes={{ root: classes.listRoot }} ref={boundaryRef}>
+                    {files.map((file) => {
+                        const disabled = selectedIds.length >= FILE_LIMIT && !selectedIds.includes(file.id)
+                        return (
+                            <ListItem
+                                key={file.id}
+                                className={cx(classes.listItem, disabled ? classes.disabled : null)}
+                                classes={{ root: classes.itemRoot }}
+                                data-id={file.id}>
+                                <SelectableFile
+                                    disabled={disabled}
+                                    className={classes.file}
+                                    file={file}
+                                    selected={selectedIds.includes(file.id)}
+                                    onChange={handleChange}
+                                />
+                            </ListItem>
+                        )
+                    })}
+                </List>
+            </Boundary>
         </section>
     )
 }
@@ -197,15 +211,24 @@ export const DisplayingFileList: FC<DisplayingFileFileListProps> = ({
 }) => {
     const { classes, cx } = useStyles()
 
+    const boundaryRef = useRef<HTMLUListElement>(null)
+
     return (
         <section className={cx(classes.container, className)} {...rest}>
-            <List className={classes.list} classes={{ root: classes.listRoot }}>
-                {files.map((file) => (
-                    <ListItem key={file.id} className={classes.listItem} classes={{ root: classes.itemRoot }}>
-                        <DisplayingFile className={classes.file} file={file} onSave={onSave} onDownload={onDownload} />
-                    </ListItem>
-                ))}
-            </List>
+            <Boundary boundaryRef={boundaryRef}>
+                <List className={classes.list} classes={{ root: classes.listRoot }} ref={boundaryRef}>
+                    {files.map((file) => (
+                        <ListItem key={file.id} className={classes.listItem} classes={{ root: classes.itemRoot }}>
+                            <DisplayingFile
+                                className={classes.file}
+                                file={file}
+                                onSave={onSave}
+                                onDownload={onDownload}
+                            />
+                        </ListItem>
+                    ))}
+                </List>
+            </Boundary>
         </section>
     )
 }

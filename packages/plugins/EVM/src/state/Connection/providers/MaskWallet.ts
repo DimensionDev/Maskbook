@@ -4,9 +4,9 @@ import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
 import type { EVM_Provider } from '../types.js'
-import { BaseHostedProvider } from './BaseHosted.js'
+import { BaseContractWalletProvider } from './BaseContractWallet.js'
 
-export class MaskWalletProvider extends BaseHostedProvider implements EVM_Provider {
+export class MaskWalletProvider extends BaseContractWalletProvider implements EVM_Provider {
     constructor() {
         super(ProviderType.MaskWallet)
         Web3StateSettings.readyPromise.then(this.addSharedContextListeners.bind(this))

@@ -3,6 +3,7 @@ import { Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../locales/i18n_generated.js'
+import { CompositionType, useCompositionContext } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
     chip: {
@@ -12,30 +13,46 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface SingleFileChipProps extends Omit<HTMLProps<HTMLDivElement>, 'ref' | 'size'> {
+interface SingleFileChipProps extends Omit<HTMLProps<HTMLDivElement>, 'ref' | 'size' | 'onClick'> {
     name: string
     size: string
+    onClick(options: { compositionType: CompositionType }): void
 }
 
-export const SingleFileChip: FC<SingleFileChipProps> = ({ name, size, ...rest }) => {
+export const SingleFileChip: FC<SingleFileChipProps> = ({ name, size, onClick, ...rest }) => {
     const { classes } = useStyles()
     const t = useI18N()
+    const { type } = useCompositionContext()
     return (
-        <Typography className={classes.chip} {...rest}>
+        <Typography
+            className={classes.chip}
+            {...rest}
+            onClick={() => {
+                onClick({ compositionType: type })
+            }}>
             <Icons.FileService size={16} />
             {t.file_chip_single({ name, size })}
         </Typography>
     )
 }
 
-interface MultipleFileChipProps extends Omit<HTMLProps<HTMLDivElement>, 'ref'> {
+interface MultipleFileChipProps
+    extends Omit<HTMLProps<HTMLDivElement>, 'ref' | 'onClick'>,
+        Pick<SingleFileChipProps, 'onClick'> {
     count: number
 }
-export const MultipleFileChip: FC<MultipleFileChipProps> = ({ count, ...rest }) => {
+export const MultipleFileChip: FC<MultipleFileChipProps> = ({ count, onClick, ...rest }) => {
     const { classes, cx } = useStyles()
     const t = useI18N()
+    const { type } = useCompositionContext()
     return (
-        <Typography component="div" className={cx(classes.chip)} {...rest}>
+        <Typography
+            component="div"
+            className={cx(classes.chip)}
+            {...rest}
+            onClick={() => {
+                onClick({ compositionType: type })
+            }}>
             <Icons.FileService size={16} />
             {t.file_chip_multiple({ count: count.toString() })}
         </Typography>

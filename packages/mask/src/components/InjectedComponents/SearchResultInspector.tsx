@@ -46,7 +46,6 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         const list = await DSearch.search(keyword, {
             getAddressType: connection?.getAddressType,
         })
-
         return list[0]
     }, [keyword, connection?.getAddressType])
     const contentComponent = useMemo(() => {

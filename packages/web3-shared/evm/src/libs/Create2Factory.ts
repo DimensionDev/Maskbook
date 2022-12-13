@@ -19,8 +19,12 @@ export class Create2Factory {
         return formatEthereumAddress(bytesToHex(hexToBytes(keccak256(bytesToHex(items))).slice(12)))
     }
 
-    /** Derive all deploy addresses from the given initCode. */
-    derive(initCode: string, length = Create2Factory.MAX_DERIVATION_NUM) {
+    derive(initCode: string, nonce: number) {
+        return this.getDeployAddress(initCode, nonce)
+    }
+
+    /** Derive multiple times from the given initCode. */
+    deriveUntil(initCode: string, length = Create2Factory.MAX_DERIVATION_NUM) {
         return Array.from({ length }).map((_, i) => this.getDeployAddress(initCode, i))
     }
 }

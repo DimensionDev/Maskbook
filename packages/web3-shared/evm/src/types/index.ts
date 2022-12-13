@@ -157,8 +157,8 @@ export enum EthereumMethodType {
     ETH_CALL_USER_OPERATION = 'eth_callUserOperation',
     ETH_SUPPORTED_CHAIN_IDS = 'eth_supportedChainIds',
     ETH_SUPPORTED_ENTRY_POINTS = 'eth_supportedEntryPoints',
-    SC_WALLET_DEPLOY = 'SCWallet_deploy',
-    SC_WALLET_CHANGE_OWNER = 'SCWallet_changeOwner',
+    MASK_DEPLOY_CONTRACT_WALLET = 'mask_deployContractWallet',
+    MASK_TRANSFER_CONTRACT_WALLET = 'mask_transferContractWallet',
 
     // only for mask
     MASK_LOGIN = 'MASK_LOGIN',
@@ -211,7 +211,6 @@ export enum ProviderType {
     MathWallet = 'MathWallet',
     Opera = 'Opera',
     WalletLink = 'WalletLink',
-    SmartPay = 'SmartPay',
     Clover = 'Clover',
     CustomNetwork = 'CustomNetwork',
 }

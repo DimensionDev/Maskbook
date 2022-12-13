@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js'
 import Web3 from 'web3'
 import * as ABICoder from 'web3-eth-abi'
-import { AbiItem, bytesToHex, hexToBytes, keccak256, toHex, toNumber } from 'web3-utils'
+import { AbiItem, bytesToHex, hexToBytes, keccak256, padLeft, toNumber } from 'web3-utils'
 import { toFixed } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import EntryPointABI from '@masknet/web3-contracts/abis/EntryPoint.json'
@@ -9,9 +9,10 @@ import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import type { EntryPoint } from '@masknet/web3-contracts/types/EntryPoint.js'
 import type { ChainId, Transaction, UserOperation } from '../types/index.js'
 import { createContract, getZeroAddress, isZeroString, isEmptyHex, isZeroAddress } from '../helpers/index.js'
+import { getSmartPayConstants } from '../index.js'
 
-const CALL_OP_TYPE = {
-    callOp: {
+const USER_OP_TYPE = {
+    userOp: {
         sender: 'address',
         nonce: 'uint256',
         initCode: 'bytes',
@@ -95,6 +96,10 @@ export class UserTransaction {
     constructor(private chainId: ChainId, private entryPoint: string, private userOperation: UserOperation) {}
 
     get hasPaymaster() {
+        console.log({
+            paymaster: this.userOperation.paymaster,
+            isZero: isZeroAddress(this.userOperation.paymaster),
+        })
         return !!(this.userOperation.paymaster && !isZeroAddress(this.userOperation.paymaster))
     }
 
@@ -102,7 +107,7 @@ export class UserTransaction {
      * Pack everything without signature
      */
     get pack() {
-        const encoded = coder.encodeParameter(CALL_OP_TYPE, {
+        const encoded = coder.encodeParameter(USER_OP_TYPE, {
             ...this.userOperation,
             signature: '0x',
         })
@@ -113,7 +118,7 @@ export class UserTransaction {
      * Pack everything include signature
      */
     get packAll() {
-        const encoded = coder.encodeParameter(CALL_OP_TYPE, this.userOperation)
+        const encoded = coder.encodeParameter(USER_OP_TYPE, this.userOperation)
         return `0x${encoded.slice(66, encoded.length - 64)}`
     }
 
@@ -143,23 +148,24 @@ export class UserTransaction {
             preVerificationGas,
             maxFeePerGas,
             maxPriorityFeePerGas,
+            paymaster,
         } = this.userOperation
 
         if (!isEmptyHex(initCode)) {
             // caution: the creator needs to set the latest index of the contract account.
             // otherwise, always treat the operation to create the initial account.
-            if (!nonce) this.userOperation.nonce = 0
+            if (typeof nonce === 'undefined') this.userOperation.nonce = 0
             if (!sender) {
                 if (!this.entryPointContract) throw new Error('Failed to create entry point contract.')
                 this.userOperation.sender = await this.entryPointContract.methods
                     .getSenderAddress(initCode, nonce)
                     .call()
             }
-            if (isZeroString(verificationGas)) {
-                this.userOperation.verificationGas = toFixed(
-                    new BigNumber(DEFAULT_USER_OPERATION.verificationGas).plus(32000 + (200 * initCode.length) / 2),
-                )
-            }
+
+            // add more verification gas
+            this.userOperation.verificationGas = toFixed(
+                new BigNumber(DEFAULT_USER_OPERATION.verificationGas).plus(32000 + (200 * initCode.length) / 2),
+            )
         }
 
         if (typeof this.userOperation.nonce === 'undefined') {
@@ -184,6 +190,9 @@ export class UserTransaction {
                 ),
             )
         }
+        if (isZeroString(maxPriorityFeePerGas)) {
+            this.userOperation.maxPriorityFeePerGas = DEFAULT_USER_OPERATION.maxPriorityFeePerGas
+        }
         if (isZeroString(verificationGas)) {
             this.userOperation.verificationGas = toFixed(DEFAULT_USER_OPERATION.verificationGas)
         }
@@ -194,9 +203,15 @@ export class UserTransaction {
                     .reduce((sum, x) => sum + x),
             )
         }
-        if (isZeroString(maxPriorityFeePerGas)) {
-            this.userOperation.maxPriorityFeePerGas = DEFAULT_USER_OPERATION.maxPriorityFeePerGas
+        if (!paymaster || isZeroAddress(paymaster)) {
+            const { PAYMASTER_CONTRACT_ADDRESS, PAYMENT_TOKEN_ADDRESS } = getSmartPayConstants(this.chainId)
+            if (!PAYMASTER_CONTRACT_ADDRESS) throw new Error('No paymaster address.')
+            if (!PAYMENT_TOKEN_ADDRESS) throw new Error('No payment token address.')
+
+            this.userOperation.paymaster = PAYMASTER_CONTRACT_ADDRESS
+            this.userOperation.paymasterData = padLeft(PAYMENT_TOKEN_ADDRESS, 32)
         }
+
         return this
     }
 
@@ -217,16 +232,17 @@ export class UserTransaction {
     }
 
     toUserOperation(): UserOperation {
-        const { nonce, callGas, verificationGas, preVerificationGas, maxFeePerGas, maxPriorityFeePerGas } =
+        const { nonce, callGas, verificationGas, preVerificationGas, maxFeePerGas, maxPriorityFeePerGas, signature } =
             this.userOperation
         return {
             ...this.userOperation,
             nonce,
-            callGas: callGas ? toHex(callGas) : undefined,
-            verificationGas: verificationGas ? toHex(verificationGas) : undefined,
-            preVerificationGas: preVerificationGas ? toHex(preVerificationGas) : undefined,
-            maxFeePerGas: maxFeePerGas ? toHex(maxFeePerGas) : undefined,
-            maxPriorityFeePerGas: maxPriorityFeePerGas ? toHex(maxPriorityFeePerGas) : undefined,
+            callGas: callGas ? toFixed(callGas) : '0',
+            verificationGas: verificationGas ? toFixed(verificationGas) : '0',
+            preVerificationGas: preVerificationGas ? toFixed(preVerificationGas) : '0',
+            maxFeePerGas: maxFeePerGas ? toFixed(maxFeePerGas) : '0',
+            maxPriorityFeePerGas: maxPriorityFeePerGas ? toFixed(maxPriorityFeePerGas) : '0',
+            signature,
         }
     }
 
@@ -254,7 +270,10 @@ export class UserTransaction {
         entryPoint: string,
         userOperation: UserOperation,
     ): Promise<UserTransaction> {
-        const userTransaction = new UserTransaction(chainId, entryPoint, userOperation)
+        const userTransaction = new UserTransaction(chainId, entryPoint, {
+            ...DEFAULT_USER_OPERATION,
+            ...userOperation,
+        })
         return userTransaction.fill()
     }
 }

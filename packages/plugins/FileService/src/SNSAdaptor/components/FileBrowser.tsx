@@ -104,7 +104,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     actions: {
-        padding: theme.spacing(2),
+        padding: theme.spacing(2, 2, 0),
         flexShrink: 0,
         boxSizing: 'border-box',
         boxShadow:
@@ -154,7 +154,10 @@ export function FileBrowser({ selectMode, selectedFileIds = EMPTY_LIST }: Props)
     const visibleFiles = useMemo(() => {
         if (searching) {
             if (!keyword) return files
-            return files.filter((x) => x.name.toLowerCase().includes(keyword) || x.key?.toLowerCase().includes(keyword))
+            const kw = keyword.toLowerCase()
+            return files.filter((x) => {
+                return x.name.toLowerCase().includes(kw) || x.key?.toLowerCase().includes(kw)
+            })
         }
         const provider = TabToProviderMap[tab]
         if (!provider) return files

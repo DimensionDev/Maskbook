@@ -6,6 +6,7 @@ import {
     Plugin,
     PluginI18NFieldRender,
     usePluginI18NField,
+    useCompositionContext,
 } from '@masknet/plugin-infra/content-script'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -167,6 +168,7 @@ const CustomEntry = memo(
         const { classes } = useStyles()
         const { id, label, onClick, unstable } = props
         useSetPluginRef(ref, onClick)
+        const { type } = useCompositionContext()
         return (
             <ClickableChip
                 classes={{
@@ -178,7 +180,11 @@ const CustomEntry = memo(
                         {unstable && <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />}
                     </>
                 }
-                onClick={onClick}
+                onClick={() => {
+                    onClick?.({
+                        compositionType: type,
+                    })
+                }}
                 disabled={props.readonly}
             />
         )

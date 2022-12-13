@@ -60,11 +60,16 @@ interface CollectibleCardProps extends Omit<FeedCardProps, 'feed'> {
 }
 
 const suffixMap: Record<string, string> = {
-    crossbell: '.csb',
+    Crossbell: '.csb',
+    Lens: '.lens',
+    ENS: '.eth',
 }
 const resolveHandle = (metadata?: RSS3BaseAPI.FollowMetadata) => {
     if (!metadata) return ''
-    return `${metadata.handle}${suffixMap[metadata.source]}`.toLowerCase()
+    const handle = metadata.handle.toLowerCase()
+    const suffix = suffixMap[metadata.platform] || ''
+    // handle might contain suffix at this time.
+    return handle.endsWith('.' + suffix) ? handle : `${handle}${suffix}`
 }
 
 /**
@@ -76,10 +81,12 @@ const resolveHandle = (metadata?: RSS3BaseAPI.FollowMetadata) => {
 export const ProfileLinkCard: FC<CollectibleCardProps> = ({ feed, className, ...rest }) => {
     const { classes, cx } = useStyles()
 
-    const user = useAddressLabel(feed.owner)
-
     const action = feed.actions[0]
     const metadata = action.metadata
+
+    const user = useAddressLabel(feed.owner)
+    const otherEns = useAddressLabel(metadata?.address ?? '')
+    const other = resolveHandle(metadata) || otherEns
 
     return (
         <CardFrame
@@ -91,7 +98,7 @@ export const ProfileLinkCard: FC<CollectibleCardProps> = ({ feed, className, ...
                 <Translate.profile_link
                     values={{
                         user,
-                        other: resolveHandle(metadata),
+                        other,
                         platform: feed.platform!,
                         context: feed.type,
                     }}
@@ -127,7 +134,7 @@ export const ProfileLinkCard: FC<CollectibleCardProps> = ({ feed, className, ...
                             width={32}
                             src={`https://cdn.stamp.fyi/avatar/${metadata.address}`}
                         />
-                        <Typography className={classes.name}>{resolveHandle(metadata)}</Typography>
+                        <Typography className={classes.name}>{other}</Typography>
                     </div>
                 </div>
             ) : null}

@@ -20,6 +20,10 @@ export class BaseProvider implements EVM_Provider {
 
     emitter = new Emitter<ProviderEvents<ChainId, ProviderType>>()
 
+    get connected() {
+        return false
+    }
+
     // No need to wait by default
     get ready() {
         return true

@@ -1,5 +1,4 @@
 import { Icons } from '@masknet/icons'
-import { formatFileSize } from '@masknet/kit'
 import { useCustomSnackbar, makeStyles } from '@masknet/theme'
 import { alpha, Button, Typography } from '@mui/material'
 import { isNil } from 'lodash-es'
@@ -99,11 +98,12 @@ export const UploadDropArea: React.FC<Props> = memo(({ maxFileSize, onSelectFile
         switch (code) {
             case 101:
                 showSnackbar(t.error({ context: 'single', limit: '' }), { variant: 'error' })
-
                 break
             case 102:
-                const MAX_FILE_SIZE = formatFileSize(maxFileSize, true)
-                showSnackbar(t.error({ context: 'oversized', limit: MAX_FILE_SIZE }), { variant: 'error' })
+                showSnackbar(t.upload_file_title({ context: 'failed' }), {
+                    variant: 'error',
+                    message: t.upload_file_message({ context: 'failed' }),
+                })
         }
     }
     return (
