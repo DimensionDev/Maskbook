@@ -104,7 +104,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     actions: {
-        padding: theme.spacing(2),
+        padding: theme.spacing(2, 2, 0),
         flexShrink: 0,
         boxSizing: 'border-box',
         boxShadow:

@@ -64,7 +64,6 @@ export function useDeploy(
             account: contractAccount?.address,
             chainId: ChainId.Mumbai,
             providerType: ProviderType.MaskWallet,
-            identifier: signAccount.raw?.identifier,
         })
     }, [connection, signAccount, lastRecognizedIdentity?.identifier, currentPersona, contractAccount])
 }
