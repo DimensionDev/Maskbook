@@ -9,6 +9,7 @@ import {
     EOAResult,
     attemptUntil,
 } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import {
     ChainId as ChainIdEVM,
