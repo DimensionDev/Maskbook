@@ -32,7 +32,14 @@ import { resolveActivityType } from '../../helpers/resolveActivityType.js'
 import { getPaymentToken } from '../../helpers/getPaymentToken.js'
 import { parseJSON } from '../../helpers/parseJSON.js'
 
-type NFTScanChainId = ChainId.Mainnet | ChainId.Matic | ChainId.BSC | ChainId.Arbitrum | ChainId.Optimism
+type NFTScanChainId =
+    | ChainId.Mainnet
+    | ChainId.Matic
+    | ChainId.BSC
+    | ChainId.Arbitrum
+    | ChainId.Optimism
+    | ChainId.xDai
+    | ChainId.Avalanche
 
 export const resolveHostName = createLookupTableResolver<NFTScanChainId, string>(
     {
@@ -40,7 +47,9 @@ export const resolveHostName = createLookupTableResolver<NFTScanChainId, string>
         [ChainId.Matic]: 'https://polygon.nftscan.com',
         [ChainId.BSC]: 'https://bnb.nftscan.com',
         [ChainId.Arbitrum]: 'https://arbitrum.nftscan.com/',
+        [ChainId.Avalanche]: 'https://avax.nftscan.com/',
         [ChainId.Optimism]: 'https://optimism.nftscan.com/',
+        [ChainId.xDai]: 'https://cronos.nftscan.com/',
     },
     '',
 )
