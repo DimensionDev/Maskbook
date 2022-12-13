@@ -5,5 +5,7 @@
     "followers": "Followers",
     "no_data": "No data",
     "follow_now": "Follow Now",
+    "no_followers": "No followers.",
+    "no_followings": "No following friends.",
     "unfollow": "Unfollow"
 }
