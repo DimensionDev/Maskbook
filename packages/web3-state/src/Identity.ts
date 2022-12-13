@@ -18,6 +18,7 @@ export class IdentityServiceState<ChainId> implements Web3SocialIdentityState<Ch
     private getIdentityID(identity: SocialIdentity) {
         if (!identity.identifier) return ''
         return [
+            '1', // version
             identity.identifier.network,
             identity.identifier.userId,
             identity.bio,

@@ -21,12 +21,12 @@ import { ChainbaseResolver } from './NameService/Chainbase.js'
 import { Web3StateSettings } from '../settings/index.js'
 import { SpaceID_Resolver } from './NameService/SpaceID.js'
 
-const ENS_RE = /[^\t\n\v()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/i
+const ENS_RE = /[^\t\n\v ()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/i
 const SID_RE = /[^\t\n\v()[\]]{1,256}\.bnb\b/i
 const ADDRESS_FULL = /0x\w{40,}/i
 const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/
 const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/
-const LENS_RE = /[^\t\n\v()[\]]{1,256}\.lens\b/i
+const LENS_RE = /[^\t\n\v ()[\]]{1,256}\.lens\b/i
 const LENS_URL_RE = /https?:\/\/.+\/(\w+\.lens)/
 
 function getENSNames(userId: string, nickname: string, bio: string) {
@@ -232,7 +232,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         if (!userId) return
 
         const response = await Twitter.getUserNftContainer(userId)
-        const connection = await Web3StateSettings.value.Connection?.getConnection?.({
+        const connection = Web3StateSettings.value.Connection?.getConnection?.({
             chainId: ChainId.Mainnet,
         })
         const ownerAddress = await connection?.getNonFungibleTokenOwner(response.address, response.token_id)
