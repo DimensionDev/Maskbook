@@ -193,10 +193,10 @@ const Profile = ({ url }: { url: string }) => {
                             />
                         </MaskTabList>
                         <TabPanel value={tabs.Followings} className={classes.panel}>
-                            <FollowersPage hit={<Nodata />} address={identity.address} tab={ProfileTab.Followings} />
+                            <FollowersPage hint={<Nodata />} address={identity.address} tab={ProfileTab.Followings} />
                         </TabPanel>
                         <TabPanel value={tabs.Followers} className={classes.panel}>
-                            <FollowersPage hit={<Nodata />} address={identity.address} tab={ProfileTab.Followers} />
+                            <FollowersPage hint={<Nodata />} address={identity.address} tab={ProfileTab.Followers} />
                         </TabPanel>
                     </Stack>
                 )}

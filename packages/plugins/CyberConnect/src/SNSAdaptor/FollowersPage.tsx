@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface FollowersPageProps {
     address?: string
-    hit?: React.ReactNode
+    hint?: React.ReactNode
     tab: ProfileTab
 }
 
@@ -52,7 +52,7 @@ export function FollowersPage(props: FollowersPageProps) {
                 ? value.map((f: IFollowIdentity) => {
                       return <FollowRow key={f.address} identity={f} />
                   })
-                : props.hit}
+                : props.hint}
             <ElementAnchor callback={() => next?.()}>{!done && value.length !== 0 && <LoadingBase />}</ElementAnchor>
         </Box>
     )
