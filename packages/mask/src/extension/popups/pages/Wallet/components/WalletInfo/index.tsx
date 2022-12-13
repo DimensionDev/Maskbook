@@ -4,10 +4,11 @@ import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { MoreHoriz } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
-import { FormattedAddress, CopyIconButton } from '@masknet/shared'
+import { FormattedAddress } from '@masknet/shared'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useReverseAddress, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
+import { CopyIconButton } from '../../../../components/CopyIconButton/index.js'
 
 const useStyles = makeStyles()({
     container: {

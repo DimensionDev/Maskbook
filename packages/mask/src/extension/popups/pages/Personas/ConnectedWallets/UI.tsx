@@ -2,14 +2,14 @@ import { memo, useCallback, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
-import { FormattedAddress, ImageIcon, CopyIconButton } from '@masknet/shared'
+import { FormattedAddress, ImageIcon } from '@masknet/shared'
 import { Button, Link, Typography } from '@mui/material'
-
 import { Icons } from '@masknet/icons'
 import type { ConnectedWalletInfo } from '../type.js'
 import { DisconnectWalletDialog } from '../components/DisconnectWalletDialog/index.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
 
 const useStyles = makeStyles()(() => ({
     container: {

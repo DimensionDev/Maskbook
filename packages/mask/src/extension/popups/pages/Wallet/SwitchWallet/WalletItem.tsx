@@ -8,8 +8,9 @@ import type { Wallet } from '@masknet/web3-shared-base'
 import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { ListItem, ListItemText, Typography } from '@mui/material'
-import { FormattedAddress, CopyIconButton } from '@masknet/shared'
+import { FormattedAddress } from '@masknet/shared'
 import { WalletContext } from '../hooks/useWalletContext.js'
+import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
 
 const useStyles = makeStyles()({
     item: {
