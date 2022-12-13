@@ -6,7 +6,7 @@ import { getAvailablePlugins } from '../utils/getAvailablePlugins.js'
 
 export function getSearchResultTabs(
     definitions: readonly Plugin.SNSAdaptor.Definition[],
-    result: SearchResult<Web3Helper.ChainIdAll>,
+    result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
     translate: (pluginID: string, field: I18NStringField) => string,
 ) {
     const displayPlugins = getAvailablePlugins(definitions, (plugins) => {

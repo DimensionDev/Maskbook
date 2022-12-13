@@ -4,7 +4,7 @@ import type { AddressType } from '@masknet/web3-shared-evm'
 import type { NetworkPluginID } from '@masknet/shared-base'
 
 export namespace DSearchBaseAPI {
-    export interface Provider<ChainId, T extends NetworkPluginID> {
+    export interface Provider<ChainId, SchemaType, T extends NetworkPluginID> {
         search(
             keyword: string,
             options: {
@@ -13,6 +13,10 @@ export namespace DSearchBaseAPI {
                     options?: Web3Helper.Web3ConnectionOptions<T>,
                 ) => Promise<AddressType | undefined>
             },
-        ): Promise<SearchResult<ChainId>>
+        ): Promise<Array<SearchResult<ChainId, SchemaType>>>
+    }
+
+    export interface DataSourceProvider<ChainId, NewType> {
+        get(): Promise<Array<SearchResult<ChainId, NewType>>>
     }
 }

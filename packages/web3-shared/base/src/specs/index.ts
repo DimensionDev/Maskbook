@@ -108,6 +108,9 @@ export enum SearchResultType {
     Domain = 'Domain',
     // e.g., $MASK #MASK or its address 0x69af81e73a73b40adf4f3d4223cd9b1ece623074
     FungibleToken = 'FungibleToken',
+    // e.g., #APE
+    NonFungibleToken='NonFungibleToken',
+    NonFungibleCollection='NonFungibleCollection',
     // hits none of all above.
     Unknown = 'Unknown'
 }
@@ -414,6 +417,16 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     createdAt?: number
     /** source type */
     source?: SourceType
+    socialLinks?: {
+        website?: string
+        email?: string
+        twitter?: string
+        discord?: string
+        telegram?: string
+        github?: string
+        instagram?: string
+        medium?: string
+    }
 }
 
 export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {
@@ -598,7 +611,6 @@ export interface NonFungibleTokenSecurity {}
     type: SearchResultType
     keyword: string
 }
-
 export interface EOAResult<ChainId> extends Result<ChainId> {
     type: SearchResultType.EOA
     domain?: string
@@ -611,11 +623,31 @@ export interface DomainResult<ChainId> extends Result<ChainId> {
     domain: string
 }
 
-export interface FungibleTokenResult<ChainId> extends Result<ChainId> {
-    type: SearchResultType.FungibleToken,
-    trendingSearchType?: '#' | '$'
-    name?: string
-    subType: SearchFungibleTokenResultSubType
+export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
+    //  This id on the provider platform
+    id?: string
+    name: string
+    symbol: string
+    type: SearchResultType.FungibleToken
+    source: SourceType 
+    token?: FungibleToken<ChainId, SchemaType>
+}
+
+export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
+    name: string,
+    address: string
+    tokenId?: string
+    type: SearchResultType.NonFungibleToken
+    source: SourceType 
+    token?: NonFungibleToken<ChainId, SchemaType>
+}
+
+export interface NonFungibleCollectionResult<ChainId, SchemaType> extends Result<ChainId> {
+    name: string,
+    address: string
+    source: SourceType 
+    type: SearchResultType.NonFungibleCollection
+    collection?: NonFungibleCollection<ChainId, SchemaType>
 }
 
 export interface UnknownResult<ChainId> extends Result<ChainId> {
@@ -623,10 +655,12 @@ export interface UnknownResult<ChainId> extends Result<ChainId> {
     type: SearchResultType.Unknown
 }
 
-export type SearchResult<ChainId> = 
+export type SearchResult<ChainId, SchemaType> = 
     | EOAResult<ChainId>
     | DomainResult<ChainId>
-    | FungibleTokenResult<ChainId>
+    | FungibleTokenResult<ChainId, SchemaType>
+    | NonFungibleTokenResult<ChainId, SchemaType>
+    | NonFungibleCollectionResult<ChainId, SchemaType>
     | UnknownResult<ChainId>
 
 /**

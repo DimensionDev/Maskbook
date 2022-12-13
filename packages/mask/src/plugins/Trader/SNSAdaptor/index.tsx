@@ -38,7 +38,7 @@ const sns: Plugin.SNSAdaptor.Definition<
         UI: {
             Content({ result }) {
                 const searchResult = usePayloadFromTokenSearchKeyword(
-                    result as FungibleTokenResult<Web3Helper.ChainIdAll>,
+                    result as FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
                 )
                 return (
                     <Web3ContextProvider
