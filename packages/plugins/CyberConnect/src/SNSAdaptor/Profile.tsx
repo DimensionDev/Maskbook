@@ -84,6 +84,7 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         height: 400,
+        flexDirection: 'column',
     },
     tab: {
         whiteSpace: 'nowrap',
@@ -121,8 +122,12 @@ const Profile = ({ url }: { url: string }) => {
         return (
             <Box className={classes.statusBox} p={2}>
                 <Icons.EmptySimple size={32} />
-                <Typography color={(theme) => theme.palette.maskColor.publicSecond} fontSize="14px" fontWeight={400}>
-                    {t.no_data()}
+                <Typography
+                    color={(theme) => theme.palette.maskColor.publicSecond}
+                    marginTop="14px"
+                    fontSize="14px"
+                    fontWeight={400}>
+                    {currentTab === tabs.Followers ? t.no_followers() : t.no_followings()}
                 </Typography>
             </Box>
         )
