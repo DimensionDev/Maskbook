@@ -3,7 +3,8 @@
     "__plugin_description": "Decentralized social graph protocol for user-centric Web3.",
     "followings": "Followings",
     "followers": "Followers",
-    "no_data": "No data",
     "follow_now": "Follow Now",
+    "no_followers": "No followers.",
+    "no_followings": "No following friends.",
     "unfollow": "Unfollow"
 }

@@ -37,6 +37,7 @@ import { getHandlers } from './rules.js'
 import { ENS, SpaceID, ChainbaseDomain } from '../entry.js'
 
 const BASE_URL = 'https://raw.githubusercontent.com/DimensionDev/Mask-Search-List/master/'
+import { DSEARCH_BASE_URL } from './constants.js'
 
 const CHAIN_ID_LIST = [ChainIdEVM.Mainnet, ChainIdEVM.BSC, ChainIdEVM.Matic]
 
@@ -62,9 +63,9 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
     CoinMarketCapClient = new CoinMarketCapSearchAPI<ChainId, SchemaType>()
 
     private async init() {
-        const tokenSpecificList = urlcat(BASE_URL, '/output/fungible-tokens/specific-list.json')
-        const nftSpecificList = urlcat(BASE_URL, '/output/non-fungible-tokens/specific-list.json')
-        const collectionSpecificList = urlcat(BASE_URL, '/output/non-fungible-collections/specific-list.json')
+        const tokenSpecificList = urlcat(DSEARCH_BASE_URL, '/fungible-tokens/specific-list.json')
+        const nftSpecificList = urlcat(DSEARCH_BASE_URL, '/non-fungible-tokens/specific-list.json')
+        const collectionSpecificList = urlcat(DSEARCH_BASE_URL, '/non-fungible-collections/specific-list.json')
 
         const tokensRequest = fetchJSON<Array<FungibleTokenResult<ChainId, SchemaType>>>(
             tokenSpecificList,

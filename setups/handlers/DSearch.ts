@@ -1,10 +1,10 @@
 import { rest } from 'msw'
 
-const baseURL = 'https://raw.githubusercontent.com/DimensionDev/Mask-Search-List/master'
+const baseURL = 'https://dsearch.mask.r2d2.to'
 
 /* cspell:disable */
 export const DSearchHandlers = [
-    rest.get(`${baseURL}/output/fungible-tokens/specific-list.json`, (req, res, ctx) => {
+    rest.get(`${baseURL}/fungible-tokens/specific-list.json`, (req, res, ctx) => {
         return res(
             ctx.status(200),
             ctx.json([
@@ -17,13 +17,13 @@ export const DSearchHandlers = [
             ]),
         )
     }),
-    rest.get(`${baseURL}/output/non-fungible-tokens/specific-list.json`, (req, res, ctx) => {
+    rest.get(`${baseURL}/non-fungible-tokens/specific-list.json`, (req, res, ctx) => {
         return res(ctx.status(200), ctx.json([]))
     }),
-    rest.get(`${baseURL}/output/non-fungible-collections/specific-list.json`, (req, res, ctx) => {
+    rest.get(`${baseURL}/non-fungible-collections/specific-list.json`, (req, res, ctx) => {
         return res(ctx.status(200), ctx.json([]))
     }),
-    rest.get(`${baseURL}/output/fungible-tokens/coin-gecko.json`, (req, res, ctx) => {
+    rest.get(`${baseURL}/fungible-tokens/coin-gecko.json`, (req, res, ctx) => {
         return res(
             ctx.status(200),
             ctx.json([
@@ -42,7 +42,7 @@ export const DSearchHandlers = [
             ]),
         )
     }),
-    rest.get(`${baseURL}/output/fungible-tokens/coinmarketcap.json`, (req, res, ctx) => {
+    rest.get(`${baseURL}/fungible-tokens/coinmarketcap.json`, (req, res, ctx) => {
         return res(
             ctx.status(200),
             ctx.json([
@@ -61,10 +61,10 @@ export const DSearchHandlers = [
             ]),
         )
     }),
-    rest.get(`${baseURL}/output/non-fungible-tokens/nftscan.json`, (req, res, ctx) => {
+    rest.get(`${baseURL}/non-fungible-tokens/nftscan.json`, (req, res, ctx) => {
         return res(ctx.status(200), ctx.json([]))
     }),
-    rest.get(`${baseURL}/output/non-fungible-collections/nftscan.json`, (req, res, ctx) => {
+    rest.get(`${baseURL}/non-fungible-collections/nftscan.json`, (req, res, ctx) => {
         return res(
             ctx.status(200),
             ctx.json([
