@@ -12,6 +12,7 @@ import {
     PluginWrapperMethods,
 } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
+import { PluginID } from '@masknet/shared-base'
 
 interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     open?: boolean
@@ -23,6 +24,7 @@ interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     wrapperProps?: Plugin.SNSAdaptor.PluginWrapperProps
     publisherLink?: string
     lackHostPermission?: boolean
+    ID: string
 }
 
 const useStyles = makeStyles<{
@@ -82,7 +84,7 @@ const useStyles = makeStyles<{
 })
 
 export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
-    const { open, title, children, action, publisher, publisherLink, content, wrapperProps } = props
+    const { open, title, children, action, publisher, publisherLink, content, wrapperProps, ID } = props
     const { classes } = useStyles({
         backgroundGradient: wrapperProps?.backgroundGradient,
         borderRadius: wrapperProps?.borderRadius,
@@ -105,7 +107,7 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
         return (
             <Box className={classes.provider}>
                 <Typography variant="body1" fontSize={14} fontWeight="400" className={classes.providerBy}>
-                    {t.plugin_provider_by()}
+                    {ID === PluginID.CyberConnect ? t.powered_by() : t.plugin_provider_by()}
                 </Typography>
                 {main}
                 {publisherLink ? (
@@ -174,6 +176,7 @@ export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdapto
 
         return (
             <MaskPostExtraInfoWrapper
+                ID={props.definition.ID}
                 wrapperProps={wrapperProps}
                 open={open}
                 title={title || t(ID, name)}

@@ -8,6 +8,7 @@ import { base } from '../base.js'
 export const DecentralizedSearchPostExtraInfoWrapper: FC<PropsWithChildren<{}>> = ({ children }) => {
     return (
         <MaskPostExtraInfoWrapper
+            ID={PluginID.DecentralizedSearch}
             open
             wrapperProps={{
                 icon: <Icons.DecentralizedSearch size={24} />,
