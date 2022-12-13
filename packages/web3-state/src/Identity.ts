@@ -51,7 +51,7 @@ export class IdentityServiceState<ChainId> implements Web3SocialIdentityState<Ch
     }
 
     __mergeSocialAddressesAll__(socialAddresses: Array<SocialAddress<ChainId>>) {
-        const accountsGrouped = groupBy(socialAddresses, (x) => `${x.pluginID}_${x.address.toLowerCase()}`)
+        const accountsGrouped = groupBy(socialAddresses, (x) => `${x.pluginID}_${x.address.toLowerCase()}_${x.type}`)
         return Object.entries(accountsGrouped).map<SocialAccount<ChainId>>(([, group]) => {
             return {
                 pluginID: group[0].pluginID,
