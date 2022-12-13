@@ -1,6 +1,6 @@
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
-import { useFollowers } from '../hooks/useFollowers.js'
+import { useFollowers, usePageable } from '../hooks/useFollowers.js'
 import type { ProfileTab } from '../constants.js'
 import { useI18N } from '../locales/index.js'
 import type { IFollowIdentity } from '../Worker/apis/index.js'
@@ -26,7 +26,8 @@ interface FollowersPageProps {
 
 export function FollowersPage(props: FollowersPageProps) {
     const { classes } = useStyles()
-    const { loading, value, next, done, error, retry } = useFollowers(props.tab, props.address)
+    const iterator = useFollowers(props.tab, props.address)
+    const { loading, value, next, done, error, retry } = usePageable(iterator)
     const t = useI18N()
 
     if (error) {

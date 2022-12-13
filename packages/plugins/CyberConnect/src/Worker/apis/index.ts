@@ -1,7 +1,6 @@
 import { createIndicator, createNextIndicator, createPageable, HubIndicator, Pageable } from '@masknet/web3-shared-base'
-import { ProfileTab } from '../../constants.js'
+import { PageSize, ProfileTab } from '../../constants.js'
 
-const COUNT = 50
 export interface IQuery {
     query: string
     variables: Record<string, string | number>
@@ -74,13 +73,14 @@ export async function fetchIdentity(address: string): Promise<{ data: { identity
 export async function fetchFollowers(
     category: ProfileTab,
     address: string,
+    size: number,
     indicator?: HubIndicator,
 ): Promise<Pageable<IFollowIdentity>> {
     if (!address) return createPageable([], createIndicator(indicator))
     const data = {
         query: `query FullIdentityQuery {
         identity(address: "${address.toLowerCase()}") {
-                ${category.toLowerCase()}(first: 50, after: "${COUNT * (indicator?.index ?? 0)}"){
+                ${category.toLowerCase()}(first: ${size > PageSize ? PageSize : size}, after: "${indicator?.id ?? 0}"){
                 pageInfo {
                     hasNextPage
                     hasPreviousPage
@@ -102,12 +102,16 @@ export async function fetchFollowers(
         return createPageable(
             res.data.identity.followings.list,
             createIndicator(indicator),
-            res.data.identity.followings.pageInfo.hasNextPage ? createNextIndicator(indicator) : undefined,
+            res.data.identity.followings.pageInfo.hasNextPage
+                ? createNextIndicator(indicator, res.data.identity.followings.pageInfo.startCursor)
+                : undefined,
         )
     return createPageable(
         res.data.identity.followers.list,
         createIndicator(indicator),
-        res.data.identity.followers.pageInfo.hasNextPage ? createNextIndicator(indicator) : undefined,
+        res.data.identity.followers.pageInfo.hasNextPage
+            ? createNextIndicator(indicator, res.data.identity.followers.pageInfo.startCursor)
+            : undefined,
     )
 }
 

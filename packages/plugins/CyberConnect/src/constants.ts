@@ -6,3 +6,4 @@ export enum ProfileTab {
     Followings = 'Followings',
     Followers = 'Followers',
 }
+export const PageSize = 50

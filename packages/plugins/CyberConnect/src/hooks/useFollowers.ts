@@ -1,25 +1,18 @@
 import { PluginCyberConnectRPC } from '../messages.js'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { pageableToIterator } from '@masknet/web3-shared-base'
 import type { IFollowIdentity } from '../Worker/apis/index.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { useUpdateEffect } from 'react-use'
-import type { ProfileTab } from '../constants.js'
+import { PageSize, ProfileTab } from '../constants.js'
 
-export function useFollowers(tab: ProfileTab, address?: string, size = 50) {
+export function usePageable(
+    iterator: AsyncGenerator<IFollowIdentity | Error, void, undefined> | undefined,
+    size = PageSize,
+) {
     const [done, setDone] = useState(false)
     const [loading, toggleLoading] = useState(false)
     const [error, setError] = useState<string>()
     const [followers, setFollowers] = useState<IFollowIdentity[]>(EMPTY_LIST)
-    const iterator = useMemo(() => {
-        if (!address) return
-        setDone(false)
-        setFollowers(EMPTY_LIST)
-        return pageableToIterator(async (indicator) => {
-            return PluginCyberConnectRPC.fetchFollowers(tab, address, indicator)
-        })
-    }, [address, tab])
-
     const next = useCallback(async () => {
         if (!iterator || done) return
         const batchFollowers: IFollowIdentity[] = []
@@ -48,17 +41,12 @@ export function useFollowers(tab: ProfileTab, address?: string, size = 50) {
         toggleLoading(false)
     }, [iterator, done])
 
-    useEffect(() => {
-        if (next) next()
-    }, [next])
-
     const retry = useCallback(() => {
         setError(undefined)
         setFollowers(EMPTY_LIST)
         setDone(false)
     }, [])
 
-    useUpdateEffect(() => setFollowers([]), [address])
     return {
         value: followers,
         next,
@@ -67,4 +55,13 @@ export function useFollowers(tab: ProfileTab, address?: string, size = 50) {
         error,
         retry,
     }
+}
+
+export function useFollowers(tab: ProfileTab, address?: string, size = 50) {
+    return useMemo(() => {
+        if (!address) return
+        return pageableToIterator(async (indicator) => {
+            return PluginCyberConnectRPC.fetchFollowers(tab, address, size, indicator)
+        })
+    }, [address, tab])
 }
