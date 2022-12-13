@@ -46,8 +46,8 @@ const definition: Plugin.SNSAdaptor.Definition = {
                 File Service
             </>
         ),
-        onClick: ({ compositionType, metada }) => {
-            const payload = metada?.get(META_KEY_3) as FileInfo[] | undefined
+        onClick: ({ compositionType, metadata }) => {
+            const payload = metadata?.get(META_KEY_3) as FileInfo[] | undefined
             const selectedIds = Array.isArray(payload) ? payload.map((f) => f.id) : EMPTY_LIST
             openPicker(selectedIds, compositionType)
         },

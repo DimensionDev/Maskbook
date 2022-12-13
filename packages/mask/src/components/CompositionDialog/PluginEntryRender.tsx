@@ -181,8 +181,8 @@ const CustomEntry = memo(
                     </>
                 }
                 onClick={() => {
-                    const metada = getMetadata()
-                    onClick?.({ compositionType: type, metada })
+                    const metadata = getMetadata()
+                    onClick?.({ compositionType: type, metadata })
                 }}
                 disabled={props.readonly}
             />

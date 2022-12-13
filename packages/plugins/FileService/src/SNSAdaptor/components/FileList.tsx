@@ -183,8 +183,7 @@ export const SelectableFileList: FC<SelectableFileListProps> = ({
                             <ListItem
                                 key={file.id}
                                 className={cx(classes.listItem, disabled ? classes.disabled : null)}
-                                classes={{ root: classes.itemRoot }}
-                                data-id={file.id}>
+                                classes={{ root: classes.itemRoot }}>
                                 <SelectableFile
                                     disabled={disabled}
                                     className={classes.file}
