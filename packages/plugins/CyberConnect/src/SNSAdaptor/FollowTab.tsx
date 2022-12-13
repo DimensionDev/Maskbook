@@ -3,7 +3,7 @@ import { Link, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
-import { CopyIconButton, FormattedAddress } from '@masknet/shared'
+import { CopyIconLink, FormattedAddress } from '@masknet/shared'
 import type { IFollowIdentity } from '../Worker/apis/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -20,6 +20,7 @@ const useStyles = makeStyles()((theme) => ({
         width: 16,
         height: 16,
         color: theme.palette.maskColor.publicSecond,
+        transform: 'translate(0px, 1px)',
     },
     PopupLink: {
         width: 16,
@@ -58,7 +59,7 @@ export function FollowRow({ identity }: { identity: IFollowIdentity }) {
                         rel="noopener noreferrer">
                         <Icons.PopupLink className={classes.PopupLink} />
                     </Link>
-                    <CopyIconButton text={identity.address} className={classes.icon} />
+                    <CopyIconLink text={identity.address} className={classes.icon} />
                 </Stack>
             </div>
         </div>

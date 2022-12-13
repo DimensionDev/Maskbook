@@ -6,7 +6,7 @@ import { FollowRow } from './FollowTab.js'
 import { useAsyncRetry } from 'react-use'
 import Avatar from 'boring-avatars'
 import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { CopyIconButton, FormattedAddress } from '@masknet/shared'
+import { FormattedAddress, CopyIconLink } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { TabContext, TabPanel } from '@mui/lab'
 import { useI18N } from '../locales/index.js'
@@ -59,6 +59,7 @@ const useStyles = makeStyles()((theme) => ({
         width: 16,
         height: 16,
         color: theme.palette.maskColor.publicSecond,
+        transform: 'translate(0px, 1px)',
     },
     PopupLink: {
         width: 16,
@@ -166,7 +167,7 @@ const Profile = ({ url }: { url: string }) => {
                                     rel="noopener noreferrer">
                                     <Icons.PopupLink className={classes.PopupLink} />
                                 </Link>
-                                <CopyIconButton text={identity?.address ?? ''} className={classes.icon} />
+                                <CopyIconLink text={identity?.address ?? ''} className={classes.icon} />
                             </Stack>
                         )}
                     </Stack>
