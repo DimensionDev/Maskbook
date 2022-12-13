@@ -1,8 +1,8 @@
 import { Icons } from '@masknet/icons'
 import { useSnackbarCallback } from '@masknet/shared'
 import { formatPersonaFingerprint, ProfileInformationFromNextID } from '@masknet/shared-base'
-import { makeStyles, ShadowRootTooltip, useBoundary } from '@masknet/theme'
-import { Checkbox, ListItem, ListItemAvatar, ListItemText, PopperProps } from '@mui/material'
+import { makeStyles, ShadowRootTooltip, useBoundedPopperProps } from '@masknet/theme'
+import { Checkbox, ListItem, ListItemAvatar, ListItemText } from '@mui/material'
 import { truncate } from 'lodash-es'
 import { useCallback } from 'react'
 import Highlighter from 'react-highlight-words'
@@ -115,21 +115,7 @@ export function ProfileInList(props: ProfileInListProps) {
         return truncate(mentions, { length: 15 }) + (len > 1 ? `(${len})` : '')
     })()
 
-    const { boundaryRef } = useBoundary()
-
-    const tooltipPopperProps: Partial<PopperProps> = {
-        disablePortal: true,
-        placement: 'top',
-        modifiers: [
-            {
-                name: 'flip',
-                options: {
-                    rootBoundary: boundaryRef.current,
-                    boundary: boundaryRef.current,
-                },
-            },
-        ],
-    }
+    const tooltipPopperProps = useBoundedPopperProps()
 
     const tooltipTitle = (() => {
         const linkedNames = profile.linkedTwitterNames
