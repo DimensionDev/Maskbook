@@ -168,7 +168,7 @@ const CustomEntry = memo(
         const { classes } = useStyles()
         const { id, label, onClick, unstable } = props
         useSetPluginRef(ref, onClick)
-        const { type } = useCompositionContext()
+        const { type, getMetadata } = useCompositionContext()
         return (
             <ClickableChip
                 classes={{
@@ -181,9 +181,8 @@ const CustomEntry = memo(
                     </>
                 }
                 onClick={() => {
-                    onClick?.({
-                        compositionType: type,
-                    })
+                    const metada = getMetadata()
+                    onClick?.({ compositionType: type, metada })
                 }}
                 disabled={props.readonly}
             />

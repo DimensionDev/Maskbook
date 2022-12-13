@@ -557,7 +557,7 @@ export namespace Plugin.SNSAdaptor {
         label: I18NFieldOrReactNode
 
         /** This callback will be called when the user clicked on the chip. */
-        onClick(options: { compositionType: CompositionType }): void
+        onClick(options: { compositionType: CompositionType; metada: ReadonlyMap<string, unknown> | undefined }): void
     }
 
     export interface CompositionDialogEntryDialog {

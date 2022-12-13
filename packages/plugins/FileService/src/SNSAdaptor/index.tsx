@@ -46,9 +46,10 @@ const definition: Plugin.SNSAdaptor.Definition = {
                 File Service
             </>
         ),
-        // TODO Open with selected files
-        onClick: ({ compositionType }) => {
-            openPicker(EMPTY_LIST, compositionType)
+        onClick: ({ compositionType, metada }) => {
+            const payload = metada?.get(META_KEY_3) as FileInfo[] | undefined
+            const selectedIds = Array.isArray(payload) ? payload.map((f) => f.id) : EMPTY_LIST
+            openPicker(selectedIds, compositionType)
         },
     },
     ApplicationEntries: [
