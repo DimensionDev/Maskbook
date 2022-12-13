@@ -171,5 +171,7 @@
     "account_icon_tooltips$facebook": "crwdns18892:0{{source}}crwdne18892:0",
     "account_icon_tooltips_only$facebook": "crwdns18894:0crwdne18894:0",
     "account_icon_tooltips$next_id": "crwdns18896:0crwdne18896:0",
-    "account_icon_tooltips_only$next_id": "crwdns18898:0crwdne18898:0"
+    "account_icon_tooltips_only$next_id": "crwdns18898:0crwdne18898:0",
+    "wallet_status_button_copy_address": "crwdns19327:0crwdne19327:0",
+    "copy_success_of_wallet_addr": "crwdns19329:0crwdne19329:0"
 }
