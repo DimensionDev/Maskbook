@@ -6,5 +6,7 @@
     "follow_now": "Follow Now",
     "no_followers": "No followers.",
     "no_followings": "No following friends.",
-    "unfollow": "Unfollow"
+    "unfollow": "Unfollow",
+    "failed": "Load failed",
+    "reload": "Reload"
 }

@@ -2,7 +2,6 @@ import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { PluginCyberConnectRPC } from '../messages.js'
 import { Box, Link, Skeleton, Stack, Tab, Typography } from '@mui/material'
 import ConnectButton from './ConnectButton.js'
-import { FollowRow } from './FollowTab.js'
 import { useAsyncRetry } from 'react-use'
 import Avatar from 'boring-avatars'
 import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -10,7 +9,8 @@ import { CopyIconButton, FormattedAddress } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { TabContext, TabPanel } from '@mui/lab'
 import { useI18N } from '../locales/index.js'
-import type { IFollowIdentity } from '../Worker/apis/index.js'
+import { ProfileTab } from '../constants.js'
+import { FollowersPage } from './FollowersPage.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -115,7 +115,7 @@ const Profile = ({ url }: { url: string }) => {
         return res.data.identity
     }, [queryAddress])
 
-    const [currentTab, onChange, tabs] = useTabs('Followings', 'Followers')
+    const [currentTab, onChange, tabs] = useTabs(ProfileTab.Followings, ProfileTab.Followers)
 
     const Nodata = () => {
         const t = useI18N()
@@ -193,22 +193,10 @@ const Profile = ({ url }: { url: string }) => {
                             />
                         </MaskTabList>
                         <TabPanel value={tabs.Followings} className={classes.panel}>
-                            {identity.followings.list.length ? (
-                                identity.followings.list.map((f: IFollowIdentity) => {
-                                    return <FollowRow key={f.address} identity={f} />
-                                })
-                            ) : (
-                                <Nodata />
-                            )}
+                            <FollowersPage hit={<Nodata />} address={identity.address} tab={ProfileTab.Followings} />
                         </TabPanel>
                         <TabPanel value={tabs.Followers} className={classes.panel}>
-                            {identity.followers.list.length ? (
-                                identity.followers.list.map((f: IFollowIdentity) => {
-                                    return <FollowRow key={f.address} identity={f} />
-                                })
-                            ) : (
-                                <Nodata />
-                            )}
+                            <FollowersPage hit={<Nodata />} address={identity.address} tab={ProfileTab.Followers} />
                         </TabPanel>
                     </Stack>
                 )}

@@ -1,3 +1,7 @@
+import { createIndicator, createNextIndicator, createPageable, HubIndicator, Pageable } from '@masknet/web3-shared-base'
+import { ProfileTab } from '../../constants.js'
+
+const COUNT = 50
 export interface IQuery {
     query: string
     variables: Record<string, string | number>
@@ -8,6 +12,13 @@ export interface IFollowIdentity {
     ens: string
     namespace: string
 }
+export interface IFollowPageInfo {
+    endCursor: number
+    hasNextPage: boolean
+    hasPreviousPage: boolean
+    startCursor: number
+}
+
 export interface IIdentity {
     address: string
     avatar: string
@@ -31,6 +42,7 @@ async function query(data: IQuery) {
         process.env.NODE_ENV === 'production'
             ? 'https://api.cybertino.io/connect/'
             : 'https://api.stg.cybertino.io/connect/'
+
     const res = await fetch(url, {
         method: 'POST',
         mode: 'cors',
@@ -45,22 +57,36 @@ async function query(data: IQuery) {
 }
 export async function fetchIdentity(address: string): Promise<{ data: { identity: IIdentity } }> {
     const data = {
-        query: `query Identity($address: String!, $first: Int, $after: String) {
-        identity(address: $address) {
+        query: `query QueryForENS {
+        identity(address: "${address.toLowerCase()}") {
             address
             ens
             domain
             avatar
-            followerCount(namespace:"")
-            followingCount(namespace:"")
-            followings(first: $first, after: $after){
-                list {
-                    address
-                    ens
-                    namespace
+        }
+    }`,
+        variables: {},
+    }
+    const res = await query(data)
+    return res
+}
+
+export async function fetchFollowers(
+    category: ProfileTab,
+    address: string,
+    indicator?: HubIndicator,
+): Promise<Pageable<IFollowIdentity>> {
+    if (!address) return createPageable([], createIndicator(indicator))
+    const data = {
+        query: `query FullIdentityQuery {
+        identity(address: "${address.toLowerCase()}") {
+                ${category.toLowerCase()}(first: 50, after: "${COUNT * (indicator?.index ?? 0)}"){
+                pageInfo {
+                    hasNextPage
+                    hasPreviousPage
+                    endCursor
+                    startCursor
                 }
-            }
-            followers(first: $first, after: $after){
                 list {
                     address
                     ens
@@ -69,15 +95,22 @@ export async function fetchIdentity(address: string): Promise<{ data: { identity
             }
         }
     }`,
-        variables: {
-            address: address.toLowerCase(),
-            first: 100,
-            after: '',
-        },
+        variables: {},
     }
     const res = await query(data)
-    return res
+    if (category === ProfileTab.Followings)
+        return createPageable(
+            res.data.identity.followings.list,
+            createIndicator(indicator),
+            res.data.identity.followings.pageInfo.hasNextPage ? createNextIndicator(indicator) : undefined,
+        )
+    return createPageable(
+        res.data.identity.followers.list,
+        createIndicator(indicator),
+        res.data.identity.followers.pageInfo.hasNextPage ? createNextIndicator(indicator) : undefined,
+    )
 }
+
 export async function fetchFollowStatus(
     fromAddr: string,
     toAddr: string,
