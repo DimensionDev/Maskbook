@@ -1,11 +1,12 @@
 import { Stack, ThemeProvider, Typography } from '@mui/material'
 import { useAsync } from 'react-use'
-import { CryptoScamDB, PluginLoggerContextProvider } from '@masknet/web3-providers'
+import { CryptoScamDB } from '@masknet/web3-providers'
 import { uniq } from 'lodash-es'
 import { useI18N } from '../../locales/index.js'
 import { makeStyles, MaskDarkTheme } from '@masknet/theme'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { logger } from '../logger.js'
+import { PluginLoggerContextProvider } from '@masknet/shared'
 
 interface PreviewCardProps {
     links: readonly string[]

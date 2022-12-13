@@ -9,7 +9,7 @@ import {
     useSystemPreferencePalette,
     DialogStackingProvider,
 } from '@masknet/theme'
-import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
+import { I18NextProviderHMR, SharedContextProvider, LoggerContextProvider } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
@@ -22,7 +22,7 @@ import { useAppearance } from '../pages/Personas/api.js'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext.js'
 import { Services } from '../API.js'
 import { useLogSettings } from '../hooks/useLogSettings.js'
-import { LoggerContextProvider, LogPlatform } from '@masknet/web3-providers'
+import { LogPlatform } from '@masknet/web3-providers'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 

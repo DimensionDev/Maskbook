@@ -7,6 +7,7 @@ import { compose } from '@masknet/shared-base'
 export * from './Confirm/index.js'
 export * from './SelectFungibleTokenDialog/index.js'
 export * from './SelectAdvancedSettingsDialog/index.js'
+export * from './Log/index.js'
 
 export function CommonUIProvider({ children }: PropsWithChildren<{}>) {
     return compose(

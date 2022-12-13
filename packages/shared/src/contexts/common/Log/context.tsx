@@ -1,7 +1,7 @@
 import type { EnhanceableSite } from '@masknet/shared-base'
 import { createContext, useContext, useMemo } from 'react'
-import type { LogHubBase } from '../types/Log.js'
-import { LogHub, LogPlatform } from './base.js'
+import type { LogHubBase } from '@masknet/web3-providers/types'
+import { LogHub, LogPlatform } from '@masknet/web3-providers'
 
 interface LoggerContext {
     logger?: LogHubBase

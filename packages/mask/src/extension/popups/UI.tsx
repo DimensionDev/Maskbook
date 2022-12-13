@@ -15,7 +15,8 @@ import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import Services from '../service.js'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { LoggerContextProvider, LogPlatform } from '@masknet/web3-providers'
+import { LogPlatform } from '@masknet/web3-providers'
+import { LoggerContextProvider } from '@masknet/shared'
 
 function usePopupTheme() {
     return usePopupFullPageTheme(useValueRef(languageSettings))
