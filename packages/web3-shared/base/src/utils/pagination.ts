@@ -1,6 +1,6 @@
 import type { HubIndicator, Pageable } from '../specs/index.js'
 
-export function createIndicator(indicator?: HubIndicator, id?: string) {
+export function createIndicator(indicator?: HubIndicator, id?: string): HubIndicator {
     const index = indicator?.index ?? 0
     return {
         id: id ?? indicator?.id ?? index.toString(),
@@ -8,7 +8,7 @@ export function createIndicator(indicator?: HubIndicator, id?: string) {
     }
 }
 
-export function createNextIndicator(indicator?: HubIndicator, id?: string) {
+export function createNextIndicator(indicator?: HubIndicator, id?: string): HubIndicator {
     const index = (indicator?.index ?? 0) + 1
     return typeof id === 'string'
         ? {
@@ -26,6 +26,7 @@ export function createPageable<Item, Indicator = HubIndicator>(
     indicator: Indicator,
     nextIndicator?: Indicator,
 ) {
+    // with next page
     if (typeof nextIndicator !== 'undefined') {
         return {
             data,
@@ -33,6 +34,7 @@ export function createPageable<Item, Indicator = HubIndicator>(
             nextIndicator,
         }
     }
+    // without next page
     return {
         data,
         indicator,
