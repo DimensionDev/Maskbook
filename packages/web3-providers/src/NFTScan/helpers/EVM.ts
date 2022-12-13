@@ -47,7 +47,7 @@ export const resolveHostName = createLookupTableResolver<NFTScanChainId, string>
         [ChainId.Matic]: 'https://polygon.nftscan.com',
         [ChainId.BSC]: 'https://bnb.nftscan.com',
         [ChainId.Arbitrum]: 'https://arbitrum.nftscan.com/',
-        [ChainId.Avalanche]: 'https://avaxapi.nftscan.com/',
+        [ChainId.Avalanche]: 'https://avax.nftscan.com/',
         [ChainId.Optimism]: 'https://optimism.nftscan.com/',
         [ChainId.xDai]: 'https://cronosapi.nftscan.com/',
     },
