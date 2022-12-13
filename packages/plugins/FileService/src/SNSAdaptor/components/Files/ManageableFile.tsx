@@ -66,13 +66,13 @@ export const ManageableFile: FC<ManageableFileProps> = memo(
                             onClick={() => {
                                 onSend?.(file)
                             }}
-                            size={24}
+                            size={20}
                         />
                         <Icons.More
                             ref={menuRef}
                             className={cx(classes.operationButton, classes.menuButton)}
                             onClick={() => setMenuOpen(true)}
-                            size={24}
+                            size={20}
                         />
                         <ShadowRootMenu
                             classes={{ paper: classes.menu }}
@@ -85,6 +85,7 @@ export const ManageableFile: FC<ManageableFileProps> = memo(
                                 horizontal: 'right',
                                 vertical: 'top',
                             }}
+                            disableScrollLock
                             open={menuOpen}
                             disablePortal
                             onClose={() => setMenuOpen(false)}>

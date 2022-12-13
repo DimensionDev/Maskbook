@@ -19,5 +19,5 @@
     "drop_hint_2": "檔案將立即被上傳而且無法取消。",
     "drop_here": "在這裡拖入一個檔案以上傳",
     "on_change_file": "更改檔案",
-    "file_key": "檔案金鑰："
+    "file_key": "檔案金鑰：<key>{{key}}</key>"
 }
