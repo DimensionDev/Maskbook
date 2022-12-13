@@ -6,7 +6,7 @@ import { DSearchAPI } from '../../src/DSearch/index.js'
 describe('DSearch test', () => {
     test('should return by sysmbol from specific list', async () => {
         const DSearch = new DSearchAPI()
-        const result = await DSearch.search('token:eth')
+        const result = await DSearch.searchToken('token:eth')
 
         expect(result.length).toBe(1)
         expect(result[0]).toStrictEqual({
@@ -20,7 +20,7 @@ describe('DSearch test', () => {
 
     test('should return by name', async () => {
         const DSearch = new DSearchAPI()
-        const result = await DSearch.search('token:eth1')
+        const result = await DSearch.searchToken('token:eth1')
 
         expect(result.length).toBe(1)
         expect(result[0]).toStrictEqual({
@@ -33,7 +33,7 @@ describe('DSearch test', () => {
     })
     test('should return by fuzzy search', async () => {
         const DSearch = new DSearchAPI()
-        const result = await DSearch.search('token:efuzzy')
+        const result = await DSearch.searchToken('token:efuzzy')
 
         expect(result.length).toBe(2)
         expect(result[0]).toStrictEqual({
@@ -53,7 +53,7 @@ describe('DSearch test', () => {
     })
     test('should return by fuzzy search without empty string', async () => {
         const DSearch = new DSearchAPI()
-        const result = await DSearch.search('token:searchempty')
+        const result = await DSearch.searchToken('token:searchempty')
 
         expect(result.length).toBe(1)
         expect(result[0]).toStrictEqual({
@@ -67,7 +67,7 @@ describe('DSearch test', () => {
 
     test('should return collection by twitter handle', async () => {
         const DSearch = new DSearchAPI()
-        const result = await DSearch.search('twitter:mathcastles')
+        const result = await DSearch.searchToken('twitter:mathcastles')
 
         expect(result.length).toBe(1)
         expect((result[0] as NonFungibleCollectionResult<any, any>)?.name).toBe('Terraforms')
@@ -75,7 +75,7 @@ describe('DSearch test', () => {
 
     test('should return all the data without prefix', async () => {
         const DSearch = new DSearchAPI()
-        const result = await DSearch.search('eth')
+        const result = await DSearch.searchToken('eth')
 
         expect(result.length).toBe(5)
         expect((result[0] as FungibleTokenResult<any, any>)?.name).toBe('eth1')

@@ -116,7 +116,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
      * "address:0x"
      *
      */
-    private async searchToken(keyword: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {
+    async searchToken(keyword: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {
         const { word, field } = this.parseKeyword(keyword)
         const data = await this.init()
 
