@@ -43,7 +43,7 @@ type NFTScanChainId =
 
 export const resolveHostName = createLookupTableResolver<NFTScanChainId, string>(
     {
-        [ChainId.Mainnet]: 'https://restapi.nftscan.com',
+        [ChainId.Mainnet]: 'https://www.nftscan.com',
         [ChainId.Matic]: 'https://polygon.nftscan.com',
         [ChainId.BSC]: 'https://bnb.nftscan.com',
         [ChainId.Arbitrum]: 'https://arbitrum.nftscan.com/',
