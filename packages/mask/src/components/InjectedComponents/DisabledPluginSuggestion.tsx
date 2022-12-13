@@ -95,6 +95,7 @@ export function PossiblePluginSuggestionUISingle(props: {
 
     return (
         <MaskPostExtraInfoWrapper
+            ID={props.define.ID}
             open
             title={<PluginI18NFieldRender field={define.name} pluginID={define.ID} />}
             publisher={
