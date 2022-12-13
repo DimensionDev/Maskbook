@@ -3,6 +3,7 @@ import urlcat from 'urlcat'
 import { fetchCached } from '../entry-helpers.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import type { DSearchBaseAPI } from '../types/DSearch.js'
+import { DSEARCH_BASE_URL } from '../DSearch/constants.js'
 
 export interface FungibleToken {
     id: string | number
@@ -17,13 +18,11 @@ export interface NonFungibleToken {
     chain: string
 }
 
-const BASE_URL = 'https://raw.githubusercontent.com/DimensionDev/Mask-Search-List/master/'
-
 export class CoinMarketCapSearchAPI<ChainId, SchemaType>
     implements DSearchBaseAPI.DataSourceProvider<ChainId, SchemaType>
 {
     async get(): Promise<Array<SearchResult<ChainId, SchemaType>>> {
-        const tokensURL = urlcat(BASE_URL, '/output/fungible-tokens/coinmarketcap.json')
+        const tokensURL = urlcat(DSEARCH_BASE_URL, '/fungible-tokens/coinmarketcap.json')
         return fetchJSON<Array<NonFungibleTokenResult<ChainId, SchemaType>>>(tokensURL, undefined, fetchCached)
     }
 }

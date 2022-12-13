@@ -3,7 +3,7 @@ import type { ScalableBloomFilter } from 'bloom-filters'
 import type { ScamWarningAPI } from '../types/ScamWarning.js'
 import { fetchJSON } from '../entry-helpers.js'
 
-const baseURL = 'https://raw.githubusercontent.com/DimensionDev/Mask-Scam-List/main/providers/cryptoscam-db/'
+const baseURL = 'https://scam.mask.r2d2.to/cryptoscam-db'
 
 export class CryptoScamDBAPI implements ScamWarningAPI.Provider {
     bloomFilter?: ScalableBloomFilter
