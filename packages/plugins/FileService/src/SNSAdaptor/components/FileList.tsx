@@ -37,6 +37,9 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
         margin: theme.spacing(0, 2, 1.5),
     },
+    disabled: {
+        opacity: 0.5,
+    },
     file: {
         width: '100%',
     },
@@ -144,7 +147,7 @@ interface SelectableFileListProps extends Omit<FileListBaseProps, 'onChange' | '
     onChange?(selectedIds: string[]): void
 }
 
-const FILE_LIMIT = 3
+const FILE_LIMIT = 2
 export const SelectableFileList: FC<SelectableFileListProps> = ({
     files,
     className,
@@ -174,21 +177,24 @@ export const SelectableFileList: FC<SelectableFileListProps> = ({
         <section className={cx(classes.container, className)} {...rest}>
             <Boundary boundaryRef={boundaryRef}>
                 <List className={classes.list} classes={{ root: classes.listRoot }} ref={boundaryRef}>
-                    {files.map((file) => (
-                        <ListItem
-                            key={file.id}
-                            className={classes.listItem}
-                            classes={{ root: classes.itemRoot }}
-                            data-id={file.id}>
-                            <SelectableFile
-                                disabled={selectedIds.length >= FILE_LIMIT && !selectedIds.includes(file.id)}
-                                className={classes.file}
-                                file={file}
-                                selected={selectedIds.includes(file.id)}
-                                onChange={handleChange}
-                            />
-                        </ListItem>
-                    ))}
+                    {files.map((file) => {
+                        const disabled = selectedIds.length >= FILE_LIMIT && !selectedIds.includes(file.id)
+                        return (
+                            <ListItem
+                                key={file.id}
+                                className={cx(classes.listItem, disabled ? classes.disabled : null)}
+                                classes={{ root: classes.itemRoot }}
+                                data-id={file.id}>
+                                <SelectableFile
+                                    disabled={disabled}
+                                    className={classes.file}
+                                    file={file}
+                                    selected={selectedIds.includes(file.id)}
+                                    onChange={handleChange}
+                                />
+                            </ListItem>
+                        )
+                    })}
                 </List>
             </Boundary>
         </section>
