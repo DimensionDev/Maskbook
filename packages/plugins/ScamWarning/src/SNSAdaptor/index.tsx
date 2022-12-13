@@ -8,11 +8,13 @@ import { useMemo } from 'react'
 import { parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { PLUGIN_DESCRIPTION, PLUGIN_NAME } from '../constants.js'
+import { initLogger } from './logger.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
         setupContext(context)
+        initLogger(context.createLogger())
     },
     ApplicationEntries: [
         (() => {

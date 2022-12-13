@@ -1,9 +1,7 @@
-import { use, cache } from 'react'
 import type {} from 'react/next'
 import { noop } from 'lodash-es'
-import { ValueRef } from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared-base-ui'
 import { Services, Messages } from '../../API.js'
+import { createHook } from '../../utils/createHook.js'
 
 export type SocialNetwork = {
     networkIdentifier: string
@@ -34,13 +32,3 @@ export const usePersonaAvatar = createHook(
     },
 )
 export const useLanguage = createHook(Services.Settings.getLanguage, Messages.events.languageSettings.on)
-
-function createHook<T>(f: () => Promise<T>, subscribe: (callback: () => void) => void) {
-    const Request = cache((_cacheKey: number) => f())
-    const cacheKey = new ValueRef(0)
-    subscribe(() => (cacheKey.value += 1))
-
-    return function useData() {
-        return use(Request(useValueRef(cacheKey)))
-    }
-}
