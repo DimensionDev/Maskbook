@@ -22,12 +22,12 @@ export interface NonFungibleToken {
     chain: string
 }
 
-const BASE_URL = 'https://raw.githubusercontent.com/DimensionDev/Mask-Search-List/master/'
+const BASE_URL = 'http://dsearch.mask.r2d2.to'
 
 export class NFTScanSearchAPI<ChainId, SchemaType> implements DSearchBaseAPI.DataSourceProvider<ChainId, SchemaType> {
     async get(): Promise<Array<SearchResult<ChainId, SchemaType>>> {
-        const nftsURL = urlcat(BASE_URL, '/output/non-fungible-tokens/nftscan.json')
-        const collectionsURL = urlcat(BASE_URL, '/output/non-fungible-collections/nftscan.json')
+        const nftsURL = urlcat(BASE_URL, '/non-fungible-tokens/nftscan.json')
+        const collectionsURL = urlcat(BASE_URL, '/non-fungible-collections/nftscan.json')
         const nfts = fetchJSON<Array<NonFungibleTokenResult<ChainId, SchemaType>>>(nftsURL, undefined, fetchCached)
         const collections = fetchJSON<Array<NonFungibleCollectionResult<ChainId, SchemaType>>>(
             collectionsURL,

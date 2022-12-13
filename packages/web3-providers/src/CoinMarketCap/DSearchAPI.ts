@@ -17,13 +17,13 @@ export interface NonFungibleToken {
     chain: string
 }
 
-const BASE_URL = 'https://raw.githubusercontent.com/DimensionDev/Mask-Search-List/master/'
+const BASE_URL = 'http://dsearch.mask.r2d2.to'
 
 export class CoinMarketCapSearchAPI<ChainId, SchemaType>
     implements DSearchBaseAPI.DataSourceProvider<ChainId, SchemaType>
 {
     async get(): Promise<Array<SearchResult<ChainId, SchemaType>>> {
-        const tokensURL = urlcat(BASE_URL, '/output/fungible-tokens/coinmarketcap.json')
+        const tokensURL = urlcat(BASE_URL, '/fungible-tokens/coinmarketcap.json')
         return fetchJSON<Array<NonFungibleTokenResult<ChainId, SchemaType>>>(tokensURL, undefined, fetchCached)
     }
 }
