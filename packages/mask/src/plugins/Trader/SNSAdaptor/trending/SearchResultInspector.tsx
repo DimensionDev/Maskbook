@@ -11,8 +11,8 @@ export interface SearchResultInspectorProps {
     searchResult: TrendingSearchResult
 }
 
-export function SearchResultInspector({ keyword, searchResult }: SearchResultInspectorProps) {
-    const { id, name, asset, type, searchedContractAddress, isNFT } = searchResult
+export function SearchResultInspector({ searchResult }: SearchResultInspectorProps) {
+    const { id, name, type, searchedContractAddress, isNFT } = searchResult
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value: dataProviders_ = EMPTY_LIST } = useAvailableDataProviders(type, name)
     const dataProviders = searchedContractAddress
@@ -31,7 +31,6 @@ export function SearchResultInspector({ keyword, searchResult }: SearchResultIns
             isPopper={false}
             name={name}
             id={id}
-            asset={asset}
             tagType={type}
             expectedChainId={chainId}
             searchedContractAddress={searchedContractAddress}

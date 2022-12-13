@@ -44,8 +44,8 @@ const sns: Plugin.SNSAdaptor.Definition<
                 return (
                     <Web3ContextProvider
                         value={{
-                            pluginID: searchResult.pluginID,
-                            chainId: searchResult.chainId ?? ChainId.Mainnet,
+                            pluginID: result.pluginID,
+                            chainId: result.chainId ?? ChainId.Mainnet,
                         }}>
                         <SearchResultInspector keyword={result.keyword} searchResult={searchResult} />
                     </Web3ContextProvider>
