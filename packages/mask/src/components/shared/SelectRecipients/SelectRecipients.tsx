@@ -1,21 +1,22 @@
-import { useEffect, useMemo, useState } from 'react'
+import {
+    ECKeyIdentifier,
+    EMPTY_LIST,
+    NextIDPlatform,
+    ProfileIdentifier,
+    ProfileInformation as Profile,
+    ProfileInformationFromNextID,
+} from '@masknet/shared-base'
+import { isValidAddress } from '@masknet/web3-shared-evm'
 import { batch } from 'async-call-rpc'
 import { cloneDeep, uniqBy } from 'lodash-es'
-import {
-    ProfileInformation as Profile,
-    NextIDPlatform,
-    ECKeyIdentifier,
-    ProfileInformationFromNextID,
-    ProfileIdentifier,
-} from '@masknet/shared-base'
+import { useEffect, useMemo, useState } from 'react'
+import Services from '../../../extension/service.js'
+import { useI18N } from '../../../utils/index.js'
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI.js'
-import { SelectRecipientsDialogUI } from './SelectRecipientsDialog.js'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI.js'
 import { usePersonasFromNextID } from '../../DataSource/usePersonasFromNextID.js'
+import { SelectRecipientsDialogUI } from './SelectRecipientsDialog.js'
 import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch.js'
-import { isValidAddress } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../utils/index.js'
-import Services from '../../../extension/service.js'
 
 export interface SelectRecipientsUIProps {
     items: LazyRecipients
@@ -55,10 +56,14 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const { loading: searchLoading, value: NextIDResults } = usePersonasFromNextID(value, type ?? NextIDPlatform.NextID)
 
     const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, value, type)
+    const myUserId = currentIdentity?.identifier.userId
     const searchedList = useMemo(() => {
-        const profileItems = items.recipients?.filter((x) => x.identifier !== currentIdentity?.identifier)
-        return uniqBy(profileItems?.concat(NextIDItems) ?? [], ({ linkedPersona }) => linkedPersona?.rawPublicKey)
-    }, [NextIDItems, items.recipients])
+        if (!items.recipients) return EMPTY_LIST
+        const profileItems = items.recipients.filter((x) => x.identifier.userId !== myUserId)
+        // Selected might contain profiles that fetched asynchronously from
+        // Next.ID, which are not stored locally
+        return uniqBy(profileItems.concat(NextIDItems, selected), ({ linkedPersona }) => linkedPersona?.rawPublicKey)
+    }, [NextIDItems, selected, items.recipients, myUserId])
 
     const onSelect = async (item: ProfileInformationFromNextID) => {
         onSetSelected([...selected, item])
@@ -77,14 +82,15 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
         emit()
     }
 
-    useEffect(() => void (open && items.request()), [open, items.request])
+    useEffect(() => {
+        if (!open) return
+        items.request()
+    }, [open, items.request])
     return (
         <SelectRecipientsDialogUI
             searchEmptyText={valueToSearch ? t('wallet_search_no_result') : undefined}
             loading={searchLoading}
-            onSearch={(v: string) => {
-                setValueToSearch(v)
-            }}
+            onSearch={setValueToSearch}
             open={open}
             items={searchedList}
             selected={selected}

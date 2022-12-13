@@ -1,8 +1,8 @@
 import { Icons } from '@masknet/icons'
 import { useSnackbarCallback } from '@masknet/shared'
 import { formatPersonaFingerprint, ProfileInformationFromNextID } from '@masknet/shared-base'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { Checkbox, ListItem, ListItemAvatar, ListItemText } from '@mui/material'
+import { makeStyles, ShadowRootTooltip, useBoundary } from '@masknet/theme'
+import { Checkbox, ListItem, ListItemAvatar, ListItemText, PopperProps } from '@mui/material'
 import { truncate } from 'lodash-es'
 import { useCallback } from 'react'
 import Highlighter from 'react-highlight-words'
@@ -115,6 +115,22 @@ export function ProfileInList(props: ProfileInListProps) {
         return truncate(mentions, { length: 15 }) + (len > 1 ? `(${len})` : '')
     })()
 
+    const { boundaryRef } = useBoundary()
+
+    const tooltipPopperProps: Partial<PopperProps> = {
+        disablePortal: true,
+        placement: 'top',
+        modifiers: [
+            {
+                name: 'flip',
+                options: {
+                    rootBoundary: boundaryRef.current,
+                    boundary: boundaryRef.current,
+                },
+            },
+        ],
+    }
+
     const tooltipTitle = (() => {
         const linkedNames = profile.linkedTwitterNames
         if (!linkedNames?.length) return ''
@@ -128,7 +144,7 @@ export function ProfileInList(props: ProfileInListProps) {
         <ListItem
             onClick={onClick}
             disabled={props.disabled}
-            className={props.selected ? cx(classes.root, classes.highLightBg) : classes.root}>
+            className={cx(classes.root, props.selected ? classes.highLightBg : null)}>
             <ListItemAvatar classes={{ root: classes.avatarBox }}>
                 <Avatar classes={{ root: classes.avatar }} person={profile} />
             </ListItemAvatar>
@@ -138,21 +154,25 @@ export function ProfileInList(props: ProfileInListProps) {
                     primary: classes.overflow,
                     secondary: classes.overflow,
                 }}
+                primaryTypographyProps={{ component: 'div' }}
                 primary={
-                    <div className={classes.flex}>
-                        <ShadowRootTooltip title={tooltipTitle} arrow classes={{ tooltip: classes.toolTip }}>
-                            <div>
-                                <Highlighter
-                                    className={classes.highLightBase}
-                                    highlightClassName={classes.highlighted}
-                                    searchWords={[props.highlightText ?? '']}
-                                    autoEscape
-                                    textToHighlight={highlightText}
-                                />
-                            </div>
-                        </ShadowRootTooltip>
-                    </div>
+                    <ShadowRootTooltip
+                        title={tooltipTitle}
+                        arrow
+                        classes={{ tooltip: classes.toolTip }}
+                        PopperProps={tooltipPopperProps}>
+                        <div className={classes.flex}>
+                            <Highlighter
+                                className={classes.highLightBase}
+                                highlightClassName={classes.highlighted}
+                                searchWords={[props.highlightText ?? '']}
+                                autoEscape
+                                textToHighlight={highlightText}
+                            />
+                        </div>
+                    </ShadowRootTooltip>
                 }
+                secondaryTypographyProps={{ component: 'div' }}
                 secondary={
                     <div className={classes.flex}>
                         <Highlighter
