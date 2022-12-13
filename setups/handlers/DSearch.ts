@@ -1,6 +1,6 @@
 import { rest } from 'msw'
 
-const baseURL = 'http://dsearch.mask.r2d2.to'
+const baseURL = 'https://dsearch.mask.r2d2.to'
 
 /* cspell:disable */
 export const DSearchHandlers = [

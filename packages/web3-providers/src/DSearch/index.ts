@@ -13,8 +13,7 @@ import { fetchJSON } from '../helpers/fetchJSON.js'
 import { NFTScanSearchAPI } from '../NFTScan/index.js'
 import type { DSearchBaseAPI } from '../types/DSearch.js'
 import { getHandlers } from './rules.js'
-
-const BASE_URL = 'http://dsearch.mask.r2d2.to'
+import { DSEARCH_BASE_URL } from './constants.js'
 
 export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.SchemaTypeAll>
     implements DSearchBaseAPI.Provider<ChainId, SchemaType>
@@ -26,9 +25,9 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
     CoinMarketCapClient = new CoinMarketCapSearchAPI<ChainId, SchemaType>()
 
     private async init() {
-        const tokenSpecificList = urlcat(BASE_URL, '/fungible-tokens/specific-list.json')
-        const nftSpecificList = urlcat(BASE_URL, '/non-fungible-tokens/specific-list.json')
-        const collectionSpecificList = urlcat(BASE_URL, '/non-fungible-collections/specific-list.json')
+        const tokenSpecificList = urlcat(DSEARCH_BASE_URL, '/fungible-tokens/specific-list.json')
+        const nftSpecificList = urlcat(DSEARCH_BASE_URL, '/non-fungible-tokens/specific-list.json')
+        const collectionSpecificList = urlcat(DSEARCH_BASE_URL, '/non-fungible-collections/specific-list.json')
 
         const tokensRequest = fetchJSON<Array<FungibleTokenResult<ChainId, SchemaType>>>(
             tokenSpecificList,
