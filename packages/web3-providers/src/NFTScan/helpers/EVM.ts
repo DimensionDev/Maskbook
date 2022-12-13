@@ -49,7 +49,7 @@ export const resolveHostName = createLookupTableResolver<NFTScanChainId, string>
         [ChainId.Arbitrum]: 'https://arbitrum.nftscan.com/',
         [ChainId.Avalanche]: 'https://avax.nftscan.com/',
         [ChainId.Optimism]: 'https://optimism.nftscan.com/',
-        [ChainId.xDai]: 'https://cronosapi.nftscan.com/',
+        [ChainId.xDai]: 'https://cronos.nftscan.com/',
     },
     '',
 )
