@@ -37,7 +37,6 @@ import type { DSearchBaseAPI } from '../types/DSearch.js'
 import { getHandlers } from './rules.js'
 import { ENS, SpaceID, ChainbaseDomain } from '../entry.js'
 
-const BASE_URL = 'https://raw.githubusercontent.com/DimensionDev/Mask-Search-List/master/'
 import { DSEARCH_BASE_URL } from './constants.js'
 
 const CHAIN_ID_LIST = [ChainIdEVM.Mainnet, ChainIdEVM.BSC, ChainIdEVM.Matic]

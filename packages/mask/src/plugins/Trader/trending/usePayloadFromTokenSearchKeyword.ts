@@ -3,7 +3,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { DataProvider } from '@masknet/public-api'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { FungibleTokenResult, SearchFungibleTokenResultSubType } from '@masknet/web3-shared-base'
+import type { FungibleTokenResult } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import { useTrendingById, useCoinInfoByAddress } from '../trending/useTrending.js'
@@ -23,13 +23,13 @@ export interface TrendingSearchResult {
 }
 
 export function usePayloadFromTokenSearchKeyword(
-    result: FungibleTokenResult<Web3Helper.ChainIdAll>,
+    result: FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
 ): TrendingSearchResult {
     const { keyword } = result
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const searchedContractAddress = result.subType === SearchFungibleTokenResultSubType.Address ? keyword : ''
-    const type = result.subType === SearchFungibleTokenResultSubType.Keyword ? result.trendingSearchType : '$'
-    const name = result.subType === SearchFungibleTokenResultSubType.Keyword ? result.name ?? '' : ''
+    const searchedContractAddress = ''
+    const type = '$'
+    const name = ''
 
     const trendingByIdResult = useTrendingById(searchedContractAddress, DataProvider.NFTScan)
     const { value: nonFungibleAsset } = trendingByIdResult
