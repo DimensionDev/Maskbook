@@ -69,7 +69,7 @@ const resolveHandle = (metadata?: RSS3BaseAPI.FollowMetadata) => {
     const handle = metadata.handle.toLowerCase()
     const suffix = suffixMap[metadata.platform] || ''
     // handle might contain suffix at this time.
-    return handle.endsWith('.' + suffix) ? handle : `${handle}${suffix}`
+    return handle.endsWith(suffix) ? handle : `${handle}${suffix}`
 }
 
 /**
