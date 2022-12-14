@@ -375,6 +375,8 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         homeLink: 'https://www.opera.com/crypto/next',
         shortenLink: 'opera.com',
         downloadLink: 'https://www.opera.com/crypto/next',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
     {
         ID: `${PLUGIN_ID}_clover`,

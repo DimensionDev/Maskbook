@@ -10,7 +10,6 @@ import {
     useWeb3Connection,
     useBalance,
     useChainIdValid,
-    useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -113,7 +112,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const providerDescriptor = useProviderDescriptor<'all'>()
     const theme = useTheme()
     const { classes, cx } = useStyles({
-        contentBackground: providerDescriptor?.backgroundGradient,
+        contentBackground: providerDescriptor?.backgroundGradient ?? theme.palette.maskColor.publicBg,
         disableChange: props.disableChange,
         withinRiskWarningDialog: props.withinRiskWarningDialog,
         textColor:
@@ -123,8 +122,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
     })
 
     const connection = useWeb3Connection()
-    const { pluginID } = useNetworkContext()
-    const { account, chainId, ...rest } = useChainContext()
+    const { account, chainId } = useChainContext()
 
     const chainIdValid = useChainIdValid()
     const wallet = useWallet()
