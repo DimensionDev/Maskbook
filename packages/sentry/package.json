@@ -3,6 +3,7 @@
   "dependencies": {
     "@sentry/browser": "7.3.0"
   },
+  "private": true,
   "type": "module",
   "main": "./dist/sentry.js",
   "devDependencies": {
