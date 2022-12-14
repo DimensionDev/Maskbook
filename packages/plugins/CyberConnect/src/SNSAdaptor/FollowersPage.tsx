@@ -1,9 +1,9 @@
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { ElementAnchor, useIterator } from '@masknet/shared'
+import { useI18N } from '../locales/index.js'
 import { useFollowers } from '../hooks/useFollowers.js'
 import type { ProfileTab } from '../constants.js'
-import { useI18N } from '../locales/index.js'
 import type { IFollowIdentity } from '../Worker/apis/index.js'
 import { FollowRow } from './FollowTab.js'
 
@@ -25,10 +25,10 @@ interface FollowersPageProps {
 }
 
 export function FollowersPage(props: FollowersPageProps) {
+    const t = useI18N()
     const { classes } = useStyles()
     const iterator = useFollowers(props.tab, props.address)
-    const { loading, value, next, done, error, retry } = useIterator<IFollowIdentity>(iterator)
-    const t = useI18N()
+    const { value, next, done, error, retry } = useIterator<IFollowIdentity>(iterator)
 
     if (error) {
         return (
@@ -49,12 +49,8 @@ export function FollowersPage(props: FollowersPageProps) {
 
     return (
         <Box className={classes.root}>
-            {value.length
-                ? value.map((f: IFollowIdentity) => {
-                      return <FollowRow key={f.address} identity={f} />
-                  })
-                : props.hint}
-            <ElementAnchor callback={() => next?.()}>{!done && value.length !== 0 && <LoadingBase />}</ElementAnchor>
+            {value?.length ? value.map((x: IFollowIdentity) => <FollowRow key={x.address} identity={x} />) : props.hint}
+            <ElementAnchor callback={() => next?.()}>{!done && value?.length && <LoadingBase />}</ElementAnchor>
         </Box>
     )
 }
