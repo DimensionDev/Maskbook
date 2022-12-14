@@ -6,7 +6,7 @@ import { FungibleTokenList } from '@masknet/shared'
 import { useBlockedFungibleTokens } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
-import { useRowSize } from '../../../../../../../shared/src/contexts/components/useRowSize.js'
+import { useRowSize } from '../../../../../../../shared/src/hooks/useRowSize.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

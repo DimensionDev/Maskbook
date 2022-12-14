@@ -16,7 +16,7 @@ import type { FungibleTokenDetailed } from '../types.js'
 
 import { FungibleTokenList } from './shared-ui/FungibleTokenList/index.js'
 
-import { useRowSize } from '../../../../../shared/src/contexts/components/useRowSize.js'
+import { useRowSize } from '../../../../../shared/src/hooks/useRowSize.js'
 
 const DISABLED_NATIVE_TOKEN = true
 
