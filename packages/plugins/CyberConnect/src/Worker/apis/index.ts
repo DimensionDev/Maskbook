@@ -115,25 +115,24 @@ export async function fetchFollowers(
     )
 }
 
-export async function fetchFollowStatus(
-    fromAddr: string,
-    toAddr: string,
-): Promise<{ data: { followStatus: IFollowStatus } }> {
+export async function fetchFollowStatus(fromAddr: string, toAddr: string): Promise<IFollowStatus> {
     const data = {
-        query: `query FollowStatus(
-            $fromAddr: String!
-            $toAddr: String!
-          ) {
-            followStatus(fromAddr: $fromAddr, toAddr: $toAddr, namespace: "Mask") {
-              isFollowed
-              isFollowing
+        query: `query FollowStatusQuery {
+            connections(
+                fromAddr: "${fromAddr}"
+                toAddrList: ["${toAddr}"]
+                network: ETH
+            ) {
+                fromAddr
+                toAddr
+                followStatus {
+                    isFollowed
+                    isFollowing
+                }
             }
-          }`,
-        variables: {
-            fromAddr: fromAddr.toLowerCase(),
-            toAddr: toAddr.toLowerCase(),
-        },
+        }`,
+        variables: {},
     }
     const res = await query(data)
-    return res
+    return res.data.connections[0]?.followStatus
 }

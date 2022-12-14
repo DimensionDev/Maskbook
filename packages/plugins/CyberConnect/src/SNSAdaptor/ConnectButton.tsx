@@ -58,7 +58,7 @@ export default function ConnectButton({
     useAsync(async () => {
         if (isSameAddress(account, address)) return
         const res = await PluginCyberConnectRPC.fetchFollowStatus(account, address)
-        setFollowing(res.data.followStatus.isFollowing)
+        setFollowing(res.isFollowing)
     }, [address, account])
 
     useEffect(() => {
