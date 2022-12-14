@@ -1,17 +1,24 @@
-export function useIterator<T>(iterator: AsyncGenerator<T | Error, void, undefined> | undefined, size = PageSize) {
+import { useCallback, useState } from 'react'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import { EMPTY_LIST } from '@masknet/shared-base'
+
+export function useIterator<T>(
+    iterator: AsyncGenerator<T | Error, void, undefined> | undefined,
+    size = 50,
+): AsyncStateRetry<T[]> & { done: boolean; next: () => Promise<void> } {
     const [done, setDone] = useState(false)
-    const [loading, toggleLoading] = useState(false)
-    const [error, setError] = useState<string>()
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<Error>()
     const [data, setData] = useState<T[]>(EMPTY_LIST)
     const next = useCallback(async () => {
         if (!iterator || done) return
         const batchFollowers: T[] = []
-        toggleLoading(true)
+        setLoading(true)
         try {
             for (const _ of Array.from({ length: size })) {
                 const { value, done: iteratorDone } = await iterator.next()
                 if (value instanceof Error) {
-                    setError(value.message)
+                    setError(value)
                     break
                 }
                 if (iteratorDone) {
@@ -23,12 +30,16 @@ export function useIterator<T>(iterator: AsyncGenerator<T | Error, void, undefin
                 }
             }
         } catch (error_) {
-            setError(error_ as string)
+            if (error_ instanceof Error) {
+                setError(error_)
+            } else {
+                setError(new Error('Unknown Error'))
+            }
             setDone(true)
         }
 
         setData((pred) => [...pred, ...batchFollowers])
-        toggleLoading(false)
+        setLoading(false)
     }, [iterator, done])
 
     const retry = useCallback(() => {
@@ -37,12 +48,30 @@ export function useIterator<T>(iterator: AsyncGenerator<T | Error, void, undefin
         setDone(false)
     }, [])
 
+    if (loading) {
+        return {
+            retry,
+            next,
+            done,
+            loading,
+        }
+    }
+
+    if (error) {
+        return {
+            retry,
+            next,
+            done,
+            loading: false,
+            error,
+        }
+    }
+
     return {
-        value: data,
+        retry,
         next,
+        value: data,
         done,
         loading,
-        error,
-        retry,
     }
 }
