@@ -28,7 +28,7 @@ export function FollowersPage(props: FollowersPageProps) {
     const t = useI18N()
     const { classes } = useStyles()
     const iterator = useFollowers(props.tab, props.address)
-    const { value, next, done, error, retry } = useIterator<IFollowIdentity>(iterator)
+    const { value, next, done, error, retry, loading } = useIterator<IFollowIdentity>(iterator)
 
     if (error) {
         return (
@@ -47,6 +47,12 @@ export function FollowersPage(props: FollowersPageProps) {
         )
     }
 
+    if (!value?.length && loading)
+        return (
+            <Box className={classes.statusBox}>
+                <LoadingBase />
+            </Box>
+        )
     return (
         <Box className={classes.root}>
             {value?.length ? value.map((x: IFollowIdentity) => <FollowRow key={x.address} identity={x} />) : props.hint}
