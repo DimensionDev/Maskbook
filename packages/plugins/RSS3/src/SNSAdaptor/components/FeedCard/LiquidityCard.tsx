@@ -76,7 +76,7 @@ interface TokenFeedCardProps extends Omit<FeedCardProps, 'feed'> {
  * - TokenOut
  * - UnknownBurn
  */
-export const LiquidityCard: FC<TokenFeedCardProps> = ({ feed, className, ...rest }) => {
+export const LiquidityCard: FC<TokenFeedCardProps> = ({ feed, className, actionIndex, ...rest }) => {
     const { verbose } = rest
     const t = useI18N()
     const { classes, cx } = useStyles()
@@ -87,60 +87,60 @@ export const LiquidityCard: FC<TokenFeedCardProps> = ({ feed, className, ...rest
     // You might see two transaction actions in a liquidity feed as well
     const actions = feed.actions.filter((x) => x.tag === Tag.Exchange)
 
-    return (
-        <>
-            {actions.map((action, index) => {
-                const metadata = action.metadata
-                const isUp = !!metadata?.action && ['supply', 'add', 'repay', 'collect'].includes(metadata?.action)
+    function renderAction(action: typeof actions[number], index?: number) {
+        const metadata = action.metadata
+        const isUp = !!metadata?.action && ['supply', 'add', 'repay', 'collect'].includes(metadata?.action)
 
-                return (
-                    <CardFrame
-                        key={index}
-                        type={CardType.TokenLiquidity}
-                        feed={feed}
-                        className={cx(className, verbose ? classes.verbose : null)}
-                        {...rest}>
-                        <Typography className={classes.summary}>
-                            <Translate.liquidity
-                                values={{
-                                    user,
-                                    platform: feed.platform!,
-                                    context: metadata?.action!,
-                                }}
-                                components={{
-                                    user: <Label title={action.address_from!} />,
-                                    platform: <Label />,
-                                    bold: <Label />,
-                                }}
-                            />
-                        </Typography>
-                        {metadata?.tokens.length ? (
-                            <div className={classes.horizonCenter}>
-                                <div className={classes.tokenList}>
-                                    {metadata.tokens.map((token) => (
-                                        <div key={token.contract_address} className={classes.token}>
-                                            <Image
-                                                classes={{ container: classes.tokenIcon }}
-                                                src={token.image}
-                                                height={40}
-                                                width={40}
-                                            />
-                                            <Typography
-                                                className={cx(classes.value, isUp ? classes.supply : classes.withdraw)}>
-                                                {isUp ? '+ ' : '- '}
-                                                {t.token_value({
-                                                    value: formatValue(token),
-                                                    symbol: token.symbol,
-                                                })}
-                                            </Typography>
-                                        </div>
-                                    ))}
+        return (
+            <CardFrame
+                key={index}
+                type={CardType.TokenLiquidity}
+                feed={feed}
+                className={cx(className, verbose ? classes.verbose : null)}
+                actionIndex={index}
+                {...rest}>
+                <Typography className={classes.summary}>
+                    <Translate.liquidity
+                        values={{
+                            user,
+                            platform: feed.platform!,
+                            context: metadata?.action!,
+                        }}
+                        components={{
+                            user: <Label title={action.address_from!} />,
+                            platform: <Label />,
+                            bold: <Label />,
+                        }}
+                    />
+                </Typography>
+                {metadata?.tokens.length ? (
+                    <div className={classes.horizonCenter}>
+                        <div className={classes.tokenList}>
+                            {metadata.tokens.map((token) => (
+                                <div key={token.contract_address} className={classes.token}>
+                                    <Image
+                                        classes={{ container: classes.tokenIcon }}
+                                        src={token.image}
+                                        height={40}
+                                        width={40}
+                                    />
+                                    <Typography className={cx(classes.value, isUp ? classes.supply : classes.withdraw)}>
+                                        {isUp ? '+ ' : '- '}
+                                        {t.token_value({
+                                            value: formatValue(token),
+                                            symbol: token.symbol,
+                                        })}
+                                    </Typography>
                                 </div>
-                            </div>
-                        ) : null}
-                    </CardFrame>
-                )
-            })}
-        </>
-    )
+                            ))}
+                        </div>
+                    </div>
+                ) : null}
+            </CardFrame>
+        )
+    }
+
+    if (actionIndex !== undefined) return renderAction(actions[actionIndex])
+
+    return <>{actions.map(renderAction)}</>
 }
