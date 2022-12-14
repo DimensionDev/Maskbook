@@ -1,5 +1,6 @@
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { NetworkPluginID } from '@masknet/shared-base'
+import type { DataProvider } from '@masknet/public-api'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { FungibleTokenResult, SearchResultType } from '@masknet/web3-shared-base'
@@ -17,6 +18,7 @@ export interface TrendingSearchResult {
         trending?: TrendingAPI.Trending | null
     }>
     isNFT: boolean
+    dataProviders?: DataProvider[]
     searchedContractAddress?: string
 }
 

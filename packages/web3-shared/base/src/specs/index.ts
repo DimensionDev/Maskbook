@@ -608,6 +608,8 @@ export interface NonFungibleTokenSecurity {}
  export interface Result<ChainId> {
     pluginID: NetworkPluginID
     chainId?: ChainId
+    rank?: number
+    source?: SourceType
     type: SearchResultType
     keyword: string
 }
