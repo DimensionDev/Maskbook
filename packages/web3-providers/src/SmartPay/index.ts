@@ -8,6 +8,7 @@ import {
     createContract,
     getSmartPayConstants,
     TransactionReceipt,
+    isValidAddress,
     UserOperation,
 } from '@masknet/web3-shared-evm'
 import { toBase64, fromHex, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
@@ -24,47 +25,44 @@ import { fetchJSON } from '../entry-helpers.js'
 
 export class SmartPayBundlerAPI implements BundlerAPI.Provider {
     private async healthz() {
-        const response = await fetch(urlcat(BUNDLER_ROOT, '/healthz'), {
+        return fetchJSON<BundlerAPI.Healthz>(urlcat(BUNDLER_ROOT, '/healthz'), {
             method: 'GET',
         })
-        const json: BundlerAPI.Healthz = await response.json()
-
-        return {
-            ...json,
-        }
     }
 
     private async handle(userOperation: UserOperation) {
-        const response = await fetch(urlcat(BUNDLER_ROOT, '/handle'), {
-            method: 'POST',
-            body: JSON.stringify({
-                user_operations: [
-                    {
-                        ...omit(userOperation, [
-                            'initCode',
-                            'callData',
-                            'callGas',
-                            'verificationGas',
-                            'preVerificationGas',
-                            'maxFeePerGas',
-                            'maxPriorityFeePerGas',
-                            'paymasterData',
-                        ]),
-                        nonce: userOperation.nonce?.toFixed() ?? '0',
-                        init_code: toBase64(fromHex(userOperation.initCode ?? '0x')),
-                        call_data: toBase64(fromHex(userOperation.callData ?? '0x')),
-                        call_gas: userOperation.callGas,
-                        verification_gas: userOperation.verificationGas,
-                        pre_verification_gas: userOperation.preVerificationGas,
-                        max_fee_per_gas: userOperation.maxFeePerGas,
-                        max_priority_fee_per_gas: userOperation.maxPriorityFeePerGas,
-                        paymaster_data: toBase64(fromHex(userOperation.paymasterData ?? '0x')),
-                        signature: toBase64(fromHex(userOperation.signature ?? '0x')),
-                    },
-                ],
-            }),
-        })
-        const { tx_hash, message = 'Unknown Error' }: { tx_hash: string; message?: string } = await response.json()
+        const { tx_hash, message = 'Unknown Error' } = await fetchJSON<{ tx_hash: string; message?: string }>(
+            urlcat(BUNDLER_ROOT, '/handle'),
+            {
+                method: 'POST',
+                body: JSON.stringify({
+                    user_operations: [
+                        {
+                            ...omit(userOperation, [
+                                'initCode',
+                                'callData',
+                                'callGas',
+                                'verificationGas',
+                                'preVerificationGas',
+                                'maxFeePerGas',
+                                'maxPriorityFeePerGas',
+                                'paymasterData',
+                            ]),
+                            nonce: userOperation.nonce?.toFixed() ?? '0',
+                            init_code: toBase64(fromHex(userOperation.initCode ?? '0x')),
+                            call_data: toBase64(fromHex(userOperation.callData ?? '0x')),
+                            call_gas: userOperation.callGas,
+                            verification_gas: userOperation.verificationGas,
+                            pre_verification_gas: userOperation.preVerificationGas,
+                            max_fee_per_gas: userOperation.maxFeePerGas,
+                            max_priority_fee_per_gas: userOperation.maxPriorityFeePerGas,
+                            paymaster_data: toBase64(fromHex(userOperation.paymasterData ?? '0x')),
+                            signature: toBase64(fromHex(userOperation.signature ?? '0x')),
+                        },
+                    ],
+                }),
+            },
+        )
         if (tx_hash) return tx_hash
         throw new Error(message)
     }
@@ -251,7 +249,7 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         return compact(
             owners.map((x, index) => {
                 // ensure the contract account has been deployed
-                // if (!isValidAddress(x)) return
+                if (!isValidAddress(x)) return
 
                 return this.createContractAccount(
                     chainId,
