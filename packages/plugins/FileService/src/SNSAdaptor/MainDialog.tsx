@@ -32,7 +32,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         padding: 0,
-        paddingBottom: theme.spacing(2),
         overflow: 'auto',
         boxSizing: 'border-box',
         '&::-webkit-scrollbar': {
