@@ -56,7 +56,7 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
     const currentProfile = useLastRecognizedIdentity()
     const { value = 0 } = useAsync(async () => {
         if (!currentProfile?.identifier?.userId) return 0
-        return SmartPayFunder.queryRemainFrequency(currentProfile.identifier.userId)
+        return SmartPayFunder.getRemainFrequency(currentProfile.identifier.userId)
     }, [currentProfile])
     return usePortalShadowRoot((container) => (
         <Popover
