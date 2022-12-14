@@ -46,9 +46,7 @@ export function SourceSwitcher(props: SourceSwitcherProps) {
                 flexDirection="row"
                 alignItems="center"
                 gap={0.5}>
-                <Typography className={classes.sourceNote}>
-                    {hideArrowDropDownIcon ? t.powered_by() : t.plugin_trader_data_source()}
-                </Typography>
+                <Typography className={classes.sourceNote}>{t.powered_by()}</Typography>
                 <FootnoteMenu
                     options={sourceTypes.map((x) => ({
                         name: (
