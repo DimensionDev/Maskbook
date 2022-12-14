@@ -269,16 +269,13 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         }
 
         return compact(
-            unionBy(
-                logs.map((x) => x.address),
-                (y) => y.toLowerCase(),
-            ).map((z, i) => {
-                if (!isValidAddress(z)) return
+            unionBy(logs, (x) => x.address.toLowerCase()).map((topic) => {
+                if (!isValidAddress(topic.address)) return
 
-                const previousOwner = toHex(logs[i].topic1.slice(-40))
+                const previousOwner = toHex(topic.topic1.slice(-40))
                 if (!isValidAddress(previousOwner)) return
 
-                return this.createContractAccount(chainId, z, owner, previousOwner, true)
+                return this.createContractAccount(chainId, topic.address, owner, previousOwner, true)
             }),
         )
     }
