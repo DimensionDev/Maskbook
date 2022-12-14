@@ -15,9 +15,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
         UI: {
             Content: ({ result }) => (
                 <SearchResultInspector
-                    keyword={result.keyword}
-                    keywordType={result.type}
-                    result={result as DomainResult<ChainId>}
+                    keyword={result[0].keyword}
+                    keywordType={result[0].type}
+                    result={result[0] as DomainResult<ChainId>}
                 />
             ),
         },

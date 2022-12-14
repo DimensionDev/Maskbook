@@ -1,5 +1,7 @@
 import { Trans } from 'react-i18next'
+import { useState } from 'react'
 import type { Plugin } from '@masknet/plugin-infra'
+import type { DataProvider } from '@masknet/public-api'
 import { base } from '../base.js'
 import { TraderDialog } from './trader/TraderDialog.js'
 import { SearchResultInspector } from './trending/SearchResultInspector.js'
@@ -11,7 +13,6 @@ import { Icons } from '@masknet/icons'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { setupStorage, storageDefaultValue } from '../storage/index.js'
 import { SearchResultType, FungibleTokenResult } from '@masknet/web3-shared-base'
 import { usePayloadFromTokenSearchKeyword } from '../trending/usePayloadFromTokenSearchKeyword.js'
 
@@ -30,14 +31,19 @@ const sns: Plugin.SNSAdaptor.Definition<
     unknown
 > = {
     ...base,
-    init(signal, context) {
-        setupStorage(context.createKVStorage('persistent', storageDefaultValue))
-    },
+    init(signal, context) {},
     SearchResultInspector: {
         ID: PluginID.Trader,
         UI: {
-            Content({ result }) {
-                console.log({ result })
+            Content({ result: resultList }) {
+                const [dataProvider, setDataProvider] = useState(resultList[0].source as DataProvider | undefined)
+                const result = resultList.find((x) => x.source === dataProvider)!
+
+                const dataProviders = resultList.reduce<DataProvider[]>((acc, cur) => {
+                    const dataProvider = cur.source as unknown as DataProvider
+                    return dataProvider ? (acc.includes(dataProvider) ? acc : acc.concat(dataProvider)) : acc
+                }, [])
+
                 const searchResult = usePayloadFromTokenSearchKeyword(
                     result as FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
                 )
@@ -47,7 +53,13 @@ const sns: Plugin.SNSAdaptor.Definition<
                             pluginID: result.pluginID,
                             chainId: result.chainId ?? ChainId.Mainnet,
                         }}>
-                        <SearchResultInspector keyword={result.keyword} searchResult={searchResult} />
+                        <SearchResultInspector
+                            keyword={result.keyword}
+                            searchResult={searchResult}
+                            setDataProvider={setDataProvider}
+                            dataProvider={dataProvider!}
+                            dataProviders={dataProviders}
+                        />
                     </Web3ContextProvider>
                 )
             },

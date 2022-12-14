@@ -9,7 +9,14 @@ import type { TagType } from '../../types/index.js'
 import { PluginTransakMessages } from '../../../Transak/messages.js'
 
 export interface TrendingPopperProps {
-    children?: (name: string, type: TagType, dataProviders: DataProvider[], reposition?: () => void) => React.ReactNode
+    children?: (
+        name: string,
+        type: TagType,
+        dataProviders: DataProvider[],
+        dataProvider: DataProvider,
+        setDataProvider: (x: DataProvider) => void,
+        reposition?: () => void,
+    ) => React.ReactNode
     PopperProps?: Partial<PopperProps>
 }
 
@@ -23,6 +30,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const [type, setType] = useState<TagType | undefined>()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [availableDataProviders, setAvailableDataProviders] = useState<DataProvider[]>([])
+    const [dataProvider, setDataProvider] = useState(availableDataProviders[0])
     const popper = useRef<HTMLDivElement | null>(null)
 
     // #region select token and provider dialog could be opened by trending view
@@ -94,7 +102,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
                 {({ TransitionProps }) => (
                     <Fade in={Boolean(anchorEl)} {...TransitionProps}>
                         <div>
-                            {props.children?.(name, type, availableDataProviders, () =>
+                            {props.children?.(name, type, availableDataProviders, dataProvider, setDataProvider, () =>
                                 setTimeout(() => popperRef.current?.update(), 100),
                             )}
                         </div>

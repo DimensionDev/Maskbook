@@ -46,27 +46,27 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         const list = await DSearch.search(keyword, {
             getAddressType: connection?.getAddressType,
         })
-        return list[0]
+        return list
     }, [keyword, connection?.getAddressType])
     const contentComponent = useMemo(() => {
-        if (!result.value) return null
-        const Component = getSearchResultContent(result.value)
+        if (!result.value?.length) return null
+        const Component = getSearchResultContent(result.value[0])
         return <Component result={result.value} />
     }, [result.value])
 
     const tabs = useMemo(() => {
-        if (!result.value) return EMPTY_LIST
-        return getSearchResultTabs(activatedPlugins, result.value, translate)
+        if (!result.value?.length) return EMPTY_LIST
+        return getSearchResultTabs(activatedPlugins, result.value[0], translate)
     }, [activatedPlugins, result.value])
 
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
     const tabContentComponent = useMemo(() => {
-        if (!result.value) return null
+        if (!result.value?.length) return null
         const Component = getSearchResultTabContent(currentTab)
-        return <Component result={result.value} />
+        return <Component result={result.value[0]} />
     }, [currentTab, result.value])
-    if (!keyword && !result.value) return null
+    if (!keyword && !result.value?.length) return null
     if (!contentComponent) return null
 
     return (

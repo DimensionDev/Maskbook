@@ -674,7 +674,7 @@ export namespace Plugin.SNSAdaptor {
         UI?: {
             /** The brief content above detailed tabs. */
             Content?: InjectUI<{
-                result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+                result: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
             }>
         }
         Utils?: {
