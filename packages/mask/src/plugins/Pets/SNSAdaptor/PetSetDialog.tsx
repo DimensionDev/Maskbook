@@ -78,7 +78,7 @@ const useStyles = makeStyles()((theme) => ({
         flex: 1,
         marginLeft: theme.spacing(0.5),
         textOverflow: 'ellipsis',
-        '-webkit-line-clamp': '1',
+        WebkitLineCamp: '1',
         maxWidth: '260px',
         overflow: 'hidden',
     },

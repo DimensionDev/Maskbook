@@ -41,8 +41,8 @@ const useStyles = makeStyles()(() => ({
         color: '#888',
         marginTop: '10px',
         textOverflow: 'ellipsis',
-        '-webkit-line-clamp': '2',
-        '-webkit-box-orient': 'vertical',
+        WebkitLineCamp: '2',
+        WebkitBoxOrient: 'vertical',
         display: '-webkit-box',
         maxHeight: '40px',
         lineHeight: '20px',
@@ -51,8 +51,8 @@ const useStyles = makeStyles()(() => ({
     },
     isOpen: {
         maxHeight: '200px',
-        '-webkit-line-clamp': 'inherit',
-        '-webkit-box-orient': 'inherit',
+        WebkitLineCamp: 'inherit',
+        WebkitBoxOrient: 'inherit',
         textOverflow: 'inherit',
     },
     isTurn: {

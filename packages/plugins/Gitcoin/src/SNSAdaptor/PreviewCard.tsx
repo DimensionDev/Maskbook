@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import urlcat from 'urlcat'
-import { Box, Card, Typography, Button, Avatar, useTheme } from '@mui/material'
+import { Box, Card, Typography, Button, Avatar } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { QueryBuilder as QueryBuilderIcon, VerifiedUser as VerifiedUserIcon } from '@mui/icons-material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -62,8 +62,8 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         display: '-webkit-box',
-        '-webkit-line-clamp': '4',
-        '-webkit-box-orient': 'vertical',
+        WebkitLineCamp: '4',
+        WebkitBoxOrient: 'vertical',
     },
     button: {
         width: '100%',
@@ -78,7 +78,6 @@ export function PreviewCard(props: PreviewCardProps) {
     const t = useI18N()
     const { classes } = useStyles()
     const { value: grant, error, loading, retry } = useGrant(props.id)
-    const theme = useTheme()
 
     // #region the donation dialog
     const postLink = usePostLink()
