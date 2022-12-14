@@ -100,7 +100,7 @@ export const ProfileCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => {
                     values={{
                         user,
                         platform: metadata?.platform!,
-                        context: metadata?.type,
+                        context: metadata?.action ?? metadata?.type,
                     }}
                     components={{
                         user: <Label />,
