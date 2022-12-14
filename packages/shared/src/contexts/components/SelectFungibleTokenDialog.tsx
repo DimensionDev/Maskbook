@@ -8,7 +8,7 @@ import type { FungibleToken } from '@masknet/web3-shared-base'
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
 import { useBaseUIRuntime } from '../base/index.js'
 import { InjectedDialog } from '../components/index.js'
-import { useRowSize } from './useRowSize.js'
+import { useRowSize } from '../../hooks/useRowSize.js'
 import { TokenListMode } from '../../UI/components/FungibleTokenList/type.js'
 
 interface StyleProps {
