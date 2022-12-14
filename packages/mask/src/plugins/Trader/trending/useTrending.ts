@@ -15,7 +15,7 @@ export function useTrendingByKeyword(
     tagType: TagType,
     keyword: string,
     dataProvider: DataProvider,
-    expectedChainId?: ChainId,
+    expectedChainId?: Web3Helper.ChainIdAll,
     searchedContractAddress?: string,
 ): AsyncState<{
     currency?: TrendingAPI.Currency
@@ -72,7 +72,7 @@ export function useTrendingByKeyword(
 export function useTrendingById(
     id: string,
     dataProvider: DataProvider,
-    expectedChainId?: ChainId,
+    expectedChainId?: Web3Helper.ChainIdAll,
     searchedContractAddress?: string,
 ): AsyncState<{
     currency?: TrendingAPI.Currency
@@ -94,7 +94,7 @@ export function useTrendingById(
         NetworkPluginID.PLUGIN_EVM,
         trending?.coin.contract_address,
         undefined,
-        { chainId: trending?.coin.chainId },
+        { chainId: trending?.coin.chainId as ChainId },
     )
 
     if (loading) {
@@ -140,7 +140,7 @@ export function useTrendingById(
 
 function createCoinFromTrending(
     trending?: TrendingAPI.Trending,
-    expectedChainId?: ChainId,
+    expectedChainId?: Web3Helper.ChainIdAll,
     searchedContractAddress?: string,
     token?: Web3Helper.FungibleTokenScope<void, NetworkPluginID.PLUGIN_EVM>,
 ): Coin {

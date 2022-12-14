@@ -1,5 +1,6 @@
 import type { TokenType } from '@masknet/web3-shared-base'
 import type { DataProvider } from '@masknet/public-api'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
 export namespace TrendingAPI {
@@ -49,7 +50,7 @@ export namespace TrendingAPI {
     export type CommunityUrls = Array<{ type: Partial<CommunityType>; link: string }>
     export interface Coin {
         id: string
-        chainId?: ChainId
+        chainId?: Web3Helper.ChainIdAll
         name: string
         symbol: string
         type: TokenType

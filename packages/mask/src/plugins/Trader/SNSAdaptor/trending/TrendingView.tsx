@@ -8,20 +8,20 @@ import {
     useNonFungibleAssetsByCollection,
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
+import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
+import type { NonFungibleTokenResult, FungibleTokenResult } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { DataProvider } from '@masknet/public-api'
 import { NFTList } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
-import { ActionButton, makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
+import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import { createFungibleToken, TokenType } from '@masknet/web3-shared-base'
-import { isNativeTokenAddress, isNativeTokenSymbol, SchemaType, ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
-import { Link, Stack, Tab, ThemeProvider } from '@mui/material'
+import { Stack, Tab, ThemeProvider } from '@mui/material'
 import { Box, useTheme } from '@mui/system'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../../utils/index.js'
-import { resolveDataProviderLink, resolveDataProviderName } from '../../pipes.js'
-import { useAvailableCoins } from '../../trending/useAvailableCoins.js'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId.js'
 import { usePriceStats } from '../../trending/usePriceStats.js'
 import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending.js'
@@ -32,7 +32,6 @@ import { PriceChart } from './PriceChart.js'
 import { DEFAULT_RANGE_OPTIONS, NFT_RANGE_OPTIONS, PriceChartDaysControl } from './PriceChartDaysControl.js'
 import { TickersTable } from './TickersTable.js'
 import { TrendingViewDeck } from './TrendingViewDeck.js'
-import { TrendingViewError } from './TrendingViewError.js'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 
@@ -107,11 +106,21 @@ export interface TrendingViewProps {
     name: string
     id?: string
     tagType: TagType
-    dataProvider: DataProvider
-    setDataProvider: (x: DataProvider) => void
-    dataProviders: DataProvider[]
+    setResult: (
+        a:
+            | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+            | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
+    ) => void
+    result:
+        | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+        | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    resultList?: Array<
+        | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+        | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    >
+    isPreciseSearch?: boolean
     searchedContractAddress?: string
-    expectedChainId?: ChainId
+    expectedChainId?: Web3Helper.ChainIdAll
     onUpdate?: () => void
     isPopper?: boolean
     asset?: AsyncState<{ currency?: TrendingAPI.Currency; trending?: TrendingAPI.Trending | null }>
@@ -129,21 +138,22 @@ export function TrendingView(props: TrendingViewProps) {
     const {
         name,
         tagType,
-        dataProviders,
         isPopper = true,
         searchedContractAddress,
-        setDataProvider,
+        isPreciseSearch,
         expectedChainId,
         asset,
         id,
-        dataProvider,
+        resultList,
+        result,
+        setResult,
     } = props
 
     const { t } = useI18N()
     const { classes } = useStyles({ isPopper })
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
-    const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UniswapInfo ? 1 : 0)
+    const [tabIndex, setTabIndex] = useState(result.source !== DataProvider.UniswapInfo ? 1 : 0)
     const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
 
@@ -155,25 +165,18 @@ export function TrendingView(props: TrendingViewProps) {
     useEffect(() => setTabIndex(0), [networkType])
     // #endregion
 
-    // #region multiple coins share the same symbol
-    const { value: coins = EMPTY_LIST } = useAvailableCoins(tagType, name, dataProvider)
-    // #endregion
-
     // #region merge trending
-    const coinId = usePreferredCoinId(name, dataProvider, id)
-    const trendingById = useTrendingById(asset ? '' : coinId, dataProvider, expectedChainId, searchedContractAddress)
+    const coinId = usePreferredCoinId(name, result.source, id)
+    const trendingById = useTrendingById(asset ? '' : coinId, result.source, expectedChainId, searchedContractAddress)
     const trendingByKeyword = useTrendingByKeyword(
         tagType,
         coinId || asset ? '' : name,
-        dataProvider,
+        result.source,
         expectedChainId,
         searchedContractAddress,
     )
-    const {
-        value: { currency, trending } = {},
-        error: trendingError,
-        loading: loadingTrending,
-    } = asset ?? (coinId ? trendingById : trendingByKeyword)
+    const { value: { currency, trending } = {}, loading: loadingTrending } =
+        asset ?? (coinId ? trendingById : trendingByKeyword)
     // #endregion
 
     const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
@@ -240,24 +243,6 @@ export function TrendingView(props: TrendingViewProps) {
     }, [t, isSwappable, isNFT])
     // #endregion
 
-    // // #region current data provider switcher
-    const DataProviderSwitcher = useMemo(() => {
-        if (dataProviders.length === 0) return
-        if (typeof dataProvider === 'undefined') return dataProviders[0]
-        const indexOf = dataProviders.indexOf(dataProvider)
-        if (indexOf === -1) return
-        const nextOption = indexOf === dataProviders.length - 1 ? dataProviders[0] : dataProviders[indexOf + 1]
-
-        return (
-            <ActionButton sx={{ marginTop: 1 }} color="primary" onClick={() => setDataProvider(nextOption)}>
-                {t('plugin_trader_switch_provider', {
-                    provider: resolveDataProviderName(nextOption),
-                })}
-            </ActionButton>
-        )
-    }, [dataProvider])
-    // // #endregion
-
     // #region api ready callback
     useEffect(() => {
         props.onUpdate?.()
@@ -269,35 +254,9 @@ export function TrendingView(props: TrendingViewProps) {
         done,
         next,
         error: loadError,
-    } = useNonFungibleAssetsByCollection(collectionAddress, NetworkPluginID.PLUGIN_EVM, { chainId: expectedChainId })
-
-    // #region no available providers
-    if (dataProviders.length === 0) return null
-    // #endregion
-
-    // #region error handling
-    // error: unknown coin or api error
-    if (trendingError)
-        return (
-            <TrendingViewError
-                message={
-                    <span>
-                        {t('plugin_trader_fail_to_load')}
-                        <Link
-                            color="primary"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            href={resolveDataProviderLink(dataProvider)}>
-                            {resolveDataProviderName(dataProvider)}
-                        </Link>
-                        .
-                    </span>
-                }
-                reaction={DataProviderSwitcher}
-                TrendingCardProps={{ classes: { root: classes.root } }}
-            />
-        )
-    // #endregion
+    } = useNonFungibleAssetsByCollection(collectionAddress, NetworkPluginID.PLUGIN_EVM, {
+        chainId: expectedChainId as ChainId,
+    })
 
     // #region display loading skeleton
     if (!currency || !trending || loadingTrending)
@@ -322,15 +281,14 @@ export function TrendingView(props: TrendingViewProps) {
             }}
             keyword={name}
             stats={stats}
-            coins={coins}
-            isPreciseSearch={!!searchedContractAddress}
+            setResult={setResult}
+            resultList={resultList}
+            result={result}
+            isPreciseSearch={isPreciseSearch}
             currency={currency}
             trending={trending}
             isPopper={isPopper}
-            setDataProvider={setDataProvider}
-            dataProvider={dataProvider}
             showDataProviderIcon={tabIndex < 3}
-            dataProviders={dataProviders}
             TrendingCardProps={{ classes: { root: classes.root } }}>
             <TabContext value={currentTab}>
                 <Stack px={2}>
@@ -345,7 +303,7 @@ export function TrendingView(props: TrendingViewProps) {
             </TabContext>
             <Stack sx={{ backgroundColor: theme.palette.maskColor.bottom }}>
                 {currentTab === ContentTabs.Market ? (
-                    <CoinMarketPanel dataProvider={dataProvider} trending={trending} />
+                    <CoinMarketPanel dataProvider={result.source} trending={trending} />
                 ) : null}
                 {currentTab === ContentTabs.Price ? (
                     <Box px={2} py={4}>
@@ -367,7 +325,7 @@ export function TrendingView(props: TrendingViewProps) {
                 ) : null}
                 {currentTab === ContentTabs.Exchange ? (
                     <Box p={2}>
-                        <TickersTable tickers={tickers} coinType={coin.type} dataProvider={dataProvider} />
+                        <TickersTable tickers={tickers} coinType={coin.type} dataProvider={result.source} />
                     </Box>
                 ) : null}
                 {currentTab === ContentTabs.Swap && isSwappable ? (

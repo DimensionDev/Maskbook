@@ -8,6 +8,7 @@ import {
     NonFungibleCollectionResult,
     EOAResult,
     attemptUntil,
+    isSameAddress,
 } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import urlcat from 'urlcat'
@@ -28,6 +29,7 @@ import {
     isZeroAddress as isZeroAddressSolana,
     isValidDomain as isValidDomainSolana,
 } from '@masknet/web3-shared-solana'
+import { uniqWith } from 'lodash-es'
 import { fetchCached } from '../entry-helpers.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import { CoinGeckoSearchAPI } from '../CoinGecko/apis/DSearchAPI.js'
@@ -115,18 +117,22 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
      * "address:0x"
      *
      */
-    async searchToken(keyword: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {
+    async searchToken(
+        keyword: string,
+    ): Promise<Array<FungibleTokenResult<ChainId, SchemaType> | NonFungibleTokenResult<ChainId, SchemaType>>> {
         const { word, field } = this.parseKeyword(keyword)
         const data = await this.init()
 
-        let result: Array<SearchResult<ChainId, SchemaType>> = []
+        let result: Array<FungibleTokenResult<ChainId, SchemaType> | NonFungibleTokenResult<ChainId, SchemaType>> = []
 
         for (const searcher of this.handlers) {
             const { rules, type } = searcher
 
             for (const rule of rules) {
                 if (field !== undefined && rule.key !== field) continue
-                const filtered = data.filter((x) => (type ? type === x.type : true))
+                const filtered = data.filter((x) => (type ? type === x.type : true)) as Array<
+                    FungibleTokenResult<ChainId, SchemaType> | NonFungibleTokenResult<ChainId, SchemaType>
+                >
 
                 if (rule.type === 'exact') {
                     const item = filtered.find((x) => rule.filter?.(x, word, filtered))
@@ -142,7 +148,9 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                 }
                 if (rule.type === 'fuzzy') {
                     const items = rule.fullSearch?.(word, filtered) ?? []
-                    const fuzzyData = items.map((x) => ({ ...x, keyword: word }))
+                    const fuzzyData = items.map((x) => ({ ...x, keyword: word })) as Array<
+                        FungibleTokenResult<ChainId, SchemaType> | NonFungibleTokenResult<ChainId, SchemaType>
+                    >
                     if (!field) {
                         result = [...result, ...fuzzyData]
                     } else {
@@ -152,7 +160,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             }
         }
 
-        return result
+        return uniqWith(result, (a, b) => a.type === b.type && (a.id === b.id || isSameAddress(a.address, b.address)))
     }
 
     async search(

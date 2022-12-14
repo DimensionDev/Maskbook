@@ -19,6 +19,7 @@ export interface TrendingSearchResult {
     }>
     isNFT: boolean
     dataProviders?: DataProvider[]
+    isPreciseSearch: boolean
     searchedContractAddress?: string
 }
 
@@ -34,6 +35,7 @@ export function usePayloadFromTokenSearchKeyword(
         name,
         id: type === SearchResultType.FungibleToken ? id : undefined,
         isNFT: false,
+        isPreciseSearch: Boolean(Others?.isValidAddress(keyword)),
         searchedContractAddress: Others?.isValidAddress(keyword)
             ? keyword
             : Others?.isValidAddress(address)

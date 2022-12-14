@@ -608,14 +608,16 @@ export interface NonFungibleTokenSecurity {}
 
  export interface Result<ChainId> {
     pluginID: NetworkPluginID
+    type: SearchResultType
+    keyword: string
     chainId?: ChainId
     id?: string
     name?: string
     rank?: number
     address?: string
     source?: DataProvider
-    type: SearchResultType
-    keyword: string
+    iconURL?: string
+    symbol?: string
 }
 export interface EOAResult<ChainId> extends Result<ChainId> {
     type: SearchResultType.EOA

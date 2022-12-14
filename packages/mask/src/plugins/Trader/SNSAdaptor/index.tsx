@@ -1,10 +1,10 @@
 import { Trans } from 'react-i18next'
 import { useState } from 'react'
 import type { Plugin } from '@masknet/plugin-infra'
-import type { DataProvider } from '@masknet/public-api'
 import { base } from '../base.js'
+import { TrendingView } from './trending/TrendingView.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { TraderDialog } from './trader/TraderDialog.js'
-import { SearchResultInspector } from './trending/SearchResultInspector.js'
 import { TagInspector } from './trending/TagInspector.js'
 import { enhanceTag } from './cashTag.js'
 import { ApplicationEntry } from '@masknet/shared'
@@ -12,7 +12,7 @@ import { Icons } from '@masknet/icons'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { SearchResultType } from '@masknet/web3-shared-base'
+import { SearchResultType, NonFungibleTokenResult, FungibleTokenResult } from '@masknet/web3-shared-base'
 import { usePayloadFromTokenSearchKeyword } from '../trending/usePayloadFromTokenSearchKeyword.js'
 
 const sns: Plugin.SNSAdaptor.Definition<
@@ -30,31 +30,37 @@ const sns: Plugin.SNSAdaptor.Definition<
     unknown
 > = {
     ...base,
-    init(signal, context) {},
+    init() {},
     SearchResultInspector: {
         ID: PluginID.Trader,
         UI: {
-            Content({ result: resultList }) {
-                const [dataProvider, setDataProvider] = useState(resultList[0].source)
-                const result = resultList.find((x) => x.source === dataProvider)!
+            Content({ result: _resultList }) {
+                const resultList = _resultList as Array<
+                    | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+                    | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+                >
+                const [result, setResult] = useState(resultList[0])
 
-                const dataProviders = resultList.reduce<DataProvider[]>((acc, cur) => {
-                    const dataProvider = cur.source
-                    return dataProvider ? (acc.includes(dataProvider) ? acc : acc.concat(dataProvider)) : acc
-                }, [])
                 const searchResult = usePayloadFromTokenSearchKeyword(result)
+
+                const { id, name, type, searchedContractAddress, isPreciseSearch } = searchResult
                 return (
                     <Web3ContextProvider
                         value={{
                             pluginID: result.pluginID,
                             chainId: result.chainId ?? ChainId.Mainnet,
                         }}>
-                        <SearchResultInspector
-                            keyword={result.keyword}
-                            searchResult={searchResult}
-                            setDataProvider={setDataProvider}
-                            dataProvider={dataProvider!}
-                            dataProviders={dataProviders}
+                        <TrendingView
+                            isPopper={false}
+                            name={name}
+                            id={id}
+                            setResult={setResult}
+                            tagType={type}
+                            result={result}
+                            resultList={resultList}
+                            expectedChainId={result.chainId ?? ChainId.Mainnet}
+                            isPreciseSearch={isPreciseSearch}
+                            searchedContractAddress={searchedContractAddress}
                         />
                     </Web3ContextProvider>
                 )
