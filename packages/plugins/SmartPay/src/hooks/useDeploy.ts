@@ -15,6 +15,8 @@ import { SignAccount, SignAccountType } from '../type.js'
 export function useDeploy(
     signAccount?: SignAccount,
     contractAccount?: ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM>,
+    nonce?: number,
+    onSuccess?: () => void,
 ) {
     const { personaSignPayMessage } = useSNSAdaptorContext()
     const currentPersona = useCurrentPersonaInformation()
@@ -33,7 +35,7 @@ export function useDeploy(
             twitterHandler: lastRecognizedIdentity.identifier.userId,
             ts: getUnixTime(new Date()),
             publicKey: currentPersona?.identifier.publicKeyAsHex,
-            nonce: 2,
+            nonce,
         })
 
         let signature
@@ -58,12 +60,8 @@ export function useDeploy(
             payload,
         })
 
-        if (!response.walletAddress) return
-
-        await connection?.deployContractWallet?.(contractAccount.owner, {
-            account: contractAccount?.address,
-            chainId: ChainId.Mumbai,
-            providerType: ProviderType.MaskWallet,
-        })
-    }, [connection, signAccount, lastRecognizedIdentity?.identifier, currentPersona, contractAccount])
+        if (response.message.walletAddress && onSuccess) {
+            onSuccess()
+        }
+    }, [connection, signAccount, lastRecognizedIdentity?.identifier, currentPersona, contractAccount, nonce, onSuccess])
 }

@@ -5,7 +5,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { SmartPayFunder } from '@masknet/web3-providers'
 import { DialogContent, CircularProgress, Box } from '@mui/material'
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { useContainer } from 'unstated-next'
 import { SmartPayContext } from '../../context/SmartPayContext.js'
@@ -43,6 +43,8 @@ export const SmartPayDialog = memo(() => {
 
     const currentVisitingProfile = useLastRecognizedIdentity()
 
+    const { loading: querySignableAccountsLoading, accounts, queryAccountsLoading } = useContainer(SmartPayContext)
+
     // #region query white list
     const { value: isVerify, loading: queryVerifyLoading } = useAsync(async () => {
         if (!currentVisitingProfile?.identifier?.userId) return false
@@ -50,11 +52,16 @@ export const SmartPayDialog = memo(() => {
     }, [open, currentVisitingProfile])
     // #endregion
 
-    const { loading: querySignableAccountsLoading } = useContainer(SmartPayContext)
-
     const entries = [RoutePaths.Deploy, RoutePaths.Ineligibility, RoutePaths.Main]
 
-    const initialIndex = isVerify ? 0 : 1
+    const initialIndex = useMemo(() => {
+        if (isVerify) {
+            if (accounts?.length) return 2
+            return 0
+        }
+
+        return 1
+    }, [isVerify, accounts])
 
     return (
         <InjectedDialog
@@ -63,7 +70,7 @@ export const SmartPayDialog = memo(() => {
             title={t.smart_pay_wallet()}
             titleTail={<Icons.Questions onClick={() => setDialog({ open: true })} />}>
             <DialogContent className={classes.dialogContent}>
-                {querySignableAccountsLoading || queryVerifyLoading ? (
+                {querySignableAccountsLoading || queryVerifyLoading || queryAccountsLoading ? (
                     <Box display="flex" justifyContent="center" alignItems="center" minHeight={448}>
                         <CircularProgress />
                     </Box>

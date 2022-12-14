@@ -1,20 +1,39 @@
 import { Icons } from '@masknet/icons'
-import { ImageIcon, useSnackbarCallback, TokenIcon, FormattedBalance } from '@masknet/shared'
+import { ImageIcon, useSnackbarCallback, TokenIcon, FormattedBalance, useMenuConfig } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { useFungibleAssets, useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
+import {
+    useFungibleAssets,
+    useFungibleTokenBalance,
+    useNetworkDescriptor,
+    useWeb3State,
+} from '@masknet/web3-hooks-base'
 import { ChainId, formatEthereumAddress, useSmartPayConstants } from '@masknet/web3-shared-evm'
-import { Box, Button, DialogActions, DialogContent, List, ListItem, ListItemText, Typography } from '@mui/material'
+import {
+    Box,
+    Button,
+    DialogActions,
+    DialogContent,
+    Link,
+    List,
+    ListItem,
+    ListItemText,
+    Radio,
+    Typography,
+} from '@mui/material'
 import { useCopyToClipboard } from 'react-use'
-import { memo, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-base'
-import { isNaN } from 'lodash-es'
+import { first, isNaN } from 'lodash-es'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { AddSmartPayPopover } from './AddSmartPayPopover.js'
 import { AccountsManagerPopover } from './AccountsManagePopover.js'
+import { useContainer } from 'unstated-next'
+import { SmartPayContext } from '../../context/SmartPayContext.js'
+import type { ContractAccountAPI } from '@masknet/web3-providers/types'
 
 const useStyles = makeStyles()((theme) => ({
     dialogContent: {
@@ -42,8 +61,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     card: {
-        background:
-            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)',
+        background: theme.palette.maskColor.modalTitleBg,
         boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
         backdropFilter: 'blur(8px)',
         borderRadius: 12,
@@ -51,7 +69,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         flexDirection: 'column',
-        color: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.main,
         position: 'relative',
     },
     badge: {
@@ -62,7 +80,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '50%',
     },
     address: {
-        color: theme.palette.maskColor.publicSecond,
+        color: theme.palette.maskColor.second,
         fontSize: 14,
         lineHeight: '18px',
         display: 'flex',
@@ -111,6 +129,14 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         cursor: 'pointer',
     },
+    linkIcon: {
+        color: theme.palette.maskColor.second,
+        cursor: 'pointer',
+        height: 14,
+    },
+    menu: {
+        padding: theme.spacing(1.5),
+    },
 }))
 
 export const SmartPayContent = memo(() => {
@@ -119,34 +145,37 @@ export const SmartPayContent = memo(() => {
 
     const [addAnchorEl, setAddAnchorEl] = useState<HTMLElement | null>(null)
     const [manageAnchorEl, setManageAnchorEl] = useState<HTMLElement | null>(null)
+    const [current, setCurrent] = useState<ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM>>()
+
+    const { accounts } = useContainer(SmartPayContext)
 
     // #region Remote Dialog Controller
-    const { setDialog: setDescriptionDialog } = useRemoteControlledDialog(
-        PluginSmartPayMessages.smartPayDescriptionDialogEvent,
-    )
-
     const { openDialog: openApproveMaskDialog } = useRemoteControlledDialog(PluginSmartPayMessages.approveDialogEvent)
     // #endregion
 
     // #region web3 state
     const { Others } = useWeb3State()
-    const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Matic)
-    const maskAddress = Others?.getMaskTokenAddress(ChainId.Matic)
+    const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Mumbai)
+    const maskAddress = Others?.getMaskTokenAddress(ChainId.Mumbai)
+
     const { value: assets, loading } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
-        chainId: ChainId.Matic,
-        account: '0x790116d0685eB197B886DAcAD9C247f785987A4a',
+        chainId: ChainId.Mumbai,
+        account: current?.address,
     })
-    const tokens = assets?.filter((x) => x.chainId === ChainId.Matic)
+
+    const tokens = assets?.filter((x) => x.chainId === ChainId.Mumbai)
     const maskToken = assets?.find((x) => isSameAddress(maskAddress, x.address))
 
-    const { EP_CONTRACT_ADDRESS } = useSmartPayConstants(ChainId.Matic)
-    const { value: allowance = '0' } = useERC20TokenAllowance(
-        '0x790116d0685eB197B886DAcAD9C247f785987A4a',
-        EP_CONTRACT_ADDRESS,
-        { chainId: ChainId.Matic },
-    )
+    const { EP_CONTRACT_ADDRESS } = useSmartPayConstants(ChainId.Mumbai)
+    const { value: allowance = '0' } = useERC20TokenAllowance(current?.address, EP_CONTRACT_ADDRESS, {
+        chainId: ChainId.Mumbai,
+    })
 
     const availableBalanceTooLow = isLessThan(formatBalance(allowance, maskToken?.decimals), 0.1)
+
+    const maskBalance = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, maskAddress, {
+        account: current?.address,
+    })
 
     // #endregion
 
@@ -154,11 +183,77 @@ export const SmartPayContent = memo(() => {
     const [, copyToClipboard] = useCopyToClipboard()
 
     const onCopy = useSnackbarCallback({
-        executor: async () => copyToClipboard('0x790116d0685eB197B886DAcAD9C247f785987A4a'),
+        executor: async (address?: string) => copyToClipboard(address ?? ''),
         deps: [],
         successText: t.copy_wallet_address_success(),
     })
     // #endregion
+
+    const [menu, openMenu] = useMenuConfig(
+        accounts?.map((account, index) => {
+            return (
+                <Box
+                    key={index}
+                    display="flex"
+                    alignItems="center"
+                    columnGap={1}
+                    onClick={() => setCurrent(account)}
+                    sx={{ cursor: 'pointer' }}>
+                    <Box position="relative" width={30} height={30}>
+                        <Icons.SmartPay size={30} />
+                        <ImageIcon classes={{ icon: classes.badge }} size={12} icon={polygonDescriptor?.icon} />
+                    </Box>
+                    <Box display="flex" flexDirection="column" justifyContent="space-between" minWidth={150}>
+                        <Typography fontSize={16} lineHeight="20px" fontWeight={700}>
+                            Smart Pay
+                        </Typography>
+                        <Typography className={classes.address}>
+                            {formatEthereumAddress(account?.address ?? '', 4)}
+                            <Icons.PopupCopy
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    onCopy(account.address)
+                                }}
+                                size={14}
+                            />
+                            <Link
+                                href={Others?.explorerResolver.addressLink(ChainId.Mumbai, account.address)}
+                                target="_blank"
+                                title="View on Explorer"
+                                rel="noopener noreferrer"
+                                className={classes.linkIcon}
+                                onClick={(e) => e.stopPropagation()}>
+                                <Icons.LinkOut size={14} />
+                            </Link>
+                        </Typography>
+                    </Box>
+                    <Radio checked={isSameAddress(current?.address, account.address)} />
+                </Box>
+            )
+        }) ?? [],
+        {
+            anchorOrigin: {
+                vertical: 'bottom',
+                horizontal: 'center',
+            },
+            transformOrigin: {
+                vertical: 'top',
+                horizontal: 'right',
+            },
+            MenuListProps: {
+                className: classes.menu,
+            },
+        },
+    )
+
+    useEffect(() => {
+        if (!accounts?.length) return
+
+        setCurrent((prev) => {
+            if (!prev) return first(accounts)
+            return prev
+        })
+    }, [accounts])
 
     return (
         <>
@@ -171,12 +266,24 @@ export const SmartPayContent = memo(() => {
                         </Box>
                         <Box display="flex" flexDirection="column" justifyContent="space-between">
                             <Typography fontSize={16} lineHeight="20px" fontWeight={700}>
-                                Smart Pay 1
+                                Smart Pay 1 <Icons.ArrowDrop size={20} onClick={openMenu} />
+                                {menu}
                             </Typography>
                             <Typography className={classes.address}>
-                                {formatEthereumAddress('0x790116d0685eB197B886DAcAD9C247f785987A4a', 4)}
-                                <Icons.PopupCopy onClick={onCopy} size={14} />
-                                <Icons.LinkOut size={14} />
+                                {formatEthereumAddress(current?.address ?? '', 4)}
+                                <Icons.PopupCopy onClick={() => onCopy(current?.address)} size={14} />
+                                <Link
+                                    href={
+                                        current
+                                            ? Others?.explorerResolver.addressLink(ChainId.Mumbai, current.address)
+                                            : ''
+                                    }
+                                    target="_blank"
+                                    title="View on Explorer"
+                                    rel="noopener noreferrer"
+                                    className={classes.linkIcon}>
+                                    <Icons.LinkOut size={14} />
+                                </Link>
                             </Typography>
                         </Box>
                     </Box>
@@ -195,6 +302,8 @@ export const SmartPayContent = memo(() => {
                         <AccountsManagerPopover
                             open={!!manageAnchorEl}
                             anchorEl={manageAnchorEl}
+                            address={current?.address}
+                            owner={current?.owner}
                             onClose={() => setManageAnchorEl(null)}
                         />
                     </Box>

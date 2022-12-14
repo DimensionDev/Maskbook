@@ -15,8 +15,10 @@ export namespace FunderAPI {
     }
 
     export interface Fund {
-        walletAddress: string
-        tx: string
+        message: {
+            walletAddress: string
+            tx: string
+        }
     }
 
     export interface WhiteList {

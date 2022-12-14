@@ -7,6 +7,7 @@ import {
     Create2Factory,
     createContract,
     getSmartPayConstants,
+    isValidAddress,
     UserOperation,
 } from '@masknet/web3-shared-evm'
 import { toBase64, fromHex, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
@@ -234,26 +235,19 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         const calls = this.multicall.createMultipleContractSingleData(contracts, names, [])
         const results = await this.multicall.call(chainId, contracts, names, calls)
 
-        const owners = compact(results.flatMap((x) => (x.succeed && x.value ? x.value : '')))
-
-        // the owner didn't deploy any account before.
-        if (!owners.length) {
-            return []
-        }
+        const owners = results.flatMap((x) => (x.succeed && x.value ? x.value : ''))
 
         const operations = await this.funder.queryOperationByOwner(owner)
+
         return compact(
             owners.map((x, index) => {
-                // ensure the contract account has been deployed
-                // if (!isValidAddress(x)) return
-
                 return this.createContractAccount(
                     chainId,
                     options[index],
                     owner,
                     owner,
-                    true,
-                    operations.some((operation) => isSameAddress(operation.walletAddress, x)),
+                    isValidAddress(x),
+                    operations.some((operation) => isSameAddress(operation.walletAddress, options[index])),
                 )
             }),
         )
