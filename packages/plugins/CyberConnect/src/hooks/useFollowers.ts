@@ -1,8 +1,7 @@
-import { useCallback, useMemo, useState } from 'react'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { useMemo } from 'react'
 import { pageableToIterator } from '@masknet/web3-shared-base'
 import { PluginCyberConnectRPC } from '../messages.js'
-import { PageSize, ProfileTab } from '../constants.js'
+import type { ProfileTab } from '../constants.js'
 
 export function useFollowers(tab: ProfileTab, address?: string, size = 50) {
     return useMemo(() => {
