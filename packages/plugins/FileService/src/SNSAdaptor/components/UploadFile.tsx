@@ -17,6 +17,8 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         overflow: 'auto',
         height: '100%',
+        paddingBottom: theme.spacing(2),
+        boxSizing: 'border-box',
     },
     uploadArea: {
         display: 'flex',
