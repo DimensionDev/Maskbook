@@ -55,6 +55,8 @@ export namespace NextIDBaseAPI {
 
         queryAllExistedBindingsByPlatform(platform: NextIDPlatform, identity: string): Promise<NextIDPersonaBindings[]>
 
+        queryLatestBindingByPlatform(platform: NextIDPlatform, identity: string): Promise<NextIDPersonaBindings | null>
+
         queryIsBound(
             personaPublicKey: string,
             platform: NextIDPlatform,
