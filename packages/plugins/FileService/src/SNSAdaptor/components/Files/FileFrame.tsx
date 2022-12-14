@@ -1,7 +1,7 @@
 import { FC, HTMLProps, memo, PropsWithChildren, ReactNode, useLayoutEffect, useRef, useState } from 'react'
 import { Icons } from '@masknet/icons'
 import { Typography } from '@mui/material'
-import { makeStyles, ShadowRootTooltip, useBoundary } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip, useBoundedPopperProps } from '@masknet/theme'
 import type { FileInfo } from '../../../types.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -60,7 +60,7 @@ export const FileFrame: FC<PropsWithChildren<FileFrameProps>> = memo(function Fi
         }
     }, [nameRef.current])
 
-    const { boundaryRef } = useBoundary()
+    const tooltipPopperProps = useBoundedPopperProps()
 
     return (
         <div className={cx(className, classes.file)} {...rest} ref={rootRef}>
@@ -70,19 +70,7 @@ export const FileFrame: FC<PropsWithChildren<FileFrameProps>> = memo(function Fi
                     title={showTooltip ? file.name : undefined}
                     disableInteractive
                     arrow
-                    PopperProps={{
-                        disablePortal: true,
-                        placement: 'top',
-                        modifiers: [
-                            {
-                                name: 'flip',
-                                options: {
-                                    rootBoundary: boundaryRef.current,
-                                    boundary: boundaryRef.current,
-                                },
-                            },
-                        ],
-                    }}>
+                    PopperProps={tooltipPopperProps}>
                     <Typography className={classes.name} ref={nameRef}>
                         {file.name}
                     </Typography>

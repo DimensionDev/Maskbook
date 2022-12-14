@@ -10,12 +10,15 @@ import {
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
 } from '../legacy-settings/wallet-settings.js'
+import { logSettings } from '../legacy-settings/settings.js'
+import { LogHub, LogPlatform } from '@masknet/web3-providers'
+import type { LogHubBase } from '@masknet/web3-providers/types'
 
 export type PartialSharedUIContext = Pick<
     Plugin.Shared.SharedUIContext,
-    'nativeType' | 'hasNativeAPI' | 'account' | 'chainId' | 'createKVStorage'
+    'nativeType' | 'hasNativeAPI' | 'account' | 'chainId' | 'createKVStorage' | 'createLogger'
 >
-let sharedUIContextSingleton: Omit<PartialSharedUIContext, 'createKVStorage'>
+let sharedUIContextSingleton: Omit<PartialSharedUIContext, 'createKVStorage' | 'createLogger'>
 export const createPartialSharedUIContext = (id: string, signal: AbortSignal): PartialSharedUIContext => {
     sharedUIContextSingleton ??= {
         nativeType: nativeAPI?.type,
@@ -32,6 +35,10 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
         createKVStorage<T extends object>(type: 'memory' | 'persistent', defaultValues: T) {
             if (type === 'memory') return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
             else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
+        },
+        createLogger(): LogHubBase | undefined {
+            if (!logSettings.value) return
+            return new LogHub(LogPlatform.Plugin, pluginID)
         },
     }
 }

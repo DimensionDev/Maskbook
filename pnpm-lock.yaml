@@ -21,15 +21,6 @@ patchedDependencies:
   '@uniswap/v3-sdk@3.9.0':
     hash: i674dmxu47nk67u5bur7yueebu
     path: patches/@uniswap__v3-sdk@3.9.0.patch
-  arweave@1.11.4:
-    hash: lwxdtt2msovfmigiutpkaty3lq
-    path: patches/arweave@1.11.4.patch
-  '@snapshot-labs/snapshot.js@0.4.12':
-    hash: p7agjh5ebmj425gqxjxh7jozii
-    path: patches/@snapshot-labs__snapshot.js@0.4.12.patch
-  '@ceramicnetwork/rpc-transport@0.3.1':
-    hash: subw5upjv36ceix3wmw66isn6u
-    path: patches/@ceramicnetwork__rpc-transport@0.3.1.patch
   gulp@4.0.2:
     hash: 2y5kpiugqogdejwrac5fzdim7y
     path: patches/gulp@4.0.2.patch
@@ -39,6 +30,9 @@ patchedDependencies:
   ipfs-http-client@57.0.3:
     hash: 7oiabyd5hzeabolk22o64jpd4i
     path: patches/ipfs-http-client@57.0.3.patch
+  '@ceramicnetwork/rpc-transport@0.3.1':
+    hash: subw5upjv36ceix3wmw66isn6u
+    path: patches/@ceramicnetwork__rpc-transport@0.3.1.patch
   '@ethersphere/bee-js@5.0.0':
     hash: g3xomw7pzn5koufm6j4gkm6n5m
     path: patches/@ethersphere__bee-js@5.0.0.patch
@@ -51,12 +45,12 @@ patchedDependencies:
   '@emotion/react@11.10.4':
     hash: obcydjbogyjam4qag626nceajy
     path: patches/@emotion__react@11.10.4.patch
-  '@mui/base@5.0.0-alpha.100':
-    hash: cc7k56pam6cgsdxwjuynldgftq
-    path: patches/@mui__base@5.0.0-alpha.100.patch
   react-devtools-inline@4.26.1:
     hash: fpee2mntbhrd2bberabvpkyh5q
     path: patches/react-devtools-inline@4.26.1.patch
+  '@mui/base@5.0.0-alpha.100':
+    hash: cc7k56pam6cgsdxwjuynldgftq
+    path: patches/@mui__base@5.0.0-alpha.100.patch
   '@protobufjs/inquire@1.1.0':
     hash: cc6ztxhxwsg3dyqdzvftqua3dy
     path: patches/@protobufjs__inquire@1.1.0.patch
@@ -66,6 +60,9 @@ patchedDependencies:
   micromark-util-symbol@1.0.1:
     hash: jkhnsgx77ffpyllfnod5pyn4ue
     path: patches/micromark-util-symbol@1.0.1.patch
+  '@sentry/core@7.3.0':
+    hash: slppt2u7q3em5yrxpisr2vi75y
+    path: patches/@sentry__core@7.3.0.patch
   '@hookform/resolvers@2.9.10':
     hash: dqqyd5a3hlw75qwefcjrgni3fy
     path: patches/@hookform__resolvers@2.9.10.patch
@@ -87,27 +84,33 @@ patchedDependencies:
   '@types/react-highlight-words@0.16.4':
     hash: cu6glh5cl4qvdid3ys3m6a2f7e
     path: patches/@types__react-highlight-words@0.16.4.patch
-  immer@9.0.16:
-    hash: 5xmqd5oohffxunmhptcxd5g33e
-    path: patches/immer@9.0.16.patch
   '@cyberlab/cyberconnect@4.2.2':
     hash: 7wgc4b53ygfwefhtjbh3dydjgy
     path: patches/@cyberlab__cyberconnect@4.2.2.patch
-  fortmatic@2.2.1:
-    hash: tb3oevqnvhntsyfyhi2z6spuea
-    path: patches/fortmatic@2.2.1.patch
   '@walletconnect/client@1.7.8':
     hash: 2krbsxzv524dzcdemy7vploqza
     path: patches/@walletconnect__client@1.7.8.patch
+  fortmatic@2.2.1:
+    hash: tb3oevqnvhntsyfyhi2z6spuea
+    path: patches/fortmatic@2.2.1.patch
   reflect-metadata@0.1.13:
     hash: pnra5xi77mqlyipflqvcm4z6ga
     path: patches/reflect-metadata@0.1.13.patch
-  ses@0.17.0:
-    hash: bgxlirdvz233rozklsyry5sxxa
-    path: patches/ses@0.17.0.patch
   bloom-filters@3.0.0:
     hash: 2etetjrjxbcye2oktxqpij75ey
     path: patches/bloom-filters@3.0.0.patch
+  ses@0.17.0:
+    hash: bgxlirdvz233rozklsyry5sxxa
+    path: patches/ses@0.17.0.patch
+  arweave@1.11.4:
+    hash: lwxdtt2msovfmigiutpkaty3lq
+    path: patches/arweave@1.11.4.patch
+  '@snapshot-labs/snapshot.js@0.4.12':
+    hash: p7agjh5ebmj425gqxjxh7jozii
+    path: patches/@snapshot-labs__snapshot.js@0.4.12.patch
+  immer@9.0.16:
+    hash: 5xmqd5oohffxunmhptcxd5g33e
+    path: patches/immer@9.0.16.patch
 
 importers:
 
@@ -2283,6 +2286,22 @@ importers:
         specifier: ^7.4.0
         version: 7.4.0
 
+  packages/sentry:
+    dependencies:
+      '@sentry/browser':
+        specifier: 7.3.0
+        version: 7.3.0
+    devDependencies:
+      '@rollup/plugin-node-resolve':
+        specifier: ^13.3.0
+        version: 13.3.0_rollup@2.79.1
+      '@rollup/plugin-replace':
+        specifier: ^4.0.0
+        version: 4.0.0_rollup@2.79.1
+      rollup:
+        specifier: ^2.75.6
+        version: 2.79.1
+
   packages/shared:
     dependencies:
       '@hookform/resolvers':
@@ -2481,6 +2500,9 @@ importers:
       typeson-registry:
         specifier: ^3.0.0
         version: 3.0.0
+      web3-utils:
+        specifier: 1.8.0
+        version: 1.8.0
       z-schema:
         specifier: ^5.0.3
         version: 5.0.3
@@ -9041,6 +9063,21 @@ packages:
       rollup: 3.5.0
     dev: true
 
+  /@rollup/plugin-node-resolve/13.3.0_rollup@2.79.1:
+    resolution: {integrity: sha512-Lus8rbUo1eEcnS4yTFKLZrVumLPY+YayBdWXgFSHYhTT2iJbMhoaaBL3xl5NCdeRytErGr8tZ0L71BMRmnlwSw==}
+    engines: {node: '>= 10.0.0'}
+    peerDependencies:
+      rollup: ^2.42.0
+    dependencies:
+      '@rollup/pluginutils': 3.1.0_rollup@2.79.1
+      '@types/resolve': 1.17.1
+      deepmerge: 4.2.2
+      is-builtin-module: 3.2.0
+      is-module: 1.0.0
+      resolve: 1.22.1
+      rollup: 2.79.1
+    dev: true
+
   /@rollup/plugin-node-resolve/15.0.1_rollup@3.5.0:
     resolution: {integrity: sha512-ReY88T7JhJjeRVbfCyNj+NXAG3IIsVMsX9b5/9jC98dRP8/yxlZdz7mHZbHk5zHr24wZZICS5AcXsFZAXYUQEg==}
     engines: {node: '>=14.0.0'}
@@ -9057,6 +9094,28 @@ packages:
       is-module: 1.0.0
       resolve: 1.22.1
       rollup: 3.5.0
+    dev: true
+
+  /@rollup/plugin-replace/4.0.0_rollup@2.79.1:
+    resolution: {integrity: sha512-+rumQFiaNac9y64OHtkHGmdjm7us9bo1PlbgQfdihQtuNxzjpaB064HbRnewUOggLQxVCCyINfStkgmBeQpv1g==}
+    peerDependencies:
+      rollup: ^1.20.0 || ^2.0.0
+    dependencies:
+      '@rollup/pluginutils': 3.1.0_rollup@2.79.1
+      magic-string: 0.25.9
+      rollup: 2.79.1
+    dev: true
+
+  /@rollup/pluginutils/3.1.0_rollup@2.79.1:
+    resolution: {integrity: sha512-GksZ6pr6TpIjHm8h9lSQ8pi8BE9VeubNT0OMJ3B5uZJ8pz73NPiqOtCog/x2/QzM1ENChPKxMDhiQuRHsqc+lg==}
+    engines: {node: '>= 8.0.0'}
+    peerDependencies:
+      rollup: ^1.20.0||^2.0.0
+    dependencies:
+      '@types/estree': 0.0.39
+      estree-walker: 1.0.1
+      picomatch: 2.3.1
+      rollup: 2.79.1
     dev: true
 
   /@rollup/pluginutils/4.2.1:
@@ -9109,6 +9168,49 @@ packages:
       - supports-color
       - typescript
       - utf-8-validate
+    dev: false
+
+  /@sentry/browser/7.3.0:
+    resolution: {integrity: sha512-UJMTDbajKNRGrs4ZQNelrPDaATvSZ9uELpPOtPSG6JUvB1BCwGgsgzz55RS0Uqs7B8KhMnDQ0kIn3FMewM4FMg==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/core': 7.3.0_slppt2u7q3em5yrxpisr2vi75y
+      '@sentry/types': 7.3.0
+      '@sentry/utils': 7.3.0
+      tslib: 1.14.1
+    dev: false
+
+  /@sentry/core/7.3.0_slppt2u7q3em5yrxpisr2vi75y:
+    resolution: {integrity: sha512-EvuWVlYm0F0+BtIEmQiCL31Fw0cfKSwUTmxc99wvouaabpHBr2zCJHRxaXOWzxS705bYBJEQiFDTIHfoOQZMzA==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/hub': 7.3.0
+      '@sentry/types': 7.3.0
+      '@sentry/utils': 7.3.0
+      tslib: 1.14.1
+    dev: false
+    patched: true
+
+  /@sentry/hub/7.3.0:
+    resolution: {integrity: sha512-0GtTaWf/hoAMoIFY7Ke6eozIbG3FdIPM364sER4SxUQVSklp6AORrV6p82IgWPROK6aj83cPk9Bszgi6RiF/BA==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/types': 7.3.0
+      '@sentry/utils': 7.3.0
+      tslib: 1.14.1
+    dev: false
+
+  /@sentry/types/7.3.0:
+    resolution: {integrity: sha512-cGkHdh9+uvbFTj65TjWcXuhe6vQiMY+U+N2GE5xCfmZT9hwuouCASViNsbJMpZqvCg+Yi0fasQLZ71rujiRNOA==}
+    engines: {node: '>=8'}
+    dev: false
+
+  /@sentry/utils/7.3.0:
+    resolution: {integrity: sha512-xUP8TBf2p/c6CN8eFQ7Y+xk0IFrJXsph5ScozqNl/2l/Xs8hd2EiYETqgUklphoYD4J2RxvPwMyqBL15QN6wNg==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/types': 7.3.0
+      tslib: 1.14.1
     dev: false
 
   /@servie/events/3.0.0:
@@ -11639,15 +11741,18 @@ packages:
   /@types/eslint/8.4.10:
     resolution: {integrity: sha512-Sl/HOqN8NKPmhWo2VBEPm0nvHnu2LL3v9vKo8MEq0EtbJ4eVzGPl41VNPvn5E1i5poMk4/XD8UriLHpJvEP/Nw==}
     dependencies:
-      '@types/estree': 0.0.51
+      '@types/estree': 1.0.0
       '@types/json-schema': 7.0.11
+
+  /@types/estree/0.0.39:
+    resolution: {integrity: sha512-EYNwp3bU+98cpU4lAWYYL7Zz+2gryWH1qbdDTidVd6hkiR6weksdbMadyXKXNPEkQFhXM+hVO9ZygomHXp+AIw==}
+    dev: true
 
   /@types/estree/0.0.51:
     resolution: {integrity: sha512-CuPgU6f3eT/XgKKPqKd/gLZV1Xmvf1a2R5POBOGQa6uv82xpls89HU5zKeVoyR8XzHd1RGNOlQlvUe3CFkjWNQ==}
 
   /@types/estree/1.0.0:
     resolution: {integrity: sha512-WulqXMDUTYAXCjZnk6JtIHPigp55cVtDgDrO2gHRwhyJto21+1zbVCtOYB2L1F9w4qCQ0rOGWBnBe0FNTiEJIQ==}
-    dev: true
 
   /@types/ethereum-blockies/0.1.0:
     resolution: {integrity: sha512-yQgqv9dqnFm9pHmCPUBPGu4NRIGSD/hihO+BwcuzxaxmMX3juD97vRvwUB3uY/MUBQ+7pWvUWDPYSAcZ1dIQDA==}
@@ -12021,6 +12126,12 @@ packages:
     dependencies:
       '@types/highlight.js': 9.12.4
       highlight.js: 9.18.5
+
+  /@types/resolve/1.17.1:
+    resolution: {integrity: sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==}
+    dependencies:
+      '@types/node': 18.11.9
+    dev: true
 
   /@types/resolve/1.20.2:
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
@@ -15361,7 +15472,7 @@ packages:
       mississippi: 3.0.0
       mkdirp: 0.5.6
       move-concurrently: 1.0.1
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 2.7.1
       ssri: 6.0.2
       unique-filename: 1.1.1
@@ -15385,7 +15496,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.12
@@ -18886,7 +18997,7 @@ packages:
     resolution: {integrity: sha512-0En0w03NRVMn9Uiyn8YRPDKvWjxCWkslUEhGNTdGx15RvPJYQ+lbOlqrlNI2vEAs4pDYK4f/HN2TbDmk5TP0iw==}
     dependencies:
       debug: 3.2.7
-      resolve: 1.22.0
+      resolve: 1.22.1
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -19177,6 +19288,10 @@ packages:
       c8: 7.12.0
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /estree-walker/1.0.1:
+    resolution: {integrity: sha512-1fMXF3YP4pZZVozF8j/ZLfvnR8NSIljt56UhbZ5PeeDmmGHpgpdwQt7ITlGvYaQukCvuBRMLEiKiYC+oeIg4cg==}
     dev: true
 
   /estree-walker/2.0.2:
@@ -22568,12 +22683,6 @@ packages:
     resolution: {integrity: sha512-YttjnrswnUYRVJvxCvu8z+PGMUSzC2JttP0OEXezlAEdp3EXzhf7IZ3j0gRAybJBQupedIZFhY61Tga6E0qASA==}
     dev: false
 
-  /is-core-module/2.10.0:
-    resolution: {integrity: sha512-Erxj2n/LDAZ7H8WNJXd9tw38GYM3dv8rk8Zcs+jJuxYTW7sozH+SS8NtrSjVL1/vpLvWi1hxy96IzjJ3EHTJJg==}
-    dependencies:
-      has: 1.0.3
-    dev: true
-
   /is-core-module/2.11.0:
     resolution: {integrity: sha512-RRjxlvLDkD1YJwDbroBHMb+cukurkDWNyHx7D3oNB5x9rb5ogcksMC5wHCadcXoo67gVr/+3GFySh3134zi6rw==}
     dependencies:
@@ -24309,6 +24418,12 @@ packages:
   /ltgt/2.2.1:
     resolution: {integrity: sha512-AI2r85+4MquTw9ZYqabu4nMwy9Oftlfa/e/52t9IjtfG+mGBbTNdAoZ3RQKLHR6r0wQnwZnPIEh/Ya6XTWAKNA==}
     dev: false
+
+  /magic-string/0.25.9:
+    resolution: {integrity: sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==}
+    dependencies:
+      sourcemap-codec: 1.4.8
+    dev: true
 
   /magic-string/0.26.7:
     resolution: {integrity: sha512-hX9XH3ziStPoPhJxLq1syWuZMxbDvGNbVchfrdCtanC7D13888bMFow61x8axrx+GfHLtVeAx2kxL7tTGRl+Ow==}
@@ -27080,13 +27195,15 @@ packages:
   /promievent/0.1.5:
     resolution: {integrity: sha512-Yqve4y2sFIz5hHmVpoZWXNayROyAyf3KWeEHZPh60yYiVpmHMKuJt6UoLbs6pC8uEMdFkqukz97mQXaAkHDPAw==}
 
-  /promise-inflight/1.0.1:
+  /promise-inflight/1.0.1_bluebird@3.7.2:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
     peerDependencies:
       bluebird: '*'
     peerDependenciesMeta:
       bluebird:
         optional: true
+    dependencies:
+      bluebird: 3.7.2
     dev: true
 
   /promise-to-callback/1.0.0:
@@ -28563,7 +28680,7 @@ packages:
     resolution: {integrity: sha512-Hhtrw0nLeSrFQ7phPp4OOcVjLPIeMnRlr5mcnVuMe7M/7eBn98A3hmFRLoFo3DLZkivSYwhRUJTyPyWAk56WLw==}
     hasBin: true
     dependencies:
-      is-core-module: 2.10.0
+      is-core-module: 2.11.0
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
     dev: true
@@ -30321,7 +30438,7 @@ packages:
       '@swc/core': ^1.2.147
       webpack: '>=2'
     dependencies:
-      webpack: 5.75.0
+      webpack: 5.75.0_webpack-cli@5.0.0
     dev: true
 
   /symbol-tree/3.2.4:
@@ -31439,7 +31556,7 @@ packages:
     dependencies:
       source-map: 0.5.7
       uglify-js: 2.8.29
-      webpack: 3.12.0
+      webpack: 3.12.0_webpack-cli@5.0.0
       webpack-sources: 1.4.3
     dev: false
 

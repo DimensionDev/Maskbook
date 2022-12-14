@@ -3,9 +3,9 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, Typography } from '@mui/material'
-import { CopyIconButton } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { formatPersonaFingerprint, formatPersonaName } from '@masknet/shared-base'
+import { CopyIconButton } from '../../../../components/CopyIconButton/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

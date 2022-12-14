@@ -1102,7 +1102,7 @@ export interface Connection<
 }
 
 export interface HubIndicator {
-    /** The id of the page. */
+    /** The id of the page (cursor). */
     id: string
     /** The index number of the page. */
     index: number

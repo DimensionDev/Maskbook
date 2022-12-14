@@ -7,16 +7,17 @@ import type {
     ExtensionSite,
     NetworkPluginID,
     NextIDPlatform,
+    PostIdentifier,
     PersonaIdentifier,
     PersonaInformation,
     PluginID,
     PopupRoutes,
-    PostIdentifier,
     ProfileIdentifier,
     ScopedStorage,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { LogHubBase } from '@masknet/web3-providers/types'
 import type {
     ChainDescriptor,
     NetworkDescriptor,
@@ -155,6 +156,10 @@ export namespace Plugin.Shared {
          * A lightweight K/V storage used to store some simple data.
          */
         createKVStorage<T extends object>(type: 'memory' | 'persistent', defaultValues: T): ScopedStorage<T>
+        /**
+         * A Logger.
+         */
+        createLogger(): LogHubBase | undefined
     }
 
     export interface SharedUIContext extends SharedContext {
@@ -556,7 +561,7 @@ export namespace Plugin.SNSAdaptor {
         label: I18NFieldOrReactNode
 
         /** This callback will be called when the user clicked on the chip. */
-        onClick(options: { compositionType: CompositionType }): void
+        onClick(options: { compositionType: CompositionType; metadata: ReadonlyMap<string, unknown> | undefined }): void
     }
 
     export interface CompositionDialogEntryDialog {

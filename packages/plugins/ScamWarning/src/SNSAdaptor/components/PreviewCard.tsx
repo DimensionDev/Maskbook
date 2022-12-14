@@ -5,6 +5,8 @@ import { uniq } from 'lodash-es'
 import { useI18N } from '../../locales/index.js'
 import { makeStyles, MaskDarkTheme } from '@masknet/theme'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
+import { logger } from '../logger.js'
+import { PluginLoggerContextProvider } from '@masknet/shared'
 
 interface PreviewCardProps {
     links: readonly string[]
@@ -37,25 +39,27 @@ export const PreviewCard = ({ links }: PreviewCardProps) => {
 
     return (
         <ThemeProvider theme={MaskDarkTheme}>
-            <Stack p={1.5} pt={0} className={classes.root}>
-                <Stack className={classes.card}>
-                    {value.map((x) => {
-                        return (
-                            <Typography
-                                key={x.url}
-                                className={classes.title}
-                                variant="h6"
-                                fontWeight={700}
-                                color="textPrimary">
-                                {x.url}
-                            </Typography>
-                        )
-                    })}
-                    <Typography variant="body1" color="textPrimary">
-                        {t.warning_description({ count: value.length })}
-                    </Typography>
+            <PluginLoggerContextProvider value={{ logger }}>
+                <Stack p={1.5} pt={0} className={classes.root}>
+                    <Stack className={classes.card}>
+                        {value.map((x) => {
+                            return (
+                                <Typography
+                                    key={x.url}
+                                    className={classes.title}
+                                    variant="h6"
+                                    fontWeight={700}
+                                    color="textPrimary">
+                                    {x.url}
+                                </Typography>
+                            )
+                        })}
+                        <Typography variant="body1" color="textPrimary">
+                            {t.warning_description({ count: value.length })}
+                        </Typography>
+                    </Stack>
                 </Stack>
-            </Stack>
+            </PluginLoggerContextProvider>
         </ThemeProvider>
     )
 }

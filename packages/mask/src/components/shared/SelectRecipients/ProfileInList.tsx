@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { useSnackbarCallback } from '@masknet/shared'
 import { formatPersonaFingerprint, ProfileInformationFromNextID } from '@masknet/shared-base'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip, useBoundedPopperProps } from '@masknet/theme'
 import { Checkbox, ListItem, ListItemAvatar, ListItemText } from '@mui/material'
 import { truncate } from 'lodash-es'
 import { useCallback } from 'react'
@@ -115,6 +115,8 @@ export function ProfileInList(props: ProfileInListProps) {
         return truncate(mentions, { length: 15 }) + (len > 1 ? `(${len})` : '')
     })()
 
+    const tooltipPopperProps = useBoundedPopperProps()
+
     const tooltipTitle = (() => {
         const linkedNames = profile.linkedTwitterNames
         if (!linkedNames?.length) return ''
@@ -128,7 +130,7 @@ export function ProfileInList(props: ProfileInListProps) {
         <ListItem
             onClick={onClick}
             disabled={props.disabled}
-            className={props.selected ? cx(classes.root, classes.highLightBg) : classes.root}>
+            className={cx(classes.root, props.selected ? classes.highLightBg : null)}>
             <ListItemAvatar classes={{ root: classes.avatarBox }}>
                 <Avatar classes={{ root: classes.avatar }} person={profile} />
             </ListItemAvatar>
@@ -138,21 +140,25 @@ export function ProfileInList(props: ProfileInListProps) {
                     primary: classes.overflow,
                     secondary: classes.overflow,
                 }}
+                primaryTypographyProps={{ component: 'div' }}
                 primary={
-                    <div className={classes.flex}>
-                        <ShadowRootTooltip title={tooltipTitle} arrow classes={{ tooltip: classes.toolTip }}>
-                            <div>
-                                <Highlighter
-                                    className={classes.highLightBase}
-                                    highlightClassName={classes.highlighted}
-                                    searchWords={[props.highlightText ?? '']}
-                                    autoEscape
-                                    textToHighlight={highlightText}
-                                />
-                            </div>
-                        </ShadowRootTooltip>
-                    </div>
+                    <ShadowRootTooltip
+                        title={tooltipTitle}
+                        arrow
+                        classes={{ tooltip: classes.toolTip }}
+                        PopperProps={tooltipPopperProps}>
+                        <div className={classes.flex}>
+                            <Highlighter
+                                className={classes.highLightBase}
+                                highlightClassName={classes.highlighted}
+                                searchWords={[props.highlightText ?? '']}
+                                autoEscape
+                                textToHighlight={highlightText}
+                            />
+                        </div>
+                    </ShadowRootTooltip>
                 }
+                secondaryTypographyProps={{ component: 'div' }}
                 secondary={
                     <div className={classes.flex}>
                         <Highlighter

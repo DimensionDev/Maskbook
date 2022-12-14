@@ -78,14 +78,14 @@ const useStyles = makeStyles()((theme) => ({
     },
     threeLine: {
         display: '-webkit-box',
-        '-webkit-line-clamp': '3',
+        WebkitLineCamp: '3',
         height: 50,
         fontSize: 14,
         fontWeight: 400,
         width: '100%',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
-        '-webkit-box-orient': 'vertical',
+        WebkitBoxOrient: 'vertical',
         fontFamily: 'Helvetica',
     },
     themeColor: {

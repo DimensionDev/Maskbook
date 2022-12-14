@@ -40,14 +40,6 @@ export class ContractWallet {
         const abi = WalletABI.find((x) => x.name === 'initialize' && x.type === 'function')
         if (!abi) throw new Error('Failed to load ABI.')
 
-        console.log([
-            this.entryPoint,
-            this.owner,
-            PAYMENT_TOKEN_ADDRESS,
-            PAYMASTER_CONTRACT_ADDRESS,
-            PAYMASTER_MINIMAL_STAKE_AMOUNT,
-        ])
-
         return this.coder.encodeFunctionCall(abi as AbiItem, [
             this.entryPoint,
             this.owner,

@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { formatGweiToWei, formatWeiToEther, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { FormattedBalance, FormattedCurrency, TokenIcon, CopyIconButton } from '@masknet/shared'
+import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
@@ -34,6 +34,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { useTitle } from '../../../hook/useTitle.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
+import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
 
 const useStyles = makeStyles()(() => ({
     container: {

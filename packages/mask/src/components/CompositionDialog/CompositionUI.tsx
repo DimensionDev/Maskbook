@@ -179,6 +179,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     const context = useMemo(
         (): CompositionContext => ({
             type: props.type,
+            getMetadata: () => Editor.current?.value.meta,
             attachMetadata: (meta, data) => Editor.current?.attachMetadata(meta, data),
             dropMetadata: (meta) => Editor.current?.dropMetadata(meta),
         }),

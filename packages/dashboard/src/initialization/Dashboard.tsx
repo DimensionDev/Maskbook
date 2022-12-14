@@ -9,7 +9,7 @@ import {
     useSystemPreferencePalette,
     DialogStackingProvider,
 } from '@masknet/theme'
-import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
+import { I18NextProviderHMR, SharedContextProvider, LoggerContextProvider } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
@@ -21,6 +21,8 @@ import { Pages } from '../pages/routes.js'
 import { useAppearance } from '../pages/Personas/api.js'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext.js'
 import { Services } from '../API.js'
+import { useLogSettings } from '../hooks/useLogSettings.js'
+import { LogPlatform } from '@masknet/web3-providers'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
@@ -29,6 +31,7 @@ export default function DashboardRoot() {
 
     // #region theme
     const appearance = useAppearance()
+    const enableLog = useLogSettings()
     const mode = useSystemPreferencePalette()
     const themes: Record<typeof appearance, Theme> = {
         dark: DashboardDarkTheme,
@@ -45,21 +48,23 @@ export default function DashboardRoot() {
             <I18NextProviderHMR i18n={i18NextInstance}>
                 <StyledEngineProvider injectFirst>
                     <ThemeProvider theme={theme}>
-                        <DialogStackingProvider>
-                            <PersonaContext.Provider>
-                                <ErrorBoundary>
-                                    <CssBaseline />
-                                    <CustomSnackbarProvider>
-                                        <SharedContextProvider>
-                                            <HashRouter>
-                                                <Pages />
-                                            </HashRouter>
-                                            <PluginRender />
-                                        </SharedContextProvider>
-                                    </CustomSnackbarProvider>
-                                </ErrorBoundary>
-                            </PersonaContext.Provider>
-                        </DialogStackingProvider>
+                        <LoggerContextProvider value={{ platform: LogPlatform.Dashboard, enable: enableLog }}>
+                            <DialogStackingProvider>
+                                <PersonaContext.Provider>
+                                    <ErrorBoundary>
+                                        <CssBaseline />
+                                        <CustomSnackbarProvider>
+                                            <SharedContextProvider>
+                                                <HashRouter>
+                                                    <Pages />
+                                                </HashRouter>
+                                                <PluginRender />
+                                            </SharedContextProvider>
+                                        </CustomSnackbarProvider>
+                                    </ErrorBoundary>
+                                </PersonaContext.Provider>
+                            </DialogStackingProvider>
+                        </LoggerContextProvider>
                     </ThemeProvider>
                 </StyledEngineProvider>
             </I18NextProviderHMR>

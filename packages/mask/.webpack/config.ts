@@ -208,6 +208,10 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
                                 : require.resolve('../../../node_modules/ses/dist/lockdown.umd.min.js'),
                         to: join(polyfillFolder, 'lockdown.js'),
                     },
+                    {
+                        from: join(__dirname, '../../sentry/dist/sentry.js'),
+                        to: join(flags.outputPath, 'sentry.js'),
+                    },
                 ],
             }),
             emitManifestFile(flags, computedFlags),

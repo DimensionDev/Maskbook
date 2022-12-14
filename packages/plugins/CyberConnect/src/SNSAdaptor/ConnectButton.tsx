@@ -102,7 +102,7 @@ export default function ConnectButton({
                     className={cx(classes.button, { [classes.isFollowing]: isFollowing })}
                     onClick={handleClick}
                     variant="roundedContained">
-                    {!isFollowing ? t.unfollow() : t.follow_now()}
+                    {!isFollowing ? t.follow_now() : t.unfollow()}
                 </Button>
             </WalletConnectedBoundary>
         )

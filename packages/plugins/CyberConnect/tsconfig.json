@@ -9,6 +9,7 @@
   "references": [
     { "path": "../../plugin-infra" },
     { "path": "../../theme" },
+    { "path": "../../shared" },
     { "path": "../../shared-base" },
     { "path": "../../web3-hooks/base" },
     { "path": "../../web3-shared/base" },

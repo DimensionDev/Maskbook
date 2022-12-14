@@ -1,0 +1,21 @@
+diff --git a/esm/integrations/functiontostring.js b/esm/integrations/functiontostring.js
+index 63309b276b5765bf0feb16ad6ddbe3d763697175..a48fc98a2c00db375fccb39067ed6e5a84e155c9 100644
+--- a/esm/integrations/functiontostring.js
++++ b/esm/integrations/functiontostring.js
+@@ -20,10 +20,12 @@ class FunctionToString  {constructor() { FunctionToString.prototype.__init.call(
+    setupOnce() {
+         originalFunctionToString = Function.prototype.toString;
+ 
+-        Function.prototype.toString = function ( ...args) {
+-      var context = getOriginalFunction(this) || this;
+-      return originalFunctionToString.apply(context, args);
+-    };
++     try {
++       Function.prototype.toString = function (...args) {
++         var context = getOriginalFunction(this) || this;
++         return originalFunctionToString.apply(context, args);
++       };
++     } catch (_) {}
+   }
+ } FunctionToString.__initStatic();
+ 

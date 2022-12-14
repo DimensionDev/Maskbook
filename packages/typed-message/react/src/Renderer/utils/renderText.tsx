@@ -36,8 +36,8 @@ export const RenderLinkFragment = memo(function RenderLink(
 function parseText(string: string, Text: NonNullable<RenderFragmentsContextType['Text']>) {
     const links = parseLink(string).flatMap((x, index) => {
         if (x.type === 'text') {
-            return sliceString(x.content).map((x) =>
-                x === '\n' ? <br key={index} /> : <Text children={x} key={index} />,
+            return sliceString(x.content).map((x, i) =>
+                x === '\n' ? <br key={`${index}/${i}`} /> : <Text children={x} key={`${index}/${i}`} />,
             )
         }
         if (x.category === 'normal' && !x.content.match(/^https?:\/\//gi)) x.content = 'http://' + x.content
@@ -56,10 +56,10 @@ function parseText(string: string, Text: NonNullable<RenderFragmentsContextType[
 function sliceString(x: string): string[] {
     const result: string[] = []
 
-    let pos = 0
     let index = x.indexOf('\n')
 
     if (index === -1) return [x]
+    let pos = 0
     while (index !== -1) {
         result.push(x.slice(pos, index), '\n')
         pos = index + 1

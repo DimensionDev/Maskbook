@@ -52,6 +52,8 @@ import { ENS_API } from './ENS/index.js'
 import { SpaceID_API } from './SpaceID/index.js'
 import { LensAPI } from './Lens/index.js'
 
+export * from './Sentry/index.js'
+
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
 export const MagicEden = new MagicEdenAPI()

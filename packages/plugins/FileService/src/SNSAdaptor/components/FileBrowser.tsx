@@ -78,6 +78,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         overflow: 'auto',
         boxSizing: 'border-box',
+        paddingBottom: theme.spacing(2),
         '&::-webkit-scrollbar': {
             display: 'none',
         },
