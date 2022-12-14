@@ -3,7 +3,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { DataProvider } from '@masknet/public-api'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { FungibleTokenResult, SearchResultType } from '@masknet/web3-shared-base'
+import { SearchResult, SearchResultType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 
@@ -23,9 +23,9 @@ export interface TrendingSearchResult {
 }
 
 export function usePayloadFromTokenSearchKeyword(
-    result: FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
+    result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
 ): TrendingSearchResult {
-    const { keyword, type, id, name, pluginID } = result
+    const { keyword, type, id, name = '', pluginID, address } = result
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     return {
@@ -34,6 +34,10 @@ export function usePayloadFromTokenSearchKeyword(
         name,
         id: type === SearchResultType.FungibleToken ? id : undefined,
         isNFT: false,
-        searchedContractAddress: Others?.isValidAddress(keyword) ? keyword : undefined,
+        searchedContractAddress: Others?.isValidAddress(keyword)
+            ? keyword
+            : Others?.isValidAddress(address)
+            ? address
+            : undefined,
     }
 }

@@ -6,14 +6,13 @@ import { base } from '../base.js'
 import { TraderDialog } from './trader/TraderDialog.js'
 import { SearchResultInspector } from './trending/SearchResultInspector.js'
 import { TagInspector } from './trending/TagInspector.js'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { enhanceTag } from './cashTag.js'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { SearchResultType, FungibleTokenResult } from '@masknet/web3-shared-base'
+import { SearchResultType } from '@masknet/web3-shared-base'
 import { usePayloadFromTokenSearchKeyword } from '../trending/usePayloadFromTokenSearchKeyword.js'
 
 const sns: Plugin.SNSAdaptor.Definition<
@@ -43,10 +42,7 @@ const sns: Plugin.SNSAdaptor.Definition<
                     const dataProvider = cur.source as unknown as DataProvider
                     return dataProvider ? (acc.includes(dataProvider) ? acc : acc.concat(dataProvider)) : acc
                 }, [])
-
-                const searchResult = usePayloadFromTokenSearchKeyword(
-                    result as FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
-                )
+                const searchResult = usePayloadFromTokenSearchKeyword(result)
                 return (
                     <Web3ContextProvider
                         value={{
