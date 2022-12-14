@@ -1,4 +1,4 @@
-import { compact, first, uniqBy } from 'lodash-es'
+import { compact, uniqBy } from 'lodash-es'
 import type { Plugin } from '@masknet/plugin-infra'
 import { IdentityServiceState } from '@masknet/web3-state'
 import { SocialIdentity, SocialAddress, SocialAddressType, attemptUntil } from '@masknet/web3-shared-base'
@@ -62,10 +62,7 @@ async function getWalletAddressesFromNextID(userId?: string): Promise<BindingPro
     const platform = getNextIDPlatform()
     if (!platform) return EMPTY_LIST
 
-    const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)
-    const latestActivatedBinding = first(
-        bindings.sort((a, z) => Number.parseInt(z.activated_at, 10) - Number.parseInt(a.activated_at, 10)),
-    )
+    const latestActivatedBinding = await NextIDProof.queryLatestBindingByPlatform(platform, userId)
     if (!latestActivatedBinding) return EMPTY_LIST
     return latestActivatedBinding.proofs.filter(
         (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),

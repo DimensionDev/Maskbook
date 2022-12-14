@@ -104,7 +104,14 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         if (!platform && !identity) return []
 
         const response = await fetchJSON<NextIDBindings>(
-            urlcat(BASE_URL, '/v1/proof', { platform, identity, page, exact: true }),
+            urlcat(BASE_URL, '/v1/proof', {
+                platform,
+                identity,
+                page,
+                exact: true,
+                sort: 'activated_at',
+                order: 'desc',
+            }),
             undefined,
             true,
         )
@@ -112,13 +119,43 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         // TODO: merge Pagination into this
         return response.unwrap().ids
     }
+
+    async queryLatestBindingByPlatform(
+        platform: NextIDPlatform,
+        identity: string,
+    ): Promise<NextIDPersonaBindings | null> {
+        if (!platform && !identity) return null
+
+        const result = await this.queryExistedBindingByPlatform(platform, identity)
+        return first(result) ?? null
+    }
+
     async queryAllExistedBindingsByPlatform(platform: NextIDPlatform, identity: string) {
+        if (!platform && !identity) return []
+
         const nextIDPersonaBindings: NextIDPersonaBindings[] = []
         let page = 1
         do {
-            const personaBindings = await this.queryExistedBindingByPlatform(platform, identity, page)
+            const result = await fetchJSON<NextIDBindings>(
+                urlcat(BASE_URL, '/v1/proof', {
+                    platform,
+                    identity,
+                    page,
+                    exact: true,
+                    sort: 'activated_at',
+                    order: 'desc',
+                }),
+                undefined,
+                true,
+            )
+
+            const personaBindings = result.unwrap().ids
             if (personaBindings.length === 0) return nextIDPersonaBindings
             nextIDPersonaBindings.push(...personaBindings)
+
+            // next is `0` if current page is the last one.
+            if (result.unwrap().pagination.next === 0) return nextIDPersonaBindings
+
             page += 1
         } while (page > 1)
         return []
