@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
-import { compact, first, omit } from 'lodash-es'
-import type { AbiItem } from 'web3-utils'
+import { compact, first, omit, unionBy } from 'lodash-es'
+import { AbiItem, padLeft, toHex } from 'web3-utils'
 import {
     ChainId,
     ContractWallet,
@@ -237,7 +237,6 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         const names = Array.from<'owner'>({ length: options.length }).fill('owner')
         const calls = this.multicall.createMultipleContractSingleData(contracts, names, [])
         const results = await this.multicall.call(chainId, contracts, names, calls)
-
         const owners = compact(results.flatMap((x) => (x.succeed && x.value ? x.value : '')))
 
         // the owner didn't deploy any account before.
@@ -245,20 +244,12 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
             return []
         }
 
-        const operations = await this.funder.getOperationsByOwner(chainId, owner)
         return compact(
             owners.map((x, index) => {
                 // ensure the contract account has been deployed
                 if (!isValidAddress(x)) return
 
-                return this.createContractAccount(
-                    chainId,
-                    options[index],
-                    owner,
-                    owner,
-                    true,
-                    operations.some((operation) => isSameAddress(operation.walletAddress, x)),
-                )
+                return this.createContractAccount(chainId, options[index], owner, owner, true)
             }),
         )
     }
@@ -270,8 +261,26 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
      * @returns
      */
     private async getAccountsFromChainbase(chainId: ChainId, owner: string) {
-        // TODO: impl chainbase query
-        return []
+        // const ownerTopic = padLeft(owner, 64)
+        const logs = await fetchJSON<ContractAccountAPI.Log[]>('', {})
+
+        if (!logs) {
+            return []
+        }
+
+        return compact(
+            unionBy(
+                logs.map((x) => x.address),
+                (y) => y.toLowerCase(),
+            ).map((z, i) => {
+                if (!isValidAddress(z)) return
+
+                const previousOwner = toHex(logs[i].topic1.slice(-40))
+                if (!isValidAddress(previousOwner)) return
+
+                return this.createContractAccount(chainId, z, owner, previousOwner, true)
+            }),
+        )
     }
 
     async getAccountByNonce(chainId: ChainId, owner: string, nonce: number) {
@@ -298,6 +307,8 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
     ): Promise<Array<ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM>>> {
         const create2Factory = await this.createCreate2Factory(chainId, owner)
         const contractWallet = await this.createContractWallet(chainId, owner)
+        const operations = await this.funder.getOperationsByOwner(chainId, owner)
+
         const allSettled = await Promise.allSettled([
             this.getAccountsFromMulticall(
                 chainId,
@@ -306,7 +317,13 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
             ),
             this.getAccountsFromChainbase(chainId, owner),
         ])
-        return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
+
+        return allSettled
+            .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
+            .map((y) => ({
+                ...y,
+                funded: operations.some((operation) => isSameAddress(operation.walletAddress, y.address)),
+            }))
     }
 
     async getAccountsByOwners(
