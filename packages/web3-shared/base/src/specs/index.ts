@@ -18,6 +18,7 @@ import type {
     ReturnNetworkResolver,
     ReturnProviderResolver,
 } from '../utils/index.js'
+import type { DataProvider } from '@masknet/public-api'
 
 export interface Pageable<Item, Indicator = unknown> {
     /** the indicator of the current page */
@@ -612,7 +613,7 @@ export interface NonFungibleTokenSecurity {}
     name?: string
     rank?: number
     address?: string
-    source?: SourceType
+    source?: DataProvider
     type: SearchResultType
     keyword: string
 }
@@ -634,7 +635,7 @@ export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId
     name: string
     symbol: string
     type: SearchResultType.FungibleToken
-    source: SourceType 
+    source: DataProvider 
     token?: FungibleToken<ChainId, SchemaType>
 }
 
@@ -643,14 +644,14 @@ export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<Chai
     address: string
     tokenId?: string
     type: SearchResultType.NonFungibleToken
-    source: SourceType 
+    source: DataProvider 
     token?: NonFungibleToken<ChainId, SchemaType>
 }
 
 export interface NonFungibleCollectionResult<ChainId, SchemaType> extends Result<ChainId> {
     name: string,
     address: string
-    source: SourceType 
+    source: DataProvider 
     type: SearchResultType.NonFungibleCollection
     collection?: NonFungibleCollection<ChainId, SchemaType>
 }

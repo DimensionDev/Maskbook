@@ -35,11 +35,11 @@ const sns: Plugin.SNSAdaptor.Definition<
         ID: PluginID.Trader,
         UI: {
             Content({ result: resultList }) {
-                const [dataProvider, setDataProvider] = useState(resultList[0].source as DataProvider | undefined)
+                const [dataProvider, setDataProvider] = useState(resultList[0].source)
                 const result = resultList.find((x) => x.source === dataProvider)!
 
                 const dataProviders = resultList.reduce<DataProvider[]>((acc, cur) => {
-                    const dataProvider = cur.source as unknown as DataProvider
+                    const dataProvider = cur.source
                     return dataProvider ? (acc.includes(dataProvider) ? acc : acc.concat(dataProvider)) : acc
                 }, [])
                 const searchResult = usePayloadFromTokenSearchKeyword(result)
