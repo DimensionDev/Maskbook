@@ -6,6 +6,7 @@ import { useFollowers } from '../hooks/useFollowers.js'
 import type { ProfileTab } from '../constants.js'
 import type { IFollowIdentity } from '../Worker/apis/index.js'
 import { FollowRow } from './FollowTab.js'
+import { useEffect } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -29,6 +30,11 @@ export function FollowersPage(props: FollowersPageProps) {
     const { classes } = useStyles()
     const iterator = useFollowers(props.tab, props.address)
     const { value, next, done, error, retry, loading } = useIterator<IFollowIdentity>(iterator)
+
+    useEffect(() => {
+        if (value?.length || loading) return
+        if (next) next()
+    }, [value?.length, loading, next])
 
     if (error) {
         return (

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
@@ -41,10 +41,6 @@ export function useIterator<T>(
         setData((pred) => [...pred, ...batchFollowers])
         setLoading(false)
     }, [iterator, done])
-
-    useEffect(() => {
-        if (next) next()
-    }, [next])
 
     const retry = useCallback(() => {
         setError(undefined)
