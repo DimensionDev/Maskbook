@@ -15,7 +15,7 @@ export function useTransferNonFungibleToken<T extends NetworkPluginID>(
     const { Connection } = useWeb3State<'all'>(pluginID)
 
     return useAsyncRetry(async () => {
-        const connection = await Connection?.getConnection?.()
+        const connection = Connection?.getConnection?.()
         if (!tokenId || !connection) return
         return connection.transferNonFungibleToken(tokenAddress, recipient, tokenId, '1', undefined, {
             account,

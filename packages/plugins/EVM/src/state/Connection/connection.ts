@@ -154,10 +154,10 @@ class Connection implements EVM_Connection {
         }
     }
 
-    private getOptions = (
+    private getOptions(
         initial?: EVM_Web3ConnectionOptions,
         overrides?: Partial<EVM_Web3ConnectionOptions>,
-    ): PartialRequired<EVM_Web3ConnectionOptions, 'account' | 'chainId' | 'providerType'> => {
+    ): PartialRequired<EVM_Web3ConnectionOptions, 'account' | 'chainId' | 'providerType'> {
         return {
             account: this.account,
             chainId: this.chainId,
@@ -692,7 +692,7 @@ class Connection implements EVM_Connection {
         initial?: EVM_Web3ConnectionOptions,
     ) {
         const options = this.getOptions(initial)
-        const web3 = await this.getWeb3(options)
+        const web3 = this.getWeb3(options)
         return createContract<T>(web3, address, ABI)
     }
 
@@ -772,7 +772,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    getCode = (address: string, initial?: EVM_Web3ConnectionOptions) => {
+    getCode(address: string, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<string>(
             {
@@ -882,7 +882,7 @@ class Connection implements EVM_Connection {
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction>,
     ) {
         const options = this.getOptions(initial)
-        const web3 = await this.getWeb3(options)
+        const web3 = this.getWeb3(options)
         const dataToSign = await web3.eth.personal.ecRecover(dataToVerify, signature)
         return dataToSign === dataToVerify
     }

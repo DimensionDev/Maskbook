@@ -21,7 +21,7 @@ export function useNFT(
     })
     return useAsyncRetry(async () => {
         if (!address || !tokenId) return
-        const connection = await Connection?.getConnection?.({
+        const connection = Connection?.getConnection?.({
             chainId,
             account,
         })
