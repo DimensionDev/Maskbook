@@ -118,28 +118,18 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
      * "address:0x"
      *
      */
-    async searchToken(
-        keyword: string,
-    ): Promise<
-        Array<
-            | NonFungibleCollectionResult<ChainId, SchemaType>
-            | FungibleTokenResult<ChainId, SchemaType>
-            | NonFungibleTokenResult<ChainId, SchemaType>
-        >
-    > {
+    async searchToken(keyword: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {
         const { word, field } = this.parseKeyword(keyword)
         const data = await this.init()
 
-        let result: Array<FungibleTokenResult<ChainId, SchemaType> | NonFungibleTokenResult<ChainId, SchemaType>> = []
+        let result: Array<SearchResult<ChainId, SchemaType>> = []
 
         for (const searcher of this.handlers) {
             const { rules, type } = searcher
 
             for (const rule of rules) {
                 if (field !== undefined && rule.key !== field) continue
-                const filtered = data.filter((x) => (type ? type === x.type : true)) as Array<
-                    FungibleTokenResult<ChainId, SchemaType> | NonFungibleTokenResult<ChainId, SchemaType>
-                >
+                const filtered = data.filter((x) => (type ? type === x.type : true))
 
                 if (rule.type === 'exact') {
                     const item = filtered.find((x) => rule.filter?.(x, word, filtered))
@@ -155,9 +145,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                 }
                 if (rule.type === 'fuzzy') {
                     const items = rule.fullSearch?.(word, filtered) ?? []
-                    const fuzzyData = items.map((x) => ({ ...x, keyword: word })) as Array<
-                        FungibleTokenResult<ChainId, SchemaType> | NonFungibleTokenResult<ChainId, SchemaType>
-                    >
+                    const fuzzyData = items.map((x) => ({ ...x, keyword: word }))
                     if (!field) {
                         result = [...result, ...fuzzyData]
                     } else {
