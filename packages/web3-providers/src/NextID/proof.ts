@@ -100,7 +100,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return first(response.unwrap().ids)
     }
 
-    async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page?: number) {
+    async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page = 1) {
         if (!platform && !identity) return []
 
         const response = await fetchJSON<NextIDBindings>(
@@ -126,7 +126,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     ): Promise<NextIDPersonaBindings | null> {
         if (!platform && !identity) return null
 
-        const result = await this.queryExistedBindingByPlatform(platform, identity)
+        const result = await this.queryExistedBindingByPlatform(platform, identity, 1)
         return first(result) ?? null
     }
 
