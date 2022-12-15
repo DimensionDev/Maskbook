@@ -3,14 +3,19 @@ import { useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Box } from '@mui/system'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NonFungibleTokenResult, FungibleTokenResult } from '@masknet/web3-shared-base'
-import { DataProvider } from '@masknet/public-api'
+import {
+    NonFungibleTokenResult,
+    FungibleTokenResult,
+    SourceType,
+    formatCurrency,
+    TokenType,
+    resolveSourceTypeName,
+} from '@masknet/web3-shared-base'
 import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity, DataProviderIcon } from '@masknet/shared'
 import { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColors, MaskLightTheme, MaskDarkTheme } from '@masknet/theme'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { formatCurrency, TokenType, resolveDataProviderName } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import {
     Avatar,
@@ -224,7 +229,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                 </Stack>
                                 <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
                                     <Typography className={classes.sourceName}>
-                                        {resolveDataProviderName(result.source)}
+                                        {resolveSourceTypeName(result.source)}
                                     </Typography>
                                     <DataProviderIcon provider={result.source} size={20} />
                                 </Stack>
@@ -312,7 +317,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                 {isNFT ? `${t('plugin_trader_floor_price')}: ` : null}
                                                 <FormattedCurrency
                                                     value={
-                                                        (result.source === DataProvider.CoinMarketCap
+                                                        (result.source === SourceType.CoinMarketCap
                                                             ? last(stats)?.[1] ?? market.current_price
                                                             : market.current_price) ?? 0
                                                     }
@@ -360,7 +365,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                 </Stack>
                                 <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
                                     <Typography className={classes.sourceName}>
-                                        {resolveDataProviderName(result.source)}
+                                        {resolveSourceTypeName(result.source)}
                                     </Typography>
                                     <DataProviderIcon provider={result.source} size={20} />
                                 </Stack>

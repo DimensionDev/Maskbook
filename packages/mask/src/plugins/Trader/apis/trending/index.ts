@@ -1,6 +1,5 @@
 import { first } from 'lodash-es'
-import { unreachable } from '@masknet/kit'
-import { DataProvider } from '@masknet/public-api'
+import { SourceType } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { CoinGeckoTrending, CoinMarketCap, NFTScanTrending, UniSwap } from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
@@ -8,19 +7,15 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Coin, Currency, Stat, TagType, Trending } from '../../types/index.js'
 import { isBlockedAddress, isBlockedKeyword, resolveKeyword, resolveCoinId } from './hotfix.js'
 
-export async function getCoinsByKeyword(
-    chainId: ChainId,
-    keyword: string,
-    dataProvider: DataProvider,
-): Promise<Coin[]> {
+export async function getCoinsByKeyword(chainId: ChainId, keyword: string, dataProvider: SourceType): Promise<Coin[]> {
     switch (dataProvider) {
-        case DataProvider.CoinGecko:
+        case SourceType.CoinGecko:
             return CoinGeckoTrending.getCoinsByKeyword(chainId, keyword)
-        case DataProvider.CoinMarketCap:
+        case SourceType.CoinMarketCap:
             return CoinMarketCap.getCoinsByKeyword(chainId, keyword)
-        case DataProvider.UniswapInfo:
+        case SourceType.UniswapInfo:
             return UniSwap.getCoinsByKeyword(chainId, keyword)
-        case DataProvider.NFTScan:
+        case SourceType.NFTScan:
             return keyword ? NFTScanTrending.getCoinsByKeyword(chainId, keyword) : EMPTY_LIST
         default:
             return EMPTY_LIST
@@ -38,7 +33,7 @@ async function checkAvailabilityOnDataProvider(
     chainId: ChainId,
     keyword: string,
     type: TagType,
-    dataProvider: DataProvider,
+    dataProvider: SourceType,
 ) {
     try {
         if (isBlockedKeyword(type, keyword)) return false
@@ -49,7 +44,7 @@ async function checkAvailabilityOnDataProvider(
     }
 }
 
-export async function getAvailableCoins(chainId: ChainId, keyword: string, type: TagType, dataProvider: DataProvider) {
+export async function getAvailableCoins(chainId: ChainId, keyword: string, type: TagType, dataProvider: SourceType) {
     if (!(await checkAvailabilityOnDataProvider(chainId, keyword, type, dataProvider))) return EMPTY_LIST
     const coins = await getCoinsByKeyword(chainId, resolveKeyword(chainId, keyword, dataProvider), dataProvider)
     return coins.filter((x) => !isBlockedAddress(chainId, x.address || x.contract_address || '')) ?? EMPTY_LIST
@@ -61,19 +56,19 @@ export async function getCoinTrending(
     chainId: ChainId,
     id: string,
     currency: Currency,
-    dataProvider: DataProvider,
-): Promise<Trending> {
+    dataProvider: SourceType,
+): Promise<Trending | undefined> {
     switch (dataProvider) {
-        case DataProvider.CoinGecko:
+        case SourceType.CoinGecko:
             return CoinGeckoTrending.getCoinTrending(chainId, id, currency)
-        case DataProvider.CoinMarketCap:
+        case SourceType.CoinMarketCap:
             return CoinMarketCap.getCoinTrending(chainId, id, currency)
-        case DataProvider.UniswapInfo:
+        case SourceType.UniswapInfo:
             return UniSwap.getCoinTrending(chainId, id, currency)
-        case DataProvider.NFTScan:
+        case SourceType.NFTScan:
             return NFTScanTrending.getCoinTrending(chainId, id, currency)
         default:
-            unreachable(dataProvider)
+            return
     }
 }
 
@@ -82,7 +77,7 @@ export async function getCoinTrendingByKeyword(
     keyword: string,
     tagType: TagType,
     currency: Currency,
-    dataProvider: DataProvider,
+    dataProvider: SourceType,
 ) {
     // check if the keyword is supported by given data provider
     const coins = await getAvailableCoins(chainId, keyword, tagType, dataProvider)
@@ -103,21 +98,21 @@ export async function getPriceStats(
     id: string,
     currency: Currency,
     days: number,
-    dataProvider: DataProvider,
+    dataProvider: SourceType,
 ): Promise<Stat[]> {
     switch (dataProvider) {
-        case DataProvider.CoinGecko:
+        case SourceType.CoinGecko:
             return CoinGeckoTrending.getCoinPriceStats(
                 chainId,
                 id,
                 currency,
                 days === TrendingAPI.Days.MAX ? 11430 : days,
             )
-        case DataProvider.CoinMarketCap:
+        case SourceType.CoinMarketCap:
             return CoinMarketCap.getCoinPriceStats(chainId, id, currency, days)
-        case DataProvider.UniswapInfo:
+        case SourceType.UniswapInfo:
             return UniSwap.getCoinPriceStats(chainId, id, currency, days)
-        case DataProvider.NFTScan:
+        case SourceType.NFTScan:
             return NFTScanTrending.getCoinPriceStats(chainId, id, currency, days)
         default:
             return EMPTY_LIST

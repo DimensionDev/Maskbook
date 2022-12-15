@@ -1,6 +1,6 @@
 import { useAsync, useAsyncRetry } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
-import type { DataProvider } from '@masknet/public-api'
+import type { SourceType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { TokenType } from '@masknet/web3-shared-base'
@@ -14,7 +14,7 @@ import { useCurrentCurrency } from './useCurrentCurrency.js'
 export function useTrendingByKeyword(
     tagType: TagType,
     keyword: string,
-    dataProvider: DataProvider,
+    dataProvider: SourceType,
     expectedChainId?: Web3Helper.ChainIdAll,
     searchedContractAddress?: string,
 ): AsyncState<{
@@ -71,7 +71,7 @@ export function useTrendingByKeyword(
 
 export function useTrendingById(
     id: string,
-    dataProvider: DataProvider,
+    dataProvider: SourceType,
     expectedChainId?: Web3Helper.ChainIdAll,
     searchedContractAddress?: string,
 ): AsyncState<{

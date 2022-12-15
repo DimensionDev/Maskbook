@@ -1,5 +1,4 @@
-import type { TokenType } from '@masknet/web3-shared-base'
-import type { DataProvider } from '@masknet/public-api'
+import type { TokenType, SourceType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
@@ -146,7 +145,7 @@ export namespace TrendingAPI {
 
     export interface Trending {
         currency: Currency
-        dataProvider: DataProvider
+        dataProvider: SourceType
         coin: Coin
         platform?: Platform
         contracts?: Contract[]

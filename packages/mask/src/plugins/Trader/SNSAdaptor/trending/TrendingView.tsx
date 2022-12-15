@@ -8,14 +8,18 @@ import {
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
-import type { NonFungibleTokenResult, FungibleTokenResult } from '@masknet/web3-shared-base'
+import {
+    NonFungibleTokenResult,
+    FungibleTokenResult,
+    SourceType,
+    createFungibleToken,
+    TokenType,
+} from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { DataProvider } from '@masknet/public-api'
 import { NFTList } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { TrendingAPI } from '@masknet/web3-providers/types'
-import { createFungibleToken, TokenType } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Stack, Tab, ThemeProvider } from '@mui/material'
 import { Box, useTheme } from '@mui/system'
@@ -147,7 +151,7 @@ export function TrendingView(props: TrendingViewProps) {
     const { classes } = useStyles({ isPopper })
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
-    const [tabIndex, setTabIndex] = useState(result.source !== DataProvider.UniswapInfo ? 1 : 0)
+    const [tabIndex, setTabIndex] = useState(result.source !== SourceType.UniswapInfo ? 1 : 0)
     const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
 

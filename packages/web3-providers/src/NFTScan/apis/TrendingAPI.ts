@@ -1,8 +1,7 @@
 import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
-import { DataProvider } from '@masknet/public-api'
+import { TokenType, SourceType, attemptUntil } from '@masknet/web3-shared-base'
 import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
-import { TokenType, attemptUntil } from '@masknet/web3-shared-base'
 import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
 import { COIN_RECOMMENDATION_SIZE } from '../../Trending/constants.js'
 import type { EVM, Response } from '../types/index.js'
@@ -164,7 +163,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         ])
         return {
             lastUpdated: new Date().toJSON(),
-            dataProvider: DataProvider.NFTScan,
+            dataProvider: SourceType.NFTScan,
             contracts: [{ chainId, address }],
             currency,
             coin: {

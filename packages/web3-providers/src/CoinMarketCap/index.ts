@@ -1,7 +1,6 @@
 import getUnixTime from 'date-fns/getUnixTime'
-import { TokenType } from '@masknet/web3-shared-base'
+import { TokenType, SourceType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { DataProvider } from '@masknet/public-api'
 import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from './constants.js'
 import { resolveCoinMarketCapChainId } from './helpers.js'
 import { FuseTrendingAPI } from '../Fuse/index.js'
@@ -199,7 +198,7 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
                 contract_address: contracts.find((x) => x.chainId === chainId)?.address,
             },
             currency,
-            dataProvider: DataProvider.CoinMarketCap,
+            dataProvider: SourceType.CoinMarketCap,
             tickers: market.market_pairs
                 .map((pair) => ({
                     logo_url: `${CMC_STATIC_BASE_URL}/img/exchanges/32x32/${pair.exchange.id}.png`,

@@ -1,8 +1,14 @@
 import { Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { DataProvider } from '@masknet/public-api'
+import {
+    SourceType,
+    formatCurrency,
+    formatInteger,
+    formatMarketCap,
+    formatSupply,
+    TokenType,
+} from '@masknet/web3-shared-base'
 import { FormattedCurrency } from '@masknet/shared'
-import { formatCurrency, formatInteger, formatMarketCap, formatSupply, TokenType } from '@masknet/web3-shared-base'
 import type { Trending } from '../../types/index.js'
 import { useI18N } from '../../../../utils/index.js'
 
@@ -28,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface CoinMarketTableProps {
-    dataProvider: DataProvider
+    dataProvider: SourceType
     trending: Trending
 }
 
@@ -50,7 +56,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
             <TableContainer className={classes.container} component={Paper} elevation={0}>
                 <Table size="small">
                     <TableBody>
-                        {DataProvider.UniswapInfo !== dataProvider ? (
+                        {SourceType.UniswapInfo !== dataProvider ? (
                             <TableRow>
                                 <TableCell className={classes.head} component="th">
                                     <Typography color="textSecondary" variant="body2">
@@ -62,7 +68,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                                 </TableCell>
                             </TableRow>
                         ) : null}
-                        {DataProvider.UniswapInfo !== dataProvider ? (
+                        {SourceType.UniswapInfo !== dataProvider ? (
                             <TableRow>
                                 <TableCell className={classes.head} component="th">
                                     <Typography color="textSecondary" variant="body2">
@@ -84,7 +90,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                                 {market?.total_volume ? `$${formatSupply(market.total_volume)}` : '--'}
                             </TableCell>
                         </TableRow>
-                        {dataProvider !== DataProvider.UniswapInfo ? (
+                        {dataProvider !== SourceType.UniswapInfo ? (
                             <TableRow>
                                 <TableCell className={classes.head} component="th">
                                     <Typography color="textSecondary" variant="body2">

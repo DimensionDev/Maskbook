@@ -1,77 +1,148 @@
 import { getEnumAsArray } from '@masknet/kit'
 import { ChainId, getCoinGeckoConstants, getCoinMarketCapConstants } from '@masknet/web3-shared-evm'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { isSameAddress, SourceType } from '@masknet/web3-shared-base'
 import { TrendingAPI } from '@masknet/web3-providers/types'
-import { DataProvider } from '@masknet/public-api'
 import STOCKS_KEYWORDS from './stocks.json'
 import CASHTAG_KEYWORDS from './cashtag.json'
 import HASHTAG_KEYWORDS from './hashtag.json'
 
 const BLACKLIST_MAP: {
-    [key in DataProvider]: {
+    [key in SourceType]: {
         [key in ChainId]?: string[]
     }
 } = {
-    [DataProvider.CoinMarketCap]: {
+    [SourceType.CoinMarketCap]: {
         [ChainId.Mainnet]: [
             '8410', // NFTX Hashmasks Index
         ],
     },
-    [DataProvider.CoinGecko]: {
+    [SourceType.CoinGecko]: {
         [ChainId.Mainnet]: ['swaptoken', 'nftx-hashmasks-index'],
     },
     // use token address as id and all letters should be lower-case
-    [DataProvider.UniswapInfo]: {
+    [SourceType.UniswapInfo]: {
         [ChainId.Mainnet]: [],
     },
-    [DataProvider.NFTScan]: {},
+    [SourceType.NFTScan]: {},
+    [SourceType.X2Y2]: {},
+    [SourceType.Chainbase]: {},
+    [SourceType.Zerion]: {},
+    [SourceType.Rarible]: {},
+    [SourceType.OpenSea]: {},
+    [SourceType.Alchemy_EVM]: {},
+    [SourceType.LooksRare]: {},
+    [SourceType.Zora]: {},
+    [SourceType.Gem]: {},
+    [SourceType.GoPlus]: {},
+    [SourceType.Rabby]: {},
+    [SourceType.R2D2]: {},
+    [SourceType.DeBank]: {},
+    [SourceType.Flow]: {},
+    [SourceType.Solana]: {},
+    [SourceType.RSS3]: {},
+    [SourceType.Alchemy_FLOW]: {},
+    [SourceType.MagicEden]: {},
+    [SourceType.Element]: {},
+    [SourceType.Solsea]: {},
+    [SourceType.Solanart]: {},
+    [SourceType.RaritySniper]: {},
+    [SourceType.TraitSniper]: {},
+    [SourceType.CF]: {},
 }
 
 const KEYWORD_ALIAS_MAP: {
-    [key in DataProvider]: {
+    [key in SourceType]: {
         [key in ChainId]?: Record<string, string>
     }
 } = {
-    [DataProvider.CoinMarketCap]: {
+    [SourceType.CoinMarketCap]: {
         [ChainId.Mainnet]: {
             NYFI: 'n0031',
         },
     },
-    [DataProvider.CoinGecko]: {
+    [SourceType.CoinGecko]: {
         [ChainId.Mainnet]: {
             NYFI: 'n0031',
         },
     },
-    [DataProvider.UniswapInfo]: {},
-    [DataProvider.NFTScan]: {},
+    [SourceType.UniswapInfo]: {},
+    [SourceType.NFTScan]: {},
+    [SourceType.X2Y2]: {},
+    [SourceType.Chainbase]: {},
+    [SourceType.Zerion]: {},
+    [SourceType.Rarible]: {},
+    [SourceType.OpenSea]: {},
+    [SourceType.Alchemy_EVM]: {},
+    [SourceType.LooksRare]: {},
+    [SourceType.Zora]: {},
+    [SourceType.Gem]: {},
+    [SourceType.GoPlus]: {},
+    [SourceType.Rabby]: {},
+    [SourceType.R2D2]: {},
+    [SourceType.DeBank]: {},
+    [SourceType.Flow]: {},
+    [SourceType.Solana]: {},
+    [SourceType.RSS3]: {},
+    [SourceType.Alchemy_FLOW]: {},
+    [SourceType.MagicEden]: {},
+    [SourceType.Element]: {},
+    [SourceType.Solsea]: {},
+    [SourceType.Solanart]: {},
+    [SourceType.RaritySniper]: {},
+    [SourceType.TraitSniper]: {},
+    [SourceType.CF]: {},
 }
 
 const KEYWORD_ID_MAP: {
-    [key in DataProvider]: {
+    [key in SourceType]: {
         [key in ChainId]?: Record<string, string>
     }
 } = {
-    [DataProvider.CoinMarketCap]: {
+    [SourceType.CoinMarketCap]: {
         [ChainId.Mainnet]: {
             UNI: '7083',
             YAM: '7131', // YAM v3
         },
     },
-    [DataProvider.CoinGecko]: {
+    [SourceType.CoinGecko]: {
         [ChainId.Mainnet]: {
             UNI: 'uniswap',
         },
     },
-    [DataProvider.UniswapInfo]: {},
-    [DataProvider.NFTScan]: {},
+    [SourceType.UniswapInfo]: {},
+    [SourceType.NFTScan]: {},
+    [SourceType.X2Y2]: {},
+    [SourceType.Chainbase]: {},
+    [SourceType.Zerion]: {},
+    [SourceType.Rarible]: {},
+    [SourceType.OpenSea]: {},
+    [SourceType.Alchemy_EVM]: {},
+    [SourceType.LooksRare]: {},
+    [SourceType.Zora]: {},
+    [SourceType.Gem]: {},
+    [SourceType.GoPlus]: {},
+    [SourceType.Rabby]: {},
+    [SourceType.R2D2]: {},
+    [SourceType.DeBank]: {},
+    [SourceType.Flow]: {},
+    [SourceType.Solana]: {},
+    [SourceType.RSS3]: {},
+    [SourceType.Alchemy_FLOW]: {},
+    [SourceType.MagicEden]: {},
+    [SourceType.Element]: {},
+    [SourceType.Solsea]: {},
+    [SourceType.Solanart]: {},
+    [SourceType.RaritySniper]: {},
+    [SourceType.TraitSniper]: {},
+    [SourceType.CF]: {},
 }
 
 const ID_ADDRESS_MAP: {
-    [key in DataProvider]: {
+    [key in SourceType]: {
         [key in ChainId]?: Record<string, string>
     }
 } = {
-    [DataProvider.CoinMarketCap]: {
+    [SourceType.CoinMarketCap]: {
         [ChainId.Mainnet]: {
             '6747': '0x32a7c02e79c4ea1008dd6564b35f131428673c41',
             '8536': '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074', // MASK
@@ -80,7 +151,7 @@ const ID_ADDRESS_MAP: {
             '8536': '0x2B9E7ccDF0F4e5B24757c1E1a80e311E34Cb10c7', // MASK
         },
     },
-    [DataProvider.CoinGecko]: {
+    [SourceType.CoinGecko]: {
         [ChainId.Mainnet]: {
             'crust-network': '0x32a7c02e79c4ea1008dd6564b35f131428673c41', // CRUST
         },
@@ -88,19 +159,67 @@ const ID_ADDRESS_MAP: {
             'mask-network': '0x2B9E7ccDF0F4e5B24757c1E1a80e311E34Cb10c7', // MASK
         },
     },
-    [DataProvider.UniswapInfo]: {},
-    [DataProvider.NFTScan]: {},
+    [SourceType.UniswapInfo]: {},
+    [SourceType.NFTScan]: {},
+    [SourceType.X2Y2]: {},
+    [SourceType.Chainbase]: {},
+    [SourceType.Zerion]: {},
+    [SourceType.Rarible]: {},
+    [SourceType.OpenSea]: {},
+    [SourceType.Alchemy_EVM]: {},
+    [SourceType.LooksRare]: {},
+    [SourceType.Zora]: {},
+    [SourceType.Gem]: {},
+    [SourceType.GoPlus]: {},
+    [SourceType.Rabby]: {},
+    [SourceType.R2D2]: {},
+    [SourceType.DeBank]: {},
+    [SourceType.Flow]: {},
+    [SourceType.Solana]: {},
+    [SourceType.RSS3]: {},
+    [SourceType.Alchemy_FLOW]: {},
+    [SourceType.MagicEden]: {},
+    [SourceType.Element]: {},
+    [SourceType.Solsea]: {},
+    [SourceType.Solanart]: {},
+    [SourceType.RaritySniper]: {},
+    [SourceType.TraitSniper]: {},
+    [SourceType.CF]: {},
 }
 
 const NETWORK_ID_MAP: {
-    [key in DataProvider]: {
+    [key in SourceType]: {
         [key in ChainId]?: string
     }
 } = {
-    [DataProvider.CoinGecko]: {},
-    [DataProvider.CoinMarketCap]: {},
-    [DataProvider.UniswapInfo]: {},
-    [DataProvider.NFTScan]: {},
+    [SourceType.CoinGecko]: {},
+    [SourceType.CoinMarketCap]: {},
+    [SourceType.UniswapInfo]: {},
+    [SourceType.NFTScan]: {},
+    [SourceType.X2Y2]: {},
+    [SourceType.Chainbase]: {},
+    [SourceType.Zerion]: {},
+    [SourceType.Rarible]: {},
+    [SourceType.OpenSea]: {},
+    [SourceType.Alchemy_EVM]: {},
+    [SourceType.LooksRare]: {},
+    [SourceType.Zora]: {},
+    [SourceType.Gem]: {},
+    [SourceType.GoPlus]: {},
+    [SourceType.Rabby]: {},
+    [SourceType.R2D2]: {},
+    [SourceType.DeBank]: {},
+    [SourceType.Flow]: {},
+    [SourceType.Solana]: {},
+    [SourceType.RSS3]: {},
+    [SourceType.Alchemy_FLOW]: {},
+    [SourceType.MagicEden]: {},
+    [SourceType.Element]: {},
+    [SourceType.Solsea]: {},
+    [SourceType.Solanart]: {},
+    [SourceType.RaritySniper]: {},
+    [SourceType.TraitSniper]: {},
+    [SourceType.CF]: {},
 }
 
 export const SCAM_ADDRESS_MAP: {
@@ -110,25 +229,21 @@ export const SCAM_ADDRESS_MAP: {
 }
 
 getEnumAsArray(ChainId).map(({ value: chainId }) => {
-    NETWORK_ID_MAP[DataProvider.CoinGecko][chainId] = getCoinGeckoConstants(chainId).PLATFORM_ID ?? ''
-    NETWORK_ID_MAP[DataProvider.CoinMarketCap][chainId] = getCoinMarketCapConstants(chainId).CHAIN_ID ?? ''
+    NETWORK_ID_MAP[SourceType.CoinGecko][chainId] = getCoinGeckoConstants(chainId).PLATFORM_ID ?? ''
+    NETWORK_ID_MAP[SourceType.CoinMarketCap][chainId] = getCoinMarketCapConstants(chainId).CHAIN_ID ?? ''
 })
 
-export function resolveCoinAddress(chainId: ChainId, id: string, dataProvider: DataProvider) {
-    return ID_ADDRESS_MAP[dataProvider][chainId]?.[id]
+export function resolveKeyword(chainId: ChainId, keyword: string, sourceType: SourceType) {
+    if (sourceType === SourceType.UniswapInfo || sourceType === SourceType.NFTScan) return keyword
+    return KEYWORD_ALIAS_MAP[sourceType][chainId]?.[keyword.toUpperCase()] ?? keyword
 }
 
-export function resolveKeyword(chainId: ChainId, keyword: string, dataProvider: DataProvider) {
-    if (dataProvider === DataProvider.UniswapInfo || dataProvider === DataProvider.NFTScan) return keyword
-    return KEYWORD_ALIAS_MAP[dataProvider][chainId]?.[keyword.toUpperCase()] ?? keyword
+export function resolveCoinId(chainId: ChainId, keyword: string, sourceType: SourceType) {
+    return KEYWORD_ID_MAP[sourceType][chainId]?.[keyword.toUpperCase()]
 }
 
-export function resolveCoinId(chainId: ChainId, keyword: string, dataProvider: DataProvider) {
-    return KEYWORD_ID_MAP[dataProvider][chainId]?.[keyword.toUpperCase()]
-}
-
-export function isBlockedId(chainId: ChainId, id: string, dataProvider: DataProvider) {
-    return BLACKLIST_MAP[dataProvider][chainId]?.includes(id)
+export function isBlockedId(chainId: ChainId, id: string, sourceType: SourceType) {
+    return BLACKLIST_MAP[sourceType][chainId]?.includes(id)
 }
 
 export function isBlockedAddress(chainId: ChainId, address: string) {
