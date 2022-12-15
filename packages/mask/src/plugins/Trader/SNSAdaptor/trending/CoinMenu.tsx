@@ -105,7 +105,6 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, result, onSelect }) =>
         <>
             {options.map((x, i) => {
                 const selected = isEqual(x, result)
-                console.log({ x })
                 return (
                     <MenuItem className={classes.menuItem} key={i} onClick={() => onSelect(x)}>
                         {x.logoURL ? (
