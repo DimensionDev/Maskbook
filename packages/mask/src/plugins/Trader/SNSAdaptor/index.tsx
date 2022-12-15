@@ -65,6 +65,7 @@ const sns: Plugin.SNSAdaptor.Definition<
         Utils: {
             shouldDisplay(result) {
                 return [
+                    SearchResultType.CA,
                     SearchResultType.FungibleToken,
                     SearchResultType.NonFungibleToken,
                     SearchResultType.NonFungibleCollection,

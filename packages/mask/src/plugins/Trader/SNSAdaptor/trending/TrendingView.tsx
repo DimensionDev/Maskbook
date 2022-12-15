@@ -143,17 +143,16 @@ export function TrendingView(props: TrendingViewProps) {
     useEffect(() => setTabIndex(0), [networkType])
     // #endregion
     // #region merge trending
-
-    const { value: { currency, trending } = {}, loading: loadingTrending } = useTrendingById(
+    const { value: { trending } = {}, loading: loadingTrending } = useTrendingById(
         result.type === SearchResultType.FungibleToken
             ? result.id || searchedContractAddress || ''
             : result.address || '',
+        result.type,
         result.source,
         expectedChainId,
         searchedContractAddress,
     )
     // #endregion
-
     const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
 
     // #region stats
@@ -234,7 +233,7 @@ export function TrendingView(props: TrendingViewProps) {
     })
 
     // #region display loading skeleton
-    if (!currency || !trending || loadingTrending)
+    if (!trending?.currency || loadingTrending)
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <TrendingViewSkeleton
@@ -259,7 +258,7 @@ export function TrendingView(props: TrendingViewProps) {
             resultList={resultList}
             result={result}
             isPreciseSearch={isPreciseSearch}
-            currency={currency}
+            currency={trending.currency}
             trending={trending}
             isPopper={isPopper}
             TrendingCardProps={{ classes: { root: classes.root } }}>
@@ -275,8 +274,8 @@ export function TrendingView(props: TrendingViewProps) {
                 </Stack>
             </TabContext>
             <Stack sx={{ backgroundColor: theme.palette.maskColor.bottom }}>
-                {currentTab === ContentTabs.Market && result.source ? (
-                    <CoinMarketPanel dataProvider={result.source} trending={trending} />
+                {currentTab === ContentTabs.Market && trending.dataProvider ? (
+                    <CoinMarketPanel dataProvider={trending.dataProvider} trending={trending} />
                 ) : null}
                 {currentTab === ContentTabs.Price ? (
                     <Box px={2} py={4}>
@@ -284,7 +283,7 @@ export function TrendingView(props: TrendingViewProps) {
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}
                             amount={market?.price_change_percentage_1h ?? market?.price_change_percentage_24h ?? 0}
-                            currency={currency}
+                            currency={trending.currency}
                             stats={stats}
                             retry={retryStats}
                             loading={loadingStats}>
@@ -296,9 +295,9 @@ export function TrendingView(props: TrendingViewProps) {
                         </PriceChart>
                     </Box>
                 ) : null}
-                {currentTab === ContentTabs.Exchange && result.source ? (
+                {currentTab === ContentTabs.Exchange && trending.dataProvider ? (
                     <Box p={2}>
-                        <TickersTable tickers={tickers} coinType={coin.type} dataProvider={result.source} />
+                        <TickersTable tickers={tickers} coinType={coin.type} dataProvider={trending.dataProvider} />
                     </Box>
                 ) : null}
                 {currentTab === ContentTabs.Swap && isSwappable ? (

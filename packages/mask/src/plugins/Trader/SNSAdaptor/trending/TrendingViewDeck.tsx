@@ -211,12 +211,12 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     gap={0.5}>
                                     <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
                                 </Stack>
-                                {result.source ? (
+                                {trending.dataProvider ? (
                                     <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
                                         <Typography className={classes.sourceName}>
-                                            {resolveSourceTypeName(result.source)}
+                                            {resolveSourceTypeName(trending.dataProvider)}
                                         </Typography>
-                                        <DataProviderIcon provider={result.source} size={20} />
+                                        <DataProviderIcon provider={trending.dataProvider} size={20} />
                                     </Stack>
                                 ) : null}
                             </Box>
@@ -303,7 +303,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                 {isNFT ? `${t('plugin_trader_floor_price')}: ` : null}
                                                 <FormattedCurrency
                                                     value={
-                                                        (result.source === SourceType.CoinMarketCap
+                                                        (trending.dataProvider === SourceType.CoinMarketCap
                                                             ? last(stats)?.[1] ?? market.current_price
                                                             : market.current_price) ?? 0
                                                     }
@@ -349,12 +349,12 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     gap={0.5}>
                                     <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
                                 </Stack>
-                                {result.source ? (
+                                {trending.dataProvider ? (
                                     <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
                                         <Typography className={classes.sourceName}>
-                                            {resolveSourceTypeName(result.source)}
+                                            {resolveSourceTypeName(trending.dataProvider)}
                                         </Typography>
-                                        <DataProviderIcon provider={result.source} size={20} />
+                                        <DataProviderIcon provider={trending.dataProvider} size={20} />
                                     </Stack>
                                 ) : null}
                             </Box>

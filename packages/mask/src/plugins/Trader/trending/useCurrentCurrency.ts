@@ -1,7 +1,7 @@
 import { SourceType } from '@masknet/web3-shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 
-const CURRENCIES_MAP: Record<SourceType, undefined | TrendingAPI.Currency[]> = {
+export const CURRENCIES_MAP: Record<SourceType, undefined | TrendingAPI.Currency[]> = {
     [SourceType.CoinGecko]: [
         {
             id: 'usd',

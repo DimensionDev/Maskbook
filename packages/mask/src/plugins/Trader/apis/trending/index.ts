@@ -6,7 +6,7 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Currency, Stat, Trending } from '../../types/index.js'
 
 export async function getCoinInfoByAddress(
-    chainId: ChainId,
+    chainId: ChainId | undefined,
     address: string,
 ): Promise<TrendingAPI.CoinInfo | undefined> {
     return CoinGeckoTrending.getCoinInfoByAddress(chainId, address)
@@ -14,7 +14,7 @@ export async function getCoinInfoByAddress(
 
 // #region get trending info
 export async function getCoinTrending(
-    chainId: ChainId,
+    chainId: ChainId | undefined,
     id: string,
     currency: Currency,
     dataProvider: SourceType,

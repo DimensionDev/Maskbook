@@ -1,18 +1,18 @@
 import { useAsync, useAsyncRetry } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
-import type { SourceType } from '@masknet/web3-shared-base'
+import { SourceType, SearchResultType, TokenType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import { PluginTraderRPC } from '../messages.js'
 import type { Coin } from '../types/index.js'
-import { useCurrentCurrency } from './useCurrentCurrency.js'
+import { useCurrentCurrency, CURRENCIES_MAP } from './useCurrentCurrency.js'
 
 export function useTrendingById(
     id: string,
+    searchType: SearchResultType,
     dataProvider: SourceType | undefined,
     expectedChainId?: Web3Helper.ChainIdAll,
     searchedContractAddress?: string,
@@ -28,6 +28,26 @@ export function useTrendingById(
         error,
     } = useAsync(async () => {
         if (!id) return null
+
+        if (searchType === SearchResultType.CA) {
+            const coinInfo = await PluginTraderRPC.getCoinInfoByAddress(undefined, id)
+            if (coinInfo?.id) {
+                const fungibleTokenTrending = await PluginTraderRPC.getCoinTrending(
+                    coinInfo.chainId,
+                    coinInfo?.id,
+                    CURRENCIES_MAP[SourceType.CoinGecko]![0],
+                    SourceType.CoinGecko,
+                ).catch(() => null)
+                if (fungibleTokenTrending) return fungibleTokenTrending
+            }
+
+            return PluginTraderRPC.getCoinTrending(
+                undefined,
+                id,
+                CURRENCIES_MAP[SourceType.NFTScan]![0],
+                SourceType.NFTScan,
+            ).catch(() => null)
+        }
         if (!currency) return null
         if (!dataProvider) return null
         return PluginTraderRPC.getCoinTrending(chainId, id, currency, dataProvider).catch(() => null)

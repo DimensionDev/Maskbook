@@ -94,7 +94,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         return coins.slice(0, COIN_RECOMMENDATION_SIZE)
     }
 
-    getCoinInfoByAddress(chainId: ChainId, address: string): Promise<TrendingAPI.CoinInfo | undefined> {
+    getCoinInfoByAddress(chainId: ChainId | undefined, address: string): Promise<TrendingAPI.CoinInfo | undefined> {
         throw new Error('To be implemented.')
     }
 
@@ -110,10 +110,11 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinTrending(
-        chainId_: ChainId,
+        chainId_: ChainId | undefined,
         /** address as id */ id: string,
         currency: TrendingAPI.Currency,
     ): Promise<TrendingAPI.Trending> {
+        console.log({ chainId_ })
         const result = chainId_
             ? { collection: await this.getCollection(chainId_, id), chainId: chainId_ }
             : await attemptUntil(
