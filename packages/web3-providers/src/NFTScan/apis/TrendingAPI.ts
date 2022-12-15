@@ -110,23 +110,25 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinTrending(
-        _chainId: ChainId,
+        chainId_: ChainId,
         /** address as id */ id: string,
         currency: TrendingAPI.Currency,
     ): Promise<TrendingAPI.Trending> {
-        const result = await attemptUntil(
-            NFTSCAN_CHAIN_ID_LIST.map((chainId) => async () => {
-                try {
-                    const collection = await this.getCollection(chainId, id)
-                    if (!collection?.contract_address) return undefined
-                    return { collection, chainId }
-                } catch {
-                    return undefined
-                }
-            }),
-            undefined,
-        )
-        if (!result) {
+        const result = chainId_
+            ? { collection: await this.getCollection(chainId_, id), chainId: chainId_ }
+            : await attemptUntil(
+                  NFTSCAN_CHAIN_ID_LIST.map((chainId) => async () => {
+                      try {
+                          const collection = await this.getCollection(chainId, id)
+                          if (!collection?.contract_address) return undefined
+                          return { collection, chainId }
+                      } catch {
+                          return undefined
+                      }
+                  }),
+                  undefined,
+              )
+        if (!result?.collection) {
             throw new Error(`NFTSCAN: Can not find token by address ${id}`)
         }
         const { collection, chainId } = result

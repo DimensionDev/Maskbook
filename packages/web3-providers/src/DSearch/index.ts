@@ -2,6 +2,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     SearchResult,
     SearchResultType,
+    CAResult,
     DomainResult,
     FungibleTokenResult,
     NonFungibleTokenResult,
@@ -166,7 +167,10 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             }
         }
 
-        return uniqWith(result, (a, b) => a.type === b.type && (a.id === b.id || isSameAddress(a.address, b.address)))
+        return uniqWith(
+            result,
+            (a, b) => a.type === b.type && (a.id === b.id || isSameAddress(a.address, b.address)),
+        ).sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
     }
 
     async search(
@@ -235,9 +239,10 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             return [
                 {
                     pluginID: NetworkPluginID.PLUGIN_EVM,
-                    type: SearchResultType.FungibleToken,
+                    type: SearchResultType.CA,
+                    address: keyword,
                     keyword,
-                } as FungibleTokenResult<ChainId, SchemaType>,
+                } as CAResult<ChainId>,
             ]
         }
 

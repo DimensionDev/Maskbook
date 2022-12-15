@@ -40,7 +40,7 @@ const sns: Plugin.SNSAdaptor.Definition<
                     | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
                 >
                 const [result, setResult] = useState(resultList[0])
-                const { name, chainId, keyword, address, type, pluginID } = result
+                const { chainId, keyword, address, pluginID } = result
                 return (
                     <Web3ContextProvider
                         value={{
@@ -68,7 +68,11 @@ const sns: Plugin.SNSAdaptor.Definition<
         },
         Utils: {
             shouldDisplay(result) {
-                return SearchResultType.FungibleToken === result.type
+                return [
+                    SearchResultType.FungibleToken,
+                    SearchResultType.NonFungibleToken,
+                    SearchResultType.NonFungibleCollection,
+                ].includes(result.type)
             },
         },
     },

@@ -104,6 +104,8 @@ export enum SearchKeywordType {
 export enum SearchResultType {
     // e.g., 0x6a7122B831c2B79c508A978f73f2ee23171279B3
     EOA = 'EOA',
+    // Contract Address, not sure is fungible or nonFungible token
+    CA='CA',
     // e.g., vitalik.eth or vitalik.bnb
     Domain = 'Domain',
     // e.g., $MASK #MASK or its address 0x69af81e73a73b40adf4f3d4223cd9b1ece623074
@@ -624,6 +626,11 @@ export interface EOAResult<ChainId> extends Result<ChainId> {
     address: string
 }
 
+export interface CAResult<ChainId> extends Result<ChainId> {
+    type: SearchResultType.CA
+    address: string
+}
+
 export interface DomainResult<ChainId> extends Result<ChainId> {
     type: SearchResultType.Domain
     address?: string
@@ -664,6 +671,7 @@ export interface UnknownResult<ChainId> extends Result<ChainId> {
 
 export type SearchResult<ChainId, SchemaType> = 
     | EOAResult<ChainId>
+    | CAResult<ChainId>
     | DomainResult<ChainId>
     | FungibleTokenResult<ChainId, SchemaType>
     | NonFungibleTokenResult<ChainId, SchemaType>
