@@ -7,7 +7,6 @@ import {
     PersonaIdentifier,
     ProfileIdentifier,
     BindingProof,
-    NextIDPersonaBindings,
     NextIDPlatform,
     EnhanceableSite,
 } from '@masknet/shared-base'
@@ -87,7 +86,7 @@ export interface ConnectedPersonaLineProps {
     personaIdentifier: PersonaIdentifier
     proof: {
         loading: boolean
-        value?: NextIDPersonaBindings
+        value?: BindingProof[]
     }
 }
 
@@ -120,7 +119,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         }
 
         const handleDisconnect = (profile: ProfileIdentifier) => {
-            const isProved = proof.value?.proofs.find((x) => {
+            const isProved = proof.value?.find((x) => {
                 return x.platform === NextIDPlatform.Twitter && x.identity === profile.userId.toLowerCase()
             })
             if (isProved && onDeleteBound) {
@@ -130,7 +129,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
             onDisconnect(profile)
         }
         const userIdBox = (profile: ProfileIdentifier) => {
-            const isProved = proof.value?.proofs.find((x) => {
+            const isProved = proof.value?.find((x) => {
                 return x.platform === NextIDPlatform.Twitter && x.identity === profile.userId.toLowerCase()
             })
 

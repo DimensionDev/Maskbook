@@ -25,7 +25,7 @@ import { styled } from '@mui/material/styles'
 import { PreviewDialog as ExportPersonaDialog } from '../../../SignUp/steps/PreviewDialog.js'
 import { useExportPrivateKey } from '../../hooks/useExportPrivateKey.js'
 import { useExportMnemonicWords } from '../../hooks/useExportMnemonicWords.js'
-import { usePersonaProof } from '../../hooks/usePersonaProof.js'
+import { usePersonaProofs } from '../../hooks/usePersonaProofs.js'
 
 const useStyles = makeStyles()((theme) => ({
     setting: {
@@ -109,7 +109,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const { onConnect, onDisconnect, onRename, onDeleteBound } = props
     const { value: privateKey } = useExportPrivateKey(identifier)
     const { value: words } = useExportMnemonicWords(identifier)
-    const proof = usePersonaProof(publicKey)
+    const proof = usePersonaProofs(publicKey)
     const [avatarOn, toggleAvatar] = useToggle(false)
     const [renameDialogOpen, setRenameDialogOpen] = useState(false)
     const [logoutDialogOpen, setLogoutDialogOpen] = useState(false)
