@@ -217,24 +217,22 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 <Stack className={classes.cardHeader}>
                     {isPopper ? null : (
                         <PluginDescriptor>
-                            {showDataProviderIcon ? (
-                                <Box className={classes.source}>
-                                    <Stack
-                                        className={classes.sourceMenu}
-                                        display="inline-flex"
-                                        flexDirection="row"
-                                        alignItems="center"
-                                        gap={0.5}>
-                                        <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
-                                    </Stack>
-                                    <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
-                                        <Typography className={classes.sourceName}>
-                                            {resolveDataProviderName(result.source)}
-                                        </Typography>
-                                        <DataProviderIcon provider={result.source} size={20} />
-                                    </Stack>
-                                </Box>
-                            ) : null}
+                            <Box className={classes.source}>
+                                <Stack
+                                    className={classes.sourceMenu}
+                                    display="inline-flex"
+                                    flexDirection="row"
+                                    alignItems="center"
+                                    gap={0.5}>
+                                    <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
+                                </Stack>
+                                <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
+                                    <Typography className={classes.sourceName}>
+                                        {resolveDataProviderName(result.source)}
+                                    </Typography>
+                                    <DataProviderIcon provider={result.source} size={20} />
+                                </Stack>
+                            </Box>
                         </PluginDescriptor>
                     )}
                     <Stack className={classes.headline}>
@@ -352,24 +350,22 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 {isPopper ? (
                     <section className={classes.pluginDescriptorWrapper}>
                         <PluginDescriptor>
-                            {showDataProviderIcon ? (
-                                <Box className={classes.source}>
-                                    <Stack
-                                        className={classes.sourceMenu}
-                                        display="inline-flex"
-                                        flexDirection="row"
-                                        alignItems="center"
-                                        gap={0.5}>
-                                        <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
-                                    </Stack>
-                                    <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
-                                        <Typography className={classes.sourceName}>
-                                            {resolveDataProviderName(result.source)}
-                                        </Typography>
-                                        <DataProviderIcon provider={result.source} size={20} />
-                                    </Stack>
-                                </Box>
-                            ) : null}
+                            <Box className={classes.source}>
+                                <Stack
+                                    className={classes.sourceMenu}
+                                    display="inline-flex"
+                                    flexDirection="row"
+                                    alignItems="center"
+                                    gap={0.5}>
+                                    <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
+                                </Stack>
+                                <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
+                                    <Typography className={classes.sourceName}>
+                                        {resolveDataProviderName(result.source)}
+                                    </Typography>
+                                    <DataProviderIcon provider={result.source} size={20} />
+                                </Stack>
+                            </Box>
                         </PluginDescriptor>
                     </section>
                 ) : null}

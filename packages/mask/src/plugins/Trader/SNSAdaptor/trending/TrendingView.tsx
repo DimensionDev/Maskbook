@@ -281,7 +281,6 @@ export function TrendingView(props: TrendingViewProps) {
             currency={currency}
             trending={trending}
             isPopper={isPopper}
-            showDataProviderIcon={tabIndex < 3}
             TrendingCardProps={{ classes: { root: classes.root } }}>
             <TabContext value={currentTab}>
                 <Stack px={2}>
