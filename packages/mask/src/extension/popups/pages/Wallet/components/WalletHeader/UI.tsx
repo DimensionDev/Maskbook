@@ -124,7 +124,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                 <div
                     className={classes.networkSelector}
                     onClick={(event) => {
-                        if (!disabled) onOpenNetworkSelector(event)
+                        if (!disabled && !wallet.owner) onOpenNetworkSelector(event)
                     }}>
                     {currentNetwork.isMainnet ? (
                         <WalletIcon mainIcon={currentNetwork.icon} size={30} />
@@ -139,7 +139,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                     <div style={{ marginLeft: 4 }}>
                         <Typography className={classes.chainName}>
                             {currentNetwork.name}
-                            {!disabled ? (
+                            {!disabled && !wallet.owner ? (
                                 <Icons.ArrowDrop
                                     className={classes.arrow}
                                     style={{ transform: status ? 'rotate(-180deg)' : undefined }}

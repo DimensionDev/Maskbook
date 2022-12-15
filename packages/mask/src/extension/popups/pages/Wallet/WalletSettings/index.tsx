@@ -55,14 +55,22 @@ const WalletSettings = memo(() => {
         <>
             <div className={classes.content}>
                 <List dense className={classes.list}>
-                    <ListItem className={classes.item} onClick={() => navigate(PopupRoutes.BackupWallet)}>
-                        <Icons.BackUp size={20} />
-                        <ListItemText className={classes.text}>{t('popups_wallet_backup_wallet')}</ListItemText>
-                    </ListItem>
-                    {wallet?.configurable ? (
+                    {!wallet.owner ? (
+                        <ListItem className={classes.item} onClick={() => navigate(PopupRoutes.BackupWallet)}>
+                            <Icons.BackUp size={20} />
+                            <ListItemText className={classes.text}>{t('popups_wallet_backup_wallet')}</ListItemText>
+                        </ListItem>
+                    ) : null}
+                    {wallet?.configurable && !wallet.owner ? (
                         <ListItem className={classes.item} onClick={() => navigate(PopupRoutes.DeleteWallet)}>
                             <Icons.PopupTrash size={20} />
                             <ListItemText className={classes.text}>{t('delete_wallet')}</ListItemText>
+                        </ListItem>
+                    ) : null}
+                    {wallet.owner ? (
+                        <ListItem>
+                            <Icons.Cached size={20} />
+                            <ListItemText className={classes.text}>{t('popups_change_owner')}</ListItemText>
                         </ListItem>
                     ) : null}
                     <Link

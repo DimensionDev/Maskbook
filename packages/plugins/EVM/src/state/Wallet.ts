@@ -50,12 +50,16 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
                     }
                 }) ?? [],
             )
+            // TODO: get wallets from storage
             if (this.providerType === ProviderType.MaskWallet) {
                 const accounts = await SmartPayAccount.getAccountsByOwners(ChainId.Mumbai, [
                     ...wallets.map((x) => x.address),
                     ...allPersonas.map((x) => x.address),
                 ])
+
                 const now = new Date()
+                const storage = this.storage.value.Maskbook
+
                 this.ref.value = [
                     ...wallets,
                     ...accounts
@@ -73,7 +77,10 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
                             identifier: allPersonas.find((persona) => isSameAddress(x.owner, persona.address))
                                 ?.identifier,
                         })),
-                ]
+                ].map((x) => ({
+                    ...x,
+                    name: storage?.find((item) => isSameAddress(item.address, x.address))?.name ?? x.name,
+                }))
             } else {
                 this.ref.value = wallets
             }
@@ -81,6 +88,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
 
         update()
         this.context.wallets.subscribe(update)
+        this.storage.subscription.subscribe(update)
     }
 
     override async addWallet(wallet: WalletItem): Promise<void> {

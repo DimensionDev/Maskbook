@@ -43,7 +43,7 @@ export const SmartPayDialog = memo(() => {
 
     const currentVisitingProfile = useLastRecognizedIdentity()
 
-    const { loading: querySignableAccountsLoading, accounts, queryAccountsLoading } = useContainer(SmartPayContext)
+    const { loading: querySignableAccountsLoading, accounts } = useContainer(SmartPayContext)
 
     // #region query white list
     const { value: isVerify, loading: queryVerifyLoading } = useAsync(async () => {
@@ -70,7 +70,7 @@ export const SmartPayDialog = memo(() => {
             title={t.smart_pay_wallet()}
             titleTail={<Icons.Questions onClick={() => setDialog({ open: true })} />}>
             <DialogContent className={classes.dialogContent}>
-                {querySignableAccountsLoading || queryVerifyLoading || queryAccountsLoading ? (
+                {querySignableAccountsLoading || queryVerifyLoading ? (
                     <Box display="flex" justifyContent="center" alignItems="center" minHeight={448}>
                         <CircularProgress />
                     </Box>

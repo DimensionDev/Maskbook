@@ -1,7 +1,6 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { StyledInput } from '../../../components/StyledInput/index.js'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useNavigate } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
 import { useAsyncFn } from 'react-use'
@@ -11,7 +10,7 @@ import { Controller } from 'react-hook-form'
 import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm.js'
 import { WalletContext } from '../hooks/useWalletContext.js'
 import { useTitle } from '../../../hook/useTitle.js'
-import { useWallet } from '@masknet/web3-hooks-base'
+import { useWallet, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
@@ -39,6 +38,7 @@ const WalletRename = memo(() => {
     const navigate = useNavigate()
     const { classes } = useStyles()
     const { selectedWallet } = WalletContext.useContainer()
+    const { Wallet } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const currentWallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const wallet = selectedWallet ?? currentWallet
 
@@ -51,11 +51,11 @@ const WalletRename = memo(() => {
 
     const [{ loading }, renameWallet] = useAsyncFn(
         async ({ name }: zod.infer<typeof schema>) => {
-            if (!wallet?.address || !name) return
-            await WalletRPC.renameWallet(wallet.address, name)
+            if (!wallet?.address || !name || !Wallet) return
+            Wallet?.renameWallet(wallet.address, name)
             return navigate(-1)
         },
-        [wallet?.address],
+        [wallet?.address, Wallet],
     )
 
     const onSubmit = handleSubmit(renameWallet)

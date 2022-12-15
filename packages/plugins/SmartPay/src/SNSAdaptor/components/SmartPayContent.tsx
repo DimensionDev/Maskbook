@@ -7,9 +7,10 @@ import {
     useFungibleAssets,
     useFungibleTokenBalance,
     useNetworkDescriptor,
+    useWeb3Connection,
     useWeb3State,
 } from '@masknet/web3-hooks-base'
-import { ChainId, formatEthereumAddress, useSmartPayConstants } from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress, SchemaType, useSmartPayConstants } from '@masknet/web3-shared-evm'
 import {
     Box,
     Button,
@@ -23,9 +24,9 @@ import {
     Typography,
 } from '@mui/material'
 import { useCopyToClipboard } from 'react-use'
-import { memo, useEffect, useState } from 'react'
-import { formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-base'
-import { first, isNaN } from 'lodash-es'
+import { memo, useEffect, useMemo, useState } from 'react'
+import { formatBalance, isLessThan, isSameAddress, Wallet } from '@masknet/web3-shared-base'
+import { compact, first, isNaN } from 'lodash-es'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
@@ -33,7 +34,7 @@ import { AddSmartPayPopover } from './AddSmartPayPopover.js'
 import { AccountsManagerPopover } from './AccountsManagePopover.js'
 import { useContainer } from 'unstated-next'
 import { SmartPayContext } from '../../context/SmartPayContext.js'
-import type { ContractAccountAPI } from '@masknet/web3-providers/types'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 const useStyles = makeStyles()((theme) => ({
     dialogContent: {
@@ -145,16 +146,18 @@ export const SmartPayContent = memo(() => {
 
     const [addAnchorEl, setAddAnchorEl] = useState<HTMLElement | null>(null)
     const [manageAnchorEl, setManageAnchorEl] = useState<HTMLElement | null>(null)
-    const [current, setCurrent] = useState<ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM>>()
+    const [current, setCurrent] = useState<Wallet>()
 
     const { accounts } = useContainer(SmartPayContext)
 
     // #region Remote Dialog Controller
     const { openDialog: openApproveMaskDialog } = useRemoteControlledDialog(PluginSmartPayMessages.approveDialogEvent)
+    const { openDialog: openReceiveDialog } = useRemoteControlledDialog(PluginSmartPayMessages.receiveDialogEvent)
     // #endregion
 
     // #region web3 state
-    const { Others } = useWeb3State()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Mumbai)
     const maskAddress = Others?.getMaskTokenAddress(ChainId.Mumbai)
 
@@ -163,7 +166,6 @@ export const SmartPayContent = memo(() => {
         account: current?.address,
     })
 
-    const tokens = assets?.filter((x) => x.chainId === ChainId.Mumbai)
     const maskToken = assets?.find((x) => isSameAddress(maskAddress, x.address))
 
     const { EP_CONTRACT_ADDRESS } = useSmartPayConstants(ChainId.Mumbai)
@@ -173,9 +175,25 @@ export const SmartPayContent = memo(() => {
 
     const availableBalanceTooLow = isLessThan(formatBalance(allowance, maskToken?.decimals), 0.1)
 
-    const maskBalance = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, maskAddress, {
+    const { value: maskBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, maskAddress, {
         account: current?.address,
     })
+
+    const allAssets = useMemo(() => {
+        if (!assets) return []
+
+        const target = assets.filter((asset) => asset.chainId === ChainId.Mumbai)
+        if (target.length > 1) return target
+
+        const maskAsset: Web3Helper.FungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM> | undefined =
+            maskAddress && Others?.createFungibleToken
+                ? {
+                      ...Others.createFungibleToken(ChainId.Mumbai, SchemaType.ERC20, maskAddress, 'Mask', 'Mask', 18),
+                      balance: maskBalance ?? '0',
+                  }
+                : undefined
+        return compact([...target, maskAsset])
+    }, [assets, maskAddress, maskBalance])
 
     // #endregion
 
@@ -205,7 +223,7 @@ export const SmartPayContent = memo(() => {
                     </Box>
                     <Box display="flex" flexDirection="column" justifyContent="space-between" minWidth={150}>
                         <Typography fontSize={16} lineHeight="20px" fontWeight={700}>
-                            Smart Pay
+                            {current?.name}
                         </Typography>
                         <Typography className={classes.address}>
                             {formatEthereumAddress(account?.address ?? '', 4)}
@@ -266,7 +284,7 @@ export const SmartPayContent = memo(() => {
                         </Box>
                         <Box display="flex" flexDirection="column" justifyContent="space-between">
                             <Typography fontSize={16} lineHeight="20px" fontWeight={700}>
-                                Smart Pay 1 <Icons.ArrowDrop size={20} onClick={openMenu} />
+                                {current?.name} <Icons.ArrowDrop size={20} onClick={openMenu} />
                                 {menu}
                             </Typography>
                             <Typography className={classes.address}>
@@ -309,7 +327,7 @@ export const SmartPayContent = memo(() => {
                     </Box>
                 </Box>
                 <List dense className={classes.list}>
-                    {tokens?.map((token, index) => (
+                    {allAssets?.map((token, index) => (
                         <ListItem className={classes.listItem} key={index}>
                             <Box display="flex" alignItems="center" columnGap="10px">
                                 <TokenIcon
@@ -353,7 +371,15 @@ export const SmartPayContent = memo(() => {
                                         ) : null}
                                     </Typography>
                                     <Typography className={classes.name}>
-                                        {token.name} <Icons.LinkOut size={14} />
+                                        {token.name}
+                                        <Link
+                                            href={Others?.explorerResolver.addressLink(ChainId.Mumbai, token.address)}
+                                            target="_blank"
+                                            title="View on Explorer"
+                                            rel="noopener noreferrer"
+                                            className={classes.linkIcon}>
+                                            <Icons.LinkOut size={14} />
+                                        </Link>
                                     </Typography>
                                 </Box>
                             </Box>
