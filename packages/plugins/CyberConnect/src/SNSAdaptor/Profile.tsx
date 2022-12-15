@@ -152,7 +152,7 @@ const Profile = ({ url }: { url: string }) => {
                             <LoadingBase />
                         ) : (
                             <Stack className={classes.address}>
-                                <Typography>
+                                <Typography color={(theme) => theme.palette.maskColor.publicMain} lineHeight="18px">
                                     <FormattedAddress
                                         address={identity?.address}
                                         formatter={formatEthereumAddress}
@@ -173,7 +173,7 @@ const Profile = ({ url }: { url: string }) => {
                     </Stack>
 
                     <Stack alignItems="center" justifyContent="center">
-                        <ConnectButton address={identity?.address ?? ''} refreshFollowList={retry} />
+                        <ConnectButton address={identity?.address ?? ''} />
                     </Stack>
                 </Stack>
 
