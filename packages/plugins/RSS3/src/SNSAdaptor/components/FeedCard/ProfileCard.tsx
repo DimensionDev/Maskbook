@@ -92,7 +92,7 @@ export const ProfileCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => {
 
     return (
         <CardFrame
-            type={metadata?.type === 'update' ? CardType.ProfileUpdate : CardType.ProfileCreate}
+            type={metadata?.action === 'update' ? CardType.ProfileUpdate : CardType.ProfileCreate}
             feed={feed}
             {...rest}>
             <Typography className={classes.summary}>
@@ -100,7 +100,7 @@ export const ProfileCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => {
                     values={{
                         user,
                         platform: metadata?.platform!,
-                        context: metadata?.type,
+                        context: metadata?.action,
                     }}
                     components={{
                         user: <Label />,

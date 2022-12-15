@@ -7,6 +7,7 @@ import {
     Create2Factory,
     createContract,
     getSmartPayConstants,
+    TransactionReceipt,
     isValidAddress,
     UserOperation,
 } from '@masknet/web3-shared-evm'
@@ -104,22 +105,48 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
     }
 }
 
-export class SmartPayFunderAPI implements FunderAPI.Provider {
+export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
+    private web3 = new Web3API()
+
     private async assetChainId(chainId: ChainId) {
-        const chainIds = await this.getSupportedChainIds()
-        if (!chainIds.includes(chainId)) throw new Error(`Not supported ${chainId}.`)
+        if (![ChainId.Matic, ChainId.Mumbai].includes(chainId)) throw new Error(`Not supported ${chainId}.`)
     }
 
-    private async queryWhiteList(handler: string) {
+    private async getWhiteList(handler: string) {
         return fetchJSON<FunderAPI.WhiteList>(urlcat(FUNDER_ROOT, '/whitelist', { twitterHandler: handler }))
     }
 
-    private async queryOperations(key: FunderAPI.ScanKey, value: string) {
-        return fetchJSON<FunderAPI.Operation[]>(urlcat(FUNDER_ROOT, '/operation', { scanKey: key, scanValue: value }))
+    async getRemainFrequency(handler: string) {
+        try {
+            const result = await this.getWhiteList(handler)
+            if (!result.totalCount || result.twitterHandler !== handler) return 0
+            return result.totalCount - result.usedCount
+        } catch {
+            return 0
+        }
     }
 
-    async getSupportedChainIds(): Promise<ChainId[]> {
-        return [ChainId.Matic, ChainId.Mumbai]
+    async getOperationsByOwner(chainId: ChainId, owner: string) {
+        await this.assetChainId(chainId)
+
+        try {
+            const operations = await fetchJSON<FunderAPI.Operation[]>(
+                urlcat(FUNDER_ROOT, '/operation', { scanKey: FunderAPI.ScanKey.OwnerAddress, scanValue: owner }),
+            )
+            const web3 = this.web3.createSDK(chainId)
+            const allSettled = await Promise.allSettled(
+                operations.map<Promise<TransactionReceipt | null>>((x) =>
+                    web3.eth.getTransactionReceipt(x.tokenTransferTx),
+                ),
+            )
+
+            return operations.filter((_, i) => {
+                const receipt = allSettled[i] as PromiseFulfilledResult<TransactionReceipt | null>
+                return receipt.status === 'fulfilled' && receipt?.value?.status === true
+            })
+        } catch {
+            return EMPTY_LIST
+        }
     }
 
     async fund(chainId: ChainId, proof: FunderAPI.Proof): Promise<FunderAPI.Fund> {
@@ -134,31 +161,10 @@ export class SmartPayFunderAPI implements FunderAPI.Provider {
 
     async verify(handler: string) {
         try {
-            const result = await this.queryWhiteList(handler)
-            if (result.twitterHandler === handler && result.totalCount > 0) {
-                return true
-            }
-            return false
+            const result = await this.getWhiteList(handler)
+            return result.twitterHandler === handler && result.totalCount > 0
         } catch {
             return false
-        }
-    }
-
-    async queryRemainFrequency(handler: string) {
-        try {
-            const result = await this.queryWhiteList(handler)
-            if (!result.totalCount || result.twitterHandler !== handler) return 0
-            return result.totalCount - result.usedCount
-        } catch {
-            return 0
-        }
-    }
-
-    async queryOperationByOwner(owner: string) {
-        try {
-            return this.queryOperations(FunderAPI.ScanKey.OwnerAddress, owner)
-        } catch {
-            return EMPTY_LIST
         }
     }
 }
@@ -237,8 +243,7 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
 
         const owners = results.flatMap((x) => (x.succeed && x.value ? x.value : ''))
 
-        const operations = await this.funder.queryOperationByOwner(owner)
-
+        const operations = await this.funder.getOperationsByOwner(chainId, owner)
         return compact(
             owners.map((x, index) => {
                 return this.createContractAccount(
@@ -269,7 +274,7 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         const contractWallet = await this.createContractWallet(chainId, owner)
         const address = create2Factory.derive(contractWallet.initCode, nonce)
 
-        const operations = await this.funder.queryOperationByOwner(owner)
+        const operations = await this.funder.getOperationsByOwner(chainId, owner)
 
         // TODO: ensure account is deployed
         return this.createContractAccount(
