@@ -272,7 +272,6 @@ export function TrendingView(props: TrendingViewProps) {
                 content: classes.content,
                 cardHeader: classes.cardHeader,
             }}
-            keyword={name}
             stats={stats}
             setResult={setResult}
             resultList={resultList}

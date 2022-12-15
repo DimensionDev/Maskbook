@@ -136,7 +136,6 @@ const useStyles = makeStyles<{
 })
 
 export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | 'footer' | 'content' | 'cardHeader'> {
-    keyword: string
     stats: Stat[]
     currency: Currency
     trending: TrendingAPI.Trending
@@ -154,18 +153,15 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     >
     children?: React.ReactNode
     isPreciseSearch?: boolean
-    showDataProviderIcon?: boolean
     isPopper?: boolean
     TrendingCardProps?: Partial<TrendingCardProps>
 }
 
 export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const {
-        keyword,
         trending,
         stats,
         children,
-        showDataProviderIcon = false,
         TrendingCardProps,
         isPopper = true,
         isPreciseSearch = false,
