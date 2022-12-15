@@ -8,66 +8,8 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import { PluginTraderRPC } from '../messages.js'
-import type { Coin, TagType } from '../types/index.js'
+import type { Coin } from '../types/index.js'
 import { useCurrentCurrency } from './useCurrentCurrency.js'
-
-export function useTrendingByKeyword(
-    tagType: TagType,
-    keyword: string,
-    dataProvider: SourceType,
-    expectedChainId?: Web3Helper.ChainIdAll,
-    searchedContractAddress?: string,
-): AsyncState<{
-    currency?: TrendingAPI.Currency
-    trending?: TrendingAPI.Trending | null
-}> {
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const currency = useCurrentCurrency(dataProvider)
-    const {
-        value: trending,
-        loading,
-        error,
-    } = useAsync(async () => {
-        if (!keyword) return null
-        if (!currency) return null
-        return PluginTraderRPC.getCoinTrendingByKeyword(chainId, keyword, tagType, currency, dataProvider)
-    }, [chainId, dataProvider, currency?.id, keyword])
-    const { value: detailedToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, trending?.coin.contract_address)
-    const coin = {
-        ...trending?.coin,
-        decimals: trending?.coin.decimals || detailedToken?.decimals || 0,
-        contract_address:
-            searchedContractAddress ?? trending?.contracts?.[0]?.address ?? trending?.coin.contract_address,
-        chainId: expectedChainId ?? trending?.contracts?.[0]?.chainId ?? trending?.coin.chainId,
-    } as Coin
-
-    if (loading) {
-        return {
-            loading: true,
-        }
-    }
-
-    if (error) {
-        return {
-            loading: false,
-            error,
-        }
-    }
-
-    return {
-        value: {
-            currency,
-            trending: trending
-                ? {
-                      ...trending,
-                      coin,
-                  }
-                : null,
-        },
-        loading,
-        error,
-    }
-}
 
 export function useTrendingById(
     id: string,

@@ -13,6 +13,7 @@ import {
     FungibleTokenResult,
     SourceType,
     createFungibleToken,
+    SearchResultType,
     TokenType,
 } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -26,7 +27,7 @@ import { Box, useTheme } from '@mui/system'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../../utils/index.js'
 import { usePriceStats } from '../../trending/usePriceStats.js'
-import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending.js'
+import { useTrendingById } from '../../trending/useTrending.js'
 import type { TagType } from '../../types/index.js'
 import { TradeView } from '../trader/TradeView.js'
 import { CoinMarketPanel } from './CoinMarketPanel.js'
@@ -162,18 +163,13 @@ export function TrendingView(props: TrendingViewProps) {
     // #region track network type
     useEffect(() => setTabIndex(0), [networkType])
     // #endregion
-
     // #region merge trending
-    const coinId = result.id
-    const trendingById = useTrendingById(coinId || '', result.source, expectedChainId, searchedContractAddress)
-    const trendingByKeyword = useTrendingByKeyword(
-        tagType,
-        coinId ? '' : name,
+    const { value: { currency, trending } = {}, loading: loadingTrending } = useTrendingById(
+        result.type === SearchResultType.FungibleToken ? result.id || searchedContractAddress || '' : result.address,
         result.source,
         expectedChainId,
         searchedContractAddress,
     )
-    const { value: { currency, trending } = {}, loading: loadingTrending } = coinId ? trendingById : trendingByKeyword
     // #endregion
 
     const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
