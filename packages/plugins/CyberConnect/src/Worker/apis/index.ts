@@ -76,7 +76,6 @@ export async function fetchFollowers(
     size: number,
     indicator?: HubIndicator,
 ): Promise<Pageable<IFollowIdentity>> {
-    if (!address) return createPageable([], createIndicator(indicator))
     const data = {
         query: `query FullIdentityQuery {
         identity(address: "${address.toLowerCase()}") {
@@ -103,37 +102,36 @@ export async function fetchFollowers(
             res.data.identity.followings.list,
             createIndicator(indicator),
             res.data.identity.followings.pageInfo.hasNextPage
-                ? createNextIndicator(indicator, res.data.identity.followings.pageInfo.startCursor)
+                ? createNextIndicator(indicator, res.data.identity.followings.pageInfo.endCursor)
                 : undefined,
         )
     return createPageable(
         res.data.identity.followers.list,
         createIndicator(indicator),
         res.data.identity.followers.pageInfo.hasNextPage
-            ? createNextIndicator(indicator, res.data.identity.followers.pageInfo.startCursor)
+            ? createNextIndicator(indicator, res.data.identity.followers.pageInfo.endCursor)
             : undefined,
     )
 }
 
-export async function fetchFollowStatus(
-    fromAddr: string,
-    toAddr: string,
-): Promise<{ data: { followStatus: IFollowStatus } }> {
+export async function fetchFollowStatus(fromAddr: string, toAddr: string): Promise<IFollowStatus> {
     const data = {
-        query: `query FollowStatus(
-            $fromAddr: String!
-            $toAddr: String!
-          ) {
-            followStatus(fromAddr: $fromAddr, toAddr: $toAddr, namespace: "Mask") {
-              isFollowed
-              isFollowing
+        query: `query FollowStatusQuery {
+            connections(
+                fromAddr: "${fromAddr}"
+                toAddrList: ["${toAddr}"]
+                network: ETH
+            ) {
+                fromAddr
+                toAddr
+                followStatus {
+                    isFollowed
+                    isFollowing
+                }
             }
-          }`,
-        variables: {
-            fromAddr: fromAddr.toLowerCase(),
-            toAddr: toAddr.toLowerCase(),
-        },
+        }`,
+        variables: {},
     }
     const res = await query(data)
-    return res
+    return res.data.connections[0]?.followStatus ?? { isFollowed: false, isFollowing: false }
 }
