@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-es'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, usePersonaProofs } from '@masknet/shared'
 import { useActivatedPluginsSNSAdaptor, usePluginI18NField } from '@masknet/plugin-infra/content-script'
 import { PluginID, NextIDPlatform, EMPTY_LIST, PopupRoutes, CrossIsolationMessages } from '@masknet/shared-base'
 import { useAvailablePlugins, getSettingsTabContent } from '@masknet/plugin-infra'
@@ -9,7 +9,7 @@ import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useI18N, MaskMessages, usePersonaProofs } from '../../utils/index.js'
+import { useI18N, MaskMessages } from '../../utils/index.js'
 import Services from '../../extension/service.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -59,7 +59,7 @@ export function PluginSettingsDialog() {
     )
 
     const { value: currentPersona, retry } = useAsyncRetry(Services.Settings.getCurrentPersonaIdentifier, [])
-    const proofs = usePersonaProofs(currentPersona?.publicKeyAsHex)
+    const proofs = usePersonaProofs(currentPersona?.publicKeyAsHex, MaskMessages)
 
     const bindingWallets = useMemo(() => {
         if (proofs.loading) return EMPTY_LIST

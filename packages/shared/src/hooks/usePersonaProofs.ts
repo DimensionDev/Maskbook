@@ -1,10 +1,11 @@
-import { EMPTY_LIST } from '@masknet/shared-base'
+import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import { BindingProof, EMPTY_LIST, MaskEvents } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useEffect } from 'react'
 import { useAsyncFn, useEffectOnce } from 'react-use'
-import { Messages } from '../../../API.js'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 
-export function usePersonaProofs(publicKey?: string) {
+export function usePersonaProofs(publicKey?: string, message?: WebExtensionMessage<MaskEvents>) {
     const [state, fn] = useAsyncFn(
         async (enableCache = true) => {
             try {
@@ -28,11 +29,11 @@ export function usePersonaProofs(publicKey?: string) {
         fn(false)
     }
 
-    useEffect(() => Messages.events.ownProofChanged.on(retry), [retry])
+    useEffect(() => message?.events.ownProofChanged.on(retry), [retry])
 
     return {
         value: state.value ?? EMPTY_LIST,
         loading: state.loading,
         retry,
-    }
+    } as AsyncStateRetry<BindingProof[]>
 }

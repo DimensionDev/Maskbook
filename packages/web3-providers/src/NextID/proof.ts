@@ -100,14 +100,14 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return first(response.unwrap().ids)
     }
 
-    async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page?: number) {
+    async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page = 1) {
         if (!platform && !identity) return []
 
         const response = await fetchJSON<NextIDBindings>(
             urlcat(BASE_URL, '/v1/proof', {
                 platform,
                 identity,
-                page: page ?? 1,
+                page,
                 exact: true,
                 sort: 'activated_at',
                 order: 'desc',

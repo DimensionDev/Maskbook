@@ -10,7 +10,7 @@ import {
     DashboardRoutes,
     NextIDAction,
 } from '@masknet/shared-base'
-import { useMenu } from '@masknet/shared'
+import { useMenu, usePersonaProofs } from '@masknet/shared'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import { RenameDialog } from '../RenameDialog/index.js'
@@ -25,7 +25,7 @@ import { styled } from '@mui/material/styles'
 import { PreviewDialog as ExportPersonaDialog } from '../../../SignUp/steps/PreviewDialog.js'
 import { useExportPrivateKey } from '../../hooks/useExportPrivateKey.js'
 import { useExportMnemonicWords } from '../../hooks/useExportMnemonicWords.js'
-import { usePersonaProofs } from '../../hooks/usePersonaProofs.js'
+import { Messages } from '../../../../API.js'
 
 const useStyles = makeStyles()((theme) => ({
     setting: {
@@ -109,7 +109,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const { onConnect, onDisconnect, onRename, onDeleteBound } = props
     const { value: privateKey } = useExportPrivateKey(identifier)
     const { value: words } = useExportMnemonicWords(identifier)
-    const proof = usePersonaProofs(publicKey)
+    const proofs = usePersonaProofs(publicKey, Messages)
     const [avatarOn, toggleAvatar] = useToggle(false)
     const [renameDialogOpen, setRenameDialogOpen] = useState(false)
     const [logoutDialogOpen, setLogoutDialogOpen] = useState(false)
@@ -196,7 +196,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                         } else {
                             return (
                                 <ConnectedPersonaLine
-                                    proof={proof}
+                                    proofs={proofs}
                                     disableAdd={currentNetworkProfiles.length >= 5}
                                     isHideOperations={false}
                                     key={networkIdentifier}

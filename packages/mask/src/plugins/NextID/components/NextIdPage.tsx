@@ -13,10 +13,10 @@ import {
     OtherLackWalletAction,
     SelectConnectPersonaAction,
 } from './Actions/index.js'
-import { PluginCardFrameMini } from '@masknet/shared'
+import { PluginCardFrameMini, usePersonaProofs } from '@masknet/shared'
 import { ThemeProvider } from '@mui/material'
 import { makeStyles, MaskLightTheme } from '@masknet/theme'
-import { usePersonaProofs } from '../../../utils/index.js'
+import { MaskMessages } from '../../../utils/messages.js'
 
 const useStyles = makeStyles()((theme) => ({}))
 
@@ -35,7 +35,7 @@ export function NextIdPage() {
         return Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
     }, [visitingPersonaIdentifier, personaConnectStatus.hasPersona])
     const publicKeyAsHex = currentPersona?.identifier.publicKeyAsHex
-    const proofs = usePersonaProofs(publicKeyAsHex)
+    const proofs = usePersonaProofs(publicKeyAsHex, MaskMessages)
 
     const handleAddWallets = () => {
         Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {

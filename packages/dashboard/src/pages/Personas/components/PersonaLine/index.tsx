@@ -84,7 +84,7 @@ export interface ConnectedPersonaLineProps {
     networkIdentifier: string
     disableAdd?: boolean
     personaIdentifier: PersonaIdentifier
-    proof: {
+    proofs: {
         loading: boolean
         value?: BindingProof[]
     }
@@ -100,7 +100,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         isHideOperations,
         disableAdd,
         personaIdentifier,
-        proof,
+        proofs,
     }) => {
         const t = useDashboardI18N()
         const { openProfilePage } = PersonaContext.useContainer()
@@ -119,7 +119,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         }
 
         const handleDisconnect = (profile: ProfileIdentifier) => {
-            const isProved = proof.value?.find((x) => {
+            const isProved = proofs.value?.find((x) => {
                 return x.platform === NextIDPlatform.Twitter && x.identity === profile.userId.toLowerCase()
             })
             if (isProved && onDeleteBound) {
@@ -142,7 +142,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                         <Typography
                             className={classes.proofIconBox}
                             onClick={(e: MouseEvent) => handleProofIconClick(e, isProved, profile)}>
-                            {proof.loading ? (
+                            {proofs.loading ? (
                                 <LoadingBase />
                             ) : isProved?.is_valid ? (
                                 <Icons.NextIdPersonaVerified size={18} />
