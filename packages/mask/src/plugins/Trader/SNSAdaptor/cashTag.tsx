@@ -1,4 +1,4 @@
-import { PluginTraderMessages, PluginTraderRPC } from '../messages.js'
+import { PluginTraderMessages } from '../messages.js'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra'
@@ -10,13 +10,11 @@ export const enhanceTag: Plugin.SNSAdaptor.Definition<ChainId>['enhanceTag'] = {
         const element = event.currentTarget
         const timer = setTimeout(async () => {
             const type = kind === 'cash' ? TrendingAPI.TagType.CASH : TrendingAPI.TagType.HASH
-            const dataProviders = await PluginTraderRPC.getAvailableDataProviders(chainId, type, content)
-            if (!dataProviders.length) return
+
             PluginTraderMessages.cashTagObserved.sendToLocal({
                 name: content,
                 type,
                 element,
-                dataProviders,
             })
         }, 500)
         return () => {

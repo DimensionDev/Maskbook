@@ -1,10 +1,10 @@
 import { first } from 'lodash-es'
-import { getEnumAsArray, unreachable } from '@masknet/kit'
+import { unreachable } from '@masknet/kit'
 import { DataProvider } from '@masknet/public-api'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { CoinGeckoTrending, CoinMarketCap, NFTScanTrending, UniSwap } from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
-import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Coin, Currency, Stat, TagType, Trending } from '../../types/index.js'
 import { isBlockedAddress, isBlockedKeyword, resolveKeyword, resolveCoinId } from './hotfix.js'
 
@@ -47,38 +47,6 @@ async function checkAvailabilityOnDataProvider(
     } catch {
         return false
     }
-}
-
-export async function getAvailableDataProviders(chainId: ChainId, type?: TagType, keyword?: string) {
-    // TODO: multi network support
-    const networkType = chainResolver.networkType(chainId)
-    const isMainnet = chainResolver.isMainnet(chainId)
-
-    if (!type || !keyword)
-        return getEnumAsArray(DataProvider)
-            .filter((x) => (isMainnet ? true : x.value !== DataProvider.UniswapInfo))
-            .map((y) => y.value)
-
-    // Check if the keyword is a numeric string
-    if (!Number.isNaN(Number(keyword))) return EMPTY_LIST
-
-    const checked = await Promise.all(
-        getEnumAsArray(DataProvider)
-            .filter((x) => (x.value === DataProvider.UniswapInfo ? networkType === NetworkType.Ethereum : true))
-            .map(
-                async (x) =>
-                    [
-                        x.value,
-                        await checkAvailabilityOnDataProvider(
-                            chainId,
-                            resolveKeyword(chainId, keyword, x.value),
-                            type,
-                            x.value,
-                        ),
-                    ] as const,
-            ),
-    )
-    return checked.filter(([, y]) => y).map(([x]) => x)
 }
 
 export async function getAvailableCoins(chainId: ChainId, keyword: string, type: TagType, dataProvider: DataProvider) {

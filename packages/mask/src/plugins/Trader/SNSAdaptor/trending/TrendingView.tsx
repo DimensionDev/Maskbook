@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { compact } from 'lodash-es'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import {
@@ -22,7 +21,6 @@ import { Stack, Tab, ThemeProvider } from '@mui/material'
 import { Box, useTheme } from '@mui/system'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../../utils/index.js'
-import { usePreferredCoinId } from '../../trending/useCurrentCoinId.js'
 import { usePriceStats } from '../../trending/usePriceStats.js'
 import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending.js'
 import type { TagType } from '../../types/index.js'
@@ -104,7 +102,6 @@ const useStyles = makeStyles<{
 
 export interface TrendingViewProps {
     name: string
-    id?: string
     tagType: TagType
     setResult: (
         a:
@@ -123,7 +120,6 @@ export interface TrendingViewProps {
     expectedChainId?: Web3Helper.ChainIdAll
     onUpdate?: () => void
     isPopper?: boolean
-    asset?: AsyncState<{ currency?: TrendingAPI.Currency; trending?: TrendingAPI.Trending | null }>
 }
 
 enum ContentTabs {
@@ -142,8 +138,6 @@ export function TrendingView(props: TrendingViewProps) {
         searchedContractAddress,
         isPreciseSearch,
         expectedChainId,
-        asset,
-        id,
         resultList,
         result,
         setResult,
@@ -166,17 +160,16 @@ export function TrendingView(props: TrendingViewProps) {
     // #endregion
 
     // #region merge trending
-    const coinId = usePreferredCoinId(name, result.source, id)
-    const trendingById = useTrendingById(asset ? '' : coinId, result.source, expectedChainId, searchedContractAddress)
+    const coinId = result.id
+    const trendingById = useTrendingById(coinId || '', result.source, expectedChainId, searchedContractAddress)
     const trendingByKeyword = useTrendingByKeyword(
         tagType,
-        coinId || asset ? '' : name,
+        coinId ? '' : name,
         result.source,
         expectedChainId,
         searchedContractAddress,
     )
-    const { value: { currency, trending } = {}, loading: loadingTrending } =
-        asset ?? (coinId ? trendingById : trendingByKeyword)
+    const { value: { currency, trending } = {}, loading: loadingTrending } = coinId ? trendingById : trendingByKeyword
     // #endregion
 
     const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
