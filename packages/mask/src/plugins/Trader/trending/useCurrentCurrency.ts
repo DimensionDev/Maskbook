@@ -34,7 +34,6 @@ const CURRENCIES_MAP: Record<SourceType, undefined | TrendingAPI.Currency[]> = {
             description: 'Ethereum',
         },
     ],
-    [SourceType.NFTScan]: undefined,
     [SourceType.X2Y2]: undefined,
     [SourceType.Chainbase]: undefined,
     [SourceType.Zerion]: undefined,
