@@ -1,29 +1,5 @@
-import { DataProvider, TradeProvider } from '@masknet/public-api'
+import { TradeProvider } from '@masknet/public-api'
 import { createLookupTableResolver } from '@masknet/shared-base'
-
-export const resolveDataProviderName = createLookupTableResolver<DataProvider, string>(
-    {
-        [DataProvider.CoinGecko]: 'CoinGecko',
-        [DataProvider.CoinMarketCap]: 'CoinMarketCap',
-        [DataProvider.UniswapInfo]: 'Uniswap Info',
-        [DataProvider.NFTScan]: 'NFTScan',
-    },
-    (dataProvider) => {
-        throw new Error(`Unknown data provider: ${dataProvider}`)
-    },
-)
-
-export const resolveDataProviderLink = createLookupTableResolver<DataProvider, string>(
-    {
-        [DataProvider.CoinGecko]: 'https://www.coingecko.com/',
-        [DataProvider.CoinMarketCap]: 'https://coinmarketcap.com/',
-        [DataProvider.UniswapInfo]: 'https://info.uniswap.org/',
-        [DataProvider.NFTScan]: 'https://www.nftscan.com/',
-    },
-    (dataProvider) => {
-        throw new Error(`Unknown data provider: ${dataProvider}`)
-    },
-)
 
 export const resolveTradeProviderName = createLookupTableResolver<TradeProvider, string>(
     {
