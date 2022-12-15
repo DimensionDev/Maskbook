@@ -9,6 +9,7 @@ import {
     SearchKeywordType,
 } from '../specs/index.js'
 import { NetworkPluginID, createLookupTableResolver, NextIDPlatform } from '@masknet/shared-base'
+import { DataProvider } from '@masknet/public-api'
 
 export interface ExplorerRoutes {
     addressPathname?: string
@@ -216,6 +217,18 @@ export const resolveSourceTypeName = createLookupTableResolver<SourceType, strin
         [SourceType.CoinGecko]: 'CoinGecko',
         [SourceType.CF]: 'CloudFlare',
         [SourceType.GoPlus]: 'GoPlus',
+    },
+    (providerType) => {
+        throw new Error(`Unknown source type: ${providerType}.`)
+    },
+)
+
+export const resolveDataProviderName = createLookupTableResolver<DataProvider, string>(
+    {
+        [DataProvider.CoinMarketCap]: 'CoinMarketCap',
+        [DataProvider.UniswapInfo]: 'UniswapInfo',
+        [DataProvider.NFTScan]: 'NFTScan',
+        [DataProvider.CoinGecko]: 'CoinGecko',
     },
     (providerType) => {
         throw new Error(`Unknown provider type: ${providerType}.`)

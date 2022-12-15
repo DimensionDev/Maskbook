@@ -1,12 +1,12 @@
 import { SourceType } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 
-export interface DataProviderIconProps {
+export interface SourceProviderIconProps {
     provider: SourceType
     size?: number
 }
 
-export function SourceProviderIcon(props: DataProviderIconProps) {
+export function SourceProviderIcon(props: SourceProviderIconProps) {
     const { size = 16 } = props
     switch (props.provider) {
         case SourceType.NFTScan:

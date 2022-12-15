@@ -5,12 +5,12 @@ import { Box } from '@mui/system'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NonFungibleTokenResult, FungibleTokenResult } from '@masknet/web3-shared-base'
 import { DataProvider } from '@masknet/public-api'
-import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
+import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity, DataProviderIcon } from '@masknet/shared'
 import { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColors, MaskLightTheme } from '@masknet/theme'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { formatCurrency, TokenType } from '@masknet/web3-shared-base'
+import { formatCurrency, TokenType, resolveDataProviderName } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import {
     Avatar,
@@ -116,6 +116,7 @@ const useStyles = makeStyles<{
             padding: '0 12px 12px',
         },
         source: {
+            display: 'flex',
             justifyContent: 'space-between',
         },
         sourceNote: {
@@ -125,6 +126,11 @@ const useStyles = makeStyles<{
         sourceMenu: {
             fontSize: 14,
             fontWeight: 700,
+        },
+        sourceName: {
+            fontWeight: 700,
+            color: theme.palette.maskColor.dark,
+            marginLeft: 4,
         },
     }
 })
@@ -221,6 +227,12 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         alignItems="center"
                                         gap={0.5}>
                                         <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
+                                    </Stack>
+                                    <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
+                                        <Typography className={classes.sourceName}>
+                                            {resolveDataProviderName(result.source)}
+                                        </Typography>
+                                        <DataProviderIcon provider={result.source} size={20} />
                                     </Stack>
                                 </Box>
                             ) : null}
@@ -350,6 +362,12 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         alignItems="center"
                                         gap={0.5}>
                                         <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
+                                    </Stack>
+                                    <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
+                                        <Typography className={classes.sourceName}>
+                                            {resolveDataProviderName(result.source)}
+                                        </Typography>
+                                        <DataProviderIcon provider={result.source} size={20} />
                                     </Stack>
                                 </Box>
                             ) : null}
