@@ -1,6 +1,7 @@
 import ENS from 'ethjs-ens'
+import type { HttpProvider } from 'web3-core'
 import namehash from '@ensdomains/eth-ens-namehash'
-import { ChainId, isEmptyHex, isZeroAddress } from '@masknet/web3-shared-evm'
+import { ChainId, createWeb3Provider, createWeb3Request, isEmptyHex, isZeroAddress } from '@masknet/web3-shared-evm'
 import { Web3API } from '../EVM/index.js'
 import type { DomainAPI } from '../entry-types.js'
 
@@ -10,8 +11,9 @@ export class ENS_API implements DomainAPI.Provider<ChainId> {
     }
 
     private get ens() {
+        const provider = this.web3.currentProvider as HttpProvider
         return new ENS({
-            provider: this.web3.givenProvider,
+            provider: createWeb3Provider(createWeb3Request(provider.send)),
             network: ChainId.Mainnet,
         })
     }

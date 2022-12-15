@@ -26,12 +26,14 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'content'>()((theme, _,
         padding: theme.spacing(1),
         borderRadius: 8,
         marginTop: theme.spacing(1.5),
+        color: theme.palette.maskColor.main,
         [`.${refs.image}`]: {
             width: 64,
             height: 64,
             borderRadius: 8,
             overflow: 'hidden',
             flexShrink: 0,
+            marginRight: theme.spacing(1.5),
         },
         [`&.${refs.verbose}`]: {
             display: 'block',
@@ -52,14 +54,19 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'content'>()((theme, _,
         fontSize: 14,
         color: theme.palette.maskColor.second,
     },
+    title: {
+        fontSize: '16px',
+        fontWeight: 700,
+        margin: theme.spacing(0.5, 0),
+    },
     content: {
         color: theme.palette.maskColor.main,
         whiteSpace: 'pre-wrap',
-        marginLeft: theme.spacing(1.5),
         display: '-webkit-box',
         WebkitBoxOrient: 'vertical',
         WebkitLineClamp: 3,
         overflow: 'hidden',
+        wordBreak: 'break-all',
     },
 }))
 
@@ -108,7 +115,7 @@ export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
                 />
             </Typography>
             <Typography className={classes.comment}>{metadata?.body}</Typography>
-            <div className={cx(classes.target, verbose ? classes.verbose : null)}>
+            <article className={cx(classes.target, verbose ? classes.verbose : null)}>
                 {verbose ? <Typography className={classes.originalLabel}>{t.original()}</Typography> : null}
                 {commentTarget?.media?.[0].mime_type?.startsWith('image/') ? (
                     <Image
@@ -118,14 +125,24 @@ export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
                         width={imageSize}
                     />
                 ) : null}
-                {verbose && commentTarget?.body ? (
-                    <Markdown defaultStyle={false} className={mdClasses.markdown}>
-                        {commentTarget.body}
-                    </Markdown>
-                ) : (
-                    <Typography className={classes.content}>{commentTarget?.body}</Typography>
-                )}
-            </div>
+                <div className={classes.article}>
+                    {commentTarget?.title ? (
+                        <Typography variant="h1" className={classes.title}>
+                            {commentTarget?.title}
+                        </Typography>
+                    ) : null}
+                    {verbose && commentTarget?.body ? (
+                        <Markdown defaultStyle={false} className={mdClasses.markdown}>
+                            {commentTarget.body}
+                        </Markdown>
+                    ) : (
+                        <Typography className={classes.content}>
+                            {/* There might be leading spaces */}
+                            {commentTarget?.body?.trimStart()}
+                        </Typography>
+                    )}
+                </div>
+            </article>
         </CardFrame>
     )
 }

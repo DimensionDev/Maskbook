@@ -146,7 +146,7 @@ export namespace RSS3BaseAPI {
     }
     export interface PostMetadata {
         title?: string
-        body: string
+        body?: string
         summary?: string
         author: string[]
         created_at?: string
@@ -182,7 +182,7 @@ export namespace RSS3BaseAPI {
         expire_at: RFC3339Datetime
         /** unknown type, it could possibly be profile avatar url */
         profile_uri: string[]
-        type: 'create' | 'update'
+        action: 'create' | 'update'
     }
     export interface FollowMetadata extends Omit<ProfileMetadata, 'expire_at'> {}
     interface LaunchMetadata {

@@ -53,6 +53,7 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
         height: 40,
         marginLeft: 10,
         overflow: 'auto',
+        flexGrow: 1,
     },
     nickname: {
         color: theme.palette.text.primary,
@@ -78,7 +79,6 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
-        flexGrow: 1,
     },
     linkIcon: {
         lineHeight: '14px',

@@ -138,7 +138,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
     async getUserByScreenName(screenName: string, checkNFTAvatar?: boolean): Promise<TwitterBaseAPI.User | null> {
         if (checkNFTAvatar) return getUserViaWebAPI(screenName)
         return attemptUntil<TwitterBaseAPI.User | null>(
-            [() => getUserViaWebAPI(screenName), () => getUserViaTwitterIdentity(screenName)],
+            [() => getUserViaTwitterIdentity(screenName), () => getUserViaWebAPI(screenName)],
             null,
         )
     }
