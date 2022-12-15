@@ -5,7 +5,10 @@ import { useEffect } from 'react'
 import { useAsyncFn, useEffectOnce } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 
-export function usePersonaProofs(publicKey?: string, message?: WebExtensionMessage<MaskEvents>) {
+export function usePersonaProofs(
+    publicKey?: string,
+    message?: WebExtensionMessage<MaskEvents>,
+): AsyncStateRetry<BindingProof[]> {
     const [state, fn] = useAsyncFn(
         async (enableCache = true) => {
             try {
@@ -31,9 +34,24 @@ export function usePersonaProofs(publicKey?: string, message?: WebExtensionMessa
 
     useEffect(() => message?.events.ownProofChanged.on(retry), [retry])
 
+    if (state.loading) {
+        return {
+            loading: true,
+            retry,
+        }
+    }
+
+    if (state.error) {
+        return {
+            loading: false,
+            error: state.error,
+            retry,
+        }
+    }
+
     return {
         value: state.value ?? EMPTY_LIST,
         loading: state.loading,
         retry,
-    } as AsyncStateRetry<BindingProof[]>
+    }
 }

@@ -9,7 +9,7 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { MaskMessages } from '../../../utils/messages.js'
 import { usePersonaProofs } from '@masknet/shared'
 
-export function useProvedWallets() {
+export function useProvedWallets(): AsyncStateRetry<BindingProof[]> {
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const { value: personas, retry } = useAsyncRetry(
         async () => Services.Identity.queryOwnedPersonaInformation(false),
@@ -26,9 +26,24 @@ export function useProvedWallets() {
 
     const proofs = usePersonaProofs(currentPersona?.identifier.publicKeyAsHex, MaskMessages)
 
+    if (proofs.loading) {
+        return {
+            loading: true,
+            retry,
+        }
+    }
+
+    if (proofs.error) {
+        return {
+            loading: false,
+            error: proofs.error,
+            retry,
+        }
+    }
+
     return {
         loading: proofs.loading,
         value: proofs.value?.filter((x) => x.platform === NextIDPlatform.Ethereum) ?? EMPTY_LIST,
         retry: proofs.retry,
-    } as AsyncStateRetry<BindingProof[]>
+    }
 }
