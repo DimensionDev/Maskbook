@@ -616,7 +616,7 @@ export interface NonFungibleTokenSecurity {}
     rank?: number
     address?: string
     source?: DataProvider
-    iconURL?: string
+    logoURL?: string
     symbol?: string
 }
 export interface EOAResult<ChainId> extends Result<ChainId> {

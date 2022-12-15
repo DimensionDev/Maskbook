@@ -14,7 +14,8 @@ import type { Coin } from '../../types/index.js'
 const useStyles = makeStyles()((theme) => ({
     coinMenu: {
         maxHeight: 600,
-        maxWidth: 400,
+        width: 400,
+        backgroundColor: theme.palette.maskColor.bottom,
         '&::-webkit-scrollbar': {
             display: 'none',
         },
@@ -22,16 +23,24 @@ const useStyles = makeStyles()((theme) => ({
             paddingRight: '0 !important',
             width: '100% !important',
         },
+        borderRadius: 16,
     },
     groupName: {
         height: 18,
         fontWeight: 'bold',
-        padding: theme.spacing(0, 2),
+        padding: '0 12px',
     },
     menuItem: {
+        display: 'flex',
         overflow: 'hidden',
-        alignItems: 'stretch',
+        alignItems: 'center',
         height: 36,
+        padding: '0 12px',
+    },
+    group: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
     },
     itemText: {
         flexDirection: 'row',
@@ -41,8 +50,18 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         overflow: 'hidden',
     },
+    itemCheckout: {
+        display: 'flex',
+        alignItems: 'center',
+    },
     divider: {
         margin: theme.spacing(1, 0),
+        width: 376,
+        position: 'relative',
+        left: 12,
+    },
+    rank: {
+        marginRight: 4,
     },
     name: {
         textOverflow: 'ellipsis',
@@ -52,7 +71,7 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: theme.spacing(0.5),
     },
     coinIcon: {
-        fontSize: 10,
+        marginRight: 4,
     },
     checkedIcon: {
         filter: 'drop-shadow(0px 4px 10px rgba(28, 104, 243, 0.2))',
@@ -86,12 +105,13 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, result, onSelect }) =>
         <>
             {options.map((x, i) => {
                 const selected = isEqual(x, result)
+                console.log({ x })
                 return (
-                    <MenuItem className={classes.menuItem} selected={selected} key={i} onClick={() => onSelect(x)}>
-                        {x.iconURL ? (
+                    <MenuItem className={classes.menuItem} key={i} onClick={() => onSelect(x)}>
+                        {x.logoURL ? (
                             <TokenIcon
                                 className={classes.coinIcon}
-                                logoURL={x.iconURL}
+                                logoURL={x.logoURL}
                                 address={x.address || ''}
                                 size={20}
                             />
@@ -106,13 +126,26 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, result, onSelect }) =>
                                 <span className={classes.name}>{x.name}</span>
                                 {x.symbol ? <span className={classes.symbol}>({x.symbol})</span> : null}
                             </Typography>
-                            {selected ? (
-                                <Icons.CheckCircle size={20} className={classes.checkedIcon} />
-                            ) : (
-                                <RadioButtonUncheckedIcon
-                                    style={{ fontSize: 20, color: theme.palette.maskColor.secondaryLine }}
-                                />
-                            )}
+                            <div className={classes.itemCheckout}>
+                                {options.length > 1 && x.rank ? (
+                                    <Typography
+                                        fontSize={14}
+                                        fontWeight={700}
+                                        flexGrow={1}
+                                        overflow="hidden"
+                                        className={classes.rank}
+                                        textOverflow="ellipsis">
+                                        #{x.rank}
+                                    </Typography>
+                                ) : null}
+                                {selected ? (
+                                    <Icons.CheckCircle size={20} className={classes.checkedIcon} />
+                                ) : (
+                                    <RadioButtonUncheckedIcon
+                                        style={{ fontSize: 20, color: theme.palette.maskColor.secondaryLine }}
+                                    />
+                                )}
+                            </div>
                         </Stack>
                     </MenuItem>
                 )
@@ -180,7 +213,7 @@ export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({
         ])
 
         return groups.map(([type, groupOptions]) => (
-            <div key={type}>
+            <div key={type} className={classes.group}>
                 <Typography className={classes.groupName}>{menuGroupNameMap[type]}</Typography>
                 <Divider className={classes.divider} />
                 <TokenMenuList options={groupOptions} result={result} onSelect={onSelect} />

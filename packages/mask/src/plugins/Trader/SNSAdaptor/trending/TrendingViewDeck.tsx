@@ -8,7 +8,7 @@ import { DataProvider } from '@masknet/public-api'
 import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity, DataProviderIcon } from '@masknet/shared'
 import { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles, MaskColors, MaskLightTheme } from '@masknet/theme'
+import { makeStyles, MaskColors, MaskLightTheme, MaskDarkTheme } from '@masknet/theme'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { formatCurrency, TokenType, resolveDataProviderName } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -276,14 +276,17 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                 onClick={() => setCoinMenuOpen((v) => !v)}>
                                                 <Icons.ArrowDrop size={24} className={classes.icon} />
                                             </IconButton>
-                                            <CoinMenu
-                                                open={coinMenuOpen}
-                                                anchorEl={titleRef.current}
-                                                optionList={resultList}
-                                                result={result}
-                                                onChange={setResult}
-                                                onClose={() => setCoinMenuOpen(false)}
-                                            />
+                                            <ThemeProvider
+                                                theme={theme.palette.mode === 'light' ? MaskLightTheme : MaskDarkTheme}>
+                                                <CoinMenu
+                                                    open={coinMenuOpen}
+                                                    anchorEl={titleRef.current}
+                                                    optionList={resultList}
+                                                    result={result}
+                                                    onChange={setResult}
+                                                    onClose={() => setCoinMenuOpen(false)}
+                                                />
+                                            </ThemeProvider>
                                         </>
                                     ) : null}
                                     {isBuyable ? (
