@@ -65,6 +65,6 @@ const CURRENCIES_MAP: Record<SourceType, undefined | TrendingAPI.Currency[]> = {
  * @param dataProvider
  * @returns
  */
-export function useCurrentCurrency(dataProvider: SourceType) {
-    return CURRENCIES_MAP[dataProvider]?.[0]
+export function useCurrentCurrency(dataProvider: SourceType | undefined) {
+    return dataProvider ? CURRENCIES_MAP[dataProvider]?.[0] : undefined
 }

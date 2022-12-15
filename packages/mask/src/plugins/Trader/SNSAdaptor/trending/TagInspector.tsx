@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import type { NonFungibleTokenResult, FungibleTokenResult } from '@masknet/web3-shared-base'
+import type { SearchResult } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { TrendingPopper } from './TrendingPopper.js'
 import { TrendingView } from './TrendingView.js'
@@ -11,13 +11,7 @@ export interface TagInspectorProps {}
 
 export function TagInspector(props: TagInspectorProps) {
     const createTrendingView = useCallback(
-        (
-            resultList: Array<
-                | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-                | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-            >,
-            reposition?: () => void,
-        ) => {
+        (resultList: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>, reposition?: () => void) => {
             return <TrendingViewWrapper resultList={resultList} reposition={reposition} />
         },
         [],
@@ -30,10 +24,7 @@ export function TagInspector(props: TagInspectorProps) {
 }
 
 interface TrendingViewWrapperProps {
-    resultList: Array<
-        | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    >
+    resultList: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     reposition?: () => void
 }
 

@@ -8,14 +8,7 @@ import {
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
-import {
-    NonFungibleTokenResult,
-    FungibleTokenResult,
-    SourceType,
-    createFungibleToken,
-    SearchResultType,
-    TokenType,
-} from '@masknet/web3-shared-base'
+import { SearchResult, SourceType, createFungibleToken, SearchResultType, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTList } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
@@ -105,18 +98,9 @@ const useStyles = makeStyles<{
 })
 
 export interface TrendingViewProps {
-    setResult: (
-        a:
-            | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-            | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
-    ) => void
-    result:
-        | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    resultList?: Array<
-        | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    >
+    setResult: (a: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) => void
+    result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    resultList?: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     isPreciseSearch?: boolean
     searchedContractAddress?: string
     expectedChainId?: Web3Helper.ChainIdAll
@@ -159,8 +143,11 @@ export function TrendingView(props: TrendingViewProps) {
     useEffect(() => setTabIndex(0), [networkType])
     // #endregion
     // #region merge trending
+
     const { value: { currency, trending } = {}, loading: loadingTrending } = useTrendingById(
-        result.type === SearchResultType.FungibleToken ? result.id || searchedContractAddress || '' : result.address,
+        result.type === SearchResultType.FungibleToken
+            ? result.id || searchedContractAddress || ''
+            : result.address || '',
         result.source,
         expectedChainId,
         searchedContractAddress,
@@ -288,7 +275,7 @@ export function TrendingView(props: TrendingViewProps) {
                 </Stack>
             </TabContext>
             <Stack sx={{ backgroundColor: theme.palette.maskColor.bottom }}>
-                {currentTab === ContentTabs.Market ? (
+                {currentTab === ContentTabs.Market && result.source ? (
                     <CoinMarketPanel dataProvider={result.source} trending={trending} />
                 ) : null}
                 {currentTab === ContentTabs.Price ? (
@@ -309,7 +296,7 @@ export function TrendingView(props: TrendingViewProps) {
                         </PriceChart>
                     </Box>
                 ) : null}
-                {currentTab === ContentTabs.Exchange ? (
+                {currentTab === ContentTabs.Exchange && result.source ? (
                     <Box p={2}>
                         <TickersTable tickers={tickers} coinType={coin.type} dataProvider={result.source} />
                     </Box>

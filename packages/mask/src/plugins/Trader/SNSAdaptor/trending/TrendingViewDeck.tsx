@@ -3,14 +3,7 @@ import { useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Box } from '@mui/system'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import {
-    NonFungibleTokenResult,
-    FungibleTokenResult,
-    SourceType,
-    formatCurrency,
-    TokenType,
-    resolveSourceTypeName,
-} from '@masknet/web3-shared-base'
+import { SourceType, SearchResult, formatCurrency, TokenType, resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity, DataProviderIcon } from '@masknet/shared'
 import { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -144,18 +137,9 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     stats: Stat[]
     currency: Currency
     trending: TrendingAPI.Trending
-    setResult: (
-        a:
-            | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-            | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
-    ) => void
-    result:
-        | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    resultList?: Array<
-        | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    >
+    setResult: (a: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) => void
+    result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    resultList?: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     children?: React.ReactNode
     isPreciseSearch?: boolean
     isPopper?: boolean
@@ -227,12 +211,14 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     gap={0.5}>
                                     <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
                                 </Stack>
-                                <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
-                                    <Typography className={classes.sourceName}>
-                                        {resolveSourceTypeName(result.source)}
-                                    </Typography>
-                                    <DataProviderIcon provider={result.source} size={20} />
-                                </Stack>
+                                {result.source ? (
+                                    <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
+                                        <Typography className={classes.sourceName}>
+                                            {resolveSourceTypeName(result.source)}
+                                        </Typography>
+                                        <DataProviderIcon provider={result.source} size={20} />
+                                    </Stack>
+                                ) : null}
                             </Box>
                         </PluginDescriptor>
                     )}
@@ -363,12 +349,14 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     gap={0.5}>
                                     <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
                                 </Stack>
-                                <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
-                                    <Typography className={classes.sourceName}>
-                                        {resolveSourceTypeName(result.source)}
-                                    </Typography>
-                                    <DataProviderIcon provider={result.source} size={20} />
-                                </Stack>
+                                {result.source ? (
+                                    <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
+                                        <Typography className={classes.sourceName}>
+                                            {resolveSourceTypeName(result.source)}
+                                        </Typography>
+                                        <DataProviderIcon provider={result.source} size={20} />
+                                    </Stack>
+                                ) : null}
                             </Box>
                         </PluginDescriptor>
                     </section>

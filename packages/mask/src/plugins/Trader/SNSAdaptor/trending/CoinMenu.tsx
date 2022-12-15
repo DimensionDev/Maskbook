@@ -2,7 +2,7 @@ import { FC, PropsWithChildren, useCallback, useMemo } from 'react'
 import { groupBy, toPairs, isEqual } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NonFungibleTokenResult, FungibleTokenResult } from '@masknet/web3-shared-base'
+import type { NonFungibleTokenResult, FungibleTokenResult, SearchResult } from '@masknet/web3-shared-base'
 import { TokenIcon } from '@masknet/shared'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
@@ -84,18 +84,9 @@ export interface CoinMenuOption {
     value: string
 }
 interface TokenMenuListProps {
-    options: Array<
-        | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    >
-    result:
-        | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    onSelect(
-        value:
-            | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-            | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
-    ): void
+    options: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    onSelect(value: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>): void
 }
 
 const TokenMenuList: FC<TokenMenuListProps> = ({ options, result, onSelect }) => {
@@ -156,18 +147,9 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, result, onSelect }) =>
 export interface CoinMenuProps {
     open: boolean
     anchorEl: HTMLElement | null
-    optionList: Array<
-        | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    >
-    result:
-        | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    onChange?: (
-        a:
-            | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-            | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
-    ) => void
+    optionList: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    onChange?: (a: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) => void
     onClose?: () => void
 }
 
@@ -201,10 +183,7 @@ export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({
         const groups: Array<
             [
                 type: SearchResultType.FungibleToken | SearchResultType.NonFungibleToken,
-                optionList: Array<
-                    | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-                    | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-                >,
+                optionList: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>,
             ]
         > = toPairs(groupBy(optionList, (x) => x.type)).map(([type, optionList]) => [
             type as SearchResultType.FungibleToken | SearchResultType.NonFungibleToken,

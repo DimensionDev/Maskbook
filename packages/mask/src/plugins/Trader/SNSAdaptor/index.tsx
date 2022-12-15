@@ -3,7 +3,6 @@ import { useState } from 'react'
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base.js'
 import { TrendingView } from './trending/TrendingView.js'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3State, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { TraderDialog } from './trader/TraderDialog.js'
 import { TagInspector } from './trending/TagInspector.js'
@@ -12,7 +11,7 @@ import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { SearchResultType, NonFungibleTokenResult, FungibleTokenResult } from '@masknet/web3-shared-base'
+import { SearchResultType } from '@masknet/web3-shared-base'
 
 const sns: Plugin.SNSAdaptor.Definition<
     ChainId,
@@ -33,12 +32,9 @@ const sns: Plugin.SNSAdaptor.Definition<
     SearchResultInspector: {
         ID: PluginID.Trader,
         UI: {
-            Content({ result: _resultList }) {
+            Content({ result: resultList }) {
                 const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-                const resultList = _resultList as Array<
-                    | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-                    | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-                >
+
                 const [result, setResult] = useState(resultList[0])
                 const { chainId, keyword, address, pluginID } = result
                 return (

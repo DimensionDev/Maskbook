@@ -13,7 +13,7 @@ import { useCurrentCurrency } from './useCurrentCurrency.js'
 
 export function useTrendingById(
     id: string,
-    dataProvider: SourceType,
+    dataProvider: SourceType | undefined,
     expectedChainId?: Web3Helper.ChainIdAll,
     searchedContractAddress?: string,
 ): AsyncState<{
@@ -29,6 +29,7 @@ export function useTrendingById(
     } = useAsync(async () => {
         if (!id) return null
         if (!currency) return null
+        if (!dataProvider) return null
         return PluginTraderRPC.getCoinTrending(chainId, id, currency, dataProvider).catch(() => null)
     }, [chainId, dataProvider, currency?.id, id])
 
