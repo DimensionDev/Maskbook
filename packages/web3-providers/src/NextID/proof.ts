@@ -107,7 +107,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             urlcat(BASE_URL, '/v1/proof', {
                 platform,
                 identity,
-                page,
+                page: page ?? 1,
                 exact: true,
                 sort: 'activated_at',
                 order: 'desc',
@@ -126,7 +126,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     ): Promise<NextIDPersonaBindings | null> {
         if (!platform && !identity) return null
 
-        const result = await this.queryExistedBindingByPlatform(platform, identity)
+        const result = await this.queryExistedBindingByPlatform(platform, identity, 1)
         return first(result) ?? null
     }
 
