@@ -1,8 +1,9 @@
 import { useCallback } from 'react'
-import type { DataProvider } from '@masknet/public-api'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
+import type { NonFungibleTokenResult, FungibleTokenResult } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { TagType } from '../../types/index.js'
 import { TrendingPopper } from './TrendingPopper.js'
 import { TrendingView } from './TrendingView.js'
@@ -14,18 +15,27 @@ export function TagInspector(props: TagInspectorProps) {
         (
             name: string,
             type: TagType,
-            dataProviders: DataProvider[],
-            dataProvider: DataProvider,
-            setDataProvider: (x: DataProvider) => void,
+            setResult: (
+                a:
+                    | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+                    | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
+            ) => void,
+            result:
+                | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+                | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
+            resultList?: Array<
+                | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+                | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+            >,
             reposition?: () => void,
         ) => {
             return (
                 <TrendingView
                     name={name}
                     tagType={type}
-                    dataProviders={dataProviders}
-                    dataProvider={dataProvider}
-                    setDataProvider={setDataProvider}
+                    setResult={setResult}
+                    result={result}
+                    resultList={resultList}
                     onUpdate={reposition}
                 />
             )
