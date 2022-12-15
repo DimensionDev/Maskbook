@@ -95,12 +95,6 @@ export enum SourceType {
     R2D2 = 'R2D2',
 }
 
-/** @deprecated use SearchResultType stead */
-export enum SearchKeywordType {
-    Address = 'Address',
-    Domain = 'Domain',
-}
-
 export enum SearchResultType {
     // e.g., 0x6a7122B831c2B79c508A978f73f2ee23171279B3
     EOA = 'EOA',
