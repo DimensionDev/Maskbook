@@ -47,6 +47,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     wrapperProps: {
         icon: (
             <Icons.CyberConnect
+                variant="light"
                 style={{ width: 24, height: 24, filter: 'drop-shadow(0px 6px 12px rgba(27, 144, 238, 0.2))' }}
             />
         ),
