@@ -5,26 +5,18 @@ import type { NonFungibleTokenResult, FungibleTokenResult } from '@masknet/web3-
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { DSearch } from '@masknet/web3-providers'
+import { TrendingAPI } from '@masknet/web3-providers/types'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useWeb3Connection } from '@masknet/web3-hooks-base'
 import { PluginTraderMessages } from '../../messages.js'
 import { WalletMessages } from '../../../Wallet/messages.js'
-import type { TagType } from '../../types/index.js'
 import { PluginTransakMessages } from '../../../Transak/messages.js'
 
 export interface TrendingPopperProps {
     children?: (
         name: string,
-        type: TagType,
-        setResult: (
-            a:
-                | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-                | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
-        ) => void,
-        result:
-            | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-            | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
-        resultList?: Array<
+        type: TrendingAPI.TagType,
+        resultList: Array<
             | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
             | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
         >,
@@ -41,25 +33,23 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const [freezed, setFreezed] = useState(false) // disable any click
     const [locked, setLocked] = useState(false) // state is updating, lock UI
     const [name, setName] = useState('')
-    const [type, setType] = useState<TagType | undefined>()
+    const [type, setType] = useState<TrendingAPI.TagType | undefined>()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const popper = useRef<HTMLDivElement | null>(null)
 
     const { value: _resultList } = useAsyncRetry(async () => {
-        if (!name || !connection?.getAddressType) return
-        const list = await DSearch.search(name, {
+        if (!name || !type || !connection?.getAddressType) return
+        const tag = type === TrendingAPI.TagType.CASH ? '$' : '#'
+        const list = await DSearch.search(`${tag}${name}`, {
             getAddressType: connection?.getAddressType,
         })
         return list
-    }, [name, connection?.getAddressType])
+    }, [name, type, connection?.getAddressType])
 
     const resultList = _resultList as Array<
         | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
         | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     >
-
-    const [result, setResult] = useState(resultList[0])
-
     // #region select token and provider dialog could be opened by trending view
     const onFreezed = useCallback((ev: { open: boolean }) => setFreezed(ev.open), [])
     useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated, onFreezed)
@@ -129,7 +119,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
                 {({ TransitionProps }) => (
                     <Fade in={Boolean(anchorEl)} {...TransitionProps}>
                         <div>
-                            {props.children?.(name, type, setResult, result, resultList, () =>
+                            {props.children?.(name, type, resultList, () =>
                                 setTimeout(() => popperRef.current?.update(), 100),
                             )}
                         </div>
