@@ -22,22 +22,13 @@ export namespace ContractAccountAPI {
      *  -- example tx: https://polygonscan.com/tx/0x7d381e3585d9b384e7ce6c910cccced02de0e29c02805a9286504f3067e09f4a
      */
     export interface Log {
-        block_number: number
-        /** e.g., 2022-12-14 09:40:28 */
-        block_timestamp: string
         transaction_hash: string
-        transaction_index: number
-        log_index: number
         /** the address of contract account */
         address: string
-        data: string
-        topics_count: number
         /** topic signature */
         topic0: string
         /** the previous owner address */
         topic1: string
-        /** the new owner address */
-        topic2: string
     }
 
     export interface Provider<T extends NetworkPluginID> {
