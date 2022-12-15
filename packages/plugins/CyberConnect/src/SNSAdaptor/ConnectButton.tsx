@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react'
 import { useAsync } from 'react-use'
-import { makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useWeb3, useNetworkContext } from '@masknet/web3-hooks-base'
@@ -16,6 +16,12 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         fontSize: 12,
         padding: '8px 12px',
+        backgroundColor: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.white,
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.white,
+        },
     },
     wallet: {
         padding: '8px 12px',
@@ -39,13 +45,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export default function ConnectButton({
-    address,
-    refreshFollowList,
-}: {
-    address: string
-    refreshFollowList: () => void
-}) {
+export default function ConnectButton({ address }: { address: string }) {
     const t = useI18N()
     const { classes, cx } = useStyles()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
@@ -77,7 +77,6 @@ export default function ConnectButton({
                 .connect(address)
                 .then(() => {
                     setFollowing(true)
-                    refreshFollowList()
                 })
                 .finally(() => setLoading(false))
         } else {
@@ -85,7 +84,6 @@ export default function ConnectButton({
                 .disconnect(address)
                 .then(() => {
                     setFollowing(false)
-                    refreshFollowList()
                 })
                 .finally(() => setLoading(false))
         }
@@ -97,12 +95,13 @@ export default function ConnectButton({
                 hideRiskWarningConfirmed
                 ActionButtonProps={{ variant: 'roundedDark' }}
                 classes={{ button: classes.wallet }}>
-                <Button
+                <ActionButton
+                    loading={isLoading}
                     className={cx(classes.button, { [classes.isFollowing]: isFollowing })}
                     onClick={handleClick}
                     variant="roundedContained">
                     {!isFollowing ? t.follow_now() : t.unfollow()}
-                </Button>
+                </ActionButton>
             </WalletConnectedBoundary>
         )
     }
