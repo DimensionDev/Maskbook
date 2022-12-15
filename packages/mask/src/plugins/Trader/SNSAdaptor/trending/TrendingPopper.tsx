@@ -14,8 +14,6 @@ import { PluginTransakMessages } from '../../../Transak/messages.js'
 
 export interface TrendingPopperProps {
     children?: (
-        name: string,
-        type: TrendingAPI.TagType,
         resultList: Array<
             | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
             | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
@@ -119,9 +117,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
                 {({ TransitionProps }) => (
                     <Fade in={Boolean(anchorEl)} {...TransitionProps}>
                         <div>
-                            {props.children?.(name, type, resultList, () =>
-                                setTimeout(() => popperRef.current?.update(), 100),
-                            )}
+                            {props.children?.(resultList, () => setTimeout(() => popperRef.current?.update(), 100))}
                         </div>
                     </Fade>
                 )}

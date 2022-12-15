@@ -5,7 +5,6 @@ import { base } from '../base.js'
 import { TrendingView } from './trending/TrendingView.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3State, Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { TrendingAPI } from '@masknet/web3-providers/types'
 import { TraderDialog } from './trader/TraderDialog.js'
 import { TagInspector } from './trending/TagInspector.js'
 import { enhanceTag } from './cashTag.js'
@@ -50,13 +49,7 @@ const sns: Plugin.SNSAdaptor.Definition<
                         }}>
                         <TrendingView
                             isPopper={false}
-                            name={name}
                             setResult={setResult}
-                            tagType={
-                                type === SearchResultType.FungibleToken
-                                    ? TrendingAPI.TagType.CASH
-                                    : TrendingAPI.TagType.HASH
-                            }
                             result={result}
                             resultList={resultList}
                             expectedChainId={chainId ?? ChainId.Mainnet}

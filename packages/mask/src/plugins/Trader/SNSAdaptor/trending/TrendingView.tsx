@@ -28,7 +28,6 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../../utils/index.js'
 import { usePriceStats } from '../../trending/usePriceStats.js'
 import { useTrendingById } from '../../trending/useTrending.js'
-import type { TagType } from '../../types/index.js'
 import { TradeView } from '../trader/TradeView.js'
 import { CoinMarketPanel } from './CoinMarketPanel.js'
 import { PriceChart } from './PriceChart.js'
@@ -106,8 +105,6 @@ const useStyles = makeStyles<{
 })
 
 export interface TrendingViewProps {
-    name: string
-    tagType: TagType
     setResult: (
         a:
             | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
@@ -137,8 +134,6 @@ enum ContentTabs {
 
 export function TrendingView(props: TrendingViewProps) {
     const {
-        name,
-        tagType,
         isPopper = true,
         searchedContractAddress,
         isPreciseSearch,
