@@ -1,6 +1,5 @@
 import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
-import { resolveCrossOriginURL } from '@masknet/web3-shared-base'
 import { RSS3API } from '../RSS3/index.js'
 import { MASK_X_DEFAULT_PAGINATION, MASK_X_ROOT_URL } from './constants.js'
 import { MaskX_BaseAPI } from '../entry-types.js'
@@ -9,7 +8,7 @@ export class MaskX_API implements MaskX_BaseAPI.Provider {
     private RSS3 = new RSS3API()
 
     private async fetchFromMaskX(pathname: string) {
-        const response = await fetch(resolveCrossOriginURL(urlcat(MASK_X_ROOT_URL, pathname))!)
+        const response = await fetch(urlcat(MASK_X_ROOT_URL, pathname))
         const json = await response.json()
         return json as MaskX_BaseAPI.Response
     }

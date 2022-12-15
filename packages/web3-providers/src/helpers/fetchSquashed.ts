@@ -10,6 +10,10 @@ const DB = new Map<
 const RULES = [
     // NextID proofs API
     'https://proof-service.nextnext.id/v1/proof',
+    // mask-x
+    'https://7x16bogxfb.execute-api.us-east-1.amazonaws.com',
+    // twitter-identity
+    'https://mr8asf7i4h.execute-api.us-east-1.amazonaws.com',
 ]
 
 export async function fetchSquashed(
