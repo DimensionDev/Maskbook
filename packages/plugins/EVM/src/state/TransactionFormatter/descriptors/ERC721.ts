@@ -6,7 +6,7 @@ import type { TransactionDescriptor } from '../types.js'
 
 export class ERC721Descriptor implements TransactionDescriptor {
     async getContractSymbol(chainId: ChainId, address: string) {
-        const connection = await Web3StateSettings.value.Connection?.getConnection?.({
+        const connection = Web3StateSettings.value.Connection?.getConnection?.({
             chainId,
         })
         const contract = await connection?.getNonFungibleTokenContract(address)

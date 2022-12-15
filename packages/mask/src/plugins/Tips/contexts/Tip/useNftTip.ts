@@ -21,7 +21,7 @@ export function useNftTip<T extends NetworkPluginID>(
         },
     }
     const [{ loading: isTransferring }, sendTip] = useAsyncFn(async () => {
-        const connection = await Connection?.getConnection?.()
+        const connection = Connection?.getConnection?.()
         if (!connection || !contractAddress) return
         if (pluginID === NetworkPluginID.PLUGIN_EVM && !tokenId) return
         const txid = await connection.transferNonFungibleToken(

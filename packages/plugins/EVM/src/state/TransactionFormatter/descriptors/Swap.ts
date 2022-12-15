@@ -23,7 +23,7 @@ export class SwapDescriptor implements TransactionDescriptor {
         )
         if (!context.methods?.find((x) => x.name)) return
 
-        const connection = await Web3StateSettings.value.Connection?.getConnection?.({
+        const connection = Web3StateSettings.value.Connection?.getConnection?.({
             chainId: context.chainId,
         })
         const nativeToken = await connection?.getNativeToken({ chainId: context.chainId })

@@ -10,7 +10,7 @@ export class ERC20Descriptor implements TransactionDescriptor {
         const context = context_ as TransactionContext<ChainId, string | undefined>
         if (!context.methods?.length) return
 
-        const connection = await Web3StateSettings.value.Connection?.getConnection?.({
+        const connection = Web3StateSettings.value.Connection?.getConnection?.({
             chainId: context.chainId,
         })
         for (const method of context.methods) {

@@ -39,7 +39,7 @@ export function getCrossChainBridge(t: Record<string, () => string>) {
             ID: `${PLUGIN_ID}_polygon_bridge`,
             isOfficial: true,
             icon: <PolygonBridgeIcon />,
-            link: 'https://wallet.polygon.technology/bridge/',
+            link: 'https://wallet.polygon.technology/polygon/bridge/',
         },
         {
             name: 'Rainbow Bridge',

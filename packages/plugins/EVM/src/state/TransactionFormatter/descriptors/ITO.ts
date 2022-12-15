@@ -9,7 +9,7 @@ import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } fr
 
 export class ITODescriptor extends DescriptorWithTransactionDecodedReceipt implements TransactionDescriptor {
     async getClaimTokenInfo(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
-        const connection = await Web3StateSettings.value.Connection?.getConnection?.({
+        const connection = Web3StateSettings.value.Connection?.getConnection?.({
             chainId,
         })
         const events = await this.getReceipt(chainId, contractAddress, ITO_ABI as AbiItem[], hash)
@@ -35,7 +35,7 @@ export class ITODescriptor extends DescriptorWithTransactionDecodedReceipt imple
         if (!isSameAddress(context.to, ITO2_CONTRACT_ADDRESS)) return
         const method = context.methods?.find((x) => ['fill_pool', 'swap', 'claim', 'destruct'].includes(x.name ?? ''))
         if (method?.name === 'fill_pool') {
-            const connection = await Web3StateSettings.value.Connection?.getConnection?.({
+            const connection = Web3StateSettings.value.Connection?.getConnection?.({
                 chainId: context.chainId,
                 account: context.from,
             })

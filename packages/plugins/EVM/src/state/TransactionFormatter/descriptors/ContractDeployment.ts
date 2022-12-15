@@ -5,7 +5,7 @@ import { Web3StateSettings } from '../../../settings/index.js'
 
 export class ContractDeploymentDescriptor {
     async compute(context: TransactionContext<ChainId, TransactionParameter>) {
-        const connection = await Web3StateSettings.value.Connection?.getConnection?.({
+        const connection = Web3StateSettings.value.Connection?.getConnection?.({
             chainId: context.chainId,
         })
 
