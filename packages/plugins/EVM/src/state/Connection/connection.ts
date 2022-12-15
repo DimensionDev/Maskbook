@@ -106,6 +106,8 @@ class Connection implements EVM_Connection {
                                             options.chainId,
                                             options.providerType,
                                             options.account,
+                                            options.owner,
+                                            options.identifier,
                                         ),
                                     )
                                     break
@@ -692,7 +694,7 @@ class Connection implements EVM_Connection {
         initial?: EVM_Web3ConnectionOptions,
     ) {
         const options = this.getOptions(initial)
-        const web3 = await this.getWeb3(options)
+        const web3 = this.getWeb3(options)
         return createContract<T>(web3, address, ABI)
     }
 
@@ -882,7 +884,7 @@ class Connection implements EVM_Connection {
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction>,
     ) {
         const options = this.getOptions(initial)
-        const web3 = await this.getWeb3(options)
+        const web3 = this.getWeb3(options)
         const dataToSign = await web3.eth.personal.ecRecover(dataToVerify, signature)
         return dataToSign === dataToVerify
     }

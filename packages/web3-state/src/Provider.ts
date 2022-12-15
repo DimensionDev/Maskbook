@@ -2,7 +2,7 @@ import { clone, first } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import { getSiteType, mapSubscription, mergeSubscription, StorageObject } from '@masknet/shared-base'
+import { ECKeyIdentifier, getSiteType, mapSubscription, mergeSubscription, StorageObject } from '@masknet/shared-base'
 import type { Account, WalletProvider, ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
 
 export interface ProviderStorage<Account, ProviderType extends string> {
@@ -152,11 +152,17 @@ export class ProviderState<
         return this.providers[providerType].readyPromise
     }
 
-    async connect(chainId: ChainId, providerType: ProviderType, address?: string) {
+    async connect(
+        chainId: ChainId,
+        providerType: ProviderType,
+        address?: string,
+        owner?: string,
+        identifier?: ECKeyIdentifier,
+    ) {
         const provider = this.providers[providerType]
 
         // compose the connection result
-        const result = await provider.connect(chainId, address)
+        const result = await provider.connect(chainId, address, owner, identifier)
 
         // failed to connect provider
         if (!result.account) throw new Error('Failed to connect provider.')

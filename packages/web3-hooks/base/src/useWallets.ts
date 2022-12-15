@@ -8,5 +8,6 @@ export function useWallets<T extends NetworkPluginID>(
     providerType?: Web3Helper.Definition[T]['ProviderType'],
 ) {
     const { Wallet } = useWeb3State(pluginID)
+
     return useSubscription(Wallet?.wallets ?? EMPTY_ARRAY)
 }

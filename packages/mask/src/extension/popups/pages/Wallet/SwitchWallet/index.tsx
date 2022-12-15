@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { Button, List } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { ECKeyIdentifier, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { MAX_WALLET_LIMIT } from '@masknet/shared'
-import { useWallet, useWallets, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet, useWallets, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { WalletItem } from './WalletItem.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { Services } from '../../../../service.js'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
     content: {
@@ -56,7 +57,7 @@ const SwitchWallet = memo(() => {
     const navigate = useNavigate()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
-
+    const { setChainId } = useChainContext()
     const handleClickCreate = useCallback(() => {
         if (!wallets.filter((x) => x.hasDerivationPath).length) {
             browser.tabs.create({
@@ -69,10 +70,15 @@ const SwitchWallet = memo(() => {
     }, [wallets, history])
 
     const handleSelect = useCallback(
-        async (address: string | undefined) => {
+        async (
+            address: string | undefined,
+            options?: { chainId: ChainId; owner?: string; identifier?: ECKeyIdentifier },
+        ) => {
             await connection?.connect({
                 account: address,
+                ...options,
             })
+            if (options?.chainId) setChainId(options.chainId)
             navigate(PopupRoutes.Wallet, { replace: true })
         },
         [history, connection],
@@ -86,7 +92,14 @@ const SwitchWallet = memo(() => {
                         <WalletItem
                             key={index}
                             wallet={item}
-                            onClick={() => handleSelect(item.address)}
+                            onClick={() =>
+                                handleSelect(
+                                    item.address,
+                                    item.owner
+                                        ? { chainId: ChainId.Mumbai, owner: item.owner, identifier: item.identifier }
+                                        : undefined,
+                                )
+                            }
                             isSelected={isSameAddress(item.address, wallet?.address)}
                         />
                     ))}

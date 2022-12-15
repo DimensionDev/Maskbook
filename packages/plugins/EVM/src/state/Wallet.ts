@@ -9,7 +9,7 @@ import {
     createSubscriptionFromValueRef,
 } from '@masknet/shared-base'
 import { SmartPayAccount } from '@masknet/web3-providers'
-import type { Wallet as WalletItem } from '@masknet/web3-shared-base'
+import { isSameAddress, Wallet as WalletItem } from '@masknet/web3-shared-base'
 import { ChainId, formatEthereumAddress, ProviderType, Transaction } from '@masknet/web3-shared-evm'
 
 export class Wallet extends WalletState<ProviderType, Transaction> {
@@ -41,26 +41,38 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
     private setupSubscriptions() {
         const update = async () => {
             const wallets = this.context.wallets.getCurrentValue()
-
+            const allPersonas = await Promise.all(
+                this.context.allPersonas?.getCurrentValue()?.map(async (x) => {
+                    const { address } = await this.context.generateSignResult(x.identifier, '')
+                    return {
+                        ...x,
+                        address,
+                    }
+                }) ?? [],
+            )
             if (this.providerType === ProviderType.MaskWallet) {
-                const accounts = await SmartPayAccount.getAccountsByOwners(
-                    ChainId.Matic,
-                    wallets.map((x) => x.address),
-                )
+                const accounts = await SmartPayAccount.getAccountsByOwners(ChainId.Mumbai, [
+                    ...wallets.map((x) => x.address),
+                    ...allPersonas.map((x) => x.address),
+                ])
                 const now = new Date()
                 this.ref.value = [
                     ...wallets,
-                    ...accounts.map((x) => ({
-                        id: x.address,
-                        name: 'Smart Pay',
-                        address: x.address,
-                        hasDerivationPath: false,
-                        hasStoredKeyInfo: false,
-                        configurable: true,
-                        createdAt: now,
-                        updatedAt: now,
-                        owner: x.owner,
-                    })),
+                    ...accounts
+                        .filter((x) => x.funded || x.deployed)
+                        .map((x) => ({
+                            id: x.address,
+                            name: 'Smart Pay',
+                            address: x.address,
+                            hasDerivationPath: false,
+                            hasStoredKeyInfo: false,
+                            configurable: true,
+                            createdAt: now,
+                            updatedAt: now,
+                            owner: x.owner,
+                            identifier: allPersonas.find((persona) => isSameAddress(x.owner, persona.address))
+                                ?.identifier,
+                        })),
                 ]
             } else {
                 this.ref.value = wallets
