@@ -15,7 +15,7 @@ export function useTokenTip<T extends NetworkPluginID>(
     const { Connection } = useWeb3State<'all'>(pluginID)
     const { account } = useChainContext()
     const [{ loading: isTransferring }, sendTip] = useAsyncFn(async () => {
-        const connection = await Connection?.getConnection?.()
+        const connection = Connection?.getConnection?.()
         if (!token?.address || !connection) return
         const connectionOptions = {
             account,

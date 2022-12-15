@@ -38,7 +38,7 @@ export class Token extends TokenState<ChainId, SchemaType> {
         const fungibleTokenListByChainFromStorage = fungibleTokenListFromStorage?.[chainId]
 
         if (!fungibleTokenListByChainFromStorage) {
-            const hub = await Web3StateSettings.value.Hub?.getHub?.({
+            const hub = Web3StateSettings.value.Hub?.getHub?.({
                 chainId,
             })
             const fungibleTokenList = await hub?.getFungibleTokensFromTokenList?.(chainId)
@@ -66,7 +66,7 @@ export class Token extends TokenState<ChainId, SchemaType> {
         const nonFungibleTokenListByChainFromStorage = nonFungibleTokenListFromStorage?.[chainId]
 
         if (!nonFungibleTokenListByChainFromStorage) {
-            const hub = await Web3StateSettings.value.Hub?.getHub?.({
+            const hub = Web3StateSettings.value.Hub?.getHub?.({
                 chainId,
             })
             const nonFungibleTokenList = await hub?.getNonFungibleTokensFromTokenList?.(chainId)
