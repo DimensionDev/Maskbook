@@ -42,11 +42,12 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const activatedPlugins = useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode()
 
     const resultList = useAsyncRetry(async () => {
-        if (!keyword || !connection?.getAddressType) return
+        if (!keyword || !connection?.getAddressType || !activatedPlugins.length) return
         return DSearch.search(keyword, {
             getAddressType: connection?.getAddressType,
         })
-    }, [keyword, connection?.getAddressType])
+    }, [keyword, connection?.getAddressType, activatedPlugins.length])
+
     const contentComponent = useMemo(() => {
         if (!resultList.value?.length) return null
         const Component = getSearchResultContent(resultList.value[0])
