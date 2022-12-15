@@ -21,6 +21,39 @@ export function createSignableWeb3(provider: Provider, keys: string[]) {
     return web3
 }
 
+export function createJsonRpcPayload(id: number, requestArguments: RequestArguments): JsonRpcPayload {
+    return {
+        jsonrpc: '2.0',
+        id,
+        method: requestArguments.method,
+        params: requestArguments.params,
+    }
+}
+
+export function createJsonRpcResponse<T>(id: number, result?: T, error?: Error): JsonRpcResponse {
+    return {
+        jsonrpc: '2.0',
+        id,
+        result,
+        error,
+    }
+}
+
+export function createWeb3Request(
+    send: (payload: JsonRpcPayload, callback: (error: Error | null, response?: JsonRpcResponse) => void) => void,
+): <T>(requestArguments: RequestArguments) => Promise<T> {
+    return <T>(requestArguments: RequestArguments) =>
+        new Promise<T>((resolve, reject) => {
+            send(createJsonRpcPayload(0, requestArguments), (error, response) => {
+                if (error) {
+                    reject(error)
+                    return
+                }
+                resolve(response?.result)
+            })
+        })
+}
+
 export function createWeb3Provider(request: <T>(requestArguments: RequestArguments) => Promise<T>): Web3Provider {
     const provider: Web3Provider = {
         on() {
@@ -45,23 +78,11 @@ export function createWeb3Provider(request: <T>(requestArguments: RequestArgumen
                     method: payload.method,
                     params: payload.params,
                 })
-                callback(null, {
-                    jsonrpc: '2.0',
-                    id: String(payload.id),
-                    result,
-                })
-                return {
-                    jsonrpc: '2.0',
-                    id: String(payload.id),
-                    result,
-                }
+                callback(null, createJsonRpcResponse(payload.id as number, result))
+                return createJsonRpcResponse(payload.id as number, result)
             } catch (error) {
                 if (error instanceof Error) callback(error)
-                return {
-                    jsonrpc: '2.0',
-                    id: String(payload.id),
-                    error: error as Error,
-                }
+                return createJsonRpcResponse(payload.id as number, undefined, error as Error)
             }
         },
     }
