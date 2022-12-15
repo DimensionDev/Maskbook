@@ -9,7 +9,6 @@ import {
     PersonaInformation,
     resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
-import { NextIDProof } from '@masknet/web3-providers'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import Services from '../../extension/service.js'
 import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../../shared/legacy-settings/settings.js'
@@ -19,6 +18,7 @@ import { useLastRecognizedIdentity } from './useActivatedUI.js'
 import { usePersonasFromDB } from './usePersonasFromDB.js'
 import { PluginNextIDMessages } from '../../plugins/NextID/messages.js'
 import { MaskMessages, useI18N } from '../../utils/index.js'
+import { usePersonaProofs } from '@masknet/shared'
 
 const createPersona = () => {
     Services.Helper.openDashboard(DashboardRoutes.Setup)
@@ -134,13 +134,19 @@ export function useCurrentPersonaConnectStatus() {
         [setPersonaSelectPanelDialog],
     )
 
+    const currentPersona = useMemo(
+        () => personas.find((x) => isSamePersona(x, currentIdentifier)),
+        [currentIdentifier, personas.length],
+    )
+
+    const { value: proofs } = usePersonaProofs(currentPersona?.identifier.publicKeyAsHex, MaskMessages)
+
     const {
         value = defaultStatus,
         loading,
         error,
         retry,
     } = useAsyncRetry<PersonaConnectStatus>(async () => {
-        const currentPersona = personas.find((x) => isSamePersona(x, currentIdentifier))
         const currentProfile = currentPersona?.linkedProfiles.find((x) =>
             isSameProfile(x.identifier, lastRecognized.identifier),
         )
@@ -167,13 +173,8 @@ export function useCurrentPersonaConnectStatus() {
 
         // handle had persona and connected current sns, then check the nextID
         try {
-            const nextIDInfo = await NextIDProof.queryExistedBindingByPersona(
-                currentPersona?.identifier.publicKeyAsHex,
-                false,
-            )
-            const verifiedProfile = nextIDInfo?.proofs.find(
+            const verifiedProfile = proofs?.find(
                 (x) =>
-                    // TODO: should move to next id api center, link the MF-1845
                     isSameProfile(resolveNextIDIdentityToProfile(x.identity, x.platform), currentProfile?.identifier) &&
                     x.is_valid,
             )
@@ -184,7 +185,7 @@ export function useCurrentPersonaConnectStatus() {
                 connected: true,
                 hasPersona: true,
                 verified: !!verifiedProfile,
-                proof: nextIDInfo?.proofs,
+                proof: proofs,
             }
         } catch {
             return {
@@ -195,15 +196,14 @@ export function useCurrentPersonaConnectStatus() {
             }
         }
     }, [
-        currentIdentifier,
-        personas,
+        currentPersona,
         lastRecognized.identifier?.toText(),
         activatedSocialNetworkUI,
         create,
         openPersonListDialog,
+        proofs?.length,
     ])
 
-    useEffect(() => MaskMessages.events.ownProofChanged.on(retry), [retry])
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])
 
     return { value, loading, retry, error }
