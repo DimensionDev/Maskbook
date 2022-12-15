@@ -18,7 +18,7 @@ export class Base implements Translator {
             }
 
             // add gas price
-            const hub = await Web3StateSettings.value.Hub?.getHub?.({
+            const hub = Web3StateSettings.value.Hub?.getHub?.({
                 chainId: context.chainId,
             })
             const options = await hub?.getGasOptions?.(context.chainId)
