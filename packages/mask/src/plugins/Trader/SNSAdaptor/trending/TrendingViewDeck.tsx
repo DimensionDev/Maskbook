@@ -178,7 +178,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const { t } = useI18N()
     const theme = useTheme()
     const { classes } = useStyles({ isPopper }, { props })
-    console.log({ resultList })
     const isNFT = coin.type === TokenType.NonFungible
 
     // #region buy
