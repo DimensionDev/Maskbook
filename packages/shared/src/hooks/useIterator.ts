@@ -54,6 +54,7 @@ export function useIterator<T>(
             next,
             done,
             loading,
+            value: data,
         }
     }
 

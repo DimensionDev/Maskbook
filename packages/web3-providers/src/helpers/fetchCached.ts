@@ -16,7 +16,9 @@ const RULES = {
     'https://kv.r2d2.to/api/com.maskbook': Duration.SHORT,
     'https://discovery.attrace.com': Duration.SHORT,
     // mask-x
-    '7x16bogxfb.execute-api.us-east-1.amazonaws.com': Duration.SHORT,
+    'https://7x16bogxfb.execute-api.us-east-1.amazonaws.com': Duration.SHORT,
+    // twitter-identity
+    'https://mr8asf7i4h.execute-api.us-east-1.amazonaws.com': Duration.SHORT,
     // coingecko
     'https://coingecko-agent.r2d2.to/api/v3': Duration.SHORT,
     // chainbase ENS

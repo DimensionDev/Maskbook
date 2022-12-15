@@ -52,6 +52,7 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center'>()((t
         color: theme.palette.maskColor.main,
         lineHeight: '18px',
         marginLeft: theme.spacing(1.5),
+        overflow: 'auto',
     },
     title: {
         fontWeight: 700,

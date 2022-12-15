@@ -1,5 +1,3 @@
-import type { ChainId } from '@masknet/web3-shared-evm'
-
 export namespace FunderAPI {
     export interface Payload {
         twitterHandler: string
@@ -43,13 +41,12 @@ export namespace FunderAPI {
         WalletAddress = 'walletAddress',
     }
 
-    export interface Provider {
-        /** Get all supported chain ids. */
-        getSupportedChainIds(): Promise<ChainId[]>
+    export interface Provider<ChainId> {
+        getRemainFrequency(handler: string): Promise<number>
+        getOperationsByOwner(chainId: ChainId, owner: string): Promise<Operation[]>
         /** Fund token for a NextID public-derived EOA account. */
         fund(chainId: ChainId, proof: Proof): Promise<Fund>
+        /** Verify whether if a whitelisted user account */
         verify(handler: string): Promise<boolean>
-        queryRemainFrequency(handler: string): Promise<number>
-        queryOperationByOwner(owner: string): Promise<Operation[]>
     }
 }

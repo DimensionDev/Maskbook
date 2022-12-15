@@ -1,6 +1,6 @@
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { PluginCyberConnectRPC } from '../messages.js'
-import { Box, Link, Skeleton, Stack, Tab, Typography } from '@mui/material'
+import { Box, Link, Stack, Tab, Typography } from '@mui/material'
 import ConnectButton from './ConnectButton.js'
 import { useAsyncRetry } from 'react-use'
 import Avatar from 'boring-avatars'
@@ -177,30 +177,26 @@ const Profile = ({ url }: { url: string }) => {
                     </Stack>
                 </Stack>
 
-                {!identity ? (
-                    <Skeleton width="100%" height={400} />
-                ) : (
-                    <Stack className={classes.follow}>
-                        <MaskTabList variant="base" onChange={onChange} aria-label="CyberConnection">
-                            <Tab
-                                label={t.followings()}
-                                value={tabs.Followings}
-                                className={tabs.Followings === currentTab ? classes.tabActive : classes.tab}
-                            />
-                            <Tab
-                                label={t.followers()}
-                                value={tabs.Followers}
-                                className={tabs.Followers === currentTab ? classes.tabActive : classes.tab}
-                            />
-                        </MaskTabList>
-                        <TabPanel value={tabs.Followings} className={classes.panel}>
-                            <FollowersPage hint={<Nodata />} address={identity.address} tab={ProfileTab.Followings} />
-                        </TabPanel>
-                        <TabPanel value={tabs.Followers} className={classes.panel}>
-                            <FollowersPage hint={<Nodata />} address={identity.address} tab={ProfileTab.Followers} />
-                        </TabPanel>
-                    </Stack>
-                )}
+                <Stack className={classes.follow}>
+                    <MaskTabList variant="base" onChange={onChange} aria-label="CyberConnection">
+                        <Tab
+                            label={t.followings()}
+                            value={tabs.Followings}
+                            className={tabs.Followings === currentTab ? classes.tabActive : classes.tab}
+                        />
+                        <Tab
+                            label={t.followers()}
+                            value={tabs.Followers}
+                            className={tabs.Followers === currentTab ? classes.tabActive : classes.tab}
+                        />
+                    </MaskTabList>
+                    <TabPanel value={tabs.Followings} className={classes.panel}>
+                        <FollowersPage hint={<Nodata />} address={identity?.address} tab={ProfileTab.Followings} />
+                    </TabPanel>
+                    <TabPanel value={tabs.Followers} className={classes.panel}>
+                        <FollowersPage hint={<Nodata />} address={identity?.address} tab={ProfileTab.Followers} />
+                    </TabPanel>
+                </Stack>
             </div>
         </TabContext>
     )
