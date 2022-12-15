@@ -1,4 +1,3 @@
-import { FungibleTokenResult, NonFungibleCollectionResult } from '@masknet/web3-shared-base'
 import { describe, expect, test } from 'vitest'
 import { DSearchAPI } from '../../src/DSearch/index.js'
 
@@ -70,7 +69,7 @@ describe('DSearch test', () => {
         const result = await DSearch.searchToken('twitter:mathcastles')
 
         expect(result.length).toBe(1)
-        expect((result[0] as NonFungibleCollectionResult<any, any>)?.name).toBe('Terraforms')
+        expect(result[0]?.name).toBe('Terraforms')
     })
 
     test('should return all the data without prefix', async () => {
@@ -78,10 +77,10 @@ describe('DSearch test', () => {
         const result = await DSearch.searchToken('eth')
 
         expect(result.length).toBe(5)
-        expect((result[0] as FungibleTokenResult<any, any>)?.name).toBe('eth1')
-        expect((result[1] as FungibleTokenResult<any, any>)?.name).toBe('eth1')
-        expect((result[2] as FungibleTokenResult<any, any>)?.name).toBe('ethInCMC')
-        expect((result[3] as FungibleTokenResult<any, any>)?.name).toBe('ethInCoinGecko')
-        expect((result[4] as NonFungibleCollectionResult<any, any>)?.name).toBe('TestEth')
+        expect(result[0]?.name).toBe('eth1')
+        expect(result[1]?.name).toBe('eth1')
+        expect(result[2]?.name).toBe('ethInCMC')
+        expect(result[3]?.name).toBe('ethInCoinGecko')
+        expect(result[4]?.name).toBe('TestEth')
     })
 })

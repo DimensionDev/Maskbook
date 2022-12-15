@@ -119,7 +119,13 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
      */
     async searchToken(
         keyword: string,
-    ): Promise<Array<FungibleTokenResult<ChainId, SchemaType> | NonFungibleTokenResult<ChainId, SchemaType>>> {
+    ): Promise<
+        Array<
+            | NonFungibleCollectionResult<ChainId, SchemaType>
+            | FungibleTokenResult<ChainId, SchemaType>
+            | NonFungibleTokenResult<ChainId, SchemaType>
+        >
+    > {
         const { word, field } = this.parseKeyword(keyword)
         const data = await this.init()
 
