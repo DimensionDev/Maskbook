@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
-import { TokenType, SourceType, attemptUntil } from '@masknet/web3-shared-base'
+import { TokenType, SourceType } from '@masknet/web3-shared-base'
 import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
 import { COIN_RECOMMENDATION_SIZE } from '../../Trending/constants.js'
@@ -28,8 +28,6 @@ const resolveNFTScanRange = createLookupTableResolver<TrendingAPI.Days, EVM.Coll
     // NFTScan will discard range unrecognized range
     () => '1d',
 )
-
-const NFTSCAN_CHAIN_ID_LIST = [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
 
 export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     private looksrare = new LooksRareAPI()
@@ -110,28 +108,15 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinTrending(
-        chainId_: ChainId,
+        chainId: ChainId,
         /** address as id */ id: string,
         currency: TrendingAPI.Currency,
     ): Promise<TrendingAPI.Trending> {
-        const result = chainId_
-            ? { collection: await this.getCollection(chainId_, id), chainId: chainId_ }
-            : await attemptUntil(
-                  NFTSCAN_CHAIN_ID_LIST.map((chainId) => async () => {
-                      try {
-                          const collection = await this.getCollection(chainId, id)
-                          if (!collection?.contract_address) return undefined
-                          return { collection, chainId }
-                      } catch {
-                          return undefined
-                      }
-                  }),
-                  undefined,
-              )
-        if (!result?.collection) {
+        const collection = await this.getCollection(chainId, id)
+
+        if (!collection) {
             throw new Error(`NFTSCAN: Can not find token by address ${id}`)
         }
-        const { collection, chainId } = result
         const address = collection.contract_address
         const [symbol, openseaStats, looksrareStats] = await Promise.all([
             getContractSymbol(id, chainId),

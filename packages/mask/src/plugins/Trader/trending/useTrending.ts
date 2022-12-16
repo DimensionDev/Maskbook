@@ -1,18 +1,19 @@
 import { useAsync, useAsyncRetry } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
-import { SourceType, SearchResultType, TokenType } from '@masknet/web3-shared-base'
+import { SourceType, TokenType, attemptUntil } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import { PluginTraderRPC } from '../messages.js'
 import type { Coin } from '../types/index.js'
 import { useCurrentCurrency } from './useCurrentCurrency.js'
 
+const NFTSCAN_CHAIN_ID_LIST = [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
+
 export function useTrendingById(
     id: string,
-    searchType: SearchResultType,
     dataProvider: SourceType | undefined,
     expectedChainId?: Web3Helper.ChainIdAll,
     searchedContractAddress?: string,
@@ -30,6 +31,20 @@ export function useTrendingById(
         if (!id) return null
         if (!currency) return null
         if (!dataProvider) return null
+        if (!expectedChainId && dataProvider === SourceType.NFTScan) {
+            return attemptUntil(
+                NFTSCAN_CHAIN_ID_LIST.map((chainId) => async () => {
+                    try {
+                        return PluginTraderRPC.getCoinTrending(chainId, id, currency, SourceType.NFTScan).catch(
+                            () => null,
+                        )
+                    } catch {
+                        return undefined
+                    }
+                }),
+                undefined,
+            )
+        }
         return PluginTraderRPC.getCoinTrending(chainId, id, currency, dataProvider).catch(() => null)
     }, [chainId, dataProvider, currency?.id, id])
 
