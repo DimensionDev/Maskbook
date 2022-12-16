@@ -1,6 +1,6 @@
 import type { SearchResult, SearchResultType } from '@masknet/web3-shared-base'
 
-export interface rule<ChainId, SchemaType> {
+export interface Rule<ChainId, SchemaType> {
     key: string
     type: 'exact' | 'fuzzy'
     filter?: (
@@ -8,14 +8,13 @@ export interface rule<ChainId, SchemaType> {
         keyword: string,
         all: Array<SearchResult<ChainId, SchemaType>>,
     ) => boolean
-
     fullSearch?: (
         keyword: string,
         all: Array<SearchResult<ChainId, SchemaType>>,
     ) => Array<SearchResult<ChainId, SchemaType>>
 }
 
-export interface handler<ChainId, SchemaType> {
-    rules: Array<rule<ChainId, SchemaType>>
+export interface Handler<ChainId, SchemaType> {
+    rules: Array<Rule<ChainId, SchemaType>>
     type?: SearchResultType
 }

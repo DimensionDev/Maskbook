@@ -2,11 +2,24 @@ import { first, nth } from 'lodash-es'
 import Web3SDK from 'web3'
 import type { FeeHistoryResult } from 'web3-eth'
 import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
-import { ChainId, chainResolver, GasOption, getRPCConstants, Web3 } from '@masknet/web3-shared-evm'
+import {
+    AddressType,
+    ChainId,
+    chainResolver,
+    GasOption,
+    getRPCConstants,
+    isValidAddress,
+} from '@masknet/web3-shared-evm'
 import type { GasOptionAPI, Web3BaseAPI } from '../entry-types.js'
 
-export class Web3API implements Web3BaseAPI.Provider<ChainId, Web3> {
-    createSDK(chainId: ChainId): Web3SDK {
+export class Web3API implements Web3BaseAPI.Provider<ChainId, AddressType, Web3SDK> {
+    async getAddressType(chainId: ChainId, address: string): Promise<AddressType | undefined> {
+        if (!isValidAddress(address)) return
+        const code = await this.createSDK(chainId).eth.getCode(address)
+        return code === '0x' ? AddressType.ExternalOwned : AddressType.Contract
+    }
+
+    createSDK(chainId: ChainId) {
         const RPC_URL = first(getRPCConstants(chainId).RPC_URLS)
         if (!RPC_URL) throw new Error('Failed to create web3 provider.')
         return new Web3SDK(RPC_URL)

@@ -107,13 +107,6 @@ export enum SearchResultType {
     NonFungibleCollection='NonFungibleCollection',
 }
 
-export enum SearchFungibleTokenResultSubType {
-    // e.g., $MASK #MASK
-    Keyword = 'Keyword',
-    // e.g., 0x69af81e73a73b40adf4f3d4223cd9b1ece623074 (Mask Network)
-    Address = 'Address',
-}
-
 export enum ActivityType {
     Transfer = 'Transfer',
     Mint = 'Mint',
@@ -599,10 +592,12 @@ export interface NonFungibleTokenSecurity {}
 
  export interface Result<ChainId> {
     pluginID: NetworkPluginID
+    chainId: ChainId
     type: SearchResultType
+    /** The original searched keyword */
     keyword: string
-    chainId?: ChainId
 }
+
 export interface EOAResult<ChainId> extends Result<ChainId> {
     type: SearchResultType.EOA
     domain?: string
@@ -611,44 +606,44 @@ export interface EOAResult<ChainId> extends Result<ChainId> {
 
 export interface DomainResult<ChainId> extends Result<ChainId> {
     type: SearchResultType.Domain
-    address?: string
     domain: string
+    address?: string
 }
 
 export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
-    //  This id on the provider platform
+    type: SearchResultType.FungibleToken
+    /** The id of token on the provider platform */
     id?: string
     address?: string
     rank?: number
     logoURL?: string
     name: string
     symbol: string
-    type: SearchResultType.FungibleToken
     source: SourceType 
     token?: FungibleToken<ChainId, SchemaType>
 }
 
 export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
+    type: SearchResultType.NonFungibleToken
     id?: string
-    name: string,
     address: string
-    logoURL?: string
     rank?: number
+    logoURL?: string
+    name: string,
     symbol?: string
     tokenId?: string
-    type: SearchResultType.NonFungibleToken
     source: SourceType 
     token?: NonFungibleToken<ChainId, SchemaType>
 }
 
 export interface NonFungibleCollectionResult<ChainId, SchemaType> extends Result<ChainId> {
-    name: string,
+    type: SearchResultType.NonFungibleCollection
     address: string
     rank?: number
     logoURL?: string
+    name: string,
     symbol?: string
     source: SourceType 
-    type: SearchResultType.NonFungibleCollection
     collection?: NonFungibleCollection<ChainId, SchemaType>
 }
 
