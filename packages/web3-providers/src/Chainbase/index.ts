@@ -120,7 +120,7 @@ export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
         })
     }
 
-    lookup = async (chainId: ChainId, name: string): Promise<string | undefined> => {
+    async lookup(chainId: ChainId, name: string): Promise<string | undefined> {
         if (!name) return
 
         const address = domainCache.get(chainId)?.[name] || (await this.getAddress(chainId, name))
@@ -132,7 +132,7 @@ export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
         return
     }
 
-    reverse = async (chainId: ChainId, address: string): Promise<string | undefined> => {
+    async reverse(chainId: ChainId, address: string): Promise<string | undefined> {
         if (!address || !isValidAddress(address)) return
 
         const name = domainCache.get(chainId)?.[formatAddress(address)] || (await this.getName(chainId, address))

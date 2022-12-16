@@ -18,7 +18,7 @@ export class ENS_API implements DomainAPI.Provider<ChainId> {
         })
     }
 
-    lookup = async (chainId: ChainId, name: string): Promise<string | undefined> => {
+    async lookup(chainId: ChainId, name: string): Promise<string | undefined> {
         try {
             const lookupAddress = await this.ens.resolveAddressForNode(namehash.hash(name))
             return isZeroAddress(lookupAddress) || isEmptyHex(lookupAddress)
@@ -28,7 +28,7 @@ export class ENS_API implements DomainAPI.Provider<ChainId> {
             return this.web3.eth.ens.registry.getOwner(name)
         }
     }
-    reverse = async (chainId: ChainId, address: string): Promise<string | undefined> => {
+    async reverse(chainId: ChainId, address: string): Promise<string | undefined> {
         try {
             const name = await this.ens.reverse(address)
             if (!name.endsWith('.eth')) return
