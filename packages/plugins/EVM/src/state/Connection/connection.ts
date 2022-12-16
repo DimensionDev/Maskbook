@@ -207,6 +207,10 @@ class Connection implements EVM_Connection {
             this.getOptions(initial),
         )
     }
+    async switchChain(chainId: ChainId, initial?: EVM_Web3ConnectionOptions): Promise<void> {
+        const options = this.getOptions(initial)
+        await Providers[options.providerType].switchChain(chainId)
+    }
     async approveFungibleToken(
         address: string,
         recipient: string,
@@ -552,10 +556,6 @@ class Connection implements EVM_Connection {
         const results = await Promise.allSettled([contract?.methods.name().call() ?? EMPTY_STRING])
         const [name] = results.map((result) => (result.status === 'fulfilled' ? result.value : '')) as string[]
         return createNonFungibleTokenCollection(options.chainId, address, name ?? 'Unknown Token', '')
-    }
-    async switchChain(chainId: ChainId, initial?: EVM_Web3ConnectionOptions): Promise<void> {
-        const options = this.getOptions(initial)
-        await Providers[options.providerType].switchChain(chainId)
     }
     async getNativeTokenBalance(initial?: EVM_Web3ConnectionOptions): Promise<string> {
         const options = this.getOptions(initial)
