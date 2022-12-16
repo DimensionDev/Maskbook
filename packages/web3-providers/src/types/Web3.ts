@@ -15,19 +15,19 @@ export namespace Web3BaseAPI {
         /** Get schema type of token contract */
         getSchemaType(chainId: ChainId, address: string): Promise<SchemaType | undefined>
         /** Get block */
-        getBlock(chainId: ChainId, noOrId: number | string): Promise<Block>
+        getBlock(chainId: ChainId, noOrId: number | string): Promise<Block | null>
         /** Get the latest block number */
         getBlockNumber(chainid: ChainId): Promise<number>
         /** Get the latest block timestamp */
-        getBlockTimestamp(chainid: ChainId): Promise<string>
+        getBlockTimestamp(chainid: ChainId): Promise<number>
         /** Get transaction */
-        getTransaction(chainId: ChainId, hash: string): Promise<Transaction>
+        getTransaction(chainId: ChainId, hash: string): Promise<Transaction | null>
         /** Get transaction receipt */
-        getTransactionReceipt(chainId: ChainId, hash: string): Promise<TransactionReceipt>
+        getTransactionReceipt(chainId: ChainId, hash: string): Promise<TransactionReceipt | null>
         /** Get transaction status */
         getTransactionStatus(chainId: ChainId, hash: string): Promise<TransactionStatusType>
         /** Get transaction nonce */
-        getTransactionNonce(chainId: ChainId, hash: string): Promise<string>
+        getTransactionNonce(chainId: ChainId, hash: string): Promise<number>
         /** Get native token */
         getNativeToken(chainId: ChainId): Promise<FungibleToken<ChainId, SchemaType>>
         /** Get fungible token */

@@ -3,6 +3,8 @@ import type { Subscription } from 'use-subscription'
 import type { Connection, ConnectionOptions, ConnectionState as Web3ConnectionState } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 
+export * from './Connection/BaseClient.js'
+
 export class ConnectionState<
     ChainId,
     AddressType,
