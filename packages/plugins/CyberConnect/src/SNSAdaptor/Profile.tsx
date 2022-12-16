@@ -1,6 +1,6 @@
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { PluginCyberConnectRPC } from '../messages.js'
-import { Box, Link, Stack, Tab, Typography } from '@mui/material'
+import { Box, Button, Link, Stack, Tab, Typography } from '@mui/material'
 import ConnectButton from './ConnectButton.js'
 import { useAsyncRetry } from 'react-use'
 import Avatar from 'boring-avatars'
@@ -102,7 +102,28 @@ const useStyles = makeStyles()((theme) => ({
             background: '#fff',
         },
     },
+    status: {
+        display: 'flex',
+        height: 196,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+    },
+    retry: {
+        width: 254,
+        height: 40,
+        backgroundColor: theme.palette.maskColor.publicMain,
+        color: 'white',
+        fontSize: 14,
+        fontWeight: 700,
+        marginBottom: 4,
+        marginTop: 32,
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.publicMain,
+        },
+    },
 }))
+
 const Profile = ({ url }: { url: string }) => {
     const t = useI18N()
     const { classes } = useStyles()
@@ -111,6 +132,7 @@ const Profile = ({ url }: { url: string }) => {
         value: identity,
         loading,
         retry,
+        error,
     } = useAsyncRetry(async () => {
         const res = await PluginCyberConnectRPC.fetchIdentity(queryAddress)
         return res.data.identity
@@ -134,6 +156,26 @@ const Profile = ({ url }: { url: string }) => {
         )
     }
 
+    if (loading)
+        return (
+            <Box className={classes.status}>
+                <LoadingBase />
+            </Box>
+        )
+
+    if (error) {
+        return (
+            <Box className={classes.status}>
+                <Typography textAlign="center" color="error">
+                    {t.failed()}
+                </Typography>
+                <Button variant="roundedContained" className={classes.retry} onClick={retry}>
+                    {t.reload()}
+                </Button>
+            </Box>
+        )
+    }
+
     return (
         <TabContext value={currentTab}>
             <div className={classes.root}>
@@ -148,32 +190,29 @@ const Profile = ({ url }: { url: string }) => {
 
                     <Stack flex={1}>
                         <Typography className={classes.userName}>{identity?.ens || identity?.address}</Typography>
-                        {loading ? (
-                            <LoadingBase />
-                        ) : (
-                            <Stack className={classes.address}>
-                                <Typography>
-                                    <FormattedAddress
-                                        address={identity?.address}
-                                        formatter={formatEthereumAddress}
-                                        size={4}
-                                    />
-                                </Typography>
-                                <Link
-                                    onClick={(event) => event.stopPropagation()}
-                                    style={{ width: 12, height: 12 }}
-                                    href={explorerResolver.addressLink(ChainId.Mainnet, identity?.address ?? '')}
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    <Icons.PopupLink className={classes.PopupLink} />
-                                </Link>
-                                <CopyIconLink text={identity?.address ?? ''} className={classes.icon} />
-                            </Stack>
-                        )}
+
+                        <Stack className={classes.address}>
+                            <Typography color={(theme) => theme.palette.maskColor.publicMain} lineHeight="18px">
+                                <FormattedAddress
+                                    address={identity?.address}
+                                    formatter={formatEthereumAddress}
+                                    size={4}
+                                />
+                            </Typography>
+                            <Link
+                                onClick={(event) => event.stopPropagation()}
+                                style={{ width: 12, height: 12 }}
+                                href={explorerResolver.addressLink(ChainId.Mainnet, identity?.address ?? '')}
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                <Icons.PopupLink className={classes.PopupLink} />
+                            </Link>
+                            <CopyIconLink text={identity?.address ?? ''} className={classes.icon} />
+                        </Stack>
                     </Stack>
 
                     <Stack alignItems="center" justifyContent="center">
-                        <ConnectButton address={identity?.address ?? ''} refreshFollowList={retry} />
+                        <ConnectButton address={identity?.address ?? ''} />
                     </Stack>
                 </Stack>
 

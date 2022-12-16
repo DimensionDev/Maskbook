@@ -1,5 +1,13 @@
 import type { RequestArguments } from 'web3-core'
-import { ProviderType, EthereumMethodType, Transaction, ChainId, PayloadEditor } from '@masknet/web3-shared-evm'
+import {
+    ProviderType,
+    EthereumMethodType,
+    Transaction,
+    ChainId,
+    PayloadEditor,
+    createJsonRpcPayload,
+    createJsonRpcResponse,
+} from '@masknet/web3-shared-evm'
 import { getError, hasError } from './error.js'
 import type { Context, EVM_Connection, EVM_Web3ConnectionOptions, Middleware } from './types.js'
 import { SharedContextSettings, Web3StateSettings } from '../../settings/index.js'
@@ -151,21 +159,15 @@ class RequestContext implements Context {
     }
 
     get request() {
-        return {
-            id: this.id,
-            jsonrpc: '2.0',
+        return createJsonRpcPayload(this.id, {
             params: [],
             ...this.requestArguments,
-        }
+        })
     }
 
     get response() {
         if (this._writeable) return
-        return {
-            id: this.id,
-            jsonrpc: '2.0',
-            result: this._result,
-        }
+        return createJsonRpcResponse(this.id, this._result)
     }
 
     get error() {

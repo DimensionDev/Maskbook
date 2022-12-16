@@ -1,3 +1,4 @@
+import type { AbiItem } from 'web3-utils'
 import { i18NextInstance } from '@masknet/shared-base'
 import { ChainId, getNftRedPacketConstant, getRedPacketConstants, TransactionParameter } from '@masknet/web3-shared-evm'
 import HappyRedPacketV4ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
@@ -5,12 +6,11 @@ import NftRedPacketABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
 import { isSameAddress, TransactionContext } from '@masknet/web3-shared-base'
 import type { TransactionDescriptor } from '../types.js'
 import { Web3StateSettings } from '../../../settings/index.js'
-import type { AbiItem } from 'web3-utils'
 import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } from '../utils.js'
 
 export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt implements TransactionDescriptor {
     async getClaimTokenInfo(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
-        const connection = await Web3StateSettings.value.Connection?.getConnection?.({
+        const connection = Web3StateSettings.value.Connection?.getConnection?.({
             chainId,
         })
         const events = await this.getReceipt(chainId, contractAddress, HappyRedPacketV4ABI as AbiItem[], hash)
@@ -30,7 +30,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
     }
 
     async getRefundTokenInfo(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
-        const connection = await Web3StateSettings.value.Connection?.getConnection?.({
+        const connection = Web3StateSettings.value.Connection?.getConnection?.({
             chainId,
         })
         const events = await this.getReceipt(chainId, contractAddress, HappyRedPacketV4ABI as AbiItem[], hash)
@@ -62,7 +62,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
     }
 
     async getNonFungibleContractSymbol(chainId: ChainId, address: string) {
-        const connection = await Web3StateSettings.value.Connection?.getConnection?.({
+        const connection = Web3StateSettings.value.Connection?.getConnection?.({
             chainId,
         })
         const contract = await connection?.getNonFungibleTokenContract(address)
@@ -92,7 +92,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                 HAPPY_RED_PACKET_ADDRESS_V4,
             ].some((x) => isSameAddress(x, context.to))
         ) {
-            const connection = await Web3StateSettings.value.Connection?.getConnection?.({
+            const connection = Web3StateSettings.value.Connection?.getConnection?.({
                 chainId: context.chainId,
                 account: context.from,
             })
