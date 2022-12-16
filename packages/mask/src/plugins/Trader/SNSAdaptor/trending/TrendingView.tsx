@@ -163,7 +163,6 @@ export function TrendingView(props: TrendingViewProps) {
         result.type === SearchResultType.FungibleToken
             ? result.id || searchedContractAddress || ''
             : result.address || '',
-        result.type,
         result.source,
         expectedChainId,
         searchedContractAddress,

@@ -2,6 +2,7 @@ import { first, isUndefined, omitBy } from 'lodash-es'
 import { hexToNumber, hexToNumberString } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { EthereumMethodType, Transaction, UserOperation } from '../types/index.js'
+import { createJsonRpcPayload } from '../index.js'
 
 const parseHexNumberString = (hex: string | number | undefined) =>
     typeof hex !== 'undefined' ? hexToNumberString(hex ?? '0x0') : undefined
@@ -124,12 +125,12 @@ export class PayloadEditor {
     }
 
     static from<T extends unknown>(id: number, method: string, params: T[] = []) {
-        return new PayloadEditor({
-            id,
-            jsonrpc: '2.0',
-            method,
-            params,
-        })
+        return new PayloadEditor(
+            createJsonRpcPayload(id, {
+                method,
+                params,
+            }),
+        )
     }
 
     static fromMethod<T extends unknown>(method: string, params: T[] = []) {

@@ -1,14 +1,13 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import { useAsync } from 'react-use'
-import { makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useWeb3, useNetworkContext } from '@masknet/web3-hooks-base'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
-import { Button } from '@mui/material'
 import { PluginCyberConnectRPC } from '../messages.js'
-import { WalletConnectedBoundary } from '@masknet/shared'
 import { useI18N } from '../locales/i18n_generated.js'
+import { WalletConnectedBoundary } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -16,6 +15,12 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         fontSize: 12,
         padding: '8px 12px',
+        backgroundColor: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.white,
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.white,
+        },
     },
     wallet: {
         padding: '8px 12px',
@@ -39,19 +44,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export default function ConnectButton({
-    address,
-    refreshFollowList,
-}: {
-    address: string
-    refreshFollowList: () => void
-}) {
+export default function ConnectButton({ address }: { address: string }) {
     const t = useI18N()
     const { classes, cx } = useStyles()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const { pluginID } = useNetworkContext()
     const { account } = useChainContext()
-    const [cc, setCC] = useState<CyberConnect | null>(null)
     const [isFollowing, setFollowing] = useState(false)
     const [isLoading, setLoading] = useState(false)
 
@@ -61,36 +59,34 @@ export default function ConnectButton({
         setFollowing(res.isFollowing)
     }, [address, account])
 
-    useEffect(() => {
+    const ccInstance = useMemo(() => {
         if (!web3?.eth.currentProvider) return
-        const ccInstance = new CyberConnect({
+        return new CyberConnect({
             provider: web3.eth.currentProvider,
             namespace: 'Mask',
             env: process.env.NODE_ENV === 'production' ? Env.PRODUCTION : Env.STAGING,
         })
-
-        setCC(ccInstance)
     }, [web3, account])
 
     const handleClick = useCallback(() => {
-        if (!cc) return
+        if (!ccInstance) return
         setLoading(true)
         if (!isFollowing) {
-            cc.connect(address)
+            ccInstance
+                .connect(address)
                 .then(() => {
                     setFollowing(true)
-                    refreshFollowList()
                 })
                 .finally(() => setLoading(false))
         } else {
-            cc.disconnect(address)
+            ccInstance
+                .disconnect(address)
                 .then(() => {
                     setFollowing(false)
-                    refreshFollowList()
                 })
                 .finally(() => setLoading(false))
         }
-    }, [cc, account, isFollowing])
+    }, [ccInstance, address, isFollowing])
 
     if (!isSameAddress(account, address)) {
         return (
@@ -98,12 +94,13 @@ export default function ConnectButton({
                 hideRiskWarningConfirmed
                 ActionButtonProps={{ variant: 'roundedDark' }}
                 classes={{ button: classes.wallet }}>
-                <Button
+                <ActionButton
+                    loading={isLoading}
                     className={cx(classes.button, { [classes.isFollowing]: isFollowing })}
                     onClick={handleClick}
                     variant="roundedContained">
                     {!isFollowing ? t.follow_now() : t.unfollow()}
-                </Button>
+                </ActionButton>
             </WalletConnectedBoundary>
         )
     }

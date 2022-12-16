@@ -3,7 +3,14 @@ import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { isNil, omit } from 'lodash-es'
 import { defer } from '@masknet/kit'
-import { ChainId, createWeb3, EthereumMethodType, getRPCConstants, PayloadEditor } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    createJsonRpcResponse,
+    createWeb3,
+    EthereumMethodType,
+    getRPCConstants,
+    PayloadEditor,
+} from '@masknet/web3-shared-evm'
 import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper/index.js'
 import { nativeAPI } from '../../../../shared/native-rpc/index.js'
 import { WalletRPC } from '../messages.js'
@@ -139,11 +146,7 @@ export async function send(
             const [address, dataToSign] = payload.params as [string, string]
             const dataSigned = await WalletRPC.signTypedData(address, dataToSign)
             try {
-                callback(null, {
-                    jsonrpc: '2.0',
-                    id: payload.id as number,
-                    result: dataSigned,
-                })
+                callback(null, createJsonRpcResponse(payload.id as number, dataSigned))
             } catch (error) {
                 callback(getError(error, null, 'Failed to sign message.'))
             }
@@ -152,11 +155,7 @@ export async function send(
             const [data, account] = payload.params as [string, string]
             const messageSigned = await WalletRPC.signPersonalMessage(data, account)
             try {
-                callback(null, {
-                    jsonrpc: '2.0',
-                    id: payload.id as number,
-                    result: messageSigned,
-                })
+                callback(null, createJsonRpcResponse(payload.id as number, messageSigned))
             } catch (error) {
                 callback(getError(error, null, 'Failed to sign message.'))
             }
