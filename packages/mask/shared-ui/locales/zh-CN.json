@@ -500,7 +500,7 @@
     "plugin_trader_no_trade": "请选择一个交易",
     "plugin_trader_swap_risk": "兑换风险",
     "plugin_trader_gas": "交易费用",
-    "plugin_poll_display_name": "投票",
+    "plugin_poll_display_name": "插件：投票",
     "plugin_poll_question_hint": "询问...",
     "plugin_poll_options_hint": "选项",
     "plugin_poll_length": "投票时长",
