@@ -9,6 +9,39 @@ export namespace TwitterBaseAPI {
         nft_avatar_metadata: AvatarMetadata
     }
 
+    export interface UserNFTAvatarResponse {
+        data: {
+            // If user doesn't exist, instead of 404 response, user field will miss
+            user?: {
+                result: TwitterBaseAPI.UserNFTAvatar
+            }
+        }
+    }
+    export interface UserNFTAvatar {
+        has_nft_avatar: boolean
+        id: string
+        is_blue_verified: boolean
+        legacy: Pick<
+            IdentifyResponse,
+            'id' | 'id_str' | 'name' | 'screen_name' | 'verified' | 'profile_image_url_https'
+        > & {
+            profile_image_extensions: {
+                mediaColor: {
+                    r: {
+                        ok: {
+                            palette: Array<{
+                                /** @example 42 */
+                                percentage: number
+                                rgb: { red: number; blue: number; green: number }
+                            }>
+                        }
+                    }
+                }
+            }
+        }
+        nft_avatar_metadata: AvatarMetadata
+    }
+
     export interface AvatarMetadata {
         token_id: string
         smart_contract: {

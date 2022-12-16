@@ -5,14 +5,15 @@ import {
     getSettings,
     getTokens,
     getUserViaWebAPI,
-    getUserNFTContainer,
     getDefaultUserSettings,
     getUserSettingsCached,
     getUserViaTwitterIdentity,
     staleUserViaWebAPI,
+    getUserNFTContainer,
 } from './apis/index.js'
 import type { TwitterBaseAPI } from '../entry-types.js'
 import { fetchJSON } from '../entry-helpers.js'
+import { getUserNFTAvatar } from './apis/getUserNFTAvatar.js'
 
 const UPLOAD_AVATAR_URL = 'https://upload.twitter.com/i/media/upload.json'
 const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
@@ -49,14 +50,33 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
     }
 
     async getUserNftContainer(screenName: string) {
-        const { bearerToken, queryToken, csrfToken } = await getTokens()
-        const result = await getUserNFTContainer(screenName, queryToken, bearerToken, csrfToken)
-        if (!result?.data?.user?.result?.has_nft_avatar) throw new Error('No NFT avatar.')
+        const result = await attemptUntil<TwitterBaseAPI.NFT | undefined>(
+            [
+                async () => {
+                    const { bearerToken, queryToken, csrfToken } = await getTokens()
+                    const response = await getUserNFTContainer(screenName, queryToken, bearerToken, csrfToken)
+                    const result = response?.data.user?.result
+                    if (!result?.has_nft_avatar) throw new Error(`User ${screenName} doesn't have NFT avatar.`)
 
-        return {
-            address: result.data.user.result.nft_avatar_metadata.smart_contract.address,
-            token_id: result.data.user.result.nft_avatar_metadata.token_id,
-        }
+                    return {
+                        address: result.nft_avatar_metadata.smart_contract.address,
+                        token_id: result.nft_avatar_metadata.token_id,
+                    }
+                },
+                async () => {
+                    const response = await getUserNFTAvatar(screenName)
+                    const result = response.data.user?.result
+                    if (!result?.has_nft_avatar) throw new Error(`User ${screenName} doesn't have NFT avatar.`)
+                    return {
+                        address: result.nft_avatar_metadata.smart_contract.address,
+                        token_id: result.nft_avatar_metadata.token_id,
+                    }
+                },
+            ],
+            undefined,
+        )
+
+        return result
     }
 
     async uploadUserAvatar(screenName: string, image: File | Blob): Promise<TwitterBaseAPI.TwitterResult> {
