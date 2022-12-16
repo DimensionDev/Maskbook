@@ -620,11 +620,6 @@ export interface EOAResult<ChainId> extends Result<ChainId> {
     address: string
 }
 
-export interface CAResult<ChainId> extends Result<ChainId> {
-    type: SearchResultType.CA
-    address: string
-}
-
 export interface DomainResult<ChainId> extends Result<ChainId> {
     type: SearchResultType.Domain
     address?: string
@@ -665,7 +660,6 @@ export interface UnknownResult<ChainId> extends Result<ChainId> {
 
 export type SearchResult<ChainId, SchemaType> = 
     | EOAResult<ChainId>
-    | CAResult<ChainId>
     | DomainResult<ChainId>
     | FungibleTokenResult<ChainId, SchemaType>
     | NonFungibleTokenResult<ChainId, SchemaType>

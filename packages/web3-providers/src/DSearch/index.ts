@@ -2,10 +2,10 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     SearchResult,
     SearchResultType,
-    CAResult,
     DomainResult,
     FungibleTokenResult,
     NonFungibleTokenResult,
+    SourceType,
     NonFungibleCollectionResult,
     EOAResult,
     attemptUntil,
@@ -38,7 +38,7 @@ import { CoinMarketCapSearchAPI } from '../CoinMarketCap/DSearchAPI.js'
 import { NFTScanSearchAPI } from '../NFTScan/index.js'
 import type { DSearchBaseAPI } from '../types/DSearch.js'
 import { getHandlers } from './rules.js'
-import { ENS, SpaceID, ChainbaseDomain } from '../entry.js'
+import { ENS, SpaceID, ChainbaseDomain, CoinGeckoTrending } from '../entry.js'
 
 import { DSEARCH_BASE_URL } from './constants.js'
 
@@ -124,6 +124,30 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
         let result: Array<SearchResult<ChainId, SchemaType>> = []
 
+        if (isValidAddress?.(keyword)) {
+            const list = data
+                .filter((x) => {
+                    return isSameAddress(keyword, x.address)
+                })
+                .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
+
+            if (list.length > 0) return [list[0]]
+
+            const coinInfo = await CoinGeckoTrending.getCoinInfoByAddress(undefined, keyword)
+
+            if (coinInfo?.id) {
+                return [
+                    {
+                        type: SearchResultType.FungibleToken,
+                        id: coinInfo.id,
+                        source: SourceType.CoinGecko,
+                        keyword,
+                        pluginID: NetworkPluginID.PLUGIN_EVM,
+                    } as FungibleTokenResult<ChainId, SchemaType>,
+                ]
+            }
+        }
+
         for (const searcher of this.handlers) {
             const { rules, type } = searcher
 
@@ -202,6 +226,9 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         }
 
         if (isValidAddress?.(keyword) && !isZeroAddress?.(keyword)) {
+            const list = await this.searchToken(keyword)
+            if (list.length > 0) return list
+
             const addressType = await attemptUntil(
                 CHAIN_ID_LIST.map((chainId) => async () => {
                     const addressType = await options?.getAddressType?.(keyword, { chainId })
@@ -228,14 +255,8 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                     } as EOAResult<ChainId>,
                 ]
             }
-            return [
-                {
-                    pluginID: NetworkPluginID.PLUGIN_EVM,
-                    type: SearchResultType.CA,
-                    address: keyword,
-                    keyword,
-                } as CAResult<ChainId>,
-            ]
+
+            // todo: query fungible token by coingecko
         }
 
         return [

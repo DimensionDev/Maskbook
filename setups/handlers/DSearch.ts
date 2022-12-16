@@ -23,7 +23,7 @@ export const DSearchHandlers = [
     rest.get(`${baseURL}/non-fungible-collections/specific-list.json`, (req, res, ctx) => {
         return res(ctx.status(200), ctx.json([]))
     }),
-    rest.get(`${baseURL}/fungible-tokens/coin-gecko.json`, (req, res, ctx) => {
+    rest.get(`${baseURL}/fungible-tokens/coingecko.json`, (req, res, ctx) => {
         return res(
             ctx.status(200),
             ctx.json([

@@ -8,7 +8,7 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import { PluginTraderRPC } from '../messages.js'
 import type { Coin } from '../types/index.js'
-import { useCurrentCurrency, CURRENCIES_MAP } from './useCurrentCurrency.js'
+import { useCurrentCurrency } from './useCurrentCurrency.js'
 
 export function useTrendingById(
     id: string,
@@ -28,26 +28,6 @@ export function useTrendingById(
         error,
     } = useAsync(async () => {
         if (!id) return null
-
-        if (searchType === SearchResultType.CA) {
-            const coinInfo = await PluginTraderRPC.getCoinInfoByAddress(undefined, id)
-            if (coinInfo?.id) {
-                const fungibleTokenTrending = await PluginTraderRPC.getCoinTrending(
-                    coinInfo.chainId,
-                    coinInfo?.id,
-                    CURRENCIES_MAP[SourceType.CoinGecko]![0],
-                    SourceType.CoinGecko,
-                ).catch(() => null)
-                if (fungibleTokenTrending) return fungibleTokenTrending
-            }
-
-            return PluginTraderRPC.getCoinTrending(
-                undefined,
-                id,
-                CURRENCIES_MAP[SourceType.NFTScan]![0],
-                SourceType.NFTScan,
-            ).catch(() => null)
-        }
         if (!currency) return null
         if (!dataProvider) return null
         return PluginTraderRPC.getCoinTrending(chainId, id, currency, dataProvider).catch(() => null)
