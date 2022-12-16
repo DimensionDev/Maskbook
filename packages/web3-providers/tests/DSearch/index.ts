@@ -83,4 +83,12 @@ describe('DSearch test', () => {
         expect(result[3]?.name).toBe('ethInCoinGecko')
         expect(result[4]?.name).toBe('TestEth')
     })
+
+    test('should return by searching address directly', async () => {
+        const DSearch = new DSearchAPI()
+        const result = await DSearch.search('0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb')
+        expect(result.length).toBe(1)
+        expect(result[0]?.name).toBe('CryptoPunks')
+        expect(result[0]?.address).toBe('0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb')
+    })
 })
