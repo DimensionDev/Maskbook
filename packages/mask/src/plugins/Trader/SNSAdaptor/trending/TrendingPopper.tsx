@@ -14,8 +14,8 @@ import { PluginTransakMessages } from '../../../Transak/messages.js'
 export interface TrendingPopperProps {
     children?: (
         resultList: Array<
-            | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
             | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+            | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
         >,
         reposition?: () => void,
     ) => React.ReactNode
@@ -33,15 +33,12 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const popper = useRef<HTMLDivElement | null>(null)
 
-    const { value: resultList } = useAsyncRetry<
-        Array<
-            | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-            | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        >
-    >(async () => {
+    const { value: resultList } = useAsyncRetry(async () => {
         if (!name || !type) return EMPTY_LIST
-        const tag = type === TrendingAPI.TagType.CASH ? '$' : '#'
-        return DSearch.search(`${tag}${name}`)
+        return DSearch.search<
+            | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+            | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+        >(`${type === TrendingAPI.TagType.CASH ? '$' : '#'}${name}`)
     }, [name, type])
 
     // #region select token and provider dialog could be opened by trending view
