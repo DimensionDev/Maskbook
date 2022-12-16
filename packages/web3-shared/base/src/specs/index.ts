@@ -98,8 +98,6 @@ export enum SourceType {
 export enum SearchResultType {
     // e.g., 0x6a7122B831c2B79c508A978f73f2ee23171279B3
     EOA = 'EOA',
-    // Contract Address, not sure is fungible or nonFungible token
-    CA='CA',
     // e.g., vitalik.eth or vitalik.bnb
     Domain = 'Domain',
     // e.g., $MASK #MASK or its address 0x69af81e73a73b40adf4f3d4223cd9b1ece623074
