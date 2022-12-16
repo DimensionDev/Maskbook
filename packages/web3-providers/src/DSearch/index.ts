@@ -1,3 +1,5 @@
+import urlcat from 'urlcat'
+import { uniqWith } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     SearchResult,
@@ -11,8 +13,7 @@ import {
     attemptUntil,
     isSameAddress,
 } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import urlcat from 'urlcat'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import {
     ChainId as ChainIdEVM,
     AddressType,
@@ -30,7 +31,6 @@ import {
     isZeroAddress as isZeroAddressSolana,
     isValidDomain as isValidDomainSolana,
 } from '@masknet/web3-shared-solana'
-import { uniqWith } from 'lodash-es'
 import { fetchCached } from '../entry-helpers.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import { CoinGeckoSearchAPI } from '../CoinGecko/apis/DSearchAPI.js'
@@ -41,6 +41,7 @@ import { getHandlers } from './rules.js'
 import { ENS, SpaceID, ChainbaseDomain, CoinGeckoTrending } from '../entry.js'
 
 import { DSEARCH_BASE_URL } from './constants.js'
+import { Web3API } from '../EVM/index.js'
 
 const CHAIN_ID_LIST = [ChainIdEVM.Mainnet, ChainIdEVM.BSC, ChainIdEVM.Matic]
 
@@ -59,11 +60,26 @@ const isValidDomain = (domain?: string): boolean => {
 export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.SchemaTypeAll>
     implements DSearchBaseAPI.Provider<ChainId, SchemaType, NetworkPluginID>
 {
-    handlers = getHandlers<ChainId, SchemaType>()
+    private handlers = getHandlers<ChainId, SchemaType>()
 
-    NFTScanClient = new NFTScanSearchAPI<ChainId, SchemaType>()
-    CoinGeckoClient = new CoinGeckoSearchAPI<ChainId, SchemaType>()
-    CoinMarketCapClient = new CoinMarketCapSearchAPI<ChainId, SchemaType>()
+    private Web3 = new Web3API()
+
+    private NFTScanClient = new NFTScanSearchAPI<ChainId, SchemaType>()
+    private CoinGeckoClient = new CoinGeckoSearchAPI<ChainId, SchemaType>()
+    private CoinMarketCapClient = new CoinMarketCapSearchAPI<ChainId, SchemaType>()
+
+    private parseKeyword(keyword: string): { word: string; field?: string } {
+        const words = keyword.split(':')
+        if (words.length === 1) {
+            return {
+                word: words[0],
+            }
+        }
+        return {
+            word: words[1],
+            field: words[0],
+        }
+    }
 
     private async init() {
         const tokenSpecificList = urlcat(DSEARCH_BASE_URL, '/fungible-tokens/specific-list.json')
@@ -104,6 +120,29 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             .flat()
     }
 
+    private async searchDomain(domain: string): Promise<Array<DomainResult<ChainId>>> {
+        const [address, chainId] = await attemptUntil(
+            [
+                () => ENS.lookup(ChainIdEVM.Mainnet, domain).then((x) => [x, ChainIdEVM.Mainnet]),
+                () => ChainbaseDomain.lookup(ChainIdEVM.Mainnet, domain).then((x) => [x, ChainIdEVM.Mainnet]),
+                () => SpaceID.lookup(ChainIdEVM.BSC, domain).then((x) => [x, ChainIdEVM.BSC]),
+            ],
+            ['', ChainIdEVM.Mainnet],
+        )
+        if (!isValidAddressEVM(address)) return EMPTY_LIST
+
+        return [
+            {
+                type: SearchResultType.Domain,
+                domain,
+                address,
+                keyword: domain,
+                chainId,
+                pluginID: NetworkPluginID.PLUGIN_EVM,
+            } as DomainResult<ChainId>,
+        ]
+    }
+
     /**
      *
      * Search DSearch token info
@@ -118,7 +157,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
      * "address:0x"
      *
      */
-    async searchToken(keyword: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {
+    private async searchToken(keyword: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {
         const { word, field } = this.parseKeyword(keyword)
         const data = (await this.init()) as Array<
             FungibleTokenResult<ChainId, SchemaType> | NonFungibleTokenResult<ChainId, SchemaType>
@@ -128,9 +167,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
         if (isValidAddress?.(keyword)) {
             const list = data
-                .filter((x) => {
-                    return isSameAddress(keyword, x.address)
-                })
+                .filter((x) => isSameAddress(keyword, x.address))
                 .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
 
             if (list.length > 0) return [list[0]]
@@ -150,9 +187,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             }
         }
 
-        for (const searcher of this.handlers) {
-            const { rules, type } = searcher
-
+        for (const { rules, type } of this.handlers) {
             for (const rule of rules) {
                 if (field !== undefined && rule.key !== field) continue
                 const filtered = data.filter((x) => (type ? type === x.type : true))
@@ -191,45 +226,14 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         ).sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
     }
 
-    async search(
-        keyword: string,
-        options?: {
-            getAddressType?: (
-                address: string,
-                options?: Web3Helper.Web3ConnectionOptions<NetworkPluginID.PLUGIN_EVM>,
-            ) => Promise<AddressType | undefined>
-        },
-    ): Promise<Array<SearchResult<ChainId, SchemaType>>> {
-        const trendingTokenRegexResult = keyword.match(/([#$])(\w+)/) ?? []
+    async search(keyword: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {
+        const [, , trendingTokenName = ''] = keyword.match(/([#$])(\w+)/) ?? []
+        if (trendingTokenName) return this.searchToken(trendingTokenName)
 
-        const [_, _trendingSearchType, trendingTokenName = ''] = trendingTokenRegexResult
         const { word, field } = this.parseKeyword(keyword)
+        if (word && field === 'token') return this.searchToken(keyword)
 
-        if (trendingTokenName) {
-            return this.searchToken(trendingTokenName)
-        }
-
-        if (word && field) {
-            return this.searchToken(keyword)
-        }
-
-        if (isValidDomain?.(keyword)) {
-            const address = await attemptUntil(
-                [ENS, ChainbaseDomain, SpaceID].map((x) => async () => {
-                    return x.lookup(ChainIdEVM.Mainnet, keyword)
-                }),
-                '',
-            )
-            return [
-                {
-                    type: SearchResultType.Domain,
-                    domain: keyword,
-                    address,
-                    keyword,
-                    pluginID: NetworkPluginID.PLUGIN_EVM,
-                } as DomainResult<ChainId>,
-            ]
-        }
+        if (isValidDomain(keyword)) return this.searchDomain(keyword)
 
         if (isValidAddress?.(keyword) && !isZeroAddress?.(keyword)) {
             const list = await this.searchToken(keyword)
@@ -237,9 +241,9 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
             const addressType = await attemptUntil(
                 CHAIN_ID_LIST.map((chainId) => async () => {
-                    const addressType = await options?.getAddressType?.(keyword, { chainId })
-                    if (addressType !== AddressType.Contract) return
-                    return addressType
+                    const type = await this.Web3.getAddressType(chainId, keyword)
+                    if (type !== AddressType.Contract) return
+                    return type
                 }),
                 undefined,
             )
@@ -265,25 +269,6 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             // todo: query fungible token by coingecko
         }
 
-        return [
-            {
-                pluginID: NetworkPluginID.PLUGIN_EVM,
-                type: SearchResultType.Unknown,
-                keyword,
-            },
-        ]
-    }
-
-    private parseKeyword(keyword: string): { word: string; field?: string } {
-        const works = keyword.split(':')
-        if (works.length === 1) {
-            return {
-                word: works[0],
-            }
-        }
-        return {
-            word: works[1],
-            field: works[0],
-        }
+        return EMPTY_LIST
     }
 }

@@ -1,13 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useLocation, useWindowScroll, useAsyncRetry } from 'react-use'
 import { Popper, ClickAwayListener, PopperProps, Fade } from '@mui/material'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import type { NonFungibleTokenResult, FungibleTokenResult } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { DSearch } from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useWeb3Connection } from '@masknet/web3-hooks-base'
 import { PluginTraderMessages } from '../../messages.js'
 import { WalletMessages } from '../../../Wallet/messages.js'
 import { PluginTransakMessages } from '../../../Transak/messages.js'
@@ -27,7 +26,6 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const popperRef = useRef<{
         update(): void
     } | null>(null)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const [freezed, setFreezed] = useState(false) // disable any click
     const [locked, setLocked] = useState(false) // state is updating, lock UI
     const [name, setName] = useState('')
@@ -35,19 +33,17 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const popper = useRef<HTMLDivElement | null>(null)
 
-    const { value: _resultList } = useAsyncRetry(async () => {
-        if (!name || !type || !connection?.getAddressType) return
+    const { value: resultList } = useAsyncRetry<
+        Array<
+            | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+            | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+        >
+    >(async () => {
+        if (!name || !type) return EMPTY_LIST
         const tag = type === TrendingAPI.TagType.CASH ? '$' : '#'
-        const list = await DSearch.search(`${tag}${name}`, {
-            getAddressType: connection?.getAddressType,
-        })
-        return list
-    }, [name, type, connection?.getAddressType])
+        return DSearch.search(`${tag}${name}`)
+    }, [name, type])
 
-    const resultList = _resultList as Array<
-        | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    >
     // #region select token and provider dialog could be opened by trending view
     const onFreezed = useCallback((ev: { open: boolean }) => setFreezed(ev.open), [])
     useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated, onFreezed)

@@ -3,7 +3,7 @@ import { HubStateBaseClient, HubStateFungibleClient, HubStateNonFungibleClient }
 import {
     AlchemyEVM,
     DeBank,
-    EthereumWeb3,
+    Web3GasOption,
     MetaSwap,
     AstarGas,
     NFTScanNonFungibleTokenEVM,
@@ -55,7 +55,7 @@ class Hub extends HubStateBaseClient<ChainId> implements EVM_Hub {
             if (chainId === ChainId.Astar) return await AstarGas.getGasOptions(options.chainId)
             return await DeBank.getGasOptions(options.chainId)
         } catch (error) {
-            return EthereumWeb3.getGasOptions(options.chainId)
+            return Web3GasOption.getGasOptions(options.chainId)
         }
     }
 

@@ -3,7 +3,7 @@ import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-es'
 import { Tab } from '@mui/material'
 import { TabContext } from '@mui/lab'
-import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { DSearch } from '@masknet/web3-providers'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import {
@@ -14,7 +14,6 @@ import {
     useActivatedPluginsSNSAdaptor,
 } from '@masknet/plugin-infra/content-script'
 import { useSearchedKeyword } from '../DataSource/useSearchedKeyword.js'
-import { useWeb3Connection } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()(() => ({
     contentWrapper: {
@@ -38,15 +37,12 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const translate = usePluginI18NField()
 
     const keyword = useSearchedKeyword()
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const activatedPlugins = useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode()
 
     const resultList = useAsyncRetry(async () => {
-        if (!keyword || !connection?.getAddressType || !activatedPlugins.length) return
-        return DSearch.search(keyword, {
-            getAddressType: connection?.getAddressType,
-        })
-    }, [keyword, connection?.getAddressType, activatedPlugins.length])
+        if (!keyword || !activatedPlugins.length) return
+        return DSearch.search(keyword)
+    }, [keyword, activatedPlugins.length])
 
     const contentComponent = useMemo(() => {
         if (!resultList.value?.length) return null
@@ -57,7 +53,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const tabs = useMemo(() => {
         if (!resultList.value?.length) return EMPTY_LIST
         return getSearchResultTabs(activatedPlugins, resultList.value[0], translate)
-    }, [activatedPlugins, resultList.value])
+    }, [activatedPlugins, resultList.value, translate])
 
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
