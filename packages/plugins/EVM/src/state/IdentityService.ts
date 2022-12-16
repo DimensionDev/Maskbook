@@ -235,6 +235,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         const connection = Web3StateSettings.value.Connection?.getConnection?.({
             chainId: ChainId.Mainnet,
         })
+        if (!response) return
         const ownerAddress = await connection?.getNonFungibleTokenOwner(response.address, response.token_id)
         if (!ownerAddress || !isValidAddress(ownerAddress)) return
         return this.createSocialAddress(SocialAddressType.TwitterBlue, ownerAddress)
