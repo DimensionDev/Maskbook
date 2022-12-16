@@ -76,27 +76,14 @@ describe('DSearch test', () => {
         expect(result[0]?.name).toBe('Terraforms')
     })
 
-    test('should return all the data without prefix', async () => {
+    test('should return all the data with tag prefix', async () => {
         const DSearch = new DSearchAPI()
-        const result = (await DSearch.search('eth')) as Array<
+        const result = (await DSearch.search('$eth')) as Array<
             NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
         >
 
-        expect(result.length).toBe(5)
+        expect(result.length).toBe(2)
         expect(result[0]?.name).toBe('eth1')
-        expect(result[1]?.name).toBe('eth1')
-        expect(result[2]?.name).toBe('ethInCMC')
-        expect(result[3]?.name).toBe('ethInCoinGecko')
-        expect(result[4]?.name).toBe('TestEth')
-    })
-
-    test('should return by searching address directly', async () => {
-        const DSearch = new DSearchAPI()
-        const result = (await DSearch.search('0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb')) as Array<
-            NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        >
-        expect(result.length).toBe(1)
-        expect(result[0]?.name).toBe('CryptoPunks')
-        expect(result[0]?.address).toBe('0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb')
+        expect(result[1]?.name).toBe('TestEth')
     })
 })
