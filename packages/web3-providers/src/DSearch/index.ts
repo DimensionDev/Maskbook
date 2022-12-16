@@ -160,9 +160,15 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
     }
 
     private async searchTokenByAddress(address: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {
-        const tokens = compact<FungibleTokenResult<ChainId, SchemaType> | NonFungibleTokenResult<ChainId, SchemaType>>(
+        const tokens = compact<
+            | FungibleTokenResult<ChainId, SchemaType>
+            | NonFungibleTokenResult<ChainId, SchemaType>
+            | NonFungibleCollectionResult<ChainId, SchemaType>
+        >(
             (await this.searchTokens()).map((x) =>
-                x.type === SearchResultType.FungibleToken || x.type === SearchResultType.NonFungibleToken
+                x.type === SearchResultType.FungibleToken ||
+                x.type === SearchResultType.NonFungibleToken ||
+                x.type === SearchResultType.NonFungibleCollection
                     ? x
                     : undefined,
             ),
@@ -171,7 +177,9 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             .filter(
                 (x) =>
                     isSameAddress(address, x.address) &&
-                    (x.type === SearchResultType.FungibleToken || x.type === SearchResultType.NonFungibleToken),
+                    (x.type === SearchResultType.FungibleToken ||
+                        x.type === SearchResultType.NonFungibleToken ||
+                        x.type === SearchResultType.NonFungibleCollection),
             )
             .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
 
@@ -198,19 +206,29 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
     }
 
     private async searchTokenByName(name: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {
-        const tokens = compact<FungibleTokenResult<ChainId, SchemaType> | NonFungibleTokenResult<ChainId, SchemaType>>(
+        const tokens = compact<
+            | FungibleTokenResult<ChainId, SchemaType>
+            | NonFungibleTokenResult<ChainId, SchemaType>
+            | NonFungibleCollectionResult<ChainId, SchemaType>
+        >(
             (await this.searchTokens()).map((x) =>
-                x.type === SearchResultType.FungibleToken || x.type === SearchResultType.NonFungibleToken
+                x.type === SearchResultType.FungibleToken ||
+                x.type === SearchResultType.NonFungibleToken ||
+                x.type === SearchResultType.NonFungibleCollection
                     ? x
                     : undefined,
             ),
         )
 
-        let result: Array<FungibleTokenResult<ChainId, SchemaType> | NonFungibleTokenResult<ChainId, SchemaType>> = []
+        let result: Array<
+            | FungibleTokenResult<ChainId, SchemaType>
+            | NonFungibleTokenResult<ChainId, SchemaType>
+            | NonFungibleCollectionResult<ChainId, SchemaType>
+        > = []
 
         for (const { rules, type } of getHandlers<ChainId, SchemaType>()) {
             for (const rule of rules) {
-                if (rule.key !== 'token') continue
+                if (!['token', 'twitter'].includes(rule.key)) continue
 
                 const filtered = tokens.filter((x) => (type ? type === x.type : true))
 
@@ -221,7 +239,9 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                 if (rule.type === 'fuzzy' && rule.fullSearch) {
                     const items = rule
                         .fullSearch<
-                            FungibleTokenResult<ChainId, SchemaType> | NonFungibleTokenResult<ChainId, SchemaType>
+                            | FungibleTokenResult<ChainId, SchemaType>
+                            | NonFungibleTokenResult<ChainId, SchemaType>
+                            | NonFungibleCollectionResult<ChainId, SchemaType>
                         >(name, filtered)
                         ?.map((x) => ({ ...x, keyword: name }))
                     if (items?.length) result = [...result, ...items]
@@ -231,7 +251,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
         return uniqWith(
             result,
-            (a, b) => a.type === b.type && (a.id === b.id || isSameAddress(a.address, b.address)),
+            (a, b) => a.type === b.type && (a.id === b.id || isSameAddress(a.address, b.address) || a.rank === b.rank),
         ).sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
     }
 
@@ -249,7 +269,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
         // token:MASK
         const { word, field } = this.parseKeyword(keyword)
-        if (word && field === 'token') return this.searchTokenByName(word) as Promise<T[]>
+        if (word && ['token', 'twitter'].includes(field ?? '')) return this.searchTokenByName(word) as Promise<T[]>
 
         // vitalik.eth
         if (isValidDomain(keyword)) return this.searchDomain(keyword) as Promise<T[]>

@@ -5,11 +5,11 @@ import { DSearchAPI } from '../../src/DSearch/index.js'
 
 /* cspell:disable */
 describe('DSearch test', () => {
-    test('should return by sysmbol from specific list', async () => {
+    test('should return from specific list', async () => {
         const DSearch = new DSearchAPI()
         const result = await DSearch.search('token:eth')
 
-        expect(result.length).toBe(1)
+        expect(result.length).toBe(2)
         expect(result[0]).toStrictEqual({
             name: 'eth1',
             symbol: 'eth',
@@ -36,17 +36,10 @@ describe('DSearch test', () => {
         const DSearch = new DSearchAPI()
         const result = await DSearch.search('token:efuzzy')
 
-        expect(result.length).toBe(2)
+        expect(result.length).toBe(1)
         expect(result[0]).toStrictEqual({
             name: 'test thefuzzy search',
             symbol: 'thefuzzy',
-            type: 'FungibleToken',
-            keyword: 'efuzzy',
-            pluginID: 'com.mask.evm',
-        })
-        expect(result[1]).toStrictEqual({
-            name: 'test thefuzzy search empty',
-            symbol: 'fuzzy',
             type: 'FungibleToken',
             keyword: 'efuzzy',
             pluginID: 'com.mask.evm',
