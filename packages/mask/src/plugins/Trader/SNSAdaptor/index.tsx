@@ -11,7 +11,8 @@ import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { SearchResultType } from '@masknet/web3-shared-base'
+import { SearchResultType, FungibleTokenResult, NonFungibleTokenResult } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 const sns: Plugin.SNSAdaptor.Definition<
     ChainId,
@@ -32,9 +33,12 @@ const sns: Plugin.SNSAdaptor.Definition<
     SearchResultInspector: {
         ID: PluginID.Trader,
         UI: {
-            Content({ result: resultList }) {
+            Content({ result: _resultList }) {
                 const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-
+                const resultList = _resultList as Array<
+                    | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+                    | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+                >
                 const [result, setResult] = useState(resultList[0])
                 const { chainId, keyword, address, pluginID } = result
                 return (

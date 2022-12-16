@@ -8,7 +8,14 @@ import {
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
-import { SearchResult, SourceType, createFungibleToken, SearchResultType, TokenType } from '@masknet/web3-shared-base'
+import {
+    SourceType,
+    createFungibleToken,
+    SearchResultType,
+    TokenType,
+    FungibleTokenResult,
+    NonFungibleTokenResult,
+} from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTList } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
@@ -98,9 +105,18 @@ const useStyles = makeStyles<{
 })
 
 export interface TrendingViewProps {
-    setResult: (a: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) => void
-    result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    resultList?: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    setResult: (
+        a:
+            | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+            | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
+    ) => void
+    result:
+        | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+        | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    resultList?: Array<
+        | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+        | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    >
     isPreciseSearch?: boolean
     searchedContractAddress?: string
     expectedChainId?: Web3Helper.ChainIdAll

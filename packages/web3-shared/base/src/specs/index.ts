@@ -606,13 +606,6 @@ export interface NonFungibleTokenSecurity {}
     type: SearchResultType
     keyword: string
     chainId?: ChainId
-    id?: string
-    name?: string
-    rank?: number
-    address?: string
-    source?: SourceType
-    logoURL?: string
-    symbol?: string
 }
 export interface EOAResult<ChainId> extends Result<ChainId> {
     type: SearchResultType.EOA
@@ -629,6 +622,9 @@ export interface DomainResult<ChainId> extends Result<ChainId> {
 export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
     //  This id on the provider platform
     id?: string
+    address?: string
+    rank?: number
+    logoURL?: string
     name: string
     symbol: string
     type: SearchResultType.FungibleToken
@@ -637,8 +633,12 @@ export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId
 }
 
 export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
+    id?: string
     name: string,
     address: string
+    logoURL?: string
+    rank?: number
+    symbol?: string
     tokenId?: string
     type: SearchResultType.NonFungibleToken
     source: SourceType 
@@ -648,6 +648,9 @@ export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<Chai
 export interface NonFungibleCollectionResult<ChainId, SchemaType> extends Result<ChainId> {
     name: string,
     address: string
+    rank?: number
+    logoURL?: string
+    symbol?: string
     source: SourceType 
     type: SearchResultType.NonFungibleCollection
     collection?: NonFungibleCollection<ChainId, SchemaType>

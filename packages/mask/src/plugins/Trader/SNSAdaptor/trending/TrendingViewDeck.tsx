@@ -3,7 +3,14 @@ import { useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Box } from '@mui/system'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { SourceType, SearchResult, formatCurrency, TokenType, resolveSourceTypeName } from '@masknet/web3-shared-base'
+import {
+    SourceType,
+    formatCurrency,
+    TokenType,
+    resolveSourceTypeName,
+    FungibleTokenResult,
+    NonFungibleTokenResult,
+} from '@masknet/web3-shared-base'
 import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity, DataProviderIcon } from '@masknet/shared'
 import { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -137,9 +144,18 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     stats: Stat[]
     currency: Currency
     trending: TrendingAPI.Trending
-    setResult: (a: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) => void
-    result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    resultList?: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    setResult: (
+        a:
+            | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+            | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
+    ) => void
+    result:
+        | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+        | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    resultList?: Array<
+        | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+        | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    >
     children?: React.ReactNode
     isPreciseSearch?: boolean
     isPopper?: boolean

@@ -120,9 +120,11 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
      */
     async searchToken(keyword: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {
         const { word, field } = this.parseKeyword(keyword)
-        const data = await this.init()
+        const data = (await this.init()) as Array<
+            FungibleTokenResult<ChainId, SchemaType> | NonFungibleTokenResult<ChainId, SchemaType>
+        >
 
-        let result: Array<SearchResult<ChainId, SchemaType>> = []
+        let result: Array<FungibleTokenResult<ChainId, SchemaType> | NonFungibleTokenResult<ChainId, SchemaType>> = []
 
         if (isValidAddress?.(keyword)) {
             const list = data
@@ -156,7 +158,9 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                 const filtered = data.filter((x) => (type ? type === x.type : true))
 
                 if (rule.type === 'exact') {
-                    const item = filtered.find((x) => rule.filter?.(x, word, filtered))
+                    const item = filtered.find((x) => rule.filter?.(x, word, filtered)) as
+                        | FungibleTokenResult<ChainId, SchemaType>
+                        | NonFungibleTokenResult<ChainId, SchemaType>
                     if (item) {
                         const exactData = { ...item, keyword: word }
 
@@ -168,7 +172,9 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                     }
                 }
                 if (rule.type === 'fuzzy') {
-                    const items = rule.fullSearch?.(word, filtered) ?? []
+                    const items = (rule.fullSearch?.(word, filtered) ?? []) as Array<
+                        FungibleTokenResult<ChainId, SchemaType> | NonFungibleTokenResult<ChainId, SchemaType>
+                    >
                     const fuzzyData = items.map((x) => ({ ...x, keyword: word }))
                     if (!field) {
                         result = [...result, ...fuzzyData]
