@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useLocation, useWindowScroll, useAsyncRetry } from 'react-use'
 import { Popper, ClickAwayListener, PopperProps, Fade } from '@mui/material'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import type { NonFungibleTokenResult, FungibleTokenResult } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { DSearch } from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
@@ -12,13 +11,7 @@ import { WalletMessages } from '../../../Wallet/messages.js'
 import { PluginTransakMessages } from '../../../Transak/messages.js'
 
 export interface TrendingPopperProps {
-    children?: (
-        resultList: Array<
-            | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-            | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        >,
-        reposition?: () => void,
-    ) => React.ReactNode
+    children?: (resultList: Array<Web3Helper.TokenResultAll>, reposition?: () => void) => React.ReactNode
     PopperProps?: Partial<PopperProps>
 }
 
@@ -35,10 +28,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
 
     const { value: resultList } = useAsyncRetry(async () => {
         if (!name || !type) return EMPTY_LIST
-        return DSearch.search<
-            | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-            | NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        >(`${type === TrendingAPI.TagType.CASH ? '$' : '#'}${name}`)
+        return DSearch.search<Web3Helper.TokenResultAll>(`${type === TrendingAPI.TagType.CASH ? '$' : '#'}${name}`)
     }, [name, type])
 
     // #region select token and provider dialog could be opened by trending view

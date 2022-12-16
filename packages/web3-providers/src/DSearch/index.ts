@@ -261,6 +261,8 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
             const addressList = await this.searchAddress(keyword)
             if (addressList.length) return addressList as T[]
+
+            // TODO: query fungible token by coingecko
         }
 
         return EMPTY_LIST
