@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { compact } from 'lodash-es'
+import { compact, uniqWith } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     SearchResult,
@@ -206,6 +206,8 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             ),
         )
 
+        let result: Array<FungibleTokenResult<ChainId, SchemaType> | NonFungibleTokenResult<ChainId, SchemaType>> = []
+
         for (const { rules, type } of getHandlers<ChainId, SchemaType>()) {
             for (const rule of rules) {
                 if (rule.key !== 'token') continue
@@ -214,16 +216,23 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
                 if (rule.type === 'exact') {
                     const item = filtered.find((x) => rule.filter?.(x, name, filtered))
-                    if (item) return [{ ...item, keyword: name }]
+                    if (item) result = [...result, { ...item, keyword: name }]
                 }
-                if (rule.type === 'fuzzy') {
-                    const items = rule.fullSearch?.(name, filtered)?.map((x) => ({ ...x, keyword: name }))
-                    if (items?.length) return items
+                if (rule.type === 'fuzzy' && rule.fullSearch) {
+                    const items = rule
+                        .fullSearch<
+                            FungibleTokenResult<ChainId, SchemaType> | NonFungibleTokenResult<ChainId, SchemaType>
+                        >(name, filtered)
+                        ?.map((x) => ({ ...x, keyword: name }))
+                    if (items?.length) result = [...result, ...items]
                 }
             }
         }
 
-        return EMPTY_LIST
+        return uniqWith(
+            result,
+            (a, b) => a.type === b.type && (a.id === b.id || isSameAddress(a.address, b.address)),
+        ).sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
     }
 
     /**
