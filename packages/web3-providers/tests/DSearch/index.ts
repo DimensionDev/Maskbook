@@ -1,4 +1,6 @@
 import { describe, expect, test } from 'vitest'
+import { NonFungibleCollectionResult, NonFungibleTokenResult } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { DSearchAPI } from '../../src/DSearch/index.js'
 
 /* cspell:disable */
@@ -66,7 +68,9 @@ describe('DSearch test', () => {
 
     test('should return collection by twitter handle', async () => {
         const DSearch = new DSearchAPI()
-        const result = await DSearch.search('twitter:mathcastles')
+        const result = (await DSearch.search('twitter:mathcastles')) as Array<
+            NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+        >
 
         expect(result.length).toBe(1)
         expect(result[0]?.name).toBe('Terraforms')
@@ -74,7 +78,9 @@ describe('DSearch test', () => {
 
     test('should return all the data without prefix', async () => {
         const DSearch = new DSearchAPI()
-        const result = await DSearch.search('eth')
+        const result = (await DSearch.search('eth')) as Array<
+            NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+        >
 
         expect(result.length).toBe(5)
         expect(result[0]?.name).toBe('eth1')
@@ -86,7 +92,9 @@ describe('DSearch test', () => {
 
     test('should return by searching address directly', async () => {
         const DSearch = new DSearchAPI()
-        const result = await DSearch.search('0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb')
+        const result = (await DSearch.search('0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb')) as Array<
+            NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+        >
         expect(result.length).toBe(1)
         expect(result[0]?.name).toBe('CryptoPunks')
         expect(result[0]?.address).toBe('0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb')
