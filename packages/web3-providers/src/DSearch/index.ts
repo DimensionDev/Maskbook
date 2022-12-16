@@ -38,11 +38,19 @@ import { CoinMarketCapSearchAPI } from '../CoinMarketCap/DSearchAPI.js'
 import { NFTScanSearchAPI } from '../NFTScan/index.js'
 import type { DSearchBaseAPI } from '../types/DSearch.js'
 import { getHandlers } from './rules.js'
-import { ENS, SpaceID, ChainbaseDomain, CoinGeckoTrending } from '../entry.js'
+import { ChainbaseDomainAPI } from '../Chainbase/index.js'
+import { SpaceID_API } from '../SpaceID/index.js'
+import { ENS_API } from '../ENS/index.js'
+import { CoinGeckoTrending_API } from '../CoinGecko/apis/CoinGecko.js'
 
 import { DSEARCH_BASE_URL } from './constants.js'
 
 const CHAIN_ID_LIST = [ChainIdEVM.Mainnet, ChainIdEVM.BSC, ChainIdEVM.Matic]
+
+const CoinGeckoTrending = new CoinGeckoTrending_API()
+const ENS = new ENS_API()
+const SpaceID = new SpaceID_API()
+const ChainbaseDomain = new ChainbaseDomainAPI()
 
 const isValidAddress = (address?: string): boolean => {
     return isValidAddressEVM(address) || isValidAddressFlow(address) || isValidAddressSolana(address)
