@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { compact, first, unionBy } from 'lodash-es'
-import { AbiItem, toHex } from 'web3-utils'
+import { AbiItem, padLeft, toHex } from 'web3-utils'
 import {
     ChainId,
     ContractWallet,
@@ -116,10 +116,9 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
      * @returns
      */
     private async getAccountsFromChainbase(chainId: ChainId, owner: string) {
-        // const ownerTopic = padLeft(owner, 64)
         const { records: logs } = await fetchJSON<{ records: ContractAccountAPI.Log[]; count: number }>(
             urlcat(LOG_ROOT, '/records', {
-                newOwnerAddress: owner,
+                newOwnerAddress: padLeft(owner, 64),
                 size: MAX_ACCOUNT_LENGTH,
                 offset: 0,
             }),
