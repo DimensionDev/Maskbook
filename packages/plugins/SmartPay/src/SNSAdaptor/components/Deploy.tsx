@@ -126,14 +126,22 @@ export function Deploy({ open }: { open: boolean }) {
     }, [signAccount, getPersonaAvatar])
 
     // #region get contract account
-    const { value: contractAccount, loading: queryContractLoading } = useAsync(async () => {
+    const { value, loading: queryContractLoading } = useAsync(async () => {
         if (!signAccount?.identity || !signAccount?.address || !open) return
 
-        // TODO: filter by deployed
         const deployAccounts = await SmartPayAccount.getAccountsByOwners(ChainId.Mumbai, [signAccount?.address])
-        return SmartPayAccount.getAccountByNonce(ChainId.Mumbai, signAccount?.address, deployAccounts.length)
+
+        const nonce = deployAccounts.filter((x) => x.funded).length
+        const account = await SmartPayAccount.getAccountByNonce(ChainId.Mumbai, signAccount?.address, nonce)
+
+        return {
+            account,
+            nonce,
+        }
     }, [signAccount, open])
     // #endregion
+
+    const { account: contractAccount, nonce } = value ?? {}
 
     // #region copy event handler
     const [, copyToClipboard] = useCopyToClipboard()
@@ -145,7 +153,7 @@ export function Deploy({ open }: { open: boolean }) {
     })
     // #endregion
 
-    const [{ loading: deployLoading }, handleDeploy] = useDeploy(signAccount, contractAccount)
+    const [{ loading: deployLoading }, handleDeploy] = useDeploy(signAccount, contractAccount, nonce, toggle)
 
     const handleSelectSignAccount = useCallback((signAccount: SignAccount) => {
         setSignAccount(signAccount)
@@ -232,7 +240,7 @@ export function Deploy({ open }: { open: boolean }) {
                             <Icons.MaskBlue size={24} className={classes.maskIcon} />
                             <Typography fontSize={18} fontWeight={700} lineHeight="22px">
                                 {signAccount?.type === 'Persona'
-                                    ? formatPersonaFingerprint(signAccount.identity ?? '', 4)
+                                    ? formatPersonaFingerprint(signAccount.raw?.identifier.rawPublicKey ?? '', 4)
                                     : formatEthereumAddress(signAccount?.identity ?? '', 4)}
                             </Typography>
                         </Box>
@@ -271,7 +279,7 @@ export function Deploy({ open }: { open: boolean }) {
                             onClick={handleDeploy}
                             loading={deployLoading}
                             disabled={deployLoading || queryContractLoading || !signAccount}
-                            variant="roundedOutlined">
+                            variant="roundedContained">
                             {t.deploy()}
                         </ActionButton>
                     </PersonaAction>
@@ -296,7 +304,7 @@ export function Deploy({ open }: { open: boolean }) {
                             onClick={handleDeploy}
                             loading={deployLoading}
                             disabled={deployLoading || queryContractLoading || !signAccount}
-                            variant="roundedOutlined">
+                            variant="roundedContained">
                             {t.deploy()}
                         </ActionButton>
                     </Box>

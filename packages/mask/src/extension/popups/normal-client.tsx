@@ -1,12 +1,13 @@
 import { status } from '../../setup.ui.js'
 import { startPluginDashboard } from '@masknet/plugin-infra/dashboard'
-import { createNormalReactRoot, hydrateNormalReactRoot } from '../../utils/index.js'
+import { createNormalReactRoot, hydrateNormalReactRoot, MaskMessages } from '../../utils/index.js'
 import { createPluginHost, createPartialSharedUIContext } from '../../../shared/plugin-infra/host.js'
 import { Services } from '../service.js'
 import Popups from './UI.js'
 import { currentPersonaIdentifier, pluginIDSettings } from '../../../shared/legacy-settings/settings.js'
 import { initialPersonaInformation } from './pages/Personas/hooks/PersonaContextInitialData.js'
 import { RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
+import { createSubscriptionFromAsync } from '@masknet/shared-base'
 
 if (location.hash === '#/personas') {
     async function hydrate() {
@@ -53,12 +54,19 @@ if (location.hash === '#/personas') {
 function startPluginHost() {
     // TODO: Should only load plugins when the page is plugin-aware.
 
+    const allPersonaSub = createSubscriptionFromAsync(
+        () => Services.Identity.queryOwnedPersonaInformation(true),
+        [],
+        MaskMessages.events.currentPersonaIdentifier.on,
+    )
+
     startPluginDashboard(
         createPluginHost(
             undefined,
             (id, signal) => ({
                 ...createPartialSharedUIContext(id, signal),
                 ...RestPartOfPluginUIContextShared,
+                allPersonas: allPersonaSub,
             }),
             Services.Settings.getPluginMinimalModeEnabled,
             Services.Helper.hasHostPermission,

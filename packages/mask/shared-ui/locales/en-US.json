@@ -853,6 +853,7 @@
     "popups_name": "Name",
     "popups_social_account": "Social Accounts",
     "popups_connected_wallets": "Connected Wallets",
+    "popups_change_owner": "Change Owner",
     "popups_wallet_connected_status$connected": "Connected",
     "popups_wallet_connected_status$unconnected": "Not Connected",
     "popups_loading": "Loading",

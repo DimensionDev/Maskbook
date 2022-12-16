@@ -91,7 +91,9 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
     }
 
     override async switchChain(chainId: ChainId) {
-        if (await this.options.isSupportedChainId(chainId)) this.storage.chainId.setValue(chainId)
+        if (await this.options.isSupportedChainId(chainId)) {
+            this.storage.chainId.setValue(chainId)
+        }
     }
 
     override async request<T extends unknown>(

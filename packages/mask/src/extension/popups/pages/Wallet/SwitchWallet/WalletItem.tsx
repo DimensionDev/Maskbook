@@ -94,7 +94,7 @@ export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }
 
     const [element] = useHover((isHovering) => (
         <ListItem className={classes.item} onClick={onClick} style={{ paddingRight: isSelected ? 10 : 42 }}>
-            <Icons.MaskWallet />
+            {wallet.owner ? <Icons.SmartPay /> : <Icons.MaskWallet />}
             <ListItemText className={classes.text}>
                 <Typography className={classes.name}>
                     <Typography component="span" display="flex" alignItems="center">

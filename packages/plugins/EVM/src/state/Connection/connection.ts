@@ -107,6 +107,8 @@ class Connection implements EVM_Connection {
                                             options.chainId,
                                             options.providerType,
                                             options.account,
+                                            options.owner,
+                                            options.identifier,
                                         ),
                                     )
                                     break

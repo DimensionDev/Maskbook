@@ -758,7 +758,9 @@ export interface Wallet {
     /** record updated at */
     updatedAt: Date
     /** an abstract wallet has a owner */
-    owner?: string
+    owner?: string,
+    
+    identifier?: ECKeyIdentifier
 }
 
 export interface Transaction<ChainId, SchemaType> {
@@ -869,7 +871,7 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     /** Create an instance that implement the wallet protocol. */
     createWeb3Provider(options?: ProviderOptions<ChainId>): Web3Provider
     /** Create the connection. */
-    connect(chainId?: ChainId, address?: string): Promise<Account<ChainId>>
+    connect(chainId?: ChainId, address?: string, owner?: string, identifier?: ECKeyIdentifier): Promise<Account<ChainId>>
     /** Dismiss the connection. */
     disconnect(): Promise<void>
 }
@@ -892,6 +894,9 @@ export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
     providerType?: ProviderType
     /** Fragments to merge into the transaction. */
     overrides?: Partial<Transaction>
+
+    owner?: string
+    identifier?: ECKeyIdentifier
 }
 export interface Connection<
     ChainId,
@@ -1476,7 +1481,7 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
     /** Wait until a provider ready */
     untilReady: (providerType: ProviderType) => Promise<void>
     /** Connect with the provider and set chain id. */
-    connect: (chainId: ChainId, providerType: ProviderType, account?: string) => Promise<Account<ChainId>>
+    connect: (chainId: ChainId, providerType: ProviderType, account?: string, owner?: string, identifier?: ECKeyIdentifier) => Promise<Account<ChainId>>
     /** Disconnect with the provider. */
     disconnect: (providerType: ProviderType) => Promise<void>
 }

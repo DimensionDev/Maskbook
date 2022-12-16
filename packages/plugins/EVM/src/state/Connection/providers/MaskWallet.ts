@@ -1,4 +1,4 @@
-import { ExtensionSite, getSiteType, PopupRoutes } from '@masknet/shared-base'
+import { ECKeyIdentifier, ExtensionSite, getSiteType, PopupRoutes } from '@masknet/shared-base'
 import { ChainId, chainResolver, isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
@@ -24,11 +24,11 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
         })
     }
 
-    override async connect(chainId: ChainId, address?: string) {
+    override async connect(chainId: ChainId, address?: string, owner?: string, identifier?: ECKeyIdentifier) {
         const siteType = getSiteType()
         if (siteType === ExtensionSite.Popup) {
             if (address) {
-                await this.switchAccount(address)
+                await this.switchAccount(address, owner, identifier)
                 await this.switchChain(chainId)
 
                 return {

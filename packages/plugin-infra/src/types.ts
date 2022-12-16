@@ -163,6 +163,7 @@ export namespace Plugin.Shared {
     }
 
     export interface SharedUIContext extends SharedContext {
+        allPersonas?: Subscription<PersonaInformation[]>
         /** The selected account of Mask Wallet */
         account: Subscription<string>
         /** The selected chainId of Mask Wallet */
