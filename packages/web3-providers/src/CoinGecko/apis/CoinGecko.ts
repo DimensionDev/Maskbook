@@ -50,10 +50,7 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
         }
     }
 
-    async getCoinInfoByAddress(
-        chainId: ChainId | undefined,
-        address: string,
-    ): Promise<TrendingAPI.CoinInfo | undefined> {
+    async getCoinInfoByAddress(address: string): Promise<TrendingAPI.CoinInfo | undefined> {
         return attemptUntil(
             COINGECKO_CHAIN_ID_LIST.map((chainId) => async () => {
                 try {
@@ -69,11 +66,7 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
         )
     }
 
-    async getCoinTrending(
-        chainId: ChainId | undefined,
-        id: string,
-        currency: TrendingAPI.Currency,
-    ): Promise<TrendingAPI.Trending> {
+    async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
         const info = await getCoinInfo(id)
         if ('error' in info) throw new Error(info.error)
 

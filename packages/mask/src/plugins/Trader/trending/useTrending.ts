@@ -4,7 +4,7 @@ import { SourceType, SearchResultType, TokenType } from '@masknet/web3-shared-ba
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import { PluginTraderRPC } from '../messages.js'
 import type { Coin } from '../types/index.js'
@@ -103,6 +103,6 @@ function createCoinFromTrending(
 export function useCoinInfoByAddress(address: string) {
     return useAsyncRetry(async () => {
         if (!address) return
-        return PluginTraderRPC.getCoinInfoByAddress(ChainId.Mainnet, address)
+        return PluginTraderRPC.getCoinInfoByAddress(address)
     }, [address])
 }

@@ -133,7 +133,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
             if (list.length > 0) return [list[0]]
 
-            const coinInfo = await CoinGeckoTrending.getCoinInfoByAddress(undefined, keyword)
+            const coinInfo = await CoinGeckoTrending.getCoinInfoByAddress(keyword)
 
             if (coinInfo?.id) {
                 return [
