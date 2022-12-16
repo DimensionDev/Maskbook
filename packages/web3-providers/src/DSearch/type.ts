@@ -8,10 +8,10 @@ export interface Rule<ChainId, SchemaType> {
         keyword: string,
         all: Array<SearchResult<ChainId, SchemaType>>,
     ) => boolean
-    fullSearch?: (
+    fullSearch?<T extends SearchResult<ChainId, SchemaType> = SearchResult<ChainId, SchemaType>>(
         keyword: string,
-        all: Array<SearchResult<ChainId, SchemaType>>,
-    ) => Array<SearchResult<ChainId, SchemaType>>
+        all: T[],
+    ): T[]
 }
 
 export interface Handler<ChainId, SchemaType> {

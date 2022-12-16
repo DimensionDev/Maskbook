@@ -65,7 +65,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
     {
         rules: [
             {
-                key: 'collection',
+                key: 'token',
                 type: 'exact',
                 filter: (data: SearchResult<ChainId, SchemaType>, keyword: string) => {
                     if (data.type !== SearchResultType.NonFungibleToken) return false
@@ -73,7 +73,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                 },
             },
             {
-                key: 'collection',
+                key: 'token',
                 type: 'fuzzy',
                 fullSearch: (keyword: string, all: Array<SearchResult<ChainId, SchemaType>>) => {
                     const data = compact<NonFungibleTokenResult<ChainId, SchemaType>>(
