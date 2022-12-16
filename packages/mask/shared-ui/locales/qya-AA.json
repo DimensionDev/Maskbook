@@ -853,6 +853,7 @@
     "popups_name": "crwdns16326:0crwdne16326:0",
     "popups_social_account": "crwdns16328:0crwdne16328:0",
     "popups_connected_wallets": "crwdns16330:0crwdne16330:0",
+    "popups_change_owner": "crwdns19335:0crwdne19335:0",
     "popups_wallet_connected_status$connected": "crwdns18260:0crwdne18260:0",
     "popups_wallet_connected_status$unconnected": "crwdns18262:0crwdne18262:0",
     "popups_loading": "crwdns16332:0crwdne16332:0",

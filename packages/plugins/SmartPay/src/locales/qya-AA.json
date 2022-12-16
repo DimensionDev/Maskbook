@@ -43,6 +43,7 @@
     "setup_smart_pay_one": "crwdns19281:0crwdne19281:0",
     "setup_smart_pay_two": "crwdns19283:0crwdne19283:0",
     "setup_smart_pay_three": "crwdns19285:0crwdne19285:0",
+    "scan_address_to_payment": "crwdns19337:0crwdne19337:0",
     "remain_mask_tips": "crwdns19287:0{{balance}}crwdnd19287:0{{symbol}}crwdne19287:0",
     "remain_times_tips": "crwdns19289:0{{times}}crwdne19289:0",
     "personas": "crwdns19291:0crwdne19291:0",
