@@ -1,12 +1,6 @@
 import { compact } from 'lodash-es'
 import Fuse from 'fuse.js'
-import {
-    FungibleTokenResult,
-    NonFungibleTokenResult,
-    SearchResult,
-    SearchResultType,
-    isSameAddress,
-} from '@masknet/web3-shared-base'
+import { SearchResult, SearchResultType, isSameAddress } from '@masknet/web3-shared-base'
 import type { Handler } from './type.js'
 
 export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, SchemaType>> => [
@@ -30,8 +24,11 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
             {
                 key: 'token',
                 type: 'fuzzy',
-                fullSearch: (keyword: string, all: Array<SearchResult<ChainId, SchemaType>>) => {
-                    const data = compact<FungibleTokenResult<ChainId, SchemaType>>(
+                fullSearch<T extends SearchResult<ChainId, SchemaType> = SearchResult<ChainId, SchemaType>>(
+                    keyword: string,
+                    all: T[],
+                ) {
+                    const data = compact<T>(
                         all.map((x) => {
                             if (x.type !== SearchResultType.FungibleToken) return
                             return {
@@ -65,7 +62,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
     {
         rules: [
             {
-                key: 'collection',
+                key: 'token',
                 type: 'exact',
                 filter: (data: SearchResult<ChainId, SchemaType>, keyword: string) => {
                     if (data.type !== SearchResultType.NonFungibleToken) return false
@@ -73,10 +70,13 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                 },
             },
             {
-                key: 'collection',
+                key: 'token',
                 type: 'fuzzy',
-                fullSearch: (keyword: string, all: Array<SearchResult<ChainId, SchemaType>>) => {
-                    const data = compact<NonFungibleTokenResult<ChainId, SchemaType>>(
+                fullSearch<T extends SearchResult<ChainId, SchemaType> = SearchResult<ChainId, SchemaType>>(
+                    keyword: string,
+                    all: T[],
+                ) {
+                    const data = compact<T>(
                         all.map((x) => {
                             if (x.type !== SearchResultType.NonFungibleToken) return
                             return {
