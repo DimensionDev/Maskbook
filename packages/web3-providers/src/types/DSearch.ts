@@ -7,7 +7,7 @@ export namespace DSearchBaseAPI {
     export interface Provider<ChainId, SchemaType, T extends NetworkPluginID> {
         search(
             keyword: string,
-            options: {
+            options?: {
                 getAddressType?: (
                     address: string,
                     options?: Web3Helper.Web3ConnectionOptions<T>,

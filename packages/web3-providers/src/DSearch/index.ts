@@ -163,20 +163,24 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
     async search(
         keyword: string,
-        options: {
+        options?: {
             getAddressType?: (
                 address: string,
                 options?: Web3Helper.Web3ConnectionOptions<NetworkPluginID.PLUGIN_EVM>,
             ) => Promise<AddressType | undefined>
         },
     ): Promise<Array<SearchResult<ChainId, SchemaType>>> {
-        const { getAddressType } = options
         const trendingTokenRegexResult = keyword.match(/([#$])(\w+)/) ?? []
 
         const [_, _trendingSearchType, trendingTokenName = ''] = trendingTokenRegexResult
+        const { word, field } = this.parseKeyword(keyword)
 
         if (trendingTokenName) {
             return this.searchToken(trendingTokenName)
+        }
+
+        if (word && field) {
+            return this.searchToken(keyword)
         }
 
         if (isValidDomain?.(keyword)) {
@@ -200,7 +204,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         if (isValidAddress?.(keyword) && !isZeroAddress?.(keyword)) {
             const addressType = await attemptUntil(
                 CHAIN_ID_LIST.map((chainId) => async () => {
-                    const addressType = await getAddressType?.(keyword, { chainId })
+                    const addressType = await options?.getAddressType?.(keyword, { chainId })
                     if (addressType !== AddressType.Contract) return
                     return addressType
                 }),
