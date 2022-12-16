@@ -105,8 +105,6 @@ export enum SearchResultType {
     // e.g., #APE
     NonFungibleToken='NonFungibleToken',
     NonFungibleCollection='NonFungibleCollection',
-    // hits none of all above.
-    Unknown = 'Unknown'
 }
 
 export enum SearchFungibleTokenResultSubType {
@@ -654,18 +652,12 @@ export interface NonFungibleCollectionResult<ChainId, SchemaType> extends Result
     collection?: NonFungibleCollection<ChainId, SchemaType>
 }
 
-export interface UnknownResult<ChainId> extends Result<ChainId> {
-    keyword: string
-    type: SearchResultType.Unknown
-}
-
 export type SearchResult<ChainId, SchemaType> = 
     | EOAResult<ChainId>
     | DomainResult<ChainId>
     | FungibleTokenResult<ChainId, SchemaType>
     | NonFungibleTokenResult<ChainId, SchemaType>
     | NonFungibleCollectionResult<ChainId, SchemaType>
-    | UnknownResult<ChainId>
 
 /**
  * Plugin can declare what chain it supports to trigger side effects (e.g. create a new transaction).

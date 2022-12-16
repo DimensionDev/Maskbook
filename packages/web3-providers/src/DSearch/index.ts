@@ -265,13 +265,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             // todo: query fungible token by coingecko
         }
 
-        return [
-            {
-                pluginID: NetworkPluginID.PLUGIN_EVM,
-                type: SearchResultType.Unknown,
-                keyword,
-            },
-        ]
+        return []
     }
 
     private parseKeyword(keyword: string): { word: string; field?: string } {
