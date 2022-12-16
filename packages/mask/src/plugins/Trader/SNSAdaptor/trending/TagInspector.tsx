@@ -9,7 +9,7 @@ import { TrendingView } from './TrendingView.js'
 export interface TagInspectorProps {}
 
 export function TagInspector(props: TagInspectorProps) {
-    const createTrendingView = useCallback((resultList: Array<Web3Helper.TokenResultAll>, reposition?: () => void) => {
+    const createTrendingView = useCallback((resultList: Web3Helper.TokenResultAll[], reposition?: () => void) => {
         return <TrendingViewWrapper resultList={resultList} reposition={reposition} />
     }, [])
     return (
@@ -20,7 +20,7 @@ export function TagInspector(props: TagInspectorProps) {
 }
 
 interface TrendingViewWrapperProps {
-    resultList: Array<Web3Helper.TokenResultAll>
+    resultList: Web3Helper.TokenResultAll[]
     reposition?: () => void
 }
 

@@ -11,7 +11,7 @@ import { WalletMessages } from '../../../Wallet/messages.js'
 import { PluginTransakMessages } from '../../../Transak/messages.js'
 
 export interface TrendingPopperProps {
-    children?: (resultList: Array<Web3Helper.TokenResultAll>, reposition?: () => void) => React.ReactNode
+    children?: (resultList: Web3Helper.TokenResultAll[], reposition?: () => void) => React.ReactNode
     PopperProps?: Partial<PopperProps>
 }
 
