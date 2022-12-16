@@ -18,6 +18,10 @@ import type {
     NonFungibleTokenSecurity,
     Web3State as Web3StateShared,
     Web3UI as Web3UIShared,
+    SearchResult,
+    TokenResult,
+    FungibleTokenResult,
+    NonFungibleTokenResult,
 } from '@masknet/web3-shared-base'
 import type * as EVM from '@masknet/web3-shared-evm'
 import type * as Flow from '@masknet/web3-shared-flow'
@@ -192,6 +196,26 @@ export declare namespace Web3Helper {
         Definition[NetworkPluginID]['SchemaType']
     >
     export type NonFungibleTokenAll = NonFungibleToken<
+        Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['SchemaType']
+    >
+
+    export type SearchResultAll = SearchResult<
+        Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['SchemaType']
+    >
+
+    export type FungibleTokenResultAll = FungibleTokenResult<
+        Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['SchemaType']
+    >
+
+    export type NonFungibleTokenResultAll = NonFungibleTokenResult<
+        Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['SchemaType']
+    >
+
+    export type TokenResultAll = TokenResult<
         Definition[NetworkPluginID]['ChainId'],
         Definition[NetworkPluginID]['SchemaType']
     >
