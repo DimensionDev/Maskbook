@@ -114,7 +114,6 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         /** address as id */ id: string,
         currency: TrendingAPI.Currency,
     ): Promise<TrendingAPI.Trending> {
-        console.log({ chainId_ })
         const result = chainId_
             ? { collection: await this.getCollection(chainId_, id), chainId: chainId_ }
             : await attemptUntil(
