@@ -20,7 +20,7 @@ export interface NonFungibleToken {
 
 export class CoinGeckoSearchAPI<ChainId, SchemaType> implements DSearchBaseAPI.DataSourceProvider<ChainId, SchemaType> {
     async get(): Promise<Array<SearchResult<ChainId, SchemaType>>> {
-        const tokensURL = urlcat(DSEARCH_BASE_URL, '/fungible-tokens/coin-gecko.json')
+        const tokensURL = urlcat(DSEARCH_BASE_URL, '/fungible-tokens/coingecko.json')
         return fetchJSON<Array<NonFungibleTokenResult<ChainId, SchemaType>>>(tokensURL, undefined, fetchCached)
     }
 }

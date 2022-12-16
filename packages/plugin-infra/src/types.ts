@@ -22,7 +22,6 @@ import type {
     ChainDescriptor,
     NetworkDescriptor,
     ProviderDescriptor,
-    SearchKeywordType,
     SearchResult,
     SocialAccount,
     SocialIdentity,
@@ -680,7 +679,7 @@ export namespace Plugin.SNSAdaptor {
         UI?: {
             /** The brief content above detailed tabs. */
             Content?: InjectUI<{
-                result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+                result: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
             }>
         }
         Utils?: {
@@ -718,9 +717,7 @@ export namespace Plugin.SNSAdaptor {
     export interface SearchResultContent {
         ID: string
         UI?: {
-            Content?: React.ForwardRefExoticComponent<
-                { keyword: string; keywordType?: SearchKeywordType } & React.RefAttributes<unknown>
-            >
+            Content?: React.ForwardRefExoticComponent<{ keyword: string } & React.RefAttributes<unknown>>
         }
     }
 

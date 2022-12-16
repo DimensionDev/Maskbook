@@ -1,6 +1,5 @@
-import { DataProvider } from '@masknet/public-api'
-import { TokenType } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { TokenType, SourceType } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { isMirroredKeyword } from '../Trending/helpers.js'
 import * as BaseAPI from './base-api.js'
 import { BTC_FIRST_LEGER_DATE, getAllCoinsByKeyword, getPriceStats as getStats } from './base-api.js'
@@ -23,11 +22,15 @@ export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
         return getAllCoinsByKeyword(chainId, keyword)
     }
 
-    async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
-        const { token, marketInfo, tickersInfo } = await BaseAPI.getCoinInfo(chainId, id)
+    async getCoinTrending(
+        chainId: ChainId | undefined,
+        id: string,
+        currency: TrendingAPI.Currency,
+    ): Promise<TrendingAPI.Trending> {
+        const { token, marketInfo, tickersInfo } = await BaseAPI.getCoinInfo(chainId ?? ChainId.Mainnet, id)
         return {
             currency,
-            dataProvider: DataProvider.UniswapInfo,
+            dataProvider: SourceType.UniswapInfo,
             market: marketInfo,
             coin: {
                 id,
@@ -47,7 +50,7 @@ export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
         }
     }
 
-    getCoinInfoByAddress(chainId: ChainId, address: string): Promise<TrendingAPI.CoinInfo | undefined> {
+    getCoinInfoByAddress(address: string): Promise<TrendingAPI.CoinInfo | undefined> {
         throw new Error('To be implemented.')
     }
 

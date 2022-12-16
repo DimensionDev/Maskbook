@@ -1,18 +1,20 @@
 import { FC, PropsWithChildren, useCallback, useMemo } from 'react'
-import { groupBy, toPairs } from 'lodash-es'
+import { groupBy, toPairs, isEqual } from 'lodash-es'
 import { Icons } from '@masknet/icons'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { TokenIcon } from '@masknet/shared'
+import { SearchResultType } from '@masknet/web3-shared-base'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
-import { TokenType } from '@masknet/web3-shared-base'
 import { RadioButtonUnchecked as RadioButtonUncheckedIcon } from '@mui/icons-material'
 import { Divider, MenuItem, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/system'
 import type { Coin } from '../../types/index.js'
-import { CoinIcon } from './components/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     coinMenu: {
         maxHeight: 600,
-        maxWidth: 400,
+        width: 400,
+        backgroundColor: theme.palette.maskColor.bottom,
         '&::-webkit-scrollbar': {
             display: 'none',
         },
@@ -20,16 +22,24 @@ const useStyles = makeStyles()((theme) => ({
             paddingRight: '0 !important',
             width: '100% !important',
         },
+        borderRadius: 16,
     },
     groupName: {
         height: 18,
         fontWeight: 'bold',
-        padding: theme.spacing(0, 2),
+        padding: '0 12px',
     },
     menuItem: {
+        display: 'flex',
         overflow: 'hidden',
-        alignItems: 'stretch',
+        alignItems: 'center',
         height: 36,
+        padding: '0 12px',
+    },
+    group: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
     },
     itemText: {
         flexDirection: 'row',
@@ -39,8 +49,18 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         overflow: 'hidden',
     },
+    itemCheckout: {
+        display: 'flex',
+        alignItems: 'center',
+    },
     divider: {
         margin: theme.spacing(1, 0),
+        width: 376,
+        position: 'relative',
+        left: 12,
+    },
+    rank: {
+        marginRight: 4,
     },
     name: {
         textOverflow: 'ellipsis',
@@ -50,7 +70,7 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: theme.spacing(0.5),
     },
     coinIcon: {
-        fontSize: 10,
+        marginRight: 4,
     },
     checkedIcon: {
         filter: 'drop-shadow(0px 4px 10px rgba(28, 104, 243, 0.2))',
@@ -63,34 +83,25 @@ export interface CoinMenuOption {
     value: string
 }
 interface TokenMenuListProps {
-    options: CoinMenuOption[]
-    type?: TokenType
-    value?: CoinMenuOption['value']
-    onSelect(type: TokenType, value: CoinMenuOption['value']): void
+    options: Web3Helper.TokenResultAll[]
+    result: Web3Helper.TokenResultAll
+    onSelect(value: Web3Helper.TokenResultAll): void
 }
 
-const TokenMenuList: FC<TokenMenuListProps> = ({ options, type, value, onSelect }) => {
+const TokenMenuList: FC<TokenMenuListProps> = ({ options, result, onSelect }) => {
     const { classes } = useStyles()
     const theme = useTheme()
     return (
         <>
-            {options.map((x) => {
-                const selected = value === x.value && type === x.coin.type
+            {options.map((x, i) => {
+                const selected = isEqual(x, result)
                 return (
-                    <MenuItem
-                        className={classes.menuItem}
-                        selected={selected}
-                        key={`${x.coin.type}/${x.value}`}
-                        onClick={() => onSelect(x.coin.type, x.value)}>
-                        {x.coin.address ? (
-                            <CoinIcon
+                    <MenuItem className={classes.menuItem} key={i} onClick={() => onSelect(x)}>
+                        {x.logoURL ? (
+                            <TokenIcon
                                 className={classes.coinIcon}
-                                type={x.coin.type}
-                                address={x.coin.address}
-                                name={x.coin.name}
-                                label=""
-                                symbol={x.coin.symbol}
-                                logoURL={x.coin.image_url}
+                                logoURL={x.logoURL}
+                                address={x.address || ''}
                                 size={20}
                             />
                         ) : null}
@@ -101,16 +112,29 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, type, value, onSelect 
                                 flexGrow={1}
                                 overflow="hidden"
                                 textOverflow="ellipsis">
-                                <span className={classes.name}>{x.coin.name}</span>
-                                <span className={classes.symbol}>({x.coin.symbol})</span>
+                                <span className={classes.name}>{x.name}</span>
+                                {x.symbol ? <span className={classes.symbol}>({x.symbol})</span> : null}
                             </Typography>
-                            {selected ? (
-                                <Icons.CheckCircle size={20} className={classes.checkedIcon} />
-                            ) : (
-                                <RadioButtonUncheckedIcon
-                                    style={{ fontSize: 20, color: theme.palette.maskColor.secondaryLine }}
-                                />
-                            )}
+                            <div className={classes.itemCheckout}>
+                                {options.length > 1 && x.rank ? (
+                                    <Typography
+                                        fontSize={14}
+                                        fontWeight={700}
+                                        flexGrow={1}
+                                        overflow="hidden"
+                                        className={classes.rank}
+                                        textOverflow="ellipsis">
+                                        #{x.rank}
+                                    </Typography>
+                                ) : null}
+                                {selected ? (
+                                    <Icons.CheckCircle size={20} className={classes.checkedIcon} />
+                                ) : (
+                                    <RadioButtonUncheckedIcon
+                                        style={{ fontSize: 20, color: theme.palette.maskColor.secondaryLine }}
+                                    />
+                                )}
+                            </div>
                         </Stack>
                     </MenuItem>
                 )
@@ -122,52 +146,53 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, type, value, onSelect 
 export interface CoinMenuProps {
     open: boolean
     anchorEl: HTMLElement | null
-    options: CoinMenuOption[]
-    type?: TokenType
-    value?: CoinMenuOption['value']
-    onChange?: (type: TokenType, value: CoinMenuOption['value']) => void
+    optionList: Web3Helper.TokenResultAll[]
+    result: Web3Helper.TokenResultAll
+    onChange?: (a: Web3Helper.TokenResultAll) => void
     onClose?: () => void
 }
 
-const menuGroupNameMap: Record<TokenType, string> = {
-    [TokenType.Fungible]: 'Token',
-    [TokenType.NonFungible]: 'NFT',
+const menuGroupNameMap: Record<SearchResultType.FungibleToken | SearchResultType.NonFungibleToken, string> = {
+    [SearchResultType.FungibleToken]: 'Token',
+    [SearchResultType.NonFungibleToken]: 'NFT',
 }
 
 export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({
     open,
-    options,
+    result,
+    optionList,
     anchorEl,
-    type,
-    value,
     onChange,
     onClose,
 }) => {
     const { classes } = useStyles()
     const onSelect = useCallback(
-        (type: TokenType, value: CoinMenuOption['value']) => {
-            onChange?.(type, value)
+        (value: Web3Helper.TokenResultAll) => {
+            onChange?.(value)
             onClose?.()
         },
         [onChange, onClose],
     )
 
     const menuItems = useMemo(() => {
-        const groups: Array<[type: TokenType, options: CoinMenuOption[]]> = toPairs(
-            groupBy(options, (x) => x.coin.type),
-        ).map(([type, options]) => [type as TokenType, options])
+        const groups: Array<
+            [
+                type: SearchResultType.FungibleToken | SearchResultType.NonFungibleToken,
+                optionList: Web3Helper.TokenResultAll[],
+            ]
+        > = toPairs(groupBy(optionList, (x) => x.type)).map(([type, optionList]) => [
+            type as SearchResultType.FungibleToken | SearchResultType.NonFungibleToken,
+            optionList,
+        ])
 
-        if (groups.length > 1) {
-            return groups.map(([type, groupOptions]) => (
-                <React.Fragment key={type}>
-                    <Typography className={classes.groupName}>{menuGroupNameMap[type]}</Typography>
-                    <Divider className={classes.divider} />
-                    <TokenMenuList options={groupOptions} type={type} value={value} onSelect={onSelect} />
-                </React.Fragment>
-            ))
-        }
-        return <TokenMenuList type={type} options={options} value={value} onSelect={onSelect} />
-    }, [options, type, value, onSelect])
+        return groups.map(([type, groupOptions]) => (
+            <div key={type} className={classes.group}>
+                <Typography className={classes.groupName}>{menuGroupNameMap[type]}</Typography>
+                <Divider className={classes.divider} />
+                <TokenMenuList options={groupOptions} result={result} onSelect={onSelect} />
+            </div>
+        ))
+    }, [optionList, result, onSelect])
 
     return (
         <ShadowRootMenu open={open} onClose={onClose} anchorEl={anchorEl} PaperProps={{ className: classes.coinMenu }}>

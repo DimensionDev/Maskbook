@@ -13,8 +13,6 @@ export interface MaskNetworkAPIs {
     app_resume(): Promise<void>
     app_isPluginEnabled(params: { pluginID: string }): Promise<boolean>
     app_setPluginStatus(params: { pluginID: string; enabled: boolean }): Promise<void>
-    // settings_getTrendingDataSource(): Promise<DataProvider>
-    // settings_setTrendingDataSource(params: { provider: DataProvider }): Promise<void>
     settings_getLaunchPageSettings(): Promise<LaunchPage>
     settings_getTheme(): Promise<Appearance>
     settings_setTheme(params: { theme: Appearance }): Promise<void>
@@ -169,13 +167,6 @@ export enum LaunchPage {
     facebook = 'facebook',
     twitter = 'twitter',
     dashboard = 'dashboard',
-}
-
-export enum DataProvider {
-    CoinGecko = 'CoinGecko',
-    CoinMarketCap = 'CoinMarketCap',
-    UniswapInfo = 'UniswapInfo',
-    NFTScan = 'NFTScan',
 }
 
 export enum TradeProvider {

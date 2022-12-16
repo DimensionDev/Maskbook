@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import type { Currency } from '../types/index.js'
-import type { DataProvider } from '@masknet/public-api'
+import type { SourceType } from '@masknet/web3-shared-base'
 import { isUndefined } from 'lodash-es'
 import { PluginTraderRPC } from '../messages.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -11,7 +11,7 @@ interface Options {
     coinId?: string
     currency?: Currency
     days?: TrendingAPI.Days
-    dataProvider?: DataProvider
+    dataProvider?: SourceType
 }
 
 export function usePriceStats({ coinId, currency, days = TrendingAPI.Days.MAX, dataProvider }: Options) {

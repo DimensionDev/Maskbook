@@ -14,6 +14,7 @@ import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../locales/index.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
+import { PluginHeader } from './PluginHeader.js'
 
 interface StyleProps {
     isMenuScroll?: boolean
@@ -59,7 +60,7 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
             textOverflow: 'ellipsis',
             fontWeight: 400,
             marginLeft: 4,
-            fontSize: 16,
+            fontSize: 14,
         },
         rightSpace: {
             marginRight: 6,
@@ -108,25 +109,15 @@ export const SearchResultInspectorContent = forwardRef(function (
     const t = useI18N()
     const { classes, cx } = useStyles({})
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const { isLoading, isError, retry, reversedAddress, nextIdBindings, firstNextIdrBinding, domain, tokenId } =
-        useContext(ENSContext)
-    useImperativeHandle(ref, () => ({ isLoading, reversedAddress, domain, isError, tokenId }), [
-        isLoading,
-        reversedAddress,
-        domain,
-        isError,
-        tokenId,
-        retry,
-    ])
+    const { reversedAddress, nextIdBindings, firstNextIdrBinding, domain, tokenId } = useContext(ENSContext)
+    useImperativeHandle(ref, () => ({ reversedAddress, domain, tokenId }), [reversedAddress, domain, tokenId])
     const [, copyToClipboard] = useCopyToClipboard()
     const copyWalletAddress = useSnackbarCallback({
         executor: async (address: string) => copyToClipboard(address),
         deps: [],
         successText: t.wallets_address_copied(),
     })
-
     const isShowSocialAccountList = nextIdBindings.length > 3
-
     return (
         <CollectibleState.Provider
             initialState={{
@@ -135,6 +126,7 @@ export const SearchResultInspectorContent = forwardRef(function (
                 contractAddress: reversedAddress ?? '',
                 sourceType: SourceType.OpenSea,
             }}>
+            <PluginHeader />
             <Box className={classes.root}>
                 <section className={classes.ensInfo}>
                     <Icons.ETH size={30} className={classes.ensIcon} />

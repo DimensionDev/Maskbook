@@ -15,7 +15,20 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { useSearchedKeyword } from '../DataSource/useSearchedKeyword.js'
 
-const useStyles = makeStyles()((theme) => ({}))
+const useStyles = makeStyles()(() => ({
+    contentWrapper: {
+        background:
+            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
+    },
+    tabContent: {
+        position: 'relative',
+        maxHeight: 478,
+        overflow: 'auto',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
+    },
+}))
 
 export interface SearchResultInspectorProps {}
 
@@ -26,48 +39,48 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const keyword = useSearchedKeyword()
     const activatedPlugins = useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode()
 
-    const result = useAsyncRetry(async () => {
-        if (!keyword) return
-        const list = await DSearch.search(keyword)
-        return list[0]
-    }, [keyword])
+    const resultList = useAsyncRetry(async () => {
+        if (!keyword || !activatedPlugins.length) return
+        return DSearch.search(keyword)
+    }, [keyword, activatedPlugins.length])
 
     const contentComponent = useMemo(() => {
-        if (!result.value) return null
-        const Component = getSearchResultContent(result.value)
-        return <Component result={result.value} />
-    }, [result.value])
+        if (!resultList.value?.length) return null
+        const Component = getSearchResultContent(resultList.value[0])
+        return <Component result={resultList.value} />
+    }, [resultList.value])
 
     const tabs = useMemo(() => {
-        if (!result.value) return EMPTY_LIST
-        return getSearchResultTabs(activatedPlugins, result.value, translate)
-    }, [activatedPlugins, result.value])
+        if (!resultList.value?.length) return EMPTY_LIST
+        return getSearchResultTabs(activatedPlugins, resultList.value[0], translate)
+    }, [activatedPlugins, resultList.value, translate])
 
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
     const tabContentComponent = useMemo(() => {
-        if (!result.value) return null
+        if (!resultList.value?.length) return null
         const Component = getSearchResultTabContent(currentTab)
-        return <Component result={result.value} />
-    }, [currentTab, result.value])
-
-    if (!keyword && !result.value) return null
+        return <Component result={resultList.value[0]} />
+    }, [currentTab, resultList.value])
+    if (!keyword && !resultList.value?.length) return null
     if (!contentComponent) return null
 
     return (
         <div className={classes.root}>
-            <div className={classes.content}>{contentComponent}</div>
-            {tabs.length ? (
-                <div className={classes.tabs}>
-                    <TabContext value={currentTab}>
-                        <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
-                            {tabs.map((tab) => (
-                                <Tab key={tab.id} label={tab.label} value={tab.id} />
-                            ))}
-                        </MaskTabList>
-                    </TabContext>
-                </div>
-            ) : null}
+            <div className={classes.contentWrapper}>
+                <div className={classes.content}>{contentComponent}</div>
+                {tabs.length ? (
+                    <div className={classes.tabs}>
+                        <TabContext value={currentTab}>
+                            <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
+                                {tabs.map((tab) => (
+                                    <Tab key={tab.id} label={tab.label} value={tab.id} />
+                                ))}
+                            </MaskTabList>
+                        </TabContext>
+                    </div>
+                ) : null}
+            </div>
             {tabContentComponent ? <div className={classes.tabContent}>{tabContentComponent}</div> : null}
         </div>
     )

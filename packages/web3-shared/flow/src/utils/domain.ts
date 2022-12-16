@@ -13,6 +13,6 @@ export const formatSchemaType = createLookupTableResolver<SchemaType, string>(
     '',
 )
 
-export function isValidDomain(domain: string) {
+export function isValidDomain(domain?: string) {
     return false
 }

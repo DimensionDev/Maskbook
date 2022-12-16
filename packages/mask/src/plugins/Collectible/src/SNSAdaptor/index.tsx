@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { Box } from '@mui/material'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { SocialAddressType } from '@masknet/web3-shared-base'
+import { SocialAddressType, SearchResultType } from '@masknet/web3-shared-base'
 import { NetworkPluginID, parseURLs } from '@masknet/shared-base'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { PostInspector } from './PostInspector.js'
@@ -93,6 +93,41 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 ...TabConfig.Utils,
                 shouldDisplay(identity, socialAccount) {
                     return socialAccount?.pluginID === NetworkPluginID.PLUGIN_EVM
+                },
+            },
+        },
+    ],
+    SearchResultTabs: [
+        {
+            ...TabConfig,
+            priority: 1,
+            UI: {
+                TabContent({ result }) {
+                    const socialAccount = {
+                        pluginID: NetworkPluginID.PLUGIN_EVM,
+                        address: result.type === SearchResultType.Domain ? result.address ?? '' : result.keyword,
+                        label:
+                            result.type === SearchResultType.Domain
+                                ? result.keyword
+                                : result.type === SearchResultType.EOA
+                                ? result.domain ?? ''
+                                : '',
+                        supportedAddressTypes: [SocialAddressType.ENS],
+                    }
+
+                    return (
+                        <Box pr={1.5} style={{ minHeight: 300 }}>
+                            <Web3ContextProvider value={{ pluginID: result.pluginID }}>
+                                <CollectionList socialAccount={socialAccount} persona={undefined} profile={undefined} />
+                            </Web3ContextProvider>
+                        </Box>
+                    )
+                },
+            },
+            Utils: {
+                ...TabConfig.Utils,
+                shouldDisplay(result) {
+                    return [SearchResultType.Domain, SearchResultType.EOA].includes(result.type)
                 },
             },
         },

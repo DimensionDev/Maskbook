@@ -21,9 +21,9 @@ const useStyles = makeStyles<StyleProps>()((theme, { isMenuScroll = false }) => 
     return {
         socialName: {
             color: theme.palette.maskColor.dark,
-            fontWeight: 700,
+            fontWeight: 400,
             marginLeft: 4,
-            fontSize: 16,
+            fontSize: 14,
         },
         more: {
             height: 36,

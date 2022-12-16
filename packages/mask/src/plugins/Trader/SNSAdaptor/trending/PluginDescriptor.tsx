@@ -4,7 +4,7 @@ import { Box } from '@mui/system'
 
 interface PluginHeaderProps extends React.PropsWithChildren<{}> {}
 
-export const PluginHeader = ({ children }: PluginHeaderProps) => {
+export const PluginDescriptor = ({ children }: PluginHeaderProps) => {
     const t = useTheme()
 
     return (

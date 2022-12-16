@@ -91,30 +91,25 @@ const domainCache = new LRUCache<ChainId, Record<string, string>>({
 })
 
 export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
-    private async getAddress(name: string, chainId: ChainId) {
+    private async getAddress(chainId: ChainId, name: string) {
         if (!isValidChainId(chainId)) return
+
         const response = await fetchFromChainbase<ENSRecord>(
             urlcat('/v1/ens/records', { chain_id: chainId, domain: name }),
         )
-        if (!response) return
-
-        return response.address
+        return response?.address
     }
 
-    private async getName(address: string, chainId: ChainId) {
+    private async getName(chainId: ChainId, address: string) {
         if (!isValidChainId(chainId)) return
+
         const response = await fetchFromChainbase<ENSRecord[]>(
             urlcat('/v1/ens/reverse', { chain_id: chainId, address }),
         )
-
-        if (!response) return
-
-        const record = first(response)
-
-        return record?.name
+        return first(response)?.name
     }
 
-    private addName(name: string, address: string, chainId: ChainId) {
+    private addName(chainId: ChainId, name: string, address: string) {
         const formattedAddress = formatEthereumAddress(address)
         const cache = domainCache.get(chainId)
 
@@ -127,12 +122,11 @@ export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
 
     async lookup(chainId: ChainId, name: string): Promise<string | undefined> {
         if (!name) return
-        const address = domainCache.get(chainId)?.[name] || (await this.getAddress(name, chainId))
 
-        if (address && isValidAddress(address)) {
-            this.addName(name, address, chainId)
-            const formattedAddress = formatEthereumAddress(address)
-            return formattedAddress
+        const address = domainCache.get(chainId)?.[name] || (await this.getAddress(chainId, name))
+        if (isValidAddress(address)) {
+            this.addName(chainId, name, address)
+            return formatEthereumAddress(address)
         }
 
         return
@@ -141,10 +135,9 @@ export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
     async reverse(chainId: ChainId, address: string): Promise<string | undefined> {
         if (!address || !isValidAddress(address)) return
 
-        const name = domainCache.get(chainId)?.[formatAddress(address)] || (await this.getName(address, chainId))
-
+        const name = domainCache.get(chainId)?.[formatAddress(address)] || (await this.getName(chainId, address))
         if (name) {
-            this.addName(name, address, chainId)
+            this.addName(chainId, name, address)
             return name
         }
         return

@@ -1,15 +1,17 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { useLocation, useWindowScroll } from 'react-use'
+import { useLocation, useWindowScroll, useAsyncRetry } from 'react-use'
 import { Popper, ClickAwayListener, PopperProps, Fade } from '@mui/material'
-import type { DataProvider } from '@masknet/public-api'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { DSearch } from '@masknet/web3-providers'
+import { TrendingAPI } from '@masknet/web3-providers/types'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginTraderMessages } from '../../messages.js'
 import { WalletMessages } from '../../../Wallet/messages.js'
-import type { TagType } from '../../types/index.js'
 import { PluginTransakMessages } from '../../../Transak/messages.js'
 
 export interface TrendingPopperProps {
-    children?: (name: string, type: TagType, dataProviders: DataProvider[], reposition?: () => void) => React.ReactNode
+    children?: (resultList: Web3Helper.TokenResultAll[], reposition?: () => void) => React.ReactNode
     PopperProps?: Partial<PopperProps>
 }
 
@@ -20,10 +22,14 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const [freezed, setFreezed] = useState(false) // disable any click
     const [locked, setLocked] = useState(false) // state is updating, lock UI
     const [name, setName] = useState('')
-    const [type, setType] = useState<TagType | undefined>()
+    const [type, setType] = useState<TrendingAPI.TagType | undefined>()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-    const [availableDataProviders, setAvailableDataProviders] = useState<DataProvider[]>([])
     const popper = useRef<HTMLDivElement | null>(null)
+
+    const { value: resultList } = useAsyncRetry(async () => {
+        if (!name || !type) return EMPTY_LIST
+        return DSearch.search<Web3Helper.TokenResultAll>(`${type === TrendingAPI.TagType.CASH ? '$' : '#'}${name}`)
+    }, [name, type])
 
     // #region select token and provider dialog could be opened by trending view
     const onFreezed = useCallback((ev: { open: boolean }) => setFreezed(ev.open), [])
@@ -43,7 +49,6 @@ export function TrendingPopper(props: TrendingPopperProps) {
                     setName(ev.name)
                     setType(ev.type)
                     setAnchorEl(ev.element)
-                    setAvailableDataProviders(ev.dataProviders)
                     setLocked(false)
                 }
                 // observe the same element
@@ -77,6 +82,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
 
     if (locked) return null
     if (!anchorEl || !type) return null
+    if (!resultList?.length) return null
     return (
         <ClickAwayListener
             onClickAway={() => {
@@ -94,9 +100,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
                 {({ TransitionProps }) => (
                     <Fade in={Boolean(anchorEl)} {...TransitionProps}>
                         <div>
-                            {props.children?.(name, type, availableDataProviders, () =>
-                                setTimeout(() => popperRef.current?.update(), 100),
-                            )}
+                            {props.children?.(resultList, () => setTimeout(() => popperRef.current?.update(), 100))}
                         </div>
                     </Fade>
                 )}

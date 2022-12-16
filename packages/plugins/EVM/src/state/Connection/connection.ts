@@ -59,6 +59,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { fetchJSON } from '@masknet/web3-providers/helpers'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
+import { Web3 } from '@masknet/web3-providers'
 import { createContext, dispatch } from './composer.js'
 import { Providers } from './provider.js'
 import type { ERC1155Metadata, ERC721Metadata, EVM_Connection, EVM_Web3ConnectionOptions } from './types.js'
@@ -316,9 +317,8 @@ class Connection implements EVM_Connection {
         )
     }
     async getAddressType(address: string, initial?: EVM_Web3ConnectionOptions): Promise<AddressType | undefined> {
-        if (!isValidAddress(address)) return
-        const code = await this.getCode(address, initial)
-        return code === '0x' ? AddressType.ExternalOwned : AddressType.Contract
+        const options = this.getOptions(initial)
+        return Web3.getAddressType(options.chainId, address)
     }
     async getSchemaType(address: string, initial?: EVM_Web3ConnectionOptions): Promise<SchemaType | undefined> {
         const options = this.getOptions(initial)
@@ -692,7 +692,7 @@ class Connection implements EVM_Connection {
         initial?: EVM_Web3ConnectionOptions,
     ) {
         const options = this.getOptions(initial)
-        const web3 = await this.getWeb3(options)
+        const web3 = this.getWeb3(options)
         return createContract<T>(web3, address, ABI)
     }
 
@@ -882,7 +882,7 @@ class Connection implements EVM_Connection {
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction>,
     ) {
         const options = this.getOptions(initial)
-        const web3 = await this.getWeb3(options)
+        const web3 = this.getWeb3(options)
         const dataToSign = await web3.eth.personal.ecRecover(dataToVerify, signature)
         return dataToSign === dataToVerify
     }

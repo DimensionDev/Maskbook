@@ -1,78 +1,21 @@
 import { useAsync, useAsyncRetry } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
-import type { DataProvider } from '@masknet/public-api'
+import { SourceType, TokenType, attemptUntil } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import { PluginTraderRPC } from '../messages.js'
-import type { Coin, TagType } from '../types/index.js'
+import type { Coin } from '../types/index.js'
 import { useCurrentCurrency } from './useCurrentCurrency.js'
 
-export function useTrendingByKeyword(
-    tagType: TagType,
-    keyword: string,
-    dataProvider: DataProvider,
-    expectedChainId?: ChainId,
-    searchedContractAddress?: string,
-): AsyncState<{
-    currency?: TrendingAPI.Currency
-    trending?: TrendingAPI.Trending | null
-}> {
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const currency = useCurrentCurrency(dataProvider)
-    const {
-        value: trending,
-        loading,
-        error,
-    } = useAsync(async () => {
-        if (!keyword) return null
-        if (!currency) return null
-        return PluginTraderRPC.getCoinTrendingByKeyword(chainId, keyword, tagType, currency, dataProvider)
-    }, [chainId, dataProvider, currency?.id, keyword])
-    const { value: detailedToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, trending?.coin.contract_address)
-    const coin = {
-        ...trending?.coin,
-        decimals: trending?.coin.decimals || detailedToken?.decimals || 0,
-        contract_address:
-            searchedContractAddress ?? trending?.contracts?.[0]?.address ?? trending?.coin.contract_address,
-        chainId: expectedChainId ?? trending?.contracts?.[0]?.chainId ?? trending?.coin.chainId,
-    } as Coin
-
-    if (loading) {
-        return {
-            loading: true,
-        }
-    }
-
-    if (error) {
-        return {
-            loading: false,
-            error,
-        }
-    }
-
-    return {
-        value: {
-            currency,
-            trending: trending
-                ? {
-                      ...trending,
-                      coin,
-                  }
-                : null,
-        },
-        loading,
-        error,
-    }
-}
+const NFTSCAN_CHAIN_ID_LIST = [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
 
 export function useTrendingById(
     id: string,
-    dataProvider: DataProvider,
-    expectedChainId?: ChainId,
+    dataProvider: SourceType | undefined,
+    expectedChainId?: Web3Helper.ChainIdAll,
     searchedContractAddress?: string,
 ): AsyncState<{
     currency?: TrendingAPI.Currency
@@ -87,6 +30,21 @@ export function useTrendingById(
     } = useAsync(async () => {
         if (!id) return null
         if (!currency) return null
+        if (!dataProvider) return null
+        if (!expectedChainId && dataProvider === SourceType.NFTScan) {
+            return attemptUntil(
+                NFTSCAN_CHAIN_ID_LIST.map((chainId) => async () => {
+                    try {
+                        return PluginTraderRPC.getCoinTrending(chainId, id, currency, SourceType.NFTScan).catch(
+                            () => null,
+                        )
+                    } catch {
+                        return undefined
+                    }
+                }),
+                undefined,
+            )
+        }
         return PluginTraderRPC.getCoinTrending(chainId, id, currency, dataProvider).catch(() => null)
     }, [chainId, dataProvider, currency?.id, id])
 
@@ -94,7 +52,7 @@ export function useTrendingById(
         NetworkPluginID.PLUGIN_EVM,
         trending?.coin.contract_address,
         undefined,
-        { chainId: trending?.coin.chainId },
+        { chainId: trending?.coin.chainId as ChainId },
     )
 
     if (loading) {
@@ -140,7 +98,7 @@ export function useTrendingById(
 
 function createCoinFromTrending(
     trending?: TrendingAPI.Trending,
-    expectedChainId?: ChainId,
+    expectedChainId?: Web3Helper.ChainIdAll,
     searchedContractAddress?: string,
     token?: Web3Helper.FungibleTokenScope<void, NetworkPluginID.PLUGIN_EVM>,
 ): Coin {
@@ -160,6 +118,6 @@ function createCoinFromTrending(
 export function useCoinInfoByAddress(address: string) {
     return useAsyncRetry(async () => {
         if (!address) return
-        return PluginTraderRPC.getCoinInfoByAddress(ChainId.Mainnet, address)
+        return PluginTraderRPC.getCoinInfoByAddress(address)
     }, [address])
 }

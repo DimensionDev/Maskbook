@@ -10,7 +10,7 @@ export class NomicsAPI implements TrendingAPI.Provider<ChainId> {
     getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
         throw new Error('Method not implemented.')
     }
-    getCoinInfoByAddress(chainId: ChainId, address: string): Promise<TrendingAPI.CoinInfo | undefined> {
+    getCoinInfoByAddress(address: string): Promise<TrendingAPI.CoinInfo | undefined> {
         throw new Error('To be implemented.')
     }
     getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {

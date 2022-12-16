@@ -1,17 +1,18 @@
 import { Trans } from 'react-i18next'
+import { useState } from 'react'
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base.js'
+import { TrendingView } from './trending/TrendingView.js'
+import { useWeb3State, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { TraderDialog } from './trader/TraderDialog.js'
-import { SearchResultInspector } from './trending/SearchResultInspector.js'
 import { TagInspector } from './trending/TagInspector.js'
 import { enhanceTag } from './cashTag.js'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
-import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
-import { setupStorage, storageDefaultValue } from '../storage/index.js'
-import { usePayloadFromTokenSearchKeyword } from '../trending/usePayloadFromTokenSearchKeyword.js'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { SearchResultType } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 const sns: Plugin.SNSAdaptor.Definition<
     ChainId,
@@ -28,28 +29,47 @@ const sns: Plugin.SNSAdaptor.Definition<
     unknown
 > = {
     ...base,
-    init(signal, context) {
-        setupStorage(context.createKVStorage('persistent', storageDefaultValue))
-    },
+    init() {},
     SearchResultInspector: {
         ID: PluginID.Trader,
         UI: {
-            Content({ result }) {
-                const searchResult = usePayloadFromTokenSearchKeyword(result.keyword)
+            Content({ result: _resultList }) {
+                const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+                const resultList = _resultList as Web3Helper.TokenResultAll[]
+                const [result, setResult] = useState(resultList[0])
+                const { chainId, keyword, address, pluginID } = result
                 return (
                     <Web3ContextProvider
                         value={{
-                            pluginID: searchResult.pluginID,
-                            chainId: searchResult.chainId ?? ChainId.Mainnet,
+                            pluginID,
+                            chainId: chainId ?? ChainId.Mainnet,
                         }}>
-                        <SearchResultInspector keyword={result.keyword} searchResult={searchResult} />
+                        <TrendingView
+                            isPopper={false}
+                            setResult={setResult}
+                            result={result}
+                            resultList={resultList}
+                            expectedChainId={chainId ?? ChainId.Mainnet}
+                            isPreciseSearch={Boolean(Others?.isValidAddress(keyword))}
+                            searchedContractAddress={
+                                Others?.isValidAddress(keyword)
+                                    ? keyword
+                                    : Others?.isValidAddress(address)
+                                    ? address
+                                    : undefined
+                            }
+                        />
                     </Web3ContextProvider>
                 )
             },
         },
         Utils: {
-            shouldDisplay({ keyword }) {
-                return /[#$]\w+/.test(keyword) || (isValidAddress(keyword) && !isZeroAddress(keyword))
+            shouldDisplay(result) {
+                return [
+                    SearchResultType.FungibleToken,
+                    SearchResultType.NonFungibleToken,
+                    SearchResultType.NonFungibleCollection,
+                ].includes(result.type)
             },
         },
     },

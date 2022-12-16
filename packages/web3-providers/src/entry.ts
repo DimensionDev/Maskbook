@@ -24,7 +24,7 @@ import { AstarAPI } from './Astar/index.js'
 import { GoPlusLabsAPI, GoPlusAuthorizationAPI } from './GoPlusLabs/index.js'
 import { NextIDProofAPI, NextIDStorageAPI } from './NextID/index.js'
 import { AlchemyEVM_API, AlchemyFlowAPI } from './Alchemy/index.js'
-import { Web3GasOptionAPI } from './EVM/index.js'
+import { Web3API, Web3GasOptionAPI } from './EVM/index.js'
 import { MagicEdenAPI } from './MagicEden/index.js'
 import { CoinMarketCapAPI } from './CoinMarketCap/index.js'
 import { UniSwapAPI } from './Uniswap/index.js'
@@ -75,14 +75,15 @@ export const Instagram = new InstagramAPI()
 export const GoPlusLabs = new GoPlusLabsAPI()
 export const GoPlusAuthorization = new GoPlusAuthorizationAPI()
 export const R2D2 = new R2D2API()
-export const DeBank = new DeBankAPI()
 export const DSearch = new DSearchAPI()
+export const DeBank = new DeBankAPI()
 
 export const MetaSwap = new MetaSwapAPI()
 export const AstarGas = new AstarAPI()
 export const NextIDProof = new NextIDProofAPI()
 export const NextIDStorage = new NextIDStorageAPI()
-export const EthereumWeb3 = new Web3GasOptionAPI()
+export const Web3 = new Web3API()
+export const Web3GasOption = new Web3GasOptionAPI()
 export const Nomics = new NomicsAPI()
 export const CoinMarketCap = new CoinMarketCapAPI()
 export const UniSwap = new UniSwapAPI()

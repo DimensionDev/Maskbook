@@ -3,9 +3,9 @@ import type { SearchResult } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 
 export interface SearchResultInspectorProps {
-    result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    result: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
 export function SearchResultInspector({ result }: SearchResultInspectorProps) {
-    return <Typography>{result.keyword}</Typography>
+    return <Typography>{result[0].keyword}</Typography>
 }

@@ -1,5 +1,5 @@
-import type { TokenType } from '@masknet/web3-shared-base'
-import type { DataProvider } from '@masknet/public-api'
+import type { TokenType, SourceType } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
 export namespace TrendingAPI {
@@ -49,7 +49,7 @@ export namespace TrendingAPI {
     export type CommunityUrls = Array<{ type: Partial<CommunityType>; link: string }>
     export interface Coin {
         id: string
-        chainId?: ChainId
+        chainId?: Web3Helper.ChainIdAll
         name: string
         symbol: string
         type: TokenType
@@ -145,7 +145,7 @@ export namespace TrendingAPI {
 
     export interface Trending {
         currency: Currency
-        dataProvider: DataProvider
+        dataProvider: SourceType
         coin: Coin
         platform?: Platform
         contracts?: Contract[]
@@ -187,7 +187,7 @@ export namespace TrendingAPI {
         /** Get all related coins with a keyword. */
         getCoinsByKeyword: (chainId: ChainId, keyword: string) => Promise<Coin[]>
         /** Get coin info by address. */
-        getCoinInfoByAddress: (chainId: ChainId, address: string) => Promise<CoinInfo | undefined>
+        getCoinInfoByAddress: (address: string) => Promise<CoinInfo | undefined>
         /** Get coin trending information by id. */
         getCoinTrending: (chainId: ChainId, id: string, currency: Currency) => Promise<Trending>
         /** Get coin price stats by id. */

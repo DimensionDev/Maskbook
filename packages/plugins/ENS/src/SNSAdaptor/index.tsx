@@ -1,17 +1,30 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginID } from '@masknet/shared-base'
 import { Trans } from 'react-i18next'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
 import { SearchResultInspector } from './SearchResultInspector.js'
+import { SearchResultType, DomainResult } from '@masknet/web3-shared-base'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
-    SearchResultContent: {
+    SearchResultInspector: {
         ID: PluginID.ENS,
         UI: {
-            Content: SearchResultInspector,
+            Content: ({ result }) => (
+                <SearchResultInspector
+                    keyword={result[0].keyword}
+                    keywordType={result[0].type}
+                    result={result[0] as DomainResult<ChainId>}
+                />
+            ),
+        },
+        Utils: {
+            shouldDisplay(result) {
+                return [SearchResultType.Domain, SearchResultType.EOA].includes(result.type)
+            },
         },
     },
     ApplicationEntries: [

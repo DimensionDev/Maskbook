@@ -1,20 +1,14 @@
 import { Icons } from '@masknet/icons'
 import { useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { DataProvider } from '@masknet/public-api'
-import {
-    FormattedCurrency,
-    Linking,
-    TokenSecurityBar,
-    useTokenSecurity,
-    SourceSwitcher,
-    FootnoteMenuOption,
-} from '@masknet/shared'
-import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
-import { useRemoteControlledDialog, useValueRefJSON } from '@masknet/shared-base-ui'
-import { makeStyles, MaskColors, MaskLightTheme } from '@masknet/theme'
+import { Box } from '@mui/system'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { SourceType, formatCurrency, TokenType, resolveSourceTypeName } from '@masknet/web3-shared-base'
+import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity, DataProviderIcon } from '@masknet/shared'
+import { PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { makeStyles, MaskColors, MaskLightTheme, MaskDarkTheme } from '@masknet/theme'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { formatCurrency, TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import {
     Avatar,
@@ -28,16 +22,14 @@ import {
     useTheme,
 } from '@mui/material'
 import { first, last } from 'lodash-es'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin.js'
 import { PluginTransakMessages } from '../../../Transak/messages.js'
-import { getCurrentPreferredCoinIdSettings } from '../../settings.js'
-import { setStorage } from '../../storage/index.js'
-import type { Coin, Currency, Stat } from '../../types/index.js'
+import type { Currency, Stat } from '../../types/index.js'
 import { CoinMenu } from './CoinMenu.js'
 import { CoinIcon } from './components/index.js'
-import { PluginHeader } from './PluginHeader.js'
+import { PluginDescriptor } from './PluginDescriptor.js'
 import { PriceChanged } from './PriceChanged.js'
 import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
 
@@ -114,49 +106,63 @@ const useStyles = makeStyles<{
         },
         buyButton: {
             marginLeft: 'auto',
-            marginBottom: theme.spacing(2),
         },
         icon: {
             color: MaskColors.dark.maskColor.dark,
+        },
+        pluginDescriptorWrapper: {
+            padding: '0 12px 12px',
+        },
+        source: {
+            display: 'flex',
+            justifyContent: 'space-between',
+        },
+        sourceNote: {
+            color: theme.palette.maskColor.secondaryDark,
+            fontWeight: 700,
+        },
+        sourceMenu: {
+            fontSize: 14,
+            fontWeight: 700,
+        },
+        sourceName: {
+            fontWeight: 700,
+            color: theme.palette.maskColor.dark,
+            marginLeft: 4,
         },
     }
 })
 
 export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | 'footer' | 'content' | 'cardHeader'> {
-    keyword: string
     stats: Stat[]
-    coins: Coin[]
     currency: Currency
     trending: TrendingAPI.Trending
-    dataProvider: DataProvider
+    setResult: (a: Web3Helper.TokenResultAll) => void
+    result: Web3Helper.TokenResultAll
+    resultList?: Web3Helper.TokenResultAll[]
     children?: React.ReactNode
     isPreciseSearch?: boolean
-    showDataProviderIcon?: boolean
     isPopper?: boolean
     TrendingCardProps?: Partial<TrendingCardProps>
-    dataProviders: DataProvider[]
 }
 
 export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const {
-        keyword,
-        coins,
         trending,
-        dataProvider,
         stats,
         children,
-        showDataProviderIcon = false,
         TrendingCardProps,
         isPopper = true,
-        dataProviders = EMPTY_LIST,
         isPreciseSearch = false,
+        resultList = [],
+        result,
+        setResult,
     } = props
     const { coin, market } = trending
 
     const { t } = useI18N()
     const theme = useTheme()
     const { classes } = useStyles({ isPopper }, { props })
-
     const isNFT = coin.type === TokenType.NonFungible
 
     // #region buy
@@ -186,28 +192,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     }, [account, coin.symbol])
     // #endregion
 
-    // #region sync with settings
-    const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
-        setStorage(option.value as DataProvider)
-    }, [])
-    // #endregion
-
-    // #region switch between coins with the same symbol
-    const currentPreferredCoinIdSettings = useValueRefJSON(getCurrentPreferredCoinIdSettings(dataProvider))
-    const onCoinMenuChange = useCallback(
-        (type: TokenType, value: string) => {
-            const settings = { ...currentPreferredCoinIdSettings }
-            const coin = coins.find((x) => x.id === value && x.type === type)
-            if (!coin) return
-            settings[keyword.toLowerCase()] = value
-            // @ts-ignore https://github.com/microsoft/TypeScript/issues/51676
-            getCurrentPreferredCoinIdSettings(dataProvider).value = settings
-        },
-        [dataProvider, keyword, coins, currentPreferredCoinIdSettings],
-    )
-    // #endregion
     const titleRef = useRef<HTMLElement>(null)
-    const coinOptions = useMemo(() => coins.map((coin) => ({ coin, value: coin.id })), [coins])
     const [coinMenuOpen, setCoinMenuOpen] = useState(false)
     const coinAddress = coin.address || coin.contract_address
 
@@ -216,15 +201,26 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
             <ThemeProvider theme={MaskLightTheme}>
                 <Stack className={classes.cardHeader}>
                     {isPopper ? null : (
-                        <PluginHeader>
-                            {showDataProviderIcon ? (
-                                <SourceSwitcher
-                                    sourceType={dataProvider as unknown as SourceType}
-                                    sourceTypes={dataProviders as unknown as SourceType[]}
-                                    onSourceTypeChange={onDataProviderChange}
-                                />
-                            ) : null}
-                        </PluginHeader>
+                        <PluginDescriptor>
+                            <Box className={classes.source}>
+                                <Stack
+                                    className={classes.sourceMenu}
+                                    display="inline-flex"
+                                    flexDirection="row"
+                                    alignItems="center"
+                                    gap={0.5}>
+                                    <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
+                                </Stack>
+                                {trending.dataProvider ? (
+                                    <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
+                                        <Typography className={classes.sourceName}>
+                                            {resolveSourceTypeName(trending.dataProvider)}
+                                        </Typography>
+                                        <DataProviderIcon provider={trending.dataProvider} size={20} />
+                                    </Stack>
+                                ) : null}
+                            </Box>
+                        </PluginDescriptor>
                     )}
                     <Stack className={classes.headline}>
                         <Stack gap={2} flexGrow={1}>
@@ -263,7 +259,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             {t('plugin_trader_rank', { rank: coin.market_cap_rank })}
                                         </Typography>
                                     ) : null}
-                                    {coins.length > 1 && !isPreciseSearch ? (
+                                    {resultList.length > 1 && !isPreciseSearch ? (
                                         <>
                                             <IconButton
                                                 sx={{ padding: 0 }}
@@ -271,15 +267,17 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                 onClick={() => setCoinMenuOpen((v) => !v)}>
                                                 <Icons.ArrowDrop size={24} className={classes.icon} />
                                             </IconButton>
-                                            <CoinMenu
-                                                open={coinMenuOpen}
-                                                anchorEl={titleRef.current}
-                                                options={coinOptions}
-                                                value={coins.find((x) => x.id === coin.id)?.id}
-                                                type={coin.type}
-                                                onChange={onCoinMenuChange}
-                                                onClose={() => setCoinMenuOpen(false)}
-                                            />
+                                            <ThemeProvider
+                                                theme={theme.palette.mode === 'light' ? MaskLightTheme : MaskDarkTheme}>
+                                                <CoinMenu
+                                                    open={coinMenuOpen}
+                                                    anchorEl={titleRef.current}
+                                                    optionList={resultList}
+                                                    result={result}
+                                                    onChange={setResult}
+                                                    onClose={() => setCoinMenuOpen(false)}
+                                                />
+                                            </ThemeProvider>
                                         </>
                                     ) : null}
                                     {isBuyable ? (
@@ -305,7 +303,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                 {isNFT ? `${t('plugin_trader_floor_price')}: ` : null}
                                                 <FormattedCurrency
                                                     value={
-                                                        (dataProvider === DataProvider.CoinMarketCap
+                                                        (trending.dataProvider === SourceType.CoinMarketCap
                                                             ? last(stats)?.[1] ?? market.current_price
                                                             : market.current_price) ?? 0
                                                     }
@@ -339,6 +337,30 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 <Paper className={classes.body} elevation={0}>
                     {children}
                 </Paper>
+                {isPopper ? (
+                    <section className={classes.pluginDescriptorWrapper}>
+                        <PluginDescriptor>
+                            <Box className={classes.source}>
+                                <Stack
+                                    className={classes.sourceMenu}
+                                    display="inline-flex"
+                                    flexDirection="row"
+                                    alignItems="center"
+                                    gap={0.5}>
+                                    <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
+                                </Stack>
+                                {trending.dataProvider ? (
+                                    <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
+                                        <Typography className={classes.sourceName}>
+                                            {resolveSourceTypeName(trending.dataProvider)}
+                                        </Typography>
+                                        <DataProviderIcon provider={trending.dataProvider} size={20} />
+                                    </Stack>
+                                ) : null}
+                            </Box>
+                        </PluginDescriptor>
+                    </section>
+                ) : null}
             </CardContent>
         </TrendingCard>
     )

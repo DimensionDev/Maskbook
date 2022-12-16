@@ -12,7 +12,7 @@ import {
     IconButton,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { DataProvider } from '@masknet/public-api'
+import type { SourceType } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { MoreHoriz as MoreHorizIcon } from '@mui/icons-material'
@@ -61,7 +61,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface CoinMetadataTableProps {
     trending: TrendingAPI.Trending
-    dataProvider: DataProvider
+    dataProvider: SourceType
 }
 
 const brands: Record<CommunityType, React.ReactNode> = {

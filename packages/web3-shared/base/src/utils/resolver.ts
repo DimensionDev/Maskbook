@@ -6,7 +6,6 @@ import {
     ProviderDescriptor,
     SocialAddressType,
     SourceType,
-    SearchKeywordType,
 } from '../specs/index.js'
 import { NetworkPluginID, createLookupTableResolver, NextIDPlatform } from '@masknet/shared-base'
 
@@ -218,7 +217,7 @@ export const resolveSourceTypeName = createLookupTableResolver<SourceType, strin
         [SourceType.GoPlus]: 'GoPlus',
     },
     (providerType) => {
-        throw new Error(`Unknown provider type: ${providerType}.`)
+        throw new Error(`Unknown source type: ${providerType}.`)
     },
 )
 
@@ -434,14 +433,4 @@ export function resolveResourceURL(url: string | undefined) {
     if (isLocaleResource(url)) return resolveLocalURL(url)
     if (isArweaveResource(url)) return resolveArweaveURL(url)
     return resolveIPFS_URL(url)
-}
-
-export function resolveSearchKeywordType(
-    keyword: string,
-    isValidDomain: (keyword: string) => boolean,
-    isValidAddress: (keyword: string) => boolean,
-) {
-    if (isValidDomain(keyword)) return SearchKeywordType.Domain
-    if (isValidAddress(keyword)) return SearchKeywordType.Address
-    return
 }

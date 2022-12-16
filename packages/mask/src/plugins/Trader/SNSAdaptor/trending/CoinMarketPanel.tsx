@@ -1,12 +1,12 @@
 import type { Trending } from '../../types/index.js'
-import type { DataProvider } from '@masknet/public-api'
+import type { SourceType } from '@masknet/web3-shared-base'
 import { CoinMarketTable } from './CoinMarketTable.js'
 import { CoinMetadataTable } from './CoinMetadataTable.js'
 import { Stack } from '@mui/material'
 
 export interface CoinMarketPanelProps {
     trending: Trending
-    dataProvider: DataProvider
+    dataProvider: SourceType
 }
 
 export function CoinMarketPanel(props: CoinMarketPanelProps) {

@@ -1,6 +1,5 @@
 import { compact, uniq, uniqBy } from 'lodash-es'
-import { attemptUntil, TokenType } from '@masknet/web3-shared-base'
-import { DataProvider } from '@masknet/public-api'
+import { attemptUntil, TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId, getCoinGeckoConstants } from '@masknet/web3-shared-evm'
 import { COINGECKO_CHAIN_ID_LIST, COINGECKO_URL_BASE } from '../constants.js'
 import { getCommunityLink, isMirroredKeyword } from '../../Trending/helpers.js'
@@ -51,7 +50,7 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
         }
     }
 
-    async getCoinInfoByAddress(chainId: ChainId, address: string): Promise<TrendingAPI.CoinInfo | undefined> {
+    async getCoinInfoByAddress(address: string): Promise<TrendingAPI.CoinInfo | undefined> {
         return attemptUntil(
             COINGECKO_CHAIN_ID_LIST.map((chainId) => async () => {
                 try {
@@ -84,7 +83,7 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
 
         return {
             lastUpdated: info.last_updated,
-            dataProvider: DataProvider.CoinGecko,
+            dataProvider: SourceType.CoinGecko,
             contracts: Object.entries(info.platforms).map(([key, address]) => ({
                 chainId: platforms.find((x) => x.id === key)?.chain_identifier ?? resolveCoinGeckoChainId(key),
                 address,

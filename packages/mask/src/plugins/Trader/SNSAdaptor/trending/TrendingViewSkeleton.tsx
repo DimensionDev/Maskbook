@@ -1,7 +1,7 @@
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { CardContent, Stack, Typography } from '@mui/material'
 import { useI18N } from '../../../../utils/index.js'
-import { PluginHeader } from './PluginHeader.js'
+import { PluginDescriptor } from './PluginDescriptor.js'
 import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -28,7 +28,7 @@ export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
     return (
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.root}>
-                <PluginHeader />
+                <PluginDescriptor />
                 <CardContent className={classes.content}>
                     <Stack height="100%" alignItems="center" justifyContent="center">
                         <LoadingBase />

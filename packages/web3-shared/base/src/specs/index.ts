@@ -95,28 +95,16 @@ export enum SourceType {
     R2D2 = 'R2D2',
 }
 
-export enum SearchSourceType {
-    Main = 'Main',
-    Sidebar = 'Sidebar',
-}
-
-/** @deprecated use SearchSourceType stead */
-export enum SearchKeywordType {
-    Address = 'Address',
-    Domain = 'Domain',
-}
-
 export enum SearchResultType {
-    // e.g., 0xd8da6bf26964af9d7eed9e03e53415d37aa96045
-    Address = 'Address',
+    // e.g., 0x6a7122B831c2B79c508A978f73f2ee23171279B3
+    EOA = 'EOA',
     // e.g., vitalik.eth or vitalik.bnb
     Domain = 'Domain',
-    // e.g., $MASK #MASK
+    // e.g., $MASK #MASK or its address 0x69af81e73a73b40adf4f3d4223cd9b1ece623074
     FungibleToken = 'FungibleToken',
-    // e.g., $PUNK #PUNK
-    NonFungibleToken = 'NonFungibleToken',
-    // e.g., $PUNK #PUNK
-    NonFungibleCollection = 'NonFungibleCollection',
+    // e.g., #APE
+    NonFungibleToken='NonFungibleToken',
+    NonFungibleCollection='NonFungibleCollection',
 }
 
 export enum ActivityType {
@@ -423,7 +411,7 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
         github?: string
         instagram?: string
         medium?: string
-      }
+    }
 }
 
 export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {
@@ -604,49 +592,66 @@ export interface NonFungibleTokenSecurity {}
 
  export interface Result<ChainId> {
     pluginID: NetworkPluginID
-    chainId?: ChainId
+    chainId: ChainId
     type: SearchResultType
+    /** The original searched keyword */
     keyword: string
 }
 
-export interface AddressResult<ChainId> extends Result<ChainId> {
-    type: SearchResultType.Address
+export interface EOAResult<ChainId> extends Result<ChainId> {
+    type: SearchResultType.EOA
+    domain?: string
+    address: string
 }
 
 export interface DomainResult<ChainId> extends Result<ChainId> {
     type: SearchResultType.Domain
     domain: string
+    address?: string
 }
 
 export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
-    //  This id on the provider platform
+    type: SearchResultType.FungibleToken
+    /** The id of token on the provider platform */
     id?: string
+    address?: string
+    rank?: number
+    logoURL?: string
     name: string
     symbol: string
-    type: SearchResultType.FungibleToken
     source: SourceType 
     token?: FungibleToken<ChainId, SchemaType>
 }
 
 export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
-    name: string,
-    address: string
-    tokenId?: string
     type: SearchResultType.NonFungibleToken
+    id?: string
+    address: string
+    rank?: number
+    logoURL?: string
+    name: string,
+    symbol?: string
+    tokenId?: string
     source: SourceType 
     token?: NonFungibleToken<ChainId, SchemaType>
 }
 
+export type TokenResult<ChainId, SchemaType> = FungibleTokenResult<ChainId, SchemaType> | NonFungibleTokenResult<ChainId, SchemaType>
+
 export interface NonFungibleCollectionResult<ChainId, SchemaType> extends Result<ChainId> {
-    name: string,
-    address: string
-    source: SourceType 
     type: SearchResultType.NonFungibleCollection
+    address: string
+    id?: string
+    rank?: number
+    logoURL?: string
+    name: string,
+    symbol?: string
+    source: SourceType 
     collection?: NonFungibleCollection<ChainId, SchemaType>
 }
 
 export type SearchResult<ChainId, SchemaType> = 
-    | AddressResult<ChainId>
+    | EOAResult<ChainId>
     | DomainResult<ChainId>
     | FungibleTokenResult<ChainId, SchemaType>
     | NonFungibleTokenResult<ChainId, SchemaType>
