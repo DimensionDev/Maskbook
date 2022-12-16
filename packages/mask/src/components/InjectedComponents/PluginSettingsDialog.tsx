@@ -63,7 +63,7 @@ export function PluginSettingsDialog() {
 
     const bindingWallets = useMemo(() => {
         if (proofs.loading) return EMPTY_LIST
-        return proofs.value.filter((x) => x.platform === NextIDPlatform.Ethereum)
+        return proofs.value?.filter((x) => x.platform === NextIDPlatform.Ethereum) ?? EMPTY_LIST
     }, [proofs])
 
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])

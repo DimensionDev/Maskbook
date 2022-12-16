@@ -129,7 +129,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
             onDisconnect(profile)
         }
         const userIdBox = (profile: ProfileIdentifier) => {
-            const isProved = proof.value?.find((x) => {
+            const isProved = proofs.value?.find((x) => {
                 return x.platform === NextIDPlatform.Twitter && x.identity === profile.userId.toLowerCase()
             })
 

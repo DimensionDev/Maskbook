@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useAsyncRetry } from 'react-use'
 import { head, unionWith } from 'lodash-es'
 import { createContainer } from 'unstated-next'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -7,10 +6,9 @@ import { ECKeyIdentifier, EMPTY_LIST, isSameProfile, PersonaInformation, Profile
 import { currentPersonaIdentifier } from '../../../../../../shared/legacy-settings/settings.js'
 import Services from '../../../../service.js'
 import { MaskMessages } from '../../../../../utils/index.js'
-import { NextIDProof } from '@masknet/web3-providers'
 import type { Account } from '../type.js'
 import { initialPersonaInformation } from './PersonaContextInitialData.js'
-import { NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP } from '@masknet/shared'
+import { NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP, usePersonaProofs } from '@masknet/shared'
 
 function useSSRPersonaInformation() {
     const [personas, setPersonas] = useState(initialPersonaInformation)
@@ -36,21 +34,10 @@ function usePersonaContext() {
     )
     const avatar = currentPersona?.avatar
 
-    const {
-        value: proofs,
-        retry: refreshProofs,
-        loading: fetchProofsLoading,
-    } = useAsyncRetry(async () => {
-        try {
-            if (!currentPersona?.identifier.publicKeyAsHex) return EMPTY_LIST
-
-            const binding = await NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
-
-            return binding?.proofs ?? EMPTY_LIST
-        } catch {
-            return EMPTY_LIST
-        }
-    }, [currentPersona])
+    const { value: proofs, loading: fetchProofsLoading } = usePersonaProofs(
+        currentPersona?.identifier.publicKeyAsHex,
+        MaskMessages,
+    )
 
     const accounts = useMemo(() => {
         if (!currentPersona) return EMPTY_LIST
@@ -94,7 +81,6 @@ function usePersonaContext() {
         selectedPersona,
         setSelectedPersona,
         proofs,
-        refreshProofs,
         fetchProofsLoading,
     }
 }

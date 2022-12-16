@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
 const VerifyWallet = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { currentPersona, refreshProofs } = PersonaContext.useContainer()
+    const { currentPersona } = PersonaContext.useContainer()
     const { signed, setSigned } = PopupContext.useContainer()
     const navigate = useNavigate()
     const location = useLocation()
@@ -128,7 +128,6 @@ const VerifyWallet = memo(() => {
             MaskMessages.events.ownProofChanged.sendToAll()
             showSnackbar(t('popups_verify_wallet_sign_success'), { variant: 'success' })
             setSigned(true)
-            refreshProofs()
             return true
         } catch (error) {
             showSnackbar(t('popups_verify_wallet_sign_failed'), { variant: 'error' })

@@ -151,7 +151,7 @@ export const ProfileList = memo(() => {
         if (!currentPersona.identifier.publicKeyAsHex || !proofs.value) return currentPersona.linkedProfiles
 
         return currentPersona.linkedProfiles.map((profile) => {
-            const target = proofs.value.find(
+            const target = proofs.value?.find(
                 (x) =>
                     profile.identifier.userId.toLowerCase() === x.identity.toLowerCase() &&
                     profile.identifier.network.replace('.com', '') === x.platform,
