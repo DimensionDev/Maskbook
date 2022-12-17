@@ -79,7 +79,9 @@ export async function fetchFollowers(
     const data = {
         query: `query FullIdentityQuery {
         identity(address: "${address.toLowerCase()}") {
-                ${category.toLowerCase()}(first: ${size > PageSize ? PageSize : size}, after: "${indicator?.id ?? 0}"){
+                ${category.toLowerCase()}(first: ${size > PageSize ? PageSize : size}, after: "${
+            Number.parseInt(indicator?.id ?? '0', 10) - 1
+        }"){
                 pageInfo {
                     hasNextPage
                     hasPreviousPage

@@ -91,6 +91,7 @@ export default function ConnectButton({ address }: { address: string }) {
     if (!isSameAddress(account, address)) {
         return (
             <WalletConnectedBoundary
+                offChain
                 hideRiskWarningConfirmed
                 ActionButtonProps={{ variant: 'roundedDark' }}
                 classes={{ button: classes.wallet }}>
