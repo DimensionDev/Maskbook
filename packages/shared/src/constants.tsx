@@ -2,6 +2,10 @@ import type { ReactNode } from 'react'
 import { Icons } from '@masknet/icons'
 import { EnhanceableSite, NextIDPlatform } from '@masknet/shared-base'
 
+export const xmasBackground = new URL('./xmasBackground.png', import.meta.url).toString()
+export const xmasBackgroundShort = new URL('./xmasBackgroundShort.png', import.meta.url).toString()
+export const xmasBackgroundMini = new URL('./xmasBackgroundMini.png', import.meta.url).toString()
+
 export const SOCIAL_MEDIA_ICON_MAPPING: Record<EnhanceableSite | string, ReactNode> = {
     [EnhanceableSite.Twitter]: <Icons.TwitterColored />,
     [EnhanceableSite.Facebook]: <Icons.FacebookColored />,
