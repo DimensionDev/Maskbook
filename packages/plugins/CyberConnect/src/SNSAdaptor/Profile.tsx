@@ -189,10 +189,21 @@ const Profile = ({ url }: { url: string }) => {
                     </Stack>
 
                     <Stack flex={1}>
-                        <Typography className={classes.userName}>{identity?.ens || identity?.address}</Typography>
+                        <Typography className={classes.userName}>
+                            {identity?.ens || (
+                                <FormattedAddress
+                                    address={identity?.address}
+                                    formatter={formatEthereumAddress}
+                                    size={4}
+                                />
+                            )}
+                        </Typography>
 
                         <Stack className={classes.address}>
-                            <Typography color={(theme) => theme.palette.maskColor.publicMain} lineHeight="18px">
+                            <Typography
+                                color={(theme) => theme.palette.maskColor.publicMain}
+                                lineHeight="18px"
+                                fontSize="14px">
                                 <FormattedAddress
                                     address={identity?.address}
                                     formatter={formatEthereumAddress}
