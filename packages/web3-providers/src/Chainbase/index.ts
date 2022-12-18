@@ -106,7 +106,7 @@ export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
         const response = await fetchFromChainbase<ENSRecord[]>(
             urlcat('/v1/ens/reverse', { chain_id: chainId, address }),
         )
-        return first(response)?.name
+        return `${first(response)?.name}.eth`
     }
 
     private addName(chainId: ChainId, name: string, address: string) {

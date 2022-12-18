@@ -108,7 +108,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
     private async searchAddress(address: string): Promise<Array<EOAResult<ChainId>>> {
         // only EVM address
-        if (isValidAddressEVM(address)) return EMPTY_LIST
+        if (!isValidAddressEVM(address)) return EMPTY_LIST
 
         const [domain, chainId] = await attemptUntil(
             [
@@ -118,7 +118,8 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             ],
             ['', ChainIdEVM.Mainnet],
         )
-        if (!isValidDomainEVM(address)) return EMPTY_LIST
+
+        if (!isValidDomainEVM(domain)) return EMPTY_LIST
 
         return [
             {

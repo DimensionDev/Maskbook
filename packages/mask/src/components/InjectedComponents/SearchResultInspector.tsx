@@ -44,9 +44,9 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const activatedPlugins = useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode()
 
     const resultList = useAsyncRetry(async () => {
-        if (!keyword || !activatedPlugins.length) return
+        if (!keyword) return
         return DSearch.search(keyword)
-    }, [keyword, activatedPlugins.length])
+    }, [keyword])
 
     const contentComponent = useMemo(() => {
         if (!resultList.value?.length) return null
