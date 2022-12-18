@@ -15,12 +15,14 @@ const useStyles = makeStyles()((theme) => {
 interface PluginHeaderProps extends React.PropsWithChildren<{}> {
     isNFTProjectPopper?: boolean
     isProfilePage?: boolean
+    isPopper?: boolean
 }
 
-export const PluginDescriptor = ({ children, isNFTProjectPopper, isProfilePage }: PluginHeaderProps) => {
+export const PluginDescriptor = ({ children, isNFTProjectPopper, isProfilePage, isPopper }: PluginHeaderProps) => {
     const theme = useTheme()
     const { classes } = useStyles()
     const t = useSharedI18N()
+
     return (
         <Stack flexDirection="row" justifyContent="space-between" alignItems="center" width="100%">
             <Stack flexDirection="row" justifyContent="space-between" gap={0.5} alignItems="center">
@@ -32,7 +34,7 @@ export const PluginDescriptor = ({ children, isNFTProjectPopper, isProfilePage }
                     <Icons.DecentralizedSearch />
                 )}
                 <Typography
-                    color={isNFTProjectPopper ? undefined : theme.palette.maskColor.dark}
+                    color={isNFTProjectPopper || isPopper ? undefined : theme.palette.maskColor.dark}
                     fontWeight="bolder"
                     fontSize={16}>
                     {isNFTProjectPopper

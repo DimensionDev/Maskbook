@@ -1,10 +1,9 @@
 import { Icons } from '@masknet/icons'
 import { useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { Box } from '@mui/system'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { SourceType, formatCurrency, TokenType, resolveSourceTypeName } from '@masknet/web3-shared-base'
-import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity, DataProviderIcon } from '@masknet/shared'
+import { SourceType, formatCurrency, TokenType } from '@masknet/web3-shared-base'
+import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
 import { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColors, MaskLightTheme, MaskDarkTheme } from '@masknet/theme'
@@ -29,12 +28,13 @@ import { PluginTransakMessages } from '../../../Transak/messages.js'
 import type { Currency, Stat } from '../../types/index.js'
 import { CoinMenu } from './CoinMenu.js'
 import { CoinIcon } from './components/index.js'
-import { PluginDescriptor } from './PluginDescriptor.js'
 import { PriceChanged } from './PriceChanged.js'
 import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
+import { TrendingViewDescriptor } from './TrendingViewDescriptor.js'
 
 const useStyles = makeStyles<{
     isPopper: boolean
+    isNFTProjectPopper: boolean
 }>()((theme, props) => {
     return {
         content: {
@@ -110,23 +110,6 @@ const useStyles = makeStyles<{
         icon: {
             color: MaskColors.dark.maskColor.dark,
         },
-        source: {
-            display: 'flex',
-            justifyContent: 'space-between',
-        },
-        sourceNote: {
-            color: theme.palette.maskColor.secondaryDark,
-            fontWeight: 700,
-        },
-        sourceMenu: {
-            fontSize: 14,
-            fontWeight: 700,
-        },
-        sourceName: {
-            fontWeight: 700,
-            color: theme.palette.maskColor.dark,
-            marginLeft: 4,
-        },
         pluginDescriptorWrapper: {
             padding: '15px 17px 15px 13px',
             position: 'absolute',
@@ -180,7 +163,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     const { t } = useI18N()
     const theme = useTheme()
-    const { classes } = useStyles({ isPopper }, { props })
+    const { classes } = useStyles({ isPopper, isNFTProjectPopper }, { props })
     const isNFT = coin.type === TokenType.NonFungible
 
     // #region buy
@@ -218,26 +201,12 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.cardHeader}>
                 {isPopper ? null : (
-                    <PluginDescriptor isProfilePage={isProfilePage}>
-                        <Box className={classes.source}>
-                            <Stack
-                                className={classes.sourceMenu}
-                                display="inline-flex"
-                                flexDirection="row"
-                                alignItems="center"
-                                gap={0.5}>
-                                <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
-                            </Stack>
-                            {trending.dataProvider ? (
-                                <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
-                                    <Typography className={classes.sourceName}>
-                                        {resolveSourceTypeName(trending.dataProvider)}
-                                    </Typography>
-                                    <DataProviderIcon provider={trending.dataProvider} size={20} />
-                                </Stack>
-                            ) : null}
-                        </Box>
-                    </PluginDescriptor>
+                    <TrendingViewDescriptor
+                        trending={trending}
+                        isProfilePage={isProfilePage}
+                        isNFTProjectPopper={isNFTProjectPopper}
+                        isPopper={isPopper}
+                    />
                 )}
                 <Stack className={classes.headline}>
                     <Stack gap={2} flexGrow={1}>
@@ -366,26 +335,12 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 </Paper>
                 {isPopper ? (
                     <section className={classes.pluginDescriptorWrapper}>
-                        <PluginDescriptor isNFTProjectPopper={isNFTProjectPopper} isProfilePage={isProfilePage}>
-                            <Box className={classes.source}>
-                                <Stack
-                                    className={classes.sourceMenu}
-                                    display="inline-flex"
-                                    flexDirection="row"
-                                    alignItems="center"
-                                    gap={0.5}>
-                                    <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
-                                </Stack>
-                                {trending.dataProvider ? (
-                                    <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
-                                        <Typography className={classes.sourceName}>
-                                            {resolveSourceTypeName(trending.dataProvider)}
-                                        </Typography>
-                                        <DataProviderIcon provider={trending.dataProvider} size={20} />
-                                    </Stack>
-                                ) : null}
-                            </Box>
-                        </PluginDescriptor>
+                        <TrendingViewDescriptor
+                            trending={trending}
+                            isProfilePage={isProfilePage}
+                            isNFTProjectPopper={isNFTProjectPopper}
+                            isPopper={isPopper}
+                        />
                     </section>
                 ) : null}
             </CardContent>
