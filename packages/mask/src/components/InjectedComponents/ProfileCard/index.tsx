@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'center',
         },
         header: {
-            backgroundImage: `url(${xmasBackgroundMini} )`,
+            backgroundImage: `linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), url(${xmasBackgroundMini} )`,
             backgroundSize: 'cover',
             backgroundPosition: 'center bottom',
             padding: theme.spacing(2, 2, 0, 2),

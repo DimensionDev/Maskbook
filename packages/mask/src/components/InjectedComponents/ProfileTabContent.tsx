@@ -38,7 +38,7 @@ const useStyles = makeStyles()((theme) => ({
         width: isFacebook(activatedSocialNetworkUI) ? 876 : 'auto',
     },
     container: {
-        backgroundImage: `url(${xmasBackgroundShort})`,
+        backgroundImage: `linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), url(${xmasBackgroundShort})`,
         backgroundColor: 'white',
         backgroundSize: 'cover',
         backgroundPosition: 'center bottom',

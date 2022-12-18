@@ -1,23 +1,25 @@
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
+import { DataProvider } from '@masknet/public-api'
+import { NFTList, xmasBackground } from '@masknet/shared'
+import { EMPTY_LIST, getSiteType, NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { ActionButton, makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import {
     useChainContext,
     useChainIdValid,
     useNonFungibleAssetsByCollection,
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
-import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
-import { DataProvider } from '@masknet/public-api'
-import { NFTList } from '@masknet/shared'
-import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
-import { ActionButton, makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { TrendingAPI } from '@masknet/web3-providers'
 import { createFungibleToken, TokenType } from '@masknet/web3-shared-base'
-import { isNativeTokenAddress, isNativeTokenSymbol, SchemaType, ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Link, Stack, Tab, ThemeProvider } from '@mui/material'
 import { Box, useTheme } from '@mui/system'
 import { compact } from 'lodash-es'
 import { useEffect, useMemo, useState } from 'react'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
+import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 import { useI18N } from '../../../../utils/index.js'
 import { resolveDataProviderLink, resolveDataProviderName } from '../../pipes.js'
 import { setStorage } from '../../storage/index.js'
@@ -35,8 +37,6 @@ import { TickersTable } from './TickersTable.js'
 import { TrendingViewDeck } from './TrendingViewDeck.js'
 import { TrendingViewError } from './TrendingViewError.js'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
-import { useValueRef } from '@masknet/shared-base-ui'
-import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 
 const useStyles = makeStyles<{
     isPopper: boolean
@@ -92,6 +92,10 @@ const useStyles = makeStyles<{
 
         cardHeader: {
             marginBottom: '-36px',
+            backgroundImage: `linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), url(${xmasBackground})`,
+            backgroundColor: 'white',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center right',
         },
         nftItems: {
             height: 530,
