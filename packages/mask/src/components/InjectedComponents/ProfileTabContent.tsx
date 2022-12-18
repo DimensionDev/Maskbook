@@ -30,6 +30,7 @@ import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
 import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry.js'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
 import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
+import { SearchResultInspector } from './SearchResultInspector.js'
 
 const MENU_ITEM_HEIGHT = 40
 const MENU_LIST_PADDING = 8
@@ -136,6 +137,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const [hidden, setHidden] = useState(true)
     const [selectedAddress, setSelectedAddress] = useState<string | undefined>()
+    const [NFTProjectAddress, setNFTProjectAddress] = useState('')
     const [menuOpen, setMenuOpen] = useState(false)
     const {
         value: personaStatus,
@@ -177,6 +179,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             retryIdentity()
         })
     }, [retryIdentity])
+
+    useEffect(() => {
+        return MaskMessages.events.NFTProjectTwitterDetect.on((ev) => {
+            setNFTProjectAddress(ev.address ?? '')
+        })
+    }, [setNFTProjectAddress])
 
     useEffect(() => {
         setSelectedAddress(first(socialAccounts)?.address)
@@ -287,6 +295,13 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }
 
     if (hidden) return null
+
+    if (NFTProjectAddress)
+        return (
+            <div className={classes.root}>
+                <SearchResultInspector keyword={NFTProjectAddress} isProfilePage />
+            </div>
+        )
 
     if (lackHostPermission?.size) {
         return (

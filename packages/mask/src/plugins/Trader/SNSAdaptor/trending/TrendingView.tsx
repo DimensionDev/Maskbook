@@ -10,7 +10,7 @@ import {
 import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
 import { SourceType, createFungibleToken, SearchResultType, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NFTList } from '@masknet/shared'
+import { NFTList, PluginCardFrameMini } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { TrendingAPI } from '@masknet/web3-providers/types'
@@ -24,14 +24,17 @@ import { useTrendingById } from '../../trending/useTrending.js'
 import { TradeView } from '../trader/TradeView.js'
 import { CoinMarketPanel } from './CoinMarketPanel.js'
 import { PriceChart } from './PriceChart.js'
-import { DEFAULT_RANGE_OPTIONS, NFT_RANGE_OPTIONS, PriceChartDaysControl } from './PriceChartDaysControl.js'
+import { DEFAULT_RANGE_OPTIONS, PriceChartDaysControl } from './PriceChartDaysControl.js'
 import { TickersTable } from './TickersTable.js'
 import { TrendingViewDeck } from './TrendingViewDeck.js'
+import { NonFungibleTickersTable } from './NonFungibleTickersTable.js'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
+import { PluginEnableBoundary } from '../../../../components/shared/PluginEnableBoundary.js'
 
 const useStyles = makeStyles<{
     isPopper: boolean
+    isNFTProjectPopper: boolean
 }>()((theme, props) => {
     return {
         root: props.isPopper
@@ -54,7 +57,8 @@ const useStyles = makeStyles<{
         },
         body: props.isPopper
             ? {
-                  minHeight: 303,
+                  minHeight: 374,
+                  maxHeight: props.isNFTProjectPopper ? 374 : 'unset',
                   overflow: 'hidden',
                   display: 'flex',
                   flexDirection: 'column',
@@ -86,7 +90,7 @@ const useStyles = makeStyles<{
             marginBottom: '-36px',
         },
         nftItems: {
-            height: 530,
+            height: props.isNFTProjectPopper ? 360 : 530,
             padding: theme.spacing(2),
             boxSizing: 'border-box',
             overflow: 'auto',
@@ -102,6 +106,9 @@ export interface TrendingViewProps {
     result: Web3Helper.TokenResultAll
     resultList?: Web3Helper.TokenResultAll[]
     isPreciseSearch?: boolean
+    isProfilePage?: boolean
+    address?: string
+    isNFTProjectPopper?: boolean
     searchedContractAddress?: string
     expectedChainId?: Web3Helper.ChainIdAll
     onUpdate?: () => void
@@ -119,6 +126,8 @@ enum ContentTabs {
 export function TrendingView(props: TrendingViewProps) {
     const {
         isPopper = true,
+        isNFTProjectPopper = false,
+        isProfilePage = false,
         searchedContractAddress,
         isPreciseSearch,
         expectedChainId,
@@ -128,9 +137,11 @@ export function TrendingView(props: TrendingViewProps) {
     } = props
 
     const { t } = useI18N()
-    const { classes } = useStyles({ isPopper })
+
+    const { classes } = useStyles({ isPopper, isNFTProjectPopper })
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
+    const isWeb3ProfileMinimalMode = useIsMinimalMode(PluginID.Web3Profile)
     const [tabIndex, setTabIndex] = useState(result.source !== SourceType.UniswapInfo ? 1 : 0)
     const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
@@ -193,11 +204,11 @@ export function TrendingView(props: TrendingViewProps) {
             },
             {
                 key: ContentTabs.Price,
-                label: isNFT ? t('plugin_trader_floor_price') : t('plugin_trader_tab_price'),
+                label: t('plugin_trader_trending'),
             },
             {
                 key: ContentTabs.Exchange,
-                label: t('plugin_trader_tab_exchange'),
+                label: isNFT ? t('plugin_trader_tab_activities') : t('plugin_trader_tab_exchange'),
             },
             isSwappable
                 ? {
@@ -238,6 +249,8 @@ export function TrendingView(props: TrendingViewProps) {
                 <TrendingViewSkeleton
                     classes={{ footer: classes.footerSkeleton }}
                     TrendingCardProps={{ classes: { root: classes.root } }}
+                    isNFTProjectPopper={isNFTProjectPopper}
+                    isProfilePage={isProfilePage}
                 />
             </ThemeProvider>
         )
@@ -245,7 +258,7 @@ export function TrendingView(props: TrendingViewProps) {
 
     const { coin, tickers, market } = trending
 
-    return (
+    const component = (
         <TrendingViewDeck
             classes={{
                 body: classes.body,
@@ -257,6 +270,8 @@ export function TrendingView(props: TrendingViewProps) {
             resultList={resultList}
             result={result}
             isPreciseSearch={isPreciseSearch}
+            isProfilePage={isProfilePage}
+            isNFTProjectPopper={isNFTProjectPopper}
             currency={trending.currency}
             trending={trending}
             isPopper={isPopper}
@@ -287,7 +302,7 @@ export function TrendingView(props: TrendingViewProps) {
                             retry={retryStats}
                             loading={loadingStats}>
                             <PriceChartDaysControl
-                                rangeOptions={isNFT ? NFT_RANGE_OPTIONS : DEFAULT_RANGE_OPTIONS}
+                                rangeOptions={DEFAULT_RANGE_OPTIONS}
                                 days={days}
                                 onDaysChange={setDays}
                             />
@@ -296,7 +311,14 @@ export function TrendingView(props: TrendingViewProps) {
                 ) : null}
                 {currentTab === ContentTabs.Exchange && trending.dataProvider ? (
                     <Box p={2}>
-                        <TickersTable tickers={tickers} coinType={coin.type} dataProvider={trending.dataProvider} />
+                        {isNFT ? (
+                            <NonFungibleTickersTable
+                                address={coin.address ?? ''}
+                                chainId={coin.chainId ?? ChainId.Mainnet}
+                            />
+                        ) : (
+                            <TickersTable tickers={tickers} dataProvider={trending.dataProvider} />
+                        )}
                     </Box>
                 ) : null}
                 {currentTab === ContentTabs.Swap && isSwappable ? (
@@ -333,4 +355,16 @@ export function TrendingView(props: TrendingViewProps) {
             </Stack>
         </TrendingViewDeck>
     )
+
+    if (isProfilePage && isWeb3ProfileMinimalMode) {
+        return (
+            <PluginCardFrameMini>
+                <ThemeProvider theme={MaskLightTheme}>
+                    <PluginEnableBoundary pluginID={PluginID.Web3Profile}>{component}</PluginEnableBoundary>
+                </ThemeProvider>
+            </PluginCardFrameMini>
+        )
+    }
+
+    return component
 }

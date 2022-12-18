@@ -9,9 +9,24 @@ import { TrendingView } from './TrendingView.js'
 export interface TagInspectorProps {}
 
 export function TagInspector(props: TagInspectorProps) {
-    const createTrendingView = useCallback((resultList: Web3Helper.TokenResultAll[], reposition?: () => void) => {
-        return <TrendingViewWrapper resultList={resultList} reposition={reposition} />
-    }, [])
+    const createTrendingView = useCallback(
+        (
+            resultList: Web3Helper.TokenResultAll[],
+            address?: string,
+            isNFTProjectPopper?: boolean,
+            reposition?: () => void,
+        ) => {
+            return (
+                <TrendingViewWrapper
+                    address={address}
+                    resultList={resultList}
+                    reposition={reposition}
+                    isNFTProjectPopper={isNFTProjectPopper}
+                />
+            )
+        },
+        [],
+    )
     return (
         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
             <TrendingPopper>{createTrendingView}</TrendingPopper>
@@ -21,10 +36,21 @@ export function TagInspector(props: TagInspectorProps) {
 
 interface TrendingViewWrapperProps {
     resultList: Web3Helper.TokenResultAll[]
+    address?: string
+    isNFTProjectPopper?: boolean
     reposition?: () => void
 }
 
-function TrendingViewWrapper({ resultList, reposition }: TrendingViewWrapperProps) {
+function TrendingViewWrapper({ resultList, reposition, address, isNFTProjectPopper }: TrendingViewWrapperProps) {
     const [result, setResult] = useState(resultList[0])
-    return <TrendingView setResult={setResult} result={result} resultList={resultList} onUpdate={reposition} />
+    return (
+        <TrendingView
+            setResult={setResult}
+            result={result}
+            resultList={resultList}
+            onUpdate={reposition}
+            address={address}
+            isNFTProjectPopper={isNFTProjectPopper}
+        />
+    )
 }

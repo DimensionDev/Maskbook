@@ -38,7 +38,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ],
     AvatarRealm: {
         ID: `${PLUGIN_ID}_profile_card`,
-        label: 'Avatar Web3 Profile Card',
+        label: 'Avatar Web3 Profile',
         priority: 99999,
         UI: {
             Decorator({ identity }) {

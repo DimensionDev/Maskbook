@@ -79,3 +79,14 @@ describe('Digital currency format util test', () => {
         expect(result).toBe(expected)
     })
 })
+
+describe('None currency format util test', () => {
+    test.each([
+        { give: 0, currency: '', expected: '0.00 ' },
+        { give: 1.55, currency: '', expected: '1.55 ' },
+        { give: 0.00000001, currency: '', expected: '< 0.000001 ' },
+    ])('.format($give)', ({ give, currency, expected }) => {
+        const result = formatCurrency(give, currency)
+        expect(result).toBe(expected)
+    })
+})

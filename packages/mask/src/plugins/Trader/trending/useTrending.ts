@@ -1,6 +1,8 @@
 import { useAsync, useAsyncRetry } from 'react-use'
+import { useCallback, useRef, useState, useEffect } from 'react'
+import { flatten } from 'lodash-es'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
-import { SourceType, TokenType, attemptUntil } from '@masknet/web3-shared-base'
+import { SourceType, TokenType, attemptUntil, NonFungibleTokenActivity } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -11,6 +13,51 @@ import type { Coin } from '../types/index.js'
 import { useCurrentCurrency } from './useCurrentCurrency.js'
 
 const NFTSCAN_CHAIN_ID_LIST = [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
+
+export function useTrendingOverviewByAddress(address: string, expectedChainId?: Web3Helper.ChainIdAll) {
+    return useAsync(async () => {
+        if (!address || !expectedChainId) return null
+        return PluginTraderRPC.getNFT_TrendingOverview(expectedChainId, address)
+    }, [expectedChainId, address])
+}
+
+export function useCollectionByTwitterHandler(twitterHandler?: string) {
+    return useAsync(async () => {
+        if (!twitterHandler) return
+        return PluginTraderRPC.getCollectionByTwitterHandler(twitterHandler)
+    }, [twitterHandler])
+}
+
+export function useNonFungibleTokenActivities(address: string, expectedChainId?: Web3Helper.ChainIdAll) {
+    const pageIndexRef = useRef<number>(0)
+    const [nonFungibleTokenActivities, setNonFungibleTokenActivities] = useState<
+        Record<number, NonFungibleTokenActivity[]>
+    >({})
+
+    const getNonFungibleTokenActivities = useCallback(async () => {
+        if (!address || !expectedChainId) return
+        const pageIndex = pageIndexRef.current
+
+        const activities = await PluginTraderRPC.getNonFungibleTokenActivities(
+            expectedChainId,
+            address,
+            pageIndexRef.current,
+        )
+
+        setNonFungibleTokenActivities((currentActivities) => {
+            if (currentActivities[pageIndexRef.current] || !activities) return currentActivities
+            pageIndexRef.current = pageIndex + 1
+
+            return { ...currentActivities, [pageIndex]: activities }
+        })
+    }, [address, expectedChainId])
+
+    useEffect(() => {
+        getNonFungibleTokenActivities()
+    }, [getNonFungibleTokenActivities])
+
+    return { activities: flatten(Object.values(nonFungibleTokenActivities)), fetchMore: getNonFungibleTokenActivities }
+}
 
 export function useTrendingById(
     id: string,

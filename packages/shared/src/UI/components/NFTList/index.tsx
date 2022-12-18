@@ -44,7 +44,7 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             gridTemplateColumns: `repeat(${columns}, 1fr)`,
         },
         nftContainer: {
-            background: isLight ? '#EDEFEF' : '#2F3336',
+            background: theme.palette.background.default,
             borderRadius: 8,
             width: 126,
             height: 154,
@@ -91,6 +91,10 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
         inactive: {
             opacity: 0.5,
         },
+        fallbackImage: {
+            width: 30,
+            height: 30,
+        },
         image: {
             width: 126,
             height: 126,
@@ -113,7 +117,8 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
 
 export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     const { classes } = useStyles({})
-    const caption = token.metadata?.name || token.tokenId
+    const { Others } = useWeb3State()
+    const caption = Others?.formatTokenId(token.tokenId, 4)
     const captionRef = useRef<HTMLDivElement>(null)
 
     const showTooltip = captionRef.current ? captionRef.current.offsetWidth !== captionRef.current.scrollWidth : false
@@ -123,7 +128,7 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
             <AssetPreviewer
                 url={token.metadata?.imageURL ?? token.metadata?.imageURL}
                 classes={{
-                    fallbackImage: classes.image,
+                    fallbackImage: classes.fallbackImage,
                     container: classes.image,
                     root: classes.root,
                 }}

@@ -1,8 +1,9 @@
-import { SourceType } from '@masknet/web3-shared-base'
+import { SourceType, NonFungibleCollectionOverview, NonFungibleTokenActivity } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { CoinGeckoTrending, CoinMarketCap, NFTScanTrending, UniSwap } from '@masknet/web3-providers'
-import { TrendingAPI } from '@masknet/web3-providers/types'
+import { TrendingAPI, NonFungibleTokenAPI } from '@masknet/web3-providers/types'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { Currency, Stat, Trending } from '../../types/index.js'
 
 export async function getCoinInfoByAddress(address: string): Promise<TrendingAPI.CoinInfo | undefined> {
@@ -56,5 +57,32 @@ export async function getPriceStats(
         default:
             return EMPTY_LIST
     }
+}
+// #endregion
+
+// #region get nft trending overview
+export async function getNFT_TrendingOverview(
+    chainId: Web3Helper.ChainIdAll,
+    id: string,
+): Promise<NonFungibleCollectionOverview | undefined> {
+    return NFTScanTrending.getCollectionOverview(chainId, id)
+}
+// #endregion
+
+// #region get nft trending activities
+export async function getNonFungibleTokenActivities(
+    chainId: Web3Helper.ChainIdAll,
+    contractAddress: string,
+    pageIndex: number,
+): Promise<NonFungibleTokenActivity[] | undefined> {
+    return NFTScanTrending.getCoinActivities(chainId, contractAddress, pageIndex)
+}
+// #endregion
+
+// #region get nft collection by twitter handler
+export async function getCollectionByTwitterHandler(
+    twitterHandler: string,
+): Promise<NonFungibleTokenAPI.Collection | undefined> {
+    return NFTScanTrending.getCollectionByTwitterHandler(twitterHandler)
 }
 // #endregion

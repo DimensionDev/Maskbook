@@ -1,15 +1,29 @@
 import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
-import { TokenType, SourceType } from '@masknet/web3-shared-base'
+import {
+    TokenType,
+    SourceType,
+    NonFungibleCollectionOverview,
+    NonFungibleTokenActivity,
+} from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
 import { COIN_RECOMMENDATION_SIZE } from '../../Trending/constants.js'
 import type { EVM, Response } from '../types/index.js'
-import { fetchFromNFTScanV2, getContractSymbol } from '../helpers/EVM.js'
+import {
+    fetchFromNFTScanV2,
+    postNFTScanRestFulAPI,
+    fetchFromNFTScanRestFulAPI,
+    getContractSymbol,
+    fetchFromNFTScanWebAPI,
+    resolveNFTScanHostName,
+    NFTScanChainId,
+} from '../helpers/EVM.js'
 import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
 import { LooksRareLogo, OpenSeaLogo } from '../../Resources/index.js'
-import { TrendingAPI } from '../../entry-types.js'
+import { TrendingAPI, NonFungibleTokenAPI } from '../../entry-types.js'
 
 enum NonFungibleMarketplace {
     OpenSea = 'OpenSea',
@@ -33,20 +47,23 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     private looksrare = new LooksRareAPI()
     private opensea = new OpenSeaAPI()
 
-    private async getCollection(chainId: ChainId, address: string): Promise<EVM.Collection | undefined> {
+    private async getCollection(
+        chainId: ChainId,
+        address: string,
+    ): Promise<NonFungibleTokenAPI.Collection | undefined> {
         if (!isValidChainId(chainId)) return
         const path = urlcat('/api/v2/collections/:address', {
             address,
             contract_address: address,
         })
-        const response = await fetchFromNFTScanV2<Response<EVM.Collection>>(chainId, path)
+        const response = await fetchFromNFTScanV2<Response<NonFungibleTokenAPI.Collection>>(chainId, path)
         return response?.data
     }
 
-    private async searchNFTCollection(chainId: ChainId, keyword: string): Promise<EVM.Collection[]> {
+    private async searchNFTCollection(chainId: ChainId, keyword: string): Promise<NonFungibleTokenAPI.Collection[]> {
         if (!isValidChainId(chainId)) return EMPTY_LIST
         const path = '/api/v2/collections/filters'
-        const response = await fetchFromNFTScanV2<Response<EVM.Collection[]>>(chainId, path, {
+        const response = await fetchFromNFTScanV2<Response<NonFungibleTokenAPI.Collection[]>>(chainId, path, {
             method: 'POST',
             body: JSON.stringify({
                 name: keyword,
@@ -57,6 +74,49 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
             }),
         })
         return response?.data ?? EMPTY_LIST
+    }
+
+    async getCollectionByTwitterHandler(twitterHandler: string): Promise<NonFungibleTokenAPI.Collection | undefined> {
+        const path = '/api/v2/collections/filters'
+        const response = await postNFTScanRestFulAPI<Response<NonFungibleTokenAPI.Collection[]>>(
+            path,
+            JSON.stringify({ twitter: twitterHandler }),
+        )
+        return response?.data[0]
+    }
+
+    async getCollectionOverview(
+        chainId: Web3Helper.ChainIdAll,
+        address: string,
+    ): Promise<NonFungibleCollectionOverview | undefined> {
+        const path = urlcat('/api/v2/statistics/collection/:address', {
+            address,
+        })
+        const response = await fetchFromNFTScanRestFulAPI<Response<NonFungibleCollectionOverview>>(path)
+        if (!response?.data) return
+        return response.data
+    }
+
+    async getCoinActivities(
+        chainId: Web3Helper.ChainIdAll,
+        contractAddress: string,
+        pageIndex: number,
+    ): Promise<NonFungibleTokenActivity[] | undefined> {
+        if (!isValidChainId(chainId as NFTScanChainId)) return
+        const path = urlcat('/nftscan/getTransactionByNftContract', {
+            contract: contractAddress,
+            filterType: 'all',
+            pageIndex,
+            pageSize: 20,
+        })
+        const response = await fetchFromNFTScanWebAPI<
+            Response<{ nft_tx_record: NonFungibleTokenActivity[]; nft_tx_total: number }>
+        >(chainId as NFTScanChainId, path)
+        if (!response?.data.nft_tx_record) return
+        return response.data.nft_tx_record.map((x) => ({
+            ...x,
+            transactionLink: `${resolveNFTScanHostName(chainId as NFTScanChainId)}/${x.transaction_hash}`,
+        }))
     }
 
     private async getCollectionTrending(
@@ -162,7 +222,10 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                 type: TokenType.NonFungible,
                 description: collection.description,
                 image_url: collection.logo_url,
-                home_urls: compact([collection.website]),
+                home_urls: compact([
+                    `${resolveNFTScanHostName(chainId as NFTScanChainId)}/${address}`,
+                    collection.website,
+                ]),
                 community_urls: [
                     {
                         type: 'twitter',

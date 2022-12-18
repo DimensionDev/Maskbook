@@ -25,14 +25,22 @@ import {
     SchemaType,
     WNATIVE,
 } from '@masknet/web3-shared-evm'
-import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
+import {
+    NFTSCAN_BASE,
+    NFTSCAN_LOGO_BASE,
+    NFTSCAN_URL,
+    NFTSCAN_API,
+    NFTSCAN_RESTFUL_API,
+    NFTSCAN_API_KEY,
+} from '../constants.js'
 import type { EVM } from '../types/EVM.js'
 import { getAssetFullName } from '../../helpers/getAssetFullName.js'
 import { resolveActivityType } from '../../helpers/resolveActivityType.js'
 import { getPaymentToken } from '../../helpers/getPaymentToken.js'
 import { parseJSON } from '../../helpers/parseJSON.js'
+import type { NonFungibleTokenAPI } from '../../entry-types.js'
 
-type NFTScanChainId =
+export type NFTScanChainId =
     | ChainId.Mainnet
     | ChainId.Matic
     | ChainId.BSC
@@ -41,7 +49,7 @@ type NFTScanChainId =
     | ChainId.xDai
     | ChainId.Avalanche
 
-export const resolveHostName = createLookupTableResolver<NFTScanChainId, string>(
+export const resolveNFTScanHostName = createLookupTableResolver<NFTScanChainId, string>(
     {
         [ChainId.Mainnet]: 'https://www.nftscan.com',
         [ChainId.Matic]: 'https://polygon.nftscan.com',
@@ -55,7 +63,7 @@ export const resolveHostName = createLookupTableResolver<NFTScanChainId, string>
 )
 
 export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, init?: RequestInit) {
-    const host = resolveHostName(chainId as NFTScanChainId)
+    const host = resolveNFTScanHostName(chainId as NFTScanChainId)
     if (!host) return
 
     const response = await fetch(urlcat(NFTSCAN_URL, pathname), {
@@ -64,6 +72,69 @@ export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, 
             'content-type': 'application/json',
             ...init?.headers,
             'x-app-chainid': chainId.toString(),
+        },
+        cache: 'no-cache',
+    })
+    const json = await response.json()
+    return json as T
+}
+
+export async function postNFTScanRestFulAPI<T>(pathname: string, body: string, init?: RequestInit) {
+    const response = await fetch(urlcat(NFTSCAN_RESTFUL_API, pathname), {
+        ...init,
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            ...init?.headers,
+            'x-api-key': NFTSCAN_API_KEY,
+        },
+        cache: 'no-cache',
+        body,
+    })
+
+    const json = await response.json()
+    return json as T
+}
+
+export async function fetchFromNFTScanRestFulAPI<T>(pathname: string, init?: RequestInit) {
+    const response = await fetch(urlcat(NFTSCAN_RESTFUL_API, pathname), {
+        ...init,
+        method: 'GET',
+        headers: {
+            'content-type': 'application/json',
+            ...init?.headers,
+            'x-api-key': NFTSCAN_API_KEY,
+        },
+        cache: 'no-cache',
+    })
+
+    const json = await response.json()
+    return json as T
+}
+
+const NFTScanAPIChainResolver = createLookupTableResolver<NFTScanChainId, string>(
+    {
+        [ChainId.Mainnet]: 'ETH',
+        [ChainId.Matic]: 'MATIC',
+        [ChainId.BSC]: 'BNB',
+        [ChainId.Arbitrum]: 'Arbitrum',
+        [ChainId.Optimism]: 'Optimism',
+        [ChainId.xDai]: 'Gnosis',
+        [ChainId.Avalanche]: 'Avalanche',
+    },
+    () => 'ETH',
+)
+
+export async function fetchFromNFTScanWebAPI<T>(chainId: ChainId, pathname: string, init?: RequestInit) {
+    const host = resolveNFTScanHostName(chainId as NFTScanChainId)
+    if (!host) return
+
+    const response = await fetch(urlcat(NFTSCAN_API, pathname), {
+        ...init,
+        headers: {
+            'content-type': 'application/json',
+            ...init?.headers,
+            chain: NFTScanAPIChainResolver(chainId as NFTScanChainId),
         },
         cache: 'no-cache',
     })
@@ -86,10 +157,14 @@ export async function getContractSymbol(address: string, chainId: ChainId) {
 }
 
 export function createPermalink(chainId: ChainId, address: string, tokenId: string) {
-    return urlcat(resolveHostName(chainId as NFTScanChainId) || 'https://www.nftscan.com', '/:address/:tokenId', {
-        address,
-        tokenId,
-    })
+    return urlcat(
+        resolveNFTScanHostName(chainId as NFTScanChainId) || 'https://www.nftscan.com',
+        '/:address/:tokenId',
+        {
+            address,
+            tokenId,
+        },
+    )
 }
 
 function getAssetTraits(asset: EVM.Asset): NonFungibleTokenTrait[] {
@@ -117,7 +192,7 @@ function getAssetTraits(asset: EVM.Asset): NonFungibleTokenTrait[] {
 export function createNonFungibleAsset(
     chainId: ChainId,
     asset: EVM.Asset,
-    collection?: EVM.Collection | EVM.AssetsGroup,
+    collection?: NonFungibleTokenAPI.Collection | EVM.AssetsGroup,
 ): NonFungibleAsset<ChainId, SchemaType> {
     const payload = parseJSON<EVM.Payload>(asset.metadata_json)
     const contractName = asset.contract_name
@@ -211,7 +286,7 @@ export function createNonFungibleCollectionFromGroup(
 
 export function createNonFungibleCollectionFromCollection(
     chainId: ChainId,
-    collection: EVM.Collection,
+    collection: NonFungibleTokenAPI.Collection,
 ): NonFungibleCollection<ChainId, SchemaType> {
     return {
         chainId,
@@ -229,7 +304,7 @@ export function createNonFungibleCollectionFromCollection(
 
 export function createNonFungibleTokenContract(
     chainId: ChainId,
-    collection: EVM.Collection,
+    collection: NonFungibleTokenAPI.Collection,
 ): NonFungibleTokenContract<ChainId, SchemaType> {
     return {
         chainId,

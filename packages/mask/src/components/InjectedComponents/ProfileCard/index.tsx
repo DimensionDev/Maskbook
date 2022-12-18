@@ -194,7 +194,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
                 <div className={classes.content}>{component}</div>
                 <div className={classes.footer}>
                     <Icons.Web3ProfileCard className={classes.cardIcon} size={24} />
-                    <Typography className={classes.cardName}>{t('profile_card_name')}</Typography>
+                    <Typography className={classes.cardName}>{t('avatar_profile_card_name')}</Typography>
                     <Typography variant="body1" className={classes.powered}>
                         <Trans
                             i18nKey="powered_by_whom"

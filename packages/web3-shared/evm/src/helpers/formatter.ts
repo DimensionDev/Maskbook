@@ -43,12 +43,14 @@ export function formatTokenId(tokenId = '', size_ = 4) {
     return `${prefix}${head}...${tail}`
 }
 
-export function formatDomainName(domain: string) {
+export function formatDomainName(domain: string, size = 18) {
     if (!domain || !isValidDomain(domain)) return domain
-    if (domain.length <= 18) return domain
-    const [name, suffix] = domain.split('.')
+    if (domain.length <= size) return domain
+    const name = domain.split('.')[0]
+    // xxx.yyy.eth
+    const suffix = domain.split('.').pop()
 
-    return `${name.slice(0, 12)}...${name.slice(-2)}.${suffix}`
+    return `${name.slice(0, size - 6)}...${name.slice(-2)}.${suffix}`
 }
 
 export function formatKeccakHash(hash: string, size = 0) {

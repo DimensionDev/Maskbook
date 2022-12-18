@@ -1,4 +1,3 @@
-import { upperFirst } from 'lodash-es'
 import {
     TableContainer,
     Paper,
@@ -65,15 +64,15 @@ export interface CoinMetadataTableProps {
 }
 
 const brands: Record<CommunityType, React.ReactNode> = {
-    discord: <Icons.DiscordRound size={16} />,
-    facebook: <Icons.FacebookRound size={16} />,
-    github: <Icons.GitHub size={16} />,
-    instagram: <Icons.InstagramRound size={16} />,
-    medium: <Icons.Medium size={16} />,
-    reddit: <Icons.RedditRound size={16} />,
-    telegram: <Icons.TelegramRound size={16} />,
-    twitter: <Icons.TwitterRound size={16} />,
-    youtube: <Icons.YouTube size={16} />,
+    discord: <Icons.DiscordRoundGray size={16} />,
+    facebook: <Icons.FacebookRoundGray size={16} />,
+    github: <Icons.GitHubGray size={16} />,
+    instagram: <Icons.InstagramRoundGray size={16} />,
+    medium: <Icons.MediumGray size={16} />,
+    reddit: <Icons.RedditRoundGray size={16} />,
+    telegram: <Icons.TelegramRoundGray size={16} />,
+    twitter: <Icons.TwitterRoundGray size={16} />,
+    youtube: <Icons.YouTubeGray size={16} />,
     other: null,
 }
 
@@ -197,18 +196,19 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                         justifyContent="flex-end"
                                         flexWrap="wrap"
                                         alignItems="center"
-                                        gap={1.5}>
-                                        {trending.coin.community_urls.map((x) => (
-                                            <Linking
-                                                key={x.link}
-                                                href={x.link}
-                                                LinkProps={{
-                                                    className: classes.link,
-                                                }}>
-                                                {brands[x.type]}
-                                                {upperFirst(x.type)}
-                                            </Linking>
-                                        ))}
+                                        gap={1}>
+                                        {trending.coin.community_urls.map((x) =>
+                                            brands[x.type] ? (
+                                                <Linking
+                                                    key={x.link}
+                                                    href={x.link}
+                                                    LinkProps={{
+                                                        className: classes.link,
+                                                    }}>
+                                                    {brands[x.type]}
+                                                </Linking>
+                                            ) : null,
+                                        )}
                                     </Stack>
                                 </TableCell>
                             </TableRow>

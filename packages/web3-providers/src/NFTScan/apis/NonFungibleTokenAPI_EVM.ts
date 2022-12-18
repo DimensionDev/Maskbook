@@ -92,7 +92,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, HubIndicator>> {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = '/api/v2/collections/filters'
-        const response = await fetchFromNFTScanV2<Response<EVM.Collection[]>>(chainId, path, {
+        const response = await fetchFromNFTScanV2<Response<NonFungibleTokenAPI.Collection[]>>(chainId, path, {
             method: 'POST',
             body: JSON.stringify({
                 name: keyword,
@@ -110,12 +110,12 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
     async getCollectionRaw(
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions<ChainId, HubIndicator> = {},
-    ): Promise<EVM.Collection | undefined> {
+    ): Promise<NonFungibleTokenAPI.Collection | undefined> {
         if (!isValidChainId(chainId)) return
         const path = urlcat('/api/v2/collections/:address', {
             address,
         })
-        const response = await fetchFromNFTScanV2<Response<EVM.Collection>>(chainId, path)
+        const response = await fetchFromNFTScanV2<Response<NonFungibleTokenAPI.Collection>>(chainId, path)
         return response?.data
     }
 
@@ -135,7 +135,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
         const path = urlcat('/api/v2/collections/:address', {
             address,
         })
-        const response = await fetchFromNFTScanV2<Response<EVM.Collection>>(chainId, path)
+        const response = await fetchFromNFTScanV2<Response<NonFungibleTokenAPI.Collection>>(chainId, path)
         if (!response?.data) return
         return createNonFungibleTokenContract(chainId, response.data)
     }

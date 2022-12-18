@@ -110,9 +110,6 @@ const useStyles = makeStyles<{
         icon: {
             color: MaskColors.dark.maskColor.dark,
         },
-        pluginDescriptorWrapper: {
-            padding: '0 12px 12px',
-        },
         source: {
             display: 'flex',
             justifyContent: 'space-between',
@@ -130,6 +127,23 @@ const useStyles = makeStyles<{
             color: theme.palette.maskColor.dark,
             marginLeft: 4,
         },
+        pluginDescriptorWrapper: {
+            padding: '15px 17px 15px 13px',
+            position: 'absolute',
+            width: '100%',
+            height: 48,
+            left: 0,
+            bottom: 12,
+            right: 0,
+            display: 'flex',
+            alignItems: 'center',
+            background: theme.palette.mode === 'dark' ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.8)',
+            backdropFilter: 'blur(5px)',
+            boxSizing: 'border-box',
+            borderBottomRightRadius: '16px',
+            borderBottomLeftRadius: '16px',
+            zIndex: 2,
+        },
     }
 })
 
@@ -139,6 +153,8 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     trending: TrendingAPI.Trending
     setResult: (a: Web3Helper.TokenResultAll) => void
     result: Web3Helper.TokenResultAll
+    isProfilePage?: boolean
+    isNFTProjectPopper?: boolean
     resultList?: Web3Helper.TokenResultAll[]
     children?: React.ReactNode
     isPreciseSearch?: boolean
@@ -152,6 +168,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         stats,
         children,
         TrendingCardProps,
+        isProfilePage,
+        isNFTProjectPopper = false,
         isPopper = true,
         isPreciseSearch = false,
         resultList = [],
@@ -198,88 +216,88 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     return (
         <TrendingCard {...TrendingCardProps}>
-            <ThemeProvider theme={MaskLightTheme}>
-                <Stack className={classes.cardHeader}>
-                    {isPopper ? null : (
-                        <PluginDescriptor>
-                            <Box className={classes.source}>
-                                <Stack
-                                    className={classes.sourceMenu}
-                                    display="inline-flex"
-                                    flexDirection="row"
-                                    alignItems="center"
-                                    gap={0.5}>
-                                    <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
-                                </Stack>
-                                {trending.dataProvider ? (
-                                    <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
-                                        <Typography className={classes.sourceName}>
-                                            {resolveSourceTypeName(trending.dataProvider)}
-                                        </Typography>
-                                        <DataProviderIcon provider={trending.dataProvider} size={20} />
-                                    </Stack>
-                                ) : null}
-                            </Box>
-                        </PluginDescriptor>
-                    )}
-                    <Stack className={classes.headline}>
-                        <Stack gap={2} flexGrow={1}>
-                            <Stack>
-                                <Stack flexDirection="row" alignItems="center" gap={0.5} ref={titleRef}>
-                                    {coinAddress ? (
-                                        <Linking href={first(coin.home_urls)}>
-                                            <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
-                                                <CoinIcon
-                                                    type={coin.type}
-                                                    name={coin.name}
-                                                    label=""
-                                                    symbol={coin.symbol}
-                                                    address={coinAddress}
-                                                    logoURL={coin.image_url}
-                                                    size={20}
-                                                />
-                                            </Avatar>
-                                        </Linking>
-                                    ) : null}
-
-                                    <Typography className={classes.title} variant="h6">
-                                        <Linking
-                                            href={first(coin.home_urls)}
-                                            LinkProps={{ className: classes.name, title: coin.name.toUpperCase() }}>
-                                            {coin.name.toUpperCase()}
-                                        </Linking>
-                                        {coin.symbol ? (
-                                            <Typography component="span" className={classes.symbol}>
-                                                (<em className={classes.symbolText}>{coin.symbol}</em>)
-                                            </Typography>
-                                        ) : null}
+            <Stack className={classes.cardHeader}>
+                {isPopper ? null : (
+                    <PluginDescriptor isProfilePage={isProfilePage}>
+                        <Box className={classes.source}>
+                            <Stack
+                                className={classes.sourceMenu}
+                                display="inline-flex"
+                                flexDirection="row"
+                                alignItems="center"
+                                gap={0.5}>
+                                <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
+                            </Stack>
+                            {trending.dataProvider ? (
+                                <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
+                                    <Typography className={classes.sourceName}>
+                                        {resolveSourceTypeName(trending.dataProvider)}
                                     </Typography>
-                                    {typeof coin.market_cap_rank === 'number' ? (
-                                        <Typography component="span" className={classes.rank} title="Index Cap Rank">
-                                            {t('plugin_trader_rank', { rank: coin.market_cap_rank })}
+                                    <DataProviderIcon provider={trending.dataProvider} size={20} />
+                                </Stack>
+                            ) : null}
+                        </Box>
+                    </PluginDescriptor>
+                )}
+                <Stack className={classes.headline}>
+                    <Stack gap={2} flexGrow={1}>
+                        <Stack>
+                            <Stack flexDirection="row" alignItems="center" gap={0.5} ref={titleRef}>
+                                {coinAddress ? (
+                                    <Linking href={first(coin.home_urls)}>
+                                        <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
+                                            <CoinIcon
+                                                type={coin.type}
+                                                name={coin.name}
+                                                label=""
+                                                symbol={coin.symbol}
+                                                address={coinAddress}
+                                                logoURL={coin.image_url}
+                                                size={20}
+                                            />
+                                        </Avatar>
+                                    </Linking>
+                                ) : null}
+
+                                <Typography className={classes.title} variant="h6">
+                                    <Linking
+                                        href={first(coin.home_urls)}
+                                        LinkProps={{ className: classes.name, title: coin.name.toUpperCase() }}>
+                                        {coin.name.toUpperCase()}
+                                    </Linking>
+                                    {coin.symbol ? (
+                                        <Typography component="span" className={classes.symbol}>
+                                            (<em className={classes.symbolText}>{coin.symbol}</em>)
                                         </Typography>
                                     ) : null}
-                                    {resultList.length > 1 && !isPreciseSearch ? (
-                                        <>
-                                            <IconButton
-                                                sx={{ padding: 0 }}
-                                                size="small"
-                                                onClick={() => setCoinMenuOpen((v) => !v)}>
-                                                <Icons.ArrowDrop size={24} className={classes.icon} />
-                                            </IconButton>
-                                            <ThemeProvider
-                                                theme={theme.palette.mode === 'light' ? MaskLightTheme : MaskDarkTheme}>
-                                                <CoinMenu
-                                                    open={coinMenuOpen}
-                                                    anchorEl={titleRef.current}
-                                                    optionList={resultList}
-                                                    result={result}
-                                                    onChange={setResult}
-                                                    onClose={() => setCoinMenuOpen(false)}
-                                                />
-                                            </ThemeProvider>
-                                        </>
-                                    ) : null}
+                                </Typography>
+                                {typeof coin.market_cap_rank === 'number' ? (
+                                    <Typography component="span" className={classes.rank} title="Index Cap Rank">
+                                        {t('plugin_trader_rank', { rank: coin.market_cap_rank })}
+                                    </Typography>
+                                ) : null}
+                                {resultList.length > 1 && !isPreciseSearch ? (
+                                    <>
+                                        <IconButton
+                                            sx={{ padding: 0 }}
+                                            size="small"
+                                            onClick={() => setCoinMenuOpen((v) => !v)}>
+                                            <Icons.ArrowDrop size={24} className={classes.icon} />
+                                        </IconButton>
+                                        <ThemeProvider
+                                            theme={theme.palette.mode === 'light' ? MaskLightTheme : MaskDarkTheme}>
+                                            <CoinMenu
+                                                open={coinMenuOpen}
+                                                anchorEl={titleRef.current}
+                                                optionList={resultList}
+                                                result={result}
+                                                onChange={setResult}
+                                                onClose={() => setCoinMenuOpen(false)}
+                                            />
+                                        </ThemeProvider>
+                                    </>
+                                ) : null}
+                                <ThemeProvider theme={MaskLightTheme}>
                                     {isBuyable ? (
                                         <Button
                                             color="primary"
@@ -291,55 +309,64 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             {t('buy_now')}
                                         </Button>
                                     ) : null}
-                                </Stack>
-                                <Stack direction="row" justifyContent="space-between">
-                                    <Stack direction="row" gap={1} alignItems="center">
-                                        {market ? (
-                                            <Typography
-                                                fontSize={18}
-                                                fontWeight={500}
-                                                lineHeight="24px"
-                                                color={theme.palette.maskColor.dark}>
-                                                {isNFT ? `${t('plugin_trader_floor_price')}: ` : null}
-                                                <FormattedCurrency
-                                                    value={
-                                                        (trending.dataProvider === SourceType.CoinMarketCap
-                                                            ? last(stats)?.[1] ?? market.current_price
-                                                            : market.current_price) ?? 0
-                                                    }
-                                                    sign={isNFT ? market.price_symbol ?? 'ETH' : 'USD'}
-                                                    formatter={formatCurrency}
-                                                />
-                                            </Typography>
-                                        ) : (
-                                            <Typography fontSize={14} fontWeight={500} lineHeight="24px">
-                                                {t('plugin_trader_no_data')}
-                                            </Typography>
-                                        )}
-                                        <PriceChanged
-                                            amount={
-                                                market?.price_change_percentage_1h ??
-                                                market?.price_change_percentage_24h ??
-                                                0
-                                            }
-                                        />
-                                    </Stack>
-                                    {isTokenSecurityEnable && tokenSecurityInfo && !error && (
-                                        <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
+                                    <Button
+                                        color="primary"
+                                        className={classes.buyButton}
+                                        size="small"
+                                        endIcon={<Icons.LinkOut size={16} />}
+                                        variant="roundedContained"
+                                        onClick={() => window.open(first(coin.home_urls))}>
+                                        {t('open')}
+                                    </Button>
+                                </ThemeProvider>
+                            </Stack>
+                            <Stack direction="row" justifyContent="space-between" marginTop={2}>
+                                <Stack direction="row" gap={1} alignItems="center">
+                                    {market ? (
+                                        <Typography
+                                            fontSize={18}
+                                            fontWeight={500}
+                                            lineHeight="24px"
+                                            color={theme.palette.maskColor.dark}>
+                                            {isNFT ? `${t('plugin_trader_floor_price')}: ` : null}
+                                            <FormattedCurrency
+                                                value={
+                                                    (trending.dataProvider === SourceType.CoinMarketCap
+                                                        ? last(stats)?.[1] ?? market.current_price
+                                                        : market.current_price) ?? 0
+                                                }
+                                                sign={isNFT ? market.price_symbol ?? 'ETH' : 'USD'}
+                                                formatter={formatCurrency}
+                                            />
+                                        </Typography>
+                                    ) : (
+                                        <Typography fontSize={14} fontWeight={500} lineHeight="24px">
+                                            {t('plugin_trader_no_data')}
+                                        </Typography>
                                     )}
+                                    <PriceChanged
+                                        amount={
+                                            market?.price_change_percentage_1h ??
+                                            market?.price_change_percentage_24h ??
+                                            0
+                                        }
+                                    />
                                 </Stack>
+                                {isTokenSecurityEnable && tokenSecurityInfo && !error && !isNFT && (
+                                    <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
+                                )}
                             </Stack>
                         </Stack>
                     </Stack>
                 </Stack>
-            </ThemeProvider>
+            </Stack>
             <CardContent className={classes.content}>
                 <Paper className={classes.body} elevation={0}>
                     {children}
                 </Paper>
                 {isPopper ? (
                     <section className={classes.pluginDescriptorWrapper}>
-                        <PluginDescriptor>
+                        <PluginDescriptor isNFTProjectPopper={isNFTProjectPopper} isProfilePage={isProfilePage}>
                             <Box className={classes.source}>
                                 <Stack
                                     className={classes.sourceMenu}
