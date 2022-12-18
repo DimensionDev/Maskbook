@@ -233,6 +233,8 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             if (!z.createdAt) return -1
             return compareDesc(a.createdAt, z.createdAt)
         })
+        if (!sortedOrders.length) throw new Error('No Data.')
+
         return createPageable(
             sortedOrders,
             createIndicator(indicator),
