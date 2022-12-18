@@ -5,11 +5,14 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { TrendingPopper } from './TrendingPopper.js'
 import { TrendingView } from './TrendingView.js'
+import { decentralizedSearchSettings } from '../../../../../shared/legacy-settings/settings.js'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { TrendingViewProvider } from './context.js'
 
 export interface TagInspectorProps {}
 
 export function TagInspector(props: TagInspectorProps) {
+    const dSearchEnable = useValueRef(decentralizedSearchSettings)
     const createTrendingView = useCallback(
         (
             resultList: Web3Helper.TokenResultAll[],
@@ -28,6 +31,8 @@ export function TagInspector(props: TagInspectorProps) {
         },
         [],
     )
+
+    if (!dSearchEnable) return null
     return (
         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
             <TrendingPopper>{createTrendingView}</TrendingPopper>

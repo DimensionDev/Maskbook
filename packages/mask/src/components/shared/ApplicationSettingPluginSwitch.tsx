@@ -6,6 +6,8 @@ import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Avatar, Box, List, ListItem, ListItemAvatar, Stack, Switch, Typography } from '@mui/material'
 import { Services } from '../../extension/service.js'
+import { useI18N } from '../../utils/index.js'
+import { useAsyncRetry } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     listItem: {
@@ -73,8 +75,10 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+const DSearch_KEY = 'decentralized_search'
+
 interface Props {
-    focusPluginID?: PluginID
+    focusPluginID?: PluginID | typeof DSearch_KEY
 }
 
 export const ApplicationSettingPluginSwitch = memo(({ focusPluginID }: Props) => {
@@ -104,6 +108,14 @@ export const ApplicationSettingPluginSwitch = memo(({ focusPluginID }: Props) =>
 
     return (
         <List>
+            <DSearchSetting
+                setRef={(element: HTMLLIElement | null) => {
+                    if (DSearch_KEY === focusPluginID) {
+                        targetPluginRef.current = element
+                    }
+                }}
+                focusPluginID={focusPluginID}
+            />
             {availablePlugins.map((x) => (
                 <ListItem
                     key={x.entry.ApplicationEntryID}
@@ -168,3 +180,74 @@ export const ApplicationSettingPluginSwitch = memo(({ focusPluginID }: Props) =>
         </List>
     )
 })
+
+interface DSearchSettingProps {
+    focusPluginID?: string
+    setRef(element: HTMLLIElement | null): void
+}
+
+function DSearchSetting({ setRef, focusPluginID }: DSearchSettingProps) {
+    const { t } = useI18N()
+    const { classes } = useStyles()
+
+    const { value: settings = true, retry } = useAsyncRetry(() => Services.Settings.getDecentralizedSearchSettings())
+
+    const handleSwitch = async (checked: boolean) => {
+        await Services.Settings.setDecentralizedSearchSettings(checked)
+        retry()
+    }
+
+    return (
+        <ListItem key={DSearch_KEY} ref={(ele) => setRef(ele)} className={classes.listItem}>
+            <Stack width="100%">
+                <Stack direction="row" width="100%">
+                    <section className={classes.listContent}>
+                        <ListItemAvatar>
+                            <Avatar className={classes.avatar}>
+                                <Icons.DecentralizedSearch />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <Stack className={classes.info} flex={1}>
+                            <div className={classes.headerWrapper}>
+                                <Typography className={classes.name}>{t('decentralized_search_name')}</Typography>
+                            </div>
+                            <Typography className={classes.desc}>{t('decentralized_search_description')}</Typography>
+                        </Stack>
+                    </section>
+                    <Stack justifyContent="center">
+                        <Switch checked={settings} onChange={(event) => handleSwitch(event.target.checked)} />
+                    </Stack>
+                </Stack>
+                <Stack direction="row" mt={1.25}>
+                    <Box className={classes.placeholder} />
+                    <Stack spacing={1.25}>
+                        <Stack>
+                            <Typography className={classes.name} fontSize={14}>
+                                {t('decentralized_search_feature_token_name')}
+                            </Typography>
+                            <Typography className={classes.desc}>
+                                {t('decentralized_search_feature_token_description')}
+                            </Typography>
+                        </Stack>
+                        <Stack>
+                            <Typography className={classes.name} fontSize={14}>
+                                {t('decentralized_search_feature_nft_name')}
+                            </Typography>
+                            <Typography className={classes.desc}>
+                                {t('decentralized_search_feature_nft_description')}
+                            </Typography>
+                        </Stack>
+                        <Stack>
+                            <Typography className={classes.name} fontSize={14}>
+                                {t('decentralized_search_feature_wallet_name')}
+                            </Typography>
+                            <Typography className={classes.desc}>
+                                {t('decentralized_search_feature_wallet_description')}
+                            </Typography>
+                        </Stack>
+                    </Stack>
+                </Stack>
+            </Stack>
+        </ListItem>
+    )
+}

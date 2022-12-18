@@ -22,7 +22,6 @@ import { Trader, TraderRef } from './Trader.js'
 import { useI18N } from '../../../../utils/index.js'
 import { currentSlippageSettings } from '../../settings.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
-import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 
 const isDashboard = isDashboardPage()
 
@@ -77,7 +76,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function TraderDialog() {
-    const disabled = useIsMinimalMode(PluginID.DecentralizedSearch)
     const tradeRef = useRef<TraderRef>(null)
     const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
     const { pluginID } = useNetworkContext()
@@ -177,8 +175,6 @@ export function TraderDialog() {
             gasConfig: GasEditor.fromTransaction(chainId as ChainId, transaction as Transaction).getGasConfig(),
         })
     }, [chainId, currentSlippageSettings.value])
-
-    if (disabled) return null
 
     return (
         <InjectedDialog

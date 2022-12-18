@@ -16,6 +16,8 @@ import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shar
 import { ChainId } from '@masknet/web3-shared-evm'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { decentralizedSearchSettings } from '../../../../shared/legacy-settings/settings.js'
 import { NFTProjectAvatarBadge } from './NFTProjectAvatarBadge.js'
 import { useCollectionByTwitterHandler } from '../../../plugins/Trader/trending/useTrending.js'
 
@@ -39,10 +41,14 @@ const sns: Plugin.SNSAdaptor.Definition<
         ID: PluginID.Trader,
         UI: {
             Content({ result: _resultList, isProfilePage }) {
+                const dSearchEnable = useValueRef(decentralizedSearchSettings)
                 const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
                 const resultList = _resultList as Web3Helper.TokenResultAll[]
                 const [result, setResult] = useState(resultList[0])
                 const { chainId, keyword, address, pluginID } = result
+
+                if (!dSearchEnable) return null
+
                 return (
                     <Web3ContextProvider
                         value={{

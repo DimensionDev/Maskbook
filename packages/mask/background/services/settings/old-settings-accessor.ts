@@ -7,6 +7,7 @@ import {
     getCurrentPluginMinimalMode,
     setCurrentPluginMinimalMode,
     logSettings,
+    decentralizedSearchSettings,
 } from '../../../shared/legacy-settings/settings.js'
 import { MaskMessages } from '../../../shared/messages.js'
 import { queryPersonasDB } from '../../../background/database/persona/db.js'
@@ -52,5 +53,7 @@ export async function setPluginMinimalModeEnabled(id: string, enabled: boolean) 
 
     MaskMessages.events.pluginMinimalModeChanged.sendToAll([id, enabled])
 }
+
+export const [getDecentralizedSearchSettings, setDecentralizedSearchSettings] = create(decentralizedSearchSettings)
 
 export { __deprecated__getStorage as getLegacySettingsInitialValue }
