@@ -7,7 +7,9 @@
     "by": "by",
     "limit": "Limit:",
     "articles": "Articles",
-    "close": "Close",
+    "close": "Closed",
     "details": "Details",
+    "failed": "Load failed",
+    "retry": "Reload",
     "action_title": "{{title}} ({{price}} {{symbol}}/Time)"
 }
