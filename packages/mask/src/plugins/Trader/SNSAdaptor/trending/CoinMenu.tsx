@@ -97,14 +97,14 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, result, onSelect }) =>
                 const selected = isEqual(x, result)
                 return (
                     <MenuItem className={classes.menuItem} key={i} onClick={() => onSelect(x)}>
-                        {x.logoURL ? (
-                            <TokenIcon
-                                className={classes.coinIcon}
-                                logoURL={x.logoURL}
-                                address={x.address || ''}
-                                size={20}
-                            />
-                        ) : null}
+                        <TokenIcon
+                            className={classes.coinIcon}
+                            logoURL={x.logoURL}
+                            address={x.address || ''}
+                            symbol={x.symbol}
+                            size={20}
+                        />
+
                         <Stack className={classes.itemText}>
                             <Typography
                                 fontSize={14}
