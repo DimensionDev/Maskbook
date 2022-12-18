@@ -19,6 +19,7 @@ import {
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
+    chainResolver,
     createContract,
     getRPCConstants,
     isENSContractAddress,
@@ -153,7 +154,10 @@ export function createNonFungibleAsset(
             ? {
                   amount: scale10(asset.latest_trade_price, WNATIVE[chainId].decimals).toFixed(),
                   // FIXME: cannot get payment token
-                  token: WNATIVE[chainId],
+                  token:
+                      asset.latest_trade_symbol === 'ETH'
+                          ? chainResolver.nativeCurrency(chainId) ?? WNATIVE[chainId]
+                          : WNATIVE[chainId],
               }
             : undefined,
         metadata: {
