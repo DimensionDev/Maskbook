@@ -25,7 +25,7 @@ export function usePersonaProofs(
 
     useEffect(() => {
         fn(true)
-    }, [])
+    }, [publicKey])
 
     const retry = () => fn(false)
 
