@@ -1,21 +1,13 @@
-import { Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { BoxInfo, BoxMetadata, MediaType } from '../../type.js'
-import { MaskSharpIconOfSize } from '@masknet/shared'
-import { Video } from '../../../../components/shared/Video.js'
+import { Box } from '@mui/material'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
+import { Video } from '../../../../components/shared/Video.js'
+import { MaskSharpIconOfSize } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
         padding: 16,
-    },
-    body: {
-        width: '100%',
-        height: 360,
-        overflow: 'hidden',
-        borderRadius: 8,
-        boxSizing: 'border-box',
-        border: `solid 1px ${theme.palette.maskColor.publicLine}`,
     },
     hero: {
         display: 'flex',
@@ -24,12 +16,6 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: 360,
         objectFit: 'scale-down',
-    },
-    icon: {
-        color: 'rgb(15, 20, 25)',
-        width: 64,
-        height: 64,
-        opacity: 0.1,
     },
 }))
 
@@ -61,7 +47,16 @@ export function ArticlesTab(props: ArticlesTabProps) {
                                 />
                             )
                         default:
-                            return <img className={classes.hero} src={resolveIPFS_URL(boxMetadata?.mediaUrl)} />
+                            return (
+                                <img
+                                    className={classes.hero}
+                                    src={
+                                        boxMetadata?.mediaUrl
+                                            ? resolveIPFS_URL(boxMetadata?.mediaUrl)
+                                            : new URL('../../assets/FallbackImage.svg', import.meta.url).toString()
+                                    }
+                                />
+                            )
                     }
                 })()}
             </Box>
