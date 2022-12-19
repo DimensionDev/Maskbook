@@ -12,11 +12,11 @@ import {
 import { useRef } from 'react'
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import type { ChainId } from '@masknet/web3-shared-evm'
 import { TokenIcon, FormattedAddress } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useScrollBottomEvent } from '@masknet/shared-base-ui'
 import { useWeb3State } from '@masknet/web3-hooks-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatCurrency } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
 import fromUnixTime from 'date-fns/fromUnixTime'
@@ -97,7 +97,7 @@ const useStyles = makeStyles<{ isNFTProjectPopper: boolean }>()((theme, { isNFTP
 
 export interface NonFungibleTickersTableProps {
     address: string
-    chainId: ChainId
+    chainId: Web3Helper.ChainIdAll
     isNFTProjectPopper?: boolean
 }
 

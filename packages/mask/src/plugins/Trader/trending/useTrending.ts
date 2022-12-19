@@ -39,12 +39,11 @@ export function useCollectionByTwitterHandler(twitterHandler?: string) {
     }, [twitterHandler])
 }
 
-export function useNonFungibleTokenActivities(address: string, expectedChainId?: ChainId) {
+export function useNonFungibleTokenActivities(address: string, expectedChainId?: Web3Helper.ChainIdAll) {
     const pageIndexRef = useRef<number>(0)
     const [nonFungibleTokenActivities, setNonFungibleTokenActivities] = useState<
         Record<number, NonFungibleTokenActivity[]>
     >({})
-
     const [{ loading: loadingNonFungibleTokenActivities }, getNonFungibleTokenActivities] = useAsyncFn(async () => {
         if (!address || !expectedChainId) return
         const pageIndex = pageIndexRef.current
@@ -77,7 +76,7 @@ export function useNonFungibleTokenActivities(address: string, expectedChainId?:
 export function useTrendingById(
     id: string,
     dataProvider: SourceType | undefined,
-    expectedChainId?: ChainId,
+    expectedChainId?: Web3Helper.ChainIdAll,
     searchedContractAddress?: string,
 ): AsyncState<{
     currency?: TrendingAPI.Currency
@@ -160,7 +159,7 @@ export function useTrendingById(
 
 function createCoinFromTrending(
     trending?: TrendingAPI.Trending,
-    expectedChainId?: ChainId,
+    expectedChainId?: Web3Helper.ChainIdAll,
     searchedContractAddress?: string,
     token?: Web3Helper.FungibleTokenScope<void, NetworkPluginID.PLUGIN_EVM>,
 ): Coin {

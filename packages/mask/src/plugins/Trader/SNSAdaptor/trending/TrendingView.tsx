@@ -9,7 +9,8 @@ import {
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
-import { SourceType, createFungibleToken, SearchResultType, TokenType, TokenResult } from '@masknet/web3-shared-base'
+import { SourceType, createFungibleToken, SearchResultType, TokenType } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTList, PluginCardFrameMini } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
@@ -105,12 +106,12 @@ const useStyles = makeStyles<{
 })
 
 export interface TrendingViewProps {
-    setResult: (a: TokenResult<ChainId, SchemaType>) => void
-    result: TokenResult<ChainId, SchemaType>
-    resultList?: Array<TokenResult<ChainId, SchemaType>>
+    setResult: (a: Web3Helper.TokenResultAll) => void
+    result: Web3Helper.TokenResultAll
+    resultList?: Web3Helper.TokenResultAll[]
     address?: string
     searchedContractAddress?: string
-    expectedChainId?: ChainId
+    expectedChainId?: Web3Helper.ChainIdAll
     onUpdate?: () => void
 }
 

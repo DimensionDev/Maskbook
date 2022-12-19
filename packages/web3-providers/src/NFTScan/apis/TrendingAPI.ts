@@ -87,7 +87,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinActivities(
-        chainId: ChainId,
+        chainId: Web3Helper.ChainIdAll,
         contractAddress: string,
         pageIndex: number,
     ): Promise<NonFungibleTokenActivity[] | undefined> {
