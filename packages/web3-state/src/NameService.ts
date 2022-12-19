@@ -68,7 +68,7 @@ export class NameServiceState<
                 return
             }
         })
-        return attemptUntil(callbacks, undefined, true)
+        return attemptUntil(callbacks, undefined, () => false)
     }
 
     async reverse(chainId: ChainId, address: string) {
@@ -85,7 +85,7 @@ export class NameServiceState<
                 return
             }
         })
-        return attemptUntil(callbacks, undefined, true)
+        return attemptUntil(callbacks, undefined, () => false)
     }
 
     createResolvers(chainId: ChainId): NameServiceResolver[] {

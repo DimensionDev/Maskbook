@@ -5,7 +5,7 @@ describe('utils attemptUntil function test', function () {
     it('should return first promise result which is success', async () => {
         const p1 = () => Promise.resolve(1)
         const p2 = () => Promise.resolve(2)
-        const result = await attemptUntil([p1, p2], null, false)
+        const result = await attemptUntil([p1, p2], null)
 
         expect(result).toBe(1)
     })
@@ -13,7 +13,7 @@ describe('utils attemptUntil function test', function () {
     it('should return second promise result which is success', async () => {
         const p1 = () => Promise.reject(1)
         const p2 = () => Promise.resolve(2)
-        const result = await attemptUntil([p1, p2], null, false)
+        const result = await attemptUntil([p1, p2], null)
 
         expect(result).toBe(2)
     })
@@ -21,7 +21,7 @@ describe('utils attemptUntil function test', function () {
     it('should return second promise result when first result is undefined', async () => {
         const p1 = () => Promise.resolve(undefined)
         const p2 = () => Promise.resolve(2)
-        const result = await attemptUntil([p1, p2], null, false)
+        const result = await attemptUntil([p1, p2], null)
 
         expect(result).toBe(2)
     })
@@ -29,7 +29,7 @@ describe('utils attemptUntil function test', function () {
     it('should return undefined promise result when first result is undefined and in strict mode', async () => {
         const p1 = () => Promise.resolve(undefined)
         const p2 = () => Promise.resolve(2)
-        const result = await attemptUntil([p1, p2], undefined, true)
+        const result = await attemptUntil([p1, p2], undefined, () => false)
 
         expect(result).toBe(undefined)
     })
@@ -39,7 +39,7 @@ describe('utils attemptUntil function test', function () {
         const p2 = () => Promise.resolve(2)
         const fallback = 3
 
-        const result = await attemptUntil([p1, p2], fallback, true)
+        const result = await attemptUntil([p1, p2], fallback, () => false)
 
         expect(result).toBe(3)
     })

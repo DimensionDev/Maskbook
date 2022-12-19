@@ -275,7 +275,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
                             return async () => resolver.reverse(y.web3_addr)
                         }),
                         undefined,
-                        true,
+                        () => false,
                     )
 
                     return this.createSocialAddress(
