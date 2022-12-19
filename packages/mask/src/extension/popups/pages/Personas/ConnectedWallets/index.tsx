@@ -23,7 +23,7 @@ const ConnectedWallets = memo(() => {
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const navigate = useNavigate()
     const location = useLocation()
-    const { proofs, currentPersona, refreshProofs, fetchProofsLoading } = PersonaContext.useContainer()
+    const { proofs, currentPersona, fetchProofsLoading } = PersonaContext.useContainer()
 
     const { showSnackbar } = usePopupCustomSnackbar()
 
@@ -106,7 +106,6 @@ const ConnectedWallets = memo(() => {
                 // Broadcast updates.
                 MaskMessages.events.ownProofChanged.sendToAll()
                 showSnackbar(t('popups_wallet_disconnect_success'))
-                refreshProofs()
             } catch {
                 showSnackbar(t('popups_wallet_disconnect_failed'))
             }

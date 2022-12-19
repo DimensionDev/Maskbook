@@ -10,13 +10,13 @@ import {
 } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import { NextIDProof } from '@masknet/web3-providers'
 import { currentSetupGuideStatus, userPinExtension } from '../../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { SetupGuideContext, SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
 import Services from '../../../extension/service.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { MaskMessages } from '../../../../shared/index.js'
+import { usePersonaProofs } from '@masknet/shared'
 
 export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
     const ui = activatedSocialNetworkUI
@@ -82,6 +82,8 @@ export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
         [username, lastRecognized, persona],
     )
 
+    const { value: proofs } = usePersonaProofs(destinedPersona.publicKeyAsHex, MaskMessages)
+
     return useAsyncRetry(async () => {
         if (!persona) {
             return composeInfo(SetupGuideStep.Close, 'close')
@@ -112,8 +114,7 @@ export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
         }
 
         // Should verified persona
-        const nextIDInfo = await NextIDProof.queryExistedBindingByPersona(persona.identifier.publicKeyAsHex, false)
-        const verifiedProfile = nextIDInfo?.proofs.find(
+        const verifiedProfile = proofs?.find(
             (x) =>
                 isSameProfile(
                     resolveNextIDIdentityToProfile(x.identity, x.platform),
@@ -124,5 +125,14 @@ export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
 
         // Default
         return composeInfo(SetupGuideStep.Close, 'done')
-    }, [lastSettingState, persona, username, ui.networkIdentifier, platform, lastPinExtensionSetting, composeInfo])
+    }, [
+        lastSettingState,
+        persona,
+        username,
+        ui.networkIdentifier,
+        platform,
+        lastPinExtensionSetting,
+        composeInfo,
+        proofs?.length,
+    ])
 }
