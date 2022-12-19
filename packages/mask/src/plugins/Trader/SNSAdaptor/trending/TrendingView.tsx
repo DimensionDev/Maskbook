@@ -125,7 +125,7 @@ enum ContentTabs {
 
 export function TrendingView(props: TrendingViewProps) {
     const { searchedContractAddress, expectedChainId, resultList, result, setResult } = props
-    const { isTokenTagPopper, isNFTProjectPopper, isProfilePage, isPreciseSearch } = useContext(TrendingViewContext)
+    const { isTokenTagPopper, isNFTProjectPopper, isProfilePage } = useContext(TrendingViewContext)
     const { t } = useI18N()
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
