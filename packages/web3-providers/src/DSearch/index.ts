@@ -135,7 +135,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
     }
 
     private async searchTokens() {
-        return (
+        const specificTokens = (
             await Promise.allSettled([
                 fetchJSON<Array<FungibleTokenResult<ChainId, SchemaType>>>(
                     urlcat(DSEARCH_BASE_URL, '/fungible-tokens/specific-list.json'),
@@ -152,6 +152,13 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                     undefined,
                     fetchCached,
                 ),
+            ])
+        )
+            .map((v) => (v.status === 'fulfilled' && v.value ? v.value : []))
+            .flat()
+
+        const normalTokens = (
+            await Promise.allSettled([
                 this.NFTScanClient.get(),
                 this.CoinGeckoClient.get(),
                 this.CoinMarketCapClient.get(),
@@ -159,23 +166,41 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         )
             .map((v) => (v.status === 'fulfilled' && v.value ? v.value : []))
             .flat()
+
+        return {
+            specificTokens: compact<
+                | FungibleTokenResult<ChainId, SchemaType>
+                | NonFungibleTokenResult<ChainId, SchemaType>
+                | NonFungibleCollectionResult<ChainId, SchemaType>
+            >(
+                specificTokens.map((x) =>
+                    x.type === SearchResultType.FungibleToken ||
+                    x.type === SearchResultType.NonFungibleToken ||
+                    x.type === SearchResultType.NonFungibleCollection
+                        ? x
+                        : undefined,
+                ),
+            ),
+            normalTokens: compact<
+                | FungibleTokenResult<ChainId, SchemaType>
+                | NonFungibleTokenResult<ChainId, SchemaType>
+                | NonFungibleCollectionResult<ChainId, SchemaType>
+            >(
+                normalTokens.map((x) =>
+                    x.type === SearchResultType.FungibleToken ||
+                    x.type === SearchResultType.NonFungibleToken ||
+                    x.type === SearchResultType.NonFungibleCollection
+                        ? x
+                        : undefined,
+                ),
+            ),
+        }
     }
 
     private async searchTokenByAddress(address: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {
-        const tokens = compact<
-            | FungibleTokenResult<ChainId, SchemaType>
-            | NonFungibleTokenResult<ChainId, SchemaType>
-            | NonFungibleCollectionResult<ChainId, SchemaType>
-        >(
-            (await this.searchTokens()).map((x) =>
-                x.type === SearchResultType.FungibleToken ||
-                x.type === SearchResultType.NonFungibleToken ||
-                x.type === SearchResultType.NonFungibleCollection
-                    ? x
-                    : undefined,
-            ),
-        )
-        const tokensFiltered = tokens
+        const { specificTokens, normalTokens } = await this.searchTokens()
+
+        const specificTokensFiltered = specificTokens
             .filter(
                 (x) =>
                     isSameAddress(address, x.address) &&
@@ -185,7 +210,19 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             )
             .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
 
-        if (tokensFiltered.length > 0) return [tokensFiltered[0]]
+        const normalTokensFiltered = normalTokens
+            .filter(
+                (x) =>
+                    isSameAddress(address, x.address) &&
+                    (x.type === SearchResultType.FungibleToken ||
+                        x.type === SearchResultType.NonFungibleToken ||
+                        x.type === SearchResultType.NonFungibleCollection),
+            )
+            .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
+
+        if (specificTokensFiltered.length > 0) return [specificTokensFiltered[0]]
+
+        if (normalTokensFiltered.length > 0) return [normalTokensFiltered[0]]
 
         const coinInfo = await CoinGeckoTrending.getCoinInfoByAddress(address)
 
@@ -207,21 +244,14 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         return EMPTY_LIST
     }
 
-    private async searchTokenByName(name: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {
-        const tokens = compact<
+    private async searchTokenByHandler(
+        tokens: Array<
             | FungibleTokenResult<ChainId, SchemaType>
             | NonFungibleTokenResult<ChainId, SchemaType>
             | NonFungibleCollectionResult<ChainId, SchemaType>
-        >(
-            (await this.searchTokens()).map((x) =>
-                x.type === SearchResultType.FungibleToken ||
-                x.type === SearchResultType.NonFungibleToken ||
-                x.type === SearchResultType.NonFungibleCollection
-                    ? x
-                    : undefined,
-            ),
-        )
-
+        >,
+        name: string,
+    ): Promise<Array<SearchResult<ChainId, SchemaType>>> {
         let result: Array<
             | FungibleTokenResult<ChainId, SchemaType>
             | NonFungibleTokenResult<ChainId, SchemaType>
@@ -233,7 +263,6 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                 if (!['token', 'twitter'].includes(rule.key)) continue
 
                 const filtered = tokens.filter((x) => (type ? type === x.type : true))
-
                 if (rule.type === 'exact') {
                     const item = filtered.find((x) => rule.filter?.(x, name, filtered))
                     if (item) result = [...result, { ...item, keyword: name }]
@@ -250,11 +279,20 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                 }
             }
         }
-
         return uniqWith(
             result,
             (a, b) => a.type === b.type && (a.id === b.id || isSameAddress(a.address, b.address) || a.rank === b.rank),
         ).sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
+    }
+
+    private async searchTokenByName(name: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {
+        const { specificTokens, normalTokens } = await this.searchTokens()
+
+        const specificResult = await this.searchTokenByHandler(specificTokens, name)
+        const normalResult = await this.searchTokenByHandler(normalTokens, name)
+
+        if (specificResult.length > 0) return specificResult
+        return normalResult
     }
 
     private async searchNonFungibleTokenByTwitterHandler(

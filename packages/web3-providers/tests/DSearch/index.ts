@@ -5,11 +5,11 @@ import { DSearchAPI } from '../../src/DSearch/index.js'
 
 /* cspell:disable */
 describe('DSearch test', () => {
-    test('should return from specific list', async () => {
+    test('should return from specific list only', async () => {
         const DSearch = new DSearchAPI()
         const result = await DSearch.search('token:eth')
 
-        expect(result.length).toBe(2)
+        expect(result.length).toBe(1)
         expect(result[0]).toStrictEqual({
             name: 'eth1',
             symbol: 'eth',
@@ -75,8 +75,7 @@ describe('DSearch test', () => {
             NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
         >
 
-        expect(result.length).toBe(2)
+        expect(result.length).toBe(1)
         expect(result[0]?.name).toBe('eth1')
-        expect(result[1]?.name).toBe('TestEth')
     })
 })
