@@ -103,8 +103,8 @@ export enum SearchResultType {
     // e.g., $MASK #MASK or its address 0x69af81e73a73b40adf4f3d4223cd9b1ece623074
     FungibleToken = 'FungibleToken',
     // e.g., #APE
-    NonFungibleToken='NonFungibleToken',
-    NonFungibleCollection='NonFungibleCollection',
+    NonFungibleToken = 'NonFungibleToken',
+    NonFungibleCollection = 'NonFungibleCollection',
 }
 
 export enum ActivityType {
@@ -147,7 +147,7 @@ export enum SocialAddressType {
     Sybil = 'Sybil',
     TwitterBlue = 'TwitterBlue',
     Mask = 'Mask Network',
-    Lens = 'Lens'
+    Lens = 'Lens',
 }
 
 export enum StorageProviderType {
@@ -163,7 +163,7 @@ export enum FontSize {
     Small = 'small',
     Normal = 'normal',
     Large = 'large',
-    X_Large = 'xLarge'
+    X_Large = 'xLarge',
 }
 
 export enum ThemeMode {
@@ -172,7 +172,7 @@ export enum ThemeMode {
 }
 
 export enum ThemeColor {
-    Blue = 'rgb(37, 99, 235)'
+    Blue = 'rgb(37, 99, 235)',
 }
 
 export interface ThemeSettings {
@@ -590,7 +590,7 @@ export interface FungibleTokenSecurity {}
  */
 export interface NonFungibleTokenSecurity {}
 
- export interface Result<ChainId> {
+export interface Result<ChainId> {
     pluginID: NetworkPluginID
     chainId: ChainId
     type: SearchResultType
@@ -619,7 +619,7 @@ export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId
     logoURL?: string
     name: string
     symbol: string
-    source: SourceType 
+    source: SourceType
     token?: FungibleToken<ChainId, SchemaType>
 }
 
@@ -629,14 +629,16 @@ export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<Chai
     address: string
     rank?: number
     logoURL?: string
-    name: string,
+    name: string
     symbol?: string
     tokenId?: string
-    source: SourceType 
+    source: SourceType
     token?: NonFungibleToken<ChainId, SchemaType>
 }
 
-export type TokenResult<ChainId, SchemaType> = FungibleTokenResult<ChainId, SchemaType> | NonFungibleTokenResult<ChainId, SchemaType>
+export type TokenResult<ChainId, SchemaType> =
+    | FungibleTokenResult<ChainId, SchemaType>
+    | NonFungibleTokenResult<ChainId, SchemaType>
 
 export interface NonFungibleCollectionResult<ChainId, SchemaType> extends Result<ChainId> {
     type: SearchResultType.NonFungibleCollection
@@ -644,13 +646,13 @@ export interface NonFungibleCollectionResult<ChainId, SchemaType> extends Result
     id?: string
     rank?: number
     logoURL?: string
-    name: string,
+    name: string
     symbol?: string
-    source: SourceType 
+    source: SourceType
     collection?: NonFungibleCollection<ChainId, SchemaType>
 }
 
-export type SearchResult<ChainId, SchemaType> = 
+export type SearchResult<ChainId, SchemaType> =
     | EOAResult<ChainId>
     | DomainResult<ChainId>
     | FungibleTokenResult<ChainId, SchemaType>
@@ -758,8 +760,8 @@ export interface Wallet {
     /** record updated at */
     updatedAt: Date
     /** an abstract wallet has a owner */
-    owner?: string,
-    
+    owner?: string
+
     identifier?: ECKeyIdentifier
 }
 
@@ -871,7 +873,12 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     /** Create an instance that implement the wallet protocol. */
     createWeb3Provider(options?: ProviderOptions<ChainId>): Web3Provider
     /** Create the connection. */
-    connect(chainId?: ChainId, address?: string, owner?: string, identifier?: ECKeyIdentifier): Promise<Account<ChainId>>
+    connect(
+        chainId?: ChainId,
+        address?: string,
+        owner?: string,
+        identifier?: ECKeyIdentifier,
+    ): Promise<Account<ChainId>>
     /** Dismiss the connection. */
     disconnect(): Promise<void>
 }
@@ -987,7 +994,7 @@ export interface Connection<
     /** Get the currently connected account. */
     getAccount(initial?: Web3ConnectionOptions): Promise<string>
     /** Get all supported accounts with metadata. */
-    getWallets?: (initial?: Web3ConnectionOptions) =>  Promise<Wallet[]>
+    getWallets?: (initial?: Web3ConnectionOptions) => Promise<Wallet[]>
     /** Get the currently chain id. */
     getChainId(initial?: Web3ConnectionOptions): Promise<ChainId>
     /** Get the latest block by number. */
@@ -1064,7 +1071,11 @@ export interface Connection<
     /** Call a operation */
     callUserOperation?: (owner: string, operation: Operation, initial?: Web3ConnectionOptions) => Promise<string>
     /** Send a operation */
-    sendUserOperation?: (owner: string, operation: Operation, initial?: Web3ConnectionOptions) => Promise<TransactionSignature>
+    sendUserOperation?: (
+        owner: string,
+        operation: Operation,
+        initial?: Web3ConnectionOptions,
+    ) => Promise<TransactionSignature>
     /** Change owner of contract Wallet */
     transferContractWallet?: (recipient: string, initial?: Web3ConnectionOptions) => Promise<string>
     /** Deploy contract Wallet */
@@ -1277,7 +1288,10 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
     extends HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions>,
         HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions> {
     /** Get recommended gas options. */
-    getGasOptions?: (chainId: ChainId, initial?: Web3HubOptions) => Promise<Record<GasOptionType, GasOption> | undefined>
+    getGasOptions?: (
+        chainId: ChainId,
+        initial?: Web3HubOptions,
+    ) => Promise<Record<GasOptionType, GasOption> | undefined>
     /** Get the most recent transactions of the given account. */
     getTransactions: (
         chainId: ChainId,
@@ -1403,9 +1417,17 @@ export interface TokenState<ChainId, SchemaType> {
     /** Block a token */
     blockToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
     /** Create a credible fungible token */
-    createFungibleToken?: (chainId: ChainId, address: string, token?: FungibleToken<ChainId, SchemaType>) => Promise<FungibleToken<ChainId, SchemaType> | undefined>
+    createFungibleToken?: (
+        chainId: ChainId,
+        address: string,
+        token?: FungibleToken<ChainId, SchemaType>,
+    ) => Promise<FungibleToken<ChainId, SchemaType> | undefined>
     /** Create a credible non-fungible token */
-    createNonFungibleToken?: (chainId: ChainId, address: string, token?: NonFungibleToken<ChainId, SchemaType>) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
+    createNonFungibleToken?: (
+        chainId: ChainId,
+        address: string,
+        token?: NonFungibleToken<ChainId, SchemaType>,
+    ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
 }
 export interface TransactionState<ChainId, Transaction> {
     /** The tracked transactions of currently chosen sub-network */
@@ -1481,7 +1503,13 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
     /** Wait until a provider ready */
     untilReady: (providerType: ProviderType) => Promise<void>
     /** Connect with the provider and set chain id. */
-    connect: (chainId: ChainId, providerType: ProviderType, account?: string, owner?: string, identifier?: ECKeyIdentifier) => Promise<Account<ChainId>>
+    connect: (
+        chainId: ChainId,
+        providerType: ProviderType,
+        account?: string,
+        owner?: string,
+        identifier?: ECKeyIdentifier,
+    ) => Promise<Account<ChainId>>
     /** Disconnect with the provider. */
     disconnect: (providerType: ProviderType) => Promise<void>
 }
@@ -1529,7 +1557,10 @@ export interface WalletState<Transaction> {
     wallets?: Subscription<Wallet[]>
 
     addWallet(wallet: Wallet): Promise<void>
-    updateWallet(address: string, updates: Partial<Omit<Wallet, 'id' | 'address' | 'createdAt' | 'createdAt'>>): Promise<void>
+    updateWallet(
+        address: string,
+        updates: Partial<Omit<Wallet, 'id' | 'address' | 'createdAt' | 'createdAt'>>,
+    ): Promise<void>
     renameWallet(address: string, name: string): Promise<void>
     removeWallet(address: string, password?: string): Promise<void>
 
@@ -1576,8 +1607,25 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
 
     // #region Constructor
     createNativeToken(chainId: ChainId): FungibleToken<ChainId, SchemaType>
-    createFungibleToken(chainId: ChainId, schemaType: SchemaType, address: string, name?: string, symbol?: string, decimals?: number, logoURI?: string): FungibleToken<ChainId, SchemaType>
-    createNonFungibleToken(chainId: ChainId, address: string, schemaType: SchemaType, tokenId: string, ownerId?: string, metadata?: NonFungibleToken<ChainId, SchemaType>['metadata'], contract?: NonFungibleToken<ChainId, SchemaType>['contract'], collection?: NonFungibleToken<ChainId, SchemaType>['collection']): NonFungibleToken<ChainId, SchemaType>
+    createFungibleToken(
+        chainId: ChainId,
+        schemaType: SchemaType,
+        address: string,
+        name?: string,
+        symbol?: string,
+        decimals?: number,
+        logoURI?: string,
+    ): FungibleToken<ChainId, SchemaType>
+    createNonFungibleToken(
+        chainId: ChainId,
+        address: string,
+        schemaType: SchemaType,
+        tokenId: string,
+        ownerId?: string,
+        metadata?: NonFungibleToken<ChainId, SchemaType>['metadata'],
+        contract?: NonFungibleToken<ChainId, SchemaType>['contract'],
+        collection?: NonFungibleToken<ChainId, SchemaType>['collection'],
+    ): NonFungibleToken<ChainId, SchemaType>
 }
 
 export interface BalanceNotifierState<ChainId> {
