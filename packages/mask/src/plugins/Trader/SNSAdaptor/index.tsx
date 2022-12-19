@@ -50,7 +50,7 @@ const sns: Plugin.SNSAdaptor.Definition<
                         }}>
                         <TrendingView
                             isProfilePage={isProfilePage}
-                            isPopper={false}
+                            isTokenTagPopper={false}
                             setResult={setResult}
                             result={result}
                             resultList={resultList}

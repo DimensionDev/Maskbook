@@ -15,10 +15,15 @@ const useStyles = makeStyles()((theme) => {
 interface PluginHeaderProps extends React.PropsWithChildren<{}> {
     isNFTProjectPopper?: boolean
     isProfilePage?: boolean
-    isPopper?: boolean
+    isTokenTagPopper?: boolean
 }
 
-export const PluginDescriptor = ({ children, isNFTProjectPopper, isProfilePage, isPopper }: PluginHeaderProps) => {
+export const PluginDescriptor = ({
+    children,
+    isNFTProjectPopper,
+    isProfilePage,
+    isTokenTagPopper,
+}: PluginHeaderProps) => {
     const theme = useTheme()
     const { classes } = useStyles()
     const t = useSharedI18N()
@@ -26,7 +31,9 @@ export const PluginDescriptor = ({ children, isNFTProjectPopper, isProfilePage, 
     return (
         <Stack flexDirection="row" justifyContent="space-between" alignItems="center" width="100%">
             <Stack flexDirection="row" justifyContent="space-between" gap={0.5} alignItems="center">
-                {isNFTProjectPopper ? (
+                {isTokenTagPopper ? (
+                    <Icons.Marketing className={classes.cardIcon} size={24} />
+                ) : isNFTProjectPopper ? (
                     <Icons.Web3ProfileCard className={classes.cardIcon} size={24} />
                 ) : isProfilePage ? (
                     <Icons.Web3Profile className={classes.cardIcon} size={24} />
@@ -34,10 +41,12 @@ export const PluginDescriptor = ({ children, isNFTProjectPopper, isProfilePage, 
                     <Icons.DecentralizedSearch />
                 )}
                 <Typography
-                    color={isNFTProjectPopper || isPopper ? undefined : theme.palette.maskColor.dark}
+                    color={isNFTProjectPopper || isTokenTagPopper ? undefined : theme.palette.maskColor.dark}
                     fontWeight="bolder"
                     fontSize={16}>
-                    {isNFTProjectPopper
+                    {isTokenTagPopper
+                        ? t.market_trending()
+                        : isNFTProjectPopper
                         ? t.avatar_profile_card_name()
                         : isProfilePage
                         ? t.profile_card_name()

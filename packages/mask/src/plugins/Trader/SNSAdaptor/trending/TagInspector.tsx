@@ -51,6 +51,7 @@ function TrendingViewWrapper({ resultList, reposition, address, isNFTProjectPopp
             onUpdate={reposition}
             address={address}
             isNFTProjectPopper={isNFTProjectPopper}
+            isTokenTagPopper={!isNFTProjectPopper}
         />
     )
 }

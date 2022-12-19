@@ -33,32 +33,34 @@ import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings
 import { PluginEnableBoundary } from '../../../../components/shared/PluginEnableBoundary.js'
 
 const useStyles = makeStyles<{
-    isPopper: boolean
+    isTokenTagPopper: boolean
     isNFTProjectPopper: boolean
+    currentTab: ContentTabs
 }>()((theme, props) => {
     return {
-        root: props.isPopper
-            ? {
-                  width: 598,
-                  borderRadius: theme.spacing(2),
-                  boxShadow:
-                      theme.palette.mode === 'dark'
-                          ? 'rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px'
-                          : 'rgba(101, 119, 134, 0.2) 0 0 15px, rgba(101, 119, 134, 0.15) 0 0 3px 1px',
-              }
-            : {
-                  width: '100%',
-                  boxShadow: 'none',
-                  borderRadius: 0,
-                  marginBottom: 0,
-              },
+        root:
+            props.isTokenTagPopper || props.isNFTProjectPopper
+                ? {
+                      width: 598,
+                      borderRadius: theme.spacing(2),
+                      boxShadow:
+                          theme.palette.mode === 'dark'
+                              ? 'rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px'
+                              : 'rgba(101, 119, 134, 0.2) 0 0 15px, rgba(101, 119, 134, 0.15) 0 0 3px 1px',
+                  }
+                : {
+                      width: '100%',
+                      boxShadow: 'none',
+                      borderRadius: 0,
+                      marginBottom: 0,
+                  },
         tabListRoot: {
             flexGrow: 0,
         },
-        body: props.isPopper
+        body: props.isNFTProjectPopper
             ? {
                   minHeight: 374,
-                  maxHeight: props.isNFTProjectPopper ? 374 : 'unset',
+                  maxHeight: props.isNFTProjectPopper ? (props.currentTab === ContentTabs.Price ? 450 : 374) : 'unset',
                   overflow: 'hidden',
                   display: 'flex',
                   flexDirection: 'column',
@@ -67,12 +69,12 @@ const useStyles = makeStyles<{
             : {
                   background: 'transparent',
               },
-        footerSkeleton: props.isPopper
+        footerSkeleton: props.isTokenTagPopper
             ? {}
             : {
                   borderBottom: `solid 1px ${theme.palette.divider}`,
               },
-        content: props.isPopper
+        content: props.isTokenTagPopper
             ? {}
             : {
                   border: 'none',
@@ -80,12 +82,13 @@ const useStyles = makeStyles<{
         tradeViewRoot: {
             maxWidth: '100% !important',
         },
-        priceChartRoot: props.isPopper
+        priceChartRoot: props.isTokenTagPopper
             ? {
                   flex: 1,
               }
             : {},
-
+        priceChartRootWrapper:
+            props.isNFTProjectPopper && props.currentTab === ContentTabs.Price ? { height: 420 } : {},
         cardHeader: {
             marginBottom: '-36px',
         },
@@ -112,7 +115,7 @@ export interface TrendingViewProps {
     searchedContractAddress?: string
     expectedChainId?: Web3Helper.ChainIdAll
     onUpdate?: () => void
-    isPopper?: boolean
+    isTokenTagPopper?: boolean
 }
 
 enum ContentTabs {
@@ -125,7 +128,7 @@ enum ContentTabs {
 
 export function TrendingView(props: TrendingViewProps) {
     const {
-        isPopper = true,
+        isTokenTagPopper = true,
         isNFTProjectPopper = false,
         isProfilePage = false,
         searchedContractAddress,
@@ -137,8 +140,6 @@ export function TrendingView(props: TrendingViewProps) {
     } = props
 
     const { t } = useI18N()
-
-    const { classes } = useStyles({ isPopper, isNFTProjectPopper })
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
     const isWeb3ProfileMinimalMode = useIsMinimalMode(PluginID.Web3Profile)
@@ -227,6 +228,8 @@ export function TrendingView(props: TrendingViewProps) {
     }, [t, isSwappable, isNFT])
     // #endregion
 
+    const { classes } = useStyles({ isTokenTagPopper, isNFTProjectPopper, currentTab })
+
     // #region api ready callback
     useEffect(() => {
         props.onUpdate?.()
@@ -251,6 +254,7 @@ export function TrendingView(props: TrendingViewProps) {
                     TrendingCardProps={{ classes: { root: classes.root } }}
                     isNFTProjectPopper={isNFTProjectPopper}
                     isProfilePage={isProfilePage}
+                    isTokenTagPopper={isTokenTagPopper}
                 />
             </ThemeProvider>
         )
@@ -274,7 +278,7 @@ export function TrendingView(props: TrendingViewProps) {
             isNFTProjectPopper={isNFTProjectPopper}
             currency={trending.currency}
             trending={trending}
-            isPopper={isPopper}
+            isTokenTagPopper={isTokenTagPopper}
             TrendingCardProps={{ classes: { root: classes.root } }}>
             <TabContext value={currentTab}>
                 <Stack px={2}>
@@ -292,7 +296,7 @@ export function TrendingView(props: TrendingViewProps) {
                     <CoinMarketPanel dataProvider={trending.dataProvider} trending={trending} />
                 ) : null}
                 {currentTab === ContentTabs.Price ? (
-                    <Box px={2} py={4}>
+                    <Box px={2} py={4} height={420} className={classes.priceChartRootWrapper}>
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}
@@ -313,6 +317,7 @@ export function TrendingView(props: TrendingViewProps) {
                     <Box p={2}>
                         {isNFT ? (
                             <NonFungibleTickersTable
+                                isNFTProjectPopper={isNFTProjectPopper}
                                 address={coin.address ?? ''}
                                 chainId={coin.chainId ?? ChainId.Mainnet}
                             />

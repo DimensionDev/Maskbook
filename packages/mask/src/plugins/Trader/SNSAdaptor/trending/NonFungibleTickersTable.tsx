@@ -15,9 +15,9 @@ import { useNonFungibleTokenActivities } from '../../trending/useTrending.js'
 import { useI18N } from '../../../../utils/index.js'
 import { pick } from 'lodash-es'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ isNFTProjectPopper: boolean }>()((theme, { isNFTProjectPopper }) => ({
     container: {
-        maxHeight: 266,
+        maxHeight: isNFTProjectPopper ? 320 : 266,
         scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
@@ -89,13 +89,18 @@ const useStyles = makeStyles()((theme) => ({
 export interface NonFungibleTickersTableProps {
     address: string
     chainId: Web3Helper.ChainIdAll
+    isNFTProjectPopper?: boolean
 }
 
 type Cells = 'nft' | 'method' | 'value' | 'from' | 'to' | 'time'
 
-export function NonFungibleTickersTable({ address, chainId }: NonFungibleTickersTableProps) {
+export function NonFungibleTickersTable({
+    address,
+    chainId,
+    isNFTProjectPopper = false,
+}: NonFungibleTickersTableProps) {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const { classes } = useStyles({ isNFTProjectPopper })
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const containerRef = useRef(null)
 

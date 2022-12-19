@@ -20,17 +20,22 @@ export interface TrendingViewSkeletonProps extends withClasses<'content' | 'foot
     TrendingCardProps?: Partial<TrendingCardProps>
     isNFTProjectPopper?: boolean
     isProfilePage?: boolean
+    isTokenTagPopper?: boolean
 }
 
 export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
-    const { TrendingCardProps, isNFTProjectPopper, isProfilePage } = props
+    const { TrendingCardProps, isNFTProjectPopper, isProfilePage, isTokenTagPopper } = props
     const { classes } = useStyles(undefined, { props })
     const { t } = useI18N()
 
     return (
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.root}>
-                <PluginDescriptor isNFTProjectPopper={isNFTProjectPopper} isProfilePage={isProfilePage} />
+                <PluginDescriptor
+                    isNFTProjectPopper={isNFTProjectPopper}
+                    isProfilePage={isProfilePage}
+                    isTokenTagPopper={isTokenTagPopper}
+                />
                 <CardContent className={classes.content}>
                     <Stack height="100%" alignItems="center" justifyContent="center">
                         <LoadingBase />

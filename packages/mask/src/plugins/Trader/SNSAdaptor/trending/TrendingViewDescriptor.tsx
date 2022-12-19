@@ -8,7 +8,7 @@ import { useI18N } from '../../../../utils/index.js'
 import { PluginDescriptor } from './PluginDescriptor.js'
 
 const useStyles = makeStyles<{
-    isPopper: boolean
+    isTokenTagPopper: boolean
     isNFTProjectPopper: boolean
 }>()((theme, props) => {
     return {
@@ -27,7 +27,7 @@ const useStyles = makeStyles<{
         sourceName: {
             fontWeight: 700,
             color:
-                props.isPopper || props.isNFTProjectPopper
+                props.isTokenTagPopper || props.isNFTProjectPopper
                     ? theme.palette.maskColor.main
                     : theme.palette.maskColor.dark,
             marginLeft: 4,
@@ -39,18 +39,21 @@ export interface TrendingViewDescriptorProps {
     trending: TrendingAPI.Trending
     isProfilePage?: boolean
     isNFTProjectPopper?: boolean
-    isPopper?: boolean
+    isTokenTagPopper?: boolean
 }
 
 export function TrendingViewDescriptor(props: TrendingViewDescriptorProps) {
-    const { trending, isProfilePage, isNFTProjectPopper = false, isPopper = true } = props
+    const { trending, isProfilePage, isNFTProjectPopper = false, isTokenTagPopper = true } = props
 
     const { t } = useI18N()
 
-    const { classes } = useStyles({ isPopper, isNFTProjectPopper })
+    const { classes } = useStyles({ isTokenTagPopper, isNFTProjectPopper })
 
     return (
-        <PluginDescriptor isNFTProjectPopper={isNFTProjectPopper} isProfilePage={isProfilePage} isPopper={isPopper}>
+        <PluginDescriptor
+            isNFTProjectPopper={isNFTProjectPopper}
+            isProfilePage={isProfilePage}
+            isTokenTagPopper={isTokenTagPopper}>
             <Box className={classes.source}>
                 <Stack
                     className={classes.sourceMenu}

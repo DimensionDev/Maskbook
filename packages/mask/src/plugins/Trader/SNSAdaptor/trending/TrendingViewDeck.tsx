@@ -33,7 +33,7 @@ import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
 import { TrendingViewDescriptor } from './TrendingViewDescriptor.js'
 
 const useStyles = makeStyles<{
-    isPopper: boolean
+    isTokenTagPopper: boolean
     isNFTProjectPopper: boolean
 }>()((theme, props) => {
     return {
@@ -51,7 +51,7 @@ const useStyles = makeStyles<{
                 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
         },
         headline: {
-            marginTop: props.isPopper ? 0 : 30,
+            marginTop: props.isNFTProjectPopper ? 0 : 30,
             alignItems: 'center',
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -141,7 +141,7 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     resultList?: Web3Helper.TokenResultAll[]
     children?: React.ReactNode
     isPreciseSearch?: boolean
-    isPopper?: boolean
+    isTokenTagPopper?: boolean
     TrendingCardProps?: Partial<TrendingCardProps>
 }
 
@@ -153,7 +153,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         TrendingCardProps,
         isProfilePage,
         isNFTProjectPopper = false,
-        isPopper = true,
+        isTokenTagPopper = true,
         isPreciseSearch = false,
         resultList = [],
         result,
@@ -163,7 +163,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     const { t } = useI18N()
     const theme = useTheme()
-    const { classes } = useStyles({ isPopper, isNFTProjectPopper }, { props })
+    const { classes } = useStyles({ isTokenTagPopper, isNFTProjectPopper }, { props })
     const isNFT = coin.type === TokenType.NonFungible
 
     // #region buy
@@ -200,12 +200,12 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     return (
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.cardHeader}>
-                {isPopper ? null : (
+                {isNFTProjectPopper ? null : (
                     <TrendingViewDescriptor
                         trending={trending}
                         isProfilePage={isProfilePage}
                         isNFTProjectPopper={isNFTProjectPopper}
-                        isPopper={isPopper}
+                        isTokenTagPopper={isTokenTagPopper}
                     />
                 )}
                 <Stack className={classes.headline}>
@@ -333,13 +333,13 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 <Paper className={classes.body} elevation={0}>
                     {children}
                 </Paper>
-                {isPopper ? (
+                {isNFTProjectPopper ? (
                     <section className={classes.pluginDescriptorWrapper}>
                         <TrendingViewDescriptor
                             trending={trending}
                             isProfilePage={isProfilePage}
                             isNFTProjectPopper={isNFTProjectPopper}
-                            isPopper={isPopper}
+                            isTokenTagPopper={isTokenTagPopper}
                         />
                     </section>
                 ) : null}
