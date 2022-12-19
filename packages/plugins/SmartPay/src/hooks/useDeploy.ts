@@ -6,7 +6,7 @@ import {
     useSNSAdaptorContext,
 } from '@masknet/plugin-infra/content-script'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { SmartPayFunder } from '@masknet/web3-providers'
 import type { ContractAccountAPI } from '@masknet/web3-providers/types'
 import { ProviderType, ChainId } from '@masknet/web3-shared-evm'
@@ -18,6 +18,7 @@ export function useDeploy(
     nonce?: number,
     onSuccess?: () => void,
 ) {
+    const { Wallet } = useWeb3State()
     const { personaSignPayMessage } = useSNSAdaptorContext()
     const currentPersona = useCurrentPersonaInformation()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
@@ -61,6 +62,9 @@ export function useDeploy(
         })
 
         if (response.message.walletAddress && onSuccess) {
+            Wallet?.updateWallet(contractAccount.address, {
+                name: 'Smart Pay',
+            })
             onSuccess()
         }
     }, [connection, signAccount, lastRecognizedIdentity?.identifier, currentPersona, contractAccount, nonce, onSuccess])
