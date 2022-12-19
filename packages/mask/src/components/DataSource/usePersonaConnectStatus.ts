@@ -136,7 +136,7 @@ export function useCurrentPersonaConnectStatus() {
 
     const currentPersona = useMemo(
         () => personas.find((x) => isSamePersona(x, currentIdentifier)),
-        [currentIdentifier, personas.length],
+        [currentIdentifier, personas],
     )
 
     const { value: proofs } = usePersonaProofs(currentPersona?.identifier.publicKeyAsHex, MaskMessages)

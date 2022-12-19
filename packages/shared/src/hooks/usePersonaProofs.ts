@@ -2,7 +2,7 @@ import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { BindingProof, EMPTY_LIST, MaskEvents } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useEffect } from 'react'
-import { useAsyncFn, useEffectOnce } from 'react-use'
+import { useAsyncFn } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 
 export function usePersonaProofs(
@@ -23,14 +23,11 @@ export function usePersonaProofs(
         [publicKey],
     )
 
-    useEffectOnce(() => {
+    useEffect(() => {
         fn(true)
-    })
+    }, [])
 
-    const retry = () => {
-        if (state.loading) return
-        fn(false)
-    }
+    const retry = () => fn(false)
 
     useEffect(() => message?.events.ownProofChanged.on(retry), [retry])
 
