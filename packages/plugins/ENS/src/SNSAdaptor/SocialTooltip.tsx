@@ -1,9 +1,9 @@
-import type { PropsWithChildren } from 'react'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { Typography } from '@mui/material'
 import { useSharedI18N } from '@masknet/shared'
 import { NextIDPlatform } from '@masknet/shared-base'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { resolveNextIDPlatformName } from '@masknet/web3-shared-base'
+import { Typography } from '@mui/material'
+import type { PropsWithChildren } from 'react'
 
 interface StyleProps {
     isMenuScroll?: boolean

@@ -1,4 +1,4 @@
-import { useContext, forwardRef, useImperativeHandle } from 'react'
+import { useContext } from 'react'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useCopyToClipboard } from 'react-use'
 import { SourceType, resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
@@ -104,15 +104,11 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
     }
 })
 
-export const SearchResultInspectorContent = forwardRef(function (
-    props: SearchResultInspectorProps,
-    ref: React.ForwardedRef<unknown>,
-) {
+export function SearchResultInspectorContent() {
     const t = useI18N()
     const { classes, cx } = useStyles({})
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const { reversedAddress, nextIdBindings, firstNextIdrBinding, domain, tokenId } = useContext(ENSContext)
-    useImperativeHandle(ref, () => ({ reversedAddress, domain, tokenId }), [reversedAddress, domain, tokenId])
+    const { reversedAddress, nextIdBindings, firstNextIdBinding, domain, tokenId } = useContext(ENSContext)
     const [, copyToClipboard] = useCopyToClipboard()
     const copyWalletAddress = useSnackbarCallback({
         executor: async (address: string) => copyToClipboard(address),
@@ -155,7 +151,7 @@ export const SearchResultInspectorContent = forwardRef(function (
                         ) : null}
                     </div>
                 </section>
-                {firstNextIdrBinding?.identity ? (
+                {firstNextIdBinding?.identity ? (
                     <div className={classes.nextIdVerified}>
                         <section className={classes.bindingsWrapper}>
                             {nextIdBindings.map((x, i) => (
@@ -183,15 +179,12 @@ export const SearchResultInspectorContent = forwardRef(function (
             </Box>
         </CollectibleState.Provider>
     )
-})
+}
 
-export const SearchResultInspector = forwardRef(function (
-    props: SearchResultInspectorProps,
-    ref: React.ForwardedRef<unknown>,
-) {
+export function SearchResultInspector(props: SearchResultInspectorProps) {
     return (
         <ENSProvider {...props}>
-            <SearchResultInspectorContent {...props} ref={ref} />
+            <SearchResultInspectorContent />
         </ENSProvider>
     )
-})
+}

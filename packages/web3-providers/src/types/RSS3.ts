@@ -488,7 +488,6 @@ export namespace RSS3BaseAPI {
         getDonations(address: string): Promise<Pageable<Donation>>
         getFootprints(address: string): Promise<Pageable<Footprint>>
         getNameInfo(id: string): Promise<NameInfo | undefined>
-        getProfileInfo(address: string): Promise<ProfileInfo | undefined>
         getWeb3Feeds(address: string, HubOptions?: HubOptions<ChainId>): Promise<Pageable<Activity>>
     }
 }
