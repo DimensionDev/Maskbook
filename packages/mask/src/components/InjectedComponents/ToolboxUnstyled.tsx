@@ -24,7 +24,7 @@ import {
     useRecentTransactions,
 } from '@masknet/web3-hooks-base'
 import { useCallback } from 'react'
-import { WalletIcon, MaskIcon } from '@masknet/shared'
+import { WalletIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../plugins/Wallet/messages.js'
 import { useI18N } from '../../utils/index.js'
@@ -40,7 +40,13 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
-
+    iconHolder: {
+        display: 'flex',
+        flexShrink: 0,
+        flexGrow: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     chainIcon: {
         fontSize: 18,
         width: 18,
@@ -79,8 +85,8 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
         <GuideStep step={1} total={4} tip={t('user_guide_tip_1')}>
             <Container>
                 <ListItemButton onClick={openDialog}>
-                    <ListItemIcon>
-                        <MaskIcon style={{ width: iconSize, height: iconSize }} />
+                    <ListItemIcon className={classes.iconHolder} style={{ width: iconSize, height: iconSize }}>
+                        <Icons.MaskXmas size={42} />
                     </ListItemIcon>
                     {mini ? null : (
                         <ListItemText

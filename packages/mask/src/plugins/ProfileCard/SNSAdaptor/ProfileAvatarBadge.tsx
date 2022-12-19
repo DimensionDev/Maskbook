@@ -4,10 +4,21 @@ import { makeStyles } from '@masknet/theme'
 import { IconButton, IconButtonProps } from '@mui/material'
 import { FC, useEffect, useRef } from 'react'
 
+const xmasHat = new URL('./XmasHat.svg', import.meta.url).toString()
 const useStyles = makeStyles()((theme) => ({
     badge: {
         padding: 0,
         boxShadow: `0 0 0 1px ${theme.palette.maskColor.bottom}`,
+        position: 'relative',
+    },
+    xmasHat: {
+        position: 'absolute',
+        width: 21,
+        height: 13,
+        top: -3,
+        left: -1,
+        backgroundImage: `url(${xmasHat})`,
+        pointerEvents: 'none',
     },
 }))
 
@@ -64,6 +75,7 @@ export const ProfileAvatarBadge: FC<Props> = ({ userId, className, ...rest }) =>
     return (
         <IconButton disableRipple className={cx(classes.badge, className)} {...rest} ref={buttonRef}>
             <Icons.MaskBlue size={16} />
+            <div className={classes.xmasHat} />
         </IconButton>
     )
 }

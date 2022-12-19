@@ -5,13 +5,13 @@ import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { useActivatedPluginsSNSAdaptor, usePluginI18NField } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins, getProfileCardTabContent } from '@masknet/plugin-infra'
-import { useSocialAccountsBySettings } from '@masknet/shared'
+import { useSocialAccountsBySettings, xmasBackgroundMini } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
-import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { LoadingBase, makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress, SocialIdentity } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
-import { Tab, Typography } from '@mui/material'
+import { Tab, ThemeProvider, Typography } from '@mui/material'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { MaskMessages, addressSorter, useI18N, useLocationChange } from '../../../utils/index.js'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
@@ -40,9 +40,10 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'center',
         },
         header: {
-            background: isDark
-                ? 'linear-gradient(180deg, #202020 0%, #181818 100%)'
-                : 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)',
+            backgroundImage: `linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), url(${xmasBackgroundMini} )`,
+            backgroundColor: 'white',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center bottom',
             padding: theme.spacing(2, 2, 0, 2),
             boxSizing: 'border-box',
             flexShrink: 0,
@@ -62,6 +63,9 @@ const useStyles = makeStyles()((theme) => {
             position: 'relative',
             paddingTop: 0,
             marginTop: theme.spacing(2),
+        },
+        tabRoot: {
+            color: 'blue',
         },
         footer: {
             position: 'absolute',
@@ -170,18 +174,25 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
             <div className={classes.root}>
                 <div className={classes.header}>
-                    <ProfileCardTitle
-                        socialAccounts={socialAccounts}
-                        address={activeAddress}
-                        onAddressChange={setSelectedAddress}
-                        identity={identity}
-                    />
+                    <ThemeProvider theme={MaskLightTheme}>
+                        <ProfileCardTitle
+                            socialAccounts={socialAccounts}
+                            address={activeAddress}
+                            onAddressChange={setSelectedAddress}
+                            identity={identity}
+                        />
+                    </ThemeProvider>
                     {tabs.length > 0 && (
                         <div className={classes.tabs}>
                             <TabContext value={currentTab}>
                                 <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
                                     {tabs.map((tab) => (
-                                        <Tab key={tab.id} label={tab.label} value={tab.id} />
+                                        <Tab
+                                            key={tab.id}
+                                            label={tab.label}
+                                            value={tab.id}
+                                            classes={{ root: classes.tabRoot, textColorPrimary: classes.tabRoot }}
+                                        />
                                     ))}
                                 </MaskTabList>
                             </TabContext>

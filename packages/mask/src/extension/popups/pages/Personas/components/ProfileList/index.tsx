@@ -1,7 +1,7 @@
 import { memo, useCallback, useState } from 'react'
 import { Avatar, Link, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { definedSocialNetworkUIs } from '../../../../../../social-network/index.js'
-import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
+import { SOCIAL_MEDIA_ICON_MAPPING, usePersonaProofs } from '@masknet/shared'
 import {
     ProfileIdentifier,
     ProfileInformation,
@@ -9,10 +9,11 @@ import {
     NextIDAction,
     NextIDPlatform,
     PopupRoutes,
+    EMPTY_LIST,
 } from '@masknet/shared-base'
 import { compact } from 'lodash-es'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../../../../utils/index.js'
+import { MaskMessages, useI18N } from '../../../../../../utils/index.js'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import Services from '../../../../../service.js'
@@ -142,14 +143,15 @@ export const ProfileList = memo(() => {
         [],
     )
 
+    const proofs = usePersonaProofs(currentPersona?.identifier.publicKeyAsHex, MaskMessages)
+
     const { value: mergedProfiles, retry: refreshProfileList } = useAsyncRetry(async () => {
-        if (!currentPersona) return []
-        if (!currentPersona.identifier.publicKeyAsHex) return currentPersona.linkedProfiles
-        const response = await NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
-        if (!response) return currentPersona.linkedProfiles
+        if (!proofs.loading) return EMPTY_LIST
+        if (!currentPersona) return EMPTY_LIST
+        if (!currentPersona.identifier.publicKeyAsHex || !proofs.value) return currentPersona.linkedProfiles
 
         return currentPersona.linkedProfiles.map((profile) => {
-            const target = response.proofs.find(
+            const target = proofs.value?.find(
                 (x) =>
                     profile.identifier.userId.toLowerCase() === x.identity.toLowerCase() &&
                     profile.identifier.network.replace('.com', '') === x.platform,
@@ -162,7 +164,7 @@ export const ProfileList = memo(() => {
                 is_valid: target?.is_valid,
             }
         })
-    }, [currentPersona])
+    }, [proofs, currentPersona])
 
     const [confirmState, onConfirmDisconnect] = useAsyncFn(async () => {
         // fetch signature payload

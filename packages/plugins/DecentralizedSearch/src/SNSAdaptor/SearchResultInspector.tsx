@@ -1,5 +1,5 @@
 import { useRef, useMemo } from 'react'
-import { Hidden } from '@masknet/shared'
+import { Hidden, xmasBackground } from '@masknet/shared'
 import { first } from 'lodash-es'
 import { TabContext } from '@mui/lab'
 import { useAvailablePlugins, getProfileTabContent } from '@masknet/plugin-infra'
@@ -31,8 +31,10 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
     },
     cardHeader: {
-        background:
-            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
+        backgroundImage: `linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), url(${xmasBackground})`,
+        backgroundColor: 'white',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center bottom',
     },
 }))
 
@@ -93,7 +95,7 @@ export function SearchResultInspector(props: { keyword: string }) {
     }, [currentTab, JSON.stringify(socialAccount)])
     const isLoading = !ensRef.current || ensRef.current?.isLoading
     const isHiddenAll = Boolean(
-        (ensRef.current && ensRef.current?.reversedAddress === undefined) ||
+        (ensRef.current && (ensRef.current?.reversedAddress === undefined || !ensRef.current?.domain)) ||
             isContractAddressType ||
             isLoadingAddressType,
     )
