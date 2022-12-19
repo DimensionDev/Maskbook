@@ -33,7 +33,7 @@ import {
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import { CoinGeckoSearchAPI } from '../CoinGecko/apis/DSearchAPI.js'
 import { CoinMarketCapSearchAPI } from '../CoinMarketCap/DSearchAPI.js'
-import { NFTScanSearchAPI } from '../NFTScan/index.js'
+import { NFTScanSearchAPI, NFTScanCollectionSearchAPI } from '../NFTScan/index.js'
 import type { DSearchBaseAPI } from '../types/DSearch.js'
 import { getHandlers } from './rules.js'
 import { DSEARCH_BASE_URL } from './constants.js'
@@ -64,6 +64,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
     implements DSearchBaseAPI.Provider<ChainId, SchemaType, NetworkPluginID>
 {
     private NFTScanClient = new NFTScanSearchAPI<ChainId, SchemaType>()
+    private NFTScanCollectionClient = new NFTScanCollectionSearchAPI<ChainId, SchemaType>()
     private CoinGeckoClient = new CoinGeckoSearchAPI<ChainId, SchemaType>()
     private CoinMarketCapClient = new CoinMarketCapSearchAPI<ChainId, SchemaType>()
 
@@ -256,6 +257,18 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         ).sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
     }
 
+    private async searchNonFungibleTokenByTwitterHandler(
+        twitterHandler: string,
+    ): Promise<Array<SearchResult<ChainId, SchemaType>>> {
+        const collections = (await this.NFTScanCollectionClient.get())
+            .filter((x) => x.collection?.socialLinks?.twitter?.toLowerCase() === twitterHandler.toLowerCase())
+            .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
+
+        if (!collections[0]) return EMPTY_LIST
+
+        return [collections[0]]
+    }
+
     /**
      * The entry point of DSearch
      * @param keyword
@@ -263,10 +276,15 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
      */
     async search<T extends SearchResult<ChainId, SchemaType> = SearchResult<ChainId, SchemaType>>(
         keyword: string,
+        type?: SearchResultType,
     ): Promise<T[]> {
         // #MASK or $MASK
         const [_, name = ''] = keyword.match(/[#$](\w+)/) ?? []
         if (name) return this.searchTokenByName(name) as Promise<T[]>
+
+        // BoredApeYC or CryptoPunks nft twitter project
+        if (type === SearchResultType.NonFungibleCollection)
+            return this.searchNonFungibleTokenByTwitterHandler(keyword) as Promise<T[]>
 
         // token:MASK
         const { word, field } = this.parseKeyword(keyword)

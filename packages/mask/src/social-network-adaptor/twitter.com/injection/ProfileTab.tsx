@@ -176,7 +176,8 @@ export function ProfileTabAtTwitter() {
     const { value: currentVisitingSocialIdentity, loading: loadingIdentity } = useCurrentVisitingSocialIdentity()
 
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
-    const { value: collection, loading: loadingCollection } = useCollectionByTwitterHandler(currentVisitingUserId)
+    const { value: collectionList, loading: loadingCollection } = useCollectionByTwitterHandler(currentVisitingUserId)
+    const collectionResult = collectionList?.[0]
     const loading = loadingIdentity || loadingCollection
 
     useEffect(() => {
@@ -186,15 +187,15 @@ export function ProfileTabAtTwitter() {
     }, [])
 
     useEffect(() => {
-        if (!collection?.contract_address) return
+        if (!collectionResult?.address) return
         return MaskMessages.events.NFTProjectTwitterDetect.sendToLocal({
-            address: collection.contract_address,
+            address: collectionResult.address,
         })
-    }, [collection?.contract_address])
+    }, [collectionResult?.address])
 
     return hidden || loading ? null : (
         <ProfileTab
-            title={collection?.twitter === currentVisitingUserId ? 'More' : 'Web3'}
+            title={collectionResult?.collection?.socialLinks?.twitter === currentVisitingUserId ? 'More' : 'Web3'}
             classes={{
                 root: classes.root,
                 button: classes.button,

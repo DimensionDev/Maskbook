@@ -2,7 +2,15 @@ import { useAsync, useAsyncRetry } from 'react-use'
 import { useCallback, useRef, useState, useEffect } from 'react'
 import { flatten } from 'lodash-es'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
-import { SourceType, TokenType, attemptUntil, NonFungibleTokenActivity } from '@masknet/web3-shared-base'
+import { DSearch } from '@masknet/web3-providers'
+import {
+    SourceType,
+    TokenType,
+    attemptUntil,
+    NonFungibleTokenActivity,
+    SearchResultType,
+    NonFungibleCollectionResult,
+} from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -24,7 +32,10 @@ export function useTrendingOverviewByAddress(address: string, expectedChainId?: 
 export function useCollectionByTwitterHandler(twitterHandler?: string) {
     return useAsync(async () => {
         if (!twitterHandler) return
-        return PluginTraderRPC.getCollectionByTwitterHandler(twitterHandler)
+        return DSearch.search<NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>(
+            twitterHandler,
+            SearchResultType.NonFungibleCollection,
+        )
     }, [twitterHandler])
 }
 

@@ -25,14 +25,7 @@ import {
     SchemaType,
     WNATIVE,
 } from '@masknet/web3-shared-evm'
-import {
-    NFTSCAN_BASE,
-    NFTSCAN_LOGO_BASE,
-    NFTSCAN_URL,
-    NFTSCAN_API,
-    NFTSCAN_RESTFUL_API,
-    NFTSCAN_API_KEY,
-} from '../constants.js'
+import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL, NFTSCAN_API, NFTSCAN_RESTFUL_API } from '../constants.js'
 import type { EVM } from '../types/EVM.js'
 import { getAssetFullName } from '../../helpers/getAssetFullName.js'
 import { resolveActivityType } from '../../helpers/resolveActivityType.js'
@@ -86,7 +79,6 @@ export async function postNFTScanRestFulAPI<T>(pathname: string, body: string, i
         headers: {
             'content-type': 'application/json',
             ...init?.headers,
-            'x-api-key': NFTSCAN_API_KEY,
         },
         cache: 'no-cache',
         body,
@@ -103,7 +95,6 @@ export async function fetchFromNFTScanRestFulAPI<T>(pathname: string, init?: Req
         headers: {
             'content-type': 'application/json',
             ...init?.headers,
-            'x-api-key': NFTSCAN_API_KEY,
         },
         cache: 'no-cache',
     })

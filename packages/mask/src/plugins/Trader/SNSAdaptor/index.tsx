@@ -11,6 +11,7 @@ import { TagInspector } from './trending/TagInspector.js'
 import { enhanceTag } from './cashTag.js'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
+
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { SearchResultType } from '@masknet/web3-shared-base'
@@ -137,15 +138,15 @@ const sns: Plugin.SNSAdaptor.Definition<
         priority: 99999,
         UI: {
             Decorator({ identity }) {
-                const { value: collection } = useCollectionByTwitterHandler(identity?.identifier?.userId)
+                const { value: collectionList } = useCollectionByTwitterHandler(identity?.identifier?.userId)
                 const isMinimalMode = useIsMinimalMode(PluginID.Web3ProfileCard)
-                if (!identity?.identifier?.userId || !collection || isMinimalMode) return null
+                if (!identity?.identifier?.userId || !collectionList?.[0] || isMinimalMode) return null
 
                 return (
                     <Box display="flex" alignItems="top" justifyContent="center">
                         <NFTProjectAvatarBadge
                             userId={identity.identifier.userId}
-                            address={collection.contract_address}
+                            address={collectionList?.[0].address}
                         />
                     </Box>
                 )

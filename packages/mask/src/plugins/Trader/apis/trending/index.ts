@@ -1,7 +1,7 @@
 import { SourceType, NonFungibleCollectionOverview, NonFungibleTokenActivity } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { CoinGeckoTrending, CoinMarketCap, NFTScanTrending, UniSwap } from '@masknet/web3-providers'
-import { TrendingAPI, NonFungibleTokenAPI } from '@masknet/web3-providers/types'
+import { TrendingAPI } from '@masknet/web3-providers/types'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { Currency, Stat, Trending } from '../../types/index.js'
@@ -76,13 +76,5 @@ export async function getNonFungibleTokenActivities(
     pageIndex: number,
 ): Promise<NonFungibleTokenActivity[] | undefined> {
     return NFTScanTrending.getCoinActivities(chainId, contractAddress, pageIndex)
-}
-// #endregion
-
-// #region get nft collection by twitter handler
-export async function getCollectionByTwitterHandler(
-    twitterHandler: string,
-): Promise<NonFungibleTokenAPI.Collection | undefined> {
-    return NFTScanTrending.getCollectionByTwitterHandler(twitterHandler)
 }
 // #endregion

@@ -13,7 +13,6 @@ import { COIN_RECOMMENDATION_SIZE } from '../../Trending/constants.js'
 import type { EVM, Response } from '../types/index.js'
 import {
     fetchFromNFTScanV2,
-    postNFTScanRestFulAPI,
     fetchFromNFTScanRestFulAPI,
     getContractSymbol,
     fetchFromNFTScanWebAPI,
@@ -74,15 +73,6 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
             }),
         })
         return response?.data ?? EMPTY_LIST
-    }
-
-    async getCollectionByTwitterHandler(twitterHandler: string): Promise<NonFungibleTokenAPI.Collection | undefined> {
-        const path = '/api/v2/collections/filters'
-        const response = await postNFTScanRestFulAPI<Response<NonFungibleTokenAPI.Collection[]>>(
-            path,
-            JSON.stringify({ twitter: twitterHandler }),
-        )
-        return response?.data[0]
     }
 
     async getCollectionOverview(

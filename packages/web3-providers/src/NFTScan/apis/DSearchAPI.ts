@@ -39,3 +39,16 @@ export class NFTScanSearchAPI<ChainId, SchemaType> implements DSearchBaseAPI.Dat
             .flat()
     }
 }
+
+export class NFTScanCollectionSearchAPI<ChainId, SchemaType>
+    implements DSearchBaseAPI.DataSourceProvider<ChainId, SchemaType>
+{
+    async get(): Promise<Array<NonFungibleCollectionResult<ChainId, SchemaType>>> {
+        const collectionsURL = urlcat(DSEARCH_BASE_URL, '/non-fungible-collections/nftscan.json')
+        return fetchJSON<Array<NonFungibleCollectionResult<ChainId, SchemaType>>>(
+            collectionsURL,
+            undefined,
+            fetchCached,
+        )
+    }
+}
