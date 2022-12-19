@@ -48,18 +48,15 @@ export function ArticlesTab(props: ArticlesTabProps) {
                             )
                         default:
                             return (
-                                <>
-                                    {!boxMetadata?.mediaUrl ? (
-                                        <img className={classes.hero} src={resolveIPFS_URL(boxMetadata?.mediaUrl)} />
-                                    ) : (
-                                        <img
-                                            className={classes.hero}
-                                            src={new URL('../../assets/FallbackImage.svg', import.meta.url).toString()}
-                                        />
-                                    )}
-                                </>
+                                <img
+                                    className={classes.hero}
+                                    src={
+                                        boxMetadata?.mediaUrl
+                                            ? resolveIPFS_URL(boxMetadata?.mediaUrl)
+                                            : new URL('../../assets/FallbackImage.svg', import.meta.url).toString()
+                                    }
+                                />
                             )
-                        // <img className={classes.hero} src={resolveIPFS_URL(boxMetadata?.mediaUrl)} />
                     }
                 })()}
             </Box>
