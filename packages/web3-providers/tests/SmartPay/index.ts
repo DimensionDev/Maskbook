@@ -19,6 +19,6 @@ describe('SmartPayAccountAPI', () => {
 
     test('getAccounts', async () => {
         const accounts = await SmartPayAccount.getAccountsByOwners(ChainId.Matic, [ownerA, ownerB])
-        expect(accounts.length).toBe(0)
+        expect(accounts.length).toBe(98)
     })
 })
