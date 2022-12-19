@@ -38,17 +38,17 @@ export function resolveNFTScanHostName(chainId: ChainId) {
         case ChainId.Mainnet:
             return 'https://www.nftscan.com'
         case ChainId.Matic:
-            return 'https://www.nftscan.com'
+            return 'https://polygon.nftscan.com'
         case ChainId.BSC:
-            return 'https://www.nftscan.com'
+            return 'https://bnb.nftscan.com'
         case ChainId.Arbitrum:
-            return 'https://www.nftscan.com'
+            return 'https://arbitrum.nftscan.com/'
         case ChainId.Avalanche:
-            return 'https://www.nftscan.com'
+            return 'https://avax.nftscan.com/'
         case ChainId.Optimism:
-            return 'https://www.nftscan.com'
+            return 'https://optimism.nftscan.com/'
         case ChainId.xDai:
-            return 'https://www.nftscan.com'
+            return 'https://cronos.nftscan.com/'
         default:
             return ''
     }
