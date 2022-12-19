@@ -25,6 +25,7 @@ import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, addressSorter, useI18N, useLocationChange } from '../../utils/index.js'
 import { useCurrentVisitingSocialIdentity } from '../DataSource/useActivatedUI.js'
+import { useCollectionByTwitterHandler } from '../../plugins/Trader/trending/useTrending.js'
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
 import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
 import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry.js'
@@ -137,7 +138,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const [hidden, setHidden] = useState(true)
     const [selectedAddress, setSelectedAddress] = useState<string | undefined>()
-    const [NFTProjectAddress, setNFTProjectAddress] = useState('')
     const [menuOpen, setMenuOpen] = useState(false)
     const {
         value: personaStatus,
@@ -179,12 +179,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             retryIdentity()
         })
     }, [retryIdentity])
-
-    useEffect(() => {
-        return MaskMessages.events.NFTProjectTwitterDetect.on((ev) => {
-            setNFTProjectAddress(ev.address ?? '')
-        })
-    }, [setNFTProjectAddress])
 
     useEffect(() => {
         setSelectedAddress(first(socialAccounts)?.address)
@@ -293,6 +287,9 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             open: true,
         })
     }
+
+    const { value: collectionList } = useCollectionByTwitterHandler(currentVisitingUserId)
+    const NFTProjectAddress = collectionList?.[0].address
 
     if (hidden) return null
 

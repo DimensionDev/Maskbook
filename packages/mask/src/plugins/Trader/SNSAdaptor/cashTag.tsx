@@ -11,7 +11,7 @@ export const enhanceTag: Plugin.SNSAdaptor.Definition<ChainId>['enhanceTag'] = {
         const timer = setTimeout(async () => {
             const type = kind === 'cash' ? TrendingAPI.TagType.CASH : TrendingAPI.TagType.HASH
 
-            PluginTraderMessages.cashAnchorObserved.sendToLocal({
+            PluginTraderMessages.trendingAnchorObserved.sendToLocal({
                 name: content,
                 type,
                 element,

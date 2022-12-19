@@ -186,13 +186,6 @@ export function ProfileTabAtTwitter() {
         })
     }, [])
 
-    useEffect(() => {
-        if (!collectionResult?.address) return
-        return MaskMessages.events.NFTProjectTwitterDetect.sendToLocal({
-            address: collectionResult.address,
-        })
-    }, [collectionResult?.address])
-
     return hidden || loading ? null : (
         <ProfileTab
             title={collectionResult?.collection?.socialLinks?.twitter === currentVisitingUserId ? 'More' : 'Web3'}

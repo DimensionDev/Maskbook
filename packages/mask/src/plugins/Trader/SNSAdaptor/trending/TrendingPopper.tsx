@@ -50,7 +50,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
     // open popper from message center
     useEffect(
         () =>
-            PluginTraderMessages.cashAnchorObserved.on((ev) => {
+            PluginTraderMessages.trendingAnchorObserved.on((ev) => {
                 const update = () => {
                     setLocked(true)
                     setName(ev.name)

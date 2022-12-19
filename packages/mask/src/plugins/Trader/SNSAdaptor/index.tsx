@@ -11,7 +11,6 @@ import { TagInspector } from './trending/TagInspector.js'
 import { enhanceTag } from './cashTag.js'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { SearchResultType } from '@masknet/web3-shared-base'

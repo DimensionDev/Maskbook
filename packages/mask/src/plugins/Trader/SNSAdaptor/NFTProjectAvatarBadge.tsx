@@ -32,7 +32,7 @@ export const NFTProjectAvatarBadge: FC<Props> = ({ address, userId, className, .
             const button = buttonRef.current
             if (!button) return
             openTimer = setTimeout(() => {
-                PluginTraderMessages.cashAnchorObserved.sendToLocal({
+                PluginTraderMessages.trendingAnchorObserved.sendToLocal({
                     name: userId,
                     address,
                     type: TrendingAPI.TagType.HASH,

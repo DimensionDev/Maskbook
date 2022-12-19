@@ -4,7 +4,7 @@ import type { SourceType } from '@masknet/web3-shared-base'
 import { PLUGIN_ID } from './constants/index.js'
 import type { TagType } from './types/index.js'
 
-interface CashAnchorEvent {
+interface TrendingAnchorEvent {
     name: string
     type: TagType
     element: HTMLElement | null
@@ -22,7 +22,7 @@ export interface TraderMessage {
     /**
      * View a cash tag
      */
-    cashAnchorObserved: CashAnchorEvent
+    trendingAnchorObserved: TrendingAnchorEvent
 
     /**
      * Swap settings dialog

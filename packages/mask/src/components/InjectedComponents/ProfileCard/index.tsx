@@ -179,7 +179,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
                         onAddressChange={setSelectedAddress}
                         identity={identity}
                     />
-                    {tabs.length > 0 && (
+                    {tabs.length > 0 && currentTab && (
                         <div className={classes.tabs}>
                             <TabContext value={currentTab}>
                                 <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
