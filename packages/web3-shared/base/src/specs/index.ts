@@ -112,6 +112,7 @@ export enum ActivityType {
     Mint = 'Mint',
     Sale = 'Sale',
     Offer = 'Offer',
+    Burn = 'Burn',
     List = 'List',
     CancelOffer = 'CancelOffer',
 }
@@ -412,6 +413,32 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
         instagram?: string
         medium?: string
     }
+}
+
+export interface NonFungibleCollectionOverview {
+    market_cap?: number
+    highest_price?: number
+    volume_24h?: number
+    average_price_24h?: number
+    sales_24h?: number
+    owners_total?: number
+    total_volume?: number
+    items_total?: number
+}
+
+export interface NonFungibleTokenActivity {
+    transaction_hash: string
+    transaction_method: ActivityType
+    transactionLink: string
+    transaction_time: number
+    tx_value: number
+    from_address: string
+    to_address: string
+    cover: string
+    contract: string
+    token_id: string
+    tradeToken: string
+    tradeTokenLogo: string
 }
 
 export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {

@@ -14,6 +14,52 @@ import type {
 } from '@masknet/web3-shared-base'
 
 export namespace NonFungibleTokenAPI {
+    export interface AttributesValue {
+        attributes_value: string
+        total: number
+    }
+    export interface Attributes {
+        attributes_name: string
+        attributes_values: AttributesValue[]
+        total: number
+    }
+    export enum ErcType {
+        ERC721 = 'erc721',
+        ERC1155 = 'erc1155',
+    }
+
+    export interface Collection {
+        contract_address: string
+        name: string
+        symbol: string
+        description: string
+        website: string | null
+        email: string | null
+        twitter: string | null
+        discord: string | null
+        telegram: string | null
+        reddit: string | null
+        github: string | null
+        instagram: string | null
+        medium: string | null
+        youtube: string | null
+        logo_url: string
+        banner_url: string
+        featured_url: string
+        large_image_url: string
+        attributes: Attributes[]
+        erc_type: ErcType | string
+        deploy_block_number: number
+        owner: string
+        verified: boolean
+        items_total: number
+        owners_total: number
+        royalty: number
+        opensea_floor_price: number
+        floor_price: number
+        price_symbol: string
+        collections_with_same_name: []
+    }
     export interface Provider<ChainId, SchemaType, Indicator = HubIndicator> {
         /** Get balance of a fungible token owned by the given account. */
         getBalance?: (account: string, options?: HubOptions<ChainId, Indicator>) => Promise<number>

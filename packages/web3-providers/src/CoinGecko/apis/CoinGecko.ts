@@ -4,6 +4,7 @@ import { ChainId, getCoinGeckoConstants } from '@masknet/web3-shared-evm'
 import { COINGECKO_CHAIN_ID_LIST, COINGECKO_URL_BASE } from '../constants.js'
 import { getCommunityLink, isMirroredKeyword } from '../../Trending/helpers.js'
 import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../../Trending/constants.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { getAllCoins, getCoinInfo, getPriceStats as getStats, getThumbCoins } from './base.js'
 import type { Platform } from '../types.js'
 import { resolveCoinGeckoChainId } from '../helpers.js'
@@ -66,7 +67,11 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
         )
     }
 
-    async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
+    async getCoinTrending(
+        chainId: Web3Helper.ChainIdAll,
+        id: string,
+        currency: TrendingAPI.Currency,
+    ): Promise<TrendingAPI.Trending> {
         const info = await getCoinInfo(id)
         if ('error' in info) throw new Error(info.error)
 

@@ -30,24 +30,28 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-export interface SearchResultInspectorProps {}
+export interface SearchResultInspectorProps {
+    keyword?: string
+    isProfilePage?: boolean
+}
 
 export function SearchResultInspector(props: SearchResultInspectorProps) {
     const { classes } = useStyles()
     const translate = usePluginI18NField()
 
-    const keyword = useSearchedKeyword()
+    const keyword_ = useSearchedKeyword()
+    const keyword = props.keyword || keyword_
     const activatedPlugins = useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode()
 
     const resultList = useAsyncRetry(async () => {
-        if (!keyword || !activatedPlugins.length) return
+        if (!keyword) return
         return DSearch.search(keyword)
-    }, [keyword, activatedPlugins.length])
+    }, [keyword])
 
     const contentComponent = useMemo(() => {
         if (!resultList.value?.length) return null
         const Component = getSearchResultContent(resultList.value[0])
-        return <Component result={resultList.value} />
+        return <Component result={resultList.value} isProfilePage={props.isProfilePage} />
     }, [resultList.value])
 
     const tabs = useMemo(() => {

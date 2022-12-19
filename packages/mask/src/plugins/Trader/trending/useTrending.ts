@@ -1,16 +1,82 @@
-import { useAsync, useAsyncRetry } from 'react-use'
+import { useAsync, useAsyncRetry, useAsyncFn } from 'react-use'
+import { useRef, useState, useEffect } from 'react'
+import { flatten } from 'lodash-es'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
-import { SourceType, TokenType, attemptUntil } from '@masknet/web3-shared-base'
+import { DSearch } from '@masknet/web3-providers'
+import {
+    SourceType,
+    TokenType,
+    attemptUntil,
+    NonFungibleTokenActivity,
+    SearchResultType,
+    NonFungibleCollectionResult,
+} from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken, useWeb3State } from '@masknet/web3-hooks-base'
 import { PluginTraderRPC } from '../messages.js'
 import type { Coin } from '../types/index.js'
 import { useCurrentCurrency } from './useCurrentCurrency.js'
 
 const NFTSCAN_CHAIN_ID_LIST = [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
+
+export function useTrendingOverviewByAddress(address: string) {
+    return useAsync(async () => {
+        if (!address) return null
+        return PluginTraderRPC.getNFT_TrendingOverview(address)
+    }, [address])
+}
+
+export function useCollectionByTwitterHandler(twitterHandler?: string) {
+    return useAsync(async () => {
+        if (!twitterHandler) return
+        return DSearch.search<NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>(
+            twitterHandler,
+            SearchResultType.NonFungibleCollection,
+        )
+    }, [twitterHandler])
+}
+
+export function useNonFungibleTokenActivities(
+    pluginID: NetworkPluginID,
+    address: string,
+    expectedChainId?: Web3Helper.ChainIdAll,
+) {
+    const pageIndexRef = useRef<number>(0)
+    const { Others } = useWeb3State(pluginID)
+    const [nonFungibleTokenActivities, setNonFungibleTokenActivities] = useState<
+        Record<number, NonFungibleTokenActivity[]>
+    >({})
+    const [{ loading: loadingNonFungibleTokenActivities }, getNonFungibleTokenActivities] = useAsyncFn(async () => {
+        if (!address || !expectedChainId || !Others?.isValidChainId(expectedChainId)) return
+        const pageIndex = pageIndexRef.current
+
+        const activities = await PluginTraderRPC.getNonFungibleTokenActivities(
+            expectedChainId,
+            address,
+            pageIndexRef.current,
+        )
+
+        setNonFungibleTokenActivities((currentActivities) => {
+            if (currentActivities[pageIndexRef.current] || !activities) return currentActivities
+            pageIndexRef.current = pageIndex + 1
+
+            return { ...currentActivities, [pageIndex]: activities }
+        })
+    }, [address, expectedChainId])
+
+    useEffect(() => {
+        getNonFungibleTokenActivities()
+    }, [getNonFungibleTokenActivities])
+
+    return {
+        activities: flatten(Object.values(nonFungibleTokenActivities)),
+        fetchMore: getNonFungibleTokenActivities,
+        loadingNonFungibleTokenActivities,
+    }
+}
 
 export function useTrendingById(
     id: string,
@@ -21,8 +87,9 @@ export function useTrendingById(
     currency?: TrendingAPI.Currency
     trending?: TrendingAPI.Trending | null
 }> {
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
+    const { chainId } = useChainContext({ chainId: expectedChainId })
     const currency = useCurrentCurrency(dataProvider)
+    const { Others } = useWeb3State()
     const {
         value: trending,
         loading,
@@ -31,7 +98,7 @@ export function useTrendingById(
         if (!id) return null
         if (!currency) return null
         if (!dataProvider) return null
-        if (!expectedChainId && dataProvider === SourceType.NFTScan) {
+        if ((!expectedChainId || Others?.isValidChainId(expectedChainId)) && dataProvider === SourceType.NFTScan) {
             return attemptUntil(
                 NFTSCAN_CHAIN_ID_LIST.map((chainId) => async () => {
                     try {

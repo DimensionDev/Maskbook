@@ -4,7 +4,7 @@ import { Plugin, CurrentSNSNetwork } from '@masknet/plugin-infra'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
-    name: { fallback: 'Avatar Web3 Profile Card' },
+    name: { fallback: 'Avatar Web3 Profile' },
     description: {
         fallback: 'Web3 Profile Card on social account avatar.',
     },

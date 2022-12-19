@@ -14,6 +14,8 @@ import {
     searchProfileTabLoseConnectionPageSelector,
     searchNameTag,
 } from '../utils/selector.js'
+import { useCollectionByTwitterHandler } from '../../../plugins/Trader/trending/useTrending.js'
+import { useCurrentVisitingSocialIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js'
 
 function getStyleProps() {
@@ -171,15 +173,22 @@ function resetTwitterActivatedContent() {
 export function ProfileTabAtTwitter() {
     const { classes } = useStyles()
     const [hidden, setHidden] = useState(false)
+    const { value: currentVisitingSocialIdentity, loading: loadingIdentity } = useCurrentVisitingSocialIdentity()
+
+    const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
+    const { value: collectionList, loading: loadingCollection } = useCollectionByTwitterHandler(currentVisitingUserId)
+    const collectionResult = collectionList?.[0]
+    const loading = loadingIdentity || loadingCollection
+
     useEffect(() => {
         return MaskMessages.events.profileTabHidden.on((data) => {
             setHidden(data.hidden)
         })
     }, [])
 
-    return hidden ? null : (
+    return hidden || loading ? null : (
         <ProfileTab
-            title="Web3"
+            title={collectionResult?.collection?.socialLinks?.twitter === currentVisitingUserId ? 'More' : 'Web3'}
             classes={{
                 root: classes.root,
                 button: classes.button,

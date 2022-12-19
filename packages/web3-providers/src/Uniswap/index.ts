@@ -2,6 +2,7 @@ import { TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { isMirroredKeyword } from '../Trending/helpers.js'
 import * as BaseAPI from './base-api.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { BTC_FIRST_LEGER_DATE, getAllCoinsByKeyword, getPriceStats as getStats } from './base-api.js'
 import type { TrendingAPI } from '../entry-types.js'
 
@@ -23,7 +24,7 @@ export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinTrending(
-        chainId: ChainId | undefined,
+        chainId: Web3Helper.ChainIdAll,
         id: string,
         currency: TrendingAPI.Currency,
     ): Promise<TrendingAPI.Trending> {

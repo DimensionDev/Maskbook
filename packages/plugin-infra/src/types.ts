@@ -681,6 +681,7 @@ export namespace Plugin.SNSAdaptor {
             /** The brief content above detailed tabs. */
             Content?: InjectUI<{
                 result: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+                isProfilePage?: boolean
             }>
         }
         Utils?: {

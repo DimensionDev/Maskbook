@@ -28,6 +28,7 @@ import {
     isNativeTokenAddress,
     isValidAddress,
     isValidChainId,
+    isValidDomain,
     SchemaType,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
@@ -106,7 +107,9 @@ export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
         const response = await fetchFromChainbase<ENSRecord[]>(
             urlcat('/v1/ens/reverse', { chain_id: chainId, address }),
         )
-        return first(response)?.name
+
+        const name = first(response)?.name
+        return isValidDomain(name) ? name : `${name}.eth`
     }
 
     private addName(chainId: ChainId, name: string, address: string) {

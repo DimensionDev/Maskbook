@@ -1,16 +1,9 @@
-import { Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material'
+import { Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Typography, Grid } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import {
-    SourceType,
-    formatCurrency,
-    formatInteger,
-    formatMarketCap,
-    formatSupply,
-    TokenType,
-} from '@masknet/web3-shared-base'
-import { FormattedCurrency } from '@masknet/shared'
+import { SourceType, formatInteger, formatMarketCap, formatSupply, TokenType } from '@masknet/web3-shared-base'
 import type { Trending } from '../../types/index.js'
 import { useI18N } from '../../../../utils/index.js'
+import { useTrendingOverviewByAddress } from '../../trending/useTrending.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -31,6 +24,27 @@ const useStyles = makeStyles()((theme) => ({
         textAlign: 'right',
         fontWeight: 700,
     },
+    gridContainer: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: '12px',
+    },
+    gridItem: {
+        display: 'flex',
+        width: 132.5,
+        height: 66,
+        background: theme.palette.background.default,
+        borderRadius: 8,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        fontWeight: 700,
+        fontSize: 14,
+    },
+    gridItemTitle: {
+        fontSize: 12,
+        fontWeight: 400,
+    },
 }))
 
 export interface CoinMarketTableProps {
@@ -44,6 +58,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
         dataProvider,
     } = props
     const { t } = useI18N()
+
     const { classes } = useStyles()
 
     return (
@@ -110,69 +125,66 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
 }
 
 export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
-    const {
-        trending: { market },
-    } = props
     const { t } = useI18N()
+    const { value: overview } = useTrendingOverviewByAddress(props.trending.coin.address ?? '')
     const { classes } = useStyles()
 
     return (
         <Stack>
-            <Stack>
-                <Typography fontSize={14} fontWeight={700} component="h3">
-                    {t('plugin_trader_market_statistic')}
-                </Typography>
-            </Stack>
-            <TableContainer className={classes.container} component={Paper} elevation={0}>
-                <Table size="small">
-                    <TableBody>
-                        <TableRow>
-                            <TableCell className={classes.head} component="th">
-                                <Typography color="textSecondary" variant="body2">
-                                    {t('plugin_trader_floor_price')}
-                                </Typography>
-                            </TableCell>
-                            <TableCell className={classes.cell}>
-                                <FormattedCurrency
-                                    value={market?.floor_price ?? 0}
-                                    sign={market?.price_symbol ?? 'ETH'}
-                                    formatter={formatCurrency}
-                                />
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell className={classes.head} component="th">
-                                <Typography color="textSecondary" variant="body2">
-                                    {t('plugin_trader_volume_24')}
-                                </Typography>
-                            </TableCell>
-                            <TableCell className={classes.cell}>
-                                <FormattedCurrency
-                                    value={market?.total_24h ?? 0}
-                                    sign={market?.price_symbol ?? 'ETH'}
-                                    formatter={formatCurrency}
-                                />
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell className={classes.head} component="th">
-                                <Typography color="textSecondary" variant="body2">
-                                    {t('plugin_trader_owners_count')}
-                                </Typography>
-                            </TableCell>
-                            <TableCell className={classes.cell}>{formatInteger(market?.owners_count, '--')}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell className={classes.head} component="th">
-                                <Typography color="textSecondary" variant="body2">
-                                    {t('plugin_trader_total_assets')}
-                                </Typography>
-                            </TableCell>
-                            <TableCell className={classes.cell}>{formatSupply(market?.total_supply, '--')}</TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <Grid spacing={4} className={classes.gridContainer}>
+                <Grid item className={classes.gridItem}>
+                    <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
+                        {t('plugin_trader_total_assets')}
+                    </Typography>
+                    {formatSupply(overview?.items_total, '--')}
+                </Grid>
+                <Grid item className={classes.gridItem}>
+                    <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
+                        {t('plugin_trader_owners_count')}
+                    </Typography>
+                    {formatInteger(overview?.owners_total, '--')}
+                </Grid>
+                <Grid item className={classes.gridItem}>
+                    <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
+                        {t('plugin_trader_market_cap')}
+                    </Typography>
+                    {formatInteger(overview?.market_cap, '--')}
+                </Grid>
+                <Grid item className={classes.gridItem}>
+                    <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
+                        {t('plugin_trader_highest_price')}
+                    </Typography>
+                    {overview?.highest_price ?? '--'}
+                </Grid>
+
+                <Grid item className={classes.gridItem}>
+                    <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
+                        {t('plugin_trader_total_volume')}
+                    </Typography>
+                    {overview?.total_volume ?? '--'}
+                </Grid>
+
+                <Grid item className={classes.gridItem}>
+                    <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
+                        {t('plugin_trader_one_day_average_price')}
+                    </Typography>
+                    {overview?.average_price_24h ?? '--'}
+                </Grid>
+
+                <Grid item className={classes.gridItem}>
+                    <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
+                        {t('plugin_trader_one_day_traded_volume')}
+                    </Typography>
+                    {overview?.volume_24h ?? '--'}
+                </Grid>
+
+                <Grid item className={classes.gridItem}>
+                    <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
+                        {t('plugin_trader_one_day_sale')}
+                    </Typography>
+                    {overview?.sales_24h ?? '--'}
+                </Grid>
+            </Grid>
         </Stack>
     )
 }

@@ -11,7 +11,12 @@ import { WalletMessages } from '../../../Wallet/messages.js'
 import { PluginTransakMessages } from '../../../Transak/messages.js'
 
 export interface TrendingPopperProps {
-    children?: (resultList: Web3Helper.TokenResultAll[], reposition?: () => void) => React.ReactNode
+    children?: (
+        resultList: Web3Helper.TokenResultAll[],
+        address?: string,
+        isNFTProjectPopper?: boolean,
+        reposition?: () => void,
+    ) => React.ReactNode
     PopperProps?: Partial<PopperProps>
 }
 
@@ -22,6 +27,8 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const [freezed, setFreezed] = useState(false) // disable any click
     const [locked, setLocked] = useState(false) // state is updating, lock UI
     const [name, setName] = useState('')
+    const [isNFTProjectPopper, setIsNFTProjectPopper] = useState(false)
+    const [address, setAddress] = useState('')
     const [type, setType] = useState<TrendingAPI.TagType | undefined>()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const popper = useRef<HTMLDivElement | null>(null)
@@ -43,11 +50,13 @@ export function TrendingPopper(props: TrendingPopperProps) {
     // open popper from message center
     useEffect(
         () =>
-            PluginTraderMessages.cashTagObserved.on((ev) => {
+            PluginTraderMessages.trendingAnchorObserved.on((ev) => {
                 const update = () => {
                     setLocked(true)
                     setName(ev.name)
                     setType(ev.type)
+                    setAddress(ev.address ?? '')
+                    setIsNFTProjectPopper(Boolean(ev.isNFTProjectPopper))
                     setAnchorEl(ev.element)
                     setLocked(false)
                 }
@@ -100,7 +109,9 @@ export function TrendingPopper(props: TrendingPopperProps) {
                 {({ TransitionProps }) => (
                     <Fade in={Boolean(anchorEl)} {...TransitionProps}>
                         <div>
-                            {props.children?.(resultList, () => setTimeout(() => popperRef.current?.update(), 100))}
+                            {props.children?.(resultList, address, isNFTProjectPopper, () =>
+                                setTimeout(() => popperRef.current?.update(), 100),
+                            )}
                         </div>
                     </Fade>
                 )}

@@ -1,6 +1,8 @@
 import { Icons } from '@masknet/icons'
-import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
+import { SourceType } from '@masknet/web3-shared-base'
+import { TrendingAPI } from '@masknet/web3-providers/types'
+import { PluginTraderMessages } from '../messages.js'
 import { IconButton, IconButtonProps } from '@mui/material'
 import { FC, useEffect, useRef } from 'react'
 
@@ -12,53 +14,40 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface Props extends IconButtonProps {
+    address: string
     userId: string
 }
-export const ProfileAvatarBadge: FC<Props> = ({ userId, className, ...rest }) => {
+export const NFTProjectAvatarBadge: FC<Props> = ({ address, userId, className, ...rest }) => {
     const buttonRef = useRef<HTMLButtonElement>(null)
     const { classes, cx } = useStyles()
 
     useEffect(() => {
         const button = buttonRef.current
         if (!button) return
-        let closeTimer: NodeJS.Timeout
+
         let openTimer: NodeJS.Timeout
         const enter = () => {
             clearTimeout(openTimer)
-            clearTimeout(closeTimer)
 
             openTimer = setTimeout(() => {
-                CrossIsolationMessages.events.profileCardEvent.sendToLocal({
-                    open: true,
-                    userId,
-                    badgeBounding: button.getBoundingClientRect(),
+                PluginTraderMessages.trendingAnchorObserved.sendToLocal({
+                    name: userId,
+                    address,
+                    type: TrendingAPI.TagType.HASH,
+                    isNFTProjectPopper: true,
+                    element: button,
+                    dataProviders: [SourceType.NFTScan],
                 })
             }, 200)
         }
-        const leave = () => {
-            clearTimeout(openTimer)
-            clearTimeout(closeTimer)
-            closeTimer = setTimeout(() => {
-                CrossIsolationMessages.events.profileCardEvent.sendToLocal({
-                    open: false,
-                })
-            }, 2000)
-        }
+
         button.addEventListener('mouseenter', enter)
-        button.addEventListener('mouseleave', leave)
-        // Other badges might want to open the profile card
-        const unsubscribe = CrossIsolationMessages.events.profileCardEvent.on((event) => {
-            if (!event.open) return
-            clearTimeout(closeTimer)
-        })
+
         return () => {
-            clearTimeout(closeTimer)
             clearTimeout(openTimer)
             button.removeEventListener('mouseenter', enter)
-            button.removeEventListener('mouseleave', leave)
-            unsubscribe()
         }
-    }, [userId])
+    }, [address, userId])
 
     return (
         <IconButton disableRipple className={cx(classes.badge, className)} {...rest} ref={buttonRef}>

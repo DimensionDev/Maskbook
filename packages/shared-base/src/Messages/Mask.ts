@@ -48,6 +48,7 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     legacySettings_broadcast: SettingsUpdateEvent
     ownPersonaChanged: void
     ownProofChanged: void
+    NFTProjectTwitterDetect: NFTProjectTwitterDetectEvent
     restoreSuccess: void
     relationsChanged: RelationChangedEvent[]
     pluginMinimalModeChanged: [id: string, newStatus: boolean]
@@ -102,6 +103,10 @@ export type CheckSecurityDialogEvent =
 export type ApplicationDialogEvent = {
     open: boolean
     pluginID: string
+}
+
+export interface NFTProjectTwitterDetectEvent {
+    address?: string
 }
 
 export interface SettingsDialogEvent {

@@ -1,8 +1,9 @@
-import { SourceType } from '@masknet/web3-shared-base'
+import { SourceType, NonFungibleCollectionOverview, NonFungibleTokenActivity } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { CoinGeckoTrending, CoinMarketCap, NFTScanTrending, UniSwap } from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { Currency, Stat, Trending } from '../../types/index.js'
 
 export async function getCoinInfoByAddress(address: string): Promise<TrendingAPI.CoinInfo | undefined> {
@@ -11,7 +12,7 @@ export async function getCoinInfoByAddress(address: string): Promise<TrendingAPI
 
 // #region get trending info
 export async function getCoinTrending(
-    chainId: ChainId,
+    chainId: Web3Helper.ChainIdAll,
     id: string,
     currency: Currency,
     dataProvider: SourceType,
@@ -56,5 +57,21 @@ export async function getPriceStats(
         default:
             return EMPTY_LIST
     }
+}
+// #endregion
+
+// #region get nft trending overview
+export async function getNFT_TrendingOverview(id: string): Promise<NonFungibleCollectionOverview | undefined> {
+    return NFTScanTrending.getCollectionOverview(id)
+}
+// #endregion
+
+// #region get nft trending activities
+export async function getNonFungibleTokenActivities(
+    chainId: Web3Helper.ChainIdAll,
+    contractAddress: string,
+    pageIndex: number,
+): Promise<NonFungibleTokenActivity[] | undefined> {
+    return NFTScanTrending.getCoinActivities(chainId, contractAddress, pageIndex)
 }
 // #endregion

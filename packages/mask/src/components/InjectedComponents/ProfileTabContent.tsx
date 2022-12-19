@@ -25,11 +25,13 @@ import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, addressSorter, useI18N, useLocationChange } from '../../utils/index.js'
 import { useCurrentVisitingSocialIdentity } from '../DataSource/useActivatedUI.js'
+import { useCollectionByTwitterHandler } from '../../plugins/Trader/trending/useTrending.js'
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
 import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
 import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry.js'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
 import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
+import { SearchResultInspector } from './SearchResultInspector.js'
 
 const MENU_ITEM_HEIGHT = 40
 const MENU_LIST_PADDING = 8
@@ -286,7 +288,18 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         })
     }
 
+    const { value: collectionList } = useCollectionByTwitterHandler(currentVisitingUserId)
+
     if (hidden) return null
+
+    const NFTProjectAddress = collectionList?.[0].address
+
+    if (NFTProjectAddress)
+        return (
+            <div className={classes.root}>
+                <SearchResultInspector keyword={NFTProjectAddress} isProfilePage />
+            </div>
+        )
 
     if (lackHostPermission?.size) {
         return (

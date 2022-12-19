@@ -53,6 +53,7 @@ import { SpaceID_API } from './SpaceID/index.js'
 import { LensAPI } from './Lens/index.js'
 
 export * from './Sentry/index.js'
+export { resolveActivityTypeBackgroundColor } from './entry-helpers.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
