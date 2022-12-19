@@ -14,6 +14,7 @@
     "create_successfully_tips": "Congratulation! You’ve deployed SmartPay wallet {{address}}.",
     "create_successfully_tips_owner": "Owner of the smart contract is {{owner}}.",
     "copy_wallet_address_success": "Copy Success",
+    "can_only_receive_polygon_assets": "Can only receive Polygon network assets",
     "current_manage_account": "Current manage account",
     "change_owner": "Change Owner",
     "done": "Done",

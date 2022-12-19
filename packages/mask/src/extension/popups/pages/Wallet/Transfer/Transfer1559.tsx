@@ -1,6 +1,6 @@
 import { memo, ReactElement, SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { ChevronDown } from 'react-feather'
 import { mapValues } from 'lodash-es'
 import { z as zod } from 'zod'
@@ -56,6 +56,7 @@ import { AccountItem } from './AccountItem.js'
 import { TransferAddressError } from '../type.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
+import Services from '../../../../service.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -195,6 +196,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
 
     const navigate = useNavigate()
+    const location = useLocation()
 
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
     const [addressTip, setAddressTip] = useState<{
@@ -442,6 +444,17 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         [selectedAsset, transferCallback, registeredAddress, Others],
     )
 
+    const handleCancel = useCallback(() => {
+        const params = new URLSearchParams(location.search)
+        const toBeClose = params.get('toBeClose')
+        if (toBeClose) {
+            Services.Helper.removePopupWindow()
+            return
+        }
+        navigate(-1)
+        return
+    }, [location])
+
     const [menu, openMenu] = useMenuConfig(
         [
             <MenuItem className={classes.expand} key="expand">
@@ -523,7 +536,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 handleMaxClick={handleMaxClick}
                 etherPrice={etherPrice ?? 0}
                 selectedAsset={selectedAsset}
-                handleCancel={() => navigate(-1)}
+                handleCancel={handleCancel}
                 handleConfirm={methods.handleSubmit(onSubmit)}
                 confirmLoading={loading}
                 popoverContent={popoverContent}
