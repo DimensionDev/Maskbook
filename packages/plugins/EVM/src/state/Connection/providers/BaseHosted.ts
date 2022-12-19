@@ -8,10 +8,12 @@ import type { EVM_Provider } from '../types.js'
 import { BaseProvider } from './Base.js'
 
 export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
-    private _storage?: StorageObject<{
-        account: string
-        chainId: ChainId
-    }>
+    private hostedStorage:
+        | StorageObject<{
+              account: string
+              chainId: ChainId
+          }>
+        | undefined
 
     constructor(
         protected override providerType: ProviderType,
@@ -23,7 +25,18 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         },
     ) {
         super(providerType)
-        Web3StateSettings.readyPromise.then(this.addListeners.bind(this))
+
+        // setup storage
+        SharedContextSettings.readyPromise.then((context) => {
+            const { storage } = context.createKVStorage('memory', {}).createSubScope(`${this.providerType}_hosted`, {
+                account: this.options.getDefaultAccount(),
+                chainId: this.options.getDefaultChainId(),
+            })
+
+            this.hostedStorage = storage
+
+            Web3StateSettings.readyPromise.then(this.addListeners.bind(this))
+        })
     }
 
     protected get options() {
@@ -36,25 +49,12 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         }
     }
 
-    get storage() {
-        if (this._storage) return this._storage
-
-        const { storage } = SharedContextSettings.value
-            .createKVStorage('memory', {})
-            .createSubScope(`${this.providerType}_hosted`, {
-                account: this.options.getDefaultAccount(),
-                chainId: this.options.getDefaultChainId(),
-            })
-        this._storage = storage
-        return this._storage
-    }
-
     get account() {
-        return this.storage.account.value
+        return this.hostedStorage?.account.value ?? this.options.getDefaultAccount()
     }
 
     get chainId() {
-        return this.storage.chainId.value
+        return this.hostedStorage?.chainId.value ?? this.options.getDefaultChainId()
     }
 
     /**
@@ -74,25 +74,24 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
     }
 
     private addListeners() {
-        const { account, chainId } = this.storage
-
-        account.subscription.subscribe(() => {
+        this.hostedStorage?.account.subscription.subscribe(() => {
             if (this.account) this.emitter.emit('accounts', [this.account])
             else this.emitter.emit('disconnect', this.providerType)
         })
-        chainId.subscription.subscribe(() => {
-            if (this.account) this.emitter.emit('chainId', toHex(this.chainId))
+        this.hostedStorage?.chainId.subscription.subscribe(() => {
+            if (this.chainId) this.emitter.emit('chainId', toHex(this.chainId))
         })
     }
 
     override async switchAccount(account?: string) {
-        if (isValidAddress(account) && (await this.options.isSupportedAccount(account)))
-            this.storage.account.setValue(account)
+        if (isValidAddress(account) && (await this.options.isSupportedAccount(account))) {
+            this.hostedStorage?.account.setValue(account)
+        }
     }
 
     override async switchChain(chainId: ChainId) {
         if (await this.options.isSupportedChainId(chainId)) {
-            this.storage.chainId.setValue(chainId)
+            this.hostedStorage?.chainId.setValue(chainId)
         }
     }
 

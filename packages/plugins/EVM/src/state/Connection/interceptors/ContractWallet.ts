@@ -125,6 +125,8 @@ export class ContractWallet implements Middleware<Context> {
 
     private async deploy(context: Context) {
         const { owner } = this.getOwner(context)
+        if (!isValidAddress(owner)) throw new Error('Invalid owner address.')
+
         const initCode = await this.getInitCode(context.chainId, owner)
         const accounts = await this.getDeployedAccounts(context.chainId, owner)
 
