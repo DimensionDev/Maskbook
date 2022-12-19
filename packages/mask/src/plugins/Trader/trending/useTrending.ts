@@ -1,5 +1,5 @@
-import { useAsync, useAsyncRetry } from 'react-use'
-import { useCallback, useRef, useState, useEffect } from 'react'
+import { useAsync, useAsyncRetry, useAsyncFn } from 'react-use'
+import { useRef, useState, useEffect } from 'react'
 import { flatten } from 'lodash-es'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { DSearch } from '@masknet/web3-providers'
@@ -45,7 +45,7 @@ export function useNonFungibleTokenActivities(address: string, expectedChainId?:
         Record<number, NonFungibleTokenActivity[]>
     >({})
 
-    const getNonFungibleTokenActivities = useCallback(async () => {
+    const [{ loading: loadingNonFungibleTokenActivities }, getNonFungibleTokenActivities] = useAsyncFn(async () => {
         if (!address || !expectedChainId) return
         const pageIndex = pageIndexRef.current
 
@@ -67,7 +67,11 @@ export function useNonFungibleTokenActivities(address: string, expectedChainId?:
         getNonFungibleTokenActivities()
     }, [getNonFungibleTokenActivities])
 
-    return { activities: flatten(Object.values(nonFungibleTokenActivities)), fetchMore: getNonFungibleTokenActivities }
+    return {
+        activities: flatten(Object.values(nonFungibleTokenActivities)),
+        fetchMore: getNonFungibleTokenActivities,
+        loadingNonFungibleTokenActivities,
+    }
 }
 
 export function useTrendingById(

@@ -101,7 +101,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         const response = await fetchFromNFTScanWebAPI<
             Response<{ nft_tx_record: NonFungibleTokenActivity[]; nft_tx_total: number }>
         >(chainId, path)
-        if (!response?.data.nft_tx_record) return
+        if (!response?.data?.nft_tx_record) return
         return response.data.nft_tx_record.map((x) => ({
             ...x,
             transactionLink: `${resolveNFTScanHostName(chainId)}/${x.transaction_hash}`,

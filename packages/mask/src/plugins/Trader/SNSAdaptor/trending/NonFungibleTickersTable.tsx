@@ -1,6 +1,16 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Link } from '@mui/material'
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Typography,
+    Link,
+    Stack,
+} from '@mui/material'
 import { useRef } from 'react'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, LoadingBase } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { TokenIcon, FormattedAddress } from '@masknet/shared'
@@ -104,7 +114,7 @@ export function NonFungibleTickersTable({
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const containerRef = useRef(null)
 
-    const { activities, fetchMore } = useNonFungibleTokenActivities(address, chainId)
+    const { activities, fetchMore, loadingNonFungibleTokenActivities } = useNonFungibleTokenActivities(address, chainId)
     useScrollBottomEvent(containerRef, fetchMore)
     const headCellMap: Record<Cells, string> = {
         nft: t('plugin_trader_table_nft'),
@@ -194,33 +204,42 @@ export function NonFungibleTickersTable({
 
     return (
         <TableContainer className={classes.container} ref={containerRef}>
-            <Table size="small" stickyHeader>
-                <TableHead>
-                    <TableRow>
-                        {headCells.map((x) => (
-                            <TableCell className={classes.cell} key={x}>
-                                {x}
-                            </TableCell>
-                        ))}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {tickerRows.length ? (
-                        tickerRows
-                    ) : (
+            {activities.length === 0 && loadingNonFungibleTokenActivities ? (
+                <Stack height={298} width={566} alignItems="center" justifyContent="center">
+                    <LoadingBase />
+                    <Typography fontSize="14px" mt={1.5}>
+                        {t('loading')}
+                    </Typography>
+                </Stack>
+            ) : (
+                <Table size="small" stickyHeader>
+                    <TableHead>
                         <TableRow>
-                            <TableCell
-                                className={classes.cell}
-                                colSpan={columns.length}
-                                style={{ borderStyle: 'none' }}>
-                                <Typography className={classes.placeholder} align="center" color="textSecondary">
-                                    {t('plugin_trader_no_data')}
-                                </Typography>
-                            </TableCell>
+                            {headCells.map((x) => (
+                                <TableCell className={classes.cell} key={x}>
+                                    {x}
+                                </TableCell>
+                            ))}
                         </TableRow>
-                    )}
-                </TableBody>
-            </Table>
+                    </TableHead>
+                    <TableBody>
+                        {tickerRows.length ? (
+                            tickerRows
+                        ) : (
+                            <TableRow>
+                                <TableCell
+                                    className={classes.cell}
+                                    colSpan={columns.length}
+                                    style={{ borderStyle: 'none' }}>
+                                    <Typography className={classes.placeholder} align="center" color="textSecondary">
+                                        {t('plugin_trader_no_data')}
+                                    </Typography>
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            )}
         </TableContainer>
     )
 }
