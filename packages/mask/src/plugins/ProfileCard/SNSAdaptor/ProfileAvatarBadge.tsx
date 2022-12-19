@@ -26,7 +26,7 @@ export const ProfileAvatarBadge: FC<Props> = ({ userId, className, ...rest }) =>
         const enter = () => {
             clearTimeout(openTimer)
             clearTimeout(closeTimer)
-            const button = buttonRef.current
+
             if (!button) return
             openTimer = setTimeout(() => {
                 CrossIsolationMessages.events.profileCardEvent.sendToLocal({
