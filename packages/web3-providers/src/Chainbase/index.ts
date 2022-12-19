@@ -28,6 +28,7 @@ import {
     isNativeTokenAddress,
     isValidAddress,
     isValidChainId,
+    isValidDomain,
     SchemaType,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
@@ -108,7 +109,7 @@ export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
         )
 
         const name = first(response)?.name
-        return name?.endsWith('.eth') ? name : `${name}.eth`
+        return isValidDomain(name) ? name : `${name}.eth`
     }
 
     private addName(chainId: ChainId, name: string, address: string) {
