@@ -95,7 +95,7 @@ const useStyles = makeStyles<{
             backgroundImage: `linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), url(${xmasBackground})`,
             backgroundColor: 'white',
             backgroundSize: 'cover',
-            backgroundPosition: 'center right',
+            backgroundPosition: 'center bottom',
         },
         nftItems: {
             height: 530,
