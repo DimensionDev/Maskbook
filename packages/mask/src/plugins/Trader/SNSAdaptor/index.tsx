@@ -41,13 +41,10 @@ const sns: Plugin.SNSAdaptor.Definition<
         ID: PluginID.Trader,
         UI: {
             Content({ result: _resultList, isProfilePage }) {
-                const dSearchEnable = useValueRef(decentralizedSearchSettings)
                 const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
                 const resultList = _resultList as Web3Helper.TokenResultAll[]
                 const [result, setResult] = useState(resultList[0])
                 const { chainId, keyword, address, pluginID } = result
-
-                if (!dSearchEnable) return null
 
                 return (
                     <Web3ContextProvider
