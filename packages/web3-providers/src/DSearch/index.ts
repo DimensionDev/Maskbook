@@ -135,7 +135,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
     }
 
     private async searchTokens() {
-        return (
+        const specificTokens = (
             await Promise.allSettled([
                 fetchJSON<Array<FungibleTokenResult<ChainId, SchemaType>>>(
                     urlcat(DSEARCH_BASE_URL, '/fungible-tokens/specific-list.json'),
@@ -152,6 +152,15 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                     undefined,
                     fetchCached,
                 ),
+            ])
+        )
+            .map((v) => (v.status === 'fulfilled' && v.value ? v.value : []))
+            .flat()
+
+        if (specificTokens.length > 0) return specificTokens
+
+        return (
+            await Promise.allSettled([
                 this.NFTScanClient.get(),
                 this.CoinGeckoClient.get(),
                 this.CoinMarketCapClient.get(),
