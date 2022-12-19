@@ -45,10 +45,18 @@ export class NFTScanCollectionSearchAPI<ChainId, SchemaType>
 {
     async get(): Promise<Array<NonFungibleCollectionResult<ChainId, SchemaType>>> {
         const collectionsURL = urlcat(DSEARCH_BASE_URL, '/non-fungible-collections/nftscan.json')
-        return fetchJSON<Array<NonFungibleCollectionResult<ChainId, SchemaType>>>(
+        const collectionsFromSpecialList = await fetchJSON<Array<NonFungibleCollectionResult<ChainId, SchemaType>>>(
+            urlcat(DSEARCH_BASE_URL, '/non-fungible-collections/specific-list.json'),
+            undefined,
+            fetchCached,
+        )
+        const collections = await fetchJSON<Array<NonFungibleCollectionResult<ChainId, SchemaType>>>(
             collectionsURL,
             undefined,
             fetchCached,
         )
+        return (await Promise.allSettled([collectionsFromSpecialList, collections]))
+            .map((v) => (v.status === 'fulfilled' && v.value ? v.value : []))
+            .flat()
     }
 }
