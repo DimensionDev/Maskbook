@@ -23,7 +23,6 @@ import fromUnixTime from 'date-fns/fromUnixTime'
 import { resolveActivityTypeBackgroundColor } from '@masknet/web3-providers'
 import { useNonFungibleTokenActivities } from '../../trending/useTrending.js'
 import { useI18N } from '../../../../utils/index.js'
-import { pick } from 'lodash-es'
 
 const useStyles = makeStyles<{ isNFTProjectPopper: boolean }>()((theme, { isNFTProjectPopper }) => ({
     container: {
@@ -124,7 +123,6 @@ export function NonFungibleTickersTable({
         to: t('plugin_trader_table_to'),
         time: t('plugin_trader_table_time'),
     }
-    const columns: Cells[] = ['nft', 'method', 'value', 'from', 'to', 'time']
 
     const tickerRows: JSX.Element[] =
         activities?.map((x, index) => {
@@ -188,7 +186,7 @@ export function NonFungibleTickersTable({
                 ),
             }
 
-            const cells = Object.entries(pick(cellMap, columns)).map(([name, cell]) => (
+            const cells = Object.entries(cellMap).map(([name, cell]) => (
                 <TableCell key={name} className={classes.cell}>
                     {cell}
                 </TableCell>
@@ -200,7 +198,7 @@ export function NonFungibleTickersTable({
             )
         }) ?? []
 
-    const headCells = Object.values(pick(headCellMap, columns))
+    const headCells = Object.values(headCellMap)
 
     return (
         <TableContainer className={classes.container} ref={containerRef}>
@@ -229,7 +227,7 @@ export function NonFungibleTickersTable({
                             <TableRow>
                                 <TableCell
                                     className={classes.cell}
-                                    colSpan={columns.length}
+                                    colSpan={headCells.length}
                                     style={{ borderStyle: 'none' }}>
                                     <Typography className={classes.placeholder} align="center" color="textSecondary">
                                         {t('plugin_trader_no_data')}
