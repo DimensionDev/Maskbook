@@ -422,7 +422,7 @@ export interface NonFungibleCollectionOverview {
     average_price_24h?: number
     sales_24h?: number
     owners_total?: number
-    total_volume?:number
+    total_volume?: number
     items_total?: number
 }
 
