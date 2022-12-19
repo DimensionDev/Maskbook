@@ -95,7 +95,7 @@ export function SearchResultInspector(props: { keyword: string }) {
     }, [currentTab, JSON.stringify(socialAccount)])
     const isLoading = !ensRef.current || ensRef.current?.isLoading
     const isHiddenAll = Boolean(
-        (ensRef.current && ensRef.current?.reversedAddress === undefined) ||
+        (ensRef.current && (ensRef.current?.reversedAddress === undefined || !ensRef.current?.domain)) ||
             isContractAddressType ||
             isLoadingAddressType,
     )

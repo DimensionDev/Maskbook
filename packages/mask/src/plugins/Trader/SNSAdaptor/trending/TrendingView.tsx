@@ -24,7 +24,6 @@ import { useI18N } from '../../../../utils/index.js'
 import { resolveDataProviderLink, resolveDataProviderName } from '../../pipes.js'
 import { setStorage } from '../../storage/index.js'
 import { useAvailableCoins } from '../../trending/useAvailableCoins.js'
-import { usePreferredCoinId } from '../../trending/useCurrentCoinId.js'
 import { useCurrentDataProvider } from '../../trending/useCurrentDataProvider.js'
 import { usePriceStats } from '../../trending/usePriceStats.js'
 import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending.js'
@@ -154,22 +153,32 @@ export function TrendingView(props: TrendingViewProps) {
     // #endregion
 
     // #region merge trending
-    const coinId = usePreferredCoinId(name, dataProvider, id)
-    const trendingById = useTrendingById(asset ? '' : coinId, dataProvider, expectedChainId, searchedContractAddress)
+
     const trendingByKeyword = useTrendingByKeyword(
         tagType,
-        coinId || asset ? '' : name,
+        asset ? '' : name,
         dataProvider,
         expectedChainId,
         searchedContractAddress,
     )
+    const coinId = trendingByKeyword.value?.currency?.id
+    const trendingById = useTrendingById(
+        asset ? (searchedContractAddress ? '' : coinId || '') : '',
+        dataProvider,
+        expectedChainId,
+        searchedContractAddress,
+    )
+
     const {
         value: { currency, trending } = {},
         error: trendingError,
         loading: loadingTrending,
-    } = asset ?? (coinId ? trendingById : trendingByKeyword)
+    } = asset ??
+    ((coinId || dataProvider === DataProvider.CoinGecko) && trendingById.value?.trending
+        ? trendingById
+        : trendingByKeyword)
     // #endregion
-
+    console.log({ trendingById, trendingByKeyword })
     const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
 
     // #region stats
