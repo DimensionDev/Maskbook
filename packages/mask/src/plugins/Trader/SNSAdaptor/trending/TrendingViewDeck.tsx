@@ -1,14 +1,13 @@
 import { Icons } from '@masknet/icons'
 import { useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { SourceType, formatCurrency, TokenType } from '@masknet/web3-shared-base'
+import { SourceType, formatCurrency, TokenType, TokenResult } from '@masknet/web3-shared-base'
 import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
 import { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColors, MaskLightTheme, MaskDarkTheme } from '@masknet/theme'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import {
     Avatar,
     Button,
@@ -134,11 +133,11 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     stats: Stat[]
     currency: Currency
     trending: TrendingAPI.Trending
-    setResult: (a: Web3Helper.TokenResultAll) => void
-    result: Web3Helper.TokenResultAll
+    setResult: (a: TokenResult<ChainId, SchemaType>) => void
+    result: TokenResult<ChainId, SchemaType>
     isProfilePage?: boolean
     isNFTProjectPopper?: boolean
-    resultList?: Web3Helper.TokenResultAll[]
+    resultList?: Array<TokenResult<ChainId, SchemaType>>
     children?: React.ReactNode
     isPreciseSearch?: boolean
     isTokenTagPopper?: boolean

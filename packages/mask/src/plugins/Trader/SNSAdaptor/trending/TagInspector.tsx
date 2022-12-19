@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import type { TokenResult } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
-import type { Web3Helper } from '@masknet/web3-helpers'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TrendingPopper } from './TrendingPopper.js'
 import { TrendingView } from './TrendingView.js'
 
@@ -11,7 +11,7 @@ export interface TagInspectorProps {}
 export function TagInspector(props: TagInspectorProps) {
     const createTrendingView = useCallback(
         (
-            resultList: Web3Helper.TokenResultAll[],
+            resultList: Array<TokenResult<ChainId, SchemaType>>,
             address?: string,
             isNFTProjectPopper?: boolean,
             reposition?: () => void,
@@ -35,7 +35,7 @@ export function TagInspector(props: TagInspectorProps) {
 }
 
 interface TrendingViewWrapperProps {
-    resultList: Web3Helper.TokenResultAll[]
+    resultList: Array<TokenResult<ChainId, SchemaType>>
     address?: string
     isNFTProjectPopper?: boolean
     reposition?: () => void

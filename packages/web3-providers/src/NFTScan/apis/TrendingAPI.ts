@@ -17,7 +17,6 @@ import {
     getContractSymbol,
     fetchFromNFTScanWebAPI,
     resolveNFTScanHostName,
-    NFTScanChainId,
 } from '../helpers/EVM.js'
 import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
@@ -88,11 +87,11 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinActivities(
-        chainId: Web3Helper.ChainIdAll,
+        chainId: ChainId,
         contractAddress: string,
         pageIndex: number,
     ): Promise<NonFungibleTokenActivity[] | undefined> {
-        if (!isValidChainId(chainId as NFTScanChainId)) return
+        if (!isValidChainId(chainId)) return
         const path = urlcat('/nftscan/getTransactionByNftContract', {
             contract: contractAddress,
             filterType: 'all',
@@ -101,11 +100,11 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         })
         const response = await fetchFromNFTScanWebAPI<
             Response<{ nft_tx_record: NonFungibleTokenActivity[]; nft_tx_total: number }>
-        >(chainId as NFTScanChainId, path)
+        >(chainId, path)
         if (!response?.data.nft_tx_record) return
         return response.data.nft_tx_record.map((x) => ({
             ...x,
-            transactionLink: `${resolveNFTScanHostName(chainId as NFTScanChainId)}/${x.transaction_hash}`,
+            transactionLink: `${resolveNFTScanHostName(chainId)}/${x.transaction_hash}`,
         }))
     }
 
@@ -212,10 +211,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                 type: TokenType.NonFungible,
                 description: collection.description,
                 image_url: collection.logo_url,
-                home_urls: compact([
-                    `${resolveNFTScanHostName(chainId as NFTScanChainId)}/${address}`,
-                    collection.website,
-                ]),
+                home_urls: compact([`${resolveNFTScanHostName(chainId)}/${address}`, collection.website]),
                 community_urls: [
                     {
                         type: 'twitter',

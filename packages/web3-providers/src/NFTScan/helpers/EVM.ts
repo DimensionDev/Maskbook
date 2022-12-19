@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import Web3SDK from 'web3'
 import type { AbiItem } from 'web3-utils'
 import { first } from 'lodash-es'
-import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
 import {
@@ -33,30 +33,29 @@ import { getPaymentToken } from '../../helpers/getPaymentToken.js'
 import { parseJSON } from '../../helpers/parseJSON.js'
 import type { NonFungibleTokenAPI } from '../../entry-types.js'
 
-export type NFTScanChainId =
-    | ChainId.Mainnet
-    | ChainId.Matic
-    | ChainId.BSC
-    | ChainId.Arbitrum
-    | ChainId.Optimism
-    | ChainId.xDai
-    | ChainId.Avalanche
-
-export const resolveNFTScanHostName = createLookupTableResolver<NFTScanChainId, string>(
-    {
-        [ChainId.Mainnet]: 'https://www.nftscan.com',
-        [ChainId.Matic]: 'https://polygon.nftscan.com',
-        [ChainId.BSC]: 'https://bnb.nftscan.com',
-        [ChainId.Arbitrum]: 'https://arbitrum.nftscan.com/',
-        [ChainId.Avalanche]: 'https://avax.nftscan.com/',
-        [ChainId.Optimism]: 'https://optimism.nftscan.com/',
-        [ChainId.xDai]: 'https://cronos.nftscan.com/',
-    },
-    '',
-)
+export function resolveNFTScanHostName(chainId: ChainId) {
+    switch (chainId) {
+        case ChainId.Mainnet:
+            return 'https://www.nftscan.com'
+        case ChainId.Matic:
+            return 'https://www.nftscan.com'
+        case ChainId.BSC:
+            return 'https://www.nftscan.com'
+        case ChainId.Arbitrum:
+            return 'https://www.nftscan.com'
+        case ChainId.Avalanche:
+            return 'https://www.nftscan.com'
+        case ChainId.Optimism:
+            return 'https://www.nftscan.com'
+        case ChainId.xDai:
+            return 'https://www.nftscan.com'
+        default:
+            return ''
+    }
+}
 
 export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, init?: RequestInit) {
-    const host = resolveNFTScanHostName(chainId as NFTScanChainId)
+    const host = resolveNFTScanHostName(chainId)
     if (!host) return
 
     const response = await fetch(urlcat(NFTSCAN_URL, pathname), {
@@ -103,21 +102,29 @@ export async function fetchFromNFTScanRestFulAPI<T>(pathname: string, init?: Req
     return json as T
 }
 
-const NFTScanAPIChainResolver = createLookupTableResolver<NFTScanChainId, string>(
-    {
-        [ChainId.Mainnet]: 'ETH',
-        [ChainId.Matic]: 'MATIC',
-        [ChainId.BSC]: 'BNB',
-        [ChainId.Arbitrum]: 'Arbitrum',
-        [ChainId.Optimism]: 'Optimism',
-        [ChainId.xDai]: 'Gnosis',
-        [ChainId.Avalanche]: 'Avalanche',
-    },
-    () => 'ETH',
-)
+function resolveNFTScanAPIChain(chainId: ChainId): string {
+    switch (chainId) {
+        case ChainId.Mainnet:
+            return 'ETH'
+        case ChainId.Matic:
+            return 'MATIC'
+        case ChainId.BSC:
+            return 'BNB'
+        case ChainId.Arbitrum:
+            return 'Arbitrum'
+        case ChainId.Optimism:
+            return 'Optimism'
+        case ChainId.xDai:
+            return 'Gnosis'
+        case ChainId.Avalanche:
+            return 'Avalanche'
+        default:
+            return 'ETH'
+    }
+}
 
 export async function fetchFromNFTScanWebAPI<T>(chainId: ChainId, pathname: string, init?: RequestInit) {
-    const host = resolveNFTScanHostName(chainId as NFTScanChainId)
+    const host = resolveNFTScanHostName(chainId)
     if (!host) return
 
     const response = await fetch(urlcat(NFTSCAN_API, pathname), {
@@ -125,7 +132,7 @@ export async function fetchFromNFTScanWebAPI<T>(chainId: ChainId, pathname: stri
         headers: {
             'content-type': 'application/json',
             ...init?.headers,
-            chain: NFTScanAPIChainResolver(chainId as NFTScanChainId),
+            chain: resolveNFTScanAPIChain(chainId),
         },
         cache: 'no-cache',
     })
@@ -148,14 +155,10 @@ export async function getContractSymbol(address: string, chainId: ChainId) {
 }
 
 export function createPermalink(chainId: ChainId, address: string, tokenId: string) {
-    return urlcat(
-        resolveNFTScanHostName(chainId as NFTScanChainId) || 'https://www.nftscan.com',
-        '/:address/:tokenId',
-        {
-            address,
-            tokenId,
-        },
-    )
+    return urlcat(resolveNFTScanHostName(chainId) || 'https://www.nftscan.com', '/:address/:tokenId', {
+        address,
+        tokenId,
+    })
 }
 
 function getAssetTraits(asset: EVM.Asset): NonFungibleTokenTrait[] {

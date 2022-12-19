@@ -3,12 +3,14 @@ import { groupBy, toPairs, isEqual } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { TokenIcon } from '@masknet/shared'
-import { SearchResultType } from '@masknet/web3-shared-base'
+import { SearchResultType, TokenResult } from '@masknet/web3-shared-base'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { RadioButtonUnchecked as RadioButtonUncheckedIcon } from '@mui/icons-material'
 import { Divider, MenuItem, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/system'
 import type { Coin } from '../../types/index.js'
+import type { ChainId } from '../../../Referral/types.js'
+import type { SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     coinMenu: {
@@ -146,9 +148,9 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, result, onSelect }) =>
 export interface CoinMenuProps {
     open: boolean
     anchorEl: HTMLElement | null
-    optionList: Web3Helper.TokenResultAll[]
-    result: Web3Helper.TokenResultAll
-    onChange?: (a: Web3Helper.TokenResultAll) => void
+    optionList: Array<TokenResult<ChainId, SchemaType>>
+    result: TokenResult<ChainId, SchemaType>
+    onChange?: (a: TokenResult<ChainId, SchemaType>) => void
     onClose?: () => void
 }
 
@@ -167,7 +169,7 @@ export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({
 }) => {
     const { classes } = useStyles()
     const onSelect = useCallback(
-        (value: Web3Helper.TokenResultAll) => {
+        (value: TokenResult<ChainId, SchemaType>) => {
             onChange?.(value)
             onClose?.()
         },
