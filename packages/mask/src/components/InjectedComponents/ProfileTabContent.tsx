@@ -290,7 +290,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const { value: collectionList } = useCollectionByTwitterHandler(currentVisitingUserId)
     const NFTProjectAddress = collectionList?.[0].address
-
     if (hidden) return null
 
     if (NFTProjectAddress)

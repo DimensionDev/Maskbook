@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useContext } from 'react'
 import { compact } from 'lodash-es'
+import { TrendingViewContext } from './context.js'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import {
     useChainContext,
@@ -107,14 +108,10 @@ export interface TrendingViewProps {
     setResult: (a: TokenResult<ChainId, SchemaType>) => void
     result: TokenResult<ChainId, SchemaType>
     resultList?: Array<TokenResult<ChainId, SchemaType>>
-    isPreciseSearch?: boolean
-    isProfilePage?: boolean
     address?: string
-    isNFTProjectPopper?: boolean
     searchedContractAddress?: string
     expectedChainId?: ChainId
     onUpdate?: () => void
-    isTokenTagPopper?: boolean
 }
 
 enum ContentTabs {
@@ -126,18 +123,8 @@ enum ContentTabs {
 }
 
 export function TrendingView(props: TrendingViewProps) {
-    const {
-        isTokenTagPopper = true,
-        isNFTProjectPopper = false,
-        isProfilePage = false,
-        searchedContractAddress,
-        isPreciseSearch,
-        expectedChainId,
-        resultList,
-        result,
-        setResult,
-    } = props
-
+    const { searchedContractAddress, expectedChainId, resultList, result, setResult } = props
+    const { isTokenTagPopper, isNFTProjectPopper, isProfilePage, isPreciseSearch } = useContext(TrendingViewContext)
     const { t } = useI18N()
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
@@ -251,9 +238,6 @@ export function TrendingView(props: TrendingViewProps) {
                 <TrendingViewSkeleton
                     classes={{ footer: classes.footerSkeleton }}
                     TrendingCardProps={{ classes: { root: classes.root } }}
-                    isNFTProjectPopper={isNFTProjectPopper}
-                    isProfilePage={isProfilePage}
-                    isTokenTagPopper={isTokenTagPopper}
                 />
             </ThemeProvider>
         )
@@ -272,12 +256,8 @@ export function TrendingView(props: TrendingViewProps) {
             setResult={setResult}
             resultList={resultList}
             result={result}
-            isPreciseSearch={isPreciseSearch}
-            isProfilePage={isProfilePage}
-            isNFTProjectPopper={isNFTProjectPopper}
             currency={trending.currency}
             trending={trending}
-            isTokenTagPopper={isTokenTagPopper}
             TrendingCardProps={{ classes: { root: classes.root } }}>
             <TabContext value={currentTab}>
                 <Stack px={2}>

@@ -5,6 +5,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TrendingPopper } from './TrendingPopper.js'
 import { TrendingView } from './TrendingView.js'
+import { TrendingViewProvider } from './context.js'
 
 export interface TagInspectorProps {}
 
@@ -44,14 +45,18 @@ interface TrendingViewWrapperProps {
 function TrendingViewWrapper({ resultList, reposition, address, isNFTProjectPopper }: TrendingViewWrapperProps) {
     const [result, setResult] = useState(resultList[0])
     return (
-        <TrendingView
-            setResult={setResult}
-            result={result}
-            resultList={resultList}
-            onUpdate={reposition}
-            address={address}
-            isNFTProjectPopper={isNFTProjectPopper}
+        <TrendingViewProvider
+            isNFTProjectPopper={Boolean(isNFTProjectPopper)}
+            isProfilePage={false}
             isTokenTagPopper={!isNFTProjectPopper}
-        />
+            isPreciseSearch={false}>
+            <TrendingView
+                setResult={setResult}
+                result={result}
+                resultList={resultList}
+                onUpdate={reposition}
+                address={address}
+            />
+        </TrendingViewProvider>
     )
 }

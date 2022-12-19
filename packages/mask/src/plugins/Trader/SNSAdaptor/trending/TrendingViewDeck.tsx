@@ -20,12 +20,13 @@ import {
     useTheme,
 } from '@mui/material'
 import { first, last } from 'lodash-es'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useRef, useState, useContext } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin.js'
 import { PluginTransakMessages } from '../../../Transak/messages.js'
 import type { Currency, Stat } from '../../types/index.js'
 import { CoinMenu } from './CoinMenu.js'
+import { TrendingViewContext } from './context.js'
 import { CoinIcon } from './components/index.js'
 import { PriceChanged } from './PriceChanged.js'
 import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
@@ -135,30 +136,15 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     trending: TrendingAPI.Trending
     setResult: (a: TokenResult<ChainId, SchemaType>) => void
     result: TokenResult<ChainId, SchemaType>
-    isProfilePage?: boolean
-    isNFTProjectPopper?: boolean
     resultList?: Array<TokenResult<ChainId, SchemaType>>
     children?: React.ReactNode
-    isPreciseSearch?: boolean
-    isTokenTagPopper?: boolean
     TrendingCardProps?: Partial<TrendingCardProps>
 }
 
 export function TrendingViewDeck(props: TrendingViewDeckProps) {
-    const {
-        trending,
-        stats,
-        children,
-        TrendingCardProps,
-        isProfilePage,
-        isNFTProjectPopper = false,
-        isTokenTagPopper = true,
-        isPreciseSearch = false,
-        resultList = [],
-        result,
-        setResult,
-    } = props
+    const { trending, stats, children, TrendingCardProps, resultList = [], result, setResult } = props
     const { coin, market } = trending
+    const { isNFTProjectPopper, isTokenTagPopper, isPreciseSearch } = useContext(TrendingViewContext)
 
     const { t } = useI18N()
     const theme = useTheme()
@@ -199,14 +185,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     return (
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.cardHeader}>
-                {isNFTProjectPopper ? null : (
-                    <TrendingViewDescriptor
-                        trending={trending}
-                        isProfilePage={isProfilePage}
-                        isNFTProjectPopper={isNFTProjectPopper}
-                        isTokenTagPopper={isTokenTagPopper}
-                    />
-                )}
+                {isNFTProjectPopper ? null : <TrendingViewDescriptor trending={trending} />}
                 <Stack className={classes.headline}>
                     <Stack gap={2} flexGrow={1}>
                         <Stack>
@@ -334,12 +313,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 </Paper>
                 {isNFTProjectPopper ? (
                     <section className={classes.pluginDescriptorWrapper}>
-                        <TrendingViewDescriptor
-                            trending={trending}
-                            isProfilePage={isProfilePage}
-                            isNFTProjectPopper={isNFTProjectPopper}
-                            isTokenTagPopper={isTokenTagPopper}
-                        />
+                        <TrendingViewDescriptor trending={trending} />
                     </section>
                 ) : null}
             </CardContent>

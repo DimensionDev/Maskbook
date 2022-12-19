@@ -2,9 +2,11 @@ import { Box } from '@mui/system'
 import { resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { DataProviderIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
+import { useContext } from 'react'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { Stack, Typography } from '@mui/material'
 import { useI18N } from '../../../../utils/index.js'
+import { TrendingViewContext } from './context.js'
 import { PluginDescriptor } from './PluginDescriptor.js'
 
 const useStyles = makeStyles<{
@@ -37,14 +39,11 @@ const useStyles = makeStyles<{
 
 export interface TrendingViewDescriptorProps {
     trending: TrendingAPI.Trending
-    isProfilePage?: boolean
-    isNFTProjectPopper?: boolean
-    isTokenTagPopper?: boolean
 }
 
 export function TrendingViewDescriptor(props: TrendingViewDescriptorProps) {
-    const { trending, isProfilePage, isNFTProjectPopper = false, isTokenTagPopper = true } = props
-
+    const { trending } = props
+    const { isProfilePage, isNFTProjectPopper = false, isTokenTagPopper = true } = useContext(TrendingViewContext)
     const { t } = useI18N()
 
     const { classes } = useStyles({ isTokenTagPopper, isNFTProjectPopper })

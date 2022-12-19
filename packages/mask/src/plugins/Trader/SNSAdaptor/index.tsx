@@ -5,6 +5,7 @@ import { useState } from 'react'
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base.js'
 import { TrendingView } from './trending/TrendingView.js'
+import { TrendingViewProvider } from './trending/context.js'
 import { useWeb3State, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { TraderDialog } from './trader/TraderDialog.js'
 import { TagInspector } from './trending/TagInspector.js'
@@ -47,22 +48,25 @@ const sns: Plugin.SNSAdaptor.Definition<
                             pluginID,
                             chainId: chainId ?? ChainId.Mainnet,
                         }}>
-                        <TrendingView
-                            isProfilePage={isProfilePage}
+                        <TrendingViewProvider
+                            isNFTProjectPopper={false}
+                            isProfilePage={Boolean(isProfilePage)}
                             isTokenTagPopper={false}
-                            setResult={setResult}
-                            result={result}
-                            resultList={resultList}
-                            expectedChainId={chainId ?? ChainId.Mainnet}
-                            isPreciseSearch={Boolean(Others?.isValidAddress(keyword))}
-                            searchedContractAddress={
-                                Others?.isValidAddress(keyword)
-                                    ? keyword
-                                    : Others?.isValidAddress(address)
-                                    ? address
-                                    : undefined
-                            }
-                        />
+                            isPreciseSearch={Boolean(Others?.isValidAddress(keyword))}>
+                            <TrendingView
+                                setResult={setResult}
+                                result={result}
+                                resultList={resultList}
+                                expectedChainId={chainId ?? ChainId.Mainnet}
+                                searchedContractAddress={
+                                    Others?.isValidAddress(keyword)
+                                        ? keyword
+                                        : Others?.isValidAddress(address)
+                                        ? address
+                                        : undefined
+                                }
+                            />
+                        </TrendingViewProvider>
                     </Web3ContextProvider>
                 )
             },

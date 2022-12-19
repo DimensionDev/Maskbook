@@ -1,6 +1,8 @@
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { CardContent, Stack, Typography } from '@mui/material'
 import { useI18N } from '../../../../utils/index.js'
+import { useContext } from 'react'
+import { TrendingViewContext } from './context.js'
 import { PluginDescriptor } from './PluginDescriptor.js'
 import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
 
@@ -18,13 +20,11 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface TrendingViewSkeletonProps extends withClasses<'content' | 'footer'> {
     TrendingCardProps?: Partial<TrendingCardProps>
-    isNFTProjectPopper?: boolean
-    isProfilePage?: boolean
-    isTokenTagPopper?: boolean
 }
 
 export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
-    const { TrendingCardProps, isNFTProjectPopper, isProfilePage, isTokenTagPopper } = props
+    const { TrendingCardProps } = props
+    const { isNFTProjectPopper, isProfilePage, isTokenTagPopper } = useContext(TrendingViewContext)
     const { classes } = useStyles(undefined, { props })
     const { t } = useI18N()
 
