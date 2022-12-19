@@ -1,6 +1,7 @@
 import { ChainId, getTrendingConstants, isValidChainId } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { chunk, first, flatten } from 'lodash-es'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 const TokenFields = `
   fragment TokenFields on Token {
@@ -87,7 +88,7 @@ export type Bundle = {
     ethPrice: number
 }
 
-async function fetchFromUniswapV2Subgraph<T>(chainId: ChainId, query: string) {
+async function fetchFromUniswapV2Subgraph<T>(chainId: Web3Helper.ChainIdAll, query: string) {
     const subgraphURL = getTrendingConstants(chainId).UNISWAP_V2_SUBGRAPH_URL
     if (!subgraphURL) return null
     const response = await fetch(subgraphURL, {
@@ -105,7 +106,7 @@ async function fetchFromUniswapV2Subgraph<T>(chainId: ChainId, query: string) {
  * Fetch Ether price of given block
  * @param blockNumber if don't give, will return latest price
  */
-export async function fetchEtherPriceByBlockNumber(chainId: ChainId, blockNumber?: string) {
+export async function fetchEtherPriceByBlockNumber(chainId: Web3Helper.ChainIdAll, blockNumber?: string) {
     const data = await fetchFromUniswapV2Subgraph<{
         bundles: Bundle[]
     }>(
@@ -126,7 +127,10 @@ export async function fetchEtherPriceByBlockNumber(chainId: ChainId, blockNumber
  * Fetch Ether price of list of blocks
  * @param blockNumbers
  */
-export async function fetchEtherPricesByBlockNumbers(chainId: ChainId, blockNumbers: Array<string | undefined>) {
+export async function fetchEtherPricesByBlockNumbers(
+    chainId: Web3Helper.ChainIdAll,
+    blockNumbers: Array<string | undefined>,
+) {
     const queries = blockNumbers.map((x) => {
         return `
             b${x}: bundle(id: "1", ${x ? `block: { number: ${x} }` : ''}) {
@@ -229,7 +233,7 @@ export async function fetchTokenDayData(chainId: ChainId, address: string, date:
  * @param address
  * @param blockNumber
  */
-export async function fetchTokenData(chainId: ChainId, address: string, blockNumber?: string) {
+export async function fetchTokenData(chainId: Web3Helper.ChainIdAll, address: string, blockNumber?: string) {
     const data = await fetchFromUniswapV2Subgraph<{
         tokens: Token[]
         pairs0: Pair[]
@@ -263,7 +267,7 @@ export async function fetchTokenData(chainId: ChainId, address: string, blockNum
  * fetch pairs bulk data
  * @param pairList
  */
-export async function fetchPairsBulk(chainId: ChainId, pairList: string[]) {
+export async function fetchPairsBulk(chainId: Web3Helper.ChainIdAll, pairList: string[]) {
     const data = await fetchFromUniswapV2Subgraph<{
         pairs: Pair[]
     }>(
@@ -288,7 +292,7 @@ export async function fetchPairsBulk(chainId: ChainId, pairList: string[]) {
  * @param pairs
  * @param blockNumber
  */
-export async function fetchPairsHistoricalBulk(chainId: ChainId, pairs: string[], blockNumber?: string) {
+export async function fetchPairsHistoricalBulk(chainId: Web3Helper.ChainIdAll, pairs: string[], blockNumber?: string) {
     const data = await fetchFromUniswapV2Subgraph<{
         pairs: Pair[]
     }>(
@@ -313,7 +317,7 @@ export async function fetchPairsHistoricalBulk(chainId: ChainId, pairs: string[]
  * @param pairAddress
  * @param blockNumber
  */
-export async function fetchPairData(chainId: ChainId, pairAddress: string, blockNumber?: string) {
+export async function fetchPairData(chainId: Web3Helper.ChainIdAll, pairAddress: string, blockNumber?: string) {
     const data = await fetchFromUniswapV2Subgraph<{
         pairs: Pair[]
     }>(

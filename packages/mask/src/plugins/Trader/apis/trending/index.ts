@@ -12,14 +12,14 @@ export async function getCoinInfoByAddress(address: string): Promise<TrendingAPI
 
 // #region get trending info
 export async function getCoinTrending(
-    chainId: ChainId,
+    chainId: Web3Helper.ChainIdAll,
     id: string,
     currency: Currency,
     dataProvider: SourceType,
 ): Promise<Trending | undefined> {
     switch (dataProvider) {
         case SourceType.CoinGecko:
-            return CoinGeckoTrending.getCoinTrending(chainId, id, currency)
+            return CoinGeckoTrending.getCoinTrending(id, currency)
         case SourceType.CoinMarketCap:
             return CoinMarketCap.getCoinTrending(chainId, id, currency)
         case SourceType.UniswapInfo:

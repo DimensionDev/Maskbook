@@ -46,10 +46,9 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     private opensea = new OpenSeaAPI()
 
     private async getCollection(
-        chainId: ChainId,
+        chainId: Web3Helper.ChainIdAll,
         address: string,
     ): Promise<NonFungibleTokenAPI.Collection | undefined> {
-        if (!isValidChainId(chainId)) return
         const path = urlcat('/api/v2/collections/:address', {
             address,
             contract_address: address,
@@ -153,7 +152,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinTrending(
-        chainId: ChainId,
+        chainId: Web3Helper.ChainIdAll,
         /** address as id */ id: string,
         currency: TrendingAPI.Currency,
     ): Promise<TrendingAPI.Trending> {

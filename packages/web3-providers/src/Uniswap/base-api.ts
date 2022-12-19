@@ -1,6 +1,7 @@
 import { BigNumber } from 'bignumber.js'
 import { isGreaterThan, isLessThanOrEqualTo, TokenType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { Pair } from './uniswap-v2-subgraph.js'
 import {
     fetchEtherPriceByBlockNumber,
@@ -162,7 +163,7 @@ export async function getAllCoinsByKeyword(chainId: ChainId, keyword: string): P
  * @param chainId ChainId
  * @param id the token address
  */
-export async function getCoinInfo(chainId: ChainId, id: string) {
+export async function getCoinInfo(chainId: Web3Helper.ChainIdAll, id: string) {
     // #region get timestamps from one hour ago, ,one day ago, a week ago
     const { utcOneHourBack, utcOneDayBack, utcWeekBack, utcTwoWeekBack, utcOneMonthBack, utcOneYearBack } =
         getTimestampForChanges()
@@ -311,7 +312,7 @@ export async function getCoinInfo(chainId: ChainId, id: string) {
     }
 }
 
-export async function getBulkPairData(chainId: ChainId, pairList: string[]) {
+export async function getBulkPairData(chainId: Web3Helper.ChainIdAll, pairList: string[]) {
     type Data = Pair | undefined
     const { utcOneDayBack } = getTimestampForChanges()
     const oneDayBlock = await fetchBlockNumberByTimestamp(chainId, utcOneDayBack)

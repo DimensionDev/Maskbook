@@ -141,7 +141,7 @@ export async function fetchFromNFTScanWebAPI<T>(chainId: Web3Helper.ChainIdAll, 
     return json as T
 }
 
-export async function getContractSymbol(address: string, chainId: ChainId) {
+export async function getContractSymbol(address: string, chainId: Web3Helper.ChainIdAll) {
     const RPC_URL = first(getRPCConstants(chainId).RPC_URLS)
     if (!RPC_URL) return ''
 

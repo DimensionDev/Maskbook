@@ -1,12 +1,13 @@
 import { ChainId, getTrendingConstants } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { chunk, first, flatten } from 'lodash-es'
 
 interface Block {
     number: string
 }
 
-async function fetchFromEthereumBlocksSubgraph<T>(chainId: ChainId, query: string) {
+async function fetchFromEthereumBlocksSubgraph<T>(chainId: Web3Helper.ChainIdAll, query: string) {
     const subgraphURL = getTrendingConstants(chainId).ETHEREUM_BLOCKS_SUBGRAPH_URL
     if (!subgraphURL) return null
     const response = await fetch(subgraphURL, {
@@ -24,7 +25,7 @@ async function fetchFromEthereumBlocksSubgraph<T>(chainId: ChainId, query: strin
  * Fetches the block number near the given timestamp.
  * @param timestamp
  */
-export async function fetchBlockNumberByTimestamp(chainId: ChainId, timestamp: number) {
+export async function fetchBlockNumberByTimestamp(chainId: Web3Helper.ChainIdAll, timestamp: number) {
     const data = await fetchFromEthereumBlocksSubgraph<{
         blocks: Block[]
     }>(
@@ -101,7 +102,7 @@ export async function fetchBlockNumbersByTimestamps(chainId: ChainId, timestamps
  * the timestamps can't have too much item
  * @param timestamps
  */
-export async function fetchBlockNumbersObjectByTimestamps(chainId: ChainId, timestamps: number[]) {
+export async function fetchBlockNumbersObjectByTimestamps(chainId: Web3Helper.ChainIdAll, timestamps: number[]) {
     const queries = timestamps.map((x) => {
         return `
             t${x}: blocks(

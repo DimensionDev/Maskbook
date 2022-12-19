@@ -87,8 +87,9 @@ export function useTrendingById(
     currency?: TrendingAPI.Currency
     trending?: TrendingAPI.Trending | null
 }> {
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
+    const { chainId } = useChainContext({ chainId: expectedChainId })
     const currency = useCurrentCurrency(dataProvider)
+    const { Others } = useWeb3State()
     const {
         value: trending,
         loading,
@@ -97,7 +98,7 @@ export function useTrendingById(
         if (!id) return null
         if (!currency) return null
         if (!dataProvider) return null
-        if (!expectedChainId && dataProvider === SourceType.NFTScan) {
+        if ((!expectedChainId || Others?.isValidChainId(expectedChainId)) && dataProvider === SourceType.NFTScan) {
             return attemptUntil(
                 NFTSCAN_CHAIN_ID_LIST.map((chainId) => async () => {
                     try {
