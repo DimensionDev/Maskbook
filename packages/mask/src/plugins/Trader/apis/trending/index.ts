@@ -19,7 +19,7 @@ export async function getCoinTrending(
 ): Promise<Trending | undefined> {
     switch (dataProvider) {
         case SourceType.CoinGecko:
-            return CoinGeckoTrending.getCoinTrending(id, currency)
+            return CoinGeckoTrending.getCoinTrending(chainId, id, currency)
         case SourceType.CoinMarketCap:
             return CoinMarketCap.getCoinTrending(chainId, id, currency)
         case SourceType.UniswapInfo:
