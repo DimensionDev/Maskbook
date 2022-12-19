@@ -245,7 +245,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         {t('plugin_trader_rank', { rank: coin.market_cap_rank })}
                                     </Typography>
                                 ) : null}
-                                {resultList.length > 1 && !isPreciseSearch ? (
+                                {resultList.length > 1 && !isPreciseSearch && result.rank && result.rank > 200 ? (
                                     <>
                                         <IconButton
                                             sx={{ padding: 0 }}
