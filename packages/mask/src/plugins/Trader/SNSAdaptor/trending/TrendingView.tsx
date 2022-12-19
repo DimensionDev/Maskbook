@@ -178,7 +178,6 @@ export function TrendingView(props: TrendingViewProps) {
         ? trendingById
         : trendingByKeyword)
     // #endregion
-    console.log({ trendingById, trendingByKeyword })
     const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
 
     // #region stats
