@@ -1,3 +1,4 @@
+import { xmasBackground } from '@masknet/shared'
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import { CardContent, Stack, Typography } from '@mui/material'
 import { useI18N } from '../../../../utils/index.js'
@@ -7,7 +8,10 @@ import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
 const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(2),
-        background: theme.palette.maskColor.modalTitleBg,
+        backgroundImage: `linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), url(${xmasBackground})`,
+        backgroundColor: 'white',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center bottom',
     },
     content: {
         height: 162,
