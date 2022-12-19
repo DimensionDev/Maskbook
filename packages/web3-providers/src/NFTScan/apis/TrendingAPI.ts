@@ -74,10 +74,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         return response?.data ?? EMPTY_LIST
     }
 
-    async getCollectionOverview(
-        chainId: Web3Helper.ChainIdAll,
-        address: string,
-    ): Promise<NonFungibleCollectionOverview | undefined> {
+    async getCollectionOverview(address: string): Promise<NonFungibleCollectionOverview | undefined> {
         const path = urlcat('/api/v2/statistics/collection/:address', {
             address,
         })

@@ -126,10 +126,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
 
 export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
     const { t } = useI18N()
-    const { value: overview } = useTrendingOverviewByAddress(
-        props.trending.coin.address ?? '',
-        props.trending.coin.chainId,
-    )
+    const { value: overview } = useTrendingOverviewByAddress(props.trending.coin.address ?? '')
     const { classes } = useStyles()
 
     return (
