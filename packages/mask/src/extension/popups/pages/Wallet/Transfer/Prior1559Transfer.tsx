@@ -1,6 +1,6 @@
 import { memo, ReactElement, SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
 import { ChevronDown } from 'react-feather'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { z as zod } from 'zod'
 import { BigNumber } from 'bignumber.js'
 import { noop } from 'lodash-es'
@@ -40,6 +40,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
 import { useI18N } from '../../../../../utils/index.js'
+import Services from '../../../../service.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -166,6 +167,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
     const navigate = useNavigate()
+    const location = useLocation()
 
     const [addressTip, setAddressTip] = useState<{
         type: TransferAddressError
@@ -355,6 +357,17 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
         )
     }, [address, addressTip])
 
+    const handleCancel = useCallback(() => {
+        const params = new URLSearchParams(location.search)
+        const toBeClose = params.get('toBeClose')
+        if (toBeClose) {
+            Services.Helper.removePopupWindow()
+            return
+        }
+        navigate(-1)
+        return
+    }, [location])
+
     return (
         <FormProvider {...methods}>
             <Prior1559TransferUI
@@ -363,7 +376,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 openAccountMenu={openMenu}
                 openAssetMenu={openAssetMenu}
                 handleMaxClick={handleMaxClick}
-                handleCancel={() => navigate(-1)}
+                handleCancel={handleCancel}
                 handleConfirm={methods.handleSubmit(onSubmit)}
                 confirmLoading={loading}
                 maxAmount={maxAmount}

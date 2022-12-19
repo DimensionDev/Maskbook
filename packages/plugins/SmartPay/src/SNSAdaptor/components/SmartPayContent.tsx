@@ -1,16 +1,23 @@
 import { Icons } from '@masknet/icons'
 import { ImageIcon, useSnackbarCallback, TokenIcon, FormattedBalance, useMenuConfig } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages, NetworkPluginID, PluginID, PopupRoutes } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import {
+    useChainContext,
     useFungibleAssets,
     useFungibleTokenBalance,
     useNetworkDescriptor,
     useWeb3Connection,
     useWeb3State,
 } from '@masknet/web3-hooks-base'
-import { ChainId, formatEthereumAddress, SchemaType, useSmartPayConstants } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    formatEthereumAddress,
+    ProviderType,
+    SchemaType,
+    useSmartPayConstants,
+} from '@masknet/web3-shared-evm'
 import {
     Box,
     Button,
@@ -23,8 +30,8 @@ import {
     Radio,
     Typography,
 } from '@mui/material'
-import { useCopyToClipboard } from 'react-use'
-import { memo, useEffect, useMemo, useState } from 'react'
+import { useAsyncFn, useCopyToClipboard } from 'react-use'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { formatBalance, isLessThan, isSameAddress, Wallet } from '@masknet/web3-shared-base'
 import { compact, first, isNaN } from 'lodash-es'
 import { useI18N } from '../../locales/i18n_generated.js'
@@ -35,6 +42,7 @@ import { AccountsManagerPopover } from './AccountsManagePopover.js'
 import { useContainer } from 'unstated-next'
 import { SmartPayContext } from '../../context/SmartPayContext.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
     dialogContent: {
@@ -152,16 +160,19 @@ export const SmartPayContent = memo(() => {
 
     // #region Remote Dialog Controller
     const { openDialog: openApproveMaskDialog } = useRemoteControlledDialog(PluginSmartPayMessages.approveDialogEvent)
-    const { openDialog: openReceiveDialog } = useRemoteControlledDialog(PluginSmartPayMessages.receiveDialogEvent)
+    const { setDialog: setReceiveDialog } = useRemoteControlledDialog(PluginSmartPayMessages.receiveDialogEvent)
+    const { openDialog: openSwapDialog } = useRemoteControlledDialog(CrossIsolationMessages.events.swapDialogEvent)
     // #endregion
 
     // #region web3 state
+    const { openPopupWindow } = useSNSAdaptorContext()
+    const { account } = useChainContext()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Mumbai)
     const maskAddress = Others?.getMaskTokenAddress(ChainId.Mumbai)
 
-    const { value: assets, loading } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
+    const { value: assets } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
         chainId: ChainId.Mumbai,
         account: current?.address,
     })
@@ -263,6 +274,49 @@ export const SmartPayContent = memo(() => {
             },
         },
     )
+
+    // #region event handler
+
+    const connectToCurrent = useCallback(async () => {
+        if (isSameAddress(current?.address, account)) return
+        await connection?.connect({
+            account: current?.address,
+            chainId: ChainId.Mumbai,
+            owner: current?.owner,
+            identifier: current?.identifier,
+            providerType: ProviderType.MaskWallet,
+        })
+    }, [account, current, connection])
+    const [{ loading: openLuckDropLoading }, handleLuckDropClick] = useAsyncFn(async () => {
+        await connectToCurrent()
+        CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
+            reason: 'timeline',
+            open: true,
+            options: {
+                startupPlugin: PluginID.RedPacket,
+            },
+        })
+    }, [connectToCurrent])
+
+    const [{ loading: openSwapLoading }, handleSwapClick] = useAsyncFn(async () => {
+        await connectToCurrent()
+        openSwapDialog()
+    }, [connectToCurrent])
+
+    const [{ loading: openSendLoading }, handleSendClick] = useAsyncFn(async () => {
+        await connectToCurrent()
+        await openPopupWindow(PopupRoutes.Transfer, { toBeClose: 1 })
+    }, [connectToCurrent, openPopupWindow])
+
+    const handleReceiveClick = useCallback(() => {
+        setReceiveDialog({
+            open: true,
+            address: current?.address,
+            name: current?.name,
+        })
+    }, [current])
+
+    // #endregion
 
     useEffect(() => {
         if (!accounts?.length) return
@@ -396,16 +450,39 @@ export const SmartPayContent = memo(() => {
                 </List>
             </DialogContent>
             <DialogActions className={classes.dialogActions}>
-                <Button variant="roundedContained" startIcon={<Icons.RedPacket />} fullWidth size="small">
+                <ActionButton
+                    loading={openLuckDropLoading}
+                    variant="roundedContained"
+                    startIcon={<Icons.RedPacket />}
+                    fullWidth
+                    size="small"
+                    onClick={handleLuckDropClick}>
                     {t.lucky_drop()}
-                </Button>
-                <Button variant="roundedContained" startIcon={<Icons.SwapColorful />} fullWidth size="small">
+                </ActionButton>
+                <ActionButton
+                    loading={openSwapLoading}
+                    variant="roundedContained"
+                    startIcon={<Icons.SwapColorful />}
+                    fullWidth
+                    size="small"
+                    onClick={handleSwapClick}>
                     {t.swap()}
-                </Button>
-                <Button variant="roundedContained" startIcon={<Icons.SendColorful />} fullWidth size="small">
+                </ActionButton>
+                <ActionButton
+                    loading={openSendLoading}
+                    variant="roundedContained"
+                    startIcon={<Icons.SendColorful />}
+                    fullWidth
+                    size="small"
+                    onClick={handleSendClick}>
                     {t.send()}
-                </Button>
-                <Button variant="roundedContained" startIcon={<Icons.ReceiveColorful />} fullWidth size="small">
+                </ActionButton>
+                <Button
+                    variant="roundedContained"
+                    startIcon={<Icons.ReceiveColorful />}
+                    fullWidth
+                    size="small"
+                    onClick={handleReceiveClick}>
                     {t.receive()}
                 </Button>
             </DialogActions>

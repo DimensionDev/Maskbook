@@ -12,6 +12,7 @@ import { formatBalance } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
+import { first } from 'lodash-es'
 
 const useStyles = makeStyles()({
     assetItem: {
@@ -34,7 +35,7 @@ const Transfer = memo(() => {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { assets, currentToken } = useContainer(WalletContext)
-    const [selectedAsset, setSelectedAsset] = useState(currentToken)
+    const [selectedAsset, setSelectedAsset] = useState(currentToken ?? first(assets))
 
     const otherWallets = useMemo(
         () => wallets.map((wallet) => ({ name: wallet.name ?? '', address: wallet.address })),

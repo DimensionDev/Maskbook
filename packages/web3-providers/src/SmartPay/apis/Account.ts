@@ -92,7 +92,7 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         const names = Array.from<'owner'>({ length: options.length }).fill('owner')
         const calls = this.multicall.createMultipleContractSingleData(contracts, names, [])
         const results = await this.multicall.call(chainId, contracts, names, calls)
-        const owners = compact(results.flatMap((x) => (x.succeed && x.value ? x.value : '')))
+        const owners = results.flatMap((x) => (x.succeed && x.value ? x.value : ''))
 
         // the owner didn't deploy any account before.
         if (!owners.length) {
@@ -101,10 +101,7 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
 
         return compact(
             owners.map((x, index) => {
-                // ensure the contract account has been deployed
-                if (!isValidAddress(x)) return
-
-                return this.createContractAccount(chainId, options[index], owner, owner, true)
+                return this.createContractAccount(chainId, options[index], owner, owner, isValidAddress(x))
             }),
         )
     }

@@ -4,7 +4,7 @@ import { PLUGIN_ID } from './constants.js'
 type SmartPayDescriptionDialogEvent = { open: boolean }
 type SmartPayDialogEvent = { open: boolean }
 type ApproveDialogEvent = { open: boolean }
-type ReceiveDialogEvent = { open: boolean; address?: string }
+type ReceiveDialogEvent = { open: boolean; address?: string; name?: string }
 
 export interface PluginSmartPayMessage {
     smartPayDescriptionDialogEvent: SmartPayDescriptionDialogEvent
