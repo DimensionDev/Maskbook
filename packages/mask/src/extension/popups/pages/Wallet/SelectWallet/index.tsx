@@ -131,15 +131,19 @@ const SelectWallet = memo(() => {
             return
         }
 
+        const wallet = wallets.find((x) => isSameAddress(x.address, selected))
         connection?.connect({
-            chainId,
+            // TODO: Just for test, will remove this logic
+            chainId: wallet?.owner ? ChainId.Mumbai : chainId,
             account: selected,
+            owner: wallet?.address,
+            identifier: wallet?.identifier,
         })
         if (chainId) {
             await WalletRPC.resolveMaskAccount([selected])
         }
         return Services.Helper.removePopupWindow()
-    }, [chainId, selected, isPopup, connection])
+    }, [chainId, selected, isPopup, connection, wallets])
 
     useEffect(() => {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
