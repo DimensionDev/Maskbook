@@ -78,14 +78,26 @@ const useTabsStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.publicMain,
         fontSize: 18,
         fontWeight: 700,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        width: 250,
     },
     active: {
         color: theme.palette.maskColor.white,
+        width: 65,
+        height: 32,
+        fontSize: 12,
+        fontWeight: 700,
         backgroundColor: theme.palette.maskColor.success,
     },
     close: {
         color: theme.palette.maskColor.white,
-        backgroundColor: new Color(theme.palette.maskColor.publicSecond).alpha(0.1).toString(),
+        width: 65,
+        backgroundColor: new Color(theme.palette.maskColor.primary).alpha(0.1).toString(),
+        height: 32,
+        fontSize: 12,
+        fontWeight: 700,
     },
     iconBox: {
         position: 'absolute',
@@ -102,6 +114,13 @@ const useTabsStyles = makeStyles()((theme) => ({
     icon: {
         width: 20,
         height: 20,
+    },
+    statusBox: {
+        display: 'flex',
+        justifyContent: 'end',
+        alignItems: 'center',
+        height: 148,
+        flexDirection: 'column',
     },
 }))
 
@@ -183,47 +202,55 @@ export function PreviewCard(props: PreviewCardProps) {
 
     if (boxState === BoxState.UNKNOWN)
         return (
-            <Box sx={{ display: 'flex', padding: 2, justifyContent: 'center', alignItems: 'center' }}>
-                <LoadingBase />
+            <Box className={classes.statusBox}>
+                <Box sx={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <LoadingBase />
+                </Box>
             </Box>
         )
     if (boxState === BoxState.ERROR)
         return (
-            <Box display="flex" flexDirection="column" alignItems="center">
-                <Typography color="error">Something went wrong.</Typography>
+            <Box className={classes.statusBox}>
+                <Typography color="error">{t.failed()}</Typography>
                 <Button
                     sx={{
-                        margin: 1.125,
                         width: 254,
-                        backgroundColor: theme.palette.maskColor.dark,
+                        backgroundColor: theme.palette.maskColor.publicMain,
                         color: 'white',
-                        '&:.hover': {
-                            backgroundColor: theme.palette.maskColor.dark,
+                        '&:hover': {
+                            backgroundColor: theme.palette.maskColor.publicMain,
                         },
+                        height: 40,
+                        marginBottom: 2,
+                        marginTop: '26px',
                     }}
                     size="small"
+                    variant="roundedContained"
                     onClick={retryBoxInfo}>
-                    Retry
+                    {t.retry()}
                 </Button>
             </Box>
         )
     if (boxState === BoxState.NOT_FOUND || !boxInfo)
         return (
-            <Box display="flex" flexDirection="column" alignItems="center">
-                <Typography color="error">Failed to load box.</Typography>
+            <Box className={classes.statusBox}>
+                <Typography color="error">{t.failed()}</Typography>
                 <Button
                     sx={{
-                        margin: 1.125,
                         width: 254,
-                        backgroundColor: theme.palette.maskColor.dark,
+                        backgroundColor: theme.palette.maskColor.publicMain,
                         color: 'white',
-                        '&:.hover': {
-                            backgroundColor: theme.palette.maskColor.dark,
+                        '&:hover': {
+                            backgroundColor: theme.palette.maskColor.publicMain,
                         },
+                        height: 40,
+                        marginBottom: 2,
+                        marginTop: '26px',
                     }}
                     size="small"
+                    variant="roundedContained"
                     onClick={retryMaskBoxInfo}>
-                    Retry
+                    {t.retry()}
                 </Button>
             </Box>
         )
@@ -255,7 +282,9 @@ export function PreviewCard(props: PreviewCardProps) {
                         </Box>
                     </Box>
                     <Box sx={{ flex: 1 }}>
-                        <Typography className={classes.name}>{boxInfo.name}</Typography>
+                        <Typography title={boxInfo.name} className={classes.name}>
+                            {boxInfo.name}
+                        </Typography>
                         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'row' }}>
                             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'row' }}>
                                 <Typography
@@ -276,7 +305,7 @@ export function PreviewCard(props: PreviewCardProps) {
                                     {t.limit()}
                                 </Typography>
                                 <Typography color={theme.palette.maskColor.publicMain} fontSize={14} fontWeight="bold">
-                                    1
+                                    {boxInfo.personalLimit}
                                 </Typography>
                             </Box>
                             <Box sx={{ display: 'flex', flexDirection: 'row' }}>
