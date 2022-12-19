@@ -13,7 +13,7 @@ export class ENS_API implements DomainAPI.Provider<ChainId> {
     private get ens() {
         const provider = this.web3.currentProvider as HttpProvider
         return new ENS({
-            provider: createWeb3Provider(createWeb3Request(provider.send)),
+            provider: createWeb3Provider(createWeb3Request(provider.send.bind(provider))),
             network: ChainId.Mainnet,
         })
     }
