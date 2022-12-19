@@ -268,6 +268,7 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         )
 
         if (!response?.data.length) return createPageable(EMPTY_LIST, createIndicator(indicator))
+
         const orders = response.data.map((x) => createNonFungibleTokenOrderFromOrder(chainId, x))
         return createPageable(
             orders,

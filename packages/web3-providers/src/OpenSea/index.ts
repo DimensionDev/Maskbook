@@ -388,6 +388,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             response?.asset_events
                 ?.filter((x) => x.event_type === 'offer_entered')
                 .map((x) => createOrder(chainId, x)) ?? EMPTY_LIST
+
         return createPageable(
             offers,
             createIndicator(indicator),

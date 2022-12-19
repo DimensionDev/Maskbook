@@ -35,6 +35,7 @@ function useContext(initialState?: InitialState) {
     const events = useNonFungibleEvents(pluginID, tokenAddress, tokenId, {
         chainId,
         account: ownerAddress,
+        sourceType: SourceType.NFTScan,
     })
     const rarity = useNonFungibleRarity(pluginID, tokenAddress, tokenId, {
         chainId,
