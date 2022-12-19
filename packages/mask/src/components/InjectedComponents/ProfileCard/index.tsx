@@ -7,11 +7,11 @@ import { useActivatedPluginsSNSAdaptor, usePluginI18NField } from '@masknet/plug
 import { useAvailablePlugins, getProfileCardTabContent } from '@masknet/plugin-infra'
 import { useSocialAccountsBySettings, xmasBackgroundMini } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
-import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { LoadingBase, makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress, SocialIdentity } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
-import { Tab, Typography } from '@mui/material'
+import { Tab, ThemeProvider, Typography } from '@mui/material'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { MaskMessages, addressSorter, useI18N, useLocationChange } from '../../../utils/index.js'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
@@ -41,6 +41,7 @@ const useStyles = makeStyles()((theme) => {
         },
         header: {
             backgroundImage: `linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), url(${xmasBackgroundMini} )`,
+            backgroundColor: 'white',
             backgroundSize: 'cover',
             backgroundPosition: 'center bottom',
             padding: theme.spacing(2, 2, 0, 2),
@@ -173,12 +174,14 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
             <div className={classes.root}>
                 <div className={classes.header}>
-                    <ProfileCardTitle
-                        socialAccounts={socialAccounts}
-                        address={activeAddress}
-                        onAddressChange={setSelectedAddress}
-                        identity={identity}
-                    />
+                    <ThemeProvider theme={MaskLightTheme}>
+                        <ProfileCardTitle
+                            socialAccounts={socialAccounts}
+                            address={activeAddress}
+                            onAddressChange={setSelectedAddress}
+                            identity={identity}
+                        />
+                    </ThemeProvider>
                     {tabs.length > 0 && (
                         <div className={classes.tabs}>
                             <TabContext value={currentTab}>

@@ -27,6 +27,8 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        flexShrink: 0,
+        flexGrow: 0,
         filter: 'drop-shadow(0px 6px 12px rgba(28, 104, 243, 0.2))',
         backdropFilter: 'blur(16px)',
         '& img': {
