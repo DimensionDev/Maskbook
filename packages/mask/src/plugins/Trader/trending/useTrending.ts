@@ -15,7 +15,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken, useWeb3State } from '@masknet/web3-hooks-base'
 import { PluginTraderRPC } from '../messages.js'
 import type { Coin } from '../types/index.js'
 import { useCurrentCurrency } from './useCurrentCurrency.js'
@@ -39,13 +39,18 @@ export function useCollectionByTwitterHandler(twitterHandler?: string) {
     }, [twitterHandler])
 }
 
-export function useNonFungibleTokenActivities(address: string, expectedChainId?: Web3Helper.ChainIdAll) {
+export function useNonFungibleTokenActivities(
+    pluginID: NetworkPluginID,
+    address: string,
+    expectedChainId?: Web3Helper.ChainIdAll,
+) {
     const pageIndexRef = useRef<number>(0)
+    const { Others } = useWeb3State(pluginID)
     const [nonFungibleTokenActivities, setNonFungibleTokenActivities] = useState<
         Record<number, NonFungibleTokenActivity[]>
     >({})
     const [{ loading: loadingNonFungibleTokenActivities }, getNonFungibleTokenActivities] = useAsyncFn(async () => {
-        if (!address || !expectedChainId) return
+        if (!address || !expectedChainId || !Others?.isValidChainId(expectedChainId)) return
         const pageIndex = pageIndexRef.current
 
         const activities = await PluginTraderRPC.getNonFungibleTokenActivities(

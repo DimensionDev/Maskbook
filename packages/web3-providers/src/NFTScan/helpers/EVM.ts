@@ -4,6 +4,7 @@ import type { AbiItem } from 'web3-utils'
 import { first } from 'lodash-es'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
 import {
     formatPercentage,
@@ -33,7 +34,7 @@ import { getPaymentToken } from '../../helpers/getPaymentToken.js'
 import { parseJSON } from '../../helpers/parseJSON.js'
 import type { NonFungibleTokenAPI } from '../../entry-types.js'
 
-export function resolveNFTScanHostName(chainId: ChainId) {
+export function resolveNFTScanHostName(chainId: Web3Helper.ChainIdAll) {
     switch (chainId) {
         case ChainId.Mainnet:
             return 'https://www.nftscan.com'
@@ -54,7 +55,7 @@ export function resolveNFTScanHostName(chainId: ChainId) {
     }
 }
 
-export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, init?: RequestInit) {
+export async function fetchFromNFTScanV2<T>(chainId: Web3Helper.ChainIdAll, pathname: string, init?: RequestInit) {
     const host = resolveNFTScanHostName(chainId)
     if (!host) return
 
@@ -102,7 +103,7 @@ export async function fetchFromNFTScanRestFulAPI<T>(pathname: string, init?: Req
     return json as T
 }
 
-function resolveNFTScanAPIChain(chainId: ChainId): string {
+function resolveNFTScanAPIChain(chainId: Web3Helper.ChainIdAll): string {
     switch (chainId) {
         case ChainId.Mainnet:
             return 'ETH'
@@ -123,7 +124,7 @@ function resolveNFTScanAPIChain(chainId: ChainId): string {
     }
 }
 
-export async function fetchFromNFTScanWebAPI<T>(chainId: ChainId, pathname: string, init?: RequestInit) {
+export async function fetchFromNFTScanWebAPI<T>(chainId: Web3Helper.ChainIdAll, pathname: string, init?: RequestInit) {
     const host = resolveNFTScanHostName(chainId)
     if (!host) return
 

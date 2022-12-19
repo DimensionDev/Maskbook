@@ -113,7 +113,11 @@ export function NonFungibleTickersTable({
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const containerRef = useRef(null)
 
-    const { activities, fetchMore, loadingNonFungibleTokenActivities } = useNonFungibleTokenActivities(address, chainId)
+    const { activities, fetchMore, loadingNonFungibleTokenActivities } = useNonFungibleTokenActivities(
+        NetworkPluginID.PLUGIN_EVM,
+        address,
+        chainId,
+    )
     useScrollBottomEvent(containerRef, fetchMore)
     const headCellMap: Record<Cells, string> = {
         nft: t('plugin_trader_table_nft'),

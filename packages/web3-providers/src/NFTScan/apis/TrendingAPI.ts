@@ -91,7 +91,6 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         contractAddress: string,
         pageIndex: number,
     ): Promise<NonFungibleTokenActivity[] | undefined> {
-        if (!isValidChainId(chainId)) return
         const path = urlcat('/nftscan/getTransactionByNftContract', {
             contract: contractAddress,
             filterType: 'all',
