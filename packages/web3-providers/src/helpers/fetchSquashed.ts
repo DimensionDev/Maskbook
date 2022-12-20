@@ -35,7 +35,7 @@ export async function fetchSquashed(
     if (!rule) return next(request, init)
 
     const hit = DB.get(url)
-    if (hit && hit.timestamp + 600 > Date.now()) return hit.response
+    if (hit && hit.timestamp + 600 > Date.now()) return hit.response.then((x) => x.clone())
 
     const responsePromise = next(request, init)
 
@@ -45,5 +45,5 @@ export async function fetchSquashed(
         response: responsePromise,
     })
 
-    return responsePromise
+    return responsePromise.then((x) => x.clone())
 }
