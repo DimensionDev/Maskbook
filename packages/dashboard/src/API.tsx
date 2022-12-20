@@ -1,5 +1,5 @@
 import type { Services as ServiceType } from '../../mask/background/services/types.js'
-import type { MaskEvents } from '@masknet/shared-base'
+import type { ECKeyIdentifier, MaskEvents } from '@masknet/shared-base'
 import type { UnboundedRegistry, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import type { WalletMessages } from '@masknet/plugin-wallet'
 
@@ -7,6 +7,11 @@ export let Services: ServiceType = null!
 export let Messages: WebExtensionMessage<MaskEvents> = null!
 export let PluginServices: PluginServices = null!
 export let PluginMessages: PluginMessages = null!
+interface MaskAccount {
+    address: string
+    owner?: string
+    identifier?: ECKeyIdentifier
+}
 export interface PluginServices {
     Wallet: {
         createMnemonicWords(): Promise<string[]>
@@ -19,7 +24,7 @@ export interface PluginServices {
             initialPassword?: string | undefined,
         ): Promise<string>
         updateMaskAccount(options: { account?: string | undefined }): Promise<void>
-        resolveMaskAccount(accounts: string[]): Promise<void>
+        resolveMaskAccount(accounts: MaskAccount[]): Promise<void>
         verifyPassword(unverifiedPassword: string): Promise<boolean>
     }
 }

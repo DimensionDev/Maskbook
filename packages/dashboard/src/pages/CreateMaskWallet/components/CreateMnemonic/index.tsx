@@ -118,7 +118,11 @@ const CreateMnemonic = memo(() => {
             account: address_,
             chainId: ChainId.Mainnet,
         })
-        await PluginServices.Wallet.resolveMaskAccount([address_])
+        await PluginServices.Wallet.resolveMaskAccount([
+            {
+                address: address_,
+            },
+        ])
 
         return address_
     }, [location.search, words, resetCallback, hasPassword, searchParams, connection])

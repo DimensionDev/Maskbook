@@ -204,7 +204,7 @@ export namespace Plugin.Shared {
         closeWalletConnectDialog(): void
 
         /** Select a Mask Wallet account */
-        selectAccount(): Promise<string[]>
+        selectAccount(): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
 
         /** Update Mask Wallet account */
         updateAccount(account: {
