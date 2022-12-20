@@ -97,13 +97,23 @@ export class ContractWallet implements Middleware<Context> {
         const { config } = context
         if (!op && !config) throw new Error('No user operation to be sent.')
 
-        const entryPoint = await this.getEntryPoint(context.chainId)
-
         // setup user operation
+        const entryPoint = await this.getEntryPoint(context.chainId)
         const userTransaction =
             (op ? await UserTransaction.fromUserOperation(context.chainId, entryPoint, op) : undefined) ||
             (config ? await UserTransaction.fromTransaction(context.chainId, entryPoint, config) : undefined)
         if (!userTransaction) throw new Error('Failed to create user transaction.')
+
+        // fill in initCode
+        if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
+            const initCode = await this.getInitCode(context.chainId, owner)
+            const accounts = await this.getDeployedAccounts(context.chainId, owner)
+
+            await userTransaction.fill({
+                initCode,
+                nonce: accounts.filter((x) => x.deployed).length,
+            })
+        }
 
         // sign user operation
         await userTransaction.sign(async (message: string) => {
@@ -137,7 +147,7 @@ export class ContractWallet implements Middleware<Context> {
 
         return this.sendUserOperation(context, {
             sender: context.account,
-            nonce: accounts.length,
+            nonce: accounts.filter((x) => x.deployed).length,
             initCode,
         })
     }
