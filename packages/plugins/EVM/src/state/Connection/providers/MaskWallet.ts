@@ -53,13 +53,16 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
             }
         }
 
-        const wallets = await SharedContextSettings.value.getWallets()
-        SharedContextSettings.value.openPopupWindow(wallets.length ? PopupRoutes.SelectWallet : PopupRoutes.Wallet, {
+        const wallets = Web3StateSettings.value.Wallet?.wallets?.getCurrentValue()
+        SharedContextSettings.value.openPopupWindow(wallets?.length ? PopupRoutes.SelectWallet : PopupRoutes.Wallet, {
             chainId,
         })
 
         const account = first(await SharedContextSettings.value.selectAccount())
         if (!account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}`)
+
+        // switch account
+        await this.switchAccount(account.address, account.owner, account.identifier)
 
         // switch chain
 
@@ -71,7 +74,7 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
 
         return {
             chainId,
-            account,
+            account: account.address,
         }
     }
 

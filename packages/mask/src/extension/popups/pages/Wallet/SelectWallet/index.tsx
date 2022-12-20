@@ -140,7 +140,13 @@ const SelectWallet = memo(() => {
             identifier: wallet?.identifier,
         })
         if (chainId) {
-            await WalletRPC.resolveMaskAccount([selected])
+            await WalletRPC.resolveMaskAccount([
+                {
+                    address: selected,
+                    owner: wallet?.address,
+                    identifier: wallet?.identifier,
+                },
+            ])
         }
         return Services.Helper.removePopupWindow()
     }, [chainId, selected, isPopup, connection, wallets])

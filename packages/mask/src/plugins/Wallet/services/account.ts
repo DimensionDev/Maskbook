@@ -1,6 +1,6 @@
 import { first } from 'lodash-es'
 import { defer, DeferTuple } from '@masknet/kit'
-import type { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
+import type { ECKeyIdentifier, EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 import { ChainId, isValidAddress } from '@masknet/web3-shared-evm'
 import {
     currentMaskWalletAccountSettings,
@@ -23,7 +23,11 @@ export async function updateMaskAccount(options: { account?: string; chainId?: C
     if (chainId) currentMaskWalletChainIdSettings.value = chainId
     if (isValidAddress(account)) {
         currentMaskWalletAccountSettings.value = account
-        await resolveMaskAccount([account])
+        await resolveMaskAccount([
+            {
+                address: account,
+            },
+        ])
     }
 }
 
@@ -37,15 +41,20 @@ export async function getConnectedStatus(site: EnhanceableSite | ExtensionSite) 
     return recordSites.get(site)
 }
 
+interface MaskAccount {
+    address: string
+    owner?: string
+    identifier?: ECKeyIdentifier
+}
 // #region select wallet with popups
-let deferred: DeferTuple<string[], Error> | null
+let deferred: DeferTuple<MaskAccount[], Error> | null
 
-export async function selectMaskAccount(): Promise<string[]> {
+export async function selectMaskAccount(): Promise<MaskAccount[]> {
     deferred = defer()
     return deferred?.[0] ?? []
 }
 
-export async function resolveMaskAccount(accounts: string[]) {
+export async function resolveMaskAccount(accounts: MaskAccount[]) {
     const [, resolve] = deferred ?? []
     resolve?.(accounts)
     deferred = null
