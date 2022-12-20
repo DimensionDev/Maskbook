@@ -136,7 +136,7 @@ const SelectWallet = memo(() => {
             // TODO: Just for test, will remove this logic
             chainId: wallet?.owner ? ChainId.Mumbai : chainId,
             account: selected,
-            owner: wallet?.address,
+            owner: wallet?.owner,
             identifier: wallet?.identifier,
         })
         if (chainId) {
