@@ -16,8 +16,6 @@ import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shar
 import { ChainId } from '@masknet/web3-shared-evm'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useValueRef } from '@masknet/shared-base-ui'
-import { decentralizedSearchSettings } from '../../../../shared/legacy-settings/settings.js'
 import { NFTProjectAvatarBadge } from './NFTProjectAvatarBadge.js'
 import { useCollectionByTwitterHandler } from '../../../plugins/Trader/trending/useTrending.js'
 
