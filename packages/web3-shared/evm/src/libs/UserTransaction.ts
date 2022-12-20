@@ -269,14 +269,14 @@ export class UserTransaction {
         entryPoint: string,
         transaction: Transaction,
     ): Promise<UserTransaction> {
-        const { from, to, nonce, value = '0', data = '0x' } = transaction
+        const { from, to, nonce = 0, value = '0', data = '0x' } = transaction
         if (!from) throw new Error('No sender address.')
         if (!to) throw new Error('No destination address.')
 
         return UserTransaction.fromUserOperation(chainId, entryPoint, {
             ...DEFAULT_USER_OPERATION,
             sender: from,
-            nonce,
+            nonce: toNumber(nonce as number),
             callData: coder.encodeFunctionCall(CALL_WALLET_TYPE, [to, value, data]),
             signature: '0x',
         })
