@@ -85,13 +85,13 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
 
     override async switchAccount(account?: string) {
         if (isValidAddress(account) && (await this.options.isSupportedAccount(account))) {
-            this.hostedStorage?.account.setValue(account)
+            await this.hostedStorage?.account.setValue(account)
         }
     }
 
     override async switchChain(chainId: ChainId) {
         if (await this.options.isSupportedChainId(chainId)) {
-            this.hostedStorage?.chainId.setValue(chainId)
+            await this.hostedStorage?.chainId.setValue(chainId)
         }
     }
 
