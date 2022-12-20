@@ -90,17 +90,22 @@ export class ContractWallet implements Middleware<Context> {
         }
     }
 
-    private async sendUserOperation(context: Context, userOperation = context.userOperation): Promise<string> {
+    private async sendUserOperation(context: Context, op = context.userOperation): Promise<string> {
         const { owner, identifier } = this.getOwner(context)
         if (!owner) throw new Error('Failed to sign user operation.')
-        if (!userOperation) throw new Error('Invalid user operation.')
+
+        const { config } = context
+        if (!op && !config) throw new Error('No user operation to be sent.')
+
+        const entryPoint = await this.getEntryPoint(context.chainId)
+
+        // setup user operation
+        const userTransaction =
+            (op ? await UserTransaction.fromUserOperation(context.chainId, entryPoint, op) : undefined) ||
+            (config ? await UserTransaction.fromTransaction(context.chainId, entryPoint, config) : undefined)
+        if (!userTransaction) throw new Error('Failed to create user transaction.')
 
         // sign user operation
-        const userTransaction = await UserTransaction.fromUserOperation(
-            context.chainId,
-            await this.getEntryPoint(context.chainId),
-            userOperation,
-        )
         await userTransaction.sign(async (message: string) => {
             if (identifier) {
                 return SharedContextSettings.value.personaSignPayMessage({
@@ -166,14 +171,14 @@ export class ContractWallet implements Middleware<Context> {
                 break
             case EthereumMethodType.ETH_SEND_TRANSACTION:
                 try {
-                    context.write(await this.sendUserOperation(context, context.userOperation))
+                    context.write(await this.sendUserOperation(context))
                 } catch (error) {
                     context.abort(error)
                 }
                 break
             case EthereumMethodType.ETH_SEND_USER_OPERATION:
                 try {
-                    context.write(await this.sendUserOperation(context, context.userOperation))
+                    context.write(await this.sendUserOperation(context))
                 } catch (error) {
                     context.abort(error)
                 }
