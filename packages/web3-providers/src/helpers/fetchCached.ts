@@ -61,13 +61,14 @@ export async function fetchCached(
 
     // send the request & cache the response
     const response = await next(request.clone(), init)
-    const { ok, status, body, headers } = response.clone()
+    const { ok, status, statusText, body, headers } = response.clone()
 
     if (ok && status === 200 && body) {
         await cache.put(
             request.clone(),
             new Response(body, {
-                ...response,
+                status,
+                statusText,
                 headers: {
                     ...Object.fromEntries(headers.entries()),
                     // store the cached date as a UTC string
