@@ -1,7 +1,13 @@
 import { BigNumber } from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useChainContext, useBalance, useWeb3, useNativeToken, useNativeTokenAddress } from '@masknet/web3-hooks-base'
-import { chainResolver, explorerResolver, isNativeTokenAddress, useRedPacketConstants } from '@masknet/web3-shared-evm'
+import {
+    chainResolver,
+    explorerResolver,
+    GasConfig,
+    isNativeTokenAddress,
+    useRedPacketConstants,
+} from '@masknet/web3-shared-evm'
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Launch as LaunchIcon } from '@mui/icons-material'
@@ -51,11 +57,12 @@ export interface ConfirmRedPacketFormProps {
     onBack: () => void
     onClose: () => void
     settings?: RedPacketSettings
+    gasOption?: GasConfig
 }
 
 export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const t = useI18N()
-    const { onBack, settings, onCreated, onClose } = props
+    const { onBack, settings, onCreated, onClose, gasOption } = props
     const { classes, cx } = useStyles()
     const { value: balance = '0', loading: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM)
     const { account, chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -87,6 +94,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         { ...settings!, total },
         contract_version,
         publicKey,
+        gasOption,
     )
     // #endregion
     const openShareTxDialog = useOpenShareTxDialog()

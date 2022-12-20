@@ -6,6 +6,7 @@ import { GasOptionType, isZero, formatBalance, formatCurrency } from '@masknet/w
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
     ChainId,
+    DepositPaymaster,
     formatEtherToGwei,
     formatWeiToEther,
     formatWeiToGwei,
@@ -17,6 +18,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { SettingsContext } from '../SettingsBoard/Context.js'
+import { useAsync } from 'react-use'
 
 interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPluginID> {
     pluginID?: T
@@ -161,6 +163,13 @@ export function SelectGasSettingsToolbarUI({
             currentGasOption.suggestedMaxPriorityFeePerGas,
         )
     }, [currentGasOption, isCustomGas, setGasConfigCallback])
+
+    const { value } = useAsync(async () => {
+        const depositPaymaster = new DepositPaymaster(ChainId.Mumbai)
+        const ratio = await depositPaymaster.getRatio()
+
+        return ratio
+    }, [])
 
     const [menu, openMenu] = useMenuConfig(
         Object.entries(gasOptions ?? {})

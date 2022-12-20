@@ -6,7 +6,14 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useWeb3Connection, useWeb3 } from '@masknet/web3-hooks-base'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { FungibleToken, isLessThan, toFixed } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, useTokenConstants, decodeEvents, ContractTransaction } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    SchemaType,
+    useTokenConstants,
+    decodeEvents,
+    ContractTransaction,
+    GasConfig,
+} from '@masknet/web3-shared-evm'
 import { useRedPacketContract } from './useRedPacketContract.js'
 
 export interface RedPacketSettings {
@@ -111,10 +118,15 @@ export function useCreateParamsCallback(
 
 export function useCreateParams(redPacketSettings: RedPacketSettings, version: number, publicKey: string) {
     const getCreateParams = useCreateParamsCallback(redPacketSettings, version, publicKey)
-    return useAsync(() => getCreateParams(), [redPacketSettings, version, publicKey])
+    return useAsync(() => getCreateParams(), [JSON.stringify(redPacketSettings), version, publicKey])
 }
 
-export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number, publicKey: string) {
+export function useCreateCallback(
+    redPacketSettings: RedPacketSettings,
+    version: number,
+    publicKey: string,
+    gasOption?: GasConfig,
+) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const redPacketContract = useRedPacketContract(chainId, version)
     const getCreateParams = useCreateParamsCallback(redPacketSettings, version, publicKey)
@@ -147,6 +159,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                 from: account,
                 value: toFixed(token.schema === SchemaType.Native ? paramsObj.total : 0),
                 gas,
+                ...(gasOption ?? {}),
             },
         )
 
@@ -162,5 +175,5 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
             }
         }
         return { hash, receipt }
-    }, [account, chainId, web3, connection, redPacketContract, redPacketSettings])
+    }, [account, chainId, web3, connection, redPacketContract, redPacketSettings, gasOption])
 }
