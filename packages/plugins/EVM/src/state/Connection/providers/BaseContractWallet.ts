@@ -23,7 +23,7 @@ export class BaseContractWalletProvider extends BaseHostedProvider implements EV
 
         // setup storage
         SharedContextSettings.readyPromise.then((context) => {
-            const { storage } = context.createKVStorage('memory', {}).createSubScope(`${this.providerType}_hosted`, {
+            const { storage } = context.createKVStorage('memory', {}).createSubScope(`${this.providerType}_owner`, {
                 value: {
                     account: this.options.getDefaultAccount(),
                     // empty string means EOA signer
