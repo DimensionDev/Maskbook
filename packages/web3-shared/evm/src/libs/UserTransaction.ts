@@ -8,7 +8,14 @@ import EntryPointABI from '@masknet/web3-contracts/abis/EntryPoint.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import type { EntryPoint } from '@masknet/web3-contracts/types/EntryPoint.js'
 import type { ChainId, Transaction, UserOperation } from '../types/index.js'
-import { createContract, getZeroAddress, isZeroString, isEmptyHex, isZeroAddress } from '../helpers/index.js'
+import {
+    createContract,
+    getZeroAddress,
+    isZeroString,
+    isEmptyHex,
+    isZeroAddress,
+    formatEthereumAddress,
+} from '../helpers/index.js'
 import { getSmartPayConstants } from '../index.js'
 
 const USER_OP_TYPE = {
@@ -95,11 +102,15 @@ export class UserTransaction {
      */
     constructor(private chainId: ChainId, private entryPoint: string, private userOperation: UserOperation) {}
 
+    get initCode() {
+        return this.userOperation.initCode
+    }
+
+    get nonce() {
+        return this.userOperation.nonce ?? 0
+    }
+
     get hasPaymaster() {
-        console.log({
-            paymaster: this.userOperation.paymaster,
-            isZero: isZeroAddress(this.userOperation.paymaster),
-        })
         return !!(this.userOperation.paymaster && !isZeroAddress(this.userOperation.paymaster))
     }
 
@@ -137,7 +148,13 @@ export class UserTransaction {
         return this
     }
 
-    async fill() {
+    async fill(overrides?: Required<Pick<UserOperation, 'initCode' | 'nonce'>>) {
+        // from overrides
+        if (overrides) {
+            this.userOperation.nonce = overrides.nonce
+            this.userOperation.initCode = overrides.initCode
+        }
+
         const {
             initCode,
             nonce,
@@ -236,6 +253,7 @@ export class UserTransaction {
             this.userOperation
         return {
             ...this.userOperation,
+            sender: formatEthereumAddress(this.userOperation.sender),
             nonce,
             callGas: callGas ? toFixed(callGas) : '0',
             verificationGas: verificationGas ? toFixed(verificationGas) : '0',
@@ -251,15 +269,14 @@ export class UserTransaction {
         entryPoint: string,
         transaction: Transaction,
     ): Promise<UserTransaction> {
-        const { from, to, nonce, value = '0', data = '0x' } = transaction
-
+        const { from, to, nonce = 0, value = '0', data = '0x' } = transaction
         if (!from) throw new Error('No sender address.')
         if (!to) throw new Error('No destination address.')
 
         return UserTransaction.fromUserOperation(chainId, entryPoint, {
             ...DEFAULT_USER_OPERATION,
             sender: from,
-            nonce,
+            nonce: toNumber(nonce as number),
             callData: coder.encodeFunctionCall(CALL_WALLET_TYPE, [to, value, data]),
             signature: '0x',
         })

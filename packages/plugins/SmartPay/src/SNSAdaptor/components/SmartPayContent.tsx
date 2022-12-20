@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { ImageIcon, useSnackbarCallback, TokenIcon, FormattedBalance, useMenuConfig } from '@masknet/shared'
-import { CrossIsolationMessages, NetworkPluginID, PluginID, PopupRoutes } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, PluginID, PopupRoutes } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import {
@@ -191,7 +191,7 @@ export const SmartPayContent = memo(() => {
     })
 
     const allAssets = useMemo(() => {
-        if (!assets) return []
+        if (!assets) return EMPTY_LIST
 
         const target = assets.filter((asset) => asset.chainId === ChainId.Mumbai)
         if (target.length > 1) return target

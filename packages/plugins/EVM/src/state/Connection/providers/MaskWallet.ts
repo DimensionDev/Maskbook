@@ -24,7 +24,10 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
         })
     }
 
-    override async connect(chainId: ChainId, address?: string, owner?: string, identifier?: ECKeyIdentifier) {
+    override async connect(chainId_: ChainId, address?: string, owner?: string, identifier?: ECKeyIdentifier) {
+        // FIXME: only for mumbai test
+        const chainId = ChainId.Mumbai
+
         const siteType = getSiteType()
         if (siteType === ExtensionSite.Popup) {
             if (address) {

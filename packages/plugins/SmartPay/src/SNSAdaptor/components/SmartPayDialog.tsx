@@ -41,27 +41,27 @@ export const SmartPayDialog = memo(() => {
     const { setDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDescriptionDialogEvent)
     const { open, closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
 
-    const currentVisitingProfile = useLastRecognizedIdentity()
+    const lastRecognizedIdentity = useLastRecognizedIdentity()
 
     const { loading: querySignableAccountsLoading, accounts } = useContainer(SmartPayContext)
 
     // #region query white list
-    const { value: isVerify, loading: queryVerifyLoading } = useAsync(async () => {
-        if (!currentVisitingProfile?.identifier?.userId) return false
-        return SmartPayFunder.verify(currentVisitingProfile?.identifier?.userId)
-    }, [open, currentVisitingProfile])
+    const { value: isVerified, loading: queryVerifyLoading } = useAsync(async () => {
+        if (!lastRecognizedIdentity?.identifier?.userId) return false
+        return SmartPayFunder.verify(lastRecognizedIdentity.identifier.userId)
+    }, [open, lastRecognizedIdentity])
     // #endregion
 
-    const entries = [RoutePaths.Deploy, RoutePaths.Ineligibility, RoutePaths.Main]
+    const entries = [RoutePaths.Deploy, RoutePaths.InEligibility, RoutePaths.Main]
 
     const initialIndex = useMemo(() => {
-        if (isVerify) {
+        if (isVerified) {
             if (accounts?.length) return 2
             return 0
         }
 
         return 1
-    }, [isVerify, accounts])
+    }, [isVerified, accounts])
 
     return (
         <InjectedDialog
@@ -78,7 +78,7 @@ export const SmartPayDialog = memo(() => {
                     <MemoryRouter initialEntries={entries} initialIndex={initialIndex}>
                         <Routes>
                             <Route path={RoutePaths.Deploy} element={<Deploy open={open} />} />
-                            <Route path={RoutePaths.Ineligibility} element={<InEligibilityTips />} />
+                            <Route path={RoutePaths.InEligibility} element={<InEligibilityTips />} />
                             <Route path={RoutePaths.Main} element={<SmartPayContent />} />
                         </Routes>
                     </MemoryRouter>

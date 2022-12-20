@@ -6,6 +6,6 @@ export const PLUGIN_NAME = 'Smart Pay'
 
 export const enum RoutePaths {
     Deploy = '/deploy',
-    Ineligibility = '/ineligibility',
+    InEligibility = '/ineligibility',
     Main = '/main',
 }
