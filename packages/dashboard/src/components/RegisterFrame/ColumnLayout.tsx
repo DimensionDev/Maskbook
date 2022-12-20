@@ -1,8 +1,8 @@
-import { styled, useTheme } from '@mui/material/styles'
-import { FooterLine } from '../FooterLine/index.js'
-import { Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Icons } from '@masknet/icons'
+import { Paper } from '@mui/material'
+import { styled } from '@mui/material/styles'
+import { FooterLine } from '../FooterLine/index.js'
+import { HeaderLine } from '../HeaderLine/index.js'
 
 const Container = styled('div')(
     ({ theme }) => `
@@ -34,19 +34,12 @@ interface ColumnLayoutProps extends React.PropsWithChildren<{}> {
 
 export const ColumnLayout = ({ haveFooter = true, children }: ColumnLayoutProps) => {
     const { classes } = useStyles()
-    const mode = useTheme().palette.mode
 
     return (
         <Container>
             <Content>
                 <Paper className={classes.paper} variant="outlined">
-                    <Typography>
-                        {mode === 'dark' ? (
-                            <Icons.MaskBanner width={130} height={40} />
-                        ) : (
-                            <Icons.Mask width={130} height={40} />
-                        )}
-                    </Typography>
+                    <HeaderLine />
                     {children}
                 </Paper>
                 {haveFooter && <FooterLine />}
