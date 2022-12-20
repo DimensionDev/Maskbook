@@ -18,6 +18,17 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         display: 'flex',
         flexDirection: 'column',
+        paddingRight: 15,
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 5,
+        },
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '5px',
+            width: 5,
+            border: '5px solid transparent',
+            backgroundColor: theme.palette.maskColor.secondaryLine,
+        },
     },
     links: {
         display: 'flex',
