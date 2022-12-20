@@ -1,13 +1,12 @@
 import { useContext } from 'react'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useCopyToClipboard } from 'react-use'
-import { SourceType, resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
+import { resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useSnackbarCallback } from '@masknet/shared'
 import { Box, Typography, Link, alpha } from '@mui/material'
 import { ENSProvider, ENSContext, SearchResultInspectorProps } from './context.js'
-import { CollectibleState } from './hooks/useCollectibleState.js'
 import { SocialAccountList } from './SocialAccountList.js'
 import { SocialTooltip } from './SocialTooltip.js'
 import { makeStyles } from '@masknet/theme'
@@ -34,13 +33,12 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
         ensIcon: {
             marginRight: 4,
         },
-        ensDomain: {
+        domain: {
             fontWeight: 700,
             color: theme.palette.maskColor.publicMain,
             fontSize: 18,
             lineHeight: '18px',
         },
-
         reversedAddress: {
             display: 'flex',
             alignItems: 'center',
@@ -108,7 +106,7 @@ export function SearchResultInspectorContent() {
     const t = useI18N()
     const { classes, cx } = useStyles({})
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const { reversedAddress, nextIdBindings, firstNextIdBinding, domain, tokenId } = useContext(ENSContext)
+    const { reversedAddress, nextIdBindings, firstNextIdBinding, domain } = useContext(ENSContext)
     const [, copyToClipboard] = useCopyToClipboard()
     const copyWalletAddress = useSnackbarCallback({
         executor: async (address: string) => copyToClipboard(address),
@@ -117,19 +115,13 @@ export function SearchResultInspectorContent() {
     })
     const isShowSocialAccountList = nextIdBindings.length > 3
     return (
-        <CollectibleState.Provider
-            initialState={{
-                chainId: ChainId.Mainnet,
-                tokenId: tokenId ?? '',
-                contractAddress: reversedAddress ?? '',
-                sourceType: SourceType.OpenSea,
-            }}>
+        <>
             <PluginHeader />
             <Box className={classes.root}>
                 <section className={classes.ensInfo}>
                     <Icons.ETH size={30} className={classes.ensIcon} />
                     <div>
-                        <Typography className={classes.ensDomain}>{domain}</Typography>
+                        <Typography className={classes.domain}>{domain}</Typography>
                         {reversedAddress ? (
                             <Typography className={classes.reversedAddress}>
                                 {reversedAddress}{' '}
@@ -177,7 +169,7 @@ export function SearchResultInspectorContent() {
                     </div>
                 ) : null}
             </Box>
-        </CollectibleState.Provider>
+        </>
     )
 }
 
