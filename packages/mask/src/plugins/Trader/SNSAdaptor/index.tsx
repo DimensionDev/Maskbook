@@ -1,7 +1,6 @@
 import { Trans } from 'react-i18next'
 import { Box } from '@mui/material'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { useState } from 'react'
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base.js'
 import { TrendingView } from './trending/TrendingView.js'
@@ -41,8 +40,8 @@ const sns: Plugin.SNSAdaptor.Definition<
             Content({ result: _resultList, isProfilePage }) {
                 const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
                 const resultList = _resultList as Web3Helper.TokenResultAll[]
-                const [result, setResult] = useState(resultList[0])
-                const { chainId, keyword, address, pluginID } = result
+                if (!resultList.length) return null
+                const { chainId, keyword, address, pluginID } = resultList[0]
                 return (
                     <Web3ContextProvider
                         value={{
@@ -55,8 +54,6 @@ const sns: Plugin.SNSAdaptor.Definition<
                             isTokenTagPopper={false}
                             isPreciseSearch={Boolean(Others?.isValidAddress(keyword))}>
                             <TrendingView
-                                setResult={setResult}
-                                result={result}
                                 resultList={resultList}
                                 expectedChainId={chainId ?? ChainId.Mainnet}
                                 searchedContractAddress={

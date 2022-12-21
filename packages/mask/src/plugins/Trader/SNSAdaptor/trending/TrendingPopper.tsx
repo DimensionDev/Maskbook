@@ -1,10 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { useLocation, useWindowScroll, useAsyncRetry } from 'react-use'
+import { useLocation, useWindowScroll } from 'react-use'
 import { Popper, ClickAwayListener, PopperProps, Fade } from '@mui/material'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { DSearch } from '@masknet/web3-providers'
-import { TrendingAPI } from '@masknet/web3-providers/types'
+import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginTraderMessages } from '../../messages.js'
 import { WalletMessages } from '../../../Wallet/messages.js'
@@ -12,7 +9,8 @@ import { PluginTransakMessages } from '../../../Transak/messages.js'
 
 export interface TrendingPopperProps {
     children?: (
-        resultList: Web3Helper.TokenResultAll[],
+        name?: string,
+        type?: TrendingAPI.TagType,
         address?: string,
         isNFTProjectPopper?: boolean,
         reposition?: () => void,
@@ -32,11 +30,6 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const [type, setType] = useState<TrendingAPI.TagType | undefined>()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const popper = useRef<HTMLDivElement | null>(null)
-
-    const { value: resultList } = useAsyncRetry(async () => {
-        if (!name || !type) return EMPTY_LIST
-        return DSearch.search<Web3Helper.TokenResultAll>(`${type === TrendingAPI.TagType.CASH ? '$' : '#'}${name}`)
-    }, [name, type])
 
     // #region select token and provider dialog could be opened by trending view
     const onFreezed = useCallback((ev: { open: boolean }) => setFreezed(ev.open), [])
@@ -91,7 +84,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
 
     if (locked) return null
     if (!anchorEl || !type) return null
-    if (!resultList?.length) return null
+
     return (
         <ClickAwayListener
             onClickAway={() => {
@@ -109,7 +102,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
                 {({ TransitionProps }) => (
                     <Fade in={Boolean(anchorEl)} {...TransitionProps}>
                         <div>
-                            {props.children?.(resultList, address, isNFTProjectPopper, () =>
+                            {props.children?.(name, type, address, isNFTProjectPopper, () =>
                                 setTimeout(() => popperRef.current?.update(), 100),
                             )}
                         </div>

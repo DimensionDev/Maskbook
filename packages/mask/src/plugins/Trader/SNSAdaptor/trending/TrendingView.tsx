@@ -106,9 +106,7 @@ const useStyles = makeStyles<{
 })
 
 export interface TrendingViewProps {
-    setResult: (a: Web3Helper.TokenResultAll) => void
-    result: Web3Helper.TokenResultAll
-    resultList?: Web3Helper.TokenResultAll[]
+    resultList: Web3Helper.TokenResultAll[]
     address?: string
     searchedContractAddress?: string
     expectedChainId?: Web3Helper.ChainIdAll
@@ -124,7 +122,8 @@ enum ContentTabs {
 }
 
 export function TrendingView(props: TrendingViewProps) {
-    const { searchedContractAddress, expectedChainId, resultList, result, setResult } = props
+    const { searchedContractAddress, expectedChainId, resultList } = props
+    const [result, setResult] = useState(resultList[0])
     const { isTokenTagPopper, isNFTProjectPopper, isProfilePage } = useContext(TrendingViewContext)
     const { t } = useI18N()
     const theme = useTheme()
