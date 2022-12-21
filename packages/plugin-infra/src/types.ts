@@ -228,7 +228,7 @@ export namespace Plugin.Shared {
         signTransaction(address: string, transaction: TransactionEVM): Promise<string>
 
         /** Sign personal message, aka. eth.personal.sign() */
-        signPersonalMessage(address: string, message: string): Promise<string>
+        signPersonalMessage(message: string, address: string): Promise<string>
 
         /** Sign typed data */
         signTypedData(address: string, message: string): Promise<string>

@@ -3,14 +3,7 @@ import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { isNil, omit } from 'lodash-es'
 import { defer } from '@masknet/kit'
-import {
-    ChainId,
-    createJsonRpcResponse,
-    createWeb3,
-    EthereumMethodType,
-    getRPCConstants,
-    PayloadEditor,
-} from '@masknet/web3-shared-evm'
+import { ChainId, getRPCConstants, PayloadEditor } from '@masknet/web3-shared-evm'
 import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper/index.js'
 import { nativeAPI } from '../../../../shared/native-rpc/index.js'
 import { WalletRPC } from '../messages.js'
@@ -122,47 +115,7 @@ export async function send(
     options?: Options,
 ): Promise<void> {
     const provider = await createProvider(options?.chainId)
-
-    switch (payload.method) {
-        case EthereumMethodType.ETH_SEND_TRANSACTION:
-        case EthereumMethodType.MASK_REPLACE_TRANSACTION:
-            const computedPayload = PayloadEditor.fromPayload(payload).signableConfig
-            if (!computedPayload?.from || !computedPayload.to || !options?.chainId) return
-
-            const privateKey = await WalletRPC.exportPrivateKey(computedPayload.from as string)
-            const web3 = createWeb3(provider)
-            const transactionSigned = await web3.eth.accounts.signTransaction(computedPayload, `0x${privateKey}`)
-            if (!transactionSigned.rawTransaction) break
-
-            return provider.send(
-                {
-                    ...payload,
-                    method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
-                    params: [transactionSigned.rawTransaction],
-                },
-                callback,
-            )
-        case EthereumMethodType.ETH_SIGN_TYPED_DATA:
-            const [address, dataToSign] = payload.params as [string, string]
-            const dataSigned = await WalletRPC.signTypedData(address, dataToSign)
-            try {
-                callback(null, createJsonRpcResponse(payload.id as number, dataSigned))
-            } catch (error) {
-                callback(getError(error, null, 'Failed to sign message.'))
-            }
-            break
-        case EthereumMethodType.PERSONAL_SIGN:
-            const [data, account] = payload.params as [string, string]
-            const messageSigned = await WalletRPC.signPersonalMessage(data, account)
-            try {
-                callback(null, createJsonRpcResponse(payload.id as number, messageSigned))
-            } catch (error) {
-                callback(getError(error, null, 'Failed to sign message.'))
-            }
-            break
-        default:
-            return provider.send(payload, callback)
-    }
+    return provider.send(payload, callback)
 }
 
 /**
