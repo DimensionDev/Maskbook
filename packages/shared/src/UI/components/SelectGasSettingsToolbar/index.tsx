@@ -2,10 +2,11 @@ import { useEffect, useState, useMemo, useCallback } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { useMenuConfig, FormattedBalance, useSharedI18N, useSelectAdvancedSettings } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { GasOptionType, isZero, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
+import { GasOptionType, isZero, formatBalance, formatCurrency, isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
     ChainId,
+    DepositPaymaster,
     formatEtherToGwei,
     formatWeiToEther,
     formatWeiToGwei,
@@ -14,9 +15,17 @@ import {
 } from '@masknet/web3-shared-evm'
 import { Typography, MenuItem, Box } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useWeb3State,
+    useNetworkContext,
+    useFungibleToken,
+    useFungibleTokenPrice,
+} from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { SettingsContext } from '../SettingsBoard/Context.js'
+import { useAsync } from 'react-use'
+import { useGasCurrencyMenu } from '../../../hooks/useGasCurrencyMenu.js'
 
 interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPluginID> {
     pluginID?: T
@@ -116,6 +125,7 @@ export function SelectGasSettingsToolbarUI({
     const { gasOptions, GAS_OPTION_NAMES } = SettingsContext.useContainer()
     const [isCustomGas, setIsCustomGas] = useState(false)
     const [currentGasOptionType, setCurrentGasOptionType] = useState<GasOptionType>(GasOptionType.NORMAL)
+    const [currentGasCurrency, setCurrentGasCurrency] = useState(gasOption?.gasCurrency)
     const { chainId } = useChainContext()
     const { Others } = useWeb3State<'all'>()
 
@@ -162,6 +172,13 @@ export function SelectGasSettingsToolbarUI({
         )
     }, [currentGasOption, isCustomGas, setGasConfigCallback])
 
+    const { value: currencyRatio } = useAsync(async () => {
+        const depositPaymaster = new DepositPaymaster(ChainId.Mumbai)
+        const ratio = await depositPaymaster.getRatio()
+
+        return ratio
+    }, [])
+
     const [menu, openMenu] = useMenuConfig(
         Object.entries(gasOptions ?? {})
             .reverse()
@@ -203,19 +220,48 @@ export function SelectGasSettingsToolbarUI({
             },
         },
     )
+
+    const [currencyMenu, openCurrencyMenu] = useGasCurrencyMenu(
+        NetworkPluginID.PLUGIN_EVM,
+        (address) => setCurrentGasCurrency(address),
+        currentGasCurrency,
+    )
+
+    const { value: currencyToken } = useFungibleToken(undefined, currentGasCurrency, nativeToken)
+    const { value: currencyTokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, currentGasCurrency)
+
     const gasFee = useMemo(() => {
-        if (!gasOption || !gasLimit) return '0'
-        return GasEditor.fromConfig(chainId as ChainId, gasOption).getGasFee(gasLimit)
-    }, [gasLimit, gasOption])
+        if (!gasOption || !gasLimit) return new BigNumber(0)
+        const result = GasEditor.fromConfig(chainId as ChainId, gasOption).getGasFee(gasLimit)
+        if (isSameAddress(nativeToken.address, currentGasCurrency)) {
+            return result
+        }
+        if (!currencyRatio) return new BigNumber(0)
+        return result.dividedBy(currencyRatio)
+    }, [gasLimit, gasOption, currencyRatio, currentGasCurrency, nativeToken])
 
     const gasFeeUSD = useMemo(() => {
         if (!gasFee) return '0'
-        return formatCurrency(formatWeiToEther(gasFee).times(nativeTokenPrice), 'USD', {
-            boundaries: {
-                min: 0.01,
+        if (isSameAddress(nativeToken.address, currentGasCurrency)) {
+            return formatCurrency(formatWeiToEther(gasFee).times(nativeTokenPrice), 'USD', {
+                boundaries: {
+                    min: 0.01,
+                },
+            })
+        }
+
+        if (!currencyToken || !currencyTokenPrice) return '0'
+
+        return formatCurrency(
+            new BigNumber(gasFee).shiftedBy(-currencyToken?.decimals).times(currencyTokenPrice),
+            'USD',
+            {
+                boundaries: {
+                    min: 0.01,
+                },
             },
-        })
-    }, [gasFee, nativeTokenPrice])
+        )
+    }, [gasFee, nativeTokenPrice, currencyTokenPrice, nativeToken.address, currentGasCurrency, currencyToken?.decimals])
 
     return gasOptions && !isZero(gasFee) ? (
         <Box className={classes.section}>
@@ -223,9 +269,9 @@ export function SelectGasSettingsToolbarUI({
             <Typography className={classes.gasSection} component="div">
                 <FormattedBalance
                     value={gasFee}
-                    decimals={nativeToken.decimals ?? 0}
+                    decimals={currencyToken?.decimals ?? 0}
                     significant={4}
-                    symbol={nativeToken.symbol}
+                    symbol={currencyToken?.symbol}
                     formatter={formatBalance}
                 />
                 <Typography className={classes.gasUSDPrice}>{t.gas_usd_price({ usd: gasFeeUSD })}</Typography>
@@ -235,7 +281,9 @@ export function SelectGasSettingsToolbarUI({
                     </Typography>
                     <Icons.Candle width={12} height={12} />
                 </div>
+                <Icons.ArrowDrop onClick={openCurrencyMenu} />
                 {menu}
+                {currencyMenu}
             </Typography>
         </Box>
     ) : null

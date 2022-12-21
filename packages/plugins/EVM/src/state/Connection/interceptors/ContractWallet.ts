@@ -156,7 +156,7 @@ export class ContractWallet implements Middleware<Context> {
         const provider = this.createProvider(context)
 
         // not a SC wallet provider
-        if (!provider) {
+        if (!provider?.owner) {
             await next()
             return
         }

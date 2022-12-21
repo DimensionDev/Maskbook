@@ -59,7 +59,7 @@ export function useMenuConfig(
             useShadowRoot ? ShadowRootMenu : Menu,
             {
                 PaperProps: menuProps?.PaperProps,
-                classes: { paper: classes.menu },
+                classes: { paper: classes.menu, ...menuProps.classes },
                 MenuListProps: menuProps?.MenuListProps,
                 open,
                 anchorEl,
