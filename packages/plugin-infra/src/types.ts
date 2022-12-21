@@ -178,16 +178,6 @@ export namespace Plugin.Shared {
         /** Native API supported */
         hasNativeAPI: boolean
 
-        /** Send request to native API */
-        send(
-            payload: JsonRpcPayload,
-            options?: {
-                account?: string
-                chainId?: ChainIdEVM
-                popupsWindow?: boolean
-            },
-        ): Promise<JsonRpcResponse>
-
         /** Open popup window */
         openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
 

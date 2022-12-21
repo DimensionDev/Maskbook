@@ -1,11 +1,9 @@
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import { isNil, omit } from 'lodash-es'
 import { defer } from '@masknet/kit'
 import { ChainId, getRPCConstants, PayloadEditor } from '@masknet/web3-shared-evm'
-import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper/index.js'
-import { nativeAPI } from '../../../../shared/native-rpc/index.js'
+import { removePopupWindow } from '../../../../background/services/helper/index.js'
 import { WalletRPC } from '../messages.js'
 
 enum JSON_RPC_ERROR_CODE {
@@ -116,57 +114,6 @@ export async function send(
 ): Promise<void> {
     const provider = await createProvider(options?.chainId)
     return provider.send(payload, callback)
-}
-
-/**
- * The entrance of all RPC requests to MaskWallet.
- */
-export async function sendPayload(payload: JsonRpcPayload, options?: Options) {
-    if (nativeAPI?.type === 'iOS') {
-        return nativeAPI.api.send(payload) as unknown as JsonRpcResponse
-    } else if (nativeAPI?.type === 'Android') {
-        const response = await nativeAPI?.api.sendJsonString(JSON.stringify(payload))
-        if (!response) throw new Error('Failed to send request to native APP.')
-        return JSON.parse(response) as JsonRpcResponse
-    } else {
-        return new Promise<JsonRpcResponse>(async (resolve, reject) => {
-            const callback = (error: Error | null, response?: JsonRpcResponse) => {
-                if (!isNil(error) || !isNil(response?.error)) {
-                    reject(getError(error, response))
-                } else if (response) resolve(response)
-            }
-
-            id += 1
-
-            const editor = PayloadEditor.fromPayload({
-                ...payload,
-                id,
-            })
-            if (editor.risky) {
-                await WalletRPC.pushUnconfirmedRequest(editor.fill())
-                UNCONFIRMED_CALLBACK_MAP.set(editor.pid!, callback)
-                if (options?.popupsWindow) openPopupWindow()
-                return
-            }
-
-            if (options?.chainId === ChainId.Astar) {
-                await send(
-                    {
-                        ...payload,
-                        params: payload.params?.map((x) => {
-                            if (x?.chainId) return omit(x, 'chainId')
-                            return x
-                        }),
-                    },
-                    callback,
-                    options,
-                )
-
-                return
-            }
-            send(payload, callback, options)
-        })
-    }
 }
 
 export async function confirmRequest(payload: JsonRpcPayload, options?: Options) {
