@@ -32,6 +32,7 @@ const useStyles = makeStyles()((theme) => ({
     checkboxGroup: {},
     label: {
         marginTop: theme.spacing(2),
+        fontFamily: 'PingFang SC',
         marginRight: 0,
         marginLeft: 0,
     },
@@ -60,7 +61,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export default memo(function Welcome() {
-    const [read, setRead] = useState(true)
+    const [read, setRead] = useState(false)
     const [allowedToCollect, setAllowedToCollect] = useState(false)
 
     const handleAgree = useCallback(async () => {
@@ -96,7 +97,7 @@ export default memo(function Welcome() {
                                 <a
                                     className={classes.link}
                                     target="_blank"
-                                    href="https://legal.mask.io/maskbook/Service-Agreement-beta=%20browser.html">
+                                    href="https://legal.mask.io/maskbook/service-agreement-beta-browser.html">
                                     Service Agreement
                                 </a>{' '}
                                 and{' '}

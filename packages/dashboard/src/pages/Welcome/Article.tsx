@@ -110,8 +110,15 @@ export const Article: FC<Props> = ({ className, ...rest }) => {
             </Typography>
             <Typography className={classes.p} mt="24px">
                 Users' identity private keys, backup passwords, wallet payment passwords, wallet private keys, mnemonic
-                phrases, keystores. Users' related information and browsing histories of their social accounts. Users'
-                addresses, balances, purchase histories, hash, or any personal information. Users' complete IP address.
+                phrases, keystores.
+                <br />
+                Users' related information and browsing histories of their social accounts.
+                <br />
+                Users' addresses, balances, purchase histories, hash, or any personal information.
+                <br />
+                Users' complete IP address.
+                <br />
+                <br />
                 Mask Network keeps users' encrypted information in users'; browser, please keep it safe and make sure to
                 back up constantly.
             </Typography>
