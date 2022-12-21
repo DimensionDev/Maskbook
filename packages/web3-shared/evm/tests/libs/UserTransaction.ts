@@ -37,12 +37,12 @@ describe('UserTransaction', async () => {
     })
 
     test('hash', () => {
-        const hash = '0x05a465d3001f59b9ddec7b1fb87454e4902c5b3bae0f020da88e4eea475f6516'
+        const hash = '0xa291d506adc38a60c6539bd4eef7dcd01a04b84d5196a12d91bd39d8903c5c30'
         expect(userTransaction.hash).toBe(hash)
     })
 
     test('requestId', () => {
-        const id = '0x6a955662926a9a874cd05d21ed9481ee5bade1669b40b804e347393c87981f3a'
+        const id = '0x4306460833ca3f38b308db101c2c411671cdbe9f2b511b00e56df9288702a5f4'
         expect(userTransaction.requestId).toBe(id)
     })
 })
