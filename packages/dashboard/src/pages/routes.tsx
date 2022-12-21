@@ -2,7 +2,6 @@ import React, { lazy, Suspense } from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom'
 import { DashboardFrame } from '../components/DashboardFrame/index.js'
 import { DashboardRoutes } from '@masknet/shared-base'
-import NoPersonaGuardRoute from './GuardRoute.js'
 
 const Wallets = lazy(() => import(/* webpackPrefetch: true */ './Wallets/index.js'))
 const Setup = lazy(() => import('./Setup/index.js'))
@@ -18,14 +17,7 @@ export function Pages() {
     return (
         <Suspense fallback={null}>
             <Routes>
-                <Route
-                    path={DashboardRoutes.Welcome}
-                    element={
-                        <NoPersonaGuardRoute redirectTo={DashboardRoutes.Personas}>
-                            <Welcome />
-                        </NoPersonaGuardRoute>
-                    }
-                />
+                <Route path={DashboardRoutes.Welcome} element={<Welcome />} />
                 <Route path={DashboardRoutes.Setup} element={<Setup />} />
                 <Route path={`${DashboardRoutes.SignUp}/*`} element={<SignUp />} />
                 <Route path={DashboardRoutes.SignIn} element={<SignIn />} />
