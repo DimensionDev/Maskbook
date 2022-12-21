@@ -257,15 +257,17 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             {t('buy_now')}
                                         </Button>
                                     ) : null}
-                                    <Button
-                                        color="primary"
-                                        className={classes.buyButton}
-                                        size="small"
-                                        endIcon={<Icons.LinkOut size={16} />}
-                                        variant="roundedContained"
-                                        onClick={() => window.open(first(coin.home_urls))}>
-                                        {t('open')}
-                                    </Button>
+                                    {isNFT ? (
+                                        <Button
+                                            color="primary"
+                                            className={classes.buyButton}
+                                            size="small"
+                                            endIcon={<Icons.LinkOut size={16} />}
+                                            variant="roundedContained"
+                                            onClick={() => window.open(first(coin.home_urls))}>
+                                            {t('open')}
+                                        </Button>
+                                    ) : null}
                                 </ThemeProvider>
                             </Stack>
                             <Stack direction="row" justifyContent="space-between" marginTop={2}>
