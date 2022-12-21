@@ -35,7 +35,7 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
     }
 
     private createWeb3(chainId: ChainId) {
-        return this.web3.createSDK(chainId)
+        return this.web3.createWeb3(chainId)
     }
 
     private createWalletContract(chainId: ChainId, address: string) {

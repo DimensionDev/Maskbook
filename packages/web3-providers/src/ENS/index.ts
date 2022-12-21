@@ -7,7 +7,7 @@ import type { DomainAPI } from '../entry-types.js'
 
 export class ENS_API implements DomainAPI.Provider<ChainId> {
     private get web3() {
-        return new Web3API().createSDK(ChainId.Mainnet)
+        return new Web3API().createWeb3(ChainId.Mainnet)
     }
 
     private get ens() {

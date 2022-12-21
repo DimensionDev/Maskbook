@@ -1,12 +1,17 @@
 import { toHex } from 'web3-utils'
-import { EthereumMethodType, createJsonRpcPayload } from '@masknet/web3-shared-evm'
+import { Web3 } from '@masknet/web3-providers'
+import { ChainId, EthereumMethodType, createJsonRpcPayload } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types.js'
 import { getError } from '../error.js'
 import { SharedContextSettings } from '../../../settings/index.js'
 
 export class MaskWallet implements Middleware<Context> {
+    private createProvider(chainId: ChainId) {
+        return Web3.createProvider(chainId)
+    }
+
     async fn(context: Context, next: () => Promise<void>) {
-        const { send, account, chainId } = SharedContextSettings.value
+        const { account, chainId } = SharedContextSettings.value
 
         switch (context.request.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
@@ -30,19 +35,20 @@ export class MaskWallet implements Middleware<Context> {
                     break
                 }
 
-                const response = await send(
-                    createJsonRpcPayload(0, {
-                        method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
-                        params: [signed],
-                    }),
-                )
-
-                if (!response.result) {
-                    context.abort(new Error(response.error?.message ?? 'Failed to send transaction.'))
-                    break
+                try {
+                    const provider = await this.createProvider(context.chainId)
+                    context.write(
+                        await provider.request<string>(
+                            createJsonRpcPayload(0, {
+                                method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
+                                params: [signed],
+                            }),
+                        ),
+                    )
+                } catch (error) {
+                    context.abort(getError(error, null, 'Failed to send transaction.'))
                 }
 
-                context.write(response.result as string)
                 break
             }
             case EthereumMethodType.PERSONAL_SIGN: {
