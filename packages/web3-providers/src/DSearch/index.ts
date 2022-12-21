@@ -258,24 +258,30 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             | NonFungibleCollectionResult<ChainId, SchemaType>
         > = []
 
-        for (const { rules, type } of getHandlers<ChainId, SchemaType>()) {
-            for (const rule of rules) {
-                if (!['token', 'twitter'].includes(rule.key)) continue
+        if (name.length < 6) {
+            result = tokens.filter((t) => t.symbol?.toLowerCase() === name.toLowerCase())
+        }
 
-                const filtered = tokens.filter((x) => (type ? type === x.type : true))
-                if (rule.type === 'exact') {
-                    const item = filtered.find((x) => rule.filter?.(x, name, filtered))
-                    if (item) result = [...result, { ...item, keyword: name }]
-                }
-                if (rule.type === 'fuzzy' && rule.fullSearch) {
-                    const items = rule
-                        .fullSearch<
-                            | FungibleTokenResult<ChainId, SchemaType>
-                            | NonFungibleTokenResult<ChainId, SchemaType>
-                            | NonFungibleCollectionResult<ChainId, SchemaType>
-                        >(name, filtered)
-                        ?.map((x) => ({ ...x, keyword: name }))
-                    if (items?.length) result = [...result, ...items]
+        if (!result.length) {
+            for (const { rules, type } of getHandlers<ChainId, SchemaType>()) {
+                for (const rule of rules) {
+                    if (!['token', 'twitter'].includes(rule.key)) continue
+
+                    const filtered = tokens.filter((x) => (type ? type === x.type : true))
+                    if (rule.type === 'exact') {
+                        const item = filtered.find((x) => rule.filter?.(x, name, filtered))
+                        if (item) result = [...result, { ...item, keyword: name }]
+                    }
+                    if (rule.type === 'fuzzy' && rule.fullSearch) {
+                        const items = rule
+                            .fullSearch<
+                                | FungibleTokenResult<ChainId, SchemaType>
+                                | NonFungibleTokenResult<ChainId, SchemaType>
+                                | NonFungibleCollectionResult<ChainId, SchemaType>
+                            >(name, filtered)
+                            ?.map((x) => ({ ...x, keyword: name }))
+                        if (items?.length) result = [...result, ...items]
+                    }
                 }
             }
         }
