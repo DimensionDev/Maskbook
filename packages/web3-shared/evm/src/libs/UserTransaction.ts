@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js'
 import Web3 from 'web3'
 import * as ABICoder from 'web3-eth-abi'
 import { AbiItem, bytesToHex, hexToBytes, keccak256, padLeft, toNumber } from 'web3-utils'
-import { toFixed } from '@masknet/web3-shared-base'
+import { multipliedBy, toFixed } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import EntryPointABI from '@masknet/web3-contracts/abis/EntryPoint.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
@@ -66,7 +66,7 @@ const DEFAULT_USER_OPERATION: Required<UserOperation> = {
     // default verification gas. will add create2 cost (3200 + 200 * length) if initCode exists
     verificationGas: '100000',
     // should also cover calldata cost.
-    preVerificationGas: '0',
+    preVerificationGas: '21000',
     maxFeePerGas: '0',
     maxPriorityFeePerGas: '1000000000',
     paymaster: getZeroAddress(),
@@ -191,13 +191,12 @@ export class UserTransaction {
         }
 
         if (isZeroString(callGas) && !isEmptyHex(callData)) {
-            this.userOperation.callGas = toFixed(
-                await web3.eth.estimateGas({
-                    from: this.entryPoint,
-                    to: sender,
-                    data: callData,
-                }),
-            )
+            const estimatedGas = await web3.eth.estimateGas({
+                from: this.entryPoint,
+                to: sender,
+                data: callData,
+            })
+            this.userOperation.callGas = toFixed(multipliedBy(estimatedGas, 1.5))
         }
         if (isZeroString(maxFeePerGas)) {
             const block = await web3.eth.getBlock('latest')
@@ -215,9 +214,12 @@ export class UserTransaction {
         }
         if (isZeroString(preVerificationGas)) {
             this.userOperation.preVerificationGas = toFixed(
-                hexToBytes(this.packAll)
-                    .map<number>((x) => (x === 0 ? 4 : 16))
-                    .reduce((sum, x) => sum + x),
+                Math.max(
+                    hexToBytes(this.packAll)
+                        .map<number>((x) => (x === 0 ? 4 : 16))
+                        .reduce((sum, x) => sum + x),
+                    Number.parseInt(DEFAULT_USER_OPERATION.preVerificationGas, 10),
+                ),
             )
         }
         if (!paymaster || isZeroAddress(paymaster)) {
@@ -226,7 +228,7 @@ export class UserTransaction {
             if (!PAYMENT_TOKEN_ADDRESS) throw new Error('No payment token address.')
 
             this.userOperation.paymaster = PAYMASTER_CONTRACT_ADDRESS
-            this.userOperation.paymasterData = padLeft(PAYMENT_TOKEN_ADDRESS, 32)
+            this.userOperation.paymasterData = padLeft(PAYMENT_TOKEN_ADDRESS, 64)
         }
 
         return this
@@ -275,7 +277,7 @@ export class UserTransaction {
 
         return UserTransaction.fromUserOperation(chainId, entryPoint, {
             ...DEFAULT_USER_OPERATION,
-            sender: from,
+            sender: formatEthereumAddress(from),
             nonce: toNumber(nonce as number),
             callData: coder.encodeFunctionCall(CALL_WALLET_TYPE, [to, value, data]),
             signature: '0x',

@@ -143,7 +143,7 @@ const SelectWallet = memo(() => {
             await WalletRPC.resolveMaskAccount([
                 {
                     address: selected,
-                    owner: wallet?.address,
+                    owner: wallet?.owner,
                     identifier: wallet?.identifier,
                 },
             ])
