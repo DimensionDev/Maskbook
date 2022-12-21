@@ -44,7 +44,14 @@ export class BaseContractWalletProvider extends BaseHostedProvider implements EV
     }
 
     override async switchAccount(account?: string, owner?: string, identifier = EMPTY_IDENTIFIER) {
-        if (!isValidAddress(owner) || !identifier) return
+        if (!isValidAddress(owner) || !identifier) {
+            await this.ownerStorage?.setValue({
+                account: this.options.getDefaultAccount(),
+                identifier: EMPTY_IDENTIFIER,
+            })
+            await super.switchAccount(account)
+            return
+        }
 
         await super.switchAccount(account)
 
