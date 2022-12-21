@@ -202,7 +202,7 @@ export class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<Chai
             urlcat('/v1/token/price', { chain_id: chainId, contract_address: address }),
         )
 
-        return data?.price ?? 0
+        return data?.price
     }
 }
 
