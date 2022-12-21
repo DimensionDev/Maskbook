@@ -742,6 +742,7 @@ export namespace Plugin.SNSAdaptor {
              */
             Decorator: InjectUI<{
                 identity?: SocialIdentity
+                userId?: string
                 persona?: string
                 socialAccounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
             }>

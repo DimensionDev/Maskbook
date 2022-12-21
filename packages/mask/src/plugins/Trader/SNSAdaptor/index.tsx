@@ -140,17 +140,14 @@ const sns: Plugin.SNSAdaptor.Definition<
         label: 'Avatar Web3 Profile',
         priority: 99999,
         UI: {
-            Decorator({ identity }) {
-                const { value: collectionList } = useCollectionByTwitterHandler(identity?.identifier?.userId)
+            Decorator({ userId }) {
+                const { value: collectionList } = useCollectionByTwitterHandler(userId)
                 const isMinimalMode = useIsMinimalMode(PluginID.Web3ProfileCard)
-                if (!identity?.identifier?.userId || !collectionList?.[0] || isMinimalMode) return null
+                if (!userId || !collectionList?.[0] || isMinimalMode) return null
 
                 return (
                     <Box display="flex" alignItems="top" justifyContent="center">
-                        <NFTProjectAvatarBadge
-                            userId={identity.identifier.userId}
-                            address={collectionList?.[0].address}
-                        />
+                        <NFTProjectAvatarBadge userId={userId} address={collectionList?.[0].address} />
                     </Box>
                 )
             },

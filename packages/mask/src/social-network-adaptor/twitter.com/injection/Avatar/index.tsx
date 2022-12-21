@@ -3,7 +3,6 @@ import { Plugin } from '@masknet/plugin-infra'
 import { Avatar } from '../../../../components/InjectedComponents/Avatar.js'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { inpageAvatarSelector } from '../../utils/selector.js'
-import { getUserIdentity } from '../../utils/user.js'
 
 function getTwitterId(ele: HTMLElement) {
     const profileLink = ele.querySelector('a[role="link"]') as HTMLAnchorElement
@@ -23,7 +22,6 @@ export async function injectAvatar(signal: AbortSignal) {
 
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
                 proxy.realCurrent = ele.firstChild as HTMLElement
-                const identity = await getUserIdentity(twitterId)
                 const isSuggestion = ele.closest('[data-testid=UserCell]')
                 const sourceType = isSuggestion
                     ? Plugin.SNSAdaptor.AvatarRealmSourceType.Suggestion
@@ -40,7 +38,7 @@ export async function injectAvatar(signal: AbortSignal) {
                             height: 16,
                             zIndex: 2,
                         }}>
-                        {identity ? <Avatar identity={identity} sourceType={sourceType} /> : null}
+                        <Avatar userId={twitterId} sourceType={sourceType} />
                     </div>,
                 )
                 remover = root.destroy
