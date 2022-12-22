@@ -19,14 +19,14 @@ function isAcceptablePermission(x: string): x is browser.permissions.Permission 
 }
 
 export default function RequestPermissionPage() {
-    const location = useLocation()
-    const params = new URLSearchParams(location.search)
-    const origins = params.getAll('origins')
-    const permissions = params.getAll('permissions').filter(isAcceptablePermission)
+    const param = useLocation()
+    const _ = new URLSearchParams(param.search)
+    const origins = _.getAll('origins')
+    const permissions = _.getAll('permissions').filter(isAcceptablePermission)
 
     const { retry, value: hasPermission } = useAsyncRetry(
         () => browser.permissions.contains({ origins, permissions }),
-        [location.search],
+        [param.search],
     )
 
     useEffect(() => {

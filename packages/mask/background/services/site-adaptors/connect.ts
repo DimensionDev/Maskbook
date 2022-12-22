@@ -6,19 +6,8 @@ import { SetupGuideStep } from '../../../shared/legacy-settings/types.js'
 import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions.js'
 import { requestSiteAdaptorsPermission } from '../helper/request-permission.js'
 import stringify from 'json-stable-stringify'
-import { compact } from 'lodash-es'
 
-const hasPermission = async (origin: string): Promise<boolean> => {
-    return browser.permissions.contains({
-        origins: [origin],
-    })
-}
-
-interface SitesQueryOptions {
-    isSocialNetwork?: boolean
-}
-
-export async function getSupportedSites(options: SitesQueryOptions = {}): Promise<
+export async function getSupportedSites(options: { isSocialNetwork?: boolean } = {}): Promise<
     Array<{
         networkIdentifier: string
     }>
@@ -26,36 +15,6 @@ export async function getSupportedSites(options: SitesQueryOptions = {}): Promis
     return [...definedSiteAdaptors.values()]
         .filter((x) => (options.isSocialNetwork === undefined ? true : x.isSocialNetwork === options.isSocialNetwork))
         .map((x) => ({ networkIdentifier: x.networkIdentifier }))
-}
-
-export async function getSupportedOrigins(options: SitesQueryOptions = {}): Promise<
-    Array<{
-        networkIdentifier: string
-        origins: string[]
-    }>
-> {
-    return [...definedSiteAdaptors.values()]
-        .filter((x) => (options.isSocialNetwork === undefined ? true : x.isSocialNetwork === options.isSocialNetwork))
-        .map((x) => ({ networkIdentifier: x.networkIdentifier, origins: [...x.declarativePermissions.origins] }))
-}
-export async function getOriginsWithoutPermission(options: SitesQueryOptions = {}): Promise<
-    Array<{
-        networkIdentifier: string
-        origins: string[]
-    }>
-> {
-    const groups = await getSupportedOrigins(options)
-    const promises = groups.map(async ({ origins, networkIdentifier }) => {
-        const unGrantedOrigins = compact(
-            await Promise.all(origins.map((origin) => hasPermission(origin).then((yes) => (yes ? null : origin)))),
-        )
-        if (!unGrantedOrigins.length) return null
-        return {
-            networkIdentifier,
-            origins: compact(unGrantedOrigins),
-        }
-    })
-    return compact(await Promise.all(promises))
 }
 
 export async function setupSite(network: string, newTab: boolean) {
