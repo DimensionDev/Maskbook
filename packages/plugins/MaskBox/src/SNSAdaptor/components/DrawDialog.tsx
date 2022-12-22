@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { useCallback } from 'react'
 import { useContainer } from 'unstated-next'
 import { makeStyles, ActionButton } from '@masknet/theme'
@@ -11,14 +12,14 @@ import {
     PluginWalletStatusBar,
     WalletConnectedBoundary,
     EthereumERC20TokenApprovedBoundary,
+    TokenPrice,
+    GasSettingBar,
 } from '@masknet/shared'
 import { Box, Button, DialogActions, DialogContent, TextField, Typography } from '@mui/material'
 import { formatEthereumAddress, SchemaType, useMaskBoxConstants } from '@masknet/web3-shared-evm'
 import { formatBalance, multipliedBy } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { BoxInfo } from '../../type.js'
-import { GasSettingBar } from '../../../Wallet/SNSAdaptor/GasSettingDialog/GasSettingBar.js'
-import { TokenPrice } from '../../../../components/shared/TokenPrice.js'
 import { Context } from '../../hooks/useContext.js'
 import { useI18N } from '../../locales/index.js'
 

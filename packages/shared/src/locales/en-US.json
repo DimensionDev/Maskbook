@@ -176,5 +176,11 @@
     "account_icon_tooltips$next_id": "Data source is retrieved from NEXT.ID.",
     "account_icon_tooltips_only$next_id": "Data source is retrieved from NEXT.ID.",
     "wallet_status_button_copy_address": "Copy Address",
-    "copy_success_of_wallet_addr": "Copy wallet address successfully!"
+    "copy_success_of_wallet_addr": "Copy wallet address successfully!",
+    "applications_create_persona_title": "Persona",
+    "applications_create_persona_action": "Create persona",
+    "persona_boundary_create_persona": "Create Persona",
+    "persona_boundary_connect_persona": "Connect Persona",
+    "persona_boundary_verify_persona": "Verify your Twitter ID",
+    "applications_create_persona_hint": "Please create a Persona and verify your account to use this function."
 }

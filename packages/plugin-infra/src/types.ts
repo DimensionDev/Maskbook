@@ -1,5 +1,5 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
-import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
+import type { UnboundedRegistry, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import type {
     BindingProof,
     ECKeyIdentifier,
@@ -14,6 +14,9 @@ import type {
     PopupRoutes,
     ProfileIdentifier,
     ScopedStorage,
+    ValueRefWithReady,
+    MaskEvents,
+    DashboardRoutes,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -422,6 +425,9 @@ export namespace Plugin.SNSAdaptor {
 
         getPostURL?: (identifier: PostIdentifier) => URL | null
         share?: (text: string) => void
+        currentPersonaIdentifier: ValueRefWithReady<string>
+        MaskMessages: WebExtensionMessage<MaskEvents>
+        openDashboard: (route: DashboardRoutes) => void
     }
 
     export type SelectProviderDialogEvent =

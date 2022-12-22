@@ -3,11 +3,11 @@ import { makeStyles } from '@masknet/theme'
 import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton.js'
 import { startWatch, createReactRootShadowed } from '../../../../utils/index.js'
 import { searchEditProfileSelector } from '../../utils/selector.js'
-import { ConnectPersonaBoundary } from '../../../../components/shared/ConnectPersonaBoundary.js'
 import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog } from './NFTAvatarEditProfileDialog.js'
 import { ButtonStyle, ButtonProps } from '../../constant.js'
 import { useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
+import { ConnectPersonaBoundary } from '@masknet/shared'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     injectOpenNFTAvatarEditProfileButtonAtProfilePage(signal)

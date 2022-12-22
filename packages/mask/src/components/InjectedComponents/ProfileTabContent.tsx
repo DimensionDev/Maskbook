@@ -12,6 +12,7 @@ import { getAvailablePlugins } from '@masknet/plugin-infra'
 import {
     AccountIcon,
     AddressItem,
+    ConnectPersonaBoundary,
     GrantPermissions,
     PluginCardFrameMini,
     useSocialAccountsBySettings,
@@ -27,7 +28,6 @@ import { MaskMessages, addressSorter, useI18N, useLocationChange } from '../../u
 import { useCurrentVisitingSocialIdentity } from '../DataSource/useActivatedUI.js'
 import { useCollectionByTwitterHandler } from '../../plugins/Trader/trending/useTrending.js'
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
-import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
 import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry.js'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
 import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'

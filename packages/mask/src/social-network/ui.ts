@@ -15,7 +15,7 @@ import {
 } from '@masknet/shared-base'
 import type { ThemeSettings } from '@masknet/web3-shared-base'
 import { Flags } from '../../shared/index.js'
-import { currentSetupGuideStatus } from '../../shared/legacy-settings/settings.js'
+import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../shared/legacy-settings/settings.js'
 import type { SetupGuideContext } from '../../shared/legacy-settings/types.js'
 import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
 import Services from '../extension/service.js'
@@ -169,6 +169,9 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     setMinimalMode: Services.Settings.setPluginMinimalModeEnabled,
                     getPostURL: ui.utils.getPostURL,
                     share: ui.utils.share,
+                    currentPersonaIdentifier,
+                    MaskMessages,
+                    openDashboard: Services.Helper.openDashboard,
                 }
             },
             Services.Settings.getPluginMinimalModeEnabled,

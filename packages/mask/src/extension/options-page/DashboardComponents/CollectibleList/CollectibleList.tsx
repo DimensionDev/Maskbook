@@ -114,7 +114,7 @@ export function CollectibleList(props: CollectibleListProps) {
                         <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
                         {hasRetry ? (
                             <Button className={classes.button} variant="text" onClick={retry}>
-                                {t('plugin_collectible_retry')}
+                                {t('retry')}
                             </Button>
                         ) : null}
                     </Box>

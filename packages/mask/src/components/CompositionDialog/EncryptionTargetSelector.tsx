@@ -8,7 +8,7 @@ import { E2EUnavailableReason } from './CompositionUI.js'
 import { Icons } from '@masknet/icons'
 import { EncryptionTargetType } from '@masknet/shared-base'
 import { unreachable } from '@masknet/kit'
-import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
+import { ConnectPersonaBoundary } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     optionTitle: {

@@ -2,8 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { BoxInfo, BoxMetadata, MediaType } from '../../type.js'
 import { Box } from '@mui/material'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
-import { Video } from '../../../../components/shared/Video.js'
-import { MaskSharpIconOfSize } from '@masknet/shared'
+import { MaskSharpIconOfSize, Video } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     main: {

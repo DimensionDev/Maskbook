@@ -18,6 +18,9 @@ export const RestPartOfPluginUIContextShared: Omit<
     | 'getPersonaAvatar'
     | 'ownProofChanged'
     | 'setMinimalMode'
+    | 'openDashboard'
+    | 'currentPersonaIdentifier'
+    | 'MaskMessages'
 > = {
     currentPersona: createSubscriptionFromAsync(
         Services.Settings.getCurrentPersonaIdentifier,

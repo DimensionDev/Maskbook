@@ -125,6 +125,7 @@
       "@masknet/plugin-gitcoin": ["./packages/plugins/Gitcoin/src"],
       "@masknet/plugin-smart-pay": ["./packages/plugins/SmartPay/src"],
       "@masknet/plugin-maskbox": ["/packages/plugins/MaskBox/src"],
+      "@masknet/plugin-collectible": ["/packages/plugins/Collectible/src"],
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]
     }
