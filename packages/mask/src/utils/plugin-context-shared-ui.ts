@@ -24,7 +24,7 @@ export const RestPartOfPluginUIContextShared: Omit<
         undefined,
         MaskMessages.events.currentPersonaIdentifier.on,
     ),
-    send: WalletRPC.sendPayload,
+    send: WalletRPC.send,
     openPopupWindow: Services.Helper.openPopupWindow,
     closePopupWindow: Services.Helper.removePopupWindow,
     openPopupConnectWindow: Services.Helper.openPopupConnectWindow,

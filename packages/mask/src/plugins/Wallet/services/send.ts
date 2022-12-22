@@ -22,7 +22,7 @@ interface Options {
 /**
  * Send to built-in RPC endpoints.
  */
-export async function send(
+async function internalSend(
     payload: JsonRpcPayload,
     callback: (error: Error | null, response?: JsonRpcResponse) => void,
     options?: Options,
@@ -80,7 +80,7 @@ let id = 0
 /**
  * The entrance of all RPC requests to MaskWallet.
  */
-export async function sendPayload(payload: JsonRpcPayload, options?: Options) {
+export async function send(payload: JsonRpcPayload, options?: Options) {
     return new Promise<JsonRpcResponse>(async (resolve, reject) => {
         const callback = (error: Error | null, response?: JsonRpcResponse) => {
             if (!isNil(error) || !isNil(response?.error)) {
@@ -102,7 +102,7 @@ export async function sendPayload(payload: JsonRpcPayload, options?: Options) {
         }
 
         if (options?.chainId === ChainId.Astar) {
-            await send(
+            await internalSend(
                 {
                     ...payload,
                     params: payload.params?.map((x) => {
@@ -116,7 +116,7 @@ export async function sendPayload(payload: JsonRpcPayload, options?: Options) {
 
             return
         }
-        send(payload, callback, options)
+        internalSend(payload, callback, options)
     })
 }
 
@@ -125,7 +125,7 @@ export async function confirmRequest(payload: JsonRpcPayload, options?: Options)
     if (!pid) return
 
     const [deferred, resolve, reject] = defer<JsonRpcResponse | undefined, Error>()
-    send(
+    internalSend(
         payload,
         (error, response) => {
             UNCONFIRMED_CALLBACK_MAP.get(pid)?.(error, response)
