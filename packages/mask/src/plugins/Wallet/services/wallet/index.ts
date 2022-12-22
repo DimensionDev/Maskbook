@@ -96,13 +96,13 @@ export async function getDerivableAccounts(mnemonic: string, page: number, pageS
 }
 
 export async function signTransaction(address: string, config: Transaction) {
-    if (!config.chainId) throw new Error('Invalid chain id.')
+    const chainId = config.chainId
+    if (!chainId) throw new Error('Invalid chain id.')
 
     const privateKey = await exportPrivateKey(address)
-    const web3 = Web3.createWeb3(config.chainId!)
-
-    const { rawTransaction } = await web3.eth.accounts.signTransaction(config, `0x${privateKey}`)
+    const { rawTransaction } = await Web3.createWeb3(chainId).eth.accounts.signTransaction(config, `0x${privateKey}`)
     if (!rawTransaction) throw new Error('Failed to sign transaction.')
+
     return rawTransaction
 }
 
