@@ -1,3 +1,7 @@
+import type React from 'react'
+import type { Option, Result } from 'ts-results-es'
+import type { Subscription } from 'use-subscription'
+import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import type {
@@ -33,10 +37,6 @@ import type {
 } from '@masknet/web3-shared-base'
 import type { ChainId as ChainIdEVM, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
-import type React from 'react'
-import type { Option, Result } from 'ts-results-es'
-import type { Subscription } from 'use-subscription'
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { CompositionType } from './entry-content-script.js'
 
 export declare namespace Plugin {
@@ -228,7 +228,7 @@ export namespace Plugin.Shared {
         signTransaction(address: string, transaction: TransactionEVM): Promise<string>
 
         /** Sign personal message, aka. eth.personal.sign() */
-        signPersonalMessage(address: string, message: string): Promise<string>
+        signPersonalMessage(message: string, address: string): Promise<string>
 
         /** Sign typed data */
         signTypedData(address: string, message: string): Promise<string>
