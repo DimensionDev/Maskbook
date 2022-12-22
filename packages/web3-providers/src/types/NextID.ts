@@ -18,7 +18,7 @@ export namespace NextIDBaseAPI {
             createdAt: string,
             patchData: unknown,
             pluginID: string,
-        ): Promise<Result<T, string>>
+        ): Promise<Result<T, null>>
         getByIdentity<T>(
             key: string,
             platform: NextIDPlatform,
@@ -32,7 +32,7 @@ export namespace NextIDBaseAPI {
             identity: string,
             patchData: unknown,
             pluginID: string,
-        ): Promise<Result<NextIDStoragePayload, string>>
+        ): Promise<Result<NextIDStoragePayload, null>>
     }
     export interface Proof {
         bindProof(

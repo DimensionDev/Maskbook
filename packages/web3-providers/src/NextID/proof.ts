@@ -10,9 +10,11 @@ import {
     NextIDPlatform,
     toBase64,
 } from '@masknet/shared-base'
-import { deleteCache, fetchJSON } from './helpers.js'
 import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
+import { fetchJSON } from '../entry-helpers.js'
+import { staleNextIDCached } from './helpers.js'
+import { fetchSquashed } from '../helpers/fetchSquashed.js'
 
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
@@ -49,7 +51,6 @@ const getExistedBindingQueryURL = (platform: string, identity: string, personaPu
     })
 
 export class NextIDProofAPI implements NextIDBaseAPI.Proof {
-    // TODO: remove 'bind' in project for business context.
     async bindProof(
         uuid: string,
         personaPublicKey: string,
@@ -77,7 +78,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             created_at: createdAt,
         }
 
-        const result = await fetchJSON(urlcat(BASE_URL, '/v1/proof'), {
+        const result = await fetchJSON<any>(urlcat(BASE_URL, '/v1/proof'), {
             body: JSON.stringify(requestBody),
             method: 'POST',
         })
@@ -86,18 +87,19 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         const cacheKeyOfQueryPersona = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
         const cacheKeyOfQueryPlatform = getPersonaQueryURL(platform, identity)
         const cacheKeyOfExistedBinding = getExistedBindingQueryURL(platform, identity, personaPublicKey)
-        deleteCache(cacheKeyOfQueryPersona)
-        deleteCache(cacheKeyOfQueryPlatform)
-        deleteCache(cacheKeyOfExistedBinding)
+
+        await staleNextIDCached(cacheKeyOfExistedBinding)
+        await staleNextIDCached(cacheKeyOfQueryPersona)
+        await staleNextIDCached(cacheKeyOfQueryPlatform)
 
         return result
     }
 
     async queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean) {
         const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
-        const response = await fetchJSON<NextIDBindings>(url, {}, enableCache)
+        const response = await fetchJSON<NextIDBindings>(url, undefined, fetchSquashed)
         // Will have only one item when query by personaPublicKey
-        return first(response.unwrap().ids)
+        return first(response.ids)
     }
 
     async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page?: number) {
@@ -106,11 +108,10 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         const response = await fetchJSON<NextIDBindings>(
             urlcat(BASE_URL, '/v1/proof', { platform, identity, page, exact: true }),
             undefined,
-            true,
+            fetchSquashed,
         )
 
-        // TODO: merge Pagination into this
-        return response.unwrap().ids
+        return response.ids
     }
     async queryAllExistedBindingsByPlatform(platform: NextIDPlatform, identity: string) {
         const nextIDPersonaBindings: NextIDPersonaBindings[] = []
@@ -128,9 +129,9 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         if (!platform && !identity) return false
 
         const url = getExistedBindingQueryURL(platform, identity, personaPublicKey)
-        const result = await fetchJSON<BindingProof>(url, {}, enableCache)
+        const result = await fetchJSON<BindingProof>(url, undefined, fetchSquashed)
 
-        return result.map(() => true).unwrapOr(false)
+        return !!result?.is_valid
     }
 
     async queryProfilesByRelationService(identity: string) {
@@ -197,13 +198,14 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         })
 
         return response
-            .map((x) => ({
-                postContent: x.post_content[nextIDLanguageFormat ?? 'default'] ?? x.post_content.default,
-                signPayload: JSON.stringify(JSON.parse(x.sign_payload)),
-                createdAt: x.created_at,
-                uuid: x.uuid,
-            }))
-            .unwrapOr(null)
+            ? {
+                  postContent:
+                      response.post_content[nextIDLanguageFormat ?? 'default'] ?? response.post_content.default,
+                  signPayload: JSON.stringify(JSON.parse(response.sign_payload)),
+                  createdAt: response.created_at,
+                  uuid: response.uuid,
+              }
+            : null
     }
 }
 
