@@ -178,16 +178,6 @@ export namespace Plugin.Shared {
         /** Native API supported */
         hasNativeAPI: boolean
 
-        /** Send request to native API */
-        send(
-            payload: JsonRpcPayload,
-            options?: {
-                account?: string
-                chainId?: ChainIdEVM
-                popupsWindow?: boolean
-            },
-        ): Promise<JsonRpcResponse>
-
         /** Open popup window */
         openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
 
@@ -244,6 +234,23 @@ export namespace Plugin.Shared {
 
         /** Remove a old wallet */
         removeWallet(id: string, password?: string): Promise<void>
+
+        /** Send request to native API, for a risky request will be added into the waiting queue. */
+        send(
+            payload: JsonRpcPayload,
+            options?: {
+                account?: string
+                chainId?: ChainIdEVM
+                popupsWindow?: boolean
+            },
+        ): Promise<JsonRpcResponse>
+        /** Confirm a request */
+        confirmRequest(
+            payload: JsonRpcPayload,
+            options?: { disableClose?: boolean; popupsWindow?: boolean },
+        ): Promise<JsonRpcResponse | void>
+        /** Reject a request */
+        rejectRequest(payload: JsonRpcPayload): Promise<void>
     }
 
     export interface Definition<

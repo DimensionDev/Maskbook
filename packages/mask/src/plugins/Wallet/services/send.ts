@@ -1,6 +1,6 @@
 import { isNil, omit } from 'lodash-es'
-import { defer } from '@masknet/kit'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import { defer } from '@masknet/kit'
 import { Web3 } from '@masknet/web3-providers'
 import {
     ChainId,
@@ -124,7 +124,7 @@ export async function confirmRequest(payload: JsonRpcPayload, options?: Options)
     const { pid } = PayloadEditor.fromPayload(payload)
     if (!pid) return
 
-    const [deferred, resolve, reject] = defer<JsonRpcResponse | undefined, Error>()
+    const [deferred, resolve, reject] = defer<JsonRpcResponse, Error>()
     internalSend(
         payload,
         (error, response) => {
@@ -135,6 +135,10 @@ export async function confirmRequest(payload: JsonRpcPayload, options?: Options)
             }
             if (response?.error) {
                 reject(new Error(`Failed to send transaction: ${response.error?.message ?? response.error}`))
+                return
+            }
+            if (!response) {
+                reject(new Error('No response.'))
                 return
             }
             WalletRPC.deleteUnconfirmedRequest(payload)

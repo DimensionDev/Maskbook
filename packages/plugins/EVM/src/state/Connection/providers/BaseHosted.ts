@@ -1,11 +1,11 @@
 import type { RequestArguments } from 'web3-core'
 import { toHex } from 'web3-utils'
 import type { ProviderOptions } from '@masknet/web3-shared-base'
-import { ExtensionSite, getSiteType, isEnhanceableSiteType, StorageObject } from '@masknet/shared-base'
+import type { StorageObject } from '@masknet/shared-base'
 import { ChainId, getDefaultChainId, isValidAddress, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
-import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
 import type { EVM_Provider } from '../types.js'
 import { BaseProvider } from './Base.js'
+import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
 
 export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
     private hostedStorage:
@@ -99,14 +99,8 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         requestArguments: RequestArguments,
         options?: ProviderOptions<ChainId>,
     ): Promise<T> {
-        const response = await SharedContextSettings.value.send(
+        return this.createWeb3Provider(options).request<T>(
             PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
-            {
-                chainId: this.chainId,
-                popupsWindow: getSiteType() === ExtensionSite.Dashboard || isEnhanceableSiteType(),
-                ...options,
-            },
         )
-        return response?.result as T
     }
 }
