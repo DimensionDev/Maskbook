@@ -9,9 +9,8 @@ import {
     EthereumMethodType,
     PayloadEditor,
 } from '@masknet/web3-shared-evm'
-import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper/index.js'
-import { nativeAPI } from '../../../../shared/native-rpc/index.js'
 import { WalletRPC } from '../messages.js'
+import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper/index.js'
 
 interface Options {
     account?: string
@@ -35,13 +34,13 @@ export async function send(
         case EthereumMethodType.ETH_SEND_TRANSACTION:
         case EthereumMethodType.MASK_REPLACE_TRANSACTION:
             const transaction = PayloadEditor.fromPayload(payload).signableConfig
-            if (!transaction?.from || !transaction.to || !chainId) return
+            if (!transaction?.from || !transaction.to) return
 
             const signed = await WalletRPC.signTransaction(transaction.from as string, {
                 chainId,
                 ...transaction,
             })
-            await provider.send(
+            provider.send(
                 {
                     ...payload,
                     method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
@@ -69,7 +68,7 @@ export async function send(
             }
             break
         default:
-            await provider.send(payload, callback)
+            provider.send(payload, callback)
             break
     }
 }
@@ -82,14 +81,6 @@ let id = 0
  * The entrance of all RPC requests to MaskWallet.
  */
 export async function sendPayload(payload: JsonRpcPayload, options?: Options) {
-    if (nativeAPI?.type === 'iOS') {
-        return nativeAPI.api.send(payload) as unknown as JsonRpcResponse
-    }
-    if (nativeAPI?.type === 'Android') {
-        const response = await nativeAPI?.api.sendJsonString(JSON.stringify(payload))
-        if (!response) throw new Error('Failed to send request to native APP.')
-        return JSON.parse(response) as JsonRpcResponse
-    }
     return new Promise<JsonRpcResponse>(async (resolve, reject) => {
         const callback = (error: Error | null, response?: JsonRpcResponse) => {
             if (!isNil(error) || !isNil(response?.error)) {
