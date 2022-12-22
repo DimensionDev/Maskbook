@@ -1,28 +1,38 @@
 import { first, nth } from 'lodash-es'
 import Web3SDK from 'web3'
 import type { FeeHistoryResult } from 'web3-eth'
+import type { HttpProvider } from 'web3-core'
 import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
 import {
     AddressType,
     ChainId,
     chainResolver,
+    createWeb3Provider,
+    createWeb3Request,
     GasOption,
     getRPCConstants,
     isValidAddress,
+    Web3Provider,
 } from '@masknet/web3-shared-evm'
 import type { GasOptionAPI, Web3BaseAPI } from '../entry-types.js'
 
-export class Web3API implements Web3BaseAPI.Provider<ChainId, AddressType, Web3SDK> {
+export class Web3API implements Web3BaseAPI.Provider<ChainId, AddressType, Web3Provider, Web3SDK> {
     async getAddressType(chainId: ChainId, address: string): Promise<AddressType | undefined> {
         if (!isValidAddress(address)) return
-        const code = await this.createSDK(chainId).eth.getCode(address)
+        const code = await this.createWeb3(chainId).eth.getCode(address)
         return code === '0x' ? AddressType.ExternalOwned : AddressType.Contract
     }
 
-    createSDK(chainId: ChainId) {
+    createWeb3(chainId: ChainId) {
         const RPC_URL = first(getRPCConstants(chainId).RPC_URLS)
         if (!RPC_URL) throw new Error('Failed to create web3 provider.')
         return new Web3SDK(RPC_URL)
+    }
+
+    createProvider(chainId: ChainId) {
+        const web3 = this.createWeb3(chainId)
+        const provider = web3.currentProvider as HttpProvider
+        return createWeb3Provider(createWeb3Request(provider.send))
     }
 }
 
@@ -57,7 +67,7 @@ export class Web3GasOptionAPI implements GasOptionAPI.Provider<ChainId, GasOptio
     }
 
     private async getGasOptionsForEIP1559(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
-        const web3 = this.web3.createSDK(chainId)
+        const web3 = this.web3.createWeb3(chainId)
         const history = await web3.eth.getFeeHistory(Web3GasOptionAPI.HISTORICAL_BLOCKS, 'pending', [25, 50, 75])
         const blocks = this.formatFeeHistory(history)
         const slow = this.avg(blocks.map((b) => b.priorityFeePerGas[0]))
@@ -94,7 +104,7 @@ export class Web3GasOptionAPI implements GasOptionAPI.Provider<ChainId, GasOptio
     }
 
     private async getGasOptionsForPriorEIP1559(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
-        const web3 = this.web3.createSDK(chainId)
+        const web3 = this.web3.createWeb3(chainId)
         const gasPrice = await web3.eth.getGasPrice()
         return {
             [GasOptionType.FAST]: {

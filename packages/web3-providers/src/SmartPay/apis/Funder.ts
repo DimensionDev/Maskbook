@@ -34,7 +34,7 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
             const operations = await fetchJSON<FunderAPI.Operation[]>(
                 urlcat(FUNDER_ROOT, '/operation', { scanKey: FunderAPI.ScanKey.OwnerAddress, scanValue: owner }),
             )
-            const web3 = this.web3.createSDK(chainId)
+            const web3 = this.web3.createWeb3(chainId)
             const allSettled = await Promise.allSettled(
                 operations.map<Promise<TransactionReceipt | null>>((x) =>
                     web3.eth.getTransactionReceipt(x.tokenTransferTx),
