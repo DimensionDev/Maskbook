@@ -1,0 +1,28 @@
+{
+  "name": "@masknet/plugin-maskbox",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "mask-src": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@masknet/plugin-infra": "workspace:^",
+    "@masknet/shared-base": "workspace:^",
+    "@masknet/web3-contracts": "workspace:^",
+    "@masknet/web3-hooks-base": "workspace:^",
+    "@masknet/web3-hooks-evm": "workspace:^",
+    "@masknet/web3-shared-base": "workspace:^",
+    "@masknet/web3-shared-evm": "workspace:^",
+    "bignumber.js": "9.1.0",
+    "react-use": "^17.4.0",
+    "rss3-next": "^0.6.17",
+    "ts-results": "^3.3.0",
+    "unstated-next": "^1.1.0",
+    "urlcat": "^3.0.0",
+    "web3-eth-abi": "1.8.0",
+    "web3-utils": "1.8.0"
+  }
+}
