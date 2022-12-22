@@ -33,12 +33,12 @@ export async function send(
     switch (payload.method) {
         case EthereumMethodType.ETH_SEND_TRANSACTION:
         case EthereumMethodType.MASK_REPLACE_TRANSACTION:
-            const transaction = PayloadEditor.fromPayload(payload).signableConfig
-            if (!transaction?.from || !transaction.to) return
+            const config = PayloadEditor.fromPayload(payload).signableConfig
+            if (!config?.from || !config.to) return
 
-            const signed = await WalletRPC.signTransaction(transaction.from as string, {
+            const signed = await WalletRPC.signTransaction(config.from as string, {
                 chainId,
-                ...transaction,
+                ...config,
             })
             provider.send(
                 {
