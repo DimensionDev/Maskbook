@@ -292,7 +292,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     if (hidden) return null
 
-    const NFTProjectAddress = collectionList?.[0].address
+    const NFTProjectAddress = collectionList?.[0]?.address
 
     if (NFTProjectAddress)
         return (
