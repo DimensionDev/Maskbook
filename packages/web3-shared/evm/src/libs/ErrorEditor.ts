@@ -40,7 +40,7 @@ export class ErrorEditor {
     }
 
     /**
-     * At least an error existence.
+     * At least an error exists.
      */
     get presence() {
         return !isNil(this.unknownError) || !isNil(this.response?.error)
