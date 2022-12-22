@@ -143,8 +143,8 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
     )
 
     const renderCollectibles = useMemo(() => {
-        if (!selectedCollection) return allCollectibles
         const uniqCollectibles = uniqBy(allCollectibles, (x) => x.contract?.address.toLowerCase() + x?.tokenId)
+        if (!selectedCollection) return uniqCollectibles
         if (!selectedCollection) return uniqCollectibles.filter((x) => !x.collection)
         return uniqCollectibles.filter(
             (x) =>
