@@ -647,6 +647,7 @@ export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId
     name: string
     symbol: string
     source: SourceType
+    alias?: string[]
     token?: FungibleToken<ChainId, SchemaType>
 }
 
