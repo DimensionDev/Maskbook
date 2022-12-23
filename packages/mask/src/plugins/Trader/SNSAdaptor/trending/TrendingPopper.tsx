@@ -9,8 +9,9 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginTraderMessages } from '../../messages.js'
 import { WalletMessages } from '../../../Wallet/messages.js'
 import { PluginTransakMessages } from '../../../Transak/messages.js'
+import type { PopperUnstyledOwnProps } from '@mui/base'
 
-export interface TrendingPopperProps {
+export interface TrendingPopperProps extends Omit<PopperProps, 'children' | 'open'> {
     children?: (
         resultList: Web3Helper.TokenResultAll[],
         address?: string,
@@ -20,7 +21,7 @@ export interface TrendingPopperProps {
     PopperProps?: Partial<PopperProps>
 }
 
-export function TrendingPopper(props: TrendingPopperProps) {
+export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
     const popperRef = useRef<{
         update(): void
     } | null>(null)
@@ -30,7 +31,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const [isNFTProjectPopper, setIsNFTProjectPopper] = useState(false)
     const [address, setAddress] = useState('')
     const [type, setType] = useState<TrendingAPI.TagType | undefined>()
-    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+    const [anchorEl, setAnchorEl] = useState<PopperUnstyledOwnProps['anchorEl']>(null)
     const popper = useRef<HTMLDivElement | null>(null)
 
     const { value: resultList } = useAsyncRetry(async () => {
@@ -57,7 +58,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
                     setType(ev.type)
                     setAddress(ev.address ?? '')
                     setIsNFTProjectPopper(Boolean(ev.isNFTProjectPopper))
-                    setAnchorEl(ev.element)
+                    setAnchorEl({ getBoundingClientRect: () => ev.element!.getBoundingClientRect() })
                     setLocked(false)
                 }
                 // observe the same element
@@ -99,17 +100,30 @@ export function TrendingPopper(props: TrendingPopperProps) {
             }}>
             <Popper
                 ref={popper}
-                open={Boolean(anchorEl)}
+                open
                 anchorEl={anchorEl}
-                disablePortal
-                transition
-                style={{ zIndex: 100, margin: 4 }}
+                style={{ zIndex: 100 }}
                 popperRef={(ref) => (popperRef.current = ref)}
-                {...props.PopperProps}>
+                transition
+                disablePortal
+                popperOptions={{
+                    strategy: 'fixed',
+                    modifiers: [
+                        {
+                            name: 'preventOverflow',
+                            options: {
+                                tether: false,
+                                rootBoundary: 'viewport',
+                                padding: 4,
+                            },
+                        },
+                    ],
+                }}
+                {...rest}>
                 {({ TransitionProps }) => (
-                    <Fade in={Boolean(anchorEl)} {...TransitionProps}>
+                    <Fade in {...TransitionProps}>
                         <div>
-                            {props.children?.(resultList, address, isNFTProjectPopper, () =>
+                            {children?.(resultList, address, isNFTProjectPopper, () =>
                                 setTimeout(() => popperRef.current?.update(), 100),
                             )}
                         </div>
