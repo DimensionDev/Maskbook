@@ -3,7 +3,7 @@ import type { Option, Result } from 'ts-results-es'
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
-import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
+import type { UnboundedRegistry, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import type {
     BindingProof,
     ECKeyIdentifier,
@@ -18,6 +18,7 @@ import type {
     PopupRoutes,
     ProfileIdentifier,
     ScopedStorage,
+    MaskEvents,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -407,6 +408,7 @@ export namespace Plugin.SNSAdaptor {
     export interface SNSAdaptorContext extends Shared.SharedUIContext {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
+        MaskMessages: WebExtensionMessage<MaskEvents>
         allPersonas?: Subscription<PersonaInformation[]>
         themeSettings: Subscription<ThemeSettings | undefined>
         /** The default theme settings. */
@@ -422,6 +424,10 @@ export namespace Plugin.SNSAdaptor {
 
         getPostURL?: (identifier: PostIdentifier) => URL | null
         share?: (text: string) => void
+
+        queryPersonaByProfile: (id: ProfileIdentifier) => Promise<PersonaInformation | undefined>
+        connectPersona: () => Promise<void>
+        createPersona: () => void
     }
 
     export type SelectProviderDialogEvent =

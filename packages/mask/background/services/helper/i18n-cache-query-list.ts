@@ -28,7 +28,7 @@ export default {
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/RedPacket/locales/%locale%.json':
         'com.maskbook.red_packet',
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Tips/locales/%locale%.json': 'com.maskbook.tip',
-    '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Avatar/locales/%locale%.json': 'com.maskbook.avatar',
+    '/[DimensionDev.Maskbook] develop/packages/plugins/Avatar/src/locales/%locale%.json': 'com.maskbook.avatar',
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Trader/locales/%locale%.json': 'com.maskbook.trader',
     '/[DimensionDev.Maskbook] develop/packages/plugins/Gitcoin/src/locales/%locale%.json': 'co.gitcoin',
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Referral/locales/%locale%.json':
@@ -41,8 +41,6 @@ export default {
         'io.mask.web3-profile-card',
     '/[DimensionDev.Maskbook] develop/packages/plugins/ENS/src/locales/%locale%.json': 'com.maskbook.ens',
     '/[DimensionDev.Maskbook] develop/packages/plugins/Approval/src/locales/%locale%.json': 'com.maskbook.approval',
-    '/[DimensionDev.Maskbook] develop/packages/plugins/DecentralizedSearch/src/locales/%locale%.json':
-        'com.maskbook.decentralized-search',
     '/[DimensionDev.Maskbook] develop/packages/plugins/ScamWarning/src/locales/%locale%.json': 'com.mask.scam-warning',
     '/[DimensionDev.Maskbook] develop/packages/plugins/SmartPay/src/locales/%locale%.json': 'com.mask.smart-pay',
 }

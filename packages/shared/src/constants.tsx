@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { Icons } from '@masknet/icons'
 import { EnhanceableSite, NextIDPlatform } from '@masknet/shared-base'
+import type { PersonaConnectStatus } from './types.js'
 
 export const SOCIAL_MEDIA_ICON_MAPPING: Record<EnhanceableSite | string, ReactNode> = {
     [EnhanceableSite.Twitter]: <Icons.TwitterColored />,
@@ -41,3 +42,12 @@ export const SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID = [EnhanceableSite.Twitter]
 export const MEDIA_VIEWER_URL = 'https://media-viewer.r2d2.to/index.html'
 
 export const MAX_WALLET_LIMIT = 100
+
+export const defaultStatus: PersonaConnectStatus = {
+    action: undefined,
+    currentPersona: undefined,
+    connected: false,
+    hasPersona: false,
+    verified: false,
+    proof: undefined,
+}
