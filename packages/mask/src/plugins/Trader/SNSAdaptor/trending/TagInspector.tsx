@@ -12,7 +12,7 @@ import { TrendingViewProvider } from './context.js'
 export interface TagInspectorProps {}
 
 export function TagInspector(props: TagInspectorProps) {
-    const dSearchEnable = useValueRef(decentralizedSearchSettings)
+    const dSearchEnabled = useValueRef(decentralizedSearchSettings)
     const createTrendingView = useCallback(
         (
             resultList: Web3Helper.TokenResultAll[],
@@ -32,7 +32,7 @@ export function TagInspector(props: TagInspectorProps) {
         [],
     )
 
-    if (!dSearchEnable) return null
+    if (!dSearchEnabled) return null
     return (
         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
             <TrendingPopper>{createTrendingView}</TrendingPopper>

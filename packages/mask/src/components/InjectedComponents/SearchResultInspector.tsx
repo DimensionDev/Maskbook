@@ -41,7 +41,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const { classes } = useStyles()
     const translate = usePluginI18NField()
 
-    const dSearchEnable = useValueRef(decentralizedSearchSettings)
+    const dSearchEnabled = useValueRef(decentralizedSearchSettings)
 
     const keyword_ = useSearchedKeyword()
     const keyword = props.keyword || keyword_
@@ -71,7 +71,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         return <Component result={resultList.value[0]} />
     }, [currentTab, resultList.value])
 
-    if (!dSearchEnable) return null
+    if (!dSearchEnabled) return null
     if (!keyword && !resultList.value?.length) return null
     if (!contentComponent) return null
 
