@@ -48,7 +48,7 @@ export const AddressLabel: FC<AddressLabelProps> = ({ address, pluginID, size, c
     )
 }
 
-export const formatValue = (value?: { value: string; decimals: number }): string => {
+export const formatValue = (value?: { value: string; decimals: number } | null): string => {
     if (!value) return ''
     return formatBalance(value.value, value.decimals, 5)
 }
