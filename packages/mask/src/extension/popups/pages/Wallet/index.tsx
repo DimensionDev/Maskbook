@@ -15,6 +15,7 @@ import { useChainContext, useWallet, useWallets, useWeb3Connection, useWeb3State
 import { TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { ChainId, EthereumMethodType, getDefaultChainId, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
 import { first } from 'lodash-es'
+// import { ChangeOwner } from './ChangeOwner/index.js'
 
 const ImportWallet = lazy(() => import('./ImportWallet/index.js'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet/index.js'))
@@ -36,6 +37,7 @@ const WalletRecovery = lazy(() => import('./WalletRecovery/index.js'))
 const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery/index.js'))
 const ReplaceTransaction = lazy(() => import('./ReplaceTransaction/index.js'))
 const CreatePassword = lazy(() => import('./CreatePassword/index.js'))
+const ChangeOwner = lazy(() => import('./ChangeOwner/index.js'))
 
 const exclusionDetectLocked = [PopupRoutes.Unlock]
 
@@ -142,6 +144,8 @@ export default function Wallet() {
                         <Route path={r(PopupRoutes.Unlock)} element={<Unlock />} />
                         <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
                         <Route path={r(PopupRoutes.ReplaceTransaction)} element={<ReplaceTransaction />} />
+                        <Route path={r(PopupRoutes.CreatePassword)} element={<CreatePassword />} />
+                        <Route path={r(PopupRoutes.ChangeOwner)} element={<ChangeOwner />} />
                     </Routes>
                 )}
             </WalletContext.Provider>
