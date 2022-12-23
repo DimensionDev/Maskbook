@@ -54,8 +54,8 @@ const useStyles = makeStyles()((theme) => ({
         width: '44px',
         height: '44px',
         '> *': {
-            width: 26,
-            height: 26,
+            width: '26px !important',
+            height: '26px !important',
         },
     },
     placeholder: {
