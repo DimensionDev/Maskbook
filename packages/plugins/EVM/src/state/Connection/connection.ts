@@ -10,12 +10,14 @@ import type { ERC165 } from '@masknet/web3-contracts/types/ERC165.js'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
 import type { ERC1155 } from '@masknet/web3-contracts/types/ERC1155.js'
 import type { BalanceChecker } from '@masknet/web3-contracts/types/BalanceChecker.js'
+import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import ERC165ABI from '@masknet/web3-contracts/abis/ERC165.json'
 import ERC20Bytes32ABI from '@masknet/web3-contracts/abis/ERC20Bytes32.json'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import ERC1155ABI from '@masknet/web3-contracts/abis/ERC1155.json'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
+import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import {
     ChainId,
     EthereumMethodType,
@@ -713,6 +715,11 @@ class Connection implements EVM_Connection {
         return this.getWeb3Contract<ERC1155>(address, ERC1155ABI as AbiItem[], options)
     }
 
+    async getWalletContract(initial?: EVM_Web3ConnectionOptions) {
+        const options = this.getOptions(initial)
+        return this.getWeb3Contract<WalletContract>(options.account, WalletABI as AbiItem[], options)
+    }
+
     async getAccount(initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         const accounts = await this.hijackedRequest<string[]>(
@@ -974,13 +981,10 @@ class Connection implements EVM_Connection {
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ) {
         const options = this.getOptions(initial)
-        return this.hijackedRequest<string>(
-            {
-                method: EthereumMethodType.MASK_TRANSFER_CONTRACT_WALLET,
-                params: [recipient],
-            },
-            options,
-        )
+
+        if (!recipient || !isValidAddress(recipient)) throw new Error('Invalid recipient address')
+        const contractWallet = await this.getWalletContract(options)
+        return new ContractTransaction(contractWallet).send((x) => x?.methods.changeOwner(recipient), options.overrides)
     }
 
     async deployContractWallet(

@@ -10,7 +10,6 @@ import {
     ProviderType,
     UserTransaction,
     ContractWallet as ContractWalletLib,
-    ContractTransaction,
     isEmptyHex,
 } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -131,13 +130,6 @@ export class ContractWallet implements Middleware<Context> {
         return this.bundler.sendUserOperation(context.chainId, userTransaction.toUserOperation())
     }
 
-    private async changeOwner(context: Context) {
-        const recipient = first<string>(context.requestArguments.params)
-        if (!recipient) throw new Error('No recipient address.')
-
-        return new ContractTransaction(this.createWallet(context)).send((x) => x.methods.changeOwner(recipient))
-    }
-
     private async deploy(context: Context) {
         const { owner } = this.getOwner(context)
         if (!isValidAddress(owner)) throw new Error('Invalid owner address.')
@@ -216,13 +208,6 @@ export class ContractWallet implements Middleware<Context> {
                 break
             case EthereumMethodType.ETH_SEND_RAW_TRANSACTION:
                 context.abort(new Error('Not supported by contract wallet.'))
-                break
-            case EthereumMethodType.MASK_TRANSFER_CONTRACT_WALLET:
-                try {
-                    context.write(await this.changeOwner(context))
-                } catch (error) {
-                    context.abort(error)
-                }
                 break
             case EthereumMethodType.MASK_DEPLOY_CONTRACT_WALLET:
                 try {
