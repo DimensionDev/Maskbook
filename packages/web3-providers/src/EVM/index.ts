@@ -32,7 +32,7 @@ export class Web3API implements Web3BaseAPI.Provider<ChainId, AddressType, Web3P
     createProvider(chainId: ChainId) {
         const web3 = this.createWeb3(chainId)
         const provider = web3.currentProvider as HttpProvider
-        return createWeb3Provider(createWeb3Request(provider.send))
+        return createWeb3Provider(createWeb3Request(provider.send.bind(provider)))
     }
 }
 
