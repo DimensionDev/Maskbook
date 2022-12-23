@@ -13,6 +13,7 @@ import {
     ContractTransaction,
     isEmptyHex,
 } from '@masknet/web3-shared-evm'
+import { Web3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
@@ -31,22 +32,12 @@ export class ContractWallet implements Middleware<Context> {
         },
     ) {}
 
-    private createWeb3(context: Context) {
-        const web3 = Web3StateSettings.value.Connection?.getWeb3?.({
-            chainId: context.chainId,
-            providerType: ProviderType.MaskWallet,
-        })
-
-        if (!web3) throw new Error('Failed to create web3.')
-        return web3
-    }
-
     private createProvider(context: Context) {
         return Providers[context.providerType] as BaseContractWalletProvider | undefined
     }
 
     private createWallet(context: Context) {
-        const web3 = this.createWeb3(context)
+        const web3 = Web3.createWeb3(context.chainId)
         const contract = createContract<WalletContract>(web3, context.account, WalletABI as AbiItem[])
         if (!contract) throw new Error('Failed to create wallet contract.')
         return contract
