@@ -219,9 +219,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         </Typography>
                                     ) : null}
                                 </Typography>
-                                {typeof coin.market_cap_rank === 'number' ? (
+                                {typeof coin.market_cap_rank === 'number' || result.rank ? (
                                     <Typography component="span" className={classes.rank} title="Index Cap Rank">
-                                        {t('plugin_trader_rank', { rank: coin.market_cap_rank })}
+                                        {t('plugin_trader_rank', { rank: result.rank ?? coin.market_cap_rank })}
                                     </Typography>
                                 ) : null}
                                 {resultList.length > 1 && !isPreciseSearch && result.rank && result.rank > 200 ? (

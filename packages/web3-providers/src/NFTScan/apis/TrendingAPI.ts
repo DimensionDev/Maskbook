@@ -13,7 +13,6 @@ import { COIN_RECOMMENDATION_SIZE } from '../../Trending/constants.js'
 import type { EVM, Response } from '../types/index.js'
 import {
     fetchFromNFTScanV2,
-    fetchFromNFTScanRestFulAPI,
     getContractSymbol,
     fetchFromNFTScanWebAPI,
     resolveNFTScanHostName,
@@ -77,7 +76,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         const path = urlcat('/api/v2/statistics/collection/:address', {
             address,
         })
-        const response = await fetchFromNFTScanRestFulAPI<Response<NonFungibleCollectionOverview>>(path)
+        const response = await fetchFromNFTScanV2<Response<NonFungibleCollectionOverview>>(undefined, path)
         if (!response?.data) return
         return response.data
     }
