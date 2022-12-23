@@ -399,7 +399,7 @@
     "plugin_wallet_connect_wallet": "Connect Wallet",
     "plugin_wallet_name_placeholder": "Enter 1-12 characters",
     "plugin_wallet_cancel_sign": "Signature canceled.",
-    "plugin_web3_profile_recommend_feature_description": "Go to account’s profile page and click Web3 or More tab to see the  user’s Web3 footprints or NFT collection details.",
+    "plugin_web3_profile_recommend_feature_description": "Optimize your social profile by customizing the display of Web3 features.",
     "plugin_nft_avatar_recommend_feature_description": "Set your NFT as profile picture with exclusive aura.",
     "application_hint": "Socialize and show off your NFTs. People can bid, buy and view your valuable NFTs without leaving Twitter.",
     "plugin_goPlusSecurity_description": "Provide you with fast, reliable and convenient security services",
@@ -1066,5 +1066,13 @@
     "plugin_web3_profile_feature_general_user_name": "General user",
     "plugin_web3_profile_feature_general_user_description": "View user’s Web3 footprints, including NFTs, social media posts and other transaction activities based on public data source.",
     "plugin_web3_profile_feature_nft_name": "NFT collection ",
-    "plugin_web3_profile_feature_nft_description": "Stay on top of NFT trending information, hot projects, notable transactions, etc."
+    "plugin_web3_profile_feature_nft_description": "Stay on top of NFT trending information, hot projects, notable transactions, etc.",
+    "decentralized_search_name": "DSearch",
+    "decentralized_search_description": "Optimize search results with token names, NFT collections, ENS domains or wallet addresses.",
+    "decentralized_search_feature_token_name": "Token",
+    "decentralized_search_feature_token_description": "Get optimized search results when you look for a token.",
+    "decentralized_search_feature_nft_name": "NFTs",
+    "decentralized_search_feature_nft_description": "Search with the name of an NFT collection or its symbol to get optimized results.",
+    "decentralized_search_feature_wallet_name": "ENS or Wallet Address",
+    "decentralized_search_feature_wallet_description": "Search with an ENS domain or wallet address to get optimized results."
 }

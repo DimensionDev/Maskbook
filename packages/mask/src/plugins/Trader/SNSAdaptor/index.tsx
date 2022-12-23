@@ -43,6 +43,7 @@ const sns: Plugin.SNSAdaptor.Definition<
                 const resultList = _resultList as Web3Helper.TokenResultAll[]
                 const [result, setResult] = useState(resultList[0])
                 const { chainId, keyword, address, pluginID } = result
+
                 return (
                     <Web3ContextProvider
                         value={{
