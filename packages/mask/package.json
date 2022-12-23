@@ -33,6 +33,7 @@
     "@masknet/plugin-file-service": "workspace:^",
     "@masknet/plugin-flow": "workspace:^",
     "@masknet/plugin-gitcoin": "workspace:^",
+    "@masknet/plugin-avatar": "workspace:^",
     "@masknet/plugin-collectible": "workspace:^",
     "@masknet/plugin-maskbox": "workspace:^",
     "@masknet/plugin-go-plus-security": "workspace:^",

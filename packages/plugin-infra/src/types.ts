@@ -1,3 +1,7 @@
+import type React from 'react'
+import type { Option, Result } from 'ts-results-es'
+import type { Subscription } from 'use-subscription'
+import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import type { UnboundedRegistry, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import type {
@@ -15,8 +19,8 @@ import type {
     ProfileIdentifier,
     ScopedStorage,
     ValueRefWithReady,
-    MaskEvents,
     DashboardRoutes,
+    MaskEvents,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -36,10 +40,6 @@ import type {
 } from '@masknet/web3-shared-base'
 import type { ChainId as ChainIdEVM, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
-import type React from 'react'
-import type { Option, Result } from 'ts-results-es'
-import type { Subscription } from 'use-subscription'
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { CompositionType } from './entry-content-script.js'
 
 export declare namespace Plugin {
@@ -231,7 +231,7 @@ export namespace Plugin.Shared {
         signTransaction(address: string, transaction: TransactionEVM): Promise<string>
 
         /** Sign personal message, aka. eth.personal.sign() */
-        signPersonalMessage(address: string, message: string): Promise<string>
+        signPersonalMessage(message: string, address: string): Promise<string>
 
         /** Sign typed data */
         signTypedData(address: string, message: string): Promise<string>
@@ -410,6 +410,7 @@ export namespace Plugin.SNSAdaptor {
     export interface SNSAdaptorContext extends Shared.SharedUIContext {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
+        MaskMessages: WebExtensionMessage<MaskEvents>
         allPersonas?: Subscription<PersonaInformation[]>
         themeSettings: Subscription<ThemeSettings | undefined>
         /** The default theme settings. */
@@ -426,8 +427,10 @@ export namespace Plugin.SNSAdaptor {
         getPostURL?: (identifier: PostIdentifier) => URL | null
         share?: (text: string) => void
         currentPersonaIdentifier: ValueRefWithReady<string>
-        MaskMessages: WebExtensionMessage<MaskEvents>
         openDashboard: (route: DashboardRoutes) => void
+        queryPersonaByProfile: (id: ProfileIdentifier) => Promise<PersonaInformation | undefined>
+        connectPersona: () => Promise<void>
+        createPersona: () => void
     }
 
     export type SelectProviderDialogEvent =

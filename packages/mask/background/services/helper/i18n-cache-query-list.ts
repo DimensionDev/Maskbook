@@ -28,7 +28,7 @@ export default {
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/RedPacket/locales/%locale%.json':
         'com.maskbook.red_packet',
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Tips/locales/%locale%.json': 'com.maskbook.tip',
-    '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Avatar/locales/%locale%.json': 'com.maskbook.avatar',
+    '/[DimensionDev.Maskbook] develop/packages/plugins/Avatar/src/locales/%locale%.json': 'com.maskbook.avatar',
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Trader/locales/%locale%.json': 'com.maskbook.trader',
     '/[DimensionDev.Maskbook] develop/packages/plugins/Gitcoin/src/locales/%locale%.json': 'co.gitcoin',
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Referral/locales/%locale%.json':

@@ -20,7 +20,10 @@ export const RestPartOfPluginUIContextShared: Omit<
     | 'setMinimalMode'
     | 'openDashboard'
     | 'currentPersonaIdentifier'
+    | 'queryPersonaByProfile'
     | 'MaskMessages'
+    | 'connectPersona'
+    | 'createPersona'
 > = {
     currentPersona: createSubscriptionFromAsync(
         Services.Settings.getCurrentPersonaIdentifier,
