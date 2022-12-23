@@ -1,27 +1,27 @@
+import Web3 from 'web3'
 import { describe, test, expect } from 'vitest'
 import { UserTransaction } from '../../src/libs/UserTransaction.js'
-import { ChainId, UserOperation } from '../../src/types/index.js'
-
-const userOperation: UserOperation = {
-    sender: '0x0000000000000000000000000000000000000000',
-    nonce: 0,
-    initCode: '0x',
-    callData: '0x',
-    callGas: '0',
-    verificationGas: '100000',
-    preVerificationGas: '100000',
-    maxFeePerGas: '100000',
-    maxPriorityFeePerGas: '100000',
-    paymaster: '0x0000000000000000000000000000000000000000',
-    paymasterData: '0x',
-    signature: '0x',
-}
+import { ChainId } from '../../src/types/index.js'
 
 describe('UserTransaction', async () => {
     const userTransaction = await UserTransaction.fromUserOperation(
         ChainId.Matic,
+        new Web3(),
         '0x0000000000000000000000000000000000000000',
-        userOperation,
+        {
+            sender: '0x0000000000000000000000000000000000000000',
+            nonce: 0,
+            initCode: '0x',
+            callData: '0x',
+            callGas: '0',
+            verificationGas: '100000',
+            preVerificationGas: '100000',
+            maxFeePerGas: '100000',
+            maxPriorityFeePerGas: '100000',
+            paymaster: '0x0000000000000000000000000000000000000000',
+            paymasterData: '0x',
+            signature: '0x',
+        },
     )
 
     test('hasPaymaster', () => {

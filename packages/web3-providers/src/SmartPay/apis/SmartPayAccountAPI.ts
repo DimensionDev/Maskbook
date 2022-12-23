@@ -5,8 +5,12 @@ import {
     ChainId,
     ContractWallet,
     Create2Factory,
+    Transaction,
+    UserOperation,
+    UserTransaction,
     createContract,
     getSmartPayConstants,
+    isEmptyHex,
     isValidAddress,
 } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -14,14 +18,36 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import { LOG_ROOT, MAX_ACCOUNT_LENGTH } from '../constants.js'
-import { SmartPayBundlerAPI } from './Bundler.js'
-import { SmartPayFunderAPI } from './Funder.js'
+import { SmartPayBundlerAPI } from './SmartPayBundlerAPI.js'
+import { SmartPayFunderAPI } from './SmartPayFunderAPI.js'
 import { MulticallAPI } from '../../Multicall/index.js'
 import { Web3API } from '../../EVM/index.js'
-import type { ContractAccountAPI } from '../../entry-types.js'
+import type { AbstractAccountAPI } from '../../entry-types.js'
 import { fetchJSON } from '../../entry-helpers.js'
 
-export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPluginID.PLUGIN_EVM> {
+/**
+ * A chainbase SQL query log
+ *  select *
+ *  from polygon.transaction_logs
+ *  where block_number>36808978 -- the deployment block height of the logic wallet contract
+ *  -- AND address="0x1778fcc4a26091d66e29dbb9aaa198cc652e73e1" -- the address of the WalletProxy contract (unknown)
+ *  AND topics_count=3 -- the topics count of ChangeOwner event
+ *  AND topic0="0xb532073b38c83145e3e5135377a08bf9aab55bc0fd7c1179cd4fb995d2a5159c" -- topic signature of ChangeOwner event
+ *  -- AND topic1="..." The previousOwner address
+ *  AND topic2="0x00000000000000000000000033a7209f653727a2ff688c81e661d61bcfffd809" -- the newOwner address (from FE)
+ *  -- example tx: https://polygonscan.com/tx/0x7d381e3585d9b384e7ce6c910cccced02de0e29c02805a9286504f3067e09f4a
+ */
+export interface Log {
+    transaction_hash: string
+    /** the address of contract account */
+    address: string
+    /** topic signature */
+    topic0: string
+    /** the previous owner address */
+    topic1: string
+}
+
+export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPluginID.PLUGIN_EVM> {
     private web3 = new Web3API()
     private multicall = new MulticallAPI()
     private bundler = new SmartPayBundlerAPI()
@@ -30,26 +56,28 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
     private async getEntryPoint(chainId: ChainId) {
         const entryPoints = await this.bundler.getSupportedEntryPoints(chainId)
         const entryPoint = first(entryPoints)
-        if (!entryPoint) throw new Error('No entry point contract.')
+        if (!entryPoint || !isValidAddress(entryPoint)) throw new Error(`Not supported ${chainId}`)
         return entryPoint
     }
 
-    private createWeb3(chainId: ChainId) {
-        return this.web3.createWeb3(chainId)
+    private async getInitCode(chainId: ChainId, owner: string) {
+        const contractWallet = await this.createContractWallet(chainId, owner)
+        if (isEmptyHex(contractWallet.initCode)) throw new Error('Failed to create initCode.')
+        return contractWallet.initCode
     }
 
     private createWalletContract(chainId: ChainId, address: string) {
-        return createContract<Wallet>(this.createWeb3(chainId), address, WalletABI as AbiItem[])
+        return createContract<Wallet>(this.web3.createWeb3(chainId), address, WalletABI as AbiItem[])
     }
 
     private async createContractWallet(chainId: ChainId, owner: string) {
         if (!owner) throw new Error('No owner address.')
-
-        const { LOGIC_WALLET_CONTRACT_ADDRESS } = getSmartPayConstants(chainId)
-        if (!LOGIC_WALLET_CONTRACT_ADDRESS) throw new Error('No logic wallet contract.')
-
-        const entryPoint = await this.getEntryPoint(chainId)
-        return new ContractWallet(chainId, owner, LOGIC_WALLET_CONTRACT_ADDRESS, entryPoint)
+        return new ContractWallet(
+            chainId,
+            owner,
+            getSmartPayConstants(chainId).LOGIC_WALLET_CONTRACT_ADDRESS ?? '',
+            await this.getEntryPoint(chainId),
+        )
     }
 
     private async createCreate2Factory(chainId: ChainId, owner: string) {
@@ -68,7 +96,7 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
         creator: string,
         deployed = true,
         funded = false,
-    ): ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM> {
+    ): AbstractAccountAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM> {
         return {
             pluginID: NetworkPluginID.PLUGIN_EVM,
             chainId,
@@ -112,7 +140,7 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
      * @returns
      */
     private async getAccountsFromChainbase(chainId: ChainId, owner: string) {
-        const { records: logs } = await fetchJSON<{ records: ContractAccountAPI.Log[]; count: number }>(
+        const { records: logs } = await fetchJSON<{ records: Log[]; count: number }>(
             urlcat(LOG_ROOT, '/records', {
                 newOwnerAddress: padLeft(owner, 64),
                 size: MAX_ACCOUNT_LENGTH,
@@ -157,7 +185,7 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
     async getAccountsByOwner(
         chainId: ChainId,
         owner: string,
-    ): Promise<Array<ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM>>> {
+    ): Promise<Array<AbstractAccountAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>>> {
         const create2Factory = await this.createCreate2Factory(chainId, owner)
         const contractWallet = await this.createContractWallet(chainId, owner)
         const operations = await this.funder.getOperationsByOwner(chainId, owner)
@@ -182,8 +210,88 @@ export class SmartPayAccountAPI implements ContractAccountAPI.Provider<NetworkPl
     async getAccountsByOwners(
         chainId: ChainId,
         owners: string[],
-    ): Promise<Array<ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM>>> {
+    ): Promise<Array<AbstractAccountAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>>> {
         const allSettled = await Promise.allSettled(owners.map((x) => this.getAccountsByOwner(chainId, x)))
         return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
+    }
+
+    async deploy(chainId: ChainId, owner: string, signer: AbstractAccountAPI.Signer): Promise<string> {
+        if (!isValidAddress(owner)) throw new Error('Invalid owner address.')
+
+        const initCode = await this.getInitCode(chainId, owner)
+        const accounts = await this.getAccountsByOwner(chainId, owner)
+        const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
+
+        return this.sendUserOperation(
+            chainId,
+            owner,
+            {
+                sender: accounts[accountsDeployed.length].address,
+                initCode,
+                nonce: accountsDeployed.length,
+            },
+            signer,
+        )
+    }
+
+    transfer(chainId: ChainId, onwer: string, recipient: string, signer: AbstractAccountAPI.Signer): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+
+    /**
+     * The internal method to send a UserTransaction.
+     */
+    private async sendUserTransaction(
+        chainId: ChainId,
+        owner: string,
+        userTransaction: UserTransaction,
+        signer: AbstractAccountAPI.Signer,
+    ) {
+        // fill in initCode
+        if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
+            const initCode = await this.getInitCode(chainId, owner)
+            const accounts = await this.getAccountsByOwner(chainId, owner)
+            const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
+
+            await userTransaction.fill(this.web3.createWeb3(chainId), {
+                initCode,
+                nonce: accountsDeployed.length,
+            })
+        }
+
+        // sign user operation
+        await userTransaction.sign(signer)
+
+        return this.bundler.sendUserOperation(chainId, userTransaction.toUserOperation())
+    }
+
+    async sendTransaction(
+        chainId: ChainId,
+        owner: string,
+        transaction: Transaction,
+        signer: AbstractAccountAPI.Signer,
+    ): Promise<string> {
+        const userTransaction = await UserTransaction.fromTransaction(
+            chainId,
+            this.web3.createWeb3(chainId),
+            await this.getEntryPoint(chainId),
+            transaction,
+        )
+        return this.sendUserTransaction(chainId, owner, userTransaction, signer)
+    }
+
+    async sendUserOperation(
+        chainId: ChainId,
+        owner: string,
+        userOperation: UserOperation,
+        signer: AbstractAccountAPI.Signer,
+    ): Promise<string> {
+        const userTransaction = await UserTransaction.fromUserOperation(
+            chainId,
+            this.web3.createWeb3(chainId),
+            await this.getEntryPoint(chainId),
+            userOperation,
+        )
+        return this.sendUserTransaction(chainId, owner, userTransaction, signer)
     }
 }

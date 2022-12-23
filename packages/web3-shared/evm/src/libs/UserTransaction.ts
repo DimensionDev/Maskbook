@@ -1,5 +1,5 @@
 import { BigNumber } from 'bignumber.js'
-import Web3 from 'web3'
+import type Web3 from 'web3'
 import * as ABICoder from 'web3-eth-abi'
 import { AbiItem, bytesToHex, hexToBytes, keccak256, padLeft, toNumber } from 'web3-utils'
 import { multipliedBy, toFixed } from '@masknet/web3-shared-base'
@@ -16,7 +16,7 @@ import {
     isZeroAddress,
     formatEthereumAddress,
 } from '../helpers/index.js'
-import { getSmartPayConstants } from '../index.js'
+import { getSmartPayConstants } from '../constants/index.js'
 
 const USER_OP_TYPE = {
     userOp: {
@@ -74,8 +74,6 @@ const DEFAULT_USER_OPERATION: Required<UserOperation> = {
     signature: '0x',
 }
 
-// TODO: replace to sdk
-const web3 = new Web3('https://polygon-mumbai.infura.io/v3/d65858b010d249419cf8687eca12b094')
 const coder = ABICoder as unknown as ABICoder.AbiCoder
 
 /**
@@ -83,14 +81,6 @@ const coder = ABICoder as unknown as ABICoder.AbiCoder
  * Learn more: https://github.com/eth-infinitism/account-abstraction/blob/develop/test/UserOp.ts
  */
 export class UserTransaction {
-    private get entryPointContract() {
-        return createContract<EntryPoint>(web3, this.entryPoint, EntryPointABI as AbiItem[])
-    }
-
-    private get walletContract() {
-        return createContract<Wallet>(web3, this.userOperation.sender, WalletABI as AbiItem[])
-    }
-
     /**
      * @deprecated Don't new UserTransaction()
      * Use UserTransaction.fromTransaction() or UserTransaction.fromUserOperation() stead.
@@ -148,12 +138,15 @@ export class UserTransaction {
         return this
     }
 
-    async fill(overrides?: Required<Pick<UserOperation, 'initCode' | 'nonce'>>) {
+    async fill(web3: Web3, overrides?: Required<Pick<UserOperation, 'initCode' | 'nonce'>>) {
         // from overrides
         if (overrides) {
             this.userOperation.nonce = overrides.nonce
             this.userOperation.initCode = overrides.initCode
         }
+
+        const entryPointContract = createContract<EntryPoint>(web3, this.entryPoint, EntryPointABI as AbiItem[])
+        const walletContract = createContract<Wallet>(web3, this.userOperation.sender, WalletABI as AbiItem[])
 
         const {
             initCode,
@@ -173,10 +166,8 @@ export class UserTransaction {
             // otherwise, always treat the operation to create the initial account.
             if (typeof nonce === 'undefined') this.userOperation.nonce = 0
             if (!sender) {
-                if (!this.entryPointContract) throw new Error('Failed to create entry point contract.')
-                this.userOperation.sender = await this.entryPointContract.methods
-                    .getSenderAddress(initCode, nonce)
-                    .call()
+                if (!entryPointContract) throw new Error('Failed to create entry point contract.')
+                this.userOperation.sender = await entryPointContract.methods.getSenderAddress(initCode, nonce).call()
             }
 
             // add more verification gas
@@ -186,8 +177,8 @@ export class UserTransaction {
         }
 
         if (typeof this.userOperation.nonce === 'undefined') {
-            if (!this.walletContract) throw new Error('Failed to create wallet contract.')
-            this.userOperation.nonce = toNumber(await this.walletContract.methods.nonce().call())
+            if (!walletContract) throw new Error('Failed to create wallet contract.')
+            this.userOperation.nonce = toNumber(await walletContract.methods.nonce().call())
         }
 
         if (isZeroString(callGas) && !isEmptyHex(callData)) {
@@ -268,6 +259,7 @@ export class UserTransaction {
 
     static async fromTransaction(
         chainId: ChainId,
+        web3: Web3,
         entryPoint: string,
         transaction: Transaction,
     ): Promise<UserTransaction> {
@@ -275,7 +267,7 @@ export class UserTransaction {
         if (!from) throw new Error('No sender address.')
         if (!to) throw new Error('No destination address.')
 
-        return UserTransaction.fromUserOperation(chainId, entryPoint, {
+        return UserTransaction.fromUserOperation(chainId, web3, entryPoint, {
             ...DEFAULT_USER_OPERATION,
             sender: formatEthereumAddress(from),
             nonce: toNumber(nonce as number),
@@ -286,6 +278,7 @@ export class UserTransaction {
 
     static async fromUserOperation(
         chainId: ChainId,
+        web3: Web3,
         entryPoint: string,
         userOperation: UserOperation,
     ): Promise<UserTransaction> {
@@ -293,6 +286,6 @@ export class UserTransaction {
             ...DEFAULT_USER_OPERATION,
             ...userOperation,
         })
-        return userTransaction.fill()
+        return userTransaction.fill(web3)
     }
 }

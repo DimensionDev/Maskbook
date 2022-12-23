@@ -7,6 +7,32 @@ import { TrendingPopper } from './TrendingPopper.js'
 import { TrendingView } from './TrendingView.js'
 import { TrendingViewProvider } from './context.js'
 
+interface TrendingViewWrapperProps {
+    resultList: Web3Helper.TokenResultAll[]
+    address?: string
+    isNFTProjectPopper?: boolean
+    reposition?: () => void
+}
+
+function TrendingViewWrapper({ resultList, reposition, address, isNFTProjectPopper }: TrendingViewWrapperProps) {
+    const [result, setResult] = useState(resultList[0])
+    return (
+        <TrendingViewProvider
+            isNFTProjectPopper={Boolean(isNFTProjectPopper)}
+            isProfilePage={false}
+            isTokenTagPopper={!isNFTProjectPopper}
+            isPreciseSearch={false}>
+            <TrendingView
+                setResult={setResult}
+                result={result}
+                resultList={resultList}
+                onUpdate={reposition}
+                address={address}
+            />
+        </TrendingViewProvider>
+    )
+}
+
 export interface TagInspectorProps {}
 
 export function TagInspector(props: TagInspectorProps) {
@@ -32,31 +58,5 @@ export function TagInspector(props: TagInspectorProps) {
         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
             <TrendingPopper>{createTrendingView}</TrendingPopper>
         </Web3ContextProvider>
-    )
-}
-
-interface TrendingViewWrapperProps {
-    resultList: Web3Helper.TokenResultAll[]
-    address?: string
-    isNFTProjectPopper?: boolean
-    reposition?: () => void
-}
-
-function TrendingViewWrapper({ resultList, reposition, address, isNFTProjectPopper }: TrendingViewWrapperProps) {
-    const [result, setResult] = useState(resultList[0])
-    return (
-        <TrendingViewProvider
-            isNFTProjectPopper={Boolean(isNFTProjectPopper)}
-            isProfilePage={false}
-            isTokenTagPopper={!isNFTProjectPopper}
-            isPreciseSearch={false}>
-            <TrendingView
-                setResult={setResult}
-                result={result}
-                resultList={resultList}
-                onUpdate={reposition}
-                address={address}
-            />
-        </TrendingViewProvider>
     )
 }
