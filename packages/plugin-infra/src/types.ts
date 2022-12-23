@@ -242,6 +242,8 @@ export namespace Plugin.Shared {
                 account?: string
                 chainId?: ChainIdEVM
                 popupsWindow?: boolean
+                owner?: string
+                identifier?: ECKeyIdentifier
             },
         ): Promise<JsonRpcResponse>
         /** Confirm a request */

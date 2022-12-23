@@ -2,6 +2,7 @@ import { isNil, omit } from 'lodash-es'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { defer } from '@masknet/kit'
 import { Web3 } from '@masknet/web3-providers'
+import type { ECKeyIdentifier } from '@masknet/shared-base'
 import {
     ChainId,
     createJsonRpcResponse,
@@ -15,6 +16,8 @@ import { openPopupWindow, removePopupWindow } from '../../../../background/servi
 interface Options {
     account?: string
     chainId?: ChainId
+    owner?: string
+    identifier?: ECKeyIdentifier
     disableClose?: boolean
     popupsWindow?: boolean
 }
