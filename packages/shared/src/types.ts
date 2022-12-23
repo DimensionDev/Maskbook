@@ -1,4 +1,4 @@
-import type { BindingProof, NetworkPluginID, PersonaInformation } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { CollectionType } from '@masknet/web3-providers/types'
 
@@ -34,18 +34,4 @@ export interface WalletsCollection {
 export interface Web3ProfileStorage {
     unListedCollections: Record<string, Record<CollectionType, string[]>>
     hiddenAddresses: WalletsCollection
-}
-
-export interface PersonaConnectStatus {
-    action?: (
-        target?: string | undefined,
-        position?: 'center' | 'top-right' | undefined,
-        enableVerify?: boolean,
-        direct?: boolean,
-    ) => void
-    currentPersona?: PersonaInformation
-    connected?: boolean
-    hasPersona?: boolean
-    verified?: boolean
-    proof?: BindingProof[]
 }

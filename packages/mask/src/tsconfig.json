@@ -31,7 +31,6 @@
     { "path": "../../plugins/Flow" },
     { "path": "../../plugins/Solana" },
     { "path": "../../external-plugin-previewer" },
-    { "path": "../../plugins/Avatar" },
     { "path": "../../injected-script/sdk" },
     { "path": "../../mask-sdk/server" },
     { "path": "../../sandboxed-plugin-runtime/src/site-adaptor" },

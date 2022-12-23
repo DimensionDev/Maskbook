@@ -2,8 +2,9 @@ import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/h
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { searchFaceBookPostAvatarOnMobileSelector, searchFaceBookPostAvatarSelector } from '../../utils/selector.js'
-import { NFTBadgeTimeline, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
+import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline.js'
 import { isMobileFacebook } from '../../utils/isMobile.js'
+import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 

@@ -7,7 +7,6 @@ import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '@masknet/
 import {
     createSubscriptionFromAsync,
     createSubscriptionFromValueRef,
-    DashboardRoutes,
     ECKeyIdentifier,
     EnhanceableSite,
     i18NextInstance,
@@ -17,7 +16,7 @@ import {
 import type { ThemeSettings } from '@masknet/web3-shared-base'
 import { Flags } from '../../shared/index.js'
 import { currentSetupGuideStatus } from '../../shared/legacy-settings/settings.js'
-import { SetupGuideContext, SetupGuideStep } from '../../shared/legacy-settings/types.js'
+import type { SetupGuideContext } from '../../shared/legacy-settings/types.js'
 import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
 import Services from '../extension/service.js'
 import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils.js'
@@ -25,7 +24,6 @@ import { MaskMessages, setupReactShadowRootEnvironment } from '../utils/index.js
 import '../utils/debug/general.js'
 import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
 import { definedSocialNetworkUIs } from './define.js'
-import stringify from 'json-stable-stringify'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -151,18 +149,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         signal,
     )
 
-    const createPersona = () => {
-        Services.Helper.openDashboard(DashboardRoutes.Setup)
-    }
-
-    const connectPersona = async () => {
-        const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
-        currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier].value = stringify({
-            status: SetupGuideStep.FindUsername,
-            persona: currentPersonaIdentifier?.toText(),
-        })
-    }
-
     startPluginSNSAdaptor(
         getCurrentSNSNetwork(ui.networkIdentifier),
         createPluginHost(
@@ -173,7 +159,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     ...RestPartOfPluginUIContextShared,
                     lastRecognizedProfile: lastRecognizedSub,
                     currentVisitingProfile: currentVisitingSub,
-                    MaskMessages,
                     allPersonas: allPersonaSub,
                     themeSettings: themeSettingsSub,
                     getThemeSettings: () => activatedSocialNetworkUI.configuration.themeSettings,
@@ -184,9 +169,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     setMinimalMode: Services.Settings.setPluginMinimalModeEnabled,
                     getPostURL: ui.utils.getPostURL,
                     share: ui.utils.share,
-                    queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
-                    createPersona,
-                    connectPersona,
                 }
             },
             Services.Settings.getPluginMinimalModeEnabled,

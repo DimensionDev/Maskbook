@@ -18,10 +18,6 @@ export const RestPartOfPluginUIContextShared: Omit<
     | 'getPersonaAvatar'
     | 'ownProofChanged'
     | 'setMinimalMode'
-    | 'queryPersonaByProfile'
-    | 'MaskMessages'
-    | 'connectPersona'
-    | 'createPersona'
 > = {
     currentPersona: createSubscriptionFromAsync(
         Services.Settings.getCurrentPersonaIdentifier,

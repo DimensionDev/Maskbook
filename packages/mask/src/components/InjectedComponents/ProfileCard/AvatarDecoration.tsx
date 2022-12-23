@@ -1,7 +1,9 @@
 import { Twitter } from '@masknet/web3-providers'
 import type { FC } from 'react'
 import { useAsync } from 'react-use'
-import { RSS3_KEY_SNS, NFTAvatarMiniClip, NFTBadgeTimeline } from '@masknet/plugin-avatar'
+import { RSS3_KEY_SNS } from '../../../plugins/Avatar/constants.js'
+import { NFTAvatarMiniClip } from '../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip.js'
+import { NFTBadgeTimeline } from '../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline.js'
 
 interface Props {
     className?: string

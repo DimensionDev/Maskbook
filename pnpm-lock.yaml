@@ -639,9 +639,6 @@ importers:
       '@masknet/plugin-approval':
         specifier: workspace:^
         version: link:../plugins/Approval
-      '@masknet/plugin-avatar':
-        specifier: workspace:^
-        version: link:../plugins/Avatar
       '@masknet/plugin-cross-chain-bridge':
         specifier: workspace:^
         version: link:../plugins/CrossChainBridge
@@ -1235,75 +1232,6 @@ importers:
       urlcat:
         specifier: ^2.0.4
         version: 2.0.4_fggwetex7eobhq3hztj4obsulu
-
-  packages/plugins/Avatar:
-    dependencies:
-      '@masknet/icons':
-        specifier: workspace:^
-        version: link:../../icons
-      '@masknet/plugin-infra':
-        specifier: workspace:^
-        version: link:../../plugin-infra
-      '@masknet/plugin-wallet':
-        specifier: workspace:^
-        version: link:../Wallet
-      '@masknet/shared':
-        specifier: workspace:^
-        version: link:../../shared
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../../shared-base
-      '@masknet/shared-base-ui':
-        specifier: workspace:^
-        version: link:../../shared-base-ui
-      '@masknet/theme':
-        specifier: workspace:^
-        version: link:../../theme
-      '@masknet/web3-helpers':
-        specifier: workspace:^
-        version: link:../../web3-helpers
-      '@masknet/web3-hooks-base':
-        specifier: workspace:^
-        version: link:../../web3-hooks/base
-      '@masknet/web3-providers':
-        specifier: workspace:^
-        version: link:../../web3-providers
-      '@masknet/web3-shared-base':
-        specifier: workspace:^
-        version: link:../../web3-shared/base
-      '@masknet/web3-shared-evm':
-        specifier: workspace:^
-        version: link:../../web3-shared/evm
-      '@types/react-avatar-editor':
-        specifier: ^13.0.0
-        version: 13.0.0_6wzwgbn4gsisp2tjbg76iifhqq
-      '@types/use-subscription':
-        specifier: ^1.0.0
-        version: 1.0.0
-      '@types/uuid':
-        specifier: ^8.3.4
-        version: 8.3.4
-      bignumber.js:
-        specifier: 9.1.0
-        version: 9.1.0
-      lru-cache:
-        specifier: ^7.10.1
-        version: 7.10.1
-      react-avatar-editor:
-        specifier: ^13.0.0
-        version: 13.0.0
-      react-use:
-        specifier: ^17.4.0
-        version: 17.4.0
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
-      use-subscription:
-        specifier: ^1.8.0
-        version: 1.8.0
-      uuid:
-        specifier: ^9.0.0
-        version: 9.0.0
 
   packages/plugins/CrossChainBridge:
     dependencies:
@@ -2062,7 +1990,7 @@ importers:
         version: 1.1.0
       '@metaplex/js':
         specifier: ^4.11.7
-        version: 4.11.7_3hthoayrtz7bowcduhtflwhjdu
+        version: 4.11.7
       '@project-serum/sol-wallet-adapter':
         specifier: ^0.2.6
         version: 0.2.6_dl5wqnnaxjm7biesxtvdpr7gpe_@solana+web3.js@1.44.2
@@ -2957,7 +2885,7 @@ importers:
         version: 1.1.0
       '@metaplex/js':
         specifier: ^4.11.7
-        version: 4.11.7_3hthoayrtz7bowcduhtflwhjdu
+        version: 4.11.7
       '@siddomains/sidjs':
         specifier: ^0.1.16
         version: 0.1.16
@@ -3783,7 +3711,7 @@ packages:
     resolution: {integrity: sha512-0NFvs3VkuSYbFi1x2Vd6tKrywq+z/cLeYC/RJNFrIX/30Bf5aiGYbtvGXolEktzJH8o5E5KJ3tT+nkxuuZFVlA==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/types': 7.20.2
+      '@babel/types': 7.19.0
 
   /@babel/helper-module-transforms/7.20.2:
     resolution: {integrity: sha512-zvBKyJXRbmK07XhMuujYoJ48B5yvvmM6+wcpv6Ivj4Yg6qO7NOZOSnvZN9CRl1zz1Z4cKf8YejmCMh8clOoOeA==}
@@ -3880,6 +3808,10 @@ packages:
     dependencies:
       '@babel/types': 7.20.2
 
+  /@babel/helper-string-parser/7.18.10:
+    resolution: {integrity: sha512-XtIfWmeNY3i4t7t4D2t02q50HvqHybPqW2ki1kosnvWCwuCMeo81Jf0gwr85jy/neUdg5XDdeFE/80DXiO+njw==}
+    engines: {node: '>=6.9.0'}
+
   /@babel/helper-string-parser/7.19.4:
     resolution: {integrity: sha512-nHtDoQcuqFmwYNYPz3Rah5ph2p8PFeFCsZk9A/48dPc/rGocJ5J3hAAZ7pb76VWX3fZKu+uEr/FhH5jLx7umrw==}
     engines: {node: '>=6.9.0'}
@@ -3892,7 +3824,6 @@ packages:
   /@babel/helper-validator-identifier/7.18.6:
     resolution: {integrity: sha512-MmetCkz9ej86nJQV+sFCxoGGrUbU3q02kgLciwkrt9QqEB7cP39oKEY0PakknEO0Gu20SskMRi+AYZ3b1TpN9g==}
     engines: {node: '>=6.9.0'}
-    dev: false
 
   /@babel/helper-validator-identifier/7.19.1:
     resolution: {integrity: sha512-awrNfaMtnHUr653GgGEs++LlAvW6w+DcPrOliSMXWCKo597CwL5Acf/wWdNkf/tfEQE3mjkeD1YOVZOUV/od1w==}
@@ -5498,6 +5429,14 @@ packages:
       to-fast-properties: 2.0.0
     dev: false
 
+  /@babel/types/7.19.0:
+    resolution: {integrity: sha512-YuGopBq3ke25BVSiS6fgF49Ul9gH1x70Bcr6bqRLjWCkcX8Hre1/5+z+IiWOIerRMSSEfGZVB9z9kyq7wVs9YA==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      '@babel/helper-string-parser': 7.18.10
+      '@babel/helper-validator-identifier': 7.18.6
+      to-fast-properties: 2.0.0
+
   /@babel/types/7.20.2:
     resolution: {integrity: sha512-FnnvsNWgZCr232sqtXggapvlkk/tuwR/qhGzcmxI0GXLCjmPYQPzio2FbdlWuY6y1sHFfQKk+rRbUZ9VStQMog==}
     engines: {node: '>=6.9.0'}
@@ -6172,8 +6111,8 @@ packages:
       '@cspell/dict-docker': 1.1.3
       '@cspell/dict-dotnet': 4.0.0
       '@cspell/dict-elixir': 4.0.0
-      '@cspell/dict-en-gb': 1.1.33
       '@cspell/dict-en_us': 4.1.0
+      '@cspell/dict-en-gb': 1.1.33
       '@cspell/dict-filetypes': 3.0.0
       '@cspell/dict-fonts': 3.0.0
       '@cspell/dict-fullstack': 3.0.0
@@ -6220,8 +6159,8 @@ packages:
       '@cspell/dict-docker': 1.1.1
       '@cspell/dict-dotnet': 2.0.1
       '@cspell/dict-elixir': 2.0.1
-      '@cspell/dict-en-gb': 1.1.33
       '@cspell/dict-en_us': 2.3.0
+      '@cspell/dict-en-gb': 1.1.33
       '@cspell/dict-filetypes': 2.1.1
       '@cspell/dict-fonts': 2.0.1
       '@cspell/dict-fullstack': 2.0.6
@@ -6627,13 +6566,13 @@ packages:
     resolution: {integrity: sha512-4Qy4/JSzyk+f4LTsALERTwTjXGh2kRNHj+eVpLWF1oSJeTC2CQ8iZeKlQoIZa0zXcwbw/RYBpfiDJIXSqeI+Og==}
     hasBin: true
     dependencies:
-      3id-did-provider: 1.1.1
       '@3id/connect': 0.2.5
       '@ceramicnetwork/3id-did-resolver': 1.4.16
       '@ceramicnetwork/blockchain-utils-linking': 1.5.5
       '@ceramicnetwork/http-client': 1.5.7
       '@ceramicstudio/idx': 0.12.2
       '@stablelib/sha256': 1.0.1
+      3id-did-provider: 1.1.1
       bs58: 4.0.1
       idb: 7.1.1
       key-did-resolver: 1.4.4
@@ -8258,18 +8197,14 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@metaplex/js/4.11.7_3hthoayrtz7bowcduhtflwhjdu:
+  /@metaplex/js/4.11.7:
     resolution: {integrity: sha512-/8X04VEHMfWF84H2DZwLY3yg0xq75vgt/VtLuChTm8iUHkj99Whnq0NLTe0OqfhiEV0qFvT5dbLFh7x2CZqrEQ==}
     deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
-    peerDependencies:
-      '@metaplex-foundation/mpl-token-metadata': ^0.0.2
-      '@solana/spl-token': ^0.1.8
-      '@solana/web3.js': ^1.30.2
     dependencies:
       '@metaplex-foundation/mpl-auction': 0.0.2
       '@metaplex-foundation/mpl-core': 0.0.2
       '@metaplex-foundation/mpl-metaplex': 0.0.5
-      '@metaplex-foundation/mpl-token-metadata': 1.1.0
+      '@metaplex-foundation/mpl-token-metadata': 0.0.2
       '@metaplex-foundation/mpl-token-vault': 0.0.2
       '@solana/spl-token': 0.1.8
       '@solana/web3.js': 1.44.2
@@ -10908,9 +10843,9 @@ packages:
       '@babel/preset-env': 7.20.2_@babel+core@7.20.2
       '@babel/types': 7.20.2
       '@mdx-js/mdx': 1.6.22
-      '@types/lodash': 4.14.190
+      '@types/lodash': 4.14.188
       js-string-escape: 1.0.1
-      loader-utils: 2.0.4
+      loader-utils: 2.0.3
       lodash: 4.17.21
       prettier: 2.3.0
       ts-dedent: 2.2.0
@@ -11210,7 +11145,7 @@ packages:
       core-js: 3.26.0
       estraverse: 5.3.0
       global: 4.4.0
-      loader-utils: 2.0.4
+      loader-utils: 2.0.3
       lodash: 4.17.21
       prettier: 2.3.0
       regenerator-runtime: 0.13.11
@@ -12002,6 +11937,10 @@ packages:
     resolution: {integrity: sha512-R+zTeVUKDdfoRxpAryaQNRKk3105Rrgx2CFRClIgRGaqDTdjsm8h6IYA8ir584W3ePzkZfst5xIgDwYrlh9HLg==}
     dependencies:
       '@types/lodash': 4.14.190
+    dev: true
+
+  /@types/lodash/4.14.188:
+    resolution: {integrity: sha512-zmEmF5OIM3rb7SbLCFYoQhO4dGt2FRM9AMkxvA3LaADOF1n8in/zGJlWji9fmafLoNyz+FoL6FE0SLtGIArD7w==}
     dev: true
 
   /@types/lodash/4.14.190:
@@ -15363,7 +15302,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001434
+      caniuse-lite: 1.0.30001431
       electron-to-chromium: 1.4.284
       node-releases: 2.0.6
       update-browserslist-db: 1.0.10_browserslist@4.21.4
@@ -15532,7 +15471,7 @@ packages:
       mississippi: 3.0.0
       mkdirp: 0.5.6
       move-concurrently: 1.0.1
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 2.7.1
       ssri: 6.0.2
       unique-filename: 1.1.1
@@ -15556,7 +15495,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.12
@@ -15717,10 +15656,10 @@ packages:
 
   /caniuse-lite/1.0.30001431:
     resolution: {integrity: sha512-zBUoFU0ZcxpvSt9IU66dXVT/3ctO1cy4y9cscs1szkPlcWb6pasYM144GqrUygUbT+k7cmUCW61cvskjcv0enQ==}
-    dev: true
 
   /caniuse-lite/1.0.30001434:
     resolution: {integrity: sha512-aOBHrLmTQw//WFa2rcF1If9fa3ypkC1wzqqiKHgfdrXTWcU8C4gKVZT77eQAPWN1APys3+uQ0Df07rKauXGEYA==}
+    dev: false
 
   /canonicalize/1.0.8:
     resolution: {integrity: sha512-0CNTVCLZggSh7bc5VkX5WWPWO+cyZbNd07IHIsSXLia/eAq+r836hgk+8BKoEh7949Mda87VUOitx5OddVj64A==}
@@ -16571,8 +16510,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
-      JSONStream: 1.3.5
       is-text-path: 1.0.1
+      JSONStream: 1.3.5
       lodash: 4.17.21
       meow: 8.1.2
       split2: 3.2.2
@@ -20600,18 +20539,6 @@ packages:
       debug:
         optional: true
 
-  /follow-redirects/1.15.1_debug@4.3.4:
-    resolution: {integrity: sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==}
-    engines: {node: '>=4.0'}
-    peerDependencies:
-      debug: '*'
-    peerDependenciesMeta:
-      debug:
-        optional: true
-    dependencies:
-      debug: 4.3.4_supports-color@6.1.0
-    dev: false
-
   /follow-redirects/1.15.2:
     resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
     engines: {node: '>=4.0'}
@@ -22091,7 +22018,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.15.1_debug@4.3.4
+      follow-redirects: 1.15.1
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -23378,13 +23305,13 @@ packages:
       '@types/lodash': 4.14.190
       '@types/node': 18.11.9
       '@types/ws': 7.4.7
-      JSONStream: 1.3.5
       commander: 2.20.3
       delay: 5.0.0
       es6-promisify: 5.0.0
       eyes: 0.1.8
       isomorphic-ws: 4.0.1_ws@7.5.7
       json-stringify-safe: 5.0.1
+      JSONStream: 1.3.5
       lodash: 4.17.21
       uuid: 3.4.0
       ws: 7.5.7
@@ -23735,7 +23662,7 @@ packages:
     resolution: {integrity: sha512-aKS4WQjPenRxiQsC93MNfjx+nbF4PAdYzmd/1JIj8HYzqfbu86beTuNgXDzPknWk0n0uARlyewZo4s++ES36Ow==}
     hasBin: true
     dependencies:
-      minimist: 1.2.7
+      minimist: 1.2.6
 
   /json5/2.2.1:
     resolution: {integrity: sha512-1hqLFMSrGHRHxav9q9gNjJ5EXznIxGVO09xQRrwplcS8qs28pZ8s8hupZAmqDwZUmVZ2Qb2jnyPOWcDH8m8dlA==}
@@ -24027,7 +23954,7 @@ packages:
     dev: false
 
   /level-ws/0.0.0:
-    resolution: {integrity: sha1-Ny5RIXeSSgBCSwtDrvK7QkltIos=}
+    resolution: {integrity: sha512-XUTaO/+Db51Uiyp/t7fCMGVFOTdtLS/NIACxE/GHsij15mKzxksZifKVjlXDF41JMUP/oM1Oc4YNGdKnc3dVLw==}
     dependencies:
       readable-stream: 1.0.34
       xtend: 2.1.2
@@ -24267,7 +24194,7 @@ packages:
     dev: false
 
   /lodash.debounce/4.0.8:
-    resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
+    resolution: {integrity: sha1-gteb/zCmfEAF/9XiUVMArZyk168=}
 
   /lodash.eq/4.0.0:
     resolution: {integrity: sha512-vbrJpXL6kQNG6TkInxX12DZRfuYVllSxhwYqjYB78g2zF3UI15nFO/0AgmZnZRnaQ38sZtjCiVjGr2rnKt4v0g==}
@@ -24346,7 +24273,7 @@ packages:
     dev: true
 
   /lodash.unescape/4.0.1:
-    resolution: {integrity: sha1-vyJJiGzlFM2hEvrpIYzcBlIR/Jw=}
+    resolution: {integrity: sha512-DhhGRshNS1aX6s5YdBE3njCCouPgnG29ebyHvImlZzXZf2SHgt+J08DHgytTPnpywNbO1Y8mNUFyQuIDBq2JZg==}
     dev: false
 
   /lodash.uniq/4.5.0:
@@ -27255,15 +27182,13 @@ packages:
   /promievent/0.1.5:
     resolution: {integrity: sha512-Yqve4y2sFIz5hHmVpoZWXNayROyAyf3KWeEHZPh60yYiVpmHMKuJt6UoLbs6pC8uEMdFkqukz97mQXaAkHDPAw==}
 
-  /promise-inflight/1.0.1_bluebird@3.7.2:
+  /promise-inflight/1.0.1:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
     peerDependencies:
       bluebird: '*'
     peerDependenciesMeta:
       bluebird:
         optional: true
-    dependencies:
-      bluebird: 3.7.2
     dev: true
 
   /promise-to-callback/1.0.0:
@@ -28024,7 +27949,7 @@ packages:
       react-dom: 0.0.0-experimental-d1e35c703-20221110_bjsypg3j75bxk4gg5elgsyi4ae
     dev: false
 
-  /react-universal-interface/0.6.2_tslib@2.4.1:
+  /react-universal-interface/0.6.2_tslib@2.4.0:
     resolution: {integrity: sha512-dg8yXdcQmvgR13RIlZbTRQOoUrDciFVoSBZILwjE2LFISxZZ8loVJKAkuzswl5js8BHda79bIb2b84ehU8IjXw==}
     peerDependencies:
       react: '*'
@@ -28033,7 +27958,7 @@ packages:
       react:
         optional: true
     dependencies:
-      tslib: 2.4.1
+      tslib: 2.4.0
     dev: false
 
   /react-use/17.4.0:
@@ -28054,13 +27979,13 @@ packages:
       fast-shallow-equal: 1.0.0
       js-cookie: 2.2.1
       nano-css: 5.3.5
-      react-universal-interface: 0.6.2_tslib@2.4.1
+      react-universal-interface: 0.6.2_tslib@2.4.0
       resize-observer-polyfill: 1.5.1
       screenfull: 5.2.0
       set-harmonic-interval: 1.0.1
       throttle-debounce: 3.0.1
       ts-easing: 0.2.0
-      tslib: 2.4.1
+      tslib: 2.4.0
     dev: false
 
   /react-virtualized-auto-sizer/1.0.7:
@@ -29782,7 +29707,6 @@ packages:
 
   /sourcemap-codec/1.4.8:
     resolution: {integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==}
-    deprecated: Please use @jridgewell/sourcemap-codec instead
 
   /space-separated-tokens/1.1.5:
     resolution: {integrity: sha512-q/JSVd1Lptzhf5bkYm4ob4iWPjx0KiRe3sRFBNrVqbJkFaBm5vbbowy1mymoPNLRa52+oadOhJ+K49wsSeSjTA==}
@@ -30499,7 +30423,7 @@ packages:
       '@swc/core': ^1.2.147
       webpack: '>=2'
     dependencies:
-      webpack: 5.75.0_webpack-cli@5.0.0
+      webpack: 5.75.0
     dev: true
 
   /symbol-tree/3.2.4:
@@ -31588,7 +31512,7 @@ packages:
     dev: false
 
   /uglify-js/2.8.29:
-    resolution: {integrity: sha512-qLq/4y2pjcU3vhlhseXGGJ7VbFO4pBANu0kwl8VCa9KEI0V8VfZIx2Fy3w01iSTA/pGwKZSmu/+I4etLNDdt5w==}
+    resolution: {integrity: sha1-KcVzMUgFe7Th913zW3qcty5qWd0=}
     engines: {node: '>=0.8.0'}
     hasBin: true
     dependencies:
@@ -31617,7 +31541,7 @@ packages:
     dependencies:
       source-map: 0.5.7
       uglify-js: 2.8.29
-      webpack: 3.12.0_webpack-cli@5.0.0
+      webpack: 3.12.0
       webpack-sources: 1.4.3
     dev: false
 
@@ -34117,12 +34041,12 @@ packages:
     name: wyvern-js
     version: 3.2.0
     dependencies:
-      0x.js: 0.29.2
       '@0xproject/abi-gen': 0.1.2
       '@0xproject/assert': 0.0.11
       '@0xproject/json-schemas': 0.7.24
       '@0xproject/utils': 0.1.3
       '@0xproject/web3-wrapper': 0.1.14
+      0x.js: 0.29.2
       bn.js: 4.12.0
       ethereumjs-abi: github.com/ProjectWyvern/ethereumjs-abi/3d2d89641a6ad5984929b6ca4b646452ec74f73d
       ethereumjs-util: 5.2.1
@@ -34137,7 +34061,6 @@ packages:
     name: wyvern-js
     version: 3.2.0
     dependencies:
-      0x.js: 0.29.2
       '@0xproject/abi-gen': 0.1.7
       '@0xproject/assert': 0.0.11
       '@0xproject/json-schemas': 0.7.24
@@ -34146,6 +34069,7 @@ packages:
       '@0xproject/web3-wrapper': 0.1.14
       '@types/lodash': 4.14.190
       '@types/node': 18.11.9
+      0x.js: 0.29.2
       awesome-typescript-loader: 3.5.0_typescript@2.9.2
       bn.js: 4.12.0
       ethereumjs-abi: github.com/ProjectWyvern/ethereumjs-abi/3d2d89641a6ad5984929b6ca4b646452ec74f73d
@@ -34174,7 +34098,6 @@ packages:
     name: wyvern-js
     version: 3.2.0
     dependencies:
-      0x.js: 0.29.2
       '@0xproject/abi-gen': 0.1.7
       '@0xproject/assert': 0.0.11
       '@0xproject/json-schemas': 0.7.24
@@ -34183,6 +34106,7 @@ packages:
       '@0xproject/web3-wrapper': 0.1.14
       '@types/lodash': 4.14.190
       '@types/node': 18.11.9
+      0x.js: 0.29.2
       awesome-typescript-loader: 3.5.0_typescript@2.9.2
       bn.js: 4.12.0
       ethereumjs-abi: github.com/ProjectWyvern/ethereumjs-abi/3d2d89641a6ad5984929b6ca4b646452ec74f73d

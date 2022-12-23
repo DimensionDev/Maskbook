@@ -7,7 +7,7 @@ import {
 import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils/index.js'
 import { useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { NFTAvatarButton } from '@masknet/plugin-avatar'
+import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton.js'
 import { NFTAvatarSettingDialog } from './NFTAvatarSettingDialog.js'
 import { useLocation } from 'react-use'
 

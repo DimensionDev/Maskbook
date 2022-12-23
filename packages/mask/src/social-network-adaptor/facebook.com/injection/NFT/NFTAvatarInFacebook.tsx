@@ -6,14 +6,16 @@ import { searchFacebookAvatarOnMobileSelector, searchFacebookAvatarSelector } fr
 import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils/index.js'
 import { EnhanceableSite, NFTAvatarEvent, NetworkPluginID } from '@masknet/shared-base'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
-import type { AvatarMetaDB } from '@masknet/plugin-avatar'
+import type { AvatarMetaDB } from '../../../../plugins/Avatar/types.js'
 import { getAvatarId } from '../../utils/user.js'
-import { useNFT, useNFTAvatar, useSaveNFTAvatar, NFTBadge, RSS3_KEY_SNS, useWallet } from '@masknet/plugin-avatar'
+import { useNFT, useNFTAvatar, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks/index.js'
+import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge.js'
 import { makeStyles } from '@masknet/theme'
 import { isMobileFacebook } from '../../utils/isMobile.js'
 import { InMemoryStorages } from '../../../../../shared/index.js'
-
+import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
+import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet.js'
 
 export function injectNFTAvatarInFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchFacebookAvatarSelector())

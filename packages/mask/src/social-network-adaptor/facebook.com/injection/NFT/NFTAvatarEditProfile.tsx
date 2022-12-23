@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { searchFacebookEditProfileSelector, searchFacebookProfileSettingButtonSelector } from '../../utils/selector.js'
 import { createReactRootShadowed, startWatch, useLocationChange } from '../../../../utils/index.js'
-import { NFTAvatarButton } from '@masknet/plugin-avatar'
+import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton.js'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchFacebookProfileSettingButtonSelector())
