@@ -12,6 +12,8 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                 filter: (data: SearchResult<ChainId, SchemaType>, keyword: string) => {
                     if (data.type !== SearchResultType.FungibleToken) return false
 
+                    if (data.alias?.map((x) => x.toLowerCase()).includes(keyword.toLowerCase())) return true
+
                     const symbol = data.symbol
                     if (symbol === keyword || symbol?.replace(/\s/g, '') === keyword) return true
 
