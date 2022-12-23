@@ -229,6 +229,7 @@
     "personas_disconnect_raw": "Disconnect",
     "personas_disconnect_warning": "Are you sure you want to delete persona verification?  Your mask friends can no longer send decrypted message to you by this persona or check your Web 3 products related with this persona.",
     "personas_logout_warning": "After logging out, your associated social accounts can no longer decrypt past encrypted messages. If you need to reuse your account, you can use your private key for recovery.",
+    "personas_logout_manage_wallet_warning": "Please note: This Persona {{persona}} is the management account of SmartPay wallet {{addresses}}. You cannot use SmartPay wallet to interact with blockchain after logging out persona.",
     "personas_add": "Add",
     "personas_upload_avatar": "Upload an avatar",
     "personas_rename": "Rename",
