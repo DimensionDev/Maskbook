@@ -37,5 +37,21 @@
     "no_wallet_message": "crwdns18348:0crwdne18348:0",
     "inactive_persona_tooltip": "crwdns18678:0crwdne18678:0",
     "wallet_non_evm_warning": "crwdns16688:0crwdne16688:0",
-    "unsupported_network": "crwdns18680:0crwdne18680:0"
+    "unsupported_network": "crwdns18680:0crwdne18680:0",
+    "nft_avatar": "crwdns19383:0crwdne19383:0",
+    "retry": "crwdns19385:0crwdne19385:0",
+    "nft_list_title": "crwdns19387:0crwdne19387:0",
+    "nft_wallet_label": "crwdns19389:0crwdne19389:0",
+    "nft_wallet_change": "crwdns19391:0crwdne19391:0",
+    "nft_input_address_label": "crwdns19393:0crwdne19393:0",
+    "nft_input_tokenid_label": "crwdns19395:0crwdne19395:0",
+    "plugin_avatar_web3_error": "crwdns19397:0crwdne19397:0",
+    "plugin_avatar_asset": "crwdns19399:0crwdne19399:0",
+    "plugin_avatar_chain_error": "crwdns19401:0crwdne19401:0",
+    "nft_owner_hint": "crwdns19403:0crwdne19403:0",
+    "nft_add_button_label_checking": "crwdns19405:0crwdne19405:0",
+    "nft_add_button_label": "crwdns19407:0crwdne19407:0",
+    "plugin_avatar_input_token_address": "crwdns19409:0crwdne19409:0",
+    "plugin_avatar_input_token_id": "crwdns19411:0crwdne19411:0",
+    "dashboard_no_collectible_found": "crwdns19413:0crwdne19413:0"
 }
