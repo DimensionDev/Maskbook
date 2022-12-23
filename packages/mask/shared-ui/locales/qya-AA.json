@@ -1066,5 +1066,13 @@
     "plugin_web3_profile_feature_general_user_name": "crwdns19119:0crwdne19119:0",
     "plugin_web3_profile_feature_general_user_description": "crwdns19121:0crwdne19121:0",
     "plugin_web3_profile_feature_nft_name": "crwdns19123:0crwdne19123:0",
-    "plugin_web3_profile_feature_nft_description": "crwdns19125:0crwdne19125:0"
+    "plugin_web3_profile_feature_nft_description": "crwdns19125:0crwdne19125:0",
+    "decentralized_search_name": "crwdns19419:0crwdne19419:0",
+    "decentralized_search_description": "crwdns19421:0crwdne19421:0",
+    "decentralized_search_feature_token_name": "crwdns19423:0crwdne19423:0",
+    "decentralized_search_feature_token_description": "crwdns19425:0crwdne19425:0",
+    "decentralized_search_feature_nft_name": "crwdns19427:0crwdne19427:0",
+    "decentralized_search_feature_nft_description": "crwdns19429:0crwdne19429:0",
+    "decentralized_search_feature_wallet_name": "crwdns19431:0crwdne19431:0",
+    "decentralized_search_feature_wallet_description": "crwdns19433:0crwdne19433:0"
 }
