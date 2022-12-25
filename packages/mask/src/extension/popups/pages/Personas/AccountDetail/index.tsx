@@ -58,7 +58,10 @@ const AccountDetail = memo(() => {
 
             if (!result) return
 
-            const signature = await Service.Identity.generateSignResult(currentPersona.identifier, result.signPayload)
+            const signature = await Service.Identity.generatePersonalSignResult(
+                currentPersona.identifier,
+                result.signPayload,
+            )
 
             if (!signature) return
 
@@ -68,7 +71,7 @@ const AccountDetail = memo(() => {
                 selectedAccount.platform,
                 selectedAccount.identity,
                 result.createdAt,
-                { signature: signature.signature.signature },
+                { signature: signature.signature },
             )
 
             await Service.Identity.detachProfile(selectedAccount.identifier)

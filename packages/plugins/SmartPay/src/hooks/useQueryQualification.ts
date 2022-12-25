@@ -1,11 +1,11 @@
+import { first, intersectionWith } from 'lodash-es'
+import { useAsync } from 'react-use'
 import { useAllPersonas, useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress, Wallet } from '@masknet/web3-shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
-import { first, intersectionWith } from 'lodash-es'
-import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import type { SignablePersona } from '../type.js'
 
@@ -23,7 +23,7 @@ export function useQueryQualification(): AsyncState<
 
     const personas = useAllPersonas()
     const wallets = useWallets()
-    const { generateSignResult } = useSNSAdaptorContext()
+    const { generateMessageSignResult } = useSNSAdaptorContext()
 
     return useAsync(async () => {
         if (!currentIdentity?.identifier?.userId) return
@@ -60,7 +60,7 @@ export function useQueryQualification(): AsyncState<
             ).map(async (x) => {
                 return {
                     ...x,
-                    address: (await generateSignResult(x.identifier, '')).address,
+                    address: (await generateMessageSignResult('personal', x.identifier, '')).address,
                 }
             }),
         )
@@ -81,5 +81,5 @@ export function useQueryQualification(): AsyncState<
             signableWallets,
             personas,
         }
-    }, [currentIdentity, personas, wallets, generateSignResult])
+    }, [currentIdentity, personas, wallets, generateMessageSignResult])
 }

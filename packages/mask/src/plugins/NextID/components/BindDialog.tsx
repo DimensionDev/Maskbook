@@ -1,17 +1,17 @@
 import { memo } from 'react'
-import { useI18N } from '../locales/index.js'
 import { useAsyncRetry } from 'react-use'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID, Binding, PersonaInformation, NextIDAction, NextIDPlatform } from '@masknet/shared-base'
-import { BindPanelUI } from './BindPanelUI.js'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import { useCustomSnackbar } from '@masknet/theme'
 import { delay } from '@masknet/kit'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { NextIDProof } from '@masknet/web3-providers'
+import { useCustomSnackbar } from '@masknet/theme'
+import { BindPanelUI } from './BindPanelUI.js'
 import { useBindPayload } from '../hooks/useBindPayload.js'
 import { usePersonaSign } from '../hooks/usePersonaSign.js'
 import { useWalletSign } from '../hooks/useWalletSign.js'
-import { NextIDProof } from '@masknet/web3-providers'
 import { MaskMessages } from '../../../../shared/index.js'
+import { useI18N } from '../locales/index.js'
 
 interface BindDialogProps {
     open: boolean
@@ -51,7 +51,7 @@ export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBou
                 message.createdAt,
                 {
                     walletSignature: walletSignState.value,
-                    signature: personaSignState.value.signature.signature,
+                    signature: personaSignState.value.signature,
                 },
             )
             showSnackbar(t.notify_wallet_sign_request_title(), {
@@ -83,7 +83,7 @@ export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBou
             isCurrentAccount
             signature={{
                 persona: {
-                    value: personaSignState.value?.signature.signature,
+                    value: personaSignState.value?.signature,
                     loading: personaSignState.loading,
                 },
                 wallet: walletSignState,

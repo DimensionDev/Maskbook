@@ -118,10 +118,12 @@ export class ContractWallet implements Middleware<Context> {
         // sign user operation
         await userTransaction.sign(async (message: string) => {
             if (identifier) {
-                return SharedContextSettings.value.personaSignPayMessage({
+                const { signature } = await SharedContextSettings.value.signMessageWithPersona({
+                    method: 'eth',
                     message,
                     identifier,
                 })
+                return signature
             }
             return context.connection.signMessage(message, 'personalSign', {
                 account: owner,
