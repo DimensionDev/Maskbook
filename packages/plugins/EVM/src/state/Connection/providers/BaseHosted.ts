@@ -2,6 +2,7 @@ import type { RequestArguments } from 'web3-core'
 import { toHex } from 'web3-utils'
 import type { ProviderOptions } from '@masknet/web3-shared-base'
 import type { StorageObject } from '@masknet/shared-base'
+import { Web3 } from '@masknet/web3-providers'
 import { ChainId, getDefaultChainId, isValidAddress, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
 import type { EVM_Provider } from '../types.js'
 import { BaseProvider } from './Base.js'
@@ -99,7 +100,7 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         requestArguments: RequestArguments,
         options?: ProviderOptions<ChainId>,
     ): Promise<T> {
-        return this.createWeb3Provider(options).request<T>(
+        return Web3.createProvider(options?.chainId || this.chainId).request<T>(
             PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
         )
     }
