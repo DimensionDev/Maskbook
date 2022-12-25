@@ -88,8 +88,7 @@ const VerifyWallet = memo(() => {
     const [{ value: signature }, personaSilentSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.identifier) return
         try {
-            const signResult = await Services.Identity.generateSignResult(
-                'personal',
+            const signResult = await Services.Identity.generatePersonalSignResult(
                 currentPersona.identifier,
                 payload.signPayload,
             )

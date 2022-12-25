@@ -39,7 +39,7 @@ export function useDeploy(
             nonce,
         })
 
-        let signature: string
+        let signature: string | undefined
 
         if (signAccount.type === SignAccountType.Persona && signAccount?.raw?.identifier) {
             signature = (
@@ -50,10 +50,10 @@ export function useDeploy(
                 })
             ).signature
         } else if (signAccount.type === SignAccountType.Wallet) {
-            signature = (await connection?.signMessage(payload, 'personalSign', {
+            signature = await connection?.signMessage(payload, 'personalSign', {
                 account: signAccount.address,
                 providerType: ProviderType.MaskWallet,
-            })) as string
+            })
         } else return
 
         if (!signature) return
