@@ -89,7 +89,13 @@ export class ContractWallet implements Middleware<Context> {
         const recipient = first<string>(context.requestArguments.params)
         if (!recipient) throw new Error('No recipient address.')
 
-        return this.account.transfer(context.chainId, this.getOwner(context).owner, recipient, this.getSigner(context))
+        return this.account.changeOwner(
+            context.chainId,
+            this.getOwner(context).owner,
+            context.account,
+            recipient,
+            this.getSigner(context),
+        )
     }
 
     async fn(context: Context, next: () => Promise<void>) {

@@ -34,16 +34,16 @@ export function ConnectionContent(props: ConnectionContentProps) {
         if (!NATIVE_TOKEN_ADDRESS) return
         return connection?.transferFungibleToken(
             NATIVE_TOKEN_ADDRESS,
-            '0x790116d0685eB197B886DAcAD9C247f785987A4a',
+            '0x66b57885E8E9D84742faBda0cE6E3496055b012d',
             '100',
             undefined,
             {
                 chainId: ChainId.Mumbai,
-                account: '0xF55e3d8e682071f67a67D6C04F8dFc2462f6a670',
+                account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
                 providerType: EVM_ProviderType.MaskWallet,
                 overrides: {
                     chainId: ChainId.Mumbai,
-                    from: '0xF55e3d8e682071f67a67D6C04F8dFc2462f6a670',
+                    from: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
                 },
             },
         )
@@ -58,11 +58,11 @@ export function ConnectionContent(props: ConnectionContentProps) {
             '1',
             {
                 chainId: ChainId.Mumbai,
-                account: '0xF55e3d8e682071f67a67D6C04F8dFc2462f6a670',
+                account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
                 providerType: EVM_ProviderType.MaskWallet,
                 overrides: {
                     chainId: ChainId.Mumbai,
-                    from: '0xF55e3d8e682071f67a67D6C04F8dFc2462f6a670',
+                    from: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
                 },
             },
         )

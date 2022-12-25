@@ -35,6 +35,23 @@ const USER_OP_TYPE = {
     },
 }
 
+const DEFAULT_USER_OPERATION: Required<UserOperation> = {
+    sender: getZeroAddress(),
+    nonce: 0,
+    initCode: '0x',
+    callData: '0x',
+    callGas: '21000',
+    // default verification gas. will add create2 cost (3200 + 200 * length) if initCode exists
+    verificationGas: '100000',
+    // should also cover calldata cost.
+    preVerificationGas: '21000',
+    maxFeePerGas: '0',
+    maxPriorityFeePerGas: '1000000000',
+    paymaster: getZeroAddress(),
+    paymasterData: '0x',
+    signature: '0x',
+}
+
 const CALL_WALLET_TYPE: AbiItem = {
     name: 'execFromEntryPoint',
     type: 'function',
@@ -55,23 +72,6 @@ const CALL_WALLET_TYPE: AbiItem = {
             type: 'bytes',
         },
     ],
-}
-
-const DEFAULT_USER_OPERATION: Required<UserOperation> = {
-    sender: getZeroAddress(),
-    nonce: 0,
-    initCode: '0x',
-    callData: '0x',
-    callGas: '0',
-    // default verification gas. will add create2 cost (3200 + 200 * length) if initCode exists
-    verificationGas: '100000',
-    // should also cover calldata cost.
-    preVerificationGas: '21000',
-    maxFeePerGas: '0',
-    maxPriorityFeePerGas: '1000000000',
-    paymaster: getZeroAddress(),
-    paymasterData: '0x',
-    signature: '0x',
 }
 
 const coder = ABICoder as unknown as ABICoder.AbiCoder
@@ -152,7 +152,6 @@ export class UserTransaction {
             initCode,
             nonce,
             sender,
-            callGas,
             callData,
             verificationGas,
             preVerificationGas,
@@ -162,9 +161,6 @@ export class UserTransaction {
         } = this.userOperation
 
         if (!isEmptyHex(initCode)) {
-            // caution: the creator needs to set the latest index of the contract account.
-            // otherwise, always treat the operation to create the initial account.
-            if (typeof nonce === 'undefined') this.userOperation.nonce = 0
             if (!sender) {
                 if (!entryPointContract) throw new Error('Failed to create entry point contract.')
                 this.userOperation.sender = await entryPointContract.methods.getSenderAddress(initCode, nonce).call()
@@ -176,12 +172,14 @@ export class UserTransaction {
             )
         }
 
-        if (typeof this.userOperation.nonce === 'undefined') {
+        // caution: the creator needs to set the latest index of the contract account.
+        // otherwise, always treat the operation to create the initial account.
+        if (!nonce) {
             if (!walletContract) throw new Error('Failed to create wallet contract.')
             this.userOperation.nonce = toNumber(await walletContract.methods.nonce().call())
         }
 
-        if (isZeroString(callGas) && !isEmptyHex(callData)) {
+        if (!isEmptyHex(callData)) {
             const estimatedGas = await web3.eth.estimateGas({
                 from: this.entryPoint,
                 to: sender,

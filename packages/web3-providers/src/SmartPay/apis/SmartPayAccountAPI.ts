@@ -234,7 +234,24 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         )
     }
 
-    transfer(chainId: ChainId, onwer: string, recipient: string, signer: AbstractAccountAPI.Signer): Promise<string> {
+    transfer(
+        chainId: ChainId,
+        owner: string,
+        sender: string,
+        recipient: string,
+        amount: string,
+        signer: AbstractAccountAPI.Signer,
+    ): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+
+    changeOwner(
+        chainId: ChainId,
+        onwer: string,
+        sender: string,
+        recipient: string,
+        signer: AbstractAccountAPI.Signer,
+    ): Promise<string> {
         throw new Error('Method not implemented.')
     }
 

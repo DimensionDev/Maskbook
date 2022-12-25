@@ -50,8 +50,17 @@ export namespace AbstractAccountAPI {
         getAccountsByOwners(chainId: ChainId, owners: string[]): Promise<Array<AbstractAccount<T>>>
         /** Deploy a new account. */
         deploy(chainId: ChainId, owner: string, signer: Signer): Promise<string>
-        /** Transfer account ownership to a new owner. */
-        transfer(chainId: ChainId, onwer: string, recipient: string, signer: Signer): Promise<string>
+        /** Transfer some native tokens to recipient. */
+        transfer(
+            chainId: ChainId,
+            owner: string,
+            sender: string,
+            recipient: string,
+            amount: string,
+            signer: Signer,
+        ): Promise<string>
+        /** Change account ownership to a new owner. */
+        changeOwner(chainId: ChainId, onwer: string, sender: string, recipient: string, signer: Signer): Promise<string>
         /** Send a transaction by the account. */
         sendTransaction(chainId: ChainId, owner: string, transaction: Transaction, signer: Signer): Promise<string>
         /** Send a user operation by the account. */
