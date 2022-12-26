@@ -1,9 +1,17 @@
+import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
-import { InjectedDialog, LoadGuard, PersonaAction, WalletTypes } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
+import { InjectedDialog, LoadGuard, PersonaAction, usePersonaProofs, WalletTypes } from '@masknet/shared'
+import {
+    CrossIsolationMessages,
+    EMPTY_LIST,
+    MaskEvents,
+    NetworkPluginID,
+    NextIDPlatform,
+    PopupRoutes,
+} from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { LogMessage, NextIDProof } from '@masknet/web3-providers'
+import { LogMessage } from '@masknet/web3-providers'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { DialogActions, DialogContent } from '@mui/material'
 import { sortBy } from 'lodash-es'
@@ -60,21 +68,19 @@ export function Web3ProfileDialog() {
     const personaPublicKey = currentPersona?.identifier.publicKeyAsHex
 
     const {
-        value: bindings,
+        value: proofs,
         retry: retryQueryBinding,
-        error: loadingBindingError,
         loading: loadingBinding,
-    } = useAsyncRetry(async () => {
-        if (!personaPublicKey) return
-        return NextIDProof.queryExistedBindingByPersona(personaPublicKey)
-    }, [personaPublicKey])
-    useEffect(() => context?.ownProofChanged.on(retryQueryBinding), [retryQueryBinding])
+        error: loadingBindingError,
+    } = usePersonaProofs(personaPublicKey, {
+        events: { ownProofChanged: context?.ownProofChanged },
+    } as WebExtensionMessage<MaskEvents>)
 
     const { value: avatar } = useAsyncRetry(async () => context.getPersonaAvatar(currentPersona?.identifier), [])
 
     const wallets: WalletTypes[] = useMemo(() => {
-        if (!bindings?.proofs?.length) return EMPTY_LIST
-        return bindings.proofs
+        if (!proofs?.length) return EMPTY_LIST
+        return proofs
             .filter((proof) => proof.platform === NextIDPlatform.Ethereum)
             .map(
                 (proof): WalletTypes => ({
@@ -84,11 +90,11 @@ export function Web3ProfileDialog() {
                     collections: [],
                 }),
             )
-    }, [bindings?.proofs])
+    }, [proofs])
 
     const accounts = useMemo(
-        () => bindings?.proofs?.filter((proof) => proof.platform === NextIDPlatform.Twitter) || EMPTY_LIST,
-        [bindings?.proofs],
+        () => proofs?.filter((proof) => proof.platform === NextIDPlatform.Twitter) || EMPTY_LIST,
+        [proofs],
     )
     const { value: NFTList } = useAsyncRetry(async () => {
         if (!currentPersona) return

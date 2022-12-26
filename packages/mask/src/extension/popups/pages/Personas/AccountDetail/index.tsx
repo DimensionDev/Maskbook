@@ -15,7 +15,7 @@ import { DisconnectDialog } from '../components/DisconnectDialog/index.js'
 const AccountDetail = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
-    const { selectedAccount, currentPersona, refreshProofs } = PersonaContext.useContainer()
+    const { selectedAccount, currentPersona } = PersonaContext.useContainer()
     const [open, setOpen] = useState(false)
 
     const { showSnackbar } = usePopupCustomSnackbar()
@@ -75,7 +75,6 @@ const AccountDetail = memo(() => {
             )
 
             await Service.Identity.detachProfile(selectedAccount.identifier)
-            refreshProofs()
             showSnackbar(t('popups_disconnect_success'), {
                 variant: 'success',
             })
