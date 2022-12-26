@@ -288,7 +288,16 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         return uniqWith(
             result,
             (a, b) => a.type === b.type && (a.id === b.id || isSameAddress(a.address, b.address) || a.rank === b.rank),
-        ).sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
+        ).sort((a, b) => {
+            if (
+                a.rank &&
+                a.rank < 200 &&
+                a.type === SearchResultType.FungibleToken &&
+                b.type !== SearchResultType.FungibleToken
+            )
+                return -1
+            return (a.rank ?? 0) - (b.rank ?? 0)
+        })
     }
 
     private async searchTokenByName(name: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {

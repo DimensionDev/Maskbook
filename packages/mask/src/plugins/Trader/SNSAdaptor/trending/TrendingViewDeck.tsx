@@ -144,6 +144,7 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
 
 export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const { trending, stats, children, TrendingCardProps, resultList = [], result, setResult } = props
+
     const { coin, market } = trending
     const { isNFTProjectPopper, isTokenTagPopper, isPreciseSearch } = useContext(TrendingViewContext)
 
@@ -224,7 +225,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         {t('plugin_trader_rank', { rank: result.rank ?? coin.market_cap_rank })}
                                     </Typography>
                                 ) : null}
-                                {resultList.length > 1 && !isPreciseSearch && result.rank && result.rank > 200 ? (
+                                {resultList.length > 1 && !isPreciseSearch && result.rank ? (
                                     <>
                                         <IconButton
                                             sx={{ padding: 0 }}
