@@ -55,6 +55,7 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
         },
         socialName: {
             color: theme.palette.maskColor.dark,
+            whiteSpace: 'nowrap',
             maxWidth: 85,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
