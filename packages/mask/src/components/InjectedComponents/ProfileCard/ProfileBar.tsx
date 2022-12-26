@@ -21,13 +21,14 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
         columnGap: 4,
     },
     avatar: {
-        flexShrink: 0,
         position: 'relative',
         height: 40,
         width: 40,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        flexShrink: 0,
+        flexGrow: 0,
         filter: 'drop-shadow(0px 6px 12px rgba(28, 104, 243, 0.2))',
         backdropFilter: 'blur(16px)',
         '& img': {

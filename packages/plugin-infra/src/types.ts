@@ -1,3 +1,7 @@
+import type React from 'react'
+import type { Option, Result } from 'ts-results-es'
+import type { Subscription } from 'use-subscription'
+import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import type {
@@ -14,6 +18,8 @@ import type {
     PopupRoutes,
     ProfileIdentifier,
     ScopedStorage,
+    PersonaSignRequest,
+    PersonaSignResult,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -31,12 +37,8 @@ import type {
     Web3State,
     Web3UI,
 } from '@masknet/web3-shared-base'
-import type { ChainId as ChainIdEVM, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
+import type { ChainId as ChainIdEVM, Transaction, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
-import type React from 'react'
-import type { Option, Result } from 'ts-results-es'
-import type { Subscription } from 'use-subscription'
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { CompositionType } from './entry-content-script.js'
 
 export declare namespace Plugin {
@@ -217,18 +219,29 @@ export namespace Plugin.Shared {
         /** Record which sites are connected to the Mask wallet  */
         recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): void
 
-        /** Sign a message with persona */
-        personaSignMessage(payload: PersonaSignRequest): Promise<PersonaSignResult>
+        /** Sign a message with persona (with popups) */
+        signMessageWithPersona(payload: PersonaSignRequest<string>): Promise<PersonaSignResult>
 
-        personaSignPayMessage(payload: Omit<PersonaSignRequest, 'method'>): Promise<string>
-        /** Generate sign message with persona */
-        generateSignResult(signer: ECKeyIdentifier, message: string): Promise<PersonaSignResult>
+        /** Sign a transaction with persona (with popups) */
+        signTransactionWithPersona(payload: PersonaSignRequest<Transaction>): Promise<PersonaSignResult>
+
+        generateMessageSignResult(
+            method: PersonaSignRequest<string>['method'],
+            signer: ECKeyIdentifier,
+            message: string,
+        ): Promise<PersonaSignResult>
+
+        generateTransactionSignResult(
+            method: PersonaSignRequest<Transaction>['method'],
+            signer: ECKeyIdentifier,
+            transaction: Transaction,
+        ): Promise<PersonaSignResult>
 
         /** Sign transaction */
         signTransaction(address: string, transaction: TransactionEVM): Promise<string>
 
         /** Sign personal message, aka. eth.personal.sign() */
-        signPersonalMessage(address: string, message: string): Promise<string>
+        signPersonalMessage(message: string, address: string): Promise<string>
 
         /** Sign typed data */
         signTypedData(address: string, message: string): Promise<string>
@@ -377,29 +390,6 @@ export namespace Plugin.Shared {
     }
 
     export interface Ability {}
-
-    export interface PersonaSignRequest {
-        /** The message to be signed. */
-        message: string
-        /** Use what method to sign this message? */
-        method: 'eth'
-        identifier: PersonaIdentifier
-    }
-
-    export interface PersonaSignResult {
-        /** The persona user selected to sign the message */
-        persona: PersonaIdentifier
-        signature: {
-            // type from ethereumjs-util
-            // raw: ECDSASignature
-            EIP2098: string
-            signature: string
-        }
-        /** Persona converted to a wallet address */
-        address: string
-        /** Message in hex */
-        messageHex: string
-    }
 }
 
 /** This part runs in the SNSAdaptor */
@@ -433,21 +423,6 @@ export namespace Plugin.SNSAdaptor {
               open: false
               address?: string
           }
-
-    export interface PersonaSignResult {
-        /** The persona user selected to sign the message */
-        persona: PersonaIdentifier
-        signature: {
-            // type from ethereumjs-util
-            // raw: ECDSASignature
-            EIP2098: string
-            signature: string
-        }
-        /** Persona converted to a wallet address */
-        address: string
-        /** Message in hex */
-        messageHex: string
-    }
 
     export interface Definition<
         ChainId = unknown,

@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { PluginID, PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
-import { NextIDProof } from '@masknet/web3-providers'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import { useCurrentPersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus.js'
 import Services from '../../../extension/service.js'
@@ -14,9 +13,10 @@ import {
     OtherLackWalletAction,
     SelectConnectPersonaAction,
 } from './Actions/index.js'
-import { PluginCardFrameMini } from '@masknet/shared'
+import { PluginCardFrameMini, usePersonaProofs } from '@masknet/shared'
 import { ThemeProvider } from '@mui/material'
 import { makeStyles, MaskLightTheme } from '@masknet/theme'
+import { MaskMessages } from '../../../utils/messages.js'
 
 const useStyles = makeStyles()((theme) => ({}))
 
@@ -35,15 +35,7 @@ export function NextIdPage() {
         return Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
     }, [visitingPersonaIdentifier, personaConnectStatus.hasPersona])
     const publicKeyAsHex = currentPersona?.identifier.publicKeyAsHex
-
-    const {
-        value: bindings,
-        loading: loadingBindings,
-        retry: retryQueryBinding,
-    } = useAsyncRetry(async () => {
-        if (!publicKeyAsHex) return
-        return NextIDProof.queryExistedBindingByPersona(publicKeyAsHex)
-    }, [publicKeyAsHex])
+    const proofs = usePersonaProofs(publicKeyAsHex, MaskMessages)
 
     const handleAddWallets = () => {
         Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
@@ -79,7 +71,7 @@ export function NextIdPage() {
         return <AddWalletPersonaAction disabled={statusLoading} onAddWallet={handleAddWallets} />
     }, [isOwn, t, statusLoading, handleAddWallets, personaConnectStatus])
 
-    if (loadingBindings || loadingPersona) {
+    if (proofs.loading || loadingPersona) {
         return <PluginCardFrameMini />
     }
 
@@ -95,8 +87,8 @@ export function NextIdPage() {
                     open={openBindDialog}
                     onClose={() => toggleBindDialog(false)}
                     persona={currentPersona}
-                    bounds={bindings?.proofs ?? EMPTY_LIST}
-                    onBound={retryQueryBinding}
+                    bounds={proofs.value ?? EMPTY_LIST}
+                    onBound={proofs.retry}
                 />
             )}
         </>

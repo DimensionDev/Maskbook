@@ -11,7 +11,7 @@ import {
 import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
 import { SourceType, createFungibleToken, SearchResultType, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NFTList, PluginCardFrameMini } from '@masknet/shared'
+import { NFTList, PluginCardFrameMini, xmasBackground } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { TrendingAPI } from '@masknet/web3-providers/types'
@@ -92,6 +92,10 @@ const useStyles = makeStyles<{
             props.isNFTProjectPopper && props.currentTab === ContentTabs.Price ? { height: 420 } : {},
         cardHeader: {
             marginBottom: '-36px',
+            backgroundImage: `linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), url(${xmasBackground})`,
+            backgroundColor: 'white',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center bottom',
         },
         nftItems: {
             height: props.isNFTProjectPopper ? 360 : 530,
@@ -276,7 +280,7 @@ export function TrendingView(props: TrendingViewProps) {
                     <CoinMarketPanel dataProvider={trending.dataProvider} trending={trending} />
                 ) : null}
                 {currentTab === ContentTabs.Price ? (
-                    <Box px={2} py={4} height={420} className={classes.priceChartRootWrapper}>
+                    <Box px={2} py={4} className={classes.priceChartRootWrapper}>
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}
