@@ -25,6 +25,7 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
     const popperRef = useRef<{
         update(): void
     } | null>(null)
+    const [active, setActive] = useState(false)
     const [freezed, setFreezed] = useState(false) // disable any click
     const [locked, setLocked] = useState(false) // state is updating, lock UI
     const [name, setName] = useState('')
@@ -59,13 +60,13 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
                     setAddress(ev.address ?? '')
                     setIsNFTProjectPopper(Boolean(ev.isNFTProjectPopper))
                     setAnchorEl({ getBoundingClientRect: () => ev.element!.getBoundingClientRect() })
+                    setActive(true)
                     setLocked(false)
                 }
                 // observe the same element
                 if (anchorEl === ev.element) return
                 // close popper on previous element
                 if (anchorEl) {
-                    setAnchorEl(null)
                     setTimeout(update, 400)
                     return
                 }
@@ -76,7 +77,7 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
 
     // close popper if location was changed
     const location = useLocation()
-    useEffect(() => setAnchorEl(null), [location.state?.key, location.href])
+    useEffect(() => setActive(false), [location.state?.key, location.href])
 
     // close popper if scroll out of visual screen
     const position = useWindowScroll()
@@ -85,29 +86,30 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
         const { top, height } = popper.current.getBoundingClientRect()
         if ((top < 0 && -top > height) || top > document.documentElement.clientHeight) {
             // out off bottom bound
-            setAnchorEl(null)
+            setActive(false)
         }
     }, [popper, Math.floor(position.y / 50)])
     // #endregion
 
     if (locked) return null
-    if (!anchorEl || !type) return null
+    if (!type) return null
     if (!resultList?.length) return null
+
     return (
         <ClickAwayListener
             onClickAway={() => {
-                if (!freezed) setAnchorEl(null)
+                if (!freezed) setActive(false)
             }}>
             <Popper
                 ref={popper}
-                open
+                open={active}
                 anchorEl={anchorEl}
                 style={{ zIndex: 100 }}
                 popperRef={(ref) => (popperRef.current = ref)}
                 transition
                 disablePortal
                 popperOptions={{
-                    strategy: 'fixed',
+                    strategy: 'absolute',
                     modifiers: [
                         {
                             name: 'preventOverflow',
@@ -121,7 +123,7 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
                 }}
                 {...rest}>
                 {({ TransitionProps }) => (
-                    <Fade in {...TransitionProps}>
+                    <Fade {...TransitionProps}>
                         <div>
                             {children?.(resultList, address, isNFTProjectPopper, () =>
                                 setTimeout(() => popperRef.current?.update(), 100),
