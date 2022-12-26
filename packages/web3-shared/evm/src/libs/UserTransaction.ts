@@ -177,7 +177,8 @@ export class UserTransaction {
         // otherwise, always treat the operation to create the initial account.
         if (!nonce) {
             if (!walletContract) throw new Error('Failed to create wallet contract.')
-            this.userOperation.nonce = toNumber(await walletContract.methods.nonce().call())
+            const nonce_ = await walletContract.methods.nonce().call()
+            this.userOperation.nonce = toNumber(nonce_) + 1
         }
 
         if (!isEmptyHex(callData)) {
@@ -186,7 +187,7 @@ export class UserTransaction {
                 to: sender,
                 data: callData,
             })
-            this.userOperation.callGas = toFixed(addGasMargin(estimatedGas, 150000))
+            this.userOperation.callGas = toFixed(addGasMargin(estimatedGas, 5000))
         }
         if (isZeroString(maxFeePerGas)) {
             const block = await web3.eth.getBlock('latest')
