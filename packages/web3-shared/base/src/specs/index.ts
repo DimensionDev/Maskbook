@@ -420,6 +420,8 @@ export interface NonFungibleCollectionOverview {
     highest_price?: number
     volume_24h?: number
     average_price_24h?: number
+    average_price_change_1d: string
+    average_price_change_7d: string
     sales_24h?: number
     owners_total?: number
     total_volume?: number
