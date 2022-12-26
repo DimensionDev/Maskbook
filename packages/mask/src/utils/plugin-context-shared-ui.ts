@@ -56,7 +56,6 @@ export const RestPartOfPluginUIContextShared: Omit<
         WalletMessages.events.walletsUpdated.on,
     ),
 
-    updateAccount: WalletRPC.updateMaskAccount,
     selectAccount: WalletRPC.selectMaskAccount,
     recordConnectedSites: WalletRPC.recordConnectedSites,
 

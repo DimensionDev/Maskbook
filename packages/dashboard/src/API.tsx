@@ -23,7 +23,6 @@ export interface PluginServices {
             derivationPath?: string,
             initialPassword?: string | undefined,
         ): Promise<string>
-        updateMaskAccount(options: { account?: string | undefined }): Promise<void>
         resolveMaskAccount(accounts: MaskAccount[]): Promise<void>
         verifyPassword(unverifiedPassword: string): Promise<boolean>
     }

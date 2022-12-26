@@ -198,14 +198,6 @@ export namespace Plugin.Shared {
         /** Select a Mask Wallet account */
         selectAccount(): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
 
-        /** Update Mask Wallet account */
-        updateAccount(account: {
-            account?: string
-            chainId?: number
-            networkType?: string
-            providerType?: string
-        }): Promise<void>
-
         /** Record which sites are connected to the Mask wallet  */
         recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): void
 
