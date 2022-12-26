@@ -1,4 +1,4 @@
-import { isNil, omit } from 'lodash-es'
+import { isNil } from 'lodash-es'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { defer } from '@masknet/kit'
 import { Web3 } from '@masknet/web3-providers'
@@ -43,7 +43,7 @@ async function internalSend(
                 chainId,
                 ...config,
             })
-            provider.send(
+            await provider.send(
                 {
                     ...payload,
                     method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
@@ -61,6 +61,7 @@ async function internalSend(
                 callback(ErrorEditor.from(error, null, 'Failed to sign message.').error)
             }
             break
+        case EthereumMethodType.ETH_SIGN:
         case EthereumMethodType.PERSONAL_SIGN:
             const [data, account] = payload.params as [string, string]
             const messageSigned = await WalletRPC.signPersonalMessage(data, account)
@@ -70,8 +71,14 @@ async function internalSend(
                 callback(ErrorEditor.from(error, null, 'Failed to sign message.').error)
             }
             break
+        case EthereumMethodType.ETH_DECRYPT:
+            callback(new Error('Method Not implemented.'))
+            break
+        case EthereumMethodType.ETH_GET_ENCRYPTION_PUBLIC_KEY:
+            callback(new Error('Method Not implemented.'))
+            break
         default:
-            provider.send(payload, callback)
+            await provider.send(payload, callback)
             break
     }
 }
@@ -104,22 +111,7 @@ export async function send(payload: JsonRpcPayload, options?: Options) {
             return
         }
 
-        if (options?.chainId === ChainId.Astar) {
-            await internalSend(
-                {
-                    ...payload,
-                    params: payload.params?.map((x) => {
-                        if (x?.chainId) return omit(x, 'chainId')
-                        return x
-                    }),
-                },
-                callback,
-                options,
-            )
-
-            return
-        }
-        internalSend(payload, callback, options)
+        await internalSend(payload, callback, options)
     })
 }
 
@@ -128,6 +120,7 @@ export async function confirmRequest(payload: JsonRpcPayload, options?: Options)
     if (!pid) return
 
     const [deferred, resolve, reject] = defer<JsonRpcResponse, Error>()
+
     internalSend(
         payload,
         (error, response) => {
