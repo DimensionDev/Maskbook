@@ -60,7 +60,7 @@ export namespace AbstractAccountAPI {
             signer: Signer,
         ): Promise<string>
         /** Change account ownership to a new owner. */
-        changeOwner(chainId: ChainId, onwer: string, sender: string, recipient: string, signer: Signer): Promise<string>
+        changeOwner(chainId: ChainId, owner: string, sender: string, recipient: string, signer: Signer): Promise<string>
         /** Send a transaction by the account. */
         sendTransaction(chainId: ChainId, owner: string, transaction: Transaction, signer: Signer): Promise<string>
         /** Send a user operation by the account. */

@@ -247,7 +247,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
 
     changeOwner(
         chainId: ChainId,
-        onwer: string,
+        owner: string,
         sender: string,
         recipient: string,
         signer: AbstractAccountAPI.Signer,
