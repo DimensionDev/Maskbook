@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { Stack, Typography, useTheme } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useSharedI18N } from '@masknet/shared'
 import { Box } from '@mui/system'
@@ -24,7 +24,6 @@ export const PluginDescriptor = ({
     isProfilePage,
     isTokenTagPopper,
 }: PluginHeaderProps) => {
-    const theme = useTheme()
     const { classes } = useStyles()
     const t = useSharedI18N()
 
@@ -40,10 +39,7 @@ export const PluginDescriptor = ({
                 ) : (
                     <Icons.DecentralizedSearch />
                 )}
-                <Typography
-                    color={isNFTProjectPopper || isTokenTagPopper ? undefined : theme.palette.maskColor.dark}
-                    fontWeight="bolder"
-                    fontSize={16}>
+                <Typography fontWeight="bolder" fontSize={16} color={(theme) => theme.palette.maskColor.dark}>
                     {isTokenTagPopper
                         ? t.market_trending()
                         : isNFTProjectPopper

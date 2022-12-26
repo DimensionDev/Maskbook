@@ -27,7 +27,6 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
     } | null>(null)
     const [active, setActive] = useState(false)
     const [freezed, setFreezed] = useState(false) // disable any click
-    const [locked, setLocked] = useState(false) // state is updating, lock UI
     const [name, setName] = useState('')
     const [isNFTProjectPopper, setIsNFTProjectPopper] = useState(false)
     const [address, setAddress] = useState('')
@@ -50,30 +49,16 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
 
     // #region open or close popper
     // open popper from message center
-    useEffect(
-        () =>
-            PluginTraderMessages.trendingAnchorObserved.on((ev) => {
-                const update = () => {
-                    setLocked(true)
-                    setName(ev.name)
-                    setType(ev.type)
-                    setAddress(ev.address ?? '')
-                    setIsNFTProjectPopper(Boolean(ev.isNFTProjectPopper))
-                    setAnchorEl({ getBoundingClientRect: () => ev.element!.getBoundingClientRect() })
-                    setActive(true)
-                    setLocked(false)
-                }
-                // observe the same element
-                if (anchorEl === ev.element) return
-                // close popper on previous element
-                if (anchorEl) {
-                    setTimeout(update, 400)
-                    return
-                }
-                update()
-            }),
-        [anchorEl],
-    )
+    useEffect(() => {
+        return PluginTraderMessages.trendingAnchorObserved.on((ev) => {
+            setName(ev.name)
+            setType(ev.type)
+            setAddress(ev.address ?? '')
+            setIsNFTProjectPopper(Boolean(ev.isNFTProjectPopper))
+            setAnchorEl({ getBoundingClientRect: () => ev.element!.getBoundingClientRect() })
+            setActive(true)
+        })
+    }, [])
 
     // close popper if location was changed
     const location = useLocation()
@@ -91,7 +76,6 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
     }, [popper, Math.floor(position.y / 50)])
     // #endregion
 
-    if (locked) return null
     if (!type) return null
     if (!resultList?.length) return null
 
