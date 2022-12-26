@@ -1,4 +1,5 @@
 import { memo, useEffect, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
 import { MaskMessages, useI18N } from '../../../../../utils/index.js'
@@ -7,7 +8,6 @@ import { PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { usePersonasFromDB } from '../../../../../components/DataSource/usePersonasFromDB.js'
 import { PersonaContext } from '../hooks/usePersonaContext.js'
 import { MethodAfterPersonaSign } from '../../Wallet/type.js'
-import { useAsyncFn } from 'react-use'
 import Services from '../../../../service.js'
 import { useTitle } from '../../../hook/useTitle.js'
 
