@@ -50,7 +50,7 @@ export class ContractWallet implements Middleware<Context> {
 
         return async (message: string) => {
             if (identifier) {
-                const { signature } = await SharedContextSettings.value.signMessageWithPersona({
+                const { signature } = await SharedContextSettings.value.signWithPersona({
                     method: 'message',
                     message,
                     identifier,

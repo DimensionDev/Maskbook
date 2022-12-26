@@ -19,7 +19,7 @@ export function useDeploy(
     onSuccess?: () => void,
 ) {
     const { Wallet } = useWeb3State()
-    const { signMessageWithPersona } = useSNSAdaptorContext()
+    const { signWithPersona } = useSNSAdaptorContext()
     const currentPersona = useCurrentPersonaInformation()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
 
@@ -43,7 +43,7 @@ export function useDeploy(
 
         if (signAccount.type === SignAccountType.Persona && signAccount?.raw?.identifier) {
             signature = (
-                await signMessageWithPersona({
+                await signWithPersona({
                     method: 'message',
                     message: payload,
                     identifier: signAccount.raw.identifier,

@@ -43,7 +43,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
             const wallets = this.context.wallets.getCurrentValue()
             const allPersonas = await Promise.all(
                 this.context.allPersonas?.getCurrentValue()?.map(async (x) => {
-                    const { address } = await this.context.generateMessageSignResult('message', x.identifier, '')
+                    const { address } = await this.context.generateSignResult('message', x.identifier, '')
                     return {
                         ...x,
                         address,

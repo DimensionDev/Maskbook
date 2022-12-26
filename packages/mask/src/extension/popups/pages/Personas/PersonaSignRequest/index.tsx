@@ -120,7 +120,7 @@ const PersonaSignRequest = memo(() => {
         switch (method) {
             case MethodAfterPersonaSign.DISCONNECT_NEXT_ID:
                 if (!message) break
-                const signatureResult = await Services.Identity.generateMessageSignResult(selectedPersona, message)
+                const signatureResult = await Services.Identity.generateSignResult('message', selectedPersona, message)
 
                 const profileIdentifier = url.get('profileIdentifier')
                 const platform = url.get('platform')

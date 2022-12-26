@@ -58,7 +58,8 @@ const AccountDetail = memo(() => {
 
             if (!result) return
 
-            const signature = await Service.Identity.generateMessageSignResult(
+            const signature = await Service.Identity.generateSignResult(
+                'message',
                 currentPersona.identifier,
                 result.signPayload,
             )

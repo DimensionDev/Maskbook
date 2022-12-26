@@ -37,7 +37,7 @@ import type {
     Web3State,
     Web3UI,
 } from '@masknet/web3-shared-base'
-import type { ChainId as ChainIdEVM, Transaction, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
+import type { ChainId as ChainIdEVM, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { CompositionType } from './entry-content-script.js'
 
@@ -202,21 +202,12 @@ export namespace Plugin.Shared {
         recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): void
 
         /** Sign a message with persona (with popups) */
-        signMessageWithPersona(payload: PersonaSignRequest<string>): Promise<PersonaSignResult>
+        signWithPersona<T>(payload: PersonaSignRequest<T>): Promise<PersonaSignResult>
 
-        /** Sign a transaction with persona (with popups) */
-        signTransactionWithPersona(payload: PersonaSignRequest<Transaction>): Promise<PersonaSignResult>
-
-        generateMessageSignResult(
-            method: PersonaSignRequest<string>['method'],
+        generateSignResult<T>(
+            method: PersonaSignRequest<T>['method'],
             signer: ECKeyIdentifier,
             message: string,
-        ): Promise<PersonaSignResult>
-
-        generateTransactionSignResult(
-            method: PersonaSignRequest<Transaction>['method'],
-            signer: ECKeyIdentifier,
-            transaction: Transaction,
         ): Promise<PersonaSignResult>
 
         /** Sign transaction */
