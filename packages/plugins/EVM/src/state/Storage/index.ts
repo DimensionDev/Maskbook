@@ -24,7 +24,7 @@ function createStorage(
                 options.namespace,
                 options.platform,
                 options.signerOrPublicKey,
-                SharedContextSettings.value.generateSignResult,
+                SharedContextSettings.value.generateMessageSignResult,
             )
         default:
             unreachable(providerType)

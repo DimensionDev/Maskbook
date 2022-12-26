@@ -120,7 +120,7 @@ const PersonaSignRequest = memo(() => {
         switch (method) {
             case MethodAfterPersonaSign.DISCONNECT_NEXT_ID:
                 if (!message) break
-                const signatureResult = await Services.Identity.generateSignResult(selectedPersona, message)
+                const signatureResult = await Services.Identity.generatePersonalSignResult(selectedPersona, message)
 
                 const profileIdentifier = url.get('profileIdentifier')
                 const platform = url.get('platform')
@@ -145,7 +145,7 @@ const PersonaSignRequest = memo(() => {
                     identity,
                     createdAt,
                     {
-                        signature: signatureResult.signature.signature,
+                        signature: signatureResult.signature,
                     },
                 )
                 const profile = currentPersona.linkedProfiles.find((x) => x.identifier.toText() === profileIdentifier)
