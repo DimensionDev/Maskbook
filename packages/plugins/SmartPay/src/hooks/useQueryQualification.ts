@@ -61,7 +61,7 @@ export function useQueryQualification(): AsyncState<
             ).map(async (x) => {
                 return {
                     ...x,
-                    address: (await generateMessageSignResult('personal', x.identifier, '')).address,
+                    address: (await generateMessageSignResult('message', x.identifier, '')).address,
                 }
             }),
         )

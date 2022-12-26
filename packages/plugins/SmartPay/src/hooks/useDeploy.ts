@@ -44,7 +44,7 @@ export function useDeploy(
         if (signAccount.type === SignAccountType.Persona && signAccount?.raw?.identifier) {
             signature = (
                 await signMessageWithPersona({
-                    method: 'eth',
+                    method: 'message',
                     message: payload,
                     identifier: signAccount.raw.identifier,
                 })

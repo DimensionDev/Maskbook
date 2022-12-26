@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid'
-import { keccakFromString, ecsign, bufferToHex, toRpcSig, privateToPublic, publicToAddress } from 'ethereumjs-util'
-import { encodeText, timeout } from '@masknet/kit'
+import { bufferToHex, privateToPublic, publicToAddress } from 'ethereumjs-util'
+import { timeout } from '@masknet/kit'
 import { personalSign } from '@metamask/eth-sig-util'
 import type { Transaction } from '@masknet/web3-shared-evm'
 import { Web3 } from '@masknet/web3-providers'
@@ -40,16 +40,7 @@ export async function signWithPersona<T>({
         'Timeout',
     )
 
-    switch (method) {
-        case 'eth':
-            return generateEthSignResult(signer, message as string)
-        case 'personal':
-            return generatePersonalSignResult(signer, message as string)
-        case 'transaction':
-            return generateTransactionSignResult(signer, message as Transaction)
-        default:
-            throw new Error(`Unknown sign method: ${method}.`)
-    }
+    return generateSignResult<T>(method, signer, message)
 }
 
 export async function generateSignResult<T>(
@@ -58,10 +49,8 @@ export async function generateSignResult<T>(
     message: T,
 ): Promise<PersonaSignResult> {
     switch (method) {
-        case 'eth':
-            return generateEthSignResult(signer, message as string)
-        case 'personal':
-            return generatePersonalSignResult(signer, message as string)
+        case 'message':
+            return generateMessageSignResult(signer, message as string)
         case 'transaction':
             return generateTransactionSignResult(signer, message as Transaction)
         default:
@@ -70,12 +59,12 @@ export async function generateSignResult<T>(
 }
 
 /**
- * Sign a raw message (eth sign)
+ * Sign a message in EVM way
  * @param signer
  * @param message
  * @returns
  */
-export async function generateEthSignResult(signer: ECKeyIdentifier, message: string) {
+export async function generateMessageSignResult(signer: ECKeyIdentifier, message: string) {
     const persona = (await queryPersonasWithPrivateKey()).find((x) => x.identifier === signer)
     if (!persona) throw new Error('Persona not found')
     const privateKey = Buffer.from(fromBase64URL(persona.privateKey.d!))
@@ -85,28 +74,6 @@ export async function generateEthSignResult(signer: ECKeyIdentifier, message: st
             privateKey,
             data: message,
         }),
-        address: bufferToHex(publicToAddress(privateToPublic(privateKey))),
-    }
-}
-
-/**
- * Sign as an EVM message (personal sign)
- * @param signer
- * @param message
- * @returns
- */
-export async function generatePersonalSignResult(signer: ECKeyIdentifier, message: string) {
-    const persona = (await queryPersonasWithPrivateKey()).find((x) => x.identifier === signer)
-    if (!persona) throw new Error('Persona not found')
-
-    const length = encodeText(message).length
-    const messageHash = keccakFromString(`\x19Ethereum Signed Message:\n${length}${message}`, 256)
-    const privateKey = Buffer.from(fromBase64URL(persona.privateKey.d!))
-    const signature = ecsign(messageHash, privateKey)
-
-    return {
-        persona: persona.identifier,
-        signature: toRpcSig(signature.v, signature.r, signature.s),
         address: bufferToHex(publicToAddress(privateToPublic(privateKey))),
     }
 }

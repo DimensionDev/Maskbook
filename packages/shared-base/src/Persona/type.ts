@@ -51,7 +51,7 @@ export interface PersonaSignRequest<T> {
     /** The message to be signed. */
     message: T
     /** Use what method to sign this message? */
-    method: 'eth' | 'personal' | 'transaction'
+    method: 'message' | 'transaction'
     identifier?: PersonaIdentifier
 }
 

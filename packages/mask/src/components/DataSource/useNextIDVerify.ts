@@ -25,7 +25,7 @@ export function useNextIDVerify() {
                 languageSettings.value ?? 'default',
             )
             if (!payload) throw new Error('Failed to create persona payload.')
-            const signResult = await Services.Identity.generatePersonalSignResult(
+            const signResult = await Services.Identity.generateMessageSignResult(
                 persona.identifier,
                 payload.signPayload,
             )
