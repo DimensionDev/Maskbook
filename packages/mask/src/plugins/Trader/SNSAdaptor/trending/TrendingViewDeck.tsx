@@ -186,7 +186,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     return (
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.cardHeader}>
-                {isNFTProjectPopper || TrendingViewContext ? null : <TrendingViewDescriptor trending={trending} />}
+                {isNFTProjectPopper || isTokenTagPopper ? null : <TrendingViewDescriptor trending={trending} />}
                 <Stack className={classes.headline}>
                     <Stack gap={2} flexGrow={1}>
                         <Stack>
@@ -314,7 +314,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 <Paper className={classes.body} elevation={0}>
                     {children}
                 </Paper>
-                {isNFTProjectPopper || TrendingViewContext ? (
+                {isNFTProjectPopper || isTokenTagPopper ? (
                     <section className={classes.pluginDescriptorWrapper}>
                         <TrendingViewDescriptor trending={trending} />
                     </section>
