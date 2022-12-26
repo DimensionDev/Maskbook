@@ -12,6 +12,7 @@ import type { SignablePersona } from '../type.js'
 export function useQueryQualification(): AsyncState<
     | {
           hasPersona: boolean
+          hasWallets: boolean
           eligibility: boolean
           personas: PersonaInformation[]
           signablePersonas?: SignablePersona[]
@@ -76,6 +77,7 @@ export function useQueryQualification(): AsyncState<
 
         return {
             hasPersona: !!personas.length,
+            hasWallets: !!signableWallets.length,
             eligibility: !!signablePersonas?.length || !!signableWallets.length,
             signablePersonas,
             signableWallets,
