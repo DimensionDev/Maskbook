@@ -52,7 +52,7 @@ const useStyles = makeStyles<{
                 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
         },
         headline: {
-            marginTop: props.isNFTProjectPopper ? 0 : 30,
+            marginTop: props.isNFTProjectPopper || props.isTokenTagPopper ? 0 : 30,
             alignItems: 'center',
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -186,7 +186,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     return (
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.cardHeader}>
-                {isNFTProjectPopper ? null : <TrendingViewDescriptor trending={trending} />}
+                {isNFTProjectPopper || TrendingViewContext ? null : <TrendingViewDescriptor trending={trending} />}
                 <Stack className={classes.headline}>
                     <Stack gap={2} flexGrow={1}>
                         <Stack>
@@ -314,7 +314,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 <Paper className={classes.body} elevation={0}>
                     {children}
                 </Paper>
-                {isNFTProjectPopper ? (
+                {isNFTProjectPopper || TrendingViewContext ? (
                     <section className={classes.pluginDescriptorWrapper}>
                         <TrendingViewDescriptor trending={trending} />
                     </section>
