@@ -46,3 +46,19 @@ export interface Relation {
     favor: RelationFavor
     network: string
 }
+
+export interface PersonaSignRequest<T> {
+    /** The message to be signed. */
+    message: T
+    /** Use what method to sign this message? */
+    method: 'eth' | 'personal' | 'transaction'
+    identifier?: PersonaIdentifier
+}
+
+export interface PersonaSignResult {
+    /** The persona user selected to sign the message */
+    persona: PersonaIdentifier
+    signature: string
+    /** Persona converted to a wallet address */
+    address: string
+}

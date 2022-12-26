@@ -14,6 +14,8 @@ import {
     useActivatedPluginsSNSAdaptor,
 } from '@masknet/plugin-infra/content-script'
 import { useSearchedKeyword } from '../DataSource/useSearchedKeyword.js'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { decentralizedSearchSettings } from '../../../shared/legacy-settings/settings.js'
 
 const useStyles = makeStyles()(() => ({
     contentWrapper: {
@@ -38,6 +40,8 @@ export interface SearchResultInspectorProps {
 export function SearchResultInspector(props: SearchResultInspectorProps) {
     const { classes } = useStyles()
     const translate = usePluginI18NField()
+
+    const dSearchEnabled = useValueRef(decentralizedSearchSettings)
 
     const keyword_ = useSearchedKeyword()
     const keyword = props.keyword || keyword_
@@ -66,6 +70,8 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         const Component = getSearchResultTabContent(currentTab)
         return <Component result={resultList.value[0]} />
     }, [currentTab, resultList.value])
+
+    if (!dSearchEnabled) return null
     if (!keyword && !resultList.value?.length) return null
     if (!contentComponent) return null
 

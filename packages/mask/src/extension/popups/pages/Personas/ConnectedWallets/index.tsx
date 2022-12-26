@@ -87,7 +87,7 @@ const ConnectedWallets = memo(() => {
 
                 if (!result) return
 
-                const signature = await Service.Identity.generateSignResult(
+                const signature = await Service.Identity.generatePersonalSignResult(
                     currentPersona.identifier,
                     result.signPayload,
                 )
@@ -101,7 +101,7 @@ const ConnectedWallets = memo(() => {
                     wallet.platform,
                     wallet.identity,
                     result.createdAt,
-                    { signature: signature.signature.signature },
+                    { signature: signature.signature },
                 )
                 // Broadcast updates.
                 MaskMessages.events.ownProofChanged.sendToAll()

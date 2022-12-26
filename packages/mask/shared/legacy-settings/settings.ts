@@ -33,6 +33,8 @@ export const dismissVerifyNextID = createBulkSettings<Record<string, boolean>>('
 
 export const logSettings = createGlobalSettings('log', false)
 
+export const decentralizedSearchSettings = createGlobalSettings('decentralizedSearchSettings', true)
+
 /**
  * ! DO NOT use this directly to query the plugin status !
  *

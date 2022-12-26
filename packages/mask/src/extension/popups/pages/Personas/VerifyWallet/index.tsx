@@ -88,12 +88,12 @@ const VerifyWallet = memo(() => {
     const [{ value: signature }, personaSilentSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.identifier) return
         try {
-            const signResult = await Services.Identity.generateSignResult(
+            const signResult = await Services.Identity.generatePersonalSignResult(
                 currentPersona.identifier,
                 payload.signPayload,
             )
             showSnackbar(t('popups_verify_persona_sign_success'), { variant: 'success' })
-            return signResult.signature.signature
+            return signResult.signature
         } catch (error) {
             showSnackbar(t('popups_verify_persona_sign_failed'), { variant: 'error' })
             console.error(error)

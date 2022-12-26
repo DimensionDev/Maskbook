@@ -34,7 +34,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
         if (!NATIVE_TOKEN_ADDRESS) return
         return connection?.transferFungibleToken(
             NATIVE_TOKEN_ADDRESS,
-            '0x66b57885E8E9D84742faBda0cE6E3496055b012d',
+            '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
             '100',
             undefined,
             {
@@ -53,7 +53,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
         if (pluginID !== NetworkPluginID.PLUGIN_EVM) return
         if (chainId !== ChainId.Mainnet) return
         return connection?.approveFungibleToken(
-            '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+            '0xF8935Df67cAB7BfcA9532D1Ac2088C5c39b995b5',
             '0x31f42841c2db5173425b5223809cf3a38fede360',
             '1',
             {

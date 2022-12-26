@@ -8,7 +8,7 @@ import { FC, useMemo } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, FeedCardProps } from '../base.js'
-import { CardType, getLastAction } from '../share.js'
+import { CardType, getCost, getLastAction } from '../share.js'
 import { AddressLabel, formatValue, Label } from './common.js'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center'>()((theme, _, refs) => ({
@@ -150,6 +150,7 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
             case Type.Trade:
                 action = getLastAction(feed as RSS3BaseAPI.CollectibleTradeFeed)
                 metadata = action.metadata
+                const cost = getCost(feed as RSS3BaseAPI.CollectibleTradeFeed)
                 return {
                     cardType: CardType.CollectibleOut,
                     metadata,
@@ -159,13 +160,14 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
                                 user,
                                 collectible: verbose ? metadata!.name : 'an NFT',
                                 recipient: formatEthereumAddress(action.address_to ?? '', 4),
-                                cost_value: formatValue(metadata?.cost),
-                                cost_symbol: metadata?.cost?.symbol ?? '',
+                                cost_value: formatValue(cost),
+                                cost_symbol: cost?.symbol ?? '',
+                                platform: feed.platform!,
+                                context: feed.platform ? 'platform' : 'no_platform',
                             }}
                             components={{
-                                user: <Label />,
                                 recipient: <AddressLabel address={action.address_to} />,
-                                cost: <Label />,
+                                bold: <Label />,
                                 collectible: verbose ? <Label /> : <span />,
                             }}
                         />

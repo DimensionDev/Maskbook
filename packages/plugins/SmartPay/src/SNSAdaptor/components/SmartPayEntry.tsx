@@ -37,7 +37,7 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
 
     const handleClick = useCallback(async () => {
         if (!value) return
-        if (!value.hasPersona) {
+        if (!value.hasPersona && !value.hasWallets) {
             setCreatePersonaConfirmDialog({
                 open: true,
                 target: 'dashboard',

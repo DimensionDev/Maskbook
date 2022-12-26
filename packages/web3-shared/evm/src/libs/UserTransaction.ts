@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js'
 import type Web3 from 'web3'
 import * as ABICoder from 'web3-eth-abi'
 import { AbiItem, bytesToHex, hexToBytes, keccak256, padLeft, toNumber } from 'web3-utils'
-import { multipliedBy, toFixed } from '@masknet/web3-shared-base'
+import { toFixed } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import EntryPointABI from '@masknet/web3-contracts/abis/EntryPoint.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
@@ -15,6 +15,7 @@ import {
     isEmptyHex,
     isZeroAddress,
     formatEthereumAddress,
+    addGasMargin,
 } from '../helpers/index.js'
 import { getSmartPayConstants } from '../constants/index.js'
 
@@ -185,7 +186,7 @@ export class UserTransaction {
                 to: sender,
                 data: callData,
             })
-            this.userOperation.callGas = toFixed(multipliedBy(estimatedGas, 1.5))
+            this.userOperation.callGas = toFixed(addGasMargin(estimatedGas, 150000))
         }
         if (isZeroString(maxFeePerGas)) {
             const block = await web3.eth.getBlock('latest')
