@@ -19,6 +19,8 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 16,
         fontWeight: 700,
         lineHeight: '120%',
+        width: '100%',
+        wordBreak: 'break-word',
     },
 }))
 

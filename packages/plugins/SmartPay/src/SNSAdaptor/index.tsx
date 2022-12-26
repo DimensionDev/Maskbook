@@ -46,7 +46,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             marketListSortingPriority: 3,
             name: { i18nKey: '__plugin_name', fallback: 'Smart Pay' },
             icon: <Icons.SmartPay size={36} />,
-            category: 'dapp',
+            category: 'other',
         },
     ],
 }
