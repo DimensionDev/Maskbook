@@ -50,7 +50,7 @@ async function internalSend(
 
     switch (payload.method) {
         case EthereumMethodType.ETH_SEND_TRANSACTION:
-        case EthereumMethodType.MASK_REPLACE_TRANSACTION:
+        case EthereumMethodType.MASK_REPLACE_TRANSACTION: {
             const config = PayloadEditor.fromPayload(payload).signableConfig
             if (!config?.from || !config.to) return
 
@@ -72,25 +72,46 @@ async function internalSend(
             }
 
             break
-        case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+        }
+        case EthereumMethodType.ETH_SIGN_TYPED_DATA: {
             const [address, dataToSign] = payload.params as [string, string]
-            const dataSigned = await WalletRPC.signTypedData(address, dataToSign)
-            try {
-                callback(null, createJsonRpcResponse(payload.id as number, dataSigned))
-            } catch (error) {
-                callback(ErrorEditor.from(error, null, 'Failed to sign message.').error)
+
+            if (options?.owner && options.identifier) {
+                const { signature } = await generateSignResult('typedData', options.identifier, dataToSign)
+                callback(null, createJsonRpcResponse(payload.id as number, signature))
+            } else {
+                try {
+                    callback(
+                        null,
+                        createJsonRpcResponse(payload.id as number, await WalletRPC.signTypedData(address, dataToSign)),
+                    )
+                } catch (error) {
+                    callback(ErrorEditor.from(error, null, 'Failed to sign message.').error)
+                }
             }
             break
+        }
         case EthereumMethodType.ETH_SIGN:
-        case EthereumMethodType.PERSONAL_SIGN:
-            const [data, account] = payload.params as [string, string]
-            const messageSigned = await WalletRPC.signPersonalMessage(data, account)
-            try {
-                callback(null, createJsonRpcResponse(payload.id as number, messageSigned))
-            } catch (error) {
-                callback(ErrorEditor.from(error, null, 'Failed to sign message.').error)
+        case EthereumMethodType.PERSONAL_SIGN: {
+            const params = payload.params?.slice() as [string, string]
+            const [account, data] = payload.method === EthereumMethodType.PERSONAL_SIGN ? params.reverse() : params
+
+            if (options?.owner && options.identifier) {
+                const { signature } = await generateSignResult('message', options.identifier, data)
+                callback(null, createJsonRpcResponse(payload.id as number, signature))
+            } else {
+                try {
+                    callback(
+                        null,
+                        createJsonRpcResponse(payload.id as number, await WalletRPC.signPersonalMessage(data, account)),
+                    )
+                } catch (error) {
+                    callback(ErrorEditor.from(error, null, 'Failed to sign message.').error)
+                }
             }
+
             break
+        }
         case EthereumMethodType.ETH_DECRYPT:
             callback(new Error('Method Not implemented.'))
             break

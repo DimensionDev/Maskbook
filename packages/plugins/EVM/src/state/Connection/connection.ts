@@ -847,11 +847,7 @@ class Connection implements EVM_Connection {
         return Number.parseInt(count, 16) || 0
     }
 
-    signMessage(
-        dataToSign: string,
-        signType?: 'personalSign' | 'typedDataSign' | Omit<string, 'personalSign' | 'typedDataSign'>,
-        initial?: EVM_Web3ConnectionOptions,
-    ) {
+    signMessage(dataToSign: string, signType?: 'personalSign' | 'typedDataSign', initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         if (!options.account) throw new Error('Unknown account.')
 

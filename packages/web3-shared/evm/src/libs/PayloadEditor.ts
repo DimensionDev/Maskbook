@@ -38,6 +38,20 @@ export class PayloadEditor {
             : undefined
     }
 
+    get message() {
+        const { method, params } = this.payload
+        switch (method) {
+            case EthereumMethodType.ETH_SIGN:
+                return (params as [string, string])[1]
+            case EthereumMethodType.PERSONAL_SIGN:
+                return (params as [string, string])[0]
+            case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+                return (params as [string, string])[1]
+            default:
+                return
+        }
+    }
+
     get config() {
         const { method, params } = this.payload
         switch (method) {

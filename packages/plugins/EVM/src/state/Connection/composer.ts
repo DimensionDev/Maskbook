@@ -112,6 +112,10 @@ class RequestContext implements Context {
         return this.payloadEditor.risky
     }
 
+    get message() {
+        return this.payloadEditor.message
+    }
+
     get config() {
         return this.payloadEditor.config
     }
