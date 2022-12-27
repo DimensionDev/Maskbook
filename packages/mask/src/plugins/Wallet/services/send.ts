@@ -1,10 +1,11 @@
 import { isNil } from 'lodash-es'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { defer } from '@masknet/kit'
-import { Web3 } from '@masknet/web3-providers'
+import { SmartPayAccount, Web3 } from '@masknet/web3-providers'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
 import {
     ChainId,
+    createJsonRpcPayload,
     createJsonRpcResponse,
     ErrorEditor,
     EthereumMethodType,
@@ -12,6 +13,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../messages.js'
 import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper/index.js'
+import { generateSignResult } from '../../../../background/services/identity/index.js'
 
 interface Options {
     account?: string
@@ -20,6 +22,19 @@ interface Options {
     identifier?: ECKeyIdentifier
     disableClose?: boolean
     popupsWindow?: boolean
+}
+
+function getSigner(options: Options) {
+    const { owner, identifier } = options
+    if (!owner) throw new Error('Failed to sign transaction.')
+
+    return async (message: string) => {
+        if (identifier) {
+            const { signature } = await generateSignResult('message', identifier, message)
+            return signature
+        }
+        return WalletRPC.signPersonalMessage(message, owner)
+    }
 }
 
 /**
@@ -39,18 +54,23 @@ async function internalSend(
             const config = PayloadEditor.fromPayload(payload).signableConfig
             if (!config?.from || !config.to) return
 
-            const signed = await WalletRPC.signTransaction(config.from as string, {
-                chainId,
-                ...config,
-            })
-            await provider.send(
-                {
-                    ...payload,
-                    method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
-                    params: [signed],
-                },
-                callback,
-            )
+            if (options?.owner) {
+                const hash = await SmartPayAccount.sendTransaction(chainId, options.owner, config, getSigner(options))
+                callback(null, createJsonRpcResponse(payload.id as number, hash))
+            } else {
+                const signed = await WalletRPC.signTransaction(config.from as string, {
+                    chainId,
+                    ...config,
+                })
+                await provider.send(
+                    createJsonRpcPayload(payload.id as number, {
+                        method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
+                        params: [signed],
+                    }),
+                    callback,
+                )
+            }
+
             break
         case EthereumMethodType.ETH_SIGN_TYPED_DATA:
             const [address, dataToSign] = payload.params as [string, string]
@@ -125,16 +145,13 @@ export async function confirmRequest(payload: JsonRpcPayload, options?: Options)
         payload,
         (error, response) => {
             UNCONFIRMED_CALLBACK_MAP.get(pid)?.(error, response)
-            if (error) {
-                reject(error)
-                return
-            }
-            if (response?.error) {
-                reject(new Error(`Failed to send transaction: ${response.error?.message ?? response.error}`))
-                return
-            }
             if (!response) {
                 reject(new Error('No response.'))
+                return
+            }
+            const editor = ErrorEditor.from(error, response)
+            if (editor.presence) {
+                reject(editor.error)
                 return
             }
             WalletRPC.deleteUnconfirmedRequest(payload)

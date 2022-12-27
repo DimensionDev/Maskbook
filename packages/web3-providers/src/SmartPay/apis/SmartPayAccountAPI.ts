@@ -266,14 +266,15 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
     ) {
         // fill in initCode
         if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
-            const initCode = await this.getInitCode(chainId, owner)
             const accounts = await this.getAccountsByOwner(chainId, owner)
             const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
 
-            await userTransaction.fill(this.web3.createWeb3(chainId), {
-                initCode,
-                nonce: accountsDeployed.length,
-            })
+            if (!accountsDeployed.length) {
+                await userTransaction.fill(this.web3.createWeb3(chainId), {
+                    initCode: await this.getInitCode(chainId, owner),
+                    nonce: accountsDeployed.length,
+                })
+            }
         }
 
         // sign user operation

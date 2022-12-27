@@ -175,10 +175,11 @@ export class UserTransaction {
 
         // caution: the creator needs to set the latest index of the contract account.
         // otherwise, always treat the operation to create the initial account.
-        if (!nonce) {
-            if (!walletContract) throw new Error('Failed to create wallet contract.')
+        if (walletContract) {
             const nonce_ = await walletContract.methods.nonce().call()
-            this.userOperation.nonce = toNumber(nonce_) + 1
+            this.userOperation.nonce = toNumber(nonce_)
+        } else {
+            throw new Error('Failed to create wallet contract.')
         }
 
         if (!isEmptyHex(callData)) {
