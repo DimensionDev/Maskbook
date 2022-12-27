@@ -275,7 +275,7 @@ export function TrendingView(props: TrendingViewProps) {
                     <CoinMarketPanel dataProvider={trending.dataProvider} trending={trending} />
                 ) : null}
                 {currentTab === ContentTabs.Price ? (
-                    <Box px={2} py={4} height={420} className={classes.priceChartRootWrapper}>
+                    <Box px={2} py={4} className={classes.priceChartRootWrapper}>
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}
