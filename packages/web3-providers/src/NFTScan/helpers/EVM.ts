@@ -24,6 +24,7 @@ import {
     createContract,
     getRPCConstants,
     isENSContractAddress,
+    isValidDomain,
     SchemaType,
     WNATIVE,
 } from '@masknet/web3-shared-evm'
@@ -202,7 +203,9 @@ export function createNonFungibleAsset(
             : undefined,
         metadata: {
             chainId,
-            name: getAssetFullName(asset.contract_address, contractName, payload?.name || asset.name, asset.token_id),
+            name: isValidDomain(asset.name)
+                ? asset.name
+                : getAssetFullName(asset.contract_address, contractName, payload?.name || asset.name, asset.token_id),
             symbol,
             description,
             imageURL: mediaURL,
