@@ -10,7 +10,9 @@ import {
     PersonaIdentifier,
     ProfileIdentifier,
     RelationFavor,
+    fromBase64URL,
 } from '@masknet/shared-base'
+import { bufferToHex, privateToPublic, publicToAddress } from 'ethereumjs-util'
 import { MaskMessages } from '../../../shared/index.js'
 import type {
     FullPersonaDBTransaction,
@@ -332,6 +334,9 @@ export async function createOrUpdatePersonaDB(
         return createPersonaDB(
             {
                 ...record,
+                address: record.privateKey?.d
+                    ? bufferToHex(publicToAddress(privateToPublic(Buffer.from(fromBase64URL(record.privateKey.d)))))
+                    : undefined,
                 createdAt: record.createdAt ?? new Date(),
                 updatedAt: record.updatedAt ?? new Date(),
                 linkedProfiles: record.linkedProfiles ?? new Map(),
@@ -695,6 +700,9 @@ function personaRecordOutDB(x: PersonaRecordDB): PersonaRecord {
 
     const obj: PersonaRecord = {
         ...x,
+        address: x.privateKey?.d
+            ? bufferToHex(publicToAddress(privateToPublic(Buffer.from(fromBase64URL(x.privateKey.d)))))
+            : undefined,
         identifier,
         publicHexKey: identifier.publicKeyAsHex,
         linkedProfiles: convertRawMapToIdentifierMap(x.linkedProfiles, ProfileIdentifier),
