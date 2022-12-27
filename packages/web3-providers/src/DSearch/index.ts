@@ -319,7 +319,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
         if (!collections[0]) return EMPTY_LIST
 
-        return [collections[0]]
+        return collections
     }
 
     /**

@@ -61,6 +61,7 @@ const useStyles = makeStyles<{
         },
         title: {
             display: 'flex',
+            maxWidth: 350,
             alignItems: 'center',
             whiteSpace: 'nowrap',
         },
