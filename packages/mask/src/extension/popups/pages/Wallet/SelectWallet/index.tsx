@@ -132,7 +132,7 @@ const SelectWallet = memo(() => {
         }
 
         const wallet = wallets.find((x) => isSameAddress(x.address, selected))
-        connection?.connect({
+        await connection?.connect({
             // TODO: Just for test, will remove this logic
             chainId: wallet?.owner ? ChainId.Mumbai : chainId,
             account: selected,

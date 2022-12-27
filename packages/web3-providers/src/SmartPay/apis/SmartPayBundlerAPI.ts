@@ -7,7 +7,7 @@ import type { BundlerAPI } from '../../types/Bundler.js'
 import { fetchJSON } from '../../entry-helpers.js'
 
 export class SmartPayBundlerAPI implements BundlerAPI.Provider {
-    private async healthz() {
+    private healthz() {
         return fetchJSON<BundlerAPI.Healthz>(urlcat(BUNDLER_ROOT, '/healthz'), {
             method: 'GET',
         })

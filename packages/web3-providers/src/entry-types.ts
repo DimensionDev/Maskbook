@@ -2,7 +2,6 @@
 export * from './types/AbstractAccount.js'
 export * from './types/Authorization.js'
 export * from './types/Bundler.js'
-export * from './types/ContractAccount.js'
 export * from './types/DSearch.js'
 export * from './types/Domain.js'
 export * from './types/Explorer.js'

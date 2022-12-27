@@ -7,7 +7,7 @@ export function usePersonaSign(message?: string, currentIdentifier?: ECKeyIdenti
         if (!message || !currentIdentifier) return
         try {
             return await Services.Identity.signWithPersona({
-                method: 'eth',
+                method: 'message',
                 message,
                 identifier: currentIdentifier,
             })

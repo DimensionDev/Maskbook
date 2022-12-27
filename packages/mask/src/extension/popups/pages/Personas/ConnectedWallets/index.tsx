@@ -87,7 +87,8 @@ const ConnectedWallets = memo(() => {
 
                 if (!result) return
 
-                const signature = await Service.Identity.generatePersonalSignResult(
+                const signature = await Service.Identity.generateSignResult(
+                    'message',
                     currentPersona.identifier,
                     result.signPayload,
                 )

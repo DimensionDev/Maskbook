@@ -131,7 +131,7 @@ const WalletRecovery = memo(() => {
 
                 // Set default wallet
                 if (wallet) {
-                    connection?.connect({
+                    await connection?.connect({
                         account: wallet.address,
                         chainId: ChainId.Mainnet,
                     })

@@ -24,7 +24,7 @@ export function useQueryQualification(): AsyncState<
 
     const personas = useAllPersonas()
     const wallets = useWallets()
-    const { generateMessageSignResult } = useSNSAdaptorContext()
+    const { generateSignResult } = useSNSAdaptorContext()
 
     return useAsync(async () => {
         if (!currentIdentity?.identifier?.userId) return
@@ -61,7 +61,7 @@ export function useQueryQualification(): AsyncState<
             ).map(async (x) => {
                 return {
                     ...x,
-                    address: (await generateMessageSignResult('personal', x.identifier, '')).address,
+                    address: (await generateSignResult('message', x.identifier, '')).address,
                 }
             }),
         )
@@ -83,5 +83,5 @@ export function useQueryQualification(): AsyncState<
             signableWallets,
             personas,
         }
-    }, [currentIdentity, personas, wallets, generateMessageSignResult])
+    }, [currentIdentity, personas, wallets, generateSignResult])
 }

@@ -7,7 +7,7 @@ import WalletProxyABI from '@masknet/web3-contracts/abis/WalletProxy.json'
 import { WalletProxyByteCode } from '@masknet/web3-contracts/bytes/WalletProxy.js'
 import { createContract } from '../helpers/transaction.js'
 import { getSmartPayConstants, ZERO_ADDRESS } from '../constants/index.js'
-import type { ChainId } from '../index.js'
+import type { ChainId } from '../types/index.js'
 
 export class ContractWallet {
     private web3 = new Web3()
