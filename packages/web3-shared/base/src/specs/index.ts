@@ -625,6 +625,8 @@ export interface Result<ChainId> {
     type: SearchResultType
     /** The original searched keyword */
     keyword: string
+    /** alias name list, e.g. binance for bnb. */
+    alias?: string[]
 }
 
 export interface EOAResult<ChainId> extends Result<ChainId> {
