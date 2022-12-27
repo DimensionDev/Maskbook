@@ -1,7 +1,7 @@
 import { first } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import type { BundlerAPI, AbstractAccountAPI } from '@masknet/web3-providers/types'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, SignType } from '@masknet/shared-base'
 import { createContract, EthereumMethodType, isValidAddress, ProviderType, Transaction } from '@masknet/web3-shared-evm'
 import { Web3 } from '@masknet/web3-providers'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
@@ -44,7 +44,7 @@ export class ContractWallet implements Middleware<Context> {
         }
     }
 
-    private getSigner(context: Context, method: 'message' | 'typedData' | 'transaction' = 'message') {
+    private getSigner(context: Context, method = SignType.Message) {
         const { owner, identifier } = this.getOwner(context)
         if (!owner) throw new Error('Failed to sign user operation.')
 
@@ -181,14 +181,14 @@ export class ContractWallet implements Middleware<Context> {
                 if (!context.message) {
                     context.abort(new Error('Invalid message.'))
                 } else {
-                    context.write(await this.getSigner(context, 'typedData')(context.message))
+                    context.write(await this.getSigner(context, SignType.TypedData)(context.message))
                 }
                 break
             case EthereumMethodType.ETH_SIGN_TRANSACTION:
                 if (!context.config) {
                     context.abort(new Error('Invalid message.'))
                 } else {
-                    context.write(await this.getSigner(context, 'transaction')(context.config))
+                    context.write(await this.getSigner(context, SignType.Transaction)(context.config))
                 }
                 break
             case EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN:

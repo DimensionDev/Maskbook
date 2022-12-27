@@ -7,7 +7,13 @@ export * from './personas.js'
 export * from './subscription.js'
 export * from './ValueRef.js'
 
-export enum MimeTypes {
+export enum SignType {
+    Message = 'message',
+    TypedData = 'typedData',
+    Transaction = 'transaction',
+}
+
+export enum MimeType {
     JSON = 'application/json',
     Binary = 'application/octet-stream',
 }

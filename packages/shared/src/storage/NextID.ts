@@ -1,5 +1,5 @@
 import type { Storage } from '@masknet/web3-shared-base'
-import { ECKeyIdentifier, fromHex, NextIDPlatform, toBase64 } from '@masknet/shared-base'
+import { ECKeyIdentifier, fromHex, NextIDPlatform, SignType, toBase64 } from '@masknet/shared-base'
 import { NextIDStorage as NextIDStorageProvider } from '@masknet/web3-providers'
 
 export class NextIDStorage implements Storage {
@@ -10,7 +10,7 @@ export class NextIDStorage implements Storage {
         private platform: NextIDPlatform, // proof platform
         private signerOrPublicKey: string | ECKeyIdentifier, // publicKey, like SocialIdentity publicKey or PersonaIdentifier publicKeyAsHex
         private signWithPersona?: <T>(
-            method: 'message' | 'typedData' | 'transaction',
+            method: SignType,
             message: T,
             identifier?: ECKeyIdentifier,
             silent?: boolean,
@@ -62,7 +62,7 @@ export class NextIDStorage implements Storage {
 
         if (!payload?.ok) throw new Error('Invalid payload Error')
 
-        const signature = await this.signWithPersona?.('message', payload.val.signPayload, this.signer, true)
+        const signature = await this.signWithPersona?.(SignType.Message, payload.val.signPayload, this.signer, true)
         if (!signature) throw new Error('Failed to sign payload.')
 
         await NextIDStorageProvider.set(

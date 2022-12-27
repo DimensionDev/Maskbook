@@ -18,10 +18,11 @@ import type {
     PopupRoutes,
     ProfileIdentifier,
     ScopedStorage,
+    SignType,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { LogHubBase } from '@masknet/web3-providers/types'
+import type { LogHubBase, SignerAPI } from '@masknet/web3-providers/types'
 import type {
     ChainDescriptor,
     NetworkDescriptor,
@@ -200,21 +201,10 @@ export namespace Plugin.Shared {
         recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): void
 
         /** Sign a message with persona (w or w/o popups) */
-        signWithPersona<T>(
-            method: 'message' | 'typedData' | 'transaction',
-            message: T,
-            identifier?: ECKeyIdentifier,
-            silent?: boolean,
-        ): Promise<string>
+        signWithPersona<T>(type: SignType, message: T, identifier?: ECKeyIdentifier, silent?: boolean): Promise<string>
 
-        /** Sign transaction */
-        signTransaction(address: string, transaction: TransactionEVM): Promise<string>
-
-        /** Sign personal message, aka. eth.personal.sign() */
-        signPersonalMessage(message: string, address: string): Promise<string>
-
-        /** Sign typed data */
-        signTypedData(address: string, message: string): Promise<string>
+        /** Sign a message with wallet */
+        signWithWallet<T>(type: SignType, message: T, account?: string): Promise<string>
 
         /** Get all wallets */
         getWallets(): Promise<Wallet[]>

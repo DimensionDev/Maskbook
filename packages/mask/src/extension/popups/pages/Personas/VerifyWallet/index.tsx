@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import { memo, useEffect } from 'react'
 import { useAsync, useAsyncFn, useLocation } from 'react-use'
 import { useNavigate } from 'react-router-dom'
-import { NextIDAction, NextIDPlatform, PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
+import { NextIDAction, NextIDPlatform, PopupRoutes, NetworkPluginID, SignType } from '@masknet/shared-base'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { Account, isSameAddress } from '@masknet/web3-shared-base'
@@ -89,7 +89,7 @@ const VerifyWallet = memo(() => {
         if (!payload || !currentPersona?.identifier) return
         try {
             const signature = await Services.Identity.signWithPersona(
-                'message',
+                SignType.Message,
                 payload.signPayload,
                 currentPersona.identifier,
                 true,

@@ -1,30 +1,21 @@
 import { v4 as uuid } from 'uuid'
-import { SignTypedDataVersion, personalSign, signTypedData } from '@metamask/eth-sig-util'
 import { timeout } from '@masknet/kit'
-import type { Transaction } from '@masknet/web3-shared-evm'
-import { Web3 } from '@masknet/web3-providers'
-import { PersonaIdentifier, fromBase64URL, PopupRoutes, ECKeyIdentifier, toHex } from '@masknet/shared-base'
+import { Web3Signer } from '@masknet/web3-providers'
+import { PersonaIdentifier, fromBase64URL, PopupRoutes, ECKeyIdentifier, SignType } from '@masknet/shared-base'
 import { MaskMessages } from '../../../../shared/index.js'
 import { queryPersonasWithPrivateKey } from '../../../../background/database/persona/db.js'
 import { openPopupWindow } from '../../../../background/services/helper/index.js'
-
-async function sign(identifier: ECKeyIdentifier, signer: (privateKey: Buffer) => Promise<string>) {
-    const persona = (await queryPersonasWithPrivateKey()).find((x) => x.identifier === identifier)
-    if (!persona) throw new Error('Persona not found')
-    const privateKey = Buffer.from(fromBase64URL(persona.privateKey.d!))
-    return signer(privateKey)
-}
 
 /**
  * Generate a signature w or w/o confirmation from user
  */
 export async function signWithPersona<T>(
-    method: 'message' | 'typedData' | 'transaction',
+    type: SignType,
     message: T,
     identifier?: ECKeyIdentifier,
     silent = false,
 ): Promise<string> {
-    const getSigner = async () => {
+    const getIdentifier = async () => {
         if (!identifier || !silent) {
             const requestID = uuid()
             await openPopupWindow(PopupRoutes.PersonaSignRequest, {
@@ -48,39 +39,11 @@ export async function signWithPersona<T>(
         return identifier
     }
 
-    const signer = await getSigner()
+    const identifier_ = await getIdentifier()
 
-    switch (method) {
-        case 'message':
-            return sign(signer, async (privateKey) =>
-                personalSign({
-                    privateKey,
-                    data: message as string,
-                }),
-            )
-        case 'typedData':
-            return sign(signer, async (privateKey) =>
-                signTypedData({
-                    privateKey,
-                    data: JSON.parse(message as string),
-                    version: SignTypedDataVersion.V4,
-                }),
-            )
-        case 'transaction':
-            const transaction = message as Transaction
+    // find persona with signer identifier
+    const persona = (await queryPersonasWithPrivateKey()).find((x) => x.identifier === identifier_)
+    if (!persona) throw new Error('Persona not found')
 
-            const chainId = transaction.chainId
-            if (!chainId) throw new Error('Invalid chain id.')
-
-            return sign(signer, async (privateKey) => {
-                const { rawTransaction } = await Web3.createWeb3(chainId).eth.accounts.signTransaction(
-                    transaction,
-                    toHex(privateKey),
-                )
-                if (!rawTransaction) throw new Error('Failed to sign transaction.')
-                return rawTransaction
-            })
-        default:
-            throw new Error(`Unknown sign method: ${method}.`)
-    }
+    return Web3Signer.sign(type, Buffer.from(fromBase64URL(persona.privateKey.d!)), message)
 }

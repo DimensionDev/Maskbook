@@ -1,10 +1,10 @@
 import { memo, useEffect, useState } from 'react'
 import { useAsyncFn } from 'react-use'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
+import { PersonaInformation, PopupRoutes, SignType } from '@masknet/shared-base'
 import { MaskMessages, useI18N } from '../../../../../utils/index.js'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { usePersonasFromDB } from '../../../../../components/DataSource/usePersonasFromDB.js'
 import { PersonaContext } from '../hooks/usePersonaContext.js'
 import { MethodAfterPersonaSign } from '../../Wallet/type.js'
@@ -120,7 +120,12 @@ const PersonaSignRequest = memo(() => {
         switch (method) {
             case MethodAfterPersonaSign.DISCONNECT_NEXT_ID:
                 if (!message) break
-                const signature = await Services.Identity.signWithPersona('message', message, selectedPersona, true)
+                const signature = await Services.Identity.signWithPersona(
+                    SignType.Message,
+                    message,
+                    selectedPersona,
+                    true,
+                )
 
                 const profileIdentifier = url.get('profileIdentifier')
                 const platform = url.get('platform')
