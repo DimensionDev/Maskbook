@@ -31,7 +31,7 @@ export class RSS3Storage implements Storage {
         return RSS3.createRSS3(
             this.address,
             connection
-                ? (message: string) => connection.signMessage(message, 'personalSign', { account: this.address })
+                ? (message: string) => connection.signMessage(message, 'message', { account: this.address })
                 : undefined,
         )
     }

@@ -103,7 +103,7 @@ export function VotingCard() {
                     primaryType: 'Vote',
                     message,
                 }),
-                'typedDataSign',
+                'typedData',
                 { account: toChecksumAddress(account) },
             )
             const body = JSON.stringify({ data, sig, address: toChecksumAddress(account) })

@@ -115,7 +115,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                     ],
                 },
             })
-            const signed = await connection?.signMessage(type === 'typedDataSign' ? typedData : message, type)
+            const signed = await connection?.signMessage(type === 'typedData' ? typedData : message, type)
             window.alert(`Signed: ${signed}`)
         },
         [chainId, connection],
@@ -207,7 +207,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                                 onClick={() => {
                                     switch (pluginID) {
                                         case NetworkPluginID.PLUGIN_EVM:
-                                            onSignMessage('personalSign')
+                                            onSignMessage('message')
                                             break
                                         default:
                                             onSignMessage()
@@ -230,7 +230,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                                 onClick={() => {
                                     switch (pluginID) {
                                         case NetworkPluginID.PLUGIN_EVM:
-                                            onSignMessage('typedDataSign')
+                                            onSignMessage('typedData')
                                             break
                                         default:
                                             break

@@ -43,7 +43,14 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
             const wallets = this.context.wallets.getCurrentValue()
             const allPersonas = await Promise.all(
                 this.context.allPersonas?.getCurrentValue()?.map(async (x) => {
-                    const { address } = await this.context.generateSignResult('message', x.identifier, '')
+                    const { address } = await this.context.signWithPersona(
+                        {
+                            method: 'message',
+                            identifier: x.identifier,
+                            message: '',
+                        },
+                        true,
+                    )
                     return {
                         ...x,
                         address,
@@ -122,7 +129,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
         password?: string | undefined,
     ): Promise<string> {
         if (this.providerType === ProviderType.MaskWallet) {
-            if (type === 'personal') {
+            if (type === 'message') {
                 return this.context.signPersonalMessage(address, message)
             } else if (type === 'typedData') {
                 return this.context.signTypedData(address, message)

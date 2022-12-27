@@ -184,7 +184,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             if (!payload.password) {
                 const [, title] = payload.message.split(MSG_DELIMITER)
                 payload.password =
-                    (await connection?.signMessage(Web3Utils.sha3(title) ?? '', 'personalSign', {
+                    (await connection?.signMessage(Web3Utils.sha3(title) ?? '', 'message', {
                         account,
                     })) ?? ''
             }

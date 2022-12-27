@@ -59,12 +59,12 @@ export class ContractWallet implements Middleware<Context> {
             }
             switch (method) {
                 case 'message':
-                    return context.connection.signMessage(message as string, 'personalSign', {
+                    return context.connection.signMessage(message as string, 'message', {
                         account: owner,
                         providerType: this.providerType,
                     })
                 case 'typedData':
-                    return context.connection.signMessage(message as string, 'typedDataSign', {
+                    return context.connection.signMessage(message as string, 'typedData', {
                         account: owner,
                         providerType: this.providerType,
                     })

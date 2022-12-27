@@ -29,36 +29,38 @@ async function sign(identifier: ECKeyIdentifier, signer: (privateKey: Buffer) =>
 }
 
 /**
- * Generate a signature with confirmation from user
+ * Generate a signature w or w/o confirmation from user
  */
-export async function signWithPersona<T>({
-    method,
-    message,
-    identifier,
-}: PersonaSignRequest<T>): Promise<PersonaSignResult> {
-    const requestID = uuid()
-    await openPopupWindow(PopupRoutes.PersonaSignRequest, { message, requestID, identifier: identifier?.toText() })
-
-    const signer = await timeout(
-        new Promise<PersonaIdentifier>((resolve, reject) => {
-            MaskMessages.events.personaSignRequest.on((approval) => {
-                if (approval.requestID !== requestID) return
-                if (!approval.selectedPersona) reject(new Error('Persona Rejected'))
-                resolve(approval.selectedPersona!)
-            })
-        }),
-        60 * 1000,
-        'Timeout',
-    )
-
-    return generateSignResult<T>(method, signer, message)
-}
-
-export async function generateSignResult<T>(
-    method: PersonaSignRequest<T>['method'],
-    signer: ECKeyIdentifier,
-    message: T,
+export async function signWithPersona<T>(
+    { method, message, identifier }: PersonaSignRequest<T>,
+    silent = false,
 ): Promise<PersonaSignResult> {
+    const getSigner = async () => {
+        if (!identifier || !silent) {
+            const requestID = uuid()
+            await openPopupWindow(PopupRoutes.PersonaSignRequest, {
+                message,
+                requestID,
+                identifier: identifier?.toText(),
+            })
+
+            return await timeout(
+                new Promise<PersonaIdentifier>((resolve, reject) => {
+                    MaskMessages.events.personaSignRequest.on((approval) => {
+                        if (approval.requestID !== requestID) return
+                        if (!approval.selectedPersona) reject(new Error('Persona Rejected'))
+                        resolve(approval.selectedPersona!)
+                    })
+                }),
+                60 * 1000,
+                'Timeout',
+            )
+        }
+        return identifier
+    }
+
+    const signer = await getSigner()
+
     switch (method) {
         case 'message':
             return sign(signer, async (privateKey) =>

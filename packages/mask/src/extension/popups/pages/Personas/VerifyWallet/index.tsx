@@ -88,10 +88,13 @@ const VerifyWallet = memo(() => {
     const [{ value: signature }, personaSilentSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.identifier) return
         try {
-            const signResult = await Services.Identity.generateSignResult(
-                'message',
-                currentPersona.identifier,
-                payload.signPayload,
+            const signResult = await Services.Identity.signWithPersona(
+                {
+                    method: 'message',
+                    identifier: currentPersona.identifier,
+                    message: payload.signPayload,
+                },
+                true,
             )
             showSnackbar(t('popups_verify_persona_sign_success'), { variant: 'success' })
             return signResult.signature
@@ -105,7 +108,7 @@ const VerifyWallet = memo(() => {
     const [{ value: walletSignState }, walletSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.identifier.publicKeyAsHex) return false
         try {
-            const walletSignature = await connection?.signMessage(payload.signPayload, 'personalSign', {
+            const walletSignature = await connection?.signMessage(payload.signPayload, 'message', {
                 chainId: wallet.chainId,
                 account: wallet.account,
                 providerType: wallet.providerType,

@@ -847,12 +847,16 @@ class Connection implements EVM_Connection {
         return Number.parseInt(count, 16) || 0
     }
 
-    signMessage(dataToSign: string, signType?: 'personalSign' | 'typedDataSign', initial?: EVM_Web3ConnectionOptions) {
+    signMessage(
+        dataToSign: string,
+        signType?: 'message' | 'typedData' | Omit<string, 'message' | 'typedData'>,
+        initial?: EVM_Web3ConnectionOptions,
+    ) {
         const options = this.getOptions(initial)
         if (!options.account) throw new Error('Unknown account.')
 
         switch (signType) {
-            case 'personalSign':
+            case 'message':
                 return this.hijackedRequest<string>(
                     {
                         method: EthereumMethodType.PERSONAL_SIGN,
@@ -860,7 +864,7 @@ class Connection implements EVM_Connection {
                     },
                     options,
                 )
-            case 'typedDataSign':
+            case 'typedData':
                 return this.hijackedRequest<string>(
                     {
                         method: EthereumMethodType.ETH_SIGN_TYPED_DATA,

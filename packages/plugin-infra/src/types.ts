@@ -202,13 +202,7 @@ export namespace Plugin.Shared {
         recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): void
 
         /** Sign a message with persona (with popups) */
-        signWithPersona<T>(payload: PersonaSignRequest<T>): Promise<PersonaSignResult>
-
-        generateSignResult<T>(
-            method: PersonaSignRequest<T>['method'],
-            signer: ECKeyIdentifier,
-            message: string,
-        ): Promise<PersonaSignResult>
+        signWithPersona<T>(payload: PersonaSignRequest<T>, slient?: boolean): Promise<PersonaSignResult>
 
         /** Sign transaction */
         signTransaction(address: string, transaction: TransactionEVM): Promise<string>

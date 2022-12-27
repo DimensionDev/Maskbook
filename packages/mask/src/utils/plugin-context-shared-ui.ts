@@ -60,7 +60,6 @@ export const RestPartOfPluginUIContextShared: Omit<
     recordConnectedSites: WalletRPC.recordConnectedSites,
 
     signWithPersona: Services.Identity.signWithPersona,
-    generateSignResult: Services.Identity.generateSignResult,
 
     signTransaction: WalletRPC.signTransaction,
     signTypedData: WalletRPC.signTypedData,

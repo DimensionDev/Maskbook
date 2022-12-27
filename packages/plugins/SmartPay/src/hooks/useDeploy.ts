@@ -50,7 +50,7 @@ export function useDeploy(
                 })
             ).signature
         } else if (signAccount.type === SignAccountType.Wallet) {
-            signature = await connection?.signMessage(payload, 'personalSign', {
+            signature = await connection?.signMessage(payload, 'message', {
                 account: signAccount.address,
                 providerType: ProviderType.MaskWallet,
             })

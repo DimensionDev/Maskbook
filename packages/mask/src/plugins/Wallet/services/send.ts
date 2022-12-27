@@ -2,7 +2,7 @@ import { isNil } from 'lodash-es'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { defer } from '@masknet/kit'
 import { SmartPayAccount, Web3 } from '@masknet/web3-providers'
-import type { ECKeyIdentifier } from '@masknet/shared-base'
+import type { ECKeyIdentifier, PersonaSignRequest } from '@masknet/shared-base'
 import {
     ChainId,
     createJsonRpcPayload,
@@ -10,10 +10,11 @@ import {
     ErrorEditor,
     EthereumMethodType,
     PayloadEditor,
+    Transaction,
 } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../messages.js'
 import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper/index.js'
-import { generateSignResult } from '../../../../background/services/identity/index.js'
+import { signWithPersona } from '../../../../background/services/identity/index.js'
 
 interface Options {
     account?: string
@@ -24,16 +25,32 @@ interface Options {
     popupsWindow?: boolean
 }
 
-function getSigner(options: Options) {
+function getSigner<T>(options: Options, method: PersonaSignRequest<T>['method'] = 'message') {
     const { owner, identifier } = options
     if (!owner) throw new Error('Failed to sign transaction.')
 
-    return async (message: string) => {
+    return async (message: T) => {
         if (identifier) {
-            const { signature } = await generateSignResult('message', identifier, message)
+            const { signature } = await signWithPersona(
+                {
+                    method,
+                    identifier,
+                    message,
+                },
+                true,
+            )
             return signature
         }
-        return WalletRPC.signPersonalMessage(message, owner)
+        switch (method) {
+            case 'message':
+                return WalletRPC.signPersonalMessage(message as string, owner)
+            case 'typedData':
+                return WalletRPC.signTypedData(owner, message as string)
+            case 'transaction':
+                return WalletRPC.signTransaction(owner, message as Transaction)
+            default:
+                throw new Error('Unknown sign method.')
+        }
     }
 }
 
@@ -77,8 +94,10 @@ async function internalSend(
             const [address, dataToSign] = payload.params as [string, string]
 
             if (options?.owner && options.identifier) {
-                const { signature } = await generateSignResult('typedData', options.identifier, dataToSign)
-                callback(null, createJsonRpcResponse(payload.id as number, signature))
+                callback(
+                    null,
+                    createJsonRpcResponse(payload.id as number, await getSigner(options, 'typedData')(dataToSign)),
+                )
             } else {
                 try {
                     callback(
@@ -97,8 +116,7 @@ async function internalSend(
             const [account, data] = payload.method === EthereumMethodType.PERSONAL_SIGN ? params.reverse() : params
 
             if (options?.owner && options.identifier) {
-                const { signature } = await generateSignResult('message', options.identifier, data)
-                callback(null, createJsonRpcResponse(payload.id as number, signature))
+                callback(null, createJsonRpcResponse(payload.id as number, await getSigner(options, 'message')(data)))
             } else {
                 try {
                     callback(

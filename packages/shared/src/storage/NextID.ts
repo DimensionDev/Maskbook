@@ -16,11 +16,7 @@ export class NextIDStorage implements Storage {
         private proofIdentity: string, // proof identity as key
         private platform: NextIDPlatform, // proof platform
         private signerOrPublicKey: string | ECKeyIdentifier, // publicKey, like SocialIdentity publicKey or PersonaIdentifier publicKeyAsHex
-        private generateSignResult?: (
-            method: PersonaSignRequest<string>['method'],
-            signer: ECKeyIdentifier,
-            message: string,
-        ) => Promise<PersonaSignResult>,
+        private signWithPersona?: <T>(payload: PersonaSignRequest<T>, silent?: boolean) => Promise<PersonaSignResult>,
     ) {
         if (typeof this.signerOrPublicKey === 'string') {
             this.publicKeyAsHex = this.signerOrPublicKey
@@ -68,7 +64,14 @@ export class NextIDStorage implements Storage {
 
         if (!payload?.ok) throw new Error('Invalid payload Error')
 
-        const signResult = await this.generateSignResult?.('message', this.signer, payload.val.signPayload)
+        const signResult = await this.signWithPersona?.(
+            {
+                method: 'message',
+                identifier: this.signer,
+                message: payload.val.signPayload,
+            },
+            true,
+        )
 
         if (!signResult) throw new Error('Failed to sign payload.')
 
