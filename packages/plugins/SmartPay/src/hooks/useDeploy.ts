@@ -42,13 +42,7 @@ export function useDeploy(
         let signature: string | undefined
 
         if (signAccount.type === SignAccountType.Persona && signAccount?.raw?.identifier) {
-            signature = (
-                await signWithPersona({
-                    method: 'message',
-                    message: payload,
-                    identifier: signAccount.raw.identifier,
-                })
-            ).signature
+            signature = await signWithPersona('message', payload, signAccount.raw.identifier)
         } else if (signAccount.type === SignAccountType.Wallet) {
             signature = await connection?.signMessage(payload, 'message', {
                 account: signAccount.address,

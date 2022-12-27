@@ -25,17 +25,15 @@ export function useNextIDVerify() {
                 languageSettings.value ?? 'default',
             )
             if (!payload) throw new Error('Failed to create persona payload.')
-            const signResult = await Services.Identity.signWithPersona(
-                {
-                    method: 'message',
-                    identifier: persona.identifier,
-                    message: payload.signPayload,
-                },
+
+            const signature = await Services.Identity.signWithPersona(
+                'message',
+                payload.signPayload,
+                persona.identifier,
                 true,
             )
-            if (!signResult) throw new Error('Failed to sign by persona.')
+            if (!signature) throw new Error('Failed to sign by persona.')
 
-            const signature = signResult.signature
             const postContent = payload.postContent.replace('%SIG_BASE64%', toBase64(fromHex(signature)))
             postMessage?.(postContent, { recover: false })
 

@@ -17,16 +17,13 @@ export function useDeleteBound() {
                 platform as NextIDPlatform,
             )
             if (!payload) throw new Error('Failed to create persona payload.')
-            const signResult = await Services.Identity.signWithPersona(
-                {
-                    method: 'message',
-                    identifier: persona_.identifier,
-                    message: payload.signPayload,
-                },
+            const signature = await Services.Identity.signWithPersona(
+                'message',
+                payload.signPayload,
+                persona_.identifier,
                 true,
             )
-            if (!signResult) throw new Error('Failed to sign by persona.')
-            const signature = signResult.signature
+            if (!signature) throw new Error('Failed to sign by persona.')
             await NextIDProof.bindProof(
                 payload.uuid,
                 persona_.identifier.publicKeyAsHex,

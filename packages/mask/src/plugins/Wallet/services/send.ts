@@ -2,7 +2,7 @@ import { isNil } from 'lodash-es'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { defer } from '@masknet/kit'
 import { SmartPayAccount, Web3 } from '@masknet/web3-providers'
-import type { ECKeyIdentifier, PersonaSignRequest } from '@masknet/shared-base'
+import type { ECKeyIdentifier } from '@masknet/shared-base'
 import {
     ChainId,
     createJsonRpcPayload,
@@ -25,21 +25,13 @@ interface Options {
     popupsWindow?: boolean
 }
 
-function getSigner<T>(options: Options, method: PersonaSignRequest<T>['method'] = 'message') {
+function getSigner<T>(options: Options, method: 'message' | 'typedData' | 'transaction' = 'message') {
     const { owner, identifier } = options
     if (!owner) throw new Error('Failed to sign transaction.')
 
     return async (message: T) => {
         if (identifier) {
-            const { signature } = await signWithPersona(
-                {
-                    method,
-                    identifier,
-                    message,
-                },
-                true,
-            )
-            return signature
+            return signWithPersona(method, message, identifier, true)
         }
         switch (method) {
             case 'message':

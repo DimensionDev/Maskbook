@@ -1,7 +1,7 @@
 import { first } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import type { BundlerAPI, AbstractAccountAPI } from '@masknet/web3-providers/types'
-import type { NetworkPluginID, PersonaSignRequest } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { createContract, EthereumMethodType, isValidAddress, ProviderType, Transaction } from '@masknet/web3-shared-evm'
 import { Web3 } from '@masknet/web3-providers'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
@@ -44,18 +44,13 @@ export class ContractWallet implements Middleware<Context> {
         }
     }
 
-    private getSigner(context: Context, method: PersonaSignRequest<string>['method'] = 'message') {
+    private getSigner(context: Context, method: 'message' | 'typedData' | 'transaction' = 'message') {
         const { owner, identifier } = this.getOwner(context)
         if (!owner) throw new Error('Failed to sign user operation.')
 
         return async <T>(message: T) => {
             if (identifier) {
-                const { signature } = await SharedContextSettings.value.signWithPersona({
-                    method,
-                    message,
-                    identifier,
-                })
-                return signature
+                return SharedContextSettings.value.signWithPersona(method, message, identifier)
             }
             switch (method) {
                 case 'message':

@@ -1,12 +1,5 @@
 import type { Storage } from '@masknet/web3-shared-base'
-import {
-    ECKeyIdentifier,
-    fromHex,
-    NextIDPlatform,
-    PersonaSignRequest,
-    PersonaSignResult,
-    toBase64,
-} from '@masknet/shared-base'
+import { ECKeyIdentifier, fromHex, NextIDPlatform, toBase64 } from '@masknet/shared-base'
 import { NextIDStorage as NextIDStorageProvider } from '@masknet/web3-providers'
 
 export class NextIDStorage implements Storage {
@@ -16,7 +9,12 @@ export class NextIDStorage implements Storage {
         private proofIdentity: string, // proof identity as key
         private platform: NextIDPlatform, // proof platform
         private signerOrPublicKey: string | ECKeyIdentifier, // publicKey, like SocialIdentity publicKey or PersonaIdentifier publicKeyAsHex
-        private signWithPersona?: <T>(payload: PersonaSignRequest<T>, silent?: boolean) => Promise<PersonaSignResult>,
+        private signWithPersona?: <T>(
+            method: 'message' | 'typedData' | 'transaction',
+            message: T,
+            identifier?: ECKeyIdentifier,
+            silent?: boolean,
+        ) => Promise<string>,
     ) {
         if (typeof this.signerOrPublicKey === 'string') {
             this.publicKeyAsHex = this.signerOrPublicKey
@@ -64,21 +62,13 @@ export class NextIDStorage implements Storage {
 
         if (!payload?.ok) throw new Error('Invalid payload Error')
 
-        const signResult = await this.signWithPersona?.(
-            {
-                method: 'message',
-                identifier: this.signer,
-                message: payload.val.signPayload,
-            },
-            true,
-        )
-
-        if (!signResult) throw new Error('Failed to sign payload.')
+        const signature = await this.signWithPersona?.('message', payload.val.signPayload, this.signer, true)
+        if (!signature) throw new Error('Failed to sign payload.')
 
         await NextIDStorageProvider.set(
             payload.val.uuid,
             this.publicKeyAsHex,
-            toBase64(fromHex(signResult.signature)),
+            toBase64(fromHex(signature)),
             this.platform,
             this.proofIdentity,
             payload.val.createdAt,

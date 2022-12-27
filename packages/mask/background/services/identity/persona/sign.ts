@@ -1,18 +1,9 @@
 import { v4 as uuid } from 'uuid'
-import { bufferToHex, privateToPublic, publicToAddress } from 'ethereumjs-util'
 import { SignTypedDataVersion, personalSign, signTypedData } from '@metamask/eth-sig-util'
 import { timeout } from '@masknet/kit'
 import type { Transaction } from '@masknet/web3-shared-evm'
 import { Web3 } from '@masknet/web3-providers'
-import {
-    PersonaIdentifier,
-    fromBase64URL,
-    PopupRoutes,
-    ECKeyIdentifier,
-    toHex,
-    PersonaSignResult,
-    PersonaSignRequest,
-} from '@masknet/shared-base'
+import { PersonaIdentifier, fromBase64URL, PopupRoutes, ECKeyIdentifier, toHex } from '@masknet/shared-base'
 import { MaskMessages } from '../../../../shared/index.js'
 import { queryPersonasWithPrivateKey } from '../../../../background/database/persona/db.js'
 import { openPopupWindow } from '../../../../background/services/helper/index.js'
@@ -21,20 +12,18 @@ async function sign(identifier: ECKeyIdentifier, signer: (privateKey: Buffer) =>
     const persona = (await queryPersonasWithPrivateKey()).find((x) => x.identifier === identifier)
     if (!persona) throw new Error('Persona not found')
     const privateKey = Buffer.from(fromBase64URL(persona.privateKey.d!))
-    return {
-        persona: identifier,
-        address: bufferToHex(publicToAddress(privateToPublic(privateKey))),
-        signature: await signer(privateKey),
-    }
+    return signer(privateKey)
 }
 
 /**
  * Generate a signature w or w/o confirmation from user
  */
 export async function signWithPersona<T>(
-    { method, message, identifier }: PersonaSignRequest<T>,
+    method: 'message' | 'typedData' | 'transaction',
+    message: T,
+    identifier?: ECKeyIdentifier,
     silent = false,
-): Promise<PersonaSignResult> {
+): Promise<string> {
     const getSigner = async () => {
         if (!identifier || !silent) {
             const requestID = uuid()

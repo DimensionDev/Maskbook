@@ -43,17 +43,18 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
             const wallets = this.context.wallets.getCurrentValue()
             const allPersonas = await Promise.all(
                 this.context.allPersonas?.getCurrentValue()?.map(async (x) => {
-                    const { address } = await this.context.signWithPersona(
-                        {
-                            method: 'message',
-                            identifier: x.identifier,
-                            message: '',
-                        },
-                        true,
-                    )
+                    // FIXME: @albert
+                    // const { address } = await this.context.signWithPersona(
+                    //     {
+                    //         method: 'message',
+                    //         identifier: x.identifier,
+                    //         message: '',
+                    //     },
+                    //     true,
+                    // )
                     return {
                         ...x,
-                        address,
+                        address: '',
                     }
                 }) ?? [],
             )

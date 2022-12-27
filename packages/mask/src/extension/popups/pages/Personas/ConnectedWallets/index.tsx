@@ -1,8 +1,8 @@
+import urlcat from 'urlcat'
+import { compact } from 'lodash-es'
 import { memo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
-import urlcat from 'urlcat'
-import { compact } from 'lodash-es'
 import { useChainContext, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
 import { NetworkPluginID, NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
@@ -88,7 +88,9 @@ const ConnectedWallets = memo(() => {
                 if (!result) return
 
                 const signature = await Service.Identity.signWithPersona(
-                    { method: 'message', identifier: currentPersona.identifier, message: result.signPayload },
+                    'message',
+                    result.signPayload,
+                    currentPersona.identifier,
                     true,
                 )
 
@@ -101,7 +103,7 @@ const ConnectedWallets = memo(() => {
                     wallet.platform,
                     wallet.identity,
                     result.createdAt,
-                    { signature: signature.signature },
+                    { signature },
                 )
                 // Broadcast updates.
                 MaskMessages.events.ownProofChanged.sendToAll()
