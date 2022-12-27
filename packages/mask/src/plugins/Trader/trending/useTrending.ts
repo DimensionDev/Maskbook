@@ -98,7 +98,7 @@ export function useTrendingById(
         if (!id) return null
         if (!currency) return null
         if (!dataProvider) return null
-        if ((!expectedChainId || Others?.isValidChainId(expectedChainId)) && dataProvider === SourceType.NFTScan) {
+        if ((!expectedChainId || !Others?.isValidChainId(expectedChainId)) && dataProvider === SourceType.NFTScan) {
             return attemptUntil(
                 NFTSCAN_CHAIN_ID_LIST.map((chainId) => async () => {
                     try {

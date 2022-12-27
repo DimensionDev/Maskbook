@@ -314,7 +314,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         twitterHandler: string,
     ): Promise<Array<SearchResult<ChainId, SchemaType>>> {
         const collections = (await this.NFTScanCollectionClient.get())
-            .filter((x) => x.collection?.socialLinks?.twitter?.toLowerCase() === twitterHandler.toLowerCase())
+            .filter((x) => x.collection?.socialLinks?.twitter?.toLowerCase().endsWith(twitterHandler.toLowerCase()))
             .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
 
         if (!collections[0]) return EMPTY_LIST
