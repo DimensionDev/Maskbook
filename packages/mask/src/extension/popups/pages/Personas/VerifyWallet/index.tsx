@@ -106,13 +106,13 @@ const VerifyWallet = memo(() => {
     const [{ value: walletSignState }, walletSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.identifier.publicKeyAsHex) return false
         try {
-            const walletSignature = await connection?.signMessage(payload.signPayload, 'message', {
+            const walletSignature = await connection?.signMessage('message', payload.signPayload, {
                 chainId: wallet.chainId,
                 account: wallet.account,
                 providerType: wallet.providerType,
             })
-
             if (!walletSignature) throw new Error('Wallet sign failed')
+
             await NextIDProof.bindProof(
                 payload.uuid,
                 currentPersona.identifier.publicKeyAsHex,

@@ -13,7 +13,7 @@ export function useSaveKV(pluginID: NetworkPluginID) {
         async (info: NextIDAvatarMeta, account: string, persona: ECKeyIdentifier, proof: BindingProof) => {
             if (!connection) return
 
-            const sign = await connection.signMessage(JSON.stringify(info), 'message', {
+            const sign = await connection.signMessage('message', JSON.stringify(info), {
                 account,
             })
 

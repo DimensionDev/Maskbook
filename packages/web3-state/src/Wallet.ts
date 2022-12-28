@@ -105,7 +105,7 @@ export class WalletState<ProviderType extends string, Transaction> implements We
     signTransaction(address: string, transaction: Transaction): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    signMessage(address: string, type: string, message: string, password?: string | undefined): Promise<string> {
+    signMessage(type: string, address: string, message: string, password?: string | undefined): Promise<string> {
         throw new Error('Method not implemented.')
     }
 }

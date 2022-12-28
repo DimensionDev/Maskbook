@@ -130,7 +130,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
             }
             throw new Error('Unknown sign type.')
         } else {
-            return super.signMessage(address, type, message, password)
+            return super.signMessage(type, address, message, password)
         }
     }
 }

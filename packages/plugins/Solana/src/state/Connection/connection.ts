@@ -356,7 +356,7 @@ class Connection implements BaseConnection {
         return TransactionStatusType.NOT_DEPEND
     }
 
-    async signMessage(dataToSign: string, signType?: string, initial?: SolanaWeb3ConnectionOptions) {
+    async signMessage(signType: string, dataToSign: string, initial?: SolanaWeb3ConnectionOptions) {
         const options = this.getOptions(initial)
         return this._getWeb3Provider(options).signMessage(dataToSign)
     }

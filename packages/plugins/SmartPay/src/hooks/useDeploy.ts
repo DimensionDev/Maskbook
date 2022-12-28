@@ -44,7 +44,7 @@ export function useDeploy(
         if (signAccount.type === SignAccountType.Persona && signAccount?.raw?.identifier) {
             signature = await signWithPersona(SignType.Message, payload, signAccount.raw.identifier)
         } else if (signAccount.type === SignAccountType.Wallet) {
-            signature = await connection?.signMessage(payload, 'message', {
+            signature = await connection?.signMessage('message', payload, {
                 account: signAccount.address,
                 providerType: ProviderType.MaskWallet,
             })

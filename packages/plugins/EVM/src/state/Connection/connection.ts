@@ -848,8 +848,8 @@ class Connection implements EVM_Connection {
     }
 
     signMessage(
+        signType: 'message' | 'typedData' | Omit<string, 'message' | 'typedData'>,
         dataToSign: string,
-        signType?: 'message' | 'typedData' | Omit<string, 'message' | 'typedData'>,
         initial?: EVM_Web3ConnectionOptions,
     ) {
         const options = this.getOptions(initial)

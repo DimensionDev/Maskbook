@@ -291,7 +291,7 @@ class Connection implements BaseConnection {
         const options = this.getOptions(initial)
         await Providers[options.providerType].switchChain(chainId)
     }
-    async signMessage(dataToSign: string, signType?: string, initial?: FlowConnectionOptions) {
+    async signMessage(signType: string, dataToSign: string, initial?: FlowConnectionOptions) {
         const options = this.getOptions(initial)
         const web3 = await this.getWeb3(options)
         const data = new TextEncoder().encode(dataToSign)
