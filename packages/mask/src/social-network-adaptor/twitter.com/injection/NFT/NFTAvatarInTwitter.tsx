@@ -26,11 +26,12 @@ import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 import { Twitter } from '@masknet/web3-providers'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
+    const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector()).useForeach((ele, _, proxy) => {
+        const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
+        root.render(<NFTAvatarInTwitter signal={signal} />)
+        return () => root.destroy()
+    })
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
-        <NFTAvatarInTwitter signal={signal} />,
-    )
 }
 
 const useStyles = makeStyles()(() => ({
