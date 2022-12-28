@@ -5,7 +5,7 @@ import {
     useCurrentPersonaInformation,
     useSNSAdaptorContext,
 } from '@masknet/plugin-infra/content-script'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, SignType } from '@masknet/shared-base'
 import { useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { SmartPayFunder } from '@masknet/web3-providers'
 import type { AbstractAccountAPI } from '@masknet/web3-providers/types'
@@ -42,7 +42,7 @@ export function useDeploy(
         let signature: string | undefined
 
         if (signAccount.type === SignAccountType.Persona && signAccount?.raw?.identifier) {
-            signature = await signWithPersona('message', payload, signAccount.raw.identifier)
+            signature = await signWithPersona(SignType.Message, payload, signAccount.raw.identifier)
         } else if (signAccount.type === SignAccountType.Wallet) {
             signature = await connection?.signMessage(payload, 'message', {
                 account: signAccount.address,

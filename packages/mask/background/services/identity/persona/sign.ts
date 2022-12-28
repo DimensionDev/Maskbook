@@ -24,7 +24,7 @@ export async function signWithPersona<T>(
                 identifier: identifier?.toText(),
             })
 
-            return await timeout(
+            return timeout(
                 new Promise<PersonaIdentifier>((resolve, reject) => {
                     MaskMessages.events.personaSignRequest.on((approval) => {
                         if (approval.requestID !== requestID) return
@@ -41,9 +41,9 @@ export async function signWithPersona<T>(
 
     const identifier_ = await getIdentifier()
 
-    // find persona with signer identifier
+    // find the persona with the signer's identifier
     const persona = (await queryPersonasWithPrivateKey()).find((x) => x.identifier === identifier_)
-    if (!persona) throw new Error('Persona not found')
+    if (!persona?.privateKey.d) throw new Error('Persona not found')
 
-    return Web3Signer.sign(type, Buffer.from(fromBase64URL(persona.privateKey.d!)), message)
+    return Web3Signer.sign(type, Buffer.from(fromBase64URL(persona.privateKey.d)), message)
 }

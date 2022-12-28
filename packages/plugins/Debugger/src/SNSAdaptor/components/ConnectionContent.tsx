@@ -1,7 +1,8 @@
 import { useCallback } from 'react'
+import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import { useWeb3Connection, useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
     ChainId,
@@ -11,7 +12,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import { ChainId as SolanaChainId, ProviderType as SolanaProviderType } from '@masknet/web3-shared-solana'
 import { ChainId as FlowChainId, ProviderType as FlowProviderType } from '@masknet/web3-shared-flow'
-import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 
 export interface ConnectionContentProps {
     onClose?: () => void
@@ -115,7 +115,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                     ],
                 },
             })
-            const signed = await connection?.signMessage(type === 'typedData' ? typedData : message, type)
+            const signed = await connection?.signMessage(type, type === 'typedData' ? typedData : message)
             window.alert(`Signed: ${signed}`)
         },
         [chainId, connection],
