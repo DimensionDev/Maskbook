@@ -1046,7 +1046,7 @@ export interface Connection<
     /** Switch to sub network */
     switchChain?: (chainId: ChainId, initial?: Web3ConnectionOptions) => Promise<void>
     /** Sign message */
-    signMessage(type: string, messgae: string, initial?: Web3ConnectionOptions): Promise<Signature>
+    signMessage(type: string, message: string, initial?: Web3ConnectionOptions): Promise<Signature>
     /** Verify message */
     verifyMessage(
         dataToVerify: string,

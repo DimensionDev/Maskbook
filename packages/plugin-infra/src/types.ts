@@ -22,7 +22,7 @@ import type {
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { LogHubBase, SignerAPI } from '@masknet/web3-providers/types'
+import type { LogHubBase } from '@masknet/web3-providers/types'
 import type {
     ChainDescriptor,
     NetworkDescriptor,
@@ -36,7 +36,7 @@ import type {
     Web3State,
     Web3UI,
 } from '@masknet/web3-shared-base'
-import type { ChainId as ChainIdEVM, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
+import type { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { CompositionType } from './entry-content-script.js'
 
