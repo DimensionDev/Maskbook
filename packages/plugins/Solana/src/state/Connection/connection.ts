@@ -356,19 +356,19 @@ class Connection implements BaseConnection {
         return TransactionStatusType.NOT_DEPEND
     }
 
-    async signMessage(signType: string, dataToSign: string, initial?: SolanaWeb3ConnectionOptions) {
+    async signMessage(type: string, message: string, initial?: SolanaWeb3ConnectionOptions) {
         const options = this.getOptions(initial)
-        return this._getWeb3Provider(options).signMessage(dataToSign)
+        return this._getWeb3Provider(options).signMessage(message)
     }
 
     async verifyMessage(
-        dataToVerify: string,
+        type: string,
+        message: string,
         signature: string,
-        signType?: string,
         initial?: SolanaWeb3ConnectionOptions,
     ): Promise<boolean> {
         const options = this.getOptions(initial)
-        return this._getWeb3Provider(options).verifyMessage(dataToVerify, signature)
+        return this._getWeb3Provider(options).verifyMessage(message, signature)
     }
 
     async signTransaction(transaction: Transaction, initial?: SolanaWeb3ConnectionOptions) {

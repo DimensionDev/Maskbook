@@ -1,8 +1,8 @@
+import type { Transaction } from '@solana/web3.js'
 import { Emitter } from '@servie/events'
 import type { Account, ProviderEvents, ProviderOptions } from '@masknet/web3-shared-base'
 import type { ChainId, ProviderType, Web3, Web3Provider } from '@masknet/web3-shared-solana'
 import type { SolanaProvider } from '../types.js'
-import type { Transaction } from '@solana/web3.js'
 
 export class BaseProvider implements SolanaProvider {
     web3: Web3 | null = null
@@ -31,10 +31,10 @@ export class BaseProvider implements SolanaProvider {
     switchChain(chainId?: ChainId): Promise<void> {
         throw new Error('Method not implemented.')
     }
-    signMessage(dataToSign: string): Promise<string> {
+    signMessage(message: string): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    verifyMessage(dataToVerify: string, signature: string): Promise<boolean> {
+    verifyMessage(message: string, signature: string): Promise<boolean> {
         throw new Error('Method not implemented.')
     }
     signTransaction(transaction: Transaction): Promise<Transaction> {

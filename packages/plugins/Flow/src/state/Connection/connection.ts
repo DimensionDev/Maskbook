@@ -291,24 +291,24 @@ class Connection implements BaseConnection {
         const options = this.getOptions(initial)
         await Providers[options.providerType].switchChain(chainId)
     }
-    async signMessage(signType: string, dataToSign: string, initial?: FlowConnectionOptions) {
+    async signMessage(type: string, message: string, initial?: FlowConnectionOptions) {
         const options = this.getOptions(initial)
         const web3 = await this.getWeb3(options)
-        const data = new TextEncoder().encode(dataToSign)
+        const data = new TextEncoder().encode(message)
         const signed = first(await web3.currentUser.signUserMessage(toHex(data)))
         if (!signed) throw new Error('Failed to sign message.')
         return signed.signature
     }
     async verifyMessage(
-        dataToVerify: string,
+        type: string,
+        message: string,
         signature: string,
-        signType?: string,
         initial?: FlowConnectionOptions,
     ): Promise<boolean> {
         const options = this.getOptions(initial)
         const web3 = await this.getWeb3(options)
         if (!options.account) throw new Error('No account found.')
-        return web3.verifyUserSignatures(dataToVerify, [
+        return web3.verifyUserSignatures(message, [
             {
                 addr: options.account,
                 keyId: 1,
