@@ -15,7 +15,7 @@ import { Icons } from '@masknet/icons'
 import { TokenIcon, FormattedAddress } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useScrollBottomEvent } from '@masknet/shared-base-ui'
-import { useWeb3State, useNonFungibleAsset } from '@masknet/web3-hooks-base'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatCurrency } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
@@ -100,18 +100,8 @@ export interface NonFungibleTickersTableProps {
     chainId: Web3Helper.ChainIdAll
     isNFTProjectPopper?: boolean
 }
-export interface ActivityTokenImageProps {
-    address: string
-    tokenId: string
-}
 
 type Cells = 'nft' | 'method' | 'value' | 'from' | 'to' | 'time'
-
-export function ActivityTokenImage({ address, tokenId }: ActivityTokenImageProps) {
-    const { classes } = useStyles({ isNFTProjectPopper: false })
-    const { value: asset } = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, address, tokenId)
-    return <img src={asset?.metadata?.imageURL} className={classes.nftImage} />
-}
 
 export function NonFungibleTickersTable({
     address,
@@ -143,7 +133,7 @@ export function NonFungibleTickersTable({
             const cellMap: Record<Cells, React.ReactNode> = {
                 nft: (
                     <div className={classes.nftCell}>
-                        <ActivityTokenImage address={address} tokenId={x.token_id} />
+                        <img src={x.nftscan_uri} className={classes.nftImage} />
                         <Typography fontSize={12}>{Others?.formatTokenId(x.token_id, 4)}</Typography>
                     </div>
                 ),

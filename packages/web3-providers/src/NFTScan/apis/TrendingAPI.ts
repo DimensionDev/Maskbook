@@ -11,7 +11,12 @@ import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
 import { COIN_RECOMMENDATION_SIZE } from '../../Trending/constants.js'
 import type { EVM, Response } from '../types/index.js'
-import { fetchFromNFTScanV2, getContractSymbol, resolveNFTScanHostName } from '../helpers/EVM.js'
+import {
+    fetchFromNFTScanV2,
+    getContractSymbol,
+    resolveNFTScanHostName,
+    createNonFungibleAsset,
+} from '../helpers/EVM.js'
 import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
 import { LooksRareLogo, OpenSeaLogo } from '../../Resources/index.js'
@@ -77,6 +82,18 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         return response.data
     }
 
+    async getAssetsBatch(chainId: Web3Helper.ChainIdAll, list: Array<{ contract_address: string; token_id: string }>) {
+        const path = urlcat('/api/v2/assets/batch', {})
+        const response = await fetchFromNFTScanV2<Response<EVM.Asset[]>>(undefined, path, {
+            method: 'POST',
+            body: JSON.stringify({
+                contract_address_with_token_id_list: list,
+            }),
+        })
+        if (!response?.data) return
+        return response.data.map((x) => createNonFungibleAsset(chainId as ChainId, x))
+    }
+
     async getCoinActivities(
         chainId: Web3Helper.ChainIdAll,
         contractAddress: string,
@@ -93,13 +110,25 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         )
 
         if (!response?.data?.content) return
+
+        const batchQueryList = response?.data?.content.map((x) => ({
+            contract_address: x.contract_address,
+            token_id: x.token_id,
+        }))
+
+        const assetsBatchResponse = await this.getAssetsBatch(chainId, batchQueryList)
+
         return {
             cursor: response.data.next,
-            content: response.data.content.map((x) => ({
-                ...x,
-                transaction_link: `${resolveNFTScanHostName(chainId)}/${x.hash}`,
-                trade_token_logo: getPaymentToken(chainId, { symbol: x.trade_symbol })?.logoURL ?? '',
-            })),
+            content: response.data.content.map((x) => {
+                const asset = assetsBatchResponse?.find((y) => y.tokenId === x.token_id)
+                return {
+                    ...x,
+                    nftscan_uri: asset?.metadata?.imageURL ?? '',
+                    transaction_link: `${resolveNFTScanHostName(chainId)}/${x.hash}`,
+                    trade_token_logo: getPaymentToken(chainId, { symbol: x.trade_symbol })?.logoURL ?? '',
+                }
+            }),
         }
     }
 

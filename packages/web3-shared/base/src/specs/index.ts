@@ -433,6 +433,7 @@ export interface NonFungibleTokenActivity {
     event_type: ActivityType
     transaction_link: string
     timestamp: number
+    nftscan_uri: string
     trade_price: number
     from: string
     to: string
