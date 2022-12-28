@@ -15,7 +15,7 @@ import { Icons } from '@masknet/icons'
 import { TokenIcon, FormattedAddress } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useScrollBottomEvent } from '@masknet/shared-base-ui'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { useWeb3State, useNonFungibleAsset } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatCurrency } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
@@ -100,8 +100,18 @@ export interface NonFungibleTickersTableProps {
     chainId: Web3Helper.ChainIdAll
     isNFTProjectPopper?: boolean
 }
+export interface ActivityTokenImageProps {
+    address: string
+    tokenId: string
+}
 
 type Cells = 'nft' | 'method' | 'value' | 'from' | 'to' | 'time'
+
+export function ActivityTokenImage({ address, tokenId }: ActivityTokenImageProps) {
+    const { classes } = useStyles({ isNFTProjectPopper: false })
+    const { value: asset } = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, address, tokenId)
+    return <img src={asset?.metadata?.imageURL} className={classes.nftImage} />
+}
 
 export function NonFungibleTickersTable({
     address,
@@ -133,7 +143,7 @@ export function NonFungibleTickersTable({
             const cellMap: Record<Cells, React.ReactNode> = {
                 nft: (
                     <div className={classes.nftCell}>
-                        <img src={x.cover} className={classes.nftImage} />
+                        <ActivityTokenImage address={address} tokenId={x.token_id} />
                         <Typography fontSize={12}>{Others?.formatTokenId(x.token_id, 4)}</Typography>
                     </div>
                 ),
@@ -141,23 +151,28 @@ export function NonFungibleTickersTable({
                     <div className={classes.methodCellWrapper}>
                         <div
                             className={classes.methodCell}
-                            style={{ backgroundColor: resolveActivityTypeBackgroundColor(x.transaction_method) }}>
-                            <Typography fontSize={12}>{x.transaction_method}</Typography>
+                            style={{ backgroundColor: resolveActivityTypeBackgroundColor(x.event_type) }}>
+                            <Typography fontSize={12}>{x.event_type}</Typography>
                         </div>
                     </div>
                 ),
                 value: (
                     <div className={classes.cellWrapper}>
-                        <TokenIcon logoURL={x.tradeTokenLogo} address={x.contract} className={classes.tokenIcon} />
+                        <TokenIcon
+                            logoURL={x.trade_token_logo}
+                            symbol={x.trade_symbol}
+                            address={x.contract_address}
+                            className={classes.tokenIcon}
+                        />
                         <Typography fontSize={12}>
-                            {formatCurrency(x.tx_value, '', { boundaries: { min: 0.0001 } })}
+                            {formatCurrency(x.trade_price.toFixed(2), '', { boundaries: { min: 0.0001 } })}
                         </Typography>
                     </div>
                 ),
                 from: (
                     <Typography fontSize={12}>
                         <FormattedAddress
-                            address={x.from_address}
+                            address={x.from}
                             formatter={(address) =>
                                 Others?.formatAddress(Others?.formatDomainName(address, 12), 4) ?? address
                             }
@@ -167,7 +182,7 @@ export function NonFungibleTickersTable({
                 to: (
                     <Typography fontSize={12}>
                         <FormattedAddress
-                            address={x.to_address}
+                            address={x.to}
                             formatter={(address) =>
                                 Others?.formatAddress(Others?.formatDomainName(address, 12), 4) ?? address
                             }
@@ -177,10 +192,13 @@ export function NonFungibleTickersTable({
                 time: (
                     <div className={classes.cellWrapper}>
                         <Typography fontSize={12}>
-                            {formatDateTime(fromUnixTime(x.transaction_time), 'yyyy-MM-dd HH:mm')}{' '}
+                            {formatDateTime(
+                                fromUnixTime(Number.parseInt((x.timestamp / 1000).toFixed(0), 10)),
+                                'yyyy-MM-dd HH:mm',
+                            )}{' '}
                         </Typography>
                         <Link
-                            href={x.transactionLink}
+                            href={x.transaction_link}
                             target="_blank"
                             rel="noopener noreferrer"
                             className={classes.transactionLink}>

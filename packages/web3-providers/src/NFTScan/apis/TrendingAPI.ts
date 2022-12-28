@@ -11,16 +11,12 @@ import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
 import { COIN_RECOMMENDATION_SIZE } from '../../Trending/constants.js'
 import type { EVM, Response } from '../types/index.js'
-import {
-    fetchFromNFTScanV2,
-    getContractSymbol,
-    fetchFromNFTScanWebAPI,
-    resolveNFTScanHostName,
-} from '../helpers/EVM.js'
+import { fetchFromNFTScanV2, getContractSymbol, resolveNFTScanHostName } from '../helpers/EVM.js'
 import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
 import { LooksRareLogo, OpenSeaLogo } from '../../Resources/index.js'
 import { TrendingAPI, NonFungibleTokenAPI } from '../../entry-types.js'
+import { getPaymentToken } from '../../entry-helpers.js'
 
 enum NonFungibleMarketplace {
     OpenSea = 'OpenSea',
@@ -84,22 +80,27 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     async getCoinActivities(
         chainId: Web3Helper.ChainIdAll,
         contractAddress: string,
-        pageIndex: number,
-    ): Promise<NonFungibleTokenActivity[] | undefined> {
-        const path = urlcat('/nftscan/getTransactionByNftContract', {
+        cursor: string,
+    ): Promise<{ content: NonFungibleTokenActivity[]; cursor: string } | undefined> {
+        const path = urlcat('/api/v2/transactions/:contract', {
             contract: contractAddress,
-            filterType: 'all',
-            pageIndex,
-            pageSize: 20,
+            cursor,
+            limit: 50,
         })
-        const response = await fetchFromNFTScanWebAPI<
-            Response<{ nft_tx_record: NonFungibleTokenActivity[]; nft_tx_total: number }>
-        >(chainId, path)
-        if (!response?.data?.nft_tx_record) return
-        return response.data.nft_tx_record.map((x) => ({
-            ...x,
-            transactionLink: `${resolveNFTScanHostName(chainId)}/${x.transaction_hash}`,
-        }))
+        const response = await fetchFromNFTScanV2<Response<{ content: NonFungibleTokenActivity[]; next: string }>>(
+            chainId,
+            path,
+        )
+
+        if (!response?.data?.content) return
+        return {
+            cursor: response.data.next,
+            content: response.data.content.map((x) => ({
+                ...x,
+                transaction_link: `${resolveNFTScanHostName(chainId)}/${x.hash}`,
+                trade_token_logo: getPaymentToken(chainId, { symbol: x.trade_symbol })?.logoURL ?? '',
+            })),
+        }
     }
 
     private async getCollectionTrending(

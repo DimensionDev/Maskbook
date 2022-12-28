@@ -429,18 +429,18 @@ export interface NonFungibleCollectionOverview {
 }
 
 export interface NonFungibleTokenActivity {
-    transaction_hash: string
-    transaction_method: ActivityType
-    transactionLink: string
-    transaction_time: number
-    tx_value: number
-    from_address: string
-    to_address: string
+    hash: string
+    event_type: ActivityType
+    transaction_link: string
+    timestamp: number
+    trade_price: number
+    from: string
+    to: string
     cover: string
-    contract: string
+    contract_address: string
     token_id: string
-    tradeToken: string
-    tradeTokenLogo: string
+    trade_token_logo: string
+    trade_symbol: string
 }
 
 export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {
