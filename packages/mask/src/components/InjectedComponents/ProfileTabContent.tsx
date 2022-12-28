@@ -25,7 +25,7 @@ import { Button, Link, MenuItem, Stack, Tab, ThemeProvider, Typography } from '@
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, addressSorter, useI18N, useLocationChange } from '../../utils/index.js'
-import { useCurrentVisitingSocialIdentity } from '../DataSource/useActivatedUI.js'
+import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI.js'
 import { useCollectionByTwitterHandler } from '../../plugins/Trader/trending/useTrending.js'
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
 import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
@@ -149,12 +149,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         retry: retryLoadPersonaStatus,
     } = useCurrentPersonaConnectStatus()
 
-    const {
-        value: currentVisitingSocialIdentity,
-        loading: loadingCurrentVisitingSocialIdentity,
-        error: loadCurrentVisitingSocialIdentityError,
-        retry: retryIdentity,
-    } = useCurrentVisitingSocialIdentity()
+    const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
 
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
     const isOwnerIdentity = currentVisitingSocialIdentity?.isOwner
@@ -172,16 +167,9 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
-            retryIdentity()
             retrySocialAccounts()
         })
-    }, [retrySocialAccounts, retryIdentity])
-
-    useEffect(() => {
-        return MaskMessages.events.ownPersonaChanged.on(() => {
-            retryIdentity()
-        })
-    }, [retryIdentity])
+    }, [retrySocialAccounts])
 
     useEffect(() => {
         setSelectedAddress(first(socialAccounts)?.address)
@@ -243,7 +231,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         if (!Component) return null
 
         return <Component identity={currentVisitingSocialIdentity} socialAccount={selectedSocialAccount} />
-    }, [componentTabId, currentVisitingSocialIdentity?.publicKey, selectedSocialAccount])
+    }, [componentTabId, selectedSocialAccount])
 
     const lackHostPermission = usePluginHostPermissionCheck(activatedPlugins.filter((x) => x.ProfileCardTabs?.length))
 
@@ -319,12 +307,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         )
     }
 
-    if (
-        (!currentVisitingUserId && !loadCurrentVisitingSocialIdentityError) ||
-        loadingSocialAccounts ||
-        loadingCurrentVisitingSocialIdentity ||
-        loadingPersonaStatus
-    )
+    if (!currentVisitingUserId || loadingSocialAccounts || loadingPersonaStatus)
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
@@ -333,13 +316,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             </ThemeProvider>
         )
 
-    if (
-        (loadCurrentVisitingSocialIdentityError || (isOwnerIdentity && loadPersonaStatusError) || loadSocialAccounts) &&
-        socialAccounts.length === 0
-    ) {
+    if (((isOwnerIdentity && loadPersonaStatusError) || loadSocialAccounts) && socialAccounts.length === 0) {
         const handleClick = () => {
             if (loadPersonaStatusError) retryLoadPersonaStatus()
-            if (loadCurrentVisitingSocialIdentityError) retryIdentity()
+
             if (loadSocialAccounts) retrySocialAccounts()
         }
         return (

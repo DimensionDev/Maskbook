@@ -90,7 +90,7 @@ export function useSocialIdentity(identity: IdentityResolved | null | undefined)
         } catch {
             return identity
         }
-    }, [identity])
+    }, [JSON.stringify(identity)])
 
     useEffect(() => MaskMessages.events.ownProofChanged.on(result.retry), [result.retry])
 
