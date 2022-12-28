@@ -8,6 +8,7 @@ import {
     mergeSubscription,
     ValueRef,
     createSubscriptionFromValueRef,
+    SignType,
 } from '@masknet/shared-base'
 import { SmartPayAccount } from '@masknet/web3-providers'
 import { isSameAddress, Wallet as WalletItem } from '@masknet/web3-shared-base'
@@ -109,7 +110,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
 
     override signTransaction(address: string, transaction: Transaction): Promise<string> {
         if (this.providerType === ProviderType.MaskWallet) {
-            return this.context.signTransaction(address, transaction)
+            return this.context.signWithWallet(SignType.Transaction, transaction, address)
         } else {
             return super.signTransaction(address, transaction)
         }
@@ -123,9 +124,9 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
     ): Promise<string> {
         if (this.providerType === ProviderType.MaskWallet) {
             if (type === 'message') {
-                return this.context.signPersonalMessage(address, message)
+                return this.context.signWithWallet(SignType.Message, address, message)
             } else if (type === 'typedData') {
-                return this.context.signTypedData(address, message)
+                return this.context.signWithWallet(SignType.TypedData, address, message)
             }
             throw new Error('Unknown sign type.')
         } else {

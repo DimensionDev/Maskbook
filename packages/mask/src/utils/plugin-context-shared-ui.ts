@@ -62,10 +62,6 @@ export const RestPartOfPluginUIContextShared: Omit<
     signWithPersona: Services.Identity.signWithPersona,
     signWithWallet: WalletRPC.signWithWallet,
 
-    signTransaction: WalletRPC.signTransaction,
-    signTypedData: WalletRPC.signTypedData,
-    signPersonalMessage: WalletRPC.signPersonalMessage,
-
     getWallets: WalletRPC.getWallets,
     addWallet: WalletRPC.updateWallet,
     updateWallet: WalletRPC.updateWallet,

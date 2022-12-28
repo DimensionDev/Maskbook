@@ -115,7 +115,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                     ],
                 },
             })
-            const signed = await connection?.signMessage(type, type === 'typedData' ? typedData : message)
+            const signed = await connection?.signMessage(type ?? message, type === 'typedData' ? typedData : message)
             window.alert(`Signed: ${signed}`)
         },
         [chainId, connection],
@@ -210,7 +210,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                                             onSignMessage('message')
                                             break
                                         default:
-                                            onSignMessage()
+                                            onSignMessage('message')
                                             break
                                     }
                                 }}>

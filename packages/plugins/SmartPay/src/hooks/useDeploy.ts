@@ -59,7 +59,7 @@ export function useDeploy(
         })
 
         if (response.message.walletAddress && onSuccess) {
-            Wallet?.updateWallet(contractAccount.address, {
+            await Wallet?.updateWallet(contractAccount.address, {
                 name: 'Smart Pay',
             })
             onSuccess()
