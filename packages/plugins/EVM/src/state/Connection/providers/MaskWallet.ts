@@ -2,9 +2,9 @@ import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import { ECKeyIdentifier, ExtensionSite, getSiteType, PopupRoutes } from '@masknet/shared-base'
 import { ChainId, chainResolver, isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
-import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
 import type { EVM_Provider } from '../types.js'
 import { BaseContractWalletProvider } from './BaseContractWallet.js'
+import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
 
 export class MaskWalletProvider extends BaseContractWalletProvider implements EVM_Provider {
     constructor() {
@@ -24,10 +24,7 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
         })
     }
 
-    override async connect(chainId_: ChainId, address?: string, owner?: string, identifier?: ECKeyIdentifier) {
-        // FIXME: only for mumbai test
-        const chainId = ChainId.Mumbai
-
+    override async connect(chainId: ChainId, address?: string, owner?: string, identifier?: ECKeyIdentifier) {
         const siteType = getSiteType()
         if (siteType === ExtensionSite.Popup) {
             if (address) {

@@ -3,7 +3,6 @@ import { BoxInfo, BoxMetadata, MediaType } from '../../type.js'
 import { Box } from '@mui/material'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { Video } from '../../../../components/shared/Video.js'
-import { MaskSharpIconOfSize } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -34,9 +33,10 @@ export function ArticlesTab(props: ArticlesTabProps) {
                 {(() => {
                     if (!boxMetadata?.mediaType)
                         return (
-                            <Box className={classes.hero}>
-                                <MaskSharpIconOfSize classes={{ root: classes.icon }} size={22} />
-                            </Box>
+                            <img
+                                className={classes.hero}
+                                src={new URL('../../assets/FallbackImage.svg', import.meta.url).toString()}
+                            />
                         )
                     switch (boxMetadata.mediaType) {
                         case MediaType.Video:

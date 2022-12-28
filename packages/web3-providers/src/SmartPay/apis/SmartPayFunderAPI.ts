@@ -4,7 +4,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { FUNDER_ROOT } from '../constants.js'
 import { FunderAPI } from '../../types/Funder.js'
 import { Web3API } from '../../EVM/index.js'
-import { fetchJSON } from '../../entry-helpers.js'
+import { fetchJSON, fetchSquashed } from '../../entry-helpers.js'
 
 export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     private web3 = new Web3API()
@@ -14,7 +14,11 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     }
 
     private async getWhiteList(handler: string) {
-        return fetchJSON<FunderAPI.WhiteList>(urlcat(FUNDER_ROOT, '/whitelist', { twitterHandler: handler }))
+        return fetchJSON<FunderAPI.WhiteList>(
+            urlcat(FUNDER_ROOT, '/whitelist', { twitterHandler: handler }),
+            {},
+            fetchSquashed,
+        )
     }
 
     async getRemainFrequency(handler: string) {
@@ -33,8 +37,10 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
         try {
             const operations = await fetchJSON<FunderAPI.Operation[]>(
                 urlcat(FUNDER_ROOT, '/operation', { scanKey: FunderAPI.ScanKey.OwnerAddress, scanValue: owner }),
+                {},
+                fetchSquashed,
             )
-            const web3 = this.web3.createSDK(chainId)
+            const web3 = this.web3.createWeb3(chainId)
             const allSettled = await Promise.allSettled(
                 operations.map<Promise<TransactionReceipt | null>>((x) =>
                     web3.eth.getTransactionReceipt(x.tokenTransferTx),

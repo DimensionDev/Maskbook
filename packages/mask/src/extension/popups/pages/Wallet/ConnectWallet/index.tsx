@@ -79,7 +79,7 @@ const ConnectWalletPage = memo(() => {
         ) => {
             if (provider.type === ProviderType.MaskWallet) {
                 const connection = Connection?.getConnection?.()
-                if (connection) connection.disconnect()
+                if (connection) await connection.disconnect()
                 if (isLocked && !getLockStatusLoading) {
                     navigate(urlcat(PopupRoutes.Unlock, { from: PopupRoutes.SelectWallet, goBack: true, popup: true }))
                     return

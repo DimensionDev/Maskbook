@@ -217,6 +217,9 @@ export enum ProviderType {
 
 export type Web3 = EVM_Web3
 
+/**
+ * EIP-1193 compatible provider
+ */
 export interface Web3Provider {
     send(
         payload: JsonRpcPayload,

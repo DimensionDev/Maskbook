@@ -68,9 +68,9 @@ export function CollectibleList(props: CollectibleListProps) {
                 </Box>
             ) : (
                 <Box className={classes.root}>
-                    {collectibles.map((token, index) => (
+                    {collectibles.map((token) => (
                         <CollectibleItem
-                            key={index}
+                            key={`${token.contract?.address.toLowerCase()}${token.tokenId}`}
                             className={classes.collectibleItem}
                             pluginID={pluginID}
                             asset={token}

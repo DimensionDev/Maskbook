@@ -44,6 +44,7 @@ export declare namespace Web3Helper {
             TransactionDetailed: EVM.TransactionDetailed
             TransactionSignature: EVM.TransactionSignature
             TransactionParameter: EVM.TransactionParameter
+            UserOperation: EVM.UserOperation
             Web3Provider: EVM.Web3Provider
             Web3: EVM.Web3
         }
@@ -62,6 +63,7 @@ export declare namespace Web3Helper {
             TransactionDetailed: Flow.TransactionDetailed
             TransactionSignature: Flow.TransactionSignature
             TransactionParameter: Flow.TransactionParameter
+            UserOperation: Flow.Operation
             Web3Provider: Flow.Web3Provider
             Web3: Flow.Web3
         }
@@ -80,6 +82,7 @@ export declare namespace Web3Helper {
             TransactionDetailed: Solana.TransactionDetailed
             TransactionSignature: Solana.TransactionSignature
             TransactionParameter: Solana.TransactionParameter
+            UserOperation: Solana.Operation
             Web3Provider: Solana.Web3Provider
             Web3: Solana.Web3
         }

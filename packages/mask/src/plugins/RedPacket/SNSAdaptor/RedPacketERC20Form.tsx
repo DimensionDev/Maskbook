@@ -10,7 +10,7 @@ import {
     rightShift,
     formatBalance,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
+import { ChainId, GasConfig, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { MenuItem, Select, Box, InputBase, Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
@@ -20,13 +20,21 @@ import {
     ChainBoundary,
     WalletConnectedBoundary,
     EthereumERC20TokenApprovedBoundary,
+    SelectGasSettingsToolbar,
 } from '@masknet/shared'
-import { useFungibleToken, useFungibleTokenBalance, useChainContext } from '@masknet/web3-hooks-base'
+import {
+    useFungibleToken,
+    useFungibleTokenBalance,
+    useChainContext,
+    useNativeToken,
+    useNativeTokenPrice,
+    useWeb3,
+} from '@masknet/web3-hooks-base'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18n } from '../../../utils/index.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
-import type { RedPacketSettings } from './hooks/useCreateCallback.js'
+import { RedPacketSettings, useCreateParams } from './hooks/useCreateCallback.js'
 
 // seconds of 1 day
 const duration = 60 * 60 * 24
@@ -61,13 +69,15 @@ export interface RedPacketFormProps {
     origin?: RedPacketSettings
     onNext: () => void
     setERC721DialogHeight?: (height: number) => void
+    gasOption?: GasConfig
+    onGasOptionChange?: (config: GasConfig) => void
 }
 
 export function RedPacketERC20Form(props: RedPacketFormProps) {
     const t = useI18N()
     const { t: tr } = useBaseI18n()
     const { classes } = useStyles()
-    const { onChange, onNext, origin } = props
+    const { onChange, onNext, origin, gasOption, onGasOptionChange } = props
     // context
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
@@ -179,6 +189,16 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
 
     const selectRef = useRef(null)
 
+    // #region gas
+    const { value: nativeToken } = useNativeToken()
+    const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
+
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const { address: publicKey } = useMemo(() => web3?.eth.accounts.create() ?? { address: '', privateKey: '' }, [web3])
+    const contract_version = 4
+    const { value: params } = useCreateParams(creatingParams, contract_version, publicKey)
+    // #endregion
+
     if (!token) return null
     return (
         <>
@@ -246,6 +266,17 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     value={message}
                 />
             </Box>
+            {nativeToken && nativeTokenPrice ? (
+                <Box margin={2}>
+                    <SelectGasSettingsToolbar
+                        nativeToken={nativeToken}
+                        nativeTokenPrice={nativeTokenPrice}
+                        gasConfig={gasOption}
+                        gasLimit={Number.parseInt(params?.gas ?? '0', 10)}
+                        onChange={onGasOptionChange}
+                    />
+                </Box>
+            ) : null}
             <Box style={{ width: '100%' }}>
                 <PluginWalletStatusBar>
                     <ChainBoundary

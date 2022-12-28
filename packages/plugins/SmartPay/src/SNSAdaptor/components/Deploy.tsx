@@ -131,10 +131,9 @@ export function Deploy({ open }: { open: boolean }) {
 
         const accounts = await SmartPayAccount.getAccountsByOwners(ChainId.Mumbai, [signAccount?.address])
         const nonce = accounts.filter((x) => x.funded).length
-        const account = await SmartPayAccount.getAccountByNonce(ChainId.Mumbai, signAccount?.address, nonce)
 
         return {
-            account,
+            account: accounts[nonce],
             nonce,
         }
     }, [signAccount, open])

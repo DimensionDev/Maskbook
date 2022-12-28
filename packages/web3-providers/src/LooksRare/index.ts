@@ -16,10 +16,10 @@ import {
     TokenType,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { ChainId, createERC20Token, formatWeiToEther, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
+import { ChainId, createERC20Token, formatWeiToEther, isValidChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { Collection, Event, Order, Stats, Token } from './types.js'
 import { LOOKSRARE_API_URL, LOOKSRARE_PAGE_SIZE } from './constants.js'
-import { resolveActivityType } from '../entry-helpers.js'
+import { getPaymentToken, resolveActivityType } from '../entry-helpers.js'
 import type { NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromLooksRare<T>(chainId: ChainId, url: string) {
@@ -131,6 +131,7 @@ function createNonFungibleTokenOrderFromOrder(
     chainId: ChainId,
     order: Order,
 ): NonFungibleTokenOrder<ChainId, SchemaType> {
+    const paymentToken = getPaymentToken(chainId, { address: order.currencyAddress })
     return {
         id: order.hash,
         chainId,
@@ -148,7 +149,7 @@ function createNonFungibleTokenOrderFromOrder(
         expiredAt: order.endTime,
         priceInToken: {
             amount: order.price,
-            token: createERC20Token(chainId, order.currencyAddress),
+            token: paymentToken ?? createERC20Token(chainId, order.currencyAddress),
         },
         source: SourceType.LooksRare,
     }

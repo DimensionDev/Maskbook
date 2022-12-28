@@ -26,7 +26,7 @@ const useStyles = makeStyles()({
 export const WalletHeader = memo(() => {
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const { account, chainId, providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account, chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
 
@@ -47,6 +47,7 @@ export const WalletHeader = memo(() => {
 
     const onChainChange = useCallback(
         async (chainId: ChainId) => {
+            setChainId(chainId)
             return connection?.switchChain?.(chainId)
         },
         [connection],

@@ -23,7 +23,7 @@ const ConnectedWallets = memo(() => {
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const navigate = useNavigate()
     const location = useLocation()
-    const { proofs, currentPersona, refreshProofs, fetchProofsLoading } = PersonaContext.useContainer()
+    const { proofs, currentPersona, fetchProofsLoading } = PersonaContext.useContainer()
 
     const { showSnackbar } = usePopupCustomSnackbar()
 
@@ -88,6 +88,7 @@ const ConnectedWallets = memo(() => {
                 if (!result) return
 
                 const signature = await Service.Identity.generateSignResult(
+                    'message',
                     currentPersona.identifier,
                     result.signPayload,
                 )
@@ -101,12 +102,11 @@ const ConnectedWallets = memo(() => {
                     wallet.platform,
                     wallet.identity,
                     result.createdAt,
-                    { signature: signature.signature.signature },
+                    { signature: signature.signature },
                 )
                 // Broadcast updates.
                 MaskMessages.events.ownProofChanged.sendToAll()
                 showSnackbar(t('popups_wallet_disconnect_success'))
-                refreshProofs()
             } catch {
                 showSnackbar(t('popups_wallet_disconnect_failed'))
             }

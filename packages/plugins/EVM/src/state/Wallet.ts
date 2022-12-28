@@ -11,6 +11,7 @@ import {
 import { SmartPayAccount } from '@masknet/web3-providers'
 import { isSameAddress, Wallet as WalletItem } from '@masknet/web3-shared-base'
 import { ChainId, formatEthereumAddress, ProviderType, Transaction } from '@masknet/web3-shared-evm'
+import { compact } from 'lodash-es'
 
 export class Wallet extends WalletState<ProviderType, Transaction> {
     private ref = new ValueRef<WalletItem[]>(EMPTY_LIST)
@@ -43,10 +44,9 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
             const wallets = this.context.wallets.getCurrentValue()
             const allPersonas = await Promise.all(
                 this.context.allPersonas?.getCurrentValue()?.map(async (x) => {
-                    const { address } = await this.context.generateSignResult(x.identifier, '')
                     return {
                         ...x,
-                        address,
+                        address: x.address,
                     }
                 }) ?? [],
             )
@@ -54,7 +54,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
             if (this.providerType === ProviderType.MaskWallet) {
                 const accounts = await SmartPayAccount.getAccountsByOwners(ChainId.Mumbai, [
                     ...wallets.map((x) => x.address),
-                    ...allPersonas.map((x) => x.address),
+                    ...compact(allPersonas.map((x) => x.address)),
                 ])
 
                 const now = new Date()

@@ -47,7 +47,7 @@ export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onCl
                 message.createdAt,
                 {
                     walletSignature: walletSignState?.value,
-                    signature: personaSignState?.value?.signature.signature,
+                    signature: personaSignState?.value?.signature,
                 },
             )
             showSnackbar(t.notify_wallet_sign_request_title(), {
@@ -83,7 +83,7 @@ export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onCl
                 isCurrentAccount={isSameAddress(account, unbindAddress)}
                 signature={{
                     persona: {
-                        value: personaSignState.value?.signature.signature,
+                        value: personaSignState.value?.signature,
                         loading: personaSignState.loading,
                     },
                     wallet: walletSignState,

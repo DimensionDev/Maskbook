@@ -35,13 +35,9 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
     override setupSubscriptions() {
         this.providerType = mapSubscription(this.storage.providerType.subscription, (provider) => provider)
 
-        this.chainId = mapSubscription(
-            mergeSubscription(this.providerType, this.storage.account.subscription, this.context.chainId),
-            ([providerType, account, chainId]) => {
-                if (providerType === ProviderType.MaskWallet) return chainId
-                return account.chainId
-            },
-        )
+        this.chainId = mapSubscription(mergeSubscription(this.storage.account.subscription), ([account]) => {
+            return account.chainId
+        })
         this.account = mapSubscription(mergeSubscription(this.storage.account.subscription), ([account]) => {
             return account.account
         })

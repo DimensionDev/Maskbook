@@ -8,18 +8,18 @@ import {
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { SmartPayFunder } from '@masknet/web3-providers'
-import type { ContractAccountAPI } from '@masknet/web3-providers/types'
+import type { AbstractAccountAPI } from '@masknet/web3-providers/types'
 import { ProviderType, ChainId } from '@masknet/web3-shared-evm'
 import { SignAccount, SignAccountType } from '../type.js'
 
 export function useDeploy(
     signAccount?: SignAccount,
-    contractAccount?: ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM>,
+    contractAccount?: AbstractAccountAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>,
     nonce?: number,
     onSuccess?: () => void,
 ) {
     const { Wallet } = useWeb3State()
-    const { personaSignPayMessage } = useSNSAdaptorContext()
+    const { signWithPersona } = useSNSAdaptorContext()
     const currentPersona = useCurrentPersonaInformation()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
 
@@ -39,13 +39,16 @@ export function useDeploy(
             nonce,
         })
 
-        let signature
+        let signature: string | undefined
 
         if (signAccount.type === SignAccountType.Persona && signAccount?.raw?.identifier) {
-            signature = await personaSignPayMessage({
-                message: payload,
-                identifier: signAccount.raw.identifier,
-            })
+            signature = (
+                await signWithPersona({
+                    method: 'message',
+                    message: payload,
+                    identifier: signAccount.raw.identifier,
+                })
+            ).signature
         } else if (signAccount.type === SignAccountType.Wallet) {
             signature = await connection?.signMessage(payload, 'personalSign', {
                 account: signAccount.address,

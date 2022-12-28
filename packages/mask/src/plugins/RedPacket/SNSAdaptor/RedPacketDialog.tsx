@@ -2,9 +2,15 @@ import { useCallback, useState } from 'react'
 import { compact } from 'lodash-es'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
-import { useChainContext, useWeb3Connection, useChainIdValid, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useWeb3Connection,
+    useChainIdValid,
+    Web3ContextProvider,
+    useGasPrice,
+} from '@masknet/web3-hooks-base'
 import { InjectedDialog, NetworkTab } from '@masknet/shared'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, GasConfig, GasEditor } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { DialogContent, Tab } from '@mui/material'
@@ -72,6 +78,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const t = useI18N()
     const { t: i18n } = useBaseI18N()
     const [showHistory, setShowHistory] = useState(false)
+    const [gasOption, setGasOption] = useState<GasConfig>()
+
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
     const { classes } = useStyles()
     const { attachMetadata, dropMetadata } = useCompositionContext()
@@ -179,6 +187,24 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         ? t.display_name()
         : t.details()
 
+    // #region gas config
+    const { value: defaultGasPrice } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const handleGasSettingChange = useCallback(
+        (gasConfig: GasConfig) => {
+            const editor = GasEditor.fromConfig(chainId, gasConfig)
+            setGasOption((config) => {
+                return editor.getGasConfig({
+                    gasPrice: defaultGasPrice,
+                    maxFeePerGas: defaultGasPrice,
+                    maxPriorityFeePerGas: defaultGasPrice,
+                    ...config,
+                })
+            })
+        },
+        [chainId, defaultGasPrice],
+    )
+    // #endregion
+
     return (
         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: networkTabChainId }}>
             <TabContext value={currentTab}>
@@ -233,6 +259,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                             onClose={onClose}
                                             onNext={onNext}
                                             onChange={_onChange}
+                                            gasOption={gasOption}
+                                            onGasOptionChange={handleGasSettingChange}
                                         />
                                     </TabPanel>
                                     <TabPanel value={tabs.collectibles} style={{ padding: 0 }}>

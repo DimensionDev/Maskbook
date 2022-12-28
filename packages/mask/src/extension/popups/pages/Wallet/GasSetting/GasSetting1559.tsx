@@ -272,7 +272,6 @@ export const GasSetting1559 = memo(() => {
                       },
             )
 
-            console.log(config)
             await WalletRPC.updateUnconfirmedRequest({
                 ...value.payload,
                 params: config,
