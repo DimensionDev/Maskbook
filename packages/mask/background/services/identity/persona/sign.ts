@@ -1,5 +1,4 @@
 import { v4 as uuid } from 'uuid'
-import { bufferToHex, privateToPublic, publicToAddress } from 'ethereumjs-util'
 import { timeout } from '@masknet/kit'
 import { personalSign } from '@metamask/eth-sig-util'
 import type { Transaction } from '@masknet/web3-shared-evm'
@@ -74,7 +73,6 @@ export async function generateMessageSignResult(signer: ECKeyIdentifier, message
             privateKey,
             data: message,
         }),
-        address: bufferToHex(publicToAddress(privateToPublic(privateKey))),
     }
 }
 
@@ -101,6 +99,5 @@ export async function generateTransactionSignResult(signer: ECKeyIdentifier, tra
     return {
         persona: persona.identifier,
         signature: rawTransaction,
-        address: bufferToHex(publicToAddress(privateToPublic(privateKey))),
     }
 }

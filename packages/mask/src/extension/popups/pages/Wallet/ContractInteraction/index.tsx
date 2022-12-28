@@ -22,6 +22,7 @@ import {
     useNativeToken,
     useNativeTokenPrice,
     useReverseAddress,
+    useWallet,
     useWeb3State,
 } from '@masknet/web3-hooks-base'
 import {
@@ -142,6 +143,7 @@ const ContractInteraction = memo(() => {
     const { classes } = useStyles()
     const location = useLocation()
     const navigate = useNavigate()
+    const wallet = useWallet()
     const { Others, TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [transferError, setTransferError] = useState(false)
@@ -234,14 +236,18 @@ const ContractInteraction = memo(() => {
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
         if (request) {
             try {
-                await WalletRPC.confirmRequest(request.payload, { chainId })
+                await WalletRPC.confirmRequest(request.payload, {
+                    chainId,
+                    owner: wallet?.owner,
+                    identifier: wallet?.identifier,
+                })
                 navigate(-1)
             } catch (error_) {
                 setTransferError(true)
             }
         }
         return
-    }, [request, location.search, history, chainId])
+    }, [request, location.search, history, chainId, wallet])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
         if (!request) return
