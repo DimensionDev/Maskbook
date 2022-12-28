@@ -23,7 +23,7 @@ import { SmartPayFunderAPI } from './SmartPayFunderAPI.js'
 import { MulticallAPI } from '../../Multicall/index.js'
 import { Web3API } from '../../EVM/index.js'
 import type { AbstractAccountAPI } from '../../entry-types.js'
-import { fetchJSON } from '../../entry-helpers.js'
+import { fetchJSON, fetchSquashed } from '../../entry-helpers.js'
 
 /**
  * A chainbase SQL query log
@@ -146,6 +146,8 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
                 size: MAX_ACCOUNT_LENGTH,
                 offset: 0,
             }),
+            {},
+            fetchSquashed,
         )
 
         if (!logs) {

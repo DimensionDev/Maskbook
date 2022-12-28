@@ -61,18 +61,7 @@ export function useQueryQualification(): AsyncState<
             ).map(async (x) => {
                 return {
                     ...x,
-                    // FIXME: @albert
-                    // address: (
-                    //     await signWithPersona(
-                    //         {
-                    //             method: 'message',
-                    //             identifier: x.identifier,
-                    //             message: '',
-                    //         },
-                    //         true,
-                    //     )
-                    // ).address,
-                    address: '',
+                    address: x.address,
                 }
             }),
         )

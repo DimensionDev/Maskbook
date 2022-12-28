@@ -8,6 +8,8 @@ export interface PersonaInformation {
     proof?: NextIDPersonaBindings
     /** The nickname of the persona. Should use profile.nickname if it presents. */
     nickname?: string
+    /** The evm address of persona */
+    address?: string
     identifier: PersonaIdentifier
     linkedProfiles: ProfileInformation[]
 }

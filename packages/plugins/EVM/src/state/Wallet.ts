@@ -1,3 +1,4 @@
+import { compact } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
 import { WalletState } from '@masknet/web3-state'
@@ -43,18 +44,9 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
             const wallets = this.context.wallets.getCurrentValue()
             const allPersonas = await Promise.all(
                 this.context.allPersonas?.getCurrentValue()?.map(async (x) => {
-                    // FIXME: @albert
-                    // const { address } = await this.context.signWithPersona(
-                    //     {
-                    //         method: 'message',
-                    //         identifier: x.identifier,
-                    //         message: '',
-                    //     },
-                    //     true,
-                    // )
                     return {
                         ...x,
-                        address: '',
+                        address: x.address,
                     }
                 }) ?? [],
             )
@@ -62,7 +54,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
             if (this.providerType === ProviderType.MaskWallet) {
                 const accounts = await SmartPayAccount.getAccountsByOwners(ChainId.Mumbai, [
                     ...wallets.map((x) => x.address),
-                    ...allPersonas.map((x) => x.address),
+                    ...compact(allPersonas.map((x) => x.address)),
                 ])
 
                 const now = new Date()
