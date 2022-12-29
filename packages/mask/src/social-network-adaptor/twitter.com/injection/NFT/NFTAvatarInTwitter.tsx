@@ -234,16 +234,12 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
 
         const handler = (event: MouseEvent) => {
             if (!nftAvatar?.tokenId || !nftAvatar?.address) return
-
             event.stopPropagation()
             event.preventDefault()
-
-            if (!nftAvatar?.pluginId || !nftAvatar.chainId) return
-
             CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
                 open: true,
-                pluginID: nftAvatar.pluginId,
-                chainId: nftAvatar.chainId,
+                pluginID: nftAvatar.pluginId ?? NetworkPluginID.PLUGIN_EVM,
+                chainId: nftAvatar.chainId ?? ChainId.Mainnet,
                 tokenId: nftAvatar.tokenId,
                 tokenAddress: nftAvatar.address,
                 ownerAddress: nftAvatar.ownerAddress,
@@ -265,15 +261,15 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         return clean
     }, [nftAvatar, showAvatar, nftInfo])
 
-    const handler = () => {
+    const handlerWatcher = () => {
         const avatar = searchAvatarSelector().evaluate()?.getAttribute('src')
         if (!avatar || !nftAvatar?.avatarId) return
         setUpdatedAvatar(!!nftAvatar?.avatarId && Twitter.getAvatarId(avatar ?? '') === nftAvatar.avatarId)
     }
 
     new MutationObserverWatcher(searchAvatarMetaSelector())
-        .addListener('onAdd', handler)
-        .addListener('onChange', handler)
+        .addListener('onAdd', handlerWatcher)
+        .addListener('onChange', handlerWatcher)
         .startWatch(
             {
                 childList: true,

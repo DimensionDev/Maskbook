@@ -29,7 +29,7 @@ export function usePersonaNFTAvatar(userId: string, avatarId: string, persona: s
             if (nftAvatar) cache.set(key, nftAvatar)
         }
         return cache.get(key)
-    }, [userId, getNFTAvatar, avatarId, activatedSocialNetworkUI.networkIdentifier])
+    }, [userId, persona, snsKey, getNFTAvatar, avatarId, activatedSocialNetworkUI.networkIdentifier])
 }
 
 async function getNFTAvatarForCache(
