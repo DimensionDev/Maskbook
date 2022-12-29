@@ -97,7 +97,7 @@ export function useSocialIdentity(identity: IdentityResolved | null | undefined)
     return result
 }
 
-export function useSocialIdentityByUseId(userId?: string) {
+export function useSocialIdentityByUserId(userId?: string) {
     const { value: identity } = useAsync(async () => {
         if (!userId) return
         return activatedSocialNetworkUI.utils.getUserIdentity?.(userId)
