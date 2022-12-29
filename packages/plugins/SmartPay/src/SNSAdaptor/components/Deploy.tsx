@@ -2,10 +2,9 @@ import { useCallback, useState } from 'react'
 import { useAsync, useBoolean, useCopyToClipboard, useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { first } from 'lodash-es'
-import { useContainer } from 'unstated-next'
 import { Icons } from '@masknet/icons'
 import { ImageIcon, PersonaAction, useSnackbarCallback, WalletDescription } from '@masknet/shared'
-import { formatPersonaFingerprint, NetworkPluginID } from '@masknet/shared-base'
+import { formatPersonaFingerprint, NetworkPluginID, PersonaInformation } from '@masknet/shared-base'
 import { ChainId, explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Typography, alpha, Box } from '@mui/material'
 import { useNetworkDescriptor, useProviderDescriptor } from '@masknet/web3-hooks-base'
@@ -16,12 +15,13 @@ import { useI18N } from '../../locales/index.js'
 import { ManagePopover } from './ManagePopover.js'
 import { SmartPayBanner } from './SmartPayBanner.js'
 import { ActionButton, LoadingBase, makeStyles } from '@masknet/theme'
-import { SmartPayContext } from '../../context/SmartPayContext.js'
-import { SignAccount, SignAccountType } from '../../type.js'
+import { ManagerAccount, ManagerAccountType } from '../../type.js'
 
 import { CreateSuccessDialog } from './CreateSuccessDialog.js'
 import { RoutePaths } from '../../constants.js'
 import { useDeploy } from '../../hooks/useDeploy.js'
+import { useManagers } from '../../hooks/useManagers.js'
+import type { Wallet } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     walletDescription: {
@@ -103,40 +103,47 @@ const useStyles = makeStyles()((theme) => ({
     bottomFixed: { height: 68, boxSizing: 'border-box' },
 }))
 
-export function Deploy({ open }: { open: boolean }) {
+export function Deploy({
+    open,
+    signWallet,
+    signPersona,
+}: {
+    open: boolean
+    signWallet?: Wallet
+    signPersona?: PersonaInformation
+}) {
     const t = useI18N()
     const navigate = useNavigate()
     const { classes } = useStyles()
     const [successDialogOpen, toggle] = useBoolean(false)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-    const [signAccount, setSignAccount] = useState<SignAccount | undefined>()
+    const [manager, setManager] = useState<ManagerAccount | undefined>()
 
     const { getPersonaAvatar } = useSNSAdaptorContext()
-    const { signablePersonas, signableWallets } = useContainer(SmartPayContext)
+    const { personaManagers, walletManagers } = useManagers()
 
     const maskProviderDescriptor = useProviderDescriptor(NetworkPluginID.PLUGIN_EVM, ProviderType.MaskWallet)
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Mumbai)
     const currentVisitingProfile = useLastRecognizedIdentity()
 
     const { value: avatar } = useAsync(async () => {
-        if (signAccount?.type === SignAccountType.Persona && signAccount?.raw?.identifier)
-            return getPersonaAvatar(signAccount?.raw?.identifier)
+        if (signPersona) return getPersonaAvatar(signPersona.identifier)
 
         return null
-    }, [signAccount, getPersonaAvatar])
+    }, [signPersona, getPersonaAvatar])
 
     // #region get contract account
     const { value, loading: queryContractLoading } = useAsync(async () => {
-        if (!signAccount?.identity || !signAccount?.address || !open) return
+        if (!manager?.address || !open) return
 
-        const accounts = await SmartPayAccount.getAccountsByOwners(ChainId.Mumbai, [signAccount?.address])
+        const accounts = await SmartPayAccount.getAccountsByOwners(ChainId.Mumbai, [manager?.address])
         const nonce = accounts.filter((x) => x.funded).length
 
         return {
             account: accounts[nonce],
             nonce,
         }
-    }, [signAccount, open])
+    }, [manager, open])
     // #endregion
 
     const { account: contractAccount, nonce } = value ?? {}
@@ -151,48 +158,46 @@ export function Deploy({ open }: { open: boolean }) {
     })
     // #endregion
 
-    const [{ loading: deployLoading }, handleDeploy] = useDeploy(signAccount, contractAccount, nonce, toggle)
+    const [{ loading: deployLoading }, handleDeploy] = useDeploy(
+        signPersona,
+        signWallet,
+        manager,
+        contractAccount,
+        nonce,
+        toggle,
+    )
 
-    const handleSelectSignAccount = useCallback((signAccount: SignAccount) => {
-        setSignAccount(signAccount)
+    const handleSelectManager = useCallback((manager: ManagerAccount) => {
+        setManager(manager)
     }, [])
 
     useUpdateEffect(() => {
-        if (signablePersonas?.length) {
-            const firstPersona = first(signablePersonas)
+        if (personaManagers?.length) {
+            const firstPersona = first(personaManagers)
 
-            setSignAccount({
-                type: SignAccountType.Persona,
-                identity: firstPersona?.identifier.publicKeyAsHex,
+            setManager({
+                type: ManagerAccountType.Persona,
                 name: firstPersona?.nickname,
                 address: firstPersona?.address,
-                raw: firstPersona,
+                rawPublicKey: firstPersona?.identifier.rawPublicKey,
             })
 
             return
-        } else if (signableWallets) {
-            const firstWallet = first(signableWallets)
-            setSignAccount({
-                type: SignAccountType.Wallet,
-                identity: firstWallet?.address,
+        } else if (walletManagers) {
+            const firstWallet = first(walletManagers)
+            setManager({
+                type: ManagerAccountType.Wallet,
                 name: firstWallet?.name,
                 address: firstWallet?.address,
             })
             return
         }
-    }, [signablePersonas, signableWallets])
+    }, [personaManagers, walletManagers])
 
     return (
         <>
             <Box className={classes.content}>
-                <SmartPayBanner>
-                    {t.personas_description({
-                        personas:
-                            signablePersonas
-                                ?.map((persona) => formatPersonaFingerprint(persona.identifier.rawPublicKey, 4))
-                                .join(',') ?? '',
-                    })}
-                </SmartPayBanner>
+                <SmartPayBanner>{t.personas_description()}</SmartPayBanner>
                 <Box className={classes.walletDescription}>
                     <Box display="flex" alignItems="center" columnGap={1.5}>
                         <Box position="relative" width={30} height={30}>
@@ -237,9 +242,9 @@ export function Deploy({ open }: { open: boolean }) {
                         <Box display="flex" alignItems="center" columnGap={1}>
                             <Icons.MaskBlue size={24} className={classes.maskIcon} />
                             <Typography fontSize={18} fontWeight={700} lineHeight="22px">
-                                {signAccount?.type === 'Persona'
-                                    ? formatPersonaFingerprint(signAccount.raw?.identifier.rawPublicKey ?? '', 4)
-                                    : formatEthereumAddress(signAccount?.identity ?? '', 4)}
+                                {manager?.type === 'Persona'
+                                    ? formatPersonaFingerprint(manager.rawPublicKey ?? '', 4)
+                                    : formatEthereumAddress(manager?.address ?? '', 4)}
                             </Typography>
                         </Box>
                         <Icons.ArrowDrop className={classes.arrow} size={24} />
@@ -250,10 +255,8 @@ export function Deploy({ open }: { open: boolean }) {
                         onClose={() => {
                             setAnchorEl(null)
                         }}
-                        signablePersonas={signablePersonas ?? []}
-                        signableWallets={signableWallets ?? []}
-                        selectedIdentity={signAccount?.identity}
-                        onSelect={handleSelectSignAccount}
+                        selectedAddress={manager?.address}
+                        onSelect={handleSelectManager}
                     />
                 </Box>
                 <Box className={classes.tips}>
@@ -267,16 +270,16 @@ export function Deploy({ open }: { open: boolean }) {
                 </Box>
             </Box>
             <Box className={classes.stateBar}>
-                {signAccount?.type === SignAccountType.Persona ? (
+                {signPersona ? (
                     <PersonaAction
                         classes={{ bottomFixed: classes.bottomFixed }}
                         avatar={avatar !== null ? avatar : undefined}
-                        currentPersona={signAccount?.raw}
+                        currentPersona={signPersona}
                         currentVisitingProfile={currentVisitingProfile}>
                         <ActionButton
                             onClick={handleDeploy}
                             loading={deployLoading}
-                            disabled={deployLoading || queryContractLoading || !signAccount}
+                            disabled={deployLoading || queryContractLoading || !signPersona}
                             variant="roundedContained">
                             {t.deploy()}
                         </ActionButton>
@@ -288,20 +291,20 @@ export function Deploy({ open }: { open: boolean }) {
                             providerIcon={maskProviderDescriptor?.icon}
                             networkIcon={polygonDescriptor?.icon}
                             iconFilterColor={maskProviderDescriptor?.iconFilterColor}
-                            name={signAccount?.name}
+                            name={signWallet?.name}
                             formattedAddress={
-                                signAccount?.identity ? formatEthereumAddress(signAccount?.identity, 4) : undefined
+                                signWallet?.address ? formatEthereumAddress(signWallet.address, 4) : undefined
                             }
                             addressLink={
-                                signAccount?.identity
-                                    ? explorerResolver.addressLink(ChainId.Mumbai, signAccount?.identity)
+                                signWallet?.address
+                                    ? explorerResolver.addressLink(ChainId.Mumbai, signWallet?.address)
                                     : undefined
                             }
                         />
                         <ActionButton
                             onClick={handleDeploy}
                             loading={deployLoading}
-                            disabled={deployLoading || queryContractLoading || !signAccount}
+                            disabled={deployLoading || queryContractLoading || !signWallet}
                             variant="roundedContained">
                             {t.deploy()}
                         </ActionButton>
@@ -315,7 +318,7 @@ export function Deploy({ open }: { open: boolean }) {
                     navigate(RoutePaths.Main)
                 }}
                 address={contractAccount?.address ?? ''}
-                owner={`${signAccount?.type === 'Persona' ? 'Persona' : 'Mask Wallet'} ${signAccount?.name}`}
+                owner={`${manager?.type === 'Persona' ? 'Persona' : 'Mask Wallet'} ${manager?.name}`}
             />
         </>
     )

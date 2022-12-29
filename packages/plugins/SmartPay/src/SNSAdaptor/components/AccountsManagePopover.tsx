@@ -3,9 +3,9 @@ import { memo, useMemo } from 'react'
 import { Box, Button, Popover, Typography } from '@mui/material'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { useContainer } from 'unstated-next'
-import { SmartPayContext } from '../../context/SmartPayContext.js'
+
 import { isSameAddress } from '@masknet/web3-shared-base'
+import { useManagers } from '../../hooks/useManagers.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -44,15 +44,15 @@ export const AccountsManagerPopover = memo<AccountsManagePopoverProps>(
     ({ open, anchorEl, onClose, address, owner }) => {
         const t = useI18N()
         const { classes } = useStyles()
-        const { signablePersonas, signableWallets } = useContainer(SmartPayContext)
+        const { personaManagers, walletManagers } = useManagers()
 
         const ownerName = useMemo(() => {
-            const persona = signablePersonas?.find((x) => isSameAddress(x.address, owner))
+            const persona = personaManagers?.find((x) => isSameAddress(x.address, owner))
 
             if (persona) return persona.nickname
 
-            return signableWallets?.find((x) => isSameAddress(x.address, owner))?.name
-        }, [owner, signablePersonas, signableWallets])
+            return walletManagers?.find((x) => isSameAddress(x.address, owner))?.name
+        }, [owner, personaManagers, walletManagers])
 
         return usePortalShadowRoot((container) => (
             <Popover

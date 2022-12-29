@@ -8,6 +8,7 @@ import {
     useFungibleAssets,
     useFungibleTokenBalance,
     useNetworkDescriptor,
+    useWallets,
     useWeb3Connection,
     useWeb3State,
 } from '@masknet/web3-hooks-base'
@@ -39,8 +40,6 @@ import { PluginSmartPayMessages } from '../../message.js'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { AddSmartPayPopover } from './AddSmartPayPopover.js'
 import { AccountsManagerPopover } from './AccountsManagePopover.js'
-import { useContainer } from 'unstated-next'
-import { SmartPayContext } from '../../context/SmartPayContext.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 
@@ -156,7 +155,8 @@ export const SmartPayContent = memo(() => {
     const [manageAnchorEl, setManageAnchorEl] = useState<HTMLElement | null>(null)
     const [current, setCurrent] = useState<Wallet>()
 
-    const { accounts } = useContainer(SmartPayContext)
+    const wallets = useWallets()
+    const contractAccounts = wallets.filter((x) => x.owner)
 
     // #region Remote Dialog Controller
     const { openDialog: openApproveMaskDialog } = useRemoteControlledDialog(PluginSmartPayMessages.approveDialogEvent)
@@ -219,7 +219,7 @@ export const SmartPayContent = memo(() => {
     // #endregion
 
     const [menu, openMenu] = useMenuConfig(
-        accounts?.map((account, index) => {
+        contractAccounts?.map((account, index) => {
             return (
                 <Box
                     key={index}
@@ -319,13 +319,13 @@ export const SmartPayContent = memo(() => {
     // #endregion
 
     useEffect(() => {
-        if (!accounts?.length) return
+        if (!contractAccounts?.length) return
 
         setCurrent((prev) => {
-            if (!prev) return first(accounts)
+            if (!prev) return first(contractAccounts)
             return prev
         })
-    }, [accounts])
+    }, [contractAccounts])
 
     return (
         <>

@@ -69,7 +69,7 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     async verify(handler: string) {
         try {
             const result = await this.getWhiteList(handler)
-            return result.twitterHandler === handler && result.totalCount > 0
+            return result.twitterHandler === handler && result.usedCount < result.totalCount
         } catch {
             return false
         }

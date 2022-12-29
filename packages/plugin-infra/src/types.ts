@@ -16,6 +16,7 @@ import type {
     PersonaInformation,
     PluginID,
     PopupRoutes,
+    DashboardRoutes,
     ProfileIdentifier,
     ScopedStorage,
     PersonaSignRequest,
@@ -179,6 +180,9 @@ export namespace Plugin.Shared {
         nativeType?: 'Android' | 'iOS'
         /** Native API supported */
         hasNativeAPI: boolean
+
+        /** Open Dashboard with a new window */
+        openDashboard(route?: DashboardRoutes, search?: string): Promise<any>
 
         /** Open popup window */
         openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
