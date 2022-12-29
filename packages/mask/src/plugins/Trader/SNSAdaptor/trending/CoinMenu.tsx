@@ -82,10 +82,13 @@ export interface CoinMenuOption {
     coin: Coin
     value: string
 }
+
+type TrendingSearchResultAll = Web3Helper.TokenResultAll | Web3Helper.NonFungibleCollectionResultAll
+
 interface TokenMenuListProps {
-    options: Web3Helper.TokenResultAll[]
-    result: Web3Helper.TokenResultAll
-    onSelect(value: Web3Helper.TokenResultAll): void
+    options: TrendingSearchResultAll[]
+    result: TrendingSearchResultAll
+    onSelect(value: TrendingSearchResultAll): void
 }
 
 const TokenMenuList: FC<TokenMenuListProps> = ({ options, result, onSelect }) => {
@@ -99,7 +102,11 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, result, onSelect }) =>
                     <MenuItem className={classes.menuItem} key={i} onClick={() => onSelect(x)}>
                         <TokenIcon
                             className={classes.coinIcon}
-                            logoURL={x.logoURL}
+                            logoURL={
+                                x.logoURL ??
+                                (x as Web3Helper.NonFungibleCollectionResultAll).collection?.iconURL ??
+                                undefined
+                            }
                             address={x.address || ''}
                             symbol={x.symbol}
                             size={20}
