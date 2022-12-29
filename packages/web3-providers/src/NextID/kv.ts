@@ -7,8 +7,9 @@ import { Err, Ok, Result } from 'ts-results-es'
 import type { NextIDPlatform, NextIDStoragePayload } from '@masknet/shared-base'
 import { KV_BASE_URL_DEV, KV_BASE_URL_PROD } from './constants.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
-import { fetchJSON } from '../entry-helpers.js'
+import { fetchJSON, fetchR2D2, fetchSquashed } from '../entry-helpers.js'
 import { staleNextIDCached } from './helpers.js'
+import { fetch } from '../helpers/fetch.js'
 
 interface CreatePayloadResponse {
     uuid: string
@@ -46,7 +47,11 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             persona: string
             proofs: Proof[]
         }
-        const response = await fetchJSON<Response>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
+        const response = await fetch<Response>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }), undefined, [
+            fetchR2D2,
+            fetchSquashed,
+            fetchJSON,
+        ])
         if (!response) return Err('User not found')
         const proofs = (response.proofs ?? [])
             .filter((x) => x.platform === platform)
@@ -68,7 +73,11 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
         interface Response {
             values: Proof[]
         }
-        const response = await fetchJSON<Response>(urlcat(BASE_URL, '/v1/kv/by_identity', { platform, identity }))
+        const response = await fetch<Response>(
+            urlcat(BASE_URL, '/v1/kv/by_identity', { platform, identity }),
+            undefined,
+            [fetchR2D2, fetchSquashed, fetchJSON],
+        )
 
         if (!response) return Err('User not found')
 
@@ -76,7 +85,11 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
         return Ok(result)
     }
     async get<T>(personaPublicKey: string): Promise<Result<T, string>> {
-        return fetchJSON(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
+        return fetch(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }), undefined, [
+            fetchR2D2,
+            fetchSquashed,
+            fetchJSON,
+        ])
     }
     /**
      * Get signature payload for updating
@@ -102,10 +115,14 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             patch: formatPatchData(pluginID, patchData),
         }
 
-        const response = await fetchJSON<CreatePayloadResponse>(urlcat(BASE_URL, '/v1/kv/payload'), {
-            body: JSON.stringify(requestBody),
-            method: 'POST',
-        })
+        const response = await fetch<CreatePayloadResponse>(
+            urlcat(BASE_URL, '/v1/kv/payload'),
+            {
+                body: JSON.stringify(requestBody),
+                method: 'POST',
+            },
+            [fetchR2D2, fetchJSON],
+        )
 
         return response
             ? Ok({
@@ -149,10 +166,14 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             created_at: createdAt,
         }
 
-        const result = await fetchJSON<T>(urlcat(BASE_URL, '/v1/kv'), {
-            body: JSON.stringify(requestBody),
-            method: 'POST',
-        })
+        const result = await fetch<T>(
+            urlcat(BASE_URL, '/v1/kv'),
+            {
+                body: JSON.stringify(requestBody),
+                method: 'POST',
+            },
+            [fetchR2D2, fetchJSON],
+        )
 
         if (result) {
             await staleNextIDCached(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))

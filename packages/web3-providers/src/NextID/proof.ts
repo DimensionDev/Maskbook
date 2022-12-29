@@ -12,9 +12,10 @@ import {
 } from '@masknet/shared-base'
 import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
-import { fetchJSON } from '../entry-helpers.js'
+import { fetchJSON, fetchR2D2 } from '../entry-helpers.js'
 import { staleNextIDCached } from './helpers.js'
 import { fetchSquashed } from '../helpers/fetchSquashed.js'
+import { fetch } from '../helpers/fetch.js'
 
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
@@ -78,10 +79,14 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             created_at: createdAt,
         }
 
-        const result = await fetchJSON<any>(urlcat(BASE_URL, '/v1/proof'), {
-            body: JSON.stringify(requestBody),
-            method: 'POST',
-        })
+        const result = await fetch<any>(
+            urlcat(BASE_URL, '/v1/proof'),
+            {
+                body: JSON.stringify(requestBody),
+                method: 'POST',
+            },
+            [fetchR2D2, fetchJSON],
+        )
 
         // Should delete cache when proof status changed
         const cacheKeyOfQueryPersona = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
@@ -97,7 +102,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
     async queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean) {
         const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
-        const response = await fetchJSON<NextIDBindings>(url, undefined, fetchSquashed)
+        const response = await fetch<NextIDBindings>(url, undefined, [fetchSquashed, fetchR2D2, fetchJSON])
         // Will have only one item when query by personaPublicKey
         return first(response.ids)
     }
@@ -105,7 +110,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page = 1) {
         if (!platform && !identity) return []
 
-        const response = await fetchJSON<NextIDBindings>(
+        const response = await fetch<NextIDBindings>(
             urlcat(BASE_URL, '/v1/proof', {
                 platform,
                 identity,
@@ -115,7 +120,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 order: 'desc',
             }),
             undefined,
-            fetchSquashed,
+            [fetchSquashed, fetchR2D2, fetchJSON],
         )
 
         return response.ids
@@ -137,7 +142,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         const nextIDPersonaBindings: NextIDPersonaBindings[] = []
         let page = 1
         do {
-            const result = await fetchJSON<NextIDBindings>(
+            const result = await fetch<NextIDBindings>(
                 urlcat(BASE_URL, '/v1/proof', {
                     platform,
                     identity,
@@ -147,15 +152,15 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                     order: 'desc',
                 }),
                 undefined,
-                true,
+                [fetchSquashed, fetchR2D2, fetchJSON],
             )
 
-            const personaBindings = result.unwrap().ids
+            const personaBindings = result.ids
             if (personaBindings.length === 0) return nextIDPersonaBindings
             nextIDPersonaBindings.push(...personaBindings)
 
             // next is `0` if current page is the last one.
-            if (result.unwrap().pagination.next === 0) return nextIDPersonaBindings
+            if (result.pagination.next === 0) return nextIDPersonaBindings
 
             page += 1
         } while (page > 1)
@@ -166,7 +171,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         if (!platform && !identity) return false
 
         const url = getExistedBindingQueryURL(platform, identity, personaPublicKey)
-        const result = await fetchJSON<BindingProof>(url, undefined, fetchSquashed)
+        const result = await fetch<BindingProof>(url, undefined, [fetchSquashed, fetchR2D2, fetchJSON])
 
         return !!result?.is_valid
     }
@@ -229,10 +234,14 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
         const nextIDLanguageFormat = language?.replace('-', '_') as PostContentLanguages
 
-        const response = await fetchJSON<CreatePayloadResponse>(urlcat(BASE_URL, '/v1/proof/payload'), {
-            body: JSON.stringify(requestBody),
-            method: 'POST',
-        })
+        const response = await fetch<CreatePayloadResponse>(
+            urlcat(BASE_URL, '/v1/proof/payload'),
+            {
+                body: JSON.stringify(requestBody),
+                method: 'POST',
+            },
+            [fetchR2D2, fetchJSON],
+        )
 
         return response
             ? {
