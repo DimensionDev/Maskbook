@@ -1,8 +1,9 @@
 import { Icons } from '@masknet/icons'
-import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
+import { useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { FormattedAddress, TokenIcon, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { openWindow } from '@masknet/shared-base-ui'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, IconButton, Stack, Typography, useTheme } from '@mui/material'
 import { useCopyToClipboard } from 'react-use'
@@ -17,6 +18,7 @@ export interface ContractSectionProps {
 
 export const ContractSection = ({ chainId, address, name, symbol, iconURL }: ContractSectionProps) => {
     const theme = useTheme()
+    const { Others } = useWeb3State()
     const [, copyToClipboard] = useCopyToClipboard()
     const chain = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
 
@@ -40,12 +42,21 @@ export const ContractSection = ({ chainId, address, name, symbol, iconURL }: Con
             ) : (
                 <Box width={16} />
             )}
-            <Typography variant="body2" component="span" fontWeight={700}>
+            <Typography variant="body2" component="span" fontWeight={700} fontSize={14}>
                 <FormattedAddress address={address} size={4} formatter={formatEthereumAddress} />
             </Typography>
             <IconButton sx={{ padding: 0 }} color="primary" size="small" onClick={onCopyAddress}>
                 <Icons.PopupCopy size={16} color={theme.palette.maskColor?.second} />
             </IconButton>
+            {chainId ? (
+                <IconButton
+                    sx={{ padding: 0 }}
+                    color="primary"
+                    size="small"
+                    onClick={() => openWindow(Others?.explorerResolver.addressLink(chainId, address))}>
+                    <Icons.LinkOut size={16} color={theme.palette.maskColor?.second} />
+                </IconButton>
+            ) : null}
         </Stack>
     )
 }
