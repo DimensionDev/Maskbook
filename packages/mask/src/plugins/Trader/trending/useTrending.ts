@@ -22,11 +22,11 @@ import { useCurrentCurrency } from './useCurrentCurrency.js'
 
 const NFTSCAN_CHAIN_ID_LIST = [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
 
-export function useTrendingOverviewByAddress(address: string) {
+export function useTrendingOverview(address: string, expectedChainId?: Web3Helper.ChainIdAll) {
     return useAsync(async () => {
-        if (!address) return null
-        return PluginTraderRPC.getNFT_TrendingOverview(address)
-    }, [address])
+        if (!address || !expectedChainId) return null
+        return PluginTraderRPC.getNFT_TrendingOverview(expectedChainId, address)
+    }, [address, expectedChainId])
 }
 
 export function useCollectionByTwitterHandler(twitterHandler?: string) {

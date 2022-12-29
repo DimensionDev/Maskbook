@@ -26,7 +26,7 @@ import { useI18N } from '../../../../utils/index.js'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin.js'
 import { PluginTransakMessages } from '../../../Transak/messages.js'
 import type { Currency, Stat } from '../../types/index.js'
-import { useTrendingOverviewByAddress } from '../../trending/useTrending.js'
+import { useTrendingOverview } from '../../trending/useTrending.js'
 import { CoinMenu } from './CoinMenu.js'
 import { TrendingViewContext } from './context.js'
 import { CoinIcon } from './components/index.js'
@@ -149,7 +149,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     const { coin, market } = trending
     const { isNFTProjectPopper, isTokenTagPopper, isPreciseSearch } = useContext(TrendingViewContext)
-    const { value: overview } = useTrendingOverviewByAddress(props.trending.coin.address ?? '')
+    const { value: overview } = useTrendingOverview(props.trending.coin.address ?? '', props.trending.coin.chainId)
 
     const { t } = useI18N()
     const theme = useTheme()

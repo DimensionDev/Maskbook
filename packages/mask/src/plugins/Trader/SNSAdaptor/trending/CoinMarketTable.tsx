@@ -6,7 +6,7 @@ import { WalletIcon } from '@masknet/shared'
 import { SourceType, formatInteger, formatMarketCap, formatSupply, TokenType } from '@masknet/web3-shared-base'
 import type { Trending } from '../../types/index.js'
 import { useI18N } from '../../../../utils/index.js'
-import { useTrendingOverviewByAddress } from '../../trending/useTrending.js'
+import { useTrendingOverview } from '../../trending/useTrending.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -137,7 +137,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
 
 export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
     const { t } = useI18N()
-    const { value: overview } = useTrendingOverviewByAddress(props.trending.coin.address ?? '')
+    const { value: overview } = useTrendingOverview(props.trending.coin.address ?? '', props.trending.coin.chainId)
     const { classes } = useStyles()
     const chain = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, props.trending.coin.chainId)
 
