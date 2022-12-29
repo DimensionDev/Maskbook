@@ -1,4 +1,4 @@
-import { isNil } from 'lodash-es'
+import { curryRight, isNil } from 'lodash-es'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { defer } from '@masknet/kit'
 import { SmartPayAccount, Web3 } from '@masknet/web3-providers'
@@ -43,7 +43,9 @@ async function internalSend(
     } = PayloadEditor.fromPayload(payload)
     const owner = options?.owner ?? from!
     const identifier = options?.identifier
-    const signer = identifier ? new Signer(identifier, signWithPersona) : new Signer(owner, signWithWallet)
+    const signer = identifier
+        ? new Signer(identifier, curryRight(signWithPersona)(true))
+        : new Signer(owner, signWithWallet)
 
     switch (payload.method) {
         case EthereumMethodType.ETH_SEND_TRANSACTION:

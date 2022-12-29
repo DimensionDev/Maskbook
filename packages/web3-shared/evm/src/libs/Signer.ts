@@ -1,4 +1,4 @@
-import { ECKeyIdentifier, SignType } from '@masknet/shared-base'
+import { SignType } from '@masknet/shared-base'
 import type { Transaction } from '../types/index.js'
 
 export class Signer<T> {
