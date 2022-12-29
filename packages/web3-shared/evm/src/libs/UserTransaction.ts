@@ -18,6 +18,8 @@ import {
     addGasMargin,
 } from '../helpers/index.js'
 import { getSmartPayConstants } from '../constants/index.js'
+import type { Signer } from './Signer.js'
+import type { ECKeyIdentifier } from '@masknet/shared-base'
 
 const USER_OP_TYPE = {
     userOp: {
@@ -134,8 +136,8 @@ export class UserTransaction {
         )
     }
 
-    async sign(signer: (message: string, userOperation: UserOperation) => Promise<string>) {
-        this.userOperation.signature = await signer(this.requestId, this.toUserOperation())
+    async sign(signer: Signer<ECKeyIdentifier> | Signer<string>) {
+        this.userOperation.signature = await signer.signMessage(this.requestId)
         return this
     }
 

@@ -113,7 +113,7 @@ class RequestContext implements Context {
     }
 
     get message() {
-        return this.payloadEditor.message
+        return this.payloadEditor.signableMessage
     }
 
     get config() {
