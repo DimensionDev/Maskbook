@@ -68,7 +68,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
         )
     }, [pluginID, connection])
 
-    const onSignMessage = useCallback(
+    const onSign = useCallback(
         async (type: string) => {
             const message = 'Hello World'
             const typedData = JSON.stringify({
@@ -115,8 +115,27 @@ export function ConnectionContent(props: ConnectionContentProps) {
                     ],
                 },
             })
-            const signed = await connection?.signMessage(type, type === 'typedData' ? typedData : message)
-            window.alert(`Signed: ${signed}`)
+            const transaction = {
+                chainId: ChainId.Mainnet,
+                from: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+                to: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+                value: '10000',
+            }
+
+            const sign = async () => {
+                switch (type) {
+                    case 'message':
+                        return connection?.signMessage('message', message)
+                    case 'typedData':
+                        return connection?.signMessage('typedData', typedData)
+                    case 'transaction':
+                        return connection?.signTransaction(transaction)
+                    default:
+                        return ''
+                }
+            }
+
+            window.alert(`Signed: ${await sign()}`)
         },
         [chainId, connection],
     )
@@ -207,13 +226,13 @@ export function ConnectionContent(props: ConnectionContentProps) {
                                 onClick={() => {
                                     switch (pluginID) {
                                         case NetworkPluginID.PLUGIN_EVM:
-                                            onSignMessage('message')
+                                            onSign('message')
                                             break
                                         default:
                                             break
                                     }
                                 }}>
-                                Sign Message
+                                Sign
                             </Button>
                         </TableCell>
                     </TableRow>
@@ -229,13 +248,35 @@ export function ConnectionContent(props: ConnectionContentProps) {
                                 onClick={() => {
                                     switch (pluginID) {
                                         case NetworkPluginID.PLUGIN_EVM:
-                                            onSignMessage('typedData')
+                                            onSign('typedData')
                                             break
                                         default:
                                             break
                                     }
                                 }}>
-                                Sign Typed Data
+                                Sign
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Sign Transaction
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button
+                                size="small"
+                                onClick={() => {
+                                    switch (pluginID) {
+                                        case NetworkPluginID.PLUGIN_EVM:
+                                            onSign('transaction')
+                                            break
+                                        default:
+                                            break
+                                    }
+                                }}>
+                                Sign
                             </Button>
                         </TableCell>
                     </TableRow>
