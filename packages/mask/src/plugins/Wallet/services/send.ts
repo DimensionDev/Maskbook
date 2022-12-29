@@ -41,7 +41,7 @@ async function internalSend(
         signableMessage,
         signableConfig,
     } = PayloadEditor.fromPayload(payload)
-    const owner = options?.owner ?? from!
+    const owner = options?.owner || from!
     const identifier = options?.identifier
     const signer = identifier
         ? new Signer(identifier, curryRight(signWithPersona)(true))

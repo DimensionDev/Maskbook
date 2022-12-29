@@ -117,9 +117,13 @@ export function ConnectionContent(props: ConnectionContentProps) {
             })
             const transaction = {
                 chainId: ChainId.Mainnet,
-                from: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+                from: '0x66b57885E8E9D84742faBda0cE6E3496055b012d',
                 to: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
-                value: '10000',
+                value: '0x1000',
+                gas: '0x5208',
+                gasPrice: '0x174876e800',
+                nonce: 0,
+                data: '0x',
             }
 
             const sign = async () => {

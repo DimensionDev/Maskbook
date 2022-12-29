@@ -1,6 +1,6 @@
 import { first } from 'lodash-es'
 import { AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
-import type { RequestArguments, SignedTransaction, TransactionReceipt } from 'web3-core'
+import type { RequestArguments, TransactionReceipt } from 'web3-core'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { getSubscriptionCurrentValue, PartialRequired } from '@masknet/shared-base'
@@ -891,14 +891,13 @@ class Connection implements EVM_Connection {
 
     async signTransaction(transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
-        const signed = await this.hijackedRequest<SignedTransaction>(
+        return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SIGN_TRANSACTION,
                 params: [transaction],
             },
             options,
         )
-        return signed.rawTransaction ?? ''
     }
 
     signTransactions(transactions: Transaction[], initial?: EVM_Web3ConnectionOptions) {
