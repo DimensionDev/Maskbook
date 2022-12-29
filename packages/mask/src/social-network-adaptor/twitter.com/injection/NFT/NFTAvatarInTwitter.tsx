@@ -236,10 +236,11 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
             if (!nftAvatar?.tokenId || !nftAvatar?.address) return
             event.stopPropagation()
             event.preventDefault()
+            if (!nftAvatar.pluginId || !nftAvatar.chainId) return
             CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
                 open: true,
-                pluginID: nftAvatar.pluginId ?? NetworkPluginID.PLUGIN_EVM,
-                chainId: nftAvatar.chainId ?? ChainId.Mainnet,
+                pluginID: nftAvatar.pluginId,
+                chainId: nftAvatar.chainId,
                 tokenId: nftAvatar.tokenId,
                 tokenAddress: nftAvatar.address,
                 ownerAddress: nftAvatar.ownerAddress,
