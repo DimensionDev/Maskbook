@@ -148,12 +148,17 @@ export function NonFungibleTickersTable({
                 ),
                 value: (
                     <div className={classes.cellWrapper}>
-                        <TokenIcon
-                            logoURL={x.trade_token_logo}
-                            symbol={x.trade_symbol}
-                            address={x.contract_address}
-                            className={classes.tokenIcon}
-                        />
+                        {x.trade_symbol.toUpperCase() === 'WETH' ? (
+                            <Icons.WETH size={16} className={classes.tokenIcon} />
+                        ) : (
+                            <TokenIcon
+                                logoURL={x.trade_token_logo}
+                                symbol={x.trade_symbol}
+                                address={x.contract_address}
+                                className={classes.tokenIcon}
+                            />
+                        )}
+
                         <Typography fontSize={12}>
                             {formatCurrency(x.trade_price.toFixed(2), '', { boundaries: { min: 0.0001 } })}
                         </Typography>
