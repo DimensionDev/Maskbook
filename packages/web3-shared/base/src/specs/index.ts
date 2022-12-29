@@ -1051,12 +1051,12 @@ export interface Connection<
     /** Switch to sub network */
     switchChain?: (chainId: ChainId, initial?: Web3ConnectionOptions) => Promise<void>
     /** Sign message */
-    signMessage(dataToSign: string, signType?: string, initial?: Web3ConnectionOptions): Promise<Signature>
+    signMessage(type: string, message: string, initial?: Web3ConnectionOptions): Promise<Signature>
     /** Verify message */
     verifyMessage(
-        dataToVerify: string,
+        type: string,
+        message: string,
         signature: Signature,
-        signType?: string,
         initial?: Web3ConnectionOptions,
     ): Promise<boolean>
     /** Approve a recipient for using a fungible token. */

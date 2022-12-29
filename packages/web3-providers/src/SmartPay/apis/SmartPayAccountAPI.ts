@@ -5,6 +5,7 @@ import {
     ChainId,
     ContractWallet,
     Create2Factory,
+    Signer,
     Transaction,
     UserOperation,
     UserTransaction,
@@ -13,7 +14,7 @@ import {
     isEmptyHex,
     isValidAddress,
 } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
@@ -217,7 +218,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
     }
 
-    async deploy(chainId: ChainId, owner: string, signer: AbstractAccountAPI.Signer): Promise<string> {
+    async deploy(chainId: ChainId, owner: string, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {
         if (!isValidAddress(owner)) throw new Error('Invalid owner address.')
 
         const initCode = await this.getInitCode(chainId, owner)
@@ -242,7 +243,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         sender: string,
         recipient: string,
         amount: string,
-        signer: AbstractAccountAPI.Signer,
+        signer: Signer<ECKeyIdentifier> | Signer<string>,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -252,7 +253,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         owner: string,
         sender: string,
         recipient: string,
-        signer: AbstractAccountAPI.Signer,
+        signer: Signer<ECKeyIdentifier> | Signer<string>,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -264,7 +265,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         chainId: ChainId,
         owner: string,
         userTransaction: UserTransaction,
-        signer: AbstractAccountAPI.Signer,
+        signer: Signer<ECKeyIdentifier> | Signer<string>,
     ) {
         // fill in initCode
         if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
@@ -289,7 +290,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         chainId: ChainId,
         owner: string,
         transaction: Transaction,
-        signer: AbstractAccountAPI.Signer,
+        signer: Signer<ECKeyIdentifier> | Signer<string>,
     ): Promise<string> {
         const userTransaction = await UserTransaction.fromTransaction(
             chainId,
@@ -304,7 +305,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         chainId: ChainId,
         owner: string,
         userOperation: UserOperation,
-        signer: AbstractAccountAPI.Signer,
+        signer: Signer<ECKeyIdentifier> | Signer<string>,
     ): Promise<string> {
         const userTransaction = await UserTransaction.fromUserOperation(
             chainId,

@@ -1,7 +1,8 @@
 import { useCallback } from 'react'
+import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import { useWeb3Connection, useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
     ChainId,
@@ -11,7 +12,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import { ChainId as SolanaChainId, ProviderType as SolanaProviderType } from '@masknet/web3-shared-solana'
 import { ChainId as FlowChainId, ProviderType as FlowProviderType } from '@masknet/web3-shared-flow'
-import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 
 export interface ConnectionContentProps {
     onClose?: () => void
@@ -68,8 +68,8 @@ export function ConnectionContent(props: ConnectionContentProps) {
         )
     }, [pluginID, connection])
 
-    const onSignMessage = useCallback(
-        async (type?: string) => {
+    const onSign = useCallback(
+        async (type: string) => {
             const message = 'Hello World'
             const typedData = JSON.stringify({
                 domain: {
@@ -115,8 +115,27 @@ export function ConnectionContent(props: ConnectionContentProps) {
                     ],
                 },
             })
-            const signed = await connection?.signMessage(type === 'typedDataSign' ? typedData : message, type)
-            window.alert(`Signed: ${signed}`)
+            const transaction = {
+                chainId: ChainId.Mainnet,
+                from: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+                to: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+                value: '10000',
+            }
+
+            const sign = async () => {
+                switch (type) {
+                    case 'message':
+                        return connection?.signMessage('message', message)
+                    case 'typedData':
+                        return connection?.signMessage('typedData', typedData)
+                    case 'transaction':
+                        return connection?.signTransaction(transaction)
+                    default:
+                        return ''
+                }
+            }
+
+            window.alert(`Signed: ${await sign()}`)
         },
         [chainId, connection],
     )
@@ -207,14 +226,13 @@ export function ConnectionContent(props: ConnectionContentProps) {
                                 onClick={() => {
                                     switch (pluginID) {
                                         case NetworkPluginID.PLUGIN_EVM:
-                                            onSignMessage('personalSign')
+                                            onSign('message')
                                             break
                                         default:
-                                            onSignMessage()
                                             break
                                     }
                                 }}>
-                                Sign Message
+                                Sign
                             </Button>
                         </TableCell>
                     </TableRow>
@@ -230,13 +248,35 @@ export function ConnectionContent(props: ConnectionContentProps) {
                                 onClick={() => {
                                     switch (pluginID) {
                                         case NetworkPluginID.PLUGIN_EVM:
-                                            onSignMessage('typedDataSign')
+                                            onSign('typedData')
                                             break
                                         default:
                                             break
                                     }
                                 }}>
-                                Sign Typed Data
+                                Sign
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Sign Transaction
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button
+                                size="small"
+                                onClick={() => {
+                                    switch (pluginID) {
+                                        case NetworkPluginID.PLUGIN_EVM:
+                                            onSign('transaction')
+                                            break
+                                        default:
+                                            break
+                                    }
+                                }}>
+                                Sign
                             </Button>
                         </TableCell>
                     </TableRow>

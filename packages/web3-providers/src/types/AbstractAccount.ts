@@ -1,5 +1,6 @@
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { Signer } from '@masknet/web3-shared-evm'
 
 export namespace AbstractAccountAPI {
     export interface AbstractAccount<T extends NetworkPluginID, ChainId = Web3Helper.Definition[T]['ChainId']> {
@@ -14,8 +15,6 @@ export namespace AbstractAccountAPI {
         /** Has funded by sponsor */
         funded: boolean
     }
-
-    export type Signer = (message: string) => Promise<string>
 
     /**
      *  select *
@@ -49,7 +48,7 @@ export namespace AbstractAccountAPI {
         /** Get all available accounts owned by the owners. */
         getAccountsByOwners(chainId: ChainId, owners: string[]): Promise<Array<AbstractAccount<T>>>
         /** Deploy a new account. */
-        deploy(chainId: ChainId, owner: string, signer: Signer): Promise<string>
+        deploy(chainId: ChainId, owner: string, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string>
         /** Transfer some native tokens to recipient. */
         transfer(
             chainId: ChainId,
@@ -57,18 +56,29 @@ export namespace AbstractAccountAPI {
             sender: string,
             recipient: string,
             amount: string,
-            signer: Signer,
+            signer: Signer<ECKeyIdentifier> | Signer<string>,
         ): Promise<string>
         /** Change account ownership to a new owner. */
-        changeOwner(chainId: ChainId, owner: string, sender: string, recipient: string, signer: Signer): Promise<string>
+        changeOwner(
+            chainId: ChainId,
+            owner: string,
+            sender: string,
+            recipient: string,
+            signer: Signer<ECKeyIdentifier> | Signer<string>,
+        ): Promise<string>
         /** Send a transaction by the account. */
-        sendTransaction(chainId: ChainId, owner: string, transaction: Transaction, signer: Signer): Promise<string>
+        sendTransaction(
+            chainId: ChainId,
+            owner: string,
+            transaction: Transaction,
+            signer: Signer<ECKeyIdentifier> | Signer<string>,
+        ): Promise<string>
         /** Send a user operation by the account. */
         sendUserOperation(
             chainId: ChainId,
             owner: string,
             userOperation: UserOperation,
-            signer: Signer,
+            signer: Signer<ECKeyIdentifier> | Signer<string>,
         ): Promise<string>
     }
 }
