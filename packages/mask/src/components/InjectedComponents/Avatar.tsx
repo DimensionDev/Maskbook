@@ -3,7 +3,7 @@ import { useSocialAccountsAll } from '@masknet/web3-hooks-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useSocialIdentityByUseId } from '../DataSource/useActivatedUI.js'
+import { useSocialIdentityByUserId } from '../DataSource/useActivatedUI.js'
 import { useMemo } from 'react'
 
 const useStyles = makeStyles()(() => ({
@@ -19,7 +19,7 @@ export function Avatar(props: AvatarProps) {
     const { userId, sourceType } = props
     const { classes } = useStyles()
 
-    const { value: identity } = useSocialIdentityByUseId(userId)
+    const { value: identity } = useSocialIdentityByUserId(userId)
     const { value: socialAccounts = EMPTY_LIST, loading: loadingSocialAccounts } = useSocialAccountsAll(identity)
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
