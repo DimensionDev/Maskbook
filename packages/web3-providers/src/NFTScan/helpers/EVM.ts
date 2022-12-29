@@ -24,10 +24,11 @@ import {
     createContract,
     getRPCConstants,
     isENSContractAddress,
+    isValidDomain,
     SchemaType,
     WNATIVE,
 } from '@masknet/web3-shared-evm'
-import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL, NFTSCAN_API, NFTSCAN_RESTFUL_API } from '../constants.js'
+import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL, NFTSCAN_API } from '../constants.js'
 import type { EVM } from '../types/EVM.js'
 import { getAssetFullName } from '../../helpers/getAssetFullName.js'
 import { resolveActivityType } from '../../helpers/resolveActivityType.js'
@@ -56,50 +57,20 @@ export function resolveNFTScanHostName(chainId: Web3Helper.ChainIdAll) {
     }
 }
 
-export async function fetchFromNFTScanV2<T>(chainId: Web3Helper.ChainIdAll, pathname: string, init?: RequestInit) {
-    const host = resolveNFTScanHostName(chainId)
-    if (!host) return
-
+export async function fetchFromNFTScanV2<T>(
+    chainId: Web3Helper.ChainIdAll | undefined,
+    pathname: string,
+    init?: RequestInit,
+) {
     const response = await fetch(urlcat(NFTSCAN_URL, pathname), {
         ...init,
         headers: {
             'content-type': 'application/json',
             ...init?.headers,
-            'x-app-chainid': chainId.toString(),
+            ...(chainId ? { 'x-app-chainid': chainId.toString() } : {}),
         },
         cache: 'no-cache',
     })
-    const json = await response.json()
-    return json as T
-}
-
-export async function postNFTScanRestFulAPI<T>(pathname: string, body: string, init?: RequestInit) {
-    const response = await fetch(urlcat(NFTSCAN_RESTFUL_API, pathname), {
-        ...init,
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json',
-            ...init?.headers,
-        },
-        cache: 'no-cache',
-        body,
-    })
-
-    const json = await response.json()
-    return json as T
-}
-
-export async function fetchFromNFTScanRestFulAPI<T>(pathname: string, init?: RequestInit) {
-    const response = await fetch(urlcat(NFTSCAN_RESTFUL_API, pathname), {
-        ...init,
-        method: 'GET',
-        headers: {
-            'content-type': 'application/json',
-            ...init?.headers,
-        },
-        cache: 'no-cache',
-    })
-
     const json = await response.json()
     return json as T
 }
@@ -232,7 +203,9 @@ export function createNonFungibleAsset(
             : undefined,
         metadata: {
             chainId,
-            name: getAssetFullName(asset.contract_address, contractName, payload?.name || asset.name, asset.token_id),
+            name: isValidDomain(asset.name)
+                ? asset.name
+                : getAssetFullName(asset.contract_address, contractName, payload?.name || asset.name, asset.token_id),
             symbol,
             description,
             imageURL: mediaURL,

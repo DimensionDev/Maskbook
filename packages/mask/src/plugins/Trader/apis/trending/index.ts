@@ -70,8 +70,8 @@ export async function getNFT_TrendingOverview(id: string): Promise<NonFungibleCo
 export async function getNonFungibleTokenActivities(
     chainId: Web3Helper.ChainIdAll,
     contractAddress: string,
-    pageIndex: number,
-): Promise<NonFungibleTokenActivity[] | undefined> {
-    return NFTScanTrending.getCoinActivities(chainId, contractAddress, pageIndex)
+    cursor: string,
+): Promise<{ content: NonFungibleTokenActivity[]; cursor: string } | undefined> {
+    return NFTScanTrending.getCoinActivities(chainId, contractAddress, cursor)
 }
 // #endregion

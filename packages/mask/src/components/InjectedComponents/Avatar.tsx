@@ -3,7 +3,7 @@ import { useSocialAccountsAll } from '@masknet/web3-hooks-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import type { SocialIdentity } from '@masknet/web3-shared-base'
+import { useSocialIdentityByUseId } from '../DataSource/useActivatedUI.js'
 import { useMemo } from 'react'
 
 const useStyles = makeStyles()(() => ({
@@ -11,16 +11,16 @@ const useStyles = makeStyles()(() => ({
 }))
 
 interface AvatarProps {
-    identity: SocialIdentity
+    userId: string
     sourceType?: Plugin.SNSAdaptor.AvatarRealmSourceType
 }
 
 export function Avatar(props: AvatarProps) {
-    const { identity, sourceType } = props
+    const { userId, sourceType } = props
     const { classes } = useStyles()
 
+    const { value: identity } = useSocialIdentityByUseId(userId)
     const { value: socialAccounts = EMPTY_LIST, loading: loadingSocialAccounts } = useSocialAccountsAll(identity)
-
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
             useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
@@ -31,7 +31,7 @@ export function Avatar(props: AvatarProps) {
             },
         )
 
-        return <Component identity={identity} socialAccounts={socialAccounts} />
+        return <Component identity={identity} socialAccounts={socialAccounts} userId={userId} />
     }, [identity, socialAccounts, sourceType])
 
     if (loadingSocialAccounts || !component) return null

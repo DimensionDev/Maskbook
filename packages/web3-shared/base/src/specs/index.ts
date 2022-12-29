@@ -420,6 +420,8 @@ export interface NonFungibleCollectionOverview {
     highest_price?: number
     volume_24h?: number
     average_price_24h?: number
+    average_price_change_1d: string
+    average_price_change_7d: string
     sales_24h?: number
     owners_total?: number
     total_volume?: number
@@ -427,18 +429,19 @@ export interface NonFungibleCollectionOverview {
 }
 
 export interface NonFungibleTokenActivity {
-    transaction_hash: string
-    transaction_method: ActivityType
-    transactionLink: string
-    transaction_time: number
-    tx_value: number
-    from_address: string
-    to_address: string
+    hash: string
+    event_type: ActivityType
+    transaction_link: string
+    timestamp: number
+    nftscan_uri: string
+    trade_price: number
+    from: string
+    to: string
     cover: string
-    contract: string
+    contract_address: string
     token_id: string
-    tradeToken: string
-    tradeTokenLogo: string
+    trade_token_logo: string
+    trade_symbol: string
 }
 
 export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {
@@ -623,6 +626,8 @@ export interface Result<ChainId> {
     type: SearchResultType
     /** The original searched keyword */
     keyword: string
+    /** alias name list, e.g. binance for bnb. */
+    alias?: string[]
 }
 
 export interface EOAResult<ChainId> extends Result<ChainId> {

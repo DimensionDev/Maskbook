@@ -14,7 +14,6 @@ describe('DSearch test', () => {
             name: 'eth1',
             symbol: 'eth',
             type: 'FungibleToken',
-            keyword: 'eth',
             pluginID: 'com.mask.evm',
         })
     })

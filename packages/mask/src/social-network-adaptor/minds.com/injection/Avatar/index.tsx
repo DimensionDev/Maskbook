@@ -13,8 +13,8 @@ export async function injectAvatar(signal: AbortSignal) {
             const run = async () => {
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
                 proxy.realCurrent = ele.firstChild as HTMLElement
-                // TODO fetch identity
-                const identity = {}
+                // TODO fetch userId
+                const userId = ''
 
                 const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
                 root.render(
@@ -27,8 +27,8 @@ export async function injectAvatar(signal: AbortSignal) {
                             height: '100%',
                             zIndex: 2,
                         }}>
-                        {identity ? (
-                            <Avatar identity={identity} sourceType={Plugin.SNSAdaptor.AvatarRealmSourceType.Post} />
+                        {userId ? (
+                            <Avatar userId={userId} sourceType={Plugin.SNSAdaptor.AvatarRealmSourceType.Post} />
                         ) : null}
                     </div>,
                 )

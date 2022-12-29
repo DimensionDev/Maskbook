@@ -13,15 +13,15 @@ import { COIN_RECOMMENDATION_SIZE } from '../../Trending/constants.js'
 import type { EVM, Response } from '../types/index.js'
 import {
     fetchFromNFTScanV2,
-    fetchFromNFTScanRestFulAPI,
     getContractSymbol,
-    fetchFromNFTScanWebAPI,
     resolveNFTScanHostName,
+    createNonFungibleAsset,
 } from '../helpers/EVM.js'
 import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
 import { LooksRareLogo, OpenSeaLogo } from '../../Resources/index.js'
 import { TrendingAPI, NonFungibleTokenAPI } from '../../entry-types.js'
+import { getPaymentToken } from '../../entry-helpers.js'
 
 enum NonFungibleMarketplace {
     OpenSea = 'OpenSea',
@@ -77,30 +77,59 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         const path = urlcat('/api/v2/statistics/collection/:address', {
             address,
         })
-        const response = await fetchFromNFTScanRestFulAPI<Response<NonFungibleCollectionOverview>>(path)
+        const response = await fetchFromNFTScanV2<Response<NonFungibleCollectionOverview>>(undefined, path)
         if (!response?.data) return
         return response.data
+    }
+
+    async getAssetsBatch(chainId: Web3Helper.ChainIdAll, list: Array<{ contract_address: string; token_id: string }>) {
+        const path = urlcat('/api/v2/assets/batch', {})
+        const response = await fetchFromNFTScanV2<Response<EVM.Asset[]>>(undefined, path, {
+            method: 'POST',
+            body: JSON.stringify({
+                contract_address_with_token_id_list: list,
+            }),
+        })
+        if (!response?.data) return
+        return response.data.map((x) => createNonFungibleAsset(chainId as ChainId, x))
     }
 
     async getCoinActivities(
         chainId: Web3Helper.ChainIdAll,
         contractAddress: string,
-        pageIndex: number,
-    ): Promise<NonFungibleTokenActivity[] | undefined> {
-        const path = urlcat('/nftscan/getTransactionByNftContract', {
+        cursor: string,
+    ): Promise<{ content: NonFungibleTokenActivity[]; cursor: string } | undefined> {
+        const path = urlcat('/api/v2/transactions/:contract', {
             contract: contractAddress,
-            filterType: 'all',
-            pageIndex,
-            pageSize: 20,
+            cursor,
+            limit: 50,
         })
-        const response = await fetchFromNFTScanWebAPI<
-            Response<{ nft_tx_record: NonFungibleTokenActivity[]; nft_tx_total: number }>
-        >(chainId, path)
-        if (!response?.data?.nft_tx_record) return
-        return response.data.nft_tx_record.map((x) => ({
-            ...x,
-            transactionLink: `${resolveNFTScanHostName(chainId)}/${x.transaction_hash}`,
+        const response = await fetchFromNFTScanV2<Response<{ content: NonFungibleTokenActivity[]; next: string }>>(
+            chainId,
+            path,
+        )
+
+        if (!response?.data?.content) return
+
+        const batchQueryList = response?.data?.content.map((x) => ({
+            contract_address: x.contract_address,
+            token_id: x.token_id,
         }))
+
+        const assetsBatchResponse = await this.getAssetsBatch(chainId, batchQueryList)
+
+        return {
+            cursor: response.data.next,
+            content: response.data.content.map((x) => {
+                const asset = assetsBatchResponse?.find((y) => y.tokenId === x.token_id)
+                return {
+                    ...x,
+                    nftscan_uri: asset?.metadata?.imageURL ?? '',
+                    transaction_link: `${resolveNFTScanHostName(chainId)}/${x.hash}`,
+                    trade_token_logo: getPaymentToken(chainId, { symbol: x.trade_symbol })?.logoURL ?? '',
+                }
+            }),
+        }
     }
 
     private async getCollectionTrending(
@@ -206,7 +235,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                 type: TokenType.NonFungible,
                 description: collection.description,
                 image_url: collection.logo_url,
-                home_urls: compact([`${resolveNFTScanHostName(chainId)}/${address}`, collection.website]),
+                home_urls: compact([collection.website]),
                 community_urls: [
                     {
                         type: 'twitter',
