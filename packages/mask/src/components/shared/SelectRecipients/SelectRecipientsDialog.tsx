@@ -36,6 +36,7 @@ const useStyles = makeStyles()((theme) => ({
     paper: {
         height: 450,
         position: 'relative',
+        padding: theme.spacing(2),
     },
     empty: {
         position: 'absolute',
