@@ -44,6 +44,7 @@
     "@masknet/web3-shared-flow": "workspace:^",
     "@masknet/web3-shared-solana": "workspace:^",
     "@metaplex-foundation/mpl-token-metadata": "^1.1.0",
+    "@metamask/eth-sig-util": "^4.0.0",
     "@metaplex/js": "^4.11.7",
     "@siddomains/sidjs": "^0.1.16",
     "@solana/buffer-layout": "^4.0.0",

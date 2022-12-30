@@ -17,7 +17,7 @@ export class PayloadEditor {
         return typeof id === 'string' ? Number.parseInt(id, 10) : id
     }
 
-    get from() {
+    get from(): string | undefined {
         const { method, params } = this.payload
         switch (method) {
             case EthereumMethodType.ETH_SIGN:
@@ -44,14 +44,10 @@ export class PayloadEditor {
             case EthereumMethodType.ETH_CALL:
             case EthereumMethodType.ETH_ESTIMATE_GAS:
             case EthereumMethodType.ETH_SIGN_TRANSACTION:
-            case EthereumMethodType.ETH_SEND_TRANSACTION: {
-                const [config] = params as [Transaction]
-                return config
-            }
-            case EthereumMethodType.MASK_REPLACE_TRANSACTION: {
-                const [, config] = params as [string, Transaction]
-                return config
-            }
+            case EthereumMethodType.ETH_SEND_TRANSACTION:
+                return (params as [Transaction])[0]
+            case EthereumMethodType.MASK_REPLACE_TRANSACTION:
+                return (params as [string, Transaction])[1]
             default:
                 return
         }
@@ -64,6 +60,20 @@ export class PayloadEditor {
             case EthereumMethodType.ETH_SEND_USER_OPERATION:
                 const [_, userOperation] = params as [string, UserOperation]
                 return userOperation
+            default:
+                return
+        }
+    }
+
+    get signableMessage() {
+        const { method, params } = this.payload
+        switch (method) {
+            case EthereumMethodType.ETH_SIGN:
+                return (params as [string, string])[1]
+            case EthereumMethodType.PERSONAL_SIGN:
+                return (params as [string, string])[0]
+            case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+                return (params as [string, string])[1]
             default:
                 return
         }
@@ -97,6 +107,7 @@ export class PayloadEditor {
             EthereumMethodType.ETH_DECRYPT,
             EthereumMethodType.ETH_GET_ENCRYPTION_PUBLIC_KEY,
             EthereumMethodType.ETH_SEND_TRANSACTION,
+            EthereumMethodType.ETH_SIGN_TRANSACTION,
             EthereumMethodType.MASK_REPLACE_TRANSACTION,
         ].includes(method as EthereumMethodType)
     }

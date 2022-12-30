@@ -55,6 +55,7 @@ export interface Context {
      */
     readonly response?: JsonRpcResponse
 
+    message?: string
     config?: Transaction
     userOperation?: UserOperation
     requestArguments: RequestArguments

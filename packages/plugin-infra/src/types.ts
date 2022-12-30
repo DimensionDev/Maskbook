@@ -19,8 +19,7 @@ import type {
     DashboardRoutes,
     ProfileIdentifier,
     ScopedStorage,
-    PersonaSignRequest,
-    PersonaSignResult,
+    SignType,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -38,7 +37,7 @@ import type {
     Web3State,
     Web3UI,
 } from '@masknet/web3-shared-base'
-import type { ChainId as ChainIdEVM, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
+import type { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { CompositionType } from './entry-content-script.js'
 
@@ -205,23 +204,11 @@ export namespace Plugin.Shared {
         /** Record which sites are connected to the Mask wallet  */
         recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): void
 
-        /** Sign a message with persona (with popups) */
-        signWithPersona<T>(payload: PersonaSignRequest<T>): Promise<PersonaSignResult>
+        /** Sign a message with persona (w or w/o popups) */
+        signWithPersona<T>(type: SignType, message: T, identifier?: ECKeyIdentifier, silent?: boolean): Promise<string>
 
-        generateSignResult<T>(
-            method: PersonaSignRequest<T>['method'],
-            signer: ECKeyIdentifier,
-            message: string,
-        ): Promise<PersonaSignResult>
-
-        /** Sign transaction */
-        signTransaction(address: string, transaction: TransactionEVM): Promise<string>
-
-        /** Sign personal message, aka. eth.personal.sign() */
-        signPersonalMessage(message: string, address: string): Promise<string>
-
-        /** Sign typed data */
-        signTypedData(address: string, message: string): Promise<string>
+        /** Sign a message with wallet */
+        signWithWallet<T>(type: SignType, message: T, account?: string): Promise<string>
 
         /** Get all wallets */
         getWallets(): Promise<Wallet[]>

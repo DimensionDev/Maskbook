@@ -1,7 +1,7 @@
 import { memo, useEffect, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router-dom'
-import { EnhanceableSite, NextIDAction, PopupRoutes } from '@masknet/shared-base'
+import { EnhanceableSite, NextIDAction, PopupRoutes, SignType } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID } from '@masknet/shared'
 import { usePopupCustomSnackbar } from '@masknet/theme'
@@ -58,10 +58,11 @@ const AccountDetail = memo(() => {
 
             if (!result) return
 
-            const signature = await Service.Identity.generateSignResult(
-                'message',
-                currentPersona.identifier,
+            const signature = await Service.Identity.signWithPersona(
+                SignType.Message,
                 result.signPayload,
+                currentPersona.identifier,
+                true,
             )
 
             if (!signature) return
@@ -72,7 +73,7 @@ const AccountDetail = memo(() => {
                 selectedAccount.platform,
                 selectedAccount.identity,
                 result.createdAt,
-                { signature: signature.signature },
+                { signature },
             )
 
             await Service.Identity.detachProfile(selectedAccount.identifier)

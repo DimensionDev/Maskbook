@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import { memo, useEffect } from 'react'
 import { useAsync, useAsyncFn, useLocation } from 'react-use'
 import { useNavigate } from 'react-router-dom'
-import { NextIDAction, NextIDPlatform, PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
+import { NextIDAction, NextIDPlatform, PopupRoutes, NetworkPluginID, SignType } from '@masknet/shared-base'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { Account, isSameAddress } from '@masknet/web3-shared-base'
@@ -88,13 +88,14 @@ const VerifyWallet = memo(() => {
     const [{ value: signature }, personaSilentSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.identifier) return
         try {
-            const signResult = await Services.Identity.generateSignResult(
-                'message',
-                currentPersona.identifier,
+            const signature = await Services.Identity.signWithPersona(
+                SignType.Message,
                 payload.signPayload,
+                currentPersona.identifier,
+                true,
             )
             showSnackbar(t('popups_verify_persona_sign_success'), { variant: 'success' })
-            return signResult.signature
+            return signature
         } catch (error) {
             showSnackbar(t('popups_verify_persona_sign_failed'), { variant: 'error' })
             console.error(error)
@@ -105,13 +106,13 @@ const VerifyWallet = memo(() => {
     const [{ value: walletSignState }, walletSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.identifier.publicKeyAsHex) return false
         try {
-            const walletSignature = await connection?.signMessage(payload.signPayload, 'personalSign', {
+            const walletSignature = await connection?.signMessage('message', payload.signPayload, {
                 chainId: wallet.chainId,
                 account: wallet.account,
                 providerType: wallet.providerType,
             })
-
             if (!walletSignature) throw new Error('Wallet sign failed')
+
             await NextIDProof.bindProof(
                 payload.uuid,
                 currentPersona.identifier.publicKeyAsHex,

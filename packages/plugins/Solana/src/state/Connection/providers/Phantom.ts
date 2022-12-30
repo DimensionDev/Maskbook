@@ -15,14 +15,14 @@ export class PhantomProvider extends BaseInjectedProvider implements SolanaProvi
         })
     }
 
-    override async signMessage(dataToSign: string) {
+    override async signMessage(message: string) {
         const { signature } = await this.bridge.request<{
             publicKey: string
             signature: string
         }>({
             method: PhantomMethodType.SIGN_MESSAGE,
             params: {
-                message: new TextEncoder().encode(dataToSign),
+                message: new TextEncoder().encode(message),
                 display: 'hex',
             },
         })

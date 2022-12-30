@@ -200,15 +200,12 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
                 const [config] = requestArguments.params as [ITxData]
                 return this.connector.signTransaction(config) as Promise<T>
             }
-            case EthereumMethodType.PERSONAL_SIGN: {
+            case EthereumMethodType.PERSONAL_SIGN:
                 return this.connector.signPersonalMessage(requestArguments.params) as Promise<T>
-            }
-            case EthereumMethodType.ETH_SIGN: {
+            case EthereumMethodType.ETH_SIGN:
                 return this.connector.signMessage(requestArguments.params) as Promise<T>
-            }
-            case EthereumMethodType.ETH_SIGN_TYPED_DATA: {
+            case EthereumMethodType.ETH_SIGN_TYPED_DATA:
                 return this.connector.signTypedData(requestArguments.params) as Promise<T>
-            }
             default:
                 return this.connector.sendCustomRequest(requestArguments)
         }

@@ -1,6 +1,6 @@
 import { useAsync, useAsyncFn } from 'react-use'
 import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { NetworkPluginID, PersonaInformation } from '@masknet/shared-base'
+import { NetworkPluginID, PersonaInformation, SignType } from '@masknet/shared-base'
 import { useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { AbstractAccountAPI, FunderAPI } from '@masknet/web3-providers/types'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -47,13 +47,7 @@ export function useDeploy(
         let signature: string | undefined
 
         if (signPersona) {
-            signature = (
-                await signWithPersona({
-                    method: 'message',
-                    message: payload,
-                    identifier: signPersona.identifier,
-                })
-            ).signature
+            signature = await signWithPersona(SignType.Message, payload, signPersona.identifier)
         } else if (signWallet) {
             signature = await connection?.signMessage(payload, 'personalSign', {
                 account: signWallet.address,
@@ -71,7 +65,7 @@ export function useDeploy(
         })
 
         if (response.message.walletAddress && onSuccess) {
-            Wallet?.updateWallet(contractAccount.address, {
+            await Wallet?.updateWallet(contractAccount.address, {
                 name: 'Smart Pay',
             })
             onSuccess()

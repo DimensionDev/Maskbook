@@ -1,10 +1,9 @@
 import * as bip39 from 'bip39'
 import { first, last, omit } from 'lodash-es'
 import { toBuffer } from 'ethereumjs-util'
-import { personalSign, signTypedData as signTypedData_, SignTypedDataVersion } from '@metamask/eth-sig-util'
-import { Web3 } from '@masknet/web3-providers'
+import { Web3Signer } from '@masknet/web3-providers'
+import type { SignType } from '@masknet/shared-base'
 import { Wallet, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
-import type { Transaction } from '@masknet/web3-shared-evm'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { MAX_DERIVE_COUNT } from '@masknet/plugin-wallet'
 import * as database from './database/index.js'
@@ -93,32 +92,6 @@ export async function getDerivableAccounts(mnemonic: string, page: number, pageS
         })
     }
     return accounts
-}
-
-export async function signTransaction(address: string, config: Transaction) {
-    const chainId = config.chainId
-    if (!chainId) throw new Error('Invalid chain id.')
-
-    const privateKey = await exportPrivateKey(address)
-    const { rawTransaction } = await Web3.createWeb3(chainId).eth.accounts.signTransaction(config, `0x${privateKey}`)
-    if (!rawTransaction) throw new Error('Failed to sign transaction.')
-
-    return rawTransaction
-}
-
-export async function signPersonalMessage(message: string, address: string, password?: string) {
-    return personalSign({
-        privateKey: toBuffer(`0x${await exportPrivateKey(address, password)}`),
-        data: message,
-    })
-}
-
-export async function signTypedData(address: string, data: string, password?: string) {
-    return signTypedData_({
-        privateKey: toBuffer(`0x${await exportPrivateKey(address, password)}`),
-        data: JSON.parse(data),
-        version: SignTypedDataVersion.V4,
-    })
 }
 
 export async function deriveWallet(name: string) {
@@ -330,4 +303,8 @@ export async function recoverWalletFromKeyStoreJSON(name: string, json: string, 
     })
     if (!created?.account?.address) throw new Error('Failed to create the wallet.')
     return database.addWallet(created.account.address, name, undefined, imported.StoredKey)
+}
+
+export async function signWithWallet<T>(type: SignType, message: T, address: string) {
+    return Web3Signer.sign(type, toBuffer(`0x${await exportPrivateKey(address)}`), message)
 }
