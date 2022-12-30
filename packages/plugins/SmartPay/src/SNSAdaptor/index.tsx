@@ -17,7 +17,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         setupContext(context)
     },
     GlobalInjection: function Component() {
-        const { value: chainId } = useAsync(SmartPayBundler.getSupportedChainId, [])
+        const { value: chainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
         return (
             <SNSAdaptorContext.Provider value={context}>

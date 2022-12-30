@@ -159,7 +159,7 @@ export class ContractWallet implements Middleware<Context> {
                 break
             case EthereumMethodType.ETH_SUPPORTED_CHAIN_IDS:
                 try {
-                    context.write(await this.bundler.getSupportedChainIds())
+                    context.write([await this.bundler.getSupportedChainId()])
                 } catch (error) {
                     context.abort(error)
                 }

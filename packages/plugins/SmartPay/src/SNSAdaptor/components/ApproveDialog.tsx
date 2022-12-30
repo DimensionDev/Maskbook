@@ -47,7 +47,7 @@ export const ApproveMaskDialog = memo(() => {
     const { Others } = useWeb3State()
     const [amount, setAmount] = useState('')
 
-    const { value: chainId } = useAsync(SmartPayBundler.getSupportedChainId, [])
+    const { value: chainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     const maskAddress = Others?.getMaskTokenAddress(chainId)
     const { EP_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)

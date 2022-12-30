@@ -160,7 +160,7 @@ export const SmartPayContent = memo(() => {
     // #endregion
 
     // #region web3 state
-    const { value: chainId } = useAsync(SmartPayBundler.getSupportedChainId, [])
+    const { value: chainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     const { openPopupWindow } = useSNSAdaptorContext()
     const { account } = useChainContext()

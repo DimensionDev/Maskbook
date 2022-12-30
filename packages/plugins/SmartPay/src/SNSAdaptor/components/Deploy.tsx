@@ -122,7 +122,7 @@ export function Deploy({
     const { getPersonaAvatar } = useSNSAdaptorContext()
     const { personaManagers, walletManagers } = useManagers()
 
-    const { value: chainId } = useAsync(SmartPayBundler.getSupportedChainId, [])
+    const { value: chainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     const maskProviderDescriptor = useProviderDescriptor(NetworkPluginID.PLUGIN_EVM, ProviderType.MaskWallet)
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)

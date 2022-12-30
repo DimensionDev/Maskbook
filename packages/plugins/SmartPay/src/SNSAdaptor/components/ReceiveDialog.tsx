@@ -55,7 +55,7 @@ export const ReceiveDialog = memo(() => {
     const [address, setAddress] = useState('')
     const [name, setName] = useState('')
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const { value: chainId } = useAsync(SmartPayBundler.getSupportedChainId, [])
+    const { value: chainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     const { open, closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.receiveDialogEvent, (ev) => {
         if (!ev.open) return

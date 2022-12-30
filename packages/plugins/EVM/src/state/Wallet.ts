@@ -1,4 +1,4 @@
-import { compact, compact } from 'lodash-es'
+import { compact } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
 import { WalletState } from '@masknet/web3-state'

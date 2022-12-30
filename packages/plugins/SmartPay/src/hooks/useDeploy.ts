@@ -20,7 +20,7 @@ export function useDeploy(
     const { Wallet } = useWeb3State()
     const { signWithPersona } = useSNSAdaptorContext()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
-    const { value: chainId } = useAsync(SmartPayBundler.getSupportedChainId, [])
+    const { value: chainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, {
         providerType: ProviderType.MaskWallet,
