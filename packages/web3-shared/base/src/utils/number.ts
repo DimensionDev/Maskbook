@@ -105,5 +105,5 @@ export function toFixed(value: BigNumber.Value = 0, decimalPlaces?: number) {
 
 export function formatInteger(value: BigNumber.Value | null | undefined, fallback?: string | number) {
     if (value === undefined || value === null) return fallback
-    return new BigNumber(value).toFormat(2, 2)
+    return new BigNumber(value).toFormat(0)
 }
