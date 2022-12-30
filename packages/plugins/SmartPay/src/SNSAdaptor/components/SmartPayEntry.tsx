@@ -56,7 +56,7 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
                 hasVerifiedPersona: false,
             }
 
-        // If currentPersona is bound, set the currentPeraona be signer
+        // If currentPersona is bound, set the currentPersona be signer
         if (currentPersona) {
             const isVerifiedPersona = await NextIDProof.queryIsBound(
                 currentPersona.identifier.publicKeyAsHex.toLowerCase(),

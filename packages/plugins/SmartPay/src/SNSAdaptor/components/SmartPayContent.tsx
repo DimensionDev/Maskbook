@@ -267,7 +267,7 @@ export const SmartPayContent = memo(() => {
             },
             transformOrigin: {
                 vertical: 'top',
-                horizontal: 'right',
+                horizontal: 'center',
             },
             MenuListProps: {
                 className: classes.menu,
@@ -337,7 +337,7 @@ export const SmartPayContent = memo(() => {
                             <ImageIcon classes={{ icon: classes.badge }} size={12} icon={polygonDescriptor?.icon} />
                         </Box>
                         <Box display="flex" flexDirection="column" justifyContent="space-between">
-                            <Typography fontSize={16} lineHeight="20px" fontWeight={700}>
+                            <Typography fontSize={16} lineHeight="20px" fontWeight={700} sx={{ display: 'flex' }}>
                                 {current?.name} <Icons.ArrowDrop size={20} onClick={openMenu} />
                                 {menu}
                             </Typography>
