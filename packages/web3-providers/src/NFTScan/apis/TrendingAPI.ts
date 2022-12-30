@@ -238,7 +238,9 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                 type: TokenType.NonFungible,
                 description: collection.description,
                 image_url: collection.logo_url,
-                home_urls: compact([collection.website]),
+                home_urls: compact([
+                    collection.website ? collection.website : `${resolveNFTScanHostName(chainId)}/${address}`,
+                ]),
                 community_urls: [
                     {
                         type: 'twitter',
