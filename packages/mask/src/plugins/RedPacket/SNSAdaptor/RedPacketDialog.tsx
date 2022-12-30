@@ -131,8 +131,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     // just sign out the password if it is lost.
                     if (!connection) return
                     payload.password = await connection.signMessage(
+                        'message',
                         Web3Utils.sha3(payload.sender.message) ?? '',
-                        'personalSign',
                         { account },
                     )
                     payload.password = payload.password!.slice(2)

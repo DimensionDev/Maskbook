@@ -6,6 +6,7 @@ import type { RSS3_KEY_SNS } from '../constants.js'
 import type { AvatarMetaDB, NextIDAvatarMeta } from '../types.js'
 import { useGetNFTAvatar } from './useGetNFTAvatar.js'
 import { getNFTAvatarByUserId } from '../utils/index.js'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 const cache = new LRU<string, NextIDAvatarMeta>({
     max: 500,
@@ -29,7 +30,7 @@ export function usePersonaNFTAvatar(userId: string, avatarId: string, persona: s
             if (nftAvatar) cache.set(key, nftAvatar)
         }
         return cache.get(key)
-    }, [userId, getNFTAvatar, avatarId, activatedSocialNetworkUI.networkIdentifier])
+    }, [userId, persona, snsKey, getNFTAvatar, avatarId, activatedSocialNetworkUI.networkIdentifier])
 }
 
 async function getNFTAvatarForCache(
@@ -47,5 +48,5 @@ async function getNFTAvatarForCache(
     if (avatarMeta.pluginId === NetworkPluginID.PLUGIN_SOLANA) {
         return { imageUrl: '', nickname: '', ...avatarMeta, address: avatarMeta.tokenId }
     }
-    return { imageUrl: '', nickname: '', ...avatarMeta }
+    return { imageUrl: '', nickname: '', pluginId: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet, ...avatarMeta }
 }

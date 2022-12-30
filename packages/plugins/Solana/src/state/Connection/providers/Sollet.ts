@@ -21,8 +21,8 @@ export class SolletProvider extends BaseProvider implements SolanaProvider {
         super()
     }
 
-    override async signMessage(dataToSign: string) {
-        const data = new TextEncoder().encode(dataToSign)
+    override async signMessage(message: string) {
+        const data = new TextEncoder().encode(message)
         const { signature } = await this.solanaProvider.sign(data, 'uft8')
         return base58.encode(signature)
     }

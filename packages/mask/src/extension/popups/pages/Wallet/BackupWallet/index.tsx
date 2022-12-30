@@ -13,7 +13,7 @@ import { useTitle } from '../../../hook/useTitle.js'
 import formatDateTime from 'date-fns/format'
 import { saveFileFromBuffer } from '../../../../../../shared/index.js'
 import { encodeText } from '@masknet/kit'
-import { MimeTypes } from '@masknet/shared-base'
+import { MimeType } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     content: {
@@ -139,7 +139,7 @@ const BackupWallet = memo(() => {
             await saveFileFromBuffer({
                 fileContent: encodeText(JSON.stringify(jsonFile)),
                 fileName: `mask-network-keystore-backup-${now}.json`,
-                mimeType: MimeTypes.JSON,
+                mimeType: MimeType.JSON,
             })
             return true
         } catch (error) {

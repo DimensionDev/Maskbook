@@ -1,8 +1,15 @@
 import { first } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import type { BundlerAPI, AbstractAccountAPI } from '@masknet/web3-providers/types'
-import type { NetworkPluginID } from '@masknet/shared-base'
-import { createContract, EthereumMethodType, isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, SignType } from '@masknet/shared-base'
+import {
+    createContract,
+    EthereumMethodType,
+    isValidAddress,
+    ProviderType,
+    Signer,
+    Transaction,
+} from '@masknet/web3-shared-evm'
 import { Web3 } from '@masknet/web3-providers'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
@@ -48,20 +55,29 @@ export class ContractWallet implements Middleware<Context> {
         const { owner, identifier } = this.getOwner(context)
         if (!owner) throw new Error('Failed to sign user operation.')
 
-        return async (message: string) => {
-            if (identifier) {
-                const { signature } = await SharedContextSettings.value.signWithPersona({
-                    method: 'message',
-                    message,
-                    identifier,
-                })
-                return signature
-            }
-            return context.connection.signMessage(message, 'personalSign', {
-                account: owner,
-                providerType: this.providerType,
-            })
-        }
+        return identifier
+            ? new Signer(identifier, SharedContextSettings.value.signWithPersona)
+            : new Signer(owner, (type: SignType, message: string | Transaction, account: string) => {
+                  switch (type) {
+                      case SignType.Message:
+                          return context.connection.signMessage('message', message as string, {
+                              account,
+                              providerType: this.providerType,
+                          })
+                      case SignType.TypedData:
+                          return context.connection.signMessage('typedData', message as string, {
+                              account,
+                              providerType: this.providerType,
+                          })
+                      case SignType.Transaction:
+                          return context.connection.signTransaction(message as Transaction, {
+                              account,
+                              providerType: this.providerType,
+                          })
+                      default:
+                          throw new Error('Unknown sign method.')
+                  }
+              })
     }
 
     private async sendUserOperation(context: Context, op = context.userOperation): Promise<string> {
@@ -158,6 +174,28 @@ export class ContractWallet implements Middleware<Context> {
             case EthereumMethodType.ETH_ESTIMATE_GAS:
                 // fill later in UserTransaction.prototype.fill()
                 context.write('0x0')
+                break
+            case EthereumMethodType.ETH_SIGN:
+            case EthereumMethodType.PERSONAL_SIGN:
+                if (!context.message) {
+                    context.abort(new Error('Invalid message.'))
+                } else {
+                    context.write(await this.getSigner(context).signMessage(context.message))
+                }
+                break
+            case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+                if (!context.message) {
+                    context.abort(new Error('Invalid message.'))
+                } else {
+                    context.write(await this.getSigner(context).signTypedData(context.message))
+                }
+                break
+            case EthereumMethodType.ETH_SIGN_TRANSACTION:
+                if (!context.config) {
+                    context.abort(new Error('Invalid message.'))
+                } else {
+                    context.write(await this.getSigner(context).signTransaction(context.config))
+                }
                 break
             case EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN:
                 context.abort(new Error('Not supported by contract wallet.'))
