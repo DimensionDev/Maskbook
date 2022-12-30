@@ -2,15 +2,22 @@ import urlcat from 'urlcat'
 import { omit } from 'lodash-es'
 import type { ChainId, UserOperation } from '@masknet/web3-shared-evm'
 import { toBase64, fromHex } from '@masknet/shared-base'
-import { BUNDLER_ROOT } from '../constants.js'
 import type { BundlerAPI } from '../../types/Bundler.js'
-import { fetchJSON } from '../../entry-helpers.js'
+import { fetchCached, fetchJSON } from '../../entry-helpers.js'
+import { BUNDLER_DEV, BUNDLER_PROD } from '../constants.js'
+
+const BUNDLER_ROOT =
+    process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? BUNDLER_PROD : BUNDLER_DEV
 
 export class SmartPayBundlerAPI implements BundlerAPI.Provider {
     private healthz() {
-        return fetchJSON<BundlerAPI.Healthz>(urlcat(BUNDLER_ROOT, '/healthz'), {
-            method: 'GET',
-        })
+        return fetchJSON<BundlerAPI.Healthz>(
+            urlcat(BUNDLER_ROOT, '/healthz'),
+            {
+                method: 'GET',
+            },
+            fetchCached,
+        )
     }
 
     private async handle(userOperation: UserOperation) {
@@ -51,8 +58,8 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
     }
 
     private async assetChainId(chainId: ChainId) {
-        const chainIds = await this.getSupportedChainIds()
-        if (!chainIds.includes(chainId)) throw new Error(`Not supported ${chainId}.`)
+        const supportedChainId = await this.getSupportedChainId()
+        if (supportedChainId === chainId) throw new Error(`Not supported ${chainId}.`)
     }
 
     async getSigner(chainId: ChainId): Promise<string> {
@@ -62,9 +69,9 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
         return healthz.bundler_eoa
     }
 
-    async getSupportedChainIds(): Promise<ChainId[]> {
+    async getSupportedChainId(): Promise<ChainId> {
         const healthz = await this.healthz()
-        return [Number.parseInt(healthz.chain_id, 10)] as ChainId[]
+        return Number.parseInt(healthz.chain_id, 10) as ChainId
     }
     async getSupportedEntryPoints(chainId: ChainId): Promise<string[]> {
         await this.assetChainId(chainId)

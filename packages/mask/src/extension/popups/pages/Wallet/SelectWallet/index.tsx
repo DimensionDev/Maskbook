@@ -14,6 +14,7 @@ import { useChainIdValid, useWallets, useChainContext, useWeb3Connection } from 
 import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainIcon, WalletIcon } from '@masknet/shared'
+import { SmartPayBundler } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()({
     content: {
@@ -132,9 +133,9 @@ const SelectWallet = memo(() => {
         }
 
         const wallet = wallets.find((x) => isSameAddress(x.address, selected))
+        const smartPayChainId = await SmartPayBundler.getSupportedChainId()
         await connection?.connect({
-            // TODO: Just for test, will remove this logic
-            chainId: wallet?.owner ? ChainId.Mumbai : chainId,
+            chainId: wallet?.owner ? smartPayChainId : chainId,
             account: selected,
             owner: wallet?.owner,
             identifier: wallet?.identifier,

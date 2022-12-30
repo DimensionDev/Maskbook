@@ -8,9 +8,9 @@ import {
     ValueRef,
     createSubscriptionFromValueRef,
 } from '@masknet/shared-base'
-import { SmartPayAccount } from '@masknet/web3-providers'
+import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
 import { isSameAddress, Wallet as WalletItem } from '@masknet/web3-shared-base'
-import { ChainId, formatEthereumAddress, ProviderType, Transaction } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, ProviderType, Transaction } from '@masknet/web3-shared-evm'
 import { compact } from 'lodash-es'
 
 export class Wallet extends WalletState<ProviderType, Transaction> {
@@ -50,9 +50,9 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
                     }
                 }) ?? [],
             )
-            // TODO: get wallets from storage
+            const chainId = await SmartPayBundler.getSupportedChainId()
             if (this.providerType === ProviderType.MaskWallet) {
-                const accounts = await SmartPayAccount.getAccountsByOwners(ChainId.Mumbai, [
+                const accounts = await SmartPayAccount.getAccountsByOwners(chainId, [
                     ...wallets.map((x) => x.address),
                     ...compact(allPersonas.map((x) => x.address)),
                 ])

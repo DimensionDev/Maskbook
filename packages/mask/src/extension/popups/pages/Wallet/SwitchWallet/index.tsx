@@ -9,7 +9,8 @@ import { useChainContext, useWallet, useWallets, useWeb3Connection } from '@mask
 import { WalletItem } from './WalletItem.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { Services } from '../../../../service.js'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { SmartPayBundler } from '@masknet/web3-providers'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
     content: {
@@ -70,15 +71,17 @@ const SwitchWallet = memo(() => {
     }, [wallets, history])
 
     const handleSelect = useCallback(
-        async (
-            address: string | undefined,
-            options?: { chainId: ChainId; owner?: string; identifier?: ECKeyIdentifier },
-        ) => {
+        async (address: string | undefined, options?: { owner?: string; identifier?: ECKeyIdentifier }) => {
+            let smartPayChainId: ChainId | undefined
+            if (options?.owner) {
+                smartPayChainId = await SmartPayBundler.getSupportedChainId()
+            }
             await connection?.connect({
                 account: address,
+                chainId: smartPayChainId,
                 ...options,
             })
-            if (options?.chainId) setChainId(options.chainId)
+            if (smartPayChainId) setChainId(smartPayChainId)
             navigate(PopupRoutes.Wallet, { replace: true })
         },
         [history, connection],
@@ -95,9 +98,7 @@ const SwitchWallet = memo(() => {
                             onClick={() =>
                                 handleSelect(
                                     item.address,
-                                    item.owner
-                                        ? { chainId: ChainId.Mumbai, owner: item.owner, identifier: item.identifier }
-                                        : undefined,
+                                    item.owner ? { owner: item.owner, identifier: item.identifier } : undefined,
                                 )
                             }
                             isSelected={isSameAddress(item.address, wallet?.address)}

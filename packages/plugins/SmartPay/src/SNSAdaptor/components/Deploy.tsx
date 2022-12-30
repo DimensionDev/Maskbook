@@ -5,10 +5,10 @@ import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { ImageIcon, PersonaAction, useSnackbarCallback, WalletDescription } from '@masknet/shared'
 import { formatPersonaFingerprint, NetworkPluginID, PersonaInformation } from '@masknet/shared-base'
-import { ChainId, explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
+import { explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Typography, alpha, Box } from '@mui/material'
 import { useNetworkDescriptor, useProviderDescriptor } from '@masknet/web3-hooks-base'
-import { SmartPayAccount } from '@masknet/web3-providers'
+import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
 import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 import { useI18N } from '../../locales/index.js'
@@ -122,8 +122,10 @@ export function Deploy({
     const { getPersonaAvatar } = useSNSAdaptorContext()
     const { personaManagers, walletManagers } = useManagers()
 
+    const { value: chainId } = useAsync(SmartPayBundler.getSupportedChainId, [])
+
     const maskProviderDescriptor = useProviderDescriptor(NetworkPluginID.PLUGIN_EVM, ProviderType.MaskWallet)
-    const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Mumbai)
+    const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const currentVisitingProfile = useLastRecognizedIdentity()
 
     const { value: avatar } = useAsync(async () => {
@@ -134,16 +136,16 @@ export function Deploy({
 
     // #region get contract account
     const { value, loading: queryContractLoading } = useAsync(async () => {
-        if (!manager?.address || !open) return
+        if (!manager?.address || !open || !chainId) return
 
-        const accounts = await SmartPayAccount.getAccountsByOwners(ChainId.Mumbai, [manager?.address])
+        const accounts = await SmartPayAccount.getAccountsByOwners(chainId, [manager?.address])
         const nonce = accounts.filter((x) => x.funded).length
 
         return {
             account: accounts[nonce],
             nonce,
         }
-    }, [manager, open])
+    }, [manager, open, chainId])
     // #endregion
 
     const { account: contractAccount, nonce } = value ?? {}
@@ -296,8 +298,8 @@ export function Deploy({
                                 signWallet?.address ? formatEthereumAddress(signWallet.address, 4) : undefined
                             }
                             addressLink={
-                                signWallet?.address
-                                    ? explorerResolver.addressLink(ChainId.Mumbai, signWallet?.address)
+                                signWallet?.address && chainId
+                                    ? explorerResolver.addressLink(chainId, signWallet?.address)
                                     : undefined
                             }
                         />

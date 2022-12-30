@@ -4,8 +4,7 @@ import { DashboardFrame } from '../components/DashboardFrame/index.js'
 import { DashboardRoutes, RestoreSuccessEvent } from '@masknet/shared-base'
 import NoPersonaGuardRoute from './GuardRoute.js'
 import { Messages, Services } from '../API.js'
-import { SmartPayAccount } from '@masknet/web3-providers'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
 import { compact } from 'lodash-es'
 import { useCustomSnackbar } from '@masknet/theme'
 import { useDashboardI18N } from '../locales/index.js'
@@ -24,8 +23,9 @@ export function Pages() {
     const t = useDashboardI18N()
     const { showSnackbar } = useCustomSnackbar()
     const restoreCallback = useCallback(async ({ wallets }: RestoreSuccessEvent) => {
+        const chainId = await SmartPayBundler.getSupportedChainId()
         const personas = await Services.Identity.queryOwnedPersonaInformation(true)
-        const accounts = await SmartPayAccount.getAccountsByOwners(ChainId.Mumbai, [
+        const accounts = await SmartPayAccount.getAccountsByOwners(chainId, [
             ...(wallets ? wallets.map((x) => x.address) : []),
             ...compact(personas.map((x) => x.address)),
         ])

@@ -26,6 +26,7 @@ import { Icons } from '@masknet/icons'
 import { SettingsContext } from '../SettingsBoard/Context.js'
 import { useAsync } from 'react-use'
 import { useGasCurrencyMenu } from '../../../hooks/useGasCurrencyMenu.js'
+import { SmartPayBundler } from '@masknet/web3-providers'
 
 interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPluginID> {
     pluginID?: T
@@ -173,7 +174,8 @@ export function SelectGasSettingsToolbarUI({
     }, [currentGasOption, isCustomGas, setGasConfigCallback])
 
     const { value: currencyRatio } = useAsync(async () => {
-        const depositPaymaster = new DepositPaymaster(ChainId.Mumbai)
+        const chainId = await SmartPayBundler.getSupportedChainId()
+        const depositPaymaster = new DepositPaymaster(chainId)
         const ratio = await depositPaymaster.getRatio()
 
         return ratio

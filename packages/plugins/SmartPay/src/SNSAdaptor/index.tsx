@@ -7,8 +7,9 @@ import { setupContext, context } from './context.js'
 import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
 import { ApproveMaskDialog, ReceiveDialog, SmartPayDescriptionDialog, SmartPayDialog } from './components/index.js'
+import { useAsync } from 'react-use'
+import { SmartPayBundler } from '@masknet/web3-providers'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -16,9 +17,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
         setupContext(context)
     },
     GlobalInjection: function Component() {
+        const { value: chainId } = useAsync(SmartPayBundler.getSupportedChainId, [])
+
         return (
             <SNSAdaptorContext.Provider value={context}>
-                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mumbai }}>
+                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId }}>
                     <SmartPayDialog />
                     <SmartPayDescriptionDialog />
                     <ApproveMaskDialog />
@@ -32,7 +35,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             RenderEntryComponent: (props) => {
                 return (
                     <SNSAdaptorContext.Provider value={context}>
-                        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mumbai }}>
+                        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
                             <SmartPayEntry {...props} />
                         </Web3ContextProvider>
                     </SNSAdaptorContext.Provider>

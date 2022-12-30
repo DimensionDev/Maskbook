@@ -13,8 +13,9 @@ import { useWalletLockStatus } from './hooks/useWalletLockStatus.js'
 import { WalletHeader } from './components/WalletHeader/index.js'
 import { useChainContext, useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { TransactionDescriptorType } from '@masknet/web3-shared-base'
-import { ChainId, EthereumMethodType, getDefaultChainId, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
+import { EthereumMethodType, getDefaultChainId, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
 import { first } from 'lodash-es'
+import { SmartPayBundler } from '@masknet/web3-providers'
 
 const ImportWallet = lazy(() => import('./ImportWallet/index.js'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet/index.js'))
@@ -109,7 +110,7 @@ export default function Wallet() {
                 providerType: ProviderType.MaskWallet,
             })
         } else if (wallet?.owner) {
-            setChainId(ChainId.Mumbai)
+            SmartPayBundler.getSupportedChainId().then((chainId) => setChainId(chainId))
         }
     }, [wallet, wallets, connection])
 
