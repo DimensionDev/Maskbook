@@ -29,9 +29,9 @@ export function Pages() {
             ...(wallets ? wallets.map((x) => x.address) : []),
             ...compact(personas.map((x) => x.address)),
         ])
-        showSnackbar(t.recovery_smartpay_wallet_title(), {
+        showSnackbar(t.recovery_smart_pay_wallet_title(), {
             variant: 'success',
-            message: t.recovery_smartpay_wallet_description({
+            message: t.recovery_smart_pay_wallet_description({
                 count: accounts.filter((x) => x.funded || x.deployed).length,
             }),
         })
