@@ -86,10 +86,16 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
 
     return (
         <>
-            <Link className={classes.link} color="inherit" underline="none" onClick={openMenu}>
+            <Link
+                className={classes.link}
+                color="inherit"
+                underline="none"
+                onClick={options.length > 1 ? openMenu : undefined}>
                 <Typography className={classes.title} variant="subtitle2">
                     {options[selectedIndex]?.name}
-                    <ArrowDropDownIcon style={{ fontSize: 16, cursor: 'pointer' }} className={classes.icon} />
+                    {options.length > 1 ? (
+                        <ArrowDropDownIcon style={{ fontSize: 16, cursor: 'pointer' }} className={classes.icon} />
+                    ) : null}
                 </Typography>
                 {children}
             </Link>
