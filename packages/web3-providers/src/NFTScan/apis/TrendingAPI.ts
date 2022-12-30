@@ -87,7 +87,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
 
     async getAssetsBatch(chainId: Web3Helper.ChainIdAll, list: Array<{ contract_address: string; token_id: string }>) {
         const path = urlcat('/api/v2/assets/batch', {})
-        const response = await fetchFromNFTScanV2<Response<EVM.Asset[]>>(undefined, path, {
+        const response = await fetchFromNFTScanV2<Response<EVM.Asset[]>>(chainId, path, {
             method: 'POST',
             body: JSON.stringify({
                 contract_address_with_token_id_list: list,
