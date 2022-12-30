@@ -7,8 +7,8 @@ import { ImageIcon, PersonaAction, useSnackbarCallback, WalletDescription } from
 import { formatPersonaFingerprint, NetworkPluginID, PersonaInformation } from '@masknet/shared-base'
 import { explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Typography, alpha, Box } from '@mui/material'
-import { useNetworkDescriptor, useProviderDescriptor } from '@masknet/web3-hooks-base'
-import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
+import { useChainContext, useNetworkDescriptor, useProviderDescriptor } from '@masknet/web3-hooks-base'
+import { SmartPayAccount } from '@masknet/web3-providers'
 import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 import { useI18N } from '../../locales/index.js'
@@ -122,7 +122,7 @@ export function Deploy({
     const { getPersonaAvatar } = useSNSAdaptorContext()
     const { personaManagers, walletManagers } = useManagers()
 
-    const { value: chainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const maskProviderDescriptor = useProviderDescriptor(NetworkPluginID.PLUGIN_EVM, ProviderType.MaskWallet)
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)

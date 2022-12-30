@@ -1,15 +1,14 @@
 import { Icons } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
-import { SmartPayBundler } from '@masknet/web3-providers'
 import { useSmartPayConstants } from '@masknet/web3-shared-evm'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, InputBase, Typography } from '@mui/material'
 import { noop } from 'lodash-es'
 import { memo, useCallback, useMemo, useState } from 'react'
-import { useAsync } from 'react-use'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
 
@@ -47,7 +46,7 @@ export const ApproveMaskDialog = memo(() => {
     const { Others } = useWeb3State()
     const [amount, setAmount] = useState('')
 
-    const { value: chainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const maskAddress = Others?.getMaskTokenAddress(chainId)
     const { EP_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)

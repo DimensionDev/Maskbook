@@ -25,7 +25,7 @@ import {
     Radio,
     Typography,
 } from '@mui/material'
-import { useAsync, useAsyncFn, useCopyToClipboard } from 'react-use'
+import { useAsyncFn, useCopyToClipboard } from 'react-use'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { formatBalance, isLessThan, isSameAddress, Wallet } from '@masknet/web3-shared-base'
 import { compact, first, isNaN } from 'lodash-es'
@@ -36,7 +36,6 @@ import { AddSmartPayPopover } from './AddSmartPayPopover.js'
 import { AccountsManagerPopover } from './AccountsManagePopover.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { SmartPayBundler } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     dialogContent: {
@@ -160,10 +159,9 @@ export const SmartPayContent = memo(() => {
     // #endregion
 
     // #region web3 state
-    const { value: chainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     const { openPopupWindow } = useSNSAdaptorContext()
-    const { account } = useChainContext()
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)

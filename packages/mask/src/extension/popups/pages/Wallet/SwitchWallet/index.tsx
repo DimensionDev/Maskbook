@@ -9,8 +9,7 @@ import { useChainContext, useWallet, useWallets, useWeb3Connection } from '@mask
 import { WalletItem } from './WalletItem.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { Services } from '../../../../service.js'
-import { SmartPayBundler } from '@masknet/web3-providers'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { PopupContext } from '../../../hook/usePopupContext.js'
 
 const useStyles = makeStyles()({
     content: {
@@ -56,6 +55,7 @@ const SwitchWallet = memo(() => {
     const { classes, cx } = useStyles()
     const connection = useWeb3Connection()
     const navigate = useNavigate()
+    const { smartPayChainId } = PopupContext.useContainer()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { setChainId } = useChainContext()
@@ -72,19 +72,15 @@ const SwitchWallet = memo(() => {
 
     const handleSelect = useCallback(
         async (address: string | undefined, options?: { owner?: string; identifier?: ECKeyIdentifier }) => {
-            let smartPayChainId: ChainId | undefined
-            if (options?.owner) {
-                smartPayChainId = await SmartPayBundler.getSupportedChainId()
-            }
             await connection?.connect({
                 account: address,
-                chainId: smartPayChainId,
+                chainId: options?.owner && smartPayChainId ? smartPayChainId : undefined,
                 ...options,
             })
-            if (smartPayChainId) setChainId(smartPayChainId)
+            if (options?.owner && smartPayChainId) setChainId(smartPayChainId)
             navigate(PopupRoutes.Wallet, { replace: true })
         },
-        [history, connection],
+        [history, connection, smartPayChainId],
     )
 
     return (

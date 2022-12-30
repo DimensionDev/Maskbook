@@ -45,8 +45,6 @@ export const SmartPayDialog = memo(() => {
           }
         | undefined
     >()
-    // const [signWallet, setSignWallet] = useState<Wallet | undefined>()
-    // const [signPersona, setSignPersona] = useState<PersonaInformation | undefined>()
     const { classes } = useStyles()
     const wallets = useWallets()
 

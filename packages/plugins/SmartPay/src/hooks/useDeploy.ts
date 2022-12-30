@@ -1,13 +1,13 @@
-import { useAsync, useAsyncFn } from 'react-use'
+import { useAsyncFn } from 'react-use'
 import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { NetworkPluginID, PersonaInformation, SignType } from '@masknet/shared-base'
-import { useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { AbstractAccountAPI, FunderAPI } from '@masknet/web3-providers/types'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import type { ManagerAccount } from '../type.js'
 import type { Wallet } from '@masknet/web3-shared-base'
 import getUnixTime from 'date-fns/getUnixTime'
-import { SmartPayBundler, SmartPayFunder } from '@masknet/web3-providers'
+import { SmartPayFunder } from '@masknet/web3-providers'
 
 export function useDeploy(
     signPersona?: PersonaInformation,
@@ -20,7 +20,7 @@ export function useDeploy(
     const { Wallet } = useWeb3State()
     const { signWithPersona } = useSNSAdaptorContext()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
-    const { value: chainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, {
         providerType: ProviderType.MaskWallet,

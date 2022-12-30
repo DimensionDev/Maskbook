@@ -15,7 +15,7 @@ import { useChainContext, useWallet, useWallets, useWeb3Connection, useWeb3State
 import { TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { EthereumMethodType, getDefaultChainId, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
 import { first } from 'lodash-es'
-import { SmartPayBundler } from '@masknet/web3-providers'
+import { PopupContext } from '../../hook/usePopupContext.js'
 
 const ImportWallet = lazy(() => import('./ImportWallet/index.js'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet/index.js'))
@@ -48,6 +48,7 @@ export default function Wallet() {
     const location = useLocation()
     const navigate = useNavigate()
     const connection = useWeb3Connection()
+    const { smartPayChainId } = PopupContext.useContainer()
     const { chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
@@ -109,10 +110,10 @@ export default function Wallet() {
                 chainId: getDefaultChainId(),
                 providerType: ProviderType.MaskWallet,
             })
-        } else if (wallet?.owner) {
-            SmartPayBundler.getSupportedChainId().then((chainId) => setChainId(chainId))
+        } else if (wallet?.owner && smartPayChainId) {
+            setChainId(smartPayChainId)
         }
-    }, [wallet, wallets, connection])
+    }, [wallet, wallets, connection, smartPayChainId])
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>

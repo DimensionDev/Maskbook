@@ -2,12 +2,10 @@ import { QRCode } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { useWeb3State } from '@masknet/web3-hooks-base'
-import { SmartPayBundler } from '@masknet/web3-providers'
+import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { Close } from '@mui/icons-material'
 import { alpha, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material'
 import { memo, useState } from 'react'
-import { useAsync } from 'react-use'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
 
@@ -55,7 +53,7 @@ export const ReceiveDialog = memo(() => {
     const [address, setAddress] = useState('')
     const [name, setName] = useState('')
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const { value: chainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const { open, closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.receiveDialogEvent, (ev) => {
         if (!ev.open) return
