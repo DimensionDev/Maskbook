@@ -388,5 +388,8 @@
     "create_wallet_your_wallet_address": "crwdns7749:0crwdne7749:0",
     "create_wallet_done": "crwdns7751:0crwdne7751:0",
     "create_wallet_verify_words": "crwdns7753:0crwdne7753:0",
-    "create_wallet_mnemonic_word_not_match": "crwdns8029:0crwdne8029:0"
+    "create_wallet_mnemonic_word_not_match": "crwdns8029:0crwdne8029:0",
+    "recovery_smart_pay_wallet_title": "crwdns19435:0crwdne19435:0",
+    "recovery_smart_pay_wallet_description_one": "crwdns19437:0{{count}}crwdne19437:0",
+    "recovery_smart_pay_wallet_description_other": "crwdns19439:0{{count}}crwdne19439:0"
 }
