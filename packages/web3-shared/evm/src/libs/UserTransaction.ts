@@ -148,9 +148,6 @@ export class UserTransaction {
             this.userOperation.initCode = overrides.initCode
         }
 
-        const entryPointContract = createContract<EntryPoint>(web3, this.entryPoint, EntryPointABI as AbiItem[])
-        const walletContract = createContract<Wallet>(web3, this.userOperation.sender, WalletABI as AbiItem[])
-
         const {
             initCode,
             nonce,
@@ -165,6 +162,7 @@ export class UserTransaction {
 
         if (!isEmptyHex(initCode)) {
             if (!sender) {
+                const entryPointContract = createContract<EntryPoint>(web3, this.entryPoint, EntryPointABI as AbiItem[])
                 if (!entryPointContract) throw new Error('Failed to create entry point contract.')
                 this.userOperation.sender = await entryPointContract.methods.getSenderAddress(initCode, nonce).call()
             }
@@ -177,11 +175,15 @@ export class UserTransaction {
 
         // caution: the creator needs to set the latest index of the contract account.
         // otherwise, always treat the operation to create the initial account.
-        if (walletContract) {
-            const nonce_ = await walletContract.methods.nonce().call()
-            this.userOperation.nonce = toNumber(nonce_)
-        } else {
-            throw new Error('Failed to create wallet contract.')
+        if (typeof overrides === 'undefined' && nonce === 0) {
+            const walletContract = createContract<Wallet>(web3, this.userOperation.sender, WalletABI as AbiItem[])
+            if (!walletContract) throw new Error('Failed to create wallet contract.')
+            try {
+                const nonce_ = await walletContract.methods.nonce().call()
+                this.userOperation.nonce = toNumber(nonce_)
+            } catch (error) {
+                this.userOperation.nonce = 0
+            }
         }
 
         if (!isEmptyHex(callData)) {

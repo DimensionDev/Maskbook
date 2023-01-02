@@ -977,7 +977,7 @@ class Connection implements EVM_Connection {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.MASK_TRANSFER,
-                params: [recipient, toHex(amount)],
+                params: [options.account, recipient, toHex(amount)],
             },
             options,
         )
@@ -988,7 +988,7 @@ class Connection implements EVM_Connection {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.MASK_CHANGE_OWNER,
-                params: [recipient],
+                params: [options.account, recipient],
             },
             options,
         )
