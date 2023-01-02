@@ -1,5 +1,5 @@
 import { Slider } from '@mui/material'
-import { formatPercentage } from '@masknet/web3-shared-evm'
+import { formatPercentage } from '@masknet/web3-shared-base'
 import { SLIPPAGE_DEFAULT, SLIPPAGE_MAX, SLIPPAGE_MIN } from '../../constants/index.js'
 import { toBips } from '../../helpers/index.js'
 

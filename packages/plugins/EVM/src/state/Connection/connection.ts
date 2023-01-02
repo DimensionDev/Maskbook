@@ -968,28 +968,37 @@ class Connection implements EVM_Connection {
         )
     }
 
-    async transferContractWallet(
+    async transfer(
         recipient: string,
+        amount: string,
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<string>(
             {
-                method: EthereumMethodType.MASK_TRANSFER_CONTRACT_WALLET,
+                method: EthereumMethodType.MASK_TRANSFER,
+                params: [recipient, toHex(amount)],
+            },
+            options,
+        )
+    }
+
+    async changeOwner(recipient: string, initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
+        const options = this.getOptions(initial)
+        return this.hijackedRequest<string>(
+            {
+                method: EthereumMethodType.MASK_CHANGE_OWNER,
                 params: [recipient],
             },
             options,
         )
     }
 
-    async deployContractWallet(
-        owner: string,
-        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
-    ) {
+    async deploy(owner: string, initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<string>(
             {
-                method: EthereumMethodType.MASK_DEPLOY_CONTRACT_WALLET,
+                method: EthereumMethodType.MASK_DEPLOY,
                 params: [owner],
             },
             options,

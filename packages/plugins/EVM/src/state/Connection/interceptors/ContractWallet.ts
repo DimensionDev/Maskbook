@@ -17,6 +17,7 @@ import type { Middleware, Context } from '../types.js'
 import { Providers } from '../provider.js'
 import type { BaseContractWalletProvider } from '../providers/BaseContractWallet.js'
 import { SharedContextSettings } from '../../../settings/index.js'
+import { isZero } from '@masknet/web3-shared-base'
 
 export class ContractWallet implements Middleware<Context> {
     constructor(
@@ -103,6 +104,21 @@ export class ContractWallet implements Middleware<Context> {
         return this.account.deploy(context.chainId, this.getOwner(context).owner, this.getSigner(context))
     }
 
+    private async transfer(context: Context) {
+        const [recipient, amount] = context.requestArguments.params as [string, string]
+        if (!recipient) throw new Error('No recipient address.')
+        if (isZero(amount)) throw new Error('Invalid amount.')
+
+        return this.account.transfer(
+            context.chainId,
+            this.getOwner(context).owner,
+            context.account,
+            recipient,
+            amount,
+            this.getSigner(context),
+        )
+    }
+
     private async changeOwner(context: Context) {
         const recipient = first<string>(context.requestArguments.params)
         if (!recipient) throw new Error('No recipient address.')
@@ -177,24 +193,48 @@ export class ContractWallet implements Middleware<Context> {
                 break
             case EthereumMethodType.ETH_SIGN:
             case EthereumMethodType.PERSONAL_SIGN:
-                if (!context.message) {
-                    context.abort(new Error('Invalid message.'))
-                } else {
+                try {
+                    if (!context.message) throw new Error('Invalid message.')
                     context.write(await this.getSigner(context).signMessage(context.message))
+                } catch (error) {
+                    context.abort(error)
                 }
                 break
             case EthereumMethodType.ETH_SIGN_TYPED_DATA:
-                if (!context.message) {
-                    context.abort(new Error('Invalid message.'))
-                } else {
+                try {
+                    if (!context.message) throw new Error('Invalid typed data.')
                     context.write(await this.getSigner(context).signTypedData(context.message))
+                } catch (error) {
+                    context.abort(error)
                 }
                 break
             case EthereumMethodType.ETH_SIGN_TRANSACTION:
-                if (!context.config) {
-                    context.abort(new Error('Invalid message.'))
-                } else {
+                try {
+                    if (!context.config) throw new Error('Invalid transaction.')
                     context.write(await this.getSigner(context).signTransaction(context.config))
+                } catch (error) {
+                    context.abort(error)
+                }
+                break
+            case EthereumMethodType.MASK_TRANSFER:
+                try {
+                    context.write(await this.transfer(context))
+                } catch (error) {
+                    context.abort(error)
+                }
+                break
+            case EthereumMethodType.MASK_CHANGE_OWNER:
+                try {
+                    context.write(await this.changeOwner(context))
+                } catch (error) {
+                    context.abort(error)
+                }
+                break
+            case EthereumMethodType.MASK_DEPLOY:
+                try {
+                    context.write(await this.deploy(context))
+                } catch (error) {
+                    context.abort(error)
                 }
                 break
             case EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN:
@@ -202,20 +242,6 @@ export class ContractWallet implements Middleware<Context> {
                 break
             case EthereumMethodType.ETH_SEND_RAW_TRANSACTION:
                 context.abort(new Error('Not supported by contract wallet.'))
-                break
-            case EthereumMethodType.MASK_TRANSFER_CONTRACT_WALLET:
-                try {
-                    context.write(await this.changeOwner(context))
-                } catch (error) {
-                    context.abort(error)
-                }
-                break
-            case EthereumMethodType.MASK_DEPLOY_CONTRACT_WALLET:
-                try {
-                    context.write(await this.deploy(context))
-                } catch (error) {
-                    context.abort(error)
-                }
                 break
             default:
                 break
