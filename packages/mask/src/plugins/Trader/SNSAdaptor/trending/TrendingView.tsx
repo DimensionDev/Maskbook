@@ -88,8 +88,6 @@ const useStyles = makeStyles<{
                   flex: 1,
               }
             : {},
-        priceChartRootWrapper:
-            props.isNFTProjectPopper && props.currentTab === ContentTabs.Price ? { height: 420 } : {},
         cardHeader: {
             marginBottom: '-36px',
             backgroundImage: `linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), url(${xmasBackground})`,
@@ -279,7 +277,7 @@ export function TrendingView(props: TrendingViewProps) {
                     <CoinMarketPanel dataProvider={trending.dataProvider} trending={trending} />
                 ) : null}
                 {currentTab === ContentTabs.Price ? (
-                    <Box px={2} py={4} className={classes.priceChartRootWrapper}>
+                    <Box px={2} py={4}>
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}

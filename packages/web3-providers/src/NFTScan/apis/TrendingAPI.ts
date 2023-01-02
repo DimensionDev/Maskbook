@@ -73,18 +73,21 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         return response?.data ?? EMPTY_LIST
     }
 
-    async getCollectionOverview(address: string): Promise<NonFungibleCollectionOverview | undefined> {
+    async getCollectionOverview(
+        chainId: Web3Helper.ChainIdAll,
+        address: string,
+    ): Promise<NonFungibleCollectionOverview | undefined> {
         const path = urlcat('/api/v2/statistics/collection/:address', {
             address,
         })
-        const response = await fetchFromNFTScanV2<Response<NonFungibleCollectionOverview>>(undefined, path)
+        const response = await fetchFromNFTScanV2<Response<NonFungibleCollectionOverview>>(chainId, path)
         if (!response?.data) return
         return response.data
     }
 
     async getAssetsBatch(chainId: Web3Helper.ChainIdAll, list: Array<{ contract_address: string; token_id: string }>) {
         const path = urlcat('/api/v2/assets/batch', {})
-        const response = await fetchFromNFTScanV2<Response<EVM.Asset[]>>(undefined, path, {
+        const response = await fetchFromNFTScanV2<Response<EVM.Asset[]>>(chainId, path, {
             method: 'POST',
             body: JSON.stringify({
                 contract_address_with_token_id_list: list,
@@ -235,7 +238,9 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                 type: TokenType.NonFungible,
                 description: collection.description,
                 image_url: collection.logo_url,
-                home_urls: compact([collection.website]),
+                home_urls: compact([
+                    collection.website ? collection.website : `${resolveNFTScanHostName(chainId)}/${address}`,
+                ]),
                 community_urls: [
                     {
                         type: 'twitter',

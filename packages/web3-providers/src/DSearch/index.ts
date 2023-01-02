@@ -251,7 +251,13 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             | NonFungibleCollectionResult<ChainId, SchemaType>
         >,
         name: string,
-    ): Promise<Array<SearchResult<ChainId, SchemaType>>> {
+    ): Promise<
+        Array<
+            | FungibleTokenResult<ChainId, SchemaType>
+            | NonFungibleTokenResult<ChainId, SchemaType>
+            | NonFungibleCollectionResult<ChainId, SchemaType>
+        >
+    > {
         let result: Array<
             | FungibleTokenResult<ChainId, SchemaType>
             | NonFungibleTokenResult<ChainId, SchemaType>
@@ -303,11 +309,19 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
     private async searchTokenByName(name: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {
         const { specificTokens, normalTokens } = await this.searchTokens()
 
-        const specificResult = await this.searchTokenByHandler(specificTokens, name)
+        const specificResult_ = await this.searchTokenByHandler(specificTokens, name)
         const normalResult = await this.searchTokenByHandler(normalTokens, name)
 
-        if (specificResult.length > 0) return specificResult
-        return normalResult
+        const specificResult: Array<
+            | FungibleTokenResult<ChainId, SchemaType>
+            | NonFungibleTokenResult<ChainId, SchemaType>
+            | NonFungibleCollectionResult<ChainId, SchemaType>
+        > = ([] = specificResult_.map((x) => {
+            const r = normalResult.find((y) => y.id === x.id && y.source === x.source)
+            return { ...x, rank: r?.rank }
+        }))
+
+        return uniqWith(specificResult.concat(normalResult), (a, b) => a.id === b.id)
     }
 
     private async searchNonFungibleTokenByTwitterHandler(

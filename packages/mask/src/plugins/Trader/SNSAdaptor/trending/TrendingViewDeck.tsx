@@ -26,7 +26,7 @@ import { useI18N } from '../../../../utils/index.js'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin.js'
 import { PluginTransakMessages } from '../../../Transak/messages.js'
 import type { Currency, Stat } from '../../types/index.js'
-import { useTrendingOverviewByAddress } from '../../trending/useTrending.js'
+import { useTrendingOverview } from '../../trending/useTrending.js'
 import { CoinMenu } from './CoinMenu.js'
 import { TrendingViewContext } from './context.js'
 import { CoinIcon } from './components/index.js'
@@ -149,7 +149,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     const { coin, market } = trending
     const { isNFTProjectPopper, isTokenTagPopper, isPreciseSearch } = useContext(TrendingViewContext)
-    const { value: overview } = useTrendingOverviewByAddress(props.trending.coin.address ?? '')
+    const { value: overview } = useTrendingOverview(props.trending.coin.address ?? '', props.trending.coin.chainId)
 
     const { t } = useI18N()
     const theme = useTheme()
@@ -190,7 +190,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     return (
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.cardHeader}>
-                {isNFTProjectPopper || isTokenTagPopper ? null : <TrendingViewDescriptor trending={trending} />}
+                {isNFTProjectPopper || isTokenTagPopper ? null : (
+                    <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
+                )}
                 <Stack className={classes.headline}>
                     <Stack gap={2} flexGrow={1}>
                         <Stack>
@@ -322,7 +324,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 </Paper>
                 {isNFTProjectPopper || isTokenTagPopper ? (
                     <section className={classes.pluginDescriptorWrapper}>
-                        <TrendingViewDescriptor trending={trending} />
+                        <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
                     </section>
                 ) : null}
             </CardContent>
