@@ -33,6 +33,7 @@ export class Nonce implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
         // set a nonce for Mask wallets
         if (
+            !context.owner &&
             context.account &&
             context.providerType === ProviderType.MaskWallet &&
             context.method === EthereumMethodType.ETH_SEND_TRANSACTION

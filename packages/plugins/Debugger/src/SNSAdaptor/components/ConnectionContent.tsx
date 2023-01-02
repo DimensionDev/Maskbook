@@ -4,12 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { useWeb3Connection, useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID } from '@masknet/shared-base'
-import {
-    ChainId,
-    ChainId as EVM_ChainId,
-    ProviderType as EVM_ProviderType,
-    useTokenConstants,
-} from '@masknet/web3-shared-evm'
+import { ChainId, ChainId as EVM_ChainId, ProviderType as EVM_ProviderType } from '@masknet/web3-shared-evm'
 import { ChainId as SolanaChainId, ProviderType as SolanaProviderType } from '@masknet/web3-shared-solana'
 import { ChainId as FlowChainId, ProviderType as FlowProviderType } from '@masknet/web3-shared-flow'
 
@@ -25,28 +20,32 @@ const useStyles = makeStyles()({
 
 export function ConnectionContent(props: ConnectionContentProps) {
     const { classes } = useStyles()
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext()
     const connection = useWeb3Connection()
 
     const onTransferCallback = useCallback(() => {
-        if (!NATIVE_TOKEN_ADDRESS) return
-        return connection?.transferFungibleToken(
-            NATIVE_TOKEN_ADDRESS,
-            '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
-            '100',
-            undefined,
-            {
-                chainId: ChainId.Mumbai,
-                account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
-                providerType: EVM_ProviderType.MaskWallet,
-                overrides: {
-                    chainId: ChainId.Mumbai,
-                    from: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
-                },
-            },
-        )
+        return connection?.transfer?.('0x66b57885E8E9D84742faBda0cE6E3496055b012d', '100', {
+            chainId: ChainId.Mumbai,
+            account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
+            providerType: EVM_ProviderType.MaskWallet,
+        })
+    }, [connection])
+
+    const onDeployCallback = useCallback(() => {
+        return connection?.deploy?.('0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC', {
+            chainId: ChainId.Mumbai,
+            account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
+            providerType: EVM_ProviderType.MaskWallet,
+        })
+    }, [connection])
+
+    const onChangeOwnerChange = useCallback(() => {
+        return connection?.changeOwner?.('0x66b57885E8E9D84742faBda0cE6E3496055b012d', {
+            chainId: ChainId.Mumbai,
+            account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
+            providerType: EVM_ProviderType.MaskWallet,
+        })
     }, [connection])
 
     const onApproveFungibleTokenCallback = useCallback(() => {
@@ -60,10 +59,6 @@ export function ConnectionContent(props: ConnectionContentProps) {
                 chainId: ChainId.Mumbai,
                 account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
                 providerType: EVM_ProviderType.MaskWallet,
-                overrides: {
-                    chainId: ChainId.Mumbai,
-                    from: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
-                },
             },
         )
     }, [pluginID, connection])
@@ -185,12 +180,36 @@ export function ConnectionContent(props: ConnectionContentProps) {
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">
-                                Native Token Transfer
+                                Transfer
                             </Typography>
                         </TableCell>
                         <TableCell>
                             <Button size="small" onClick={() => onTransferCallback()}>
                                 Transfer
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Deploy
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button size="small" onClick={() => onDeployCallback()}>
+                                Deploy
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Change Owner
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button size="small" onClick={() => onChangeOwnerChange()}>
+                                Change Owner
                             </Button>
                         </TableCell>
                     </TableRow>

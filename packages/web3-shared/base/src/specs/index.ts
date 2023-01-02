@@ -1109,10 +1109,12 @@ export interface Connection<
         operation: Operation,
         initial?: Web3ConnectionOptions,
     ) => Promise<TransactionSignature>
+    /** Transfer some native tokens from contract Wallet */
+    transfer?: (recipient: string, amount: string, initial?: Web3ConnectionOptions) => Promise<string>
     /** Change owner of contract Wallet */
-    transferContractWallet?: (recipient: string, initial?: Web3ConnectionOptions) => Promise<string>
+    changeOwner?: (recipient: string, initial?: Web3ConnectionOptions) => Promise<string>
     /** Deploy contract Wallet */
-    deployContractWallet?: (owner: string, initial?: Web3ConnectionOptions) => Promise<string>
+    deploy?: (owner: string, initial?: Web3ConnectionOptions) => Promise<string>
     /** Sign a transaction */
     signTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): Promise<TransactionSignature>
     /** Sign multiple transactions */

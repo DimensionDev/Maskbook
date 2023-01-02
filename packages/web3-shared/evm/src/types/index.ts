@@ -157,8 +157,9 @@ export enum EthereumMethodType {
     ETH_CALL_USER_OPERATION = 'eth_callUserOperation',
     ETH_SUPPORTED_CHAIN_IDS = 'eth_supportedChainIds',
     ETH_SUPPORTED_ENTRY_POINTS = 'eth_supportedEntryPoints',
-    MASK_DEPLOY_CONTRACT_WALLET = 'mask_deployContractWallet',
-    MASK_TRANSFER_CONTRACT_WALLET = 'mask_transferContractWallet',
+    MASK_DEPLOY = 'mask_deploy',
+    MASK_TRANSFER = 'mask_transfer',
+    MASK_CHANGE_OWNER = 'mask_changeOwner',
 
     // only for mask
     MASK_LOGIN = 'MASK_LOGIN',

@@ -1,6 +1,7 @@
 import { unstable_useCacheRefresh, useContext } from 'react'
 import { millify } from 'millify'
-import { formatEthereumAddress, explorerResolver, formatPercentage } from '@masknet/web3-shared-evm'
+import { formatPercentage } from '@masknet/web3-shared-base'
+import { formatEthereumAddress, explorerResolver } from '@masknet/web3-shared-evm'
 import { Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
