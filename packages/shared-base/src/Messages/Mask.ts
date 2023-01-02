@@ -49,7 +49,7 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     ownPersonaChanged: void
     ownProofChanged: void
     NFTProjectTwitterDetect: NFTProjectTwitterDetectEvent
-    restoreSuccess: void
+    restoreSuccess: RestoreSuccessEvent
     relationsChanged: RelationChangedEvent[]
     pluginMinimalModeChanged: [id: string, newStatus: boolean]
     hostPermissionChanged: void
@@ -151,6 +151,13 @@ export interface NFTAvatarSettingDialogEvent {
 export interface SettingsUpdateEvent {
     key: string
     value: any
+}
+
+export interface RestoreSuccessEvent {
+    wallets?: Array<{
+        address: string
+        name: string
+    }>
 }
 
 export interface ProfileNFTsPageEvent {

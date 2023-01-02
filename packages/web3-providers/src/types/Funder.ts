@@ -1,4 +1,8 @@
 export namespace FunderAPI {
+    export enum ProofType {
+        Persona = 'persona',
+        EOA = 'eoa',
+    }
     export interface Payload {
         twitterHandler: string
         nonce: number
@@ -7,7 +11,8 @@ export namespace FunderAPI {
         ts: number
     }
     export interface Proof {
-        ownerAddress: string
+        publicKey: string
+        type: 'persona' | 'eoa'
         payload: string // JSON.stringify(payload)
         signature: string
     }

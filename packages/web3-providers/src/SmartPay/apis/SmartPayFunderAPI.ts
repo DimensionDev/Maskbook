@@ -1,10 +1,12 @@
 import urlcat from 'urlcat'
 import { ChainId, TransactionReceipt } from '@masknet/web3-shared-evm'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { FUNDER_ROOT } from '../constants.js'
 import { FunderAPI } from '../../types/Funder.js'
 import { Web3API } from '../../EVM/index.js'
 import { fetchJSON, fetchSquashed } from '../../entry-helpers.js'
+import { FUNDER_DEV, FUNDER_PROD } from '../constants.js'
+
+const FUNDER_ROOT = process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? FUNDER_PROD : FUNDER_DEV
 
 export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     private web3 = new Web3API()
@@ -69,7 +71,7 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     async verify(handler: string) {
         try {
             const result = await this.getWhiteList(handler)
-            return result.twitterHandler === handler && result.totalCount > 0
+            return result.twitterHandler === handler && result.usedCount < result.totalCount
         } catch {
             return false
         }

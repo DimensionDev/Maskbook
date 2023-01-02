@@ -28,6 +28,8 @@ export const RestPartOfPluginUIContextShared: Omit<
     confirmRequest: WalletRPC.confirmRequest,
     rejectRequest: WalletRPC.rejectRequest,
 
+    openDashboard: Services.Helper.openDashboard,
+
     openPopupWindow: Services.Helper.openPopupWindow,
     closePopupWindow: Services.Helper.removePopupWindow,
     openPopupConnectWindow: Services.Helper.openPopupConnectWindow,

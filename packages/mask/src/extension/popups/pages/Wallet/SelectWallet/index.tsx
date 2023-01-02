@@ -14,6 +14,7 @@ import { useChainIdValid, useWallets, useChainContext, useWeb3Connection } from 
 import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainIcon, WalletIcon } from '@masknet/shared'
+import { PopupContext } from '../../../hook/usePopupContext.js'
 
 const useStyles = makeStyles()({
     content: {
@@ -90,6 +91,7 @@ const SelectWallet = memo(() => {
     const { classes } = useStyles()
     const location = useLocation()
     const navigate = useNavigate()
+    const { smartPayChainId } = PopupContext.useContainer()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const networks = getRegisteredWeb3Networks().filter(
         (x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
@@ -132,9 +134,9 @@ const SelectWallet = memo(() => {
         }
 
         const wallet = wallets.find((x) => isSameAddress(x.address, selected))
+
         await connection?.connect({
-            // TODO: Just for test, will remove this logic
-            chainId: wallet?.owner ? ChainId.Mumbai : chainId,
+            chainId: wallet?.owner ? smartPayChainId : chainId,
             account: selected,
             owner: wallet?.owner,
             identifier: wallet?.identifier,
@@ -149,7 +151,7 @@ const SelectWallet = memo(() => {
             ])
         }
         return Services.Helper.removePopupWindow()
-    }, [chainId, selected, isPopup, connection, wallets])
+    }, [chainId, selected, isPopup, connection, wallets, smartPayChainId])
 
     useEffect(() => {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')

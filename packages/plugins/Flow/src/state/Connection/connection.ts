@@ -96,12 +96,12 @@ class Connection implements BaseConnection {
     }
     async getBlock(no: number, initial?: FlowConnectionOptions): Promise<BlockObject | null> {
         const options = this.getOptions(initial)
-        const web3 = await this.getWeb3(options)
+        const web3 = this.getWeb3(options)
         return web3.send([web3.getBlock(), web3.atBlockHeight(no)]).then(web3.decode)
     }
     async getBlockTimestamp(initial?: FlowConnectionOptions): Promise<number> {
         const options = this.getOptions(initial)
-        const web3 = await this.getWeb3(options)
+        const web3 = this.getWeb3(options)
         const blockHeader: BlockHeaderObject = await web3.send([web3.getBlockHeader()]).then(web3.decode)
         return getUnixTime(new Date(blockHeader.timestamp as unknown as string))
     }
@@ -233,7 +233,7 @@ class Connection implements BaseConnection {
 
     async getAccount(initial?: FlowConnectionOptions): Promise<string> {
         const options = this.getOptions(initial)
-        const web3 = await this.getWeb3(options)
+        const web3 = this.getWeb3(options)
         return web3.currentUser().addr ?? ''
     }
     async getChainId(initial?: FlowConnectionOptions): Promise<ChainId> {
@@ -242,19 +242,19 @@ class Connection implements BaseConnection {
     }
     async getBlockNumber(initial?: FlowConnectionOptions): Promise<number> {
         const options = this.getOptions(initial)
-        const web3 = await this.getWeb3(options)
+        const web3 = this.getWeb3(options)
         const blockHeader = await web3.send([web3.getBlockHeader()]).then(web3.decode)
         return blockHeader.height
     }
     async getBalance(address: string, initial?: FlowConnectionOptions): Promise<string> {
         const options = this.getOptions(initial)
-        const web3 = await this.getWeb3(options)
+        const web3 = this.getWeb3(options)
         const account = await web3.send([web3.getAccount(address)]).then(web3.decode)
         return account.balance.toFixed()
     }
     async getTransaction(id: string, initial?: FlowConnectionOptions) {
         const options = this.getOptions(initial)
-        const web3 = await this.getWeb3(options)
+        const web3 = this.getWeb3(options)
         return web3.getTransaction(id)
     }
     async getTransactionReceipt(id: string, initial?: FlowConnectionOptions) {
@@ -262,7 +262,7 @@ class Connection implements BaseConnection {
     }
     async getTransactionStatus(id: string, initial?: FlowConnectionOptions): Promise<TransactionStatusType> {
         const options = this.getOptions(initial)
-        const web3 = await this.getWeb3(options)
+        const web3 = this.getWeb3(options)
         const { status } = web3.getTransactionStatus(id)
         const status_ = status as TransactionStatusCode
         switch (status_) {
@@ -282,7 +282,7 @@ class Connection implements BaseConnection {
     }
     async getTransactionNonce(address: string, initial?: FlowConnectionOptions): Promise<number> {
         const options = this.getOptions(initial)
-        const web3 = await this.getWeb3(options)
+        const web3 = this.getWeb3(options)
         const account = web3.getAccount(address)
         const key = first(account.keys)
         return key?.sequenceNumber ?? 0
@@ -293,7 +293,7 @@ class Connection implements BaseConnection {
     }
     async signMessage(type: string, message: string, initial?: FlowConnectionOptions) {
         const options = this.getOptions(initial)
-        const web3 = await this.getWeb3(options)
+        const web3 = this.getWeb3(options)
         const data = new TextEncoder().encode(message)
         const signed = first(await web3.currentUser.signUserMessage(toHex(data)))
         if (!signed) throw new Error('Failed to sign message.')
@@ -306,7 +306,7 @@ class Connection implements BaseConnection {
         initial?: FlowConnectionOptions,
     ): Promise<boolean> {
         const options = this.getOptions(initial)
-        const web3 = await this.getWeb3(options)
+        const web3 = this.getWeb3(options)
         if (!options.account) throw new Error('No account found.')
         return web3.verifyUserSignatures(message, [
             {
@@ -318,12 +318,12 @@ class Connection implements BaseConnection {
     }
     async callTransaction(query: QueryOptions, initial?: FlowConnectionOptions) {
         const options = this.getOptions(initial)
-        const web3 = await this.getWeb3(options)
+        const web3 = this.getWeb3(options)
         return web3.query(query)
     }
     async sendTransaction(mutation: MutateOptions, initial?: FlowConnectionOptions): Promise<string> {
         const options = this.getOptions(initial)
-        const web3 = await this.getWeb3(options)
+        const web3 = this.getWeb3(options)
         const id = await web3.mutate(mutation)
         await web3.tx(id).onceSealed()
         return id

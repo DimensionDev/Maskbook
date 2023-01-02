@@ -6,9 +6,8 @@ describe('SmartPayBundlerAPI', () => {
     const SmartPayBundler = new SmartPayBundlerAPI()
 
     test('healthz', async () => {
-        const chainIds = await SmartPayBundler.getSupportedChainIds()
-        expect(chainIds.length).toBe(1)
-        expect(chainIds[0]).toBe(ChainId.Matic)
+        const chainId = await SmartPayBundler.getSupportedChainId()
+        expect(chainId).toBeTruthy()
     })
 })
 
