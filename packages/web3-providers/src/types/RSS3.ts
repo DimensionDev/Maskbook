@@ -184,7 +184,7 @@ export namespace RSS3BaseAPI {
         profile_uri: string[]
         action: 'create' | 'update'
     }
-    export interface FollowMetadata extends Omit<ProfileMetadata, 'expire_at'> {}
+    export interface FollowMetadata extends Partial<Omit<ProfileMetadata, 'expire_at'>> {}
     interface LaunchMetadata {
         logo: URLString
         title: string
