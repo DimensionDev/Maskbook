@@ -27,7 +27,7 @@ function create<T>(settings: ValueRefWithReady<T>) {
     return [get, set] as const
 }
 export const [getTheme, setTheme] = create(appearanceSettings)
-export const [getLogSetting] = create(logSettings)
+export const [getLogSettings] = create(logSettings)
 export const [getLanguage, setLanguage] = create(languageSettings)
 
 export async function setLogEnable(enable: boolean) {
@@ -69,7 +69,7 @@ export { __deprecated__getStorage as getLegacySettingsInitialValue }
 
 // should remove this flag after new log privacy policy release
 if (Flags.log_enabled) {
-    getLogSetting().then((current) => {
+    getLogSettings().then((current) => {
         if (current && typeof current === 'string') return
         setLogEnable(true)
     })
