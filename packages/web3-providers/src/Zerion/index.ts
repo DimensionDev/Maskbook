@@ -16,7 +16,14 @@ import {
     GasOptionType,
     toFixed,
 } from '@masknet/web3-shared-base'
-import { ChainId, createNativeToken, GasOption, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    createNativeToken,
+    GasOption,
+    SchemaType,
+    isValidChainId,
+    isValidAddress,
+} from '@masknet/web3-shared-evm'
 import type { ZerionNonFungibleTokenItem, ZerionNonFungibleCollection, ZerionCoin } from './types.js'
 import { formatAsset, formatTransactions } from './helpers.js'
 import {
@@ -54,7 +61,8 @@ export class ZerionAPI
                 )
                 ?.map((x) => {
                     return formatAsset(zerionChainIdResolver(x.chain)!, x)
-                }) ?? EMPTY_LIST
+                })
+                .filter((x) => isValidAddress(x.address)) ?? EMPTY_LIST
 
         return createPageable(
             unionWith(
