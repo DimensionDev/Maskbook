@@ -35,10 +35,12 @@ const useStyles = makeStyles()((theme) => ({
         width: 14,
         height: 14,
         cursor: 'pointer',
+        marginLeft: theme.spacing(0.5),
     },
     badge: {
-        width: 22,
-        height: 22,
+        width: 32,
+        height: 18,
+        marginLeft: theme.spacing(0.5),
     },
     highLightBg: {
         background: theme.palette.background.default,
