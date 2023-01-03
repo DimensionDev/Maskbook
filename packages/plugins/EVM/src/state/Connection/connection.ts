@@ -125,6 +125,7 @@ class Connection implements EVM_Connection {
                                                 : options.providerType
                                         ]
 
+                                    // chain switching silently
                                     if (context.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
                                         if (options.providerType === ProviderType.MaskWallet) {
                                             await provider.switchChain(options.chainId)
