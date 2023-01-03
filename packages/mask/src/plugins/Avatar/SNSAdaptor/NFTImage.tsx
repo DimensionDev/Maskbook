@@ -51,6 +51,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     tooltip: {
         whiteSpace: 'nowrap',
+        maxWidth: '100%',
     },
 }))
 
