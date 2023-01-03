@@ -22,7 +22,6 @@ import {
     useNativeToken,
     useNativeTokenPrice,
     useReverseAddress,
-    useWallet,
     useWeb3State,
 } from '@masknet/web3-hooks-base'
 import {
@@ -36,6 +35,8 @@ import {
 import { useTitle } from '../../../hook/useTitle.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
+import { useContainer } from 'unstated-next'
+import { PopupContext } from '../../../hook/usePopupContext.js'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -143,7 +144,7 @@ const ContractInteraction = memo(() => {
     const { classes } = useStyles()
     const location = useLocation()
     const navigate = useNavigate()
-    const wallet = useWallet()
+    const { smartPayChainId } = useContainer(PopupContext)
     const { Others, TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [transferError, setTransferError] = useState(false)
@@ -237,9 +238,9 @@ const ContractInteraction = memo(() => {
         if (request) {
             try {
                 await WalletRPC.confirmRequest(request.payload, {
-                    chainId,
-                    owner: wallet?.owner,
-                    identifier: wallet?.identifier,
+                    chainId: request.owner ? smartPayChainId : chainId,
+                    owner: request.owner,
+                    identifier: request.identifier,
                 })
                 navigate(-1)
             } catch (error_) {
@@ -247,7 +248,7 @@ const ContractInteraction = memo(() => {
             }
         }
         return
-    }, [request, location.search, history, chainId, wallet])
+    }, [request, location.search, history, chainId, smartPayChainId])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
         if (!request) return

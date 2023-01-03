@@ -17,6 +17,7 @@ import { StyledInput } from '../../../components/StyledInput/index.js'
 import { StyledRadio } from '../../../components/StyledRadio/index.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { useTitle } from '../../../hook/useTitle.js'
+import { WalletContext } from '../hooks/useWalletContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -132,27 +133,24 @@ export default function ChangeOwner() {
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets()
 
-    const contractAccount = useMemo(() => {
-        const address = new URLSearchParams(location.search).get('address')
-        if (!address) return
-        return wallets.find((x) => isSameAddress(x.address, address))
-    }, [location, wallets])
-
-    const ownerAddress = new URLSearchParams(location.search).get('owner')
+    const { selectedWallet: contractAccount } = useContainer(WalletContext)
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value: personaManagers } = useAsync(async () => {
-        return Services.Identity.queryOwnedPersonaInformation(false)
+        return Services.Identity.queryOwnedPersonaInformation(true)
     }, [])
 
+    console.log(personaManagers)
     const walletManagers = useMemo(() => wallets.filter((x) => !x.owner), [wallets])
 
     const [, handleConfirm] = useAsyncFn(async () => {
-        if (!manageAccount?.address || !ownerAddress) return
+        if (!manageAccount?.address || !contractAccount) return
         return connection?.changeOwner?.(manageAccount.address, {
             chainId: smartPayChainId,
             account: contractAccount?.address,
             providerType: ProviderType.MaskWallet,
+            owner: contractAccount?.owner,
+            identifier: contractAccount?.identifier,
         })
     }, [manageAccount?.address, smartPayChainId, contractAccount])
 
@@ -210,7 +208,7 @@ export default function ChangeOwner() {
                                     key={index}
                                     className={cx(
                                         classes.item,
-                                        isSameAddress(persona.address, ownerAddress ?? '')
+                                        isSameAddress(persona.address, contractAccount?.owner ?? '')
                                             ? classes.disabledItem
                                             : undefined,
                                     )}
@@ -252,7 +250,7 @@ export default function ChangeOwner() {
                                     key={index}
                                     className={cx(
                                         classes.item,
-                                        isSameAddress(wallet.address, ownerAddress ?? '')
+                                        isSameAddress(wallet.address, contractAccount?.owner ?? '')
                                             ? classes.disabledItem
                                             : undefined,
                                     )}

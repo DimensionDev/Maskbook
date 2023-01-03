@@ -10,7 +10,6 @@ import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import { WalletContext } from '../hooks/useWalletContext.js'
 import { Navigator } from '../../../components/Navigator/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
-import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -72,10 +71,7 @@ const WalletSettings = memo(() => {
                         <ListItem
                             className={classes.item}
                             onClick={() => {
-                                navigate(
-                                    urlcat(PopupRoutes.ChangeOwner, { address: wallet.address, owner: wallet.owner }),
-                                )
-                                // setOwnerWallet(wallet.owner)
+                                navigate(PopupRoutes.ChangeOwner)
                             }}>
                             <Icons.Cached size={20} />
                             <ListItemText className={classes.text}>{t('popups_change_owner')}</ListItemText>

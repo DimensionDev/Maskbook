@@ -9,7 +9,6 @@ import {
     Signer,
     Transaction,
 } from '@masknet/web3-shared-evm'
-import { isZero } from '@masknet/web3-shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'

@@ -129,7 +129,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
 
         return compact(
             owners.map((x, index) =>
-                this.createContractAccount(chainId, options[index], owner, owner, isValidAddress(x)),
+                this.createContractAccount(chainId, options[index], x || owner, owner, isValidAddress(x)),
             ),
         )
     }

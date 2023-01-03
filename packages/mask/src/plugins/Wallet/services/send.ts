@@ -3,7 +3,6 @@ import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { defer } from '@masknet/kit'
 import { SmartPayAccount, Web3 } from '@masknet/web3-providers'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
-import { isZero } from '@masknet/web3-shared-base'
 import {
     ChainId,
     createJsonRpcPayload,
@@ -54,7 +53,7 @@ async function internalSend(
         case EthereumMethodType.MASK_REPLACE_TRANSACTION:
             try {
                 if (!signableConfig) throw new Error('No transaction to be sent.')
-                if (owner && identifier) {
+                if (owner) {
                     callback(
                         null,
                         createJsonRpcResponse(
@@ -143,7 +142,11 @@ export async function send(payload: JsonRpcPayload, options?: Options) {
             id,
         })
         if (editor.risky) {
-            await WalletRPC.pushUnconfirmedRequest(editor.fill())
+            await WalletRPC.pushUnconfirmedRequest({
+                ...editor.fill(),
+                owner: options?.owner,
+                identifier: options?.identifier?.toText(),
+            })
             UNCONFIRMED_CALLBACK_MAP.set(editor.pid!, callback)
             if (options?.popupsWindow) openPopupWindow()
         } else {

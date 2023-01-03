@@ -334,7 +334,7 @@ class Connection implements EVM_Connection {
         const ERC1155_INTERFACE_ID = '0xd9b67a26'
 
         try {
-            const erc165Contract = await this.getWeb3Contract<ERC165>(address, ERC165ABI as AbiItem[], options)
+            const erc165Contract = this.getWeb3Contract<ERC165>(address, ERC165ABI as AbiItem[], options)
 
             const [isERC165, isERC721] = await Promise.all([
                 erc165Contract?.methods.supportsInterface(ERC165_INTERFACE_ID).call({ from: options.account }),
@@ -612,7 +612,7 @@ class Connection implements EVM_Connection {
         const listOfNonNativeAddress = listOfAddress.filter((x) => !isNativeTokenAddress(x))
 
         if (listOfNonNativeAddress.length) {
-            const contract = await this.getWeb3Contract<BalanceChecker>(
+            const contract = this.getWeb3Contract<BalanceChecker>(
                 BALANCE_CHECKER_ADDRESS ?? '',
                 BalanceCheckerABI as AbiItem[],
                 options,
@@ -638,7 +638,7 @@ class Connection implements EVM_Connection {
 
         const options = this.getOptions(initial)
         const BALANCE_CHECKER_ADDRESS = getEthereumConstant(options.chainId, 'BALANCE_CHECKER_ADDRESS')
-        const contract = await this.getWeb3Contract<BalanceChecker>(
+        const contract = this.getWeb3Contract<BalanceChecker>(
             BALANCE_CHECKER_ADDRESS ?? '',
             BalanceCheckerABI as AbiItem[],
             options,
@@ -671,7 +671,7 @@ class Connection implements EVM_Connection {
 
         // ERC20
         const contract = this.getERC20Contract(address, options)
-        const bytes32Contract = await this.getWeb3Contract<ERC20Bytes32>(address, ERC20Bytes32ABI as AbiItem[], options)
+        const bytes32Contract = this.getWeb3Contract<ERC20Bytes32>(address, ERC20Bytes32ABI as AbiItem[], options)
         const results = await Promise.allSettled([
             contract?.methods.name().call() ?? EMPTY_STRING,
             bytes32Contract?.methods.name().call() ?? EMPTY_STRING,
