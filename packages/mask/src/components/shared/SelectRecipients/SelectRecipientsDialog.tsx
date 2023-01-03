@@ -62,6 +62,9 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 300,
         maxHeight: 380,
         overflowY: 'auto',
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     actions: {
         display: 'flex',
