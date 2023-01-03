@@ -72,7 +72,9 @@ const WalletSettings = memo(() => {
                         <ListItem
                             className={classes.item}
                             onClick={() => {
-                                navigate(urlcat(PopupRoutes.ChangeOwner, { owner: wallet.owner }))
+                                navigate(
+                                    urlcat(PopupRoutes.ChangeOwner, { address: wallet.address, owner: wallet.owner }),
+                                )
                                 // setOwnerWallet(wallet.owner)
                             }}>
                             <Icons.Cached size={20} />

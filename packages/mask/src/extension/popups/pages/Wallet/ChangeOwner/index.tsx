@@ -1,19 +1,21 @@
 import { Icons } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
-import { formatPersonaFingerprint, NetworkPluginID, PersonaInformation } from '@masknet/shared-base'
+import { formatPersonaFingerprint, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, useWallets, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Link, Popover, Typography, Button } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
+import { useContainer } from 'unstated-next'
 import { useI18N } from '../../../../../utils/index.js'
 import Services from '../../../../service.js'
 import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { StyledRadio } from '../../../components/StyledRadio/index.js'
+import { PopupContext } from '../../../hook/usePopupContext.js'
 import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -101,19 +103,21 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         backgroundColor: '#ffffff',
     },
+    disabledItem: {
+        opacity: 0.5,
+    },
 }))
 
-enum SignAccountType {
+enum ManagerAccountType {
     Wallet = 'Wallet',
     Persona = 'Persona',
 }
 
-interface SignAccount {
-    type: SignAccountType
-    identity?: string
+interface ManagerAccount {
+    type: ManagerAccountType
     name?: string
     address?: string
-    raw?: PersonaInformation & { address?: string }
+    rawPublicKey?: string
 }
 
 export default function ChangeOwner() {
@@ -122,35 +126,35 @@ export default function ChangeOwner() {
     const navigate = useNavigate()
     const location = useLocation()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-    const [manageAccount, setManageAccount] = useState<SignAccount | undefined>()
+    const [manageAccount, setManageAccount] = useState<ManagerAccount | undefined>()
 
+    const { smartPayChainId } = useContainer(PopupContext)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets()
-    const ownerWallet = useMemo(() => {
-        const owner = new URLSearchParams(location.search).get('owner')
-        if (!owner) return
-        return wallets.find((x) => isSameAddress(x.address, owner))
+
+    const contractAccount = useMemo(() => {
+        const address = new URLSearchParams(location.search).get('address')
+        if (!address) return
+        return wallets.find((x) => isSameAddress(x.address, address))
     }, [location, wallets])
 
+    const ownerAddress = new URLSearchParams(location.search).get('owner')
+
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { value: signablePersonas } = useAsync(async () => {
-        const personas = await Services.Identity.queryOwnedPersonaInformation(false)
-        return Promise.all(
-            personas.map(async (x) => {
-                return {
-                    ...x,
-                    address: (await Services.Identity.generateSignResult(x.identifier, '')).address,
-                }
-            }),
-        )
+    const { value: personaManagers } = useAsync(async () => {
+        return Services.Identity.queryOwnedPersonaInformation(false)
     }, [])
 
-    const signableWallets = useMemo(() => wallets.filter((x) => !x.owner), [wallets])
+    const walletManagers = useMemo(() => wallets.filter((x) => !x.owner), [wallets])
 
     const [, handleConfirm] = useAsyncFn(async () => {
-        if (!manageAccount?.address) return
-        return connection?.transferContractWallet?.(manageAccount?.address)
-    }, [manageAccount?.address])
+        if (!manageAccount?.address || !ownerAddress) return
+        return connection?.changeOwner?.(manageAccount.address, {
+            chainId: smartPayChainId,
+            account: contractAccount?.address,
+            providerType: ProviderType.MaskWallet,
+        })
+    }, [manageAccount?.address, smartPayChainId, contractAccount])
 
     useTitle(t('popups_wallet_change_owner'))
 
@@ -161,16 +165,16 @@ export default function ChangeOwner() {
                 <Box className={classes.wallet}>
                     <Icons.MaskWallet />
                     <Box>
-                        <Typography className={classes.text}>{ownerWallet?.name}</Typography>
+                        <Typography className={classes.text}>{contractAccount?.name}</Typography>
                         <Typography className={classes.text}>
                             <FormattedAddress
-                                address={ownerWallet?.address}
+                                address={contractAccount?.address}
                                 size={4}
                                 formatter={formatEthereumAddress}
                             />
                             <Link
                                 sx={{ display: 'flex', alignItems: 'center' }}
-                                href={explorerResolver.addressLink(chainId, ownerWallet?.address ?? '')}
+                                href={explorerResolver.addressLink(chainId, contractAccount?.address ?? '')}
                                 target="_blank"
                                 rel="noopener noreferrer">
                                 <Icons.PopupLink className={classes.icon} />
@@ -199,19 +203,23 @@ export default function ChangeOwner() {
                     PaperProps={{ style: { minWidth: `${anchorEl?.clientWidth ?? 568}px` }, className: classes.paper }}
                     disableRestoreFocus>
                     <Typography className={classes.popoverTitle}>{t('persona')}</Typography>
-                    {signablePersonas?.length ? (
+                    {personaManagers?.length ? (
                         <Box className={classes.list}>
-                            {signablePersonas.map((persona, index) => (
+                            {personaManagers.map((persona, index) => (
                                 <Box
                                     key={index}
-                                    className={classes.item}
+                                    className={cx(
+                                        classes.item,
+                                        isSameAddress(persona.address, ownerAddress ?? '')
+                                            ? classes.disabledItem
+                                            : undefined,
+                                    )}
                                     onClick={() =>
                                         setManageAccount({
-                                            type: SignAccountType.Persona,
-                                            identity: persona.identifier.publicKeyAsHex,
+                                            type: ManagerAccountType.Persona,
                                             name: persona.nickname,
                                             address: persona.address,
-                                            raw: persona,
+                                            rawPublicKey: persona.identifier.rawPublicKey,
                                         })
                                     }>
                                     <Box display="flex" alignItems="center" columnGap={0.5}>
@@ -227,9 +235,7 @@ export default function ChangeOwner() {
                                             </Typography>
                                         </Box>
                                     </Box>
-                                    <StyledRadio
-                                        checked={manageAccount?.identity === persona.identifier.publicKeyAsHex}
-                                    />
+                                    <StyledRadio checked={isSameAddress(persona.address, manageAccount?.address)} />
                                 </Box>
                             ))}
                         </Box>
@@ -239,16 +245,20 @@ export default function ChangeOwner() {
                         </Box>
                     )}
                     <Typography className={classes.popoverTitle}>{t('popups_wallet_wallets')}</Typography>
-                    {signableWallets?.length ? (
+                    {walletManagers?.length ? (
                         <Box className={classes.list}>
-                            {signableWallets?.map((wallet, index) => (
+                            {walletManagers?.map((wallet, index) => (
                                 <Box
                                     key={index}
-                                    className={classes.item}
+                                    className={cx(
+                                        classes.item,
+                                        isSameAddress(wallet.address, ownerAddress ?? '')
+                                            ? classes.disabledItem
+                                            : undefined,
+                                    )}
                                     onClick={() =>
                                         setManageAccount({
-                                            type: SignAccountType.Wallet,
-                                            identity: wallet.address,
+                                            type: ManagerAccountType.Wallet,
                                             name: wallet.name,
                                             address: wallet.address,
                                         })

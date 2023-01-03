@@ -73,15 +73,20 @@ export default function Wallet() {
                 case EthereumMethodType.PERSONAL_SIGN:
                     navigate(PopupRoutes.WalletSignRequest, { replace: true })
                     break
+                case EthereumMethodType.MASK_TRANSFER:
+                case EthereumMethodType.MASK_DEPLOY:
+                case EthereumMethodType.MASK_CHANGE_OWNER:
+                    navigate(PopupRoutes.ContractInteraction, { replace: true })
+                    break
                 default:
                     break
             }
         }
 
-        const computedPayload = PayloadEditor.fromPayload(payload).config
-        if (!computedPayload) return
+        const computedPayload = PayloadEditor.fromPayload(payload)
+        if (!computedPayload.config) return
 
-        const formatterTransaction = await TransactionFormatter?.formatTransaction(chainId, computedPayload)
+        const formatterTransaction = await TransactionFormatter?.formatTransaction(chainId, computedPayload.config)
 
         if (
             formatterTransaction &&
