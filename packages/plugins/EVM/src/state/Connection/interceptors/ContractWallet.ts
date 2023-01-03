@@ -77,34 +77,6 @@ export class ContractWallet implements Middleware<Context> {
         return this.account.deploy(context.chainId, context.owner, this.getSigner(context))
     }
 
-    private async transfer(context: Context) {
-        if (!context.owner) throw new Error('No owner.')
-
-        const [sender, recipient, amount] = context.requestArguments.params as [string, string, string]
-        if (!isValidAddress(sender)) throw new Error('Invalid sender address.')
-        if (!isValidAddress(recipient)) throw new Error('Invalid recipient address.')
-        if (isZero(amount)) throw new Error('Invalid amount.')
-
-        return this.account.transfer(
-            context.chainId,
-            context.owner,
-            context.account,
-            recipient,
-            amount,
-            this.getSigner(context),
-        )
-    }
-
-    private async changeOwner(context: Context) {
-        if (!context.owner) throw new Error('No owner.')
-
-        const [sender, recipient] = context.requestArguments.params as [string, string]
-        if (!isValidAddress(sender)) throw new Error('Invalid sender address.')
-        if (!isValidAddress(recipient)) throw new Error('Invalid recipient address.')
-
-        return this.account.changeOwner(context.chainId, context.owner, sender, recipient, this.getSigner(context))
-    }
-
     async fn(context: Context, next: () => Promise<void>) {
         const provider = Providers[context.providerType] as BaseContractWalletProvider | undefined
 
@@ -185,20 +157,6 @@ export class ContractWallet implements Middleware<Context> {
                 try {
                     if (!context.config) throw new Error('Invalid transaction.')
                     context.write(await this.getSigner(context).signTransaction(context.config))
-                } catch (error) {
-                    context.abort(error)
-                }
-                break
-            case EthereumMethodType.MASK_TRANSFER:
-                try {
-                    context.write(await this.transfer(context))
-                } catch (error) {
-                    context.abort(error)
-                }
-                break
-            case EthereumMethodType.MASK_CHANGE_OWNER:
-                try {
-                    context.write(await this.changeOwner(context))
                 } catch (error) {
                     context.abort(error)
                 }

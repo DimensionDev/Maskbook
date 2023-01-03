@@ -245,19 +245,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         amount: string,
         signer: Signer<ECKeyIdentifier> | Signer<string>,
     ): Promise<string> {
-        const contract = this.createWalletContract(chainId, owner)
-        if (!contract) throw new Error('Failed to create contract.')
-
-        return this.sendTransaction(
-            chainId,
-            owner,
-            {
-                from: sender,
-                to: sender,
-                data: contract.methods.transfer(recipient, amount).encodeABI(),
-            },
-            signer,
-        )
+        throw new Error('Method not implemented.')
     }
 
     changeOwner(
@@ -267,19 +255,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         recipient: string,
         signer: Signer<ECKeyIdentifier> | Signer<string>,
     ): Promise<string> {
-        const contract = this.createWalletContract(chainId, owner)
-        if (!contract) throw new Error('Failed to create contract.')
-
-        return this.sendTransaction(
-            chainId,
-            owner,
-            {
-                from: sender,
-                to: sender,
-                data: contract.methods.changeOwner(recipient).encodeABI(),
-            },
-            signer,
-        )
+        throw new Error('Method not implemented.')
     }
 
     /**

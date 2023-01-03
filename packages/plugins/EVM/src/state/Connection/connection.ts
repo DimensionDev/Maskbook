@@ -17,7 +17,7 @@ import ERC20Bytes32ABI from '@masknet/web3-contracts/abis/ERC20Bytes32.json'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import ERC1155ABI from '@masknet/web3-contracts/abis/ERC1155.json'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
-import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
+import WalletContractABI from '@masknet/web3-contracts/abis/Wallet.json'
 import {
     ChainId,
     EthereumMethodType,
@@ -222,7 +222,7 @@ class Connection implements EVM_Connection {
         if (!address || isNativeTokenAddress(address)) throw new Error('Invalid token address.')
 
         // ERC20
-        return new ContractTransaction(await this.getERC20Contract(address, options)).send(
+        return new ContractTransaction(this.getERC20Contract(address, options)).send(
             (x) => x?.methods.approve(recipient, toHex(amount)),
             options.overrides,
         )
@@ -251,7 +251,7 @@ class Connection implements EVM_Connection {
         if (!address || isNativeTokenAddress(address)) throw new Error('Invalid token address.')
 
         // ERC721 & ERC1155
-        return new ContractTransaction(await this.getERC721Contract(address, options)).send(
+        return new ContractTransaction(this.getERC721Contract(address, options)).send(
             (x) => x?.methods.setApprovalForAll(recipient, approved),
             options.overrides,
         )
@@ -282,7 +282,7 @@ class Connection implements EVM_Connection {
         }
 
         // ERC20
-        return new ContractTransaction(await this.getERC20Contract(address, options)).send(
+        return new ContractTransaction(this.getERC20Contract(address, options)).send(
             (x) => x?.methods.transfer(recipient, toHex(amount)),
             options.overrides,
         )
@@ -300,14 +300,14 @@ class Connection implements EVM_Connection {
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
-            return new ContractTransaction(await this.getERC1155Contract(address, options)).send(
+            return new ContractTransaction(this.getERC1155Contract(address, options)).send(
                 (x) => x?.methods.safeTransferFrom(options.account, recipient, tokenId, amount ?? '', '0x'),
                 options.overrides,
             )
         }
 
         // ERC721
-        return new ContractTransaction(await this.getERC721Contract(address, options)).send(
+        return new ContractTransaction(this.getERC721Contract(address, options)).send(
             (x) => x?.methods.transferFrom(options.account, recipient, tokenId),
             options.overrides,
         )
@@ -383,7 +383,7 @@ class Connection implements EVM_Connection {
         let ownerId: string | undefined
 
         if (actualSchema !== SchemaType.ERC1155) {
-            const contract = await this.getERC721Contract(address, options)
+            const contract = this.getERC721Contract(address, options)
             try {
                 ownerId = await contract?.methods.ownerOf(tokenId).call()
             } catch {}
@@ -413,7 +413,7 @@ class Connection implements EVM_Connection {
         if (actualSchema === SchemaType.ERC1155) return ''
 
         // ERC721
-        const contract = await this.getERC721Contract(address, options)
+        const contract = this.getERC721Contract(address, options)
         return (await contract?.methods.ownerOf(tokenId).call()) ?? ''
     }
 
@@ -429,13 +429,13 @@ class Connection implements EVM_Connection {
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
-            const contract = await this.getERC1155Contract(address, options)
+            const contract = this.getERC1155Contract(address, options)
             // the owner has at least 1 token
             return toNumber((await contract?.methods.balanceOf(owner, tokenId).call()) ?? 0) > 0 ?? false
         }
 
         // ERC721
-        const contract = await this.getERC721Contract(address, options)
+        const contract = this.getERC721Contract(address, options)
         return isSameAddress(await contract?.methods.ownerOf(tokenId).call(), owner)
     }
     async getNonFungibleTokenMetadata(
@@ -460,7 +460,7 @@ class Connection implements EVM_Connection {
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
-            const contract = await this.getERC1155Contract(address, options)
+            const contract = this.getERC1155Contract(address, options)
             const uri = await contract?.methods.uri(tokenId ?? '').call()
             if (!uri) throw new Error('Failed to read metadata uri.')
 
@@ -477,7 +477,7 @@ class Connection implements EVM_Connection {
         }
 
         // ERC721
-        const contract = await this.getERC721Contract(address, options)
+        const contract = this.getERC721Contract(address, options)
         const uri = await contract?.methods.tokenURI(tokenId ?? '').call()
         if (!uri) throw new Error('Failed to read metadata uri.')
         const response = await fetchJSON<ERC721Metadata>(processURI(uri))
@@ -501,7 +501,7 @@ class Connection implements EVM_Connection {
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
-            const contractERC721 = await this.getERC721Contract(address, options)
+            const contractERC721 = this.getERC721Contract(address, options)
             const results = await Promise.allSettled([
                 contractERC721?.methods.name().call() ?? EMPTY_STRING,
                 contractERC721?.methods.symbol().call() ?? EMPTY_STRING,
@@ -521,7 +521,7 @@ class Connection implements EVM_Connection {
         }
 
         // ERC721
-        const contract = await this.getERC721Contract(address, options)
+        const contract = this.getERC721Contract(address, options)
         const results = await Promise.allSettled([
             contract?.methods.name().call() ?? EMPTY_STRING,
             contract?.methods.symbol().call() ?? EMPTY_STRING,
@@ -551,7 +551,7 @@ class Connection implements EVM_Connection {
         }
 
         // ERC721
-        const contract = await this.getERC721Contract(address, options)
+        const contract = this.getERC721Contract(address, options)
         const results = await Promise.allSettled([contract?.methods.name().call() ?? EMPTY_STRING])
         const [name] = results.map((result) => (result.status === 'fulfilled' ? result.value : '')) as string[]
         return createNonFungibleTokenCollection(options.chainId, address, name ?? 'Unknown Token', '')
@@ -572,7 +572,7 @@ class Connection implements EVM_Connection {
         if (!address || isNativeTokenAddress(address)) return this.getNativeTokenBalance(options)
 
         // ERC20
-        const contract = await this.getERC20Contract(address, options)
+        const contract = this.getERC20Contract(address, options)
         return contract?.methods.balanceOf(options.account).call() ?? '0'
     }
     async getNonFungibleTokenBalance(
@@ -586,12 +586,12 @@ class Connection implements EVM_Connection {
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
-            const contract = await this.getERC1155Contract(address, options)
+            const contract = this.getERC1155Contract(address, options)
             return contract?.methods?.balanceOf(options.account, tokenId ?? '').call() ?? '0'
         }
 
         // ERC721
-        const contract = await this.getERC721Contract(address, options)
+        const contract = this.getERC721Contract(address, options)
         return contract?.methods.balanceOf(options.account).call() ?? '0'
     }
     async getFungibleTokensBalance(
@@ -670,7 +670,7 @@ class Connection implements EVM_Connection {
         if (!address || isNativeTokenAddress(address)) return this.getNativeToken(options)
 
         // ERC20
-        const contract = await this.getERC20Contract(address, options)
+        const contract = this.getERC20Contract(address, options)
         const bytes32Contract = await this.getWeb3Contract<ERC20Bytes32>(address, ERC20Bytes32ABI as AbiItem[], options)
         const results = await Promise.allSettled([
             contract?.methods.name().call() ?? EMPTY_STRING,
@@ -691,34 +691,30 @@ class Connection implements EVM_Connection {
         )
     }
 
-    async getWeb3Contract<T extends BaseContract>(
-        address: string,
-        ABI: AbiItem[],
-        initial?: EVM_Web3ConnectionOptions,
-    ) {
+    getWeb3Contract<T extends BaseContract>(address: string, ABI: AbiItem[], initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         const web3 = this.getWeb3(options)
         return createContract<T>(web3, address, ABI)
     }
 
-    async getERC20Contract(address: string, initial?: EVM_Web3ConnectionOptions) {
+    getERC20Contract(address: string, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.getWeb3Contract<ERC20>(address, ERC20ABI as AbiItem[], options)
     }
 
-    async getERC721Contract(address: string, initial?: EVM_Web3ConnectionOptions) {
+    getERC721Contract(address: string, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.getWeb3Contract<ERC721>(address, ERC721ABI as AbiItem[], options)
     }
 
-    async getERC1155Contract(address: string, initial?: EVM_Web3ConnectionOptions) {
+    getERC1155Contract(address: string, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.getWeb3Contract<ERC1155>(address, ERC1155ABI as AbiItem[], options)
     }
 
-    async getWalletContract(initial?: EVM_Web3ConnectionOptions) {
+    getWalletContract(address: string, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
-        return this.getWeb3Contract<WalletContract>(options.account, WalletABI as AbiItem[], options)
+        return this.getWeb3Contract<WalletContract>(address, WalletContractABI as AbiItem[], options)
     }
 
     async getAccount(initial?: EVM_Web3ConnectionOptions) {
@@ -982,10 +978,19 @@ class Connection implements EVM_Connection {
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ) {
         const options = this.getOptions(initial)
+        const contract = this.getWalletContract(options.account, options)
+        if (!contract) throw new Error('Failed to create contract.')
+
         return this.hijackedRequest<string>(
             {
-                method: EthereumMethodType.MASK_TRANSFER,
-                params: [options.account, recipient, toHex(amount)],
+                method: EthereumMethodType.ETH_SEND_TRANSACTION,
+                params: [
+                    {
+                        from: options.account,
+                        to: options.account,
+                        data: contract.methods.transfer(recipient, amount).encodeABI(),
+                    },
+                ],
             },
             options,
         )
@@ -993,10 +998,19 @@ class Connection implements EVM_Connection {
 
     async changeOwner(recipient: string, initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
         const options = this.getOptions(initial)
+        const contract = this.getWalletContract(options.account, options)
+        if (!contract) throw new Error('Failed to create contract.')
+
         return this.hijackedRequest<string>(
             {
-                method: EthereumMethodType.MASK_CHANGE_OWNER,
-                params: [options.account, recipient],
+                method: EthereumMethodType.ETH_SEND_TRANSACTION,
+                params: [
+                    {
+                        from: options.account,
+                        to: options.account,
+                        data: contract.methods.changeOwner(recipient).encodeABI(),
+                    },
+                ],
             },
             options,
         )
