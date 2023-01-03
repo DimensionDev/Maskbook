@@ -109,6 +109,9 @@ export class PayloadEditor {
             EthereumMethodType.ETH_SEND_TRANSACTION,
             EthereumMethodType.ETH_SIGN_TRANSACTION,
             EthereumMethodType.MASK_REPLACE_TRANSACTION,
+            EthereumMethodType.MASK_TRANSFER,
+            EthereumMethodType.MASK_DEPLOY,
+            EthereumMethodType.MASK_CHANGE_OWNER,
         ].includes(method as EthereumMethodType)
     }
 
