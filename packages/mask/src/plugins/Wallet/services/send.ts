@@ -3,6 +3,7 @@ import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { defer } from '@masknet/kit'
 import { SmartPayAccount, Web3 } from '@masknet/web3-providers'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
+import { isZero } from '@masknet/web3-shared-base'
 import {
     ChainId,
     createJsonRpcPayload,
@@ -17,7 +18,6 @@ import { WalletRPC } from '../messages.js'
 import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper/index.js'
 import { signWithPersona } from '../../../../background/services/identity/index.js'
 import { signWithWallet } from './wallet/index.js'
-import { isZero } from '@masknet/web3-shared-base'
 
 interface Options {
     account?: string
@@ -181,10 +181,9 @@ export async function send(payload: JsonRpcPayload, options?: Options) {
             await WalletRPC.pushUnconfirmedRequest(editor.fill())
             UNCONFIRMED_CALLBACK_MAP.set(editor.pid!, callback)
             if (options?.popupsWindow) openPopupWindow()
-            return
+        } else {
+            await internalSend(payload, callback, options)
         }
-
-        await internalSend(payload, callback, options)
     })
 }
 
