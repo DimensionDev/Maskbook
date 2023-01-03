@@ -148,7 +148,6 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                     identity,
                     page,
                     exact: true,
-                    sort: 'activated_at',
                     order: 'desc',
                 }),
                 undefined,

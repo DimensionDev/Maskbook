@@ -16,10 +16,10 @@ import type {
     PersonaInformation,
     PluginID,
     PopupRoutes,
+    DashboardRoutes,
     ProfileIdentifier,
     ScopedStorage,
-    PersonaSignRequest,
-    PersonaSignResult,
+    SignType,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -37,7 +37,7 @@ import type {
     Web3State,
     Web3UI,
 } from '@masknet/web3-shared-base'
-import type { ChainId as ChainIdEVM, Transaction, Transaction as TransactionEVM } from '@masknet/web3-shared-evm'
+import type { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { CompositionType } from './entry-content-script.js'
 
@@ -180,15 +180,8 @@ export namespace Plugin.Shared {
         /** Native API supported */
         hasNativeAPI: boolean
 
-        /** Send request to native API */
-        send(
-            payload: JsonRpcPayload,
-            options?: {
-                account?: string
-                chainId?: ChainIdEVM
-                popupsWindow?: boolean
-            },
-        ): Promise<JsonRpcResponse>
+        /** Open Dashboard with a new window */
+        openDashboard(route?: DashboardRoutes, search?: string): Promise<any>
 
         /** Open popup window */
         openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
@@ -208,43 +201,14 @@ export namespace Plugin.Shared {
         /** Select a Mask Wallet account */
         selectAccount(): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
 
-        /** Update Mask Wallet account */
-        updateAccount(account: {
-            account?: string
-            chainId?: number
-            networkType?: string
-            providerType?: string
-        }): Promise<void>
-
         /** Record which sites are connected to the Mask wallet  */
         recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): void
 
-        /** Sign a message with persona (with popups) */
-        signMessageWithPersona(payload: PersonaSignRequest<string>): Promise<PersonaSignResult>
+        /** Sign a message with persona (w or w/o popups) */
+        signWithPersona<T>(type: SignType, message: T, identifier?: ECKeyIdentifier, silent?: boolean): Promise<string>
 
-        /** Sign a transaction with persona (with popups) */
-        signTransactionWithPersona(payload: PersonaSignRequest<Transaction>): Promise<PersonaSignResult>
-
-        generateMessageSignResult(
-            method: PersonaSignRequest<string>['method'],
-            signer: ECKeyIdentifier,
-            message: string,
-        ): Promise<PersonaSignResult>
-
-        generateTransactionSignResult(
-            method: PersonaSignRequest<Transaction>['method'],
-            signer: ECKeyIdentifier,
-            transaction: Transaction,
-        ): Promise<PersonaSignResult>
-
-        /** Sign transaction */
-        signTransaction(address: string, transaction: TransactionEVM): Promise<string>
-
-        /** Sign personal message, aka. eth.personal.sign() */
-        signPersonalMessage(message: string, address: string): Promise<string>
-
-        /** Sign typed data */
-        signTypedData(address: string, message: string): Promise<string>
+        /** Sign a message with wallet */
+        signWithWallet<T>(type: SignType, message: T, account?: string): Promise<string>
 
         /** Get all wallets */
         getWallets(): Promise<Wallet[]>
@@ -257,6 +221,25 @@ export namespace Plugin.Shared {
 
         /** Remove a old wallet */
         removeWallet(id: string, password?: string): Promise<void>
+
+        /** Send request to native API, for a risky request will be added into the waiting queue. */
+        send(
+            payload: JsonRpcPayload,
+            options?: {
+                account?: string
+                chainId?: ChainIdEVM
+                popupsWindow?: boolean
+                owner?: string
+                identifier?: ECKeyIdentifier
+            },
+        ): Promise<JsonRpcResponse>
+        /** Confirm a request */
+        confirmRequest(
+            payload: JsonRpcPayload,
+            options?: { disableClose?: boolean; popupsWindow?: boolean },
+        ): Promise<JsonRpcResponse | void>
+        /** Reject a request */
+        rejectRequest(payload: JsonRpcPayload): Promise<void>
     }
 
     export interface Definition<
@@ -717,6 +700,7 @@ export namespace Plugin.SNSAdaptor {
              */
             Decorator: InjectUI<{
                 identity?: SocialIdentity
+                userId?: string
                 persona?: string
                 socialAccounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
             }>

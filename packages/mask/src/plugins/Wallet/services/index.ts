@@ -1,5 +1,4 @@
 export * from './account.js'
-export * from './keystore/index.js'
 export * from './wallet/index.js'
 export * from './legacyWallet.js'
 export * from './rpc.js'

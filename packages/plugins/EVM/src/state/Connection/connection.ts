@@ -1,6 +1,6 @@
 import { first } from 'lodash-es'
 import { AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
-import type { RequestArguments, SignedTransaction, TransactionReceipt } from 'web3-core'
+import type { RequestArguments, TransactionReceipt } from 'web3-core'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { getSubscriptionCurrentValue, PartialRequired } from '@masknet/shared-base'
@@ -848,57 +848,56 @@ class Connection implements EVM_Connection {
     }
 
     signMessage(
-        dataToSign: string,
-        signType?: 'personalSign' | 'typedDataSign' | Omit<string, 'personalSign' | 'typedDataSign'>,
+        type: 'message' | 'typedData' | Omit<string, 'message' | 'typedData'>,
+        message: string,
         initial?: EVM_Web3ConnectionOptions,
     ) {
         const options = this.getOptions(initial)
         if (!options.account) throw new Error('Unknown account.')
 
-        switch (signType) {
-            case 'personalSign':
+        switch (type) {
+            case 'message':
                 return this.hijackedRequest<string>(
                     {
                         method: EthereumMethodType.PERSONAL_SIGN,
-                        params: [dataToSign, options.account, ''].filter((x) => typeof x !== 'undefined'),
+                        params: [message, options.account, ''].filter((x) => typeof x !== 'undefined'),
                     },
                     options,
                 )
-            case 'typedDataSign':
+            case 'typedData':
                 return this.hijackedRequest<string>(
                     {
                         method: EthereumMethodType.ETH_SIGN_TYPED_DATA,
-                        params: [options.account, dataToSign],
+                        params: [options.account, message],
                     },
                     options,
                 )
             default:
-                throw new Error(`Unknown sign type: ${signType}.`)
+                throw new Error(`Unknown sign type: ${type}.`)
         }
     }
 
     async verifyMessage(
-        dataToVerify: string,
+        type: string,
+        message: string,
         signature: string,
-        signType?: string,
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction>,
     ) {
         const options = this.getOptions(initial)
         const web3 = this.getWeb3(options)
-        const dataToSign = await web3.eth.personal.ecRecover(dataToVerify, signature)
-        return dataToSign === dataToVerify
+        const dataToSign = await web3.eth.personal.ecRecover(message, signature)
+        return dataToSign === message
     }
 
     async signTransaction(transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
-        const signed = await this.hijackedRequest<SignedTransaction>(
+        return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SIGN_TRANSACTION,
                 params: [transaction],
             },
             options,
         )
-        return signed.rawTransaction ?? ''
     }
 
     signTransactions(transactions: Transaction[], initial?: EVM_Web3ConnectionOptions) {
@@ -969,28 +968,37 @@ class Connection implements EVM_Connection {
         )
     }
 
-    async transferContractWallet(
+    async transfer(
         recipient: string,
+        amount: string,
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<string>(
             {
-                method: EthereumMethodType.MASK_TRANSFER_CONTRACT_WALLET,
-                params: [recipient],
+                method: EthereumMethodType.MASK_TRANSFER,
+                params: [options.account, recipient, toHex(amount)],
             },
             options,
         )
     }
 
-    async deployContractWallet(
-        owner: string,
-        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
-    ) {
+    async changeOwner(recipient: string, initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<string>(
             {
-                method: EthereumMethodType.MASK_DEPLOY_CONTRACT_WALLET,
+                method: EthereumMethodType.MASK_CHANGE_OWNER,
+                params: [options.account, recipient],
+            },
+            options,
+        )
+    }
+
+    async deploy(owner: string, initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
+        const options = this.getOptions(initial)
+        return this.hijackedRequest<string>(
+            {
+                method: EthereumMethodType.MASK_DEPLOY,
                 params: [owner],
             },
             options,

@@ -68,6 +68,7 @@ export function useMenuConfig(
                 onClick: close,
                 anchorOrigin: menuProps?.anchorOrigin,
                 transformOrigin: menuProps?.transformOrigin,
+                disableScrollLock: true,
             },
             elements?.map((element, key) =>
                 isValidElement<object>(element) ? cloneElement(element, { ...element.props, key }) : element,

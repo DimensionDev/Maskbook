@@ -3,6 +3,8 @@ import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-es'
 import { Tab } from '@mui/material'
 import { TabContext } from '@mui/lab'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import type { SearchResult } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { DSearch } from '@masknet/web3-providers'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
@@ -35,6 +37,7 @@ const useStyles = makeStyles()(() => ({
 export interface SearchResultInspectorProps {
     keyword?: string
     isProfilePage?: boolean
+    collectionList?: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
 export function SearchResultInspector(props: SearchResultInspectorProps) {
@@ -49,8 +52,8 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
 
     const resultList = useAsyncRetry(async () => {
         if (!keyword) return
-        return DSearch.search(keyword)
-    }, [keyword])
+        return props.collectionList ?? DSearch.search(keyword)
+    }, [keyword, JSON.stringify(props.collectionList)])
 
     const contentComponent = useMemo(() => {
         if (!resultList.value?.length) return null

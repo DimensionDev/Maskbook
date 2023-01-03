@@ -217,7 +217,7 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
                             {...gridProps}
                         />
                     </Box>
-                    {error && !done && <RetryHint hint={false} retry={nextPage} />}
+                    {error && done && <RetryHint hint={false} retry={nextPage} />}
                     <ElementAnchor
                         callback={() => {
                             if (nextPage) nextPage()

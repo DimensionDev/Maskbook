@@ -22,11 +22,11 @@ import { useCurrentCurrency } from './useCurrentCurrency.js'
 
 const NFTSCAN_CHAIN_ID_LIST = [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
 
-export function useTrendingOverviewByAddress(address: string) {
+export function useTrendingOverview(address: string, expectedChainId?: Web3Helper.ChainIdAll) {
     return useAsync(async () => {
-        if (!address) return null
-        return PluginTraderRPC.getNFT_TrendingOverview(address)
-    }, [address])
+        if (!address || !expectedChainId) return null
+        return PluginTraderRPC.getNFT_TrendingOverview(expectedChainId, address)
+    }, [address, expectedChainId])
 }
 
 export function useCollectionByTwitterHandler(twitterHandler?: string) {
@@ -44,26 +44,21 @@ export function useNonFungibleTokenActivities(
     address: string,
     expectedChainId?: Web3Helper.ChainIdAll,
 ) {
-    const pageIndexRef = useRef<number>(0)
+    const cursorRef = useRef<string>('')
     const { Others } = useWeb3State(pluginID)
     const [nonFungibleTokenActivities, setNonFungibleTokenActivities] = useState<
-        Record<number, NonFungibleTokenActivity[]>
+        Record<string, NonFungibleTokenActivity[]>
     >({})
     const [{ loading: loadingNonFungibleTokenActivities }, getNonFungibleTokenActivities] = useAsyncFn(async () => {
         if (!address || !expectedChainId || !Others?.isValidChainId(expectedChainId)) return
-        const pageIndex = pageIndexRef.current
 
-        const activities = await PluginTraderRPC.getNonFungibleTokenActivities(
-            expectedChainId,
-            address,
-            pageIndexRef.current,
-        )
+        const result = await PluginTraderRPC.getNonFungibleTokenActivities(expectedChainId, address, cursorRef.current)
 
         setNonFungibleTokenActivities((currentActivities) => {
-            if (currentActivities[pageIndexRef.current] || !activities) return currentActivities
-            pageIndexRef.current = pageIndex + 1
+            if (!result || currentActivities[result.cursor] || !result?.content) return currentActivities
+            cursorRef.current = result.cursor
 
-            return { ...currentActivities, [pageIndex]: activities }
+            return { ...currentActivities, [cursorRef.current]: result.content }
         })
     }, [address, expectedChainId])
 
@@ -98,7 +93,7 @@ export function useTrendingById(
         if (!id) return null
         if (!currency) return null
         if (!dataProvider) return null
-        if ((!expectedChainId || Others?.isValidChainId(expectedChainId)) && dataProvider === SourceType.NFTScan) {
+        if ((!expectedChainId || !Others?.isValidChainId(expectedChainId)) && dataProvider === SourceType.NFTScan) {
             return attemptUntil(
                 NFTSCAN_CHAIN_ID_LIST.map((chainId) => async () => {
                     try {

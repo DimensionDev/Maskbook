@@ -1,17 +1,12 @@
 import { useCallback } from 'react'
+import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import { useWeb3Connection, useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
-import {
-    ChainId,
-    ChainId as EVM_ChainId,
-    ProviderType as EVM_ProviderType,
-    useTokenConstants,
-} from '@masknet/web3-shared-evm'
+import { ChainId, ChainId as EVM_ChainId, ProviderType as EVM_ProviderType } from '@masknet/web3-shared-evm'
 import { ChainId as SolanaChainId, ProviderType as SolanaProviderType } from '@masknet/web3-shared-solana'
 import { ChainId as FlowChainId, ProviderType as FlowProviderType } from '@masknet/web3-shared-flow'
-import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 
 export interface ConnectionContentProps {
     onClose?: () => void
@@ -25,28 +20,32 @@ const useStyles = makeStyles()({
 
 export function ConnectionContent(props: ConnectionContentProps) {
     const { classes } = useStyles()
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext()
     const connection = useWeb3Connection()
 
     const onTransferCallback = useCallback(() => {
-        if (!NATIVE_TOKEN_ADDRESS) return
-        return connection?.transferFungibleToken(
-            NATIVE_TOKEN_ADDRESS,
-            '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
-            '100',
-            undefined,
-            {
-                chainId: ChainId.Mumbai,
-                account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
-                providerType: EVM_ProviderType.MaskWallet,
-                overrides: {
-                    chainId: ChainId.Mumbai,
-                    from: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
-                },
-            },
-        )
+        return connection?.transfer?.('0x66b57885E8E9D84742faBda0cE6E3496055b012d', '100', {
+            chainId: ChainId.Mumbai,
+            account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
+            providerType: EVM_ProviderType.MaskWallet,
+        })
+    }, [connection])
+
+    const onDeployCallback = useCallback(() => {
+        return connection?.deploy?.('0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC', {
+            chainId: ChainId.Mumbai,
+            account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
+            providerType: EVM_ProviderType.MaskWallet,
+        })
+    }, [connection])
+
+    const onChangeOwnerChange = useCallback(() => {
+        return connection?.changeOwner?.('0x66b57885E8E9D84742faBda0cE6E3496055b012d', {
+            chainId: ChainId.Mumbai,
+            account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
+            providerType: EVM_ProviderType.MaskWallet,
+        })
     }, [connection])
 
     const onApproveFungibleTokenCallback = useCallback(() => {
@@ -60,16 +59,12 @@ export function ConnectionContent(props: ConnectionContentProps) {
                 chainId: ChainId.Mumbai,
                 account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
                 providerType: EVM_ProviderType.MaskWallet,
-                overrides: {
-                    chainId: ChainId.Mumbai,
-                    from: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
-                },
             },
         )
     }, [pluginID, connection])
 
-    const onSignMessage = useCallback(
-        async (type?: string) => {
+    const onSign = useCallback(
+        async (type: string) => {
             const message = 'Hello World'
             const typedData = JSON.stringify({
                 domain: {
@@ -115,8 +110,31 @@ export function ConnectionContent(props: ConnectionContentProps) {
                     ],
                 },
             })
-            const signed = await connection?.signMessage(type === 'typedDataSign' ? typedData : message, type)
-            window.alert(`Signed: ${signed}`)
+            const transaction = {
+                chainId: ChainId.Mainnet,
+                from: '0x66b57885E8E9D84742faBda0cE6E3496055b012d',
+                to: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+                value: '0x1000',
+                gas: '0x5208',
+                gasPrice: '0x174876e800',
+                nonce: 0,
+                data: '0x',
+            }
+
+            const sign = async () => {
+                switch (type) {
+                    case 'message':
+                        return connection?.signMessage('message', message)
+                    case 'typedData':
+                        return connection?.signMessage('typedData', typedData)
+                    case 'transaction':
+                        return connection?.signTransaction(transaction)
+                    default:
+                        return ''
+                }
+            }
+
+            window.alert(`Signed: ${await sign()}`)
         },
         [chainId, connection],
     )
@@ -162,12 +180,36 @@ export function ConnectionContent(props: ConnectionContentProps) {
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">
-                                Native Token Transfer
+                                Transfer
                             </Typography>
                         </TableCell>
                         <TableCell>
                             <Button size="small" onClick={() => onTransferCallback()}>
                                 Transfer
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Deploy
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button size="small" onClick={() => onDeployCallback()}>
+                                Deploy
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Change Owner
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button size="small" onClick={() => onChangeOwnerChange()}>
+                                Change Owner
                             </Button>
                         </TableCell>
                     </TableRow>
@@ -207,14 +249,13 @@ export function ConnectionContent(props: ConnectionContentProps) {
                                 onClick={() => {
                                     switch (pluginID) {
                                         case NetworkPluginID.PLUGIN_EVM:
-                                            onSignMessage('personalSign')
+                                            onSign('message')
                                             break
                                         default:
-                                            onSignMessage()
                                             break
                                     }
                                 }}>
-                                Sign Message
+                                Sign
                             </Button>
                         </TableCell>
                     </TableRow>
@@ -230,13 +271,35 @@ export function ConnectionContent(props: ConnectionContentProps) {
                                 onClick={() => {
                                     switch (pluginID) {
                                         case NetworkPluginID.PLUGIN_EVM:
-                                            onSignMessage('typedDataSign')
+                                            onSign('typedData')
                                             break
                                         default:
                                             break
                                     }
                                 }}>
-                                Sign Typed Data
+                                Sign
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Sign Transaction
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button
+                                size="small"
+                                onClick={() => {
+                                    switch (pluginID) {
+                                        case NetworkPluginID.PLUGIN_EVM:
+                                            onSign('transaction')
+                                            break
+                                        default:
+                                            break
+                                    }
+                                }}>
+                                Sign
                             </Button>
                         </TableCell>
                     </TableRow>

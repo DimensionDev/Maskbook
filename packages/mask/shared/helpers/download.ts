@@ -1,4 +1,4 @@
-import type { MimeTypes } from '@masknet/shared-base'
+import type { MimeType } from '@masknet/shared-base'
 
 // TODO: maybe fallback to normal HTML save file?
 export async function saveFileFromUrl(url: string, fileName: string) {
@@ -7,7 +7,7 @@ export async function saveFileFromUrl(url: string, fileName: string) {
 export interface SaveFileOptions {
     fileContent: BufferSource
     fileName: string
-    mimeType: string | MimeTypes
+    mimeType: string | MimeType
 }
 export async function saveFileFromBuffer(options: SaveFileOptions) {
     const blob = new Blob([options.fileContent], { type: options.mimeType })

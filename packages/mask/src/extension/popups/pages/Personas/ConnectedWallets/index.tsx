@@ -1,12 +1,12 @@
-import { memo } from 'react'
-import { useAsync, useAsyncFn } from 'react-use'
-import { useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
+import { memo } from 'react'
+import { useAsync, useAsyncFn } from 'react-use'
+import { useLocation } from 'react-router-dom'
+import { usePopupCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
-import { NetworkPluginID, NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
-import { usePopupCustomSnackbar } from '@masknet/theme'
+import { NetworkPluginID, NextIDAction, NextIDPlatform, PopupRoutes, SignType } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/index.js'
@@ -21,7 +21,6 @@ const ConnectedWallets = memo(() => {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
-    const navigate = useNavigate()
     const location = useLocation()
     const { proofs, currentPersona, fetchProofsLoading } = PersonaContext.useContainer()
 
@@ -87,9 +86,11 @@ const ConnectedWallets = memo(() => {
 
                 if (!result) return
 
-                const signature = await Service.Identity.generatePersonalSignResult(
-                    currentPersona.identifier,
+                const signature = await Service.Identity.signWithPersona(
+                    SignType.Message,
                     result.signPayload,
+                    currentPersona.identifier,
+                    true,
                 )
 
                 if (!signature) return
@@ -101,7 +102,7 @@ const ConnectedWallets = memo(() => {
                     wallet.platform,
                     wallet.identity,
                     result.createdAt,
-                    { signature: signature.signature },
+                    { signature },
                 )
                 // Broadcast updates.
                 MaskMessages.events.ownProofChanged.sendToAll()

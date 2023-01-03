@@ -16,7 +16,7 @@ export namespace BundlerAPI {
         /** Get the address of the signer who drafts and broadcasts the transaction. */
         getSigner(chainId: ChainId): Promise<string>
         /** Get all supported chain ids. */
-        getSupportedChainIds(): Promise<ChainId[]>
+        getSupportedChainId(): Promise<ChainId>
         /** Get all supported entry contracts. */
         getSupportedEntryPoints(chainId: ChainId): Promise<string[]>
         /** Simulate a user operation. */

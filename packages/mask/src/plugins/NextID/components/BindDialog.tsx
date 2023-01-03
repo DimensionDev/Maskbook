@@ -51,7 +51,7 @@ export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBou
                 message.createdAt,
                 {
                     walletSignature: walletSignState.value,
-                    signature: personaSignState.value.signature,
+                    signature: personaSignState.value,
                 },
             )
             showSnackbar(t.notify_wallet_sign_request_title(), {
@@ -82,10 +82,7 @@ export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBou
             onWalletSign={handleWalletSign}
             isCurrentAccount
             signature={{
-                persona: {
-                    value: personaSignState.value?.signature,
-                    loading: personaSignState.loading,
-                },
+                persona: personaSignState,
                 wallet: walletSignState,
             }}
             isBound={isBound}

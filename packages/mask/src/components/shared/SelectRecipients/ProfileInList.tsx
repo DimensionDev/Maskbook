@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { useSnackbarCallback } from '@masknet/shared'
 import { formatPersonaFingerprint, ProfileInformationFromNextID } from '@masknet/shared-base'
-import { makeStyles, ShadowRootTooltip, useBoundedPopperProps } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Checkbox, ListItem, ListItemAvatar, ListItemText } from '@mui/material'
 import { truncate } from 'lodash-es'
 import { useCallback } from 'react'
@@ -12,8 +12,6 @@ import { Avatar } from '../../../utils/components/Avatar.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        maxWidth: 'calc(50% - 6px)',
-        padding: '0 0 0 8px',
         borderRadius: 8,
         cursor: 'pointer',
     },
@@ -32,17 +30,15 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     actionIcon: {
-        fontSize: 16,
+        width: 14,
+        height: 14,
         cursor: 'pointer',
+        marginLeft: theme.spacing(0.5),
     },
     badge: {
-        background: theme.palette.background.input,
-        color: theme.palette.text.strong,
-        fontSize: 10,
-        fontWeight: 700,
-        marginLeft: 12,
-        padding: '2px 4px',
-        borderRadius: 2,
+        width: 32,
+        height: 18,
+        marginLeft: theme.spacing(0.5),
     },
     highLightBg: {
         background: theme.palette.background.default,
@@ -70,7 +66,6 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column-reverse',
     },
     toolTip: {
-        maxWidth: 250,
         fontSize: 14,
         lineHeight: '18px',
         padding: 10,
@@ -78,7 +73,6 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 4,
         whiteSpace: 'normal',
         marginTop: 0,
-        transform: 'translate(5px,45px,0px)',
     },
 }))
 
@@ -115,11 +109,9 @@ export function ProfileInList(props: ProfileInListProps) {
         return truncate(mentions, { length: 15 }) + (len > 1 ? `(${len})` : '')
     })()
 
-    const tooltipPopperProps = useBoundedPopperProps()
-
     const tooltipTitle = (() => {
         const linkedNames = profile.linkedTwitterNames
-        if (!linkedNames?.length) return ''
+        if (linkedNames.length < 2) return ''
         const mentions = profile.linkedTwitterNames.map((username) => '@' + username)
         return `${t('select_friends_dialog_persona_connect')} ${mentions.join(', ')}.`
     })()
@@ -145,8 +137,8 @@ export function ProfileInList(props: ProfileInListProps) {
                     <ShadowRootTooltip
                         title={tooltipTitle}
                         arrow
-                        classes={{ tooltip: classes.toolTip }}
-                        PopperProps={tooltipPopperProps}>
+                        placement="top"
+                        classes={{ tooltip: classes.toolTip }}>
                         <div className={classes.flex}>
                             <Highlighter
                                 className={classes.highLightBase}
@@ -169,7 +161,7 @@ export function ProfileInList(props: ProfileInListProps) {
                             textToHighlight={textToHighlight}
                         />
                         <Icons.Copy className={classes.actionIcon} onClick={onCopyPubkey} />
-                        {profile.fromNextID && <div className={classes.badge}>Next.ID</div>}
+                        {profile.fromNextID && <Icons.NextIDMini className={classes.badge} />}
                     </div>
                 }
             />

@@ -64,10 +64,10 @@ const suffixMap: Record<string, string> = {
     Lens: '.lens',
     ENS: '.eth',
 }
-const resolveHandle = (metadata?: RSS3BaseAPI.FollowMetadata) => {
-    if (!metadata) return ''
+const resolveHandle = (metadata: RSS3BaseAPI.FollowMetadata) => {
+    if (!metadata.handle) return ''
     const handle = metadata.handle.toLowerCase()
-    const suffix = suffixMap[metadata.platform] || ''
+    const suffix = (metadata.platform && suffixMap[metadata.platform]) || ''
     // handle might contain suffix at this time.
     return handle.endsWith(suffix) ? handle : `${handle}${suffix}`
 }
@@ -86,7 +86,7 @@ export const ProfileLinkCard: FC<CollectibleCardProps> = ({ feed, className, ...
 
     const user = useAddressLabel(feed.owner)
     const otherEns = useAddressLabel(metadata?.address ?? '')
-    const other = resolveHandle(metadata) || otherEns
+    const other = metadata ? resolveHandle(metadata) : otherEns
 
     return (
         <CardFrame

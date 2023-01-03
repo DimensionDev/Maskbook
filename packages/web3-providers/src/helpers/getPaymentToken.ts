@@ -15,13 +15,17 @@ import {
     WBTC,
     WNATIVE,
 } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 
-export function getPaymentToken(chainId: ChainId, token?: { name?: string; symbol?: string; address?: string }) {
+export function getPaymentToken(
+    chainId: Web3Helper.ChainIdAll,
+    token?: { name?: string; symbol?: string; address?: string },
+) {
     if (!token) return
 
     return [
-        createNativeToken(chainId),
+        createNativeToken(chainId as ChainId),
         /* cspell:disable-next-line */
         ...[APE, USDC, USDT, DAI, HUSD, BUSD, WBTC, WNATIVE, TATR, RARI].map((x) => x[chainId]),
     ].find(

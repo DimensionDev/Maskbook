@@ -36,6 +36,10 @@ const useStyles = makeStyles()((theme) => ({
     paper: {
         height: 450,
         position: 'relative',
+        padding: theme.spacing(2),
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     empty: {
         position: 'absolute',
@@ -53,14 +57,12 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.primary,
     },
     list: {
-        width: '100%',
-        display: 'flex',
-        flexWrap: 'wrap',
-        alignContent: 'baseline',
-        gap: 12,
-        minHeight: 300,
-        maxHeight: 380,
-        overflowY: 'auto',
+        gridGap: '12px',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)',
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     actions: {
         display: 'flex',

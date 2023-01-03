@@ -88,8 +88,6 @@ const useStyles = makeStyles<{
                   flex: 1,
               }
             : {},
-        priceChartRootWrapper:
-            props.isNFTProjectPopper && props.currentTab === ContentTabs.Price ? { height: 420 } : {},
         cardHeader: {
             marginBottom: '-36px',
             backgroundImage: `linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), url(${xmasBackground})`,
@@ -110,9 +108,7 @@ const useStyles = makeStyles<{
 })
 
 export interface TrendingViewProps {
-    setResult: (a: Web3Helper.TokenResultAll) => void
-    result: Web3Helper.TokenResultAll
-    resultList?: Web3Helper.TokenResultAll[]
+    resultList: Web3Helper.TokenResultAll[]
     address?: string
     searchedContractAddress?: string
     expectedChainId?: Web3Helper.ChainIdAll
@@ -128,7 +124,8 @@ enum ContentTabs {
 }
 
 export function TrendingView(props: TrendingViewProps) {
-    const { searchedContractAddress, expectedChainId, resultList, result, setResult } = props
+    const { searchedContractAddress, expectedChainId, resultList } = props
+    const [result, setResult] = useState(resultList[0])
     const { isTokenTagPopper, isNFTProjectPopper, isProfilePage } = useContext(TrendingViewContext)
     const { t } = useI18N()
     const theme = useTheme()
@@ -280,7 +277,7 @@ export function TrendingView(props: TrendingViewProps) {
                     <CoinMarketPanel dataProvider={trending.dataProvider} trending={trending} />
                 ) : null}
                 {currentTab === ContentTabs.Price ? (
-                    <Box px={2} py={4} className={classes.priceChartRootWrapper}>
+                    <Box px={2} py={4}>
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}

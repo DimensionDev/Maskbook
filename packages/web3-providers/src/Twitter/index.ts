@@ -10,6 +10,7 @@ import {
     getUserViaTwitterIdentity,
     staleUserViaWebAPI,
     getUserNFTContainer,
+    staleUserViaIdentity,
 } from './apis/index.js'
 import type { TwitterBaseAPI } from '../entry-types.js'
 import { fetchJSON } from '../entry-helpers.js'
@@ -163,7 +164,8 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         )
     }
 
-    async staleUserByScreenName(screenName: string): Promise<TwitterBaseAPI.User | null> {
-        return staleUserViaWebAPI(screenName)
+    async staleUserByScreenName(screenName: string): Promise<void> {
+        await staleUserViaWebAPI(screenName)
+        await staleUserViaIdentity(screenName)
     }
 }

@@ -12,7 +12,7 @@ LoggerContext.displayName = 'LoggerContext'
 
 interface LoggerContextProvider {
     platform: LogPlatform | EnhanceableSite
-    enable: boolean
+    loggerId: string
 }
 
 export function PluginLoggerContextProvider({ children, value }: React.ProviderProps<LoggerContext>) {
@@ -21,9 +21,9 @@ export function PluginLoggerContextProvider({ children, value }: React.ProviderP
 
 export function LoggerContextProvider({ value, children }: React.ProviderProps<LoggerContextProvider>) {
     const logger = useMemo(() => {
-        if (!value.enable) return
-        return new LogHub(value.platform)
-    }, [value.platform, value.enable])
+        if (!value.loggerId) return
+        return new LogHub(value.platform, value.loggerId)
+    }, [value.platform, value.loggerId])
 
     return <LoggerContext.Provider value={{ logger }}>{children}</LoggerContext.Provider>
 }

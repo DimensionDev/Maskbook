@@ -6,7 +6,7 @@ import { ProfileIdentifier, NetworkPluginID, EMPTY_LIST } from '@masknet/shared-
 import { SocialAccount, SocialAddressType } from '@masknet/web3-shared-base'
 import {
     useCurrentVisitingIdentity,
-    useSocialIdentityByUseId,
+    useSocialIdentityByUserId,
 } from '../../../../components/DataSource/useActivatedUI.js'
 import { useProfilePublicKey } from '../../hooks/useProfilePublicKey.js'
 import { PluginTipsMessages } from '../../messages.js'
@@ -56,7 +56,7 @@ export const TipButton: FC<Props> = (props) => {
 
     const { pluginID } = useNetworkContext()
     const visitingIdentity = useCurrentVisitingIdentity()
-    const { value: identity } = useSocialIdentityByUseId(receiverUserId)
+    const { value: identity } = useSocialIdentityByUserId(receiverUserId)
 
     const isVisitingUser = visitingIdentity.identifier?.userId === receiverUserId
     const isRuntimeAvailable = useMemo(() => {

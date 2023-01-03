@@ -18,6 +18,8 @@ import { Squash } from './middleware/Squash.js'
 import { RecentTransaction } from './middleware/RecentTransaction.js'
 import { Translator } from './middleware/Translator.js'
 import { TransactionWatcher } from './middleware/TransactionWatcher.js'
+import { Providers } from './provider.js'
+import type { BaseContractWalletProvider } from './providers/BaseContractWallet.js'
 
 class Composer<T> {
     private listOfMiddleware: Array<Middleware<T>> = []
@@ -112,6 +114,10 @@ class RequestContext implements Context {
         return this.payloadEditor.risky
     }
 
+    get message() {
+        return this.payloadEditor.signableMessage
+    }
+
     get config() {
         return this.payloadEditor.config
     }
@@ -148,6 +154,17 @@ class RequestContext implements Context {
 
     get requestId() {
         return this.id
+    }
+
+    get owner() {
+        const provider = Providers[this.providerType] as BaseContractWalletProvider | undefined
+        if (!provider) throw new Error('Not owner.')
+        return provider.owner
+    }
+
+    get identifier() {
+        const provider = Providers[this.providerType] as BaseContractWalletProvider | undefined
+        return provider?.identifier
     }
 
     get requestOptions() {

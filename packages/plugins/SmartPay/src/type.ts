@@ -1,16 +1,11 @@
-import type { PersonaInformation } from '@masknet/shared-base'
-
-export enum SignAccountType {
+export enum ManagerAccountType {
     Wallet = 'Wallet',
     Persona = 'Persona',
 }
 
-export interface SignAccount {
-    type: SignAccountType
-    identity?: string
+export interface ManagerAccount {
+    type: ManagerAccountType
     name?: string
     address?: string
-    raw?: SignablePersona
+    rawPublicKey?: string
 }
-
-export type SignablePersona = PersonaInformation & { address?: string }

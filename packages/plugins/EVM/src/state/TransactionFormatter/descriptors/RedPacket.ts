@@ -134,6 +134,20 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                     },
                 }
             } else {
+                const tokenAmountDescription = await this.getRefundTokenInfo(context.chainId, context.to, context.hash)
+                return {
+                    chainId: context.chainId,
+                    title: i18NextInstance.t('plugin_red_packet_refund_with_token_title'),
+                    description: i18NextInstance.t('plugin_red_packet_refund_with_token'),
+                    snackbar: {
+                        successfulDescription: tokenAmountDescription
+                            ? i18NextInstance.t('plugin_red_packet_create_with_token_success', {
+                                  tokenAmountDescription,
+                              })
+                            : i18NextInstance.t('plugin_red_packet_refund_with_token_success_without_detail'),
+                        failedDescription: i18NextInstance.t('plugin_red_packet_refund_with_token_fail'),
+                    },
+                }
             }
         } else if (isSameAddress(context.to, RED_PACKET_NFT_ADDRESS)) {
             if (method?.name === 'create_red_packet') {

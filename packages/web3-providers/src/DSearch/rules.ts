@@ -20,6 +20,9 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                     const name = data.name
                     if (name === keyword) return true
 
+                    const alias = data.alias
+                    if (alias?.map((x) => x.toLowerCase()).includes(keyword.toLowerCase())) return true
+
                     return false
                 },
             },
@@ -68,7 +71,12 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                 type: 'exact',
                 filter: (data: SearchResult<ChainId, SchemaType>, keyword: string) => {
                     if (data.type !== SearchResultType.NonFungibleToken) return false
-                    return isSameAddress(data.address, keyword) || data.name === keyword
+
+                    return (
+                        isSameAddress(data.address, keyword) ||
+                        data.name === keyword ||
+                        Boolean(data.alias?.map((x) => x.toLowerCase()).includes(keyword.toLowerCase()))
+                    )
                 },
             },
             {

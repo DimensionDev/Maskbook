@@ -10,7 +10,7 @@ export interface SolanaWeb3ConnectionOptions extends Web3Helper.Web3ConnectionOp
 
 export interface SolanaProvider extends WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     /** Sign message. */
-    signMessage(dataToSign: string): Promise<string>
+    signMessage(message: string): Promise<string>
     /** Sign a transaction. */
     signTransaction(transaction: Transaction): Promise<Transaction>
     /** Sign multiple transactions. */

@@ -1,4 +1,3 @@
-import LRUCache from 'lru-cache'
 import { useAsyncRetry } from 'react-use'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import type { SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
@@ -6,12 +5,6 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3State } from './useWeb3State.js'
 
 type AddressList = Array<SocialAddress<Web3Helper.ChainIdAll>>
-type CacheValue = Promise<Array<PromiseSettledResult<AddressList>>>
-
-const addressCache = new LRUCache<string, CacheValue>({
-    max: 500,
-    ttl: 2 * 60 * 1000,
-})
 
 /**
  * Get all social addresses across all networks.

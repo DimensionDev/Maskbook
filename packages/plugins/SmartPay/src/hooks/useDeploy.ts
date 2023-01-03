@@ -1,74 +1,84 @@
 import { useAsyncFn } from 'react-use'
+import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { NetworkPluginID, PersonaInformation, SignType } from '@masknet/shared-base'
+import { useChainContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
+import { AbstractAccountAPI, FunderAPI } from '@masknet/web3-providers/types'
+import { ProviderType } from '@masknet/web3-shared-evm'
+import type { ManagerAccount } from '../type.js'
+import type { Wallet } from '@masknet/web3-shared-base'
 import getUnixTime from 'date-fns/getUnixTime'
-import {
-    useLastRecognizedIdentity,
-    useCurrentPersonaInformation,
-    useSNSAdaptorContext,
-} from '@masknet/plugin-infra/content-script'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { SmartPayFunder } from '@masknet/web3-providers'
-import type { ContractAccountAPI } from '@masknet/web3-providers/types'
-import { ProviderType, ChainId } from '@masknet/web3-shared-evm'
-import { SignAccount, SignAccountType } from '../type.js'
 
 export function useDeploy(
-    signAccount?: SignAccount,
-    contractAccount?: ContractAccountAPI.ContractAccount<NetworkPluginID.PLUGIN_EVM>,
+    signPersona?: PersonaInformation,
+    signWallet?: Wallet,
+    signAccount?: ManagerAccount,
+    contractAccount?: AbstractAccountAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>,
     nonce?: number,
     onSuccess?: () => void,
 ) {
     const { Wallet } = useWeb3State()
-    const { signMessageWithPersona } = useSNSAdaptorContext()
-    const currentPersona = useCurrentPersonaInformation()
+    const { signWithPersona } = useSNSAdaptorContext()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, {
         providerType: ProviderType.MaskWallet,
-        chainId: ChainId.Mumbai,
+        chainId,
     })
 
     return useAsyncFn(async () => {
-        if (!lastRecognizedIdentity?.identifier?.userId || !currentPersona || !signAccount?.address || !contractAccount)
+        if (
+            !chainId ||
+            !lastRecognizedIdentity?.identifier?.userId ||
+            !signAccount?.address ||
+            !contractAccount ||
+            (!signPersona && !signWallet)
+        )
             return
 
         const payload = JSON.stringify({
             twitterHandler: lastRecognizedIdentity.identifier.userId,
             ts: getUnixTime(new Date()),
-            publicKey: currentPersona?.identifier.publicKeyAsHex,
+            ownerAddress: signAccount.address,
             nonce,
         })
 
         let signature: string | undefined
 
-        if (signAccount.type === SignAccountType.Persona && signAccount?.raw?.identifier) {
-            signature = (
-                await signMessageWithPersona({
-                    method: 'eth',
-                    message: payload,
-                    identifier: signAccount.raw.identifier,
-                })
-            ).signature
-        } else if (signAccount.type === SignAccountType.Wallet) {
+        if (signPersona) {
+            signature = await signWithPersona(SignType.Message, payload, signPersona.identifier)
+        } else if (signWallet) {
             signature = await connection?.signMessage(payload, 'personalSign', {
-                account: signAccount.address,
+                account: signWallet.address,
                 providerType: ProviderType.MaskWallet,
             })
-        } else return
+        }
+        const publicKey = signPersona ? signPersona.identifier.publicKeyAsHex : signWallet?.address
+        if (!signature || !publicKey) return
 
-        if (!signature) return
-
-        const response = await SmartPayFunder.fund(ChainId.Mumbai, {
-            ownerAddress: signAccount.address,
+        const response = await SmartPayFunder.fund(chainId, {
+            publicKey,
+            type: signPersona ? FunderAPI.ProofType.Persona : FunderAPI.ProofType.EOA,
             signature,
             payload,
         })
 
         if (response.message.walletAddress && onSuccess) {
-            Wallet?.updateWallet(contractAccount.address, {
+            await Wallet?.updateWallet(contractAccount.address, {
                 name: 'Smart Pay',
             })
             onSuccess()
         }
-    }, [connection, signAccount, lastRecognizedIdentity?.identifier, currentPersona, contractAccount, nonce, onSuccess])
+    }, [
+        chainId,
+        connection,
+        signAccount,
+        lastRecognizedIdentity?.identifier,
+        signWallet,
+        signPersona,
+        contractAccount,
+        nonce,
+        onSuccess,
+    ])
 }

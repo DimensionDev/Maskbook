@@ -5,6 +5,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { RSS3 } from '@masknet/web3-providers'
 
 const caches = new Map<string, LRU<string, unknown>>()
+
 export class RSS3Storage implements Storage {
     private cache: LRU<string, unknown> | undefined
     constructor(
@@ -31,7 +32,7 @@ export class RSS3Storage implements Storage {
         return RSS3.createRSS3(
             this.address,
             connection
-                ? (message: string) => connection.signMessage(message, 'personalSign', { account: this.address })
+                ? (message: string) => connection.signMessage('message', message, { account: this.address })
                 : undefined,
         )
     }

@@ -1,8 +1,7 @@
-import { EthereumAddress } from 'wallet.ts'
-import Web3 from 'web3'
 import { toHex } from 'web3-utils'
-import { first } from 'lodash-es'
-import { ChainId, EthereumMethodType, getRPCConstants, ProviderType } from '@masknet/web3-shared-evm'
+import { EthereumAddress } from 'wallet.ts'
+import { Web3 } from '@masknet/web3-providers'
+import { ChainId, EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types.js'
 
 export class Nonce implements Middleware<Context> {
@@ -11,11 +10,7 @@ export class Nonce implements Middleware<Context> {
     private nonces = new Map<string, Map<ChainId, number>>()
 
     private getRemoteNonce(chainId: ChainId, address: string) {
-        const RPC_URL = first(getRPCConstants(chainId).RPC_URLS)
-        if (!RPC_URL) throw new Error('Failed to fetch nonce.')
-
-        const web3 = new Web3(RPC_URL)
-        return web3.eth.getTransactionCount(address)
+        return Web3.createWeb3(chainId).eth.getTransactionCount(address)
     }
 
     private async syncRemoteNonce(chainId: ChainId, address: string, commitment = 0) {
@@ -38,6 +33,7 @@ export class Nonce implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
         // set a nonce for Mask wallets
         if (
+            !context.owner &&
             context.account &&
             context.providerType === ProviderType.MaskWallet &&
             context.method === EthereumMethodType.ETH_SEND_TRANSACTION

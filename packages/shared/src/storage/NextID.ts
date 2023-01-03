@@ -1,12 +1,5 @@
 import type { Storage } from '@masknet/web3-shared-base'
-import {
-    ECKeyIdentifier,
-    fromHex,
-    NextIDPlatform,
-    PersonaSignRequest,
-    PersonaSignResult,
-    toBase64,
-} from '@masknet/shared-base'
+import { ECKeyIdentifier, fromHex, NextIDPlatform, SignType, toBase64 } from '@masknet/shared-base'
 import { NextIDStorage as NextIDStorageProvider } from '@masknet/web3-providers'
 
 export class NextIDStorage implements Storage {
@@ -16,11 +9,12 @@ export class NextIDStorage implements Storage {
         private proofIdentity: string, // proof identity as key
         private platform: NextIDPlatform, // proof platform
         private signerOrPublicKey: string | ECKeyIdentifier, // publicKey, like SocialIdentity publicKey or PersonaIdentifier publicKeyAsHex
-        private generateSignResult?: (
-            method: PersonaSignRequest<string>['method'],
-            signer: ECKeyIdentifier,
-            message: string,
-        ) => Promise<PersonaSignResult>,
+        private signWithPersona?: <T>(
+            method: SignType,
+            message: T,
+            identifier?: ECKeyIdentifier,
+            silent?: boolean,
+        ) => Promise<string>,
     ) {
         if (typeof this.signerOrPublicKey === 'string') {
             this.publicKeyAsHex = this.signerOrPublicKey
@@ -68,14 +62,13 @@ export class NextIDStorage implements Storage {
 
         if (!payload?.ok) throw new Error('Invalid payload Error')
 
-        const signResult = await this.generateSignResult?.('personal', this.signer, payload.val.signPayload)
-
-        if (!signResult) throw new Error('Failed to sign payload.')
+        const signature = await this.signWithPersona?.(SignType.Message, payload.val.signPayload, this.signer, true)
+        if (!signature) throw new Error('Failed to sign payload.')
 
         await NextIDStorageProvider.set(
             payload.val.uuid,
             this.publicKeyAsHex,
-            toBase64(fromHex(signResult.signature)),
+            toBase64(fromHex(signature)),
             this.platform,
             this.proofIdentity,
             payload.val.createdAt,

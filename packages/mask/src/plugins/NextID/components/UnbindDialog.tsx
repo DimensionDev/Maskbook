@@ -1,18 +1,18 @@
 import { memo, useCallback, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { useI18N } from '../locales/index.js'
+import { delay } from '@masknet/kit'
+import { useCustomSnackbar } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, Binding, PersonaInformation, NextIDAction, NextIDPlatform } from '@masknet/shared-base'
-import { useCustomSnackbar } from '@masknet/theme'
+import { NextIDProof } from '@masknet/web3-providers'
 import { usePersonaSign } from '../hooks/usePersonaSign.js'
 import { useWalletSign } from '../hooks/useWalletSign.js'
 import { useBindPayload } from '../hooks/useBindPayload.js'
-import { delay } from '@masknet/kit'
 import { UnbindPanelUI } from './UnbindPanelUI.js'
 import { UnbindConfirm } from './UnbindConfirm.js'
-import { NextIDProof } from '@masknet/web3-providers'
 import { MaskMessages } from '../../../../shared/index.js'
+import { useI18N } from '../locales/index.js'
 
 interface VerifyWalletDialogProps {
     unbindAddress: string
@@ -47,7 +47,7 @@ export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onCl
                 message.createdAt,
                 {
                     walletSignature: walletSignState?.value,
-                    signature: personaSignState?.value?.signature,
+                    signature: personaSignState?.value,
                 },
             )
             showSnackbar(t.notify_wallet_sign_request_title(), {
@@ -82,10 +82,7 @@ export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onCl
                 onWalletSign={handleWalletSign}
                 isCurrentAccount={isSameAddress(account, unbindAddress)}
                 signature={{
-                    persona: {
-                        value: personaSignState.value?.signature,
-                        loading: personaSignState.loading,
-                    },
+                    persona: personaSignState,
                     wallet: walletSignState,
                 }}
                 isBound={isBound}
