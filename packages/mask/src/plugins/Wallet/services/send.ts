@@ -77,12 +77,19 @@ async function internalSend(
             break
         case EthereumMethodType.ETH_SIGN:
         case EthereumMethodType.PERSONAL_SIGN:
-        case EthereumMethodType.ETH_SIGN_TYPED_DATA:
             try {
                 if (!signableMessage) throw new Error('No message to be signed.')
                 callback(null, createJsonRpcResponse(pid, await signer.signMessage(signableMessage)))
             } catch (error) {
                 callback(ErrorEditor.from(error, null, 'Failed to sign message.').error)
+            }
+            break
+        case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+            try {
+                if (!signableMessage) throw new Error('No typed data to be signed.')
+                callback(null, createJsonRpcResponse(pid, await signer.signTypedData(signableMessage)))
+            } catch (error) {
+                callback(ErrorEditor.from(error, null, 'Failed to sign typed data.').error)
             }
             break
         case EthereumMethodType.ETH_SIGN_TRANSACTION:
