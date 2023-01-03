@@ -30,9 +30,7 @@ export const PluginDescriptor = ({
     return (
         <Stack flexDirection="row" justifyContent="space-between" alignItems="center" width="100%">
             <Stack flexDirection="row" justifyContent="space-between" gap={0.5} alignItems="center">
-                {isTokenTagPopper ? (
-                    <Icons.Marketing className={classes.cardIcon} size={24} />
-                ) : isNFTProjectPopper ? (
+                {isNFTProjectPopper || isTokenTagPopper ? (
                     <Icons.Web3ProfileCard className={classes.cardIcon} size={24} />
                 ) : isProfilePage ? (
                     <Icons.Web3Profile className={classes.cardIcon} size={24} />
@@ -41,7 +39,7 @@ export const PluginDescriptor = ({
                 )}
                 <Typography fontWeight="bolder" fontSize={16} color={(theme) => theme.palette.maskColor.dark}>
                     {isTokenTagPopper
-                        ? t.market_trending()
+                        ? t.web3_profile_card_name()
                         : isNFTProjectPopper
                         ? t.avatar_profile_card_name()
                         : isProfilePage
