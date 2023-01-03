@@ -1,7 +1,9 @@
 import { BigNumber } from 'bignumber.js'
+import { isUndefined, omitBy } from 'lodash-es'
 import type Web3 from 'web3'
 import * as ABICoder from 'web3-eth-abi'
 import { AbiItem, bytesToHex, hexToBytes, keccak256, padLeft, toNumber } from 'web3-utils'
+import type { ECKeyIdentifier } from '@masknet/shared-base'
 import { toFixed } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import EntryPointABI from '@masknet/web3-contracts/abis/EntryPoint.json'
@@ -19,7 +21,6 @@ import {
 } from '../helpers/index.js'
 import { getSmartPayConstants } from '../constants/index.js'
 import type { Signer } from './Signer.js'
-import type { ECKeyIdentifier } from '@masknet/shared-base'
 
 const USER_OP_TYPE = {
     userOp: {
@@ -93,7 +94,18 @@ export class UserTransaction {
      * @param entryPoint
      * @param userOperation
      */
-    constructor(private chainId: ChainId, private entryPoint: string, private userOperation: UserOperation) {}
+    constructor(
+        private chainId: ChainId,
+        private entryPoint: string,
+        private userOperation: UserOperation,
+        private options?: {
+            paymentToken?: string
+        },
+    ) {}
+
+    get paymentToken() {
+        return this.options?.paymentToken
+    }
 
     get initCode() {
         return this.userOperation.initCode
@@ -134,11 +146,6 @@ export class UserTransaction {
         return keccak256(
             coder.encodeParameters(['bytes32', 'address', 'uint256'], [this.hash, this.entryPoint, this.chainId]),
         )
-    }
-
-    async sign(signer: Signer<ECKeyIdentifier> | Signer<string>) {
-        this.userOperation.signature = await signer.signMessage(this.requestId)
-        return this
     }
 
     async fill(web3: Web3, overrides?: Required<Pick<UserOperation, 'initCode' | 'nonce'>>) {
@@ -219,12 +226,12 @@ export class UserTransaction {
             )
         }
         if (!paymaster || isZeroAddress(paymaster)) {
-            const { PAYMASTER_CONTRACT_ADDRESS, PAYMENT_TOKEN_ADDRESS } = getSmartPayConstants(this.chainId)
+            const { PAYMASTER_CONTRACT_ADDRESS } = getSmartPayConstants(this.chainId)
             if (!PAYMASTER_CONTRACT_ADDRESS) throw new Error('No paymaster address.')
-            if (!PAYMENT_TOKEN_ADDRESS) throw new Error('No payment token address.')
+            if (!this.paymentToken) throw new Error('No payment token address.')
 
             this.userOperation.paymaster = PAYMASTER_CONTRACT_ADDRESS
-            this.userOperation.paymasterData = padLeft(PAYMENT_TOKEN_ADDRESS, 64)
+            this.userOperation.paymasterData = padLeft(this.paymentToken, 64)
         }
 
         return this
@@ -246,7 +253,28 @@ export class UserTransaction {
         }
     }
 
-    toUserOperation(): UserOperation {
+    async toRawTransaction(web3: Web3, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {
+        const transaction = this.toTransaction()
+        if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
+        const walletContract = createContract<Wallet>(web3, transaction.from, WalletABI as AbiItem[])
+        if (!walletContract) throw new Error('Failed to create wallet contract.')
+
+        return signer.signTransaction(
+            omitBy(
+                {
+                    ...transaction,
+                    to: transaction.from,
+                    nonce: await web3.eth.getTransactionCount(transaction.from),
+                    data: walletContract?.methods
+                        .exec(transaction.to, transaction.value ?? '0', transaction.data ?? '0x')
+                        .encodeABI(),
+                },
+                isUndefined,
+            ),
+        )
+    }
+
+    async toUserOperation(signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<UserOperation> {
         const { nonce, callGas, verificationGas, preVerificationGas, maxFeePerGas, maxPriorityFeePerGas, signature } =
             this.userOperation
         return {
@@ -258,7 +286,7 @@ export class UserTransaction {
             preVerificationGas: preVerificationGas ? toFixed(preVerificationGas) : '0',
             maxFeePerGas: maxFeePerGas ? toFixed(maxFeePerGas) : '0',
             maxPriorityFeePerGas: maxPriorityFeePerGas ? toFixed(maxPriorityFeePerGas) : '0',
-            signature,
+            signature: await signer.signMessage(this.requestId),
         }
     }
 
@@ -272,13 +300,21 @@ export class UserTransaction {
         if (!from) throw new Error('No sender address.')
         if (!to) throw new Error('No destination address.')
 
-        return UserTransaction.fromUserOperation(chainId, web3, entryPoint, {
-            ...DEFAULT_USER_OPERATION,
-            sender: formatEthereumAddress(from),
-            nonce: toNumber(nonce as number),
-            callData: coder.encodeFunctionCall(CALL_WALLET_TYPE, [to, value, data]),
-            signature: '0x',
-        })
+        return UserTransaction.fromUserOperation(
+            chainId,
+            web3,
+            entryPoint,
+            {
+                ...DEFAULT_USER_OPERATION,
+                sender: formatEthereumAddress(from),
+                nonce: toNumber(nonce as number),
+                callData: coder.encodeFunctionCall(CALL_WALLET_TYPE, [to, value, data]),
+                signature: '0x',
+            },
+            {
+                paymentToken: transaction.feeCurrency,
+            },
+        )
     }
 
     static async fromUserOperation(
@@ -286,11 +322,19 @@ export class UserTransaction {
         web3: Web3,
         entryPoint: string,
         userOperation: UserOperation,
+        options?: {
+            paymentToken?: string
+        },
     ): Promise<UserTransaction> {
-        const userTransaction = new UserTransaction(chainId, entryPoint, {
-            ...DEFAULT_USER_OPERATION,
-            ...userOperation,
-        })
+        const userTransaction = new UserTransaction(
+            chainId,
+            entryPoint,
+            {
+                ...DEFAULT_USER_OPERATION,
+                ...userOperation,
+            },
+            options,
+        )
         return userTransaction.fill(web3)
     }
 }
