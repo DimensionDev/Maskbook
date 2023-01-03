@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { memo, useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography, ListItemButton } from '@mui/material'
 import type { BindingProof } from '@masknet/shared-base'
@@ -42,7 +42,7 @@ interface PersonaItemProps {
     onSelect?: (proof: BindingProof, tokenInfo?: AllChainsNonFungibleToken) => void
 }
 
-export function PersonaItem(props: PersonaItemProps) {
+export const PersonaItem = memo(function PersonaItem(props: PersonaItemProps) {
     const { userId, onSelect, owner = false, proof, avatar, nickname = '', persona = '' } = props
     const t = useI18N()
     const { classes } = useStyles()
@@ -54,7 +54,7 @@ export function PersonaItem(props: PersonaItemProps) {
         RSS3_KEY_SNS.TWITTER,
     )
 
-    const onClick = useCallback(() => {
+    const handleSelect = useCallback(() => {
         if (!proof || !onSelect) return
         if (!nftAvatar) return onSelect(proof)
         const tokenDetailed: AllChainsNonFungibleToken = {
@@ -79,12 +79,12 @@ export function PersonaItem(props: PersonaItemProps) {
             address: nftAvatar.address,
         }
         onSelect(proof, tokenDetailed)
-    }, [nftAvatar, proof])
+    }, [nftAvatar, proof, onSelect])
 
     const inactive = !owner || !proof
 
     return (
-        <ListItemButton className={classes.root} onClick={onClick} disabled={inactive}>
+        <ListItemButton className={classes.root} onClick={handleSelect} disabled={inactive}>
             <NFTAvatar
                 owner={owner}
                 avatar={avatar || nftAvatar?.imageUrl}
@@ -109,4 +109,4 @@ export function PersonaItem(props: PersonaItemProps) {
             <Icons.RightArrow sx={{ color: (theme) => theme.palette.maskColor.borderSecondary, marginLeft: 8 }} />
         </ListItemButton>
     )
-}
+})
