@@ -113,16 +113,6 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
                 code = ''
             }
 
-            // cancel tx
-            if (isSameAddress(from, to) && isZero(value)) {
-                return { ...context, type: TransactionDescriptorType.CANCEL }
-            }
-
-            // send ether
-            if (isEmptyHex(code)) {
-                return { ...context, type: TransactionDescriptorType.TRANSFER }
-            }
-
             // smart pay tx
             if (isSameAddress(to, getSmartPayConstant(chainId, 'EP_CONTRACT_ADDRESS'))) {
                 const userOperations = decodeUserOperations(transaction)
@@ -140,6 +130,16 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
                         allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)),
                     ),
                 }
+            }
+
+            // cancel tx
+            if (isSameAddress(from, to) && isZero(value)) {
+                return { ...context, type: TransactionDescriptorType.CANCEL }
+            }
+
+            // send ether
+            if (isEmptyHex(code)) {
+                return { ...context, type: TransactionDescriptorType.TRANSFER }
             }
 
             return { ...context, type: TransactionDescriptorType.INTERACTION }
