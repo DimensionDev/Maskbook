@@ -12,7 +12,7 @@ import {
 import { useRef } from 'react'
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { TokenIcon, FormattedAddress } from '@masknet/shared'
+import { TokenIcon, FormattedAddress, Image } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useScrollBottomEvent } from '@masknet/shared-base-ui'
 import { useWeb3State } from '@masknet/web3-hooks-base'
@@ -81,6 +81,11 @@ const useStyles = makeStyles<{ isNFTProjectPopper: boolean }>()((theme, { isNFTP
         height: 16,
         marginRight: 4,
     },
+    imageLoading: {
+        color: theme.palette.maskColor.main,
+        height: '15px !important',
+        width: '15px !important',
+    },
     linkIcon: {
         color: theme.palette.text.primary,
     },
@@ -133,7 +138,15 @@ export function NonFungibleTickersTable({
             const cellMap: Record<Cells, React.ReactNode> = {
                 nft: (
                     <div className={classes.nftCell}>
-                        <img src={x.nftscan_uri} className={classes.nftImage} />
+                        <Image
+                            fallback={<Icons.MaskAvatar size={20} />}
+                            src={x.nftscan_uri}
+                            classes={{
+                                container: classes.nftImage,
+                                imageLoading: classes.imageLoading,
+                            }}
+                            className={classes.nftImage}
+                        />
                         <Typography fontSize={12}>{Others?.formatTokenId(x.token_id, 4)}</Typography>
                     </div>
                 ),
