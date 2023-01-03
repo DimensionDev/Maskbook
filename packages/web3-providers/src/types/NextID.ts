@@ -47,7 +47,7 @@ export namespace NextIDBaseAPI {
                 signature?: string
                 proofLocation?: string
             },
-        ): Promise<Result<unknown, string>>
+        ): Promise<void>
 
         queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean): Promise<any>
 

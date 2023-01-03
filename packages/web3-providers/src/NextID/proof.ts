@@ -5,6 +5,7 @@ import {
     fromHex,
     NextIDAction,
     NextIDBindings,
+    NextIDErrorBody,
     NextIDPayload,
     NextIDPersonaBindings,
     NextIDPlatform,
@@ -79,7 +80,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             created_at: createdAt,
         }
 
-        const result = await fetch<any>(
+        const result = await fetch<NextIDErrorBody | void>(
             urlcat(BASE_URL, '/v1/proof'),
             {
                 body: JSON.stringify(requestBody),
@@ -87,6 +88,8 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             },
             [fetchR2D2, fetchJSON],
         )
+
+        if (result?.message) throw new Error(result.message)
 
         // Should delete cache when proof status changed
         const cacheKeyOfQueryPersona = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
@@ -96,8 +99,6 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         await staleNextIDCached(cacheKeyOfExistedBinding)
         await staleNextIDCached(cacheKeyOfQueryPersona)
         await staleNextIDCached(cacheKeyOfQueryPlatform)
-
-        return result
     }
 
     async queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean) {
