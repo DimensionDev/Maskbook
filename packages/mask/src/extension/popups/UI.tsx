@@ -45,7 +45,7 @@ function PluginRenderDelayed() {
 export default function Popups() {
     const [title, setTitle] = useState('')
     useEffect(queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
-    const logSettings = useLogSettings()
+    const loggerId = useLogSettings()
 
     return MaskUIRootPage(
         usePopupTheme,
@@ -53,7 +53,7 @@ export default function Popups() {
             <Web3ContextProvider
                 value={{ pluginID: NetworkPluginID.PLUGIN_EVM, providerType: ProviderType.MaskWallet }}>
                 <PopupContext.Provider>
-                    <LoggerContextProvider value={{ platform: LogPlatform.Popup, enable: logSettings }}>
+                    <LoggerContextProvider value={{ platform: LogPlatform.Popup, loggerId }}>
                         <PageTitleContext.Provider value={{ title, setTitle }}>
                             <HashRouter>
                                 <Routes>
