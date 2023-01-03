@@ -1,4 +1,5 @@
 import urlcat from 'urlcat'
+import { first } from 'lodash-es'
 import { lazy, Suspense, useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
@@ -14,7 +15,6 @@ import { WalletHeader } from './components/WalletHeader/index.js'
 import { useChainContext, useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { EthereumMethodType, getDefaultChainId, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
-import { first } from 'lodash-es'
 import { PopupContext } from '../../hook/usePopupContext.js'
 
 const ImportWallet = lazy(() => import('./ImportWallet/index.js'))
@@ -73,9 +73,7 @@ export default function Wallet() {
                 case EthereumMethodType.PERSONAL_SIGN:
                     navigate(PopupRoutes.WalletSignRequest, { replace: true })
                     break
-                case EthereumMethodType.MASK_TRANSFER:
                 case EthereumMethodType.MASK_DEPLOY:
-                case EthereumMethodType.MASK_CHANGE_OWNER:
                     navigate(PopupRoutes.ContractInteraction, { replace: true })
                     break
                 default:
