@@ -13,8 +13,8 @@ describe('DSearch test', () => {
         expect(result[0]).toStrictEqual({
             name: 'eth1',
             symbol: 'eth',
+            rank: undefined,
             type: 'FungibleToken',
-            keyword: 'eth',
             pluginID: 'com.mask.evm',
         })
     })
@@ -27,6 +27,7 @@ describe('DSearch test', () => {
         expect(result[0]).toStrictEqual({
             name: 'eth1',
             symbol: 'eth',
+            rank: undefined,
             type: 'FungibleToken',
             keyword: 'eth1',
             pluginID: 'com.mask.evm',

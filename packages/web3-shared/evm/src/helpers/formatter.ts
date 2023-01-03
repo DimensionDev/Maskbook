@@ -1,11 +1,9 @@
 import { BigNumber } from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
+import { createLookupTableResolver } from '@masknet/shared-base'
 import { isValidDomain } from './domain.js'
 import { isValidAddress } from './address.js'
 import { SchemaType } from '../types/index.js'
-import { createLookupTableResolver } from '@masknet/shared-base'
-
-export { formatPercentage } from '@masknet/web3-shared-base'
 
 export function formatPrice(price: BigNumber.Value, decimalPlaces = 6) {
     return new BigNumber(price).decimalPlaces(decimalPlaces).toString()

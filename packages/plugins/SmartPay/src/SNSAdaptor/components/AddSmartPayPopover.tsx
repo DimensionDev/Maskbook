@@ -79,13 +79,13 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
             }}>
             <Typography className={classes.title}>{t.add_smart_pay_wallet()}</Typography>
             <Box className={classes.info}>
-                <Icon name={currentProfile?.nickname} size={30} />
+                <Icon logoURL={currentProfile?.avatar} name={currentProfile?.nickname} size={30} />
                 <Box>
                     <Typography className={classes.name}>{currentProfile?.nickname}</Typography>
                     <Typography className={classes.identifier}>@{currentProfile?.identifier?.userId}</Typography>
                 </Box>
             </Box>
-            <Typography className={classes.tips}>{t.remain_times_tips({ times: value.toString() ?? '-' })}</Typography>
+            <Typography className={classes.tips}>{t.remain_times_tips({ count: value })}</Typography>
             <Button
                 fullWidth
                 variant="roundedContained"

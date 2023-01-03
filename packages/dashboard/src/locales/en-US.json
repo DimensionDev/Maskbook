@@ -389,5 +389,8 @@
     "create_wallet_your_wallet_address": "Your wallet address",
     "create_wallet_done": "Done",
     "create_wallet_verify_words": "Verify mnemonic words",
-    "create_wallet_mnemonic_word_not_match": "The mnemonic word is incorrect"
+    "create_wallet_mnemonic_word_not_match": "The mnemonic word is incorrect",
+    "recovery_smart_pay_wallet_title": "Recovery SmartPay wallet",
+    "recovery_smart_pay_wallet_description_one": "{{count}} SmartPay wallet is detected locally. Recovering successfully.",
+    "recovery_smart_pay_wallet_description_other": "{{count}} SmartPay wallets are detected locally. Recovering successfully."
 }

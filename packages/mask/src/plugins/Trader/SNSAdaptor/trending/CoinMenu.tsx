@@ -116,7 +116,7 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, result, onSelect }) =>
                                 {x.symbol ? <span className={classes.symbol}>({x.symbol})</span> : null}
                             </Typography>
                             <div className={classes.itemCheckout}>
-                                {options.length > 1 && x.rank ? (
+                                {x.rank ? (
                                     <Typography
                                         fontSize={14}
                                         fontWeight={700}
@@ -152,9 +152,13 @@ export interface CoinMenuProps {
     onClose?: () => void
 }
 
-const menuGroupNameMap: Record<SearchResultType.FungibleToken | SearchResultType.NonFungibleToken, string> = {
+const menuGroupNameMap: Record<
+    SearchResultType.FungibleToken | SearchResultType.NonFungibleToken | SearchResultType.NonFungibleCollection,
+    string
+> = {
     [SearchResultType.FungibleToken]: 'Token',
     [SearchResultType.NonFungibleToken]: 'NFT',
+    [SearchResultType.NonFungibleCollection]: 'NFT',
 }
 
 export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({

@@ -1,17 +1,14 @@
 import * as bip39 from 'bip39'
 import { first, last, omit } from 'lodash-es'
-import { hexToBytes, toHex } from 'web3-utils'
 import { toBuffer } from 'ethereumjs-util'
-import { personalSign, signTypedData as signTypedData_, SignTypedDataVersion } from '@metamask/eth-sig-util'
-import { isSameAddress, Wallet, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
-import { EthereumMethodType, formatEthereumAddress, PayloadEditor, Transaction } from '@masknet/web3-shared-evm'
+import { Web3Signer } from '@masknet/web3-providers'
+import type { SignType } from '@masknet/shared-base'
+import { Wallet, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { MAX_DERIVE_COUNT } from '@masknet/plugin-wallet'
 import * as database from './database/index.js'
 import * as password from './password.js'
 import * as Mask from '../maskwallet/index.js'
-import { hasNativeAPI } from '../../../../../shared/native-rpc/index.js'
-import { sendPayload } from '../send.js'
 
 function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
     const splitted = path.split('/')
@@ -41,37 +38,12 @@ export {
 export { isLocked, lockWallet, unlockWallet } from './locker.js'
 
 export async function getWallet(address?: string) {
-    if (hasNativeAPI) {
-        const wallets = await getWallets()
-        return wallets.find((x) => isSameAddress(x.address, address))
-    }
     const wallet = await database.getWallet(address)
     if (!wallet?.hasStoredKeyInfo) return null
     return sanitizeWallet(wallet)
 }
 
 export async function getWallets(): Promise<Wallet[]> {
-    if (hasNativeAPI) {
-        const response = await sendPayload(PayloadEditor.fromMethod(EthereumMethodType.ETH_ACCOUNTS).fill())
-        const accounts = response.result as string[] | undefined
-        const address = first(accounts) ?? ''
-        if (!address) return []
-
-        const now = new Date()
-        const address_ = formatEthereumAddress(address)
-        return [
-            {
-                id: address_,
-                name: 'Mask Network',
-                address: address_,
-                createdAt: now,
-                updatedAt: now,
-                configurable: false,
-                hasStoredKeyInfo: false,
-                hasDerivationPath: false,
-            },
-        ]
-    }
     const wallets = await database.getWallets()
     return wallets.filter((x) => x.hasStoredKeyInfo).map(sanitizeWallet)
 }
@@ -81,7 +53,6 @@ export function createMnemonicWords() {
 }
 
 export async function getWalletPrimary() {
-    if (hasNativeAPI) return null
     return (
         first(
             (await database.getWallets())
@@ -121,47 +92,6 @@ export async function getDerivableAccounts(mnemonic: string, page: number, pageS
         })
     }
     return accounts
-}
-
-export async function signTransaction(address: string, config: Transaction) {
-    const password_ = await password.INTERNAL_getPasswordRequired()
-    const wallet = await database.getWalletRequired(address)
-    const sign_input = {
-        amount: (config.value as string) ?? null,
-        gas_limit: config.gas ? toHex(config.gas) : null,
-        gas_price: config.gasPrice ?? null,
-        chain_id: config.chainId,
-        max_fee_per_gas: config.maxFeePerGas ?? null,
-        max_inclusion_fee_per_gas: config.maxFeePerGas ?? null,
-        nonce: config.nonce ? toHex(config.nonce) : null,
-        to_address: config.to ? config.to.toLowerCase() : null,
-        payload: config.data ? new Uint8Array(hexToBytes(config.data)) : new Uint8Array(),
-    }
-    const signed = await Mask.signTransaction({
-        password: password_,
-        coin: api.Coin.Ethereum,
-        storedKeyData: wallet.storedKeyInfo?.data,
-        derivationPath: wallet.derivationPath,
-        sign_input,
-    })
-
-    if (!signed?.sign_output?.encoded) throw new Error('Failed to sign transaction.')
-    return `0x${Buffer.from(signed.sign_output.encoded).toString('hex')}`
-}
-
-export async function signPersonalMessage(message: string, address: string, password?: string) {
-    return personalSign({
-        privateKey: toBuffer(`0x${await exportPrivateKey(address, password)}`),
-        data: message,
-    })
-}
-
-export async function signTypedData(address: string, data: string, password?: string) {
-    return signTypedData_({
-        privateKey: toBuffer(`0x${await exportPrivateKey(address, password)}`),
-        data: JSON.parse(data),
-        version: SignTypedDataVersion.V4,
-    })
 }
 
 export async function deriveWallet(name: string) {
@@ -373,4 +303,8 @@ export async function recoverWalletFromKeyStoreJSON(name: string, json: string, 
     })
     if (!created?.account?.address) throw new Error('Failed to create the wallet.')
     return database.addWallet(created.account.address, name, undefined, imported.StoredKey)
+}
+
+export async function signWithWallet<T>(type: SignType, message: T, address: string) {
+    return Web3Signer.sign(type, toBuffer(`0x${await exportPrivateKey(address)}`), message)
 }

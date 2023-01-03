@@ -114,7 +114,7 @@ const DeleteWallet = memo(() => {
             try {
                 await Wallet?.removeWallet?.(wallet.address, password)
 
-                connection?.connect({
+                await connection?.connect({
                     account: first(Wallet?.wallets?.getCurrentValue())?.address ?? '',
                 })
 

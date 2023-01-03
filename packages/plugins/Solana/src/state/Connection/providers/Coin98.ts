@@ -11,10 +11,10 @@ export class Coin98Provider extends BaseInjectedProvider implements SolanaProvid
         super(ProviderType.Coin98, injectedCoin98SolanaProvider)
     }
 
-    override async signMessage(dataToSign: string): Promise<string> {
+    override async signMessage(message: string): Promise<string> {
         const { signature } = (await this.bridge.request({
             method: Coin98MethodType.SOL_SIGN,
-            params: [new TextEncoder().encode(dataToSign)],
+            params: [new TextEncoder().encode(message)],
         })) as {
             signature: string
         }

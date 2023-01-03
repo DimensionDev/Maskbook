@@ -173,7 +173,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                                     key={i}
                                                     href={x}
                                                     LinkProps={{ className: classes.link }}
-                                                    TypographyProps={{ fontWeight: 700 }}
+                                                    TypographyProps={{ fontWeight: 700, fontSize: 14 }}
                                                 />
                                             ))}
                                         </Stack>

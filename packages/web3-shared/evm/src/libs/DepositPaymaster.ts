@@ -1,10 +1,13 @@
 import Web3 from 'web3'
-import { ChainId, createContract, getRPCConstants, getSmartPayConstants } from '../index.js'
 import type { AbiItem } from 'web3-utils'
+import { first } from 'lodash-es'
+import { BigNumber } from 'bignumber.js'
 import DepositPaymasterABI from '@masknet/web3-contracts/abis/DepositPaymaster.json'
 import type { DepositPaymaster as DepositPaymasterType } from '@masknet/web3-contracts/types/DepositPaymaster.js'
-import { BigNumber } from 'bignumber.js'
-import { first } from 'lodash-es'
+import type { ChainId } from '../types/index.js'
+import { getRPCConstants, getSmartPayConstants } from '../constants/constants.js'
+import { createContract } from '../helpers/index.js'
+
 export class DepositPaymaster {
     /**
      * DepositPaymaster

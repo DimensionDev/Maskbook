@@ -33,12 +33,11 @@ export async function fetchCached(
     init?: RequestInit,
     next = originalFetch,
 ): Promise<Response> {
-    // why: the caches define in test env
+    // why: the caches doesn't define in test env
     if (process.env.NODE_ENV === 'test') return next(input, init)
 
-    const request = new Request(input, init)
-
     // skip all side effect requests
+    const request = new Request(input, init)
     if (request.method !== 'GET') return next(request, init)
 
     // skip all non-http requests
@@ -82,11 +81,15 @@ export async function fetchCached(
 
 export async function staleCached(info: RequestInfo | URL, init?: RequestInit): Promise<Response | void> {
     const request = new Request(info, init)
-
     if (request.method !== 'GET') return
-    if (!request.url.startsWith('http')) return
 
-    const cache = await caches.open(new URL(request.url).host)
+    const url = request.url
+    if (!url.startsWith('http')) return
+
+    const rule = URLS.find((x) => url.includes(x))
+    if (!rule) return
+
+    const cache = await caches.open(rule)
     const hit = await cache.match(request)
     if (!hit) return
 

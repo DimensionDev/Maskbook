@@ -109,6 +109,7 @@ export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
         )
 
         const name = first(response)?.name
+        if (!name) return
         return isValidDomain(name) ? name : `${name}.eth`
     }
 

@@ -43,6 +43,7 @@ export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
     await delay(backup.personas.size + backup.profiles.size)
 
     if (backup.personas.size || backup.profiles.size) MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
+    MaskMessages.events.restoreSuccess.sendToAll({ wallets })
 }
 
 async function restorePersonas(backup: NormalizedBackup.Data) {

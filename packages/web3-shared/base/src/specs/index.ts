@@ -420,6 +420,8 @@ export interface NonFungibleCollectionOverview {
     highest_price?: number
     volume_24h?: number
     average_price_24h?: number
+    average_price_change_1d: string
+    average_price_change_7d: string
     sales_24h?: number
     owners_total?: number
     total_volume?: number
@@ -427,18 +429,19 @@ export interface NonFungibleCollectionOverview {
 }
 
 export interface NonFungibleTokenActivity {
-    transaction_hash: string
-    transaction_method: ActivityType
-    transactionLink: string
-    transaction_time: number
-    tx_value: number
-    from_address: string
-    to_address: string
+    hash: string
+    event_type: ActivityType
+    transaction_link: string
+    timestamp: number
+    nftscan_uri: string
+    trade_price: number
+    from: string
+    to: string
     cover: string
-    contract: string
+    contract_address: string
     token_id: string
-    tradeToken: string
-    tradeTokenLogo: string
+    trade_token_logo: string
+    trade_symbol: string
 }
 
 export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {
@@ -623,6 +626,8 @@ export interface Result<ChainId> {
     type: SearchResultType
     /** The original searched keyword */
     keyword: string
+    /** alias name list, e.g. binance for bnb. */
+    alias?: string[]
 }
 
 export interface EOAResult<ChainId> extends Result<ChainId> {
@@ -647,6 +652,7 @@ export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId
     name: string
     symbol: string
     source: SourceType
+    alias?: string[]
     token?: FungibleToken<ChainId, SchemaType>
 }
 
@@ -1045,12 +1051,12 @@ export interface Connection<
     /** Switch to sub network */
     switchChain?: (chainId: ChainId, initial?: Web3ConnectionOptions) => Promise<void>
     /** Sign message */
-    signMessage(dataToSign: string, signType?: string, initial?: Web3ConnectionOptions): Promise<Signature>
+    signMessage(type: string, message: string, initial?: Web3ConnectionOptions): Promise<Signature>
     /** Verify message */
     verifyMessage(
-        dataToVerify: string,
+        type: string,
+        message: string,
         signature: Signature,
-        signType?: string,
         initial?: Web3ConnectionOptions,
     ): Promise<boolean>
     /** Approve a recipient for using a fungible token. */
@@ -1103,10 +1109,12 @@ export interface Connection<
         operation: Operation,
         initial?: Web3ConnectionOptions,
     ) => Promise<TransactionSignature>
+    /** Transfer some native tokens from contract Wallet */
+    transfer?: (recipient: string, amount: string, initial?: Web3ConnectionOptions) => Promise<string>
     /** Change owner of contract Wallet */
-    transferContractWallet?: (recipient: string, initial?: Web3ConnectionOptions) => Promise<string>
+    changeOwner?: (recipient: string, initial?: Web3ConnectionOptions) => Promise<string>
     /** Deploy contract Wallet */
-    deployContractWallet?: (owner: string, initial?: Web3ConnectionOptions) => Promise<string>
+    deploy?: (owner: string, initial?: Web3ConnectionOptions) => Promise<string>
     /** Sign a transaction */
     signTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): Promise<TransactionSignature>
     /** Sign multiple transactions */

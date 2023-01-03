@@ -3,7 +3,6 @@ import type { ProviderOptions } from '@masknet/web3-shared-base'
 import { ChainId, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base.js'
 import type { EVM_Provider } from '../types.js'
-import { SharedContextSettings } from '../../../settings/index.js'
 
 export class NoneProvider extends BaseProvider implements EVM_Provider {
     constructor() {
@@ -14,10 +13,8 @@ export class NoneProvider extends BaseProvider implements EVM_Provider {
         requestArguments: RequestArguments,
         options?: ProviderOptions<ChainId>,
     ): Promise<T> {
-        const response = await SharedContextSettings.value.send(
+        return this.createWeb3Provider(options).request<T>(
             PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
-            options,
         )
-        return response?.result as T
     }
 }

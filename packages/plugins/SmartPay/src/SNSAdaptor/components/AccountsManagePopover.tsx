@@ -3,9 +3,10 @@ import { memo, useMemo } from 'react'
 import { Box, Button, Popover, Typography } from '@mui/material'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { useContainer } from 'unstated-next'
-import { SmartPayContext } from '../../context/SmartPayContext.js'
+
 import { isSameAddress } from '@masknet/web3-shared-base'
+import { useManagers } from '../../hooks/useManagers.js'
+import { formatPersonaFingerprint } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -44,15 +45,24 @@ export const AccountsManagerPopover = memo<AccountsManagePopoverProps>(
     ({ open, anchorEl, onClose, address, owner }) => {
         const t = useI18N()
         const { classes } = useStyles()
-        const { signablePersonas, signableWallets } = useContainer(SmartPayContext)
+        const { personaManagers, walletManagers } = useManagers()
 
-        const ownerName = useMemo(() => {
-            const persona = signablePersonas?.find((x) => isSameAddress(x.address, owner))
+        const ownerInfo = useMemo(() => {
+            const persona = personaManagers?.find((x) => isSameAddress(x.address, owner))
 
-            if (persona) return persona.nickname
+            if (persona)
+                return {
+                    name: persona.nickname,
+                    publicKey: formatPersonaFingerprint(persona.identifier.rawPublicKey, 4),
+                }
 
-            return signableWallets?.find((x) => isSameAddress(x.address, owner))?.name
-        }, [owner, signablePersonas, signableWallets])
+            const wallet = walletManagers?.find((x) => isSameAddress(x.address, owner))
+            if (!wallet) return
+            return {
+                name: wallet.name,
+                publicKey: formatEthereumAddress(wallet.address, 4),
+            }
+        }, [owner, personaManagers, walletManagers])
 
         return usePortalShadowRoot((container) => (
             <Popover
@@ -80,8 +90,8 @@ export const AccountsManagerPopover = memo<AccountsManagePopoverProps>(
                 </Typography>
                 <Box component="div" display="flex" justifyContent="space-between" alignItems="center">
                     <Box>
-                        <Typography className={classes.name}>{ownerName}</Typography>
-                        <Typography className={classes.second}>{formatEthereumAddress(owner ?? '', 4)}</Typography>
+                        <Typography className={classes.name}>{ownerInfo?.name}</Typography>
+                        <Typography className={classes.second}>{ownerInfo?.publicKey}</Typography>
                     </Box>
                     <Button variant="roundedContained">{t.change_owner()}</Button>
                 </Box>

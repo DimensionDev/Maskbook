@@ -11,7 +11,7 @@ import {
 import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
 import { SourceType, createFungibleToken, SearchResultType, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NFTList, PluginCardFrameMini } from '@masknet/shared'
+import { NFTList, PluginCardFrameMini, xmasBackground } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { TrendingAPI } from '@masknet/web3-providers/types'
@@ -88,10 +88,12 @@ const useStyles = makeStyles<{
                   flex: 1,
               }
             : {},
-        priceChartRootWrapper:
-            props.isNFTProjectPopper && props.currentTab === ContentTabs.Price ? { height: 420 } : {},
         cardHeader: {
             marginBottom: '-36px',
+            backgroundImage: `linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), url(${xmasBackground})`,
+            backgroundColor: 'white',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center bottom',
         },
         nftItems: {
             height: props.isNFTProjectPopper ? 360 : 530,
@@ -106,9 +108,7 @@ const useStyles = makeStyles<{
 })
 
 export interface TrendingViewProps {
-    setResult: (a: Web3Helper.TokenResultAll) => void
-    result: Web3Helper.TokenResultAll
-    resultList?: Web3Helper.TokenResultAll[]
+    resultList: Web3Helper.TokenResultAll[]
     address?: string
     searchedContractAddress?: string
     expectedChainId?: Web3Helper.ChainIdAll
@@ -124,7 +124,8 @@ enum ContentTabs {
 }
 
 export function TrendingView(props: TrendingViewProps) {
-    const { searchedContractAddress, expectedChainId, resultList, result, setResult } = props
+    const { searchedContractAddress, expectedChainId, resultList } = props
+    const [result, setResult] = useState(resultList[0])
     const { isTokenTagPopper, isNFTProjectPopper, isProfilePage } = useContext(TrendingViewContext)
     const { t } = useI18N()
     const theme = useTheme()
@@ -276,7 +277,7 @@ export function TrendingView(props: TrendingViewProps) {
                     <CoinMarketPanel dataProvider={trending.dataProvider} trending={trending} />
                 ) : null}
                 {currentTab === ContentTabs.Price ? (
-                    <Box px={2} py={4} height={420} className={classes.priceChartRootWrapper}>
+                    <Box px={2} py={4}>
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}

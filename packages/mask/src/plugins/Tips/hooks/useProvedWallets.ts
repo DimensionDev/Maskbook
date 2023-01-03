@@ -1,14 +1,15 @@
 import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { head } from 'lodash-es'
-import { ECKeyIdentifier, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { BindingProof, ECKeyIdentifier, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { NextIDProof } from '@masknet/web3-providers'
 import Services from '../../../extension/service.js'
 import { currentPersonaIdentifier } from '../../../../shared/legacy-settings/settings.js'
-import { MaskMessages } from '../../../utils/index.js'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import { MaskMessages } from '../../../utils/messages.js'
+import { usePersonaProofs } from '@masknet/shared'
 
-export function useProvedWallets() {
+export function useProvedWallets(): AsyncStateRetry<BindingProof[]> {
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const { value: personas, retry } = useAsyncRetry(
         async () => Services.Identity.queryOwnedPersonaInformation(false),
@@ -19,17 +20,30 @@ export function useProvedWallets() {
         return MaskMessages.events.ownPersonaChanged.on(retry)
     }, [retry])
 
-    const res = useAsyncRetry(async () => {
-        if (!currentIdentifier) return EMPTY_LIST
-        const currentPersona = personas?.find(
-            (x) => x.identifier === ECKeyIdentifier.from(currentIdentifier).unwrapOr(head(personas)?.identifier),
-        )
-        if (!currentPersona?.identifier.publicKeyAsHex) return EMPTY_LIST
-        const { proofs } = (await NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex))!
-        return proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
-    }, [currentPersonaIdentifier, personas])
+    const currentPersona = personas?.find(
+        (x) => x.identifier === ECKeyIdentifier.from(currentIdentifier).unwrapOr(head(personas)?.identifier),
+    )
 
-    useEffect(() => MaskMessages.events.ownProofChanged.on(res.retry), [res.retry])
+    const proofs = usePersonaProofs(currentPersona?.identifier.publicKeyAsHex, MaskMessages)
 
-    return res
+    if (proofs.loading) {
+        return {
+            loading: true,
+            retry,
+        }
+    }
+
+    if (proofs.error) {
+        return {
+            loading: false,
+            error: proofs.error,
+            retry,
+        }
+    }
+
+    return {
+        loading: proofs.loading,
+        value: proofs.value?.filter((x) => x.platform === NextIDPlatform.Ethereum) ?? EMPTY_LIST,
+        retry: proofs.retry,
+    }
 }

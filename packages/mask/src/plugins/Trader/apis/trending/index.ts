@@ -61,8 +61,11 @@ export async function getPriceStats(
 // #endregion
 
 // #region get nft trending overview
-export async function getNFT_TrendingOverview(id: string): Promise<NonFungibleCollectionOverview | undefined> {
-    return NFTScanTrending.getCollectionOverview(id)
+export async function getNFT_TrendingOverview(
+    chainId: Web3Helper.ChainIdAll,
+    address: string,
+): Promise<NonFungibleCollectionOverview | undefined> {
+    return NFTScanTrending.getCollectionOverview(chainId, address)
 }
 // #endregion
 
@@ -70,8 +73,8 @@ export async function getNFT_TrendingOverview(id: string): Promise<NonFungibleCo
 export async function getNonFungibleTokenActivities(
     chainId: Web3Helper.ChainIdAll,
     contractAddress: string,
-    pageIndex: number,
-): Promise<NonFungibleTokenActivity[] | undefined> {
-    return NFTScanTrending.getCoinActivities(chainId, contractAddress, pageIndex)
+    cursor: string,
+): Promise<{ content: NonFungibleTokenActivity[]; cursor: string } | undefined> {
+    return NFTScanTrending.getCoinActivities(chainId, contractAddress, cursor)
 }
 // #endregion

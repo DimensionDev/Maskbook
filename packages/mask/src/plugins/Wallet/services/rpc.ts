@@ -1,8 +1,8 @@
 import { first } from 'lodash-es'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import type { JsonRpcPayload } from 'web3-core-helpers'
-import { createTransaction } from '../../../../background/database/utils/openDB.js'
 import { createWalletDBAccess } from '../database/Wallet.db.js'
+import { createTransaction } from '../../../../background/database/utils/openDB.js'
 import { openPopupWindow } from '../../../../background/services/helper/index.js'
 
 const MAX_UNCONFIRMED_REQUESTS_SIZE = 1
@@ -21,27 +21,6 @@ export async function getUnconfirmedRequests() {
 
 export async function topUnconfirmedRequest() {
     return first(await getUnconfirmedRequests())
-}
-
-export async function shiftUnconfirmedRequest() {
-    const now = new Date()
-    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('UnconfirmedRequestChunk')
-
-    const chunk_ = await t.objectStore('UnconfirmedRequestChunk').get(MAIN_RECORD_ID)
-    const requests = (chunk_?.requests ?? []).sort(requestSorter)
-    if (!chunk_) return
-    if (!requests.length) return
-
-    const payload = first(requests)
-    const chunk = {
-        ...chunk_,
-        updatedAt: now,
-        requests: requests.slice(1),
-    }
-    await t.objectStore('UnconfirmedRequestChunk').put(chunk)
-    // TODO: hasRequest is not the best definition
-    WalletMessages.events.requestsUpdated.sendToAll({ hasRequest: false })
-    return payload
 }
 
 export async function pushUnconfirmedRequest(payload: JsonRpcPayload) {
@@ -115,22 +94,4 @@ export async function deleteUnconfirmedRequest(payload: JsonRpcPayload) {
     await t.objectStore('UnconfirmedRequestChunk').put(chunk)
     WalletMessages.events.requestsUpdated.sendToAll({ hasRequest: false })
     return payload
-}
-
-export async function clearUnconfirmedRequests() {
-    const now = new Date()
-    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('UnconfirmedRequestChunk')
-
-    const chunk_ = await t.objectStore('UnconfirmedRequestChunk').get(MAIN_RECORD_ID)
-    const requests = chunk_?.requests ?? []
-    if (!chunk_) return
-    if (!requests.length) return
-
-    const chunk = {
-        ...chunk_,
-        updatedAt: now,
-        requests: [],
-    }
-    await t.objectStore('UnconfirmedRequestChunk').put(chunk)
-    WalletMessages.events.requestsUpdated.sendToAll({ hasRequest: false })
 }

@@ -1,151 +1,112 @@
-import { first } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
-import type { BundlerAPI, ContractAccountAPI } from '@masknet/web3-providers/types'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { BundlerAPI, AbstractAccountAPI } from '@masknet/web3-providers/types'
+import { NetworkPluginID, SignType } from '@masknet/shared-base'
 import {
-    ChainId,
     createContract,
     EthereumMethodType,
     isValidAddress,
     ProviderType,
-    UserTransaction,
-    ContractWallet as ContractWalletLib,
-    isEmptyHex,
+    Signer,
+    Transaction,
 } from '@masknet/web3-shared-evm'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { isZero } from '@masknet/web3-shared-base'
+import { Web3 } from '@masknet/web3-providers'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
-import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
 import type { Middleware, Context } from '../types.js'
 import { Providers } from '../provider.js'
 import type { BaseContractWalletProvider } from '../providers/BaseContractWallet.js'
+import { SharedContextSettings } from '../../../settings/index.js'
 
 export class ContractWallet implements Middleware<Context> {
     constructor(
         protected providerType: ProviderType,
-        protected contractAccount: ContractAccountAPI.Provider<NetworkPluginID.PLUGIN_EVM>,
+        protected account: AbstractAccountAPI.Provider<NetworkPluginID.PLUGIN_EVM>,
         protected bundler: BundlerAPI.Provider,
-        protected options: {
-            getLogicContractAddress(chainId: ChainId): string
-        },
     ) {}
 
-    private createWeb3(context: Context) {
-        const web3 = Web3StateSettings.value.Connection?.getWeb3?.({
-            chainId: context.chainId,
-            providerType: ProviderType.MaskWallet,
-        })
-
-        if (!web3) throw new Error('Failed to create web3.')
-        return web3
-    }
-
-    private createProvider(context: Context) {
-        return Providers[context.providerType] as BaseContractWalletProvider | undefined
-    }
-
     private createWallet(context: Context) {
-        const web3 = this.createWeb3(context)
+        const web3 = Web3.createWeb3(context.chainId)
         const contract = createContract<WalletContract>(web3, context.account, WalletABI as AbiItem[])
         if (!contract) throw new Error('Failed to create wallet contract.')
         return contract
     }
 
-    private async getEntryPoint(chainId: ChainId) {
-        const entryPoints = await this.bundler.getSupportedEntryPoints(chainId)
-        const entryPoint = first(entryPoints)
-        if (!entryPoint || !isValidAddress(entryPoint)) throw new Error(`Not supported ${chainId}`)
-        return entryPoint
-    }
-
-    private async getInitCode(chainId: ChainId, owner: string) {
-        const contractWallet = new ContractWalletLib(
-            chainId,
-            owner,
-            this.options.getLogicContractAddress(chainId),
-            await this.getEntryPoint(chainId),
-        )
-        if (isEmptyHex(contractWallet.initCode)) throw new Error('Failed to create initCode.')
-        return contractWallet.initCode
-    }
-
-    private async getDeployedAccounts(chainId: ChainId, owner: string) {
-        const accounts = await this.contractAccount.getAccountsByOwner(chainId, owner)
-        return accounts.filter((x) => isSameAddress(x.creator, owner))
-    }
-
     private async getNonce(context: Context) {
         const walletContract = this.createWallet(context)
-        return walletContract.methods.nonce()
+        return walletContract.methods.nonce().call()
     }
 
-    private getOwner(context: Context) {
-        const provider = this.createProvider(context)
-        if (!provider) throw new Error('Invalid provider')
-
-        return {
-            owner: provider.owner,
-            identifier: provider.identifier,
-        }
+    private getSigner(context: Context) {
+        if (context.identifier) return new Signer(context.identifier, SharedContextSettings.value.signWithPersona)
+        if (context.owner)
+            return new Signer(context.owner, (type: SignType, message: string | Transaction, account: string) => {
+                switch (type) {
+                    case SignType.Message:
+                        return context.connection.signMessage('message', message as string, {
+                            account,
+                            providerType: this.providerType,
+                        })
+                    case SignType.TypedData:
+                        return context.connection.signMessage('typedData', message as string, {
+                            account,
+                            providerType: this.providerType,
+                        })
+                    case SignType.Transaction:
+                        return context.connection.signTransaction(message as Transaction, {
+                            account,
+                            providerType: this.providerType,
+                        })
+                    default:
+                        throw new Error('Unknown sign method.')
+                }
+            })
+        throw new Error('Failed to create signer.')
     }
 
     private async sendUserOperation(context: Context, op = context.userOperation): Promise<string> {
-        const { owner, identifier } = this.getOwner(context)
-        if (!owner) throw new Error('Failed to sign user operation.')
-
-        const { config } = context
-        if (!op && !config) throw new Error('No user operation to be sent.')
-
-        // setup user operation
-        const entryPoint = await this.getEntryPoint(context.chainId)
-        const userTransaction =
-            (op ? await UserTransaction.fromUserOperation(context.chainId, entryPoint, op) : undefined) ||
-            (config ? await UserTransaction.fromTransaction(context.chainId, entryPoint, config) : undefined)
-        if (!userTransaction) throw new Error('Failed to create user transaction.')
-
-        // fill in initCode
-        if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
-            const initCode = await this.getInitCode(context.chainId, owner)
-            const accounts = await this.getDeployedAccounts(context.chainId, owner)
-
-            await userTransaction.fill({
-                initCode,
-                nonce: accounts.filter((x) => x.deployed).length,
-            })
-        }
-
-        // sign user operation
-        await userTransaction.sign(async (message: string) => {
-            if (identifier) {
-                return SharedContextSettings.value.personaSignPayMessage({
-                    message,
-                    identifier,
-                })
-            }
-            return context.connection.signMessage(message, 'personalSign', {
-                account: owner,
-                providerType: this.providerType,
-            })
-        })
-        return this.bundler.sendUserOperation(context.chainId, userTransaction.toUserOperation())
+        if (!context.owner) throw new Error('No owner.')
+        if (op) return this.account.sendUserOperation(context.chainId, context.owner, op, this.getSigner(context))
+        if (context.config)
+            return this.account.sendTransaction(context.chainId, context.owner, context.config, this.getSigner(context))
+        throw new Error('No user operation to be sent.')
     }
 
     private async deploy(context: Context) {
-        const { owner } = this.getOwner(context)
-        if (!isValidAddress(owner)) throw new Error('Invalid owner address.')
+        if (!context.owner) throw new Error('No owner.')
+        return this.account.deploy(context.chainId, context.owner, this.getSigner(context))
+    }
 
-        const initCode = await this.getInitCode(context.chainId, owner)
-        const accounts = await this.getDeployedAccounts(context.chainId, owner)
+    private async transfer(context: Context) {
+        if (!context.owner) throw new Error('No owner.')
 
-        return this.sendUserOperation(context, {
-            sender: context.account,
-            nonce: accounts.filter((x) => x.deployed).length,
-            initCode,
-        })
+        const [sender, recipient, amount] = context.requestArguments.params as [string, string, string]
+        if (!isValidAddress(sender)) throw new Error('Invalid sender address.')
+        if (!isValidAddress(recipient)) throw new Error('Invalid recipient address.')
+        if (isZero(amount)) throw new Error('Invalid amount.')
+
+        return this.account.transfer(
+            context.chainId,
+            context.owner,
+            context.account,
+            recipient,
+            amount,
+            this.getSigner(context),
+        )
+    }
+
+    private async changeOwner(context: Context) {
+        if (!context.owner) throw new Error('No owner.')
+
+        const [sender, recipient] = context.requestArguments.params as [string, string]
+        if (!isValidAddress(sender)) throw new Error('Invalid sender address.')
+        if (!isValidAddress(recipient)) throw new Error('Invalid recipient address.')
+
+        return this.account.changeOwner(context.chainId, context.owner, sender, recipient, this.getSigner(context))
     }
 
     async fn(context: Context, next: () => Promise<void>) {
-        const provider = this.createProvider(context)
+        const provider = Providers[context.providerType] as BaseContractWalletProvider | undefined
 
         // not a SC wallet provider
         if (!provider?.owner) {
@@ -187,7 +148,7 @@ export class ContractWallet implements Middleware<Context> {
                 break
             case EthereumMethodType.ETH_SUPPORTED_CHAIN_IDS:
                 try {
-                    context.write(await this.bundler.getSupportedChainIds())
+                    context.write([await this.bundler.getSupportedChainId()])
                 } catch (error) {
                     context.abort(error)
                 }
@@ -203,18 +164,57 @@ export class ContractWallet implements Middleware<Context> {
                 // fill later in UserTransaction.prototype.fill()
                 context.write('0x0')
                 break
-            case EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN:
-                context.abort(new Error('Not supported by contract wallet.'))
+            case EthereumMethodType.ETH_SIGN:
+            case EthereumMethodType.PERSONAL_SIGN:
+                try {
+                    if (!context.message) throw new Error('Invalid message.')
+                    context.write(await this.getSigner(context).signMessage(context.message))
+                } catch (error) {
+                    context.abort(error)
+                }
                 break
-            case EthereumMethodType.ETH_SEND_RAW_TRANSACTION:
-                context.abort(new Error('Not supported by contract wallet.'))
+            case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+                try {
+                    if (!context.message) throw new Error('Invalid typed data.')
+                    context.write(await this.getSigner(context).signTypedData(context.message))
+                } catch (error) {
+                    context.abort(error)
+                }
                 break
-            case EthereumMethodType.MASK_DEPLOY_CONTRACT_WALLET:
+            case EthereumMethodType.ETH_SIGN_TRANSACTION:
+                try {
+                    if (!context.config) throw new Error('Invalid transaction.')
+                    context.write(await this.getSigner(context).signTransaction(context.config))
+                } catch (error) {
+                    context.abort(error)
+                }
+                break
+            case EthereumMethodType.MASK_TRANSFER:
+                try {
+                    context.write(await this.transfer(context))
+                } catch (error) {
+                    context.abort(error)
+                }
+                break
+            case EthereumMethodType.MASK_CHANGE_OWNER:
+                try {
+                    context.write(await this.changeOwner(context))
+                } catch (error) {
+                    context.abort(error)
+                }
+                break
+            case EthereumMethodType.MASK_DEPLOY:
                 try {
                     context.write(await this.deploy(context))
                 } catch (error) {
                     context.abort(error)
                 }
+                break
+            case EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN:
+                context.abort(new Error('Not supported by contract wallet.'))
+                break
+            case EthereumMethodType.ETH_SEND_RAW_TRANSACTION:
+                context.abort(new Error('Not supported by contract wallet.'))
                 break
             default:
                 break

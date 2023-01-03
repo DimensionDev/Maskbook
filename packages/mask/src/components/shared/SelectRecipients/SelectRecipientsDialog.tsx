@@ -36,6 +36,7 @@ const useStyles = makeStyles()((theme) => ({
     paper: {
         height: 450,
         position: 'relative',
+        padding: theme.spacing(2),
     },
     empty: {
         position: 'absolute',
@@ -61,6 +62,9 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 300,
         maxHeight: 380,
         overflowY: 'auto',
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     actions: {
         display: 'flex',

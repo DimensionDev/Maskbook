@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-es'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, usePersonaProofs } from '@masknet/shared'
 import {
     useActivatedPluginsSNSAdaptor,
     usePluginI18NField,
@@ -13,7 +13,6 @@ import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { NextIDProof } from '@masknet/web3-providers'
 import { useI18N, MaskMessages } from '../../utils/index.js'
 import Services from '../../extension/service.js'
 
@@ -64,16 +63,12 @@ export function PluginSettingsDialog() {
     )
 
     const { value: currentPersona, retry } = useAsyncRetry(Services.Settings.getCurrentPersonaIdentifier, [])
+    const proofs = usePersonaProofs(currentPersona?.publicKeyAsHex, MaskMessages)
 
-    const { value: bindingWallets, retry: retryBindingWallets } = useAsyncRetry(async () => {
-        if (!currentPersona) return EMPTY_LIST
-        const response = await NextIDProof.queryExistedBindingByPersona(currentPersona.publicKeyAsHex)
-        if (!response) return EMPTY_LIST
-        const { proofs } = response
-        return proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
-    }, [currentPersona])
-
-    useEffect(() => MaskMessages.events.ownProofChanged.on(retryBindingWallets), [retryBindingWallets])
+    const bindingWallets = useMemo(() => {
+        if (proofs.loading) return EMPTY_LIST
+        return proofs.value?.filter((x) => x.platform === NextIDPlatform.Ethereum) ?? EMPTY_LIST
+    }, [proofs])
 
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])
 

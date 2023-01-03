@@ -4,11 +4,11 @@ import {
     EthereumMethodType,
     Transaction,
     ChainId,
+    ErrorEditor,
     PayloadEditor,
     createJsonRpcPayload,
     createJsonRpcResponse,
 } from '@masknet/web3-shared-evm'
-import { getError, hasError } from './error.js'
 import type { Context, EVM_Connection, EVM_Web3ConnectionOptions, Middleware } from './types.js'
 import { SharedContextSettings, Web3StateSettings } from '../../settings/index.js'
 import { AddressBook } from './middleware/AddressBook.js'
@@ -18,6 +18,8 @@ import { Squash } from './middleware/Squash.js'
 import { RecentTransaction } from './middleware/RecentTransaction.js'
 import { Translator } from './middleware/Translator.js'
 import { TransactionWatcher } from './middleware/TransactionWatcher.js'
+import { Providers } from './provider.js'
+import type { BaseContractWalletProvider } from './providers/BaseContractWallet.js'
 
 class Composer<T> {
     private listOfMiddleware: Array<Middleware<T>> = []
@@ -80,7 +82,11 @@ class RequestContext implements Context {
         }
     }
 
-    get editor() {
+    private get errorEditor() {
+        return ErrorEditor.from(this._error, this.response, 'Failed to send request.')
+    }
+
+    private get payloadEditor() {
         return PayloadEditor.fromPayload(this.request)
     }
 
@@ -89,11 +95,11 @@ class RequestContext implements Context {
     }
 
     get account() {
-        return this.editor.from ?? this._options?.account ?? this._account
+        return this.payloadEditor.from ?? this._options?.account ?? this._account
     }
 
     get chainId() {
-        return this.editor.chainId ?? this._options?.chainId ?? this._chainId
+        return this.payloadEditor.chainId ?? this._options?.chainId ?? this._chainId
     }
 
     get providerType() {
@@ -105,15 +111,19 @@ class RequestContext implements Context {
     }
 
     get risky() {
-        return this.editor.risky
+        return this.payloadEditor.risky
+    }
+
+    get message() {
+        return this.payloadEditor.signableMessage
     }
 
     get config() {
-        return this.editor.config
+        return this.payloadEditor.config
     }
 
     get userOperation() {
-        return this.editor.userOperation
+        return this.payloadEditor.userOperation
     }
 
     set config(config: Transaction | undefined) {
@@ -146,6 +156,17 @@ class RequestContext implements Context {
         return this.id
     }
 
+    get owner() {
+        const provider = Providers[this.providerType] as BaseContractWalletProvider | undefined
+        if (!provider) throw new Error('Not owner.')
+        return provider.owner
+    }
+
+    get identifier() {
+        const provider = Providers[this.providerType] as BaseContractWalletProvider | undefined
+        return provider?.identifier
+    }
+
     get requestOptions() {
         return this._options
     }
@@ -172,7 +193,7 @@ class RequestContext implements Context {
 
     get error() {
         if (this._writeable) return null
-        if (hasError(this._error, this.response)) return getError(this._error, this.response, 'Failed to send request.')
+        if (this.errorEditor.presence) return this.errorEditor.error
         return null
     }
 

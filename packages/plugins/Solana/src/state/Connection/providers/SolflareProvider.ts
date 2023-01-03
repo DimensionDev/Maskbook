@@ -9,10 +9,10 @@ export class SolflareProvider extends BaseInjectedProvider implements SolanaProv
         super(ProviderType.Solflare, injectedSolflareProvider)
     }
 
-    override async signMessage(dataToSign: string): Promise<string> {
+    override async signMessage(message: string): Promise<string> {
         const { signature } = (await this.bridge.request({
             method: PhantomMethodType.SIGN_MESSAGE,
-            params: [new TextEncoder().encode(dataToSign)],
+            params: [new TextEncoder().encode(message)],
         })) as {
             signature: string
         }

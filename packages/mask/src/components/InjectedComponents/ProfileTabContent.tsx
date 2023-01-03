@@ -15,6 +15,7 @@ import {
     GrantPermissions,
     PluginCardFrameMini,
     useSocialAccountsBySettings,
+    xmasBackgroundShort,
 } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useTabs } from '@masknet/theme'
@@ -24,7 +25,7 @@ import { Button, Link, MenuItem, Stack, Tab, ThemeProvider, Typography } from '@
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, addressSorter, useI18N, useLocationChange } from '../../utils/index.js'
-import { useCurrentVisitingSocialIdentity } from '../DataSource/useActivatedUI.js'
+import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI.js'
 import { useCollectionByTwitterHandler } from '../../plugins/Trader/trending/useTrending.js'
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
 import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
@@ -41,8 +42,10 @@ const useStyles = makeStyles()((theme) => ({
         width: isFacebook(activatedSocialNetworkUI) ? 876 : 'auto',
     },
     container: {
-        background:
-            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
+        backgroundImage: `linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), url(${xmasBackgroundShort})`,
+        backgroundColor: 'white',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center bottom',
         padding: '16px 16px 0 16px',
     },
     title: {
@@ -146,12 +149,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         retry: retryLoadPersonaStatus,
     } = useCurrentPersonaConnectStatus()
 
-    const {
-        value: currentVisitingSocialIdentity,
-        loading: loadingCurrentVisitingSocialIdentity,
-        error: loadCurrentVisitingSocialIdentityError,
-        retry: retryIdentity,
-    } = useCurrentVisitingSocialIdentity()
+    const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
 
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
     const isOwnerIdentity = currentVisitingSocialIdentity?.isOwner
@@ -169,16 +167,9 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
-            retryIdentity()
             retrySocialAccounts()
         })
-    }, [retrySocialAccounts, retryIdentity])
-
-    useEffect(() => {
-        return MaskMessages.events.ownPersonaChanged.on(() => {
-            retryIdentity()
-        })
-    }, [retryIdentity])
+    }, [retrySocialAccounts])
 
     useEffect(() => {
         setSelectedAddress(first(socialAccounts)?.address)
@@ -240,7 +231,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         if (!Component) return null
 
         return <Component identity={currentVisitingSocialIdentity} socialAccount={selectedSocialAccount} />
-    }, [componentTabId, currentVisitingSocialIdentity?.publicKey, selectedSocialAccount])
+    }, [componentTabId, selectedSocialAccount])
 
     const lackHostPermission = usePluginHostPermissionCheck(activatedPlugins.filter((x) => x.ProfileCardTabs?.length))
 
@@ -297,7 +288,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     if (NFTProjectAddress)
         return (
             <div className={classes.root}>
-                <SearchResultInspector keyword={NFTProjectAddress} isProfilePage />
+                <SearchResultInspector keyword={NFTProjectAddress} isProfilePage collectionList={collectionList} />
             </div>
         )
 
@@ -316,12 +307,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         )
     }
 
-    if (
-        (!currentVisitingUserId && !loadCurrentVisitingSocialIdentityError) ||
-        loadingSocialAccounts ||
-        loadingCurrentVisitingSocialIdentity ||
-        loadingPersonaStatus
-    )
+    if (!currentVisitingUserId || loadingSocialAccounts || loadingPersonaStatus)
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
@@ -330,13 +316,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             </ThemeProvider>
         )
 
-    if (
-        (loadCurrentVisitingSocialIdentityError || (isOwnerIdentity && loadPersonaStatusError) || loadSocialAccounts) &&
-        socialAccounts.length === 0
-    ) {
+    if (((isOwnerIdentity && loadPersonaStatusError) || loadSocialAccounts) && socialAccounts.length === 0) {
         const handleClick = () => {
             if (loadPersonaStatusError) retryLoadPersonaStatus()
-            if (loadCurrentVisitingSocialIdentityError) retryIdentity()
+
             if (loadSocialAccounts) retrySocialAccounts()
         }
         return (

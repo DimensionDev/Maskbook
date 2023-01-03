@@ -5,20 +5,8 @@ import { SharedContextSettings } from '../../../settings/index.js'
 
 export class MaskWallet implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
-        const { hasNativeAPI, send, account, chainId } = SharedContextSettings.value
+        const { account, chainId } = SharedContextSettings.value
 
-        // redirect to native app
-        if (hasNativeAPI) {
-            try {
-                const response = await send(context.request)
-                context.end(new Error(response.error?.message ?? 'Unknown Error'), response.result)
-            } catch (error) {
-                context.abort(error)
-            } finally {
-                await next()
-            }
-            return
-        }
         switch (context.request.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
                 context.write(toHex(chainId.getCurrentValue()))

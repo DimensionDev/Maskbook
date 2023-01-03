@@ -1,4 +1,4 @@
-import type { LensBaseAPI } from '../types/lens.js'
+import type { LensBaseAPI } from '../types/Lens.js'
 import { LENS_ROOT_API } from './constants.js'
 
 export class LensAPI implements LensBaseAPI.Provider {

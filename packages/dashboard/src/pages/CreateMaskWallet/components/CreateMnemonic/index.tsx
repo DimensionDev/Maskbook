@@ -108,23 +108,23 @@ const CreateMnemonic = memo(() => {
             await PluginServices.Wallet.setPassword(password)
         }
 
-        const address_ = await PluginServices.Wallet.recoverWalletFromMnemonic(
+        const address = await PluginServices.Wallet.recoverWalletFromMnemonic(
             name,
             words.join(' '),
             `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
         )
 
         await connection?.connect({
-            account: address_,
+            account: address,
             chainId: ChainId.Mainnet,
         })
         await PluginServices.Wallet.resolveMaskAccount([
             {
-                address: address_,
+                address,
             },
         ])
 
-        return address_
+        return address
     }, [location.search, words, resetCallback, hasPassword, searchParams, connection])
 
     const onClose = useCallback(() => {

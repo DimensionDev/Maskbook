@@ -32,17 +32,15 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     actionIcon: {
-        fontSize: 16,
+        width: 14,
+        height: 14,
         cursor: 'pointer',
+        marginLeft: theme.spacing(0.5),
     },
     badge: {
-        background: theme.palette.background.input,
-        color: theme.palette.text.strong,
-        fontSize: 10,
-        fontWeight: 700,
-        marginLeft: 12,
-        padding: '2px 4px',
-        borderRadius: 2,
+        width: 32,
+        height: 18,
+        marginLeft: theme.spacing(0.5),
     },
     highLightBg: {
         background: theme.palette.background.default,
@@ -169,7 +167,7 @@ export function ProfileInList(props: ProfileInListProps) {
                             textToHighlight={textToHighlight}
                         />
                         <Icons.Copy className={classes.actionIcon} onClick={onCopyPubkey} />
-                        {profile.fromNextID && <div className={classes.badge}>Next.ID</div>}
+                        {profile.fromNextID && <Icons.NextIDMini className={classes.badge} />}
                     </div>
                 }
             />

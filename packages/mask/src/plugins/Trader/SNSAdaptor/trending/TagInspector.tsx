@@ -1,7 +1,11 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
+import { useAsyncRetry } from 'react-use'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { SearchResultType } from '@masknet/web3-shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
+import { DSearch } from '@masknet/web3-providers'
+import { TrendingAPI } from '@masknet/web3-providers/types'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { TrendingPopper } from './TrendingPopper.js'
 import { TrendingView } from './TrendingView.js'
@@ -12,7 +16,8 @@ export interface TagInspectorProps {}
 export function TagInspector(props: TagInspectorProps) {
     const createTrendingView = useCallback(
         (
-            resultList: Web3Helper.TokenResultAll[],
+            name?: string,
+            type?: TrendingAPI.TagType,
             address?: string,
             isNFTProjectPopper?: boolean,
             reposition?: () => void,
@@ -20,7 +25,8 @@ export function TagInspector(props: TagInspectorProps) {
             return (
                 <TrendingViewWrapper
                     address={address}
-                    resultList={resultList}
+                    name={name}
+                    type={type}
                     reposition={reposition}
                     isNFTProjectPopper={isNFTProjectPopper}
                 />
@@ -36,27 +42,31 @@ export function TagInspector(props: TagInspectorProps) {
 }
 
 interface TrendingViewWrapperProps {
-    resultList: Web3Helper.TokenResultAll[]
+    name?: string
+    type?: TrendingAPI.TagType
     address?: string
     isNFTProjectPopper?: boolean
     reposition?: () => void
 }
 
-function TrendingViewWrapper({ resultList, reposition, address, isNFTProjectPopper }: TrendingViewWrapperProps) {
-    const [result, setResult] = useState(resultList[0])
+function TrendingViewWrapper({ name, type, reposition, address, isNFTProjectPopper }: TrendingViewWrapperProps) {
+    const { value: resultList } = useAsyncRetry(async () => {
+        if (!name || !type) return EMPTY_LIST
+        return DSearch.search<Web3Helper.TokenResultAll>(
+            isNFTProjectPopper ? name : `${type === TrendingAPI.TagType.CASH ? '$' : '#'}${name}`,
+            isNFTProjectPopper ? SearchResultType.NonFungibleCollection : undefined,
+        )
+    }, [name, type, isNFTProjectPopper])
+
+    if (!resultList?.length) return null
+
     return (
         <TrendingViewProvider
             isNFTProjectPopper={Boolean(isNFTProjectPopper)}
             isProfilePage={false}
             isTokenTagPopper={!isNFTProjectPopper}
             isPreciseSearch={false}>
-            <TrendingView
-                setResult={setResult}
-                result={result}
-                resultList={resultList}
-                onUpdate={reposition}
-                address={address}
-            />
+            <TrendingView resultList={resultList} onUpdate={reposition} address={address} />
         </TrendingViewProvider>
     )
 }

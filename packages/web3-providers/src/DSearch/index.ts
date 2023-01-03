@@ -251,60 +251,89 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             | NonFungibleCollectionResult<ChainId, SchemaType>
         >,
         name: string,
-    ): Promise<Array<SearchResult<ChainId, SchemaType>>> {
+    ): Promise<
+        Array<
+            | FungibleTokenResult<ChainId, SchemaType>
+            | NonFungibleTokenResult<ChainId, SchemaType>
+            | NonFungibleCollectionResult<ChainId, SchemaType>
+        >
+    > {
         let result: Array<
             | FungibleTokenResult<ChainId, SchemaType>
             | NonFungibleTokenResult<ChainId, SchemaType>
             | NonFungibleCollectionResult<ChainId, SchemaType>
         > = []
 
-        for (const { rules, type } of getHandlers<ChainId, SchemaType>()) {
-            for (const rule of rules) {
-                if (!['token', 'twitter'].includes(rule.key)) continue
+        if (name.length < 6) {
+            result = tokens.filter((t) => t.symbol?.toLowerCase() === name.toLowerCase())
+        }
 
-                const filtered = tokens.filter((x) => (type ? type === x.type : true))
-                if (rule.type === 'exact') {
-                    const item = filtered.find((x) => rule.filter?.(x, name, filtered))
-                    if (item) result = [...result, { ...item, keyword: name }]
-                }
-                if (rule.type === 'fuzzy' && rule.fullSearch) {
-                    const items = rule
-                        .fullSearch<
-                            | FungibleTokenResult<ChainId, SchemaType>
-                            | NonFungibleTokenResult<ChainId, SchemaType>
-                            | NonFungibleCollectionResult<ChainId, SchemaType>
-                        >(name, filtered)
-                        ?.map((x) => ({ ...x, keyword: name }))
-                    if (items?.length) result = [...result, ...items]
+        if (!result.length) {
+            for (const { rules, type } of getHandlers<ChainId, SchemaType>()) {
+                for (const rule of rules) {
+                    if (!['token', 'twitter'].includes(rule.key)) continue
+
+                    const filtered = tokens.filter((x) => (type ? type === x.type : true))
+                    if (rule.type === 'exact') {
+                        const item = filtered.find((x) => rule.filter?.(x, name, filtered))
+                        if (item) result = [...result, { ...item, keyword: name }]
+                    }
+                    if (rule.type === 'fuzzy' && rule.fullSearch) {
+                        const items = rule
+                            .fullSearch<
+                                | FungibleTokenResult<ChainId, SchemaType>
+                                | NonFungibleTokenResult<ChainId, SchemaType>
+                                | NonFungibleCollectionResult<ChainId, SchemaType>
+                            >(name, filtered)
+                            ?.map((x) => ({ ...x, keyword: name }))
+                        if (items?.length) result = [...result, ...items]
+                    }
                 }
             }
         }
         return uniqWith(
             result,
             (a, b) => a.type === b.type && (a.id === b.id || isSameAddress(a.address, b.address) || a.rank === b.rank),
-        ).sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
+        ).sort((a, b) => {
+            if (
+                a.rank &&
+                a.rank < 200 &&
+                a.type === SearchResultType.FungibleToken &&
+                b.type !== SearchResultType.FungibleToken
+            )
+                return -1
+            return (a.rank ?? 0) - (b.rank ?? 0)
+        })
     }
 
     private async searchTokenByName(name: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {
         const { specificTokens, normalTokens } = await this.searchTokens()
 
-        const specificResult = await this.searchTokenByHandler(specificTokens, name)
+        const specificResult_ = await this.searchTokenByHandler(specificTokens, name)
         const normalResult = await this.searchTokenByHandler(normalTokens, name)
 
-        if (specificResult.length > 0) return specificResult
-        return normalResult
+        const specificResult: Array<
+            | FungibleTokenResult<ChainId, SchemaType>
+            | NonFungibleTokenResult<ChainId, SchemaType>
+            | NonFungibleCollectionResult<ChainId, SchemaType>
+        > = ([] = specificResult_.map((x) => {
+            const r = normalResult.find((y) => y.id === x.id && y.source === x.source)
+            return { ...x, rank: r?.rank }
+        }))
+
+        return uniqWith(specificResult.concat(normalResult), (a, b) => a.id === b.id)
     }
 
     private async searchNonFungibleTokenByTwitterHandler(
         twitterHandler: string,
     ): Promise<Array<SearchResult<ChainId, SchemaType>>> {
         const collections = (await this.NFTScanCollectionClient.get())
-            .filter((x) => x.collection?.socialLinks?.twitter?.toLowerCase() === twitterHandler.toLowerCase())
+            .filter((x) => x.collection?.socialLinks?.twitter?.toLowerCase().endsWith(twitterHandler.toLowerCase()))
             .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
 
         if (!collections[0]) return EMPTY_LIST
 
-        return [collections[0]]
+        return collections
     }
 
     /**

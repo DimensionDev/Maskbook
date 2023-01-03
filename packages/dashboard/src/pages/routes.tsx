@@ -1,8 +1,13 @@
-import React, { lazy, Suspense } from 'react'
+import React, { lazy, Suspense, useCallback, useEffect } from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom'
 import { DashboardFrame } from '../components/DashboardFrame/index.js'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, RestoreSuccessEvent } from '@masknet/shared-base'
 import NoPersonaGuardRoute from './GuardRoute.js'
+import { Messages, Services } from '../API.js'
+import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
+import { compact } from 'lodash-es'
+import { useCustomSnackbar } from '@masknet/theme'
+import { useDashboardI18N } from '../locales/index.js'
 
 const Wallets = lazy(() => import(/* webpackPrefetch: true */ './Wallets/index.js'))
 const Setup = lazy(() => import('./Setup/index.js'))
@@ -15,6 +20,26 @@ const Settings = lazy(() => import(/* webpackPrefetch: true */ './Settings/index
 const CreateWallet = lazy(() => import('./CreateMaskWallet/index.js'))
 
 export function Pages() {
+    const t = useDashboardI18N()
+    const { showSnackbar } = useCustomSnackbar()
+    const restoreCallback = useCallback(async ({ wallets }: RestoreSuccessEvent) => {
+        const chainId = await SmartPayBundler.getSupportedChainId()
+        const personas = await Services.Identity.queryOwnedPersonaInformation(true)
+        const accounts = await SmartPayAccount.getAccountsByOwners(chainId, [
+            ...(wallets ? wallets.map((x) => x.address) : []),
+            ...compact(personas.map((x) => x.address)),
+        ])
+        showSnackbar(t.recovery_smart_pay_wallet_title(), {
+            variant: 'success',
+            message: t.recovery_smart_pay_wallet_description({
+                count: accounts.filter((x) => x.funded || x.deployed).length,
+            }),
+        })
+    }, [])
+
+    useEffect(() => {
+        return Messages.events.restoreSuccess.on(restoreCallback)
+    }, [restoreCallback])
     return (
         <Suspense fallback={null}>
             <Routes>

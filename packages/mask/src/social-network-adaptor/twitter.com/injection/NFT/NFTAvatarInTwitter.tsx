@@ -26,11 +26,12 @@ import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 import { Twitter } from '@masknet/web3-providers'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
+    const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector()).useForeach((ele, _, proxy) => {
+        const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
+        root.render(<NFTAvatarInTwitter signal={signal} />)
+        return () => root.destroy()
+    })
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
-        <NFTAvatarInTwitter signal={signal} />,
-    )
 }
 
 const useStyles = makeStyles()(() => ({
@@ -233,12 +234,9 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
 
         const handler = (event: MouseEvent) => {
             if (!nftAvatar?.tokenId || !nftAvatar?.address) return
-
             event.stopPropagation()
             event.preventDefault()
-
-            if (!nftAvatar?.pluginId || !nftAvatar.chainId) return
-
+            if (!nftAvatar.pluginId || !nftAvatar.chainId) return
             CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
                 open: true,
                 pluginID: nftAvatar.pluginId,
@@ -264,15 +262,15 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         return clean
     }, [nftAvatar, showAvatar, nftInfo])
 
-    const handler = () => {
+    const handlerWatcher = () => {
         const avatar = searchAvatarSelector().evaluate()?.getAttribute('src')
         if (!avatar || !nftAvatar?.avatarId) return
         setUpdatedAvatar(!!nftAvatar?.avatarId && Twitter.getAvatarId(avatar ?? '') === nftAvatar.avatarId)
     }
 
     new MutationObserverWatcher(searchAvatarMetaSelector())
-        .addListener('onAdd', handler)
-        .addListener('onChange', handler)
+        .addListener('onAdd', handlerWatcher)
+        .addListener('onChange', handlerWatcher)
         .startWatch(
             {
                 childList: true,

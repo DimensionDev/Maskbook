@@ -14,7 +14,7 @@ import { encryptBackup } from '@masknet/backup-format'
 import { encode } from '@msgpack/msgpack'
 import PasswordFiled from '../../../../components/PasswordField/index.js'
 import { MaskAlert } from '../../../../components/MaskAlert/index.js'
-import { MimeTypes } from '@masknet/shared-base'
+import { MimeType } from '@masknet/shared-base'
 
 export interface BackupDialogProps {
     local?: boolean
@@ -65,7 +65,7 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
                 // local backup, no account
                 const encrypted = await encryptBackup(encode(backupPassword), encode(file))
                 const now = formatDateTime(Date.now(), 'yyyy-MM-dd')
-                const blob = new Blob([encrypted], { type: MimeTypes.Binary })
+                const blob = new Blob([encrypted], { type: MimeType.Binary })
                 const url = URL.createObjectURL(blob)
                 const a = document.createElement('a')
                 a.href = url

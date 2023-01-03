@@ -2,8 +2,7 @@ import { QRCode } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { useWeb3State } from '@masknet/web3-hooks-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { Close } from '@mui/icons-material'
 import { alpha, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material'
 import { memo, useState } from 'react'
@@ -54,6 +53,8 @@ export const ReceiveDialog = memo(() => {
     const [address, setAddress] = useState('')
     const [name, setName] = useState('')
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+
     const { open, closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.receiveDialogEvent, (ev) => {
         if (!ev.open) return
         if (ev.address) setAddress(ev.address)
@@ -77,7 +78,7 @@ export const ReceiveDialog = memo(() => {
             </DialogTitle>
             <DialogContent className={classes.content}>
                 <QRCode
-                    text={`${Others?.chainResolver.chainPrefix(ChainId.Mumbai)}:${address}`}
+                    text={`${Others?.chainResolver.chainPrefix(chainId)}:${address}`}
                     canvasProps={{ width: 250, height: 250 }}
                 />
                 <Typography className={classes.tips}>{t.scan_address_to_payment()}</Typography>

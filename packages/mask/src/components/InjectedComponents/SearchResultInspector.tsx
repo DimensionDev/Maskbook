@@ -3,6 +3,8 @@ import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-es'
 import { Tab } from '@mui/material'
 import { TabContext } from '@mui/lab'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import type { SearchResult } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { DSearch } from '@masknet/web3-providers'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
@@ -14,6 +16,8 @@ import {
     useActivatedPluginsSNSAdaptor,
 } from '@masknet/plugin-infra/content-script'
 import { useSearchedKeyword } from '../DataSource/useSearchedKeyword.js'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { decentralizedSearchSettings } from '../../../shared/legacy-settings/settings.js'
 
 const useStyles = makeStyles()(() => ({
     contentWrapper: {
@@ -33,11 +37,14 @@ const useStyles = makeStyles()(() => ({
 export interface SearchResultInspectorProps {
     keyword?: string
     isProfilePage?: boolean
+    collectionList?: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
 export function SearchResultInspector(props: SearchResultInspectorProps) {
     const { classes } = useStyles()
     const translate = usePluginI18NField()
+
+    const dSearchEnabled = useValueRef(decentralizedSearchSettings)
 
     const keyword_ = useSearchedKeyword()
     const keyword = props.keyword || keyword_
@@ -45,8 +52,8 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
 
     const resultList = useAsyncRetry(async () => {
         if (!keyword) return
-        return DSearch.search(keyword)
-    }, [keyword])
+        return props.collectionList ?? DSearch.search(keyword)
+    }, [keyword, JSON.stringify(props.collectionList)])
 
     const contentComponent = useMemo(() => {
         if (!resultList.value?.length) return null
@@ -66,6 +73,8 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         const Component = getSearchResultTabContent(currentTab)
         return <Component result={resultList.value[0]} />
     }, [currentTab, resultList.value])
+
+    if (!dSearchEnabled) return null
     if (!keyword && !resultList.value?.length) return null
     if (!contentComponent) return null
 

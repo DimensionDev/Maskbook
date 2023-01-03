@@ -14,7 +14,7 @@ export const useWalletSign = (message?: string, address?: string) => {
             if (changed || !address || !message || !connection) return
             try {
                 showSnackbar(t.notify_wallet_sign(), { processing: true, message: t.notify_wallet_sign_confirm() })
-                const result = await connection.signMessage(message, 'personalSign', { account: address })
+                const result = await connection.signMessage('message', message, { account: address })
                 return result
             } catch {
                 showSnackbar(t.notify_wallet_sign(), { variant: 'error', message: t.notify_wallet_sign_cancel() })

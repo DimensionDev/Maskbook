@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
-import { useWindowSize } from 'react-use'
+import { useRef } from 'react'
 import { Stack, Typography, useTheme } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils/index.js'
@@ -14,7 +13,7 @@ const DEFAULT_DIMENSION: Dimension = {
     bottom: 32,
     left: 16,
     width: 566,
-    height: 200,
+    height: 190,
 }
 
 const useStyles = makeStyles<PriceChartProps>()((theme, { stats, coin }) => {
@@ -58,22 +57,10 @@ export function PriceChart(props: PriceChartProps) {
     const rootRef = useRef<HTMLDivElement>(null)
     const svgRef = useRef<SVGSVGElement>(null)
 
-    // #region make chart responsive
-    const { width } = useWindowSize()
-    const [responsiveWidth, setResponsiveWidth] = useState(DEFAULT_DIMENSION.width)
-    const [responsiveHeight, setResponsiveHeight] = useState(DEFAULT_DIMENSION.height)
-
-    useEffect(() => {
-        if (!rootRef.current) return
-        setResponsiveWidth(rootRef.current.getBoundingClientRect().width || DEFAULT_DIMENSION.width)
-        setResponsiveHeight(rootRef.current.getBoundingClientRect().height || DEFAULT_DIMENSION.height)
-    }, [width /* redraw canvas if window width resize */])
-    // #endregion
-
     const dimension = {
         ...DEFAULT_DIMENSION,
-        width: responsiveWidth,
-        height: responsiveHeight,
+        width: DEFAULT_DIMENSION.width,
+        height: DEFAULT_DIMENSION.height,
     }
 
     useDimension(svgRef, dimension)

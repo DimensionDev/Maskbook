@@ -13,7 +13,6 @@ import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../../constants.js'
 import type { AdvanceSettingData } from '../AdvanceSetting.js'
 import { gcd, sortTokens } from '../helpers.js'
 import { useITO_Contract } from './useITO_Contract.js'
-import { useI18N } from '../../../../utils/index.js'
 
 export interface PoolSettings {
     password: string
@@ -53,7 +52,6 @@ type paramsObjType = {
 }
 
 export function useFillCallback(poolSettings?: PoolSettings) {
-    const { t } = useI18N()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
@@ -74,7 +72,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         // error: unable to sign password
         let signedPassword = ''
         try {
-            signedPassword = await connection.signMessage(password, 'personalSign', { account })
+            signedPassword = await connection.signMessage('message', password, { account })
         } catch {
             signedPassword = ''
         }
