@@ -45,13 +45,15 @@ export function resolveNFTScanHostName(chainId: Web3Helper.ChainIdAll) {
         case ChainId.BSC:
             return 'https://bnb.nftscan.com'
         case ChainId.Arbitrum:
-            return 'https://arbitrum.nftscan.com/'
+            return 'https://arbitrum.nftscan.com'
         case ChainId.Avalanche:
-            return 'https://avax.nftscan.com/'
+            return 'https://avax.nftscan.com'
         case ChainId.Optimism:
-            return 'https://optimism.nftscan.com/'
+            return 'https://optimism.nftscan.com'
         case ChainId.xDai:
-            return 'https://cronos.nftscan.com/'
+            return 'https://cronos.nftscan.com'
+        case ChainId.Moonbeam:
+            return 'https://moonbeam.nftscan.com'
         default:
             return ''
     }

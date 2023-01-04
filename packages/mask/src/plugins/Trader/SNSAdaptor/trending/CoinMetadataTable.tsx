@@ -143,6 +143,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                                 address={contracts[0].address}
                                                 name={contracts[0].name}
                                                 symbol={contracts[0].symbol}
+                                                nftScanURL={trending.coin.nftscan_url}
                                             />
                                             {contracts.length > 1 ? (
                                                 <IconButton size="small" onClick={openMenu}>

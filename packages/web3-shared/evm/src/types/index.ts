@@ -75,6 +75,8 @@ export enum ChainId {
 
     Crossbell = 3737,
 
+    Moonbeam = 1284,
+
     // For any chains not supported yet.
     Invalid = 0,
 }

@@ -274,7 +274,7 @@ export function TrendingView(props: TrendingViewProps) {
             </TabContext>
             <Stack sx={{ backgroundColor: theme.palette.maskColor.bottom }}>
                 {currentTab === ContentTabs.Market && trending.dataProvider ? (
-                    <CoinMarketPanel dataProvider={trending.dataProvider} trending={trending} />
+                    <CoinMarketPanel dataProvider={trending.dataProvider} trending={trending} result={result} />
                 ) : null}
                 {currentTab === ContentTabs.Price ? (
                     <Box px={2} py={4}>

@@ -19,6 +19,7 @@ const DEFAULT_CRYPTO_CURRENCY_SYMBOLS: Record<string, string> = {
     BNB: 'BNB',
     POLYGON: 'MATIC',
     AVAX: 'AVAX',
+    GLMR: 'GLMR',
     MATIC: 'MATIC',
 }
 

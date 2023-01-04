@@ -1,5 +1,7 @@
 import { Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Typography, Grid } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { WalletIcon } from '@masknet/shared'
@@ -60,6 +62,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface CoinMarketTableProps {
     dataProvider: SourceType
+    result: Web3Helper.TokenResultAll
     trending: Trending
 }
 
@@ -137,10 +140,19 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
 
 export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
     const { t } = useI18N()
-    const { value: overview } = useTrendingOverview(props.trending.coin.address ?? '', props.trending.coin.chainId)
+    const chainId = props.result.chainId ?? props.trending.coin.chainId
+    const address = props.result.address ?? props.trending.coin.address ?? ''
+    const { value: overview } = useTrendingOverview(address, chainId)
     const { classes } = useStyles()
-    const chain = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, props.trending.coin.chainId)
-
+    const chain = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
+    const ChainIcon = () => (
+        <WalletIcon
+            mainIcon={
+                chainId === ChainId.Moonbeam ? new URL('../../assets/moonbeam.png', import.meta.url) : chain?.icon
+            }
+            size={14}
+        />
+    )
     return (
         <Stack>
             <Grid spacing={4} className={classes.gridContainer}>
@@ -161,7 +173,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                         {t('plugin_trader_market_cap')}
                     </Typography>
                     <div className={classes.amountWrapper}>
-                        <WalletIcon mainIcon={chain?.icon} size={14} />
+                        <ChainIcon />
                         <span className={classes.amount}>{formatInteger(overview?.market_cap, '--')}</span>
                     </div>
                 </Grid>
@@ -170,7 +182,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                         {t('plugin_trader_highest_price')}
                     </Typography>
                     <div className={classes.amountWrapper}>
-                        <WalletIcon mainIcon={chain?.icon} size={14} />
+                        <ChainIcon />
                         <span className={classes.amount}>{formatSupply(overview?.highest_price, '--')}</span>
                     </div>
                 </Grid>
@@ -180,7 +192,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                         {t('plugin_trader_total_volume')}
                     </Typography>
                     <div className={classes.amountWrapper}>
-                        <WalletIcon mainIcon={chain?.icon} size={14} />
+                        <ChainIcon />
                         <span className={classes.amount}>{formatSupply(overview?.total_volume, '--')}</span>
                     </div>
                 </Grid>
@@ -190,7 +202,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                         {t('plugin_trader_one_day_average_price')}
                     </Typography>
                     <div className={classes.amountWrapper}>
-                        <WalletIcon mainIcon={chain?.icon} size={14} />
+                        <ChainIcon />
                         <span className={classes.amount}> {formatSupply(overview?.average_price_24h, '--')}</span>
                     </div>
                 </Grid>
@@ -200,7 +212,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                         {t('plugin_trader_one_day_traded_volume')}
                     </Typography>
                     <div className={classes.amountWrapper}>
-                        <WalletIcon mainIcon={chain?.icon} size={14} />
+                        <ChainIcon />
                         <span className={classes.amount}> {formatSupply(overview?.volume_24h, '--')}</span>
                     </div>
                 </Grid>

@@ -241,6 +241,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                 home_urls: compact([
                     collection.website ? collection.website : `${resolveNFTScanHostName(chainId)}/${address}`,
                 ]),
+                nftscan_url: `${resolveNFTScanHostName(chainId)}/${address}`,
                 community_urls: [
                     {
                         type: 'twitter',

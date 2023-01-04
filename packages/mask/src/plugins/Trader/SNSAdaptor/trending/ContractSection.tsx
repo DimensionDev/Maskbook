@@ -14,9 +14,10 @@ export interface ContractSectionProps {
     name: string
     symbol?: string
     iconURL?: string
+    nftScanURL?: string
 }
 
-export const ContractSection = ({ chainId, address, name, symbol, iconURL }: ContractSectionProps) => {
+export const ContractSection = ({ chainId, address, name, symbol, iconURL, nftScanURL }: ContractSectionProps) => {
     const theme = useTheme()
     const { Others } = useWeb3State()
     const [, copyToClipboard] = useCopyToClipboard()
@@ -53,7 +54,7 @@ export const ContractSection = ({ chainId, address, name, symbol, iconURL }: Con
                     sx={{ padding: 0 }}
                     color="primary"
                     size="small"
-                    onClick={() => openWindow(Others?.explorerResolver.addressLink(chainId, address))}>
+                    onClick={() => openWindow(Others?.explorerResolver.addressLink(chainId, address) || nftScanURL)}>
                     <Icons.LinkOut size={16} color={theme.palette.maskColor?.second} />
                 </IconButton>
             ) : null}

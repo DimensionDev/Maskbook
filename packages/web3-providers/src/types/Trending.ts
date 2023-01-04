@@ -62,6 +62,7 @@ export namespace TrendingAPI {
         source_code_urls?: string[]
         community_urls?: CommunityUrls
         home_urls?: string[]
+        nftscan_url?: string
         announcement_urls?: string[]
         blockchain_urls?: string[]
         image_url?: string
