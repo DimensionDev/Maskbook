@@ -86,7 +86,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 body: JSON.stringify(requestBody),
                 method: 'POST',
             },
-            [fetchJSON, fetchR2D2],
+            [fetchR2D2, fetchJSON],
         )
 
         if (result?.message) throw new Error(result.message)
@@ -103,7 +103,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
     async queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean) {
         const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
-        const response = await fetch<NextIDBindings>(url, undefined, [fetchJSON, fetchSquashed, fetchR2D2])
+        const response = await fetch<NextIDBindings>(url, undefined, [fetchSquashed, fetchR2D2, fetchJSON])
         // Will have only one item when query by personaPublicKey
         return first(response.ids)
     }
@@ -121,7 +121,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 order: 'desc',
             }),
             undefined,
-            [fetchJSON, fetchSquashed, fetchR2D2],
+            [fetchSquashed, fetchR2D2, fetchJSON],
         )
 
         return response.ids
@@ -151,7 +151,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                     order: 'desc',
                 }),
                 undefined,
-                [fetchJSON, fetchSquashed, fetchR2D2],
+                [fetchSquashed, fetchR2D2, fetchJSON],
             )
 
             const personaBindings = result.ids
@@ -171,7 +171,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             if (!platform && !identity) return false
 
             const url = getExistedBindingQueryURL(platform, identity, personaPublicKey)
-            const result = await fetch<BindingProof>(url, undefined, [fetchJSON, fetchSquashed, fetchR2D2])
+            const result = await fetch<BindingProof>(url, undefined, [fetchSquashed, fetchR2D2, fetchJSON])
 
             return !!result?.is_valid
         } catch {
@@ -243,7 +243,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 body: JSON.stringify(requestBody),
                 method: 'POST',
             },
-            [fetchJSON, fetchR2D2],
+            [fetchR2D2, fetchJSON],
         )
 
         return response

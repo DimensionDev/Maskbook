@@ -4,6 +4,6 @@ export type Fetcher<T = Response> = (input: RequestInfo | URL, init?: RequestIni
 
 export function fetch<T = Response>(input: RequestInfo | URL, init?: RequestInit, fetchers: Fetcher[] = []) {
     if (!fetchers.length) throw new Error('No fetcher found.')
-    const fetcher = fetchers.reduceRight<Fetcher>((ff, f) => (r, i) => f(r, i, ff), originalFetch)
+    const fetcher = fetchers.reduce<Fetcher>((ff, f) => (r, i) => f(r, i, ff), originalFetch)
     return fetcher(input, init) as Promise<T>
 }
