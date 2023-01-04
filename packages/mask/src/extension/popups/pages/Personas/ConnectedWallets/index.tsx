@@ -58,9 +58,7 @@ const ConnectedWallets = memo(() => {
         )
 
         return compact(results)
-            .sort((a, z) => {
-                return isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1
-            })
+            .sort((a, z) => (isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1))
             .map((x, index, list) => {
                 if (!x.name)
                     return {
