@@ -1,10 +1,9 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { PluginID, PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import { useCurrentPersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus.js'
 import Services from '../../../extension/service.js'
-import { useI18N } from '../locales/index.js'
 import { BindDialog } from './BindDialog.js'
 import { PluginEnableBoundary } from '../../../components/shared/PluginEnableBoundary.js'
 import {
@@ -15,14 +14,10 @@ import {
 } from './Actions/index.js'
 import { PluginCardFrameMini, usePersonaProofs } from '@masknet/shared'
 import { ThemeProvider } from '@mui/material'
-import { makeStyles, MaskLightTheme } from '@masknet/theme'
+import { MaskLightTheme } from '@masknet/theme'
 import { MaskMessages } from '../../../utils/messages.js'
 
-const useStyles = makeStyles()((theme) => ({}))
-
 export function NextIdPage() {
-    const t = useI18N()
-
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const { value: personaConnectStatus, loading: statusLoading } = useCurrentPersonaConnectStatus()
@@ -37,39 +32,30 @@ export function NextIdPage() {
     const publicKeyAsHex = currentPersona?.identifier.publicKeyAsHex
     const proofs = usePersonaProofs(publicKeyAsHex, MaskMessages)
 
-    const handleAddWallets = () => {
+    const handleAddWallets = useCallback(() => {
         Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
             internal: true,
         })
-    }
+    }, [])
 
     const getActionComponent = useMemo(() => {
         if (!isOwn) return <OtherLackWalletAction />
 
         if (!personaConnectStatus.hasPersona || !personaConnectStatus.connected || !personaConnectStatus.verified) {
-            return (
-                <>
-                    {(() => {
-                        if (!personaConnectStatus.hasPersona)
-                            return (
-                                <CreatePersonaAction
-                                    disabled={statusLoading}
-                                    onCreate={() =>
-                                        personaConnectStatus.action?.(undefined, undefined, undefined, true)
-                                    }
-                                />
-                            )
-                        if (!personaConnectStatus.connected || !personaConnectStatus.verified)
-                            return <SelectConnectPersonaAction />
+            if (!personaConnectStatus.hasPersona)
+                return (
+                    <CreatePersonaAction
+                        disabled={statusLoading}
+                        onCreate={() => personaConnectStatus.action?.(undefined, undefined, undefined, true)}
+                    />
+                )
+            if (!personaConnectStatus.connected || !personaConnectStatus.verified) return <SelectConnectPersonaAction />
 
-                        return <AddWalletPersonaAction disabled={statusLoading} onAddWallet={handleAddWallets} />
-                    })()}
-                </>
-            )
+            return <AddWalletPersonaAction disabled={statusLoading} onAddWallet={handleAddWallets} />
         }
 
         return <AddWalletPersonaAction disabled={statusLoading} onAddWallet={handleAddWallets} />
-    }, [isOwn, t, statusLoading, handleAddWallets, personaConnectStatus])
+    }, [isOwn, statusLoading, handleAddWallets, personaConnectStatus])
 
     if (proofs.loading || loadingPersona) {
         return <PluginCardFrameMini />

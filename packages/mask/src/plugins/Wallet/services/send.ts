@@ -17,7 +17,6 @@ import { WalletRPC } from '../messages.js'
 import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper/index.js'
 import { signWithPersona } from '../../../../background/services/identity/index.js'
 import { signWithWallet } from './wallet/index.js'
-import { isZero } from '@masknet/web3-shared-base'
 
 interface Options {
     account?: string
@@ -54,7 +53,7 @@ async function internalSend(
         case EthereumMethodType.MASK_REPLACE_TRANSACTION:
             try {
                 if (!signableConfig) throw new Error('No transaction to be sent.')
-                if (owner && identifier) {
+                if (owner) {
                     callback(
                         null,
                         createJsonRpcResponse(
@@ -109,41 +108,6 @@ async function internalSend(
                 callback(ErrorEditor.from(error, null, 'Failed to deploy.').error)
             }
             break
-        case EthereumMethodType.MASK_TRANSFER:
-            try {
-                const [sender, recipient, amount] = payload.params as [string, string, string]
-                if (!isValidAddress(sender)) throw new Error('Invalid sender address.')
-                if (!isValidAddress(recipient)) throw new Error('Invalid recipient address.')
-                if (isZero(amount)) throw new Error('Invalid amount.')
-
-                callback(
-                    null,
-                    createJsonRpcResponse(
-                        pid,
-                        await SmartPayAccount.transfer(chainId, owner, sender, recipient, amount, signer),
-                    ),
-                )
-            } catch (error) {
-                callback(ErrorEditor.from(error, null, 'Failed to transfer.').error)
-            }
-            break
-        case EthereumMethodType.MASK_CHANGE_OWNER:
-            try {
-                const [sender, recipient] = payload.params as [string, string]
-                if (!isValidAddress(sender)) throw new Error('Invalid sender address.')
-                if (!isValidAddress(recipient)) throw new Error('Invalid recipient address.')
-
-                callback(
-                    null,
-                    createJsonRpcResponse(
-                        pid,
-                        await SmartPayAccount.changeOwner(chainId, owner, sender, recipient, signer),
-                    ),
-                )
-            } catch (error) {
-                callback(ErrorEditor.from(error, null, 'Failed to change owner.').error)
-            }
-            break
         case EthereumMethodType.ETH_DECRYPT:
             callback(new Error('Method not implemented.'))
             break
@@ -178,13 +142,16 @@ export async function send(payload: JsonRpcPayload, options?: Options) {
             id,
         })
         if (editor.risky) {
-            await WalletRPC.pushUnconfirmedRequest(editor.fill())
+            await WalletRPC.pushUnconfirmedRequest({
+                ...editor.fill(),
+                owner: options?.owner,
+                identifier: options?.identifier?.toText(),
+            })
             UNCONFIRMED_CALLBACK_MAP.set(editor.pid!, callback)
             if (options?.popupsWindow) openPopupWindow()
-            return
+        } else {
+            await internalSend(payload, callback, options)
         }
-
-        await internalSend(payload, callback, options)
     })
 }
 

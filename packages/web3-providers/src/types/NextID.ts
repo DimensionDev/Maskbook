@@ -18,7 +18,7 @@ export namespace NextIDBaseAPI {
             createdAt: string,
             patchData: unknown,
             pluginID: string,
-        ): Promise<Result<T, string>>
+        ): Promise<Result<T, null>>
         getByIdentity<T>(
             key: string,
             platform: NextIDPlatform,
@@ -32,7 +32,7 @@ export namespace NextIDBaseAPI {
             identity: string,
             patchData: unknown,
             pluginID: string,
-        ): Promise<Result<NextIDStoragePayload, string>>
+        ): Promise<Result<NextIDStoragePayload, null>>
     }
     export interface Proof {
         bindProof(
@@ -47,7 +47,7 @@ export namespace NextIDBaseAPI {
                 signature?: string
                 proofLocation?: string
             },
-        ): Promise<Result<unknown, string>>
+        ): Promise<void>
 
         queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean): Promise<any>
 

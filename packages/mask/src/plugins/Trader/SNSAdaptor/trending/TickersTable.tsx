@@ -100,9 +100,17 @@ export function TickersTable({ dataProvider, tickers }: TickersTableProps) {
             pair: (() => {
                 if (!ticker.base_name || !ticker.target_name) return null
                 const formatted = formatEthereumAddress(ticker.base_name, 2)
+                const basename = formatted !== ticker.base_name ? ticker.base_name : ''
+                const targetName = formatEthereumAddress(ticker.target_name, 2)
+
                 return (
                     <ShadowRootTooltip
                         placement="top-start"
+                        disableInteractive
+                        PopperProps={{
+                            disablePortal: true,
+                        }}
+                        disableHoverListener={basename.length + targetName.length < 9}
                         title={`${formatted} / ${formatEthereumAddress(ticker.target_name, 2)}`}
                         arrow>
                         <Box className={classes.pair}>

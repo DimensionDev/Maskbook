@@ -42,6 +42,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     label: {
         color: theme.palette.text.secondary,
+        fontSize: 14,
         whiteSpace: 'nowrap',
         textAlign: 'left',
     },

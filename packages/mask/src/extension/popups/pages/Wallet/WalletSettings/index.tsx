@@ -68,7 +68,11 @@ const WalletSettings = memo(() => {
                         </ListItem>
                     ) : null}
                     {wallet.owner ? (
-                        <ListItem>
+                        <ListItem
+                            className={classes.item}
+                            onClick={() => {
+                                navigate(PopupRoutes.ChangeOwner)
+                            }}>
                             <Icons.Cached size={20} />
                             <ListItemText className={classes.text}>{t('popups_change_owner')}</ListItemText>
                         </ListItem>

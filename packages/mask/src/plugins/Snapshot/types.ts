@@ -18,12 +18,23 @@ export interface RawVote {
     choice: number | { [choiceIndex: number]: number } | number[]
     created: number
     voter: string
+    ipfs: string
     id: string
+    vp: number
+    vp_by_strategy: number[]
 }
 
 export interface Proposal {
     address: string
     author: string
+    // forum link
+    discussion: string
+    // number of voters
+    voterAmounts: number
+    symbol: string
+    scores_total: number
+    scores: number[]
+    scores_by_strategy: number[][]
     msg: string
     title: string
     version: string

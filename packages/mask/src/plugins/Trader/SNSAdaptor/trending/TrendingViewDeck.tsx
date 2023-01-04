@@ -20,7 +20,7 @@ import {
     Typography,
     useTheme,
 } from '@mui/material'
-import { first, last } from 'lodash-es'
+import { first, last, uniqBy } from 'lodash-es'
 import { useCallback, useRef, useState, useContext } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin.js'
@@ -190,6 +190,11 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const [coinMenuOpen, setCoinMenuOpen] = useState(false)
     const coinAddress = coin.address || coin.contract_address
 
+    const displayResultList = uniqBy(
+        [result, ...resultList],
+        (x) => `${x.address?.toLowerCase()}_${x.chainId}_${x.type}`,
+    )
+
     return (
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.cardHeader}>
@@ -233,7 +238,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         {t('plugin_trader_rank', { rank: result.rank ?? coin.market_cap_rank })}
                                     </Typography>
                                 ) : null}
-                                {resultList.length > 1 && !isPreciseSearch && result.rank ? (
+                                {displayResultList.length > 1 && !isPreciseSearch && result.rank ? (
                                     <>
                                         <IconButton
                                             sx={{ padding: 0 }}
@@ -246,7 +251,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             <CoinMenu
                                                 open={coinMenuOpen}
                                                 anchorEl={titleRef.current}
-                                                optionList={resultList}
+                                                optionList={displayResultList}
                                                 result={result}
                                                 onChange={setResult}
                                                 onClose={() => setCoinMenuOpen(false)}

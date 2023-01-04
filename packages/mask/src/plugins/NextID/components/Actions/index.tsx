@@ -61,7 +61,7 @@ interface AddWalletPersonaActionProps {
     onAddWallet(): void
 }
 
-export const AddWalletPersonaAction = memo<AddWalletPersonaActionProps>(({ disabled, onAddWallet }) => {
+export const AddWalletPersonaAction = memo<AddWalletPersonaActionProps>(({ onAddWallet }) => {
     const t = useI18N()
     const { classes } = useStyles()
     return (

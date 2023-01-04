@@ -73,15 +73,10 @@ export const PersonaItemUI = (props: PersonaItemProps) => {
                     currentProfileIdentify.identifier,
                 ) && p.is_valid,
         )
-    }, [data])
+    }, [data.proof])
 
     return (
-        <Stack
-            key={data.persona.identifier.toText()}
-            direction="row"
-            alignItems="center"
-            gap={1}
-            onClick={() => onClick()}>
+        <Stack direction="row" alignItems="center" gap={1} onClick={onClick}>
             <Box flexGrow={0} position="relative">
                 {data.avatar && (
                     <Avatar
@@ -101,7 +96,7 @@ export const PersonaItemUI = (props: PersonaItemProps) => {
                 <Typography className={classes.nickname}>
                     <Stack component="span" display="inline-flex" direction="row" alignItems="center" gap={0.25}>
                         {data.persona.nickname}
-                        <>{isVerified && <Icons.NextIDMini width={32} height={18} />}</>
+                        {isVerified ? <Icons.NextIDMini width={32} height={18} /> : null}
                     </Stack>
                 </Typography>
                 <Typography className={classes.fingerprint}>

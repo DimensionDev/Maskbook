@@ -8,9 +8,12 @@ import { PersonaContext } from '../hooks/usePersonaContext.js'
 import Services from '../../../../service.js'
 import { LoadingButton } from '@mui/lab'
 import { useNavigate } from 'react-router-dom'
-import { PopupRoutes, formatPersonaFingerprint, type PersonaInformation } from '@masknet/shared-base'
+import { PopupRoutes, formatPersonaFingerprint, type PersonaInformation, NetworkPluginID } from '@masknet/shared-base'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
+import { useWallets } from '@masknet/web3-hooks-base'
+import type { Wallet } from '@masknet/web3-shared-base'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -73,12 +76,14 @@ const useStyles = makeStyles()((theme) => ({
         padding: '8px 16px',
         margin: '20px 0',
         width: '100%',
+        marginBottom: 12,
     },
 }))
 
 const Logout = memo(() => {
     const { selectedPersona } = PersonaContext.useContainer()
     const navigate = useNavigate()
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const backupPassword = useMemo(() => {
         try {
             const password = localStorage.getItem('backupPassword')
@@ -99,8 +104,14 @@ const Logout = memo(() => {
         }
         navigate(PopupRoutes.Personas, { replace: true })
     }, [selectedPersona, history])
+
+    const manageWallets = useMemo(() => {
+        return wallets.filter((x) => x.identifier?.toText() === selectedPersona?.identifier.toText())
+    }, [wallets, selectedPersona])
+
     return (
         <LogoutUI
+            manageWallets={manageWallets}
             selectedPersona={selectedPersona}
             backupPassword={backupPassword ?? ''}
             loading={loading}
@@ -111,6 +122,7 @@ const Logout = memo(() => {
 })
 
 export interface LogoutUIProps {
+    manageWallets: Wallet[]
     selectedPersona?: PersonaInformation
     backupPassword: string
     loading: boolean
@@ -118,69 +130,94 @@ export interface LogoutUIProps {
     onLogout: () => void
 }
 
-export const LogoutUI = memo<LogoutUIProps>(({ backupPassword, loading, onLogout, onCancel, selectedPersona }) => {
-    const { t } = useI18N()
-    const { classes } = useStyles()
-    const [password, setPassword] = useState('')
-    const [error, setError] = useState(false)
+export const LogoutUI = memo<LogoutUIProps>(
+    ({ backupPassword, loading, onLogout, onCancel, selectedPersona, manageWallets }) => {
+        const { t } = useI18N()
+        const { classes } = useStyles()
+        const [password, setPassword] = useState('')
+        const [error, setError] = useState(false)
 
-    useTitle(t('popups_log_out'))
+        useTitle(t('popups_log_out'))
 
-    const onConfirm = useCallback(() => {
-        if (!backupPassword || backupPassword === password) onLogout()
-        else setError(true)
-    }, [onLogout, backupPassword, password])
+        const onConfirm = useCallback(() => {
+            if (!backupPassword || backupPassword === password) onLogout()
+            else setError(true)
+        }, [onLogout, backupPassword, password])
 
-    return (
-        <>
-            <div className={classes.content}>
-                <Icons.CircleWarning size={64} />
-                <Typography className={classes.title}>{t('popups_persona_logout')}</Typography>
-                <div className={classes.personaContainer}>
-                    <div className={classes.iconContainer}>
-                        <Icons.Masks />
+        return (
+            <>
+                <div className={classes.content}>
+                    <Icons.CircleWarning size={64} />
+                    <Typography className={classes.title}>{t('popups_persona_logout')}</Typography>
+                    <div className={classes.personaContainer}>
+                        <div className={classes.iconContainer}>
+                            <Icons.Masks />
+                        </div>
+                        <div>
+                            <Typography className={classes.name}>{selectedPersona?.nickname}</Typography>
+                            <Typography className={classes.identifier}>
+                                {formatPersonaFingerprint(selectedPersona?.identifier.rawPublicKey ?? '', 10)}
+                            </Typography>
+                        </div>
                     </div>
-                    <div>
-                        <Typography className={classes.name}>{selectedPersona?.nickname}</Typography>
-                        <Typography className={classes.identifier}>
-                            {formatPersonaFingerprint(selectedPersona?.identifier.rawPublicKey ?? '', 10)}
+                    {manageWallets.map((x, index) => {
+                        return (
+                            <div className={classes.personaContainer} key={index}>
+                                <div className={classes.iconContainer}>
+                                    <Icons.SmartPay />
+                                </div>
+                                <div>
+                                    <Typography className={classes.name}>{x.name}</Typography>
+                                    <Typography className={classes.identifier}>
+                                        {formatEthereumAddress(x.address, 4)}
+                                    </Typography>
+                                </div>
+                            </div>
+                        )
+                    })}
+                    <Typography className={classes.tips}>{t('popups_persona_disconnect_tip')}</Typography>
+                    {manageWallets.length ? (
+                        <Typography className={classes.tips} marginTop={2}>
+                            {t('popups_persona_disconnect_manage_wallet_warning', {
+                                persona: selectedPersona?.nickname ?? '',
+                                addresses: manageWallets.map((x) => formatEthereumAddress(x.address, 4)).join(','),
+                            })}
                         </Typography>
-                    </div>
+                    ) : null}
                 </div>
-                <Typography className={classes.tips}>{t('popups_persona_disconnect_tip')}</Typography>
-            </div>
 
-            {backupPassword ? (
-                <div className={classes.password}>
-                    <PasswordField
-                        placeholder={t('popups_backup_password')}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        error={error}
-                        helperText={error ? t('popups_password_do_not_match') : ''}
-                    />
+                {backupPassword ? (
+                    <div className={classes.password}>
+                        <PasswordField
+                            placeholder={t('popups_backup_password')}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            error={error}
+                            helperText={error ? t('popups_password_do_not_match') : ''}
+                        />
+                    </div>
+                ) : null}
+                <div className={classes.controller}>
+                    <Button
+                        variant="contained"
+                        className={classes.button}
+                        onClick={onCancel}
+                        style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}>
+                        {t('cancel')}
+                    </Button>
+                    <LoadingButton
+                        loading={loading}
+                        variant="contained"
+                        className={classes.button}
+                        color="error"
+                        style={{ backgroundColor: '#ff5555' }}
+                        onClick={onConfirm}>
+                        {t('popups_persona_logout')}
+                    </LoadingButton>
                 </div>
-            ) : null}
-            <div className={classes.controller}>
-                <Button
-                    variant="contained"
-                    className={classes.button}
-                    onClick={onCancel}
-                    style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}>
-                    {t('cancel')}
-                </Button>
-                <LoadingButton
-                    loading={loading}
-                    variant="contained"
-                    className={classes.button}
-                    color="error"
-                    style={{ backgroundColor: '#ff5555' }}
-                    onClick={onConfirm}>
-                    {t('popups_persona_logout')}
-                </LoadingButton>
-            </div>
-        </>
-    )
-})
+            </>
+        )
+    },
+)
 
 export default Logout
