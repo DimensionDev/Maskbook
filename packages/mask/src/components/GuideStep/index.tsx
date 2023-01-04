@@ -134,6 +134,7 @@ export default function GuideStep({
     useEffect(() => {
         if (disabled) return
         document.body.style.overflow = open ? 'hidden' : ''
+        document.documentElement.style.overflow = open ? 'hidden' : ''
     }, [open])
 
     const onSkip = () => {
