@@ -85,7 +85,7 @@ export function PersonaPage({ onNext, onChange }: PersonaPageProps) {
                                 <Typography color="currentColor" fontSize={14} fontFamily="Helvetica">
                                     {t.persona_hint()}
                                 </Typography>
-                                <Icons.Close size={20} onClick={() => setHintVisible(true)} />
+                                <Icons.Close size={20} onClick={() => setHintVisible(false)} />
                             </Box>
                         ) : null}
                         {bindingProofs
