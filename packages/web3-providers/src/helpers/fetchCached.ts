@@ -54,7 +54,7 @@ export async function fetchCached(
     const date = hit?.headers.get('x-cache-date')
 
     if (hit && date) {
-        const expired = new Date(date).getTime() + RULES[rule] > Date.now()
+        const expired = new Date(date).getTime() + RULES[rule] < Date.now()
         if (!expired) return hit
     }
 
