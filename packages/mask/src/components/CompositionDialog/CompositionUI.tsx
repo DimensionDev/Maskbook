@@ -1,11 +1,3 @@
-import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
-import { Icons } from '@masknet/icons'
-import { CompositionContext, CompositionType } from '@masknet/plugin-infra/content-script'
-import { EncryptionTargetType, ProfileInformation } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
-import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
-import { LoadingButton } from '@mui/lab'
-import { Button, Checkbox, Chip, Typography } from '@mui/material'
 import {
     forwardRef,
     startTransition,
@@ -18,6 +10,14 @@ import {
     useState,
 } from 'react'
 import { useSubscription } from 'use-subscription'
+import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
+import { Icons } from '@masknet/icons'
+import { CompositionContext, CompositionType } from '@masknet/plugin-infra/content-script'
+import { EncryptionTargetType, ProfileInformation } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
+import { LoadingButton } from '@mui/lab'
+import { Button, Checkbox, Chip, Typography } from '@mui/material'
 import { PersistentStorages } from '../../../shared/index.js'
 import { useI18N } from '../../utils/index.js'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector.js'
