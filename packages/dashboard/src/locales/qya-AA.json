@@ -229,6 +229,7 @@
     "personas_disconnect_raw": "crwdns14714:0crwdne14714:0",
     "personas_disconnect_warning": "crwdns7997:0crwdne7997:0",
     "personas_logout_warning": "crwdns8183:0crwdne8183:0",
+    "personas_logout_manage_wallet_warning": "crwdns19451:0{{persona}}crwdnd19451:0{{addresses}}crwdne19451:0",
     "personas_add": "crwdns7957:0crwdne7957:0",
     "personas_upload_avatar": "crwdns7959:0crwdne7959:0",
     "personas_rename": "crwdns1839:0crwdne1839:0",
