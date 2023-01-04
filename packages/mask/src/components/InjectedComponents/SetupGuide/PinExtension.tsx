@@ -1,11 +1,10 @@
-import { WizardDialog } from './WizardDialog.js'
-import { useI18N } from '../../../utils/index.js'
-import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
-import { Box, Button, Typography } from '@mui/material'
-import { MaskIcon } from '@masknet/shared'
-import { Extension as ExtensionIcon } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
+import { Extension as ExtensionIcon } from '@mui/icons-material'
+import { Box, Button, Typography } from '@mui/material'
+import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
+import { useI18N } from '../../../utils/index.js'
 import { useFindUsernameStyles } from './FindUsername.js'
+import { WizardDialog } from './WizardDialog.js'
 
 interface PinExtensionProps {
     onDone?: () => void
@@ -23,7 +22,7 @@ export function PinExtension({ onDone, onClose }: PinExtensionProps) {
             content={
                 <Box className={classes.connection}>
                     <Box className={classes.connectItem}>
-                        <MaskIcon size={48} />
+                        <Icons.MaskBlue size={48} />
                         <Typography variant="body2" className={classes.name}>
                             Mask Network
                         </Typography>
