@@ -312,7 +312,7 @@ export class UserTransaction {
                 signature: '0x',
             },
             {
-                paymentToken: transaction.feeCurrency,
+                paymentToken: transaction.gasCurrency,
             },
         )
     }

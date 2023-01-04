@@ -258,9 +258,12 @@ export interface Transaction {
     data?: string
     nonce?: number
     chainId?: number
-    feeCurrency?: string // gas fee currency
+
+    // 4337
+    gasCurrency?: string
 
     // CELO
+    feeCurrency?: string // address of the ERC20 contract to use to pay for gas and the gateway fee
     gatewayFeeRecipient?: string // coinbase address of the full serving the light client's transactions
     gatewayFee?: string // value paid to the gateway fee recipient, denominated in the fee currency
 }
