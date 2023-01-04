@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 14,
             fontWeight: 700,
         },
-        sourceNameInMenu: {
+        sourceName: {
             fontWeight: 700,
             color: theme.palette.mode === 'dark' ? '' : theme.palette.maskColor.publicMain,
         },
@@ -47,7 +47,7 @@ export function SourceSwitcher(props: SourceSwitcherProps) {
                     options={uniqBy(resultList, (x) => x.source).map((x) => ({
                         name: (
                             <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
-                                <Typography className={classes.sourceNameInMenu}>
+                                <Typography className={classes.sourceName}>
                                     {resolveSourceTypeName(x.source)}
                                 </Typography>
                                 <SourceProviderIcon provider={x.source} size={20} />
