@@ -1,4 +1,5 @@
 import { ReactNode, useCallback } from 'react'
+import { useSubscription } from 'use-subscription'
 import type { Option } from 'ts-results-es'
 import {
     useActivatedPluginsSNSAdaptor,
@@ -14,7 +15,6 @@ import { makeStyles } from '@masknet/theme'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import Services from '../../extension/service.js'
 import { useI18N } from '../../utils/index.js'
-import { useSubscription } from 'use-subscription'
 
 function useDisabledPlugins() {
     const activated = new Set(useActivatedPluginsSNSAdaptor('any').map((x) => x.ID))
@@ -60,7 +60,6 @@ export function PossiblePluginSuggestionPostInspector() {
 export function PossiblePluginSuggestionUI(props: { plugins: Plugin.Shared.Definition[] }) {
     const { plugins } = props
     const _plugins = useActivatedPluginsSNSAdaptor('any')
-    // const lackPermission = usePluginHostPermissionCheck(plugins)
     if (!plugins.length) return null
     return (
         <>
@@ -69,7 +68,6 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.Shared.Defin
                     define={define}
                     key={define.ID}
                     wrapperProps={_plugins.find((y) => y.ID === define.ID)?.wrapperProps}
-                    // lackHostPermission={lackPermission?.has(define.ID)}
                 />
             ))}
         </>
