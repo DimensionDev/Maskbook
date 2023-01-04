@@ -172,7 +172,11 @@ export default function ChangeOwner() {
                             />
                             <Link
                                 sx={{ display: 'flex', alignItems: 'center' }}
-                                href={explorerResolver.addressLink(chainId, contractAccount?.address ?? '')}
+                                href={
+                                    contractAccount?.address
+                                        ? explorerResolver.addressLink(chainId, contractAccount.address)
+                                        : undefined
+                                }
                                 target="_blank"
                                 rel="noopener noreferrer">
                                 <Icons.PopupLink className={classes.icon} />
@@ -288,6 +292,10 @@ export default function ChangeOwner() {
                     variant="contained"
                     className={cx(classes.button, classes.secondaryButton)}
                     onClick={() => {
+                        const toBeClose = new URLSearchParams(location.search).get('toBeClose')
+                        if (toBeClose) {
+                            return Services.Helper.removePopupWindow()
+                        }
                         navigate(-1)
                     }}>
                     {t('cancel')}

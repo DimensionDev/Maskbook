@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { createContainer } from 'unstated-next'
 import {
     useChainContext,
@@ -6,14 +6,18 @@ import {
     useFungibleAssets,
     useWeb3State,
     useFungibleTokenBalance,
+    useWallets,
 } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import type { FungibleAsset, RecentTransactionComputed, Wallet } from '@masknet/web3-shared-base'
+import { FungibleAsset, isSameAddress, RecentTransactionComputed, Wallet } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
 import { compact } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { useLocation } from 'react-router-dom'
 
 function useWalletContext() {
+    const location = useLocation()
+    const wallets = useWallets()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value: assets, loading } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, { chainId })
     const transactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM)
@@ -40,6 +44,13 @@ function useWalletContext() {
                 : undefined
         return compact([...target, maskAsset])
     }, [assets, chainId, maskAddress, maskBalance])
+
+    useEffect(() => {
+        const contractAccount = new URLSearchParams(location.search).get('contractAccount')
+        if (!contractAccount || selectedWallet) return
+        const target = wallets.find((x) => isSameAddress(x.address, contractAccount))
+        setSelectedWallet(target)
+    }, [location.search, wallets, selectedWallet])
 
     return {
         currentToken,

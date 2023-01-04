@@ -373,6 +373,7 @@ export const SmartPayContent = memo(() => {
                             anchorEl={manageAnchorEl}
                             address={current?.address}
                             owner={current?.owner}
+                            name={current?.name}
                             onClose={() => setManageAnchorEl(null)}
                         />
                     </Box>
