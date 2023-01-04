@@ -23957,7 +23957,7 @@ packages:
     dev: false
 
   /level-ws/0.0.0:
-    resolution: {integrity: sha1-Ny5RIXeSSgBCSwtDrvK7QkltIos=}
+    resolution: {integrity: sha512-XUTaO/+Db51Uiyp/t7fCMGVFOTdtLS/NIACxE/GHsij15mKzxksZifKVjlXDF41JMUP/oM1Oc4YNGdKnc3dVLw==}
     dependencies:
       readable-stream: 1.0.34
       xtend: 2.1.2
