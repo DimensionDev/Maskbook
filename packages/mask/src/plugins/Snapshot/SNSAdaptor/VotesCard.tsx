@@ -10,6 +10,7 @@ import { useI18N } from '../../../utils/index.js'
 import { EthereumBlockie } from '@masknet/shared'
 import { SnapshotContext } from '../context.js'
 import { useVotes } from './hooks/useVotes.js'
+import { useProposal } from './hooks/useProposal.js'
 import { LoadingCard } from './LoadingCard.js'
 import { LoadingFailCard } from './LoadingFailCard.js'
 import { SnapshotCard } from './SnapshotCard.js'
@@ -85,6 +86,7 @@ const useStyles = makeStyles()((theme) => {
 function Content() {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const identifier = useContext(SnapshotContext)
+    const proposal = useProposal(identifier.id)
     const votes = useVotes(identifier)
     const { classes, cx, theme } = useStyles()
     const { t } = useI18N()
@@ -92,7 +94,11 @@ function Content() {
     return (
         <SnapshotCard
             title={
-                <Badge max={9999999} classes={{ badge: classes.badge }} badgeContent={votes.length} color="primary">
+                <Badge
+                    max={9999999}
+                    classes={{ badge: classes.badge }}
+                    badgeContent={proposal.voterAmounts}
+                    color="primary">
                     {t('plugin_snapshot_votes_title')}
                 </Badge>
             }>
