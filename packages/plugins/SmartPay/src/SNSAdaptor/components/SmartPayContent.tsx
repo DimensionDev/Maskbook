@@ -334,10 +334,13 @@ export const SmartPayContent = memo(() => {
                             <ImageIcon classes={{ icon: classes.badge }} size={12} icon={polygonDescriptor?.icon} />
                         </Box>
                         <Box display="flex" flexDirection="column" justifyContent="space-between">
-                            <Typography fontSize={16} lineHeight="20px" fontWeight={700} sx={{ display: 'flex' }}>
-                                {current?.name} <Icons.ArrowDrop size={20} onClick={openMenu} />
-                                {menu}
-                            </Typography>
+                            <Box display="flex" onClick={openMenu} sx={{ cursor: 'pointer' }}>
+                                <Typography fontSize={16} lineHeight="20px" fontWeight={700}>
+                                    {current?.name}
+                                </Typography>
+                                <Icons.ArrowDrop size={20} />
+                            </Box>
+                            {menu}
                             <Typography className={classes.address}>
                                 {formatEthereumAddress(current?.address ?? '', 4)}
                                 <Icons.PopupCopy onClick={() => onCopy(current?.address)} size={14} />

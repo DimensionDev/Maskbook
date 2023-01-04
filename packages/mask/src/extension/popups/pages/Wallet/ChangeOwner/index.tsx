@@ -294,9 +294,10 @@ export default function ChangeOwner() {
                     onClick={() => {
                         const toBeClose = new URLSearchParams(location.search).get('toBeClose')
                         if (toBeClose) {
-                            return Services.Helper.removePopupWindow()
+                            Services.Helper.removePopupWindow()
+                        } else {
+                            navigate(-1)
                         }
-                        navigate(-1)
                     }}>
                     {t('cancel')}
                 </Button>
