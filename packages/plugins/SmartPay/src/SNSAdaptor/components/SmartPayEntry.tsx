@@ -50,7 +50,7 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
         })
     }, [])
 
-    const { value, loading } = useAsync(async () => {
+    const { value, loading, error } = useAsync(async () => {
         if (!currentIdentity?.identifier?.userId || (!currentPersona && !wallets.length))
             return {
                 hasVerifiedPersona: false,
@@ -112,7 +112,7 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
         if (loading || !value) return
 
         // Contract account already exists
-        if (wallets.filter((x) => x.owner))
+        if (wallets.filter((x) => x.owner).length)
             return setSmartPayDialog({
                 open: true,
                 hasAccounts: true,
@@ -121,7 +121,7 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
             })
 
         // If there is no persona and no signer
-        if (!personas && !value.signPersona && !value.signWallet) {
+        if (!personas.length && !value.signPersona && !value.signWallet) {
             return setCreatePersonaConfirmDialog({
                 open: true,
                 target: 'dashboard',
