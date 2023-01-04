@@ -5,6 +5,7 @@ import {
     ChainId,
     ContractWallet,
     Create2Factory,
+    EthereumMethodType,
     Signer,
     Transaction,
     UserOperation,
@@ -267,7 +268,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         userTransaction: UserTransaction,
         signer: Signer<ECKeyIdentifier> | Signer<string>,
     ) {
-        try {
+        if (userTransaction.paymentToken) {
             // fill in initCode
             if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
                 const accounts = await this.getAccountsByOwner(chainId, owner)
@@ -281,13 +282,12 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
                 }
             }
 
-            // sign user operation
-            await userTransaction.sign(signer)
-
-            return this.bundler.sendUserOperation(chainId, userTransaction.toUserOperation())
-        } catch (error) {
-            console.log(error)
-            return ''
+            return this.bundler.sendUserOperation(chainId, await userTransaction.toUserOperation(signer))
+        } else {
+            return this.web3.createProvider(chainId).request<string>({
+                method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
+                params: [await userTransaction.toRawTransaction(this.web3.createWeb3(chainId), signer)],
+            })
         }
     }
 
