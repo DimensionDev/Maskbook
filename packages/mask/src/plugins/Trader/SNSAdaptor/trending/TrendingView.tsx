@@ -144,7 +144,7 @@ export function TrendingView(props: TrendingViewProps) {
             ? result.id || searchedContractAddress || ''
             : result.address || '',
         result.source,
-        expectedChainId,
+        result.chainId ?? expectedChainId,
         searchedContractAddress,
     )
     // #endregion
