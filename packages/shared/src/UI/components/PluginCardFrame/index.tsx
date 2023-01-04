@@ -3,7 +3,6 @@ import { Link, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useMemo } from 'react'
 import { useSharedI18N } from '../../../locales/index.js'
-import { xmasBackground } from '../../../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -12,10 +11,8 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
     },
     container: {
-        backgroundImage: `linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), url(${xmasBackground})`,
-        backgroundColor: 'white',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center bottom',
+        background:
+            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(45, 41, 253, 0.2) 100%), #FFFFFF;',
         minHeight: '196px',
         justifyContent: 'space-between',
     },
