@@ -18,6 +18,7 @@ const DEFAULT_CRYPTO_CURRENCY_SYMBOLS: Record<string, string> = {
     SOL: '\u25CE',
     BNB: 'BNB',
     POLYGON: 'MATIC',
+    AVAX: 'AVAX',
     MATIC: 'MATIC',
 }
 
