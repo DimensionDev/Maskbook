@@ -86,7 +86,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 body: JSON.stringify(requestBody),
                 method: 'POST',
             },
-            [fetchR2D2, fetchJSON],
+            [fetchJSON, fetchR2D2],
         )
 
         if (result?.message) throw new Error(result.message)
@@ -103,7 +103,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
     async queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean) {
         const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
-        const response = await fetch<NextIDBindings>(url, undefined, [fetchSquashed, fetchR2D2, fetchJSON])
+        const response = await fetch<NextIDBindings>(url, undefined, [fetchJSON, fetchSquashed, fetchR2D2])
         // Will have only one item when query by personaPublicKey
         return first(response.ids)
     }
@@ -121,7 +121,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 order: 'desc',
             }),
             undefined,
-            [fetchSquashed, fetchR2D2, fetchJSON],
+            [fetchJSON, fetchSquashed, fetchR2D2],
         )
 
         return response.ids
@@ -148,11 +148,10 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                     platform,
                     identity,
                     page,
-                    exact: true,
                     order: 'desc',
                 }),
                 undefined,
-                [fetchSquashed, fetchR2D2, fetchJSON],
+                [fetchJSON, fetchSquashed, fetchR2D2],
             )
 
             const personaBindings = result.ids
@@ -168,12 +167,16 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     }
 
     async queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string, enableCache?: boolean) {
-        if (!platform && !identity) return false
+        try {
+            if (!platform && !identity) return false
 
-        const url = getExistedBindingQueryURL(platform, identity, personaPublicKey)
-        const result = await fetch<BindingProof>(url, undefined, [fetchSquashed, fetchR2D2, fetchJSON])
+            const url = getExistedBindingQueryURL(platform, identity, personaPublicKey)
+            const result = await fetch<BindingProof>(url, undefined, [fetchJSON, fetchSquashed, fetchR2D2])
 
-        return !!result?.is_valid
+            return !!result?.is_valid
+        } catch {
+            return false
+        }
     }
 
     async queryProfilesByRelationService(identity: string) {
@@ -240,7 +243,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 body: JSON.stringify(requestBody),
                 method: 'POST',
             },
-            [fetchR2D2, fetchJSON],
+            [fetchJSON, fetchR2D2],
         )
 
         return response

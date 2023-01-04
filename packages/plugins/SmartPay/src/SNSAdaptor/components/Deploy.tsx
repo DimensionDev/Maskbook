@@ -1,5 +1,5 @@
-import { useCallback, useState } from 'react'
-import { useAsync, useBoolean, useCopyToClipboard, useUpdateEffect } from 'react-use'
+import { useCallback, useEffect, useState } from 'react'
+import { useAsync, useBoolean, useCopyToClipboard } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
@@ -173,7 +173,8 @@ export function Deploy({
         setManager(manager)
     }, [])
 
-    useUpdateEffect(() => {
+    useEffect(() => {
+        if (manager) return
         if (personaManagers?.length) {
             const firstPersona = first(personaManagers)
 
@@ -194,7 +195,7 @@ export function Deploy({
             })
             return
         }
-    }, [personaManagers, walletManagers])
+    }, [personaManagers, walletManagers, manager])
 
     return (
         <>
