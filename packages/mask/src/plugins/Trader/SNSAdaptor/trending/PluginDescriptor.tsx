@@ -37,7 +37,14 @@ export const PluginDescriptor = ({
                 ) : (
                     <Icons.DecentralizedSearch />
                 )}
-                <Typography fontWeight="bolder" fontSize={16} color={(theme) => theme.palette.maskColor.dark}>
+                <Typography
+                    fontWeight="bolder"
+                    fontSize={16}
+                    color={(theme) =>
+                        isNFTProjectPopper || isTokenTagPopper
+                            ? theme.palette.maskColor.main
+                            : theme.palette.maskColor.dark
+                    }>
                     {isTokenTagPopper
                         ? t.web3_profile_card_name()
                         : isNFTProjectPopper

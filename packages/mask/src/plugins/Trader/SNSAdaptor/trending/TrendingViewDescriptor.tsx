@@ -26,6 +26,12 @@ const useStyles = makeStyles<{
             fontSize: 14,
             fontWeight: 700,
         },
+        sourceName: {
+            color:
+                props.isNFTProjectPopper || props.isTokenTagPopper
+                    ? theme.palette.maskColor.main
+                    : theme.palette.maskColor.dark,
+        },
     }
 })
 
@@ -56,7 +62,12 @@ export function TrendingViewDescriptor(props: TrendingViewDescriptorProps) {
                     gap={0.5}>
                     <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
                 </Stack>
-                <SourceSwitcher resultList={resultList} result={result} setResult={setResult} />
+                <SourceSwitcher
+                    resultList={resultList}
+                    result={result}
+                    setResult={setResult}
+                    classes={{ sourceName: classes.sourceName }}
+                />
             </Box>
         </PluginDescriptor>
     )

@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface SourceSwitcherProps extends withClasses<'source'> {
+export interface SourceSwitcherProps extends withClasses<'source' | 'sourceName'> {
     result: Web3Helper.TokenResultAll
     resultList: Web3Helper.TokenResultAll[]
     setResult: (a: Web3Helper.TokenResultAll) => void
