@@ -62,7 +62,7 @@ export function Image({
     if (loadingImageURL && !disableSpinner) {
         return (
             <div {...containerProps} className={cx(classes.container, classes.center, containerProps?.className)}>
-                <LoadingBase />
+                <LoadingBase className={classes.imageLoading} />
             </div>
         )
     }

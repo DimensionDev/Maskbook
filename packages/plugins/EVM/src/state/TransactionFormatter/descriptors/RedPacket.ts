@@ -141,7 +141,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                     description: i18NextInstance.t('plugin_red_packet_refund_with_token'),
                     snackbar: {
                         successfulDescription: tokenAmountDescription
-                            ? i18NextInstance.t('plugin_red_packet_create_with_token_success', {
+                            ? i18NextInstance.t('plugin_red_packet_refund_with_token_success', {
                                   tokenAmountDescription,
                               })
                             : i18NextInstance.t('plugin_red_packet_refund_with_token_success_without_detail'),

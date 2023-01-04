@@ -19,13 +19,18 @@ const useStyles = makeStyles()((theme) => ({
     },
     head: {
         padding: 0,
+        fontSize: 14,
         border: 'none',
     },
     cell: {
         whiteSpace: 'nowrap',
         border: 'none',
+        fontSize: 14,
         textAlign: 'right',
         fontWeight: 700,
+    },
+    label: {
+        fontSize: 14,
     },
     gridContainer: {
         display: 'grid',
@@ -85,7 +90,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                         {SourceType.UniswapInfo !== dataProvider ? (
                             <TableRow>
                                 <TableCell className={classes.head} component="th">
-                                    <Typography color="textSecondary" variant="body2">
+                                    <Typography color="textSecondary" variant="body2" className={classes.label}>
                                         {t('plugin_trader_market_cap')}
                                     </Typography>
                                 </TableCell>
@@ -97,7 +102,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                         {SourceType.UniswapInfo !== dataProvider ? (
                             <TableRow>
                                 <TableCell className={classes.head} component="th">
-                                    <Typography color="textSecondary" variant="body2">
+                                    <Typography color="textSecondary" variant="body2" className={classes.label}>
                                         {t('plugin_trader_circulating_supply')}
                                     </Typography>
                                 </TableCell>
@@ -108,7 +113,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                         ) : null}
                         <TableRow>
                             <TableCell className={classes.head} component="th">
-                                <Typography color="textSecondary" variant="body2">
+                                <Typography color="textSecondary" variant="body2" className={classes.label}>
                                     {t('plugin_trader_volume_24')}
                                 </Typography>
                             </TableCell>
@@ -119,7 +124,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                         {dataProvider !== SourceType.UniswapInfo ? (
                             <TableRow>
                                 <TableCell className={classes.head} component="th">
-                                    <Typography color="textSecondary" variant="body2">
+                                    <Typography color="textSecondary" variant="body2" className={classes.label}>
                                         {t('plugin_trader_total_supply')}
                                     </Typography>
                                 </TableCell>

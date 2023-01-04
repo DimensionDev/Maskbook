@@ -145,7 +145,7 @@ function Content() {
                                           <Typography className={classes.ellipsisText}>
                                               {result.powerDetail
                                                   .flatMap((detail, index) => {
-                                                      const name = millify(detail.power, {
+                                                      const name = millify(proposal.scores_by_strategy[i][index], {
                                                           precision: 2,
                                                           lowercase: true,
                                                       })
@@ -157,7 +157,7 @@ function Content() {
                                       placement="top"
                                       arrow>
                                       <Typography className={classes.power}>
-                                          {millify(result.power, { precision: 2, lowercase: true })}
+                                          {millify(proposal.scores[i], { precision: 2, lowercase: true })}
                                       </Typography>
                                   </ShadowRootTooltip>
                                   <Typography className={classes.ratio}>

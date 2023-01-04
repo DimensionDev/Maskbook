@@ -18,7 +18,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'inline-flex',
         alignItems: 'center',
         fontSize: 10,
-        color: theme.palette.maskColor.dark,
     },
     icon: {
         color: theme.palette.maskColor.dark,
@@ -31,7 +30,7 @@ export interface FootnoteMenuOption {
     disabled?: boolean
 }
 
-export interface FootnoteMenuProps {
+export interface FootnoteMenuProps extends withClasses<'title'> {
     options: FootnoteMenuOption[]
     selectedIndex?: number
     children?: React.ReactNode
@@ -41,7 +40,7 @@ export interface FootnoteMenuProps {
 export function FootnoteMenu(props: FootnoteMenuProps) {
     const { children, options, selectedIndex = -1, onChange } = props
 
-    const { classes, theme } = useStyles()
+    const { classes, theme } = useStyles(undefined, { props })
     const onSelect = (option: FootnoteMenuOption) => {
         onChange?.(option.value)
     }
