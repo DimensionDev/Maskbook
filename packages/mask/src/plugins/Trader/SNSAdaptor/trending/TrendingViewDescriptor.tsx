@@ -7,6 +7,7 @@ import { Stack, Typography } from '@mui/material'
 import { useI18N } from '../../../../utils/index.js'
 import { TrendingViewContext } from './context.js'
 import { PluginDescriptor } from './PluginDescriptor.js'
+import { uniqBy } from 'lodash-es'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -49,26 +50,35 @@ export function TrendingViewDescriptor(props: TrendingViewDescriptorProps) {
 
     const { classes } = useStyles({ isTokenTagPopper, isNFTProjectPopper })
 
+    const displayList = uniqBy(
+        resultList.filter((x) => x.type === result.type),
+        (x) => x.source,
+    )
+
     return (
         <PluginDescriptor
             isNFTProjectPopper={isNFTProjectPopper}
             isProfilePage={isProfilePage}
             isTokenTagPopper={isTokenTagPopper}>
             <Box className={classes.source}>
-                <Stack
-                    className={classes.sourceMenu}
-                    display="inline-flex"
-                    flexDirection="row"
-                    alignItems="center"
-                    gap={0.5}>
-                    <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
-                </Stack>
-                <SourceSwitcher
-                    resultList={resultList}
-                    result={result}
-                    setResult={setResult}
-                    classes={{ selectedOption: classes.selectedOption }}
-                />
+                {displayList.length > 1 && (
+                    <>
+                        <Stack
+                            className={classes.sourceMenu}
+                            display="inline-flex"
+                            flexDirection="row"
+                            alignItems="center"
+                            gap={0.5}>
+                            <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
+                        </Stack>
+                        <SourceSwitcher
+                            resultList={displayList}
+                            result={result}
+                            setResult={setResult}
+                            classes={{ selectedOption: classes.selectedOption }}
+                        />
+                    </>
+                )}
             </Box>
         </PluginDescriptor>
     )
