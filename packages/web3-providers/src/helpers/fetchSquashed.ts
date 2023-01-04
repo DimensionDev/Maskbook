@@ -1,3 +1,6 @@
+import urlcat from 'urlcat'
+import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD } from '../NextID/constants.js'
+
 const { fetch: originalFetch } = globalThis
 
 const DB = new Map<
@@ -8,8 +11,10 @@ const DB = new Map<
     }
 >()
 const RULES = [
-    // NextID proofs API
-    'https://proof-service.nextnext.id/v1/proof',
+    // NextID production proofs API
+    urlcat(PROOF_BASE_URL_PROD, '/v1/proof'),
+    // NextID Development proofs API
+    urlcat(PROOF_BASE_URL_DEV, '/v1/proof'),
     // mask-x
     'https://7x16bogxfb.execute-api.us-east-1.amazonaws.com',
     // twitter-identity

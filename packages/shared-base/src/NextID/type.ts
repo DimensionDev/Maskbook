@@ -17,6 +17,10 @@ export enum NextIDPlatform {
     EthLeaderboard = 'ethLeaderboard',
 }
 
+export interface NextIDErrorBody {
+    message?: string
+}
+
 export interface NextIDPayload {
     postContent: string
     signPayload: string
