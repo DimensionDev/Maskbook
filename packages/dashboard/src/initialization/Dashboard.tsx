@@ -31,7 +31,7 @@ export default function DashboardRoot() {
 
     // #region theme
     const appearance = useAppearance()
-    const loggerId = useLogSettings()
+    const enableLog = useLogSettings()
     const mode = useSystemPreferencePalette()
     const themes: Record<typeof appearance, Theme> = {
         dark: DashboardDarkTheme,
@@ -48,7 +48,7 @@ export default function DashboardRoot() {
             <I18NextProviderHMR i18n={i18NextInstance}>
                 <StyledEngineProvider injectFirst>
                     <ThemeProvider theme={theme}>
-                        <LoggerContextProvider value={{ platform: LogPlatform.Dashboard, loggerId }}>
+                        <LoggerContextProvider value={{ platform: LogPlatform.Dashboard, enable: enableLog }}>
                             <DialogStackingProvider>
                                 <PersonaContext.Provider>
                                     <ErrorBoundary>
