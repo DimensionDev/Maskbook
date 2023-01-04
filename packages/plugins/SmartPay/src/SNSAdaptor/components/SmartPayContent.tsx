@@ -6,13 +6,15 @@ import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import {
     useChainContext,
     useFungibleAssets,
+    useFungibleToken,
     useFungibleTokenBalance,
     useNetworkDescriptor,
+    useWallet,
     useWallets,
     useWeb3Connection,
     useWeb3State,
 } from '@masknet/web3-hooks-base'
-import { formatEthereumAddress, ProviderType, SchemaType, useSmartPayConstants } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, ProviderType, useSmartPayConstants } from '@masknet/web3-shared-evm'
 import {
     Box,
     Button,
@@ -27,7 +29,7 @@ import {
 } from '@mui/material'
 import { useAsyncFn, useCopyToClipboard } from 'react-use'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { formatBalance, isLessThan, isSameAddress, Wallet } from '@masknet/web3-shared-base'
+import { formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-base'
 import { compact, first, isNaN } from 'lodash-es'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
@@ -147,7 +149,6 @@ export const SmartPayContent = memo(() => {
 
     const [addAnchorEl, setAddAnchorEl] = useState<HTMLElement | null>(null)
     const [manageAnchorEl, setManageAnchorEl] = useState<HTMLElement | null>(null)
-    const [current, setCurrent] = useState<Wallet>()
 
     const wallets = useWallets()
     const contractAccounts = wallets.filter((x) => x.owner)
@@ -161,7 +162,8 @@ export const SmartPayContent = memo(() => {
     // #region web3 state
 
     const { openPopupWindow } = useSNSAdaptorContext()
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account, chainId, setAccount } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const wallet = useWallet()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
@@ -169,21 +171,18 @@ export const SmartPayContent = memo(() => {
 
     const { value: assets } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
         chainId,
-        account: current?.address,
     })
 
-    const maskToken = assets?.find((x) => isSameAddress(maskAddress, x.address))
+    const { value: maskToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, maskAddress)
 
     const { EP_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
-    const { value: allowance = '0' } = useERC20TokenAllowance(current?.address, EP_CONTRACT_ADDRESS, {
+    const { value: allowance = '0' } = useERC20TokenAllowance(maskAddress, EP_CONTRACT_ADDRESS, {
         chainId,
     })
 
     const availableBalanceTooLow = isLessThan(formatBalance(allowance, maskToken?.decimals), 0.1)
 
-    const { value: maskBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, maskAddress, {
-        account: current?.address,
-    })
+    const { value: maskBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, maskAddress)
 
     const allAssets = useMemo(() => {
         if (!assets) return EMPTY_LIST
@@ -191,15 +190,14 @@ export const SmartPayContent = memo(() => {
         const target = assets.filter((asset) => asset.chainId === chainId)
         if (target.length > 1) return target
 
-        const maskAsset: Web3Helper.FungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM> | undefined =
-            maskAddress && Others?.createFungibleToken && chainId
-                ? {
-                      ...Others.createFungibleToken(chainId, SchemaType.ERC20, maskAddress, 'Mask', 'Mask', 18),
-                      balance: maskBalance ?? '0',
-                  }
-                : undefined
+        const maskAsset: Web3Helper.FungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM> | undefined = maskToken
+            ? {
+                  ...maskToken,
+                  balance: maskBalance ?? '0',
+              }
+            : undefined
         return compact([...target, maskAsset])
-    }, [assets, maskAddress, maskBalance, chainId])
+    }, [assets, maskToken, maskBalance, chainId])
 
     // #endregion
 
@@ -214,14 +212,14 @@ export const SmartPayContent = memo(() => {
     // #endregion
 
     const [menu, openMenu] = useMenuConfig(
-        contractAccounts?.map((account, index) => {
+        contractAccounts?.map((contractAccount, index) => {
             return (
                 <Box
                     key={index}
                     display="flex"
                     alignItems="center"
                     columnGap={1}
-                    onClick={() => setCurrent(account)}
+                    onClick={() => setAccount(contractAccount.address)}
                     sx={{ cursor: 'pointer' }}>
                     <Box position="relative" width={30} height={30}>
                         <Icons.SmartPay size={30} />
@@ -229,20 +227,22 @@ export const SmartPayContent = memo(() => {
                     </Box>
                     <Box display="flex" flexDirection="column" justifyContent="space-between" minWidth={150}>
                         <Typography fontSize={16} lineHeight="20px" fontWeight={700}>
-                            {current?.name}
+                            {contractAccount.name}
                         </Typography>
                         <Typography className={classes.address}>
-                            {formatEthereumAddress(account?.address ?? '', 4)}
+                            {formatEthereumAddress(contractAccount?.address ?? '', 4)}
                             <Icons.PopupCopy
                                 onClick={(e) => {
                                     e.stopPropagation()
-                                    onCopy(account.address)
+                                    onCopy(contractAccount.address)
                                 }}
                                 size={14}
                             />
                             <Link
                                 href={
-                                    chainId ? Others?.explorerResolver.addressLink(chainId, account.address) : undefined
+                                    chainId
+                                        ? Others?.explorerResolver.addressLink(chainId, contractAccount.address)
+                                        : undefined
                                 }
                                 target="_blank"
                                 title="View on Explorer"
@@ -253,7 +253,7 @@ export const SmartPayContent = memo(() => {
                             </Link>
                         </Typography>
                     </Box>
-                    <Radio checked={isSameAddress(current?.address, account.address)} />
+                    <Radio checked={isSameAddress(account, contractAccount.address)} />
                 </Box>
             )
         }) ?? [],
@@ -273,17 +273,15 @@ export const SmartPayContent = memo(() => {
     )
 
     // #region event handler
-
     const connectToCurrent = useCallback(async () => {
-        if (isSameAddress(current?.address, account)) return
         await connection?.connect({
-            account: current?.address,
+            account,
             chainId,
-            owner: current?.owner,
-            identifier: current?.identifier,
+            owner: wallet?.owner,
+            identifier: wallet?.identifier,
             providerType: ProviderType.MaskWallet,
         })
-    }, [account, current, connection, chainId])
+    }, [account, wallet, connection, chainId])
     const [{ loading: openLuckDropLoading }, handleLuckDropClick] = useAsyncFn(async () => {
         await connectToCurrent()
         CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
@@ -308,21 +306,20 @@ export const SmartPayContent = memo(() => {
     const handleReceiveClick = useCallback(() => {
         setReceiveDialog({
             open: true,
-            address: current?.address,
-            name: current?.name,
+            address: account,
+            name: wallet?.name,
         })
-    }, [current])
+    }, [account, wallet])
 
     // #endregion
 
     useEffect(() => {
         if (!contractAccounts?.length) return
-
-        setCurrent((prev) => {
-            if (!prev) return first(contractAccounts)
-            return prev
-        })
-    }, [contractAccounts])
+        if (account) return
+        const contractAccount = first(contractAccounts)
+        if (!contractAccount) return
+        setAccount(contractAccount.address)
+    }, [contractAccounts, account])
 
     return (
         <>
@@ -336,19 +333,17 @@ export const SmartPayContent = memo(() => {
                         <Box display="flex" flexDirection="column" justifyContent="space-between">
                             <Box display="flex" onClick={openMenu} sx={{ cursor: 'pointer' }}>
                                 <Typography fontSize={16} lineHeight="20px" fontWeight={700}>
-                                    {current?.name}
+                                    {wallet?.name}
                                 </Typography>
                                 <Icons.ArrowDrop size={20} />
                             </Box>
                             {menu}
                             <Typography className={classes.address}>
-                                {formatEthereumAddress(current?.address ?? '', 4)}
-                                <Icons.PopupCopy onClick={() => onCopy(current?.address)} size={14} />
+                                {formatEthereumAddress(account ?? '', 4)}
+                                <Icons.PopupCopy onClick={() => onCopy(account)} size={14} />
                                 <Link
                                     href={
-                                        current && chainId
-                                            ? Others?.explorerResolver.addressLink(chainId, current.address)
-                                            : ''
+                                        account && chainId ? Others?.explorerResolver.addressLink(chainId, account) : ''
                                     }
                                     target="_blank"
                                     title="View on Explorer"
@@ -374,9 +369,9 @@ export const SmartPayContent = memo(() => {
                         <AccountsManagerPopover
                             open={!!manageAnchorEl}
                             anchorEl={manageAnchorEl}
-                            address={current?.address}
-                            owner={current?.owner}
-                            name={current?.name}
+                            address={account}
+                            owner={wallet?.owner}
+                            name={wallet?.name}
                             onClose={() => setManageAnchorEl(null)}
                         />
                     </Box>
@@ -408,7 +403,10 @@ export const SmartPayContent = memo(() => {
                                                 placement="top">
                                                 <Typography
                                                     ml={1}
-                                                    onClick={openApproveMaskDialog}
+                                                    onClick={async () => {
+                                                        await connectToCurrent()
+                                                        openApproveMaskDialog()
+                                                    }}
                                                     component="span"
                                                     className={classes.maskGasTip}
                                                     display="inline-flex"

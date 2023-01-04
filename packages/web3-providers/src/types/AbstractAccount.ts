@@ -72,6 +72,7 @@ export namespace AbstractAccountAPI {
             owner: string,
             transaction: Transaction,
             signer: Signer<ECKeyIdentifier> | Signer<string>,
+            gasCurrency: string,
         ): Promise<string>
         /** Send a user operation by the account. */
         sendUserOperation(

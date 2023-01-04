@@ -295,6 +295,7 @@ export class UserTransaction {
         web3: Web3,
         entryPoint: string,
         transaction: Transaction,
+        gasCurrency: string,
     ): Promise<UserTransaction> {
         const { from, to, nonce = 0, value = '0', data = '0x' } = transaction
         if (!from) throw new Error('No sender address.')
@@ -312,7 +313,7 @@ export class UserTransaction {
                 signature: '0x',
             },
             {
-                paymentToken: transaction.gasCurrency,
+                paymentToken: gasCurrency,
             },
         )
     }
