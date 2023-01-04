@@ -1,9 +1,14 @@
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { LegacyWalletRecord } from '../../../../shared/definitions/wallet.js'
 export type { LegacyWalletRecord } from '../../../../shared/definitions/wallet.js'
+
+export interface RequestPayload extends JsonRpcPayload {
+    owner?: string
+    identifier?: string
+}
 export interface UnconfirmedRequestChunkRecord {
     /** A chunk of unconfirmed rpc requests */
-    requests: JsonRpcPayload[]
+    requests: RequestPayload[]
     createdAt: Date
     updatedAt: Date
 }

@@ -82,7 +82,6 @@ const SwitchWallet = memo(() => {
         },
         [history, connection, smartPayChainId],
     )
-
     return (
         <>
             <div className={classes.content}>

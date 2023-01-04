@@ -129,7 +129,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
 
         return compact(
             owners.map((x, index) =>
-                this.createContractAccount(chainId, options[index], owner, owner, isValidAddress(x)),
+                this.createContractAccount(chainId, options[index], x || owner, owner, isValidAddress(x)),
             ),
         )
     }
@@ -245,19 +245,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         amount: string,
         signer: Signer<ECKeyIdentifier> | Signer<string>,
     ): Promise<string> {
-        const contract = this.createWalletContract(chainId, owner)
-        if (!contract) throw new Error('Failed to create contract.')
-
-        return this.sendTransaction(
-            chainId,
-            owner,
-            {
-                from: sender,
-                to: sender,
-                data: contract.methods.transfer(recipient, amount).encodeABI(),
-            },
-            signer,
-        )
+        throw new Error('Method not implemented.')
     }
 
     changeOwner(
@@ -267,19 +255,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         recipient: string,
         signer: Signer<ECKeyIdentifier> | Signer<string>,
     ): Promise<string> {
-        const contract = this.createWalletContract(chainId, owner)
-        if (!contract) throw new Error('Failed to create contract.')
-
-        return this.sendTransaction(
-            chainId,
-            owner,
-            {
-                from: sender,
-                to: sender,
-                data: contract.methods.changeOwner(recipient).encodeABI(),
-            },
-            signer,
-        )
+        throw new Error('Method not implemented.')
     }
 
     /**
@@ -291,23 +267,28 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         userTransaction: UserTransaction,
         signer: Signer<ECKeyIdentifier> | Signer<string>,
     ) {
-        // fill in initCode
-        if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
-            const accounts = await this.getAccountsByOwner(chainId, owner)
-            const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
+        try {
+            // fill in initCode
+            if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
+                const accounts = await this.getAccountsByOwner(chainId, owner)
+                const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
 
-            if (!accountsDeployed.length) {
-                await userTransaction.fill(this.web3.createWeb3(chainId), {
-                    initCode: await this.getInitCode(chainId, owner),
-                    nonce: accountsDeployed.length,
-                })
+                if (!accountsDeployed.length) {
+                    await userTransaction.fill(this.web3.createWeb3(chainId), {
+                        initCode: await this.getInitCode(chainId, owner),
+                        nonce: accountsDeployed.length,
+                    })
+                }
             }
+
+            // sign user operation
+            await userTransaction.sign(signer)
+
+            return this.bundler.sendUserOperation(chainId, userTransaction.toUserOperation())
+        } catch (error) {
+            console.log(error)
+            return ''
         }
-
-        // sign user operation
-        await userTransaction.sign(signer)
-
-        return this.bundler.sendUserOperation(chainId, userTransaction.toUserOperation())
     }
 
     async sendTransaction(

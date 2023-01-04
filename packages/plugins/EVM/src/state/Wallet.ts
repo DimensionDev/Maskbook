@@ -43,14 +43,8 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
     private setupSubscriptions() {
         const update = async () => {
             const wallets = this.context.wallets.getCurrentValue()
-            const allPersonas = await Promise.all(
-                this.context.allPersonas?.getCurrentValue()?.map(async (x) => {
-                    return {
-                        ...x,
-                        address: x.address,
-                    }
-                }) ?? [],
-            )
+            const allPersonas = this.context.allPersonas?.getCurrentValue() ?? []
+
             const chainId = await SmartPayBundler.getSupportedChainId()
             if (this.providerType === ProviderType.MaskWallet) {
                 const accounts = await SmartPayAccount.getAccountsByOwners(chainId, [
@@ -89,6 +83,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
 
         update()
         this.context.wallets.subscribe(update)
+        this.context.allPersonas?.subscribe(update)
         this.storage.subscription.subscribe(update)
     }
 

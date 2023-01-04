@@ -230,6 +230,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                 />
             )}
             <LogoutPersonaDialog
+                nickname={nickname}
                 open={logoutDialogOpen}
                 identifier={identifier}
                 onClose={() => setLogoutDialogOpen(false)}

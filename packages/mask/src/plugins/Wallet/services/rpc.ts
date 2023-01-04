@@ -4,6 +4,7 @@ import type { JsonRpcPayload } from 'web3-core-helpers'
 import { createWalletDBAccess } from '../database/Wallet.db.js'
 import { createTransaction } from '../../../../background/database/utils/openDB.js'
 import { openPopupWindow } from '../../../../background/services/helper/index.js'
+import type { RequestPayload } from '../database/types.js'
 
 const MAX_UNCONFIRMED_REQUESTS_SIZE = 1
 const MAIN_RECORD_ID = '0'
@@ -23,7 +24,7 @@ export async function topUnconfirmedRequest() {
     return first(await getUnconfirmedRequests())
 }
 
-export async function pushUnconfirmedRequest(payload: JsonRpcPayload) {
+export async function pushUnconfirmedRequest(payload: RequestPayload) {
     const now = new Date()
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('UnconfirmedRequestChunk')
 
