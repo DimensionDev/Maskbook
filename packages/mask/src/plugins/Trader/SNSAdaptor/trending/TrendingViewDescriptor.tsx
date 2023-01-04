@@ -26,7 +26,8 @@ const useStyles = makeStyles<{
             fontSize: 14,
             fontWeight: 700,
         },
-        sourceName: {
+        selectedOption: {
+            fontWeight: 700,
             color:
                 props.isNFTProjectPopper || props.isTokenTagPopper
                     ? theme.palette.maskColor.main
@@ -66,7 +67,7 @@ export function TrendingViewDescriptor(props: TrendingViewDescriptorProps) {
                     resultList={resultList}
                     result={result}
                     setResult={setResult}
-                    classes={{ sourceName: classes.sourceName }}
+                    classes={{ selectedOption: classes.selectedOption }}
                 />
             </Box>
         </PluginDescriptor>

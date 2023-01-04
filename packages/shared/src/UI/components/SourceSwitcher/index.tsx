@@ -17,14 +17,14 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 14,
             fontWeight: 700,
         },
-        sourceName: {
+        sourceNameInMenu: {
             fontWeight: 700,
             color: theme.palette.mode === 'dark' ? '' : theme.palette.maskColor.publicMain,
         },
     }
 })
 
-export interface SourceSwitcherProps extends withClasses<'source' | 'sourceName'> {
+export interface SourceSwitcherProps extends withClasses<'source' | 'selectedOption'> {
     result: Web3Helper.TokenResultAll
     resultList: Web3Helper.TokenResultAll[]
     setResult: (a: Web3Helper.TokenResultAll) => void
@@ -47,7 +47,7 @@ export function SourceSwitcher(props: SourceSwitcherProps) {
                     options={uniqBy(resultList, (x) => x.source).map((x) => ({
                         name: (
                             <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
-                                <Typography className={classes.sourceName}>
+                                <Typography className={classes.sourceNameInMenu}>
                                     {resolveSourceTypeName(x.source)}
                                 </Typography>
                                 <SourceProviderIcon provider={x.source} size={20} />
@@ -57,6 +57,7 @@ export function SourceSwitcher(props: SourceSwitcherProps) {
                     }))}
                     selectedIndex={typeof result.source !== 'undefined' ? sourceTypes.indexOf(result.source) : -1}
                     onChange={setResult}
+                    classes={{ title: classes.selectedOption }}
                 />
             </Stack>
         </Box>
