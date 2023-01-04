@@ -1,6 +1,6 @@
-import type { Plugin } from '@masknet/plugin-infra'
 import { useEffect } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
+import type { Plugin } from '@masknet/plugin-infra'
 import Services from '../../extension/service.js'
 import { MaskMessages } from '../../utils/messages.js'
 
