@@ -140,7 +140,6 @@ export default function ChangeOwner() {
         return Services.Identity.queryOwnedPersonaInformation(true)
     }, [])
 
-    console.log(personaManagers)
     const walletManagers = useMemo(() => wallets.filter((x) => !x.owner), [wallets])
 
     const [, handleConfirm] = useAsyncFn(async () => {
