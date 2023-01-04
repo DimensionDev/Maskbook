@@ -14,6 +14,7 @@ const useStyles = makeStyles()({
     link: {
         display: 'flex',
         alignItems: 'center',
+        wordBreak: 'break-word',
     },
 })
 export interface TransactionSnackbarProps<T extends NetworkPluginID> {
@@ -120,6 +121,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
             ...{
                 message: (
                     <Link
+                        sx={{ wordBreak: 'break-word' }}
                         className={classes.link}
                         color="inherit"
                         href={Others?.explorerResolver.transactionLink?.(progress.chainId, progress.txHash)}
