@@ -134,7 +134,7 @@ const sns: Plugin.SNSAdaptor.Definition<
     },
     AvatarRealm: {
         ID: `${base.ID}_nft_project_card`,
-        label: 'Avatar Web3 Profile',
+        label: 'Web3 Profile Card',
         priority: 99999,
         UI: {
             Decorator({ userId }) {

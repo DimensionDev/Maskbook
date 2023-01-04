@@ -45,10 +45,8 @@ export const PluginDescriptor = ({
                             ? theme.palette.maskColor.main
                             : theme.palette.maskColor.dark
                     }>
-                    {isTokenTagPopper
+                    {isTokenTagPopper || isNFTProjectPopper
                         ? t.web3_profile_card_name()
-                        : isNFTProjectPopper
-                        ? t.avatar_profile_card_name()
                         : isProfilePage
                         ? t.profile_card_name()
                         : t.decentralized_search_name()}
