@@ -1,19 +1,19 @@
+import { Icons } from '@masknet/icons'
+import { PersonaAction } from '@masknet/shared'
 import { BindingProof, EMPTY_LIST, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
+import { isValidAddress } from '@masknet/web3-shared-evm'
 import { Box, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'
+import { useAsyncRetry } from 'react-use'
 import { useSubscription } from 'use-subscription'
+import { useLastRecognizedSocialIdentity } from '../../../components/DataSource/useActivatedUI.js'
+import { usePersonasFromDB } from '../../../components/DataSource/usePersonasFromDB.js'
+import { usePersonasFromNextID } from '../../../components/DataSource/usePersonasFromNextID.js'
 import { context } from '../context.js'
 import { useI18N } from '../locales/index.js'
-import { PersonaItem } from './PersonaItem.js'
-import { usePersonasFromDB } from '../../../components/DataSource/usePersonasFromDB.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
-import { PersonaAction } from '@masknet/shared'
-import { useAsyncRetry } from 'react-use'
-import { isValidAddress } from '@masknet/web3-shared-evm'
-import { useLastRecognizedSocialIdentity } from '../../../components/DataSource/useActivatedUI.js'
-import { Icons } from '@masknet/icons'
-import { usePersonasFromNextID } from '../../../components/DataSource/usePersonasFromNextID.js'
+import { PersonaItem } from './PersonaItem.js'
 
 const useStyles = makeStyles()((theme) => ({
     messageBox: {
@@ -31,14 +31,15 @@ const useStyles = makeStyles()((theme) => ({
 interface PersonaPageProps {
     onNext: () => void
     onClose(): void
-    onChange: (proof: BindingProof, wallets?: BindingProof[], tokenInfo?: AllChainsNonFungibleToken) => void
+    onChange: (proof: BindingProof, wallets: BindingProof[], tokenInfo?: AllChainsNonFungibleToken) => void
 }
 
 export function PersonaPage({ onNext, onChange }: PersonaPageProps) {
     const t = useI18N()
-    const [visible, setVisible] = useState(true)
+    const [hintVisible, setHintVisible] = useState(true)
     const { classes } = useStyles()
     const { loading, value: socialIdentity } = useLastRecognizedSocialIdentity()
+    const proofs = socialIdentity?.binding?.proofs ?? EMPTY_LIST
     const network = socialIdentity?.identifier?.network.replace('.com', '')
     const userId = socialIdentity?.identifier?.userId
 
@@ -60,16 +61,12 @@ export function PersonaPage({ onNext, onChange }: PersonaPageProps) {
 
     const onSelect = useCallback(
         (proof: BindingProof, tokenInfo?: AllChainsNonFungibleToken) => {
-            onChange(
-                proof,
-                socialIdentity?.binding?.proofs.filter(
-                    (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
-                ) ?? EMPTY_LIST,
-                tokenInfo,
-            )
+            const list =
+                proofs.filter((x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity)) ?? EMPTY_LIST
+            onChange(proof, list, tokenInfo)
             onNext()
         },
-        [onNext, bindingProofs],
+        [onChange, onNext, proofs],
     )
     const { value: avatar } = useAsyncRetry(async () => context.getPersonaAvatar(currentPersona?.identifier), [])
 
@@ -82,13 +79,13 @@ export function PersonaPage({ onNext, onChange }: PersonaPageProps) {
                     </Stack>
                 ) : (
                     <>
-                        {visible ? (
+                        {hintVisible ? (
                             <Box className={classes.messageBox}>
                                 <Icons.Info size={20} />
                                 <Typography color="currentColor" fontSize={14} fontFamily="Helvetica">
                                     {t.persona_hint()}
                                 </Typography>
-                                <Icons.Close size={20} onClick={() => setVisible(true)} />
+                                <Icons.Close size={20} onClick={() => setHintVisible(true)} />
                             </Box>
                         ) : null}
                         {bindingProofs
@@ -108,10 +105,10 @@ export function PersonaPage({ onNext, onChange }: PersonaPageProps) {
                                 />
                             ))}
 
-                        {myPersonas?.[0].linkedProfiles
+                        {currentPersona?.linkedProfiles
                             .filter((x) => x.identifier.network === network)
                             .map((x, i) =>
-                                socialIdentity?.binding?.proofs.some(
+                                proofs.some(
                                     (y) => y.identity.toLowerCase() === x.identifier.userId.toLowerCase(),
                                 ) ? null : (
                                     <PersonaItem avatar="" key={`persona${i}`} userId={x.identifier.userId} />

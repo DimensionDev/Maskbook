@@ -49,7 +49,7 @@ export function NFTAvatarDialog() {
 
     const handleClose = () => setOpen(false)
 
-    const onPersonaChange = (proof: BindingProof, wallets?: BindingProof[], tokenInfo?: AllChainsNonFungibleToken) => {
+    const onPersonaChange = (proof: BindingProof, wallets: BindingProof[], tokenInfo?: AllChainsNonFungibleToken) => {
         setWallets(wallets)
         setTokenInfo(tokenInfo)
         setProof(proof)
