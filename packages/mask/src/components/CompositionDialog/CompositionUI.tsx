@@ -1,11 +1,3 @@
-import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
-import { Icons } from '@masknet/icons'
-import { CompositionContext, CompositionType } from '@masknet/plugin-infra/content-script'
-import { EncryptionTargetType, ProfileInformation } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
-import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
-import { LoadingButton } from '@mui/lab'
-import { Button, Checkbox, Chip, Typography } from '@mui/material'
 import {
     forwardRef,
     startTransition,
@@ -17,10 +9,15 @@ import {
     useRef,
     useState,
 } from 'react'
-import { useSubscription } from 'use-subscription'
-import { PersistentStorages } from '../../../shared/index.js'
+import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
+import { Icons } from '@masknet/icons'
+import { CompositionContext, CompositionType } from '@masknet/plugin-infra/content-script'
+import { EncryptionTargetType, ProfileInformation } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
+import { LoadingButton } from '@mui/lab'
+import { Button, Checkbox, Typography } from '@mui/material'
 import { useI18N } from '../../utils/index.js'
-import { DebugMetadataInspector } from '../shared/DebugMetadataInspector.js'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients.js'
 import { CharLimitIndicator } from './CharLimitIndicator.js'
 import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMethodSelector.js'
@@ -340,33 +337,4 @@ function useEncryptionEncode(props: Pick<CompositionProps, 'supportImageEncoding
         imagePayloadVisible,
         setEncoding,
     }
-}
-
-function useMetadataDebugger(context: CompositionContext, Editor: TypedMessageEditorRef | null) {
-    const isDebug = useSubscription(PersistentStorages.Settings.storage.debugging.subscription)
-    const [__MetadataDebuggerMeta, __configureMetadataDebugger] = useState<TypedMessage['meta'] | null>(null)
-
-    const __syncMetadataDebugger = () => {
-        const meta = Editor?.value.meta ?? new Map()
-        setTimeout(() => __configureMetadataDebugger(meta))
-    }
-    const UI = [
-        isDebug && <Chip key="debug" label="Post metadata inspector" onClick={__syncMetadataDebugger} />,
-        isDebug && __MetadataDebuggerMeta && (
-            <DebugMetadataInspector
-                key="debug-dialog"
-                meta={__MetadataDebuggerMeta}
-                onNewMeta={(meta, data) => {
-                    context.attachMetadata(meta, data)
-                    __syncMetadataDebugger()
-                }}
-                onDeleteMeta={(meta) => {
-                    context.dropMetadata(meta)
-                    __syncMetadataDebugger()
-                }}
-                onExit={() => __configureMetadataDebugger(null)}
-            />
-        ),
-    ]
-    return UI
 }

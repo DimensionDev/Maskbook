@@ -78,7 +78,7 @@ export function WalletItem({ address, isDefault, deletable, fallbackName, setAsD
     const { classes, cx } = useStyles()
     const t = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address)
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address, ChainId.Mainnet)
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const onCopy = useSnackbarCallback(
         async (ev: React.MouseEvent<HTMLAnchorElement>) => {
@@ -93,14 +93,13 @@ export function WalletItem({ address, isDefault, deletable, fallbackName, setAsD
     )
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
 
+    const formattedName = domain ? Others?.formatDomainName(domain) : null
     const walletName = useMemo(() => {
-        if (domain && Others?.formatDomainName) {
-            return Others.formatDomainName(domain)
-        }
+        if (formattedName) return formattedName
         const currentWallet = wallets.find((x) => isSameAddress(x.address, address))
         const name = currentWallet?.name
         return name !== undefined && currentWallet?.hasStoredKeyInfo ? name : fallbackName
-    }, [address, domain, fallbackName])
+    }, [address, formattedName, fallbackName])
 
     const getActionRender = () => {
         if (!deletable)
