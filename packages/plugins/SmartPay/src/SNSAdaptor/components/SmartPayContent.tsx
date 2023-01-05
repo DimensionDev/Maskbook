@@ -161,7 +161,6 @@ export const SmartPayContent = memo(() => {
     const contractAccounts = wallets.filter((x) => x.owner)
 
     // #region Remote Dialog Controller
-    // const { openDialog: openApproveMaskDialog } = useRemoteControlledDialog(PluginSmartPayMessages.approveDialogEvent)
     const { setDialog: setReceiveDialog } = useRemoteControlledDialog(PluginSmartPayMessages.receiveDialogEvent)
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(CrossIsolationMessages.events.swapDialogEvent)
     // #endregion
@@ -323,14 +322,6 @@ export const SmartPayContent = memo(() => {
     }, [account, wallet])
 
     // #endregion
-
-    // useEffect(() => {
-    //     if (!contractAccounts?.length) return
-    //     if (account) return
-    //     const contractAccount = first(contractAccounts)
-    //     if (!contractAccount) return
-    //     setAccount(contractAccount.address)
-    // }, [contractAccounts, account])
 
     return (
         <>

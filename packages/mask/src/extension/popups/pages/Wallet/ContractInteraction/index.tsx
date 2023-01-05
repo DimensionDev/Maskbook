@@ -39,6 +39,7 @@ import {
     leftShift,
     pow10,
     TransactionDescriptorType,
+    ZERO,
 } from '@masknet/web3-shared-base'
 import { useTitle } from '../../../hook/useTitle.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
@@ -302,11 +303,11 @@ const ContractInteraction = memo(() => {
     const gasPricePriorEIP1559 = new BigNumber(gasPrice ?? defaultPrices?.gasPrice ?? 0)
 
     const gasFee = useMemo(() => {
-        if (!gas) return new BigNumber(0)
+        if (!gas) return ZERO
         const result = (isSupport1559 ? gasPriceEIP1559 : gasPricePriorEIP1559).multipliedBy(gas ?? 0).integerValue()
 
         if (isNativeTokenAddress(gasCurrency)) return result
-        if (!currencyRatio) return new BigNumber(0)
+        if (!currencyRatio) return ZERO
         return result.dividedBy(currencyRatio)
     }, [
         gas,
