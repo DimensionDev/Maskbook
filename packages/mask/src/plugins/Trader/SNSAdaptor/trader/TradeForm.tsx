@@ -44,6 +44,7 @@ import Services from '../../../../extension/service.js'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { TrendingAPI } from '@masknet/web3-providers/types'
 
 const useStyles = makeStyles<{
     isDashboard: boolean
@@ -220,6 +221,7 @@ export interface AllTradeFormProps extends withClasses<'root'> {
     onSwitch: () => void
     settings?: boolean
     gasConfig?: GasConfig
+    trending?: TrendingAPI.Trending
 }
 
 export const TradeForm = memo<AllTradeFormProps>(
@@ -238,6 +240,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         onSwitch,
         settings,
         gasConfig,
+        trending,
         ...props
     }) => {
         const maxAmountTrade = useRef<TradeInfo | null>(null)
@@ -554,7 +557,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                         {settings ? (
                             <ChainBoundary
                                 expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                expectedChainId={chainId as ChainId}>
+                                expectedChainId={(trending?.contracts?.[0]?.chainId ?? chainId) as ChainId}>
                                 <WalletConnectedBoundary offChain>
                                     <EthereumERC20TokenApprovedBoundary
                                         onlyInfiniteUnlock

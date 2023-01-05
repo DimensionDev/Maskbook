@@ -307,6 +307,7 @@ export function TrendingView(props: TrendingViewProps) {
                     <Web3ContextProvider value={context}>
                         <TradeView
                             classes={{ root: classes.tradeViewRoot }}
+                            trending={trending}
                             TraderProps={{
                                 defaultInputCoin: coin.address
                                     ? createFungibleToken(

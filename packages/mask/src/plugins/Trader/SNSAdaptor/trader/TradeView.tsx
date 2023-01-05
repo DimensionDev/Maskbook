@@ -2,6 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { useChainContext, useFungibleToken, useNetworkContext } from '@masknet/web3-hooks-base'
 import { Trader, TraderProps } from './Trader.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
+import type { TrendingAPI } from '@masknet/web3-providers/types'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -20,6 +21,7 @@ const useStyles = makeStyles()((theme) => {
 
 export interface TradeViewProps extends withClasses<'root'> {
     TraderProps: TraderProps
+    trending?: TrendingAPI.Trending
 }
 
 export function TradeView(props: TradeViewProps) {
@@ -32,6 +34,7 @@ export function TradeView(props: TradeViewProps) {
         TraderProps.defaultInputCoin,
         { chainId },
     )
+
     const { classes } = useStyles(undefined, { props })
     return (
         <div className={classes.root}>
@@ -42,6 +45,7 @@ export function TradeView(props: TradeViewProps) {
                     chainId={chainId}
                     classes={{ root: classes.trade }}
                     settings
+                    trending={props.trending}
                 />
             </AllProviderTradeContext.Provider>
         </div>
