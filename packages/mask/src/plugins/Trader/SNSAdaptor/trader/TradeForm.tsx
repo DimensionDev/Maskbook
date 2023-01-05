@@ -249,9 +249,8 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { chainId } = useChainContext()
         const { pluginID } = useNetworkContext()
         const { Others } = useWeb3State()
-        const { chainId: expectedChainId, isSwapping, allTradeComputed } = AllProviderTradeContext.useContainer()
+        const { isSwapping, allTradeComputed } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
-
         const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
         const isSNSClosed = snsAdaptorMinimalPlugins?.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
         const isDashboardClosed = useIsMinimalModeDashBoard(PluginID.GoPlusSecurity)
@@ -554,7 +553,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                         {settings ? (
                             <ChainBoundary
                                 expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                expectedChainId={(expectedChainId ?? chainId) as ChainId}>
+                                expectedChainId={chainId as ChainId}>
                                 <WalletConnectedBoundary offChain>
                                     <EthereumERC20TokenApprovedBoundary
                                         onlyInfiniteUnlock

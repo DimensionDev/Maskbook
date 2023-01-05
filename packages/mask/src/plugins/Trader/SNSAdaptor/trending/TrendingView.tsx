@@ -312,10 +312,9 @@ export function TrendingView(props: TrendingViewProps) {
                     </Box>
                 ) : null}
                 {currentTab === ContentTabs.Swap && isSwappable ? (
-                    <Web3ContextProvider value={context}>
+                    <Web3ContextProvider value={{ pluginID: context.pluginID, chainId: swapExpectedChainId }}>
                         <TradeView
                             classes={{ root: classes.tradeViewRoot }}
-                            expectedChainId={swapExpectedChainId}
                             TraderProps={{
                                 defaultInputCoin: coin.address
                                     ? createFungibleToken(
