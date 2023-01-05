@@ -23,7 +23,7 @@ export interface ProfileInformation {
 
 export interface ProfileInformationFromNextID extends ProfileInformation {
     fromNextID: boolean
-    linkedTwitterNames: string[]
+    linkedTwitterNames?: string[]
     walletAddress?: string
     createdAt?: Date
     updatedAt?: Date

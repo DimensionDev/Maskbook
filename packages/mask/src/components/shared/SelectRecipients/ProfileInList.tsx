@@ -103,16 +103,16 @@ export function ProfileInList(props: ProfileInListProps) {
     )
     const highlightText = (() => {
         if (!profile.fromNextID) return `@${profile.identifier.userId || profile.nickname}`
-        const mentions = profile.linkedTwitterNames.map((x) => '@' + x).join(' ')
+        const mentions = profile.linkedTwitterNames?.map((x) => '@' + x).join(' ') ?? ''
         if (mentions.length < 15) return mentions
-        const len = profile.linkedTwitterNames.length
+        const len = profile.linkedTwitterNames?.length ?? 0
         return truncate(mentions, { length: 15 }) + (len > 1 ? `(${len})` : '')
     })()
 
     const tooltipTitle = (() => {
-        const linkedNames = profile.linkedTwitterNames
-        if (!linkedNames?.length || linkedNames.length < 2) return ''
-        const mentions = profile.linkedTwitterNames.map((username) => '@' + username)
+        const linkedNames = profile.linkedTwitterNames ?? []
+        if (linkedNames.length < 2) return ''
+        const mentions = profile.linkedTwitterNames?.map((username) => '@' + username) ?? []
         return `${t('select_friends_dialog_persona_connect')} ${mentions.join(', ')}.`
     })()
 
