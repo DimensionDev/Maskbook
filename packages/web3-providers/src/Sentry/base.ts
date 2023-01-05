@@ -1,4 +1,4 @@
-import type { EnhanceableSite, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import type { EnhanceableSite } from '@masknet/shared-base'
 import Web3Utils from 'web3-utils'
 import type { LogHubBase } from '../types/Log.js'
 
@@ -11,14 +11,12 @@ function hash(value: string) {
 export class LogHub implements LogHubBase {
     private _platform: LogPlatform | EnhanceableSite
     private _plugin_id?: string
-    private _user?: {
-        persona?: string | null
-        profile?: string | null
-    }
+    private _user: string
 
-    constructor(platform: LogPlatform | EnhanceableSite, pluginId?: string) {
+    constructor(platform: LogPlatform | EnhanceableSite, loggerId: string, pluginId?: string) {
         this._platform = platform
         this._plugin_id = pluginId
+        this._user = loggerId
 
         Sentry.init({
             dsn: process.env.MASK_SENTRY_DSN,
@@ -34,22 +32,15 @@ export class LogHub implements LogHubBase {
         this._platform = platform
     }
 
-    setLogUser(user: { persona?: PersonaIdentifier; profile?: ProfileIdentifier }) {
-        const checksumPersona = user.persona ? hash(user.persona.toText()) : undefined
-        const checksumProfile = user.profile ? hash(user.profile.toText()) : undefined
-
-        this._user = {
-            persona: checksumPersona,
-            profile: checksumProfile,
-        }
+    setLogUser(loggerId: string) {
+        this._user = loggerId
     }
 
     private initScope() {
         const scope = new Sentry.Scope()
         scope.setTag('platform', this._platform)
 
-        if (this._user?.profile || this._user?.persona)
-            scope.setUser({ id: this._user?.persona, segment: this._user?.profile })
+        if (this._user) scope.setUser({ id: this._user })
         if (this._plugin_id) scope.setTag('plugin_id', this._plugin_id)
 
         return scope

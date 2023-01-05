@@ -10,11 +10,12 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { GrantPermissions, InjectedDialog, useSharedI18N } from '@masknet/shared'
 import { PluginID } from '@masknet/shared-base'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip.js'
 import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
-import { GrantPermissions, InjectedDialog, useSharedI18N } from '@masknet/shared'
+
 const useStyles = makeStyles()((theme) => ({
     sup: {
         paddingLeft: 2,
@@ -24,6 +25,7 @@ const useStyles = makeStyles()((theme) => ({
         boxShadow: `0px 0px 20px 0px ${theme.palette.mode === 'dark' ? '#FFFFFF1F' : '#0000000D'}`,
     },
 }))
+
 export interface PluginEntryRenderRef {
     openPlugin(id: string, pluginProps?: any): void
 }

@@ -148,7 +148,6 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                     platform,
                     identity,
                     page,
-                    exact: true,
                     order: 'desc',
                 }),
                 undefined,
@@ -168,12 +167,16 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     }
 
     async queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string, enableCache?: boolean) {
-        if (!platform && !identity) return false
+        try {
+            if (!platform && !identity) return false
 
-        const url = getExistedBindingQueryURL(platform, identity, personaPublicKey)
-        const result = await fetch<BindingProof>(url, undefined, [fetchSquashed, fetchR2D2, fetchJSON])
+            const url = getExistedBindingQueryURL(platform, identity, personaPublicKey)
+            const result = await fetch<BindingProof>(url, undefined, [fetchSquashed, fetchR2D2, fetchJSON])
 
-        return !!result?.is_valid
+            return !!result?.is_valid
+        } catch {
+            return false
+        }
     }
 
     async queryProfilesByRelationService(identity: string) {
