@@ -1,12 +1,12 @@
 import { Icons } from '@masknet/icons'
-import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useCurrentPersonaInformation, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog } from '@masknet/shared'
 import type { PersonaInformation } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { SmartPayFunder } from '@masknet/web3-providers'
-import type { Wallet } from '@masknet/web3-shared-base'
+import { isSameAddress, Wallet } from '@masknet/web3-shared-base'
 import { DialogContent, CircularProgress } from '@mui/material'
 import { Box } from '@mui/system'
 import { useMemo, useState } from 'react'
@@ -42,6 +42,7 @@ export function RouterDialog() {
     const { pathname } = useLocation()
     const navigate = useNavigate()
     const wallets = useWallets()
+    const currentPersona = useCurrentPersonaInformation()
     const [hasAccounts, setHasAccounts] = useState(false)
     const [signer, setSigner] = useState<
         | {
@@ -89,6 +90,16 @@ export function RouterDialog() {
         }
         return navigate(RoutePaths.InEligibility)
     }, [isVerified, wallets, hasAccounts])
+
+    useUpdateEffect(() => {
+        if (
+            (signer?.signPersona &&
+                currentPersona?.identifier.publicKeyAsHex !== signer.signPersona.identifier.publicKeyAsHex) ||
+            (signer?.signWallet && !wallets.some((x) => isSameAddress(x.address, signer.signWallet?.address)))
+        ) {
+            closeDialog()
+        }
+    }, [currentPersona, signer, wallets])
 
     return (
         <InjectedDialog

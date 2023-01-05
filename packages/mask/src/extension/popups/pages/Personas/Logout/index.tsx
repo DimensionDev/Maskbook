@@ -94,13 +94,13 @@ const Logout = memo(() => {
         }
     }, [])
 
-    const [{ loading }, onLogout] = useAsyncFn(async () => {
+    const [{ loading, error }, onLogout] = useAsyncFn(async () => {
         if (!selectedPersona) return
         await Services.Identity.logoutPersona(selectedPersona.identifier)
         const currentPersona = await Services.Settings.getCurrentPersonaIdentifier()
         if (!currentPersona) {
             const lastCreatedPersona = await Services.Identity.queryLastPersonaCreated()
-            if (lastCreatedPersona) await Services.Settings.setCurrentPersonaIdentifier(lastCreatedPersona)
+            await Services.Settings.setCurrentPersonaIdentifier(lastCreatedPersona)
         }
         navigate(PopupRoutes.Personas, { replace: true })
     }, [selectedPersona, history])

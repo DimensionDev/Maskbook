@@ -52,9 +52,9 @@ export async function getCurrentPersonaIdentifier(): Promise<PersonaIdentifier |
     if (personas[0]) currentPersonaIdentifier.value = personas[0].toText()
     return personas[0]
 }
-export async function setCurrentPersonaIdentifier(x: PersonaIdentifier) {
+export async function setCurrentPersonaIdentifier(x?: PersonaIdentifier) {
     await currentPersonaIdentifier.readyPromise
-    currentPersonaIdentifier.value = x.toText()
+    currentPersonaIdentifier.value = x?.toText() ?? ''
     MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
 }
 export async function getPluginMinimalModeEnabled(id: string): Promise<BooleanPreference> {
