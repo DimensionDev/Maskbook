@@ -152,6 +152,9 @@ export class UserTransaction {
         return toFixed(plus(this.userOperation.callGas ?? 0, this.userOperation.preVerificationGas ?? 0))
     }
 
+    /**
+     * Fill up an incomplete user operation.
+     */
     async fill(web3: Web3, overrides?: Required<Pick<UserOperation, 'initCode' | 'nonce'>>) {
         // from overrides
         if (overrides) {
@@ -239,6 +242,20 @@ export class UserTransaction {
         }
 
         return this
+    }
+
+    /**
+     * Estimate a raw transaction.
+     */
+    estimate(web3: Web3) {
+        const transaction = this.toTransaction()
+        if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
+        const walletContract = createContract<Wallet>(web3, transaction.from, WalletABI as AbiItem[])
+        if (!walletContract) throw new Error('Failed to create wallet contract.')
+
+        return walletContract?.methods
+            .exec(transaction.to, transaction.value ?? '0', transaction.data ?? '0x')
+            .estimateGas()
     }
 
     toTransaction(): Transaction {
