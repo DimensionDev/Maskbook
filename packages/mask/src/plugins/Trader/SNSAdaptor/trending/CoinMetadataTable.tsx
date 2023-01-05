@@ -19,7 +19,10 @@ import { Linking, useMenuConfig } from '@masknet/shared'
 import { useI18N } from '../../../../utils/index.js'
 import { ContractSection } from './ContractSection.js'
 import type { CommunityType } from '../../types/index.js'
-import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
+import { isValidChainId as isValidChainIdEVM, ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
+import { isValidChainId as isValidChainIdSolana, ChainId as ChainIdSolana } from '@masknet/web3-shared-solana'
+import { isValidChainId as isValidChainIdFlow, ChainId as ChainIdFlow } from '@masknet/web3-shared-flow'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -78,6 +81,15 @@ const brands: Record<CommunityType, React.ReactNode> = {
     other: null,
 }
 
+function isValidChainIdAll(chainId?: Web3Helper.ChainIdAll) {
+    if (!chainId) return false
+    return (
+        isValidChainIdEVM(chainId as ChainIdEVM) ||
+        isValidChainIdSolana(chainId as ChainIdSolana) ||
+        isValidChainIdFlow(chainId as ChainIdFlow)
+    )
+}
+
 export function CoinMetadataTable(props: CoinMetadataTableProps) {
     const { trending } = props
     const { t } = useI18N()
@@ -94,7 +106,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
 
     const [menu, openMenu] = useMenuConfig(
         contracts
-            .filter((x) => isValidChainId(x.chainId as ChainId))
+            .filter((x) => isValidChainIdAll(x.chainId))
             .map((x) => (
                 <MenuItem key={x.chainId}>
                     <ContractSection chainId={x.chainId} address={x.address} name={x.address} />
