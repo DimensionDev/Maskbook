@@ -50,9 +50,6 @@ export interface Log {
 }
 
 export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPluginID.PLUGIN_EVM> {
-    estimateUserOperation(chainId: ChainId, userOperation: UserOperation): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
     private web3 = new Web3API()
     private multicall = new MulticallAPI()
     private bundler = new SmartPayBundlerAPI()
@@ -335,7 +332,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         return userTransaction.gas
     }
 
-    async estimateUserOpearation(chainId: ChainId, userOperation: UserOperation): Promise<string> {
+    async estimateUserOperation(chainId: ChainId, userOperation: UserOperation): Promise<string> {
         const userTransaction = await UserTransaction.fromUserOperation(
             chainId,
             this.web3.createWeb3(chainId),
