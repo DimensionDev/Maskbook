@@ -2,7 +2,7 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useFungibleToken, useMaskTokenAddress, useNativeToken } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { MenuItem, Radio, Typography } from '@mui/material'
+import { MenuItem, Radio as MuiRadio, RadioProps, Typography } from '@mui/material'
 import { useUpdateEffect } from '@react-hookz/web'
 import { compact } from 'lodash-es'
 import { useEffect, useState } from 'react'
@@ -33,6 +33,8 @@ export function useGasCurrencyMenu(
     pluginId?: NetworkPluginID,
     onCurrencyChange?: (address: string) => void,
     initialCurrencyAddress?: string,
+    // TODO: remove this after override popups theme
+    Radio: React.ComponentType<RadioProps> = MuiRadio,
 ) {
     const { classes } = useStyles()
     const [current, setCurrent] = useState(initialCurrencyAddress)

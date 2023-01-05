@@ -10,13 +10,11 @@ type SmartPayDialogEvent = {
     signPersona?: PersonaInformation
     signWallet?: Wallet
 }
-type ApproveDialogEvent = { open: boolean }
 type ReceiveDialogEvent = { open: boolean; address?: string; name?: string }
 
 export interface PluginSmartPayMessage {
     smartPayDescriptionDialogEvent: SmartPayDescriptionDialogEvent
     smartPayDialogEvent: SmartPayDialogEvent
-    approveDialogEvent: ApproveDialogEvent
     receiveDialogEvent: ReceiveDialogEvent
 }
 

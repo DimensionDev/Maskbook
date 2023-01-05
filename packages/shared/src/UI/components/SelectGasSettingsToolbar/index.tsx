@@ -36,6 +36,7 @@ interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPlugi
     gasLimit: number
     gasConfig?: GasConfig
     onChange?(gasConfig?: GasConfig): void
+    supportMultiCurrency?: boolean
 }
 
 const useStyles = makeStyles()((theme) => {
@@ -120,6 +121,7 @@ export function SelectGasSettingsToolbarUI({
     gasLimit,
     nativeToken,
     nativeTokenPrice,
+    supportMultiCurrency,
 }: SelectGasSettingsToolbarProps) {
     const t = useSharedI18N()
     const { classes, cx, theme } = useStyles()
@@ -140,12 +142,14 @@ export function SelectGasSettingsToolbarUI({
                     ? {
                           maxFeePerGas,
                           maxPriorityFeePerGas,
+                          gasCurrency: currentGasCurrency,
                       }
                     : {
                           gasPrice: new BigNumber(maxFeePerGas).gt(0) ? maxFeePerGas : gasPrice,
+                          gasCurrency: currentGasCurrency,
                       },
             ),
-        [isSupportEIP1559, chainId, onChange],
+        [isSupportEIP1559, chainId, onChange, currentGasCurrency],
     )
 
     const openCustomGasSettingsDialog = useCallback(async () => {
@@ -243,7 +247,7 @@ export function SelectGasSettingsToolbarUI({
     }, [gasLimit, gasOption, currencyRatio, currentGasCurrency, nativeToken])
 
     const gasFeeUSD = useMemo(() => {
-        if (!gasFee) return '0'
+        if (!gasFee || gasFee.isZero()) return '0'
         if (isSameAddress(nativeToken.address, currentGasCurrency)) {
             return formatCurrency(formatWeiToEther(gasFee).times(nativeTokenPrice), 'USD', {
                 boundaries: {
@@ -283,9 +287,9 @@ export function SelectGasSettingsToolbarUI({
                     </Typography>
                     <Icons.Candle width={12} height={12} />
                 </div>
-                <Icons.ArrowDrop onClick={openCurrencyMenu} />
+                {supportMultiCurrency ? <Icons.ArrowDrop onClick={openCurrencyMenu} /> : null}
                 {menu}
-                {currencyMenu}
+                {supportMultiCurrency ? currencyMenu : null}
             </Typography>
         </Box>
     ) : null

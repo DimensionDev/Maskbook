@@ -23,6 +23,7 @@ interface Options {
     chainId?: ChainId
     owner?: string
     identifier?: ECKeyIdentifier
+    gasCurrency?: string
     disableClose?: boolean
     popupsWindow?: boolean
 }
@@ -44,6 +45,7 @@ async function internalSend(
     } = PayloadEditor.fromPayload(payload)
     const owner = options?.owner || from!
     const identifier = options?.identifier
+    const gasCurrency = options?.gasCurrency
     const signer = identifier
         ? new Signer(identifier, curryRight(signWithPersona)(true))
         : new Signer(owner, signWithWallet)
@@ -53,12 +55,12 @@ async function internalSend(
         case EthereumMethodType.MASK_REPLACE_TRANSACTION:
             try {
                 if (!signableConfig) throw new Error('No transaction to be sent.')
-                if (owner) {
+                if (owner && gasCurrency) {
                     callback(
                         null,
                         createJsonRpcResponse(
                             pid,
-                            await SmartPayAccount.sendTransaction(chainId, owner, signableConfig, signer),
+                            await SmartPayAccount.sendTransaction(chainId, owner, signableConfig, signer, gasCurrency),
                         ),
                     )
                 } else {

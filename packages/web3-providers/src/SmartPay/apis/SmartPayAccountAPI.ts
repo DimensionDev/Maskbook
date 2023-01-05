@@ -296,12 +296,14 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         owner: string,
         transaction: Transaction,
         signer: Signer<ECKeyIdentifier> | Signer<string>,
+        gasCurrency?: string,
     ): Promise<string> {
         const userTransaction = await UserTransaction.fromTransaction(
             chainId,
             this.web3.createWeb3(chainId),
             await this.getEntryPoint(chainId),
             transaction,
+            gasCurrency,
         )
         return this.sendUserTransaction(chainId, owner, userTransaction, signer)
     }

@@ -5,11 +5,12 @@ import { PLUGIN_ID } from '../constants.js'
 import { SmartPayEntry } from './components/SmartPayEntry.js'
 import { setupContext, context } from './context.js'
 import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { useWallets, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ApproveMaskDialog, ReceiveDialog, SmartPayDescriptionDialog, SmartPayDialog } from './components/index.js'
+import { ReceiveDialog, SmartPayDescriptionDialog, SmartPayDialog } from './components/index.js'
 import { useAsync } from 'react-use'
 import { SmartPayBundler } from '@masknet/web3-providers'
+import { first } from 'lodash-es'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -17,14 +18,20 @@ const sns: Plugin.SNSAdaptor.Definition = {
         setupContext(context)
     },
     GlobalInjection: function Component() {
+        const wallets = useWallets()
+        const contractAccounts = wallets.filter((x) => x.owner)
         const { value: chainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
         return (
             <SNSAdaptorContext.Provider value={context}>
-                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId }}>
+                <Web3ContextProvider
+                    value={{
+                        pluginID: NetworkPluginID.PLUGIN_EVM,
+                        chainId,
+                        account: first(contractAccounts)?.address,
+                    }}>
                     <SmartPayDialog />
                     <SmartPayDescriptionDialog />
-                    <ApproveMaskDialog />
                     <ReceiveDialog />
                 </Web3ContextProvider>
             </SNSAdaptorContext.Provider>

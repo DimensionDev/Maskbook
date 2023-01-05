@@ -67,7 +67,13 @@ export class ContractWallet implements Middleware<Context> {
         if (!context.owner) throw new Error('No owner.')
         if (op) return this.account.sendUserOperation(context.chainId, context.owner, op, this.getSigner(context))
         if (context.config)
-            return this.account.sendTransaction(context.chainId, context.owner, context.config, this.getSigner(context))
+            return this.account.sendTransaction(
+                context.chainId,
+                context.owner,
+                context.config,
+                this.getSigner(context),
+                context.config.gasCurrency,
+            )
         throw new Error('No user operation to be sent.')
     }
 

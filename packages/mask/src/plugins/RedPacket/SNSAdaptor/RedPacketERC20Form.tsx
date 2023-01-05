@@ -35,6 +35,8 @@ import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18n } from '../../../utils/index.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
 import { RedPacketSettings, useCreateParams } from './hooks/useCreateCallback.js'
+import { useAsync } from 'react-use'
+import { SmartPayBundler } from '@masknet/web3-providers'
 
 // seconds of 1 day
 const duration = 60 * 60 * 24
@@ -81,6 +83,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     // context
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
+    const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     // #region select token
     const { value: nativeTokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, undefined, undefined, {
@@ -269,6 +272,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             {nativeToken && nativeTokenPrice ? (
                 <Box margin={2}>
                     <SelectGasSettingsToolbar
+                        supportMultiCurrency={chainId === smartPayChainId}
                         nativeToken={nativeToken}
                         nativeTokenPrice={nativeTokenPrice}
                         gasConfig={gasOption}
