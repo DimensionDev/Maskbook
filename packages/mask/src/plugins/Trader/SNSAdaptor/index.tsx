@@ -5,7 +5,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base.js'
 import { TrendingView } from './trending/TrendingView.js'
 import { TrendingViewProvider } from './trending/context.js'
-import { useWeb3State, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3State, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { TraderDialog } from './trader/TraderDialog.js'
 import { TagInspector } from './trending/TagInspector.js'
 import { enhanceTag } from './cashTag.js'
@@ -40,13 +40,15 @@ const sns: Plugin.SNSAdaptor.Definition<
             Content({ result: _resultList, isProfilePage }) {
                 const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
                 const resultList = _resultList as Web3Helper.TokenResultAll[]
+                const { chainId: _chainId } = useChainContext()
                 if (!resultList.length) return null
                 const { chainId, keyword, address, pluginID } = resultList[0]
+
                 return (
                     <Web3ContextProvider
                         value={{
                             pluginID,
-                            chainId: chainId ?? ChainId.Mainnet,
+                            chainId: chainId ?? _chainId,
                         }}>
                         <TrendingViewProvider
                             isNFTProjectPopper={false}

@@ -84,33 +84,28 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
 
     const metadataLinks = [['Website', trending.coin.home_urls]] as Array<[string, string[] | undefined]>
 
-    const contracts =
-        trending.contracts ?? (trending.coin.chainId && trending.coin.contract_address)
-            ? [
-                  {
-                      chainId: trending.coin.chainId!,
-                      address: trending.coin.contract_address!,
-                      name: trending.coin.name,
-                      symbol: trending.coin.symbol,
-                      iconURL: '',
-                  },
-              ]
-            : []
+    const contracts = trending.contracts?.filter((x) => x.chainId) ?? [
+        {
+            chainId: trending.coin.chainId!,
+            address: trending.coin.contract_address!,
+        },
+    ]
 
     const [menu, openMenu] = useMenuConfig(
         contracts.map((x) => (
             <MenuItem key={x.chainId}>
-                <ContractSection
-                    chainId={x.chainId}
-                    address={x.address}
-                    name={x.name}
-                    symbol={x.symbol}
-                    iconURL={x.iconURL}
-                />
+                <ContractSection chainId={x.chainId} address={x.address} name={x.address} />
             </MenuItem>
         )),
         {
-            anchorSibling: false,
+            anchorOrigin: {
+                vertical: 'bottom',
+                horizontal: 'center',
+            },
+            transformOrigin: {
+                vertical: 'top',
+                horizontal: 'right',
+            },
         },
     )
 
@@ -139,17 +134,13 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                             height={18}
                                             style={{ position: 'relative', right: -5 }}>
                                             <ContractSection
-                                                iconURL={contracts[0].iconURL}
                                                 chainId={contracts[0].chainId}
                                                 address={contracts[0].address}
-                                                name={contracts[0].name}
-                                                symbol={contracts[0].symbol}
+                                                name={contracts[0].address}
                                             />
-                                            {contracts.length > 1 ? (
-                                                <IconButton size="small" onClick={openMenu}>
-                                                    <MoreHorizIcon style={{ fontSize: 16 }} />
-                                                </IconButton>
-                                            ) : null}
+                                            <IconButton size="small" onClick={openMenu}>
+                                                <MoreHorizIcon style={{ fontSize: 16 }} />
+                                            </IconButton>
                                             {menu}
                                         </Stack>
                                     ) : (

@@ -3,7 +3,6 @@ import { useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { FormattedAddress, TokenIcon, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { openWindow } from '@masknet/shared-base-ui'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, IconButton, Stack, Typography, useTheme } from '@mui/material'
 import { useCopyToClipboard } from 'react-use'
@@ -48,15 +47,6 @@ export const ContractSection = ({ chainId, address, name, symbol, iconURL }: Con
             <IconButton sx={{ padding: 0 }} color="primary" size="small" onClick={onCopyAddress}>
                 <Icons.PopupCopy size={16} color={theme.palette.maskColor?.second} />
             </IconButton>
-            {chainId ? (
-                <IconButton
-                    sx={{ padding: 0 }}
-                    color="primary"
-                    size="small"
-                    onClick={() => openWindow(Others?.explorerResolver.addressLink(chainId, address))}>
-                    <Icons.LinkOut size={16} color={theme.palette.maskColor?.second} />
-                </IconButton>
-            ) : null}
         </Stack>
     )
 }

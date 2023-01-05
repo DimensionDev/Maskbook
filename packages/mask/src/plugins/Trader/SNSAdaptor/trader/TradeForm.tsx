@@ -251,7 +251,6 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { Others } = useWeb3State()
         const { isSwapping, allTradeComputed } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
-
         const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
         const isSNSClosed = snsAdaptorMinimalPlugins?.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
         const isDashboardClosed = useIsMinimalModeDashBoard(PluginID.GoPlusSecurity)
