@@ -100,7 +100,7 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         requestArguments: RequestArguments,
         options?: ProviderOptions<ChainId>,
     ): Promise<T> {
-        return Web3.createProvider(options?.chainId || this.chainId).request<T>(
+        return Web3.createWeb3Provider(options?.chainId || this.chainId).request<T>(
             PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
         )
     }

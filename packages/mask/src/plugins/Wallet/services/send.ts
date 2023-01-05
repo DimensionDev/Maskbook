@@ -62,7 +62,7 @@ async function internalSend(
                         ),
                     )
                 } else {
-                    await Web3.createProvider(chainId).send(
+                    await Web3.createWeb3Provider(chainId).send(
                         createJsonRpcPayload(pid, {
                             method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
                             params: [await signer.signTransaction(signableConfig)],
@@ -115,7 +115,7 @@ async function internalSend(
             callback(new Error('Method not implemented.'))
             break
         default:
-            await Web3.createProvider(chainId).send(payload, callback)
+            await Web3.createWeb3Provider(chainId).send(payload, callback)
             break
     }
 }

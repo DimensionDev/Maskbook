@@ -1,7 +1,7 @@
 import { first, memoize } from 'lodash-es'
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
-import type { AbiItem } from 'web3-utils'
+import { AbiItem, toHex } from 'web3-utils'
 import {
     AddressType,
     SchemaType,
@@ -12,13 +12,23 @@ import {
     getRPCConstants,
     isValidAddress,
     Web3Provider,
+    Transaction,
     TransactionDetailed,
     TransactionReceipt,
     Block,
     isEmptyHex,
     getTransactionStatusType,
+    EthereumMethodType,
+    AccountTransaction,
 } from '@masknet/web3-shared-evm'
-import type { FungibleToken, TransactionStatusType } from '@masknet/web3-shared-base'
+import type {
+    FungibleToken,
+    NonFungibleCollection,
+    NonFungibleToken,
+    NonFungibleTokenContract,
+    NonFungibleTokenMetadata,
+    TransactionStatusType,
+} from '@masknet/web3-shared-base'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
 import type { ERC20Bytes32 } from '@masknet/web3-contracts/types/ERC20Bytes32.js'
 import type { ERC165 } from '@masknet/web3-contracts/types/ERC165.js'
@@ -43,6 +53,7 @@ export class Web3API
             ChainId,
             AddressType,
             SchemaType,
+            Transaction,
             TransactionDetailed,
             TransactionReceipt,
             Block,
@@ -56,7 +67,7 @@ export class Web3API
         return createWeb3SDK(RPC_URL)
     }
 
-    createProvider(chainId: ChainId) {
+    createWeb3Provider(chainId: ChainId) {
         const web3 = this.createWeb3(chainId)
         const provider = web3.currentProvider as HttpProvider
         return createWeb3Provider(createWeb3Request(provider.send.bind(provider)))
@@ -176,6 +187,110 @@ export class Web3API
         tokenId: string,
         schema?: SchemaType | undefined,
     ): Promise<boolean> {
+        throw new Error('Method not implemented.')
+    }
+    async estimateTransaction(chainId: ChainId, transaction: Transaction, fallback = 21000): Promise<string> {
+        try {
+            const provider = this.createWeb3Provider(chainId)
+            return provider.request<string>({
+                method: EthereumMethodType.ETH_ESTIMATE_GAS,
+                params: [
+                    {
+                        ...transaction,
+                        value: transaction.value ? toHex(transaction.value) : undefined,
+                        // rpc hack, alchemy rpc must pass gas parameter
+                        gas: chainId === ChainId.Astar ? '0x135168' : undefined,
+                    },
+                ],
+            })
+        } catch {
+            return toHex(fallback)
+        }
+    }
+
+    callTransaction(chainId: ChainId, transaction: Transaction, overrides?: Transaction): Promise<string> {
+        const provider = this.createWeb3Provider(chainId)
+        return provider.request<string>({
+            method: EthereumMethodType.ETH_CALL,
+            params: [new AccountTransaction(transaction).fill(overrides), 'latest'],
+        })
+    }
+    replaceTransaction(chainId: ChainId, hash: string, transaction: Transaction): Promise<void> {
+        const provider = this.createWeb3Provider(chainId)
+        return provider.request<void>({
+            method: EthereumMethodType.MASK_REPLACE_TRANSACTION,
+            params: [hash, transaction],
+        })
+    }
+    cancelTransaction(chainId: ChainId, hash: string, transaction: Transaction): Promise<void> {
+        const provider = this.createWeb3Provider(chainId)
+        return provider.request<void>({
+            method: EthereumMethodType.MASK_REPLACE_TRANSACTION,
+            params: [
+                hash,
+                {
+                    ...transaction,
+                    to: transaction.from,
+                    data: '0x0',
+                    value: '0x0',
+                },
+            ],
+        })
+    }
+    sendSignedTransaction(chainId: ChainId, signed: string): Promise<string> {
+        const provider = this.createWeb3Provider(chainId)
+        return provider.request<string>({
+            method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
+            params: [signed],
+        })
+    }
+    getNativeTokenBalance(chainId: ChainId): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+    getFungibleTokenBalance(
+        chainId: ChainId,
+        address: string,
+        tokenId?: string | undefined,
+        schemaType?: SchemaType | undefined,
+    ): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+    getNonFungibleTokenBalance(
+        chainId: ChainId,
+        address: string,
+        tokenId?: string | undefined,
+        schemaType?: SchemaType | undefined,
+    ): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+    getNonFungibleToken(
+        chainId: ChainId,
+        address: string,
+        tokenId: string,
+        schema?: SchemaType | undefined,
+    ): Promise<NonFungibleToken<ChainId, SchemaType>> {
+        throw new Error('Method not implemented.')
+    }
+    getNonFungibleTokenMetadata(
+        chainId: ChainId,
+        address: string,
+        tokenId?: string | undefined,
+        scheam?: SchemaType | undefined,
+    ): Promise<NonFungibleTokenMetadata<ChainId>> {
+        throw new Error('Method not implemented.')
+    }
+    getNonFungibleTokenContract(
+        chainId: ChainId,
+        address: string,
+        tokenId?: string | undefined,
+        scheam?: SchemaType | undefined,
+    ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
+        throw new Error('Method not implemented.')
+    }
+    getNonFungibleTokenCollection(
+        chainId: ChainId,
+        address: string,
+    ): Promise<NonFungibleCollection<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
 }

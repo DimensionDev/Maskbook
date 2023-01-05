@@ -264,6 +264,7 @@ class Connection implements EVM_Connection {
         initial?: EVM_Web3ConnectionOptions,
     ): Promise<string> {
         const options = this.getOptions(initial)
+
         // Native
         if (!address || isNativeTokenAddress(address)) {
             const tx: Transaction = {
@@ -314,12 +315,8 @@ class Connection implements EVM_Connection {
     }
 
     async getGasPrice(initial?: EVM_Web3ConnectionOptions): Promise<string> {
-        return this.hijackedRequest<string>(
-            {
-                method: EthereumMethodType.ETH_GAS_PRICE,
-            },
-            this.getOptions(initial),
-        )
+        const options = this.getOptions(initial)
+        return Web3.getGasPrice(options.chainId)
     }
     async getAddressType(address: string, initial?: EVM_Web3ConnectionOptions): Promise<AddressType | undefined> {
         const options = this.getOptions(initial)
@@ -327,41 +324,7 @@ class Connection implements EVM_Connection {
     }
     async getSchemaType(address: string, initial?: EVM_Web3ConnectionOptions): Promise<SchemaType | undefined> {
         const options = this.getOptions(initial)
-        const ERC165_INTERFACE_ID = '0x01ffc9a7'
-        const EIP5516_INTERFACE_ID = '0x8314f22b'
-        const EIP5192_INTERFACE_ID = '0xb45a3c0e'
-        const ERC721_INTERFACE_ID = '0x80ac58cd'
-        const ERC1155_INTERFACE_ID = '0xd9b67a26'
-
-        try {
-            const erc165Contract = this.getWeb3Contract<ERC165>(address, ERC165ABI as AbiItem[], options)
-
-            const [isERC165, isERC721] = await Promise.all([
-                erc165Contract?.methods.supportsInterface(ERC165_INTERFACE_ID).call({ from: options.account }),
-                erc165Contract?.methods.supportsInterface(ERC721_INTERFACE_ID).call({ from: options.account }),
-            ])
-
-            if (isERC165 && isERC721) return SchemaType.ERC721
-
-            const isERC1155 = await erc165Contract?.methods
-                .supportsInterface(ERC1155_INTERFACE_ID)
-                .call({ from: options.account })
-            if (isERC165 && isERC1155) return SchemaType.ERC1155
-
-            const [isEIP5516, isEIP5192] = await Promise.all([
-                erc165Contract?.methods.supportsInterface(EIP5516_INTERFACE_ID).call({ from: options.account }),
-                erc165Contract?.methods.supportsInterface(EIP5192_INTERFACE_ID).call({ from: options.account }),
-            ])
-
-            if (isEIP5516 || isEIP5192) return SchemaType.SBT
-
-            const isERC20 = (await this.getCode(address, options)) !== '0x'
-            if (isERC20) return SchemaType.ERC20
-
-            return
-        } catch {
-            return
-        }
+        return Web3.getSchemaType(options.chainId, address)
     }
     async getNonFungibleToken(
         address: string,
@@ -691,28 +654,32 @@ class Connection implements EVM_Connection {
         )
     }
 
-    getWeb3Contract<T extends BaseContract>(address: string, ABI: AbiItem[], initial?: EVM_Web3ConnectionOptions) {
+    private getWeb3Contract<T extends BaseContract>(
+        address: string,
+        ABI: AbiItem[],
+        initial?: EVM_Web3ConnectionOptions,
+    ) {
         const options = this.getOptions(initial)
         const web3 = this.getWeb3(options)
         return createContract<T>(web3, address, ABI)
     }
 
-    getERC20Contract(address: string, initial?: EVM_Web3ConnectionOptions) {
+    private getERC20Contract(address: string, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.getWeb3Contract<ERC20>(address, ERC20ABI as AbiItem[], options)
     }
 
-    getERC721Contract(address: string, initial?: EVM_Web3ConnectionOptions) {
+    private getERC721Contract(address: string, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.getWeb3Contract<ERC721>(address, ERC721ABI as AbiItem[], options)
     }
 
-    getERC1155Contract(address: string, initial?: EVM_Web3ConnectionOptions) {
+    private getERC1155Contract(address: string, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.getWeb3Contract<ERC1155>(address, ERC1155ABI as AbiItem[], options)
     }
 
-    getWalletContract(address: string, initial?: EVM_Web3ConnectionOptions) {
+    private getWalletContract(address: string, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.getWeb3Contract<WalletContract>(address, WalletContractABI as AbiItem[], options)
     }
@@ -741,114 +708,52 @@ class Connection implements EVM_Connection {
 
     getBlock(noOrId: number | string, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
-        return this.hijackedRequest<Block>(
-            {
-                method: EthereumMethodType.ETH_GET_BLOCK_BY_NUMBER,
-                params: [typeof noOrId === 'number' ? toHex(noOrId) : noOrId, false],
-            },
-            options,
-        )
+        return Web3.getBlock(options.chainId, noOrId)
     }
 
     getBlockNumber(initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
-        return this.hijackedRequest<number>(
-            {
-                method: EthereumMethodType.ETH_BLOCK_NUMBER,
-            },
-            options,
-        )
+        return Web3.getBlockNumber(options.chainId)
     }
 
     async getBlockTimestamp(initial?: EVM_Web3ConnectionOptions): Promise<number> {
         const options = this.getOptions(initial)
-        const blockNumber = await this.getBlockNumber(options)
-        const block = await this.getBlock(blockNumber)
-        return Number.parseInt(block.timestamp, 16)
+        return Web3.getBlockTimestamp(options.chainId)
     }
 
     getBalance(address: string, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
-        return this.hijackedRequest<string>(
-            {
-                method: EthereumMethodType.ETH_GET_BALANCE,
-                params: [address, 'latest'],
-            },
-            options,
-        )
+        return Web3.getBalance(options.chainId, address)
     }
 
     getCode(address: string, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
-        return this.hijackedRequest<string>(
-            {
-                method: EthereumMethodType.ETH_GET_CODE,
-                params: [address, 'latest'],
-            },
-            options,
-        )
+        return Web3.getCode(options.chainId, address)
     }
 
     async getTransaction(hash: string, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
-        return this.hijackedRequest<TransactionDetailed>(
-            {
-                method: EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH,
-                params: [hash],
-            },
-            options,
-        )
+        return Web3.getTransaction(options.chainId, hash)
     }
 
     async estimateTransaction(transaction: Transaction, fallback = 21000, initial?: EVM_Web3ConnectionOptions) {
-        try {
-            const options = this.getOptions(initial)
-            return this.hijackedRequest<string>(
-                {
-                    method: EthereumMethodType.ETH_ESTIMATE_GAS,
-                    params: [
-                        {
-                            from: options.account,
-                            ...transaction,
-                            value: transaction.value ? toHex(transaction.value) : undefined,
-                            // rpc hack, alchemy rpc must pass gas parameter
-                            gas: options.chainId === ChainId.Astar ? '0x135168' : undefined,
-                        },
-                    ],
-                },
-                options,
-            )
-        } catch {
-            return toHex(fallback)
-        }
+        const options = this.getOptions(initial)
+        return Web3.estimateTransaction(options.chainId, transaction, fallback)
     }
 
     getTransactionReceipt(hash: string, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
-        return this.hijackedRequest<TransactionReceipt | null>(
-            {
-                method: EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
-                params: [hash],
-            },
-            options,
-        )
+        return Web3.getTransactionReceipt(options.chainId, hash)
     }
 
-    async getTransactionStatus(id: string, initial?: EVM_Web3ConnectionOptions): Promise<TransactionStatusType> {
+    async getTransactionStatus(hash: string, initial?: EVM_Web3ConnectionOptions): Promise<TransactionStatusType> {
         const options = this.getOptions(initial)
-        return getReceiptStatus(await this.getTransactionReceipt(id, options))
+        return Web3.getTransactionStatus(options.chainId, hash)
     }
 
     async getTransactionNonce(address: string, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
-        const count = await this.hijackedRequest<string>(
-            {
-                method: EthereumMethodType.ETH_GET_TRANSACTION_COUNT,
-                params: [address, 'latest'],
-            },
-            options,
-        )
-        return Number.parseInt(count, 16) || 0
+        return Web3.getTransactionNonce(options.chainId, address)
     }
 
     signMessage(
@@ -1029,13 +934,7 @@ class Connection implements EVM_Connection {
 
     callTransaction(transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
-        return this.hijackedRequest<string>(
-            {
-                method: EthereumMethodType.ETH_CALL,
-                params: [new AccountTransaction(transaction).fill(options.overrides), 'latest'],
-            },
-            options,
-        )
+        return Web3.callTransaction(options.chainId, transaction, options.overrides)
     }
     async sendTransaction(transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
