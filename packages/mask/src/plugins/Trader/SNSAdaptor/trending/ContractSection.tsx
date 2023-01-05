@@ -11,7 +11,7 @@ import { useCopyToClipboard } from 'react-use'
 export interface ContractSectionProps {
     chainId?: Web3Helper.ChainIdAll
     address: string
-    name: string
+    name?: string
     symbol?: string
     iconURL?: string
 }

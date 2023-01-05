@@ -85,7 +85,8 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
     const metadataLinks = [['Website', trending.coin.home_urls]] as Array<[string, string[] | undefined]>
 
     const contracts =
-        trending.contracts ?? (trending.coin.chainId && trending.coin.contract_address)
+        trending.contracts ??
+        (trending.coin.chainId && trending.coin.contract_address
             ? [
                   {
                       chainId: trending.coin.chainId!,
@@ -95,18 +96,14 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                       iconURL: '',
                   },
               ]
-            : []
+            : [])
+
+    console.log(contracts)
 
     const [menu, openMenu] = useMenuConfig(
         contracts.map((x) => (
             <MenuItem key={x.chainId}>
-                <ContractSection
-                    chainId={x.chainId}
-                    address={x.address}
-                    name={x.name}
-                    symbol={x.symbol}
-                    iconURL={x.iconURL}
-                />
+                <ContractSection chainId={x.chainId} address={x.address} iconURL={x.iconURL ?? ''} />
             </MenuItem>
         )),
         {
@@ -142,8 +139,6 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                                 iconURL={contracts[0].iconURL}
                                                 chainId={contracts[0].chainId}
                                                 address={contracts[0].address}
-                                                name={contracts[0].name}
-                                                symbol={contracts[0].symbol}
                                             />
                                             {contracts.length > 1 ? (
                                                 <IconButton size="small" onClick={openMenu}>

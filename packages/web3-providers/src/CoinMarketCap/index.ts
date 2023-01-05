@@ -158,14 +158,20 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
             getLatestMarketPairs(id, currencyName),
         ])
 
-        const contracts = coinInfo.contract_address.map(
-            (x) =>
-                ({
-                    chainId: resolveCoinMarketCapChainId(x.platform.name),
-                    address: x.contract_address,
-                    icon_url: `${CMC_STATIC_BASE_URL}/img/coins/64x64/${x.platform.coin.id}.png`,
-                } as TrendingAPI.Contract),
-        )
+        const contracts = coinInfo.contract_address
+            .map(
+                (x) =>
+                    ({
+                        chainId: resolveCoinMarketCapChainId(x.platform.name),
+                        address: x.contract_address,
+                        iconURL: `${CMC_STATIC_BASE_URL}/img/coins/64x64/${x.platform.coin.id}.png`,
+                    } as TrendingAPI.Contract),
+            )
+            .sort((a, b) => {
+                if (!a.chainId) return 1
+                if (!b.chainId) return 1
+                return a.chainId - b.chainId
+            })
 
         const trending: TrendingAPI.Trending = {
             lastUpdated: status.timestamp,
