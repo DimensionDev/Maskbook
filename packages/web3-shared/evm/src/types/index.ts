@@ -200,6 +200,7 @@ export enum NetworkType {
     Harmony = 'Harmony',
     Conflux = 'Conflux',
     Astar = 'Astar',
+    Moonbeam = 'Moonbeam',
 }
 
 export enum ProviderType {

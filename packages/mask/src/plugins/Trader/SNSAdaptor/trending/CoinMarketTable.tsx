@@ -1,7 +1,6 @@
 import { Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Typography, Grid } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ChainId } from '@masknet/web3-shared-evm'
 import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { WalletIcon } from '@masknet/shared'
@@ -150,14 +149,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
     const { value: overview } = useTrendingOverview(address, chainId)
     const { classes } = useStyles()
     const chain = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
-    const ChainIcon = () => (
-        <WalletIcon
-            mainIcon={
-                chainId === ChainId.Moonbeam ? new URL('../../assets/moonbeam.png', import.meta.url) : chain?.icon
-            }
-            size={14}
-        />
-    )
+    const ChainIcon = () => <WalletIcon mainIcon={chain?.icon} size={14} />
     return (
         <Stack>
             <Grid spacing={4} className={classes.gridContainer}>
