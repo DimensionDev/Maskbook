@@ -326,6 +326,18 @@ export function TrendingView(props: TrendingViewProps) {
                                           coin.decimals ?? 0,
                                       )
                                     : undefined,
+                                defaultOutputCoin: trending.coin
+                                    ? createFungibleToken(
+                                          trending.coin.chainId ?? chainId,
+                                          isNativeTokenAddress(trending.coin.address)
+                                              ? SchemaType.Native
+                                              : SchemaType.ERC20,
+                                          trending.coin.address ?? trending.coin.contract_address ?? '',
+                                          trending.coin.name,
+                                          trending.coin.symbol,
+                                          trending.coin.decimals ?? 0,
+                                      )
+                                    : undefined,
                             }}
                         />
                     </Web3ContextProvider>
