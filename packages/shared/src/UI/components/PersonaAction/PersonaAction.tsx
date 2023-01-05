@@ -73,7 +73,7 @@ export function PersonaAction(props: PersonaActionProps) {
                     <Box sx={{ display: 'flex' }}>
                         <Typography className={classes.personaKey}>
                             {currentPersona?.identifier
-                                ? formatPublicKey(currentPersona?.identifier?.rawPublicKey)
+                                ? formatPublicKey(currentPersona.identifier.rawPublicKey)
                                 : '--'}
                         </Typography>
                         <ShadowRootTooltip
