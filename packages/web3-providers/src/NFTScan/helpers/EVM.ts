@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import Web3SDK from 'web3'
 import type { AbiItem } from 'web3-utils'
 import { first } from 'lodash-es'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
@@ -63,13 +63,16 @@ export async function fetchFromNFTScanV2<T>(
     chainId: Web3Helper.ChainIdAll | undefined,
     pathname: string,
     init?: RequestInit,
+    pluginID?: NetworkPluginID,
 ) {
     const response = await fetch(urlcat(NFTSCAN_URL, pathname), {
         ...init,
         headers: {
             'content-type': 'application/json',
             ...init?.headers,
-            ...(chainId ? { 'x-app-chainid': chainId.toString() } : {}),
+            ...(chainId
+                ? { 'x-app-chainid': pluginID === NetworkPluginID.PLUGIN_SOLANA ? 'solana' : chainId.toString() }
+                : {}),
         },
         cache: 'no-cache',
     })

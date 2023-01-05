@@ -59,7 +59,12 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                       address: id,
                       contract_address: id,
                   })
-        const response = await fetchFromNFTScanV2<Response<NonFungibleTokenAPI.Collection>>(chainId, path)
+        const response = await fetchFromNFTScanV2<Response<NonFungibleTokenAPI.Collection>>(
+            chainId,
+            path,
+            undefined,
+            pluginID,
+        )
         return response?.data
     }
 
@@ -204,9 +209,9 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         currency: TrendingAPI.Currency,
     ): Promise<TrendingAPI.Trending> {
         const collection = await this.getCollection(pluginID, chainId, id)
-
+        console.log({ collection })
         if (!collection) {
-            throw new Error(`NFTSCAN: Can not find token by address ${id}`)
+            throw new Error(`NFTSCAN: Can not find token by id ${id}`)
         }
         const address = collection.contract_address
         const [symbol, openseaStats, looksrareStats] = await Promise.all([

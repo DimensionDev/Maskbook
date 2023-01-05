@@ -144,7 +144,7 @@ export function TrendingView(props: TrendingViewProps) {
         result.pluginID,
         result.type === SearchResultType.FungibleToken
             ? result.id || searchedContractAddress || ''
-            : result.address || '',
+            : (result.pluginID === NetworkPluginID.PLUGIN_SOLANA ? result.name : result.address) || '',
         result.source,
         result.chainId ?? expectedChainId,
         searchedContractAddress,
