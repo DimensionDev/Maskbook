@@ -63,9 +63,15 @@ export class ContractWallet implements Middleware<Context> {
         throw new Error('Failed to create signer.')
     }
 
-    private async sendUserOperation(context: Context, op = context.userOperation): Promise<string> {
+    private async sendUserOperation(context: Context, userOperation = context.userOperation): Promise<string> {
         if (!context.owner) throw new Error('No owner.')
-        if (op) return this.account.sendUserOperation(context.chainId, context.owner, op, this.getSigner(context))
+        if (userOperation)
+            return this.account.sendUserOperation(
+                context.chainId,
+                context.owner,
+                userOperation,
+                this.getSigner(context),
+            )
         if (context.config)
             return this.account.sendTransaction(
                 context.chainId,
@@ -75,6 +81,12 @@ export class ContractWallet implements Middleware<Context> {
                 context.config.gasCurrency,
             )
         throw new Error('No user operation to be sent.')
+    }
+
+    private estimateUserOperation(context: Context, userOperation = context.userOperation): Promise<string> {
+        if (userOperation) return this.account.estimateUserOperation(context.chainId, userOperation)
+        if (context.config) return this.account.estimateTransaction(context.chainId, context.config)
+        throw new Error('No user operation to be estimated.')
     }
 
     private async deploy(context: Context) {
@@ -138,8 +150,11 @@ export class ContractWallet implements Middleware<Context> {
                 }
                 break
             case EthereumMethodType.ETH_ESTIMATE_GAS:
-                // fill later in UserTransaction.prototype.fill()
-                context.write('0x0')
+                try {
+                    context.write(await this.estimateUserOperation(context))
+                } catch (error) {
+                    context.abort(error)
+                }
                 break
             case EthereumMethodType.ETH_SIGN:
             case EthereumMethodType.PERSONAL_SIGN:
