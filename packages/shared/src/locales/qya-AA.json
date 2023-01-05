@@ -1,5 +1,8 @@
 {
     "approve": "crwdns18766:0crwdne18766:0",
+    "approve_mask": "crwdns19467:0crwdne19467:0",
+    "approve_mask_description": "crwdns19469:0crwdne19469:0",
+    "approve_mask_question": "crwdns19471:0crwdne19471:0",
     "authorization_descriptions": "crwdns18768:0crwdne18768:0",
     "create_persona_hint": "crwdns19305:0crwdne19305:0",
     "create_persona_title": "crwdns19307:0crwdne19307:0",
