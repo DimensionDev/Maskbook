@@ -63,13 +63,13 @@ export class ContractWallet implements Middleware<Context> {
         throw new Error('Failed to create signer.')
     }
 
-    private async send(context: Context, userOperation = context.userOperation): Promise<string> {
+    private async send(context: Context): Promise<string> {
         if (!context.owner) throw new Error('No owner.')
-        if (userOperation)
+        if (context.userOperation)
             return this.account.sendUserOperation(
                 context.chainId,
                 context.owner,
-                userOperation,
+                context.userOperation,
                 this.getSigner(context),
             )
         if (context.config)
@@ -83,8 +83,8 @@ export class ContractWallet implements Middleware<Context> {
         throw new Error('No user operation to be sent.')
     }
 
-    private estimate(context: Context, userOperation = context.userOperation): Promise<string> {
-        if (userOperation) return this.account.estimateUserOperation(context.chainId, userOperation)
+    private estimate(context: Context): Promise<string> {
+        if (context.userOperation) return this.account.estimateUserOperation(context.chainId, context.userOperation)
         if (context.config) return this.account.estimateTransaction(context.chainId, context.config)
         throw new Error('No user operation to be estimated.')
     }
