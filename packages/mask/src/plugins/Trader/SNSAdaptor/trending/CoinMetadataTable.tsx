@@ -19,6 +19,7 @@ import { Linking, useMenuConfig } from '@masknet/shared'
 import { useI18N } from '../../../../utils/index.js'
 import { ContractSection } from './ContractSection.js'
 import type { CommunityType } from '../../types/index.js'
+import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -92,11 +93,13 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
     ]
 
     const [menu, openMenu] = useMenuConfig(
-        contracts.map((x) => (
-            <MenuItem key={x.chainId}>
-                <ContractSection chainId={x.chainId} address={x.address} name={x.address} />
-            </MenuItem>
-        )),
+        contracts
+            .filter((x) => isValidChainId(x.chainId as ChainId))
+            .map((x) => (
+                <MenuItem key={x.chainId}>
+                    <ContractSection chainId={x.chainId} address={x.address} name={x.address} />
+                </MenuItem>
+            )),
         {
             anchorOrigin: {
                 vertical: 'bottom',
