@@ -291,10 +291,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                 }
             }
         }
-        return uniqWith(
-            result,
-            (a, b) => a.type === b.type && (a.id === b.id || isSameAddress(a.address, b.address) || a.rank === b.rank),
-        ).sort((a, b) => {
+        return result.sort((a, b) => {
             if (
                 a.rank &&
                 a.rank < 200 &&
