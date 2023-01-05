@@ -71,7 +71,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
 
         if (!item?.fromNextID || !item.linkedPersona || !whoAmI) return
         const [rpc, emit] = batch(Services.Identity)
-        item.linkedTwitterNames.forEach((x) => {
+        item.linkedTwitterNames?.forEach((x) => {
             const newItem = {
                 ...item,
                 nickname: x,
