@@ -1,5 +1,12 @@
 import { Icons } from '@masknet/icons'
-import { ImageIcon, useSnackbarCallback, TokenIcon, FormattedBalance, useMenuConfig } from '@masknet/shared'
+import {
+    ImageIcon,
+    useSnackbarCallback,
+    TokenIcon,
+    FormattedBalance,
+    useMenuConfig,
+    ApproveMaskDialog,
+} from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, PluginID, PopupRoutes } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
@@ -9,7 +16,6 @@ import {
     useFungibleToken,
     useFungibleTokenBalance,
     useNetworkDescriptor,
-    useWallet,
     useWallets,
     useWeb3Connection,
     useWeb3State,
@@ -28,9 +34,9 @@ import {
     Typography,
 } from '@mui/material'
 import { useAsyncFn, useCopyToClipboard } from 'react-use'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-base'
-import { compact, first, isNaN } from 'lodash-es'
+import { compact, isNaN } from 'lodash-es'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
@@ -147,6 +153,7 @@ export const SmartPayContent = memo(() => {
     const t = useI18N()
     const { classes } = useStyles()
 
+    const [approveDialogOpen, setApproveDialogOpen] = useState(false)
     const [addAnchorEl, setAddAnchorEl] = useState<HTMLElement | null>(null)
     const [manageAnchorEl, setManageAnchorEl] = useState<HTMLElement | null>(null)
 
@@ -154,7 +161,7 @@ export const SmartPayContent = memo(() => {
     const contractAccounts = wallets.filter((x) => x.owner)
 
     // #region Remote Dialog Controller
-    const { openDialog: openApproveMaskDialog } = useRemoteControlledDialog(PluginSmartPayMessages.approveDialogEvent)
+    // const { openDialog: openApproveMaskDialog } = useRemoteControlledDialog(PluginSmartPayMessages.approveDialogEvent)
     const { setDialog: setReceiveDialog } = useRemoteControlledDialog(PluginSmartPayMessages.receiveDialogEvent)
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(CrossIsolationMessages.events.swapDialogEvent)
     // #endregion
@@ -163,7 +170,11 @@ export const SmartPayContent = memo(() => {
 
     const { openPopupWindow } = useSNSAdaptorContext()
     const { account, chainId, setAccount } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const wallet = useWallet()
+
+    const wallet = useMemo(() => {
+        return contractAccounts.find((x) => isSameAddress(x.address, account))
+    }, [contractAccounts, account])
+
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
@@ -175,8 +186,8 @@ export const SmartPayContent = memo(() => {
 
     const { value: maskToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, maskAddress)
 
-    const { EP_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
-    const { value: allowance = '0' } = useERC20TokenAllowance(maskAddress, EP_CONTRACT_ADDRESS, {
+    const { PAYMASTER_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
+    const { value: allowance = '0' } = useERC20TokenAllowance(maskAddress, PAYMASTER_CONTRACT_ADDRESS, {
         chainId,
     })
 
@@ -313,13 +324,13 @@ export const SmartPayContent = memo(() => {
 
     // #endregion
 
-    useEffect(() => {
-        if (!contractAccounts?.length) return
-        if (account) return
-        const contractAccount = first(contractAccounts)
-        if (!contractAccount) return
-        setAccount(contractAccount.address)
-    }, [contractAccounts, account])
+    // useEffect(() => {
+    //     if (!contractAccounts?.length) return
+    //     if (account) return
+    //     const contractAccount = first(contractAccounts)
+    //     if (!contractAccount) return
+    //     setAccount(contractAccount.address)
+    // }, [contractAccounts, account])
 
     return (
         <>
@@ -404,8 +415,9 @@ export const SmartPayContent = memo(() => {
                                                 <Typography
                                                     ml={1}
                                                     onClick={async () => {
+                                                        if (!availableBalanceTooLow) return
                                                         await connectToCurrent()
-                                                        openApproveMaskDialog()
+                                                        setApproveDialogOpen(true)
                                                     }}
                                                     component="span"
                                                     className={classes.maskGasTip}
@@ -451,6 +463,7 @@ export const SmartPayContent = memo(() => {
                         </ListItem>
                     ))}
                 </List>
+                <ApproveMaskDialog open={approveDialogOpen} handleClose={() => setApproveDialogOpen(false)} />
             </DialogContent>
             <DialogActions className={classes.dialogActions}>
                 <ActionButton
