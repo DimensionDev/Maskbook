@@ -135,7 +135,7 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
             />
             <ShadowRootTooltip title={showTooltip ? caption : undefined} placement="bottom" disableInteractive arrow>
                 <Typography ref={captionRef} className={classes.caption}>
-                    {token.metadata?.name ?? caption}
+                    {Others?.isValidDomain(token.metadata?.name) ? token.metadata?.name : caption}
                 </Typography>
             </ShadowRootTooltip>
         </div>
