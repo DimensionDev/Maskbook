@@ -441,6 +441,11 @@ export const TradeForm = memo<AllTradeFormProps>(
             })
         }, [chainId])
 
+        const expectedChainId = useMemo(() => {
+            const contracts = trending?.contracts?.filter((x) => x.chainId === chainId) ?? []
+            if (contracts.length > 0) return chainId
+            return trending?.contracts?.[0]?.chainId ?? chainId
+        }, [trending?.contracts, chainId])
         // #endregion
         return (
             <>
@@ -557,7 +562,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                         {settings ? (
                             <ChainBoundary
                                 expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                expectedChainId={(trending?.contracts?.[0]?.chainId ?? chainId) as ChainId}>
+                                expectedChainId={expectedChainId as ChainId}>
                                 <WalletConnectedBoundary offChain>
                                     <EthereumERC20TokenApprovedBoundary
                                         onlyInfiniteUnlock
