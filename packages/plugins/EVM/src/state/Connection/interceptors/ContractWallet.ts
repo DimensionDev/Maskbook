@@ -63,7 +63,7 @@ export class ContractWallet implements Middleware<Context> {
         throw new Error('Failed to create signer.')
     }
 
-    private async sendUserOperation(context: Context, userOperation = context.userOperation): Promise<string> {
+    private async send(context: Context, userOperation = context.userOperation): Promise<string> {
         if (!context.owner) throw new Error('No owner.')
         if (userOperation)
             return this.account.sendUserOperation(
@@ -83,7 +83,7 @@ export class ContractWallet implements Middleware<Context> {
         throw new Error('No user operation to be sent.')
     }
 
-    private estimateUserOperation(context: Context, userOperation = context.userOperation): Promise<string> {
+    private estimate(context: Context, userOperation = context.userOperation): Promise<string> {
         if (userOperation) return this.account.estimateUserOperation(context.chainId, userOperation)
         if (context.config) return this.account.estimateTransaction(context.chainId, context.config)
         throw new Error('No user operation to be estimated.')
@@ -123,14 +123,14 @@ export class ContractWallet implements Middleware<Context> {
                 break
             case EthereumMethodType.ETH_SEND_TRANSACTION:
                 try {
-                    context.write(await this.sendUserOperation(context))
+                    context.write(await this.send(context))
                 } catch (error) {
                     context.abort(error)
                 }
                 break
             case EthereumMethodType.ETH_SEND_USER_OPERATION:
                 try {
-                    context.write(await this.sendUserOperation(context))
+                    context.write(await this.send(context))
                 } catch (error) {
                     context.abort(error)
                 }
@@ -151,7 +151,7 @@ export class ContractWallet implements Middleware<Context> {
                 break
             case EthereumMethodType.ETH_ESTIMATE_GAS:
                 try {
-                    context.write(await this.estimateUserOperation(context))
+                    context.write(await this.estimate(context))
                 } catch (error) {
                     context.abort(error)
                 }
