@@ -321,4 +321,24 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         )
         return this.sendUserTransaction(chainId, owner, userTransaction, signer)
     }
+
+    async estimateTransaction(chainId: ChainId, transaction: Transaction): Promise<string> {
+        const userTransaction = await UserTransaction.fromTransaction(
+            chainId,
+            this.web3.createWeb3(chainId),
+            await this.getEntryPoint(chainId),
+            transaction,
+        )
+        return userTransaction.gas
+    }
+
+    async estimateUserOperation(chainId: ChainId, userOperation: UserOperation): Promise<string> {
+        const userTransaction = await UserTransaction.fromUserOperation(
+            chainId,
+            this.web3.createWeb3(chainId),
+            await this.getEntryPoint(chainId),
+            userOperation,
+        )
+        return userTransaction.gas
+    }
 }
