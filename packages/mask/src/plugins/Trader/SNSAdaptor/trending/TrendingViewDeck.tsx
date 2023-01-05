@@ -150,6 +150,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const { coin, market } = trending
     const { isNFTProjectPopper, isTokenTagPopper, isPreciseSearch } = useContext(TrendingViewContext)
     const { value: overview } = useTrendingOverview(
+        result.pluginID,
         result.address ?? props.trending.coin.address ?? '',
         props.trending.coin.chainId,
     )

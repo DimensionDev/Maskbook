@@ -416,6 +416,8 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
 }
 
 export interface NonFungibleCollectionOverview {
+    // collection name
+    collection?: string
     market_cap?: number
     highest_price?: number
     volume_24h?: number

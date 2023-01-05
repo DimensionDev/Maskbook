@@ -1,5 +1,5 @@
 import { SourceType, NonFungibleCollectionOverview, NonFungibleTokenActivity } from '@masknet/web3-shared-base'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { CoinGeckoTrending, CoinMarketCap, NFTScanTrending, UniSwap } from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import type { ChainId } from '@masknet/web3-shared-evm'
@@ -12,6 +12,7 @@ export async function getCoinInfoByAddress(address: string): Promise<TrendingAPI
 
 // #region get trending info
 export async function getCoinTrending(
+    pluginID: NetworkPluginID,
     chainId: Web3Helper.ChainIdAll,
     id: string,
     currency: Currency,
@@ -19,13 +20,13 @@ export async function getCoinTrending(
 ): Promise<Trending | undefined> {
     switch (dataProvider) {
         case SourceType.CoinGecko:
-            return CoinGeckoTrending.getCoinTrending(chainId, id, currency)
+            return CoinGeckoTrending.getCoinTrending(pluginID, chainId, id, currency)
         case SourceType.CoinMarketCap:
-            return CoinMarketCap.getCoinTrending(chainId, id, currency)
+            return CoinMarketCap.getCoinTrending(pluginID, chainId, id, currency)
         case SourceType.UniswapInfo:
-            return UniSwap.getCoinTrending(chainId, id, currency)
+            return UniSwap.getCoinTrending(pluginID, chainId, id, currency)
         case SourceType.NFTScan:
-            return NFTScanTrending.getCoinTrending(chainId, id, currency)
+            return NFTScanTrending.getCoinTrending(pluginID, chainId, id, currency)
         default:
             return
     }
@@ -62,10 +63,11 @@ export async function getPriceStats(
 
 // #region get nft trending overview
 export async function getNFT_TrendingOverview(
+    pluginID: NetworkPluginID,
     chainId: Web3Helper.ChainIdAll,
     address: string,
 ): Promise<NonFungibleCollectionOverview | undefined> {
-    return NFTScanTrending.getCollectionOverview(chainId, address)
+    return NFTScanTrending.getCollectionOverview(pluginID, chainId, address)
 }
 // #endregion
 

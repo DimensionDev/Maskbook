@@ -1,6 +1,7 @@
 import { compact, uniq, uniqBy } from 'lodash-es'
 import { attemptUntil, TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId, getCoinGeckoConstants } from '@masknet/web3-shared-evm'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { COINGECKO_CHAIN_ID_LIST, COINGECKO_URL_BASE } from '../constants.js'
 import { getCommunityLink, isMirroredKeyword } from '../../Trending/helpers.js'
 import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../../Trending/constants.js'
@@ -68,6 +69,7 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinTrending(
+        pluginID: NetworkPluginID,
         chainId: Web3Helper.ChainIdAll,
         id: string,
         currency: TrendingAPI.Currency,

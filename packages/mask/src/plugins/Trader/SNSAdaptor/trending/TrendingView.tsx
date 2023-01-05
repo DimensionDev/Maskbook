@@ -139,7 +139,9 @@ export function TrendingView(props: TrendingViewProps) {
     useEffect(() => setTabIndex(0), [networkType])
     // #endregion
     // #region merge trending
+
     const { value: { trending } = {}, loading: loadingTrending } = useTrendingById(
+        result.pluginID,
         result.type === SearchResultType.FungibleToken
             ? result.id || searchedContractAddress || ''
             : result.address || '',

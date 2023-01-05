@@ -7,7 +7,7 @@ import {
     NonFungibleTokenActivity,
 } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
+import { createLookupTableResolver, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
 import { COIN_RECOMMENDATION_SIZE } from '../../Trending/constants.js'
 import type { EVM, Response } from '../types/index.js'
@@ -46,13 +46,19 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     private opensea = new OpenSeaAPI()
 
     private async getCollection(
+        pluginID: NetworkPluginID,
         chainId: Web3Helper.ChainIdAll,
-        address: string,
+        id: string,
     ): Promise<NonFungibleTokenAPI.Collection | undefined> {
-        const path = urlcat('/api/v2/collections/:address', {
-            address,
-            contract_address: address,
-        })
+        const path =
+            pluginID === NetworkPluginID.PLUGIN_SOLANA
+                ? urlcat('/api/sol/collections/:collection', {
+                      collection: id,
+                  })
+                : urlcat('/api/v2/collections/:address', {
+                      address: id,
+                      contract_address: id,
+                  })
         const response = await fetchFromNFTScanV2<Response<NonFungibleTokenAPI.Collection>>(chainId, path)
         return response?.data
     }
@@ -74,12 +80,20 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCollectionOverview(
+        pluginID: NetworkPluginID,
         chainId: Web3Helper.ChainIdAll,
-        address: string,
+        id: string,
     ): Promise<NonFungibleCollectionOverview | undefined> {
+        if (pluginID === NetworkPluginID.PLUGIN_SOLANA) {
+            const path = urlcat('/api/sol/statistics/ranking/trade', {})
+            const response = await fetchFromNFTScanV2<Response<NonFungibleCollectionOverview[]>>(chainId, path)
+            if (!response?.data) return
+            return response.data.find((x) => x.collection === id)
+        }
         const path = urlcat('/api/v2/statistics/collection/:address', {
-            address,
+            address: id,
         })
+
         const response = await fetchFromNFTScanV2<Response<NonFungibleCollectionOverview>>(chainId, path)
         if (!response?.data) return
         return response.data
@@ -184,11 +198,12 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinTrending(
+        pluginID: NetworkPluginID,
         chainId: Web3Helper.ChainIdAll,
         /** address as id */ id: string,
         currency: TrendingAPI.Currency,
     ): Promise<TrendingAPI.Trending> {
-        const collection = await this.getCollection(chainId, id)
+        const collection = await this.getCollection(pluginID, chainId, id)
 
         if (!collection) {
             throw new Error(`NFTSCAN: Can not find token by address ${id}`)
