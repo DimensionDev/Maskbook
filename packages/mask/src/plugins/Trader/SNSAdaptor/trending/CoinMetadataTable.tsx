@@ -98,7 +98,6 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
               ]
             : [])
 
-    console.log(contracts)
 
     const [menu, openMenu] = useMenuConfig(
         contracts.map((x) => (
