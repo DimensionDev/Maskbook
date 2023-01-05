@@ -202,21 +202,19 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                     <Stack gap={2} flexGrow={1}>
                         <Stack>
                             <Stack flexDirection="row" alignItems="center" gap={0.5} ref={titleRef}>
-                                {coinAddress ? (
-                                    <Linking href={first(coin.home_urls)}>
-                                        <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
-                                            <CoinIcon
-                                                type={coin.type}
-                                                name={coin.name}
-                                                label=""
-                                                symbol={coin.symbol}
-                                                address={coinAddress}
-                                                logoURL={coin.image_url}
-                                                size={20}
-                                            />
-                                        </Avatar>
-                                    </Linking>
-                                ) : null}
+                                <Linking href={first(coin.home_urls)}>
+                                    <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
+                                        <CoinIcon
+                                            type={coin.type}
+                                            name={coin.name}
+                                            label=""
+                                            symbol={coin.symbol}
+                                            address={coinAddress ?? ''}
+                                            logoURL={coin.image_url}
+                                            size={20}
+                                        />
+                                    </Avatar>
+                                </Linking>
 
                                 <Typography className={classes.title} variant="h6">
                                     <Linking
