@@ -98,7 +98,7 @@ function reducer(state: AllProviderTradeState, action: AllProviderSwapAction): A
     }
 }
 
-export function useAllProviderTradeContext() {
+export function useAllProviderTradeContext(initialState?: { chainId?: Web3Helper.ChainIdAll }) {
     const [tradeStore, dispatchTradeStore] = useReducer(reducer, INITIAL_STATE)
     const [isSwapping, setIsSwapping] = useState(false)
     const [temporarySlippage, setTemporarySlippage] = useState<number | undefined>()
@@ -112,6 +112,7 @@ export function useAllProviderTradeContext() {
         temporarySlippage,
         setTemporarySlippage,
         allTradeComputed,
+        chainId: initialState?.chainId,
     }
 }
 

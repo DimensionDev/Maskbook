@@ -173,6 +173,14 @@ export function TrendingView(props: TrendingViewProps) {
         chainIdValid
     // #endregion
 
+    // #region expected chainId
+    const swapExpectedChainId = useMemo(() => {
+        const contracts = trending?.contracts?.filter((x) => x.chainId === chainId) ?? []
+        if (contracts.length > 0) return chainId
+        return trending?.contracts?.[0]?.chainId ?? chainId
+    }, [trending?.contracts, chainId])
+    // #endregion
+
     // #region tabs
     const tabs = useMemo(() => {
         const list = [ContentTabs.Market, ContentTabs.Price, ContentTabs.Exchange]
@@ -307,7 +315,7 @@ export function TrendingView(props: TrendingViewProps) {
                     <Web3ContextProvider value={context}>
                         <TradeView
                             classes={{ root: classes.tradeViewRoot }}
-                            trending={trending}
+                            expectedChainId={swapExpectedChainId}
                             TraderProps={{
                                 defaultInputCoin: coin.address
                                     ? createFungibleToken(

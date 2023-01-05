@@ -28,14 +28,12 @@ import { useUpdateBalance } from './hooks/useUpdateBalance.js'
 import { TradeForm } from './TradeForm.js'
 import { WalletMessages } from '../../../Wallet/messages.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { TrendingAPI } from '@masknet/web3-providers/types'
 
 export interface TraderProps extends withClasses<'root'> {
     defaultInputCoin?: Web3Helper.FungibleTokenAll
     defaultOutputCoin?: Web3Helper.FungibleTokenAll
     chainId?: Web3Helper.ChainIdAll
     settings?: boolean
-    trending?: TrendingAPI.Trending
 }
 
 export interface TraderRef {
@@ -334,7 +332,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                 gasPrice={gasPrice}
                 gasConfig={gasConfig}
                 onSwitch={onSwitchToken}
-                trending={props.trending}
             />
             {focusedTrade?.value && !isNativeTokenWrapper(focusedTrade.value) && inputToken && outputToken ? (
                 <ConfirmDialog

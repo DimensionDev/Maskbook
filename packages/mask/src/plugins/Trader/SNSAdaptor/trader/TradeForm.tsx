@@ -44,7 +44,6 @@ import Services from '../../../../extension/service.js'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { TrendingAPI } from '@masknet/web3-providers/types'
 
 const useStyles = makeStyles<{
     isDashboard: boolean
@@ -221,7 +220,6 @@ export interface AllTradeFormProps extends withClasses<'root'> {
     onSwitch: () => void
     settings?: boolean
     gasConfig?: GasConfig
-    trending?: TrendingAPI.Trending
 }
 
 export const TradeForm = memo<AllTradeFormProps>(
@@ -240,7 +238,6 @@ export const TradeForm = memo<AllTradeFormProps>(
         onSwitch,
         settings,
         gasConfig,
-        trending,
         ...props
     }) => {
         const maxAmountTrade = useRef<TradeInfo | null>(null)
@@ -252,7 +249,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { chainId } = useChainContext()
         const { pluginID } = useNetworkContext()
         const { Others } = useWeb3State()
-        const { isSwapping, allTradeComputed } = AllProviderTradeContext.useContainer()
+        const { chainId: expectedChainId, isSwapping, allTradeComputed } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
 
         const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
@@ -441,11 +438,6 @@ export const TradeForm = memo<AllTradeFormProps>(
             })
         }, [chainId])
 
-        const expectedChainId = useMemo(() => {
-            const contracts = trending?.contracts?.filter((x) => x.chainId === chainId) ?? []
-            if (contracts.length > 0) return chainId
-            return trending?.contracts?.[0]?.chainId ?? chainId
-        }, [trending?.contracts, chainId])
         // #endregion
         return (
             <>
@@ -562,7 +554,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                         {settings ? (
                             <ChainBoundary
                                 expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                expectedChainId={expectedChainId as ChainId}>
+                                expectedChainId={(expectedChainId ?? chainId) as ChainId}>
                                 <WalletConnectedBoundary offChain>
                                     <EthereumERC20TokenApprovedBoundary
                                         onlyInfiniteUnlock
