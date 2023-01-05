@@ -310,11 +310,11 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     )}
                                     <PriceChanged
                                         amount={
-                                            market?.price_change_percentage_1h ??
-                                            market?.price_change_percentage_24h ??
-                                            overview?.average_price_change_1d
+                                            market?.price_change_percentage_1h_in_currency ??
+                                            market?.price_change_24h ??
+                                            (overview?.average_price_change_1d
                                                 ? Number.parseFloat(overview?.average_price_change_1d ?? '0')
-                                                : 0
+                                                : 0)
                                         }
                                     />
                                 </Stack>

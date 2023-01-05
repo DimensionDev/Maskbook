@@ -242,7 +242,7 @@ export async function getCoinInfo(chainId: Web3Helper.ChainIdAll, id: string) {
         new BigNumber(oneHourToken?.derivedETH ?? 0).multipliedBy(oneHourBackEthPrice ?? 0),
     )
 
-    const price_change_percentage_24h = getPercentChange(
+    const price_change_24h = getPercentChange(
         currentPrice,
         new BigNumber(oneDayToken?.derivedETH ?? 0).multipliedBy(oneDayBackEthPrice ?? 0),
     )
@@ -280,13 +280,13 @@ export async function getCoinInfo(chainId: Web3Helper.ChainIdAll, id: string) {
         marketInfo: {
             current_price: currentPrice.toNumber(),
             price_change_percentage_1h,
-            price_change_percentage_24h,
+            price_change_24h,
             price_change_percentage_7d_in_currency,
             price_change_percentage_14d_in_currency,
             price_change_percentage_30d_in_currency,
             price_change_percentage_1y_in_currency,
             price_change_percentage_1h_in_currency: price_change_percentage_1h,
-            price_change_percentage_24h_in_currency: price_change_percentage_24h,
+            price_change_percentage_24h_in_currency: price_change_24h,
             total_volume: new BigNumber(oneDayVolumeUSD ? oneDayVolumeUSD : oneDayVolumeUT).toNumber(),
         },
         tickersInfo: Object.entries(pairsData)
