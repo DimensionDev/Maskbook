@@ -4,7 +4,7 @@ import type Web3 from 'web3'
 import * as ABICoder from 'web3-eth-abi'
 import { AbiItem, bytesToHex, hexToBytes, keccak256, padLeft, toNumber } from 'web3-utils'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
-import { toFixed } from '@masknet/web3-shared-base'
+import { plus, toFixed } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import EntryPointABI from '@masknet/web3-contracts/abis/EntryPoint.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
@@ -146,6 +146,10 @@ export class UserTransaction {
         return keccak256(
             coder.encodeParameters(['bytes32', 'address', 'uint256'], [this.hash, this.entryPoint, this.chainId]),
         )
+    }
+
+    get gas() {
+        return toFixed(plus(this.userOperation.callGas ?? 0, this.userOperation.preVerificationGas ?? 0))
     }
 
     async fill(web3: Web3, overrides?: Required<Pick<UserOperation, 'initCode' | 'nonce'>>) {
