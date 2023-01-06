@@ -9,6 +9,7 @@ import {
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId as ChainIdSolana } from '@masknet/web3-shared-solana'
 import { SourceType, createFungibleToken, SearchResultType, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTList, PluginCardFrameMini } from '@masknet/shared'
@@ -221,14 +222,20 @@ export function TrendingView(props: TrendingViewProps) {
         props.onUpdate?.()
     }, [tabIndex, loadingTrending])
     // #endregion
-    const collectionAddress = trending?.coin.type === TokenType.NonFungible ? trending.coin.contract_address : undefined
+    const collectionId =
+        trending?.coin.type === TokenType.NonFungible
+            ? result.pluginID === NetworkPluginID.PLUGIN_SOLANA
+                ? result.name
+                : trending.coin.contract_address
+            : undefined
     const {
         value: fetchedTokens = EMPTY_LIST,
         done,
         next,
         error: loadError,
-    } = useNonFungibleAssetsByCollection(collectionAddress, NetworkPluginID.PLUGIN_EVM, {
-        chainId: expectedChainId as ChainId,
+    } = useNonFungibleAssetsByCollection(collectionId, result.pluginID, {
+        chainId:
+            result.pluginID === NetworkPluginID.PLUGIN_SOLANA ? ChainIdSolana.Mainnet : (expectedChainId as ChainId),
     })
 
     // #region display loading skeleton
@@ -331,6 +338,7 @@ export function TrendingView(props: TrendingViewProps) {
                 {currentTab === ContentTabs.NFTItems && isNFT ? (
                     <Box className={classes.nftItems}>
                         <NFTList
+                            pluginID={result.pluginID}
                             className={classes.nftList}
                             tokens={fetchedTokens}
                             onNextPage={next}
