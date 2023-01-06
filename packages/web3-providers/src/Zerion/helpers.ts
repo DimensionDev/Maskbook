@@ -55,7 +55,7 @@ export function formatTransactions(
 
             return {
                 id: transaction.hash,
-                chainId,
+                chainId: ChainId.Mainnet,
                 type: transaction.type,
                 filterType: transaction.type,
                 from: transaction.address_from ?? '',

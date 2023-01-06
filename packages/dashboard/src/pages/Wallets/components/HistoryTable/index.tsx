@@ -1,4 +1,4 @@
-import { Dispatch, memo, SetStateAction, useState } from 'react'
+import { Dispatch, memo, SetStateAction, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
@@ -46,14 +46,19 @@ export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
         setPage(0)
     }, [account, selectedChainId])
 
+    const dataSource = useMemo(() => {
+        const arr = (value as Array<Transaction<ChainId, SchemaType>>) ?? EMPTY_LIST
+        return arr.filter((x) => x.chainId === selectedChainId) ?? EMPTY_LIST
+    }, [value, selectedChainId])
+
     return (
         <HistoryTableUI
             page={page}
             onPageChange={setPage}
             hasNextPage={false}
             isLoading={loading}
-            isEmpty={!value?.length}
-            dataSource={(value ?? EMPTY_LIST) as Array<Transaction<ChainId, SchemaType>>}
+            isEmpty={!dataSource.length}
+            dataSource={dataSource}
             selectedChainId={selectedChainId}
         />
     )
