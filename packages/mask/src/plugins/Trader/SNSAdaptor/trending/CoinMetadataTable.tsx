@@ -161,18 +161,13 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                             height={18}
                                             style={{ position: 'relative', right: -5 }}>
                                             <ContractSection
-                                                iconURL={contracts[0].iconURL}
                                                 chainId={contracts[0].chainId}
                                                 address={contracts[0].address}
-                                                name={contracts[0].name}
-                                                symbol={contracts[0].symbol}
-                                                nftScanURL={trending.coin.nftscan_url}
+                                                name={contracts[0].address}
                                             />
-                                            {contracts.length > 1 ? (
-                                                <IconButton size="small" onClick={openMenu}>
-                                                    <MoreHorizIcon style={{ fontSize: 16 }} />
-                                                </IconButton>
-                                            ) : null}
+                                            <IconButton size="small" onClick={openMenu}>
+                                                <MoreHorizIcon style={{ fontSize: 16 }} />
+                                            </IconButton>
                                             {menu}
                                         </Stack>
                                     ) : (
