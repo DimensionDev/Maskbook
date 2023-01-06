@@ -160,7 +160,10 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                     ...x,
                     nftscan_uri: asset?.metadata?.imageURL ?? '',
                     transaction_link: `${resolveNFTScanHostName(pluginID, chainId)}/${x.hash}`,
-                    trade_token_logo: getPaymentToken(chainId, { symbol: x.trade_symbol })?.logoURL ?? '',
+                    trade_token_logo:
+                        pluginID === NetworkPluginID.PLUGIN_SOLANA
+                            ? ''
+                            : getPaymentToken(chainId, { symbol: x.trade_symbol })?.logoURL ?? '',
                 }
             }),
         }
