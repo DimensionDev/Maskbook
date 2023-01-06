@@ -1,9 +1,10 @@
 import { first, isUndefined, omitBy } from 'lodash-es'
 import Web3 from 'web3'
-import { hexToNumber, hexToNumberString } from 'web3-utils'
+import { AbiItem, hexToNumber, hexToNumberString } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Proof, ProofPayload } from '@masknet/shared-base'
 import { toFixed } from '@masknet/web3-shared-base'
+import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json'
 import { ChainId, EthereumMethodType, Transaction, UserOperation } from '../types/index.js'
 import { createJsonRpcPayload } from '../helpers/index.js'
 import { getSmartPayConstant } from '../index.js'
@@ -58,20 +59,7 @@ export class PayloadEditor {
                     to: getSmartPayConstant(this.chainId_, 'CREATE2_FACTORY_CONTRACT_ADDRESS'),
                     chainId: this.chainId_,
                     data: new Web3().eth.abi.encodeFunctionCall(
-                        {
-                            name: 'deploy',
-                            type: 'function',
-                            inputs: [
-                                {
-                                    type: 'bytes',
-                                    name: 'code',
-                                },
-                                {
-                                    type: 'bytes32',
-                                    name: 'nonce',
-                                },
-                            ],
-                        },
+                        CREATE2_FACTORY_ABI.find((x) => x.name === 'deploy')! as AbiItem,
                         ['0x', toFixed(0)],
                     ),
                 }
@@ -82,24 +70,11 @@ export class PayloadEditor {
                 // compose a fake transaction to be accepted by Transaction Watcher
                 return {
                     from: ownerAddress,
-                    // it's a not-exist address, use the original owner address as placeholder
+                    // it's a not-exist address, use the original owner's address as a placeholder
                     to: ownerAddress,
                     chainId: this.chainId_,
                     data: new Web3().eth.abi.encodeFunctionCall(
-                        {
-                            name: 'fund',
-                            type: 'function',
-                            inputs: [
-                                {
-                                    type: 'address',
-                                    name: 'owner',
-                                },
-                                {
-                                    type: 'uint256',
-                                    name: 'nonce',
-                                },
-                            ],
-                        },
+                        CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem,
                         [ownerAddress, toFixed(nonce)],
                     ),
                 }
