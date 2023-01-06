@@ -106,6 +106,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
 
     const [menu, openMenu] = useMenuConfig(
         contracts
+            .slice(1)
             .filter((x) => isValidChainIdAll(x.chainId))
             .map((x) => (
                 <MenuItem key={x.chainId}>
