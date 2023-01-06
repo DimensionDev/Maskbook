@@ -48,6 +48,9 @@ export const ContractSection = ({ chainId, address, name, symbol, iconURL }: Con
                 component="span"
                 fontWeight={700}
                 fontSize={14}
+                sx={{
+                    cursor: 'pointer',
+                }}
                 onClick={chainId ? () => openWindow(Others?.explorerResolver.addressLink(chainId, address)) : noop}>
                 <FormattedAddress address={address} size={4} formatter={formatEthereumAddress} />
             </Typography>
