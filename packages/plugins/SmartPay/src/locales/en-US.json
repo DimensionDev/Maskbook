@@ -12,6 +12,8 @@
     "create_a_new_persona_title": "Create a New Persona",
     "create_a_new_persona_desc": "Create a new Persona in Pop-up.",
     "create_successfully": "Created successfully!",
+    "create_smart_pay_wallet": "Create Smart Pay Wallet",
+    "created_smart_pay_wallet_description": "Created a SmartPay wallet on Ploygon network.",
     "create_successfully_tips": "Congratulation! You’ve deployed SmartPay wallet {{address}}.",
     "create_successfully_tips_owner": "Owner of the smart contract is {{owner}}.",
     "copy_wallet_address_success": "Copy Success",
@@ -52,7 +54,10 @@
     "remain_times_tips_other": "Remaining {{count}} times to create SmartPay wallet for the above account.",
     "personas": "Personas",
     "receive": "Receive",
+    "transaction_submitted": "Transaction submitted.",
+    "user_cancelled_the_transaction": "User cancelled the transaction.",
     "wallets": "Wallets",
+    "waiting_for_user_signature": "Waiting for user signature",
     "what_is_smart_pay": "What is Smart Pay",
     "what_is_smart_pay_title": "What is smart pay?"
 }
