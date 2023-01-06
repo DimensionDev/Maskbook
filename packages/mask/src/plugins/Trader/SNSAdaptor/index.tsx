@@ -55,7 +55,6 @@ const sns: Plugin.SNSAdaptor.Definition<
                             isPreciseSearch={Boolean(Others?.isValidAddress(keyword))}>
                             <TrendingView
                                 resultList={resultList}
-                                expectedChainId={chainId}
                                 searchedContractAddress={
                                     Others?.isValidAddress(keyword)
                                         ? keyword

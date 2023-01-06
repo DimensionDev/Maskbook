@@ -107,7 +107,6 @@ export interface TrendingViewProps {
     resultList: Web3Helper.TokenResultAll[]
     address?: string
     searchedContractAddress?: string
-    expectedChainId?: Web3Helper.ChainIdAll
     onUpdate?: () => void
 }
 
@@ -120,7 +119,7 @@ enum ContentTabs {
 }
 
 export function TrendingView(props: TrendingViewProps) {
-    const { searchedContractAddress, expectedChainId, resultList } = props
+    const { searchedContractAddress, resultList } = props
     const [result, setResult] = useState(resultList[0])
     const { isTokenTagPopper, isNFTProjectPopper, isProfilePage } = useContext(TrendingViewContext)
     const { t } = useI18N()
@@ -233,7 +232,7 @@ export function TrendingView(props: TrendingViewProps) {
         next,
         error: loadError,
     } = useNonFungibleAssetsByCollection(collectionId, result.pluginID, {
-        chainId: expectedChainId,
+        chainId: result.chainId,
     })
 
     // #region display loading skeleton
