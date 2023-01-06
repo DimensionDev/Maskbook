@@ -40,6 +40,7 @@ const useStyles = makeStyles()((theme) => ({
         '::-webkit-scrollbar': {
             display: 'none',
         },
+        overflow: 'hidden',
     },
     empty: {
         position: 'absolute',
@@ -63,6 +64,9 @@ const useStyles = makeStyles()((theme) => ({
         '::-webkit-scrollbar': {
             display: 'none',
         },
+        height: 400,
+        overflowY: 'auto',
+        alignItems: 'flex-start',
     },
     actions: {
         display: 'flex',
