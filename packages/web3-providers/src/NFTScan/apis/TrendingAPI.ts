@@ -11,12 +11,8 @@ import { createLookupTableResolver, EMPTY_LIST, NetworkPluginID } from '@masknet
 import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
 import { COIN_RECOMMENDATION_SIZE } from '../../Trending/constants.js'
 import type { EVM, Response } from '../types/index.js'
-import {
-    fetchFromNFTScanV2,
-    getContractSymbol,
-    resolveNFTScanHostName,
-    createNonFungibleAsset,
-} from '../helpers/EVM.js'
+import { fetchFromNFTScanV2, getContractSymbol, createNonFungibleAsset } from '../helpers/EVM.js'
+import { resolveNFTScanHostName } from '../helpers/utils.js'
 import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
 import { LooksRareLogo, OpenSeaLogo } from '../../Resources/index.js'
@@ -150,7 +146,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
 
         const batchQueryList = response?.data?.content.map((x) => ({
             contract_address: x.contract_address,
-            token_id: x.token_id,
+            token_id: x.token_id ?? '',
         }))
 
         const assetsBatchResponse =
@@ -163,7 +159,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                 return {
                     ...x,
                     nftscan_uri: asset?.metadata?.imageURL ?? '',
-                    transaction_link: `${resolveNFTScanHostName(chainId)}/${x.hash}`,
+                    transaction_link: `${resolveNFTScanHostName(pluginID, chainId)}/${x.hash}`,
                     trade_token_logo: getPaymentToken(chainId, { symbol: x.trade_symbol })?.logoURL ?? '',
                 }
             }),
@@ -275,9 +271,9 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
                 description: collection.description,
                 image_url: collection.logo_url,
                 home_urls: compact([
-                    collection.website ? collection.website : `${resolveNFTScanHostName(chainId)}/${address}`,
+                    collection.website ? collection.website : `${resolveNFTScanHostName(pluginID, chainId)}/${address}`,
                 ]),
-                nftscan_url: `${resolveNFTScanHostName(chainId)}/${address}`,
+                nftscan_url: `${resolveNFTScanHostName(pluginID, chainId)}/${address}`,
                 community_urls: [
                     {
                         type: 'twitter',

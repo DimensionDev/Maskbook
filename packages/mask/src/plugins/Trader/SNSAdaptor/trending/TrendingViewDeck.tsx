@@ -299,7 +299,14 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                         ? last(stats)?.[1] ?? market.current_price
                                                         : market.current_price) ?? 0
                                                 }
-                                                sign={isNFT ? market.price_symbol ?? 'ETH' : 'USD'}
+                                                sign={
+                                                    isNFT
+                                                        ? market.price_symbol ??
+                                                          (result.pluginID === NetworkPluginID.PLUGIN_SOLANA
+                                                              ? 'SOL'
+                                                              : 'ETH')
+                                                        : 'USD'
+                                                }
                                                 formatter={formatCurrency}
                                             />
                                         </Typography>
