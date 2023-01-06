@@ -58,7 +58,7 @@ interface WalletsByNetworkProps {
     >
     notEmpty: boolean
     defaultAddress?: string
-    setAsDefault: (address: string) => void
+    onSetDefault: (address: string) => void
     openConnectWallet: () => void
 }
 
@@ -67,7 +67,7 @@ export function WalletsByNetwork({
     networkId,
     toSetting,
     defaultAddress,
-    setAsDefault,
+    onSetDefault,
     openConnectWallet,
     notEmpty,
 }: WalletsByNetworkProps) {
@@ -87,7 +87,7 @@ export function WalletsByNetwork({
                     wallets.map((x) => (
                         <WalletItem
                             key={x.identity}
-                            setAsDefault={setAsDefault}
+                            onSetDefault={onSetDefault}
                             fallbackName={x.fallbackName}
                             address={x.identity}
                             isDefault={isSameAddress(defaultAddress, x.identity)}
