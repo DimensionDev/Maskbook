@@ -428,6 +428,9 @@ export interface NonFungibleCollectionOverview {
     owners_total?: number
     total_volume?: number
     items_total?: number
+    sales?: number
+    volume?: number
+    average_price?: number
 }
 
 export interface NonFungibleTokenActivity {

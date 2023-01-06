@@ -91,7 +91,12 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     ): Promise<NonFungibleCollectionOverview | undefined> {
         if (pluginID === NetworkPluginID.PLUGIN_SOLANA) {
             const path = urlcat('/api/sol/statistics/ranking/trade', {})
-            const response = await fetchFromNFTScanV2<Response<NonFungibleCollectionOverview[]>>(chainId, path)
+            const response = await fetchFromNFTScanV2<Response<NonFungibleCollectionOverview[]>>(
+                chainId,
+                path,
+                undefined,
+                pluginID,
+            )
             if (!response?.data) return
             return response.data.find((x) => x.collection === id)
         }
