@@ -4,9 +4,7 @@ import { flatten } from 'lodash-es'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { DSearch } from '@masknet/web3-providers'
 import {
-    SourceType,
     TokenType,
-    attemptUntil,
     NonFungibleTokenActivity,
     SearchResultType,
     NonFungibleCollectionResult,
@@ -14,13 +12,11 @@ import {
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import { PluginTraderRPC } from '../messages.js'
 import type { Coin } from '../types/index.js'
 import { useCurrentCurrency } from './useCurrentCurrency.js'
-
-const NFTSCAN_CHAIN_ID_LIST = [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
 
 export function useTrendingOverview(
     pluginID: NetworkPluginID,
@@ -83,15 +79,14 @@ export function useNonFungibleTokenActivities(
 
 export function useTrendingById(
     result: Web3Helper.TokenResultAll,
-    expectedChainId?: Web3Helper.ChainIdAll,
     searchedContractAddress?: string,
 ): AsyncState<{
     currency?: TrendingAPI.Currency
     trending?: TrendingAPI.Trending | null
 }> {
-    const { chainId } = useChainContext({ chainId: expectedChainId })
+    const { chainId } = useChainContext({ chainId: result.chainId })
     const currency = useCurrentCurrency(result.source)
-
+    result.chainId
     const {
         value: trending,
         loading,
@@ -99,27 +94,7 @@ export function useTrendingById(
     } = useAsync(async () => {
         if (!currency) return null
         if (!result.source) return null
-        if (!expectedChainId && result.source === SourceType.NFTScan) {
-            return attemptUntil(
-                NFTSCAN_CHAIN_ID_LIST.map((chainId) => async () => {
-                    try {
-                        return PluginTraderRPC.getCoinTrending(
-                            NetworkPluginID.PLUGIN_EVM,
-                            chainId,
-                            result,
-                            currency,
-                            SourceType.NFTScan,
-                        ).catch(() => null)
-                    } catch {
-                        return undefined
-                    }
-                }),
-                undefined,
-            )
-        }
-        return PluginTraderRPC.getCoinTrending(result.pluginID, chainId, result, currency, result.source).catch(
-            () => null,
-        )
+        return PluginTraderRPC.getCoinTrending(result, currency).catch(() => null)
     }, [chainId, JSON.stringify(result), currency?.id])
 
     const { value: detailedToken } = useFungibleToken(
@@ -161,7 +136,7 @@ export function useTrendingById(
             trending: trending
                 ? {
                       ...trending,
-                      coin: createCoinFromTrending(trending, expectedChainId, searchedContractAddress, detailedToken),
+                      coin: createCoinFromTrending(trending, chainId, searchedContractAddress, detailedToken),
                   }
                 : null,
         },

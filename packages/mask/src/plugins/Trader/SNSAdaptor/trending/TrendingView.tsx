@@ -140,11 +140,7 @@ export function TrendingView(props: TrendingViewProps) {
     // #endregion
     // #region merge trending
 
-    const { value: { trending } = {}, loading: loadingTrending } = useTrendingById(
-        result,
-        result.chainId ?? expectedChainId,
-        searchedContractAddress,
-    )
+    const { value: { trending } = {}, loading: loadingTrending } = useTrendingById(result, searchedContractAddress)
     // #endregion
     const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
 

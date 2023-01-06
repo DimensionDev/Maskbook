@@ -18,23 +18,21 @@ export async function getCoinInfoByAddress(address: string): Promise<TrendingAPI
 
 // #region get trending info
 export async function getCoinTrending(
-    pluginID: NetworkPluginID,
-    chainId: Web3Helper.ChainIdAll,
     result: Web3Helper.TokenResultAll,
     currency: Currency,
-    dataProvider: SourceType,
 ): Promise<Trending | undefined> {
-    switch (dataProvider) {
+    const { chainId, source, pluginID, id = '', name = '', address = '' } = result
+    switch (source) {
         case SourceType.CoinGecko:
-            return CoinGeckoTrending.getCoinTrending(chainId, result.id || '', currency)
+            return CoinGeckoTrending.getCoinTrending(chainId, id, currency)
         case SourceType.CoinMarketCap:
-            return CoinMarketCap.getCoinTrending(chainId, result.id || '', currency)
+            return CoinMarketCap.getCoinTrending(chainId, id, currency)
         case SourceType.UniswapInfo:
-            return UniSwap.getCoinTrending(chainId, result.id || '', currency)
+            return UniSwap.getCoinTrending(chainId, id, currency)
         case SourceType.NFTScan:
             return pluginID === NetworkPluginID.PLUGIN_SOLANA
-                ? NFTScanTrending_Solana.getCoinTrending(chainId, result.name || '', currency)
-                : NFTScanTrending_EVM.getCoinTrending(chainId, result.address || '', currency)
+                ? NFTScanTrending_Solana.getCoinTrending(chainId, name, currency)
+                : NFTScanTrending_EVM.getCoinTrending(chainId, address, currency)
         default:
             return
     }
