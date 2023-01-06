@@ -208,7 +208,6 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                     <div className={classes.amountWrapper}>
                         {overview?.average_price_24h ?? overview?.average_price ? <ChainIcon /> : null}
                         <span className={classes.amount}>
-                            {' '}
                             {formatSupply(overview?.average_price_24h ?? overview?.average_price, '--')}
                         </span>
                     </div>
@@ -221,7 +220,6 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                     <div className={classes.amountWrapper}>
                         {overview?.volume_24h ?? overview?.volume ? <ChainIcon /> : null}
                         <span className={classes.amount}>
-                            {' '}
                             {formatSupply(overview?.volume_24h ?? overview?.volume, '--')}
                         </span>
                     </div>
