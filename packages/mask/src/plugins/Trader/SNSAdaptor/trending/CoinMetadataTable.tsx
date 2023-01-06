@@ -115,13 +115,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
             .filter((x) => isValidChainIdAll(x.chainId))
             .map((x) => (
                 <MenuItem key={x.chainId}>
-                    <ContractSection
-                        chainId={x.chainId}
-                        address={x.address}
-                        name={x.address}
-                        symbol={x.symbol}
-                        iconURL={x.iconURL}
-                    />
+                    <ContractSection chainId={x.chainId} address={x.address} name={x.address} />
                 </MenuItem>
             )),
         {
