@@ -60,7 +60,6 @@ import {
     resolveCrossOriginURL,
 } from '@masknet/web3-shared-base'
 import { Web3 } from '@masknet/web3-providers'
-import type { FunderAPI } from '@masknet/web3-providers/types'
 import { fetchJSON } from '@masknet/web3-providers/helpers'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
 import { createContext, dispatch } from './composer.js'
