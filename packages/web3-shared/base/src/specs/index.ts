@@ -441,7 +441,10 @@ export interface NonFungibleTokenActivity {
     nftscan_uri: string
     trade_price?: number
     from: string
+    // The param `to` of the transaction
     to: string
+    // The user address who received the NFT
+    receive: string
     cover: string
     contract_address: string
     token_id?: string
