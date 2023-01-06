@@ -59,9 +59,10 @@ import {
     resolveIPFS_URL,
     resolveCrossOriginURL,
 } from '@masknet/web3-shared-base'
+import { Web3 } from '@masknet/web3-providers'
+import type { FunderAPI } from '@masknet/web3-providers/types'
 import { fetchJSON } from '@masknet/web3-providers/helpers'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
-import { Web3 } from '@masknet/web3-providers'
 import { createContext, dispatch } from './composer.js'
 import { Providers } from './provider.js'
 import type { ERC1155Metadata, ERC721Metadata, EVM_Connection, EVM_Web3ConnectionOptions } from './types.js'
@@ -1011,6 +1012,17 @@ class Connection implements EVM_Connection {
                         data: contract.methods.changeOwner(recipient).encodeABI(),
                     },
                 ],
+            },
+            options,
+        )
+    }
+
+    async fund(proof: FunderAPI.Proof, initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
+        const options = this.getOptions(initial)
+        return this.hijackedRequest<string>(
+            {
+                method: EthereumMethodType.MASK_FUND,
+                params: [proof],
             },
             options,
         )
