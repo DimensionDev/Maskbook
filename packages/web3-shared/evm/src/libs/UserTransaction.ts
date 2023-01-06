@@ -258,11 +258,7 @@ export class UserTransaction {
             .estimateGas()
     }
 
-    toTransaction(): Transaction {
-        return UserTransaction.toTransaction(this.chainId, this.userOperation)
-    }
-
-    async toRawTransaction(web3: Web3, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {
+    async signTransaction(web3: Web3, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {
         const transaction = this.toTransaction()
         if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
         const walletContract = createContract<Wallet>(web3, transaction.from, WalletABI as AbiItem[])
@@ -283,7 +279,7 @@ export class UserTransaction {
         )
     }
 
-    async toUserOperation(signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<UserOperation> {
+    async signUserOperation(signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<UserOperation> {
         const { nonce, callGas, verificationGas, preVerificationGas, maxFeePerGas, maxPriorityFeePerGas, signature } =
             this.userOperation
         return {
@@ -299,6 +295,10 @@ export class UserTransaction {
         }
     }
 
+    toTransaction(): Transaction {
+        return UserTransaction.toTransaction(this.chainId, this.userOperation)
+    }
+
     static async fromTransaction(
         chainId: ChainId,
         web3: Web3,
@@ -306,21 +306,11 @@ export class UserTransaction {
         transaction: Transaction,
         gasCurrency?: string,
     ): Promise<UserTransaction> {
-        const { from, to, nonce = 0, value = '0', data = '0x' } = transaction
-        if (!from) throw new Error('No sender address.')
-        if (!to) throw new Error('No destination address.')
-
         return UserTransaction.fromUserOperation(
             chainId,
             web3,
             entryPoint,
-            {
-                ...DEFAULT_USER_OPERATION,
-                sender: formatEthereumAddress(from),
-                nonce: toNumber(nonce as number),
-                callData: coder.encodeFunctionCall(CALL_WALLET_TYPE, [to, value, data]),
-                signature: '0x',
-            },
+            UserTransaction.toUserOperation(transaction),
             {
                 paymentToken: gasCurrency,
             },
@@ -348,10 +338,24 @@ export class UserTransaction {
         return userTransaction.fill(web3)
     }
 
+    static toUserOperation(transaction: Transaction): UserOperation {
+        const { from, to, nonce = 0, value = '0', data = '0x' } = transaction
+        if (!from) throw new Error('No sender address.')
+        if (!to) throw new Error('No destination address.')
+        return {
+            ...DEFAULT_USER_OPERATION,
+            sender: formatEthereumAddress(from),
+            nonce: toNumber(nonce as number),
+            callData: coder.encodeFunctionCall(CALL_WALLET_TYPE, [to, value, data]),
+            signature: '0x',
+        }
+    }
+
     static toTransaction(chainId: ChainId, userOperation: UserOperation): Transaction {
         const callBytes = userOperation.callData ? hexToBytes(userOperation.callData) : []
 
         return {
+            chainId,
             from: userOperation.sender,
             to: bytesToHex(callBytes.slice(12, 36)),
             value: bytesToHex(callBytes.slice(36, 68)),
@@ -360,7 +364,6 @@ export class UserTransaction {
             maxPriorityFeePerGas: userOperation.maxPriorityFeePerGas,
             nonce: toNumber(userOperation.nonce ?? '0'),
             data: bytesToHex(callBytes.slice(68)),
-            chainId,
         }
     }
 }
