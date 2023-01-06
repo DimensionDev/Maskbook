@@ -125,7 +125,14 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                 </MenuItem>
             )),
         {
-            anchorSibling: false,
+            anchorOrigin: {
+                vertical: 'bottom',
+                horizontal: 'center',
+            },
+            transformOrigin: {
+                vertical: 'top',
+                horizontal: 'right',
+            },
         },
     )
 
