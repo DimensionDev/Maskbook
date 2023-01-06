@@ -14,7 +14,6 @@ import { makeStyles, LoadingBase } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { TokenIcon, FormattedAddress, Image, WalletIcon } from '@masknet/shared'
 import { useScrollBottomEvent } from '@masknet/shared-base-ui'
-import { ChainId as ChainIdSolana } from '@masknet/web3-shared-solana'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -125,10 +124,7 @@ export function NonFungibleTickersTable({
         id,
         chainId,
     )
-    const chain = useNetworkDescriptor(
-        result.pluginID,
-        result.pluginID === NetworkPluginID.PLUGIN_SOLANA ? ChainIdSolana.Mainnet : chainId,
-    )
+    const chain = useNetworkDescriptor(result.pluginID, chainId)
     useScrollBottomEvent(containerRef, fetchMore)
     const headCellMap: Record<Cells, string> = {
         nft: t('plugin_trader_table_nft'),

@@ -66,7 +66,12 @@ function TrendingViewWrapper({ name, type, reposition, address, isNFTProjectPopp
             isProfilePage={false}
             isTokenTagPopper={!isNFTProjectPopper}
             isPreciseSearch={false}>
-            <TrendingView resultList={resultList} onUpdate={reposition} address={address} />
+            <TrendingView
+                resultList={resultList}
+                onUpdate={reposition}
+                address={address}
+                expectedChainId={resultList[0]?.chainId}
+            />
         </TrendingViewProvider>
     )
 }

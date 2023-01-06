@@ -9,7 +9,6 @@ import {
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
-import { ChainId as ChainIdSolana } from '@masknet/web3-shared-solana'
 import { SourceType, createFungibleToken, SearchResultType, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTList, PluginCardFrameMini } from '@masknet/shared'
@@ -234,8 +233,7 @@ export function TrendingView(props: TrendingViewProps) {
         next,
         error: loadError,
     } = useNonFungibleAssetsByCollection(collectionId, result.pluginID, {
-        chainId:
-            result.pluginID === NetworkPluginID.PLUGIN_SOLANA ? ChainIdSolana.Mainnet : (expectedChainId as ChainId),
+        chainId: expectedChainId,
     })
 
     // #region display loading skeleton
@@ -308,7 +306,7 @@ export function TrendingView(props: TrendingViewProps) {
                                     (result.pluginID === NetworkPluginID.PLUGIN_SOLANA ? result.name : coin.address) ??
                                     ''
                                 }
-                                chainId={coin.chainId ?? ChainId.Mainnet}
+                                chainId={result.chainId ?? coin.chainId ?? ChainId.Mainnet}
                                 result={result}
                             />
                         ) : (
