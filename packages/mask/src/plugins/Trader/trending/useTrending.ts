@@ -15,7 +15,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { useChainContext, useFungibleToken, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import { PluginTraderRPC } from '../messages.js'
 import type { Coin } from '../types/index.js'
 import { useCurrentCurrency } from './useCurrentCurrency.js'
@@ -41,18 +41,22 @@ export function useCollectionByTwitterHandler(twitterHandler?: string) {
 
 export function useNonFungibleTokenActivities(
     pluginID: NetworkPluginID,
-    address: string,
+    id: string,
     expectedChainId?: Web3Helper.ChainIdAll,
 ) {
     const cursorRef = useRef<string>('')
-    const { Others } = useWeb3State(pluginID)
     const [nonFungibleTokenActivities, setNonFungibleTokenActivities] = useState<
         Record<string, NonFungibleTokenActivity[]>
     >({})
     const [{ loading: loadingNonFungibleTokenActivities }, getNonFungibleTokenActivities] = useAsyncFn(async () => {
-        if (!address || !expectedChainId || !Others?.isValidChainId(expectedChainId)) return
+        if (!id || !expectedChainId || !pluginID) return
 
-        const result = await PluginTraderRPC.getNonFungibleTokenActivities(expectedChainId, address, cursorRef.current)
+        const result = await PluginTraderRPC.getNonFungibleTokenActivities(
+            pluginID,
+            expectedChainId,
+            id,
+            cursorRef.current,
+        )
 
         setNonFungibleTokenActivities((currentActivities) => {
             if (!result || currentActivities[result.cursor] || !result?.content) return currentActivities
@@ -60,7 +64,7 @@ export function useNonFungibleTokenActivities(
 
             return { ...currentActivities, [cursorRef.current]: result.content }
         })
-    }, [address, expectedChainId])
+    }, [id, expectedChainId, pluginID])
 
     useEffect(() => {
         getNonFungibleTokenActivities()

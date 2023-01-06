@@ -122,18 +122,28 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinActivities(
+        pluginID: NetworkPluginID,
         chainId: Web3Helper.ChainIdAll,
-        contractAddress: string,
+        id: string,
         cursor: string,
     ): Promise<{ content: NonFungibleTokenActivity[]; cursor: string } | undefined> {
-        const path = urlcat('/api/v2/transactions/:contract', {
-            contract: contractAddress,
-            cursor,
-            limit: 50,
-        })
+        const path =
+            pluginID === NetworkPluginID.PLUGIN_SOLANA
+                ? urlcat('/api/sol/transactions/collection/:collection', {
+                      collection: id,
+                      cursor,
+                      limit: 50,
+                  })
+                : urlcat('/api/v2/transactions/:contract', {
+                      contract: id,
+                      cursor,
+                      limit: 50,
+                  })
         const response = await fetchFromNFTScanV2<Response<{ content: NonFungibleTokenActivity[]; next: string }>>(
             chainId,
             path,
+            undefined,
+            pluginID,
         )
 
         if (!response?.data?.content) return
@@ -143,7 +153,8 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
             token_id: x.token_id,
         }))
 
-        const assetsBatchResponse = await this.getAssetsBatch(chainId, batchQueryList)
+        const assetsBatchResponse =
+            pluginID === NetworkPluginID.PLUGIN_SOLANA ? undefined : await this.getAssetsBatch(chainId, batchQueryList)
 
         return {
             cursor: response.data.next,

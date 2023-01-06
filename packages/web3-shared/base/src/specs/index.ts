@@ -439,14 +439,21 @@ export interface NonFungibleTokenActivity {
     transaction_link: string
     timestamp: number
     nftscan_uri: string
-    trade_price: number
+    trade_price?: number
     from: string
     to: string
     cover: string
     contract_address: string
-    token_id: string
+    token_id?: string
     trade_token_logo: string
-    trade_symbol: string
+    trade_symbol?: string
+    // #region solana
+    source?: string
+    destination?: string
+    fee?: number
+    tx_interact_program?: string
+    token_address?: string
+    // #endregion
 }
 
 export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {

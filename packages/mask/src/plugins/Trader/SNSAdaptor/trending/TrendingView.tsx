@@ -297,8 +297,12 @@ export function TrendingView(props: TrendingViewProps) {
                         {isNFT ? (
                             <NonFungibleTickersTable
                                 isNFTProjectPopper={isNFTProjectPopper}
-                                address={coin.address ?? ''}
+                                id={
+                                    (result.pluginID === NetworkPluginID.PLUGIN_SOLANA ? result.name : coin.address) ??
+                                    ''
+                                }
                                 chainId={coin.chainId ?? ChainId.Mainnet}
+                                result={result}
                             />
                         ) : (
                             <TickersTable tickers={tickers} dataProvider={trending.dataProvider} />

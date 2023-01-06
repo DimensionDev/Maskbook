@@ -73,10 +73,11 @@ export async function getNFT_TrendingOverview(
 
 // #region get nft trending activities
 export async function getNonFungibleTokenActivities(
+    pluginID: NetworkPluginID,
     chainId: Web3Helper.ChainIdAll,
     contractAddress: string,
     cursor: string,
 ): Promise<{ content: NonFungibleTokenActivity[]; cursor: string } | undefined> {
-    return NFTScanTrending.getCoinActivities(chainId, contractAddress, cursor)
+    return NFTScanTrending.getCoinActivities(pluginID, chainId, contractAddress, cursor)
 }
 // #endregion
