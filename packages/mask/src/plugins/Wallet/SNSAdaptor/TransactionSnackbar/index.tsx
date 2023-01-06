@@ -14,7 +14,6 @@ const useStyles = makeStyles()({
     link: {
         display: 'flex',
         alignItems: 'center',
-        wordBreak: 'break-word',
     },
 })
 export interface TransactionSnackbarProps<T extends NetworkPluginID> {
