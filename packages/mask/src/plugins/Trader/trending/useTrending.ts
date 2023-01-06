@@ -22,11 +22,15 @@ import { useCurrentCurrency } from './useCurrentCurrency.js'
 
 const NFTSCAN_CHAIN_ID_LIST = [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
 
-export function useTrendingOverview(pluginID: NetworkPluginID, id: string, expectedChainId?: Web3Helper.ChainIdAll) {
+export function useTrendingOverview(
+    pluginID: NetworkPluginID,
+    result: Web3Helper.TokenResultAll,
+    expectedChainId?: Web3Helper.ChainIdAll,
+) {
     return useAsync(async () => {
-        if (!id || !expectedChainId || !pluginID) return null
-        return PluginTraderRPC.getNFT_TrendingOverview(pluginID, expectedChainId, id)
-    }, [id, expectedChainId, pluginID])
+        if (!result || !expectedChainId || !pluginID) return null
+        return PluginTraderRPC.getNFT_TrendingOverview(pluginID, expectedChainId, result)
+    }, [JSON.stringify(result), expectedChainId, pluginID])
 }
 
 export function useCollectionByTwitterHandler(twitterHandler?: string) {
@@ -78,9 +82,7 @@ export function useNonFungibleTokenActivities(
 }
 
 export function useTrendingById(
-    pluginID: NetworkPluginID,
-    id: string,
-    dataProvider: SourceType | undefined,
+    result: Web3Helper.TokenResultAll,
     expectedChainId?: Web3Helper.ChainIdAll,
     searchedContractAddress?: string,
 ): AsyncState<{
@@ -88,24 +90,23 @@ export function useTrendingById(
     trending?: TrendingAPI.Trending | null
 }> {
     const { chainId } = useChainContext({ chainId: expectedChainId })
-    const currency = useCurrentCurrency(dataProvider)
+    const currency = useCurrentCurrency(result.source)
 
     const {
         value: trending,
         loading,
         error,
     } = useAsync(async () => {
-        if (!id) return null
         if (!currency) return null
-        if (!dataProvider) return null
-        if (!expectedChainId && dataProvider === SourceType.NFTScan) {
+        if (!result.source) return null
+        if (!expectedChainId && result.source === SourceType.NFTScan) {
             return attemptUntil(
                 NFTSCAN_CHAIN_ID_LIST.map((chainId) => async () => {
                     try {
                         return PluginTraderRPC.getCoinTrending(
                             NetworkPluginID.PLUGIN_EVM,
                             chainId,
-                            id,
+                            result,
                             currency,
                             SourceType.NFTScan,
                         ).catch(() => null)
@@ -116,8 +117,10 @@ export function useTrendingById(
                 undefined,
             )
         }
-        return PluginTraderRPC.getCoinTrending(pluginID, chainId, id, currency, dataProvider).catch(() => null)
-    }, [chainId, dataProvider, currency?.id, id])
+        return PluginTraderRPC.getCoinTrending(result.pluginID, chainId, result, currency, result.source).catch(
+            () => null,
+        )
+    }, [chainId, JSON.stringify(result), currency?.id])
 
     const { value: detailedToken } = useFungibleToken(
         NetworkPluginID.PLUGIN_EVM,

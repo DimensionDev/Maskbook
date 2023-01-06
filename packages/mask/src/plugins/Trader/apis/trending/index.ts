@@ -20,21 +20,21 @@ export async function getCoinInfoByAddress(address: string): Promise<TrendingAPI
 export async function getCoinTrending(
     pluginID: NetworkPluginID,
     chainId: Web3Helper.ChainIdAll,
-    id: string,
+    result: Web3Helper.TokenResultAll,
     currency: Currency,
     dataProvider: SourceType,
 ): Promise<Trending | undefined> {
     switch (dataProvider) {
         case SourceType.CoinGecko:
-            return CoinGeckoTrending.getCoinTrending(chainId, id, currency)
+            return CoinGeckoTrending.getCoinTrending(chainId, result.id || '', currency)
         case SourceType.CoinMarketCap:
-            return CoinMarketCap.getCoinTrending(chainId, id, currency)
+            return CoinMarketCap.getCoinTrending(chainId, result.id || '', currency)
         case SourceType.UniswapInfo:
-            return UniSwap.getCoinTrending(chainId, id, currency)
+            return UniSwap.getCoinTrending(chainId, result.id || '', currency)
         case SourceType.NFTScan:
             return pluginID === NetworkPluginID.PLUGIN_SOLANA
-                ? NFTScanTrending_Solana.getCoinTrending(chainId, id, currency)
-                : NFTScanTrending_EVM.getCoinTrending(chainId, id, currency)
+                ? NFTScanTrending_Solana.getCoinTrending(chainId, result.name || '', currency)
+                : NFTScanTrending_EVM.getCoinTrending(chainId, result.address || '', currency)
         default:
             return
     }
@@ -73,11 +73,11 @@ export async function getPriceStats(
 export async function getNFT_TrendingOverview(
     pluginID: NetworkPluginID,
     chainId: Web3Helper.ChainIdAll,
-    address: string,
+    result: Web3Helper.TokenResultAll,
 ): Promise<NonFungibleCollectionOverview | undefined> {
     return pluginID === NetworkPluginID.PLUGIN_SOLANA
-        ? NFTScanTrending_Solana.getCollectionOverview(chainId, address)
-        : NFTScanTrending_EVM.getCollectionOverview(chainId, address)
+        ? NFTScanTrending_Solana.getCollectionOverview(chainId, result.name)
+        : NFTScanTrending_EVM.getCollectionOverview(chainId, result.address ?? '')
 }
 // #endregion
 

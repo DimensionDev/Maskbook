@@ -9,7 +9,7 @@ import {
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
-import { SourceType, createFungibleToken, SearchResultType, TokenType } from '@masknet/web3-shared-base'
+import { SourceType, createFungibleToken, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTList, PluginCardFrameMini } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
@@ -141,11 +141,7 @@ export function TrendingView(props: TrendingViewProps) {
     // #region merge trending
 
     const { value: { trending } = {}, loading: loadingTrending } = useTrendingById(
-        result.pluginID,
-        result.type === SearchResultType.FungibleToken
-            ? result.id || searchedContractAddress || ''
-            : (result.pluginID === NetworkPluginID.PLUGIN_SOLANA ? result.name : result.address) || '',
-        result.source,
+        result,
         result.chainId ?? expectedChainId,
         searchedContractAddress,
     )

@@ -149,11 +149,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     const { coin, market } = trending
     const { isNFTProjectPopper, isTokenTagPopper, isPreciseSearch } = useContext(TrendingViewContext)
-    const id =
-        (result.pluginID === NetworkPluginID.PLUGIN_SOLANA
-            ? result.name
-            : result.address ?? props.trending.coin.address) ?? ''
-    const { value: overview } = useTrendingOverview(result.pluginID, id, props.trending.coin.chainId)
+
+    const { value: overview } = useTrendingOverview(result.pluginID, result, props.trending.coin.chainId)
 
     const { t } = useI18N()
     const theme = useTheme()

@@ -3,7 +3,6 @@ import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-solana'
 import { WalletIcon } from '@masknet/shared'
 import { SourceType, formatInteger, formatMarketCap, formatSupply, TokenType } from '@masknet/web3-shared-base'
 import type { Trending } from '../../types/index.js'
@@ -145,15 +144,8 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
 
 export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
     const { t } = useI18N()
-    const chainId =
-        props.result.pluginID === NetworkPluginID.PLUGIN_SOLANA
-            ? ChainId.Mainnet
-            : props.result.chainId ?? props.trending.coin.chainId
-    const id =
-        (props.result.pluginID === NetworkPluginID.PLUGIN_SOLANA
-            ? props.result.name
-            : props.result.address ?? props.trending.coin.address) ?? ''
-    const { value: overview } = useTrendingOverview(props.result.pluginID, id, chainId)
+    const chainId = props.result.chainId ?? props.trending.coin.chainId
+    const { value: overview } = useTrendingOverview(props.result.pluginID, props.result, chainId)
     const { classes } = useStyles()
     const chain = useNetworkDescriptor(props.result.pluginID ?? NetworkPluginID.PLUGIN_EVM, chainId)
     const ChainIcon = () => <WalletIcon mainIcon={chain?.icon} size={14} />
