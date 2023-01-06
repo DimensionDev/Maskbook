@@ -3,7 +3,7 @@ import { AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
 import type { RequestArguments, TransactionReceipt } from 'web3-core'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import { getSubscriptionCurrentValue, PartialRequired } from '@masknet/shared-base'
+import { getSubscriptionCurrentValue, PartialRequired, Proof } from '@masknet/shared-base'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
 import type { ERC20Bytes32 } from '@masknet/web3-contracts/types/ERC20Bytes32.js'
 import type { ERC165 } from '@masknet/web3-contracts/types/ERC165.js'
@@ -1017,7 +1017,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    async fund(proof: FunderAPI.Proof, initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
+    async fund(proof: Proof, initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<string>(
             {

@@ -49,9 +49,14 @@ export interface Relation {
     network: string
 }
 
+export enum ProofType {
+    Persona = 'persona',
+    EOA = 'eoa',
+}
+
 export interface Proof {
     publicKey: string
-    type: 'persona' | 'eoa'
+    type: ProofType
     payload: string // JSON.stringify(payload)
     signature: string
 }

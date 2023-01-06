@@ -1,11 +1,6 @@
-import type { Proof } from '@masknet/shared-base'
+import type { Proof, ProofType } from '@masknet/shared-base'
 
 export namespace FunderAPI {
-    export enum ProofType {
-        Persona = 'persona',
-        EOA = 'eoa',
-    }
-
     export interface Payload {
         twitterHandler: string
         nonce: number
