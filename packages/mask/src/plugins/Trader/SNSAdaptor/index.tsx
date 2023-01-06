@@ -46,7 +46,7 @@ const sns: Plugin.SNSAdaptor.Definition<
                     <Web3ContextProvider
                         value={{
                             pluginID,
-                            chainId: chainId ?? ChainId.Mainnet,
+                            chainId,
                         }}>
                         <TrendingViewProvider
                             isNFTProjectPopper={false}
@@ -55,7 +55,7 @@ const sns: Plugin.SNSAdaptor.Definition<
                             isPreciseSearch={Boolean(Others?.isValidAddress(keyword))}>
                             <TrendingView
                                 resultList={resultList}
-                                expectedChainId={chainId ?? ChainId.Mainnet}
+                                expectedChainId={chainId}
                                 searchedContractAddress={
                                     Others?.isValidAddress(keyword)
                                         ? keyword
