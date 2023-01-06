@@ -5,14 +5,12 @@ import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Proof, ProofPayload } from '@masknet/shared-base'
 import { toFixed } from '@masknet/web3-shared-base'
 import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json'
-import { ChainId, EthereumMethodType, Transaction, UserOperation } from '../types/index.js'
+import { EthereumMethodType, Transaction, TransactionOptions, UserOperation } from '../types/index.js'
 import { createJsonRpcPayload } from '../helpers/index.js'
 import { getSmartPayConstant } from '../index.js'
 
 export class PayloadEditor {
-    constructor(private payload: JsonRpcPayload) {}
-
-    private chainId_: ChainId = null!
+    constructor(private payload: JsonRpcPayload, private options?: TransactionOptions) {}
 
     get pid() {
         const { id } = this.payload
@@ -35,9 +33,10 @@ export class PayloadEditor {
     }
 
     get chainId() {
-        return typeof this.config?.chainId === 'string'
-            ? Number.parseInt(this.config.chainId, 16) || undefined
-            : undefined
+        if (typeof this.config?.chainId === 'string') {
+            return Number.parseInt(this.config.chainId, 16) || this.options?.chainId
+        }
+        return this.options?.chainId
     }
 
     get config() {
@@ -51,19 +50,23 @@ export class PayloadEditor {
             case EthereumMethodType.MASK_REPLACE_TRANSACTION:
                 return (params as [string, Transaction])[1]
             case EthereumMethodType.MASK_DEPLOY:
+                if (!this.options?.chainId) throw new Error('Unknown chain id.')
+
                 const [owner] = params as [string]
 
                 // compose a fake transaction to be accepted by Transaction Watcher
                 return {
                     from: owner,
-                    to: getSmartPayConstant(this.chainId_, 'CREATE2_FACTORY_CONTRACT_ADDRESS'),
-                    chainId: this.chainId_,
+                    to: getSmartPayConstant(this.options?.chainId, 'CREATE2_FACTORY_CONTRACT_ADDRESS'),
+                    chainId: this.options?.chainId,
                     data: new Web3().eth.abi.encodeFunctionCall(
                         CREATE2_FACTORY_ABI.find((x) => x.name === 'deploy')! as AbiItem,
                         ['0x', toFixed(0)],
                     ),
                 }
             case EthereumMethodType.MASK_FUND:
+                if (!this.options?.chainId) throw new Error('Unknown chain id.')
+
                 const [proof] = params as [Proof]
                 const { ownerAddress, nonce = 0 } = JSON.parse(proof.payload) as ProofPayload
 
@@ -72,7 +75,7 @@ export class PayloadEditor {
                     from: ownerAddress,
                     // it's a not-exist address, use the original owner's address as a placeholder
                     to: ownerAddress,
-                    chainId: this.chainId_,
+                    chainId: this.options?.chainId,
                     data: new Web3().eth.abi.encodeFunctionCall(
                         CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem,
                         [ownerAddress, toFixed(nonce)],
@@ -183,20 +186,21 @@ export class PayloadEditor {
         return this.payload
     }
 
-    static from<T extends unknown>(id: number, method: string, params: T[] = []) {
+    static from<T extends unknown>(id: number, method: string, params: T[] = [], options?: TransactionOptions) {
         return new PayloadEditor(
             createJsonRpcPayload(id, {
                 method,
                 params,
             }),
+            options,
         )
     }
 
-    static fromMethod<T extends unknown>(method: string, params: T[] = []) {
-        return PayloadEditor.from(0, method, params)
+    static fromMethod<T extends unknown>(method: string, params: T[] = [], options?: TransactionOptions) {
+        return PayloadEditor.from(0, method, params, options)
     }
 
-    static fromPayload(payload: JsonRpcPayload) {
-        return new PayloadEditor(payload)
+    static fromPayload(payload: JsonRpcPayload, options?: TransactionOptions) {
+        return new PayloadEditor(payload, options)
     }
 }
