@@ -224,7 +224,6 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         currency: TrendingAPI.Currency,
     ): Promise<TrendingAPI.Trending> {
         const collection = await this.getCollection(pluginID, chainId, id)
-        console.log({ collection })
         if (!collection) {
             throw new Error(`NFTSCAN: Can not find token by id ${id}`)
         }
