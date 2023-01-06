@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import Web3SDK from 'web3'
 import type { AbiItem } from 'web3-utils'
 import { first } from 'lodash-es'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
@@ -28,46 +28,29 @@ import {
     SchemaType,
     WNATIVE,
 } from '@masknet/web3-shared-evm'
-import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL, NFTSCAN_API } from '../constants.js'
+import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
 import type { EVM } from '../types/EVM.js'
+import { resolveNFTScanHostName } from './utils.js'
 import { getAssetFullName } from '../../helpers/getAssetFullName.js'
 import { resolveActivityType } from '../../helpers/resolveActivityType.js'
 import { getPaymentToken } from '../../helpers/getPaymentToken.js'
 import { parseJSON } from '../../helpers/parseJSON.js'
 import type { NonFungibleTokenAPI } from '../../entry-types.js'
 
-export function resolveNFTScanHostName(chainId: Web3Helper.ChainIdAll) {
-    switch (chainId) {
-        case ChainId.Mainnet:
-            return 'https://www.nftscan.com'
-        case ChainId.Matic:
-            return 'https://polygon.nftscan.com'
-        case ChainId.BSC:
-            return 'https://bnb.nftscan.com'
-        case ChainId.Arbitrum:
-            return 'https://arbitrum.nftscan.com/'
-        case ChainId.Avalanche:
-            return 'https://avax.nftscan.com/'
-        case ChainId.Optimism:
-            return 'https://optimism.nftscan.com/'
-        case ChainId.xDai:
-            return 'https://cronos.nftscan.com/'
-        default:
-            return ''
-    }
-}
-
 export async function fetchFromNFTScanV2<T>(
     chainId: Web3Helper.ChainIdAll | undefined,
     pathname: string,
     init?: RequestInit,
+    pluginID?: NetworkPluginID,
 ) {
     const response = await fetch(urlcat(NFTSCAN_URL, pathname), {
         ...init,
         headers: {
             'content-type': 'application/json',
             ...init?.headers,
-            ...(chainId ? { 'x-app-chainid': chainId.toString() } : {}),
+            ...(chainId
+                ? { 'x-app-chainid': pluginID === NetworkPluginID.PLUGIN_SOLANA ? 'solana' : chainId.toString() }
+                : {}),
         },
         cache: 'no-cache',
     })
@@ -96,23 +79,6 @@ function resolveNFTScanAPIChain(chainId: Web3Helper.ChainIdAll): string {
     }
 }
 
-export async function fetchFromNFTScanWebAPI<T>(chainId: Web3Helper.ChainIdAll, pathname: string, init?: RequestInit) {
-    const host = resolveNFTScanHostName(chainId)
-    if (!host) return
-
-    const response = await fetch(urlcat(NFTSCAN_API, pathname), {
-        ...init,
-        headers: {
-            'content-type': 'application/json',
-            ...init?.headers,
-            chain: resolveNFTScanAPIChain(chainId),
-        },
-        cache: 'no-cache',
-    })
-    const json = await response.json()
-    return json as T
-}
-
 export async function getContractSymbol(address: string, chainId: Web3Helper.ChainIdAll) {
     const RPC_URL = first(getRPCConstants(chainId).RPC_URLS)
     if (!RPC_URL) return ''
@@ -127,8 +93,8 @@ export async function getContractSymbol(address: string, chainId: Web3Helper.Cha
     }
 }
 
-export function createPermalink(chainId: ChainId, address: string, tokenId: string) {
-    return urlcat(resolveNFTScanHostName(chainId) || 'https://www.nftscan.com', '/:address/:tokenId', {
+export function createPermalink(pluginID: NetworkPluginID, chainId: ChainId, address: string, tokenId: string) {
+    return urlcat(resolveNFTScanHostName(pluginID, chainId) || 'https://www.nftscan.com', '/:address/:tokenId', {
         address,
         tokenId,
     })
@@ -175,7 +141,7 @@ export function createNonFungibleAsset(
     return {
         id: asset.contract_address,
         chainId,
-        link: createPermalink(chainId, asset.contract_address, asset.token_id),
+        link: createPermalink(NetworkPluginID.PLUGIN_EVM, chainId, asset.contract_address, asset.token_id),
         tokenId: asset.token_id,
         type: TokenType.NonFungible,
         address: asset.contract_address,
@@ -314,7 +280,12 @@ export function createNonFungibleTokenEvent(
             address: transaction.to,
         },
         assetName: transaction.contract_name,
-        assetPermalink: createPermalink(chainId, transaction.contract_address, transaction.token_id),
+        assetPermalink: createPermalink(
+            NetworkPluginID.PLUGIN_EVM,
+            chainId,
+            transaction.contract_address,
+            transaction.token_id,
+        ),
         priceInToken: paymentToken
             ? {
                   amount: scale10(transaction.trade_price, paymentToken?.decimals).toFixed(),

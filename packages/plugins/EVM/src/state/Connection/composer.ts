@@ -148,6 +148,10 @@ class RequestContext implements Context {
         }
     }
 
+    get proof() {
+        return this.payloadEditor.proof
+    }
+
     get connection() {
         return this._connection
     }

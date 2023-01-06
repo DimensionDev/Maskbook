@@ -63,6 +63,7 @@ export async function getEVMAvailableTraderProviders(networkType?: NetworkType) 
         case NetworkType.Fuse:
         case NetworkType.Metis:
         case NetworkType.Conflux:
+        case NetworkType.Moonbeam:
             console.error('To be implement network: ', networkType)
             return []
         default:

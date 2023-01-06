@@ -9,7 +9,7 @@ import {
     Signer,
     Transaction,
 } from '@masknet/web3-shared-evm'
-import { Web3 } from '@masknet/web3-providers'
+import { SmartPayFunder, Web3 } from '@masknet/web3-providers'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
 import type { Middleware, Context } from '../types.js'
@@ -87,6 +87,11 @@ export class ContractWallet implements Middleware<Context> {
         if (context.userOperation) return this.account.estimateUserOperation(context.chainId, context.userOperation)
         if (context.config) return this.account.estimateTransaction(context.chainId, context.config)
         throw new Error('No user operation to be estimated.')
+    }
+
+    private async fund(context: Context) {
+        if (!context.proof) throw new Error('No proof.')
+        return SmartPayFunder.fund(context.chainId, context.proof)
     }
 
     private async deploy(context: Context) {
@@ -177,6 +182,13 @@ export class ContractWallet implements Middleware<Context> {
                 try {
                     if (!context.config) throw new Error('Invalid transaction.')
                     context.write(await this.getSigner(context).signTransaction(context.config))
+                } catch (error) {
+                    context.abort(error)
+                }
+                break
+            case EthereumMethodType.MASK_FUND:
+                try {
+                    context.write(await this.fund(context))
                 } catch (error) {
                     context.abort(error)
                 }

@@ -75,6 +75,8 @@ export enum ChainId {
 
     Crossbell = 3737,
 
+    Moonbeam = 1284,
+
     // For any chains not supported yet.
     Invalid = 0,
 }
@@ -158,6 +160,7 @@ export enum EthereumMethodType {
     ETH_SUPPORTED_CHAIN_IDS = 'eth_supportedChainIds',
     ETH_SUPPORTED_ENTRY_POINTS = 'eth_supportedEntryPoints',
     MASK_DEPLOY = 'mask_deploy',
+    MASK_FUND = 'mask_fund',
 
     // only for mask
     MASK_LOGIN = 'MASK_LOGIN',
@@ -198,6 +201,7 @@ export enum NetworkType {
     Harmony = 'Harmony',
     Conflux = 'Conflux',
     Astar = 'Astar',
+    Moonbeam = 'Moonbeam',
 }
 
 export enum ProviderType {

@@ -62,6 +62,7 @@ export namespace TrendingAPI {
         source_code_urls?: string[]
         community_urls?: CommunityUrls
         home_urls?: string[]
+        nftscan_url?: string
         announcement_urls?: string[]
         blockchain_urls?: string[]
         image_url?: string
@@ -89,7 +90,7 @@ export namespace TrendingAPI {
         total_volume?: number
         price_symbol?: string
         price_change_percentage_1h?: number
-        price_change_percentage_24h?: number
+        price_change_24h?: number
         price_change_percentage_1h_in_currency?: number
         price_change_percentage_1y_in_currency?: number
         price_change_percentage_7d_in_currency?: number

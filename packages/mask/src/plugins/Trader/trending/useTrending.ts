@@ -4,9 +4,7 @@ import { flatten } from 'lodash-es'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { DSearch } from '@masknet/web3-providers'
 import {
-    SourceType,
     TokenType,
-    attemptUntil,
     NonFungibleTokenActivity,
     SearchResultType,
     NonFungibleCollectionResult,
@@ -14,19 +12,21 @@ import {
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { useChainContext, useFungibleToken, useWeb3State } from '@masknet/web3-hooks-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import { PluginTraderRPC } from '../messages.js'
 import type { Coin } from '../types/index.js'
 import { useCurrentCurrency } from './useCurrentCurrency.js'
 
-const NFTSCAN_CHAIN_ID_LIST = [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
-
-export function useTrendingOverview(address: string, expectedChainId?: Web3Helper.ChainIdAll) {
+export function useTrendingOverview(
+    pluginID: NetworkPluginID,
+    result: Web3Helper.TokenResultAll,
+    expectedChainId?: Web3Helper.ChainIdAll,
+) {
     return useAsync(async () => {
-        if (!address || !expectedChainId) return null
-        return PluginTraderRPC.getNFT_TrendingOverview(expectedChainId, address)
-    }, [address, expectedChainId])
+        if (!result || !expectedChainId || !pluginID) return null
+        return PluginTraderRPC.getNFT_TrendingOverview(pluginID, expectedChainId, result)
+    }, [JSON.stringify(result), expectedChainId, pluginID])
 }
 
 export function useCollectionByTwitterHandler(twitterHandler?: string) {
@@ -41,18 +41,22 @@ export function useCollectionByTwitterHandler(twitterHandler?: string) {
 
 export function useNonFungibleTokenActivities(
     pluginID: NetworkPluginID,
-    address: string,
+    id: string,
     expectedChainId?: Web3Helper.ChainIdAll,
 ) {
     const cursorRef = useRef<string>('')
-    const { Others } = useWeb3State(pluginID)
     const [nonFungibleTokenActivities, setNonFungibleTokenActivities] = useState<
         Record<string, NonFungibleTokenActivity[]>
     >({})
     const [{ loading: loadingNonFungibleTokenActivities }, getNonFungibleTokenActivities] = useAsyncFn(async () => {
-        if (!address || !expectedChainId || !Others?.isValidChainId(expectedChainId)) return
+        if (!id || !expectedChainId || !pluginID) return
 
-        const result = await PluginTraderRPC.getNonFungibleTokenActivities(expectedChainId, address, cursorRef.current)
+        const result = await PluginTraderRPC.getNonFungibleTokenActivities(
+            pluginID,
+            expectedChainId,
+            id,
+            cursorRef.current,
+        )
 
         setNonFungibleTokenActivities((currentActivities) => {
             if (!result || currentActivities[result.cursor] || !result?.content) return currentActivities
@@ -60,7 +64,7 @@ export function useNonFungibleTokenActivities(
 
             return { ...currentActivities, [cursorRef.current]: result.content }
         })
-    }, [address, expectedChainId])
+    }, [id, expectedChainId, pluginID])
 
     useEffect(() => {
         getNonFungibleTokenActivities()
@@ -74,41 +78,24 @@ export function useNonFungibleTokenActivities(
 }
 
 export function useTrendingById(
-    id: string,
-    dataProvider: SourceType | undefined,
-    expectedChainId?: Web3Helper.ChainIdAll,
+    result: Web3Helper.TokenResultAll,
     searchedContractAddress?: string,
 ): AsyncState<{
     currency?: TrendingAPI.Currency
     trending?: TrendingAPI.Trending | null
 }> {
-    const { chainId } = useChainContext({ chainId: expectedChainId })
-    const currency = useCurrentCurrency(dataProvider)
-    const { Others } = useWeb3State()
+    const { chainId } = useChainContext({ chainId: result.chainId })
+    const currency = useCurrentCurrency(result.source)
+    result.chainId
     const {
         value: trending,
         loading,
         error,
     } = useAsync(async () => {
-        if (!id) return null
         if (!currency) return null
-        if (!dataProvider) return null
-        if ((!expectedChainId || !Others?.isValidChainId(expectedChainId)) && dataProvider === SourceType.NFTScan) {
-            return attemptUntil(
-                NFTSCAN_CHAIN_ID_LIST.map((chainId) => async () => {
-                    try {
-                        return PluginTraderRPC.getCoinTrending(chainId, id, currency, SourceType.NFTScan).catch(
-                            () => null,
-                        )
-                    } catch {
-                        return undefined
-                    }
-                }),
-                undefined,
-            )
-        }
-        return PluginTraderRPC.getCoinTrending(chainId, id, currency, dataProvider).catch(() => null)
-    }, [chainId, dataProvider, currency?.id, id])
+        if (!result.source) return null
+        return PluginTraderRPC.getCoinTrending(result, currency).catch(() => null)
+    }, [chainId, JSON.stringify(result), currency?.id])
 
     const { value: detailedToken } = useFungibleToken(
         NetworkPluginID.PLUGIN_EVM,
@@ -149,7 +136,7 @@ export function useTrendingById(
             trending: trending
                 ? {
                       ...trending,
-                      coin: createCoinFromTrending(trending, expectedChainId, searchedContractAddress, detailedToken),
+                      coin: createCoinFromTrending(trending, chainId, searchedContractAddress, detailedToken),
                   }
                 : null,
         },

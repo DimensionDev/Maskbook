@@ -48,3 +48,15 @@ export interface Relation {
     favor: RelationFavor
     network: string
 }
+
+export enum ProofType {
+    Persona = 'persona',
+    EOA = 'eoa',
+}
+
+export interface Proof {
+    publicKey: string
+    type: ProofType
+    payload: string // JSON.stringify(payload)
+    signature: string
+}
