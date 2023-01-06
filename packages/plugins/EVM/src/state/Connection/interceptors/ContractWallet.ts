@@ -89,6 +89,11 @@ export class ContractWallet implements Middleware<Context> {
         throw new Error('No user operation to be estimated.')
     }
 
+    private async fund(context: Context) {
+        // return the funded tx hash
+        return ''
+    }
+
     private async deploy(context: Context) {
         if (!context.owner) throw new Error('No owner.')
         return this.account.deploy(context.chainId, context.owner, this.getSigner(context))
@@ -177,6 +182,13 @@ export class ContractWallet implements Middleware<Context> {
                 try {
                     if (!context.config) throw new Error('Invalid transaction.')
                     context.write(await this.getSigner(context).signTransaction(context.config))
+                } catch (error) {
+                    context.abort(error)
+                }
+                break
+            case EthereumMethodType.MASK_FUND:
+                try {
+                    context.write(await this.fund(context))
                 } catch (error) {
                     context.abort(error)
                 }

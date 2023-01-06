@@ -259,19 +259,7 @@ export class UserTransaction {
     }
 
     toTransaction(): Transaction {
-        const callBytes = this.userOperation.callData ? hexToBytes(this.userOperation.callData) : []
-
-        return {
-            from: this.userOperation.sender,
-            to: bytesToHex(callBytes.slice(12, 36)),
-            value: bytesToHex(callBytes.slice(36, 68)),
-            gas: this.userOperation.callGas,
-            maxFeePerGas: this.userOperation.maxFeePerGas,
-            maxPriorityFeePerGas: this.userOperation.maxPriorityFeePerGas,
-            nonce: toNumber(this.userOperation.nonce ?? '0'),
-            data: bytesToHex(callBytes.slice(68)),
-            chainId: this.chainId,
-        }
+        return UserTransaction.toTransaction(this.chainId, this.userOperation)
     }
 
     async toRawTransaction(web3: Web3, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {
@@ -358,5 +346,21 @@ export class UserTransaction {
             options,
         )
         return userTransaction.fill(web3)
+    }
+
+    static toTransaction(chainId: ChainId, userOperation: UserOperation): Transaction {
+        const callBytes = userOperation.callData ? hexToBytes(userOperation.callData) : []
+
+        return {
+            from: userOperation.sender,
+            to: bytesToHex(callBytes.slice(12, 36)),
+            value: bytesToHex(callBytes.slice(36, 68)),
+            gas: userOperation.callGas,
+            maxFeePerGas: userOperation.maxFeePerGas,
+            maxPriorityFeePerGas: userOperation.maxPriorityFeePerGas,
+            nonce: toNumber(userOperation.nonce ?? '0'),
+            data: bytesToHex(callBytes.slice(68)),
+            chainId: chainId,
+        }
     }
 }
