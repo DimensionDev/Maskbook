@@ -7,7 +7,6 @@ import { openWindow } from '@masknet/shared-base-ui'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, IconButton, Stack, Typography, useTheme } from '@mui/material'
 import { useCopyToClipboard } from 'react-use'
-import { openWindow } from '@masknet/shared-base-ui'
 import { noop } from 'lodash-es'
 
 export interface ContractSectionProps {
