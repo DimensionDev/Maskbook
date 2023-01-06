@@ -7,6 +7,8 @@ import { openWindow } from '@masknet/shared-base-ui'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, IconButton, Stack, Typography, useTheme } from '@mui/material'
 import { useCopyToClipboard } from 'react-use'
+import { openWindow } from '@masknet/shared-base-ui'
+import { noop } from 'lodash-es'
 
 export interface ContractSectionProps {
     chainId?: Web3Helper.ChainIdAll
@@ -43,7 +45,12 @@ export const ContractSection = ({ chainId, address, name, symbol, iconURL, nftSc
             ) : (
                 <Box width={16} />
             )}
-            <Typography variant="body2" component="span" fontWeight={700} fontSize={14}>
+            <Typography
+                variant="body2"
+                component="span"
+                fontWeight={700}
+                fontSize={14}
+                onClick={chainId ? () => openWindow(Others?.explorerResolver.addressLink(chainId, address)) : noop}>
                 <FormattedAddress address={address} size={4} formatter={formatEthereumAddress} />
             </Typography>
             <IconButton sx={{ padding: 0 }} color="primary" size="small" onClick={onCopyAddress}>
