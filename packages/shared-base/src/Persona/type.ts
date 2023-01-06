@@ -54,6 +54,11 @@ export enum ProofType {
     EOA = 'eoa',
 }
 
+export interface ProofPayload {
+    ownerAddress: string
+    nonce?: number
+}
+
 export interface Proof {
     publicKey: string
     type: ProofType

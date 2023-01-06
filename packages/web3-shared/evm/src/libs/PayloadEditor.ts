@@ -1,17 +1,17 @@
 import { first, isUndefined, omitBy } from 'lodash-es'
+import Web3 from 'web3'
 import { hexToNumber, hexToNumberString } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
-import { EthereumMethodType, Transaction, UserOperation } from '../types/index.js'
+import type { Proof, ProofPayload } from '@masknet/shared-base'
+import { toFixed } from '@masknet/web3-shared-base'
+import { ChainId, EthereumMethodType, Transaction, UserOperation } from '../types/index.js'
 import { createJsonRpcPayload } from '../helpers/index.js'
-import type { Proof } from '@masknet/shared-base'
-
-const parseHexNumberString = (hex: string | number | undefined) =>
-    typeof hex !== 'undefined' ? hexToNumberString(hex ?? '0x0') : undefined
-
-const parseHexNumber = (hex: string | number | undefined) => (typeof hex !== 'undefined' ? hexToNumber(hex) : undefined)
+import { getSmartPayConstant } from '../index.js'
 
 export class PayloadEditor {
     constructor(private payload: JsonRpcPayload) {}
+
+    private chainId_: ChainId = null!
 
     get pid() {
         const { id } = this.payload
@@ -49,6 +49,60 @@ export class PayloadEditor {
                 return (params as [Transaction])[0]
             case EthereumMethodType.MASK_REPLACE_TRANSACTION:
                 return (params as [string, Transaction])[1]
+            case EthereumMethodType.MASK_DEPLOY:
+                const [owner] = params as [string]
+
+                // compose a fake transaction to be accepted by Transaction Watcher
+                return {
+                    from: owner,
+                    to: getSmartPayConstant(this.chainId_, 'CREATE2_FACTORY_CONTRACT_ADDRESS'),
+                    chainId: this.chainId_,
+                    data: new Web3().eth.abi.encodeFunctionCall(
+                        {
+                            name: 'deploy',
+                            type: 'function',
+                            inputs: [
+                                {
+                                    type: 'bytes',
+                                    name: 'code',
+                                },
+                                {
+                                    type: 'bytes32',
+                                    name: 'nonce',
+                                },
+                            ],
+                        },
+                        ['0x', toFixed(0)],
+                    ),
+                }
+            case EthereumMethodType.MASK_FUND:
+                const [proof] = params as [Proof]
+                const { ownerAddress, nonce = 0 } = JSON.parse(proof.payload) as ProofPayload
+
+                // compose a fake transaction to be accepted by Transaction Watcher
+                return {
+                    from: ownerAddress,
+                    // it's a not-exist address, use the original owner address as placeholder
+                    to: ownerAddress,
+                    chainId: this.chainId_,
+                    data: new Web3().eth.abi.encodeFunctionCall(
+                        {
+                            name: 'fund',
+                            type: 'function',
+                            inputs: [
+                                {
+                                    type: 'address',
+                                    name: 'owner',
+                                },
+                                {
+                                    type: 'uint256',
+                                    name: 'nonce',
+                                },
+                            ],
+                        },
+                        [ownerAddress, toFixed(nonce)],
+                    ),
+                }
             default:
                 return
         }
@@ -70,8 +124,7 @@ export class PayloadEditor {
         const { method, params } = this.payload
         switch (method) {
             case EthereumMethodType.MASK_FUND:
-                const [proof] = params as [Proof]
-                return proof
+                return (params as [Proof])[0]
             default:
                 return
         }
@@ -93,6 +146,12 @@ export class PayloadEditor {
 
     get signableConfig() {
         if (!this.config) return
+
+        const parseHexNumberString = (hex: string | number | undefined) =>
+            typeof hex !== 'undefined' ? hexToNumberString(hex ?? '0x0') : undefined
+
+        const parseHexNumber = (hex: string | number | undefined) =>
+            typeof hex !== 'undefined' ? hexToNumber(hex) : undefined
 
         return omitBy(
             {
