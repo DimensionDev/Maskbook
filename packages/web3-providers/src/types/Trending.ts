@@ -141,7 +141,10 @@ export namespace TrendingAPI {
     export interface Contract {
         chainId?: Web3Helper.ChainIdAll
         address: string
+        name?: string
+        symbol?: string
         icon_url?: string
+        iconURL?: string
     }
 
     export interface Trending {

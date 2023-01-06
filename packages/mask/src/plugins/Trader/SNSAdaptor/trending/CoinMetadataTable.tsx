@@ -98,7 +98,8 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
     const metadataLinks = [['Website', trending.coin.home_urls]] as Array<[string, string[] | undefined]>
 
     const contracts =
-        trending.contracts ?? (trending.coin.chainId && trending.coin.contract_address)
+        trending.contracts ??
+        (trending.coin.chainId && trending.coin.contract_address
             ? [
                   {
                       chainId: trending.coin.chainId!,
@@ -108,7 +109,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                       iconURL: '',
                   },
               ]
-            : []
+            : [])
 
     const [menu, openMenu] = useMenuConfig(
         contracts
