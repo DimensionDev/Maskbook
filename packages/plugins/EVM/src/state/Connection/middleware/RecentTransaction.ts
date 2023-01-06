@@ -1,6 +1,6 @@
 import type { TransactionReceipt } from 'web3-core'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
-import { EthereumMethodType, Transaction } from '@masknet/web3-shared-evm'
+import { EthereumMethodType, Transaction, UserTransaction } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types.js'
 import { getReceiptStatus } from '../utils.js'
 import { Web3StateSettings } from '../../../settings/index.js'
@@ -24,6 +24,12 @@ export class RecentTransaction implements Middleware<Context> {
                     )
                     await TransactionWatcher?.watchTransaction(context.chainId, context.result, context.config)
                     break
+                case EthereumMethodType.ETH_SEND_USER_OPERATION:
+                    if (!context.userOperation || typeof context.result !== 'string') return
+                    const transaction = UserTransaction.toTransaction(context.chainId, context.userOperation)
+                    await Transaction?.addTransaction?.(context.chainId, context.account, context.result, transaction)
+                    await TransactionWatcher?.watchTransaction(context.chainId, context.result, transaction)
+                    break
                 case EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT:
                     if (isSquashed) return
 
@@ -42,6 +48,10 @@ export class RecentTransaction implements Middleware<Context> {
                         account: receipt.to,
                     })
                     BlockNumberNotifier?.emitter.emit('update', context.chainId)
+                    break
+                case EthereumMethodType.MASK_DEPLOY:
+                    break
+                case EthereumMethodType.MASK_FUND:
                     break
                 case EthereumMethodType.MASK_REPLACE_TRANSACTION:
                     if (!context.config || typeof context.result !== 'string') return

@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { ChainId, TransactionReceipt } from '@masknet/web3-shared-evm'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, Proof } from '@masknet/shared-base'
 import { FunderAPI } from '../../types/Funder.js'
 import { Web3API } from '../../EVM/index.js'
 import { fetchJSON, fetchSquashed } from '../../entry-helpers.js'
@@ -58,7 +58,7 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
         }
     }
 
-    async fund(chainId: ChainId, proof: FunderAPI.Proof): Promise<FunderAPI.Fund> {
+    async fund(chainId: ChainId, proof: Proof): Promise<FunderAPI.Fund> {
         await this.assetChainId(chainId)
 
         return fetchJSON<FunderAPI.Fund>(urlcat(FUNDER_ROOT, '/verify'), {

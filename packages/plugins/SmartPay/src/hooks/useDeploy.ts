@@ -1,13 +1,13 @@
 import { useAsyncFn } from 'react-use'
-import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { NetworkPluginID, PersonaInformation, SignType } from '@masknet/shared-base'
-import { useChainContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
-import { AbstractAccountAPI, FunderAPI } from '@masknet/web3-providers/types'
-import { ProviderType } from '@masknet/web3-shared-evm'
-import type { ManagerAccount } from '../type.js'
-import type { Wallet } from '@masknet/web3-shared-base'
 import getUnixTime from 'date-fns/getUnixTime'
+import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { NetworkPluginID, PersonaInformation, ProofType, SignType } from '@masknet/shared-base'
+import { useChainContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
+import type { AbstractAccountAPI } from '@masknet/web3-providers/types'
+import { ProviderType } from '@masknet/web3-shared-evm'
+import type { Wallet } from '@masknet/web3-shared-base'
 import { SmartPayFunder } from '@masknet/web3-providers'
+import type { ManagerAccount } from '../type.js'
 
 export function useDeploy(
     signPersona?: PersonaInformation,
@@ -59,7 +59,7 @@ export function useDeploy(
 
         const response = await SmartPayFunder.fund(chainId, {
             publicKey,
-            type: signPersona ? FunderAPI.ProofType.Persona : FunderAPI.ProofType.EOA,
+            type: signPersona ? ProofType.Persona : ProofType.EOA,
             signature,
             payload,
         })

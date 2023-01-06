@@ -1,6 +1,6 @@
 import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import type { ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
+import type { ECKeyIdentifier, NetworkPluginID, Proof } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { RecognizableError, WalletProvider } from '@masknet/web3-shared-base'
 import type {
@@ -48,6 +48,7 @@ export interface Context {
     readonly requestOptions?: EVM_Web3ConnectionOptions
     readonly message?: string
     readonly userOperation?: UserOperation
+    readonly proof?: Proof
 
     /**
      * JSON RPC request payload
