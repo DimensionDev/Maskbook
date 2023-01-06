@@ -360,7 +360,7 @@ export class UserTransaction {
             maxPriorityFeePerGas: userOperation.maxPriorityFeePerGas,
             nonce: toNumber(userOperation.nonce ?? '0'),
             data: bytesToHex(callBytes.slice(68)),
-            chainId: chainId,
+            chainId,
         }
     }
 }
