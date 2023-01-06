@@ -5,14 +5,14 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base.js'
 import { TrendingView } from './trending/TrendingView.js'
 import { TrendingViewProvider } from './trending/context.js'
-import { useChainContext, useWeb3State, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { useWeb3State, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { TraderDialog } from './trader/TraderDialog.js'
 import { TagInspector } from './trending/TagInspector.js'
 import { enhanceTag } from './cashTag.js'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTProjectAvatarBadge } from './NFTProjectAvatarBadge.js'
@@ -40,15 +40,13 @@ const sns: Plugin.SNSAdaptor.Definition<
             Content({ result: _resultList, isProfilePage }) {
                 const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
                 const resultList = _resultList as Web3Helper.TokenResultAll[]
-                const { chainId: _chainId } = useChainContext()
                 if (!resultList.length) return null
                 const { chainId, keyword, address, pluginID } = resultList[0]
-
                 return (
                     <Web3ContextProvider
                         value={{
                             pluginID,
-                            chainId: chainId ?? _chainId,
+                            chainId,
                         }}>
                         <TrendingViewProvider
                             isNFTProjectPopper={false}
@@ -57,7 +55,7 @@ const sns: Plugin.SNSAdaptor.Definition<
                             isPreciseSearch={Boolean(Others?.isValidAddress(keyword))}>
                             <TrendingView
                                 resultList={resultList}
-                                expectedChainId={chainId ?? ChainId.Mainnet}
+                                expectedChainId={chainId}
                                 searchedContractAddress={
                                     Others?.isValidAddress(keyword)
                                         ? keyword
@@ -136,7 +134,7 @@ const sns: Plugin.SNSAdaptor.Definition<
     },
     AvatarRealm: {
         ID: `${base.ID}_nft_project_card`,
-        label: 'Avatar Web3 Profile',
+        label: 'Web3 Profile Card',
         priority: 99999,
         UI: {
             Decorator({ userId }) {

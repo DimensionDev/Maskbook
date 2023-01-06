@@ -61,24 +61,20 @@ export function TrendingViewDescriptor(props: TrendingViewDescriptorProps) {
             isProfilePage={isProfilePage}
             isTokenTagPopper={isTokenTagPopper}>
             <Box className={classes.source}>
-                {displayList.length > 1 && (
-                    <>
-                        <Stack
-                            className={classes.sourceMenu}
-                            display="inline-flex"
-                            flexDirection="row"
-                            alignItems="center"
-                            gap={0.5}>
-                            <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
-                        </Stack>
-                        <SourceSwitcher
-                            resultList={displayList}
-                            result={result}
-                            setResult={setResult}
-                            classes={{ selectedOption: classes.selectedOption }}
-                        />
-                    </>
-                )}
+                <Stack
+                    className={classes.sourceMenu}
+                    display="inline-flex"
+                    flexDirection="row"
+                    alignItems="center"
+                    gap={0.5}>
+                    <Typography className={classes.sourceNote}>{t('powered_by')}</Typography>
+                </Stack>
+                <SourceSwitcher
+                    resultList={displayList}
+                    result={result}
+                    setResult={setResult}
+                    classes={{ selectedOption: classes.selectedOption }}
+                />
             </Box>
         </PluginDescriptor>
     )

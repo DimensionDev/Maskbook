@@ -9,7 +9,7 @@ import {
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
-import { SourceType, createFungibleToken, SearchResultType, TokenType } from '@masknet/web3-shared-base'
+import { SourceType, createFungibleToken, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTList, PluginCardFrameMini } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
@@ -139,14 +139,8 @@ export function TrendingView(props: TrendingViewProps) {
     useEffect(() => setTabIndex(0), [networkType])
     // #endregion
     // #region merge trending
-    const { value: { trending } = {}, loading: loadingTrending } = useTrendingById(
-        result.type === SearchResultType.FungibleToken
-            ? result.id || searchedContractAddress || ''
-            : result.address || '',
-        result.source,
-        result.chainId ?? expectedChainId,
-        searchedContractAddress,
-    )
+
+    const { value: { trending } = {}, loading: loadingTrending } = useTrendingById(result, searchedContractAddress)
     // #endregion
     const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
 
@@ -227,14 +221,19 @@ export function TrendingView(props: TrendingViewProps) {
         props.onUpdate?.()
     }, [tabIndex, loadingTrending])
     // #endregion
-    const collectionAddress = trending?.coin.type === TokenType.NonFungible ? trending.coin.contract_address : undefined
+    const collectionId =
+        trending?.coin.type === TokenType.NonFungible
+            ? result.pluginID === NetworkPluginID.PLUGIN_SOLANA
+                ? result.name
+                : trending.coin.contract_address
+            : undefined
     const {
         value: fetchedTokens = EMPTY_LIST,
         done,
         next,
         error: loadError,
-    } = useNonFungibleAssetsByCollection(collectionAddress, NetworkPluginID.PLUGIN_EVM, {
-        chainId: expectedChainId as ChainId,
+    } = useNonFungibleAssetsByCollection(collectionId, result.pluginID, {
+        chainId: expectedChainId,
     })
 
     // #region display loading skeleton
@@ -278,14 +277,14 @@ export function TrendingView(props: TrendingViewProps) {
             </TabContext>
             <Stack sx={{ backgroundColor: theme.palette.maskColor.bottom }}>
                 {currentTab === ContentTabs.Market && trending.dataProvider ? (
-                    <CoinMarketPanel dataProvider={trending.dataProvider} trending={trending} />
+                    <CoinMarketPanel dataProvider={trending.dataProvider} trending={trending} result={result} />
                 ) : null}
                 {currentTab === ContentTabs.Price ? (
                     <Box px={2} py={4}>
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}
-                            amount={market?.price_change_percentage_1h ?? market?.price_change_percentage_24h ?? 0}
+                            amount={market?.price_change_percentage_1h ?? market?.price_change_24h ?? 0}
                             currency={trending.currency}
                             stats={stats}
                             retry={retryStats}
@@ -303,8 +302,12 @@ export function TrendingView(props: TrendingViewProps) {
                         {isNFT ? (
                             <NonFungibleTickersTable
                                 isNFTProjectPopper={isNFTProjectPopper}
-                                address={coin.address ?? ''}
-                                chainId={coin.chainId ?? ChainId.Mainnet}
+                                id={
+                                    (result.pluginID === NetworkPluginID.PLUGIN_SOLANA ? result.name : coin.address) ??
+                                    ''
+                                }
+                                chainId={result.chainId ?? coin.chainId ?? ChainId.Mainnet}
+                                result={result}
                             />
                         ) : (
                             <TickersTable tickers={tickers} dataProvider={trending.dataProvider} />
@@ -333,6 +336,7 @@ export function TrendingView(props: TrendingViewProps) {
                 {currentTab === ContentTabs.NFTItems && isNFT ? (
                     <Box className={classes.nftItems}>
                         <NFTList
+                            pluginID={result.pluginID}
                             className={classes.nftList}
                             tokens={fetchedTokens}
                             onNextPage={next}

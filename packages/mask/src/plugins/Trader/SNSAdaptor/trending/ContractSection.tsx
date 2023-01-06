@@ -3,10 +3,10 @@ import { useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { FormattedAddress, TokenIcon, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { openWindow } from '@masknet/shared-base-ui'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, IconButton, Stack, Typography, useTheme } from '@mui/material'
 import { useCopyToClipboard } from 'react-use'
-import { openWindow } from '@masknet/shared-base-ui'
 import { noop } from 'lodash-es'
 
 export interface ContractSectionProps {

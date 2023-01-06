@@ -75,6 +75,8 @@ export enum ChainId {
 
     Crossbell = 3737,
 
+    Moonbeam = 1284,
+
     // For any chains not supported yet.
     Invalid = 0,
 }
@@ -198,6 +200,7 @@ export enum NetworkType {
     Harmony = 'Harmony',
     Conflux = 'Conflux',
     Astar = 'Astar',
+    Moonbeam = 'Moonbeam',
 }
 
 export enum ProviderType {

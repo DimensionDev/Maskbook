@@ -280,12 +280,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     if (hidden) return null
 
-    const NFTProjectAddress = collectionList?.[0]?.address
+    const keyword = collectionList?.[0]?.address || collectionList?.[0]?.name
 
-    if (NFTProjectAddress)
+    if (keyword)
         return (
             <div className={classes.root}>
-                <SearchResultInspector keyword={NFTProjectAddress} isProfilePage collectionList={collectionList} />
+                <SearchResultInspector keyword={keyword} isProfilePage collectionList={collectionList} />
             </div>
         )
 
