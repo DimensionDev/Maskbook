@@ -190,6 +190,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const titleRef = useRef<HTMLElement>(null)
     const [coinMenuOpen, setCoinMenuOpen] = useState(false)
     const coinAddress = coin.address || coin.contract_address
+    const coinName = result.name || coin.name
 
     const displayResultList = uniqBy(
         [result, ...resultList],
@@ -210,7 +211,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
                                         <CoinIcon
                                             type={coin.type}
-                                            name={coin.name}
+                                            name={coinName}
                                             label=""
                                             symbol={coin.symbol}
                                             address={coinAddress ?? ''}
@@ -223,8 +224,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                 <Typography className={classes.title} variant="h6">
                                     <Linking
                                         href={first(coin.home_urls)}
-                                        LinkProps={{ className: classes.name, title: coin.name.toUpperCase() }}>
-                                        {coin.name.toUpperCase()}
+                                        LinkProps={{ className: classes.name, title: coinName.toUpperCase() }}>
+                                        {coinName.toUpperCase()}
                                     </Linking>
                                     {coin.symbol ? (
                                         <Typography component="span" className={classes.symbol}>
