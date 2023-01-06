@@ -153,9 +153,11 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                                 address={contracts[0].address}
                                                 name={contracts[0].address}
                                             />
-                                            <IconButton size="small" onClick={openMenu}>
-                                                <MoreHorizIcon style={{ fontSize: 16 }} />
-                                            </IconButton>
+                                            {contracts.length > 1 ? (
+                                                <IconButton size="small" onClick={openMenu}>
+                                                    <MoreHorizIcon style={{ fontSize: 16 }} />
+                                                </IconButton>
+                                            ) : null}
                                             {menu}
                                         </Stack>
                                     ) : (
