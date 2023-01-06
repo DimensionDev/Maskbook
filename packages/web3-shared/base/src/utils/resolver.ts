@@ -251,7 +251,7 @@ export const resolveCurrencyName = createLookupTableResolver<CurrencyType, strin
 
 export const resolveNetworkWalletName = createLookupTableResolver<NetworkPluginID, string>(
     {
-        [NetworkPluginID.PLUGIN_EVM]: 'EVM wallet',
+        [NetworkPluginID.PLUGIN_EVM]: 'Ethereum wallet',
         [NetworkPluginID.PLUGIN_SOLANA]: 'Solana wallet',
         [NetworkPluginID.PLUGIN_FLOW]: 'Flow wallet',
     },
