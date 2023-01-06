@@ -1,6 +1,12 @@
 import { SourceType, NonFungibleCollectionOverview, NonFungibleTokenActivity } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { CoinGeckoTrending, CoinMarketCap, NFTScanTrending, UniSwap } from '@masknet/web3-providers'
+import {
+    CoinGeckoTrending,
+    CoinMarketCap,
+    NFTScanTrending_EVM,
+    NFTScanTrending_Solana,
+    UniSwap,
+} from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -20,13 +26,15 @@ export async function getCoinTrending(
 ): Promise<Trending | undefined> {
     switch (dataProvider) {
         case SourceType.CoinGecko:
-            return CoinGeckoTrending.getCoinTrending(pluginID, chainId, id, currency)
+            return CoinGeckoTrending.getCoinTrending(chainId, id, currency)
         case SourceType.CoinMarketCap:
-            return CoinMarketCap.getCoinTrending(pluginID, chainId, id, currency)
+            return CoinMarketCap.getCoinTrending(chainId, id, currency)
         case SourceType.UniswapInfo:
-            return UniSwap.getCoinTrending(pluginID, chainId, id, currency)
+            return UniSwap.getCoinTrending(chainId, id, currency)
         case SourceType.NFTScan:
-            return NFTScanTrending.getCoinTrending(pluginID, chainId, id, currency)
+            return pluginID === NetworkPluginID.PLUGIN_SOLANA
+                ? NFTScanTrending_Solana.getCoinTrending(chainId, id, currency)
+                : NFTScanTrending_EVM.getCoinTrending(chainId, id, currency)
         default:
             return
     }
@@ -54,7 +62,7 @@ export async function getPriceStats(
         case SourceType.UniswapInfo:
             return UniSwap.getCoinPriceStats(chainId, id, currency, days)
         case SourceType.NFTScan:
-            return NFTScanTrending.getCoinPriceStats(chainId, id, currency, days)
+            return NFTScanTrending_EVM.getCoinPriceStats(chainId, id, currency, days)
         default:
             return EMPTY_LIST
     }
@@ -67,7 +75,9 @@ export async function getNFT_TrendingOverview(
     chainId: Web3Helper.ChainIdAll,
     address: string,
 ): Promise<NonFungibleCollectionOverview | undefined> {
-    return NFTScanTrending.getCollectionOverview(pluginID, chainId, address)
+    return pluginID === NetworkPluginID.PLUGIN_SOLANA
+        ? NFTScanTrending_Solana.getCollectionOverview(chainId, address)
+        : NFTScanTrending_EVM.getCollectionOverview(chainId, address)
 }
 // #endregion
 
@@ -78,6 +88,8 @@ export async function getNonFungibleTokenActivities(
     contractAddress: string,
     cursor: string,
 ): Promise<{ content: NonFungibleTokenActivity[]; cursor: string } | undefined> {
-    return NFTScanTrending.getCoinActivities(pluginID, chainId, contractAddress, cursor)
+    return pluginID === NetworkPluginID.PLUGIN_SOLANA
+        ? NFTScanTrending_Solana.getCoinActivities(chainId, contractAddress, cursor)
+        : NFTScanTrending_EVM.getCoinActivities(chainId, contractAddress, cursor)
 }
 // #endregion

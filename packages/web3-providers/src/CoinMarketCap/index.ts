@@ -1,7 +1,6 @@
 import getUnixTime from 'date-fns/getUnixTime'
 import { TokenType, SourceType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import type { NetworkPluginID } from '@masknet/shared-base'
 import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from './constants.js'
 import { resolveCoinMarketCapChainId } from './helpers.js'
 import { FuseTrendingAPI } from '../Fuse/index.js'
@@ -148,7 +147,6 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinTrending(
-        pluginID: NetworkPluginID,
         chainId: Web3Helper.ChainIdAll,
         id: string,
         currency: TrendingAPI.Currency,

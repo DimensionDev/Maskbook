@@ -1,6 +1,6 @@
 import { first, unionWith } from 'lodash-es'
 import { getEnumAsArray } from '@masknet/kit'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     Transaction,
     HubOptions,
@@ -216,12 +216,7 @@ export class ZerionTrendingAPI implements TrendingAPI.Provider<ChainId> {
     getCoinInfoByAddress(address: string): Promise<TrendingAPI.CoinInfo | undefined> {
         throw new Error('To be implemented.')
     }
-    getCoinTrending(
-        pluginID: NetworkPluginID,
-        chainId: ChainId,
-        id: string,
-        currency: TrendingAPI.Currency,
-    ): Promise<TrendingAPI.Trending> {
+    getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
         throw new Error('Method not implemented.')
     }
     getCoinPriceStats(

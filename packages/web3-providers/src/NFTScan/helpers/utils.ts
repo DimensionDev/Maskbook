@@ -1,6 +1,7 @@
-import { NetworkPluginID } from '@masknet/shared-base'
+import { createLookupTableResolver, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-
+import { TrendingAPI } from '../../entry-types.js'
+import type { EVM } from '../types/index.js'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 export function resolveNFTScanHostName(pluginId: NetworkPluginID, chainId: Web3Helper.ChainIdAll) {
@@ -26,4 +27,22 @@ export function resolveNFTScanHostName(pluginId: NetworkPluginID, chainId: Web3H
         default:
             return ''
     }
+}
+
+export const resolveNFTScanRange = createLookupTableResolver<TrendingAPI.Days, EVM.CollectionTrendingRange>(
+    {
+        [TrendingAPI.Days.MAX]: 'all',
+        [TrendingAPI.Days.ONE_DAY]: '1d',
+        [TrendingAPI.Days.ONE_WEEK]: '7d',
+        [TrendingAPI.Days.ONE_MONTH]: '30d',
+        [TrendingAPI.Days.THREE_MONTHS]: '90d',
+        [TrendingAPI.Days.ONE_YEAR]: '1y',
+    },
+    // NFTScan will discard range unrecognized range
+    () => '1d',
+)
+
+export enum NonFungibleMarketplace {
+    OpenSea = 'OpenSea',
+    LooksRare = 'LooksRare',
 }

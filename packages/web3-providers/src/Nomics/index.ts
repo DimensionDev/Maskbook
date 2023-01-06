@@ -1,5 +1,4 @@
 import type { ChainId } from '@masknet/web3-shared-evm'
-import type { NetworkPluginID } from '@masknet/shared-base'
 import { TOKEN_VIEW_ROOT_URL, INTERVAL } from './constants.js'
 import type { TrendingAPI } from '../entry-types.js'
 import { fetchJSON } from '../entry-helpers.js'
@@ -14,12 +13,7 @@ export class NomicsAPI implements TrendingAPI.Provider<ChainId> {
     getCoinInfoByAddress(address: string): Promise<TrendingAPI.CoinInfo | undefined> {
         throw new Error('To be implemented.')
     }
-    getCoinTrending(
-        pluginID: NetworkPluginID,
-        chainId: ChainId,
-        id: string,
-        currency: TrendingAPI.Currency,
-    ): Promise<TrendingAPI.Trending> {
+    getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
         throw new Error('Method not implemented.')
     }
     getCoinPriceStats(

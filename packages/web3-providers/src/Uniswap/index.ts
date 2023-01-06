@@ -1,6 +1,5 @@
 import { TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import type { NetworkPluginID } from '@masknet/shared-base'
 import { isMirroredKeyword } from '../Trending/helpers.js'
 import * as BaseAPI from './base-api.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -25,7 +24,6 @@ export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinTrending(
-        pluginID: NetworkPluginID,
         chainId: Web3Helper.ChainIdAll,
         id: string,
         currency: TrendingAPI.Currency,

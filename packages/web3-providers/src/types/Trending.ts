@@ -1,6 +1,5 @@
 import type { TokenType, SourceType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
 export namespace TrendingAPI {
@@ -191,12 +190,7 @@ export namespace TrendingAPI {
         /** Get coin info by address. */
         getCoinInfoByAddress: (address: string) => Promise<CoinInfo | undefined>
         /** Get coin trending information by id. */
-        getCoinTrending: (
-            pluginID: NetworkPluginID,
-            chainId: ChainId,
-            id: string,
-            currency: Currency,
-        ) => Promise<Trending>
+        getCoinTrending: (chainId: ChainId, id: string, currency: Currency) => Promise<Trending>
         /** Get coin price stats by id. */
         getCoinPriceStats: (chainId: ChainId, id: string, currency: Currency, days: number) => Promise<Stat[]>
         /** Get token info by symbol */
