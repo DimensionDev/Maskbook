@@ -10,6 +10,7 @@ import type {
     NextIDPlatform,
     NameServiceID,
     NetworkPluginID,
+    Proof,
 } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
@@ -1114,15 +1115,7 @@ export interface Connection<
     /** Change owner of contract wallet */
     changeOwner?: (recipient: string, initial?: Web3ConnectionOptions) => Promise<string>
     /** Fund contract wallet */
-    fund?: (
-        proof: {
-            publicKey: string
-            type: 'persona' | 'eoa'
-            payload: string // JSON.stringify(payload)
-            signature: string
-        },
-        initial?: Web3ConnectionOptions,
-    ) => Promise<string>
+    fund?: (proof: Proof, initial?: Web3ConnectionOptions) => Promise<string>
     /** Deploy contract wallet */
     deploy?: (owner: string, initial?: Web3ConnectionOptions) => Promise<string>
     /** Sign a transaction */

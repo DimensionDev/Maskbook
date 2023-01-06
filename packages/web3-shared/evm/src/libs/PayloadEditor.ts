@@ -3,6 +3,7 @@ import { hexToNumber, hexToNumberString } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { EthereumMethodType, Transaction, UserOperation } from '../types/index.js'
 import { createJsonRpcPayload } from '../helpers/index.js'
+import type { Proof } from '@masknet/shared-base'
 
 const parseHexNumberString = (hex: string | number | undefined) =>
     typeof hex !== 'undefined' ? hexToNumberString(hex ?? '0x0') : undefined
@@ -60,6 +61,17 @@ export class PayloadEditor {
             case EthereumMethodType.ETH_SEND_USER_OPERATION:
                 const [_, userOperation] = params as [string, UserOperation]
                 return userOperation
+            default:
+                return
+        }
+    }
+
+    get proof() {
+        const { method, params } = this.payload
+        switch (method) {
+            case EthereumMethodType.MASK_FUND:
+                const [proof] = params as [Proof]
+                return proof
             default:
                 return
         }

@@ -9,7 +9,7 @@ import {
     Signer,
     Transaction,
 } from '@masknet/web3-shared-evm'
-import { Web3 } from '@masknet/web3-providers'
+import { SmartPayFunder, Web3 } from '@masknet/web3-providers'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
 import type { Middleware, Context } from '../types.js'
@@ -90,8 +90,8 @@ export class ContractWallet implements Middleware<Context> {
     }
 
     private async fund(context: Context) {
-        // return the funded tx hash
-        return ''
+        if (!context.proof) throw new Error('No proof.')
+        return SmartPayFunder.fund(context.chainId, context.proof)
     }
 
     private async deploy(context: Context) {
