@@ -76,6 +76,20 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1.5),
         backgroundColor: theme.palette.maskColor.bg,
         borderRadius: 12,
+        maxHeight: 200,
+        boxSizing: 'border-box',
+        overflowY: 'scroll',
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 20,
+        },
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+            backgroundClip: 'padding-box',
+        },
     },
     stateBar: {
         position: 'sticky',
@@ -209,7 +223,7 @@ export function Deploy({
                         </Box>
                         <Box display="flex" flexDirection="column" justifyContent="space-between">
                             <Typography lineHeight="18px" fontWeight={700}>
-                                Smart Pay 1
+                                Smart Pay {nonce ?? 0 + 1}
                             </Typography>
 
                             <Typography className={classes.address}>

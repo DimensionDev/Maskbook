@@ -33,7 +33,8 @@ const useStyles = makeStyles()((theme) => ({
     tips: {
         color: '#FF5555',
         fontSize: 13,
-        linHeight: '18px',
+        lineHeight: '18px',
+        wordBreak: 'break-all',
     },
     controller: {
         padding: '0 16px 16px 16px',
@@ -177,7 +178,7 @@ export const LogoutUI = memo<LogoutUIProps>(
                     })}
                     <Typography className={classes.tips}>{t('popups_persona_disconnect_tip')}</Typography>
                     {manageWallets.length ? (
-                        <Typography className={classes.tips} marginTop={2}>
+                        <Typography className={classes.tips} sx={{ my: 2 }}>
                             {t('popups_persona_disconnect_manage_wallet_warning', {
                                 persona: selectedPersona?.nickname ?? '',
                                 addresses: manageWallets.map((x) => formatEthereumAddress(x.address, 4)).join(','),
