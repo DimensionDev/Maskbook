@@ -236,7 +236,7 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
                 current_price: quotesInfo_.quote[currencyName].price,
                 total_volume: quotesInfo_.quote[currencyName].volume_24h,
                 price_change_percentage_1h: quotesInfo_.quote[currencyName].percent_change_1h,
-                price_change_percentage_24h: quotesInfo_.quote[currencyName].percent_change_24h,
+                price_change_24h: quotesInfo_.quote[currencyName].percent_change_24h,
                 price_change_percentage_1h_in_currency: quotesInfo_.quote[currencyName].percent_change_1h,
                 price_change_percentage_24h_in_currency: quotesInfo_.quote[currencyName].percent_change_24h,
                 price_change_percentage_7d_in_currency: quotesInfo_.quote[currencyName].percent_change_7d,

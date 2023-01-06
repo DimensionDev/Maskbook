@@ -41,11 +41,13 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'space-between',
     },
+    dialogPaper: {
+        height: 544,
+    },
     dialogContent: {
-        padding: '12px 16px',
+        padding: theme.spacing(1.5, 2),
         position: 'relative',
         boxSizing: 'border-box',
-        minHeight: 544,
     },
     loading: {
         position: 'absolute',
@@ -201,6 +203,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             open={open}
             onClose={onClose}
             title={t.tips()}
+            classes={{ paper: classes.dialogPaper }}
             titleTail={<Icons.Gear size={24} onClick={handleOpenSettingDialog} className={classes.titleTailIcon} />}>
             {loading ? (
                 <DialogContent className={classes.dialogContent}>
@@ -226,7 +229,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                                     notEmpty={!!bindingWallets.length}
                                     networkId={x}
                                     defaultAddress={pendingDefault || defaultAddress}
-                                    setAsDefault={(address: string) => setPendingDefault(address)}
+                                    onSetDefault={setPendingDefault}
                                     openConnectWallet={openConnectWallet}
                                 />
                             )

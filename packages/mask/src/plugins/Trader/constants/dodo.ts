@@ -20,4 +20,5 @@ export const networkNames: Record<NetworkType, string> = {
     [NetworkType.Harmony]: 'harmony',
     [NetworkType.Conflux]: '',
     [NetworkType.Astar]: '',
+    [NetworkType.Moonbeam]: '',
 }

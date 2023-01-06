@@ -31,6 +31,7 @@ export function getNativeTokenLabel(networkType: NetworkType) {
         case NetworkType.Harmony:
         case NetworkType.Conflux:
         case NetworkType.Astar:
+        case NetworkType.Moonbeam:
             return NATIVE_TOKEN_ADDRESS
         default:
             safeUnreachable(networkType)

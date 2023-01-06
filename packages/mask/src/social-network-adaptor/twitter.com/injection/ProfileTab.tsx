@@ -187,7 +187,10 @@ export function ProfileTabAtTwitter() {
     return hidden || loading ? null : (
         <ProfileTab
             title={
-                currentVisitingUserId && collectionResult?.collection?.socialLinks?.twitter === currentVisitingUserId
+                currentVisitingUserId &&
+                collectionResult?.collection?.socialLinks?.twitter
+                    ?.toLowerCase()
+                    .endsWith(currentVisitingUserId.toLowerCase())
                     ? 'More'
                     : 'Web3'
             }

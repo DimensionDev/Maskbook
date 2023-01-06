@@ -55,7 +55,7 @@ export function PersonaPage({ onNext, onChange }: PersonaPageProps) {
     )
     const bindingProofs = useMemo(
         () => bindingPersonas.map((x) => x.proofs.filter((y) => y.is_valid && y.platform === network)).flat(),
-        [bindingPersonas],
+        [bindingPersonas, network],
     )
 
     const onSelect = useCallback(

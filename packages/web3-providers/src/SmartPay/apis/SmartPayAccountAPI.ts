@@ -16,7 +16,7 @@ import {
     isValidAddress,
 } from '@masknet/web3-shared-evm'
 import { ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { isSameAddress, toFixed } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import { LOG_ROOT, MAX_ACCOUNT_LENGTH } from '../constants.js'
@@ -320,5 +320,26 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
             userOperation,
         )
         return this.sendUserTransaction(chainId, owner, userTransaction, signer)
+    }
+
+    async estimateTransaction(chainId: ChainId, transaction: Transaction): Promise<string> {
+        const web3 = this.web3.createWeb3(chainId)
+        const userTransaction = await UserTransaction.fromTransaction(
+            chainId,
+            web3,
+            await this.getEntryPoint(chainId),
+            transaction,
+        )
+        return toFixed(await userTransaction.estimate(web3))
+    }
+
+    async estimateUserOperation(chainId: ChainId, userOperation: UserOperation): Promise<string> {
+        const userTransaction = await UserTransaction.fromUserOperation(
+            chainId,
+            this.web3.createWeb3(chainId),
+            await this.getEntryPoint(chainId),
+            userOperation,
+        )
+        return userTransaction.gas
     }
 }

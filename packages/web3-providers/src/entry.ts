@@ -3,7 +3,8 @@ import { OpenSeaAPI } from './OpenSea/index.js'
 import { LooksRareAPI } from './LooksRare/index.js'
 import { RaribleAPI } from './Rarible/index.js'
 import {
-    NFTScanTrendingAPI,
+    NFTScanTrendingAPI_EVM,
+    NFTScanTrendingAPI_Solana,
     NFTScanNonFungibleTokenAPI_EVM,
     NFTScanNonFungibleTokenAPI_Solana,
 } from './NFTScan/index.js'
@@ -108,7 +109,8 @@ export const SolanaFungible = new SolanaFungibleAPI()
 export const SolanaNonFungible = new SolanaNonFungibleAPI()
 
 // NFTScan
-export const NFTScanTrending = new NFTScanTrendingAPI()
+export const NFTScanTrending_EVM = new NFTScanTrendingAPI_EVM()
+export const NFTScanTrending_Solana = new NFTScanTrendingAPI_Solana()
 export const NFTScanNonFungibleTokenEVM = new NFTScanNonFungibleTokenAPI_EVM()
 export const NFTScanNonFungibleTokenSolana = new NFTScanNonFungibleTokenAPI_Solana()
 

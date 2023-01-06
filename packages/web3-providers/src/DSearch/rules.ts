@@ -121,7 +121,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                 type: 'exact',
                 filter: (data: SearchResult<ChainId, SchemaType>, keyword: string) => {
                     if (data.type !== SearchResultType.NonFungibleCollection) return false
-                    return data.collection?.socialLinks?.twitter === keyword
+                    return Boolean(data.collection?.socialLinks?.twitter?.toLowerCase().endsWith(keyword.toLowerCase()))
                 },
             },
         ],

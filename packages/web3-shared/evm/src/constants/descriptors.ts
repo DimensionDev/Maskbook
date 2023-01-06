@@ -263,6 +263,17 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         isMainnet: true,
         averageBlockDelay: 15,
     },
+    {
+        ID: `${PLUGIN_ID}_moonbeam`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Moonbeam,
+        type: NetworkType.Moonbeam,
+        icon: new URL('../assets/moonbeam.png', import.meta.url),
+        iconColor: 'rgb(36, 150, 238)',
+        name: 'Moonbeam',
+        isMainnet: false,
+        averageBlockDelay: 15,
+    },
 ]
 export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderType>> = [
     {

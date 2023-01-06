@@ -81,5 +81,9 @@ export namespace AbstractAccountAPI {
             userOperation: UserOperation,
             signer: Signer<ECKeyIdentifier> | Signer<string>,
         ): Promise<string>
+        /** Estimate a transaction. */
+        estimateTransaction(chainId: ChainId, transaction: Transaction): Promise<string>
+        /** Estimate a user operation. */
+        estimateUserOperation(chainId: ChainId, userOperation: UserOperation): Promise<string>
     }
 }

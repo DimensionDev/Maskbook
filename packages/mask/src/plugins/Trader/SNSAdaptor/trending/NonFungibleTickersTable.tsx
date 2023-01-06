@@ -12,10 +12,10 @@ import {
 import { useRef } from 'react'
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { TokenIcon, FormattedAddress, Image } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { TokenIcon, FormattedAddress, Image, WalletIcon } from '@masknet/shared'
 import { useScrollBottomEvent } from '@masknet/shared-base-ui'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useWeb3State, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatCurrency } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
@@ -101,28 +101,30 @@ const useStyles = makeStyles<{ isNFTProjectPopper: boolean }>()((theme, { isNFTP
 }))
 
 export interface NonFungibleTickersTableProps {
-    address: string
+    id: string
     chainId: Web3Helper.ChainIdAll
+    result: Web3Helper.TokenResultAll
     isNFTProjectPopper?: boolean
 }
 
 type Cells = 'nft' | 'method' | 'value' | 'from' | 'to' | 'time'
 
 export function NonFungibleTickersTable({
-    address,
+    id,
     chainId,
+    result,
     isNFTProjectPopper = false,
 }: NonFungibleTickersTableProps) {
     const { t } = useI18N()
     const { classes } = useStyles({ isNFTProjectPopper })
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { Others } = useWeb3State(result.pluginID)
     const containerRef = useRef(null)
-
     const { activities, fetchMore, loadingNonFungibleTokenActivities } = useNonFungibleTokenActivities(
-        NetworkPluginID.PLUGIN_EVM,
-        address,
+        result.pluginID,
+        id,
         chainId,
     )
+    const chain = useNetworkDescriptor(result.pluginID, chainId)
     useScrollBottomEvent(containerRef, fetchMore)
     const headCellMap: Record<Cells, string> = {
         nft: t('plugin_trader_table_nft'),
@@ -147,7 +149,7 @@ export function NonFungibleTickersTable({
                             }}
                             className={classes.nftImage}
                         />
-                        <Typography fontSize={12}>{Others?.formatTokenId(x.token_id, 4)}</Typography>
+                        <Typography fontSize={12}>{Others?.formatTokenId(x.token_id || x.token_address, 4)}</Typography>
                     </div>
                 ),
                 method: (
@@ -161,7 +163,11 @@ export function NonFungibleTickersTable({
                 ),
                 value: (
                     <div className={classes.cellWrapper}>
-                        {x.trade_symbol.toUpperCase() === 'WETH' ? (
+                        {result.pluginID === NetworkPluginID.PLUGIN_SOLANA ? (
+                            <div className={classes.tokenIcon}>
+                                <WalletIcon mainIcon={chain?.icon} size={16} />
+                            </div>
+                        ) : x.trade_symbol?.toUpperCase() === 'WETH' ? (
                             <Icons.WETH size={16} className={classes.tokenIcon} />
                         ) : (
                             <TokenIcon
@@ -173,14 +179,16 @@ export function NonFungibleTickersTable({
                         )}
 
                         <Typography fontSize={12}>
-                            {formatCurrency(x.trade_price.toFixed(2), '', { boundaries: { min: 0.0001 } })}
+                            {formatCurrency((x.trade_price ?? x.fee ?? 0).toFixed(4), '', {
+                                boundaries: { min: 0.00001 },
+                            })}
                         </Typography>
                     </div>
                 ),
                 from: (
                     <Typography fontSize={12}>
                         <FormattedAddress
-                            address={x.from}
+                            address={x.from ?? x.source}
                             formatter={(address) =>
                                 Others?.formatAddress(Others?.formatDomainName(address, 12), 4) ?? address
                             }
@@ -190,7 +198,7 @@ export function NonFungibleTickersTable({
                 to: (
                     <Typography fontSize={12}>
                         <FormattedAddress
-                            address={x.to}
+                            address={x.receive ?? x.destination}
                             formatter={(address) =>
                                 Others?.formatAddress(Others?.formatDomainName(address, 12), 4) ?? address
                             }
