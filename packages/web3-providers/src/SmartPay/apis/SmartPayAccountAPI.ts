@@ -200,9 +200,8 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
                 owner,
                 create2Factory.deriveUntil(contractWallet.initCode, MAX_ACCOUNT_LENGTH),
             ),
-            this.getAccountsFromChainbase(chainId, owner),
+            // this.getAccountsFromChainbase(chainId, owner),
         ])
-
         return allSettled
             .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
             .map((y) => ({
