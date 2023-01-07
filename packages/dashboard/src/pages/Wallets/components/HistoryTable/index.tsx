@@ -1,17 +1,16 @@
+import { noop } from 'lodash-es'
 import { Dispatch, memo, SetStateAction, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { useDashboardI18N } from '../../../../locales/index.js'
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useChainContext, useTransactions, useNetworkContext } from '@masknet/web3-hooks-base'
+import type { Transaction } from '@masknet/web3-shared-base'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
 import { EmptyPlaceholder } from '../EmptyPlaceholder/index.js'
 import { HistoryTableRow } from '../HistoryTableRow/index.js'
-import { noop } from 'lodash-es'
-import { useChainContext, useTransactions } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
-import type { Transaction } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { useDashboardI18N } from '../../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -39,16 +38,16 @@ interface HistoryTableProps {
 
 export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
     const [page, setPage] = useState(0)
-    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { value, loading } = useTransactions(NetworkPluginID.PLUGIN_EVM, { chainId: selectedChainId })
+    const { pluginID } = useNetworkContext()
+    const { account } = useChainContext()
+    const { value = EMPTY_LIST, loading } = useTransactions(pluginID, { chainId: selectedChainId })
 
     useUpdateEffect(() => {
         setPage(0)
     }, [account, selectedChainId])
 
     const dataSource = useMemo(() => {
-        const arr = (value as Array<Transaction<ChainId, SchemaType>>) ?? EMPTY_LIST
-        return arr.filter((x) => x.chainId === selectedChainId) ?? EMPTY_LIST
+        return value.filter((x) => x.chainId === selectedChainId)
     }, [value, selectedChainId])
 
     return (
@@ -70,7 +69,7 @@ export interface HistoryTableUIProps {
     hasNextPage: boolean
     isLoading: boolean
     isEmpty: boolean
-    dataSource: Array<Transaction<ChainId, SchemaType>>
+    dataSource: Array<Transaction<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     selectedChainId: Web3Helper.ChainIdAll
 }
 
