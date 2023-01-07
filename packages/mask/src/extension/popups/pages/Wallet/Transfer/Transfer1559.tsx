@@ -76,7 +76,7 @@ const useStyles = makeStyles()({
     accountName: {
         fontSize: 16,
         fontWeight: 600,
-        linHeight: '16px',
+        lineHeight: '16px',
         color: '#15181B',
     },
     user: {

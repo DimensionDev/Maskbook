@@ -9,7 +9,7 @@ import { SmartPayFunder } from '@masknet/web3-providers'
 import { isSameAddress, Wallet } from '@masknet/web3-shared-base'
 import { DialogContent, CircularProgress } from '@mui/material'
 import { Box } from '@mui/system'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { matchPath, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { RoutePaths } from '../../constants.js'
@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
 export function RouterDialog() {
     const t = useI18N()
     const { classes } = useStyles()
-    const { pathname } = useLocation()
+    const { pathname, state } = useLocation()
     const navigate = useNavigate()
     const wallets = useWallets()
     const currentPersona = useCurrentPersonaInformation()
@@ -81,6 +81,11 @@ export function RouterDialog() {
         return t.__plugin_name()
     }, [matchPath, pathname])
 
+    const handleClose = useCallback(() => {
+        if (state?.canBack) return navigate(-1)
+        closeDialog()
+    }, [state])
+
     useUpdateEffect(() => {
         if (isVerified) {
             if (wallets.filter((x) => x.owner).length || hasAccounts) {
@@ -104,7 +109,7 @@ export function RouterDialog() {
     return (
         <InjectedDialog
             open={open}
-            onClose={closeDialog}
+            onClose={handleClose}
             title={title}
             titleTail={<Icons.Questions onClick={() => setDialog({ open: true })} />}>
             <DialogContent className={classes.dialogContent}>

@@ -25,6 +25,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         padding: theme.spacing(0, 6.25, 3),
+        marginTop: theme.spacing(2),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -71,14 +72,15 @@ export const ReceiveDialog = memo(() => {
                     gridTemplateColumns: '50px auto 50px',
                     whiteSpace: 'nowrap',
                 }}>
-                <IconButton size="large" disableRipple onClick={closeDialog}>
-                    <Close color="inherit" />
+                <IconButton size="large" disableRipple onClick={closeDialog} sx={{ padding: 0 }}>
+                    <Close color="inherit" style={{ width: 24, height: 24 }} />
                 </IconButton>
                 <Typography className={classes.title}>{name}</Typography>
             </DialogTitle>
             <DialogContent className={classes.content}>
                 <QRCode
                     text={`${Others?.chainResolver.chainPrefix(chainId)}:${address}`}
+                    options={{ width: 250 }}
                     canvasProps={{ width: 250, height: 250 }}
                 />
                 <Typography className={classes.tips}>{t.scan_address_to_payment()}</Typography>

@@ -124,7 +124,7 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
                     ))}
                 </Box>
             ) : (
-                <Box className={classes.footer}>
+                <Box className={classes.footer} sx={{ py: 2 }}>
                     <Box>
                         <Typography className={classes.title}>{t.create_a_new_persona_title()}</Typography>
                         <Typography className={classes.desc}>{t.create_a_new_persona_desc()}</Typography>
@@ -173,20 +173,21 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
                         </Box>
                     ))}
                 </Box>
-            ) : null}
-            <Box className={classes.footer}>
-                <Box>
-                    <Typography className={classes.title}>{t.create_a_new_wallet_title()}</Typography>
-                    <Typography className={classes.desc}>{t.create_a_new_wallet_desc()}</Typography>
+            ) : (
+                <Box className={classes.footer}>
+                    <Box>
+                        <Typography className={classes.title}>{t.create_a_new_wallet_title()}</Typography>
+                        <Typography className={classes.desc}>{t.create_a_new_wallet_desc()}</Typography>
+                    </Box>
+                    <Button
+                        variant="roundedContained"
+                        size="small"
+                        sx={{ height: 32 }}
+                        onClick={() => openPopupWindow(PopupRoutes.WalletStartUp)}>
+                        {t.create()}
+                    </Button>
                 </Box>
-                <Button
-                    variant="roundedContained"
-                    size="small"
-                    sx={{ height: 32 }}
-                    onClick={() => openPopupWindow(PopupRoutes.WalletStartUp)}>
-                    {t.create()}
-                </Button>
-            </Box>
+            )}
         </Popover>
     ))
 })
