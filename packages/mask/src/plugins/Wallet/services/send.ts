@@ -33,12 +33,12 @@ async function internalSend(
         signableMessage,
         signableConfig,
     } = PayloadEditor.fromPayload(payload, options)
-    const owner = options?.owner || from!
+    const owner = options?.owner
     const identifier = options?.identifier
     const gasCurrency = options?.gasCurrency
     const signer = identifier
         ? new Signer(identifier, curryRight(signWithPersona)(true))
-        : new Signer(owner, signWithWallet)
+        : new Signer(owner || from!, signWithWallet)
 
     switch (payload.method) {
         case EthereumMethodType.ETH_SEND_TRANSACTION:
