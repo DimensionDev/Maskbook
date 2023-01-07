@@ -12,6 +12,8 @@
     "create_a_new_persona_title": "crwdns19441:0crwdne19441:0",
     "create_a_new_persona_desc": "crwdns19443:0crwdne19443:0",
     "create_successfully": "crwdns19221:0crwdne19221:0",
+    "create_smart_pay_wallet": "crwdns19475:0crwdne19475:0",
+    "created_smart_pay_wallet_description": "crwdns19477:0crwdne19477:0",
     "create_successfully_tips": "crwdns19223:0{{address}}crwdne19223:0",
     "create_successfully_tips_owner": "crwdns19225:0{{owner}}crwdne19225:0",
     "copy_wallet_address_success": "crwdns19227:0crwdne19227:0",
@@ -52,7 +54,10 @@
     "remain_times_tips_other": "crwdns19447:0{{count}}crwdne19447:0",
     "personas": "crwdns19291:0crwdne19291:0",
     "receive": "crwdns19293:0crwdne19293:0",
+    "transaction_submitted": "crwdns19479:0crwdne19479:0",
+    "user_cancelled_the_transaction": "crwdns19481:0crwdne19481:0",
     "wallets": "crwdns19295:0crwdne19295:0",
+    "waiting_for_user_signature": "crwdns19483:0crwdne19483:0",
     "what_is_smart_pay": "crwdns19297:0crwdne19297:0",
     "what_is_smart_pay_title": "crwdns19299:0crwdne19299:0"
 }
