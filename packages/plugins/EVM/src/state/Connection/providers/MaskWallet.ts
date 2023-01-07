@@ -1,6 +1,7 @@
 import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import { ECKeyIdentifier, ExtensionSite, getSiteType, PopupRoutes } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, chainResolver, isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
 import type { EVM_Provider } from '../types.js'
 import { BaseContractWalletProvider } from './BaseContractWallet.js'
@@ -45,7 +46,7 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
 
         // connected
         if (chainId === this.chainId && isValidAddress(this.account)) {
-            if (siteType) SharedContextSettings.value.recordConnectedSites(siteType, true)
+            if (siteType) await SharedContextSettings.value.recordConnectedSites(siteType, true)
 
             return {
                 account: this.account,
@@ -54,23 +55,27 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
         }
 
         const wallets = Web3StateSettings.value.Wallet?.wallets?.getCurrentValue()
-        SharedContextSettings.value.openPopupWindow(wallets?.length ? PopupRoutes.SelectWallet : PopupRoutes.Wallet, {
-            chainId,
-        })
+        await SharedContextSettings.value.openPopupWindow(
+            wallets?.length ? PopupRoutes.SelectWallet : PopupRoutes.Wallet,
+            {
+                chainId,
+            },
+        )
 
         const account = first(await SharedContextSettings.value.selectAccount())
         if (!account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}`)
 
         // switch account
-        await this.switchAccount(account.address, account.owner, account.identifier)
+        if (!isSameAddress(this.account, account?.address)) {
+            await this.switchAccount(account.address, account.owner, account.identifier)
+        }
 
         // switch chain
-
         if (chainId !== this.chainId) {
             await this.switchChain(chainId)
         }
 
-        if (siteType) SharedContextSettings.value.recordConnectedSites(siteType, true)
+        if (siteType) await SharedContextSettings.value.recordConnectedSites(siteType, true)
 
         return {
             chainId,
@@ -80,6 +85,6 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
 
     override async disconnect() {
         const siteType = getSiteType()
-        if (siteType) SharedContextSettings.value.recordConnectedSites(siteType, false)
+        if (siteType) await SharedContextSettings.value.recordConnectedSites(siteType, false)
     }
 }

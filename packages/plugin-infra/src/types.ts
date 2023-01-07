@@ -202,7 +202,7 @@ export namespace Plugin.Shared {
         selectAccount(): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
 
         /** Record which sites are connected to the Mask wallet  */
-        recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): void
+        recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): Promise<void>
 
         /** Sign a message with persona (w or w/o popups) */
         signWithPersona<T>(type: SignType, message: T, identifier?: ECKeyIdentifier, silent?: boolean): Promise<string>
