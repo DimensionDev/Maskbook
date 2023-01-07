@@ -32,14 +32,22 @@ export function TradeView(props: TradeViewProps) {
         TraderProps.defaultInputCoin,
         { chainId },
     )
+
+    const { value: outputToken } = useFungibleToken(
+        pluginID,
+        TraderProps.defaultOutputCoin?.address ?? '',
+        TraderProps.defaultOutputCoin,
+        { chainId },
+    )
+
     const { classes } = useStyles(undefined, { props })
     return (
         <div className={classes.root}>
             <AllProviderTradeContext.Provider>
                 <Trader
                     {...TraderProps}
+                    defaultOutputCoin={outputToken}
                     defaultInputCoin={inputToken}
-                    chainId={chainId}
                     classes={{ root: classes.trade }}
                     settings
                 />
