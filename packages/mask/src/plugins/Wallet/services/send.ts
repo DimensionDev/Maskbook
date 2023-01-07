@@ -2,7 +2,6 @@ import { curryRight, isNil } from 'lodash-es'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { defer } from '@masknet/kit'
 import { SmartPayAccount, Web3 } from '@masknet/web3-providers'
-import type { ECKeyIdentifier } from '@masknet/shared-base'
 import {
     ChainId,
     createJsonRpcPayload,
@@ -11,6 +10,7 @@ import {
     EthereumMethodType,
     isValidAddress,
     PayloadEditor,
+    TransactionOptions,
     Signer,
 } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../messages.js'
@@ -18,23 +18,13 @@ import { openPopupWindow, removePopupWindow } from '../../../../background/servi
 import { signWithPersona } from '../../../../background/services/identity/index.js'
 import { signWithWallet } from './wallet/index.js'
 
-interface Options {
-    account?: string
-    chainId?: ChainId
-    owner?: string
-    identifier?: ECKeyIdentifier
-    gasCurrency?: string
-    disableClose?: boolean
-    popupsWindow?: boolean
-}
-
 /**
  * Send to built-in RPC endpoints.
  */
 async function internalSend(
     payload: JsonRpcPayload,
     callback: (error: Error | null, response?: JsonRpcResponse) => void,
-    options?: Options,
+    options?: TransactionOptions,
 ): Promise<void> {
     const {
         pid = 0,
@@ -42,7 +32,7 @@ async function internalSend(
         chainId = options?.chainId ?? ChainId.Mainnet,
         signableMessage,
         signableConfig,
-    } = PayloadEditor.fromPayload(payload)
+    } = PayloadEditor.fromPayload(payload, options)
     const owner = options?.owner
     const identifier = options?.identifier
     const gasCurrency = options?.gasCurrency
@@ -129,7 +119,7 @@ let id = 0
 /**
  * The entrance of all RPC requests to MaskWallet.
  */
-export async function send(payload: JsonRpcPayload, options?: Options) {
+export async function send(payload: JsonRpcPayload, options?: TransactionOptions) {
     return new Promise<JsonRpcResponse>(async (resolve, reject) => {
         const callback = (error: Error | null, response?: JsonRpcResponse) => {
             if (!isNil(error) || !isNil(response?.error)) {
@@ -139,10 +129,13 @@ export async function send(payload: JsonRpcPayload, options?: Options) {
 
         id += 1
 
-        const editor = PayloadEditor.fromPayload({
-            ...payload,
-            id,
-        })
+        const editor = PayloadEditor.fromPayload(
+            {
+                ...payload,
+                id,
+            },
+            options,
+        )
         if (editor.risky) {
             await WalletRPC.pushUnconfirmedRequest({
                 ...editor.fill(),
@@ -157,8 +150,8 @@ export async function send(payload: JsonRpcPayload, options?: Options) {
     })
 }
 
-export async function confirmRequest(payload: JsonRpcPayload, options?: Options) {
-    const { pid } = PayloadEditor.fromPayload(payload)
+export async function confirmRequest(payload: JsonRpcPayload, options?: TransactionOptions) {
+    const { pid } = PayloadEditor.fromPayload(payload, options)
     if (!pid) return
 
     const [deferred, resolve, reject] = defer<JsonRpcResponse, Error>()

@@ -15,6 +15,8 @@ export class RecentTransaction implements Middleware<Context> {
         try {
             switch (context.method) {
                 case EthereumMethodType.ETH_SEND_TRANSACTION:
+                case EthereumMethodType.MASK_DEPLOY:
+                case EthereumMethodType.MASK_FUND:
                     if (!context.config || typeof context.result !== 'string') return
                     await Transaction?.addTransaction?.(
                         context.chainId,
@@ -48,10 +50,6 @@ export class RecentTransaction implements Middleware<Context> {
                         account: receipt.to,
                     })
                     BlockNumberNotifier?.emitter.emit('update', context.chainId)
-                    break
-                case EthereumMethodType.MASK_DEPLOY:
-                    break
-                case EthereumMethodType.MASK_FUND:
                     break
                 case EthereumMethodType.MASK_REPLACE_TRANSACTION:
                     if (!context.config || typeof context.result !== 'string') return

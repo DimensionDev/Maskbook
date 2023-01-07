@@ -37,7 +37,7 @@ import type {
     Web3State,
     Web3UI,
 } from '@masknet/web3-shared-base'
-import type { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
+import type { ChainId as ChainIdEVM, TransactionOptions } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { CompositionType } from './entry-content-script.js'
 
@@ -223,16 +223,7 @@ export namespace Plugin.Shared {
         removeWallet(id: string, password?: string): Promise<void>
 
         /** Send request to native API, for a risky request will be added into the waiting queue. */
-        send(
-            payload: JsonRpcPayload,
-            options?: {
-                account?: string
-                chainId?: ChainIdEVM
-                popupsWindow?: boolean
-                owner?: string
-                identifier?: ECKeyIdentifier
-            },
-        ): Promise<JsonRpcResponse>
+        send(payload: JsonRpcPayload, options?: TransactionOptions): Promise<JsonRpcResponse>
         /** Confirm a request */
         confirmRequest(
             payload: JsonRpcPayload,

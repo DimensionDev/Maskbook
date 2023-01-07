@@ -811,7 +811,7 @@ export interface Wallet {
     updatedAt: Date
     /** an abstract wallet has a owner */
     owner?: string
-
+    /** persona identifier */
     identifier?: ECKeyIdentifier
 }
 
@@ -951,8 +951,9 @@ export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
     providerType?: ProviderType
     /** Fragments to merge into the transaction. */
     overrides?: Partial<Transaction>
-
+    /** an abstract wallet has a owner */
     owner?: string
+    /** persona identifier */
     identifier?: ECKeyIdentifier
 }
 export interface Connection<

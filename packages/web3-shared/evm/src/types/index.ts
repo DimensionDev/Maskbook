@@ -4,8 +4,9 @@ import type {
     Transaction as Web3Transaction,
     TransactionReceipt as Web3TransactionReceipt,
 } from 'web3-core'
-import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types.js'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type { ECKeyIdentifier } from '@masknet/shared-base'
+import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types.js'
 
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
 
@@ -289,3 +290,13 @@ export type TransactionReceipt = Web3TransactionReceipt
 export type TransactionDetailed = Web3Transaction
 export type TransactionSignature = string
 export type TransactionParameter = string | boolean | undefined
+
+export interface TransactionOptions {
+    account?: string
+    chainId?: ChainId
+    owner?: string
+    identifier?: ECKeyIdentifier
+    gasCurrency?: string
+    disableClose?: boolean
+    popupsWindow?: boolean
+}
