@@ -67,6 +67,9 @@ const useStyles = makeStyles()((theme) => {
             paddingTop: 0,
             marginTop: theme.spacing(2),
         },
+        tabRoot: {
+            color: 'blue',
+        },
         footer: {
             position: 'absolute',
             height: 48,
@@ -184,7 +187,12 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
                             <TabContext value={currentTab}>
                                 <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
                                     {tabs.map((tab) => (
-                                        <Tab key={tab.id} label={tab.label} value={tab.id} />
+                                        <Tab
+                                            key={tab.id}
+                                            label={tab.label}
+                                            value={tab.id}
+                                            classes={{ root: classes.tabRoot, textColorPrimary: classes.tabRoot }}
+                                        />
                                     ))}
                                 </MaskTabList>
                             </TabContext>
@@ -194,7 +202,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
                 <div className={classes.content}>{component}</div>
                 <div className={classes.footer}>
                     <Icons.Web3ProfileCard className={classes.cardIcon} size={24} />
-                    <Typography className={classes.cardName}>{t('avatar_profile_card_name')}</Typography>
+                    <Typography className={classes.cardName}>{t('web3_profile_card_name')}</Typography>
                     <Typography variant="body1" className={classes.powered}>
                         <Trans
                             i18nKey="powered_by_whom"

@@ -8,7 +8,7 @@ import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        padding: theme.spacing(2),
+        padding: theme.spacing(1, 1.5),
         background: theme.palette.maskColor.modalTitleBg,
     },
     content: {
@@ -31,11 +31,13 @@ export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
     return (
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.root}>
-                <PluginDescriptor
-                    isNFTProjectPopper={isNFTProjectPopper}
-                    isProfilePage={isProfilePage}
-                    isTokenTagPopper={isTokenTagPopper}
-                />
+                {isNFTProjectPopper || isTokenTagPopper ? null : (
+                    <PluginDescriptor
+                        isNFTProjectPopper={isNFTProjectPopper}
+                        isProfilePage={isProfilePage}
+                        isTokenTagPopper={isTokenTagPopper}
+                    />
+                )}
                 <CardContent className={classes.content}>
                     <Stack height="100%" alignItems="center" justifyContent="center">
                         <LoadingBase />
@@ -44,6 +46,13 @@ export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
                         </Typography>
                     </Stack>
                 </CardContent>
+                {isNFTProjectPopper || isTokenTagPopper ? (
+                    <PluginDescriptor
+                        isNFTProjectPopper={isNFTProjectPopper}
+                        isProfilePage={isProfilePage}
+                        isTokenTagPopper={isTokenTagPopper}
+                    />
+                ) : null}
             </Stack>
         </TrendingCard>
     )

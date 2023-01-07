@@ -1,24 +1,23 @@
 import { Icons } from '@masknet/icons'
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useSnackbarCallback } from '@masknet/shared'
-import { formatPersonaFingerprint, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, formatPersonaFingerprint, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { isSameAddress, Wallet } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Button, Popover, Radio, Typography } from '@mui/material'
 import { memo } from 'react'
 import { useCopyToClipboard } from 'react-use'
+import { useManagers } from '../../hooks/useManagers.js'
 import { useI18N } from '../../locales/index.js'
-import { SignAccount, SignAccountType } from '../../type.js'
+import { ManagerAccount, ManagerAccountType } from '../../type.js'
 
 export interface ManagePopoverProps {
     open: boolean
     anchorEl: HTMLElement | null
     onClose: () => void
-    signablePersonas: Array<PersonaInformation & { address?: string }>
-    signableWallets: Wallet[]
-    selectedIdentity?: string
-    onSelect: (account: SignAccount) => void
+    selectedAddress?: string
+    onSelect: (account: ManagerAccount) => void
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -64,43 +63,43 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const ManagePopover = memo<ManagePopoverProps>(
-    ({ open, anchorEl, onClose, signablePersonas, signableWallets, onSelect, selectedIdentity }) => {
-        const t = useI18N()
-        const { classes } = useStyles()
+export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose, onSelect, selectedAddress }) => {
+    const t = useI18N()
+    const { classes } = useStyles()
+    const { personaManagers, walletManagers } = useManagers()
 
-        const [, copyToClipboard] = useCopyToClipboard()
+    const [, copyToClipboard] = useCopyToClipboard()
 
-        const onCopy = useSnackbarCallback({
-            executor: async (text) => copyToClipboard(text),
-            deps: [],
-            successText: t.copy_wallet_address_success(),
-        })
+    const onCopy = useSnackbarCallback({
+        executor: async (text) => copyToClipboard(text),
+        deps: [],
+        successText: t.copy_wallet_address_success(),
+    })
 
-        const { openPopupWindow } = useSNSAdaptorContext()
+    const { openPopupWindow, openDashboard } = useSNSAdaptorContext()
 
-        return usePortalShadowRoot((container) => (
-            <Popover
-                container={container}
-                open={open}
-                anchorEl={anchorEl}
-                onClose={onClose}
-                PaperProps={{ style: { minWidth: `${anchorEl?.clientWidth ?? 568}px` }, className: classes.paper }}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-                disableRestoreFocus>
-                <Typography className={classes.title}>{t.personas()}</Typography>
+    return usePortalShadowRoot((container) => (
+        <Popover
+            container={container}
+            open={open}
+            anchorEl={anchorEl}
+            onClose={onClose}
+            PaperProps={{ style: { minWidth: `${anchorEl?.clientWidth ?? 568}px` }, className: classes.paper }}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+            disableRestoreFocus>
+            <Typography className={classes.title}>{t.personas()}</Typography>
+            {personaManagers.length ? (
                 <Box className={classes.list}>
-                    {signablePersonas.map((persona, index) => (
+                    {personaManagers.map((persona, index) => (
                         <Box
                             key={index}
                             className={classes.item}
                             onClick={() =>
                                 onSelect({
-                                    type: SignAccountType.Persona,
-                                    identity: persona.identifier.publicKeyAsHex,
+                                    type: ManagerAccountType.Persona,
                                     name: persona.nickname,
                                     address: persona.address,
-                                    raw: persona,
+                                    rawPublicKey: persona.identifier.rawPublicKey,
                                 })
                             }>
                             <Box display="flex" alignItems="center" columnGap={0.5}>
@@ -120,47 +119,61 @@ export const ManagePopover = memo<ManagePopoverProps>(
                                     </Typography>
                                 </Box>
                             </Box>
-                            <Radio checked={selectedIdentity === persona.identifier.publicKeyAsHex} />
+                            <Radio checked={isSameAddress(persona.address, selectedAddress)} />
                         </Box>
                     ))}
                 </Box>
-                <Typography className={classes.title}>{t.wallets()}</Typography>
-                {signableWallets.length ? (
-                    <Box className={classes.list}>
-                        {signableWallets.map((wallet, index) => (
-                            <Box
-                                key={index}
-                                className={classes.item}
-                                onClick={() =>
-                                    onSelect({
-                                        type: SignAccountType.Wallet,
-                                        identity: wallet.address,
-                                        name: wallet.name,
-                                        address: wallet.address,
-                                    })
-                                }>
-                                <Box display="flex" alignItems="center" columnGap={0.5}>
-                                    <Icons.MaskBlue size={30} />
-                                    <Box>
-                                        <Typography className={classes.title}>{wallet.name}</Typography>
-                                        <Typography className={classes.identity}>
-                                            {formatEthereumAddress(wallet.address, 4)}
-                                            <Icons.PopupCopy
-                                                size={14}
-                                                onClick={(event) => {
-                                                    event.stopPropagation()
-                                                    event.preventDefault()
-                                                    onCopy(wallet.address)
-                                                }}
-                                            />
-                                        </Typography>
-                                    </Box>
-                                </Box>
-                                <Radio checked={isSameAddress(selectedIdentity, wallet.address)} />
-                            </Box>
-                        ))}
+            ) : (
+                <Box className={classes.footer} sx={{ py: 2 }}>
+                    <Box>
+                        <Typography className={classes.title}>{t.create_a_new_persona_title()}</Typography>
+                        <Typography className={classes.desc}>{t.create_a_new_persona_desc()}</Typography>
                     </Box>
-                ) : null}
+                    <Button
+                        variant="roundedContained"
+                        size="small"
+                        sx={{ height: 32 }}
+                        onClick={() => openDashboard(DashboardRoutes.Setup)}>
+                        {t.create()}
+                    </Button>
+                </Box>
+            )}
+            <Typography className={classes.title}>{t.wallets()}</Typography>
+            {walletManagers.length ? (
+                <Box className={classes.list}>
+                    {walletManagers.map((wallet, index) => (
+                        <Box
+                            key={index}
+                            className={classes.item}
+                            onClick={() =>
+                                onSelect({
+                                    type: ManagerAccountType.Wallet,
+                                    name: wallet.name,
+                                    address: wallet.address,
+                                })
+                            }>
+                            <Box display="flex" alignItems="center" columnGap={0.5}>
+                                <Icons.MaskBlue size={30} />
+                                <Box>
+                                    <Typography className={classes.title}>{wallet.name}</Typography>
+                                    <Typography className={classes.identity}>
+                                        {formatEthereumAddress(wallet.address, 4)}
+                                        <Icons.PopupCopy
+                                            size={14}
+                                            onClick={(event) => {
+                                                event.stopPropagation()
+                                                event.preventDefault()
+                                                onCopy(wallet.address)
+                                            }}
+                                        />
+                                    </Typography>
+                                </Box>
+                            </Box>
+                            <Radio checked={isSameAddress(selectedAddress, wallet.address)} />
+                        </Box>
+                    ))}
+                </Box>
+            ) : (
                 <Box className={classes.footer}>
                     <Box>
                         <Typography className={classes.title}>{t.create_a_new_wallet_title()}</Typography>
@@ -171,10 +184,10 @@ export const ManagePopover = memo<ManagePopoverProps>(
                         size="small"
                         sx={{ height: 32 }}
                         onClick={() => openPopupWindow(PopupRoutes.WalletStartUp)}>
-                        {t.create_a_new_wallet()}
+                        {t.create()}
                     </Button>
                 </Box>
-            </Popover>
-        ))
-    },
-)
+            )}
+        </Popover>
+    ))
+})

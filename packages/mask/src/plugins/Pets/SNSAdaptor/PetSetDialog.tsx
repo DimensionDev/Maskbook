@@ -157,7 +157,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             if (!Storage) return
             const kvStorage = Storage.createKVStorage(PetsPluginID)
             await kvStorage.set(user.userId, user.address)
-            const signature = await connection?.signMessage(user.userId, 'personalSign', { account: user.address })
+            const signature = await connection?.signMessage('message', user.userId, { account: user.address })
             const storage = Storage.createRSS3Storage(user.address)
             storage.set('_pet', { address: user.address, signature, essay: meta })
             closeDialogHandle()

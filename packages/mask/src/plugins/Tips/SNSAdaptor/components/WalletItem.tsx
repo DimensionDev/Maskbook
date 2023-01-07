@@ -71,14 +71,14 @@ interface WalletItemProps {
     deletable?: boolean
     onDelete?: () => void
     fallbackName?: string
-    setAsDefault?: (address: string) => void
+    onSetDefault?: (address: string) => void
 }
 
-export function WalletItem({ address, isDefault, deletable, fallbackName, setAsDefault, onDelete }: WalletItemProps) {
+export function WalletItem({ address, isDefault, deletable, fallbackName, onSetDefault, onDelete }: WalletItemProps) {
     const { classes, cx } = useStyles()
     const t = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address)
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address, ChainId.Mainnet)
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const onCopy = useSnackbarCallback(
         async (ev: React.MouseEvent<HTMLAnchorElement>) => {
@@ -93,30 +93,27 @@ export function WalletItem({ address, isDefault, deletable, fallbackName, setAsD
     )
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
 
+    const formattedName = domain ? Others?.formatDomainName(domain) : null
     const walletName = useMemo(() => {
-        if (domain && Others?.formatDomainName) {
-            return Others.formatDomainName(domain)
-        }
+        if (formattedName) return formattedName
         const currentWallet = wallets.find((x) => isSameAddress(x.address, address))
         const name = currentWallet?.name
         return name !== undefined && currentWallet?.hasStoredKeyInfo ? name : fallbackName
-    }, [address, domain, fallbackName])
+    }, [address, formattedName, fallbackName])
 
-    const getActionRender = () => {
-        if (!deletable)
-            return (
-                <Typography
-                    className={cx(classes.actionBtn, isDefault ? classes.disabled : undefined)}
-                    onClick={() => {
-                        if (isDefault) return
-                        setAsDefault?.(address)
-                    }}>
-                    {t.tip_set_as_default()}
-                </Typography>
-            )
-        if (deletable) return <Icons.Trash onClick={onDelete} size={24} className={classes.actionBtn} />
-        return null
-    }
+    const action = deletable ? (
+        <Icons.Trash onClick={onDelete} size={24} className={classes.actionBtn} />
+    ) : (
+        <Typography
+            className={cx(classes.actionBtn, isDefault ? classes.disabled : undefined)}
+            onClick={() => {
+                if (isDefault) return
+                onSetDefault?.(address)
+            }}>
+            {t.tip_set_as_default()}
+        </Typography>
+    )
+
     return (
         <div className={classes.currentAccount}>
             <div className={classes.accountInfo}>
@@ -146,7 +143,7 @@ export function WalletItem({ address, isDefault, deletable, fallbackName, setAsD
                     </Link>
                 </div>
             </div>
-            {getActionRender()}
+            {action}
         </div>
     )
 }

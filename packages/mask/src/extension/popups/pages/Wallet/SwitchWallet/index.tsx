@@ -9,7 +9,7 @@ import { useChainContext, useWallet, useWallets, useWeb3Connection } from '@mask
 import { WalletItem } from './WalletItem.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { Services } from '../../../../service.js'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { PopupContext } from '../../../hook/usePopupContext.js'
 
 const useStyles = makeStyles()({
     content: {
@@ -55,6 +55,7 @@ const SwitchWallet = memo(() => {
     const { classes, cx } = useStyles()
     const connection = useWeb3Connection()
     const navigate = useNavigate()
+    const { smartPayChainId } = PopupContext.useContainer()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { setChainId } = useChainContext()
@@ -70,20 +71,17 @@ const SwitchWallet = memo(() => {
     }, [wallets, history])
 
     const handleSelect = useCallback(
-        async (
-            address: string | undefined,
-            options?: { chainId: ChainId; owner?: string; identifier?: ECKeyIdentifier },
-        ) => {
+        async (address: string | undefined, options?: { owner?: string; identifier?: ECKeyIdentifier }) => {
             await connection?.connect({
                 account: address,
+                chainId: options?.owner && smartPayChainId ? smartPayChainId : undefined,
                 ...options,
             })
-            if (options?.chainId) setChainId(options.chainId)
+            if (options?.owner && smartPayChainId) setChainId(smartPayChainId)
             navigate(PopupRoutes.Wallet, { replace: true })
         },
-        [history, connection],
+        [history, connection, smartPayChainId],
     )
-
     return (
         <>
             <div className={classes.content}>
@@ -95,9 +93,7 @@ const SwitchWallet = memo(() => {
                             onClick={() =>
                                 handleSelect(
                                     item.address,
-                                    item.owner
-                                        ? { chainId: ChainId.Mumbai, owner: item.owner, identifier: item.identifier }
-                                        : undefined,
+                                    item.owner ? { owner: item.owner, identifier: item.identifier } : undefined,
                                 )
                             }
                             isSelected={isSameAddress(item.address, wallet?.address)}

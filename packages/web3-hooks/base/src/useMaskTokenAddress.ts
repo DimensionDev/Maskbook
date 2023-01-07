@@ -9,8 +9,5 @@ export function useMaskTokenAddress<S extends 'all' | void = void, T extends Net
 ) {
     const { chainId } = useChainContext()
     const { Others } = useWeb3State(pluginID)
-    const maskTokenAddress = Others?.getMaskTokenAddress?.(options?.chainId ?? chainId)
-
-    if (!maskTokenAddress) throw new Error('No mask token address.')
-    return maskTokenAddress
+    return Others?.getMaskTokenAddress?.(options?.chainId ?? chainId)
 }

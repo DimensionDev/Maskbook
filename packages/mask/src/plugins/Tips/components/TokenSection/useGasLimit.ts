@@ -27,6 +27,7 @@ export function useGasLimit(fallback = 50000) {
             account,
         })
         if (!connection || !token?.address) return fallback
+
         const web3 = connection.getWeb3({
             chainId,
             account,

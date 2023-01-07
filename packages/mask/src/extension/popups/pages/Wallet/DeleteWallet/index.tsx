@@ -1,17 +1,18 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { first } from 'lodash-es'
 import { Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { PopupRoutes } from '@masknet/shared-base'
+import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../../../../utils/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
-import { useWallet, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
+import { useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { WalletContext } from '../hooks/useWalletContext.js'
 import { useTitle } from '../../../hook/useTitle.js'
+import { isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()({
     content: {
@@ -72,6 +73,7 @@ const useStyles = makeStyles()({
         backgroundColor: '#F7F9FA',
         borderRadius: 8,
         padding: '8px 16px',
+        marginBottom: 12,
     },
     iconContainer: {
         display: 'flex',
@@ -102,6 +104,7 @@ const DeleteWallet = memo(() => {
     const currentWallet = useWallet()
     const wallet = selectedWallet ?? currentWallet
 
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { classes } = useStyles()
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
@@ -111,7 +114,7 @@ const DeleteWallet = memo(() => {
             try {
                 await Wallet?.removeWallet?.(wallet.address, password)
 
-                connection?.connect({
+                await connection?.connect({
                     account: first(Wallet?.wallets?.getCurrentValue())?.address ?? '',
                 })
 
@@ -125,6 +128,10 @@ const DeleteWallet = memo(() => {
             }
         }
     }, [wallet, password, Wallet, connection])
+
+    const manageWallets = useMemo(() => {
+        return wallets.filter((x) => isSameAddress(x.owner, wallet?.address))
+    }, [wallets, wallet])
 
     useTitle(t('popups_delete_wallet'))
 
@@ -146,6 +153,25 @@ const DeleteWallet = memo(() => {
                         </Typography>
                     </div>
                 </div>
+                {manageWallets.map((x, index) => {
+                    return (
+                        <div className={classes.info} key={index}>
+                            <div className={classes.iconContainer}>
+                                <Icons.SmartPay />
+                            </div>
+                            <div>
+                                <Typography className={classes.name}>{x?.name}</Typography>
+                                <Typography className={classes.address}>
+                                    <FormattedAddress
+                                        address={x?.address}
+                                        size={10}
+                                        formatter={formatEthereumAddress}
+                                    />
+                                </Typography>
+                            </div>
+                        </div>
+                    )
+                })}
                 <Typography className={classes.tip}>{t('popups_wallet_delete_tip')}</Typography>
 
                 <Typography className={classes.label}>{t('popups_wallet_confirm_payment_password')}</Typography>

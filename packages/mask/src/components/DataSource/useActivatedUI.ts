@@ -90,14 +90,14 @@ export function useSocialIdentity(identity: IdentityResolved | null | undefined)
         } catch {
             return identity
         }
-    }, [identity])
+    }, [JSON.stringify(identity)])
 
     useEffect(() => MaskMessages.events.ownProofChanged.on(result.retry), [result.retry])
 
     return result
 }
 
-export function useSocialIdentityByUseId(userId?: string) {
+export function useSocialIdentityByUserId(userId?: string) {
     const { value: identity } = useAsync(async () => {
         if (!userId) return
         return activatedSocialNetworkUI.utils.getUserIdentity?.(userId)

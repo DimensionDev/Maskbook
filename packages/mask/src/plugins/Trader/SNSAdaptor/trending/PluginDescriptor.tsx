@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { Stack, Typography, useTheme } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useSharedI18N } from '@masknet/shared'
 import { Box } from '@mui/system'
@@ -24,16 +24,13 @@ export const PluginDescriptor = ({
     isProfilePage,
     isTokenTagPopper,
 }: PluginHeaderProps) => {
-    const theme = useTheme()
     const { classes } = useStyles()
     const t = useSharedI18N()
 
     return (
         <Stack flexDirection="row" justifyContent="space-between" alignItems="center" width="100%">
             <Stack flexDirection="row" justifyContent="space-between" gap={0.5} alignItems="center">
-                {isTokenTagPopper ? (
-                    <Icons.Marketing className={classes.cardIcon} size={24} />
-                ) : isNFTProjectPopper ? (
+                {isNFTProjectPopper || isTokenTagPopper ? (
                     <Icons.Web3ProfileCard className={classes.cardIcon} size={24} />
                 ) : isProfilePage ? (
                     <Icons.Web3Profile className={classes.cardIcon} size={24} />
@@ -41,13 +38,15 @@ export const PluginDescriptor = ({
                     <Icons.DecentralizedSearch />
                 )}
                 <Typography
-                    color={isNFTProjectPopper || isTokenTagPopper ? undefined : theme.palette.maskColor.dark}
                     fontWeight="bolder"
-                    fontSize={16}>
-                    {isTokenTagPopper
-                        ? t.market_trending()
-                        : isNFTProjectPopper
-                        ? t.avatar_profile_card_name()
+                    fontSize={16}
+                    color={(theme) =>
+                        isNFTProjectPopper || isTokenTagPopper
+                            ? theme.palette.maskColor.main
+                            : theme.palette.maskColor.dark
+                    }>
+                    {isTokenTagPopper || isNFTProjectPopper
+                        ? t.web3_profile_card_name()
                         : isProfilePage
                         ? t.profile_card_name()
                         : t.decentralized_search_name()}

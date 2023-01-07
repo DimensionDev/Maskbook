@@ -11,7 +11,8 @@ import {
 } from '@masknet/shared-base'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import type { SocialNetwork } from '../../api.js'
-import { usePersonaProof } from '../../hooks/usePersonaProof.js'
+import { usePersonaProofs } from '@masknet/shared'
+import { Messages } from '../../../../API.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -83,7 +84,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
     const { nickname, active = false, definedSocialNetworks, identifier, profiles, publicKey } = props
     const { onConnect, onDisconnect, onClick } = props
     const { classes, cx } = useStyles()
-    const proof = usePersonaProof(publicKey)
+    const proofs = usePersonaProofs(publicKey, Messages)
     return (
         <div className={classes.card}>
             <div className={cx(classes.status, active ? classes.statusActivated : classes.statusInactivated)} />
@@ -113,7 +114,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                         } else {
                             return (
                                 <ConnectedPersonaLine
-                                    proof={proof}
+                                    proofs={proofs}
                                     isHideOperations
                                     key={networkIdentifier}
                                     onConnect={(type, profile) =>

@@ -135,13 +135,15 @@ const SignRequest = memo(() => {
             try {
                 await WalletRPC.confirmRequest(value.payload, {
                     disableClose: !!goBack,
+                    owner: wallet?.owner,
+                    identifier: wallet?.identifier,
                 })
                 navigate(-1)
             } catch (error_) {
                 setTransferError(true)
             }
         }
-    }, [value, routeLocation.search, connection])
+    }, [value, routeLocation.search, connection, wallet])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
         if (!value) return

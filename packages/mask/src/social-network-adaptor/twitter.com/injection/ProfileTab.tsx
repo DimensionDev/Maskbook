@@ -15,7 +15,7 @@ import {
     searchNameTag,
 } from '../utils/selector.js'
 import { useCollectionByTwitterHandler } from '../../../plugins/Trader/trending/useTrending.js'
-import { useCurrentVisitingSocialIdentity } from '../../../components/DataSource/useActivatedUI.js'
+import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js'
 
 function getStyleProps() {
@@ -173,12 +173,10 @@ function resetTwitterActivatedContent() {
 export function ProfileTabAtTwitter() {
     const { classes } = useStyles()
     const [hidden, setHidden] = useState(false)
-    const { value: currentVisitingSocialIdentity, loading: loadingIdentity } = useCurrentVisitingSocialIdentity()
-
+    const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
-    const { value: collectionList, loading: loadingCollection } = useCollectionByTwitterHandler(currentVisitingUserId)
+    const { value: collectionList, loading } = useCollectionByTwitterHandler(currentVisitingUserId)
     const collectionResult = collectionList?.[0]
-    const loading = loadingIdentity || loadingCollection
 
     useEffect(() => {
         return MaskMessages.events.profileTabHidden.on((data) => {
@@ -188,7 +186,14 @@ export function ProfileTabAtTwitter() {
 
     return hidden || loading ? null : (
         <ProfileTab
-            title={collectionResult?.collection?.socialLinks?.twitter === currentVisitingUserId ? 'More' : 'Web3'}
+            title={
+                currentVisitingUserId &&
+                collectionResult?.collection?.socialLinks?.twitter
+                    ?.toLowerCase()
+                    .endsWith(currentVisitingUserId.toLowerCase())
+                    ? 'More'
+                    : 'Web3'
+            }
             classes={{
                 root: classes.root,
                 button: classes.button,

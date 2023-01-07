@@ -2952,6 +2952,9 @@ importers:
       '@masknet/web3-shared-solana':
         specifier: workspace:^
         version: link:../web3-shared/solana
+      '@metamask/eth-sig-util':
+        specifier: ^4.0.0
+        version: 4.0.0
       '@metaplex-foundation/mpl-token-metadata':
         specifier: ^1.1.0
         version: 1.1.0

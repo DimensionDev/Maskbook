@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
 interface PersonaPageProps {
     onNext: () => void
     onClose(): void
-    onChange: (proof: BindingProof, wallets?: BindingProof[], tokenInfo?: AllChainsNonFungibleToken) => void
+    onChange: (proof: BindingProof, wallets: BindingProof[], tokenInfo?: AllChainsNonFungibleToken) => void
 }
 
 export function PersonaPage({ onNext, onChange }: PersonaPageProps) {
@@ -48,8 +48,8 @@ export function PersonaPage({ onNext, onChange }: PersonaPageProps) {
         () => bindingPersonas.map((x) => x.proofs.filter((y) => y.is_valid && y.platform === network)).flat(),
         [bindingPersonas],
     )
-    const myPersonas = useAllPersonas()
 
+    const myPersonas = useAllPersonas()
     const _persona = useSubscription(context.currentPersona)
 
     const currentPersona = myPersonas?.find(

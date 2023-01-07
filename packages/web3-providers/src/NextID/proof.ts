@@ -5,14 +5,18 @@ import {
     fromHex,
     NextIDAction,
     NextIDBindings,
+    NextIDErrorBody,
     NextIDPayload,
     NextIDPersonaBindings,
     NextIDPlatform,
     toBase64,
 } from '@masknet/shared-base'
-import { deleteCache, fetchJSON } from './helpers.js'
 import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
+import { fetchJSON, fetchR2D2 } from '../entry-helpers.js'
+import { staleNextIDCached } from './helpers.js'
+import { fetchSquashed } from '../helpers/fetchSquashed.js'
+import { fetch } from '../helpers/fetch.js'
 
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
@@ -49,7 +53,6 @@ const getExistedBindingQueryURL = (platform: string, identity: string, personaPu
     })
 
 export class NextIDProofAPI implements NextIDBaseAPI.Proof {
-    // TODO: remove 'bind' in project for business context.
     async bindProof(
         uuid: string,
         personaPublicKey: string,
@@ -77,60 +80,103 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             created_at: createdAt,
         }
 
-        const result = await fetchJSON(urlcat(BASE_URL, '/v1/proof'), {
-            body: JSON.stringify(requestBody),
-            method: 'POST',
-        })
+        const result = await fetch<NextIDErrorBody | void>(
+            urlcat(BASE_URL, '/v1/proof'),
+            {
+                body: JSON.stringify(requestBody),
+                method: 'POST',
+            },
+            [fetchR2D2, fetchJSON],
+        )
+
+        if (result?.message) throw new Error(result.message)
 
         // Should delete cache when proof status changed
         const cacheKeyOfQueryPersona = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
         const cacheKeyOfQueryPlatform = getPersonaQueryURL(platform, identity)
         const cacheKeyOfExistedBinding = getExistedBindingQueryURL(platform, identity, personaPublicKey)
-        deleteCache(cacheKeyOfQueryPersona)
-        deleteCache(cacheKeyOfQueryPlatform)
-        deleteCache(cacheKeyOfExistedBinding)
 
-        return result
+        await staleNextIDCached(cacheKeyOfExistedBinding)
+        await staleNextIDCached(cacheKeyOfQueryPersona)
+        await staleNextIDCached(cacheKeyOfQueryPlatform)
     }
 
     async queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean) {
         const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
-        const response = await fetchJSON<NextIDBindings>(url, {}, enableCache)
+        const response = await fetch<NextIDBindings>(url, undefined, [fetchSquashed, fetchR2D2, fetchJSON])
         // Will have only one item when query by personaPublicKey
-        return first(response.unwrap().ids)
+        return first(response.ids)
     }
 
-    async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page?: number) {
+    async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page = 1) {
         if (!platform && !identity) return []
 
-        const response = await fetchJSON<NextIDBindings>(
-            urlcat(BASE_URL, '/v1/proof', { platform, identity, page, exact: true }),
+        const response = await fetch<NextIDBindings>(
+            urlcat(BASE_URL, '/v1/proof', {
+                platform,
+                identity,
+                page,
+                exact: true,
+                sort: 'activated_at',
+                order: 'desc',
+            }),
             undefined,
-            true,
+            [fetchSquashed, fetchR2D2, fetchJSON],
         )
 
-        // TODO: merge Pagination into this
-        return response.unwrap().ids
+        return response.ids
     }
+
+    async queryLatestBindingByPlatform(
+        platform: NextIDPlatform,
+        identity: string,
+    ): Promise<NextIDPersonaBindings | null> {
+        if (!platform && !identity) return null
+
+        const result = await this.queryExistedBindingByPlatform(platform, identity, 1)
+        return first(result) ?? null
+    }
+
     async queryAllExistedBindingsByPlatform(platform: NextIDPlatform, identity: string) {
+        if (!platform && !identity) return []
+
         const nextIDPersonaBindings: NextIDPersonaBindings[] = []
         let page = 1
         do {
-            const personaBindings = await this.queryExistedBindingByPlatform(platform, identity, page)
+            const result = await fetch<NextIDBindings>(
+                urlcat(BASE_URL, '/v1/proof', {
+                    platform,
+                    identity,
+                    page,
+                    order: 'desc',
+                }),
+                undefined,
+                [fetchSquashed, fetchR2D2, fetchJSON],
+            )
+
+            const personaBindings = result.ids
             if (personaBindings.length === 0) return nextIDPersonaBindings
             nextIDPersonaBindings.push(...personaBindings)
+
+            // next is `0` if current page is the last one.
+            if (result.pagination.next === 0) return nextIDPersonaBindings
+
             page += 1
         } while (page > 1)
         return []
     }
 
     async queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string, enableCache?: boolean) {
-        if (!platform && !identity) return false
+        try {
+            if (!platform && !identity) return false
 
-        const url = getExistedBindingQueryURL(platform, identity, personaPublicKey)
-        const result = await fetchJSON<BindingProof>(url, {}, enableCache)
+            const url = getExistedBindingQueryURL(platform, identity, personaPublicKey)
+            const result = await fetch<BindingProof>(url, undefined, [fetchSquashed, fetchR2D2, fetchJSON])
 
-        return result.map(() => true).unwrapOr(false)
+            return !!result?.is_valid
+        } catch {
+            return false
+        }
     }
 
     async queryProfilesByRelationService(identity: string) {
@@ -191,19 +237,24 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
         const nextIDLanguageFormat = language?.replace('-', '_') as PostContentLanguages
 
-        const response = await fetchJSON<CreatePayloadResponse>(urlcat(BASE_URL, '/v1/proof/payload'), {
-            body: JSON.stringify(requestBody),
-            method: 'POST',
-        })
+        const response = await fetch<CreatePayloadResponse>(
+            urlcat(BASE_URL, '/v1/proof/payload'),
+            {
+                body: JSON.stringify(requestBody),
+                method: 'POST',
+            },
+            [fetchR2D2, fetchJSON],
+        )
 
         return response
-            .map((x) => ({
-                postContent: x.post_content[nextIDLanguageFormat ?? 'default'] ?? x.post_content.default,
-                signPayload: JSON.stringify(JSON.parse(x.sign_payload)),
-                createdAt: x.created_at,
-                uuid: x.uuid,
-            }))
-            .unwrapOr(null)
+            ? {
+                  postContent:
+                      response.post_content[nextIDLanguageFormat ?? 'default'] ?? response.post_content.default,
+                  signPayload: JSON.stringify(JSON.parse(response.sign_payload)),
+                  createdAt: response.created_at,
+                  uuid: response.uuid,
+              }
+            : null
     }
 }
 

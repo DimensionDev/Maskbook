@@ -71,7 +71,7 @@ export function createManager<
 
     function startDaemon(host: Plugin.__Host.Host<Context>, extraCheck?: (id: PluginID) => boolean) {
         _host = host
-        const { signal = new AbortController().signal, addI18NResource, minimalMode, permission } = _host
+        const { signal = new AbortController().signal, addI18NResource, minimalMode } = _host
         const removeListener1 = minimalMode.events.on('enabled', (id) => updateCompositedMinimalMode(id))
         const removeListener2 = minimalMode.events.on('disabled', (id) => updateCompositedMinimalMode(id))
         const removeListener3 = onNewPluginRegistered((id, def) => {

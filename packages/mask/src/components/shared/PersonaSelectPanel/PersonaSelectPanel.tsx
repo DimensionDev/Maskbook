@@ -1,6 +1,7 @@
-import { Button, Stack, Typography } from '@mui/material'
+import { Icons } from '@masknet/icons'
+import { delay } from '@masknet/kit'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import {
-    resolveNextIDIdentityToProfile,
     CrossIsolationMessages,
     DashboardRoutes,
     EMPTY_LIST,
@@ -8,23 +9,22 @@ import {
     isSameProfile,
     PersonaIdentifier,
     ProfileIdentifier,
+    resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
-import { useAsyncFn, useCopyToClipboard } from 'react-use'
-import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
-import { useConnectedPersonas } from '../../DataSource/useConnectedPersonas.js'
-import Services from '../../../extension/service.js'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { useNextIDVerify } from '../../DataSource/useNextIDVerify.js'
-import { useI18N } from '../../../utils/index.js'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { Button, Stack, Typography } from '@mui/material'
+import { memo, useEffect, useMemo, useState } from 'react'
+import { useAsyncFn, useCopyToClipboard } from 'react-use'
+import Services from '../../../extension/service.js'
+import { useI18N } from '../../../utils/index.js'
+import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
+import { useConnectedPersonas } from '../../DataSource/useConnectedPersonas.js'
+import { useNextIDVerify } from '../../DataSource/useNextIDVerify.js'
+import { useCurrentPersona } from '../../DataSource/usePersonaConnectStatus.js'
+import { ErrorPanel } from './ErrorPanel.js'
 import type { PersonaNextIDMixture } from './PersonaItemUI.js'
 import { PersonaItemUI } from './PersonaItemUI.js'
-import { useCurrentPersona } from '../../DataSource/usePersonaConnectStatus.js'
-import { delay } from '@masknet/kit'
-import { Icons } from '@masknet/icons'
-import { ErrorPanel } from './ErrorPanel.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -111,7 +111,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
             title: t('applications_create_persona_title'),
             actionHint: t('applications_create_persona_action'),
         })
-    }, [personas.length, finishTarget, loading, error])
+    }, [!personas.length, !finishTarget, loading, !error])
 
     const actionButton = useMemo(() => {
         let isConnected = true
@@ -160,36 +160,37 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
 
         const actionProps = {
             ...(() => {
+                const { persona } = selectedPersona
                 if (!isConnected && !isVerified && enableVerify)
                     return {
                         buttonText: t('applications_persona_verify_connect', {
-                            nickname: selectedPersona?.persona.nickname,
+                            nickname: persona.nickname,
                         }),
                         hint: t('applications_persona_verify_connect_hint', {
-                            nickname: selectedPersona?.persona.nickname,
+                            nickname: persona.nickname,
                         }),
                     }
                 if (!isConnected)
                     return {
                         buttonText: t('applications_persona_connect', {
-                            nickname: selectedPersona?.persona.nickname,
+                            nickname: persona.nickname,
                         }),
                         hint: t('applications_persona_connect_hint', {
-                            nickname: selectedPersona?.persona.nickname,
+                            nickname: persona.nickname,
                         }),
                     }
                 if (!isVerified)
                     return {
                         buttonText: t('applications_persona_verify', {
-                            nickname: selectedPersona?.persona.nickname,
+                            nickname: persona.nickname,
                         }),
                         hint: t('applications_persona_verify_hint', {
-                            nickname: selectedPersona?.persona.nickname,
+                            nickname: persona.nickname,
                         }),
                     }
                 return {
                     buttonText: t('applications_persona_connect', {
-                        nickname: selectedPersona?.persona.nickname,
+                        nickname: persona.nickname,
                     }),
                 }
             })(),
@@ -197,11 +198,15 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
         }
 
         return <ActionContent {...actionProps} classes={{ button: props.classes?.button }} />
-    }, [currentPersonaIdentifier, currentProfileIdentify, selectedPersona, enableVerify, finishTarget])
-
-    const onSelectPersona = useCallback((x: PersonaNextIDMixture) => {
-        setSelectedPersona(x)
-    }, [])
+    }, [
+        currentPersonaIdentifier,
+        currentProfileIdentify,
+        enableVerify,
+        finishTarget,
+        selectedPersona?.persona,
+        selectedPersona?.proof,
+        selectedPersona?.persona.linkedProfiles,
+    ])
 
     const onCopyPersonsPublicKey = (e: React.MouseEvent<HTMLElement>, p: PersonaNextIDMixture) => {
         e.preventDefault()
@@ -212,7 +217,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     if (loading) {
         return (
             <Stack justifyContent="center" alignItems="center" height="100%">
-                <LoadingBase width={24} height={24} />
+                <LoadingBase size={24} />
             </Stack>
         )
     }
@@ -230,7 +235,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
                             key={x.persona.identifier.toText()}
                             data={x}
                             onCopy={(e) => onCopyPersonsPublicKey(e, x)}
-                            onClick={() => onSelectPersona(x)}
+                            onClick={() => setSelectedPersona(x)}
                             currentPersona={selectedPersona}
                             currentPersonaIdentifier={currentPersonaIdentifier}
                             currentProfileIdentify={currentProfileIdentify}

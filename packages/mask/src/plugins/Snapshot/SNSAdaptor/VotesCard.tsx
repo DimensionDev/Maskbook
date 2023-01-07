@@ -1,6 +1,7 @@
 import { unstable_useCacheRefresh, useContext } from 'react'
 import { millify } from 'millify'
-import { formatEthereumAddress, explorerResolver, formatPercentage } from '@masknet/web3-shared-evm'
+import { formatPercentage } from '@masknet/web3-shared-base'
+import { formatEthereumAddress, explorerResolver } from '@masknet/web3-shared-evm'
 import { Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -9,6 +10,7 @@ import { useI18N } from '../../../utils/index.js'
 import { EthereumBlockie } from '@masknet/shared'
 import { SnapshotContext } from '../context.js'
 import { useVotes } from './hooks/useVotes.js'
+import { useProposal } from './hooks/useProposal.js'
 import { LoadingCard } from './LoadingCard.js'
 import { LoadingFailCard } from './LoadingFailCard.js'
 import { SnapshotCard } from './SnapshotCard.js'
@@ -84,6 +86,7 @@ const useStyles = makeStyles()((theme) => {
 function Content() {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const identifier = useContext(SnapshotContext)
+    const proposal = useProposal(identifier.id)
     const votes = useVotes(identifier)
     const { classes, cx, theme } = useStyles()
     const { t } = useI18N()
@@ -91,7 +94,11 @@ function Content() {
     return (
         <SnapshotCard
             title={
-                <Badge max={9999999} classes={{ badge: classes.badge }} badgeContent={votes.length} color="primary">
+                <Badge
+                    max={9999999}
+                    classes={{ badge: classes.badge }}
+                    badgeContent={proposal.voterAmounts}
+                    color="primary">
                     {t('plugin_snapshot_votes_title')}
                 </Badge>
             }>

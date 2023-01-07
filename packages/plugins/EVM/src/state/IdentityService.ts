@@ -1,4 +1,4 @@
-import { compact, first, uniqBy } from 'lodash-es'
+import { compact, uniqBy } from 'lodash-es'
 import type { Plugin } from '@masknet/plugin-infra'
 import { IdentityServiceState } from '@masknet/web3-state'
 import { SocialIdentity, SocialAddress, SocialAddressType, attemptUntil } from '@masknet/web3-shared-base'
@@ -21,8 +21,8 @@ import { ChainbaseResolver } from './NameService/Chainbase.js'
 import { Web3StateSettings } from '../settings/index.js'
 import { SpaceID_Resolver } from './NameService/SpaceID.js'
 
-const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/i
-const SID_RE = /[^\t\n\v()[\]]{1,256}\.bnb\b/i
+const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
+const SID_RE = /[^\t\n\v()[\]]{1,256}\.bnb\b/gi
 const ADDRESS_FULL = /0x\w{40,}/i
 const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/
 const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/
@@ -30,9 +30,7 @@ const LENS_RE = /[^\s()[\]]{1,256}\.lens\b/i
 const LENS_URL_RE = /https?:\/\/.+\/(\w+\.lens)/
 
 function getENSNames(userId: string, nickname: string, bio: string) {
-    return [userId.match(ENS_RE), nickname.match(ENS_RE), bio.match(ENS_RE)]
-        .map((result) => result?.[0] ?? '')
-        .filter(Boolean)
+    return [userId.match(ENS_RE), nickname.match(ENS_RE), bio.match(ENS_RE)].flatMap((result) => result ?? [])
 }
 
 function getLensNames(nickname: string, bio: string, homepage: string) {
@@ -42,9 +40,7 @@ function getLensNames(nickname: string, bio: string, homepage: string) {
 }
 
 function getSIDNames(userId: string, nickname: string, bio: string) {
-    return [userId.match(SID_RE), nickname.match(SID_RE), bio.match(SID_RE)]
-        .map((result) => result?.[0] ?? '')
-        .filter(Boolean)
+    return [userId.match(SID_RE), nickname.match(SID_RE), bio.match(SID_RE)].flatMap((result) => result ?? [])
 }
 
 function getRSS3Ids(nickname: string, profileURL: string, bio: string) {
@@ -70,15 +66,11 @@ async function getWalletAddressesFromNextID({ identifier, publicKey }: SocialIde
     const platform = getNextIDPlatform()
     if (!platform) return EMPTY_LIST
 
-    const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(platform, identifier.userId)
-    const latestActivatedBinding = first(
-        bindings.sort((a, z) => Number.parseInt(z.activated_at, 10) - Number.parseInt(a.activated_at, 10)),
+    const latestActivatedBinding = await NextIDProof.queryLatestBindingByPlatform(platform, identifier.userId)
+    if (!latestActivatedBinding) return EMPTY_LIST
+    return latestActivatedBinding.proofs.filter(
+        (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
     )
-    const binding = publicKey
-        ? bindings.find((x) => x.persona === publicKey) ?? latestActivatedBinding
-        : latestActivatedBinding
-    if (!binding) return EMPTY_LIST
-    return binding.proofs.filter((x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity))
 }
 
 const resolveMaskXAddressType = createLookupTableResolver<MaskX_BaseAPI.SourceType, SocialAddressType>(
@@ -193,7 +185,9 @@ export class IdentityService extends IdentityServiceState<ChainId> {
                 return this.createSocialAddress(SocialAddressType.ENS, address, name)
             }),
         )
-        return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean))
+        return uniqBy(compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined))), (x) =>
+            x.address.toLowerCase(),
+        )
     }
 
     private async getSocialAddressFromSpaceID({ identifier, nickname = '', bio = '' }: SocialIdentity) {
@@ -209,7 +203,9 @@ export class IdentityService extends IdentityServiceState<ChainId> {
                 return this.createSocialAddress(SocialAddressType.SPACE_ID, address, name, ChainId.BSC)
             }),
         )
-        return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean))
+        return uniqBy(compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined))), (x) =>
+            x.address.toLowerCase(),
+        )
     }
 
     private async getSocialAddressFromLens({ nickname = '', bio = '', homepage = '' }: SocialIdentity) {

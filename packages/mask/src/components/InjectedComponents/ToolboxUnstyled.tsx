@@ -40,7 +40,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
-
     chainIcon: {
         fontSize: 18,
         width: 18,
@@ -80,7 +79,7 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
             <Container>
                 <ListItemButton onClick={openDialog}>
                     <ListItemIcon>
-                        <MaskIcon style={{ width: iconSize, height: iconSize }} />
+                        <MaskIcon size={iconSize} />
                     </ListItemIcon>
                     {mini ? null : (
                         <ListItemText

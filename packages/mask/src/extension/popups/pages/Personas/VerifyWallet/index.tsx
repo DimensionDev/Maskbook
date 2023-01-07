@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import { memo, useEffect } from 'react'
 import { useAsync, useAsyncFn, useLocation } from 'react-use'
 import { useNavigate } from 'react-router-dom'
-import { NextIDAction, NextIDPlatform, PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
+import { NextIDAction, NextIDPlatform, PopupRoutes, NetworkPluginID, SignType } from '@masknet/shared-base'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { Account, isSameAddress } from '@masknet/web3-shared-base'
@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
 const VerifyWallet = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { currentPersona, refreshProofs } = PersonaContext.useContainer()
+    const { currentPersona } = PersonaContext.useContainer()
     const { signed, setSigned } = PopupContext.useContainer()
     const navigate = useNavigate()
     const location = useLocation()
@@ -88,12 +88,14 @@ const VerifyWallet = memo(() => {
     const [{ value: signature }, personaSilentSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.identifier) return
         try {
-            const signResult = await Services.Identity.generateSignResult(
-                currentPersona.identifier,
+            const signature = await Services.Identity.signWithPersona(
+                SignType.Message,
                 payload.signPayload,
+                currentPersona.identifier,
+                true,
             )
             showSnackbar(t('popups_verify_persona_sign_success'), { variant: 'success' })
-            return signResult.signature.signature
+            return signature
         } catch (error) {
             showSnackbar(t('popups_verify_persona_sign_failed'), { variant: 'error' })
             console.error(error)
@@ -104,13 +106,13 @@ const VerifyWallet = memo(() => {
     const [{ value: walletSignState }, walletSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.identifier.publicKeyAsHex) return false
         try {
-            const walletSignature = await connection?.signMessage(payload.signPayload, 'personalSign', {
+            const walletSignature = await connection?.signMessage('message', payload.signPayload, {
                 chainId: wallet.chainId,
                 account: wallet.account,
                 providerType: wallet.providerType,
             })
-
             if (!walletSignature) throw new Error('Wallet sign failed')
+
             await NextIDProof.bindProof(
                 payload.uuid,
                 currentPersona.identifier.publicKeyAsHex,
@@ -128,7 +130,6 @@ const VerifyWallet = memo(() => {
             MaskMessages.events.ownProofChanged.sendToAll()
             showSnackbar(t('popups_verify_wallet_sign_success'), { variant: 'success' })
             setSigned(true)
-            refreshProofs()
             return true
         } catch (error) {
             showSnackbar(t('popups_verify_wallet_sign_failed'), { variant: 'error' })

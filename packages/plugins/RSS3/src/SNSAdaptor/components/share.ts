@@ -156,6 +156,20 @@ export function getLastAction<
     return feed.actions[feed.actions.length - 1]
 }
 
+/**
+ * Get cost from multiple actions.
+ * We used to get it from the last action, but it might not always exists in
+ * the last action.
+ */
+export function getCost(feed: RSS3BaseAPI.CollectibleTradeFeed): RSS3BaseAPI.TransactionMetadata | null {
+    for (const action of feed.actions) {
+        if (action.metadata?.cost) {
+            return action.metadata.cost
+        }
+    }
+    return null
+}
+
 const ONE_MIN = 60 * 1000
 const ONE_HOUR = 60 * ONE_MIN
 const ONE_DAY = 24 * ONE_HOUR

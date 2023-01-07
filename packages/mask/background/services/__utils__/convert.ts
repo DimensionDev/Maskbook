@@ -32,6 +32,7 @@ export function toPersonaInformation(personas: PersonaRecord[], t: FullPersonaDB
         personaInfo.push({
             nickname: persona.nickname,
             identifier: persona.identifier,
+            address: persona.address,
             linkedProfiles: map,
         })
 

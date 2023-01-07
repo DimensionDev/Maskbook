@@ -1,3 +1,4 @@
+import { compact } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
 import { WalletState } from '@masknet/web3-state'
@@ -7,10 +8,11 @@ import {
     mergeSubscription,
     ValueRef,
     createSubscriptionFromValueRef,
+    SignType,
 } from '@masknet/shared-base'
-import { SmartPayAccount } from '@masknet/web3-providers'
+import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
 import { isSameAddress, Wallet as WalletItem } from '@masknet/web3-shared-base'
-import { ChainId, formatEthereumAddress, ProviderType, Transaction } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, ProviderType, Transaction } from '@masknet/web3-shared-evm'
 
 export class Wallet extends WalletState<ProviderType, Transaction> {
     private ref = new ValueRef<WalletItem[]>(EMPTY_LIST)
@@ -41,20 +43,13 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
     private setupSubscriptions() {
         const update = async () => {
             const wallets = this.context.wallets.getCurrentValue()
-            const allPersonas = await Promise.all(
-                this.context.allPersonas?.getCurrentValue()?.map(async (x) => {
-                    const { address } = await this.context.generateSignResult(x.identifier, '')
-                    return {
-                        ...x,
-                        address,
-                    }
-                }) ?? [],
-            )
-            // TODO: get wallets from storage
+            const allPersonas = this.context.allPersonas?.getCurrentValue() ?? []
+
+            const chainId = await SmartPayBundler.getSupportedChainId()
             if (this.providerType === ProviderType.MaskWallet) {
-                const accounts = await SmartPayAccount.getAccountsByOwners(ChainId.Mumbai, [
+                const accounts = await SmartPayAccount.getAccountsByOwners(chainId, [
                     ...wallets.map((x) => x.address),
-                    ...allPersonas.map((x) => x.address),
+                    ...compact(allPersonas.map((x) => x.address)),
                 ])
 
                 const now = new Date()
@@ -88,6 +83,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
 
         update()
         this.context.wallets.subscribe(update)
+        this.context.allPersonas?.subscribe(update)
         this.storage.subscription.subscribe(update)
     }
 
@@ -109,7 +105,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
 
     override signTransaction(address: string, transaction: Transaction): Promise<string> {
         if (this.providerType === ProviderType.MaskWallet) {
-            return this.context.signTransaction(address, transaction)
+            return this.context.signWithWallet(SignType.Transaction, transaction, address)
         } else {
             return super.signTransaction(address, transaction)
         }
@@ -122,14 +118,14 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
         password?: string | undefined,
     ): Promise<string> {
         if (this.providerType === ProviderType.MaskWallet) {
-            if (type === 'personal') {
-                return this.context.signPersonalMessage(address, message)
+            if (type === 'message') {
+                return this.context.signWithWallet(SignType.Message, address, message)
             } else if (type === 'typedData') {
-                return this.context.signTypedData(address, message)
+                return this.context.signWithWallet(SignType.TypedData, address, message)
             }
             throw new Error('Unknown sign type.')
         } else {
-            return super.signMessage(address, type, message, password)
+            return super.signMessage(type, address, message, password)
         }
     }
 }

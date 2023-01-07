@@ -10,6 +10,7 @@ import type {
     NextIDPlatform,
     NameServiceID,
     NetworkPluginID,
+    Proof,
 } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
@@ -416,29 +417,48 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
 }
 
 export interface NonFungibleCollectionOverview {
+    // collection name
+    collection?: string
     market_cap?: number
     highest_price?: number
     volume_24h?: number
     average_price_24h?: number
+    average_price_change_1d: string
+    average_price_change: string
+    average_price_change_7d: string
     sales_24h?: number
     owners_total?: number
     total_volume?: number
     items_total?: number
+    sales?: number
+    volume?: number
+    average_price?: number
 }
 
 export interface NonFungibleTokenActivity {
-    transaction_hash: string
-    transaction_method: ActivityType
-    transactionLink: string
-    transaction_time: number
-    tx_value: number
-    from_address: string
-    to_address: string
+    hash: string
+    event_type: ActivityType
+    transaction_link: string
+    timestamp: number
+    nftscan_uri: string
+    trade_price?: number
+    from: string
+    // The param `to` of the transaction
+    to: string
+    // The user address who received the NFT
+    receive: string
     cover: string
-    contract: string
-    token_id: string
-    tradeToken: string
-    tradeTokenLogo: string
+    contract_address: string
+    token_id?: string
+    trade_token_logo: string
+    trade_symbol?: string
+    // #region solana
+    source?: string
+    destination?: string
+    fee?: number
+    tx_interact_program?: string
+    token_address?: string
+    // #endregion
 }
 
 export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {
@@ -623,6 +643,8 @@ export interface Result<ChainId> {
     type: SearchResultType
     /** The original searched keyword */
     keyword: string
+    /** alias name list, e.g. binance for bnb. */
+    alias?: string[]
 }
 
 export interface EOAResult<ChainId> extends Result<ChainId> {
@@ -647,6 +669,7 @@ export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId
     name: string
     symbol: string
     source: SourceType
+    alias?: string[]
     token?: FungibleToken<ChainId, SchemaType>
 }
 
@@ -788,7 +811,7 @@ export interface Wallet {
     updatedAt: Date
     /** an abstract wallet has a owner */
     owner?: string
-
+    /** persona identifier */
     identifier?: ECKeyIdentifier
 }
 
@@ -928,8 +951,9 @@ export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
     providerType?: ProviderType
     /** Fragments to merge into the transaction. */
     overrides?: Partial<Transaction>
-
+    /** an abstract wallet has a owner */
     owner?: string
+    /** persona identifier */
     identifier?: ECKeyIdentifier
 }
 export interface Connection<
@@ -1045,12 +1069,12 @@ export interface Connection<
     /** Switch to sub network */
     switchChain?: (chainId: ChainId, initial?: Web3ConnectionOptions) => Promise<void>
     /** Sign message */
-    signMessage(dataToSign: string, signType?: string, initial?: Web3ConnectionOptions): Promise<Signature>
+    signMessage(type: string, message: string, initial?: Web3ConnectionOptions): Promise<Signature>
     /** Verify message */
     verifyMessage(
-        dataToVerify: string,
+        type: string,
+        message: string,
         signature: Signature,
-        signType?: string,
         initial?: Web3ConnectionOptions,
     ): Promise<boolean>
     /** Approve a recipient for using a fungible token. */
@@ -1103,10 +1127,14 @@ export interface Connection<
         operation: Operation,
         initial?: Web3ConnectionOptions,
     ) => Promise<TransactionSignature>
-    /** Change owner of contract Wallet */
-    transferContractWallet?: (recipient: string, initial?: Web3ConnectionOptions) => Promise<string>
-    /** Deploy contract Wallet */
-    deployContractWallet?: (owner: string, initial?: Web3ConnectionOptions) => Promise<string>
+    /** Transfer some native tokens from contract wallet */
+    transfer?: (recipient: string, amount: string, initial?: Web3ConnectionOptions) => Promise<string>
+    /** Change owner of contract wallet */
+    changeOwner?: (recipient: string, initial?: Web3ConnectionOptions) => Promise<string>
+    /** Fund contract wallet */
+    fund?: (proof: Proof, initial?: Web3ConnectionOptions) => Promise<string>
+    /** Deploy contract wallet */
+    deploy?: (owner: string, initial?: Web3ConnectionOptions) => Promise<string>
     /** Sign a transaction */
     signTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): Promise<TransactionSignature>
     /** Sign multiple transactions */

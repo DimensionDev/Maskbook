@@ -113,7 +113,7 @@ const AddDeriveWallet = memo(() => {
                 `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${firstPath}`,
             )
 
-            const wallets = await Promise.all(
+            await Promise.all(
                 unDeriveWallets
                     .slice(1)
                     .map(async (pathIndex) =>
@@ -126,7 +126,7 @@ const AddDeriveWallet = memo(() => {
             )
 
             if (!currentMaskWalletAccountSettings.value) {
-                connection?.connect({ account: firstWallet })
+                await connection?.connect({ account: firstWallet })
             }
         }
         navigate(PopupRoutes.Wallet, { replace: true })

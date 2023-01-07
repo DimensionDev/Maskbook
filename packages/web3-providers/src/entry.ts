@@ -3,7 +3,8 @@ import { OpenSeaAPI } from './OpenSea/index.js'
 import { LooksRareAPI } from './LooksRare/index.js'
 import { RaribleAPI } from './Rarible/index.js'
 import {
-    NFTScanTrendingAPI,
+    NFTScanTrendingAPI_EVM,
+    NFTScanTrendingAPI_Solana,
     NFTScanNonFungibleTokenAPI_EVM,
     NFTScanNonFungibleTokenAPI_Solana,
 } from './NFTScan/index.js'
@@ -51,6 +52,7 @@ import { MulticallAPI } from './Multicall/index.js'
 import { ENS_API } from './ENS/index.js'
 import { SpaceID_API } from './SpaceID/index.js'
 import { LensAPI } from './Lens/index.js'
+import { Web3SignerAPI } from './EVM/apis/Web3SignerAPI.js'
 
 export * from './Sentry/index.js'
 export { resolveActivityTypeBackgroundColor } from './entry-helpers.js'
@@ -85,6 +87,7 @@ export const NextIDProof = new NextIDProofAPI()
 export const NextIDStorage = new NextIDStorageAPI()
 export const Web3 = new Web3API()
 export const Web3GasOption = new Web3GasOptionAPI()
+export const Web3Signer = new Web3SignerAPI()
 export const Nomics = new NomicsAPI()
 export const CoinMarketCap = new CoinMarketCapAPI()
 export const UniSwap = new UniSwapAPI()
@@ -106,7 +109,8 @@ export const SolanaFungible = new SolanaFungibleAPI()
 export const SolanaNonFungible = new SolanaNonFungibleAPI()
 
 // NFTScan
-export const NFTScanTrending = new NFTScanTrendingAPI()
+export const NFTScanTrending_EVM = new NFTScanTrendingAPI_EVM()
+export const NFTScanTrending_Solana = new NFTScanTrendingAPI_Solana()
 export const NFTScanNonFungibleTokenEVM = new NFTScanNonFungibleTokenAPI_EVM()
 export const NFTScanNonFungibleTokenSolana = new NFTScanNonFungibleTokenAPI_Solana()
 

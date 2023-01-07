@@ -1,9 +1,10 @@
+import { BigNumber } from 'bignumber.js'
+import type { AbiItem } from 'web3-utils'
+import { Web3 } from '@masknet/web3-providers'
 import { FungibleToken, scale10, formatBalance } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { decodeEvents, createContract } from '@masknet/web3-shared-evm'
 import { Web3StateSettings } from '../../settings/index.js'
-import { BigNumber } from 'bignumber.js'
-import type { AbiItem } from 'web3-utils'
 
 export function getTokenAmountDescription(amount = '0', token?: FungibleToken<ChainId, SchemaType>) {
     const value = scale10(1, 9 + (token?.decimals ?? 18)).isGreaterThanOrEqualTo(amount)
@@ -27,9 +28,7 @@ export class DescriptorWithTransactionDecodedReceipt {
             chainId,
         })
 
-        const web3 = Web3StateSettings.value.Connection?.getWeb3?.({
-            chainId,
-        })
+        const web3 = Web3.createWeb3(chainId)
 
         if (!connection || !web3 || !hash || !contractAddress || !abi) return
 

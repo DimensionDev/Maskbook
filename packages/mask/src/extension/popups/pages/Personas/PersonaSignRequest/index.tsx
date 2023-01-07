@@ -1,13 +1,13 @@
 import { memo, useEffect, useState } from 'react'
+import { useAsyncFn } from 'react-use'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
+import { PersonaInformation, PopupRoutes, SignType } from '@masknet/shared-base'
 import { MaskMessages, useI18N } from '../../../../../utils/index.js'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { usePersonasFromDB } from '../../../../../components/DataSource/usePersonasFromDB.js'
 import { PersonaContext } from '../hooks/usePersonaContext.js'
 import { MethodAfterPersonaSign } from '../../Wallet/type.js'
-import { useAsyncFn } from 'react-use'
 import Services from '../../../../service.js'
 import { useTitle } from '../../../hook/useTitle.js'
 
@@ -120,7 +120,12 @@ const PersonaSignRequest = memo(() => {
         switch (method) {
             case MethodAfterPersonaSign.DISCONNECT_NEXT_ID:
                 if (!message) break
-                const signatureResult = await Services.Identity.generateSignResult(selectedPersona, message)
+                const signature = await Services.Identity.signWithPersona(
+                    SignType.Message,
+                    message,
+                    selectedPersona,
+                    true,
+                )
 
                 const profileIdentifier = url.get('profileIdentifier')
                 const platform = url.get('platform')
@@ -129,7 +134,7 @@ const PersonaSignRequest = memo(() => {
                 const uuid = url.get('uuid')
 
                 if (
-                    !signatureResult ||
+                    !signature ||
                     !profileIdentifier ||
                     !platform ||
                     !identity ||
@@ -145,7 +150,7 @@ const PersonaSignRequest = memo(() => {
                     identity,
                     createdAt,
                     {
-                        signature: signatureResult.signature.signature,
+                        signature,
                     },
                 )
                 const profile = currentPersona.linkedProfiles.find((x) => x.identifier.toText() === profileIdentifier)

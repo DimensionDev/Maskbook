@@ -1,19 +1,20 @@
 import ENS from 'ethjs-ens'
-import type { HttpProvider } from 'web3-core'
 import namehash from '@ensdomains/eth-ens-namehash'
-import { ChainId, createWeb3Provider, createWeb3Request, isEmptyHex, isZeroAddress } from '@masknet/web3-shared-evm'
+import { ChainId, isEmptyHex, isZeroAddress } from '@masknet/web3-shared-evm'
 import { Web3API } from '../EVM/index.js'
 import type { DomainAPI } from '../entry-types.js'
 
 export class ENS_API implements DomainAPI.Provider<ChainId> {
-    private get web3() {
-        return new Web3API().createSDK(ChainId.Mainnet)
+    private web3 = new Web3API()
+
+    private get eth() {
+        return this.web3.createWeb3(ChainId.Mainnet).eth
     }
 
     private get ens() {
-        const provider = this.web3.currentProvider as HttpProvider
+        const provider = this.web3.createProvider(ChainId.Mainnet)
         return new ENS({
-            provider: createWeb3Provider(createWeb3Request(provider.send.bind(provider))),
+            provider,
             network: ChainId.Mainnet,
         })
     }
@@ -22,10 +23,10 @@ export class ENS_API implements DomainAPI.Provider<ChainId> {
         try {
             const lookupAddress = await this.ens.resolveAddressForNode(namehash.hash(name))
             return isZeroAddress(lookupAddress) || isEmptyHex(lookupAddress)
-                ? this.web3.eth.ens.registry.getOwner(name)
+                ? this.eth.ens.registry.getOwner(name)
                 : lookupAddress
         } catch {
-            return this.web3.eth.ens.registry.getOwner(name)
+            return this.eth.ens.registry.getOwner(name)
         }
     }
     async reverse(chainId: ChainId, address: string): Promise<string | undefined> {

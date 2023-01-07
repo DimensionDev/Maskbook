@@ -1,20 +1,21 @@
 import urlcat from 'urlcat'
+import { first } from 'lodash-es'
 import { lazy, Suspense, useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
+import { NetworkPluginID, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
+import { useChainContext, useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
+import { TransactionDescriptorType } from '@masknet/web3-shared-base'
+import { EthereumMethodType, getDefaultChainId, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
 import { WalletStartUp } from './components/StartUp/index.js'
 import { WalletAssets } from './components/WalletAssets/index.js'
-import { NetworkPluginID, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { WalletContext } from './hooks/useWalletContext.js'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages.js'
 import SelectWallet from './SelectWallet/index.js'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus.js'
 import { WalletHeader } from './components/WalletHeader/index.js'
-import { useChainContext, useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
-import { TransactionDescriptorType } from '@masknet/web3-shared-base'
-import { ChainId, EthereumMethodType, getDefaultChainId, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
-import { first } from 'lodash-es'
+import { PopupContext } from '../../hook/usePopupContext.js'
 
 const ImportWallet = lazy(() => import('./ImportWallet/index.js'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet/index.js'))
@@ -36,6 +37,7 @@ const WalletRecovery = lazy(() => import('./WalletRecovery/index.js'))
 const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery/index.js'))
 const ReplaceTransaction = lazy(() => import('./ReplaceTransaction/index.js'))
 const CreatePassword = lazy(() => import('./CreatePassword/index.js'))
+const ChangeOwner = lazy(() => import('./ChangeOwner/index.js'))
 
 const exclusionDetectLocked = [PopupRoutes.Unlock]
 
@@ -47,6 +49,7 @@ export default function Wallet() {
     const location = useLocation()
     const navigate = useNavigate()
     const connection = useWeb3Connection()
+    const { smartPayChainId } = PopupContext.useContainer()
     const { chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
@@ -70,16 +73,20 @@ export default function Wallet() {
                 case EthereumMethodType.PERSONAL_SIGN:
                     navigate(PopupRoutes.WalletSignRequest, { replace: true })
                     break
+                case EthereumMethodType.MASK_DEPLOY:
+                    navigate(PopupRoutes.ContractInteraction, { replace: true })
+                    break
                 default:
                     break
             }
         }
 
-        const computedPayload = PayloadEditor.fromPayload(payload).config
-        if (!computedPayload) return
+        const computedPayload = PayloadEditor.fromPayload(payload)
+        if (!computedPayload.config) return
 
-        const formatterTransaction = await TransactionFormatter?.formatTransaction(chainId, computedPayload)
+        const formatterTransaction = await TransactionFormatter?.formatTransaction(chainId, computedPayload.config)
 
+        console.log(formatterTransaction)
         if (
             formatterTransaction &&
             [TransactionDescriptorType.INTERACTION, TransactionDescriptorType.TRANSFER].includes(
@@ -108,10 +115,10 @@ export default function Wallet() {
                 chainId: getDefaultChainId(),
                 providerType: ProviderType.MaskWallet,
             })
-        } else if (wallet?.owner) {
-            setChainId(ChainId.Mumbai)
+        } else if (wallet?.owner && smartPayChainId) {
+            setChainId(smartPayChainId)
         }
-    }, [wallet, wallets, connection])
+    }, [wallet, wallets, connection, smartPayChainId])
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
@@ -142,6 +149,8 @@ export default function Wallet() {
                         <Route path={r(PopupRoutes.Unlock)} element={<Unlock />} />
                         <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
                         <Route path={r(PopupRoutes.ReplaceTransaction)} element={<ReplaceTransaction />} />
+                        <Route path={r(PopupRoutes.CreatePassword)} element={<CreatePassword />} />
+                        <Route path={r(PopupRoutes.ChangeOwner)} element={<ChangeOwner />} />
                     </Routes>
                 )}
             </WalletContext.Provider>

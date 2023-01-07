@@ -5,7 +5,7 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { PluginWalletStatusBar } from '@masknet/shared'
 import { PluginID, NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
-import { resolveSourceTypeName } from '@masknet/web3-shared-base'
+import { SourceType, resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { useI18N as useBaseI18n } from '../../../../../utils/index.js'
 import { AboutTab } from './tabs/AboutTab.js'
@@ -173,7 +173,10 @@ export function CardDialogContent(props: CardDialogContentProps) {
                             fullWidth>
                             <span className={classes.buttonText}>
                                 {t('plugin_collectibles_more_on_button', {
-                                    provider: resolveSourceTypeName(asset.value.source),
+                                    provider:
+                                        asset.value.source === SourceType.NFTScan
+                                            ? resolveSourceTypeName(asset.value.source)
+                                            : 'platform',
                                 })}
                             </span>
                             <Icons.LinkOut size={16} />

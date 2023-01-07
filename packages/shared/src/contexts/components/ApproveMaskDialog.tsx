@@ -1,15 +1,13 @@
 import { Icons } from '@masknet/icons'
-import { useSharedI18N } from '@masknet/shared'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
-import { ChainId, useSmartPayConstants } from '@masknet/web3-shared-evm'
+import { useSmartPayConstants } from '@masknet/web3-shared-evm'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, InputBase, Typography } from '@mui/material'
 import { noop } from 'lodash-es'
 import { memo, useCallback, useMemo, useState } from 'react'
-import { useI18N } from '../../locales/i18n_generated.js'
-import { PluginSmartPayMessages } from '../../message.js'
+import { useSharedI18N } from '../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -37,28 +35,32 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const ApproveMaskDialog = memo(() => {
-    const t = useI18N()
+export interface ApproveMaskDialogProps {
+    open: boolean
+    handleClose: () => void
+}
+export const ApproveMaskDialog = memo<ApproveMaskDialogProps>(({ open, handleClose }) => {
     const sharedI18N = useSharedI18N()
     const { classes } = useStyles()
-    const { open, closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.approveDialogEvent)
     const { Others } = useWeb3State()
     const [amount, setAmount] = useState('')
 
-    const maskAddress = Others?.getMaskTokenAddress(ChainId.Mumbai)
-    const { EP_CONTRACT_ADDRESS } = useSmartPayConstants(ChainId.Mumbai)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+
+    const maskAddress = Others?.getMaskTokenAddress(chainId)
+    const { PAYMASTER_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
 
     const [{ type: approveStateType }, transactionState, approveCallback] = useERC20TokenApproveCallback(
         maskAddress ?? '',
         amount,
-        EP_CONTRACT_ADDRESS ?? '',
+        PAYMASTER_CONTRACT_ADDRESS ?? '',
         noop,
-        ChainId.Mumbai,
+        chainId,
     )
 
     const onApprove = useCallback(async () => {
         if (approveStateType !== ApproveStateType.NOT_APPROVED) return
-        await approveCallback(false)
+        await approveCallback(true)
     }, [approveStateType, transactionState, approveCallback])
 
     const action = useMemo(() => {
@@ -95,14 +97,14 @@ export const ApproveMaskDialog = memo(() => {
     }, [approveStateType, approveCallback, sharedI18N, transactionState, onApprove])
 
     return usePortalShadowRoot((container) => (
-        <Dialog container={container} open={open} onClose={closeDialog} classes={{ paper: classes.paper }}>
+        <Dialog container={container} open={open} onClose={handleClose} classes={{ paper: classes.paper }}>
             <DialogTitle sx={{ py: 3 }}>
-                <Typography className={classes.title}>{t.approve_mask()}</Typography>
+                <Typography className={classes.title}>{sharedI18N.approve_mask()}</Typography>
             </DialogTitle>
             <DialogContent>
-                <Typography className={classes.description}>{t.approve_mask_description()}</Typography>
+                <Typography className={classes.description}>{sharedI18N.approve_mask_description()}</Typography>
                 <Typography className={classes.description} marginTop={2}>
-                    {t.approve_mask_question()}
+                    {sharedI18N.approve_mask_question()}
                 </Typography>
                 <InputBase
                     sx={{ mt: 3 }}
@@ -118,7 +120,7 @@ export const ApproveMaskDialog = memo(() => {
             </DialogContent>
             <DialogActions className={classes.actions}>
                 {action}
-                <Button fullWidth variant="roundedOutlined" onClick={closeDialog}>
+                <Button fullWidth variant="roundedOutlined" onClick={handleClose}>
                     {sharedI18N.cancel()}
                 </Button>
             </DialogActions>

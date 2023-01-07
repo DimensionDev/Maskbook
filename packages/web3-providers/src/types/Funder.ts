@@ -1,3 +1,5 @@
+import type { Proof } from '@masknet/shared-base'
+
 export namespace FunderAPI {
     export interface Payload {
         twitterHandler: string
@@ -5,11 +7,6 @@ export namespace FunderAPI {
         publicKey: string
         // timestamp will expire after 1 hour
         ts: number
-    }
-    export interface Proof {
-        ownerAddress: string
-        payload: string // JSON.stringify(payload)
-        signature: string
     }
 
     export interface Fund {

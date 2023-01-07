@@ -4,7 +4,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { EMPTY_LIST, mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
 import { isSameAddress, Wallet, WalletState as Web3WalletState } from '@masknet/web3-shared-base'
 
-export type WalletStorage<ProviderType extends string> = Partial<Record<ProviderType, Wallet[]>>
+type WalletStorage<ProviderType extends string> = Partial<Record<ProviderType, Wallet[]>>
 
 export class WalletState<ProviderType extends string, Transaction> implements Web3WalletState<Transaction> {
     public storage: StorageItem<WalletStorage<ProviderType>> = null!
@@ -68,6 +68,7 @@ export class WalletState<ProviderType extends string, Transaction> implements We
             ],
         })
     }
+
     async updateWallet(
         address: string,
         updates: Partial<Omit<Wallet, 'id' | 'address' | 'createdAt' | 'updatedAt' | 'storedKeyInfo'>>,
@@ -90,11 +91,13 @@ export class WalletState<ProviderType extends string, Transaction> implements We
             ),
         })
     }
+
     async renameWallet(address: string, name: string) {
         await this.updateWallet(address, {
             name,
         })
     }
+
     async removeWallet(address: string, password?: string | undefined) {
         await this.storage.setValue({
             ...this.storage.value,
@@ -105,7 +108,8 @@ export class WalletState<ProviderType extends string, Transaction> implements We
     signTransaction(address: string, transaction: Transaction): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    signMessage(address: string, type: string, message: string, password?: string | undefined): Promise<string> {
+
+    signMessage(type: string, address: string, message: string, password?: string | undefined): Promise<string> {
         throw new Error('Method not implemented.')
     }
 }

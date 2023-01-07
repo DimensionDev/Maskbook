@@ -8,6 +8,8 @@ export interface PersonaInformation {
     proof?: NextIDPersonaBindings
     /** The nickname of the persona. Should use profile.nickname if it presents. */
     nickname?: string
+    /** The evm address of persona */
+    address?: string
     identifier: PersonaIdentifier
     linkedProfiles: ProfileInformation[]
 }
@@ -21,7 +23,7 @@ export interface ProfileInformation {
 
 export interface ProfileInformationFromNextID extends ProfileInformation {
     fromNextID: boolean
-    linkedTwitterNames: string[]
+    linkedTwitterNames?: string[]
     walletAddress?: string
     createdAt?: Date
     updatedAt?: Date
@@ -45,4 +47,21 @@ export interface Relation {
     linked: PersonaIdentifier
     favor: RelationFavor
     network: string
+}
+
+export enum ProofType {
+    Persona = 'persona',
+    EOA = 'eoa',
+}
+
+export interface ProofPayload {
+    ownerAddress: string
+    nonce?: number
+}
+
+export interface Proof {
+    publicKey: string
+    type: ProofType
+    payload: string // JSON.stringify(payload)
+    signature: string
 }

@@ -229,6 +229,7 @@
     "personas_disconnect_raw": "Disconnect",
     "personas_disconnect_warning": "Are you sure you want to delete persona verification?  Your mask friends can no longer send decrypted message to you by this persona or check your Web 3 products related with this persona.",
     "personas_logout_warning": "After logging out, your associated social accounts can no longer decrypt past encrypted messages. If you need to reuse your account, you can use your private key for recovery.",
+    "personas_logout_manage_wallet_warning": "Please note: This Persona {{persona}} is the management account of SmartPay wallet {{addresses}}. You cannot use SmartPay wallet to interact with blockchain after logging out persona.",
     "personas_add": "Add",
     "personas_upload_avatar": "Upload an avatar",
     "personas_rename": "Rename",
@@ -388,5 +389,8 @@
     "create_wallet_your_wallet_address": "Your wallet address",
     "create_wallet_done": "Done",
     "create_wallet_verify_words": "Verify mnemonic words",
-    "create_wallet_mnemonic_word_not_match": "The mnemonic word is incorrect"
+    "create_wallet_mnemonic_word_not_match": "The mnemonic word is incorrect",
+    "recovery_smart_pay_wallet_title": "Recovery SmartPay wallet",
+    "recovery_smart_pay_wallet_description_one": "{{count}} SmartPay wallet is detected locally. Recovering successfully.",
+    "recovery_smart_pay_wallet_description_other": "{{count}} SmartPay wallets are detected locally. Recovering successfully."
 }

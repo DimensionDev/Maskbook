@@ -1,12 +1,12 @@
-import { memo } from 'react'
-import { useAsync, useAsyncFn } from 'react-use'
-import { useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
+import { memo } from 'react'
+import { useAsync, useAsyncFn } from 'react-use'
+import { useLocation } from 'react-router-dom'
+import { usePopupCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
-import { NetworkPluginID, NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
-import { usePopupCustomSnackbar } from '@masknet/theme'
+import { NetworkPluginID, NextIDAction, NextIDPlatform, PopupRoutes, SignType } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/index.js'
@@ -21,9 +21,8 @@ const ConnectedWallets = memo(() => {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
-    const navigate = useNavigate()
     const location = useLocation()
-    const { proofs, currentPersona, refreshProofs, fetchProofsLoading } = PersonaContext.useContainer()
+    const { proofs, currentPersona, fetchProofsLoading } = PersonaContext.useContainer()
 
     const { showSnackbar } = usePopupCustomSnackbar()
 
@@ -59,9 +58,7 @@ const ConnectedWallets = memo(() => {
         )
 
         return compact(results)
-            .sort((a, z) => {
-                return isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1
-            })
+            .sort((a, z) => (isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1))
             .map((x, index, list) => {
                 if (!x.name)
                     return {
@@ -87,9 +84,11 @@ const ConnectedWallets = memo(() => {
 
                 if (!result) return
 
-                const signature = await Service.Identity.generateSignResult(
-                    currentPersona.identifier,
+                const signature = await Service.Identity.signWithPersona(
+                    SignType.Message,
                     result.signPayload,
+                    currentPersona.identifier,
+                    true,
                 )
 
                 if (!signature) return
@@ -101,12 +100,11 @@ const ConnectedWallets = memo(() => {
                     wallet.platform,
                     wallet.identity,
                     result.createdAt,
-                    { signature: signature.signature.signature },
+                    { signature },
                 )
                 // Broadcast updates.
                 MaskMessages.events.ownProofChanged.sendToAll()
                 showSnackbar(t('popups_wallet_disconnect_success'))
-                refreshProofs()
             } catch {
                 showSnackbar(t('popups_wallet_disconnect_failed'))
             }

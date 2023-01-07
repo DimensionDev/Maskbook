@@ -4,8 +4,9 @@ import type {
     Transaction as Web3Transaction,
     TransactionReceipt as Web3TransactionReceipt,
 } from 'web3-core'
-import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types.js'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type { ECKeyIdentifier } from '@masknet/shared-base'
+import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types.js'
 
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
 
@@ -74,6 +75,8 @@ export enum ChainId {
     ZKSync_Alpha_Testnet = 280,
 
     Crossbell = 3737,
+
+    Moonbeam = 1284,
 
     // For any chains not supported yet.
     Invalid = 0,
@@ -157,8 +160,8 @@ export enum EthereumMethodType {
     ETH_CALL_USER_OPERATION = 'eth_callUserOperation',
     ETH_SUPPORTED_CHAIN_IDS = 'eth_supportedChainIds',
     ETH_SUPPORTED_ENTRY_POINTS = 'eth_supportedEntryPoints',
-    MASK_DEPLOY_CONTRACT_WALLET = 'mask_deployContractWallet',
-    MASK_TRANSFER_CONTRACT_WALLET = 'mask_transferContractWallet',
+    MASK_DEPLOY = 'mask_deploy',
+    MASK_FUND = 'mask_fund',
 
     // only for mask
     MASK_LOGIN = 'MASK_LOGIN',
@@ -199,6 +202,7 @@ export enum NetworkType {
     Harmony = 'Harmony',
     Conflux = 'Conflux',
     Astar = 'Astar',
+    Moonbeam = 'Moonbeam',
 }
 
 export enum ProviderType {
@@ -217,6 +221,9 @@ export enum ProviderType {
 
 export type Web3 = EVM_Web3
 
+/**
+ * EIP-1193 compatible provider
+ */
 export interface Web3Provider {
     send(
         payload: JsonRpcPayload,
@@ -257,6 +264,9 @@ export interface Transaction {
     nonce?: number
     chainId?: number
 
+    // 4337
+    gasCurrency?: string
+
     // CELO
     feeCurrency?: string // address of the ERC20 contract to use to pay for gas and the gateway fee
     gatewayFeeRecipient?: string // coinbase address of the full serving the light client's transactions
@@ -280,3 +290,13 @@ export type TransactionReceipt = Web3TransactionReceipt
 export type TransactionDetailed = Web3Transaction
 export type TransactionSignature = string
 export type TransactionParameter = string | boolean | undefined
+
+export interface TransactionOptions {
+    account?: string
+    chainId?: ChainId
+    owner?: string
+    identifier?: ECKeyIdentifier
+    gasCurrency?: string
+    disableClose?: boolean
+    popupsWindow?: boolean
+}

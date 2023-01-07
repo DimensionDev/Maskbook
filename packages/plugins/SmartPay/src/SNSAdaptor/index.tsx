@@ -5,11 +5,12 @@ import { PLUGIN_ID } from '../constants.js'
 import { SmartPayEntry } from './components/SmartPayEntry.js'
 import { setupContext, context } from './context.js'
 import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { useWallets, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { ApproveMaskDialog, ReceiveDialog, SmartPayDescriptionDialog, SmartPayDialog } from './components/index.js'
-import { SmartPayContext } from '../context/SmartPayContext.js'
+import { ReceiveDialog, SmartPayDescriptionDialog, SmartPayDialog } from './components/index.js'
+import { useAsync } from 'react-use'
+import { SmartPayBundler } from '@masknet/web3-providers'
+import { first } from 'lodash-es'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -17,15 +18,21 @@ const sns: Plugin.SNSAdaptor.Definition = {
         setupContext(context)
     },
     GlobalInjection: function Component() {
+        const wallets = useWallets()
+        const contractAccounts = wallets.filter((x) => x.owner)
+        const { value: chainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
+
         return (
             <SNSAdaptorContext.Provider value={context}>
-                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mumbai }}>
-                    <SmartPayContext.Provider>
-                        <SmartPayDialog />
-                        <SmartPayDescriptionDialog />
-                        <ApproveMaskDialog />
-                        <ReceiveDialog />
-                    </SmartPayContext.Provider>
+                <Web3ContextProvider
+                    value={{
+                        pluginID: NetworkPluginID.PLUGIN_EVM,
+                        chainId,
+                        account: first(contractAccounts)?.address,
+                    }}>
+                    <SmartPayDialog />
+                    <SmartPayDescriptionDialog />
+                    <ReceiveDialog />
                 </Web3ContextProvider>
             </SNSAdaptorContext.Provider>
         )
@@ -35,7 +42,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             RenderEntryComponent: (props) => {
                 return (
                     <SNSAdaptorContext.Provider value={context}>
-                        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mumbai }}>
+                        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
                             <SmartPayEntry {...props} />
                         </Web3ContextProvider>
                     </SNSAdaptorContext.Provider>
@@ -46,7 +53,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             marketListSortingPriority: 3,
             name: { i18nKey: '__plugin_name', fallback: 'Smart Pay' },
             icon: <Icons.SmartPay size={36} />,
-            category: 'dapp',
+            category: 'other',
         },
     ],
 }

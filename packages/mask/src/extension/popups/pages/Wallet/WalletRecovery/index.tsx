@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { PageHeader } from '../components/PageHeader/index.js'
-import { MaskMessages, useI18N } from '../../../../../utils/index.js'
+import { useI18N } from '../../../../../utils/index.js'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -131,14 +131,11 @@ const WalletRecovery = memo(() => {
 
                 // Set default wallet
                 if (wallet) {
-                    connection?.connect({
+                    await connection?.connect({
                         account: wallet.address,
                         chainId: ChainId.Mainnet,
                     })
                 }
-
-                // Send event after successful recovery
-                MaskMessages.events.restoreSuccess.sendToAll(undefined)
 
                 await Services.Helper.removePopupWindow()
             }

@@ -1,9 +1,13 @@
 import { Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Typography, Grid } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { WalletIcon } from '@masknet/shared'
 import { SourceType, formatInteger, formatMarketCap, formatSupply, TokenType } from '@masknet/web3-shared-base'
 import type { Trending } from '../../types/index.js'
 import { useI18N } from '../../../../utils/index.js'
-import { useTrendingOverviewByAddress } from '../../trending/useTrending.js'
+import { useTrendingOverview } from '../../trending/useTrending.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -16,13 +20,18 @@ const useStyles = makeStyles()((theme) => ({
     },
     head: {
         padding: 0,
+        fontSize: 14,
         border: 'none',
     },
     cell: {
         whiteSpace: 'nowrap',
         border: 'none',
+        fontSize: 14,
         textAlign: 'right',
         fontWeight: 700,
+    },
+    label: {
+        fontSize: 14,
     },
     gridContainer: {
         display: 'grid',
@@ -45,10 +54,19 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         fontWeight: 400,
     },
+    amountWrapper: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    amount: {
+        marginLeft: 4,
+        fontWeight: 700,
+    },
 }))
 
 export interface CoinMarketTableProps {
     dataProvider: SourceType
+    result: Web3Helper.TokenResultAll
     trending: Trending
 }
 
@@ -74,7 +92,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                         {SourceType.UniswapInfo !== dataProvider ? (
                             <TableRow>
                                 <TableCell className={classes.head} component="th">
-                                    <Typography color="textSecondary" variant="body2">
+                                    <Typography color="textSecondary" variant="body2" className={classes.label}>
                                         {t('plugin_trader_market_cap')}
                                     </Typography>
                                 </TableCell>
@@ -86,7 +104,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                         {SourceType.UniswapInfo !== dataProvider ? (
                             <TableRow>
                                 <TableCell className={classes.head} component="th">
-                                    <Typography color="textSecondary" variant="body2">
+                                    <Typography color="textSecondary" variant="body2" className={classes.label}>
                                         {t('plugin_trader_circulating_supply')}
                                     </Typography>
                                 </TableCell>
@@ -97,7 +115,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                         ) : null}
                         <TableRow>
                             <TableCell className={classes.head} component="th">
-                                <Typography color="textSecondary" variant="body2">
+                                <Typography color="textSecondary" variant="body2" className={classes.label}>
                                     {t('plugin_trader_volume_24')}
                                 </Typography>
                             </TableCell>
@@ -108,7 +126,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                         {dataProvider !== SourceType.UniswapInfo ? (
                             <TableRow>
                                 <TableCell className={classes.head} component="th">
-                                    <Typography color="textSecondary" variant="body2">
+                                    <Typography color="textSecondary" variant="body2" className={classes.label}>
                                         {t('plugin_trader_total_supply')}
                                     </Typography>
                                 </TableCell>
@@ -126,9 +144,11 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
 
 export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
     const { t } = useI18N()
-    const { value: overview } = useTrendingOverviewByAddress(props.trending.coin.address ?? '')
+    const chainId = props.result.chainId ?? props.trending.coin.chainId
+    const { value: overview } = useTrendingOverview(props.result.pluginID, props.result, chainId)
     const { classes } = useStyles()
-
+    const chain = useNetworkDescriptor(props.result.pluginID ?? NetworkPluginID.PLUGIN_EVM, chainId)
+    const ChainIcon = () => <WalletIcon mainIcon={chain?.icon} size={14} />
     return (
         <Stack>
             <Grid spacing={4} className={classes.gridContainer}>
@@ -148,41 +168,60 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
                         {t('plugin_trader_market_cap')}
                     </Typography>
-                    {formatInteger(overview?.market_cap, '--')}
+                    <div className={classes.amountWrapper}>
+                        {overview?.market_cap ? <ChainIcon /> : null}
+                        <span className={classes.amount}>{formatInteger(overview?.market_cap, '--')}</span>
+                    </div>
                 </Grid>
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
                         {t('plugin_trader_highest_price')}
                     </Typography>
-                    {overview?.highest_price ?? '--'}
+                    <div className={classes.amountWrapper}>
+                        {overview?.highest_price ? <ChainIcon /> : null}
+                        <span className={classes.amount}>{formatSupply(overview?.highest_price, '--')}</span>
+                    </div>
                 </Grid>
 
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
                         {t('plugin_trader_total_volume')}
                     </Typography>
-                    {overview?.total_volume ?? '--'}
+                    <div className={classes.amountWrapper}>
+                        {overview?.total_volume ? <ChainIcon /> : null}
+                        <span className={classes.amount}>{formatSupply(overview?.total_volume, '--')}</span>
+                    </div>
                 </Grid>
 
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
                         {t('plugin_trader_one_day_average_price')}
                     </Typography>
-                    {overview?.average_price_24h ?? '--'}
+                    <div className={classes.amountWrapper}>
+                        {overview?.average_price_24h ?? overview?.average_price ? <ChainIcon /> : null}
+                        <span className={classes.amount}>
+                            {formatSupply(overview?.average_price_24h ?? overview?.average_price, '--')}
+                        </span>
+                    </div>
                 </Grid>
 
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
                         {t('plugin_trader_one_day_traded_volume')}
                     </Typography>
-                    {overview?.volume_24h ?? '--'}
+                    <div className={classes.amountWrapper}>
+                        {overview?.volume_24h ?? overview?.volume ? <ChainIcon /> : null}
+                        <span className={classes.amount}>
+                            {formatSupply(overview?.volume_24h ?? overview?.volume, '--')}
+                        </span>
+                    </div>
                 </Grid>
 
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
                         {t('plugin_trader_one_day_sale')}
                     </Typography>
-                    {overview?.sales_24h ?? '--'}
+                    {formatSupply(overview?.sales_24h ?? overview?.sales, '--')}
                 </Grid>
             </Grid>
         </Stack>
