@@ -1,5 +1,5 @@
 import { first } from 'lodash-es'
-import { ECKeyIdentifier, ExtensionSite, getSiteType, PopupRoutes } from '@masknet/shared-base'
+import { ECKeyIdentifier, EMPTY_LIST, ExtensionSite, getSiteType, PopupRoutes } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, chainResolver, isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
 import type { EVM_Provider } from '../types.js'
@@ -9,6 +9,27 @@ import { SharedContextSettings, Web3StateSettings } from '../../../settings/inde
 export class MaskWalletProvider extends BaseContractWalletProvider implements EVM_Provider {
     constructor() {
         super(ProviderType.MaskWallet)
+
+        const getReadyPromise = async () => {
+            await Web3StateSettings.readyPromise
+            await Web3StateSettings.value.Wallet?.readyPromise
+        }
+
+        // the initial setup of selecting the primary wallet
+        getReadyPromise().then(() => {
+            Web3StateSettings.value.Wallet?.wallets?.subscribe(async () => {
+                const primaryWallet = first(this.wallets)?.address
+
+                if (!this.hostedAccount && primaryWallet) {
+                    await this.switchAccount(primaryWallet)
+                    await this.switchChain(ChainId.Mainnet)
+                }
+            })
+        })
+    }
+
+    private get wallets() {
+        return Web3StateSettings.value.Wallet?.wallets?.getCurrentValue() ?? EMPTY_LIST
     }
 
     override async connect(
@@ -37,9 +58,8 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
             }
         }
 
-        const wallets = Web3StateSettings.value.Wallet?.wallets?.getCurrentValue()
         await SharedContextSettings.value.openPopupWindow(
-            wallets?.length ? PopupRoutes.SelectWallet : PopupRoutes.Wallet,
+            this.wallets.length ? PopupRoutes.SelectWallet : PopupRoutes.Wallet,
             {
                 chainId,
             },

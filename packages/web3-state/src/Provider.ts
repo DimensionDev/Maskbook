@@ -53,6 +53,17 @@ export class ProviderState<
         this.setupProviders()
     }
 
+    get ready() {
+        return this.storage.account.initialized && this.storage.providerType.initialized
+    }
+
+    get readyPromise() {
+        return Promise.all([
+            this.storage.account.initializedPromise,
+            this.storage.providerType.initializedPromise,
+        ]).then(() => {})
+    }
+
     protected setupSubscriptions() {
         if (!this.site) return
 
