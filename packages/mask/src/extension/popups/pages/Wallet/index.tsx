@@ -85,8 +85,6 @@ export default function Wallet() {
         if (!computedPayload.config) return
 
         const formatterTransaction = await TransactionFormatter?.formatTransaction(chainId, computedPayload.config)
-
-        console.log(formatterTransaction)
         if (
             formatterTransaction &&
             [TransactionDescriptorType.INTERACTION, TransactionDescriptorType.TRANSFER].includes(
