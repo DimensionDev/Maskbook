@@ -276,20 +276,18 @@ const ContractInteraction = memo(() => {
 
     // handlers
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
-        if (request) {
-            try {
-                await WalletRPC.confirmRequest(request.payload, {
-                    chainId: request.owner ? smartPayChainId : chainId,
-                    owner: request.owner,
-                    identifier: request.identifier,
-                    gasCurrency,
-                })
-                navigate(-1)
-            } catch (error_) {
-                setTransferError(true)
-            }
+        if (!request) return
+        try {
+            await WalletRPC.confirmRequest(request.payload, {
+                chainId: request.owner ? smartPayChainId : chainId,
+                owner: request.owner,
+                identifier: request.identifier,
+                gasCurrency,
+            })
+            navigate(-1)
+        } catch (error_) {
+            setTransferError(true)
         }
-        return
     }, [request, location.search, history, chainId, smartPayChainId, gasCurrency])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {

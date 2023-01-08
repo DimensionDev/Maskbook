@@ -174,8 +174,8 @@ class Connection implements EVM_Connection {
             providerType: this.providerType,
             ...initial,
             overrides: {
-                from: this.account,
-                chainId: this.chainId,
+                from: initial?.account ?? this.account,
+                chainId: initial?.chainId ?? this.chainId,
                 ...initial?.overrides,
                 ...overrides?.overrides,
             },
