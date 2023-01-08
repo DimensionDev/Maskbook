@@ -2,18 +2,18 @@ import { memo, useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { first } from 'lodash-es'
 import { makeStyles } from '@masknet/theme'
+import { Button, List, Typography } from '@mui/material'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
-import { Button, List, Typography } from '@mui/material'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
-import { useI18N } from '../../../../../utils/index.js'
-import Services from '../../../../service.js'
-import { WalletItem } from './WalletItem.js'
 import { useChainIdValid, useWallets, useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainIcon, WalletIcon } from '@masknet/shared'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
+import { useI18N } from '../../../../../utils/index.js'
+import Services from '../../../../service.js'
+import { WalletItem } from './WalletItem.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 
 const useStyles = makeStyles()({
@@ -135,21 +135,17 @@ const SelectWallet = memo(() => {
 
         const wallet = wallets.find((x) => isSameAddress(x.address, selected))
 
-        await connection?.connect({
-            chainId: wallet?.owner ? smartPayChainId : chainId,
-            account: selected,
-            owner: wallet?.owner,
-            identifier: wallet?.identifier,
-        })
-        if (chainId) {
-            await WalletRPC.resolveMaskAccount([
-                {
-                    address: selected,
-                    owner: wallet?.owner,
-                    identifier: wallet?.identifier,
-                },
-            ])
-        }
+        await WalletRPC.resolveMaskAccount([
+            wallet?.owner
+                ? {
+                      address: selected,
+                      owner: wallet.owner,
+                      identifier: wallet.identifier,
+                  }
+                : {
+                      address: selected,
+                  },
+        ])
         return Services.Helper.removePopupWindow()
     }, [chainId, selected, isPopup, connection, wallets, smartPayChainId])
 

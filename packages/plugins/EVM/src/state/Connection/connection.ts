@@ -106,11 +106,15 @@ class Connection implements EVM_Connection {
                                 case EthereumMethodType.MASK_LOGIN:
                                     context.write(
                                         await this.Provider?.connect(
-                                            options.chainId,
                                             options.providerType,
+                                            options.chainId,
                                             options.account,
-                                            options.owner,
-                                            options.identifier,
+                                            options.owner
+                                                ? {
+                                                      account: options.owner,
+                                                      identifier: options.identifier,
+                                                  }
+                                                : undefined,
                                         ),
                                     )
                                     break
@@ -133,7 +137,7 @@ class Connection implements EVM_Connection {
                                             await delay(1500)
                                         }
                                         // make sure that the provider is connected before sending the transaction
-                                        await this.Provider?.connect(options.chainId, options.providerType)
+                                        await this.Provider?.connect(options.providerType, options.chainId)
                                     }
 
                                     const web3Provider = provider.createWeb3Provider({

@@ -926,8 +926,10 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     connect(
         chainId?: ChainId,
         address?: string,
-        owner?: string,
-        identifier?: ECKeyIdentifier,
+        owner?: {
+            account: string
+            identifier?: ECKeyIdentifier
+        },
     ): Promise<Account<ChainId>>
     /** Dismiss the connection. */
     disconnect(): Promise<void>
@@ -1559,11 +1561,13 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
     untilReady: (providerType: ProviderType) => Promise<void>
     /** Connect with the provider and set chain id. */
     connect: (
-        chainId: ChainId,
         providerType: ProviderType,
+        chainId: ChainId,
         account?: string,
-        owner?: string,
-        identifier?: ECKeyIdentifier,
+        owner?: {
+            account: string
+            identifier?: ECKeyIdentifier
+        },
     ) => Promise<Account<ChainId>>
     /** Disconnect with the provider. */
     disconnect: (providerType: ProviderType) => Promise<void>

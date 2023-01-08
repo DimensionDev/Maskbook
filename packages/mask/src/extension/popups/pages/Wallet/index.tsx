@@ -1,12 +1,11 @@
 import urlcat from 'urlcat'
-import { first } from 'lodash-es'
 import { lazy, Suspense, useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
 import { NetworkPluginID, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
-import { useChainContext, useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
 import { TransactionDescriptorType } from '@masknet/web3-shared-base'
-import { EthereumMethodType, getDefaultChainId, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
+import { EthereumMethodType, PayloadEditor } from '@masknet/web3-shared-evm'
 import { WalletStartUp } from './components/StartUp/index.js'
 import { WalletAssets } from './components/WalletAssets/index.js'
 import { WalletContext } from './hooks/useWalletContext.js'
@@ -45,12 +44,12 @@ const r = relativeRouteOf(PopupRoutes.Wallet)
 
 export default function Wallet() {
     const wallet = useWallet()
-    const wallets = useWallets()
     const location = useLocation()
     const navigate = useNavigate()
-    const connection = useWeb3Connection()
     const { smartPayChainId } = PopupContext.useContainer()
-    const { chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
+        chainId: wallet?.owner && smartPayChainId ? smartPayChainId : undefined,
+    })
     const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
     const { loading, retry } = useAsyncRetry(async () => {
@@ -63,6 +62,7 @@ export default function Wallet() {
             ].some((item) => item === location.pathname)
         )
             return
+
         const payload = await WalletRPC.topUnconfirmedRequest()
         if (!payload) return
 
@@ -105,18 +105,6 @@ export default function Wallet() {
             if (hasRequest) retry()
         })
     }, [retry])
-
-    useEffect(() => {
-        if (!wallet && wallets.length) {
-            connection?.connect({
-                account: first(wallets)?.address,
-                chainId: getDefaultChainId(),
-                providerType: ProviderType.MaskWallet,
-            })
-        } else if (wallet?.owner && smartPayChainId) {
-            setChainId(smartPayChainId)
-        }
-    }, [wallet, wallets, connection, smartPayChainId])
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
