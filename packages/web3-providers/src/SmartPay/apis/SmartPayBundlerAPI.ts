@@ -4,15 +4,12 @@ import type { ChainId, UserOperation } from '@masknet/web3-shared-evm'
 import { toBase64, fromHex } from '@masknet/shared-base'
 import type { BundlerAPI } from '../../types/Bundler.js'
 import { fetchCached, fetchJSON } from '../../entry-helpers.js'
-import { BUNDLER_DEV, BUNDLER_PROD } from '../constants.js'
-
-const BUNDLER_ROOT =
-    process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? BUNDLER_PROD : BUNDLER_DEV
+import { BUNDLER_PROD } from '../constants.js'
 
 export class SmartPayBundlerAPI implements BundlerAPI.Provider {
     private healthz() {
         return fetchJSON<BundlerAPI.Healthz>(
-            urlcat(BUNDLER_ROOT, '/healthz'),
+            urlcat(BUNDLER_PROD, '/healthz'),
             {
                 method: 'GET',
             },
@@ -22,7 +19,7 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
 
     private async handle(userOperation: UserOperation) {
         const { tx_hash, message = 'Unknown Error' } = await fetchJSON<{ tx_hash: string; message?: string }>(
-            urlcat(BUNDLER_ROOT, '/handle'),
+            urlcat(BUNDLER_PROD, '/handle'),
             {
                 method: 'POST',
                 body: JSON.stringify({
