@@ -149,7 +149,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     const { coin, market } = trending
     const { isNFTProjectPopper, isTokenTagPopper, isPreciseSearch } = useContext(TrendingViewContext)
-    const { value: overview } = useTrendingOverview(props.trending.coin.address ?? '', props.trending.coin.chainId)
+
+    const { value: overview } = useTrendingOverview(result.pluginID, result, props.trending.coin.chainId)
 
     const { t } = useI18N()
     const theme = useTheme()
@@ -186,6 +187,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const titleRef = useRef<HTMLElement>(null)
     const [coinMenuOpen, setCoinMenuOpen] = useState(false)
     const coinAddress = coin.address || coin.contract_address
+    const coinName = result.name || coin.name
 
     const displayResultList = uniqBy(
         [result, ...resultList],
@@ -202,27 +204,25 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                     <Stack gap={2} flexGrow={1}>
                         <Stack>
                             <Stack flexDirection="row" alignItems="center" gap={0.5} ref={titleRef}>
-                                {coinAddress ? (
-                                    <Linking href={first(coin.home_urls)}>
-                                        <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
-                                            <CoinIcon
-                                                type={coin.type}
-                                                name={coin.name}
-                                                label=""
-                                                symbol={coin.symbol}
-                                                address={coinAddress}
-                                                logoURL={coin.image_url}
-                                                size={20}
-                                            />
-                                        </Avatar>
-                                    </Linking>
-                                ) : null}
+                                <Linking href={first(coin.home_urls)}>
+                                    <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
+                                        <CoinIcon
+                                            type={coin.type}
+                                            name={coinName}
+                                            label=""
+                                            symbol={coin.symbol}
+                                            address={coinAddress ?? ''}
+                                            logoURL={coin.image_url}
+                                            size={20}
+                                        />
+                                    </Avatar>
+                                </Linking>
 
                                 <Typography className={classes.title} variant="h6">
                                     <Linking
                                         href={first(coin.home_urls)}
-                                        LinkProps={{ className: classes.name, title: coin.name.toUpperCase() }}>
-                                        {coin.name.toUpperCase()}
+                                        LinkProps={{ className: classes.name, title: coinName.toUpperCase() }}>
+                                        {coinName.toUpperCase()}
                                     </Linking>
                                     {coin.symbol ? (
                                         <Typography component="span" className={classes.symbol}>
@@ -296,7 +296,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                         ? last(stats)?.[1] ?? market.current_price
                                                         : market.current_price) ?? 0
                                                 }
-                                                sign={isNFT ? market.price_symbol ?? 'ETH' : 'USD'}
+                                                sign={isNFT ? market.price_symbol : 'USD'}
                                                 formatter={formatCurrency}
                                             />
                                         </Typography>
@@ -307,11 +307,13 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     )}
                                     <PriceChanged
                                         amount={
-                                            market?.price_change_percentage_1h ??
-                                            market?.price_change_percentage_24h ??
-                                            overview?.average_price_change_1d
+                                            market?.price_change_percentage_1h_in_currency ??
+                                            market?.price_change_24h ??
+                                            (overview?.average_price_change
+                                                ? Number.parseFloat(overview?.average_price_change ?? '0')
+                                                : overview?.average_price_change_1d
                                                 ? Number.parseFloat(overview?.average_price_change_1d ?? '0')
-                                                : 0
+                                                : 0)
                                         }
                                     />
                                 </Stack>

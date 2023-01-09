@@ -1,12 +1,18 @@
 import { BigNumber } from 'bignumber.js'
 import { FungibleAsset, leftShift, multipliedBy, TokenType, Transaction } from '@masknet/web3-shared-base'
-import { ChainId, getTokenConstant, SchemaType, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ChainId, getTokenConstant, SchemaType, formatEthereumAddress, isValidAddress } from '@masknet/web3-shared-evm'
 import {
     ZerionAddressPosition,
     ZerionRBDTransactionType,
     ZerionTransactionItem,
     ZerionTransactionStatus,
 } from './types.js'
+
+export function isValidAsset(data: ZerionAddressPosition) {
+    const { asset, chain } = data
+    const { address } = asset.implementations[chain]
+    return isValidAddress(address)
+}
 
 export function formatAsset(chainId: ChainId, data: ZerionAddressPosition): FungibleAsset<ChainId, SchemaType> {
     const { asset, chain, quantity } = data
@@ -49,7 +55,7 @@ export function formatTransactions(
 
             return {
                 id: transaction.hash,
-                chainId,
+                chainId: ChainId.Mainnet,
                 type: transaction.type,
                 filterType: transaction.type,
                 from: transaction.address_from ?? '',

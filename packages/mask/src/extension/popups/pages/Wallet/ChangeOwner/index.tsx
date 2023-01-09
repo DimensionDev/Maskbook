@@ -60,6 +60,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     placeholder: {
         padding: theme.spacing(3.5, 1),
+        color: theme.palette.maskColor.second,
     },
     list: {
         padding: theme.spacing(2, 0),
@@ -67,6 +68,7 @@ const useStyles = makeStyles()((theme) => ({
     item: {
         display: 'flex',
         justifyContent: 'space-between',
+        cursor: 'pointer',
     },
     identity: {
         fontSIze: 14,
@@ -211,18 +213,19 @@ export default function ChangeOwner() {
                                     key={index}
                                     className={cx(
                                         classes.item,
-                                        isSameAddress(persona.address, contractAccount?.owner ?? '')
+                                        isSameAddress(persona.address, contractAccount?.owner)
                                             ? classes.disabledItem
                                             : undefined,
                                     )}
-                                    onClick={() =>
+                                    onClick={() => {
+                                        if (isSameAddress(persona.address, contractAccount?.owner)) return
                                         setManageAccount({
                                             type: ManagerAccountType.Persona,
                                             name: persona.nickname,
                                             address: persona.address,
                                             rawPublicKey: persona.identifier.rawPublicKey,
                                         })
-                                    }>
+                                    }}>
                                     <Box display="flex" alignItems="center" columnGap={0.5}>
                                         <Icons.MaskBlue size={30} />
                                         <Box>
@@ -253,17 +256,18 @@ export default function ChangeOwner() {
                                     key={index}
                                     className={cx(
                                         classes.item,
-                                        isSameAddress(wallet.address, contractAccount?.owner ?? '')
+                                        isSameAddress(wallet.address, contractAccount?.owner)
                                             ? classes.disabledItem
                                             : undefined,
                                     )}
-                                    onClick={() =>
+                                    onClick={() => {
+                                        if (isSameAddress(wallet.address, contractAccount?.owner)) return
                                         setManageAccount({
                                             type: ManagerAccountType.Wallet,
                                             name: wallet.name,
                                             address: wallet.address,
                                         })
-                                    }>
+                                    }}>
                                     <Box display="flex" alignItems="center" columnGap={0.5}>
                                         <Icons.MaskBlue size={30} />
                                         <Box>

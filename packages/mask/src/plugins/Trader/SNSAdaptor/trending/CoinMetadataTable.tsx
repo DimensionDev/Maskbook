@@ -84,33 +84,33 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
 
     const metadataLinks = [['Website', trending.coin.home_urls]] as Array<[string, string[] | undefined]>
 
-    const contracts =
-        trending.contracts ?? (trending.coin.chainId && trending.coin.contract_address)
-            ? [
-                  {
-                      chainId: trending.coin.chainId!,
-                      address: trending.coin.contract_address!,
-                      name: trending.coin.name,
-                      symbol: trending.coin.symbol,
-                      iconURL: '',
-                  },
-              ]
-            : []
+    const contracts = trending.contracts?.filter((x) => x.chainId) ?? [
+        {
+            chainId: trending.coin.chainId!,
+            address: trending.coin.contract_address!,
+        },
+    ]
 
     const [menu, openMenu] = useMenuConfig(
-        contracts.map((x) => (
+        contracts.slice(1).map((x) => (
             <MenuItem key={x.chainId}>
                 <ContractSection
+                    pluginID={trending.coin.pluginID}
                     chainId={x.chainId}
                     address={x.address}
-                    name={x.name}
-                    symbol={x.symbol}
-                    iconURL={x.iconURL}
+                    name={x.address}
                 />
             </MenuItem>
         )),
         {
-            anchorSibling: false,
+            anchorOrigin: {
+                vertical: 'bottom',
+                horizontal: 'center',
+            },
+            transformOrigin: {
+                vertical: 'top',
+                horizontal: 'right',
+            },
         },
     )
 
@@ -139,11 +139,10 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                             height={18}
                                             style={{ position: 'relative', right: -5 }}>
                                             <ContractSection
-                                                iconURL={contracts[0].iconURL}
+                                                pluginID={trending.coin.pluginID}
                                                 chainId={contracts[0].chainId}
                                                 address={contracts[0].address}
-                                                name={contracts[0].name}
-                                                symbol={contracts[0].symbol}
+                                                name={contracts[0].address}
                                             />
                                             {contracts.length > 1 ? (
                                                 <IconButton size="small" onClick={openMenu}>

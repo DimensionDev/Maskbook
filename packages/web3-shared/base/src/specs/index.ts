@@ -10,6 +10,7 @@ import type {
     NextIDPlatform,
     NameServiceID,
     NetworkPluginID,
+    Proof,
 } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
@@ -416,16 +417,22 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
 }
 
 export interface NonFungibleCollectionOverview {
+    // collection name
+    collection?: string
     market_cap?: number
     highest_price?: number
     volume_24h?: number
     average_price_24h?: number
     average_price_change_1d: string
+    average_price_change: string
     average_price_change_7d: string
     sales_24h?: number
     owners_total?: number
     total_volume?: number
     items_total?: number
+    sales?: number
+    volume?: number
+    average_price?: number
 }
 
 export interface NonFungibleTokenActivity {
@@ -434,14 +441,27 @@ export interface NonFungibleTokenActivity {
     transaction_link: string
     timestamp: number
     nftscan_uri: string
-    trade_price: number
+    trade_price?: number
+    // The param `from` of the transaction
     from: string
+    // The param `to` of the transaction
     to: string
+    // The user address who received the NFT
+    receive: string
+    // The user address who sent the NFT
+    send: string
     cover: string
     contract_address: string
-    token_id: string
+    token_id?: string
     trade_token_logo: string
-    trade_symbol: string
+    trade_symbol?: string
+    // #region solana
+    source?: string
+    destination?: string
+    fee?: number
+    tx_interact_program?: string
+    token_address?: string
+    // #endregion
 }
 
 export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {
@@ -794,7 +814,7 @@ export interface Wallet {
     updatedAt: Date
     /** an abstract wallet has a owner */
     owner?: string
-
+    /** persona identifier */
     identifier?: ECKeyIdentifier
 }
 
@@ -909,8 +929,10 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     connect(
         chainId?: ChainId,
         address?: string,
-        owner?: string,
-        identifier?: ECKeyIdentifier,
+        owner?: {
+            account: string
+            identifier?: ECKeyIdentifier
+        },
     ): Promise<Account<ChainId>>
     /** Dismiss the connection. */
     disconnect(): Promise<void>
@@ -934,8 +956,9 @@ export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
     providerType?: ProviderType
     /** Fragments to merge into the transaction. */
     overrides?: Partial<Transaction>
-
+    /** an abstract wallet has a owner */
     owner?: string
+    /** persona identifier */
     identifier?: ECKeyIdentifier
 }
 export interface Connection<
@@ -1109,11 +1132,13 @@ export interface Connection<
         operation: Operation,
         initial?: Web3ConnectionOptions,
     ) => Promise<TransactionSignature>
-    /** Transfer some native tokens from contract Wallet */
+    /** Transfer some native tokens from contract wallet */
     transfer?: (recipient: string, amount: string, initial?: Web3ConnectionOptions) => Promise<string>
-    /** Change owner of contract Wallet */
+    /** Change owner of contract wallet */
     changeOwner?: (recipient: string, initial?: Web3ConnectionOptions) => Promise<string>
-    /** Deploy contract Wallet */
+    /** Fund contract wallet */
+    fund?: (proof: Proof, initial?: Web3ConnectionOptions) => Promise<string>
+    /** Deploy contract wallet */
     deploy?: (owner: string, initial?: Web3ConnectionOptions) => Promise<string>
     /** Sign a transaction */
     signTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): Promise<TransactionSignature>
@@ -1345,6 +1370,9 @@ export interface Storage {
 }
 
 export interface SettingsState {
+    ready: boolean
+    readyPromise: Promise<void>
+
     /** Is testnets valid */
     allowTestnet?: Subscription<boolean>
     /** The currency of estimated values and prices. */
@@ -1358,6 +1386,9 @@ export interface SettingsState {
 }
 
 export interface AddressBookState<ChainId> {
+    ready: boolean
+    readyPromise: Promise<void>
+
     /** The tracked addresses of currently chosen sub-network */
     addressBook?: Subscription<string[]>
 
@@ -1367,6 +1398,9 @@ export interface AddressBookState<ChainId> {
     removeAddress: (chainId: ChainId, address: string) => Promise<void>
 }
 export interface RiskWarningState {
+    ready: boolean
+    readyPromise: Promise<void>
+
     /** Is approved */
     approved?: Subscription<boolean>
 
@@ -1422,6 +1456,9 @@ export interface NameServiceResolver {
 }
 
 export interface NameServiceState<ChainId> {
+    ready: boolean
+    readyPromise: Promise<void>
+
     /** create name resolver */
     createResolvers: (chainId: ChainId) => NameServiceResolver[]
     /** get address of domain name */
@@ -1430,6 +1467,9 @@ export interface NameServiceState<ChainId> {
     reverse?: (chainId: ChainId, address: string) => Promise<string | undefined>
 }
 export interface TokenState<ChainId, SchemaType> {
+    ready: boolean
+    readyPromise: Promise<void>
+
     /** The user trusted fungible tokens. */
     trustedFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
     /** The user trusted non-fungible tokens. */
@@ -1465,6 +1505,9 @@ export interface TokenState<ChainId, SchemaType> {
     ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
 }
 export interface TransactionState<ChainId, Transaction> {
+    ready: boolean
+    readyPromise: Promise<void>
+
     /** The tracked transactions of currently chosen sub-network */
     transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
 
@@ -1507,6 +1550,9 @@ export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
     ) => Promise<TransactionDescriptor<ChainId, Transaction>>
 }
 export interface TransactionWatcherState<ChainId, Transaction> {
+    ready: boolean
+    readyPromise: Promise<void>
+
     emitter: Emitter<WatchEvents<Transaction>>
 
     /** Add a transaction into the watch list. */
@@ -1524,6 +1570,9 @@ export interface TransactionWatcherState<ChainId, Transaction> {
     ) => Promise<void>
 }
 export interface ProviderState<ChainId, ProviderType, NetworkType> {
+    ready: boolean
+    readyPromise: Promise<void>
+
     /** The account of the currently visiting site. */
     account?: Subscription<string>
     /** The chain id of the currently visiting site. */
@@ -1537,13 +1586,16 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
     isReady: (providerType: ProviderType) => boolean
     /** Wait until a provider ready */
     untilReady: (providerType: ProviderType) => Promise<void>
+
     /** Connect with the provider and set chain id. */
     connect: (
-        chainId: ChainId,
         providerType: ProviderType,
+        chainId: ChainId,
         account?: string,
-        owner?: string,
-        identifier?: ECKeyIdentifier,
+        owner?: {
+            account: string
+            identifier?: ECKeyIdentifier
+        },
     ) => Promise<Account<ChainId>>
     /** Disconnect with the provider. */
     disconnect: (providerType: ProviderType) => Promise<void>
@@ -1588,6 +1640,9 @@ export interface ConnectionState<
     getConnection?: (initial?: Web3ConnectionOptions) => Web3Connection
 }
 export interface WalletState<Transaction> {
+    ready: boolean
+    readyPromise: Promise<void>
+
     /** The currently stored wallet by MaskWallet. */
     wallets?: Subscription<Wallet[]>
 

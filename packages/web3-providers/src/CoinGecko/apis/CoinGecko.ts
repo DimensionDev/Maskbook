@@ -11,6 +11,7 @@ import { resolveCoinGeckoChainId } from '../helpers.js'
 import { FuseTrendingAPI } from '../../Fuse/index.js'
 import { fetchJSON } from '../../entry-helpers.js'
 import type { TrendingAPI } from '../../entry-types.js'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
     private fuse = new FuseTrendingAPI()
@@ -85,7 +86,6 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
             : ''
 
         const platforms = await this.getSupportedPlatform()
-
         return {
             lastUpdated: info.last_updated,
             dataProvider: SourceType.CoinGecko,
@@ -95,6 +95,8 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
             })),
             currency,
             coin: {
+                pluginID:
+                    info.asset_platform_id === 'solana' ? NetworkPluginID.PLUGIN_SOLANA : NetworkPluginID.PLUGIN_EVM,
                 id,
                 name: info.name,
                 symbol: info.symbol.toUpperCase(),

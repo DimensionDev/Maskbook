@@ -1,23 +1,23 @@
 import { FC, useCallback, useRef } from 'react'
 import { noop } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ElementAnchor, Linking, AssetPreviewer, RetryHint } from '@masknet/shared'
+import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
-import { useWeb3State, useNetworkContext } from '@masknet/web3-hooks-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 import { Checkbox, List, ListItem, Radio, Stack, Typography } from '@mui/material'
 
 interface NFTItemProps {
-    token: NonFungibleToken<ChainId, SchemaType>
+    token: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    pluginID: NetworkPluginID
 }
 
 export type NFTKeyPair = [address: string, tokenId: string]
 
 interface Props {
     selectable?: boolean
-    tokens: Array<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
+    tokens: Array<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID>>
     selectedPairs?: NFTKeyPair[]
     onChange?: (id: string | null, contractAddress?: string) => void
     limit?: number
@@ -27,6 +27,7 @@ interface Props {
     onNextPage(): void
     finished: boolean
     hasError?: boolean
+    pluginID: NetworkPluginID
 }
 
 const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { columns = 4, gap = 12 }) => {
@@ -62,12 +63,6 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             padding: 0,
             flexDirection: 'column',
             userSelect: 'none',
-        },
-        link: {
-            width: '100%',
-            '&:hover': {
-                textDecoration: 'none',
-            },
         },
         disabled: {
             opacity: 0.5,
@@ -115,16 +110,27 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
     }
 })
 
-export const NFTItem: FC<NFTItemProps> = ({ token }) => {
+export const NFTItem: FC<NFTItemProps> = ({ token, pluginID }) => {
     const { classes } = useStyles({})
-    const { Others } = useWeb3State()
+    const { Others } = useWeb3State(pluginID)
     const caption = Others?.formatTokenId(token.tokenId, 4)
     const captionRef = useRef<HTMLDivElement>(null)
 
     const showTooltip = captionRef.current ? captionRef.current.offsetWidth !== captionRef.current.scrollWidth : false
 
+    const onClick = useCallback(() => {
+        if (!token.chainId || !pluginID) return
+        CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
+            open: true,
+            chainId: token.chainId,
+            pluginID,
+            tokenId: token.tokenId,
+            tokenAddress: token.address,
+        })
+    }, [pluginID, token.chainId, token.tokenId, token.address])
+
     return (
-        <div className={classes.nftContainer}>
+        <div className={classes.nftContainer} onClick={onClick}>
             <AssetPreviewer
                 url={token.metadata?.imageURL ?? token.metadata?.imageURL}
                 classes={{
@@ -135,7 +141,9 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
             />
             <ShadowRootTooltip title={showTooltip ? caption : undefined} placement="bottom" disableInteractive arrow>
                 <Typography ref={captionRef} className={classes.caption}>
-                    {token.metadata?.name ?? caption}
+                    {Others?.isValidDomain(token.metadata?.name) || pluginID === NetworkPluginID.PLUGIN_SOLANA
+                        ? token.metadata?.name
+                        : caption}
                 </Typography>
             </ShadowRootTooltip>
         </div>
@@ -153,6 +161,7 @@ export const NFTList: FC<Props> = ({
     className,
     onNextPage,
     finished,
+    pluginID,
     hasError,
 }) => {
     const { classes, cx } = useStyles({ columns, gap })
@@ -160,8 +169,7 @@ export const NFTList: FC<Props> = ({
     const isRadio = limit === 1
     const reachedLimit = selectedPairs && selectedPairs.length >= limit
 
-    const { pluginID } = useNetworkContext()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { Others } = useWeb3State(pluginID)
 
     const toggleItem = useCallback(
         (currentId: string | null, contractAddress?: string) => {
@@ -206,9 +214,7 @@ export const NFTList: FC<Props> = ({
                                 [classes.selected]: selected,
                                 [classes.inactive]: inactive,
                             })}>
-                            <Linking LinkProps={{ className: classes.link }} href={link}>
-                                <NFTItem token={token} />
-                            </Linking>
+                            <NFTItem token={token} pluginID={pluginID} />
                             {selectable ? (
                                 <SelectComponent
                                     size="small"
@@ -230,7 +236,7 @@ export const NFTList: FC<Props> = ({
                     )
                 })}
             </List>
-            {hasError && !finished && tokens.length ? (
+            {hasError && finished && tokens.length ? (
                 <Stack py={1}>
                     <RetryHint hint={false} retry={onNextPage} />
                 </Stack>

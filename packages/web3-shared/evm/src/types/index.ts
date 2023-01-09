@@ -4,8 +4,9 @@ import type {
     Transaction as Web3Transaction,
     TransactionReceipt as Web3TransactionReceipt,
 } from 'web3-core'
-import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types.js'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type { ECKeyIdentifier } from '@masknet/shared-base'
+import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types.js'
 
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
 
@@ -74,6 +75,8 @@ export enum ChainId {
     ZKSync_Alpha_Testnet = 280,
 
     Crossbell = 3737,
+
+    Moonbeam = 1284,
 
     // For any chains not supported yet.
     Invalid = 0,
@@ -158,6 +161,7 @@ export enum EthereumMethodType {
     ETH_SUPPORTED_CHAIN_IDS = 'eth_supportedChainIds',
     ETH_SUPPORTED_ENTRY_POINTS = 'eth_supportedEntryPoints',
     MASK_DEPLOY = 'mask_deploy',
+    MASK_FUND = 'mask_fund',
 
     // only for mask
     MASK_LOGIN = 'MASK_LOGIN',
@@ -198,6 +202,7 @@ export enum NetworkType {
     Harmony = 'Harmony',
     Conflux = 'Conflux',
     Astar = 'Astar',
+    Moonbeam = 'Moonbeam',
 }
 
 export enum ProviderType {
@@ -285,3 +290,13 @@ export type TransactionReceipt = Web3TransactionReceipt
 export type TransactionDetailed = Web3Transaction
 export type TransactionSignature = string
 export type TransactionParameter = string | boolean | undefined
+
+export interface TransactionOptions {
+    account?: string
+    chainId?: ChainId
+    owner?: string
+    identifier?: ECKeyIdentifier
+    gasCurrency?: string
+    disableClose?: boolean
+    popupsWindow?: boolean
+}

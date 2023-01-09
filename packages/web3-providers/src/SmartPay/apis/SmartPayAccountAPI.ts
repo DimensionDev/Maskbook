@@ -16,7 +16,7 @@ import {
     isValidAddress,
 } from '@masknet/web3-shared-evm'
 import { ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { isSameAddress, toFixed } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import { LOG_ROOT, MAX_ACCOUNT_LENGTH } from '../constants.js'
@@ -200,9 +200,8 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
                 owner,
                 create2Factory.deriveUntil(contractWallet.initCode, MAX_ACCOUNT_LENGTH),
             ),
-            this.getAccountsFromChainbase(chainId, owner),
+            // this.getAccountsFromChainbase(chainId, owner),
         ])
-
         return allSettled
             .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
             .map((y) => ({
@@ -282,11 +281,11 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
                 }
             }
 
-            return this.bundler.sendUserOperation(chainId, await userTransaction.toUserOperation(signer))
+            return this.bundler.sendUserOperation(chainId, await userTransaction.signUserOperation(signer))
         } else {
             return this.web3.createWeb3Provider(chainId).request<string>({
                 method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
-                params: [await userTransaction.toRawTransaction(this.web3.createWeb3(chainId), signer)],
+                params: [await userTransaction.signTransaction(this.web3.createWeb3(chainId), signer)],
             })
         }
     }
@@ -296,12 +295,14 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         owner: string,
         transaction: Transaction,
         signer: Signer<ECKeyIdentifier> | Signer<string>,
+        gasCurrency?: string,
     ): Promise<string> {
         const userTransaction = await UserTransaction.fromTransaction(
             chainId,
             this.web3.createWeb3(chainId),
             await this.getEntryPoint(chainId),
             transaction,
+            gasCurrency,
         )
         return this.sendUserTransaction(chainId, owner, userTransaction, signer)
     }
@@ -319,5 +320,26 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
             userOperation,
         )
         return this.sendUserTransaction(chainId, owner, userTransaction, signer)
+    }
+
+    async estimateTransaction(chainId: ChainId, transaction: Transaction): Promise<string> {
+        const web3 = this.web3.createWeb3(chainId)
+        const userTransaction = await UserTransaction.fromTransaction(
+            chainId,
+            web3,
+            await this.getEntryPoint(chainId),
+            transaction,
+        )
+        return toFixed(await userTransaction.estimate(web3))
+    }
+
+    async estimateUserOperation(chainId: ChainId, userOperation: UserOperation): Promise<string> {
+        const userTransaction = await UserTransaction.fromUserOperation(
+            chainId,
+            this.web3.createWeb3(chainId),
+            await this.getEntryPoint(chainId),
+            userOperation,
+        )
+        return userTransaction.gas
     }
 }

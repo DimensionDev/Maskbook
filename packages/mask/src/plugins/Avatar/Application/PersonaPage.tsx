@@ -43,20 +43,20 @@ export function PersonaPage({ onNext, onChange }: PersonaPageProps) {
     const network = socialIdentity?.identifier?.network.replace('.com', '')
     const userId = socialIdentity?.identifier?.userId
 
+    const myPersonas = usePersonasFromDB()
+    const persona = useSubscription(context.currentPersona)
+    const currentPersona = myPersonas.find(
+        (x: PersonaInformation) => x.identifier.rawPublicKey.toLowerCase() === persona?.rawPublicKey.toLowerCase(),
+    )
+
     const { value: bindingPersonas = EMPTY_LIST } = usePersonasFromNextID(
-        socialIdentity?.publicKey,
+        persona?.publicKeyAsHex ?? '',
         NextIDPlatform.NextID,
+        true,
     )
     const bindingProofs = useMemo(
         () => bindingPersonas.map((x) => x.proofs.filter((y) => y.is_valid && y.platform === network)).flat(),
-        [bindingPersonas],
-    )
-
-    const myPersonas = usePersonasFromDB()
-    const _persona = useSubscription(context.currentPersona)
-
-    const currentPersona = myPersonas?.find(
-        (x: PersonaInformation) => x.identifier.rawPublicKey.toLowerCase() === _persona?.rawPublicKey.toLowerCase(),
+        [bindingPersonas, network],
     )
 
     const onSelect = useCallback(

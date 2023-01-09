@@ -148,6 +148,10 @@ class RequestContext implements Context {
         }
     }
 
+    get proof() {
+        return this.payloadEditor.proof
+    }
+
     get connection() {
         return this._connection
     }
@@ -158,12 +162,12 @@ class RequestContext implements Context {
 
     get owner() {
         const provider = Providers[this.providerType] as BaseContractWalletProvider | undefined
-        return this._options?.owner ?? provider?.owner
+        return this._options?.owner ?? provider?.ownerAccount
     }
 
     get identifier() {
         const provider = Providers[this.providerType] as BaseContractWalletProvider | undefined
-        return this._options?.identifier ?? provider?.identifier
+        return this._options?.identifier ?? provider?.ownerIdentifier
     }
 
     get requestOptions() {

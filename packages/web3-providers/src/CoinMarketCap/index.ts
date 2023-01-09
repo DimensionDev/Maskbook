@@ -1,6 +1,6 @@
 import getUnixTime from 'date-fns/getUnixTime'
 import { TokenType, SourceType } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, isValidAddress, isValidChainId } from '@masknet/web3-shared-evm'
 import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from './constants.js'
 import { resolveCoinMarketCapChainId } from './helpers.js'
 import { FuseTrendingAPI } from '../Fuse/index.js'
@@ -10,6 +10,7 @@ import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../Trending/constants.
 import type { Coin, Pair, ResultData, Status, QuotesInfo, CoinInfo } from './types.js'
 import { fetchJSON } from '../entry-helpers.js'
 import { TrendingAPI } from '../entry-types.js'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 // #regin get quote info
 export async function getQuotesInfo(id: string, currency: string) {
@@ -158,14 +159,26 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
             getLatestMarketPairs(id, currencyName),
         ])
 
-        const contracts = coinInfo.contract_address.map(
-            (x) =>
-                ({
-                    chainId: resolveCoinMarketCapChainId(x.platform.name),
-                    address: x.contract_address,
-                    icon_url: `${CMC_STATIC_BASE_URL}/img/coins/64x64/${x.platform.coin.id}.png`,
-                } as TrendingAPI.Contract),
-        )
+        const contracts = coinInfo.contract_address
+            .map(
+                (x) =>
+                    ({
+                        chainId: resolveCoinMarketCapChainId(x.platform.name),
+                        address: x.contract_address,
+                        icon_url: `${CMC_STATIC_BASE_URL}/img/coins/64x64/${x.platform.coin.id}.png`,
+                    } as TrendingAPI.Contract),
+            )
+            .filter((x) => isValidChainId(x.chainId as ChainId))
+
+        function getPlatform(contracts: TrendingAPI.Contract[], contract_address?: string) {
+            const _contracts = contracts.filter(
+                (x) =>
+                    contract_address === x.address && isValidChainId(x.chainId as ChainId) && isValidAddress(x.address),
+            )
+            if (_contracts.length > 0) return _contracts[0]
+
+            return contracts.filter((x) => isValidChainId(x.chainId as ChainId) && isValidAddress(x.address))?.[0]
+        }
 
         const trending: TrendingAPI.Trending = {
             lastUpdated: status.timestamp,
@@ -173,6 +186,8 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
             contracts,
             coin: {
                 id,
+                chainId: getPlatform(contracts, coinInfo.platform?.token_address)?.chainId,
+                pluginID: NetworkPluginID.PLUGIN_EVM,
                 name: coinInfo.name,
                 symbol: coinInfo.symbol,
                 type: TokenType.Fungible,
@@ -200,7 +215,9 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
                 telegram_url: coinInfo.urls.chat?.find((x) => x.includes('telegram')),
                 market_cap_rank: quotesInfo?.[id]?.cmc_rank,
                 description: coinInfo.description,
-                contract_address: contracts.find((x) => x.chainId === chainId)?.address,
+                contract_address:
+                    getPlatform(contracts, coinInfo.platform?.token_address)?.address ??
+                    coinInfo.platform?.token_address,
             },
             currency,
             dataProvider: SourceType.CoinMarketCap,
@@ -236,11 +253,12 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
                 current_price: quotesInfo_.quote[currencyName].price,
                 total_volume: quotesInfo_.quote[currencyName].volume_24h,
                 price_change_percentage_1h: quotesInfo_.quote[currencyName].percent_change_1h,
-                price_change_percentage_24h: quotesInfo_.quote[currencyName].percent_change_24h,
+                price_change_24h: quotesInfo_.quote[currencyName].percent_change_24h,
                 price_change_percentage_1h_in_currency: quotesInfo_.quote[currencyName].percent_change_1h,
                 price_change_percentage_24h_in_currency: quotesInfo_.quote[currencyName].percent_change_24h,
                 price_change_percentage_7d_in_currency: quotesInfo_.quote[currencyName].percent_change_7d,
             }
+
         return trending
     }
 

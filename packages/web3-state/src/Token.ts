@@ -28,6 +28,28 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
     public credibleFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
     public credibleNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
 
+    get ready() {
+        return (
+            this.storage.fungibleTokenList.initialized &&
+            this.storage.nonFungibleTokenList.initialized &&
+            this.storage.fungibleTokenBlockedBy.initialized &&
+            this.storage.nonFungibleTokenBlockedBy.initialized &&
+            this.storage.credibleFungibleTokenList.initialized &&
+            this.storage.credibleNonFungibleTokenList.initialized
+        )
+    }
+
+    get readyPromise() {
+        return Promise.all([
+            this.storage.fungibleTokenList.initializedPromise,
+            this.storage.nonFungibleTokenList.initializedPromise,
+            this.storage.fungibleTokenBlockedBy.initializedPromise,
+            this.storage.nonFungibleTokenBlockedBy.initializedPromise,
+            this.storage.credibleFungibleTokenList.initializedPromise,
+            this.storage.credibleNonFungibleTokenList.initializedPromise,
+        ]).then(() => {})
+    }
+
     constructor(
         protected context: Plugin.Shared.SharedContext,
         protected defaultValue: TokenStorage<ChainId, SchemaType>,

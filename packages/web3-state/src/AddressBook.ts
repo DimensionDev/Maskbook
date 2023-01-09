@@ -37,6 +37,14 @@ export class AddressBookState<
         }
     }
 
+    get ready() {
+        return this.storage.initialized
+    }
+
+    get readyPromise() {
+        return this.storage.initializedPromise
+    }
+
     async addAddress(chainId: ChainId, address: string) {
         if (!this.options.isValidAddress(address)) throw new Error(`Invalid address: ${address}`)
         const all = this.storage.value

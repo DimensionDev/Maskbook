@@ -9,7 +9,7 @@ import {
     Signer,
     Transaction,
 } from '@masknet/web3-shared-evm'
-import { Web3 } from '@masknet/web3-providers'
+import { SmartPayFunder, Web3 } from '@masknet/web3-providers'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
 import type { Middleware, Context } from '../types.js'
@@ -63,12 +63,35 @@ export class ContractWallet implements Middleware<Context> {
         throw new Error('Failed to create signer.')
     }
 
-    private async sendUserOperation(context: Context, op = context.userOperation): Promise<string> {
+    private async send(context: Context): Promise<string> {
         if (!context.owner) throw new Error('No owner.')
-        if (op) return this.account.sendUserOperation(context.chainId, context.owner, op, this.getSigner(context))
+        if (context.userOperation)
+            return this.account.sendUserOperation(
+                context.chainId,
+                context.owner,
+                context.userOperation,
+                this.getSigner(context),
+            )
         if (context.config)
-            return this.account.sendTransaction(context.chainId, context.owner, context.config, this.getSigner(context))
+            return this.account.sendTransaction(
+                context.chainId,
+                context.owner,
+                context.config,
+                this.getSigner(context),
+                context.config.gasCurrency,
+            )
         throw new Error('No user operation to be sent.')
+    }
+
+    private estimate(context: Context): Promise<string> {
+        if (context.userOperation) return this.account.estimateUserOperation(context.chainId, context.userOperation)
+        if (context.config) return this.account.estimateTransaction(context.chainId, context.config)
+        throw new Error('No user operation to be estimated.')
+    }
+
+    private async fund(context: Context) {
+        if (!context.proof) throw new Error('No proof.')
+        return SmartPayFunder.fund(context.chainId, context.proof)
     }
 
     private async deploy(context: Context) {
@@ -80,18 +103,18 @@ export class ContractWallet implements Middleware<Context> {
         const provider = Providers[context.providerType] as BaseContractWalletProvider | undefined
 
         // not a SC wallet provider
-        if (!provider?.owner) {
+        if (!provider?.ownerAccount) {
             await next()
             return
         }
 
         switch (context.request.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
-                context.write(provider.chainId)
+                context.write(provider.hostedChainId)
                 break
             case EthereumMethodType.ETH_ACCOUNTS:
-                if (isValidAddress(provider.account)) {
-                    context.write([provider.account])
+                if (isValidAddress(provider.hostedAccount)) {
+                    context.write([provider.hostedAccount])
                 } else {
                     context.abort(new Error('Please connect a wallet.'))
                 }
@@ -105,14 +128,14 @@ export class ContractWallet implements Middleware<Context> {
                 break
             case EthereumMethodType.ETH_SEND_TRANSACTION:
                 try {
-                    context.write(await this.sendUserOperation(context))
+                    context.write(await this.send(context))
                 } catch (error) {
                     context.abort(error)
                 }
                 break
             case EthereumMethodType.ETH_SEND_USER_OPERATION:
                 try {
-                    context.write(await this.sendUserOperation(context))
+                    context.write(await this.send(context))
                 } catch (error) {
                     context.abort(error)
                 }
@@ -132,8 +155,11 @@ export class ContractWallet implements Middleware<Context> {
                 }
                 break
             case EthereumMethodType.ETH_ESTIMATE_GAS:
-                // fill later in UserTransaction.prototype.fill()
-                context.write('0x0')
+                try {
+                    context.write(await this.estimate(context))
+                } catch (error) {
+                    context.abort(error)
+                }
                 break
             case EthereumMethodType.ETH_SIGN:
             case EthereumMethodType.PERSONAL_SIGN:
@@ -156,6 +182,13 @@ export class ContractWallet implements Middleware<Context> {
                 try {
                     if (!context.config) throw new Error('Invalid transaction.')
                     context.write(await this.getSigner(context).signTransaction(context.config))
+                } catch (error) {
+                    context.abort(error)
+                }
+                break
+            case EthereumMethodType.MASK_FUND:
+                try {
+                    context.write(await this.fund(context))
                 } catch (error) {
                     context.abort(error)
                 }

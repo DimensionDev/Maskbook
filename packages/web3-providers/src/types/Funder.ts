@@ -1,20 +1,12 @@
+import type { Proof } from '@masknet/shared-base'
+
 export namespace FunderAPI {
-    export enum ProofType {
-        Persona = 'persona',
-        EOA = 'eoa',
-    }
     export interface Payload {
         twitterHandler: string
         nonce: number
         publicKey: string
         // timestamp will expire after 1 hour
         ts: number
-    }
-    export interface Proof {
-        publicKey: string
-        type: 'persona' | 'eoa'
-        payload: string // JSON.stringify(payload)
-        signature: string
     }
 
     export interface Fund {

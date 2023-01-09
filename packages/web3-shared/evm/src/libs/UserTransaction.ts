@@ -4,7 +4,7 @@ import type Web3 from 'web3'
 import * as ABICoder from 'web3-eth-abi'
 import { AbiItem, bytesToHex, hexToBytes, keccak256, padLeft, toNumber } from 'web3-utils'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
-import { toFixed } from '@masknet/web3-shared-base'
+import { plus, toFixed } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import EntryPointABI from '@masknet/web3-contracts/abis/EntryPoint.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
@@ -148,6 +148,13 @@ export class UserTransaction {
         )
     }
 
+    get gas() {
+        return toFixed(plus(this.userOperation.callGas ?? 0, this.userOperation.preVerificationGas ?? 0))
+    }
+
+    /**
+     * Fill up an incomplete user operation.
+     */
     async fill(web3: Web3, overrides?: Required<Pick<UserOperation, 'initCode' | 'nonce'>>) {
         // from overrides
         if (overrides) {
@@ -237,23 +244,21 @@ export class UserTransaction {
         return this
     }
 
-    toTransaction(): Transaction {
-        const callBytes = this.userOperation.callData ? hexToBytes(this.userOperation.callData) : []
+    /**
+     * Estimate a raw transaction.
+     */
+    estimate(web3: Web3) {
+        const transaction = this.toTransaction()
+        if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
+        const walletContract = createContract<Wallet>(web3, transaction.from, WalletABI as AbiItem[])
+        if (!walletContract) throw new Error('Failed to create wallet contract.')
 
-        return {
-            from: this.userOperation.sender,
-            to: bytesToHex(callBytes.slice(12, 36)),
-            value: bytesToHex(callBytes.slice(36, 68)),
-            gas: this.userOperation.callGas,
-            maxFeePerGas: this.userOperation.maxFeePerGas,
-            maxPriorityFeePerGas: this.userOperation.maxPriorityFeePerGas,
-            nonce: toNumber(this.userOperation.nonce ?? '0'),
-            data: bytesToHex(callBytes.slice(68)),
-            chainId: this.chainId,
-        }
+        return walletContract?.methods
+            .exec(transaction.to, transaction.value ?? '0', transaction.data ?? '0x')
+            .estimateGas()
     }
 
-    async toRawTransaction(web3: Web3, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {
+    async signTransaction(web3: Web3, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {
         const transaction = this.toTransaction()
         if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
         const walletContract = createContract<Wallet>(web3, transaction.from, WalletABI as AbiItem[])
@@ -274,7 +279,7 @@ export class UserTransaction {
         )
     }
 
-    async toUserOperation(signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<UserOperation> {
+    async signUserOperation(signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<UserOperation> {
         const { nonce, callGas, verificationGas, preVerificationGas, maxFeePerGas, maxPriorityFeePerGas, signature } =
             this.userOperation
         return {
@@ -290,29 +295,24 @@ export class UserTransaction {
         }
     }
 
+    toTransaction(): Transaction {
+        return UserTransaction.toTransaction(this.chainId, this.userOperation)
+    }
+
     static async fromTransaction(
         chainId: ChainId,
         web3: Web3,
         entryPoint: string,
         transaction: Transaction,
+        gasCurrency?: string,
     ): Promise<UserTransaction> {
-        const { from, to, nonce = 0, value = '0', data = '0x' } = transaction
-        if (!from) throw new Error('No sender address.')
-        if (!to) throw new Error('No destination address.')
-
         return UserTransaction.fromUserOperation(
             chainId,
             web3,
             entryPoint,
+            UserTransaction.toUserOperation(transaction),
             {
-                ...DEFAULT_USER_OPERATION,
-                sender: formatEthereumAddress(from),
-                nonce: toNumber(nonce as number),
-                callData: coder.encodeFunctionCall(CALL_WALLET_TYPE, [to, value, data]),
-                signature: '0x',
-            },
-            {
-                paymentToken: transaction.gasCurrency,
+                paymentToken: gasCurrency,
             },
         )
     }
@@ -336,5 +336,34 @@ export class UserTransaction {
             options,
         )
         return userTransaction.fill(web3)
+    }
+
+    static toUserOperation(transaction: Transaction): UserOperation {
+        const { from, to, nonce = 0, value = '0', data = '0x' } = transaction
+        if (!from) throw new Error('No sender address.')
+        if (!to) throw new Error('No destination address.')
+        return {
+            ...DEFAULT_USER_OPERATION,
+            sender: formatEthereumAddress(from),
+            nonce: toNumber(nonce as number),
+            callData: coder.encodeFunctionCall(CALL_WALLET_TYPE, [to, value, data]),
+            signature: '0x',
+        }
+    }
+
+    static toTransaction(chainId: ChainId, userOperation: UserOperation): Transaction {
+        const callBytes = userOperation.callData ? hexToBytes(userOperation.callData) : []
+
+        return {
+            chainId,
+            from: userOperation.sender,
+            to: bytesToHex(callBytes.slice(12, 36)),
+            value: bytesToHex(callBytes.slice(36, 68)),
+            gas: userOperation.callGas,
+            maxFeePerGas: userOperation.maxFeePerGas,
+            maxPriorityFeePerGas: userOperation.maxPriorityFeePerGas,
+            nonce: toNumber(userOperation.nonce ?? '0'),
+            data: bytesToHex(callBytes.slice(68)),
+        }
     }
 }

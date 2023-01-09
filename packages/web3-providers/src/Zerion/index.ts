@@ -18,7 +18,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { ChainId, createNativeToken, GasOption, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import type { ZerionNonFungibleTokenItem, ZerionNonFungibleCollection, ZerionCoin } from './types.js'
-import { formatAsset, formatTransactions } from './helpers.js'
+import { formatAsset, formatTransactions, isValidAsset } from './helpers.js'
 import {
     getAssetsList,
     getCoinsByKeyword,
@@ -50,6 +50,7 @@ export class ZerionAPI
                         x.asset.icon_url &&
                         x.asset.is_displayable &&
                         !filterAssetType.includes(x.asset.type) &&
+                        isValidAsset(x) &&
                         zerionChainIdResolver(x.chain),
                 )
                 ?.map((x) => {

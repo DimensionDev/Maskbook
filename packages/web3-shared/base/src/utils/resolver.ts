@@ -106,38 +106,55 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
 
     return {
         explorerURL: getExplorerURL,
-        addressLink: (chainId: ChainId, address: string, tokenId?: string) =>
-            urlcat(getExplorerURL(chainId).url, addressPathname, {
+        addressLink: (chainId: ChainId, address: string, tokenId?: string) => {
+            const explorerURL = getExplorerURL(chainId)
+            if (!explorerURL.url) return ''
+            return urlcat(explorerURL.url, addressPathname, {
                 address,
-                ...getExplorerURL(chainId)?.parameters,
-            }),
-        blockLink: (chainId: ChainId, blockNumber: number) =>
-            urlcat(getExplorerURL(chainId).url, blockPathname, {
+                ...explorerURL?.parameters,
+            })
+        },
+        blockLink: (chainId: ChainId, blockNumber: number) => {
+            const explorerURL = getExplorerURL(chainId)
+            if (!explorerURL.url) return ''
+
+            return urlcat(explorerURL.url, blockPathname, {
                 blockNumber,
-                ...getExplorerURL(chainId)?.parameters,
-            }),
-        transactionLink: (chainId: ChainId, id: string) =>
-            urlcat(getExplorerURL(chainId).url, transactionPathname, {
+                ...explorerURL?.parameters,
+            })
+        },
+        transactionLink: (chainId: ChainId, id: string) => {
+            const explorerURL = getExplorerURL(chainId)
+            if (!explorerURL.url) return ''
+
+            return urlcat(explorerURL.url, transactionPathname, {
                 id,
-                ...getExplorerURL(chainId)?.parameters,
-            }),
-        domainLink: (chainId: ChainId, domain: string) =>
-            urlcat(getExplorerURL(chainId).url, domainPathname, {
+                ...explorerURL?.parameters,
+            })
+        },
+        domainLink: (chainId: ChainId, domain: string) => {
+            const explorerURL = getExplorerURL(chainId)
+            if (!explorerURL.url) return ''
+            return urlcat(explorerURL.url, domainPathname, {
                 domain,
-                ...getExplorerURL(chainId)?.parameters,
-            }),
+                ...explorerURL?.parameters,
+            })
+        },
         fungibleTokenLink: (chainId: ChainId, address: string) => {
-            if (!address) return ''
-            return urlcat(getExplorerURL(chainId).url, fungibleTokenPathname, {
+            const explorerURL = getExplorerURL(chainId)
+            if (!address || !explorerURL.url) return ''
+            return urlcat(explorerURL.url, fungibleTokenPathname, {
                 address,
-                ...getExplorerURL(chainId)?.parameters,
+                ...explorerURL?.parameters,
             })
         },
         nonFungibleTokenLink: (chainId: ChainId, address: string, tokenId: string) => {
-            return urlcat(getExplorerURL(chainId).url, nonFungibleTokenPathname, {
+            const explorerURL = getExplorerURL(chainId)
+            if (!explorerURL.url) return ''
+            return urlcat(explorerURL.url, nonFungibleTokenPathname, {
                 address,
                 tokenId,
-                ...getExplorerURL(chainId)?.parameters,
+                ...explorerURL?.parameters,
             })
         },
     }
@@ -234,7 +251,7 @@ export const resolveCurrencyName = createLookupTableResolver<CurrencyType, strin
 
 export const resolveNetworkWalletName = createLookupTableResolver<NetworkPluginID, string>(
     {
-        [NetworkPluginID.PLUGIN_EVM]: 'EVM wallet',
+        [NetworkPluginID.PLUGIN_EVM]: 'Ethereum wallet',
         [NetworkPluginID.PLUGIN_SOLANA]: 'Solana wallet',
         [NetworkPluginID.PLUGIN_FLOW]: 'Flow wallet',
     },

@@ -42,43 +42,41 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
 
     private setupSubscriptions() {
         const update = async () => {
+            if (this.providerType !== ProviderType.MaskWallet) return
+
             const wallets = this.context.wallets.getCurrentValue()
             const allPersonas = this.context.allPersonas?.getCurrentValue() ?? []
 
             const chainId = await SmartPayBundler.getSupportedChainId()
-            if (this.providerType === ProviderType.MaskWallet) {
-                const accounts = await SmartPayAccount.getAccountsByOwners(chainId, [
-                    ...wallets.map((x) => x.address),
-                    ...compact(allPersonas.map((x) => x.address)),
-                ])
+            const accounts = await SmartPayAccount.getAccountsByOwners(chainId, [
+                ...wallets.map((x) => x.address),
+                ...compact(allPersonas.map((x) => x.address)),
+            ])
 
-                const now = new Date()
-                const storage = this.storage.value.Maskbook
+            const now = new Date()
 
-                this.ref.value = [
-                    ...wallets,
-                    ...accounts
-                        .filter((x) => x.funded || x.deployed)
-                        .map((x) => ({
-                            id: x.address,
-                            name: 'Smart Pay',
-                            address: x.address,
-                            hasDerivationPath: false,
-                            hasStoredKeyInfo: false,
-                            configurable: true,
-                            createdAt: now,
-                            updatedAt: now,
-                            owner: x.owner,
-                            identifier: allPersonas.find((persona) => isSameAddress(x.owner, persona.address))
-                                ?.identifier,
-                        })),
-                ].map((x) => ({
-                    ...x,
-                    name: storage?.find((item) => isSameAddress(item.address, x.address))?.name ?? x.name,
-                }))
-            } else {
-                this.ref.value = wallets
-            }
+            this.ref.value = [
+                ...wallets,
+                ...accounts
+                    .filter((x) => x.funded || x.deployed)
+                    .map((x) => ({
+                        id: x.address,
+                        name: 'Smart Pay',
+                        address: x.address,
+                        hasDerivationPath: false,
+                        hasStoredKeyInfo: false,
+                        configurable: true,
+                        createdAt: now,
+                        updatedAt: now,
+                        owner: x.owner,
+                        identifier: allPersonas.find((persona) => isSameAddress(x.owner, persona.address))?.identifier,
+                    })),
+            ].map((x) => ({
+                ...x,
+                name:
+                    this.storage.value[ProviderType.MaskWallet]?.find((item) => isSameAddress(item.address, x.address))
+                        ?.name ?? x.name,
+            }))
         }
 
         update()

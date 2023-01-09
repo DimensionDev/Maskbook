@@ -90,7 +90,11 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
                 fullWidth
                 variant="roundedContained"
                 onClick={() => {
-                    navigate(RoutePaths.Deploy)
+                    navigate(RoutePaths.Deploy, {
+                        state: {
+                            canBack: true,
+                        },
+                    })
                 }}>
                 {t.create()}
             </Button>

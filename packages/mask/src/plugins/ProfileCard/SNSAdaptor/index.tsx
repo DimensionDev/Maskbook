@@ -6,7 +6,7 @@ import { Box } from '@mui/material'
 import { base } from '../base.js'
 import { PLUGIN_ID, SNS_RSS3_FIELD_KEY_MAP } from '../constants.js'
 import { setupContext } from '../context.js'
-import { ProfileAvatarBadge } from './ProfileAvatarBadge.js'
+import { AvatarBadge } from '../../../components/shared/AvatarBadge/AvatarBadge.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -38,7 +38,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ],
     AvatarRealm: {
         ID: `${PLUGIN_ID}_profile_card`,
-        label: 'Avatar Web3 Profile',
+        label: 'Web3 Profile Card',
         priority: 99999,
         UI: {
             Decorator({ identity }) {
@@ -48,7 +48,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 return (
                     <Box display="flex" alignItems="top" justifyContent="center">
                         <div style={{ display: 'flex', alignItems: 'top', justifyContent: 'center' }}>
-                            <ProfileAvatarBadge userId={identity.identifier.userId} />
+                            <AvatarBadge userId={identity.identifier.userId} />
                         </div>
                     </Box>
                 )

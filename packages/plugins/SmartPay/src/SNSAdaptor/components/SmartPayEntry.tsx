@@ -134,7 +134,7 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
         }
 
         // if there is verified persona but current persona isn't verified
-        if (value.hasVerifiedPersona && !value.signPersona && !value.signWallet) {
+        if ((value.hasVerifiedPersona || personas.length) && !value.signPersona && !value.signWallet) {
             return setPersonaSelectPanelDialog({
                 open: true,
                 enableVerify: true,

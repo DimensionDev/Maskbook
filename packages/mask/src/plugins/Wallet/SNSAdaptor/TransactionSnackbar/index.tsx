@@ -120,6 +120,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
             ...{
                 message: (
                     <Link
+                        sx={{ wordBreak: 'break-word' }}
                         className={classes.link}
                         color="inherit"
                         href={Others?.explorerResolver.transactionLink?.(progress.chainId, progress.txHash)}

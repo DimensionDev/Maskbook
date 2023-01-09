@@ -6,11 +6,10 @@ import { Icons } from '@masknet/icons'
 import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TokenType, Transaction } from '@masknet/web3-shared-base'
 import { Box, Link, Stack, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
-import { TransactionIcon } from '../TransactionIcon/index.js'
 import { DebankTransactionDirection, ZerionTransactionDirection } from '@masknet/web3-providers/types'
+import { TransactionIcon } from '../TransactionIcon/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     type: {
@@ -57,7 +56,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface HistoryTableRowProps {
-    transaction: Transaction<ChainId, SchemaType>
+    transaction: Transaction<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     selectedChainId: Web3Helper.ChainIdAll
 }
 

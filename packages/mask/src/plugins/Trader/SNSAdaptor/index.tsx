@@ -12,10 +12,10 @@ import { enhanceTag } from './cashTag.js'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NFTProjectAvatarBadge } from './NFTProjectAvatarBadge.js'
+import { NFTProjectAvatarBadge } from '../../../components/shared/AvatarBadge/NFTProjectAvatarBadge.js'
 import { useCollectionByTwitterHandler } from '../../../plugins/Trader/trending/useTrending.js'
 
 const sns: Plugin.SNSAdaptor.Definition<
@@ -46,7 +46,7 @@ const sns: Plugin.SNSAdaptor.Definition<
                     <Web3ContextProvider
                         value={{
                             pluginID,
-                            chainId: chainId ?? ChainId.Mainnet,
+                            chainId,
                         }}>
                         <TrendingViewProvider
                             isNFTProjectPopper={false}
@@ -55,7 +55,6 @@ const sns: Plugin.SNSAdaptor.Definition<
                             isPreciseSearch={Boolean(Others?.isValidAddress(keyword))}>
                             <TrendingView
                                 resultList={resultList}
-                                expectedChainId={chainId ?? ChainId.Mainnet}
                                 searchedContractAddress={
                                     Others?.isValidAddress(keyword)
                                         ? keyword
@@ -134,7 +133,7 @@ const sns: Plugin.SNSAdaptor.Definition<
     },
     AvatarRealm: {
         ID: `${base.ID}_nft_project_card`,
-        label: 'Avatar Web3 Profile',
+        label: 'Web3 Profile Card',
         priority: 99999,
         UI: {
             Decorator({ userId }) {

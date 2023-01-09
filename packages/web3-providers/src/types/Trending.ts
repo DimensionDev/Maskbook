@@ -1,6 +1,7 @@
 import type { TokenType, SourceType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 export namespace TrendingAPI {
     export interface Settings {
@@ -62,6 +63,7 @@ export namespace TrendingAPI {
         source_code_urls?: string[]
         community_urls?: CommunityUrls
         home_urls?: string[]
+        nftscan_url?: string
         announcement_urls?: string[]
         blockchain_urls?: string[]
         image_url?: string
@@ -72,6 +74,7 @@ export namespace TrendingAPI {
         facebook_url?: string
         twitter_url?: string
         telegram_url?: string
+        pluginID?: NetworkPluginID
     }
 
     export interface CoinInfo {
@@ -89,7 +92,7 @@ export namespace TrendingAPI {
         total_volume?: number
         price_symbol?: string
         price_change_percentage_1h?: number
-        price_change_percentage_24h?: number
+        price_change_24h?: number
         price_change_percentage_1h_in_currency?: number
         price_change_percentage_1y_in_currency?: number
         price_change_percentage_7d_in_currency?: number

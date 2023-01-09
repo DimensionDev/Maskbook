@@ -1,12 +1,10 @@
 import urlcat from 'urlcat'
 import { ChainId, TransactionReceipt } from '@masknet/web3-shared-evm'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, Proof } from '@masknet/shared-base'
 import { FunderAPI } from '../../types/Funder.js'
 import { Web3API } from '../../EVM/index.js'
 import { fetchJSON, fetchSquashed } from '../../entry-helpers.js'
-import { FUNDER_DEV, FUNDER_PROD } from '../constants.js'
-
-const FUNDER_ROOT = process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? FUNDER_PROD : FUNDER_DEV
+import { FUNDER_PROD } from '../constants.js'
 
 export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     private web3 = new Web3API()
@@ -17,7 +15,7 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
 
     private async getWhiteList(handler: string) {
         return fetchJSON<FunderAPI.WhiteList>(
-            urlcat(FUNDER_ROOT, '/whitelist', { twitterHandler: handler }),
+            urlcat(FUNDER_PROD, '/whitelist', { twitterHandler: handler }),
             {},
             fetchSquashed,
         )
@@ -38,7 +36,7 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
 
         try {
             const operations = await fetchJSON<FunderAPI.Operation[]>(
-                urlcat(FUNDER_ROOT, '/operation', { scanKey: FunderAPI.ScanKey.OwnerAddress, scanValue: owner }),
+                urlcat(FUNDER_PROD, '/operation', { scanKey: FunderAPI.ScanKey.OwnerAddress, scanValue: owner }),
                 {},
                 fetchSquashed,
             )
@@ -58,10 +56,10 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
         }
     }
 
-    async fund(chainId: ChainId, proof: FunderAPI.Proof): Promise<FunderAPI.Fund> {
+    async fund(chainId: ChainId, proof: Proof): Promise<FunderAPI.Fund> {
         await this.assetChainId(chainId)
 
-        return fetchJSON<FunderAPI.Fund>(urlcat(FUNDER_ROOT, '/verify'), {
+        return fetchJSON<FunderAPI.Fund>(urlcat(FUNDER_PROD, '/verify'), {
             method: 'POST',
             body: JSON.stringify(proof),
             headers: { 'Content-Type': 'application/json' },

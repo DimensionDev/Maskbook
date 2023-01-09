@@ -72,6 +72,7 @@ export namespace AbstractAccountAPI {
             owner: string,
             transaction: Transaction,
             signer: Signer<ECKeyIdentifier> | Signer<string>,
+            gasCurrency?: string,
         ): Promise<string>
         /** Send a user operation by the account. */
         sendUserOperation(
@@ -80,5 +81,9 @@ export namespace AbstractAccountAPI {
             userOperation: UserOperation,
             signer: Signer<ECKeyIdentifier> | Signer<string>,
         ): Promise<string>
+        /** Estimate a transaction. */
+        estimateTransaction(chainId: ChainId, transaction: Transaction): Promise<string>
+        /** Estimate a user operation. */
+        estimateUserOperation(chainId: ChainId, userOperation: UserOperation): Promise<string>
     }
 }

@@ -1,3 +1,4 @@
+import { delay } from '@masknet/kit'
 import { ECKeyIdentifier, StorageItem } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ProviderType, isValidAddress } from '@masknet/web3-shared-evm'
@@ -30,36 +31,38 @@ export class BaseContractWalletProvider extends BaseHostedProvider implements EV
                     identifier: EMPTY_IDENTIFIER,
                 },
             })
+
             this.ownerStorage = storage.value
         })
     }
 
-    get owner() {
+    get ownerAccount() {
         return this.ownerStorage?.value.account ?? this.options.getDefaultAccount()
     }
 
-    get identifier() {
+    get ownerIdentifier() {
         const identifier = this.ownerStorage?.value.identifier
         return identifier?.rawPublicKey === 'EMPTY' ? undefined : identifier
     }
 
-    override async switchAccount(account?: string, owner?: string, identifier = EMPTY_IDENTIFIER) {
-        if (!isValidAddress(owner) || !identifier) {
-            await this.ownerStorage?.setValue({
-                account: this.options.getDefaultAccount(),
-                identifier: EMPTY_IDENTIFIER,
-            })
-            await super.switchAccount(account)
-            return
-        }
-
+    override async switchAccount(account?: string, owner?: { account: string; identifier?: ECKeyIdentifier }) {
         await super.switchAccount(account)
 
-        // ensure account switching is successful
-        if (isSameAddress(this.account, account)) {
+        if (!owner || !isValidAddress(owner.account)) {
             await this.ownerStorage?.setValue({
-                account: owner,
-                identifier,
+                account: this.options.getDefaultAccount(),
+                identifier: owner?.identifier ?? EMPTY_IDENTIFIER,
+            })
+        } else {
+            // delay for syncing storage
+            await delay(300)
+
+            // ensure account switching is successful
+            if (!isSameAddress(this.hostedAccount, account)) return
+
+            await this.ownerStorage?.setValue({
+                account: owner.account,
+                identifier: owner.identifier ?? EMPTY_IDENTIFIER,
             })
         }
     }
