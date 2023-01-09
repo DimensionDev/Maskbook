@@ -1,10 +1,10 @@
+import { FC, useEffect, useRef } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { SourceType } from '@masknet/web3-shared-base'
 import { TrendingAPI } from '@masknet/web3-providers/types'
-import { PluginTraderMessages } from '../messages.js'
 import { IconButton, IconButtonProps } from '@mui/material'
-import { FC, useEffect, useRef } from 'react'
+import { PluginTraderMessages } from '../../../plugins/Trader/messages.js'
 
 const useStyles = makeStyles()((theme) => ({
     badge: {
