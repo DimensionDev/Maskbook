@@ -27,6 +27,14 @@ export class NameServiceState<
         this.storage = storage.value
     }
 
+    get ready() {
+        return this.storage.initialized
+    }
+
+    get readyPromise() {
+        return this.storage.initializedPromise
+    }
+
     private async addName(id: NameServiceID, address: string, name: string) {
         if (!this.options.isValidAddress(address)) return
         const all = this.storage.value

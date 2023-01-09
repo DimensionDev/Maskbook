@@ -33,4 +33,22 @@ export class SettingsState implements Web3SettingsState {
         this.fungibleAssetSourceType = this.storage.fungibleAssetSourceType.subscription
         this.nonFungibleAssetSourceType = this.storage.nonFungibleAssetSourceType.subscription
     }
+
+    get ready() {
+        return (
+            this.storage.currencyType.initialized &&
+            this.storage.gasOptionType.initialized &&
+            this.storage.fungibleAssetSourceType.initialized &&
+            this.storage.nonFungibleAssetSourceType.initialized
+        )
+    }
+
+    get readyPromise() {
+        return Promise.all([
+            this.storage.currencyType.initializedPromise,
+            this.storage.gasOptionType.initializedPromise,
+            this.storage.fungibleAssetSourceType.initializedPromise,
+            this.storage.nonFungibleAssetSourceType.initializedPromise,
+        ]).then(() => {})
+    }
 }

@@ -929,8 +929,10 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     connect(
         chainId?: ChainId,
         address?: string,
-        owner?: string,
-        identifier?: ECKeyIdentifier,
+        owner?: {
+            account: string
+            identifier?: ECKeyIdentifier
+        },
     ): Promise<Account<ChainId>>
     /** Dismiss the connection. */
     disconnect(): Promise<void>
@@ -1368,6 +1370,9 @@ export interface Storage {
 }
 
 export interface SettingsState {
+    ready: boolean
+    readyPromise: Promise<void>
+
     /** Is testnets valid */
     allowTestnet?: Subscription<boolean>
     /** The currency of estimated values and prices. */
@@ -1381,6 +1386,9 @@ export interface SettingsState {
 }
 
 export interface AddressBookState<ChainId> {
+    ready: boolean
+    readyPromise: Promise<void>
+
     /** The tracked addresses of currently chosen sub-network */
     addressBook?: Subscription<string[]>
 
@@ -1390,6 +1398,9 @@ export interface AddressBookState<ChainId> {
     removeAddress: (chainId: ChainId, address: string) => Promise<void>
 }
 export interface RiskWarningState {
+    ready: boolean
+    readyPromise: Promise<void>
+
     /** Is approved */
     approved?: Subscription<boolean>
 
@@ -1445,6 +1456,9 @@ export interface NameServiceResolver {
 }
 
 export interface NameServiceState<ChainId> {
+    ready: boolean
+    readyPromise: Promise<void>
+
     /** create name resolver */
     createResolvers: (chainId: ChainId) => NameServiceResolver[]
     /** get address of domain name */
@@ -1453,6 +1467,9 @@ export interface NameServiceState<ChainId> {
     reverse?: (chainId: ChainId, address: string) => Promise<string | undefined>
 }
 export interface TokenState<ChainId, SchemaType> {
+    ready: boolean
+    readyPromise: Promise<void>
+
     /** The user trusted fungible tokens. */
     trustedFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
     /** The user trusted non-fungible tokens. */
@@ -1488,6 +1505,9 @@ export interface TokenState<ChainId, SchemaType> {
     ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
 }
 export interface TransactionState<ChainId, Transaction> {
+    ready: boolean
+    readyPromise: Promise<void>
+
     /** The tracked transactions of currently chosen sub-network */
     transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
 
@@ -1530,6 +1550,9 @@ export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
     ) => Promise<TransactionDescriptor<ChainId, Transaction>>
 }
 export interface TransactionWatcherState<ChainId, Transaction> {
+    ready: boolean
+    readyPromise: Promise<void>
+
     emitter: Emitter<WatchEvents<Transaction>>
 
     /** Add a transaction into the watch list. */
@@ -1547,6 +1570,9 @@ export interface TransactionWatcherState<ChainId, Transaction> {
     ) => Promise<void>
 }
 export interface ProviderState<ChainId, ProviderType, NetworkType> {
+    ready: boolean
+    readyPromise: Promise<void>
+
     /** The account of the currently visiting site. */
     account?: Subscription<string>
     /** The chain id of the currently visiting site. */
@@ -1560,13 +1586,16 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
     isReady: (providerType: ProviderType) => boolean
     /** Wait until a provider ready */
     untilReady: (providerType: ProviderType) => Promise<void>
+
     /** Connect with the provider and set chain id. */
     connect: (
-        chainId: ChainId,
         providerType: ProviderType,
+        chainId: ChainId,
         account?: string,
-        owner?: string,
-        identifier?: ECKeyIdentifier,
+        owner?: {
+            account: string
+            identifier?: ECKeyIdentifier
+        },
     ) => Promise<Account<ChainId>>
     /** Disconnect with the provider. */
     disconnect: (providerType: ProviderType) => Promise<void>
@@ -1611,6 +1640,9 @@ export interface ConnectionState<
     getConnection?: (initial?: Web3ConnectionOptions) => Web3Connection
 }
 export interface WalletState<Transaction> {
+    ready: boolean
+    readyPromise: Promise<void>
+
     /** The currently stored wallet by MaskWallet. */
     wallets?: Subscription<Wallet[]>
 

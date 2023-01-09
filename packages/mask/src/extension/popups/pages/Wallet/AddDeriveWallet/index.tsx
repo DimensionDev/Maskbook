@@ -1,18 +1,18 @@
 import { memo, useCallback, useRef, useState } from 'react'
+import { useAsync, useAsyncFn } from 'react-use'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { first } from 'lodash-es'
+import { LoadingButton } from '@mui/lab'
 import { TableContainer, TablePagination, tablePaginationClasses, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useAsync, useAsyncFn } from 'react-use'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
-import { DeriveWalletTable } from '../components/DeriveWalletTable/index.js'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { currySameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { useNativeToken, useWallets, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
+import { DeriveWalletTable } from '../components/DeriveWalletTable/index.js'
 import { useI18N } from '../../../../../utils/index.js'
-import { LoadingButton } from '@mui/lab'
-import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings.js'
 import { useTitle } from '../../../hook/useTitle.js'
+import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -52,12 +52,12 @@ const useStyles = makeStyles()({
 })
 
 const AddDeriveWallet = memo(() => {
-    const indexes = useRef(new Set<number>())
     const { t } = useI18N()
+    const indexes = useRef(new Set<number>())
     const navigate = useNavigate()
     const location = useLocation()
     const { value: nativeToken } = useNativeToken()
-    const state = location.state as any as
+    const state = location.state as
         | {
               mnemonic?: string
           }
@@ -102,32 +102,32 @@ const AddDeriveWallet = memo(() => {
     )
 
     const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
-        const unDeriveWallets = Array.from(indexes.current)
         if (!mnemonic) return
 
-        if (unDeriveWallets.length) {
-            const firstPath = first(unDeriveWallets)
-            const firstWallet = await WalletRPC.recoverWalletFromMnemonic(
-                `${walletName}${firstPath!}`,
-                mnemonic,
-                `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${firstPath}`,
-            )
+        const unDeriveWallets = Array.from(indexes.current)
+        if (!unDeriveWallets.length) return
 
-            await Promise.all(
-                unDeriveWallets
-                    .slice(1)
-                    .map(async (pathIndex) =>
-                        WalletRPC.recoverWalletFromMnemonic(
-                            `${walletName}${pathIndex}`,
-                            mnemonic,
-                            `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${pathIndex}`,
-                        ),
+        const firstPath = first(unDeriveWallets)
+        const firstWallet = await WalletRPC.recoverWalletFromMnemonic(
+            `${walletName}${firstPath!}`,
+            mnemonic,
+            `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${firstPath}`,
+        )
+
+        await Promise.all(
+            unDeriveWallets
+                .slice(1)
+                .map(async (pathIndex) =>
+                    WalletRPC.recoverWalletFromMnemonic(
+                        `${walletName}${pathIndex}`,
+                        mnemonic,
+                        `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${pathIndex}`,
                     ),
-            )
+                ),
+        )
 
-            if (!currentMaskWalletAccountSettings.value) {
-                await connection?.connect({ account: firstWallet })
-            }
+        if (!currentMaskWalletAccountSettings.value) {
+            await connection?.connect({ account: firstWallet })
         }
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [mnemonic, walletName, wallets.length, connection])

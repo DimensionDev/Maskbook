@@ -77,9 +77,13 @@ const ConnectWalletPage = memo(() => {
             network: Web3Helper.Web3NetworkDescriptor<NetworkPluginID.PLUGIN_EVM>,
             provider: Web3Helper.Web3ProviderDescriptor<NetworkPluginID.PLUGIN_EVM>,
         ) => {
+            const connection = Connection?.getConnection?.({
+                providerType: provider.type,
+            })
+
             if (provider.type === ProviderType.MaskWallet) {
-                const connection = Connection?.getConnection?.()
                 if (connection) await connection.disconnect()
+
                 if (isLocked && !getLockStatusLoading) {
                     navigate(urlcat(PopupRoutes.Unlock, { from: PopupRoutes.SelectWallet, goBack: true, popup: true }))
                     return
@@ -89,7 +93,6 @@ const ConnectWalletPage = memo(() => {
                     await Services.Helper.openWalletStartUpWindow({
                         toBeClose: 1,
                     })
-
                     return
                 }
 
@@ -98,24 +101,18 @@ const ConnectWalletPage = memo(() => {
                         popup: true,
                     }),
                 )
-                return
+            } else {
+                const account = await connection?.connect({
+                    chainId: await connection?.getChainId(),
+                })
+
+                navigate(PopupRoutes.VerifyWallet, {
+                    state: {
+                        ...account,
+                        providerType: provider.type,
+                    },
+                })
             }
-
-            const connection = Connection?.getConnection?.({
-                providerType: provider.type,
-            })
-
-            const currentChainId = await connection?.getChainId()
-            const account = await connection?.connect({
-                chainId: currentChainId,
-            })
-
-            navigate(PopupRoutes.VerifyWallet, {
-                state: {
-                    ...account,
-                    providerType: provider.type,
-                },
-            })
         },
         [isLocked, getLockStatusLoading, wallets.length],
     )

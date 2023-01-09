@@ -34,6 +34,14 @@ export class RiskWarningState implements Web3RiskWarningState {
         }
     }
 
+    get ready() {
+        return this.storage.initialized
+    }
+
+    get readyPromise() {
+        return this.storage.initializedPromise
+    }
+
     async isApproved(address: string) {
         return Reflect.has(this.storage.value, this.options.formatAddress(address))
     }

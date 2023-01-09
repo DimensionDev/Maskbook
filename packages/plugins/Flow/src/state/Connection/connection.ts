@@ -64,7 +64,7 @@ class Connection implements BaseConnection {
         return {
             account: '',
             chainId: ChainId.Mainnet,
-            ...(await Web3StateSettings.value.Provider?.connect(options.chainId, options.providerType)),
+            ...(await Web3StateSettings.value.Provider?.connect(options.providerType, options.chainId)),
         }
     }
     async disconnect(initial?: FlowConnectionOptions): Promise<void> {

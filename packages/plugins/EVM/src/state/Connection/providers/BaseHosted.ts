@@ -36,7 +36,12 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
 
             this.hostedStorage = storage
 
-            Web3StateSettings.readyPromise.then(this.addListeners.bind(this))
+            this.hostedStorage?.account.subscription.subscribe(() => {
+                if (this.hostedAccount) this.emitter.emit('accounts', [this.hostedAccount])
+            })
+            this.hostedStorage?.chainId.subscription.subscribe(() => {
+                if (this.hostedChainId) this.emitter.emit('chainId', toHex(this.hostedChainId))
+            })
         })
     }
 
@@ -50,11 +55,11 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         }
     }
 
-    get account() {
+    get hostedAccount() {
         return this.hostedStorage?.account.value ?? this.options.getDefaultAccount()
     }
 
-    get chainId() {
+    get hostedChainId() {
         return this.hostedStorage?.chainId.value ?? this.options.getDefaultChainId()
     }
 
@@ -74,33 +79,27 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         return Web3StateSettings.readyPromise.then(() => {})
     }
 
-    private addListeners() {
-        this.hostedStorage?.account.subscription.subscribe(() => {
-            if (this.account) this.emitter.emit('accounts', [this.account])
-            else this.emitter.emit('disconnect', this.providerType)
-        })
-        this.hostedStorage?.chainId.subscription.subscribe(() => {
-            if (this.chainId) this.emitter.emit('chainId', toHex(this.chainId))
-        })
-    }
-
     override async switchAccount(account?: string) {
-        if (isValidAddress(account) && (await this.options.isSupportedAccount(account))) {
-            await this.hostedStorage?.account.setValue(account)
-        }
+        if (!isValidAddress(account)) throw new Error(`Invalid address: ${account}`)
+
+        const supported = await this.options.isSupportedAccount(account)
+        if (!supported) throw new Error(`Not supported account: ${account}`)
+
+        await this.hostedStorage?.account.setValue(account)
     }
 
     override async switchChain(chainId: ChainId) {
-        if (await this.options.isSupportedChainId(chainId)) {
-            await this.hostedStorage?.chainId.setValue(chainId)
-        }
+        const supported = await this.options.isSupportedChainId(chainId)
+        if (!supported) throw new Error(`Not supported chain id: ${chainId}`)
+
+        await this.hostedStorage?.chainId.setValue(chainId)
     }
 
     override async request<T extends unknown>(
         requestArguments: RequestArguments,
         options?: ProviderOptions<ChainId>,
     ): Promise<T> {
-        return Web3.createProvider(options?.chainId || this.chainId).request<T>(
+        return Web3.createProvider(options?.chainId || this.hostedChainId).request<T>(
             PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
         )
     }

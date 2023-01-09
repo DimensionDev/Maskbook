@@ -53,6 +53,14 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
         }
     }
 
+    get ready() {
+        return this.storage.initialized
+    }
+
+    get readyPromise() {
+        return this.storage.initializedPromise
+    }
+
     async addTransaction(chainId: ChainId, address: string, id: string, transaction: Transaction) {
         const now = new Date()
         const all = this.storage.value

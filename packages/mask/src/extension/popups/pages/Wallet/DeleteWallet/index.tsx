@@ -1,18 +1,18 @@
-import { memo, useCallback, useMemo, useState } from 'react'
 import { first } from 'lodash-es'
+import { memo, useCallback, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { useNavigate } from 'react-router-dom'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { FormattedAddress } from '@masknet/shared'
+import { useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
-import { useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { WalletContext } from '../hooks/useWalletContext.js'
 import { useTitle } from '../../../hook/useTitle.js'
-import { isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()({
     content: {
@@ -110,21 +110,18 @@ const DeleteWallet = memo(() => {
     const [errorMessage, setErrorMessage] = useState('')
 
     const onConfirm = useCallback(async () => {
-        if (wallet?.address) {
-            try {
-                await Wallet?.removeWallet?.(wallet.address, password)
-
-                await connection?.connect({
-                    account: first(Wallet?.wallets?.getCurrentValue())?.address ?? '',
-                })
-
-                navigate(PopupRoutes.Wallet, { replace: true })
-            } catch (error) {
-                if (error instanceof Error) {
-                    setErrorMessage(
-                        error.message === 'Wrong password' ? t('popups_wallet_unlock_error_password') : error.message,
-                    )
-                }
+        if (!wallet?.address) return
+        try {
+            await Wallet?.removeWallet?.(wallet.address, password)
+            await connection?.connect({
+                account: first(Wallet?.wallets?.getCurrentValue())?.address ?? '',
+            })
+            navigate(PopupRoutes.Wallet, { replace: true })
+        } catch (error) {
+            if (error instanceof Error) {
+                setErrorMessage(
+                    error.message === 'Wrong password' ? t('popups_wallet_unlock_error_password') : error.message,
+                )
             }
         }
     }, [wallet, password, Wallet, connection])
