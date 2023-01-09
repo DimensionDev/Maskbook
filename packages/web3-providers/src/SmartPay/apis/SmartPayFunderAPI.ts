@@ -4,9 +4,9 @@ import { EMPTY_LIST, Proof } from '@masknet/shared-base'
 import { FunderAPI } from '../../types/Funder.js'
 import { Web3API } from '../../EVM/index.js'
 import { fetchJSON, fetchSquashed } from '../../entry-helpers.js'
-import { FUNDER_DEV, FUNDER_PROD } from '../constants.js'
+import { FUNDER_PROD } from '../constants.js'
 
-const FUNDER_ROOT = process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? FUNDER_PROD : FUNDER_DEV
+const FUNDER_ROOT = FUNDER_PROD
 
 export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     private web3 = new Web3API()

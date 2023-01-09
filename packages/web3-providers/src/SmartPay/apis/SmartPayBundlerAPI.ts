@@ -4,10 +4,9 @@ import type { ChainId, UserOperation } from '@masknet/web3-shared-evm'
 import { toBase64, fromHex } from '@masknet/shared-base'
 import type { BundlerAPI } from '../../types/Bundler.js'
 import { fetchCached, fetchJSON } from '../../entry-helpers.js'
-import { BUNDLER_DEV, BUNDLER_PROD } from '../constants.js'
+import { BUNDLER_PROD } from '../constants.js'
 
-const BUNDLER_ROOT =
-    process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? BUNDLER_PROD : BUNDLER_DEV
+const BUNDLER_ROOT = BUNDLER_PROD
 
 export class SmartPayBundlerAPI implements BundlerAPI.Provider {
     private healthz() {
