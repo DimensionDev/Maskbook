@@ -40,7 +40,7 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
                 {},
                 fetchSquashed,
             )
-            const web3 = this.web3.createWeb3(chainId)
+            const web3 = this.web3.getWeb3(chainId)
             const allSettled = await Promise.allSettled(
                 operations.map<Promise<TransactionReceipt | null>>((x) =>
                     web3.eth.getTransactionReceipt(x.tokenTransferTx),

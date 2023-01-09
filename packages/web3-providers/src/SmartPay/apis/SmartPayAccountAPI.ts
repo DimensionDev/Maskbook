@@ -69,7 +69,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
     }
 
     private createWalletContract(chainId: ChainId, address: string) {
-        return createContract<Wallet>(this.web3.createWeb3(chainId), address, WalletABI as AbiItem[])
+        return createContract<Wallet>(this.web3.getWeb3(chainId), address, WalletABI as AbiItem[])
     }
 
     private async createContractWallet(chainId: ChainId, owner: string) {
@@ -274,7 +274,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
                 const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
 
                 if (!accountsDeployed.length) {
-                    await userTransaction.fill(this.web3.createWeb3(chainId), {
+                    await userTransaction.fill(this.web3.getWeb3(chainId), {
                         initCode: await this.getInitCode(chainId, owner),
                         nonce: accountsDeployed.length,
                     })
@@ -283,9 +283,9 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
 
             return this.bundler.sendUserOperation(chainId, await userTransaction.signUserOperation(signer))
         } else {
-            return this.web3.createWeb3Provider(chainId).request<string>({
+            return this.web3.getWeb3Provider(chainId).request<string>({
                 method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
-                params: [await userTransaction.signTransaction(this.web3.createWeb3(chainId), signer)],
+                params: [await userTransaction.signTransaction(this.web3.getWeb3(chainId), signer)],
             })
         }
     }
@@ -299,7 +299,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
     ): Promise<string> {
         const userTransaction = await UserTransaction.fromTransaction(
             chainId,
-            this.web3.createWeb3(chainId),
+            this.web3.getWeb3(chainId),
             await this.getEntryPoint(chainId),
             transaction,
             gasCurrency,
@@ -315,7 +315,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
     ): Promise<string> {
         const userTransaction = await UserTransaction.fromUserOperation(
             chainId,
-            this.web3.createWeb3(chainId),
+            this.web3.getWeb3(chainId),
             await this.getEntryPoint(chainId),
             userOperation,
         )
@@ -323,7 +323,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
     }
 
     async estimateTransaction(chainId: ChainId, transaction: Transaction): Promise<string> {
-        const web3 = this.web3.createWeb3(chainId)
+        const web3 = this.web3.getWeb3(chainId)
         const userTransaction = await UserTransaction.fromTransaction(
             chainId,
             web3,
@@ -336,7 +336,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
     async estimateUserOperation(chainId: ChainId, userOperation: UserOperation): Promise<string> {
         const userTransaction = await UserTransaction.fromUserOperation(
             chainId,
-            this.web3.createWeb3(chainId),
+            this.web3.getWeb3(chainId),
             await this.getEntryPoint(chainId),
             userOperation,
         )

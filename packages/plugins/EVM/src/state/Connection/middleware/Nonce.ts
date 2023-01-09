@@ -10,7 +10,7 @@ export class Nonce implements Middleware<Context> {
     private nonces = new Map<string, Map<ChainId, number>>()
 
     private getRemoteNonce(chainId: ChainId, address: string) {
-        return Web3.createWeb3(chainId).eth.getTransactionCount(address)
+        return Web3.getWeb3(chainId).eth.getTransactionCount(address)
     }
 
     private async syncRemoteNonce(chainId: ChainId, address: string, commitment = 0) {

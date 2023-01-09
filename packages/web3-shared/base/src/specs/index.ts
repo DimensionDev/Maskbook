@@ -1030,26 +1030,26 @@ export interface Connection<
     /** Get a non-fungible token. */
     getNonFungibleToken(
         address: string,
-        tokenId: string,
+        tokenId: string | undefined,
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>>
     getNonFungibleTokenOwner(
         address: string,
-        tokenId: string,
+        tokenId: string | undefined,
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
     ): Promise<string>
     getNonFungibleTokenOwnership(
         address: string,
-        tokenId: string,
+        tokenId: string | undefined,
         owner: string,
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
     ): Promise<boolean>
     getNonFungibleTokenMetadata(
         address: string,
-        tokenId: string,
+        tokenId: string | undefined,
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
     ): Promise<NonFungibleTokenMetadata<ChainId>>

@@ -8,6 +8,19 @@ import type {
 } from '@masknet/web3-shared-base'
 
 export namespace Web3BaseAPI {
+    export interface ERC721Metadata {
+        name: string
+        description: string
+        image: string
+    }
+
+    export interface ERC1155Metadata {
+        name: string
+        decimals: number
+        description: string
+        image: string
+    }
+
     export interface Provider<
         ChainId,
         AddressType,
@@ -20,26 +33,35 @@ export namespace Web3BaseAPI {
         Web3,
     > {
         /** Create an instance from the network SDK. */
-        createWeb3(chainId: ChainId): Web3
+        getWeb3(chainId: ChainId): Web3
         /** Create an instance that implement the wallet protocol. */
-        createWeb3Provider(chainId: ChainId): Provider
+        getWeb3Provider(chainId: ChainId): Provider
         /** Get the latest balance of the account. */
         getBalance(chainId: ChainId, address: string): Promise<string>
         /** Get native fungible token balance. */
-        getNativeTokenBalance(chainId: ChainId): Promise<string>
+        getNativeTokenBalance(chainId: ChainId, owner: string): Promise<string>
         /** Get fungible token balance. */
-        getFungibleTokenBalance(chainId: ChainId, address: string, schema?: SchemaType): Promise<string>
+        getFungibleTokenBalance(chainId: ChainId, address: string, owner: string, schema?: SchemaType): Promise<string>
         /** Get non-fungible token balance. */
         getNonFungibleTokenBalance(
             chainId: ChainId,
             address: string,
-            tokenId?: string,
+            tokenId: string | undefined,
+            owner: string,
             schema?: SchemaType,
         ): Promise<string>
         /** Get fungible token balance. */
-        getFungibleTokensBalance(chainId: ChainId, listOfAddress: string[]): Promise<Record<string, string>>
+        getFungibleTokensBalance(
+            chainId: ChainId,
+            listOfAddress: string[],
+            owner: string,
+        ): Promise<Record<string, string>>
         /** Get non-fungible token balance. */
-        getNonFungibleTokensBalance(chainId: ChainId, listOfAddress: string[]): Promise<Record<string, string>>
+        getNonFungibleTokensBalance(
+            chainId: ChainId,
+            listOfAddress: string[],
+            owner: string,
+        ): Promise<Record<string, string>>
         /** Get gas price */
         getGasPrice(chainId: ChainId): Promise<string>
         /** Get the source code of a on-chain program. */
@@ -106,10 +128,10 @@ export namespace Web3BaseAPI {
             address: string,
             schema?: SchemaType,
         ): Promise<NonFungibleCollection<ChainId, SchemaType>>
-        /** Estimate a transaction  */
-        estimateTransaction(chainId: ChainId, transaction: Transaction, fallback?: number): Promise<string>
         /** Query a transaction */
         callTransaction(chainId: ChainId, transaction: Transaction): Promise<string>
+        /** Estimate a transaction  */
+        estimateTransaction(chainId: ChainId, transaction: Transaction, fallback?: number): Promise<string>
         /** Send a signed transaction */
         sendSignedTransaction(chainId: ChainId, signed: string): Promise<string>
     }

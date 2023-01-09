@@ -1,7 +1,7 @@
 import { first, memoize } from 'lodash-es'
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
-import { AbiItem, toHex } from 'web3-utils'
+import { AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
 import {
     AddressType,
     SchemaType,
@@ -20,27 +20,46 @@ import {
     getTransactionStatusType,
     EthereumMethodType,
     AccountTransaction,
+    isNativeTokenAddress,
+    createERC20Token,
+    parseStringOrBytes32,
+    createNativeToken,
+    getTokenConstant,
+    getEthereumConstant,
 } from '@masknet/web3-shared-evm'
-import type {
+import {
     FungibleToken,
     NonFungibleCollection,
     NonFungibleToken,
     NonFungibleTokenContract,
     NonFungibleTokenMetadata,
     TransactionStatusType,
+    createNonFungibleToken,
+    createNonFungibleTokenCollection,
+    createNonFungibleTokenContract,
+    createNonFungibleTokenMetadata,
+    isSameAddress,
+    resolveIPFS_URL,
+    resolveCrossOriginURL,
 } from '@masknet/web3-shared-base'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
 import type { ERC20Bytes32 } from '@masknet/web3-contracts/types/ERC20Bytes32.js'
 import type { ERC165 } from '@masknet/web3-contracts/types/ERC165.js'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
 import type { ERC1155 } from '@masknet/web3-contracts/types/ERC1155.js'
+import type { BalanceChecker } from '@masknet/web3-contracts/types/BalanceChecker.js'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import ERC165ABI from '@masknet/web3-contracts/abis/ERC165.json'
 import ERC20Bytes32ABI from '@masknet/web3-contracts/abis/ERC20Bytes32.json'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import ERC1155ABI from '@masknet/web3-contracts/abis/ERC1155.json'
+import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
 import type { Web3BaseAPI } from '../../entry-types.js'
+import { fetchJSON } from '../../entry-helpers.js'
+
+const EMPTY_STRING = Promise.resolve('')
+const ZERO = Promise.resolve(0)
 
 const createWeb3SDK = memoize(
     (url: string) => new Web3(url),
@@ -61,20 +80,77 @@ export class Web3API
             Web3
         >
 {
-    createWeb3(chainId: ChainId) {
+    async getFungibleTokensBalance(
+        chainId: ChainId,
+        listOfAddress: string[],
+        owner: string,
+    ): Promise<Record<string, string>> {
+        if (!listOfAddress.length) return {}
+
+        const NATIVE_TOKEN_ADDRESS = getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS')
+        const BALANCE_CHECKER_ADDRESS = getEthereumConstant(chainId, 'BALANCE_CHECKER_ADDRESS')
+        const entities: Array<[string, string]> = []
+
+        if (listOfAddress.some(isNativeTokenAddress)) {
+            entities.push([NATIVE_TOKEN_ADDRESS ?? '', await this.getBalance(chainId, owner)])
+        }
+
+        const listOfNonNativeAddress = listOfAddress.filter((x) => !isNativeTokenAddress(x))
+
+        if (listOfNonNativeAddress.length) {
+            const contract = this.getWeb3Contract<BalanceChecker>(
+                chainId,
+                BALANCE_CHECKER_ADDRESS ?? '',
+                BalanceCheckerABI as AbiItem[],
+            )
+            const balances = await contract?.methods.balances([owner], listOfNonNativeAddress).call({
+                // cannot check the sender's balance in the same contract
+                from: undefined,
+                chainId: numberToHex(chainId),
+            })
+
+            listOfNonNativeAddress.forEach((x, i) => {
+                entities.push([x, balances?.[i] ?? '0'])
+            })
+        }
+        return Object.fromEntries(entities)
+    }
+    async getNonFungibleTokensBalance(
+        chainId: ChainId,
+        listOfAddress: string[],
+        owner: string,
+    ): Promise<Record<string, string>> {
+        if (!listOfAddress.length) return {}
+
+        const BALANCE_CHECKER_ADDRESS = getEthereumConstant(chainId, 'BALANCE_CHECKER_ADDRESS')
+        const contract = this.getWeb3Contract<BalanceChecker>(
+            chainId,
+            BALANCE_CHECKER_ADDRESS ?? '',
+            BalanceCheckerABI as AbiItem[],
+        )
+        const result = await contract?.methods.balances([owner], listOfAddress).call({
+            // cannot check the sender's balance in the same contract
+            from: undefined,
+            chainId: numberToHex(chainId),
+        })
+
+        if (result?.length !== listOfAddress.length) return {}
+        return Object.fromEntries(listOfAddress.map<[string, string]>((x, i) => [x, result[i]]))
+    }
+    getWeb3(chainId: ChainId) {
         const RPC_URL = first(getRPCConstants(chainId).RPC_URLS)
         if (!RPC_URL) throw new Error('Failed to create web3 provider.')
         return createWeb3SDK(RPC_URL)
     }
 
-    createWeb3Provider(chainId: ChainId) {
-        const web3 = this.createWeb3(chainId)
+    getWeb3Provider(chainId: ChainId) {
+        const web3 = this.getWeb3(chainId)
         const provider = web3.currentProvider as HttpProvider
         return createWeb3Provider(createWeb3Request(provider.send.bind(provider)))
     }
 
     private getWeb3Contract<T extends BaseContract>(chainId: ChainId, address: string, ABI: AbiItem[]) {
-        const web3 = this.createWeb3(chainId)
+        const web3 = this.getWeb3(chainId)
         return createContract<T>(web3, address, ABI)
     }
 
@@ -95,17 +171,17 @@ export class Web3API
     }
 
     getBalance(chainId: ChainId, address: string): Promise<string> {
-        return this.createWeb3(chainId).eth.getBalance(address)
+        return this.getWeb3(chainId).eth.getBalance(address)
     }
     getGasPrice(chainId: ChainId): Promise<string> {
-        return this.createWeb3(chainId).eth.getGasPrice()
+        return this.getWeb3(chainId).eth.getGasPrice()
     }
     getCode(chainId: ChainId, address: string): Promise<string> {
-        return this.createWeb3(chainId).eth.getCode(address)
+        return this.getWeb3(chainId).eth.getCode(address)
     }
     async getAddressType(chainId: ChainId, address: string): Promise<AddressType | undefined> {
         if (!isValidAddress(address)) return
-        const code = await this.createWeb3(chainId).eth.getCode(address)
+        const code = await this.getWeb3(chainId).eth.getCode(address)
         return code === '0x' ? AddressType.ExternalOwned : AddressType.Contract
     }
     async getSchemaType(chainId: ChainId, address: string): Promise<SchemaType | undefined> {
@@ -144,10 +220,10 @@ export class Web3API
         }
     }
     getBlock(chainId: ChainId, noOrId: string | number): Promise<Block> {
-        return this.createWeb3(chainId).eth.getBlock(noOrId) as Promise<Block>
+        return this.getWeb3(chainId).eth.getBlock(noOrId) as Promise<Block>
     }
     getBlockNumber(chainId: ChainId): Promise<number> {
-        return this.createWeb3(chainId).eth.getBlockNumber()
+        return this.getWeb3(chainId).eth.getBlockNumber()
     }
     async getBlockTimestamp(chainId: ChainId): Promise<number> {
         const blockNumber = await this.getBlockNumber(chainId)
@@ -155,43 +231,86 @@ export class Web3API
         return Number.parseInt(block.timestamp, 16)
     }
     getTransaction(chainId: ChainId, hash: string): Promise<TransactionDetailed> {
-        return this.createWeb3(chainId).eth.getTransaction(hash) as unknown as Promise<TransactionDetailed>
+        return this.getWeb3(chainId).eth.getTransaction(hash) as unknown as Promise<TransactionDetailed>
     }
     getTransactionReceipt(chainId: ChainId, hash: string): Promise<TransactionReceipt> {
-        return this.createWeb3(chainId).eth.getTransactionReceipt(hash)
+        return this.getWeb3(chainId).eth.getTransactionReceipt(hash)
     }
     getTransactionNonce(chainId: ChainId, address: string): Promise<number> {
-        return this.createWeb3(chainId).eth.getTransactionCount(address)
+        return this.getWeb3(chainId).eth.getTransactionCount(address)
     }
     async getTransactionStatus(chainId: ChainId, hash: string): Promise<TransactionStatusType> {
         const receipt = await this.getTransactionReceipt(chainId, hash)
         return getTransactionStatusType(receipt)
     }
     getNativeToken(chainId: ChainId): Promise<FungibleToken<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
+        const token = createNativeToken(chainId)
+        if (!token) throw new Error('Failed to create native token.')
+        return Promise.resolve(token)
     }
-    getFungibleToken(chainId: ChainId, address: string): Promise<FungibleToken<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
+    async getFungibleToken(chainId: ChainId, address: string): Promise<FungibleToken<ChainId, SchemaType>> {
+        // Native
+        if (!address || isNativeTokenAddress(address)) return this.getNativeToken(chainId)
+
+        // ERC20
+        const contract = this.getERC20Contract(chainId, address)
+        const bytes32Contract = this.getWeb3Contract<ERC20Bytes32>(chainId, address, ERC20Bytes32ABI as AbiItem[])
+        const results = await Promise.allSettled([
+            contract?.methods.name().call() ?? EMPTY_STRING,
+            bytes32Contract?.methods.name().call() ?? EMPTY_STRING,
+            contract?.methods.symbol().call() ?? EMPTY_STRING,
+            bytes32Contract?.methods.symbol().call() ?? EMPTY_STRING,
+            contract?.methods.decimals().call() ?? ZERO,
+        ])
+        const [name, nameBytes32, symbol, symbolBytes32, decimals] = results.map((result) =>
+            result.status === 'fulfilled' ? result.value : '',
+        ) as string[]
+        return createERC20Token(
+            chainId,
+            address,
+            parseStringOrBytes32(name, nameBytes32, 'Unknown Token'),
+            parseStringOrBytes32(symbol, symbolBytes32, 'UNKNOWN'),
+            typeof decimals === 'string' ? Number.parseInt(decimals ? decimals : '0', 10) : decimals,
+        )
     }
-    getNonFungibleTokenOwner(
+    async getNonFungibleTokenOwner(
         chainId: ChainId,
         address: string,
         tokenId: string,
         schema?: SchemaType | undefined,
     ): Promise<string> {
-        throw new Error('Method not implemented.')
+        const actualSchema = schema ?? (await this.getSchemaType(chainId, address))
+
+        // ERC1155
+        if (actualSchema === SchemaType.ERC1155) return ''
+
+        // ERC721
+        const contract = this.getERC721Contract(chainId, address)
+        return (await contract?.methods.ownerOf(tokenId).call()) ?? ''
     }
-    getNonFungibleTokenOwnership(
+    async getNonFungibleTokenOwnership(
         chainId: ChainId,
         address: string,
         tokenId: string,
+        owner: string,
         schema?: SchemaType | undefined,
     ): Promise<boolean> {
-        throw new Error('Method not implemented.')
+        const actualSchema = schema ?? (await this.getSchemaType(chainId, address))
+
+        // ERC1155
+        if (actualSchema === SchemaType.ERC1155) {
+            const contract = this.getERC1155Contract(chainId, address)
+            // the owner has at least 1 token
+            return toNumber((await contract?.methods.balanceOf(owner, tokenId).call()) ?? 0) > 0 ?? false
+        }
+
+        // ERC721
+        const contract = this.getERC721Contract(chainId, address)
+        return isSameAddress(await contract?.methods.ownerOf(tokenId).call(), owner)
     }
     async estimateTransaction(chainId: ChainId, transaction: Transaction, fallback = 21000): Promise<string> {
         try {
-            const provider = this.createWeb3Provider(chainId)
+            const provider = this.getWeb3Provider(chainId)
             return provider.request<string>({
                 method: EthereumMethodType.ETH_ESTIMATE_GAS,
                 params: [
@@ -209,21 +328,21 @@ export class Web3API
     }
 
     callTransaction(chainId: ChainId, transaction: Transaction, overrides?: Transaction): Promise<string> {
-        const provider = this.createWeb3Provider(chainId)
+        const provider = this.getWeb3Provider(chainId)
         return provider.request<string>({
             method: EthereumMethodType.ETH_CALL,
             params: [new AccountTransaction(transaction).fill(overrides), 'latest'],
         })
     }
     replaceTransaction(chainId: ChainId, hash: string, transaction: Transaction): Promise<void> {
-        const provider = this.createWeb3Provider(chainId)
+        const provider = this.getWeb3Provider(chainId)
         return provider.request<void>({
             method: EthereumMethodType.MASK_REPLACE_TRANSACTION,
             params: [hash, transaction],
         })
     }
     cancelTransaction(chainId: ChainId, hash: string, transaction: Transaction): Promise<void> {
-        const provider = this.createWeb3Provider(chainId)
+        const provider = this.getWeb3Provider(chainId)
         return provider.request<void>({
             method: EthereumMethodType.MASK_REPLACE_TRANSACTION,
             params: [
@@ -238,59 +357,194 @@ export class Web3API
         })
     }
     sendSignedTransaction(chainId: ChainId, signed: string): Promise<string> {
-        const provider = this.createWeb3Provider(chainId)
+        const provider = this.getWeb3Provider(chainId)
         return provider.request<string>({
             method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
             params: [signed],
         })
     }
-    getNativeTokenBalance(chainId: ChainId): Promise<string> {
-        throw new Error('Method not implemented.')
+    async getNativeTokenBalance(chainId: ChainId, owner: string): Promise<string> {
+        if (!isValidAddress(owner)) return '0'
+        return this.getBalance(chainId, owner)
     }
-    getFungibleTokenBalance(
+    async getFungibleTokenBalance(
         chainId: ChainId,
         address: string,
-        tokenId?: string | undefined,
-        schemaType?: SchemaType | undefined,
+        owner: string,
+        schema?: SchemaType | undefined,
     ): Promise<string> {
-        throw new Error('Method not implemented.')
+        // Native
+        if (!address || isNativeTokenAddress(address)) return this.getNativeTokenBalance(chainId, owner)
+
+        // ERC20
+        const contract = this.getERC20Contract(chainId, address)
+        return (await contract?.methods.balanceOf(owner).call()) ?? '0'
     }
-    getNonFungibleTokenBalance(
+    async getNonFungibleTokenBalance(
         chainId: ChainId,
         address: string,
-        tokenId?: string | undefined,
-        schemaType?: SchemaType | undefined,
+        tokenId: string | undefined,
+        owner: string,
+        schema?: SchemaType | undefined,
     ): Promise<string> {
-        throw new Error('Method not implemented.')
+        const actualSchema = schema ?? (await this.getSchemaType(chainId, address))
+
+        // ERC1155
+        if (actualSchema === SchemaType.ERC1155) {
+            const contract = this.getERC1155Contract(chainId, address)
+            return contract?.methods?.balanceOf(owner, tokenId ?? '').call() ?? '0'
+        }
+
+        // ERC721
+        const contract = this.getERC721Contract(chainId, address)
+        return contract?.methods.balanceOf(owner).call() ?? '0'
     }
-    getNonFungibleToken(
+    async getNonFungibleToken(
         chainId: ChainId,
         address: string,
         tokenId: string,
         schema?: SchemaType | undefined,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
+        const actualSchema = schema ?? (await this.getSchemaType(chainId, address))
+        const allSettled = await Promise.allSettled([
+            this.getNonFungibleTokenMetadata(chainId, address, tokenId, schema),
+            this.getNonFungibleTokenContract(chainId, address, schema),
+        ])
+        const [metadata, contract] = allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)) as [
+            NonFungibleTokenMetadata<ChainId>,
+            NonFungibleTokenContract<ChainId, SchemaType>,
+        ]
+
+        let ownerId: string | undefined
+
+        if (actualSchema !== SchemaType.ERC1155) {
+            const contract = this.getERC721Contract(chainId, address)
+            try {
+                ownerId = await contract?.methods.ownerOf(tokenId).call()
+            } catch {}
+        }
+
+        return createNonFungibleToken<ChainId, SchemaType>(
+            chainId,
+            address,
+            actualSchema ?? SchemaType.ERC721,
+            tokenId,
+            ownerId,
+            metadata,
+            contract,
+        )
     }
-    getNonFungibleTokenMetadata(
+    async getNonFungibleTokenMetadata(
         chainId: ChainId,
         address: string,
         tokenId?: string | undefined,
-        scheam?: SchemaType | undefined,
+        schema?: SchemaType | undefined,
     ): Promise<NonFungibleTokenMetadata<ChainId>> {
-        throw new Error('Method not implemented.')
+        const processURI = (uri: string) => {
+            // e.g,
+            // address: 0x495f947276749ce646f68ac8c248420045cb7b5e
+            // token id: 33445046430196205871873533938903624085962860434195770982901962545689408831489
+            if (uri.startsWith('https://api.opensea.io/') && tokenId) return uri.replace('0x{id}', tokenId)
+
+            // add cors header
+            if (!uri.startsWith('ipfs://')) return resolveCrossOriginURL(resolveIPFS_URL(uri))!
+
+            return uri
+        }
+        const actualSchema = schema ?? (await this.getSchemaType(chainId, address))
+
+        // ERC1155
+        if (actualSchema === SchemaType.ERC1155) {
+            const contract = this.getERC1155Contract(chainId, address)
+            const uri = await contract?.methods.uri(tokenId ?? '').call()
+            if (!uri) throw new Error('Failed to read metadata uri.')
+
+            const response = await fetchJSON<Web3BaseAPI.ERC1155Metadata>(processURI(uri))
+            return createNonFungibleTokenMetadata(
+                chainId,
+                response.name,
+                '',
+                response.description,
+                undefined,
+                resolveIPFS_URL(response.image),
+                resolveIPFS_URL(response.image),
+            )
+        }
+
+        // ERC721
+        const contract = this.getERC721Contract(chainId, address)
+        const uri = await contract?.methods.tokenURI(tokenId ?? '').call()
+        if (!uri) throw new Error('Failed to read metadata uri.')
+        const response = await fetchJSON<Web3BaseAPI.ERC721Metadata>(processURI(uri))
+        return createNonFungibleTokenMetadata(
+            chainId,
+            response.name,
+            '',
+            response.description,
+            undefined,
+            resolveIPFS_URL(response.image),
+            resolveIPFS_URL(response.image),
+        )
     }
-    getNonFungibleTokenContract(
+    async getNonFungibleTokenContract(
         chainId: ChainId,
         address: string,
-        tokenId?: string | undefined,
-        scheam?: SchemaType | undefined,
+        schema?: SchemaType | undefined,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
+        const actualSchema = schema ?? (await this.getSchemaType(chainId, address))
+
+        // ERC1155
+        if (actualSchema === SchemaType.ERC1155) {
+            const contractERC721 = this.getERC721Contract(chainId, address)
+            const results = await Promise.allSettled([
+                contractERC721?.methods.name().call() ?? EMPTY_STRING,
+                contractERC721?.methods.symbol().call() ?? EMPTY_STRING,
+            ])
+
+            const [name, symbol] = results.map((result) =>
+                result.status === 'fulfilled' ? result.value : '',
+            ) as string[]
+
+            return createNonFungibleTokenContract(
+                chainId,
+                SchemaType.ERC1155,
+                address,
+                name ?? 'Unknown Token',
+                symbol ?? 'UNKNOWN',
+            )
+        }
+
+        // ERC721
+        const contract = this.getERC721Contract(chainId, address)
+        const results = await Promise.allSettled([
+            contract?.methods.name().call() ?? EMPTY_STRING,
+            contract?.methods.symbol().call() ?? EMPTY_STRING,
+        ])
+
+        const [name, symbol] = results.map((result) => (result.status === 'fulfilled' ? result.value : '')) as string[]
+
+        return createNonFungibleTokenContract<ChainId, SchemaType.ERC721>(
+            chainId,
+            SchemaType.ERC721,
+            address,
+            name ?? 'Unknown Token',
+            symbol ?? 'UNKNOWN',
+        )
     }
-    getNonFungibleTokenCollection(
+    async getNonFungibleTokenCollection(
         chainId: ChainId,
         address: string,
+        schema?: SchemaType,
     ): Promise<NonFungibleCollection<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
+        const actualSchema = schema ?? (await this.getSchemaType(chainId, address))
+
+        // ERC1155
+        if (actualSchema === SchemaType.ERC1155) throw new Error('Not implemented yet.')
+
+        // ERC721
+        const contract = this.getERC721Contract(chainId, address)
+        const results = await Promise.allSettled([contract?.methods.name().call() ?? EMPTY_STRING])
+        const [name] = results.map((result) => (result.status === 'fulfilled' ? result.value : '')) as string[]
+        return createNonFungibleTokenCollection(chainId, address, name ?? 'Unknown Token', '')
     }
 }
