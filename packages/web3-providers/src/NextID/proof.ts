@@ -136,7 +136,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return first(result) ?? null
     }
 
-    async queryAllExistedBindingsByPlatform(platform: NextIDPlatform, identity: string) {
+    async queryAllExistedBindingsByPlatform(platform: NextIDPlatform, identity: string, exact?: boolean) {
         if (!platform && !identity) return []
 
         const nextIDPersonaBindings: NextIDPersonaBindings[] = []
@@ -146,6 +146,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 urlcat(BASE_URL, '/v1/proof', {
                     platform,
                     identity,
+                    exact,
                     page,
                     order: 'desc',
                 }),
