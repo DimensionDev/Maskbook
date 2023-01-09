@@ -50,8 +50,9 @@ export function PersonaPage({ onNext, onChange }: PersonaPageProps) {
     )
 
     const { value: bindingPersonas = EMPTY_LIST } = usePersonasFromNextID(
-        persona?.publicKeyAsHex,
+        persona?.publicKeyAsHex ?? '',
         NextIDPlatform.NextID,
+        true,
     )
     const bindingProofs = useMemo(
         () => bindingPersonas.map((x) => x.proofs.filter((y) => y.is_valid && y.platform === network)).flat(),

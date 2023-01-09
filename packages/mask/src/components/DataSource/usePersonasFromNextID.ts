@@ -9,13 +9,14 @@ import { activatedSocialNetworkUI } from '../../social-network/index.js'
  * Get all personas bound with the given identity from NextID service
  */
 export function usePersonasFromNextID(
-    userId?: string,
+    userId: string,
     platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform,
+    exact?: boolean,
 ) {
     const asyncRetry = useAsyncRetry(async () => {
         if (!platform || !userId) return EMPTY_LIST
-        return NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)
-    }, [platform, userId])
+        return NextIDProof.queryAllExistedBindingsByPlatform(platform, userId, exact)
+    }, [platform, userId, exact])
     useEffect(() => MaskMessages.events.ownProofChanged.on(asyncRetry.retry), [asyncRetry.retry])
     return asyncRetry
 }
