@@ -163,7 +163,8 @@ export function TrendingView(props: TrendingViewProps) {
         !isMinimalMode &&
         !isNFT &&
         (!!trending?.coin.contract_address || isNativeTokenSymbol(coinSymbol)) &&
-        chainIdValid
+        chainIdValid &&
+        trending?.coin.pluginID === NetworkPluginID.PLUGIN_EVM
     // #endregion
 
     // #region expected chainId
