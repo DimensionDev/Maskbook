@@ -94,7 +94,12 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
     const [menu, openMenu] = useMenuConfig(
         contracts.slice(1).map((x) => (
             <MenuItem key={x.chainId}>
-                <ContractSection chainId={x.chainId} address={x.address} name={x.address} />
+                <ContractSection
+                    pluginID={trending.coin.pluginID}
+                    chainId={x.chainId}
+                    address={x.address}
+                    name={x.address}
+                />
             </MenuItem>
         )),
         {
@@ -134,6 +139,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                             height={18}
                                             style={{ position: 'relative', right: -5 }}>
                                             <ContractSection
+                                                pluginID={trending.coin.pluginID}
                                                 chainId={contracts[0].chainId}
                                                 address={contracts[0].address}
                                                 name={contracts[0].address}
