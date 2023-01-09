@@ -27,7 +27,7 @@ export class Web3SignerAPI implements SignerAPI.Provider {
                 if (!chainId) throw new Error('Invalid chain id.')
 
                 const { rawTransaction } = await this.web3
-                    .createWeb3(chainId)
+                    .getWeb3(chainId)
                     .eth.accounts.signTransaction(transaction, toHex(key))
                 if (!rawTransaction) throw new Error('Failed to sign transaction.')
 

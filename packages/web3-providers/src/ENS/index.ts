@@ -8,11 +8,11 @@ export class ENS_API implements DomainAPI.Provider<ChainId> {
     private web3 = new Web3API()
 
     private get eth() {
-        return this.web3.createWeb3(ChainId.Mainnet).eth
+        return this.web3.getWeb3(ChainId.Mainnet).eth
     }
 
     private get ens() {
-        const provider = this.web3.createProvider(ChainId.Mainnet)
+        const provider = this.web3.getWeb3Provider(ChainId.Mainnet)
         return new ENS({
             provider,
             network: ChainId.Mainnet,
