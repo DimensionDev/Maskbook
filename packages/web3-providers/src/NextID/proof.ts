@@ -11,15 +11,15 @@ import {
     NextIDPlatform,
     toBase64,
 } from '@masknet/shared-base'
-import { PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
+import { PROOF_BASE_URL_PROD, RELATION_SERVICE_URL, PROOF_BASE_URL_DEV } from './constants.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
 import { fetchJSON, fetchR2D2 } from '../entry-helpers.js'
 import { staleNextIDCached } from './helpers.js'
 import { fetchSquashed } from '../helpers/fetchSquashed.js'
 import { fetch } from '../helpers/fetch.js'
 
-const BASE_URL = PROOF_BASE_URL_PROD
-
+const BASE_URL =
+    process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
 interface CreatePayloadBody {
     action: string
     platform: string
