@@ -2,7 +2,7 @@ import { styled, Breadcrumbs, Dialog, IconButton, Link, Typography } from '@mui/
 import { useHref, useNavigate } from 'react-router-dom'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales/index.js'
-import { memo, useState } from 'react'
+import { HTMLProps, memo, useState } from 'react'
 import { About } from './About.js'
 import { Close } from '@mui/icons-material'
 import { Version } from './Version.js'
@@ -105,7 +105,9 @@ function FooterLinkButton(props: FooterLinkAnchorButtonProps) {
     )
 }
 
-export const FooterLine = memo(() => {
+interface Props extends HTMLProps<HTMLDivElement> {}
+
+export const FooterLine = memo((props: Props) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const [isOpen, setOpen] = useState(false)
@@ -120,7 +122,7 @@ export const FooterLine = memo(() => {
         }
     }
     return (
-        <>
+        <div {...props}>
             <Breadcrumbs
                 classes={{ separator: classes.separator, ol: classes.ol, root: classes.navRoot }}
                 separator="|"
@@ -146,6 +148,6 @@ export const FooterLine = memo(() => {
                     <Close />
                 </IconButton>
             </AboutDialog>
-        </>
+        </div>
     )
 })

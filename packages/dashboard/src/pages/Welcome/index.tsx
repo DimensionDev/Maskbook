@@ -1,128 +1,140 @@
-import { Button, useTheme } from '@mui/material'
-import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout.js'
-import { styled } from '@mui/material/styles'
-import { memo, MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react'
-import { useDashboardI18N } from '../../locales/index.js'
-import links from '../../components/FooterLine/links.json'
-import { openWindow } from '@masknet/shared-base-ui'
+import { makeStyles } from '@masknet/theme'
+import { Button, Checkbox, FormControlLabel, FormGroup, Typography } from '@mui/material'
+import { memo, useCallback, useState } from 'react'
 import { Services } from '../../API.js'
+import { FooterLine } from '../../components/FooterLine/index.js'
+import { HeaderLine } from '../../components/HeaderLine/index.js'
+import { useDashboardI18N } from '../../locales/index.js'
+import { Article } from './Article.js'
 
-const Content = styled('div')(({ theme }) => ({
-    padding: `${theme.spacing(1)} ${theme.spacing(4)}`,
-    [theme.breakpoints.down('md')]: {
-        padding: `${theme.spacing(1)} ${theme.spacing(0)}`,
+const useStyles = makeStyles()((theme) => ({
+    page: {
+        display: 'flex',
+        height: '100%',
+        maxWidth: 1440,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        minHeight: '100vh',
+        flexDirection: 'column',
+    },
+    content: {
+        width: 660,
+        margin: '86px auto 0',
+        padding: theme.spacing(1, 4),
+        flexGrow: 1,
+        [theme.breakpoints.down('md')]: {
+            padding: theme.spacing(1, 0),
+        },
+    },
+    article: {
+        minHeight: 500,
+    },
+    checkboxGroup: {},
+    label: {
+        marginTop: theme.spacing(2),
+        fontFamily: 'PingFang SC',
+        marginRight: 0,
+        marginLeft: 0,
+    },
+    link: {
+        color: theme.palette.maskColor.main,
+        textDecoration: 'underline',
+    },
+    checkbox: {
+        padding: 0,
+        marginRight: theme.spacing(1.5),
+    },
+    buttonGroup: {
+        margin: '16px auto 0',
+        display: 'flex',
+        justifyContent: 'space-around',
+        width: 180,
+    },
+    header: {
+        marginTop: 37,
+        paddingLeft: 54,
+    },
+    footer: {
+        width: 972,
+        margin: '0 auto',
     },
 }))
 
-const ButtonGroup = styled('div')(
-    ({ theme }) => `
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-around;
-    width: 180px;
-`,
-)
+export default memo(function Welcome() {
+    const [read, setRead] = useState(false)
+    const [allowedToCollect, setAllowedToCollect] = useState(false)
 
-const IFrame = styled('iframe')(({ theme }) => ({
-    border: 'none',
-    width: '100%',
-    minHeight: '500px',
-}))
-
-export default function Welcome() {
-    const iframeRef = useRef<HTMLIFrameElement | null>(null)
-    const mode = useTheme().palette.mode
-
-    const agreementContentPageURL = new URL('./en.html', import.meta.url).toString()
-    const privacyPolicyDocument = useMemo(() => () => iframeRef?.current?.contentWindow?.document, [iframeRef])
-
-    useEffect(
-        () => () => {
-            const link = privacyPolicyDocument()?.getElementById('link')
-            link?.removeEventListener('click', handleLinkClick)
-        },
-        [],
-    )
-
-    useEffect(() => {
-        updateIFrameStyle()
-    }, [mode])
-
-    const updateIFrameStyle = () => {
-        const iframeDocument = privacyPolicyDocument()
-        if (!iframeDocument) return
-
-        const style = iframeDocument.createElement('style')
-        style.textContent = `
-              h3, h6 { color: ${mode === 'dark' ? '#FFFFFF' : '#111432'}; }
-              p { color: ${mode === 'dark' ? 'rgba(255, 255, 255, 0.8);' : '#7b8192'}; }
-            `
-        iframeDocument.head?.appendChild(style)
-    }
-
-    const handleIFrameLoad = () => {
-        updateIFrameStyle()
-
-        const iframeDocument = privacyPolicyDocument()
-        if (!iframeDocument) return
-
-        const link = iframeDocument.getElementById('link')
-        link?.addEventListener('click', handleLinkClick)
-    }
-
-    const handleLinkClick = () => openWindow(links.MASK_PRIVACY_POLICY)
-    const handleAgreeLogger = useCallback(() => {
-        return Services.Settings.setLogEnable(true)
+    const handleAgree = useCallback(async () => {
+        const url = await Services.SocialNetwork.setupSite('twitter.com', false)
+        if (url) location.assign(url)
+        if (allowedToCollect) {
+            Services.Settings.setLogEnable(true)
+        }
     }, [])
 
+    const t = useDashboardI18N()
+    const { classes } = useStyles()
     return (
-        <WelcomeUI
-            iframeRef={iframeRef}
-            privacyPolicyURL={agreementContentPageURL}
-            iframeLoadHandler={handleIFrameLoad}
-            agreeLoggerHandler={handleAgreeLogger}
-            agreeHandler={async () => {
-                const url = await Services.SocialNetwork.setupSite('twitter.com', false)
-                if (url) location.assign(url)
-            }}
-            cancelHandler={() => window.close()}
-        />
+        <div className={classes.page}>
+            <HeaderLine className={classes.header} />
+            <main className={classes.content}>
+                <Article className={classes.article} />
+                <FormGroup className={classes.checkboxGroup}>
+                    <FormControlLabel
+                        className={classes.label}
+                        control={
+                            <Checkbox
+                                className={classes.checkbox}
+                                checked={read}
+                                onChange={(event) => {
+                                    setRead(event.currentTarget.checked)
+                                }}
+                            />
+                        }
+                        label={
+                            <Typography>
+                                I have read and agree to the{' '}
+                                <a
+                                    className={classes.link}
+                                    target="_blank"
+                                    href="https://legal.mask.io/maskbook/service-agreement-beta-browser.html">
+                                    Service Agreement
+                                </a>{' '}
+                                and{' '}
+                                <a
+                                    className={classes.link}
+                                    target="_blank"
+                                    href="https://legal.mask.io/maskbook/privacy-policy-browser.html">
+                                    Privacy Policy
+                                </a>
+                                .
+                            </Typography>
+                        }
+                    />
+                    <FormControlLabel
+                        className={classes.label}
+                        control={
+                            <Checkbox
+                                className={classes.checkbox}
+                                checked={allowedToCollect}
+                                onChange={(event) => {
+                                    setAllowedToCollect(event.currentTarget.checked)
+                                }}
+                            />
+                        }
+                        label="Allow us to collect your usage information to help us make improvements."
+                    />
+                </FormGroup>
+                <div className={classes.buttonGroup}>
+                    <Button color="secondary" onClick={() => window.close()}>
+                        {t.cancel()}
+                    </Button>
+                    <Button color="primary" onClick={handleAgree} disabled={!read}>
+                        {t.agree()}
+                    </Button>
+                </div>
+            </main>
+            <FooterLine className={classes.footer} />
+        </div>
     )
-}
-
-interface WelcomeUIProps {
-    privacyPolicyURL: string
-    iframeRef: MutableRefObject<HTMLIFrameElement | null>
-    iframeLoadHandler(): void
-    agreeHandler(): void
-    cancelHandler(): void
-    agreeLoggerHandler(): void
-}
-
-export const WelcomeUI = memo(
-    ({
-        privacyPolicyURL,
-        iframeLoadHandler,
-        agreeHandler,
-        agreeLoggerHandler: agreeLogger,
-        cancelHandler,
-        iframeRef,
-    }: WelcomeUIProps) => {
-        const t = useDashboardI18N()
-        return (
-            <ColumnLayout>
-                <Content>
-                    <IFrame ref={iframeRef} src={privacyPolicyURL} onLoad={iframeLoadHandler} />
-                    <ButtonGroup>
-                        <Button color="secondary" onClick={cancelHandler}>
-                            {t.cancel()}
-                        </Button>
-                        <Button color="primary" onClick={agreeHandler}>
-                            {t.agree()}
-                        </Button>
-                    </ButtonGroup>
-                </Content>
-            </ColumnLayout>
-        )
-    },
-)
+})
