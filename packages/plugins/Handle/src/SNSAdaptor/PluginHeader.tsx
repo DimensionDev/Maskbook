@@ -52,7 +52,7 @@ export const PluginHeader = () => {
                     component="div"
                     color={MaskColorVar.textPluginColor}>
                     {base.publisher ? (
-                        <PluginI18NFieldRender pluginID={PluginID.ENS} field={base.publisher.name} />
+                        <PluginI18NFieldRender pluginID={PluginID.Handle} field={base.publisher.name} />
                     ) : undefined}
                 </Typography>
                 {base.publisher?.link ? (

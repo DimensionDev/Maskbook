@@ -1,12 +1,11 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { ENS_PluginID } from './constants.js'
 import { languages } from './locales/languages.js'
 
 export const base: Plugin.Shared.Definition = {
-    ID: ENS_PluginID,
-    name: { fallback: 'ENS' },
+    ID: PluginID.Handle,
+    name: { fallback: 'Handle' },
     description: {
         fallback: '',
     },

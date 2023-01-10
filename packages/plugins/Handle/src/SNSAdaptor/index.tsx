@@ -11,7 +11,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     SearchResultInspector: {
-        ID: PluginID.ENS,
+        ID: PluginID.Handle,
         UI: {
             Content: ({ result }) => (
                 <SearchResultInspector

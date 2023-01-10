@@ -42,6 +42,8 @@ import { ChainbaseDomainAPI } from '../Chainbase/index.js'
 import { SpaceID_API } from '../SpaceID/index.js'
 import { ENS_API } from '../ENS/index.js'
 import { CoinGeckoTrending_API } from '../CoinGecko/apis/CoinGecko.js'
+import { RSS3API } from '../RSS3/index.js'
+import { PlatformToChainIdMap } from '../RSS3/constants.js'
 
 const CoinGeckoTrending = new CoinGeckoTrending_API()
 const ENS = new ENS_API()
@@ -60,6 +62,28 @@ const isValidDomain = (domain?: string): boolean => {
     return isValidDomainEVM(domain) || isValidDomainFlow(domain) || isValidDomainSolana(domain)
 }
 
+const isValidHandle = (handler: string): boolean => {
+    const suffix = handler.split('.').pop()
+    if (!suffix) return false
+    return [
+        'avax',
+        'csb',
+        'bit',
+        'eth',
+        'lens',
+        'bnb',
+        'crypto',
+        'nft',
+        'x',
+        'wallet',
+        'bitcoin',
+        'dao',
+        '888',
+        'zil',
+        'blockchain',
+    ].includes(suffix.toLowerCase())
+}
+
 export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.SchemaTypeAll>
     implements DSearchBaseAPI.Provider<ChainId, SchemaType, NetworkPluginID>
 {
@@ -67,6 +91,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
     private NFTScanCollectionClient = new NFTScanCollectionSearchAPI<ChainId, SchemaType>()
     private CoinGeckoClient = new CoinGeckoSearchAPI<ChainId, SchemaType>()
     private CoinMarketCapClient = new CoinMarketCapSearchAPI<ChainId, SchemaType>()
+    private RSS3 = new RSS3API()
 
     private parseKeyword(keyword: string): { word: string; field?: string } {
         const words = keyword.split(':')
@@ -105,6 +130,25 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                 address,
             },
         ]
+    }
+
+    private async searchRSS3Handle(handle: string): Promise<Array<DomainResult<ChainId>>> {
+        const profiles = await this.RSS3.getProfiles(handle)
+        return profiles
+            .filter((x) => x.handle === handle)
+            .map((profile) => {
+                const chainId = PlatformToChainIdMap[profile.network] as ChainId
+                if (!chainId) console.error(`Not chain id configured for network ${profile.network}`)
+
+                return {
+                    type: SearchResultType.Domain,
+                    pluginID: NetworkPluginID.PLUGIN_EVM,
+                    chainId,
+                    keyword: handle,
+                    domain: profile.handle,
+                    address: profile.address,
+                }
+            })
     }
 
     private async searchAddress(address: string): Promise<Array<EOAResult<ChainId>>> {
@@ -356,6 +400,11 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
         // vitalik.eth
         if (isValidDomain(keyword)) return this.searchDomain(keyword) as Promise<T[]>
+
+        // vitalik.lens, vitalik.bit, etc.
+        if (isValidHandle(keyword)) {
+            return this.searchRSS3Handle(keyword) as Promise<T[]>
+        }
 
         // 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045
         if (isValidAddress?.(keyword) && !isZeroAddress?.(keyword)) {
