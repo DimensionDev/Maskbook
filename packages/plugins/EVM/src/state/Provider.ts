@@ -35,12 +35,14 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
     override setupSubscriptions() {
         this.providerType = mapSubscription(this.storage.providerType.subscription, (provider) => provider)
 
-        this.chainId = mapSubscription(mergeSubscription(this.storage.account.subscription), ([account]) => {
-            return account.chainId
-        })
-        this.account = mapSubscription(mergeSubscription(this.storage.account.subscription), ([account]) => {
-            return account.account
-        })
+        this.chainId = mapSubscription(
+            mergeSubscription(this.storage.account.subscription),
+            ([account]) => account.chainId,
+        )
+        this.account = mapSubscription(
+            mergeSubscription(this.storage.account.subscription),
+            ([account]) => account.account,
+        )
         this.networkType = mapSubscription(
             mergeSubscription(this.providerType, this.storage.account.subscription, this.context.chainId),
             ([providerType, account, chainId]) => {
@@ -51,11 +53,13 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
     }
 
     override async connect(
-        chainId: ChainId,
         providerType: ProviderType,
+        chainId: ChainId,
         address?: string | undefined,
-        owner?: string,
-        identifier?: ECKeyIdentifier,
+        owner?: {
+            account: string
+            identifier?: ECKeyIdentifier
+        },
     ): Promise<Account<ChainId>> {
         // Disconnect WalletConnect, prevents its session lasting too long.
         if (this.providers[ProviderType.WalletConnect].connected) {
@@ -66,6 +70,6 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             }
         }
 
-        return super.connect(chainId, providerType, address, owner, identifier)
+        return super.connect(providerType, chainId, address, owner)
     }
 }

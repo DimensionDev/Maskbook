@@ -26,7 +26,7 @@ export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const [avatarId_, setAvatarId_] = useState('')
     const { classes } = useStyles(undefined, { props })
-    const { MaskMessages } = useSNSAdaptorContext()
+    const { NFTAvatarTimelineUpdated } = useSNSAdaptorContext()
 
     const onUpdate = (data: AvatarMetaDB) => {
         if (!data.address || !data.tokenId) {
@@ -45,7 +45,7 @@ export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
         setAvatar(_avatar)
     }, [_avatar])
 
-    useEffect(() => MaskMessages.events.NFTAvatarTimelineUpdated.on((data) => onUpdate(data as AvatarMetaDB)), [])
+    useEffect(() => NFTAvatarTimelineUpdated.on((data) => onUpdate(data as AvatarMetaDB)), [])
 
     if (!avatar) return null
     if (avatarId_ && avatar.avatarId !== avatarId_) return null

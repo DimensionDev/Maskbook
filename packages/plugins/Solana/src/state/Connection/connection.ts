@@ -88,7 +88,7 @@ class Connection implements BaseConnection {
         return {
             account: '',
             chainId: ChainId.Mainnet,
-            ...(await Web3StateSettings.value.Provider?.connect(options.chainId, options.providerType)),
+            ...(await Web3StateSettings.value.Provider?.connect(options.providerType, options.chainId)),
         }
     }
     async disconnect(initial?: SolanaWeb3ConnectionOptions): Promise<void> {
@@ -247,7 +247,11 @@ class Connection implements BaseConnection {
         const balance = await connection.getBalance(new PublicKey(options.account))
         return balance.toString()
     }
-    async getFungibleTokenBalance(address: string, initial?: SolanaWeb3ConnectionOptions): Promise<string> {
+    async getFungibleTokenBalance(
+        address: string,
+        schema?: SchemaType,
+        initial?: SolanaWeb3ConnectionOptions,
+    ): Promise<string> {
         const options = this.getOptions(initial)
         if (!options.account) return '0'
         if (isNativeTokenAddress(address)) {

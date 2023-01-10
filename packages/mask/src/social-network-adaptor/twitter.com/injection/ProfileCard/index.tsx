@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
-import { useAsync } from 'react-use'
 import { CrossIsolationMessages, ProfileIdentifier } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
+import { Fade } from '@mui/material'
+import { useEffect, useRef, useState } from 'react'
+import { useAsync } from 'react-use'
 import { useSocialIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { ProfileCard } from '../../../../components/InjectedComponents/ProfileCard/index.js'
 import { attachReactTreeWithoutContainer } from '../../../../utils/index.js'
@@ -15,9 +16,10 @@ export function injectProfileCardHolder(signal: AbortSignal) {
     attachReactTreeWithoutContainer('profile-card', <ProfileCardHolder />, signal)
 }
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()({
     root: {
         position: 'absolute',
+        borderRadius: 10,
         width: CARD_WIDTH,
         height: CARD_HEIGHT,
     },
@@ -28,14 +30,14 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
     },
-}))
+})
 
 function ProfileCardHolder() {
     const { classes } = useStyles()
     const holderRef = useRef<HTMLDivElement>(null)
     const [twitterId, setTwitterId] = useState('')
 
-    const style = useControlProfileCard(holderRef)
+    const { active, style } = useControlProfileCard(holderRef)
 
     useEffect(() => {
         return CrossIsolationMessages.events.profileCardEvent.on((event) => {
@@ -68,14 +70,16 @@ function ProfileCardHolder() {
     const { value: resolvedIdentity, loading: resolving } = useSocialIdentity(identity)
 
     return (
-        <div className={classes.root} style={style} ref={holderRef} onClick={handleClick}>
-            {loading || resolving ? (
-                <div className={classes.loading}>
-                    <LoadingBase size={36} />
-                </div>
-            ) : resolvedIdentity ? (
-                <ProfileCard identity={resolvedIdentity} />
-            ) : null}
-        </div>
+        <Fade in={active} easing="linear" timeout={250}>
+            <div className={classes.root} style={style} ref={holderRef} onClick={handleClick}>
+                {loading || resolving ? (
+                    <div className={classes.loading}>
+                        <LoadingBase size={36} />
+                    </div>
+                ) : resolvedIdentity ? (
+                    <ProfileCard identity={resolvedIdentity} />
+                ) : null}
+            </div>
+        </Fade>
     )
 }

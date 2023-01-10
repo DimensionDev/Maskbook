@@ -2960,7 +2960,7 @@ importers:
         version: 1.1.0
       '@metaplex/js':
         specifier: ^4.11.7
-        version: 4.11.7_3hthoayrtz7bowcduhtflwhjdu
+        version: 4.11.7
       '@siddomains/sidjs':
         specifier: ^0.1.16
         version: 0.1.16

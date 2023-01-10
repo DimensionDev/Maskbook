@@ -1,4 +1,4 @@
-import { BindingProof, EMPTY_LIST, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
+import { BindingProof, EMPTY_LIST, MaskEvents, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Box, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'
@@ -12,6 +12,7 @@ import { useAsyncRetry } from 'react-use'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import { useAllPersonas, useLastRecognizedSocialIdentity } from '@masknet/plugin-infra/content-script'
+import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 
 const useStyles = makeStyles()((theme) => ({
     messageBox: {
@@ -40,20 +41,23 @@ export function PersonaPage({ onNext, onChange }: PersonaPageProps) {
     const network = socialIdentity?.identifier?.network.replace('.com', '')
     const userId = socialIdentity?.identifier?.userId
 
+    const myPersonas = useAllPersonas()
+    const _persona = useSubscription(context.currentPersona)
+    const currentPersona = myPersonas?.find(
+        (x: PersonaInformation) => x.identifier.rawPublicKey.toLowerCase() === _persona?.rawPublicKey.toLowerCase(),
+    )
+
     const { value: bindingPersonas = EMPTY_LIST } = usePersonasFromNextID(
-        socialIdentity?.publicKey,
+        _persona?.publicKeyAsHex ?? '',
         NextIDPlatform.NextID,
+        true,
+        {
+            events: { ownProofChanged: context.ownProofChanged },
+        } as WebExtensionMessage<MaskEvents>,
     )
     const bindingProofs = useMemo(
         () => bindingPersonas.map((x) => x.proofs.filter((y) => y.is_valid && y.platform === network)).flat(),
         [bindingPersonas],
-    )
-
-    const myPersonas = useAllPersonas()
-    const _persona = useSubscription(context.currentPersona)
-
-    const currentPersona = myPersonas?.find(
-        (x: PersonaInformation) => x.identifier.rawPublicKey.toLowerCase() === _persona?.rawPublicKey.toLowerCase(),
     )
 
     const onSelect = useCallback(

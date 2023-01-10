@@ -173,7 +173,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     ...RestPartOfPluginUIContextShared,
                     lastRecognizedProfile: lastRecognizedSub,
                     currentVisitingProfile: currentVisitingSub,
-                    MaskMessages,
+                    NFTAvatarTimelineUpdated: MaskMessages.events.NFTAvatarTimelineUpdated,
                     allPersonas: allPersonaSub,
                     themeSettings: themeSettingsSub,
                     getThemeSettings: () => activatedSocialNetworkUI.configuration.themeSettings,

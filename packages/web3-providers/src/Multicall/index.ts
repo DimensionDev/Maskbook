@@ -26,7 +26,7 @@ export class MulticallAPI implements MulticallBaseAPI.Provider {
     } = {}
 
     private createWeb3(chainId: ChainId) {
-        return this.web3.createWeb3(chainId)
+        return this.web3.getWeb3(chainId)
     }
 
     private createContract(chainId: ChainId) {

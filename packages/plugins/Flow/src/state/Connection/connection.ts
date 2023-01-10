@@ -64,7 +64,7 @@ class Connection implements BaseConnection {
         return {
             account: '',
             chainId: ChainId.Mainnet,
-            ...(await Web3StateSettings.value.Provider?.connect(options.chainId, options.providerType)),
+            ...(await Web3StateSettings.value.Provider?.connect(options.providerType, options.chainId)),
         }
     }
     async disconnect(initial?: FlowConnectionOptions): Promise<void> {
@@ -158,7 +158,7 @@ class Connection implements BaseConnection {
     getNativeTokenBalance(initial?: FlowConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getFungibleTokenBalance(address: string, initial?: FlowConnectionOptions): Promise<string> {
+    getFungibleTokenBalance(address: string, schema?: SchemaType, initial?: FlowConnectionOptions): Promise<string> {
         const options = this.getOptions(initial)
         if (!address || isNativeTokenAddress(address)) {
             return this.getNativeTokenBalance(options)

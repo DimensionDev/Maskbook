@@ -1,6 +1,7 @@
 import type { TokenType, SourceType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 export namespace TrendingAPI {
     export interface Settings {
@@ -73,6 +74,7 @@ export namespace TrendingAPI {
         facebook_url?: string
         twitter_url?: string
         telegram_url?: string
+        pluginID?: NetworkPluginID
     }
 
     export interface CoinInfo {

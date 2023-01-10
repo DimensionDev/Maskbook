@@ -53,7 +53,11 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const currentIdentity = useCurrentIdentity()
     const type = resolveNextIDPlatform(valueToSearch)
     const value = resolveValueToSearch(valueToSearch)
-    const { loading: searchLoading, value: NextIDResults } = usePersonasFromNextID(value, type ?? NextIDPlatform.NextID)
+    const { loading: searchLoading, value: NextIDResults } = usePersonasFromNextID(
+        value,
+        type ?? NextIDPlatform.NextID,
+        false,
+    )
 
     const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, value, type)
     const myUserId = currentIdentity?.identifier.userId

@@ -36,7 +36,7 @@ export class Web3GasOptionAPI implements GasOptionAPI.Provider<ChainId, GasOptio
     }
 
     private async getGasOptionsForEIP1559(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
-        const web3 = this.web3.createWeb3(chainId)
+        const web3 = this.web3.getWeb3(chainId)
         const history = await web3.eth.getFeeHistory(Web3GasOptionAPI.HISTORICAL_BLOCKS, 'pending', [25, 50, 75])
         const blocks = this.formatFeeHistory(history)
         const slow = this.avg(blocks.map((b) => b.priorityFeePerGas[0]))
@@ -73,7 +73,7 @@ export class Web3GasOptionAPI implements GasOptionAPI.Provider<ChainId, GasOptio
     }
 
     private async getGasOptionsForPriorEIP1559(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
-        const web3 = this.web3.createWeb3(chainId)
+        const web3 = this.web3.getWeb3(chainId)
         const gasPrice = await web3.eth.getGasPrice()
         return {
             [GasOptionType.FAST]: {

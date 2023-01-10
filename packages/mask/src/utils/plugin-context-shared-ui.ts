@@ -19,9 +19,9 @@ export const RestPartOfPluginUIContextShared: Omit<
     | 'ownProofChanged'
     | 'setMinimalMode'
     | 'queryPersonaByProfile'
-    | 'MaskMessages'
     | 'connectPersona'
     | 'createPersona'
+    | 'NFTAvatarTimelineUpdated'
 > = {
     currentPersona: createSubscriptionFromAsync(
         Services.Settings.getCurrentPersonaIdentifier,

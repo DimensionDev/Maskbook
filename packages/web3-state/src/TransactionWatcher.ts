@@ -217,6 +217,14 @@ export class TransactionWatcherState<ChainId, Transaction>
         }
     }
 
+    get ready() {
+        return this.storage.initialized
+    }
+
+    get readyPromise() {
+        return this.storage.initializedPromise
+    }
+
     protected getWatcher(chainId: ChainId) {
         if (!this.watchers.has(chainId))
             this.watchers.set(

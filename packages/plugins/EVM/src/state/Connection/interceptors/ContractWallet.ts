@@ -25,7 +25,7 @@ export class ContractWallet implements Middleware<Context> {
     ) {}
 
     private createWallet(context: Context) {
-        const web3 = Web3.createWeb3(context.chainId)
+        const web3 = Web3.getWeb3(context.chainId)
         const contract = createContract<WalletContract>(web3, context.account, WalletABI as AbiItem[])
         if (!contract) throw new Error('Failed to create wallet contract.')
         return contract
@@ -103,18 +103,18 @@ export class ContractWallet implements Middleware<Context> {
         const provider = Providers[context.providerType] as BaseContractWalletProvider | undefined
 
         // not a SC wallet provider
-        if (!provider?.owner) {
+        if (!provider?.ownerAccount) {
             await next()
             return
         }
 
         switch (context.request.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
-                context.write(provider.chainId)
+                context.write(provider.hostedChainId)
                 break
             case EthereumMethodType.ETH_ACCOUNTS:
-                if (isValidAddress(provider.account)) {
-                    context.write([provider.account])
+                if (isValidAddress(provider.hostedAccount)) {
+                    context.write([provider.hostedAccount])
                 } else {
                     context.abort(new Error('Please connect a wallet.'))
                 }

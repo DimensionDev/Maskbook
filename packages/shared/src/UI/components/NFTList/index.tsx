@@ -1,9 +1,9 @@
 import { FC, useCallback, useRef } from 'react'
 import { noop } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ElementAnchor, Linking, AssetPreviewer, RetryHint } from '@masknet/shared'
+import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { Checkbox, List, ListItem, Radio, Stack, Typography } from '@mui/material'
@@ -64,12 +64,6 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             flexDirection: 'column',
             userSelect: 'none',
         },
-        link: {
-            width: '100%',
-            '&:hover': {
-                textDecoration: 'none',
-            },
-        },
         disabled: {
             opacity: 0.5,
             cursor: 'not-allowed',
@@ -124,8 +118,19 @@ export const NFTItem: FC<NFTItemProps> = ({ token, pluginID }) => {
 
     const showTooltip = captionRef.current ? captionRef.current.offsetWidth !== captionRef.current.scrollWidth : false
 
+    const onClick = useCallback(() => {
+        if (!token.chainId || !pluginID) return
+        CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
+            open: true,
+            chainId: token.chainId,
+            pluginID,
+            tokenId: token.tokenId,
+            tokenAddress: token.address,
+        })
+    }, [pluginID, token.chainId, token.tokenId, token.address])
+
     return (
-        <div className={classes.nftContainer}>
+        <div className={classes.nftContainer} onClick={onClick}>
             <AssetPreviewer
                 url={token.metadata?.imageURL ?? token.metadata?.imageURL}
                 classes={{
@@ -209,9 +214,7 @@ export const NFTList: FC<Props> = ({
                                 [classes.selected]: selected,
                                 [classes.inactive]: inactive,
                             })}>
-                            <Linking LinkProps={{ className: classes.link }} href={link}>
-                                <NFTItem token={token} pluginID={pluginID} />
-                            </Linking>
+                            <NFTItem token={token} pluginID={pluginID} />
                             {selectable ? (
                                 <SelectComponent
                                     size="small"

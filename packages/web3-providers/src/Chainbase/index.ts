@@ -96,7 +96,7 @@ export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
         if (!isValidChainId(chainId)) return
 
         const response = await fetchFromChainbase<ENSRecord>(
-            urlcat('/v1/ens/records', { chain_id: chainId, domain: name }),
+            urlcat(`/v1/${chainId !== ChainId.BSC ? 'ens' : 'space-id'}/records`, { chain_id: chainId, domain: name }),
         )
         return response?.address
     }
@@ -105,7 +105,7 @@ export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
         if (!isValidChainId(chainId)) return
 
         const response = await fetchFromChainbase<ENSRecord[]>(
-            urlcat('/v1/ens/reverse', { chain_id: chainId, address }),
+            urlcat(`/v1/${chainId !== ChainId.BSC ? 'ens' : 'space-id'}/reverse`, { chain_id: chainId, address }),
         )
 
         const name = first(response)?.name

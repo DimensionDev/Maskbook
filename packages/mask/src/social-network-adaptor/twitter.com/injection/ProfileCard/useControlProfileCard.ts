@@ -2,45 +2,44 @@ import { CrossIsolationMessages } from '@masknet/shared-base'
 import { CSSProperties, RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { CARD_HEIGHT, CARD_WIDTH } from './constants.js'
 
-export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>) {
-    const activeRef = useRef(false)
+interface Result {
+    active: boolean
+    style: CSSProperties
+}
+
+const LEAVE_DURATION = 500
+export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Result {
+    const hoverRef = useRef(false)
     const closeTimerRef = useRef<NodeJS.Timeout>()
 
-    const [style, setStyle] = useState<CSSProperties>({
-        visibility: 'hidden',
-        borderRadius: 10,
-    })
+    const [active, setActive] = useState(false)
+    const [style, setStyle] = useState<CSSProperties>({})
 
     const hideProfileCard = useCallback(() => {
-        if (activeRef.current) return
-        setStyle((old) => {
-            if (old.visibility === 'hidden') return old
-            return {
-                ...old,
-                visibility: 'hidden',
-            }
-        })
+        if (hoverRef.current) return
+        setActive(false)
     }, [])
 
     const showProfileCard = useCallback((patchStyle: CSSProperties) => {
         clearTimeout(closeTimerRef.current)
+        setActive(true)
         setStyle((old) => {
-            const { visibility, left, top } = old
-            if (visibility === 'visible' && left === patchStyle.left && top === patchStyle.top) return old
-            return { ...old, ...patchStyle, visibility: 'visible' }
+            const { left, top } = old
+            if (left === patchStyle.left && top === patchStyle.top) return old
+            return { ...old, ...patchStyle }
         })
     }, [])
     useEffect(() => {
         const holder = holderRef.current
         if (!holder) return
         const enter = () => {
-            activeRef.current = true
+            hoverRef.current = true
             clearTimeout(closeTimerRef.current)
         }
         const leave = () => {
-            activeRef.current = false
+            hoverRef.current = false
             clearTimeout(closeTimerRef.current)
-            closeTimerRef.current = setTimeout(hideProfileCard, 2000)
+            closeTimerRef.current = setTimeout(hideProfileCard, LEAVE_DURATION)
         }
         holder.addEventListener('mouseenter', enter)
         holder.addEventListener('mouseleave', leave)
@@ -92,7 +91,7 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>) {
             // @ts-ignore
             // `NODE.contains(other)` doesn't work for cross multiple layer of Shadow DOM
             if (event.path?.includes(holderRef.current)) return
-            activeRef.current = false
+            hoverRef.current = false
             hideProfileCard()
         }
         document.body.addEventListener('click', onClick)
@@ -101,5 +100,5 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>) {
         }
     }, [hideProfileCard])
 
-    return style
+    return { style, active }
 }

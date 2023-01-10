@@ -1,25 +1,25 @@
 import { memo, useMemo, useState } from 'react'
-import { Tab, Tabs, Typography } from '@mui/material'
-import { makeStyles, useTabs } from '@masknet/theme'
+import { useAsyncFn } from 'react-use'
+import { useNavigate } from 'react-router-dom'
 import { Controller, useForm } from 'react-hook-form'
 import { z as zod } from 'zod'
+import { query } from 'urlcat'
+import { Tab, Tabs, Typography } from '@mui/material'
+import { makeStyles, useTabs } from '@masknet/theme'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoadingButton, TabContext, TabPanel } from '@mui/lab'
-import { useNavigate } from 'react-router-dom'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
+import { useWeb3Connection } from '@masknet/web3-hooks-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { JsonFileBox } from '../components/JsonFileBox/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
-import { useAsyncFn } from 'react-use'
-import { query } from 'urlcat'
 import { useI18N } from '../../../../../utils/index.js'
 import Services from '../../../../service.js'
 import { getDerivableAccounts } from '../../../../../plugins/Wallet/services/index.js'
 import { PageHeader } from '../components/PageHeader/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
-import { useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useTitle } from '../../../hook/useTitle.js'
-import { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
     container: {
@@ -130,50 +130,43 @@ const ImportWallet = memo(() => {
 
     const [{ loading }, onDerivedWallet] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
-            if (!disabled) {
-                try {
-                    switch (currentTab) {
-                        case tabs.mnemonic:
-                            // valid the mnemonic
-                            await getDerivableAccounts(mnemonic, 0, 1)
-                            const params = query({ name: data.name })
-                            navigate(PopupRoutes.AddDeriveWallet + '?' + params, {
-                                replace: true,
-                                state: { mnemonic },
-                            })
-                            break
-                        case tabs.json:
-                            const wallet = await WalletRPC.recoverWalletFromKeyStoreJSON(
+            if (disabled) return
+            try {
+                switch (currentTab) {
+                    case tabs.mnemonic:
+                        // valid the mnemonic
+                        await getDerivableAccounts(mnemonic, 0, 1)
+                        const params = query({ name: data.name })
+                        navigate(PopupRoutes.AddDeriveWallet + '?' + params, {
+                            replace: true,
+                            state: { mnemonic },
+                        })
+                        break
+                    case tabs.json:
+                        await connection?.connect({
+                            account: await WalletRPC.recoverWalletFromKeyStoreJSON(
                                 data.name,
                                 keyStoreContent,
                                 keyStorePassword,
-                            )
-
-                            await connection?.connect({
-                                account: wallet,
-                            })
-
-                            navigate(PopupRoutes.Wallet, { replace: true })
-                            await Services.Helper.removePopupWindow()
-                            break
-                        case tabs.privateKey:
-                            const privateKeyWallet = await WalletRPC.recoverWalletFromPrivateKey(data.name, privateKey)
-
-                            await connection?.connect({
-                                account: privateKeyWallet,
-                                chainId: ChainId.Mainnet,
-                            })
-
-                            await Services.Helper.removePopupWindow()
-                            navigate(PopupRoutes.Wallet, { replace: true })
-                            break
-                        default:
-                            break
-                    }
-                } catch (error) {
-                    if (error instanceof Error) {
-                        setErrorMessage(error.message)
-                    }
+                            ),
+                        })
+                        navigate(PopupRoutes.Wallet, { replace: true })
+                        await Services.Helper.removePopupWindow()
+                        break
+                    case tabs.privateKey:
+                        await connection?.connect({
+                            account: await WalletRPC.recoverWalletFromPrivateKey(data.name, privateKey),
+                            chainId: ChainId.Mainnet,
+                        })
+                        await Services.Helper.removePopupWindow()
+                        navigate(PopupRoutes.Wallet, { replace: true })
+                        break
+                    default:
+                        break
+                }
+            } catch (error) {
+                if (error instanceof Error) {
+                    setErrorMessage(error.message)
                 }
             }
         },

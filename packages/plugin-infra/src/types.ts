@@ -3,7 +3,7 @@ import type { Option, Result } from 'ts-results-es'
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
-import type { UnboundedRegistry, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import type {
     BindingProof,
     ECKeyIdentifier,
@@ -20,7 +20,7 @@ import type {
     ProfileIdentifier,
     ScopedStorage,
     SignType,
-    MaskEvents,
+    NFTAvatarEvent,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -203,7 +203,7 @@ export namespace Plugin.Shared {
         selectAccount(): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
 
         /** Record which sites are connected to the Mask wallet  */
-        recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): void
+        recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): Promise<void>
 
         /** Sign a message with persona (w or w/o popups) */
         signWithPersona<T>(type: SignType, message: T, identifier?: ECKeyIdentifier, silent?: boolean): Promise<string>
@@ -372,7 +372,7 @@ export namespace Plugin.SNSAdaptor {
     export interface SNSAdaptorContext extends Shared.SharedUIContext {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
-        MaskMessages: WebExtensionMessage<MaskEvents>
+        NFTAvatarTimelineUpdated: UnboundedRegistry<NFTAvatarEvent>
         allPersonas?: Subscription<PersonaInformation[]>
         themeSettings: Subscription<ThemeSettings | undefined>
         /** The default theme settings. */
