@@ -363,13 +363,13 @@
             }
         },
         {
-            "input": "./packages/plugins/ENS/src/locales/en-US.json",
-            "output": "./packages/plugins/ENS/src/locales/i18n_generated",
+            "input": "./packages/plugins/Handle/src/locales/en-US.json",
+            "output": "./packages/plugins/Handle/src/locales/i18n_generated",
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
-                "namespace": "com.maskbook.ens",
+                "namespace": "com.maskbook.handle",
                 "trans": "Translate",
                 "emitTS": true
             }

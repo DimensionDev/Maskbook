@@ -2,11 +2,11 @@ import { createContext, PropsWithChildren } from 'react'
 import { useAsync } from 'react-use'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { SearchResultType, DomainResult } from '@masknet/web3-shared-base'
-import type { BindingProof } from '@masknet/shared-base'
+import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import { resolveNonFungibleTokenIdFromEnsDomain, ChainId } from '@masknet/web3-shared-evm'
 
 interface ENSContextProps {
-    firstNextIdrBinding: BindingProof | undefined
+    firstNextIdBinding: BindingProof | undefined
     restOfNextIdBindings: BindingProof[]
     nextIdBindings: BindingProof[]
     reversedAddress: string | undefined
@@ -15,7 +15,7 @@ interface ENSContextProps {
 }
 
 export const ENSContext = createContext<ENSContextProps>({
-    firstNextIdrBinding: undefined,
+    firstNextIdBinding: undefined,
     restOfNextIdBindings: [],
     nextIdBindings: [],
     reversedAddress: undefined,
@@ -29,12 +29,12 @@ export function ENSProvider({ children, result }: PropsWithChildren<SearchResult
     const reversedAddress = result.address
     const tokenId = resolveNonFungibleTokenIdFromEnsDomain(domain)
 
-    const { value: nextIdBindings = [] } = useAsync(
-        async () => (reversedAddress ? NextIDProof.queryProfilesByRelationService(reversedAddress) : []),
+    const { value: nextIdBindings = EMPTY_LIST } = useAsync(
+        async () => (reversedAddress ? NextIDProof.queryProfilesByRelationService(reversedAddress) : EMPTY_LIST),
         [reversedAddress],
     )
 
-    const firstNextIdrBinding = nextIdBindings[0]
+    const firstNextIdBinding = nextIdBindings[0]
     const restOfNextIdBindings = nextIdBindings.slice(1)
 
     return (
@@ -44,7 +44,7 @@ export function ENSProvider({ children, result }: PropsWithChildren<SearchResult
                 tokenId,
                 domain,
                 nextIdBindings,
-                firstNextIdrBinding,
+                firstNextIdBinding,
                 restOfNextIdBindings,
             }}>
             {children}

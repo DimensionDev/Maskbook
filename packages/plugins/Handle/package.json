@@ -1,5 +1,5 @@
 {
-  "name": "@masknet/plugin-ens",
+  "name": "@masknet/plugin-handle",
   "private": true,
   "type": "module",
   "exports": {

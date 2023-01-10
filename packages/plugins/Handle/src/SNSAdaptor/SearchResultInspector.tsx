@@ -1,13 +1,12 @@
-import { useContext, forwardRef, useImperativeHandle } from 'react'
+import { useContext } from 'react'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useCopyToClipboard } from 'react-use'
-import { SourceType, resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
+import { resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useSnackbarCallback } from '@masknet/shared'
 import { Box, Typography, Link, alpha } from '@mui/material'
 import { ENSProvider, ENSContext, SearchResultInspectorProps } from './context.js'
-import { CollectibleState } from './hooks/useCollectibleState.js'
 import { SocialAccountList } from './SocialAccountList.js'
 import { SocialTooltip } from './SocialTooltip.js'
 import { makeStyles } from '@masknet/theme'
@@ -34,13 +33,12 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
         ensIcon: {
             marginRight: 4,
         },
-        ensDomain: {
+        domain: {
             fontWeight: 700,
             color: theme.palette.maskColor.publicMain,
             fontSize: 18,
             lineHeight: '18px',
         },
-
         reversedAddress: {
             display: 'flex',
             alignItems: 'center',
@@ -104,15 +102,11 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
     }
 })
 
-export const SearchResultInspectorContent = forwardRef(function (
-    props: SearchResultInspectorProps,
-    ref: React.ForwardedRef<unknown>,
-) {
+export function SearchResultInspectorContent() {
     const t = useI18N()
     const { classes, cx } = useStyles({})
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const { reversedAddress, nextIdBindings, firstNextIdrBinding, domain, tokenId } = useContext(ENSContext)
-    useImperativeHandle(ref, () => ({ reversedAddress, domain, tokenId }), [reversedAddress, domain, tokenId])
+    const { reversedAddress, nextIdBindings, firstNextIdBinding, domain } = useContext(ENSContext)
     const [, copyToClipboard] = useCopyToClipboard()
     const copyWalletAddress = useSnackbarCallback({
         executor: async (address: string) => copyToClipboard(address),
@@ -121,19 +115,13 @@ export const SearchResultInspectorContent = forwardRef(function (
     })
     const isShowSocialAccountList = nextIdBindings.length > 3
     return (
-        <CollectibleState.Provider
-            initialState={{
-                chainId: ChainId.Mainnet,
-                tokenId: tokenId ?? '',
-                contractAddress: reversedAddress ?? '',
-                sourceType: SourceType.OpenSea,
-            }}>
+        <>
             <PluginHeader />
             <Box className={classes.root}>
                 <section className={classes.ensInfo}>
                     <Icons.ETH size={30} className={classes.ensIcon} />
                     <div>
-                        <Typography className={classes.ensDomain}>{domain}</Typography>
+                        <Typography className={classes.domain}>{domain}</Typography>
                         {reversedAddress ? (
                             <Typography className={classes.reversedAddress}>
                                 {reversedAddress}{' '}
@@ -155,7 +143,7 @@ export const SearchResultInspectorContent = forwardRef(function (
                         ) : null}
                     </div>
                 </section>
-                {firstNextIdrBinding?.identity ? (
+                {firstNextIdBinding?.identity ? (
                     <div className={classes.nextIdVerified}>
                         <section className={classes.bindingsWrapper}>
                             {nextIdBindings.map((x, i) => (
@@ -181,17 +169,14 @@ export const SearchResultInspectorContent = forwardRef(function (
                     </div>
                 ) : null}
             </Box>
-        </CollectibleState.Provider>
+        </>
     )
-})
+}
 
-export const SearchResultInspector = forwardRef(function (
-    props: SearchResultInspectorProps,
-    ref: React.ForwardedRef<unknown>,
-) {
+export function SearchResultInspector(props: SearchResultInspectorProps) {
     return (
         <ENSProvider {...props}>
-            <SearchResultInspectorContent {...props} ref={ref} />
+            <SearchResultInspectorContent />
         </ENSProvider>
     )
-})
+}
