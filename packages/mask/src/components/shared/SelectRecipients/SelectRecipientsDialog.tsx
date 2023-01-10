@@ -57,15 +57,18 @@ const useStyles = makeStyles()((theme) => ({
     mainText: {
         color: theme.palette.text.primary,
     },
+    listParent: {
+        height: 400,
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
+        overflowY: 'auto',
+    },
     list: {
         gridGap: '12px',
         display: 'grid',
         gridTemplateColumns: 'repeat(2, 1fr)',
-        '::-webkit-scrollbar': {
-            display: 'none',
-        },
-        height: 400,
-        overflowY: 'auto',
+
         alignItems: 'flex-start',
     },
     actions: {
@@ -168,36 +171,38 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     </div>
                 ) : (
                     <Boundary>
-                        <div className={classes.list}>
-                            {results.length === 0 ? (
-                                <div className={classes.empty}>
-                                    <Icons.SearchEmpty size={36} />
-                                    <Typography>
-                                        {props.searchEmptyText ?? t('compose_encrypt_share_dialog_empty')}
-                                    </Typography>
-                                </div>
-                            ) : (
-                                results.map((item) => {
-                                    const pubkey = item.linkedPersona?.publicKeyAsHex as string
-                                    const selected = selectedPubkeyList.includes(pubkey)
-                                    return (
-                                        <ProfileInList
-                                            key={pubkey}
-                                            item={item as ProfileInformationFromNextID}
-                                            highlightText={keyword}
-                                            selected={selected}
-                                            disabled={props.disabled}
-                                            onChange={(_, checked) => {
-                                                if (checked) {
-                                                    props.onSelect(item)
-                                                } else {
-                                                    props.onDeselect(item)
-                                                }
-                                            }}
-                                        />
-                                    )
-                                })
-                            )}
+                        <div className={classes.listParent}>
+                            <div className={classes.list}>
+                                {results.length === 0 ? (
+                                    <div className={classes.empty}>
+                                        <Icons.SearchEmpty size={36} />
+                                        <Typography>
+                                            {props.searchEmptyText ?? t('compose_encrypt_share_dialog_empty')}
+                                        </Typography>
+                                    </div>
+                                ) : (
+                                    results.map((item) => {
+                                        const pubkey = item.linkedPersona?.publicKeyAsHex as string
+                                        const selected = selectedPubkeyList.includes(pubkey)
+                                        return (
+                                            <ProfileInList
+                                                key={pubkey}
+                                                item={item as ProfileInformationFromNextID}
+                                                highlightText={keyword}
+                                                selected={selected}
+                                                disabled={props.disabled}
+                                                onChange={(_, checked) => {
+                                                    if (checked) {
+                                                        props.onSelect(item)
+                                                    } else {
+                                                        props.onDeselect(item)
+                                                    }
+                                                }}
+                                            />
+                                        )
+                                    })
+                                )}
+                            </div>
                         </div>
                     </Boundary>
                 )}
