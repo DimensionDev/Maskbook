@@ -7,7 +7,6 @@ import {
     TableBody,
     Typography,
     Stack,
-    MenuItem,
     IconButton,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -20,6 +19,7 @@ import { useI18N } from '../../../../utils/index.js'
 import { ContractSection } from './ContractSection.js'
 import type { CommunityType } from '../../types/index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { ContractItem } from './ContractItem.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -59,7 +59,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     menu: {
-        maxHeight: 200,
+        maxHeight: 300,
         '&::-webkit-scrollbar': {
             display: 'none',
         },
@@ -100,10 +100,14 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
     ]
 
     const [menu, openMenu] = useMenuConfig(
-        contracts.slice(1).map((x) => (
-            <MenuItem key={x.chainId}>
-                <ContractSection pluginID={x.pluginID} chainId={x.chainId} address={x.address} name={x.address} />
-            </MenuItem>
+        contracts.map((x) => (
+            <ContractItem
+                key={x.chainId}
+                pluginID={x.pluginID}
+                chainId={x.chainId}
+                address={x.address}
+                name={x.address}
+            />
         )),
         {
             anchorOrigin: {
