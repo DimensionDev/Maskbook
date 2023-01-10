@@ -159,8 +159,8 @@ function createCoinFromTrending(
         type: trending?.coin.type ?? TokenType.Fungible,
         decimals: trending?.coin.decimals || token?.decimals || 0,
         contract_address:
-            searchedContractAddress ?? trending?.contracts?.[0]?.address ?? trending?.coin.contract_address,
-        chainId: expectedChainId ?? trending?.contracts?.[0]?.chainId ?? trending?.coin.chainId,
+            trending?.contracts?.[0]?.address ?? trending?.coin.contract_address ?? searchedContractAddress,
+        chainId: trending?.contracts?.[0]?.chainId ?? trending?.coin.chainId ?? expectedChainId,
     }
 }
 
