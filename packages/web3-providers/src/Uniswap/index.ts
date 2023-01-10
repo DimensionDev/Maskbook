@@ -1,10 +1,10 @@
+import { NetworkPluginID } from '@masknet/shared-base'
 import { TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { isMirroredKeyword } from '../Trending/helpers.js'
 import * as BaseAPI from './base-api.js'
 import { BTC_FIRST_LEGER_DATE, getAllCoinsByKeyword, getPriceStats as getStats } from './base-api.js'
 import type { TrendingAPI } from '../entry-types.js'
-import { NetworkPluginID } from '@masknet/shared-base'
 
 export enum Days {
     MAX = 0,

@@ -5,7 +5,7 @@ import {
     CoinMarketCap,
     NFTScanTrending_EVM,
     NFTScanTrending_Solana,
-    UniSwap,
+    Uniswap,
 } from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import type { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
@@ -29,7 +29,7 @@ export async function getCoinTrending(
         case SourceType.CoinMarketCap:
             return CoinMarketCap.getCoinTrending(chainId as ChainIdEVM, id, currency)
         case SourceType.UniswapInfo:
-            return UniSwap.getCoinTrending(chainId as ChainIdEVM, id, currency)
+            return Uniswap.getCoinTrending(chainId as ChainIdEVM, id, currency)
         case SourceType.NFTScan:
             return pluginID === NetworkPluginID.PLUGIN_SOLANA
                 ? NFTScanTrending_Solana.getCoinTrending(chainId as ChainIdSolana, name, currency)
@@ -59,7 +59,7 @@ export async function getPriceStats(
         case SourceType.CoinMarketCap:
             return CoinMarketCap.getCoinPriceStats(chainId as ChainIdEVM, id, currency, days)
         case SourceType.UniswapInfo:
-            return UniSwap.getCoinPriceStats(chainId as ChainIdEVM, id, currency, days)
+            return Uniswap.getCoinPriceStats(chainId as ChainIdEVM, id, currency, days)
         case SourceType.NFTScan:
             return NFTScanTrending_EVM.getCoinPriceStats(chainId as ChainIdEVM, id, currency, days)
         default:
