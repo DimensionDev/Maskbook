@@ -57,19 +57,22 @@ export class NFTScanTrendingAPI_Solana implements TrendingAPI.Provider<ChainId> 
         chainId: Web3Helper.ChainIdAll,
         id: string,
         cursor: string,
-    ): Promise<{ content: NonFungibleTokenActivity[]; cursor: string } | undefined> {
+    ): Promise<
+        | { content: Array<NonFungibleTokenActivity<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>; cursor: string }
+        | undefined
+    > {
         const path = urlcat('/api/sol/transactions/collection/:collection', {
             collection: id,
             cursor,
             limit: 50,
         })
 
-        const response = await fetchFromNFTScanV2<Response<{ content: NonFungibleTokenActivity[]; next: string }>>(
-            chainId,
-            path,
-            undefined,
-            NetworkPluginID.PLUGIN_SOLANA,
-        )
+        const response = await fetchFromNFTScanV2<
+            Response<{
+                content: Array<NonFungibleTokenActivity<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+                next: string
+            }>
+        >(chainId, path, undefined, NetworkPluginID.PLUGIN_SOLANA)
 
         if (!response?.data?.content) return
 
@@ -80,7 +83,6 @@ export class NFTScanTrendingAPI_Solana implements TrendingAPI.Provider<ChainId> 
                     ...x,
                     nftscan_uri: '',
                     transaction_link: `${resolveNFTScanHostName(NetworkPluginID.PLUGIN_SOLANA, chainId)}/${x.hash}`,
-                    trade_token_logo: '',
                 }
             }),
         }

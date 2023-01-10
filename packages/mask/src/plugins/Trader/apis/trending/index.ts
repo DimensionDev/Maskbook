@@ -85,7 +85,10 @@ export async function getNonFungibleTokenActivities(
     chainId: Web3Helper.ChainIdAll,
     contractAddress: string,
     cursor: string,
-): Promise<{ content: NonFungibleTokenActivity[]; cursor: string } | undefined> {
+): Promise<
+    | { content: Array<NonFungibleTokenActivity<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>; cursor: string }
+    | undefined
+> {
     return pluginID === NetworkPluginID.PLUGIN_SOLANA
         ? NFTScanTrending_Solana.getCoinActivities(chainId, contractAddress, cursor)
         : NFTScanTrending_EVM.getCoinActivities(chainId, contractAddress, cursor)
