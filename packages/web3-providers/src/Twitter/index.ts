@@ -22,12 +22,10 @@ const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
 export class TwitterAPI implements TwitterBaseAPI.Provider {
     getAvatarId(avatarURL?: string) {
         if (!avatarURL) return ''
-        const url = new URL(avatarURL)
-        const match = url.pathname.match(TWITTER_AVATAR_ID_MATCH)
-        if (!match) return ''
-
-        return match[1]
+        const match = new URL(avatarURL).pathname.match(TWITTER_AVATAR_ID_MATCH)
+        return match ? match[1] : ''
     }
+
     getSettings() {
         return getSettings()
     }
@@ -35,7 +33,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
     async getUserSettings(fresh = false) {
         const defaults = getDefaultUserSettings()
         try {
-            if (fresh) await this.staleUserSettings()
+            if (fresh) getUserSettingsCached.cache.clear()
             const userSettings = await timeout(getUserSettingsCached(), 5000)
             return {
                 ...defaults,
@@ -44,10 +42,6 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         } catch {
             return defaults
         }
-    }
-
-    async staleUserSettings() {
-        getUserSettingsCached.cache.clear()
     }
 
     async getUserNftContainer(screenName: string) {
@@ -101,9 +95,9 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             credentials: 'include',
             headers,
         })
-        const mediaId = initRes.media_id_string
-        // APPEND
 
+        // APPEND
+        const mediaId = initRes.media_id_string
         const appendURL = `${UPLOAD_AVATAR_URL}?command=APPEND&media_id=${mediaId}&segment_index=0`
         const formData = new FormData()
         formData.append('media', image)
