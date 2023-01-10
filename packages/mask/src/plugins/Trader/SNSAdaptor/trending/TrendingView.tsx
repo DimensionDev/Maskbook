@@ -8,7 +8,7 @@ import {
     useNonFungibleAssetsByCollection,
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
-import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { SourceType, createFungibleToken, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTList, PluginCardFrameMini } from '@masknet/shared'
@@ -162,7 +162,7 @@ export function TrendingView(props: TrendingViewProps) {
     const isSwappable =
         !isMinimalMode &&
         !isNFT &&
-        (!!trending?.coin.contract_address || isNativeTokenSymbol(coinSymbol)) &&
+        !!trending?.coin.contract_address &&
         chainIdValid &&
         trending?.coin.pluginID === NetworkPluginID.PLUGIN_EVM
     // #endregion

@@ -89,10 +89,12 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
         return {
             lastUpdated: info.last_updated,
             dataProvider: SourceType.CoinGecko,
-            contracts: Object.entries(info.platforms).map(([key, address]) => ({
-                chainId: platforms.find((x) => x.id === key)?.chain_identifier ?? resolveCoinGeckoChainId(key),
-                address,
-            })),
+            contracts: Object.entries(info.platforms)
+                .map(([key, address]) => ({
+                    chainId: platforms.find((x) => x.id === key)?.chain_identifier ?? resolveCoinGeckoChainId(key),
+                    address,
+                }))
+                .filter((x) => x.chainId && x.address),
             currency,
             coin: {
                 pluginID:
