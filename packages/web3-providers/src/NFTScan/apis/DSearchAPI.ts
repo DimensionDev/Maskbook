@@ -1,5 +1,5 @@
-import type { NonFungibleCollectionResult, SearchResult, SourceType } from '@masknet/web3-shared-base'
 import urlcat from 'urlcat'
+import type { NonFungibleCollectionResult, SearchResult, SourceType } from '@masknet/web3-shared-base'
 import { fetchCached } from '../../entry-helpers.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import type { DSearchBaseAPI } from '../../types/DSearch.js'

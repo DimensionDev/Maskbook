@@ -1,6 +1,7 @@
 import { compact, uniq, uniqBy } from 'lodash-es'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { attemptUntil, TokenType, SourceType } from '@masknet/web3-shared-base'
-import { ChainId, getCoinGeckoConstants } from '@masknet/web3-shared-evm'
+import { getCoinGeckoConstants } from '@masknet/web3-shared-evm'
 import { COINGECKO_CHAIN_ID_LIST, COINGECKO_URL_BASE } from '../constants.js'
 import { getCommunityLink, isMirroredKeyword } from '../../Trending/helpers.js'
 import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../../Trending/constants.js'
@@ -11,9 +12,8 @@ import { resolveCoinGeckoChainId } from '../helpers.js'
 import { FuseTrendingAPI } from '../../Fuse/index.js'
 import { fetchJSON } from '../../entry-helpers.js'
 import type { TrendingAPI } from '../../entry-types.js'
-import { NetworkPluginID } from '@masknet/shared-base'
 
-export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
+export class CoinGeckoTrending_API implements TrendingAPI.Provider<Web3Helper.ChainIdAll> {
     private fuse = new FuseTrendingAPI()
     private coins: Map<string, TrendingAPI.Coin> = new Map()
 
@@ -34,7 +34,7 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
         return coins.map((coin) => ({ ...coin, type: TokenType.Fungible }))
     }
 
-    async getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
+    async getCoinsByKeyword(chainId: Web3Helper.ChainIdAll, keyword: string): Promise<TrendingAPI.Coin[]> {
         try {
             await this.createCoins()
             const coinThumbs = await getThumbCoins(keyword)
@@ -157,7 +157,7 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinPriceStats(
-        chainId: ChainId,
+        chainId: Web3Helper.ChainIdAll,
         coinId: string,
         currency: TrendingAPI.Currency,
         days: number,

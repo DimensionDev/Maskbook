@@ -1,8 +1,8 @@
 import { createLookupTableResolver, NetworkPluginID } from '@masknet/shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { TrendingAPI } from '../../entry-types.js'
 import type { EVM } from '../types/index.js'
-import { ChainId } from '@masknet/web3-shared-evm'
 
 export function resolveNFTScanHostName(pluginId: NetworkPluginID, chainId: Web3Helper.ChainIdAll) {
     if (pluginId === NetworkPluginID.PLUGIN_SOLANA) return 'https://solana.nftscan.com'

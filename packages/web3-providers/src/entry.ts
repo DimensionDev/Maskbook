@@ -28,7 +28,7 @@ import { AlchemyEVM_API, AlchemyFlowAPI } from './Alchemy/index.js'
 import { Web3API, Web3GasOptionAPI } from './EVM/index.js'
 import { MagicEdenAPI } from './MagicEden/index.js'
 import { CoinMarketCapAPI } from './CoinMarketCap/index.js'
-import { UniSwapAPI } from './Uniswap/index.js'
+import { UniswapAPI } from './Uniswap/index.js'
 import { RabbyAPI } from './Rabby/index.js'
 import { GemAPI } from './Gem/index.js'
 import { X2Y2API } from './X2Y2/index.js'
@@ -90,7 +90,7 @@ export const Web3GasOption = new Web3GasOptionAPI()
 export const Web3Signer = new Web3SignerAPI()
 export const Nomics = new NomicsAPI()
 export const CoinMarketCap = new CoinMarketCapAPI()
-export const UniSwap = new UniSwapAPI()
+export const Uniswap = new UniswapAPI()
 export const Rabby = new RabbyAPI()
 export const X2Y2 = new X2Y2API()
 export const Cloudflare = new CloudflareAPI()
