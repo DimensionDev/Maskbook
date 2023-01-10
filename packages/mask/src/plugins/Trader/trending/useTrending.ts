@@ -46,7 +46,7 @@ export function useNonFungibleTokenActivities(
 ) {
     const cursorRef = useRef<string>('')
     const [nonFungibleTokenActivities, setNonFungibleTokenActivities] = useState<
-        Record<string, NonFungibleTokenActivity[]>
+        Record<string, Array<NonFungibleTokenActivity<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
     >({})
     const [{ loading: loadingNonFungibleTokenActivities }, getNonFungibleTokenActivities] = useAsyncFn(async () => {
         if (!id || !expectedChainId || !pluginID) return

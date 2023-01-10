@@ -18,7 +18,13 @@ import { LidoProtocol } from '../protocols/LDOProtocol.js'
 import { AAVEProtocol } from '../protocols/AAVEProtocol.js'
 import { LDO_PAIRS } from '../constants.js'
 import { TabContext, TabPanel } from '@mui/lab'
-import { Web3ContextProvider, useChainContext, useFungibleTokens, useWeb3 } from '@masknet/web3-hooks-base'
+import {
+    Web3ContextProvider,
+    useChainContext,
+    useFungibleTokens,
+    useWeb3,
+    useNetworkContext,
+} from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
@@ -75,6 +81,7 @@ const chains = [ChainId.Mainnet]
 export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const { t } = useI18N()
     const isDashboard = isDashboardPage()
+    const { pluginID } = useNetworkContext()
     const { classes } = useStyles({ isDashboard })
 
     const { chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -136,7 +143,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const [currentTab, onChange, tabs] = useTabs('Deposit', 'Withdraw')
 
     return (
-        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
+        <Web3ContextProvider value={{ pluginID, chainId: ChainId.Mainnet }}>
             <AllProviderTradeContext.Provider>
                 <TabContext value={currentTab}>
                     <InjectedDialog
@@ -164,6 +171,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                             indicator: classes.indicator,
                                         }}
                                         chains={chains.filter(Boolean) as ChainId[]}
+                                        pluginID={NetworkPluginID.PLUGIN_EVM}
                                     />
                                 </div>
                                 <div className={classes.tableTabWrapper}>
