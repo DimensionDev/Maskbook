@@ -188,7 +188,7 @@ export function NonFungibleTickersTable({
                 from: (
                     <Typography fontSize={12}>
                         <FormattedAddress
-                            address={x.from ?? x.source}
+                            address={x.send ?? x.from ?? x.source}
                             formatter={(address) =>
                                 Others?.formatAddress(Others?.formatDomainName(address, 12), 4) ?? address
                             }
@@ -198,7 +198,7 @@ export function NonFungibleTickersTable({
                 to: (
                     <Typography fontSize={12}>
                         <FormattedAddress
-                            address={x.send ?? x.receive ?? x.destination}
+                            address={x.receive ?? x.destination}
                             formatter={(address) =>
                                 Others?.formatAddress(Others?.formatDomainName(address, 12), 4) ?? address
                             }
