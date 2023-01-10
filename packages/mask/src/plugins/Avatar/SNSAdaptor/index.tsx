@@ -39,23 +39,21 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         })
                     }
                     return (
-                        <>
-                            <ApplicationEntry
-                                title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
-                                icon={icon}
-                                recommendFeature={recommendFeature}
-                                {...EntryComponentProps}
-                                onClick={
-                                    EntryComponentProps.onClick
-                                        ? () => EntryComponentProps.onClick?.(clickHandler)
-                                        : clickHandler
-                                }
-                                tooltipHint={
-                                    EntryComponentProps.tooltipHint ??
-                                    (EntryComponentProps.disabled ? undefined : <Trans i18nKey="application_hint" />)
-                                }
-                            />
-                        </>
+                        <ApplicationEntry
+                            title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
+                            icon={icon}
+                            recommendFeature={recommendFeature}
+                            {...EntryComponentProps}
+                            onClick={
+                                EntryComponentProps.onClick
+                                    ? () => EntryComponentProps.onClick?.(clickHandler)
+                                    : clickHandler
+                            }
+                            tooltipHint={
+                                EntryComponentProps.tooltipHint ??
+                                (EntryComponentProps.disabled ? undefined : <Trans i18nKey="application_hint" />)
+                            }
+                        />
                     )
                 },
                 appBoardSortingDefaultPriority: 3,
