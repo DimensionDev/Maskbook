@@ -1,11 +1,6 @@
 import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
-import {
-    TokenType,
-    SourceType,
-    NonFungibleCollectionOverview,
-    NonFungibleTokenActivity,
-} from '@masknet/web3-shared-base'
+import { TokenType, SourceType, NonFungibleCollectionOverview } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
@@ -80,16 +75,18 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
         chainId: Web3Helper.ChainIdAll,
         id: string,
         cursor: string,
-    ): Promise<{ content: NonFungibleTokenActivity[]; cursor: string } | undefined> {
+    ): Promise<{ content: Web3Helper.NonFungibleTokenActivityAll[]; cursor: string } | undefined> {
         const path = urlcat('/api/v2/transactions/:contract', {
             contract: id,
             cursor,
             limit: 50,
         })
-        const response = await fetchFromNFTScanV2<Response<{ content: NonFungibleTokenActivity[]; next: string }>>(
-            chainId,
-            path,
-        )
+        const response = await fetchFromNFTScanV2<
+            Response<{
+                content: Web3Helper.NonFungibleTokenActivityAll[]
+                next: string
+            }>
+        >(chainId, path)
 
         if (!response?.data?.content) return
 
@@ -108,7 +105,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
                     ...x,
                     nftscan_uri: asset?.metadata?.imageURL ?? '',
                     transaction_link: `${resolveNFTScanHostName(NetworkPluginID.PLUGIN_EVM, chainId)}/${x.hash}`,
-                    trade_token_logo: getPaymentToken(chainId, { symbol: x.trade_symbol })?.logoURL ?? '',
+                    trade_token: getPaymentToken(chainId, { symbol: x.trade_symbol }),
                 }
             }),
         }

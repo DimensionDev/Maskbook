@@ -8,6 +8,7 @@ import {
     useChainIdValid,
     Web3ContextProvider,
     useGasPrice,
+    useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import { InjectedDialog, NetworkTab } from '@masknet/shared'
 import { ChainId, GasConfig, GasEditor } from '@masknet/web3-shared-evm'
@@ -79,6 +80,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { t: i18n } = useBaseI18N()
     const [showHistory, setShowHistory] = useState(false)
     const [gasOption, setGasOption] = useState<GasConfig>()
+    const { pluginID } = useNetworkContext()
 
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
     const { classes } = useStyles()
@@ -206,7 +208,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     // #endregion
 
     return (
-        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: networkTabChainId }}>
+        <Web3ContextProvider value={{ pluginID, chainId: networkTabChainId }}>
             <TabContext value={currentTab}>
                 <InjectedDialog
                     isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
@@ -241,6 +243,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                         }}
                                         chains={chainIdList}
                                         hideArrowButton={currentTab === tabs.collectibles}
+                                        pluginID={NetworkPluginID.PLUGIN_EVM}
                                     />
                                 </div>
                                 <div

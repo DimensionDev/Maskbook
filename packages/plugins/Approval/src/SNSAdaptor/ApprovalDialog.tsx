@@ -10,7 +10,6 @@ import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../locales/index.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { ApprovalEmptyContent } from './ApprovalEmptyContent.js'
 import { ApprovalTokenContent } from './ApprovalTokenContent.js'
 import { ApprovalNFTContent } from './ApprovalNFTContent.js'
 
@@ -132,7 +131,6 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
     const chainIdList = compact<ChainId>(
         approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? [],
     )
-
     const { classes } = useStyles()
     const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
@@ -140,30 +138,26 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
 
     return (
         <div className={classes.approvalWrapper}>
-            {pluginID === NetworkPluginID.PLUGIN_EVM ? (
-                <>
-                    <div className={classes.abstractTabWrapper}>
-                        <NetworkTab
-                            classes={{
-                                tab: classes.tab,
-                                tabPanel: classes.tabPanel,
-                                indicator: classes.indicator,
-                                tabPaper: classes.tabPaper,
-                            }}
-                            chains={chainIdList}
-                        />
-                    </div>
-                    <section className={classes.contentWrapper}>
-                        {tab === Tabs.tokens ? (
-                            <ApprovalTokenContent chainId={chainId} />
-                        ) : (
-                            <ApprovalNFTContent chainId={chainId} />
-                        )}
-                    </section>
-                </>
-            ) : (
-                <ApprovalEmptyContent />
-            )}
+            <div className={classes.abstractTabWrapper}>
+                <NetworkTab
+                    classes={{
+                        tab: classes.tab,
+                        tabPanel: classes.tabPanel,
+                        indicator: classes.indicator,
+                        tabPaper: classes.tabPaper,
+                    }}
+                    chains={chainIdList}
+                    pluginID={NetworkPluginID.PLUGIN_EVM}
+                />
+            </div>
+            <section className={classes.contentWrapper}>
+                {tab === Tabs.tokens ? (
+                    <ApprovalTokenContent chainId={chainId} />
+                ) : (
+                    <ApprovalNFTContent chainId={chainId} />
+                )}
+            </section>
+
             <PluginWalletStatusBar className={classes.footer}>
                 <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
                     <Button

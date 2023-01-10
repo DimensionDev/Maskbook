@@ -205,6 +205,7 @@ export function TraderDialog() {
                             indicator: classes.indicator,
                         }}
                         chains={chainIdList}
+                        pluginID={NetworkPluginID.PLUGIN_EVM}
                     />
                 </div>
                 <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId }}>

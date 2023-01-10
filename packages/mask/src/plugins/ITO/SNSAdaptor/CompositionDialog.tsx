@@ -1,7 +1,13 @@
 import { useActivatedPlugin, useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog, InjectedDialogProps, useOpenShareTxDialog, NetworkTab } from '@masknet/shared'
 import { PluginID, EMPTY_LIST, EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useWeb3Connection, useChainIdValid, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useWeb3Connection,
+    useChainIdValid,
+    Web3ContextProvider,
+    useNetworkContext,
+} from '@masknet/web3-hooks-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, useITOConstants } from '@masknet/web3-shared-evm'
@@ -72,6 +78,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const { t } = useI18N()
 
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
+    const { pluginID } = useNetworkContext()
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         chainId: chainIdValid ? undefined : ChainId.Mainnet,
     })
@@ -242,12 +249,16 @@ export function CompositionDialog(props: CompositionDialogProps) {
             title={t('plugin_ito_display_name')}
             onClose={() => (showHistory ? setShowHistory(false) : onBack())}>
             <DialogContent className={classes.content}>
-                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: currentChainId }}>
+                <Web3ContextProvider value={{ pluginID, chainId: currentChainId }}>
                     {step === ITOCreateFormPageStep.NewItoPage ? (
                         !showHistory ? (
                             <>
                                 <div className={classes.abstractTabWrapper}>
-                                    <NetworkTab classes={{ tabs: classes.tabs }} chains={chainIdList} />
+                                    <NetworkTab
+                                        classes={{ tabs: classes.tabs }}
+                                        chains={chainIdList}
+                                        pluginID={NetworkPluginID.PLUGIN_EVM}
+                                    />
                                 </div>
                                 <CreateForm
                                     onNext={onNext}

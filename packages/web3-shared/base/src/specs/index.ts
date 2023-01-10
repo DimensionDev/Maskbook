@@ -435,7 +435,7 @@ export interface NonFungibleCollectionOverview {
     average_price?: number
 }
 
-export interface NonFungibleTokenActivity {
+export interface NonFungibleTokenActivity<ChainId, SchemaType> {
     hash: string
     event_type: ActivityType
     transaction_link: string
@@ -453,7 +453,7 @@ export interface NonFungibleTokenActivity {
     cover: string
     contract_address: string
     token_id?: string
-    trade_token_logo: string
+    trade_token?: FungibleToken<ChainId, SchemaType>
     trade_symbol?: string
     // #region solana
     source?: string
