@@ -1,6 +1,6 @@
-import { useAsync, useAsyncRetry, useAsyncFn } from 'react-use'
-import { useRef, useState, useEffect } from 'react'
 import { flatten } from 'lodash-es'
+import { useRef, useState, useEffect } from 'react'
+import { useAsync, useAsyncRetry, useAsyncFn } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { DSearch } from '@masknet/web3-providers'
 import {
@@ -15,7 +15,6 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import { PluginTraderRPC } from '../messages.js'
-import type { Coin } from '../types/index.js'
 import { useCurrentCurrency } from './useCurrentCurrency.js'
 
 export function useTrendingOverview(
@@ -79,7 +78,7 @@ export function useNonFungibleTokenActivities(
 
 export function useTrendingById(
     result: Web3Helper.TokenResultAll,
-    searchedContractAddress?: string,
+    address?: string,
 ): AsyncState<{
     currency?: TrendingAPI.Currency
     trending?: TrendingAPI.Trending | null
@@ -136,31 +135,22 @@ export function useTrendingById(
             trending: trending
                 ? {
                       ...trending,
-                      coin: createCoinFromTrending(trending, chainId, searchedContractAddress, detailedToken),
+                      coin: {
+                          ...trending?.coin,
+                          id: trending?.coin.id ?? '',
+                          name: trending?.coin.name ?? '',
+                          symbol: trending?.coin.symbol ?? '',
+                          type: trending?.coin.type ?? TokenType.Fungible,
+                          decimals: trending?.coin.decimals || detailedToken?.decimals || 0,
+                          contract_address:
+                              trending?.contracts?.[0]?.address ?? trending?.coin.contract_address ?? address,
+                          chainId: trending?.contracts?.[0]?.chainId ?? trending?.coin.chainId ?? chainId,
+                      },
                   }
                 : null,
         },
         loading,
         error,
-    }
-}
-
-function createCoinFromTrending(
-    trending?: TrendingAPI.Trending,
-    expectedChainId?: Web3Helper.ChainIdAll,
-    searchedContractAddress?: string,
-    token?: Web3Helper.FungibleTokenScope<void, NetworkPluginID.PLUGIN_EVM>,
-): Coin {
-    return {
-        ...trending?.coin,
-        id: trending?.coin.id ?? '',
-        name: trending?.coin.name ?? '',
-        symbol: trending?.coin.symbol ?? '',
-        type: trending?.coin.type ?? TokenType.Fungible,
-        decimals: trending?.coin.decimals || token?.decimals || 0,
-        contract_address:
-            searchedContractAddress ?? trending?.contracts?.[0]?.address ?? trending?.coin.contract_address,
-        chainId: expectedChainId ?? trending?.contracts?.[0]?.chainId ?? trending?.coin.chainId,
     }
 }
 
