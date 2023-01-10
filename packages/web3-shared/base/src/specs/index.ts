@@ -453,7 +453,7 @@ export interface NonFungibleTokenActivity<ChainId, SchemaType> {
     cover: string
     contract_address: string
     token_id?: string
-    token?: FungibleToken<ChainId, SchemaType>
+    trade_token?: FungibleToken<ChainId, SchemaType>
     trade_symbol?: string
     // #region solana
     source?: string

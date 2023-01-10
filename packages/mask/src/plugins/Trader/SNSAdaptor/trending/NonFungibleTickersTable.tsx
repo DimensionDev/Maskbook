@@ -265,7 +265,7 @@ interface TransactionValueProps {
 function TransactionValue({ result, chainId, activity }: TransactionValueProps) {
     const { classes } = useStyles({ isNFTProjectPopper: false })
     const chain = useNetworkDescriptor(result.pluginID, chainId)
-    const { value: token } = useFungibleToken(result.pluginID, activity.token?.address, activity.token, {
+    const { value: token } = useFungibleToken(result.pluginID, activity.trade_token?.address, activity.trade_token, {
         chainId: result.chainId,
     })
 
@@ -279,7 +279,7 @@ function TransactionValue({ result, chainId, activity }: TransactionValueProps) 
                 <Icons.WETH size={16} className={classes.tokenIcon} />
             ) : (
                 <TokenIcon
-                    logoURL={token?.logoURL || activity.token?.logoURL}
+                    logoURL={token?.logoURL || activity.trade_token?.logoURL}
                     symbol={activity.trade_symbol}
                     address={activity.contract_address}
                     className={classes.tokenIcon}
