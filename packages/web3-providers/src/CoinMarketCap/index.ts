@@ -165,6 +165,7 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
                     ({
                         chainId: resolveCoinMarketCapChainId(x.platform.name),
                         address: x.contract_address,
+                        pluingID: NetworkPluginID.PLUGIN_EVM,
                         icon_url: `${CMC_STATIC_BASE_URL}/img/coins/64x64/${x.platform.coin.id}.png`,
                     } as TrendingAPI.Contract),
             )
