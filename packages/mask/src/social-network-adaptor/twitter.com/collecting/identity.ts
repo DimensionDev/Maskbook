@@ -16,7 +16,7 @@ import {
     selfInfoSelectors,
 } from '../utils/selector.js'
 
-function collect() {
+function collectSelfInfo() {
     const handle = selfInfoSelectors().handle.evaluate()
     const nickname = selfInfoSelectors().name.evaluate()
     const avatar = selfInfoSelectors().userAvatar.evaluate()
@@ -24,7 +24,7 @@ function collect() {
     return { handle, nickname, avatar }
 }
 
-function _getNickname(nickname?: string) {
+function getNickname(nickname?: string) {
     const nicknameNode = searchSelfNicknameSelector().closest<HTMLDivElement>(1).evaluate()
     let _nickname = ''
     if (!nicknameNode?.childNodes.length) return nickname
@@ -49,11 +49,10 @@ function resolveLastRecognizedIdentityInner(
     const assign = async () => {
         await delay(2000)
 
-        const dataFromScript = collect()
-        const avatar = (searchSelfAvatarSelector().evaluate()?.getAttribute('src') || dataFromScript.avatar) ?? ''
-        const handle =
-            searchSelfHandleSelector().evaluate()?.textContent?.trim()?.replace(/^@/, '') || dataFromScript.handle
-        const nickname = _getNickname(dataFromScript.nickname) ?? ''
+        const selfInfo = collectSelfInfo()
+        const avatar = (searchSelfAvatarSelector().evaluate()?.getAttribute('src') || selfInfo.avatar) ?? ''
+        const handle = searchSelfHandleSelector().evaluate()?.textContent?.trim()?.replace(/^@/, '') || selfInfo.handle
+        const nickname = getNickname(selfInfo.nickname) ?? ''
 
         if (handle) {
             ref.value = {
