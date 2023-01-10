@@ -1,44 +1,28 @@
 import { memoize } from 'lodash-es'
 import { memoizePromise } from '@masknet/kit'
-import { isFirefox } from '@masknet/shared-base'
+import { getStore } from './getDatabase.js'
 import { TwitterBaseAPI } from '../../entry-types.js'
 
-/* cspell:disable-next-line */
-const DB_NAME = 'localforage'
-const DB_VERSION = 2
 /* cspell:disable-next-line */
 const STORE_NAME = 'keyvaluepairs'
 /* cspell:disable-next-line */
 const KEY_NAME = 'device:rweb.settings'
 
 export async function getUserSettings() {
-    if (!isFirefox()) {
-        const databases = await indexedDB.databases()
-        if (!databases.some((x) => x.name === DB_NAME && x.version === DB_VERSION)) return
-    }
+    const store = await getStore(STORE_NAME)
+    const query = store.get(KEY_NAME)
 
     return new Promise<TwitterBaseAPI.UserSettings | undefined>(async (resolve, reject) => {
-        const request = indexedDB.open(DB_NAME, DB_VERSION)
+        query.addEventListener('success', (event) => {
+            if (!event.target) reject('Failed to get user settings.')
 
-        request.addEventListener('success', () => {
-            const db = request.result
-            const transaction = db.transaction([STORE_NAME], 'readonly')
-            const objectStore = transaction.objectStore(STORE_NAME)
-            const query = objectStore.get(KEY_NAME)
+            const event_ = event as unknown as TwitterBaseAPI.Event<{
+                local: TwitterBaseAPI.UserSettings
+            }>
 
-            query.addEventListener('success', (event) => {
-                if (!event.target) reject('Failed to get user settings.')
-
-                const event_ = event as unknown as TwitterBaseAPI.Event<{
-                    local: TwitterBaseAPI.UserSettings
-                }>
-                resolve(event_.target.result.local)
-            })
-            query.addEventListener('error', (error) => {
-                reject(error)
-            })
+            resolve(event_.target.result.local)
         })
-        request.addEventListener('error', (error) => {
+        query.addEventListener('error', (error) => {
             reject(error)
         })
     })

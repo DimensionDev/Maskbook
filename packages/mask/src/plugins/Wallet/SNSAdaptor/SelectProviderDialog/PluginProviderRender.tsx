@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => {
             flexGrow: 1,
             marginTop: 21,
             counterIncrement: 'steps 1',
-            '&:first-child': {
+            '&:first-of-type': {
                 marginTop: 0,
             },
         },
