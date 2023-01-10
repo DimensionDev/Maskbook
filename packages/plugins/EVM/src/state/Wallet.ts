@@ -15,7 +15,7 @@ import { isSameAddress, Wallet as WalletItem } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, ProviderType, Transaction } from '@masknet/web3-shared-evm'
 
 export class Wallet extends WalletState<ProviderType, Transaction> {
-    private ref = new ValueRef<WalletItem[]>(EMPTY_LIST)
+    private ref = new ValueRef(this.context.wallets.getCurrentValue())
     private subscription = createSubscriptionFromValueRef(this.ref)
 
     constructor(
@@ -36,7 +36,6 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
                 },
             )
         }
-        this.ref.value = [...this.context.wallets.getCurrentValue()]
         this.setupSubscriptions()
     }
 
