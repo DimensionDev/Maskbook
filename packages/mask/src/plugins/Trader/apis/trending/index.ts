@@ -27,9 +27,9 @@ export async function getCoinTrending(
         case SourceType.CoinGecko:
             return CoinGeckoTrending.getCoinTrending(chainId, id, currency)
         case SourceType.CoinMarketCap:
-            return CoinMarketCap.getCoinTrending(chainId, id, currency)
+            return CoinMarketCap.getCoinTrending(chainId as ChainIdEVM, id, currency)
         case SourceType.UniswapInfo:
-            return UniSwap.getCoinTrending(chainId, id, currency)
+            return UniSwap.getCoinTrending(chainId as ChainIdEVM, id, currency)
         case SourceType.NFTScan:
             return pluginID === NetworkPluginID.PLUGIN_SOLANA
                 ? NFTScanTrending_Solana.getCoinTrending(chainId as ChainIdSolana, name, currency)

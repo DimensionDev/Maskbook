@@ -1,16 +1,15 @@
 import getUnixTime from 'date-fns/getUnixTime'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId, isValidAddress, isValidChainId } from '@masknet/web3-shared-evm'
 import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from './constants.js'
 import { resolveCoinMarketCapChainId } from './helpers.js'
 import { FuseTrendingAPI } from '../Fuse/index.js'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { getCommunityLink, isMirroredKeyword } from '../Trending/helpers.js'
 import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../Trending/constants.js'
 import type { Coin, Pair, ResultData, Status, QuotesInfo, CoinInfo } from './types.js'
 import { fetchJSON } from '../entry-helpers.js'
 import { TrendingAPI } from '../entry-types.js'
-import { NetworkPluginID } from '@masknet/shared-base'
 
 // #regin get quote info
 export async function getQuotesInfo(id: string, currency: string) {
@@ -147,11 +146,7 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
         throw new Error('To be implemented.')
     }
 
-    async getCoinTrending(
-        chainId: Web3Helper.ChainIdAll,
-        id: string,
-        currency: TrendingAPI.Currency,
-    ): Promise<TrendingAPI.Trending> {
+    async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
         const currencyName = currency.name.toUpperCase()
         const [{ data: coinInfo, status }, { data: quotesInfo }, { data: market }] = await Promise.all([
             getCoinInfo(id),
