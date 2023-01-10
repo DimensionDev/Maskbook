@@ -259,7 +259,7 @@ export function NonFungibleTickersTable({
 interface TransactionValueProps {
     result: Web3Helper.TokenResultAll
     chainId: Web3Helper.ChainIdAll
-    activity: Web3Helper.NonFungibleTokenActivity
+    activity: Web3Helper.NonFungibleTokenActivityAll
 }
 
 function TransactionValue({ result, chainId, activity }: TransactionValueProps) {

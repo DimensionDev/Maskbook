@@ -75,7 +75,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
         chainId: Web3Helper.ChainIdAll,
         id: string,
         cursor: string,
-    ): Promise<{ content: Web3Helper.NonFungibleTokenActivity[]; cursor: string } | undefined> {
+    ): Promise<{ content: Web3Helper.NonFungibleTokenActivityAll[]; cursor: string } | undefined> {
         const path = urlcat('/api/v2/transactions/:contract', {
             contract: id,
             cursor,
@@ -83,7 +83,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
         })
         const response = await fetchFromNFTScanV2<
             Response<{
-                content: Web3Helper.NonFungibleTokenActivity[]
+                content: Web3Helper.NonFungibleTokenActivityAll[]
                 next: string
             }>
         >(chainId, path)
