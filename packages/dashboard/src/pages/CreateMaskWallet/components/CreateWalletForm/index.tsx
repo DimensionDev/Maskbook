@@ -166,7 +166,7 @@ const CreateWalletForm = memo(() => {
                 </Box>
                 {!loading && !hasPassword ? (
                     <>
-                        <Box style={{ marginTop: 24 }}>
+                        <Box style={{ marginTop: 24, display: 'flex', flexDirection: 'column', rowGap: 10 }}>
                             <Typography className={classes.label}>{t.create_wallet_payment_password()}</Typography>
                             <Controller
                                 control={control}
