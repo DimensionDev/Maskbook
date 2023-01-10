@@ -1,6 +1,6 @@
 import { useI18N } from '../../../utils/index.js'
 import { Box, Checkbox, FormControlLabel, Typography } from '@mui/material'
-import { MaskIcon, ActionButtonPromise } from '@masknet/shared'
+import { ActionButtonPromise } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { WizardDialogProps, WizardDialog } from './WizardDialog.js'
 import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
@@ -115,7 +115,7 @@ export const VerifyNextID = ({
             content={
                 <Box className={classes.connection}>
                     <Box className={classes.connectItem}>
-                        <MaskIcon size={48} />
+                        <Icons.MaskBlue size={48} />
                         <Typography variant="body2" className={classes.name}>
                             {personaName}
                         </Typography>

@@ -4,9 +4,9 @@ import { TypedMessage, makeTypedMessageText } from '@masknet/typed-message'
 import { TypedMessageRender } from '@masknet/typed-message-react'
 import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context.js'
 import { Check as CheckIcon, Close as CloseIcon } from '@mui/icons-material'
-import { MaskIcon } from '@masknet/shared'
 import { memo, useCallback, useMemo } from 'react'
 import { activatedSocialNetworkUI } from '../../social-network/ui.js'
+import { Icons } from '@masknet/icons'
 
 export enum AdditionalIcon {
     check = 'check',
@@ -51,7 +51,7 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
             color={message ? 'textSecondary' : 'textPrimary'}
             gutterBottom
             className={classes.title}>
-            <span className={classes.icon}>{ProgressJSX || <MaskIcon />}</span>
+            <span className={classes.icon}>{ProgressJSX || <Icons.MaskBlue />}</span>
             <Box
                 sx={{
                     flex: 1,
