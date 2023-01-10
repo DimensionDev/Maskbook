@@ -1,11 +1,6 @@
 import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
-import {
-    TokenType,
-    SourceType,
-    NonFungibleCollectionOverview,
-    NonFungibleTokenActivity,
-} from '@masknet/web3-shared-base'
+import { TokenType, SourceType, NonFungibleCollectionOverview } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
@@ -57,10 +52,7 @@ export class NFTScanTrendingAPI_Solana implements TrendingAPI.Provider<ChainId> 
         chainId: Web3Helper.ChainIdAll,
         id: string,
         cursor: string,
-    ): Promise<
-        | { content: Array<NonFungibleTokenActivity<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>; cursor: string }
-        | undefined
-    > {
+    ): Promise<{ content: Web3Helper.NonFungibleTokenActivity[]; cursor: string } | undefined> {
         const path = urlcat('/api/sol/transactions/collection/:collection', {
             collection: id,
             cursor,
@@ -69,7 +61,7 @@ export class NFTScanTrendingAPI_Solana implements TrendingAPI.Provider<ChainId> 
 
         const response = await fetchFromNFTScanV2<
             Response<{
-                content: Array<NonFungibleTokenActivity<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+                content: Web3Helper.NonFungibleTokenActivity[]
                 next: string
             }>
         >(chainId, path, undefined, NetworkPluginID.PLUGIN_SOLANA)

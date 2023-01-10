@@ -15,6 +15,7 @@ import type {
     RecentTransaction,
     HubIndicator,
     FungibleTokenSecurity,
+    NonFungibleTokenActivity as NonFungibleTokenActivity_,
     NonFungibleTokenSecurity,
     Web3State as Web3StateShared,
     Web3UI as Web3UIShared,
@@ -214,6 +215,11 @@ export declare namespace Web3Helper {
     >
 
     export type NonFungibleTokenResultAll = NonFungibleTokenResult<
+        Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['SchemaType']
+    >
+
+    export type NonFungibleTokenActivity = NonFungibleTokenActivity_<
         Definition[NetworkPluginID]['ChainId'],
         Definition[NetworkPluginID]['SchemaType']
     >

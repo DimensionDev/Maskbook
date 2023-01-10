@@ -17,7 +17,7 @@ import { useScrollBottomEvent } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State, useNetworkDescriptor, useFungibleToken } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { formatCurrency, NonFungibleTokenActivity } from '@masknet/web3-shared-base'
+import { formatCurrency } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import { resolveActivityTypeBackgroundColor } from '@masknet/web3-providers'
@@ -259,7 +259,7 @@ export function NonFungibleTickersTable({
 interface TransactionValueProps {
     result: Web3Helper.TokenResultAll
     chainId: Web3Helper.ChainIdAll
-    activity: NonFungibleTokenActivity<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    activity: Web3Helper.NonFungibleTokenActivity
 }
 
 function TransactionValue({ result, chainId, activity }: TransactionValueProps) {

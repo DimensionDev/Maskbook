@@ -1,4 +1,4 @@
-import { SourceType, NonFungibleCollectionOverview, NonFungibleTokenActivity } from '@masknet/web3-shared-base'
+import { SourceType, NonFungibleCollectionOverview } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import {
     CoinGeckoTrending,
@@ -85,10 +85,7 @@ export async function getNonFungibleTokenActivities(
     chainId: Web3Helper.ChainIdAll,
     contractAddress: string,
     cursor: string,
-): Promise<
-    | { content: Array<NonFungibleTokenActivity<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>; cursor: string }
-    | undefined
-> {
+): Promise<{ content: Web3Helper.NonFungibleTokenActivity[]; cursor: string } | undefined> {
     return pluginID === NetworkPluginID.PLUGIN_SOLANA
         ? NFTScanTrending_Solana.getCoinActivities(chainId, contractAddress, cursor)
         : NFTScanTrending_EVM.getCoinActivities(chainId, contractAddress, cursor)
