@@ -17,8 +17,8 @@ export interface FeedCardBaseProps {
     actionIndex?: number
     /**
      * verbose variant is
-     * - not inspectable (no clickable)
-     * - show more details, including fee, more other content, different layout
+     * - not inspectable (not clickable)
+     * - showing more details, including fee, and more other content, in different layout
      */
     verbose?: boolean
 }
