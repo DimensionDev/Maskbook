@@ -139,7 +139,7 @@ export function TrendingView(props: TrendingViewProps) {
     // #endregion
     // #region merge trending
 
-    const { value: { trending } = {}, loading: loadingTrending } = useTrendingById(result, searchedContractAddress)
+    const { value: { trending } = {}, loading: loadingTrending } = useTrendingById(result, result.address)
     // #endregion
     const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
 
@@ -169,9 +169,19 @@ export function TrendingView(props: TrendingViewProps) {
 
     // #region expected chainId
     const swapExpectedChainId = useMemo(() => {
-        const contracts = trending?.contracts?.filter((x) => x.chainId === chainId) ?? []
-        if (contracts.length > 0) return chainId
-        return trending?.contracts?.[0]?.chainId ?? chainId
+        const contracts =
+            trending?.contracts?.filter((x) => x.chainId && x.address) ??
+            (trending?.coin.chainId && trending.coin.contract_address)
+                ? [
+                      {
+                          chainId: trending.coin.chainId,
+                          address: trending.coin.contract_address,
+                      },
+                  ]
+                : []
+        const _contracts = contracts?.filter((x) => x.chainId === chainId) ?? []
+        if (_contracts.length > 0) return chainId
+        return contracts?.[0]?.chainId ?? chainId
     }, [trending?.contracts, chainId])
     // #endregion
 
