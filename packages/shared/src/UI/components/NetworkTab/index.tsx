@@ -10,7 +10,7 @@ import { Stack, Tab, Typography } from '@mui/material'
 interface NetworkTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
     chains: Array<Web3Helper.Definition[NetworkPluginID]['ChainId']>
     hideArrowButton?: boolean
-    pluginID?: NetworkPluginID
+    pluginID: NetworkPluginID
 }
 
 export function NetworkTab(props: NetworkTabProps) {
