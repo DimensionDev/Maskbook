@@ -1,7 +1,7 @@
 import { memoize } from 'lodash-es'
 import { memoizePromise } from '@masknet/kit'
-import { TwitterBaseAPI } from '../../entry-types.js'
 import { getStore } from './getDatabase.js'
+import { TwitterBaseAPI } from '../../entry-types.js'
 
 /* cspell:disable-next-line */
 const STORE_NAME = 'keyvaluepairs'
