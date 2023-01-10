@@ -36,7 +36,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
                 },
             )
         }
-
+        this.ref.value = [...this.context.wallets.getCurrentValue()]
         this.setupSubscriptions()
     }
 
