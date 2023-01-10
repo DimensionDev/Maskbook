@@ -18,5 +18,13 @@
     "readme_fund_link": "https://gitcoin.co/grants/86/gitcoin-sustainability-fund",
     "plugin_gitcoin_select_a_token": "Select a token",
     "plugin_gitcoin_insufficient_balance": "Insufficient {{symbol}} balance",
-    "share_text": "I just donated {{project_name}} with {{balance}} {{symbol}}.\n\n{{promote}}"
+    "share_text": "I just donated {{project_name}} with {{balance}} {{symbol}}.\n\n{{promote}}",
+    "active": "Active",
+    "grant_status$active": "Active",
+    "grant_status$closed": "Close",
+    "total_raised": "Total Raised <bold>{{amount}}</bold>",
+    "admin": "by <bold>{{admin}}</bold>",
+    "give_back_to_match_pool": "Give back to the Gitcoin match pool",
+    "total_contribution": "Your Total Contribution",
+    "give_back_tooltip": "Contribute towards the Gitcoin Match Pool! Funds are used for current and future Grant rounds. The selected amount will be added on top of your grant contributions."
 }

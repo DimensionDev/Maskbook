@@ -106,7 +106,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface FungibleTokenInputUIProps extends InputBaseProps {
+export interface FungibleTokenInputUIProps extends InputBaseProps {
     label: string
     disableMax?: boolean
     isNative?: boolean
@@ -200,8 +200,8 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                         ) : null}
                     </Box>
                 }
-                className={classes.root}
                 {...props}
+                className={cx(classes.root, props.className)}
             />
         )
     },

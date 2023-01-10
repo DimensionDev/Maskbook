@@ -1,42 +1,73 @@
-import { useCallback } from 'react'
-import urlcat from 'urlcat'
-import { Box, Card, Typography, Button, Avatar } from '@mui/material'
-import { LoadingBase, makeStyles } from '@masknet/theme'
-import { QueryBuilder as QueryBuilderIcon, VerifiedUser as VerifiedUserIcon } from '@mui/icons-material'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { Icons } from '@masknet/icons'
+import { ChainBoundary, SocialIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { useGrant } from '../hooks/useGrant.js'
-import { PluginGitcoinMessages } from '../messages.js'
-import { ChainBoundary } from '@masknet/shared'
-import { useI18N } from '../locales/i18n_generated.js'
-import { usePostLink } from '@masknet/plugin-infra/content-script'
+import { alpha, Box, Button, Card, Link, Stack, Typography } from '@mui/material'
+import { compact, uniq } from 'lodash-es'
+import urlcat from 'urlcat'
+import { useGrant } from './hooks/useGrant.js'
+import { Translate, useI18N } from '../locales/i18n_generated.js'
+import { useDonate } from './contexts/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        padding: theme.spacing(2),
+        padding: theme.spacing(1.5),
         maxHeight: 500,
         overflow: 'auto',
         '&::-webkit-scrollbar': {
             display: 'none',
         },
     },
-    logo: {
-        textAlign: 'center',
-        '& > *': {
-            width: 'auto',
-            height: 100,
-            maxWidth: '100%',
-        },
-    },
-    title: {
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
+    header: {
         display: 'flex',
         alignItems: 'center',
-        '& > :last-child': {
-            marginTop: 4,
-            marginLeft: 4,
+        flexDirection: 'row',
+        flexGrow: 1,
+    },
+    metas: {
+        display: 'flex',
+        marginTop: theme.spacing(1),
+    },
+    admin: {
+        marginLeft: 'auto',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    link: {
+        marginLeft: theme.spacing(1),
+        color: theme.palette.maskColor.main,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    main: {
+        padding: theme.spacing(2),
+        marginTop: theme.spacing(2.5),
+    },
+    network: {
+        marginRight: theme.spacing(1.5),
+    },
+    title: {
+        lineHeight: '22px',
+        fontWeight: 'bold',
+        fontSize: 18,
+        flexGrow: 1,
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+    },
+    bold: {
+        fontWeight: 'bold',
+        color: theme.palette.maskColor.dark,
+    },
+    banner: {
+        textAlign: 'center',
+        img: {
+            width: '100%',
+            maxWidth: '100%',
+            borderRadius: theme.spacing(1.5),
         },
     },
     description: {
@@ -54,14 +85,6 @@ const useStyles = makeStyles()((theme) => ({
         paddingBottom: theme.spacing(1),
         display: 'flex',
         alignItems: 'center',
-        '& svg': {
-            marginRight: theme.spacing(0.5),
-        },
-    },
-    avatar: {
-        width: theme.spacing(2),
-        height: theme.spacing(2),
-        margin: theme.spacing(0, 1),
     },
     text: {
         overflow: 'hidden',
@@ -81,22 +104,11 @@ export interface PreviewCardProps {
 
 export function PreviewCard(props: PreviewCardProps) {
     const t = useI18N()
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
     const { value: grant, error, loading, retry } = useGrant(props.id)
 
     // #region the donation dialog
-    const postLink = usePostLink()
-    const { setDialog: setDonationDialog } = useRemoteControlledDialog(PluginGitcoinMessages.donationDialogUpdated)
-    const onDonate = useCallback(() => {
-        if (!grant) return
-        setDonationDialog({
-            open: true,
-            address: grant.admin_address,
-            title: grant.title,
-            postLink,
-        })
-    }, [grant, setDonationDialog])
-    // #endregion
+    const openDonate = useDonate()
 
     if (loading)
         return (
@@ -115,17 +127,73 @@ export function PreviewCard(props: PreviewCardProps) {
         )
     if (!grant) return null
 
+    const twitters = uniq(compact([grant.twitter_handle_1, grant.twitter_handle_2])).map(
+        (handle) => `https://twitter.com/${handle}`,
+    )
+
     return (
-        <>
-            <Card variant="outlined" className={classes.root} elevation={0}>
-                <div className={classes.logo}>
+        <Box className={classes.root}>
+            <div className={classes.header}>
+                <Icons.ETH className={classes.network} size={36} />
+                <Stack flexGrow={1} overflow="auto">
+                    <Box display="flex" flexDirection="row" alignItems="center">
+                        <Typography variant="h1" className={classes.title} title={grant.title}>
+                            {grant.title}
+                        </Typography>
+                        <Button
+                            disableTouchRipple
+                            color="success"
+                            size="small"
+                            sx={{
+                                pointerEvents: 'none',
+                                borderRadius: '32px',
+                                backgroundColor: grant.active
+                                    ? theme.palette.maskColor.success
+                                    : alpha(theme.palette.maskColor.primary, 0.1),
+                            }}>
+                            {t.grant_status({ context: grant.active ? 'active' : 'closed' })}
+                        </Button>
+                    </Box>
+                    <div className={classes.metas}>
+                        <Typography color="second" fontSize={14}>
+                            <Translate.total_raised
+                                values={{
+                                    amount: `$${grant.amount_received}`,
+                                }}
+                                components={{
+                                    bold: <Typography component="span" className={classes.bold} />,
+                                }}
+                            />
+                        </Typography>
+                        <div className={classes.admin}>
+                            <Typography>
+                                <Translate.admin
+                                    values={{ admin: grant.admin_profile.handle }}
+                                    components={{
+                                        bold: <Typography component="span" className={classes.bold} />,
+                                    }}
+                                />
+                            </Typography>
+                            {twitters.map((url) => (
+                                <Link key={url} className={classes.link} target="_blank" href={url}>
+                                    <SocialIcon url={url} size={16} />
+                                </Link>
+                            ))}
+                            {grant.admin_profile.github_url ? (
+                                <Link className={classes.link} href={grant.admin_profile.github_url} target="_blank">
+                                    <SocialIcon url={grant.admin_profile.github_url} size={16} />
+                                </Link>
+                            ) : null}
+                            <Link className={classes.link} href={grant.admin_profile.url}>
+                                <SocialIcon url={grant.admin_profile.url} size={16} />
+                            </Link>
+                        </div>
+                    </div>
+                </Stack>
+            </div>
+            <Card variant="outlined" className={classes.main} elevation={0}>
+                <div className={classes.banner}>
                     <img src={grant.logo_url} />
-                </div>
-                <div className={classes.title}>
-                    <Typography variant="h6" color="textPrimary">
-                        {grant.title}
-                    </Typography>
-                    {grant.verified ? <VerifiedUserIcon fontSize="small" color="primary" /> : null}
                 </div>
                 <div className={classes.description}>
                     <Typography variant="body2" color="textSecondary" className={classes.text}>
@@ -134,22 +202,8 @@ export function PreviewCard(props: PreviewCardProps) {
                 </div>
                 <div className={classes.data}>
                     <div className={classes.meta}>
-                        <QueryBuilderIcon fontSize="small" color="disabled" />
                         <Typography variant="body2" color="textSecondary">
                             {t.last_updated()} {grant.last_update_natural}
-                        </Typography>
-                    </div>
-                    <div className={classes.meta}>
-                        <Typography variant="body2" color="textSecondary">
-                            {t.by()}
-                        </Typography>
-                        <Avatar
-                            alt={grant.admin_profile.handle}
-                            src={grant.admin_profile.avatar_url}
-                            className={classes.avatar}
-                        />
-                        <Typography variant="body2" color="textSecondary">
-                            {grant.admin_profile.handle}
                         </Typography>
                     </div>
                 </div>
@@ -162,25 +216,32 @@ export function PreviewCard(props: PreviewCardProps) {
                         className={classes.button}
                         target="_blank"
                         rel="noopener noreferrer"
-                        href={urlcat('https://gitcoin.co', grant.url)}>
+                        href={urlcat('https://gitcoin.co', grant.url)}
+                        startIcon={<Icons.Eye variant="dark" size={18} />}>
                         {t.view_on()}
                     </Button>
                 </Box>
-                <Box sx={{ flex: 1, padding: '12px 5px' }}>
-                    <ChainBoundary
-                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                        expectedChainId={ChainId.Mainnet}
-                        predicate={(pluginID, chainId) =>
-                            pluginID === NetworkPluginID.PLUGIN_EVM &&
-                            [ChainId.Mainnet, ChainId.Matic].includes(chainId)
-                        }
-                        ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
-                        <Button fullWidth variant="roundedDark" onClick={onDonate}>
-                            {t.donate()}
-                        </Button>
-                    </ChainBoundary>
-                </Box>
+                {grant.active ? (
+                    <Box sx={{ flex: 1, padding: '12px 5px' }}>
+                        <ChainBoundary
+                            expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                            expectedChainId={ChainId.Mainnet}
+                            predicate={(pluginID, chainId) =>
+                                pluginID === NetworkPluginID.PLUGIN_EVM &&
+                                [ChainId.Mainnet, ChainId.Matic].includes(chainId)
+                            }
+                            ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
+                            <Button
+                                fullWidth
+                                variant="roundedDark"
+                                onClick={() => openDonate({ grant })}
+                                startIcon={<Icons.ConnectWallet size={18} />}>
+                                {t.donate()}
+                            </Button>
+                        </ChainBoundary>
+                    </Box>
+                ) : null}
             </Box>
-        </>
+        </Box>
     )
 }
