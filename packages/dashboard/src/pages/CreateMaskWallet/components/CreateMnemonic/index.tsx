@@ -13,7 +13,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { useMnemonicWordsPuzzle } from '../../../../hooks/useMnemonicWordsPuzzle.js'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { useWeb3Connection } from '@masknet/web3-hooks-base'
-import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { ProviderType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -114,10 +114,6 @@ const CreateMnemonic = memo(() => {
             `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
         )
 
-        await connection?.connect({
-            account: address,
-            chainId: ChainId.Mainnet,
-        })
         await PluginServices.Wallet.resolveMaskAccount([
             {
                 address,
