@@ -1,4 +1,3 @@
-import { delay } from '@masknet/kit'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createLookupTableResolver } from '@masknet/shared-base'
 import type { SocialNetworkUI as Next } from '@masknet/types'
@@ -45,7 +44,6 @@ async function resolveThemeSettingsInner(
     cancel: AbortSignal,
 ) {
     const assign = async () => {
-        await delay(2000)
         const userSettings = await Twitter.getUserSettings(true)
         if (!userSettings) return
 
