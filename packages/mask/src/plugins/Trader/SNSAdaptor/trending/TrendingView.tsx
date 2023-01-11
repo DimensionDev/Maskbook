@@ -100,6 +100,9 @@ const useStyles = makeStyles<{
         nftList: {
             gap: 12,
         },
+        hidden: {
+            visibility: 'hidden',
+        },
     }
 })
 
@@ -222,7 +225,7 @@ export function TrendingView(props: TrendingViewProps) {
     }, [t, isSwappable, isNFT])
     // #endregion
 
-    const { classes } = useStyles({ isTokenTagPopper, isNFTProjectPopper, currentTab })
+    const { classes, cx } = useStyles({ isTokenTagPopper, isNFTProjectPopper, currentTab })
 
     // #region api ready callback
     useEffect(() => {
@@ -353,19 +356,22 @@ export function TrendingView(props: TrendingViewProps) {
                         />
                     </Web3ContextProvider>
                 ) : null}
-                {currentTab === ContentTabs.NFTItems && isNFT ? (
-                    <Box className={classes.nftItems}>
-                        <NFTList
-                            pluginID={result.pluginID}
-                            className={classes.nftList}
-                            tokens={fetchedTokens}
-                            onNextPage={next}
-                            finished={done}
-                            hasError={!!loadError}
-                            gap={16}
-                        />
-                    </Box>
-                ) : null}
+
+                <Box
+                    className={cx(
+                        classes.nftItems,
+                        currentTab === ContentTabs.NFTItems && isNFT ? '' : classes.hidden,
+                    )}>
+                    <NFTList
+                        pluginID={result.pluginID}
+                        className={classes.nftList}
+                        tokens={fetchedTokens}
+                        onNextPage={next}
+                        finished={done}
+                        hasError={!!loadError}
+                        gap={16}
+                    />
+                </Box>
             </Stack>
         </TrendingViewDeck>
     )
