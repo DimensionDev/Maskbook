@@ -1,6 +1,6 @@
 import { unstable_useCacheRefresh, useContext } from 'react'
 import { millify } from 'millify'
-import { formatPercentage } from '@masknet/web3-shared-base'
+import { formatPercentage, isSameAddress } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, explorerResolver } from '@masknet/web3-shared-evm'
 import { Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
@@ -84,13 +84,12 @@ const useStyles = makeStyles()((theme) => {
 })
 
 function Content() {
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const identifier = useContext(SnapshotContext)
     const proposal = useProposal(identifier.id)
-    const votes = useVotes(identifier)
+    const votes = useVotes(identifier, account)
     const { classes, cx, theme } = useStyles()
     const { t } = useI18N()
-
     return (
         <SnapshotCard
             title={
@@ -126,7 +125,9 @@ function Content() {
                                     <EthereumBlockie address={v.address} />
                                 </Box>
                                 <Typography color={theme.palette.maskColor.dark}>
-                                    {formatEthereumAddress(v.address, 4)}
+                                    {isSameAddress(v.address, account)
+                                        ? t('plugin_snapshot_votes_yourself')
+                                        : formatEthereumAddress(v.address, 4)}
                                 </Typography>
                             </Link>
                             {v.choice ? (
