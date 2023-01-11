@@ -498,8 +498,26 @@ class Connection implements EVM_Connection {
     }
 
     async estimateTransaction(transaction: Transaction, fallback = 21000, initial?: EVM_Web3ConnectionOptions) {
-        const options = this.getOptions(initial)
-        return Web3.estimateTransaction(options.chainId, transaction, fallback)
+        try {
+            const options = this.getOptions(initial)
+            return this.hijackedRequest<string>(
+                {
+                    method: EthereumMethodType.ETH_ESTIMATE_GAS,
+                    params: [
+                        {
+                            from: options.account,
+                            ...transaction,
+                            value: transaction.value ? toHex(transaction.value) : undefined,
+                            // rpc hack, alchemy rpc must pass gas parameter
+                            gas: options.chainId === ChainId.Astar ? '0x135168' : undefined,
+                        },
+                    ],
+                },
+                options,
+            )
+        } catch {
+            return toHex(fallback)
+        }
     }
 
     getTransactionReceipt(hash: string, initial?: EVM_Web3ConnectionOptions) {
@@ -647,15 +665,19 @@ class Connection implements EVM_Connection {
         const contract = this.getWalletContract(options.account, options)
         if (!contract) throw new Error('Failed to create contract.')
 
+        const tx = {
+            from: options.account,
+            to: options.account,
+            data: contract.methods.transfer(recipient, amount).encodeABI(),
+        }
+
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_TRANSACTION,
                 params: [
                     {
-                        from: options.account,
-                        to: options.account,
-                        data: contract.methods.transfer(recipient, amount).encodeABI(),
-                        gas: await contract.methods.transfer(recipient, amount).estimateGas(),
+                        ...tx,
+                        gas: await this.estimateTransaction(tx, 50000, options),
                     },
                 ],
             },
@@ -668,15 +690,19 @@ class Connection implements EVM_Connection {
         const contract = this.getWalletContract(options.account, options)
         if (!contract) throw new Error('Failed to create contract.')
 
+        const tx = {
+            from: options.account,
+            to: options.account,
+            data: contract.methods.changeOwner(recipient).encodeABI(),
+        }
+
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_TRANSACTION,
                 params: [
                     {
-                        from: options.account,
-                        to: options.account,
-                        data: contract.methods.changeOwner(recipient).encodeABI(),
-                        gas: await contract.methods.changeOwner(recipient).estimateGas(),
+                        ...tx,
+                        gas: await this.estimateTransaction(tx, 50000, options),
                     },
                 ],
             },
