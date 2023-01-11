@@ -23,6 +23,8 @@ const RULES = [
     'attrace.com/v1/logsearch',
     'https://discovery.attrace.com/mainnet/farmOracles.json',
     'https://discovery.attrace.com/mainnet/full.json',
+    // twitter post images
+    'https://pbs.twimg.com/media',
 ]
 
 export async function fetchSquashed(
