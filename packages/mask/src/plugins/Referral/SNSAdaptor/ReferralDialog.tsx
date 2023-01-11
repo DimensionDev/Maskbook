@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useTheme } from '@mui/material/styles'
@@ -107,7 +107,16 @@ export function ReferralDialog({ open, onClose }: ReferralDialogProps) {
         setPropsData(props)
     }
 
-    const renderViews = () => {
+    const onHandleClose = useCallback(() => {
+        onClose?.()
+        setCurrentPage({
+            page: PagesType.LANDING,
+            title: t.__plugin_name(),
+        })
+        setCurrentTitle(t.__plugin_name())
+    }, [])
+
+    const View = useMemo(() => {
         const { page } = currentPage
         switch (page) {
             case PagesType.LANDING:
@@ -138,26 +147,7 @@ export function ReferralDialog({ open, onClose }: ReferralDialogProps) {
             default:
                 return <Landing continue={onContinue} />
         }
-    }
-
-    const onBackToAdjustRewardsDialog = useCallback(async () => {
-        const props: DialogInterface = {
-            adjustFarmDialog: {
-                ...propsData?.depositDialog?.adjustFarmData,
-                continue: () => {},
-            },
-        }
-        setPropsData(props)
-    }, [propsData])
-
-    const onHandleClose = useCallback(() => {
-        onClose?.()
-        setCurrentPage({
-            page: PagesType.LANDING,
-            title: t.__plugin_name(),
-        })
-        setCurrentTitle(t.__plugin_name())
-    }, [])
+    }, [currentPage.page, onContinue, onChangePage, onClose])
 
     return (
         <InjectedDialog
@@ -185,7 +175,7 @@ export function ReferralDialog({ open, onClose }: ReferralDialogProps) {
                 dialogTitle: classes.dialogTitle,
                 dialogTitleTypography: classes.dialogTitleTypography,
             }}>
-            <DialogContent className={classes.content}>{renderViews()}</DialogContent>
+            <DialogContent className={classes.content}>{View}</DialogContent>
         </InjectedDialog>
     )
 }
