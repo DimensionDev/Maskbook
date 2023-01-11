@@ -53,16 +53,7 @@ const sns: Plugin.SNSAdaptor.Definition<
                             isProfilePage={Boolean(isProfilePage)}
                             isTokenTagPopper={false}
                             isPreciseSearch={Boolean(Others?.isValidAddress(keyword))}>
-                            <TrendingView
-                                resultList={resultList}
-                                searchedContractAddress={
-                                    Others?.isValidAddress(keyword)
-                                        ? keyword
-                                        : Others?.isValidAddress(address)
-                                        ? address
-                                        : undefined
-                                }
-                            />
+                            <TrendingView resultList={resultList} />
                         </TrendingViewProvider>
                     </Web3ContextProvider>
                 )

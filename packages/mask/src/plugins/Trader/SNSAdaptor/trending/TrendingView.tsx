@@ -100,13 +100,15 @@ const useStyles = makeStyles<{
         nftList: {
             gap: 12,
         },
+        hidden: {
+            visibility: 'hidden',
+        },
     }
 })
 
 export interface TrendingViewProps {
     resultList: Web3Helper.TokenResultAll[]
     address?: string
-    searchedContractAddress?: string
     onUpdate?: () => void
 }
 
@@ -119,7 +121,7 @@ enum ContentTabs {
 }
 
 export function TrendingView(props: TrendingViewProps) {
-    const { searchedContractAddress, resultList } = props
+    const { resultList } = props
     const [result, setResult] = useState(resultList[0])
     const { isTokenTagPopper, isNFTProjectPopper, isProfilePage } = useContext(TrendingViewContext)
     const { t } = useI18N()
@@ -141,7 +143,6 @@ export function TrendingView(props: TrendingViewProps) {
 
     const { value: { trending } = {}, loading: loadingTrending } = useTrendingById(result, result.address)
     // #endregion
-    const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
 
     // #region stats
     const [days, setDays] = useState(TrendingAPI.Days.ONE_WEEK)
@@ -224,7 +225,7 @@ export function TrendingView(props: TrendingViewProps) {
     }, [t, isSwappable, isNFT])
     // #endregion
 
-    const { classes } = useStyles({ isTokenTagPopper, isNFTProjectPopper, currentTab })
+    const { classes, cx } = useStyles({ isTokenTagPopper, isNFTProjectPopper, currentTab })
 
     // #region api ready callback
     useEffect(() => {
@@ -355,19 +356,22 @@ export function TrendingView(props: TrendingViewProps) {
                         />
                     </Web3ContextProvider>
                 ) : null}
-                {currentTab === ContentTabs.NFTItems && isNFT ? (
-                    <Box className={classes.nftItems}>
-                        <NFTList
-                            pluginID={result.pluginID}
-                            className={classes.nftList}
-                            tokens={fetchedTokens}
-                            onNextPage={next}
-                            finished={done}
-                            hasError={!!loadError}
-                            gap={16}
-                        />
-                    </Box>
-                ) : null}
+
+                <Box
+                    className={cx(
+                        classes.nftItems,
+                        currentTab === ContentTabs.NFTItems && isNFT ? '' : classes.hidden,
+                    )}>
+                    <NFTList
+                        pluginID={result.pluginID}
+                        className={classes.nftList}
+                        tokens={fetchedTokens}
+                        onNextPage={next}
+                        finished={done}
+                        hasError={!!loadError}
+                        gap={16}
+                    />
+                </Box>
             </Stack>
         </TrendingViewDeck>
     )

@@ -210,7 +210,7 @@ export function useLineChart(
         d3.select(svgRef.current).on('mousemove', function () {
             // eslint-disable-next-line @typescript-eslint/no-invalid-this
             const mx = d3.mouse(this)[0]
-            if (mx < left || mx > left + contentWidth) {
+            if (mx < left - 10 || mx > left + contentWidth) {
                 // mouse not in the content view
                 hide()
                 return
@@ -226,12 +226,11 @@ export function useLineChart(
                         },
                         Date
                     >((d) => d.date)
-                    .left(data, date, 1)
+                    .left(data, date, 0)
                 return data[index]
             }
 
             const { date, value } = bisect(fixedX)
-
             tooltipLine.attr('transform', `translate(${Number(x(date))}, 0)`).call(lineCallout, date)
 
             tooltip.attr('transform', `translate(${Number(x(date))},${y(value)})`).call(callout, {
