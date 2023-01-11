@@ -59,7 +59,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     menu: {
-        maxHeight: 300,
+        maxHeight: 446,
         '&::-webkit-scrollbar': {
             display: 'none',
         },
