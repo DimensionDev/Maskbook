@@ -1,5 +1,3 @@
-import { memoize } from 'lodash-es'
-import { memoizePromise } from '@masknet/kit'
 import { isFirefox } from '@masknet/shared-base'
 
 /* cspell:disable-next-line */
@@ -31,5 +29,3 @@ export async function getStore(name: string) {
     const transaction = database.transaction([name], 'readonly')
     return transaction.objectStore(name)
 }
-
-export const getStoreCached = memoizePromise(memoize, getStore, (name) => name)
