@@ -21,7 +21,7 @@ const RULES = [
     'https://mr8asf7i4h.execute-api.us-east-1.amazonaws.com',
     // attrace
     'attrace.com/v1/logsearch',
-    'https://discovery.attrace.com/',
+    'https://discovery.attrace.com',
 ]
 
 export async function fetchSquashed(

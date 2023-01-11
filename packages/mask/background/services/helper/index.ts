@@ -15,3 +15,6 @@ export {
     requestHostPermission,
 } from './request-permission.js'
 export { queryRemoteI18NBundle, type Bundle } from './i18n-cache-query.js'
+
+import { fetchGlobal } from '@masknet/web3-providers/helpers'
+Reflect.set(globalThis, 'fetch', fetchGlobal)

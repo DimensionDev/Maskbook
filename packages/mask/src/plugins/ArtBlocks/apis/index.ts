@@ -1,3 +1,4 @@
+import { fetchJSON } from '@masknet/web3-providers/helpers'
 import { resolveSubgraphLinkOnArtBlocks } from '../pipes/index.js'
 
 export async function fetchProject(chainId: number, projectId: string) {
@@ -30,15 +31,12 @@ export async function fetchProject(chainId: number, projectId: string) {
         }`,
     }
 
-    const response = await fetch(resolveSubgraphLinkOnArtBlocks(chainId), {
+    const { data } = await fetchJSON<{ data: any }>(resolveSubgraphLinkOnArtBlocks(chainId), {
         body: JSON.stringify(body),
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
     })
-
-    const result = (await response.json())?.data
-
-    return result
+    return data
 }
 
 export async function fetchToken(chainId: number, tokenId: number) {
@@ -57,13 +55,10 @@ export async function fetchToken(chainId: number, tokenId: number) {
         }`,
     }
 
-    const response = await fetch(resolveSubgraphLinkOnArtBlocks(chainId), {
+    const { data } = await fetchJSON<{ data: any }>(resolveSubgraphLinkOnArtBlocks(chainId), {
         body: JSON.stringify(body),
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
     })
-
-    const result = (await response.json())?.data
-
-    return result
+    return data
 }
