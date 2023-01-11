@@ -37,7 +37,6 @@ import { NFTScanSearchAPI, NFTScanCollectionSearchAPI } from '../NFTScan/index.j
 import type { DSearchBaseAPI } from '../types/DSearch.js'
 import { getHandlers } from './rules.js'
 import { DSEARCH_BASE_URL } from './constants.js'
-import { fetchCached } from '../entry-helpers.js'
 import { ChainbaseDomainAPI } from '../Chainbase/index.js'
 import { SpaceID_API } from '../SpaceID/index.js'
 import { ENS_API } from '../ENS/index.js'
@@ -139,18 +138,12 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             await Promise.allSettled([
                 fetchJSON<Array<FungibleTokenResult<ChainId, SchemaType>>>(
                     urlcat(DSEARCH_BASE_URL, '/fungible-tokens/specific-list.json'),
-                    undefined,
-                    fetchCached,
                 ),
                 fetchJSON<Array<NonFungibleTokenResult<ChainId, SchemaType>>>(
                     urlcat(DSEARCH_BASE_URL, '/non-fungible-tokens/specific-list.json'),
-                    undefined,
-                    fetchCached,
                 ),
                 fetchJSON<Array<NonFungibleCollectionResult<ChainId, SchemaType>>>(
                     urlcat(DSEARCH_BASE_URL, '/non-fungible-collections/specific-list.json'),
-                    undefined,
-                    fetchCached,
                 ),
             ])
         )

@@ -1,6 +1,7 @@
 export * from './helpers/fetch.js'
 export * from './helpers/fetchBlob.js'
 export * from './helpers/fetchCached.js'
+export * from './helpers/fetchGlobal.js'
 export * from './helpers/fetchJSON.js'
 export * from './helpers/fetchR2D2.js'
 export * from './helpers/fetchSquashed.js'

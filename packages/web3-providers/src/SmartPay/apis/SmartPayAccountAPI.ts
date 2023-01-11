@@ -148,8 +148,6 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
                 size: MAX_ACCOUNT_LENGTH,
                 offset: 0,
             }),
-            {},
-            fetchSquashed,
         )
 
         if (!logs) {

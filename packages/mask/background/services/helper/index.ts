@@ -1,5 +1,4 @@
-export { fetchBlob, fetchJSON, fetchText } from '@masknet/web3-providers/helpers'
-export { r2d2Fetch } from './r2d2Fetch.js'
+export { fetchBlob, fetchJSON, fetchText, fetchGlobal } from '@masknet/web3-providers/helpers'
 export { resolveTCOLink } from './short-link-resolver.js'
 export {
     openPopupWindow,

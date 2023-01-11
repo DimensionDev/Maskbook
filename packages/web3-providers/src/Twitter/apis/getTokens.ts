@@ -1,5 +1,4 @@
 import { escapeRegExp } from 'lodash-es'
-import { fetchCached, fetchText } from '../../entry-helpers.js'
 
 function getScriptURL(content: string, name: string) {
     const matchURL = new RegExp(
@@ -26,7 +25,8 @@ function getScriptContentMatched(content: string, pattern: RegExp) {
 
 async function fetchContent(url?: string) {
     if (!url) return
-    return fetchText(url, undefined, fetchCached)
+    const response = await fetch(url, undefined)
+    return response.text()
 }
 
 export async function getTokens(operationName?: string) {
