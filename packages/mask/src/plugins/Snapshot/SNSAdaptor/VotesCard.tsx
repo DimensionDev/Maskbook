@@ -1,6 +1,6 @@
 import { unstable_useCacheRefresh, useContext } from 'react'
 import { millify } from 'millify'
-import { formatPercentage } from '@masknet/web3-shared-base'
+import { formatPercentage, isSameAddress } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, explorerResolver } from '@masknet/web3-shared-evm'
 import { Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
@@ -84,13 +84,12 @@ const useStyles = makeStyles()((theme) => {
 })
 
 function Content() {
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const identifier = useContext(SnapshotContext)
     const proposal = useProposal(identifier.id)
     const votes = useVotes(identifier)
     const { classes, cx, theme } = useStyles()
     const { t } = useI18N()
-
     return (
         <SnapshotCard
             title={
@@ -103,71 +102,79 @@ function Content() {
                 </Badge>
             }>
             <List className={classes.list}>
-                {votes.map((v) => {
-                    const isAverageWeight = v.choices?.every((c) => c.weight === 1)
-                    const fullChoiceText =
-                        v.totalWeight && v.choices
-                            ? v.choices
-                                  .flatMap((choice, index) => [
-                                      index === 0 ? '' : ', ',
-                                      !isAverageWeight ? formatPercentage(choice.weight / v.totalWeight!) + ' ' : '',
-                                      choice.name,
-                                  ])
-                                  .join('')
-                            : null
-                    return (
-                        <ListItem className={classes.listItem} key={v.address}>
-                            <Link
-                                className={cx(classes.link, classes.ellipsisText)}
-                                target="_blank"
-                                rel="noopener"
-                                href={explorerResolver.addressLink(chainId, v.address)}>
-                                <Box className={classes.avatarWrapper}>
-                                    <EthereumBlockie address={v.address} />
-                                </Box>
-                                <Typography color={theme.palette.maskColor.dark}>
-                                    {formatEthereumAddress(v.address, 4)}
-                                </Typography>
-                            </Link>
-                            {v.choice ? (
-                                <Typography className={classes.choice}>{v.choice}</Typography>
-                            ) : v.choices ? (
+                {votes
+                    .sort((x) => (isSameAddress(x.address, account) ? -1 : 1))
+                    .map((v) => {
+                        const isAverageWeight = v.choices?.every((c) => c.weight === 1)
+                        const fullChoiceText =
+                            v.totalWeight && v.choices
+                                ? v.choices
+                                      .flatMap((choice, index) => [
+                                          index === 0 ? '' : ', ',
+                                          !isAverageWeight
+                                              ? formatPercentage(choice.weight / v.totalWeight!) + ' '
+                                              : '',
+                                          choice.name,
+                                      ])
+                                      .join('')
+                                : null
+                        return (
+                            <ListItem className={classes.listItem} key={v.address}>
+                                <Link
+                                    className={cx(classes.link, classes.ellipsisText)}
+                                    target="_blank"
+                                    rel="noopener"
+                                    href={explorerResolver.addressLink(chainId, v.address)}>
+                                    <Box className={classes.avatarWrapper}>
+                                        <EthereumBlockie address={v.address} />
+                                    </Box>
+                                    <Typography color={theme.palette.maskColor.dark}>
+                                        {isSameAddress(v.address, account)
+                                            ? t('plugin_snapshot_votes_yourself')
+                                            : formatEthereumAddress(v.address, 4)}
+                                    </Typography>
+                                </Link>
+                                {v.choice ? (
+                                    <Typography className={classes.choice}>{v.choice}</Typography>
+                                ) : v.choices ? (
+                                    <ShadowRootTooltip
+                                        PopperProps={{
+                                            disablePortal: false,
+                                        }}
+                                        title={
+                                            <Typography className={classes.shadowRootTooltip}>
+                                                {fullChoiceText}
+                                            </Typography>
+                                        }
+                                        placement="top"
+                                        classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                                        arrow>
+                                        <Typography className={classes.choice}>{fullChoiceText}</Typography>
+                                    </ShadowRootTooltip>
+                                ) : null}
                                 <ShadowRootTooltip
                                     PopperProps={{
-                                        disablePortal: false,
+                                        disablePortal: true,
                                     }}
+                                    classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                     title={
-                                        <Typography className={classes.shadowRootTooltip}>{fullChoiceText}</Typography>
+                                        <Typography className={classes.shadowRootTooltip}>
+                                            {millify(v.balance, { precision: 2, lowercase: true }) +
+                                                ' ' +
+                                                (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
+                                        </Typography>
                                     }
                                     placement="top"
-                                    classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                     arrow>
-                                    <Typography className={classes.choice}>{fullChoiceText}</Typography>
-                                </ShadowRootTooltip>
-                            ) : null}
-                            <ShadowRootTooltip
-                                PopperProps={{
-                                    disablePortal: true,
-                                }}
-                                classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
-                                title={
-                                    <Typography className={classes.shadowRootTooltip}>
+                                    <Typography className={classes.power}>
                                         {millify(v.balance, { precision: 2, lowercase: true }) +
                                             ' ' +
                                             (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
                                     </Typography>
-                                }
-                                placement="top"
-                                arrow>
-                                <Typography className={classes.power}>
-                                    {millify(v.balance, { precision: 2, lowercase: true }) +
-                                        ' ' +
-                                        (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
-                                </Typography>
-                            </ShadowRootTooltip>
-                        </ListItem>
-                    )
-                })}
+                                </ShadowRootTooltip>
+                            </ListItem>
+                        )
+                    })}
             </List>
         </SnapshotCard>
     )
