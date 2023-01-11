@@ -144,7 +144,7 @@ export namespace TrendingAPI {
         chainId?: Web3Helper.ChainIdAll
         address: string
         icon_url?: string
-        pluginID?: NetworkPluginID
+        pluginID: NetworkPluginID
     }
 
     export interface Trending {
