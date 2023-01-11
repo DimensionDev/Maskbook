@@ -3,7 +3,7 @@ import { ChainId, TransactionReceipt } from '@masknet/web3-shared-evm'
 import { EMPTY_LIST, Proof } from '@masknet/shared-base'
 import { FunderAPI } from '../../types/Funder.js'
 import { Web3API } from '../../EVM/index.js'
-import { fetchJSON, fetchSquashed } from '../../entry-helpers.js'
+import { fetchJSON } from '../../entry-helpers.js'
 import { FUNDER_PROD } from '../constants.js'
 
 export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
