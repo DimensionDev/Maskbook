@@ -13,6 +13,7 @@ import {
     createContract,
     getSmartPayConstants,
     isEmptyHex,
+    isNativeTokenAddress,
     isValidAddress,
 } from '@masknet/web3-shared-evm'
 import { ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
@@ -267,7 +268,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         userTransaction: UserTransaction,
         signer: Signer<ECKeyIdentifier> | Signer<string>,
     ) {
-        if (userTransaction.paymentToken) {
+        if (userTransaction.paymentToken && !isNativeTokenAddress(userTransaction.paymentToken)) {
             // fill in initCode
             if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
                 const accounts = await this.getAccountsByOwner(chainId, owner)
