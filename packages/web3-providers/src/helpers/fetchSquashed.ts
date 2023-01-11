@@ -15,6 +15,10 @@ const RULES = [
     urlcat(PROOF_BASE_URL_PROD, '/v1/proof'),
     // NextID Development proofs API
     urlcat(PROOF_BASE_URL_DEV, '/v1/proof'),
+    // scamdb
+    'https://scam.mask.r2d2.to',
+    // kv service
+    'https://kv.r2d2.to',
     // mask-x
     'https://7x16bogxfb.execute-api.us-east-1.amazonaws.com',
     // twitter-identity
