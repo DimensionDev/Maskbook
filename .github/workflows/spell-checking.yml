@@ -2,7 +2,7 @@ name: Check Spell
 
 on:
   pull_request:
-    branches: [develop*, release*]
+    branches: [master, develop, released, hotfix/*, release/*]
 
 permissions:
   contents: read
