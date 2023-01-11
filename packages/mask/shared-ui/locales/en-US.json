@@ -830,6 +830,7 @@
     "plugin_snapshot_description": "Display and vote for proposals directly on social media.",
     "plugin_snapshot_result_title": "Results",
     "plugin_snapshot_votes_title": "Votes",
+    "plugin_snapshot_votes_yourself": "You",
     "plugin_snapshot_no_power": "No power",
     "plugin_snapshot_vote_success": "Voted successfully.",
     "plugin_snapshot_vote_failed": "Please try again if you failed to vote.",
