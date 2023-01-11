@@ -19,6 +19,10 @@ const RULES = [
     'https://7x16bogxfb.execute-api.us-east-1.amazonaws.com',
     // twitter-identity
     'https://mr8asf7i4h.execute-api.us-east-1.amazonaws.com',
+    // attrace
+    'attrace.com/v1/logsearch',
+    'https://discovery.attrace.com/mainnet/farmOracles.json',
+    'https://discovery.attrace.com/mainnet/full.json',
 ]
 
 export async function fetchSquashed(
