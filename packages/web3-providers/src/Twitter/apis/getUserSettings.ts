@@ -1,6 +1,6 @@
 import { memoize } from 'lodash-es'
 import { memoizePromise } from '@masknet/kit'
-import { getStore } from './getDatabase.js'
+import { getStoreCached } from './getDatabase.js'
 import { TwitterBaseAPI } from '../../entry-types.js'
 
 /* cspell:disable-next-line */
@@ -9,7 +9,7 @@ const STORE_NAME = 'keyvaluepairs'
 const KEY_NAME = 'device:rweb.settings'
 
 export async function getUserSettings() {
-    const store = await getStore(STORE_NAME)
+    const store = await getStoreCached(STORE_NAME)
     const query = store.get(KEY_NAME)
 
     return new Promise<TwitterBaseAPI.UserSettings | undefined>(async (resolve, reject) => {
