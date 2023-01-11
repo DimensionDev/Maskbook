@@ -185,7 +185,6 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
             coin: {
                 id,
                 chainId: getPlatform(contracts, coinInfo.platform?.token_address)?.chainId,
-                pluginID: NetworkPluginID.PLUGIN_EVM,
                 name: coinInfo.name,
                 symbol: coinInfo.symbol,
                 type: TokenType.Fungible,

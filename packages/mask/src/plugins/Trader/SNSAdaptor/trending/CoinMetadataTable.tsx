@@ -95,7 +95,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
         {
             chainId: trending.coin.chainId!,
             address: trending.coin.contract_address!,
-            pluginID: trending.coin.pluginID ?? NetworkPluginID.PLUGIN_EVM,
+            pluginID: NetworkPluginID.PLUGIN_EVM,
         },
     ]
 

@@ -1,4 +1,3 @@
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 const NETWORK_NAME_MAP: {
@@ -12,6 +11,6 @@ const NETWORK_NAME_MAP: {
     Optimism: ChainId.Optimism,
 }
 
-export function resolveCoinMarketCapChainId(name: string): Web3Helper.ChainIdAll {
+export function resolveCoinMarketCapChainId(name: string) {
     return NETWORK_NAME_MAP[name]
 }
