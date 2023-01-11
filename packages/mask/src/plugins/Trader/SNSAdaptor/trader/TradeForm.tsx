@@ -289,7 +289,7 @@ export const TradeForm = memo<AllTradeFormProps>(
             const gasFee = multipliedBy(marginGasPrice, focusedTrade?.gas.value ?? MIN_GAS_LIMIT)
             let amount_ = new BigNumber(inputTokenBalanceAmount.toFixed() ?? 0)
             amount_ = Others?.isNativeTokenSchemaType(inputToken?.schema) ? amount_.minus(gasFee) : amount_
-            return leftShift(BigNumber.max(0, amount_), inputToken?.decimals)
+            return leftShift(BigNumber.max(0, amount_), inputToken?.decimals).toFixed(5)
         }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken, Others?.isNativeTokenSchemaType])
 
         // #region UI logic
@@ -339,7 +339,8 @@ export const TradeForm = memo<AllTradeFormProps>(
 
         const handleAmountChange = useCallback(
             (amount: string) => {
-                maxAmountTrade.current = maxAmount.isEqualTo(amount) && focusedTrade ? focusedTrade : null
+                maxAmountTrade.current =
+                    new BigNumber(maxAmount).isEqualTo(amount) && focusedTrade ? focusedTrade : null
                 onInputAmountChange(amount)
             },
             [onInputAmountChange, maxAmount, focusedTrade],
@@ -448,7 +449,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                         balance={inputTokenBalanceAmount.toFixed()}
                         token={inputToken}
                         onAmountChange={handleAmountChange}
-                        maxAmount={maxAmount.toFixed()}
+                        maxAmount={maxAmount}
                         SelectTokenChip={{
                             ChipProps: {
                                 onClick: () => onTokenChipClick(TokenPanelType.Input),
@@ -551,7 +552,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                 <Box className={classes.stateBar}>
                     <PluginWalletStatusBar onClick={isPopup ? openSelectWalletPopup : undefined}>
                         {/* TODO: remove the chain boundary after sol network dex be added */}
-                        {settings ? (
+                        {settings && pluginID !== NetworkPluginID.PLUGIN_EVM ? (
                             <ChainBoundary
                                 expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                                 expectedChainId={chainId as ChainId}>
@@ -569,9 +570,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         infiniteUnlockContent={t('plugin_trader_unlock_symbol', {
                                             symbol: approveToken?.symbol,
                                         })}
-                                        expectedChainId={
-                                            pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined
-                                        }
+                                        expectedChainId={chainId as ChainId}
                                         token={
                                             !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
                                             approveToken?.schema === SchemaType.ERC20 &&

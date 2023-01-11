@@ -208,7 +208,7 @@ export function TraderDialog() {
                         pluginID={NetworkPluginID.PLUGIN_EVM}
                     />
                 </div>
-                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId }}>
+                <Web3ContextProvider value={{ pluginID, chainId }}>
                     <AllProviderTradeContext.Provider>
                         <Trader
                             defaultInputCoin={defaultInputCoin ? inputToken : undefined}
