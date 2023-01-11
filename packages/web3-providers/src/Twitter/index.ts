@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { delay, timeout } from '@masknet/kit'
+import { timeout } from '@masknet/kit'
 import { attemptUntil } from '@masknet/web3-shared-base'
 import {
     getSettings,
