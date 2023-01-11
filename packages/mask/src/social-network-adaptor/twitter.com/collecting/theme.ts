@@ -44,7 +44,7 @@ async function resolveThemeSettingsInner(
     cancel: AbortSignal,
 ) {
     const assign = async () => {
-        const userSettings = await Twitter.getUserSettings(true)
+        const userSettings = await Twitter.getUserSettings()
         if (!userSettings) return
 
         ref.value = {
