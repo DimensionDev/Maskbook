@@ -26,7 +26,6 @@ import { useI18N } from '../../../../utils/index.js'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin.js'
 import { PluginTransakMessages } from '../../../Transak/messages.js'
 import type { Currency, Stat } from '../../types/index.js'
-import { useTrendingOverview } from '../../trending/useTrending.js'
 import { CoinMenu } from './CoinMenu.js'
 import { TrendingViewContext } from './context.js'
 import { CoinIcon } from './components/index.js'
@@ -149,8 +148,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     const { coin, market } = trending
     const { isNFTProjectPopper, isTokenTagPopper, isPreciseSearch } = useContext(TrendingViewContext)
-
-    const { value: overview } = useTrendingOverview(result.pluginID, result, props.trending.coin.chainId)
 
     const { t } = useI18N()
     const theme = useTheme()
@@ -305,17 +302,15 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             {t('plugin_trader_no_data')}
                                         </Typography>
                                     )}
-                                    <PriceChanged
-                                        amount={
-                                            market?.price_change_percentage_1h_in_currency ??
-                                            market?.price_change_24h ??
-                                            (overview?.average_price_change
-                                                ? Number.parseFloat(overview?.average_price_change ?? '0')
-                                                : overview?.average_price_change_1d
-                                                ? Number.parseFloat(overview?.average_price_change_1d ?? '0')
-                                                : 0)
-                                        }
-                                    />
+                                    {isNFT ? null : (
+                                        <PriceChanged
+                                            amount={
+                                                market?.price_change_percentage_1h_in_currency ??
+                                                market?.price_change_24h ??
+                                                0
+                                            }
+                                        />
+                                    )}
                                 </Stack>
                                 {isTokenSecurityEnable && tokenSecurityInfo && !error && !isNFT && (
                                     <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
