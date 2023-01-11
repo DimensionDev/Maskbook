@@ -53,7 +53,7 @@ const useStyles = makeStyles<{
                 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
         },
         headline: {
-            marginTop: props.isNFTProjectPopper || props.isTokenTagPopper ? 0 : 30,
+            marginTop: props.isNFTProjectPopper || props.isTokenTagPopper ? 0 : 16,
             alignItems: 'center',
             flexDirection: 'row',
             justifyContent: 'space-between',
