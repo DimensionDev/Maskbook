@@ -3,12 +3,12 @@ import { useAsyncFn } from 'react-use'
 import { PluginID, NetworkPluginID, isDashboardPage, CrossIsolationMessages, TokenType } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import {
-    Web3ContextProvider,
     useChainContext,
     useChainIdValid,
     useNetworkContext,
     useWeb3State,
     useFungibleToken,
+    Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
 import { ChainId, GasEditor, SchemaType, Transaction } from '@masknet/web3-shared-evm'
 import { DialogContent, dialogTitleClasses, IconButton } from '@mui/material'
@@ -80,7 +80,7 @@ export function TraderDialog() {
     const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
     const { pluginID } = useNetworkContext()
     const { Others } = useWeb3State()
-    const chainIdList = traderDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
+    const chainIdList = traderDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -199,16 +199,16 @@ export function TraderDialog() {
             }
             className={classes.dialog}>
             <DialogContent className={classes.content}>
-                <div className={classes.abstractTabWrapper}>
-                    <NetworkTab
-                        classes={{
-                            indicator: classes.indicator,
-                        }}
-                        chains={chainIdList}
-                        pluginID={NetworkPluginID.PLUGIN_EVM}
-                    />
-                </div>
-                <Web3ContextProvider value={{ pluginID, chainId }}>
+                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+                    <div className={classes.abstractTabWrapper}>
+                        <NetworkTab
+                            classes={{
+                                indicator: classes.indicator,
+                            }}
+                            chains={chainIdList}
+                            pluginID={NetworkPluginID.PLUGIN_EVM}
+                        />
+                    </div>
                     <AllProviderTradeContext.Provider>
                         <Trader
                             defaultInputCoin={defaultInputCoin ? inputToken : undefined}

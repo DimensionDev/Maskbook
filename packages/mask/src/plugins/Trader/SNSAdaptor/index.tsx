@@ -5,7 +5,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base.js'
 import { TrendingView } from './trending/TrendingView.js'
 import { TrendingViewProvider } from './trending/context.js'
-import { useNetworkContext, useWeb3State, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { useWeb3State, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { TraderDialog } from './trader/TraderDialog.js'
 import { TagInspector } from './trending/TagInspector.js'
 import { enhanceTag } from './cashTag.js'
@@ -70,13 +70,10 @@ const sns: Plugin.SNSAdaptor.Definition<
         },
     },
     GlobalInjection() {
-        const { pluginID } = useNetworkContext()
         return (
             <>
                 <TagInspector />
-                <Web3ContextProvider value={{ pluginID }}>
-                    <TraderDialog />
-                </Web3ContextProvider>
+                <TraderDialog />
             </>
         )
     },
