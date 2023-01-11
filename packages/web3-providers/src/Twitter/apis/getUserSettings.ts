@@ -1,5 +1,3 @@
-import { memoize } from 'lodash-es'
-import { memoizePromise } from '@masknet/kit'
 import { getStore } from './getDatabase.js'
 import { TwitterBaseAPI } from '../../entry-types.js'
 
@@ -27,8 +25,6 @@ export async function getUserSettings() {
         })
     })
 }
-
-export const getUserSettingsCached = memoizePromise(memoize, getUserSettings, () => 'DEFAULT')
 
 export function getDefaultUserSettings(): TwitterBaseAPI.UserSettings {
     return {

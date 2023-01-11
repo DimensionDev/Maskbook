@@ -1,12 +1,12 @@
 import urlcat from 'urlcat'
-import { timeout } from '@masknet/kit'
+import { delay, timeout } from '@masknet/kit'
 import { attemptUntil } from '@masknet/web3-shared-base'
 import {
     getSettings,
     getTokens,
     getUserViaWebAPI,
     getDefaultUserSettings,
-    getUserSettingsCached,
+    getUserSettings,
     getUserViaTwitterIdentity,
     staleUserViaWebAPI,
     getUserNFTAvatar,
@@ -30,11 +30,10 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         return getSettings()
     }
 
-    async getUserSettings(fresh = false) {
+    async getUserSettings() {
         const defaults = getDefaultUserSettings()
         try {
-            if (fresh) getUserSettingsCached.cache.clear()
-            const userSettings = await timeout(getUserSettingsCached(), 5000)
+            const userSettings = await timeout(getUserSettings(), 5000)
             return {
                 ...defaults,
                 ...userSettings,
