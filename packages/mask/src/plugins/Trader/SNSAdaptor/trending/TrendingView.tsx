@@ -106,7 +106,6 @@ const useStyles = makeStyles<{
 export interface TrendingViewProps {
     resultList: Web3Helper.TokenResultAll[]
     address?: string
-    searchedContractAddress?: string
     onUpdate?: () => void
 }
 
@@ -119,7 +118,7 @@ enum ContentTabs {
 }
 
 export function TrendingView(props: TrendingViewProps) {
-    const { searchedContractAddress, resultList } = props
+    const { resultList } = props
     const [result, setResult] = useState(resultList[0])
     const { isTokenTagPopper, isNFTProjectPopper, isProfilePage } = useContext(TrendingViewContext)
     const { t } = useI18N()
@@ -141,7 +140,6 @@ export function TrendingView(props: TrendingViewProps) {
 
     const { value: { trending } = {}, loading: loadingTrending } = useTrendingById(result, result.address)
     // #endregion
-    const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
 
     // #region stats
     const [days, setDays] = useState(TrendingAPI.Days.ONE_WEEK)
