@@ -1,14 +1,15 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import {
-    NETWORK_DESCRIPTORS,
-    PROVIDER_DESCRIPTORS,
+    CHAIN_DESCRIPTORS,
     ChainId,
+    NETWORK_DESCRIPTORS,
     NetworkType,
+    PROVIDER_DESCRIPTORS,
     ProviderType,
     SchemaType,
 } from '@masknet/web3-shared-solana'
 import { languages } from './locales/languages.js'
-import { PLUGIN_ID, PLUGIN_NAME, PLUGIN_DESCRIPTION } from './constants.js'
+import { PLUGIN_DESCRIPTION, PLUGIN_ID, PLUGIN_NAME } from './constants.js'
 
 export const base: Plugin.Shared.Definition<ChainId, SchemaType, ProviderType, NetworkType> = {
     ID: PLUGIN_ID,
@@ -21,6 +22,7 @@ export const base: Plugin.Shared.Definition<ChainId, SchemaType, ProviderType, N
         target: 'stable',
     },
     i18n: languages,
+    declareWeb3Chains: CHAIN_DESCRIPTORS,
     declareWeb3Networks: NETWORK_DESCRIPTORS,
     declareWeb3Providers: PROVIDER_DESCRIPTORS,
 }

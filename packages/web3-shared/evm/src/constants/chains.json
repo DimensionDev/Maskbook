@@ -498,7 +498,8 @@
             "chainId": 1666600000,
             "name": "ONE",
             "symbol": "ONE",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/harmony/info/logo.png/quality=85"
         },
         "infoURL": "https://www.harmony.one/",
         "explorers": [
@@ -688,7 +689,7 @@
             "name": "ASTAR",
             "symbol": "ASTR",
             "decimals": 18,
-            "logoURI": "https://static.debank.com/image/chain/logo_url/astar/398c7e0014bdada3d818367a7273fabe.png"
+            "logoURL": "https://static.debank.com/image/chain/logo_url/astar/398c7e0014bdada3d818367a7273fabe.png"
         },
         "infoURL": "https://blockscout.com/astar/",
         "explorers": [
@@ -698,5 +699,389 @@
                 "standard": "EIP3091"
             }
         ]
+    },
+    {
+        "chainId": 25,
+        "name": "Cronos Mainnet Beta",
+        "type": "Cronos Mainnet Beta",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 25,
+            "name": "Cronos",
+            "symbol": "CRO",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/cronos/info/logo.png/quality=85"
+        },
+        "infoURL": "https://cronos.org/",
+        "shortName": "cro"
+    },
+    {
+        "chainId": 50,
+        "name": "XDC Network",
+        "type": "XDC Network",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 50,
+            "name": "XinFin",
+            "symbol": "XDC",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/xdc/info/logo.png/quality=85"
+        },
+        "infoURL": "https://xinfin.org/",
+        "shortName": "xdc xinfin"
+    },
+    {
+        "chainId": 52,
+        "name": "CoinEx Smart Chain Mainnet",
+        "type": "CoinEx Smart Chain Mainnet",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 52,
+            "name": "CoinEx Chain Native Token",
+            "symbol": "cet",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/xdc/cet/logo.png/quality=85"
+        },
+        "infoURL": "https://www.coinex.org/",
+        "shortName": "cet"
+    },
+    {
+        "chainId": 57,
+        "name": "Syscoin Mainnet",
+        "type": "Syscoin Mainnet",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 57,
+            "name": "Syscoin",
+            "symbol": "SYS",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/syscoin/info/logo.png/quality=85"
+        },
+        "infoURL": "https://www.syscoin.org",
+        "shortName": "sys"
+    },
+    {
+        "chainId": 66,
+        "name": "OKXChain Mainnet",
+        "type": "OKXChain Mainnet",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 66,
+            "name": "OKXChain Global Utility Token",
+            "symbol": "OKT",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/okt/info/logo.png/quality=85"
+        },
+        "infoURL": "https://www.okex.com/okc",
+        "shortName": "okt"
+    },
+    {
+        "chainId": 82,
+        "name": "Meter Mainnet",
+        "type": "Meter Mainnet",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 82,
+            "name": "Meter",
+            "symbol": "MTR",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/meter/info/logo.png/quality=85"
+        },
+        "infoURL": "https://www.meter.io",
+        "shortName": "Meter"
+    },
+    {
+        "chainId": 88,
+        "name": "TomoChain",
+        "type": "TomoChain",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 88,
+            "name": "TomoChain",
+            "symbol": "TOMO",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/tomochain/info/logo.png/quality=85"
+        },
+        "infoURL": "https://tomochain.com",
+        "shortName": "tomo"
+    },
+    {
+        "chainId": 96,
+        "name": "NEXT Smart Chain",
+        "type": "NEXT Smart Chain",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 96,
+            "name": "NEXT",
+            "symbol": "NEXT",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/nsc/info/logo.png/quality=85"
+        },
+        "infoURL": "https://www.nextsmartchain.com/",
+        "shortName": "nsc"
+    },
+    {
+        "chainId": 106,
+        "name": "Velas EVM Mainnet",
+        "type": "Velas EVM Mainnet",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 106,
+            "name": "Velas",
+            "symbol": "VLX",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/vlx/info/logo.png/quality=85"
+        },
+        "infoURL": "https://velas.com",
+        "shortName": "vlx"
+    },
+    {
+        "chainId": 108,
+        "name": "ThunderCore Mainnet",
+        "type": "ThunderCore Mainnet",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 108,
+            "name": "ThunderCore Token",
+            "symbol": "TT",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/tt/info/logo.png/quality=85"
+        },
+        "infoURL": "https://thundercore.com",
+        "shortName": "TT"
+    },
+    {
+        "chainId": 122,
+        "name": "Fuse Mainnet",
+        "type": "Fuse Mainnet",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 122,
+            "name": "Fuse",
+            "symbol": "FUSE",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/fuse/info/logo.png/quality=85"
+        },
+        "infoURL": "https://fuse.io/",
+        "shortName": "fuse"
+    },
+    {
+        "chainId": 128,
+        "name": "Huobi ECO Chain Mainnet",
+        "type": "Huobi ECO Chain Mainnet",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 128,
+            "name": "Huobi ECO Chain Native Token",
+            "symbol": "HT",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/heco/info/logo.png/quality=85"
+        },
+        "infoURL": "https://www.hecochain.com",
+        "shortName": "heco"
+    },
+    {
+        "chainId": 199,
+        "name": "BitTorrent Chain Mainnet",
+        "type": "BitTorrent Chain Mainnet",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 199,
+            "name": "BitTorrent",
+            "symbol": "BTT",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/btt/info/logo.png/quality=85"
+        },
+        "infoURL": "https://bittorrentchain.io/",
+        "shortName": "BTT"
+    },
+    {
+        "chainId": 288,
+        "name": "Boba Network",
+        "type": "Boba Network",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 288,
+            "name": "Ether",
+            "symbol": "ETH",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/boba/info/logo.png/quality=85"
+        },
+        "infoURL": "https://boba.network",
+        "shortName": "Boba"
+    },
+    {
+        "chainId": 321,
+        "name": "KCC Mainnet",
+        "type": "KCC Mainnet",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 321,
+            "name": "KuCoin Token",
+            "symbol": "KCS",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/kcc/info/logo.png/quality=85"
+        },
+        "infoURL": "https://kcc.io",
+        "shortName": "kcs"
+    },
+    {
+        "chainId": 361,
+        "name": "Theta Mainnet",
+        "type": "Theta Mainnet",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 361,
+            "name": "Theta Fuel",
+            "symbol": "TFUEL",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/theta/info/logo.png/quality=85"
+        },
+        "infoURL": "https://www.thetatoken.org/",
+        "shortName": "theta-mainnet"
+    },
+    {
+        "chainId": 530,
+        "name": "Function X",
+        "type": "Function X",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 57,
+            "name": "FX",
+            "symbol": "FX",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/fx/info/logo.png/quality=85"
+        },
+        "infoURL": "https://functionx.io/",
+        "shortName": "Function X"
+    },
+    {
+        "chainId": 1088,
+        "name": "Metis Andromeda Mainnet",
+        "type": "Metis Andromeda Mainnet",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 1088,
+            "name": "Metis",
+            "symbol": "METIS",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/metis/info/logo.png/quality=85"
+        },
+        "infoURL": "https://www.metis.io",
+        "shortName": "metis-andromeda"
+    },
+    {
+        "chainId": 1284,
+        "name": "Moonbeam",
+        "type": "Moonbeam",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 1284,
+            "name": "Glimmer",
+            "symbol": "GLMR",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/moonbeam/info/logo.png/quality=85"
+        },
+        "infoURL": "https://moonbeam.network/networks/moonbeam/",
+        "shortName": "mbeam"
+    },
+    {
+        "chainId": 1285,
+        "name": "Moonriver",
+        "type": "Moonriver",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 1285,
+            "name": "Moonriver",
+            "symbol": "MOVR",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/moonriver/info/logo.png/quality=85"
+        },
+        "infoURL": "https://moonbeam.network/networks/moonriver/",
+        "shortName": "mriver"
+    },
+    {
+        "chainId": 7700,
+        "name": "Canto",
+        "type": "Canto",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 7700,
+            "name": "Canto",
+            "symbol": "CANTO",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/canto/info/logo.png/quality=85"
+        },
+        "infoURL": "https://canto.io",
+        "shortName": "canto"
+    },
+    {
+        "chainId": 9001,
+        "name": "Evmos",
+        "type": "Evmos",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 9001,
+            "name": "Evmos",
+            "symbol": "EVMOS",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/evmos/info/logo.png/quality=85"
+        },
+        "infoURL": "https://evmos.org",
+        "shortName": "evmos"
+    },
+    {
+        "chainId": 42170,
+        "name": "Arbitrum Nova",
+        "type": "Arbitrum Nova",
+        "shortName": "arb-nova",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 42170,
+            "name": "Ether",
+            "symbol": "ETH",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/arb-nova/info/logo.png/quality=85"
+        },
+        "infoURL": "https://arbitrum.io"
+    },
+    {
+        "chainId": 42262,
+        "name": "Oasis",
+        "type": "Oasis",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 42262,
+            "name": "Emerald Rose",
+            "symbol": "ROSE",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/oasis/info/logo.png/quality=85"
+        },
+        "infoURL": "https://docs.oasis.dev/general/developer-resources/overview",
+        "shortName": "emerald"
     }
 ]
