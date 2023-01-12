@@ -50,7 +50,6 @@ import { NomicsAPI } from './Nomics/index.js'
 import { DSearchAPI } from './DSearch/index.js'
 import { MulticallAPI } from './Multicall/index.js'
 import { ENS_API } from './ENS/index.js'
-import { SpaceID_API } from './SpaceID/index.js'
 import { LensAPI } from './Lens/index.js'
 import { Web3SignerAPI } from './EVM/apis/Web3SignerAPI.js'
 
@@ -128,9 +127,6 @@ export const ZerionGas = new ZerionGasAPI()
 
 // ENS
 export const ENS = new ENS_API()
-
-// SpaceID
-export const SpaceID = new SpaceID_API()
 
 // Fuse
 export const FuseTrending = new FuseTrendingAPI()
