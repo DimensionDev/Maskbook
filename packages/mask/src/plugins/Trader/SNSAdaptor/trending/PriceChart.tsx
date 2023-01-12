@@ -27,8 +27,8 @@ const useStyles = makeStyles<PriceChartProps>()((theme, { stats, coin }) => {
         },
         progress: {
             position: 'absolute',
-            right: 0,
-            bottom: -64,
+            left: 275,
+            top: 85,
         },
         placeholder: {
             paddingTop: theme.spacing(10),
