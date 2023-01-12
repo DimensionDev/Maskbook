@@ -26,6 +26,12 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.second,
     },
     item: {},
+    address: {
+        cursor: 'pointer',
+        '&:hover': {
+            textDecoration: 'underline',
+        },
+    },
 }))
 
 interface ContractItemProps {
@@ -59,7 +65,7 @@ export function ContractItem(props: ContractItemProps) {
                 <ImageIcon icon={networkDescriptor?.icon} size={20} />
                 <Stack className={classes.item}>
                     <Typography fontWeight="700">{networkDescriptor.name}</Typography>
-                    <Typography>
+                    <Typography className={classes.address}>
                         <FormattedAddress address={address} size={4} formatter={Others?.formatAddress} />
                     </Typography>
                 </Stack>
