@@ -33,7 +33,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
     }, [connection])
 
     const onDeployCallback = useCallback(() => {
-        return connection?.deploy?.('0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC', {
+        return connection?.deploy?.('0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC', undefined, {
             chainId: ChainId.Mumbai,
             account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
             providerType: EVM_ProviderType.MaskWallet,
