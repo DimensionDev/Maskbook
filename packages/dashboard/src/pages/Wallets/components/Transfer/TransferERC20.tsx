@@ -52,7 +52,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const { value: defaultGasPrice = '0' } = useGasPrice(NetworkPluginID.PLUGIN_EVM)
 
     const [selectedToken, setSelectedToken] = useState(token)
-    const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
+    const selectFungibleToken = useSelectFungibleToken<void, NetworkPluginID.PLUGIN_EVM>()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const is1559Supported = useMemo(() => chainResolver.isSupport(chainId, 'EIP1559'), [chainId])
 

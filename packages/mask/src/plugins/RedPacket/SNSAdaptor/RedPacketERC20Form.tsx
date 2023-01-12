@@ -93,7 +93,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         origin?.token,
     )
 
-    const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
+    const selectFungibleToken = useSelectFungibleToken<void, NetworkPluginID.PLUGIN_EVM>()
     const onSelectTokenChipClick = useCallback(async () => {
         const picked = await selectFungibleToken({
             disableNativeToken: false,

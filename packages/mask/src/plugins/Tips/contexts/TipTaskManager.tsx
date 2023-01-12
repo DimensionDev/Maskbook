@@ -1,8 +1,7 @@
 import { FC, useCallback, useEffect, useState } from 'react'
 import { isEqual } from 'lodash-es'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { getDefaultChainId, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TipDialog } from '../components/index.js'
 import { PluginTipsMessages } from '../messages.js'
@@ -46,13 +45,13 @@ export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) =>
         <>
             {tasks.map((task) => {
                 const tipsAccount = task.accounts.find((x) => isSameAddress(x.address, task.recipient))
-
+                const pluginID = tipsAccount?.pluginID ?? task.accounts[0].pluginID
                 return (
                     <Web3ContextProvider
                         key={task.id}
                         value={{
-                            pluginID: tipsAccount?.pluginID ?? NetworkPluginID.PLUGIN_EVM,
-                            chainId: ChainId.Mainnet,
+                            pluginID,
+                            chainId: getDefaultChainId(pluginID),
                         }}>
                         <TipTaskProvider key={task.id} task={task}>
                             <TipsTransactionProvider>

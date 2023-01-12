@@ -16,7 +16,6 @@ import { Box, Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales/index.js'
 import {
     useBlockedFungibleTokens,
-    useChainContext,
     useNetworkContext,
     useFungibleAssets,
     useFungibleToken,
@@ -25,6 +24,7 @@ import {
     useFungibleTokensFromTokenList,
     useTrustedFungibleTokens,
     useWeb3State,
+    useAccount,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
@@ -137,11 +137,10 @@ export const FungibleTokenList = forwardRef(
         // #endregion
 
         const { pluginID } = useNetworkContext<T>(props.pluginID)
-        const { account, chainId } = useChainContext({
-            chainId: props.chainId,
-        })
+        const account = useAccount(pluginID)
+        const chainId = props.chainId
         const { Token, Others } = useWeb3State<'all'>(pluginID)
-        const { value: fungibleTokens = EMPTY_LIST } = useFungibleTokensFromTokenList(pluginID, { chainId })
+        const { value: fungibleTokens = EMPTY_LIST, error } = useFungibleTokensFromTokenList(pluginID, { chainId })
         const trustedFungibleTokens = useTrustedFungibleTokens(pluginID, undefined, chainId)
         const blockedFungibleTokens = useBlockedFungibleTokens(pluginID)
         const nativeToken = useMemo(() => Others?.chainResolver.nativeCurrency(chainId), [chainId])
@@ -166,13 +165,9 @@ export const FungibleTokenList = forwardRef(
                 { account, chainId },
             )
 
-        const { value: fungibleAssets = EMPTY_LIST, loading: loadingFungibleAssets } = useFungibleAssets(
-            pluginID,
-            undefined,
-            {
-                chainId,
-            },
-        )
+        const { value: fungibleAssets = EMPTY_LIST } = useFungibleAssets(pluginID, undefined, {
+            chainId,
+        })
 
         // To avoid SearchableList re-render, reduce the dep
         const sortedFungibleTokensForManage = useMemo(() => {
@@ -433,3 +428,5 @@ export const FungibleTokenList = forwardRef(
         )
     },
 )
+
+FungibleTokenList.displayName = 'FungibleTokenList'
