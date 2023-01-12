@@ -1,5 +1,5 @@
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
+import { SmartPayAccount, SmartPayBundler, SmartPayFunder } from '@masknet/web3-providers'
 import type { Context, Middleware } from '../types.js'
 import { NoneWallet } from '../interceptors/None.js'
 import { MaskWallet } from '../interceptors/MaskWallet.js'
@@ -14,7 +14,7 @@ export class Interceptor implements Middleware<Context> {
         [ProviderType.None]: [new NoneWallet()],
         [ProviderType.MaskWallet]: [
             new Popups(),
-            new ContractWallet(ProviderType.MaskWallet, SmartPayAccount, SmartPayBundler),
+            new ContractWallet(ProviderType.MaskWallet, SmartPayAccount, SmartPayBundler, SmartPayFunder),
             new MaskWallet(),
         ],
         [ProviderType.MetaMask]: [new MetaMask()],
