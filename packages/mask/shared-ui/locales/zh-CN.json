@@ -903,7 +903,6 @@
     "popups_rename_error_tip": "最大长度为 {{length}} 个字符。",
     "nft_wallet_label": "钱包",
     "plugin_profile_no_wallets": "在此连接您的钱包。<br/>此部分将显示给您的加密朋友。<br/>显示内容包括数字艺术、捐赠、徽章<br/>和其他链上的公开信息。",
-    "plugin_vcent_last_offer_at": "最新的OFFER为",
     "nft_input_address_label": "请输入合约地址",
     "nft_input_tokenid_label": "请输入Token ID",
     "nft_owner_hint": "此 NFT 不存在或不属于您。",
