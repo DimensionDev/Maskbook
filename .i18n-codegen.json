@@ -409,6 +409,18 @@
                 "trans": "Translate",
                 "emitTS": true
             }
+        },
+        {
+            "input": "./packages/plugins/Transak/src/locales/en-US.json",
+            "output": "./packages/plugins/Transak/src/locales/i18n_generated",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "com.maskbook.transak",
+                "trans": "Translate",
+                "emitTS": true
+            }
         }
     ]
 }

@@ -687,6 +687,9 @@ importers:
       '@masknet/plugin-solana':
         specifier: workspace:^
         version: link:../plugins/Solana
+      '@masknet/plugin-transak':
+        specifier: workspace:^
+        version: link:../plugins/Transak
       '@masknet/plugin-wallet':
         specifier: workspace:^
         version: link:../plugins/Wallet
@@ -2037,6 +2040,39 @@ importers:
       '@types/use-subscription':
         specifier: ^1.0.0
         version: 1.0.0
+
+  packages/plugins/Transak:
+    dependencies:
+      '@masknet/icons':
+        specifier: workspace:^
+        version: link:../../icons
+      '@masknet/plugin-infra':
+        specifier: workspace:^
+        version: link:../../plugin-infra
+      '@masknet/shared':
+        specifier: workspace:^
+        version: link:../../shared
+      '@masknet/shared-base':
+        specifier: workspace:^
+        version: link:../../shared-base
+      '@masknet/shared-base-ui':
+        specifier: workspace:^
+        version: link:../../shared-base-ui
+      '@masknet/theme':
+        specifier: workspace:^
+        version: link:../../theme
+      '@masknet/web3-shared-evm':
+        specifier: workspace:^
+        version: link:../../web3-shared/evm
+      json-stable-stringify:
+        specifier: ^1.0.2
+        version: 1.0.2
+      react-use:
+        specifier: ^17.4.0
+        version: 17.4.0
+      ts-results:
+        specifier: ^3.3.0
+        version: 3.3.0
 
   packages/plugins/Wallet:
     dependencies:
@@ -29711,6 +29747,7 @@ packages:
 
   /sourcemap-codec/1.4.8:
     resolution: {integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==}
+    deprecated: Please use @jridgewell/sourcemap-codec instead
 
   /space-separated-tokens/1.1.5:
     resolution: {integrity: sha512-q/JSVd1Lptzhf5bkYm4ob4iWPjx0KiRe3sRFBNrVqbJkFaBm5vbbowy1mymoPNLRa52+oadOhJ+K49wsSeSjTA==}
