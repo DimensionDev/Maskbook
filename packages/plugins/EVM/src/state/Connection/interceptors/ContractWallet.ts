@@ -1,7 +1,8 @@
 import type { AbiItem } from 'web3-utils'
-import type { BundlerAPI, AbstractAccountAPI } from '@masknet/web3-providers/types'
+import type { BundlerAPI, AbstractAccountAPI, FunderAPI } from '@masknet/web3-providers/types'
 import { NetworkPluginID, SignType } from '@masknet/shared-base'
 import {
+    ChainId,
     createContract,
     EthereumMethodType,
     isValidAddress,
@@ -9,7 +10,7 @@ import {
     Signer,
     Transaction,
 } from '@masknet/web3-shared-evm'
-import { SmartPayFunder, Web3 } from '@masknet/web3-providers'
+import { Web3 } from '@masknet/web3-providers'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
 import type { Middleware, Context } from '../types.js'
@@ -22,6 +23,7 @@ export class ContractWallet implements Middleware<Context> {
         protected providerType: ProviderType,
         protected account: AbstractAccountAPI.Provider<NetworkPluginID.PLUGIN_EVM>,
         protected bundler: BundlerAPI.Provider,
+        protected funder: FunderAPI.Provider<ChainId>,
     ) {}
 
     private createWallet(context: Context) {
@@ -91,7 +93,7 @@ export class ContractWallet implements Middleware<Context> {
 
     private async fund(context: Context) {
         if (!context.proof) throw new Error('No proof.')
-        return SmartPayFunder.fund(context.chainId, context.proof)
+        return this.funder.fund(context.chainId, context.proof)
     }
 
     private async deploy(context: Context) {

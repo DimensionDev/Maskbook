@@ -1142,7 +1142,7 @@ export interface Connection<
     /** Fund contract wallet */
     fund?: (proof: Proof, initial?: Web3ConnectionOptions) => Promise<string>
     /** Deploy contract wallet */
-    deploy?: (owner: string, initial?: Web3ConnectionOptions) => Promise<string>
+    deploy?: (owner: string, identifier?: ECKeyIdentifier, initial?: Web3ConnectionOptions) => Promise<string>
     /** Sign a transaction */
     signTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): Promise<TransactionSignature>
     /** Sign multiple transactions */

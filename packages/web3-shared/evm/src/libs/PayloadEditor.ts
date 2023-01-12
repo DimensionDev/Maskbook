@@ -2,7 +2,7 @@ import { first, isUndefined, omitBy } from 'lodash-es'
 import Web3 from 'web3'
 import { AbiItem, hexToNumber, hexToNumberString } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
-import type { Proof, ProofPayload } from '@masknet/shared-base'
+import type { ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
 import { toFixed } from '@masknet/web3-shared-base'
 import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json'
 import { EthereumMethodType, Transaction, TransactionOptions, UserOperation } from '../types/index.js'
@@ -29,6 +29,32 @@ export class PayloadEditor {
             default:
                 const config = this.config
                 return config?.from
+        }
+    }
+
+    get owner() {
+        const { method, params } = this.payload
+        switch (method) {
+            case EthereumMethodType.MASK_FUND:
+                const [proof] = params as [Proof]
+                const { ownerAddress } = JSON.parse(proof.payload) as ProofPayload
+                return ownerAddress
+            case EthereumMethodType.MASK_DEPLOY:
+                const [owner] = params as [string, ECKeyIdentifier]
+                return owner
+            default:
+                return
+        }
+    }
+
+    get identifier() {
+        const { method, params } = this.payload
+        switch (method) {
+            case EthereumMethodType.MASK_DEPLOY:
+                const [_, identifier] = params as [string, ECKeyIdentifier]
+                return identifier
+            default:
+                return
         }
     }
 
