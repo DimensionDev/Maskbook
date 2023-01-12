@@ -32,6 +32,7 @@ import { NonFungibleTickersTable } from './NonFungibleTickersTable.js'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 import { PluginEnableBoundary } from '../../../../components/shared/PluginEnableBoundary.js'
+import { ContentTabs } from '../../types/index.js'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -82,7 +83,6 @@ const useStyles = makeStyles<{
               },
         tradeViewRoot: {
             maxWidth: '100% !important',
-            height: props.isTokenTagPopper ? 590 : 'unset',
         },
         priceChartRoot: props.isTokenTagPopper
             ? {
@@ -115,14 +115,6 @@ export interface TrendingViewProps {
     resultList: Web3Helper.TokenResultAll[]
     address?: string
     onUpdate?: () => void
-}
-
-enum ContentTabs {
-    Market = 'market',
-    Price = 'price',
-    Exchange = 'exchange',
-    Swap = 'swap',
-    NFTItems = 'nft-items',
 }
 
 export function TrendingView(props: TrendingViewProps) {
@@ -274,6 +266,7 @@ export function TrendingView(props: TrendingViewProps) {
                 content: classes.content,
                 cardHeader: classes.cardHeader,
             }}
+            currentTab={currentTab}
             stats={stats}
             setResult={setResult}
             resultList={resultList}

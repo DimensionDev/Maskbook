@@ -11,6 +11,14 @@ export enum WarningLevel {
     BLOCKED = 5,
 }
 
+export enum ContentTabs {
+    Market = 'market',
+    Price = 'price',
+    Exchange = 'exchange',
+    Swap = 'swap',
+    NFTItems = 'nft-items',
+}
+
 // ZRX supported source swap list
 // Learn more: https://matcha.xyz/
 export enum ZrxTradePool {
