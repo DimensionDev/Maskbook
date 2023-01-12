@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js'
 import { isUndefined, omitBy } from 'lodash-es'
 import type Web3 from 'web3'
 import * as ABICoder from 'web3-eth-abi'
-import { AbiItem, bytesToHex, hexToBytes, keccak256, padLeft, toNumber } from 'web3-utils'
+import { AbiItem, bytesToHex, hexToBytes, keccak256, padLeft, toHex, toNumber } from 'web3-utils'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
 import { plus, toFixed } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
@@ -247,15 +247,17 @@ export class UserTransaction {
     /**
      * Estimate a raw transaction.
      */
-    estimate(web3: Web3) {
+    async estimate(web3: Web3) {
         const transaction = this.toTransaction()
         if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
         const walletContract = createContract<Wallet>(web3, transaction.from, WalletABI as AbiItem[])
         if (!walletContract) throw new Error('Failed to create wallet contract.')
 
-        return walletContract?.methods
+        const result = await walletContract?.methods
             .exec(transaction.to, transaction.value ?? '0', transaction.data ?? '0x')
             .estimateGas()
+
+        return toHex(result)
     }
 
     async signTransaction(web3: Web3, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {
@@ -349,7 +351,7 @@ export class UserTransaction {
         return {
             chainId,
             from: userOperation.sender,
-            to: bytesToHex(callBytes.slice(12, 36)),
+            to: bytesToHex(callBytes.slice(16, 36)),
             value: bytesToHex(callBytes.slice(36, 68)),
             gas: userOperation.callGas,
             maxFeePerGas: userOperation.maxFeePerGas,

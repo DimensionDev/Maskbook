@@ -382,6 +382,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         EthereumAddress.isValid(address) ? address : registeredAddress,
     )
     // #endregion
+
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         selectedAsset?.address ?? '',
