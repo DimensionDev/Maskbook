@@ -151,13 +151,14 @@ const ImportWallet = memo(() => {
                             ),
                         })
                         navigate(PopupRoutes.Wallet, { replace: true })
-                        await Services.Helper.removePopupWindow()
                         break
                     case tabs.privateKey:
+                        const account = await WalletRPC.recoverWalletFromPrivateKey(data.name, privateKey)
                         await connection?.connect({
-                            account: await WalletRPC.recoverWalletFromPrivateKey(data.name, privateKey),
+                            account,
                             chainId: ChainId.Mainnet,
                         })
+                        await WalletRPC.resolveMaskAccount([{ address: account }])
                         await Services.Helper.removePopupWindow()
                         navigate(PopupRoutes.Wallet, { replace: true })
                         break
