@@ -104,3 +104,9 @@ export function formatTransactions(
             }
         })
 }
+
+export function resolveDeBankAssetId(id: string) {
+    if (id === 'bsc') return 'bnb'
+    if (id === 'cfx') return 'Conflux'
+    return id
+}
