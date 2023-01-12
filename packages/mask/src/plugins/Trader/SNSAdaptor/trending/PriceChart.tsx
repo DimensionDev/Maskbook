@@ -77,7 +77,9 @@ export function PriceChart(props: PriceChartProps) {
 
     return (
         <div className={classes.root} ref={rootRef}>
-            {props.loading && <LoadingBase className={classes.progress} color="primary" size={15} />}
+            {props.loading && props.stats.length && (
+                <LoadingBase className={classes.progress} color="primary" size={15} />
+            )}
 
             <Stack gap={2}>
                 {props.stats.length ? (
