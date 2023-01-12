@@ -86,16 +86,14 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
             : ''
 
         const platforms = await this.getSupportedPlatform()
-
+        console.log('-------------------------------------')
+        console.log(info)
         return {
             lastUpdated: info.last_updated,
             dataProvider: SourceType.CoinGecko,
             contracts: Object.entries(info.platforms)
                 .map(([key, address]) => ({
-                    chainId:
-                        platforms.find((x) => x.id === key)?.chain_identifier ??
-                        resolveCoinGeckoChainId(key) ??
-                        ChainId.Mainnet,
+                    chainId: platforms.find((x) => x.id === key)?.chain_identifier ?? resolveCoinGeckoChainId(key)
                     address,
                     pluginID: key === 'solana' ? NetworkPluginID.PLUGIN_SOLANA : NetworkPluginID.PLUGIN_EVM,
                 }))
