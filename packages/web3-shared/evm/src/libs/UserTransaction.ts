@@ -301,20 +301,13 @@ export class UserTransaction {
 
     static async fromTransaction(
         chainId: ChainId,
-        web3: Web3,
         entryPoint: string,
         transaction: Transaction,
         gasCurrency?: string,
     ): Promise<UserTransaction> {
-        return UserTransaction.fromUserOperation(
-            chainId,
-            web3,
-            entryPoint,
-            UserTransaction.toUserOperation(transaction),
-            {
-                paymentToken: gasCurrency,
-            },
-        )
+        return new UserTransaction(chainId, entryPoint, UserTransaction.toUserOperation(transaction), {
+            paymentToken: gasCurrency,
+        })
     }
 
     static async fromUserOperation(
@@ -326,7 +319,7 @@ export class UserTransaction {
             paymentToken?: string
         },
     ): Promise<UserTransaction> {
-        const userTransaction = new UserTransaction(
+        return new UserTransaction(
             chainId,
             entryPoint,
             {
@@ -334,8 +327,7 @@ export class UserTransaction {
                 ...userOperation,
             },
             options,
-        )
-        return userTransaction.fill(web3)
+        ).fill(web3)
     }
 
     static toUserOperation(transaction: Transaction): UserOperation {
