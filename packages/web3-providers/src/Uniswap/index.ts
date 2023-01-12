@@ -5,7 +5,6 @@ import * as BaseAPI from './base-api.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { BTC_FIRST_LEGER_DATE, getAllCoinsByKeyword, getPriceStats as getStats } from './base-api.js'
 import type { TrendingAPI } from '../entry-types.js'
-import { NetworkPluginID } from '@masknet/shared-base'
 
 export enum Days {
     MAX = 0,
@@ -37,7 +36,6 @@ export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
             coin: {
                 id,
                 chainId,
-                pluginID: NetworkPluginID.PLUGIN_EVM,
                 name: token?.name || '',
                 symbol: token?.symbol || '',
                 type: TokenType.Fungible,

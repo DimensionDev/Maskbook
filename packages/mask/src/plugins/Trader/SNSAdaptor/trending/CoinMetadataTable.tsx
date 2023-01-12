@@ -7,7 +7,6 @@ import {
     TableBody,
     Typography,
     Stack,
-    MenuItem,
     IconButton,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -19,6 +18,8 @@ import { Linking, useMenuConfig } from '@masknet/shared'
 import { useI18N } from '../../../../utils/index.js'
 import { ContractSection } from './ContractSection.js'
 import type { CommunityType } from '../../types/index.js'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ContractItem } from './ContractItem.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -57,6 +58,12 @@ const useStyles = makeStyles()((theme) => ({
             paddingRight: 0,
         },
     },
+    menu: {
+        maxHeight: 446,
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
+    },
 }))
 
 export interface CoinMetadataTableProps {
@@ -88,19 +95,19 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
         {
             chainId: trending.coin.chainId!,
             address: trending.coin.contract_address!,
+            pluginID: NetworkPluginID.PLUGIN_EVM,
         },
     ]
 
     const [menu, openMenu] = useMenuConfig(
-        contracts.slice(1).map((x) => (
-            <MenuItem key={x.chainId}>
-                <ContractSection
-                    pluginID={trending.coin.pluginID}
-                    chainId={x.chainId}
-                    address={x.address}
-                    name={x.address}
-                />
-            </MenuItem>
+        contracts.map((x) => (
+            <ContractItem
+                key={x.chainId}
+                pluginID={x.pluginID}
+                chainId={x.chainId}
+                address={x.address}
+                name={x.address}
+            />
         )),
         {
             anchorOrigin: {
@@ -111,6 +118,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                 vertical: 'top',
                 horizontal: 'right',
             },
+            classes: { paper: classes.menu },
         },
     )
 
@@ -139,7 +147,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                             height={18}
                                             style={{ position: 'relative', right: -5 }}>
                                             <ContractSection
-                                                pluginID={trending.coin.pluginID}
+                                                pluginID={contracts[0].pluginID}
                                                 chainId={contracts[0].chainId}
                                                 address={contracts[0].address}
                                                 name={contracts[0].address}

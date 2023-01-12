@@ -165,7 +165,7 @@ export function TrendingView(props: TrendingViewProps) {
         !isNFT &&
         !!trending?.coin.contract_address &&
         chainIdValid &&
-        trending?.coin.pluginID === NetworkPluginID.PLUGIN_EVM
+        trending.contracts?.[0].pluginID === NetworkPluginID.PLUGIN_EVM
     // #endregion
 
     // #region expected chainId
@@ -177,6 +177,7 @@ export function TrendingView(props: TrendingViewProps) {
                       {
                           chainId: trending.coin.chainId,
                           address: trending.coin.contract_address,
+                          pluginID: NetworkPluginID.PLUGIN_EVM,
                       },
                   ]
                 : []

@@ -202,7 +202,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
         return {
             lastUpdated: new Date().toJSON(),
             dataProvider: SourceType.NFTScan,
-            contracts: [{ chainId, address }],
+            contracts: [{ chainId, address, pluginID: NetworkPluginID.PLUGIN_EVM }],
             currency,
             coin: {
                 id,
