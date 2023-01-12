@@ -4,12 +4,12 @@ import { makeStyles } from '@masknet/theme'
 import { useAsync } from 'react-use'
 import { PluginVCentRPC } from '../messages.js'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../utils/index.js'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
 import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { VALUABLES_VCENT_URL } from '../constants.js'
+import { useI18N } from '../locales/i18n_generated.js'
 import urlcat from 'urlcat'
 
 const useStyle = makeStyles()((theme) => ({
@@ -50,7 +50,7 @@ const useStyle = makeStyles()((theme) => ({
 
 export default function VCentDialog({ tweetAddress }: { tweetAddress: string }) {
     const { classes } = useStyle()
-    const { t } = useI18N()
+    const t = useI18N()
     const { value: tweets } = useAsync(() => PluginVCentRPC.getTweetData(tweetAddress), [tweetAddress])
     const tweet = first(tweets)
     usePluginWrapper(tweet?.type === 'Offer')
@@ -74,7 +74,7 @@ export default function VCentDialog({ tweetAddress }: { tweetAddress: string }) 
                         fontWeight="bold"
                         fontSize={14}
                         color={(t) => t.palette.maskColor.second}>
-                        {t('plugin_vcent_last_offer_at')}
+                        {t.plugin_vcent_last_offer_at()}
                     </Typography>
                     <Typography fontWeight="bold" fontSize={14} color={(t) => t.palette.maskColor.publicMain}>
                         ${tweet.amount_usd}
@@ -86,7 +86,7 @@ export default function VCentDialog({ tweetAddress }: { tweetAddress: string }) 
                 className={classes.button}
                 target="_blank"
                 href={urlcat(VALUABLES_VCENT_URL, tweet.tweet_id)}>
-                {t('plugin_vcent_go')}
+                {t.plugin_vcent_go()}
             </Button>
         </Box>
     )
