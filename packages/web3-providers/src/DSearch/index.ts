@@ -38,7 +38,6 @@ import type { DSearchBaseAPI } from '../types/DSearch.js'
 import { getHandlers } from './rules.js'
 import { DSEARCH_BASE_URL } from './constants.js'
 import { ChainbaseDomainAPI } from '../Chainbase/index.js'
-import { SpaceID_API } from '../SpaceID/index.js'
 import { ENS_API } from '../ENS/index.js'
 import { CoinGeckoTrending_API } from '../CoinGecko/apis/CoinGecko.js'
 import { RSS3API } from '../RSS3/index.js'
@@ -46,7 +45,6 @@ import { PlatformToChainIdMap } from '../RSS3/constants.js'
 
 const CoinGeckoTrending = new CoinGeckoTrending_API()
 const ENS = new ENS_API()
-const SpaceID = new SpaceID_API()
 const ChainbaseDomain = new ChainbaseDomainAPI()
 
 const isValidAddress = (address?: string): boolean => {
@@ -113,7 +111,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             [
                 () => ENS.lookup(ChainIdEVM.Mainnet, domain).then((x = '') => [x, ChainIdEVM.Mainnet]),
                 () => ChainbaseDomain.lookup(ChainIdEVM.Mainnet, domain).then((x = '') => [x, ChainIdEVM.Mainnet]),
-                () => SpaceID.lookup(ChainIdEVM.BSC, domain).then((x = '') => [x, ChainIdEVM.BSC]),
+                () => ChainbaseDomain.lookup(ChainIdEVM.BSC, domain).then((x = '') => [x, ChainIdEVM.BSC]),
             ],
             ['', ChainIdEVM.Mainnet],
         )
@@ -158,7 +156,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             [
                 () => ENS.reverse(ChainIdEVM.Mainnet, address).then((x) => [x, ChainIdEVM.Mainnet]),
                 () => ChainbaseDomain.reverse(ChainIdEVM.Mainnet, address).then((x) => [x, ChainIdEVM.Mainnet]),
-                () => SpaceID.reverse(ChainIdEVM.BSC, address).then((x) => [x, ChainIdEVM.BSC]),
+                () => ChainbaseDomain.reverse(ChainIdEVM.BSC, address).then((x) => [x, ChainIdEVM.BSC]),
             ],
             ['', ChainIdEVM.Mainnet],
         )
