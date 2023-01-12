@@ -1,4 +1,4 @@
-import { fetch } from 'cross-fetch'
+import { fetch, Headers, Request, Response } from 'cross-fetch'
 import { afterAll, afterEach, beforeAll } from 'vitest'
 import { setupServer } from 'msw/node'
 import { AccountHandlers } from './handlers/SmartPayAccount.js'
@@ -6,7 +6,10 @@ import { BundlerHandlers } from './handlers/SmartPayBundler.js'
 import { DSearchHandlers } from './handlers/DSearch.js'
 
 // Add `fetch` polyfill.
-global.fetch = fetch
+globalThis.fetch = fetch
+globalThis.Headers = Headers
+globalThis.Request = Request
+globalThis.Response = Response
 
 const server = setupServer(...AccountHandlers, ...BundlerHandlers, ...DSearchHandlers)
 

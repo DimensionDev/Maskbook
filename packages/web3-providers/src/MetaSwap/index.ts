@@ -13,9 +13,7 @@ function formatAmountAsWei(amount = '0') {
 export class MetaSwapAPI implements GasOptionAPI.Provider<ChainId, GasOption> {
     async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption> | undefined> {
         if (!isValidChainId(chainId)) return
-        const response = await global.r2d2Fetch(
-            urlcat(METASWAP_API, '/networks/:chainId/suggestedGasFees', { chainId }),
-        )
+        const response = await fetch(urlcat(METASWAP_API, '/networks/:chainId/suggestedGasFees', { chainId }))
         const result = (await response.json()) as EstimateSuggestResponse
 
         return {

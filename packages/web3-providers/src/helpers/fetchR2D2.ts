@@ -1,6 +1,5 @@
 /* cspell:disable */
 import { attemptUntil, fetchImageViaDOM } from '@masknet/web3-shared-base'
-import { fetchBlob } from './fetchBlob.js'
 
 const { fetch: originalFetch } = globalThis
 
@@ -46,7 +45,16 @@ export async function fetchR2D2(input: RequestInfo | URL, init?: RequestInit, ne
     // hotfix image requests
     if (request.method === 'GET' && request.headers.get('accept')?.includes('image/')) {
         return new Response(
-            await attemptUntil<Blob | null>([() => fetchBlob(url, request), () => fetchImageViaDOM(url)], null),
+            await attemptUntil<Blob | null>(
+                [
+                    async () => {
+                        const response = await originalFetch(url, request)
+                        return response.blob()
+                    },
+                    () => fetchImageViaDOM(url),
+                ],
+                null,
+            ),
             {
                 headers: {
                     'Content-Type': 'image/png',

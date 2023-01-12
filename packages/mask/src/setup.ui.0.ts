@@ -25,13 +25,4 @@ const indexedDB: KVStorageBackend = {
 setupMaskKVStorageBackend(indexedDB, memory)
 setupLegacySettingsAtNonBackground(Services.Settings.getLegacySettingsInitialValue)
 
-// Temporary, will be removed when the Mask SDK is ready
-Reflect.set(globalThis, 'r2d2Fetch', (req: RequestInfo, init?: RequestInit) => {
-    const signal = init?.signal
-    if (init) delete init.signal
-    return Services.Helper.r2d2Fetch(req, init).then((response) => {
-        signal?.throwIfAborted()
-        return response
-    })
-})
 Reflect.set(globalThis, 'fetch', contentFetch)
