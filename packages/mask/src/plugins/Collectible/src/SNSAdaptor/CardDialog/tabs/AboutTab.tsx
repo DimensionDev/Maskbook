@@ -1,6 +1,5 @@
 import { BigNumber } from 'bignumber.js'
 import { first } from 'lodash-es'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
@@ -8,6 +7,8 @@ import { DescriptionCard } from '../../Shared/DescriptionCard.js'
 import { PropertiesCard } from '../../Shared/PropertiesCard.js'
 import { PriceCard } from '../../Shared/PriceCard.js'
 import { DetailsCard } from '../../Shared/DetailsCard.js'
+import { Context } from '../../Context/index.js'
+import { memo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -34,23 +35,22 @@ const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<Web3Helper.ChainId
 }
 
 export interface AboutTabProps {
-    asset: AsyncStateRetry<Web3Helper.NonFungibleAssetScope<void>>
-    orders: AsyncStateRetry<Pageable<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
+    asset: Web3Helper.NonFungibleAssetScope<void>
+    orders?: Pageable<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
-export function AboutTab(props: AboutTabProps) {
-    const { asset, orders } = props
+export const AboutTab = memo(function AboutTab({ asset, orders }: AboutTabProps) {
     const { classes } = useStyles()
-    const _asset = asset.value
-    const topOffer = resolveTopOffer(orders.value?.data)
+    const topOffer = resolveTopOffer(orders?.data)
+    const { rarity } = Context.useContainer()
 
-    if (!_asset) return null
+    if (!asset) return null
     return (
         <div className={classes.root}>
-            <PriceCard topOffer={topOffer} asset={_asset} />
-            <DetailsCard asset={_asset} />
-            <DescriptionCard asset={_asset} />
-            <PropertiesCard timeline asset={_asset} />
+            <PriceCard topOffer={topOffer} asset={asset} />
+            <DetailsCard asset={asset} />
+            <DescriptionCard asset={asset} />
+            <PropertiesCard timeline asset={asset} rank={rarity.value?.rank} />
         </div>
     )
-}
+})
