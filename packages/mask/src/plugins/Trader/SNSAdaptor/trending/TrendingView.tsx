@@ -82,6 +82,7 @@ const useStyles = makeStyles<{
               },
         tradeViewRoot: {
             maxWidth: '100% !important',
+            height: props.isTokenTagPopper ? 590 : 'unset',
         },
         priceChartRoot: props.isTokenTagPopper
             ? {
@@ -97,11 +98,15 @@ const useStyles = makeStyles<{
             boxSizing: 'border-box',
             overflow: 'auto',
         },
+        priceChartWrapper: {
+            padding: theme.spacing(4, 2, props.isTokenTagPopper ? 8 : 4, 2),
+        },
         nftList: {
             gap: 12,
         },
         hidden: {
             visibility: 'hidden',
+            height: 0,
         },
     }
 })
@@ -292,7 +297,7 @@ export function TrendingView(props: TrendingViewProps) {
                     <CoinMarketPanel dataProvider={trending.dataProvider} trending={trending} result={result} />
                 ) : null}
                 {currentTab === ContentTabs.Price ? (
-                    <Box px={2} py={4}>
+                    <Box className={classes.priceChartWrapper}>
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}
@@ -358,21 +363,19 @@ export function TrendingView(props: TrendingViewProps) {
                     </Web3ContextProvider>
                 ) : null}
 
-                <Box
-                    className={cx(
-                        classes.nftItems,
-                        currentTab === ContentTabs.NFTItems && isNFT ? '' : classes.hidden,
-                    )}>
-                    <NFTList
-                        pluginID={result.pluginID}
-                        className={classes.nftList}
-                        tokens={fetchedTokens}
-                        onNextPage={next}
-                        finished={done}
-                        hasError={!!loadError}
-                        gap={16}
-                    />
-                </Box>
+                {isNFT && (
+                    <Box className={cx(classes.nftItems, currentTab === ContentTabs.NFTItems ? '' : classes.hidden)}>
+                        <NFTList
+                            pluginID={result.pluginID}
+                            className={classes.nftList}
+                            tokens={fetchedTokens}
+                            onNextPage={next}
+                            finished={done}
+                            hasError={!!loadError}
+                            gap={16}
+                        />
+                    </Box>
+                )}
             </Stack>
         </TrendingViewDeck>
     )
