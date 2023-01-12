@@ -298,7 +298,6 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
     ): Promise<string> {
         const userTransaction = await UserTransaction.fromTransaction(
             chainId,
-            this.web3.getWeb3(chainId),
             await this.getEntryPoint(chainId),
             transaction,
             gasCurrency,
@@ -322,14 +321,12 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
     }
 
     async estimateTransaction(chainId: ChainId, transaction: Transaction): Promise<string> {
-        const web3 = this.web3.getWeb3(chainId)
         const userTransaction = await UserTransaction.fromTransaction(
             chainId,
-            web3,
             await this.getEntryPoint(chainId),
             transaction,
         )
-        return toFixed(await userTransaction.estimate(web3))
+        return toFixed(await userTransaction.estimate(this.web3.getWeb3(chainId)))
     }
 
     async estimateUserOperation(chainId: ChainId, userOperation: UserOperation): Promise<string> {
