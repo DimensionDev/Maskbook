@@ -44,7 +44,7 @@ export class DeBankAPI
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
         if (!CHAIN_ID) throw new Error('Failed to get gas price.')
 
-        const response = await fetch(urlcat(DEBANK_OPEN_API, '/chain/gas_price_dict_v2', { chain: CHAIN_ID }))
+        const response = await fetch(urlcat(DEBANK_OPEN_API, '/v1/wallet/gas_market', { chain_id: CHAIN_ID }))
         const result = (await response.json()) as GasPriceDictResponse
         if (result.error_code !== 0) throw new Error('Failed to get gas price.')
 
