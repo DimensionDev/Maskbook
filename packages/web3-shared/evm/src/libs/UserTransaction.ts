@@ -306,15 +306,9 @@ export class UserTransaction {
         transaction: Transaction,
         gasCurrency?: string,
     ): Promise<UserTransaction> {
-        return UserTransaction.fromUserOperation(
-            chainId,
-            web3,
-            entryPoint,
-            UserTransaction.toUserOperation(transaction),
-            {
-                paymentToken: gasCurrency,
-            },
-        )
+        return new UserTransaction(chainId, entryPoint, UserTransaction.toUserOperation(transaction), {
+            paymentToken: gasCurrency,
+        })
     }
 
     static async fromUserOperation(
