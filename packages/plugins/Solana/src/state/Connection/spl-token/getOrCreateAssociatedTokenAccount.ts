@@ -1,5 +1,5 @@
 import { TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token'
-import { Connection, PublicKey, Commitment, Transaction } from '@solana/web3.js'
+import { type Connection, PublicKey, Commitment, Transaction } from '@solana/web3.js'
 import { createAssociatedTokenAccountInstruction } from './createAssociatedTokenAccountInstruction.js'
 import { getAccountInfo } from './getAccountInfo.js'
 import { getAssociatedTokenAddress } from './getAssociatedTokenAddress.js'
@@ -47,14 +47,18 @@ export async function getOrCreateAssociatedTokenAccount(
                     ),
                 )
 
-                const blockHash = await connection.getRecentBlockhash()
+                const blockHash = await connection.getLatestBlockhash()
                 transaction.feePayer = payer
                 transaction.recentBlockhash = blockHash.blockhash
                 const signed = await signTransaction(transaction)
 
                 const signature = await connection.sendRawTransaction(signed.serialize())
 
-                await connection.confirmTransaction(signature)
+                await connection.confirmTransaction({
+                    signature,
+                    blockhash: blockHash.blockhash,
+                    lastValidBlockHeight: blockHash.lastValidBlockHeight,
+                })
             } catch (error: unknown) {
                 // Ignore all errors; for now there is no API-compatible way to selectively ignore the expected
                 // instruction error if the associated account exists already.
