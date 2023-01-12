@@ -12,7 +12,7 @@ import {
     toFixed,
 } from '@masknet/web3-shared-base'
 import { ChainId, formatGweiToWei, getDeBankConstants, SchemaType, GasOption } from '@masknet/web3-shared-evm'
-import { formatAssets, formatTransactions } from './helpers.js'
+import { formatAssets, formatTransactions, resolveDeBankAssetId } from './helpers.js'
 import type { WalletTokenRecord, GasPriceDictResponse, HistoryRecord } from './types.js'
 import { getNativeAssets } from '../entry-helpers.js'
 import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../entry-types.js'
@@ -83,8 +83,8 @@ export class DeBankAPI
                         ...x,
 
                         // rename bsc to bnb
-                        id: x.id === 'bsc' ? 'bnb' : x.id,
-                        chain: x.chain === 'bsc' ? 'bnb' : x.chain,
+                        id: resolveDeBankAssetId(x.id),
+                        chain: resolveDeBankAssetId(x.chain),
                         // prefix ARETH
                         symbol: x.chain === 'arb' && x.symbol === 'ETH' ? 'ARETH' : x.symbol,
                         logo_url:

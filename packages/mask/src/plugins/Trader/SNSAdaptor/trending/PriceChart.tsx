@@ -27,8 +27,8 @@ const useStyles = makeStyles<PriceChartProps>()((theme, { stats, coin }) => {
         },
         progress: {
             position: 'absolute',
-            right: 0,
-            bottom: -64,
+            left: 275,
+            top: 85,
         },
         placeholder: {
             paddingTop: theme.spacing(10),
@@ -77,7 +77,9 @@ export function PriceChart(props: PriceChartProps) {
 
     return (
         <div className={classes.root} ref={rootRef}>
-            {props.loading && <LoadingBase className={classes.progress} color="primary" size={15} />}
+            {props.loading && props.stats.length && (
+                <LoadingBase className={classes.progress} color="primary" size={15} />
+            )}
 
             <Stack gap={2}>
                 {props.stats.length ? (
