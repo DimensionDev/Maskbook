@@ -71,7 +71,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     // #region select token dialog
-    const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
+    const selectFungibleToken = useSelectFungibleToken<void, NetworkPluginID.PLUGIN_EVM>()
     const onSelectTokenChipClick = useCallback(async () => {
         const picked = await selectFungibleToken({
             disableNativeToken: isSell,

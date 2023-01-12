@@ -148,10 +148,9 @@ class Connection implements BaseConnection {
                 Number.parseInt(amount, 10),
             ),
         )
-        const blockHash = await connection.getRecentBlockhash()
+        const blockHash = await connection.getLatestBlockhash()
         transaction.feePayer = payerPubkey
         transaction.recentBlockhash = blockHash.blockhash
-
         const signature = await this.sendTransaction(transaction)
         return signature
     }
@@ -276,14 +275,19 @@ class Connection implements BaseConnection {
         const options = this.getOptions(initial)
         if (!options.account) return {}
         const { data: assets } = await SolanaFungible.getAssets(options.account, options)
-        const records = assets.reduce(
-            (map: Record<string, string>, asset) => ({ ...map, [asset.address]: asset.balance }),
+        const records = assets.reduce<Record<string, string>>(
+            (map, asset) => ({ ...map, [asset.address]: asset.balance }),
             {},
         )
         const nativeTokenAddress = getNativeTokenAddress(options.chainId)
         if (listOfAddress.includes(nativeTokenAddress)) {
             records[nativeTokenAddress] = await this.getNativeTokenBalance(options)
         }
+        // In the token picker UI, if balance of a token is undefined, then it
+        // will keep loading. We set it 0 to walk around that, since fetching is done.
+        listOfAddress.forEach((address) => {
+            records[address] = records[address] ?? '0'
+        })
         return records
     }
     getNonFungibleTokensBalance(

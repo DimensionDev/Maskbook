@@ -13,7 +13,7 @@ import { ChainId, GasOption, SchemaType } from '@masknet/web3-shared-solana'
 import type { SolanaHub } from './types.js'
 
 class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
-    protected getFungibleProviders(initial?: HubOptions<ChainId>) {
+    protected override getProviders(initial?: HubOptions<ChainId>) {
         const options = this.getOptions(initial)
 
         // only the first page is available

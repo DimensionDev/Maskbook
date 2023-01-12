@@ -12,9 +12,7 @@ const { TaskManagerContext, TaskManagerProvider: SelectFungibleTokenProvider } =
     Web3Helper.FungibleTokenScope<'all'> | null
 >(SelectFungibleTokenDialog)
 
-export function useSelectFungibleToken<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
-    pluginID?: T,
-) {
+export function useSelectFungibleToken<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>() {
     const context = useContext(TaskManagerContext) as ContextOptions<
         SelectFungibleTokenDialogProps,
         Web3Helper.FungibleTokenScope<S, T>
