@@ -55,8 +55,8 @@
         "Arbitrum_Rinkeby": ["https://rinkeby.arbitrum.io/rpc"],
         "xDai": ["https://rpc.gnosischain.com"],
         "Optimism": [
-            "https://opt-mainnet.g.alchemy.com/v2/si4Ts8BGkOpDGesRfjdRZHFzUukHvURN",
             "https://optimism-mainnet.infura.io/v3/c44fac7726a64d5bbbb3a1c51f02d75b",
+            "https://opt-mainnet.g.alchemy.com/v2/si4Ts8BGkOpDGesRfjdRZHFzUukHvURN",
             "https://mainnet.optimism.io"
         ],
         "Optimism_Kovan": ["https://kovan.optimism.io"],
