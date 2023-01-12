@@ -162,12 +162,12 @@ class RequestContext implements Context {
 
     get owner() {
         const provider = Providers[this.providerType] as BaseContractWalletProvider | undefined
-        return this._options?.owner ?? provider?.ownerAccount
+        return this._options?.owner ?? provider?.ownerAccount ?? this.payloadEditor.owner
     }
 
     get identifier() {
         const provider = Providers[this.providerType] as BaseContractWalletProvider | undefined
-        return this._options?.identifier ?? provider?.ownerIdentifier
+        return this._options?.identifier ?? provider?.ownerIdentifier ?? this.payloadEditor.identifier
     }
 
     get requestOptions() {

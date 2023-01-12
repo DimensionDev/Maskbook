@@ -3,7 +3,7 @@ import { AbiItem, toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import { getSubscriptionCurrentValue, PartialRequired, Proof } from '@masknet/shared-base'
+import { ECKeyIdentifier, getSubscriptionCurrentValue, PartialRequired, Proof } from '@masknet/shared-base'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
 import type { ERC1155 } from '@masknet/web3-contracts/types/ERC1155.js'
@@ -43,9 +43,6 @@ import { createContext, dispatch } from './composer.js'
 import { Providers } from './provider.js'
 import type { EVM_Connection, EVM_Web3ConnectionOptions } from './types.js'
 import { Web3StateSettings } from '../../settings/index.js'
-
-const EMPTY_STRING = Promise.resolve('')
-const ZERO = Promise.resolve(0)
 
 class Connection implements EVM_Connection {
     constructor(
@@ -721,12 +718,16 @@ class Connection implements EVM_Connection {
         )
     }
 
-    async deploy(owner: string, initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
+    async deploy(
+        owner: string,
+        identifier?: ECKeyIdentifier,
+        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.MASK_DEPLOY,
-                params: [owner],
+                params: [owner, identifier],
             },
             options,
         )
