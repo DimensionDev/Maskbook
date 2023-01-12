@@ -124,6 +124,7 @@
       "@masknet/plugin-scam-warning": ["./packages/plugins/ScamWarning/src"],
       "@masknet/plugin-gitcoin": ["./packages/plugins/Gitcoin/src"],
       "@masknet/plugin-smart-pay": ["./packages/plugins/SmartPay/src"],
+      "@masknet/plugin-vcent": ["./packages/plugins/VCent/src"],
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]
     }
