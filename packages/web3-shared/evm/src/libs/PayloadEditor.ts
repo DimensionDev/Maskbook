@@ -106,6 +106,7 @@ export class PayloadEditor {
                         CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem,
                         [ownerAddress, toFixed(nonce)],
                     ),
+                    is_fund: true,
                 }
             default:
                 return

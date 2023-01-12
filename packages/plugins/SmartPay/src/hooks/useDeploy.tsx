@@ -1,18 +1,16 @@
 import { useAsyncFn } from 'react-use'
 import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { NetworkPluginID, PersonaInformation, ProofType, SignType } from '@masknet/shared-base'
+import { NetworkPluginID, PersonaInformation, PopupRoutes, ProofType, SignType } from '@masknet/shared-base'
 import { useChainContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import type { AbstractAccountAPI } from '@masknet/web3-providers/types'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import type { ManagerAccount } from '../type.js'
 import type { Wallet } from '@masknet/web3-shared-base'
 import getUnixTime from 'date-fns/getUnixTime'
-import { SmartPayFunder } from '@masknet/web3-providers'
 import { ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import { useI18N } from '../locales/index.js'
-import { Box, Link, Typography, useTheme } from '@mui/material'
+import { Typography, useTheme } from '@mui/material'
 import { useCallback, useRef } from 'react'
-import { Icons } from '@masknet/icons'
 
 export function useDeploy(
     signPersona?: PersonaInformation,
@@ -25,8 +23,9 @@ export function useDeploy(
     const theme = useTheme()
     const snackbarKeyRef = useRef<SnackbarKey>()
     const t = useI18N()
-    const { Wallet, Others } = useWeb3State()
-    const { signWithPersona } = useSNSAdaptorContext()
+
+    const { Wallet, TransactionWatcher } = useWeb3State()
+    const { signWithPersona, hasPaymentPassword, openPopupWindow } = useSNSAdaptorContext()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
@@ -57,6 +56,10 @@ export function useDeploy(
         )
             return
 
+        const hasPassword = await hasPaymentPassword()
+
+        if (!hasPassword) return openPopupWindow(PopupRoutes.CreatePassword)
+
         const payload = JSON.stringify({
             twitterHandler: lastRecognizedIdentity.identifier.userId,
             ts: getUnixTime(new Date()),
@@ -65,6 +68,12 @@ export function useDeploy(
         })
 
         let signature: string | undefined
+
+        showSingletonSnackbar(t.create_smart_pay_wallet(), {
+            message: t.waiting_for_user_signature(),
+            processing: true,
+            variant: 'default',
+        })
 
         if (signPersona) {
             signature = await signWithPersona(SignType.Message, payload, signPersona.identifier)
@@ -77,22 +86,26 @@ export function useDeploy(
         const publicKey = signPersona ? signPersona.identifier.publicKeyAsHex : signWallet?.address
         if (!signature || !publicKey) return
 
-        showSingletonSnackbar(t.create_smart_pay_wallet(), {
-            message: t.waiting_for_user_signature(),
-            processing: true,
-            variant: 'default',
-        })
+        closeSnackbar()
 
         try {
-            const response = await SmartPayFunder.fund(chainId, {
-                publicKey,
-                type: signPersona ? ProofType.Persona : ProofType.EOA,
-                signature,
-                payload,
-            })
+            const response = await connection?.fund?.(
+                {
+                    publicKey,
+                    type: signPersona ? ProofType.Persona : ProofType.EOA,
+                    signature,
+                    payload,
+                },
+                {
+                    chainId,
+                },
+            )
 
-            if (response.message) {
-                await Wallet?.addWallet({
+            if (!response?.message.walletAddress) throw new Error('Deploy Failed')
+
+            return TransactionWatcher?.emitter.on('progress', (txHash, status) => {
+                if (txHash !== response.message.tx) return
+                Wallet?.addWallet({
                     name: 'Smart Pay',
                     address: contractAccount.address,
                     hasDerivationPath: false,
@@ -100,26 +113,9 @@ export function useDeploy(
                     id: contractAccount.address,
                     createdAt: new Date(),
                     updatedAt: new Date(),
-                })
-                showSingletonSnackbar(t.create_smart_pay_wallet(), {
-                    processing: false,
-                    variant: 'default',
-                    message: (
-                        <Box display="flex" alignItems="center">
-                            <Typography sx={{ color: theme.palette.maskColor.success }}>
-                                {t.transaction_submitted()}
-                            </Typography>
-                            <Link
-                                href={Others?.explorerResolver.addressLink(chainId, response.message.tx)}
-                                target="_blank"
-                                rel="noopener">
-                                <Icons.LinkOut />
-                            </Link>
-                        </Box>
-                    ),
-                })
-            }
-        } catch {
+                }).then(onSuccess)
+            })
+        } catch (error) {
             showSingletonSnackbar(t.create_smart_pay_wallet(), {
                 processing: false,
                 variant: 'default',
@@ -140,5 +136,6 @@ export function useDeploy(
         contractAccount,
         nonce,
         onSuccess,
+        TransactionWatcher,
     ])
 }

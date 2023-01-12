@@ -780,6 +780,8 @@ export interface TransactionContext<ChainId, Parameter = string | undefined> {
     }>
     /** nested children contexts */
     children?: Array<TransactionContext<ChainId, Parameter>>
+    /** 4337 wallet fund */
+    is_fund?: boolean
 }
 
 export interface AddressName {
@@ -1140,7 +1142,10 @@ export interface Connection<
     /** Change owner of contract wallet */
     changeOwner?: (recipient: string, initial?: Web3ConnectionOptions) => Promise<string>
     /** Fund contract wallet */
-    fund?: (proof: Proof, initial?: Web3ConnectionOptions) => Promise<string>
+    fund?: (
+        proof: Proof,
+        initial?: Web3ConnectionOptions,
+    ) => Promise<{ message: { walletAddress: string; tx: string } }>
     /** Deploy contract wallet */
     deploy?: (owner: string, identifier?: ECKeyIdentifier, initial?: Web3ConnectionOptions) => Promise<string>
     /** Sign a transaction */

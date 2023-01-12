@@ -170,6 +170,7 @@ const ContractInteraction = memo(() => {
         })
     }, [TransactionFormatter, request])
 
+    console.log(request)
     const {
         tokenAddress,
         typeName,

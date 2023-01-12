@@ -4,6 +4,7 @@ import { EthereumMethodType, Transaction, UserTransaction } from '@masknet/web3-
 import type { Context, Middleware } from '../types.js'
 import { getReceiptStatus } from '../utils.js'
 import { Web3StateSettings } from '../../../settings/index.js'
+import type { FunderAPI } from '@masknet/web3-providers/types'
 
 export class RecentTransaction implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
@@ -17,14 +18,10 @@ export class RecentTransaction implements Middleware<Context> {
                 case EthereumMethodType.ETH_SEND_TRANSACTION:
                 case EthereumMethodType.MASK_DEPLOY:
                 case EthereumMethodType.MASK_FUND:
-                    if (!context.config || typeof context.result !== 'string') return
-                    await Transaction?.addTransaction?.(
-                        context.chainId,
-                        context.account,
-                        context.result,
-                        context.config,
-                    )
-                    await TransactionWatcher?.watchTransaction(context.chainId, context.result, context.config)
+                    const tx = (context.result as FunderAPI.Fund).message.tx
+                    if (!context.config || !tx) return
+                    await Transaction?.addTransaction?.(context.chainId, context.account, tx, context.config)
+                    await TransactionWatcher?.watchTransaction(context.chainId, tx, context.config)
                     break
                 case EthereumMethodType.ETH_SEND_USER_OPERATION:
                     if (!context.userOperation || typeof context.result !== 'string') return

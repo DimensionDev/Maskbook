@@ -310,8 +310,8 @@ export const SmartPayContent = memo(() => {
 
     const [{ loading: openSendLoading }, handleSendClick] = useAsyncFn(async () => {
         await connectToCurrent()
-        await openPopupWindow(PopupRoutes.Transfer, { toBeClose: 1 })
-    }, [connectToCurrent, openPopupWindow])
+        await openPopupWindow(PopupRoutes.Transfer, { toBeClose: 1, selectedToken: maskToken?.address })
+    }, [connectToCurrent, openPopupWindow, maskToken])
 
     const handleReceiveClick = useCallback(() => {
         setReceiveDialog({

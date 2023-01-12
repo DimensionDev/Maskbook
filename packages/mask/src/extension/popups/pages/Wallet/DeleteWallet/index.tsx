@@ -13,6 +13,8 @@ import { useI18N } from '../../../../../utils/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { WalletContext } from '../hooks/useWalletContext.js'
 import { useTitle } from '../../../hook/useTitle.js'
+import { useContainer } from 'unstated-next'
+import { PopupContext } from '../../../hook/usePopupContext.js'
 
 const useStyles = makeStyles()({
     content: {
@@ -108,13 +110,21 @@ const DeleteWallet = memo(() => {
     const { classes } = useStyles()
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
-
+    const { smartPayChainId } = useContainer(PopupContext)
     const onConfirm = useCallback(async () => {
         if (!wallet?.address) return
         try {
             await Wallet?.removeWallet?.(wallet.address, password)
+            const newWallet = first(
+                Wallet?.wallets
+                    ?.getCurrentValue()
+                    .filter(
+                        (x) => !isSameAddress(x.address, wallet.address) && !isSameAddress(x.owner, wallet.address),
+                    ),
+            )
             await connection?.connect({
-                account: first(Wallet?.wallets?.getCurrentValue())?.address ?? '',
+                account: newWallet?.address,
+                chainId: newWallet?.owner ? smartPayChainId : undefined,
             })
             navigate(PopupRoutes.Wallet, { replace: true })
         } catch (error) {
@@ -124,7 +134,7 @@ const DeleteWallet = memo(() => {
                 )
             }
         }
-    }, [wallet, password, Wallet, connection])
+    }, [wallet, password, Wallet, connection, smartPayChainId])
 
     const manageWallets = useMemo(() => {
         return wallets.filter((x) => isSameAddress(x.owner, wallet?.address))

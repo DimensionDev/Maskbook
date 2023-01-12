@@ -266,6 +266,7 @@ export interface Transaction {
 
     // 4337
     gasCurrency?: string
+    is_fund?: boolean
 
     // CELO
     feeCurrency?: string // address of the ERC20 contract to use to pay for gas and the gateway fee

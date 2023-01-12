@@ -87,7 +87,7 @@ class RequestContext implements Context {
     }
 
     private get payloadEditor() {
-        return PayloadEditor.fromPayload(this.request)
+        return PayloadEditor.fromPayload(this.request, this._options)
     }
 
     get writeable() {

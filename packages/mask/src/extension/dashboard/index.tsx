@@ -8,6 +8,7 @@ import { createNormalReactRoot } from '../../utils/createNormalReactRoot.js'
 import { status } from '../../setup.ui.js'
 import { PluginTransakMessages } from '../../plugins/Transak/messages.js'
 import { RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
+import { createSubscriptionFromAsync } from '@masknet/shared-base'
 
 setService(Services)
 setMessages(MaskMessages)
@@ -24,6 +25,11 @@ startPluginDashboard(
         (id, signal) => ({
             ...createPartialSharedUIContext(id, signal),
             ...RestPartOfPluginUIContextShared,
+            allPersonas: createSubscriptionFromAsync(
+                () => Services.Identity.queryOwnedPersonaInformation(true),
+                [],
+                MaskMessages.events.currentPersonaIdentifier.on,
+            ),
         }),
         Services.Settings.getPluginMinimalModeEnabled,
         Services.Helper.hasHostPermission,

@@ -91,11 +91,6 @@ export class ContractWallet implements Middleware<Context> {
         throw new Error('No user operation to be estimated.')
     }
 
-    private async fund(context: Context) {
-        if (!context.proof) throw new Error('No proof.')
-        return this.funder.fund(context.chainId, context.proof)
-    }
-
     private async deploy(context: Context) {
         if (!context.owner) throw new Error('No owner.')
         return this.account.deploy(context.chainId, context.owner, this.getSigner(context))
@@ -188,13 +183,7 @@ export class ContractWallet implements Middleware<Context> {
                     context.abort(error)
                 }
                 break
-            case EthereumMethodType.MASK_FUND:
-                try {
-                    context.write(await this.fund(context))
-                } catch (error) {
-                    context.abort(error)
-                }
-                break
+
             case EthereumMethodType.MASK_DEPLOY:
                 try {
                     context.write(await this.deploy(context))

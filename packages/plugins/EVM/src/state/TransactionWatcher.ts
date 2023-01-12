@@ -39,6 +39,9 @@ export class TransactionWatcher extends TransactionWatcherState<ChainId, Transac
         transaction: Transaction,
         status: TransactionStatusType,
     ) {
+        if (transaction.is_fund) {
+            this.emitter.emit('progress', id, status, transaction)
+        }
         const { Transaction } = Web3StateSettings.value
 
         // update record status in transaction state
