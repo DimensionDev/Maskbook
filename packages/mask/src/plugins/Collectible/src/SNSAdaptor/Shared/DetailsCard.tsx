@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
@@ -42,6 +42,7 @@ const useStyles = makeStyles()((theme) => ({
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
         display: 'flex',
+        alignItems: 'center',
         gap: 6,
         color: theme.palette.maskColor.main,
     },
@@ -66,7 +67,7 @@ export function DetailsCard(props: DetailsCardProps) {
     const { Others } = useWeb3State()
     const { pluginID } = useNetworkContext()
 
-    const infos: Array<{ title: string; value?: string; link?: boolean }> = []
+    const infos: Array<{ title: string; value?: string; link?: boolean; tooltip?: string }> = []
     if (pluginID === NetworkPluginID.PLUGIN_SOLANA) {
         infos.push({
             title: t('plugin_collectible_mint_address'),
@@ -85,6 +86,7 @@ export function DetailsCard(props: DetailsCardProps) {
         {
             title: t('plugin_collectible_creator_earning'),
             value: asset.contract?.creatorEarning ?? '-',
+            tooltip: t('plugin_collectible_creator_earning_tooltip'),
         },
     )
     if (sourceType && PLATFORM_COSTS[sourceType]) {
@@ -102,7 +104,7 @@ export function DetailsCard(props: DetailsCardProps) {
                         <Typography className={classes.title}>{x.title}</Typography>
                         <Typography className={classes.content}>
                             {x.value}{' '}
-                            {x.link && (
+                            {x.link ? (
                                 <Link
                                     className={classes.link}
                                     href={Others?.explorerResolver.addressLink?.(asset.chainId, asset.address) ?? ''}
@@ -110,7 +112,12 @@ export function DetailsCard(props: DetailsCardProps) {
                                     rel="noopener noreferrer">
                                     <Icons.LinkOut size={16} />
                                 </Link>
-                            )}
+                            ) : null}
+                            {x.value && x.tooltip ? (
+                                <ShadowRootTooltip title={x.tooltip} placement="top">
+                                    <Icons.Info size={18} />
+                                </ShadowRootTooltip>
+                            ) : null}
                         </Typography>
                     </div>
                 )
