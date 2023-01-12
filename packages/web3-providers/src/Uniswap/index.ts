@@ -1,4 +1,3 @@
-import { NetworkPluginID } from '@masknet/shared-base'
 import { TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { isMirroredKeyword } from '../Trending/helpers.js'
