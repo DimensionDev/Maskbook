@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { PluginID, CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
-import { useHiddenAddressSetting, useSocialAccountsAll } from '@masknet/web3-hooks-base'
+import { useHiddenAddressSettings, useSocialAccountsAll } from '@masknet/web3-hooks-base'
 import { currySameAddress, SocialAccount, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
@@ -21,7 +21,7 @@ export const useSocialAccountsBySettings = (
         loading: loadingHiddenAddress,
         error: loadingHiddenAddressError,
         retry: retryLoadHiddenAddress,
-    } = useHiddenAddressSetting(PluginID.Web3Profile, identity?.publicKey)
+    } = useHiddenAddressSettings(PluginID.Web3Profile, identity?.publicKey)
 
     const addresses = useMemo(() => {
         if (loadingSocialAccounts || loadingHiddenAddress) return EMPTY_LIST
