@@ -154,15 +154,13 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
             getLatestMarketPairs(id, currencyName),
         ])
 
-        const contracts = coinInfo.contract_address
-            .map(
-                (x) =>
-                    ({
-                        chainId: resolveCoinMarketCapChainId(x.platform.name),
-                        address: x.contract_address,
-                        icon_url: `${CMC_STATIC_BASE_URL}/img/coins/64x64/${x.platform.coin.id}.png`,
-                    } as TrendingAPI.Contract),
-            )
+        const contracts: TrendingAPI.Contract[] = coinInfo.contract_address
+            .map((x) => ({
+                chainId: resolveCoinMarketCapChainId(x.platform.name),
+                address: x.contract_address,
+                pluginID: NetworkPluginID.PLUGIN_EVM,
+                icon_url: `${CMC_STATIC_BASE_URL}/img/coins/64x64/${x.platform.coin.id}.png`,
+            }))
             .filter((x) => isValidChainId(x.chainId as ChainId))
 
         function getPlatform(contracts: TrendingAPI.Contract[], contract_address?: string) {
@@ -182,7 +180,6 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
             coin: {
                 id,
                 chainId: getPlatform(contracts, coinInfo.platform?.token_address)?.chainId,
-                pluginID: NetworkPluginID.PLUGIN_EVM,
                 name: coinInfo.name,
                 symbol: coinInfo.symbol,
                 type: TokenType.Fungible,

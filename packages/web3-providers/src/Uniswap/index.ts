@@ -32,7 +32,6 @@ export class UniswapAPI implements TrendingAPI.Provider<ChainId> {
             coin: {
                 id,
                 chainId,
-                pluginID: NetworkPluginID.PLUGIN_EVM,
                 name: token?.name || '',
                 symbol: token?.symbol || '',
                 type: TokenType.Fungible,

@@ -89,7 +89,7 @@ export class NFTScanTrendingAPI_Solana implements TrendingAPI.Provider<ChainId> 
         return {
             lastUpdated: new Date().toJSON(),
             dataProvider: SourceType.NFTScan,
-            contracts: [{ chainId, address }],
+            contracts: [{ chainId, address, pluginID: NetworkPluginID.PLUGIN_SOLANA }],
             currency,
             coin: {
                 id,

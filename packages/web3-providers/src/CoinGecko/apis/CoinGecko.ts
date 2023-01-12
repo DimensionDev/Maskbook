@@ -86,6 +86,7 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<Web3Helper.Ch
             : ''
 
         const platforms = await this.getSupportedPlatform()
+
         return {
             lastUpdated: info.last_updated,
             dataProvider: SourceType.CoinGecko,
@@ -93,12 +94,11 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<Web3Helper.Ch
                 .map(([key, address]) => ({
                     chainId: platforms.find((x) => x.id === key)?.chain_identifier ?? resolveCoinGeckoChainId(key),
                     address,
+                    pluginID: key === 'solana' ? NetworkPluginID.PLUGIN_SOLANA : NetworkPluginID.PLUGIN_EVM,
                 }))
                 .filter((x) => x.chainId && x.address),
             currency,
             coin: {
-                pluginID:
-                    info.asset_platform_id === 'solana' ? NetworkPluginID.PLUGIN_SOLANA : NetworkPluginID.PLUGIN_EVM,
                 id,
                 name: info.name,
                 symbol: info.symbol.toUpperCase(),
