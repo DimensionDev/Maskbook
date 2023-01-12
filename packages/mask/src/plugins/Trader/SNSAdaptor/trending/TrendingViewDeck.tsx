@@ -188,7 +188,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     const displayResultList = uniqBy(
         [result, ...resultList],
-        (x) => `${x.address?.toLowerCase()}_${x.chainId}_${x.type}`,
+        (x) => `${x.address?.toLowerCase()}_${x.chainId}_${x.type}_${x.name?.toLowerCase()}`,
     )
 
     return (

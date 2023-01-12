@@ -647,7 +647,11 @@ export interface Result<ChainId> {
     /** The original searched keyword */
     keyword: string
     /** alias name list, e.g. binance for bnb. */
-    alias?: string[]
+    alias?: Array<{
+        value: string
+        // If pin this to top of results
+        isPin?: boolean
+    }>
 }
 
 export interface EOAResult<ChainId> extends Result<ChainId> {
@@ -672,7 +676,6 @@ export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId
     name: string
     symbol: string
     source: SourceType
-    alias?: string[]
     token?: FungibleToken<ChainId, SchemaType>
 }
 
