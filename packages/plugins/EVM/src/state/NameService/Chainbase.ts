@@ -5,6 +5,7 @@ import { ChainId } from '@masknet/web3-shared-evm'
 
 export class ChainbaseResolver implements NameServiceResolver {
     get id(): NameServiceID {
+        // to shared cache with ENS
         return NameServiceID.ENS
     }
 

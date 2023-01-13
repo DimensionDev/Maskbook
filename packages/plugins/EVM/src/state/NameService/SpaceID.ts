@@ -1,7 +1,7 @@
 import type { NameServiceResolver } from '@masknet/web3-shared-base'
 import { NameServiceID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { SpaceID } from '@masknet/web3-providers'
+import { ChainbaseDomain } from '@masknet/web3-providers'
 
 export class SpaceID_Resolver implements NameServiceResolver {
     public get id() {
@@ -9,10 +9,10 @@ export class SpaceID_Resolver implements NameServiceResolver {
     }
 
     async lookup(name: string) {
-        return SpaceID.lookup(ChainId.BSC, name)
+        return ChainbaseDomain.lookup(ChainId.BSC, name)
     }
 
     async reverse(address: string) {
-        return SpaceID.reverse(ChainId.BSC, address)
+        return ChainbaseDomain.reverse(ChainId.BSC, address)
     }
 }

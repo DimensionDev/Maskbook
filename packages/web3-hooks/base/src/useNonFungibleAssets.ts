@@ -28,8 +28,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
         setDone(false)
         return flattenAsyncIterator(
             networks
-                .filter((x) => x.isMainnet)
-                .filter((x) => (options?.chainId ? x.chainId === options.chainId : true))
+                .filter((x) => x.isMainnet && (options?.chainId ? x.chainId === options.chainId : true))
                 .map((x) => {
                     return pageableToIterator(async (indicator) => {
                         return hub.getNonFungibleAssets!(account, {
@@ -46,10 +45,10 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
     const next = useCallback(async () => {
         if (!iterator || done) return
         setError(undefined)
-        const batchResult: Array<Web3Helper.NonFungibleAssetScope<S, T>> = []
         toggleLoading(true)
+        const batchResult: Array<Web3Helper.NonFungibleAssetScope<S, T>> = []
         try {
-            for (const v of Array.from({ length: options?.size ?? 36 })) {
+            for (const _ of Array.from({ length: options?.size ?? 36 })) {
                 const { value, done: iteratorDone } = await iterator.next()
                 if (value instanceof Error) {
                     // Controlled error

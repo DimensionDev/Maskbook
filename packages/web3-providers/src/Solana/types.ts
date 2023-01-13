@@ -44,6 +44,8 @@ export interface ProgramAccount {
 
 export type GetAccountInfoResponse = RpcResponse<{ value: AccountInfo }>
 
+export type GetBalanceResponse = RpcResponse<{ value: number }>
+
 export type GetProgramAccountsResponse = RpcResponse<ProgramAccount[]>
 
 export interface SplToken {

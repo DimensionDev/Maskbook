@@ -13,7 +13,7 @@ import {
     NextIDPlatform,
     PopupRoutes,
 } from '@masknet/shared-base'
-import { useHiddenAddressSetting, useWeb3State } from '@masknet/web3-hooks-base'
+import { useHiddenAddressSettings, useWeb3State } from '@masknet/web3-hooks-base'
 import { WalletSettingCard } from '@masknet/shared'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useSharedI18N } from '../../../locales/index.js'
@@ -87,7 +87,7 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
         const [showAlert, setShowAlert] = useState(true)
         const { showSnackbar } = useCustomSnackbar()
 
-        const { value: hiddenAddresses, loading } = useHiddenAddressSetting(pluginID, currentPersona?.publicKeyAsHex)
+        const { value: hiddenAddresses, loading } = useHiddenAddressSettings(pluginID, currentPersona?.publicKeyAsHex)
 
         const onSwitchChange = useCallback((address: string) => {
             setAddresses((prev) => {

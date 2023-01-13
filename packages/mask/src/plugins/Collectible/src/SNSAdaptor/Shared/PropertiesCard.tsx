@@ -1,9 +1,9 @@
-import { makeStyles } from '@masknet/theme'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { Typography } from '@mui/material'
 import format from 'date-fns/format'
 import isAfter from 'date-fns/isAfter'
 import isValid from 'date-fns/isValid'
+import { makeStyles } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
 import { Rank } from './Rank.js'
 
@@ -102,19 +102,17 @@ export function PropertiesCard(props: PropertiesCardProps) {
                 ) : null}
             </div>
             <div className={classes.content}>
-                {asset.traits?.map((x) => {
-                    return (
-                        <div key={x.type} className={classes.traitsItem}>
-                            <Typography className={classes.traitTitle}>{x.type}</Typography>
-                            <Typography className={classes.traitValue} title={x.value}>
-                                {isReasonableDate(x.value) ? format(new Date(x.value), 'yyyy-MM-dd') : x.value}
-                            </Typography>
-                            {typeof x.rarity === 'string' ? (
-                                <Typography className={classes.traitRarity}>({x.rarity})</Typography>
-                            ) : null}
-                        </div>
-                    )
-                })}
+                {asset.traits?.map((x, i) => (
+                    <div key={i} className={classes.traitsItem}>
+                        <Typography className={classes.traitTitle}>{x.type}</Typography>
+                        <Typography className={classes.traitValue} title={x.value}>
+                            {isReasonableDate(x.value) ? format(new Date(x.value), 'yyyy-MM-dd') : x.value}
+                        </Typography>
+                        {typeof x.rarity === 'string' ? (
+                            <Typography className={classes.traitRarity}>({x.rarity})</Typography>
+                        ) : null}
+                    </div>
+                ))}
             </div>
         </div>
     )

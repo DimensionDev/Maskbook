@@ -411,8 +411,20 @@
             }
         },
         {
-            "input": "./packages/plugins/Transak/src/locales/en-US.json",
-            "output": "./packages/plugins/Transak/src/locales/i18n_generated",
+            "input": "./packages/plugins/VCent/src/locales/en-US.json",
+            "output": "./packages/plugins/VCent/src/locales/i18n_generated",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "com.maskbook.tweet",
+                "trans": "Translate",
+                "emitTS": true
+            }
+        },
+        {
+            "input": "./packages/plugins/transak/src/locales/en-US.json",
+            "output": "./packages/plugins/transak/src/locales/i18n_generated",
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",

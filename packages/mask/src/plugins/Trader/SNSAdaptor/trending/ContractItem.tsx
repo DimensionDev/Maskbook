@@ -59,13 +59,15 @@ export function ContractItem(props: ContractItemProps) {
 
     return (
         <>
-            <MenuItem
-                className={classes.root}
-                onClick={chainId ? () => openWindow(Others?.explorerResolver.addressLink(chainId, address)) : noop}>
+            <MenuItem className={classes.root}>
                 <ImageIcon icon={networkDescriptor?.icon} size={20} />
                 <Stack className={classes.item}>
                     <Typography fontWeight="700">{networkDescriptor.name}</Typography>
-                    <Typography className={classes.address}>
+                    <Typography
+                        className={classes.address}
+                        onClick={
+                            chainId ? () => openWindow(Others?.explorerResolver.addressLink(chainId, address)) : noop
+                        }>
                         <FormattedAddress address={address} size={4} formatter={Others?.formatAddress} />
                     </Typography>
                 </Stack>

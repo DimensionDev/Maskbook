@@ -1,5 +1,5 @@
 {
-  "name": "@masknet/plugin-transak",
+  "name": "@masknet/plugin-vcent",
   "private": true,
   "type": "module",
   "exports": {
@@ -13,12 +13,11 @@
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/shared": "workspace:^",
     "@masknet/shared-base": "workspace:^",
-    "@masknet/shared-base-ui": "workspace:^",
     "@masknet/theme": "workspace:^",
+    "@masknet/web3-hooks-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
-    "@types/json-stable-stringify": "^1.0.34",
-    "json-stable-stringify": "^1.0.2",
     "react-use": "^17.4.0",
-    "ts-results": "^3.3.0"
+    "ts-results": "^3.3.0",
+    "urlcat": "^2.0.4"
   }
 }

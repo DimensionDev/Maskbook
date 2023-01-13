@@ -24,7 +24,7 @@ import { first, last, uniqBy } from 'lodash-es'
 import { useCallback, useRef, useState, useContext } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { useTransakAllowanceCoin, PluginTransakMessages } from '@masknet/plugin-transak'
-import type { Currency, Stat } from '../../types/index.js'
+import { Currency, Stat, ContentTabs } from '../../types/index.js'
 import { CoinMenu } from './CoinMenu.js'
 import { TrendingViewContext } from './context.js'
 import { CoinIcon } from './components/index.js'
@@ -134,6 +134,7 @@ const useStyles = makeStyles<{
 export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | 'footer' | 'content' | 'cardHeader'> {
     stats: Stat[]
     currency: Currency
+    currentTab: ContentTabs
     trending: TrendingAPI.Trending
     setResult: (a: Web3Helper.TokenResultAll) => void
     result: Web3Helper.TokenResultAll
@@ -143,7 +144,7 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
 }
 
 export function TrendingViewDeck(props: TrendingViewDeckProps) {
-    const { trending, stats, children, TrendingCardProps, resultList = [], result, setResult } = props
+    const { trending, stats, children, TrendingCardProps, resultList = [], result, setResult, currentTab } = props
 
     const { coin, market } = trending
     const { isNFTProjectPopper, isTokenTagPopper, isPreciseSearch } = useContext(TrendingViewContext)
@@ -323,11 +324,12 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 <Paper className={classes.body} elevation={0}>
                     {children}
                 </Paper>
-                {isNFTProjectPopper || isTokenTagPopper ? (
-                    <section className={classes.pluginDescriptorWrapper}>
-                        <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
-                    </section>
-                ) : null}
+                {isNFTProjectPopper ||
+                    (isTokenTagPopper && currentTab !== ContentTabs.Swap && (
+                        <section className={classes.pluginDescriptorWrapper}>
+                            <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
+                        </section>
+                    ))}
             </CardContent>
         </TrendingCard>
     )
