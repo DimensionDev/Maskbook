@@ -3,7 +3,6 @@ import { useSubscription } from 'use-subscription'
 import {
     useFungibleToken,
     useNonFungibleTokenContract,
-    useNetworkContext,
     useChainContext,
     getDefaultChainId,
 } from '@masknet/web3-hooks-base'
@@ -19,6 +18,7 @@ import { useNftTip } from './useNftTip.js'
 import { useTokenTip } from './useTokenTip.js'
 import { useRecipientValidate } from './useRecipientValidate.js'
 import { useTipValidate } from './useTipValidate.js'
+import { TargetRuntimeContext } from '../TargetRuntimeContext.js'
 
 interface Props {
     task: TipTask
@@ -47,7 +47,7 @@ function useDirtyDetection(deps: any[]): [boolean, Dispatch<SetStateAction<boole
 }
 
 export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ children, task }) => {
-    const { pluginID, setPluginID } = useNetworkContext()
+    const { pluginID, setPluginID } = TargetRuntimeContext.useContainer()
     const { chainId, setChainId } = useChainContext()
 
     const [_recipientAddress, setRecipient] = useState(task.recipient ?? '')

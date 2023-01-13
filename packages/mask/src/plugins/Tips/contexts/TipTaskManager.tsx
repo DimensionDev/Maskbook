@@ -8,6 +8,7 @@ import { PluginTipsMessages } from '../messages.js'
 import type { TipTask } from '../types/index.js'
 import { TipTaskProvider } from './Tip/TipTaskProvider.js'
 import { TipsTransactionProvider } from './TipsTransaction.js'
+import { TargetRuntimeContext } from './TargetRuntimeContext.js'
 
 let id = 0
 
@@ -16,6 +17,7 @@ interface Task extends TipTask {
 }
 
 export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) => {
+    const { pluginID } = TargetRuntimeContext.useContainer()
     const [tasks, setTasks] = useState<Task[]>(EMPTY_LIST)
 
     const removeTask = useCallback((task: Task) => {
@@ -53,7 +55,7 @@ export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) =>
                             pluginID,
                             chainId: getDefaultChainId(pluginID),
                         }}>
-                        <TipTaskProvider key={task.id} task={task}>
+                        <TipTaskProvider task={task}>
                             <TipsTransactionProvider>
                                 <TipDialog open key={task.id} onClose={() => removeTask(task)} />
                             </TipsTransactionProvider>

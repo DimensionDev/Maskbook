@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { useBoolean } from 'react-use'
-import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { InjectedDialog, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, MaskTabList } from '@masknet/theme'
@@ -8,7 +8,7 @@ import type { NonFungibleAsset } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
-import { useCreateTipsTransaction, useTip } from '../contexts/index.js'
+import { TargetRuntimeContext, useCreateTipsTransaction, useTip } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
 import { TipsType } from '../types/index.js'
 import { AddDialog } from './AddDialog.js'
@@ -77,7 +77,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         sendTip,
         validation: [isValid, validateMessage],
     } = useTip()
-    const { pluginID } = useNetworkContext()
+    const { pluginID } = TargetRuntimeContext.useContainer()
     const { chainId } = useChainContext()
 
     const isTokenTip = tipType === TipsType.Tokens

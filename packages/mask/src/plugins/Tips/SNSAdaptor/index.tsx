@@ -8,7 +8,7 @@ import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
 import { MaskColorVar } from '@masknet/theme'
 import { Link } from '@mui/material'
 import { base } from '../base.js'
-import { TipTaskManager } from '../contexts/index.js'
+import { TargetRuntimeContext, TipTaskManager } from '../contexts/index.js'
 import { setupStorage, storageDefaultValue } from '../storage/index.js'
 import { TipsEntranceDialog } from './TipsEntranceDialog.js'
 import { TipsRealmContent } from './components/TipsRealmContent/index.js'
@@ -93,7 +93,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
         },
     ],
     GlobalInjection() {
-        return <TipTaskManager />
+        return (
+            <TargetRuntimeContext.Provider>
+                <TipTaskManager />
+            </TargetRuntimeContext.Provider>
+        )
     },
     TipsRealm: {
         ID: `${base.ID}_tips`,

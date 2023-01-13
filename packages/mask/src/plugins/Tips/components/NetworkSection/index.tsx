@@ -1,9 +1,9 @@
 import type { FC, HTMLProps } from 'react'
 import { PluginID, EMPTY_LIST } from '@masknet/shared-base'
-import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { makeStyles } from '@masknet/theme'
 import { NetworkTab } from '@masknet/shared'
+import { TargetRuntimeContext } from '../../contexts/TargetRuntimeContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -32,7 +32,7 @@ interface Props extends HTMLProps<HTMLDivElement> {}
 export const NetworkSection: FC<Props> = () => {
     const { classes } = useStyles()
 
-    const { pluginID } = useNetworkContext()
+    const { pluginID } = TargetRuntimeContext.useContainer()
     const definition = useActivatedPlugin(PluginID.Tips, 'any')
     const chainIdList = definition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
 
