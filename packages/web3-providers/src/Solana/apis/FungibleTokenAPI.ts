@@ -13,12 +13,18 @@ import {
     CurrencyType,
     NonFungibleToken,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, createNativeToken, isValidChainId } from '@masknet/web3-shared-solana'
+import {
+    ChainId,
+    SchemaType,
+    createNativeToken,
+    isValidChainId,
+    getNativeTokenAddress,
+} from '@masknet/web3-shared-solana'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { CoinGeckoPriceSolanaAPI } from '../../CoinGecko/index.js'
 import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants.js'
 import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers.js'
-import type { GetAccountInfoResponse, GetProgramAccountsResponse, RaydiumTokenList } from '../types.js'
+import type { GetBalanceResponse, GetProgramAccountsResponse, RaydiumTokenList } from '../types.js'
 import type { FungibleTokenAPI, TokenListAPI } from '../../entry-types.js'
 
 const fetchTokenList = memoizePromise(
@@ -95,15 +101,15 @@ export class SolanaFungibleAPI
     }
 
     async getAsset(account: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId, HubIndicator> = {}) {
-        const price = await this.coingecko.getFungibleTokenPrice(chainId, 'solana', {
+        const price = await this.coingecko.getFungibleTokenPrice(chainId, getNativeTokenAddress(), {
             currencyType: CurrencyType.USD,
         })
 
-        const data = await requestRPC<GetAccountInfoResponse>(chainId, {
-            method: 'getAccountInfo',
+        const data = await requestRPC<GetBalanceResponse>(chainId, {
+            method: 'getBalance',
             params: [account],
         })
-        const balance = data.result?.value.lamports.toString() ?? '0'
+        const balance = data.result?.value.toString() ?? '0'
         return createFungibleAsset(createNativeToken(chainId), balance, {
             [CurrencyType.USD]: price.toString(),
         })
@@ -113,7 +119,9 @@ export class SolanaFungibleAPI
         address: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, HubIndicator>> {
-        if (!isValidChainId(chainId)) return createPageable([], createIndicator(indicator))
+        if (!isValidChainId(chainId)) {
+            return createPageable([], createIndicator(indicator))
+        }
         const allSettled = await Promise.allSettled([
             this.getAsset(address, { chainId }).then((x) => [x]),
             this.getSplTokenList(chainId, address),

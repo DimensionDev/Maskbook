@@ -5,13 +5,14 @@ import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
 import { formatBalance } from '@masknet/web3-shared-base'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import {
     useChainContext,
     useChainIdValid,
     useFungibleTokenBalance,
     useNetworkContext,
     useWeb3State,
+    Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
 import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base.js'
@@ -28,6 +29,9 @@ import { useUpdateBalance } from './hooks/useUpdateBalance.js'
 import { TradeForm } from './TradeForm.js'
 import { WalletMessages } from '../../../Wallet/messages.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { TraderStateBar } from './TraderStateBar.js'
+import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
+import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
 
 export interface TraderProps extends withClasses<'root'> {
     defaultInputCoin?: Web3Helper.FungibleTokenAll
@@ -56,6 +60,11 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
+
+    const site = getSiteType()
+    const pluginIDs = useValueRef(pluginIDSettings)
+
+    const context = { pluginID: site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM }
 
     // #region trade state
     const {
@@ -328,7 +337,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                 onTokenChipClick={onTokenChipClick}
                 focusedTrade={focusedTrade}
                 onFocusedTradeChange={(trade) => setFocusTrade(trade)}
-                onSwap={onSwap}
                 gasPrice={gasPrice}
                 gasConfig={gasConfig}
                 onSwitch={onSwitchToken}
@@ -346,6 +354,20 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                     onClose={onConfirmDialogClose}
                 />
             ) : null}
+
+            <Web3ContextProvider value={context}>
+                <TraderStateBar
+                    settings={settings}
+                    trades={sortedAllTradeComputed}
+                    inputToken={inputToken}
+                    outputToken={outputToken}
+                    inputTokenBalance={inputTokenBalance}
+                    inputAmount={inputAmount}
+                    focusedTrade={focusedTrade}
+                    gasPrice={gasPrice}
+                    onSwap={onSwap}
+                />
+            </Web3ContextProvider>
         </>
     )
 })

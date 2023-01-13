@@ -23,7 +23,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isDashboard }) => 
         display: 'flex',
         flexDirection: 'column',
         overflow: 'auto',
-        '-ms-overflow-style': 'none',
+        msOverflowStyle: 'none',
         scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',

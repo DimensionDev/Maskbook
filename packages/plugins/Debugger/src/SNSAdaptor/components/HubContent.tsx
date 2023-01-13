@@ -38,6 +38,7 @@ export function HubContent(props: HubContentProps) {
         ['getTransactions', [chainId, account]],
 
         // fungible tokens
+        ['getFungibleToken', [address]],
         ['getFungibleAsset', [address]],
         ['getFungibleAssets', [account]],
         ['getFungibleTokenBalance', [address]],

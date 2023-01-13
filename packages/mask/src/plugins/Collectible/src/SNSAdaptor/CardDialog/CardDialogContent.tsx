@@ -137,7 +137,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
 
                 <div className={classes.tabWrapper}>
                     {currentTab === TabType.About ? (
-                        <AboutTab orders={orders} asset={asset} />
+                        <AboutTab orders={orders.value} asset={asset.value} />
                     ) : currentTab === TabType.Offers ? (
                         <OffersTab offers={orders} />
                     ) : (

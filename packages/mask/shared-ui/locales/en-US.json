@@ -755,6 +755,7 @@
     "plugin_collectible_nft_activity_empty": "This NFT didn't have any activities.",
     "plugin_collectible_chain_info": "Chain Info",
     "plugin_collectible_creator_earning": "Creator Royalties",
+    "plugin_collectible_creator_earning_tooltip": "When you sell this item, this amount will be taken out of the sale proceeds and sent to the creator of the NFT as royalties. Collection owners can adjust royalties.",
     "plugin_collectible_platform_costs": "{{platform}} Platform costs",
     "plugin_collectible_contract_address": "Contract Address",
     "plugin_collectible_token_id": "Token ID",

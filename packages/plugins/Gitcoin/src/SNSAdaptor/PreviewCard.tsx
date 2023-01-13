@@ -15,6 +15,11 @@ import { usePostLink } from '@masknet/plugin-infra/content-script'
 const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(2),
+        maxHeight: 500,
+        overflow: 'auto',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     logo: {
         textAlign: 'center',

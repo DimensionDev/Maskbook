@@ -1,13 +1,14 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import {
+    CHAIN_DESCRIPTORS,
     ChainId,
-    SchemaType,
-    NetworkType,
     NETWORK_DESCRIPTORS,
-    ProviderType,
+    NetworkType,
     PROVIDER_DESCRIPTORS,
+    ProviderType,
+    SchemaType,
 } from '@masknet/web3-shared-evm'
-import { PLUGIN_ID, PLUGIN_NAME, PLUGIN_DESCRIPTION } from './constants/index.js'
+import { PLUGIN_DESCRIPTION, PLUGIN_ID, PLUGIN_NAME } from './constants/index.js'
 import { languages } from './locales/languages.js'
 
 export const base: Plugin.Shared.Definition<ChainId, SchemaType, ProviderType, NetworkType> = {
@@ -21,6 +22,7 @@ export const base: Plugin.Shared.Definition<ChainId, SchemaType, ProviderType, N
         target: 'stable',
     },
     i18n: languages,
+    declareWeb3Chains: CHAIN_DESCRIPTORS,
     declareWeb3Networks: NETWORK_DESCRIPTORS,
     declareWeb3Providers: PROVIDER_DESCRIPTORS,
 }

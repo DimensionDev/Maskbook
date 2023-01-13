@@ -12,7 +12,7 @@ import {
     toFixed,
 } from '@masknet/web3-shared-base'
 import { ChainId, formatGweiToWei, getDeBankConstants, SchemaType, GasOption } from '@masknet/web3-shared-evm'
-import { formatAssets, formatTransactions } from './helpers.js'
+import { formatAssets, formatTransactions, resolveDeBankAssetId, resolveDeBankAssetIdReversed } from './helpers.js'
 import type { WalletTokenRecord, GasPriceDictResponse, HistoryRecord } from './types.js'
 import { getNativeAssets } from '../entry-helpers.js'
 import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../entry-types.js'
@@ -44,7 +44,7 @@ export class DeBankAPI
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
         if (!CHAIN_ID) throw new Error('Failed to get gas price.')
 
-        const response = await fetch(urlcat(DEBANK_OPEN_API, '/chain/gas_price_dict_v2', { chain: CHAIN_ID }))
+        const response = await fetch(urlcat(DEBANK_OPEN_API, '/v1/wallet/gas_market', { chain_id: CHAIN_ID }))
         const result = (await response.json()) as GasPriceDictResponse
         if (result.error_code !== 0) throw new Error('Failed to get gas price.')
 
@@ -83,8 +83,8 @@ export class DeBankAPI
                         ...x,
 
                         // rename bsc to bnb
-                        id: x.id === 'bsc' ? 'bnb' : x.id,
-                        chain: x.chain === 'bsc' ? 'bnb' : x.chain,
+                        id: resolveDeBankAssetId(x.id),
+                        chain: resolveDeBankAssetId(x.chain),
                         // prefix ARETH
                         symbol: x.chain === 'arb' && x.symbol === 'ETH' ? 'ARETH' : x.symbol,
                         logo_url:
@@ -108,7 +108,9 @@ export class DeBankAPI
         if (!CHAIN_ID) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
         const response = await fetch(
-            `${DEBANK_OPEN_API}/v1/user/history_list?id=${address.toLowerCase()}&chain_id=${CHAIN_ID}`,
+            `${DEBANK_OPEN_API}/v1/user/history_list?id=${address.toLowerCase()}&chain_id=${resolveDeBankAssetIdReversed(
+                CHAIN_ID,
+            )}`,
         )
         if (!response.ok) throw new Error('Fail to load transactions.')
         const data: HistoryRecord = await response.json()

@@ -3,18 +3,14 @@ import { omit } from 'lodash-es'
 import type { ChainId, UserOperation } from '@masknet/web3-shared-evm'
 import { toBase64, fromHex } from '@masknet/shared-base'
 import type { BundlerAPI } from '../../types/Bundler.js'
-import { fetchCached, fetchJSON } from '../../entry-helpers.js'
+import { fetchJSON } from '../../entry-helpers.js'
 import { BUNDLER_PROD } from '../constants.js'
 
 export class SmartPayBundlerAPI implements BundlerAPI.Provider {
     private healthz() {
-        return fetchJSON<BundlerAPI.Healthz>(
-            urlcat(BUNDLER_PROD, '/healthz'),
-            {
-                method: 'GET',
-            },
-            fetchCached,
-        )
+        return fetchJSON<BundlerAPI.Healthz>(urlcat(BUNDLER_PROD, '/healthz'), {
+            method: 'GET',
+        })
     }
 
     private async handle(userOperation: UserOperation) {

@@ -8,7 +8,7 @@ import { useWeb3State } from './useWeb3State.js'
  * @param identity The persona identifier's hex string
  * @returns
  */
-export function useHiddenAddressSetting(pluginID: PluginID, identity?: string) {
+export function useHiddenAddressSettings(pluginID: PluginID, identity?: string) {
     const { Storage } = useWeb3State()
 
     return useAsyncRetry(async () => {

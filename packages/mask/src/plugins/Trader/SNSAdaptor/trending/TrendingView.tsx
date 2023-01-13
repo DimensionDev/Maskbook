@@ -32,6 +32,7 @@ import { NonFungibleTickersTable } from './NonFungibleTickersTable.js'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 import { PluginEnableBoundary } from '../../../../components/shared/PluginEnableBoundary.js'
+import { ContentTabs } from '../../types/index.js'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -97,11 +98,15 @@ const useStyles = makeStyles<{
             boxSizing: 'border-box',
             overflow: 'auto',
         },
+        priceChartWrapper: {
+            padding: theme.spacing(4, 2, props.isTokenTagPopper ? 8 : 4, 2),
+        },
         nftList: {
             gap: 12,
         },
         hidden: {
             visibility: 'hidden',
+            height: 0,
         },
     }
 })
@@ -110,14 +115,6 @@ export interface TrendingViewProps {
     resultList: Web3Helper.TokenResultAll[]
     address?: string
     onUpdate?: () => void
-}
-
-enum ContentTabs {
-    Market = 'market',
-    Price = 'price',
-    Exchange = 'exchange',
-    Swap = 'swap',
-    NFTItems = 'nft-items',
 }
 
 export function TrendingView(props: TrendingViewProps) {
@@ -140,7 +137,6 @@ export function TrendingView(props: TrendingViewProps) {
     useEffect(() => setTabIndex(0), [networkType])
     // #endregion
     // #region merge trending
-
     const { value: { trending } = {}, loading: loadingTrending } = useTrendingById(result, result.address)
     // #endregion
 
@@ -165,7 +161,7 @@ export function TrendingView(props: TrendingViewProps) {
         !isNFT &&
         !!trending?.coin.contract_address &&
         chainIdValid &&
-        trending?.coin.pluginID === NetworkPluginID.PLUGIN_EVM
+        trending.contracts?.[0].pluginID === NetworkPluginID.PLUGIN_EVM
     // #endregion
 
     // #region expected chainId
@@ -177,6 +173,7 @@ export function TrendingView(props: TrendingViewProps) {
                       {
                           chainId: trending.coin.chainId,
                           address: trending.coin.contract_address,
+                          pluginID: NetworkPluginID.PLUGIN_EVM,
                       },
                   ]
                 : []
@@ -268,6 +265,7 @@ export function TrendingView(props: TrendingViewProps) {
                 content: classes.content,
                 cardHeader: classes.cardHeader,
             }}
+            currentTab={currentTab}
             stats={stats}
             setResult={setResult}
             resultList={resultList}
@@ -291,7 +289,7 @@ export function TrendingView(props: TrendingViewProps) {
                     <CoinMarketPanel dataProvider={trending.dataProvider} trending={trending} result={result} />
                 ) : null}
                 {currentTab === ContentTabs.Price ? (
-                    <Box px={2} py={4}>
+                    <Box className={classes.priceChartWrapper}>
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}
@@ -357,21 +355,19 @@ export function TrendingView(props: TrendingViewProps) {
                     </Web3ContextProvider>
                 ) : null}
 
-                <Box
-                    className={cx(
-                        classes.nftItems,
-                        currentTab === ContentTabs.NFTItems && isNFT ? '' : classes.hidden,
-                    )}>
-                    <NFTList
-                        pluginID={result.pluginID}
-                        className={classes.nftList}
-                        tokens={fetchedTokens}
-                        onNextPage={next}
-                        finished={done}
-                        hasError={!!loadError}
-                        gap={16}
-                    />
-                </Box>
+                {isNFT && (
+                    <Box className={cx(classes.nftItems, currentTab === ContentTabs.NFTItems ? '' : classes.hidden)}>
+                        <NFTList
+                            pluginID={result.pluginID}
+                            className={classes.nftList}
+                            tokens={fetchedTokens}
+                            onNextPage={next}
+                            finished={done}
+                            hasError={!!loadError}
+                            gap={16}
+                        />
+                    </Box>
+                )}
             </Stack>
         </TrendingViewDeck>
     )

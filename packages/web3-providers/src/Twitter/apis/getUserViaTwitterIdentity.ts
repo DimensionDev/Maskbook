@@ -1,6 +1,7 @@
 import urlcat from 'urlcat'
-import type { TwitterBaseAPI } from '../../entry-types.js'
 import { staleCached } from '../../helpers/fetchCached.js'
+import { fetchJSON } from '../../entry-helpers.js'
+import type { TwitterBaseAPI } from '../../entry-types.js'
 
 const TWITTER_IDENTITY_URL = 'https://mr8asf7i4h.execute-api.us-east-1.amazonaws.com/prod/twitter-identity'
 
@@ -43,9 +44,7 @@ export async function getUserViaTwitterIdentity(screenName: string): Promise<Twi
     const url = urlcat(TWITTER_IDENTITY_URL, {
         screenName,
     })
-    const response = await fetch(url)
-    if (!response.ok) return null
-    const identity: TwitterBaseAPI.IdentifyResponse = await response.json()
+    const identity = await fetchJSON<TwitterBaseAPI.IdentifyResponse>(url)
     return identityToLegacyUser(identity)
 }
 

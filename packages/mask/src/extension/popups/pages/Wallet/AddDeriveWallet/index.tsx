@@ -128,6 +128,7 @@ const AddDeriveWallet = memo(() => {
 
         if (!currentMaskWalletAccountSettings.value) {
             await connection?.connect({ account: firstWallet })
+            await WalletRPC.resolveMaskAccount([{ address: firstWallet }])
         }
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [mnemonic, walletName, wallets.length, connection])

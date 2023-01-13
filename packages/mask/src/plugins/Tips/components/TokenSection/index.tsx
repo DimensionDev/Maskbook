@@ -28,15 +28,15 @@ export const TokenSection: FC<Props> = ({ className, ...rest }) => {
     const { classes, cx } = useStyles()
     const { token, setToken, amount, setAmount } = useTip()
     const { pluginID } = useNetworkContext()
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account, chainId } = useChainContext()
 
     // balance
-    const { value: tokenBalance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address, {
+    const { value: tokenBalance = '0' } = useFungibleTokenBalance(pluginID, token?.address, {
         chainId,
         account,
     })
     const { gasPrice } = useGasConfig(chainId)
-    const { value: defaultGasPrice = '1' } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const { value: defaultGasPrice = '1' } = useGasPrice(pluginID, { chainId })
     const isNativeToken = useMemo(() => isNativeTokenAddress(token?.address), [token?.address])
 
     const maxAmount = useMemo(() => {
@@ -50,6 +50,7 @@ export const TokenSection: FC<Props> = ({ className, ...rest }) => {
     const selectFungibleToken = useSelectFungibleToken()
     const onSelectTokenChipClick = useCallback(async () => {
         const picked = await selectFungibleToken({
+            pluginID,
             chainId,
             disableNativeToken: false,
             selectedTokens: token ? [token.address] : [],
@@ -57,7 +58,7 @@ export const TokenSection: FC<Props> = ({ className, ...rest }) => {
         if (picked) {
             setToken(picked)
         }
-    }, [selectFungibleToken, token?.address, chainId])
+    }, [selectFungibleToken, token?.address, pluginID, chainId])
     // #endregion
 
     return (

@@ -12,16 +12,19 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                 filter: (data: SearchResult<ChainId, SchemaType>, keyword: string) => {
                     if (data.type !== SearchResultType.FungibleToken) return false
 
-                    if (data.alias?.map((x) => x.toLowerCase()).includes(keyword.toLowerCase())) return true
+                    if (
+                        data.alias
+                            ?.filter((x) => !x.isPin)
+                            .map((x) => x.value.toLowerCase())
+                            .includes(keyword.toLowerCase())
+                    )
+                        return true
 
                     const symbol = data.symbol
                     if (symbol === keyword || symbol?.replace(/\s/g, '') === keyword) return true
 
                     const name = data.name
                     if (name === keyword) return true
-
-                    const alias = data.alias
-                    if (alias?.map((x) => x.toLowerCase()).includes(keyword.toLowerCase())) return true
 
                     return false
                 },
@@ -75,7 +78,12 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                     return (
                         isSameAddress(data.address, keyword) ||
                         data.name === keyword ||
-                        Boolean(data.alias?.map((x) => x.toLowerCase()).includes(keyword.toLowerCase()))
+                        Boolean(
+                            data.alias
+                                ?.filter((x) => !x.isPin)
+                                ?.map((x) => x.value.toLowerCase())
+                                .includes(keyword.toLowerCase()),
+                        )
                     )
                 },
             },
