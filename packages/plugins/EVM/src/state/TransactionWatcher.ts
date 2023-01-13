@@ -45,8 +45,8 @@ export class TransactionWatcher extends TransactionWatcherState<ChainId, Transac
         const { Transaction } = Web3StateSettings.value
 
         // update record status in transaction state
-        if (status !== TransactionStatusType.NOT_DEPEND && Transaction?.updateTransaction && transaction.from)
-            await Transaction.updateTransaction(chainId, transaction.from as string, id, status)
+        if (status !== TransactionStatusType.NOT_DEPEND && transaction.from)
+            await Transaction?.updateTransaction?.(chainId, transaction.from as string, id, status)
 
         // only tracked records will get notified
         getSubscriptionCurrentValue(() => Transaction?.transactions).then((transactions) => {
