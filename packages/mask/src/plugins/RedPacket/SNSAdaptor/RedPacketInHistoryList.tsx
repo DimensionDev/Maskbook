@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => {
             textOverflow: 'ellipsis',
         },
         span: {
-            maxWidth: 350,
+            maxWidth: 400,
             display: 'inline-flex',
         },
         root: {
@@ -220,7 +220,9 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         (patchedHistory as RedPacketJSONPayload).token?.address ??
         (patchedHistory as RedPacketJSONPayloadFromChain).token_address
 
-    const { value: tokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress ?? '')
+    const { value: tokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress ?? '', undefined, {
+        chainId,
+    })
 
     const historyToken = {
         ...(tokenDetailed ?? (patchedHistory as RedPacketJSONPayload).token),
