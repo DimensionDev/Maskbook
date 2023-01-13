@@ -25,6 +25,9 @@ const RULES = {
     'https://chainbase-proxy.r2d2.to/v1/ens': Duration.SHORT,
     // Mask Search List
     'https://dsearch.mask.r2d2.to': Duration.LONG,
+    // Smart Pay
+    'https://9rh2q3tdqj.execute-api.ap-east-1.amazonaws.com/': Duration.SHORT,
+    'https://uldpla73li.execute-api.ap-east-1.amazonaws.com': Duration.SHORT,
 }
 const URLS = Object.keys(RULES) as unknown as Array<keyof typeof RULES>
 

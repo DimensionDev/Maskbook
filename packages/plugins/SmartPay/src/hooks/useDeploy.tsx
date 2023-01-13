@@ -99,6 +99,7 @@ export function useDeploy(
                     chainId,
                 },
             )
+            if (!hash) throw new Error('Deploy Failed')
 
             return TransactionWatcher?.emitter.on('progress', (txHash, status) => {
                 if (txHash !== hash) return

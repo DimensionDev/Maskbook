@@ -817,6 +817,8 @@ export interface Wallet {
     updatedAt: Date
     /** an abstract wallet has a owner */
     owner?: string
+    /** an abstract wallet has been deployed */
+    deployed?: boolean
     /** persona identifier */
     identifier?: ECKeyIdentifier
 }

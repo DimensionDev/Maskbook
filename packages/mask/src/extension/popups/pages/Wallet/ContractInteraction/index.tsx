@@ -29,6 +29,7 @@ import {
     useNativeToken,
     useNativeTokenPrice,
     useReverseAddress,
+    useWallet,
     useWeb3State,
 } from '@masknet/web3-hooks-base'
 import {
@@ -156,6 +157,7 @@ const ContractInteraction = memo(() => {
     const { classes } = useStyles()
     const location = useLocation()
     const navigate = useNavigate()
+    const wallet = useWallet()
     const { smartPayChainId } = useContainer(PopupContext)
     const { Others, TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -263,7 +265,7 @@ const ContractInteraction = memo(() => {
         chainId: smartPayChainId,
     })
 
-    const availableBalanceTooLow = isLessThan(formatBalance(allowance, maskToken?.decimals), 0.1)
+    const availableBalanceTooLow = !wallet?.deployed || !isLessThan(formatBalance(allowance, maskToken?.decimals), 0.1)
 
     const { value: currencyRatio } = useAsync(async () => {
         if (!smartPayChainId) return
@@ -428,7 +430,7 @@ const ContractInteraction = memo(() => {
                                 }
                                 formatter={formatBalance}
                             />
-                            {request?.owner && !availableBalanceTooLow ? (
+                            {request?.owner && availableBalanceTooLow ? (
                                 <Icons.ArrowDrop onClick={openCurrencyMenu} />
                             ) : null}
                             <Link
@@ -438,7 +440,7 @@ const ContractInteraction = memo(() => {
                                 {t('popups_wallet_contract_interaction_edit')}
                             </Link>
                         </Typography>
-                        {request?.owner && !availableBalanceTooLow ? currencyMenu : null}
+                        {request?.owner && availableBalanceTooLow ? currencyMenu : null}
                     </div>
 
                     {!isGreaterThan(totalUSD, pow10(9)) ? (
