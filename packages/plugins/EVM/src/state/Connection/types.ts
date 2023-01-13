@@ -1,17 +1,7 @@
-import type { RequestArguments } from 'web3-core'
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import type { ECKeyIdentifier, NetworkPluginID, Proof } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { RecognizableError, WalletProvider } from '@masknet/web3-shared-base'
-import type {
-    Web3,
-    ChainId,
-    ProviderType,
-    EthereumMethodType,
-    Transaction,
-    Web3Provider,
-    UserOperation,
-} from '@masknet/web3-shared-evm'
+import type { WalletProvider } from '@masknet/web3-shared-base'
+import type { Web3, ChainId, ProviderType, Web3Provider } from '@masknet/web3-shared-evm'
 
 export interface EVM_Web3State extends Web3Helper.Web3State<NetworkPluginID.PLUGIN_EVM> {}
 

@@ -11,7 +11,6 @@ import {
     PayloadEditor,
     TransactionOptions,
     Signer,
-    isZeroAddress,
 } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../messages.js'
 import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper/index.js'
@@ -45,7 +44,7 @@ async function internalSend(
         case EthereumMethodType.MASK_REPLACE_TRANSACTION:
             try {
                 if (!signableConfig) throw new Error('No transaction to be sent.')
-                if (owner && gasCurrency && !isZeroAddress(gasCurrency)) {
+                if (owner && gasCurrency) {
                     callback(
                         null,
                         createJsonRpcResponse(
