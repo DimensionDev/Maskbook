@@ -13,7 +13,6 @@
     "verify_Twitter_ID": "crwdns14738:0crwdne14738:0",
     "verify_other_Twitter_ID_intro": "crwdns14740:0crwdne14740:0",
     "verify_Twitter_ID_button": "crwdns14742:0crwdne14742:0",
-    "enable_plugin": "crwdns18118:0crwdne18118:0",
     "verify_wallet_button": "crwdns13083:0crwdne13083:0",
     "add_wallet_button": "crwdns13085:0crwdne13085:0",
     "verify_wallet_dialog_title": "crwdns13087:0crwdne13087:0",
@@ -57,5 +56,6 @@
     "mask_network": "crwdns18124:0crwdne18124:0",
     "create_persona_intro": "crwdns18270:0crwdne18270:0",
     "add_wallet_intro": "crwdns18272:0crwdne18272:0",
-    "others_lack_wallet": "crwdns18274:0crwdne18274:0"
+    "others_lack_wallet": "crwdns18274:0crwdne18274:0",
+    "enable_plugin": "crwdns18118:0crwdne18118:0"
 }
