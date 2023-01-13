@@ -91,6 +91,11 @@ export class ContractWallet implements Middleware<Context> {
         throw new Error('No user operation to be estimated.')
     }
 
+    private async fund(context: Context) {
+        if (!context.proof) throw new Error('No proof.')
+        return this.funder.fund(context.chainId, context.proof)
+    }
+
     private async deploy(context: Context) {
         if (!context.owner) throw new Error('No owner.')
         return this.account.deploy(context.chainId, context.owner, this.getSigner(context))
@@ -100,18 +105,18 @@ export class ContractWallet implements Middleware<Context> {
         const provider = Providers[context.providerType] as BaseContractWalletProvider | undefined
 
         // not a SC wallet provider
-        if (!provider?.ownerAccount) {
+        if (!provider?.ownerAccount && context.method !== EthereumMethodType.MASK_FUND) {
             await next()
             return
         }
 
         switch (context.request.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
-                context.write(provider.hostedChainId)
+                context.write(provider?.hostedChainId)
                 break
             case EthereumMethodType.ETH_ACCOUNTS:
-                if (isValidAddress(provider.hostedAccount)) {
-                    context.write([provider.hostedAccount])
+                if (isValidAddress(provider?.hostedAccount)) {
+                    context.write([provider?.hostedAccount])
                 } else {
                     context.abort(new Error('Please connect a wallet.'))
                 }
@@ -183,7 +188,14 @@ export class ContractWallet implements Middleware<Context> {
                     context.abort(error)
                 }
                 break
-
+            case EthereumMethodType.MASK_FUND:
+                try {
+                    const result = await this.fund(context)
+                    context.write(result)
+                } catch (error) {
+                    context.abort(error)
+                }
+                break
             case EthereumMethodType.MASK_DEPLOY:
                 try {
                     context.write(await this.deploy(context))

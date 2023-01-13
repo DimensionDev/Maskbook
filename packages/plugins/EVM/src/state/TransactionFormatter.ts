@@ -76,7 +76,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
             to,
             value,
             hash,
-            is_fund: transaction.is_fund,
+            isFund: transaction.isFund,
         }
 
         if (data) {
@@ -136,12 +136,12 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
             }
 
             // cancel tx
-            if (isSameAddress(from, to) && isZero(value) && !context.is_fund) {
+            if (isSameAddress(from, to) && isZero(value) && !context.isFund) {
                 return { ...context, type: TransactionDescriptorType.CANCEL }
             }
 
             // send ether
-            if (isEmptyHex(code) && !context.is_fund) {
+            if (isEmptyHex(code) && !context.isFund) {
                 return { ...context, type: TransactionDescriptorType.TRANSFER }
             }
 
