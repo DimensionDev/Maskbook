@@ -65,6 +65,7 @@ const useStyles = makeStyles()((theme) => ({
         width: 16,
         height: 16,
         transform: 'translate(0px, -2px)',
+        color: theme.palette.maskColor.publicSecond,
     },
     follow: {
         marginTop: theme.spacing(2),
