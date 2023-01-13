@@ -3,7 +3,6 @@ import { getEnumAsArray } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { TransactionWatcherState } from '@masknet/web3-state'
 import { ChainId, Transaction } from '@masknet/web3-shared-evm'
-import { getSubscriptionCurrentValue } from '@masknet/shared-base'
 import { RecentTransaction, TransactionStatusType } from '@masknet/web3-shared-base'
 import { TransactionCheckers } from './TransactionWatcher/checker.js'
 import { Web3StateSettings } from '../settings/index.js'
@@ -39,19 +38,21 @@ export class TransactionWatcher extends TransactionWatcherState<ChainId, Transac
         transaction: Transaction,
         status: TransactionStatusType,
     ) {
-        if (transaction.isFund) {
-            this.emitter.emit('progress', id, status, transaction)
-        }
         const { Transaction } = Web3StateSettings.value
 
-        // update record status in transaction state
-        if (status !== TransactionStatusType.NOT_DEPEND && transaction.from)
-            await Transaction?.updateTransaction?.(chainId, transaction.from as string, id, status)
+        // a wallet connected
+        if (Transaction) {
+            // update record status in transaction state
+            if (status !== TransactionStatusType.NOT_DEPEND && transaction.from)
+                await Transaction.updateTransaction?.(chainId, transaction.from as string, id, status)
 
-        // only tracked records will get notified
-        getSubscriptionCurrentValue(() => Transaction?.transactions).then((transactions) => {
-            if (transactions?.some((x) => Object.keys(x.candidates).includes(id)))
-                this.emitter.emit('progress', id, status, transaction)
-        })
+            // only tracked records will get notified
+            if (transaction.from) {
+                const stored = await Transaction.getTransaction?.(chainId, transaction.from, id)
+                if (stored) this.emitter.emit('progress', id, status, transaction)
+            }
+        } else {
+            this.emitter.emit('progress', id, status, transaction)
+        }
     }
 }

@@ -191,7 +191,7 @@ export class ContractWallet implements Middleware<Context> {
             case EthereumMethodType.MASK_FUND:
                 try {
                     const { message } = await this.fund(context)
-                    if (isValidAddress(message.walletAddress)) throw new Error('Failed to fund.')
+                    if (!isValidAddress(message.walletAddress)) throw new Error('Failed to fund.')
                     context.write(message.tx)
                 } catch (error) {
                     context.abort(error)

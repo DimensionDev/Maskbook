@@ -1514,6 +1514,8 @@ export interface TransactionState<ChainId, Transaction> {
     /** The tracked transactions of currently chosen sub-network */
     transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
 
+    /** Get a transaction record. */
+    getTransaction?: (chainId: ChainId, address: string, id: string) => Promise<Transaction | undefined>
     /** Add a transaction record. */
     addTransaction?: (chainId: ChainId, address: string, id: string, transaction: Transaction) => Promise<void>
     /** Replace a transaction with new record. */
