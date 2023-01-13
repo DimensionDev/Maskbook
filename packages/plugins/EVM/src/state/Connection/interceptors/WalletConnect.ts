@@ -1,9 +1,8 @@
 import { toHex } from 'web3-utils'
-import { EthereumMethodType } from '@masknet/web3-shared-evm'
-import type { Context, Middleware } from '../types.js'
+import { ConnectionContext, EthereumMethodType, Middleware } from '@masknet/web3-shared-evm'
 
-export class WalletConnect implements Middleware<Context> {
-    async fn(context: Context, next: () => Promise<void>) {
+export class WalletConnect implements Middleware<ConnectionContext> {
+    async fn(context: ConnectionContext, next: () => Promise<void>) {
         switch (context.request.method) {
             case EthereumMethodType.PERSONAL_SIGN:
                 context.requestArguments = {

@@ -4,7 +4,6 @@ import { defer } from '@masknet/kit'
 import { SmartPayAccount, Web3 } from '@masknet/web3-providers'
 import {
     ChainId,
-    createJsonRpcPayload,
     createJsonRpcResponse,
     ErrorEditor,
     EthereumMethodType,

@@ -1,10 +1,9 @@
 import { toHex } from 'web3-utils'
-import { EthereumMethodType } from '@masknet/web3-shared-evm'
-import type { Context, Middleware } from '../types.js'
+import { ConnectionContext, EthereumMethodType, Middleware } from '@masknet/web3-shared-evm'
 import { SharedContextSettings } from '../../../settings/index.js'
 
-export class MaskWallet implements Middleware<Context> {
-    async fn(context: Context, next: () => Promise<void>) {
+export class MaskWallet implements Middleware<ConnectionContext> {
+    async fn(context: ConnectionContext, next: () => Promise<void>) {
         const { account, chainId } = SharedContextSettings.value
 
         switch (context.request.method) {

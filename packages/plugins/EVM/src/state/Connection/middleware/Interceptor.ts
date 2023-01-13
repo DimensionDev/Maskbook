@@ -1,6 +1,5 @@
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { ConnectionContext, Middleware, ProviderType } from '@masknet/web3-shared-evm'
 import { SmartPayAccount, SmartPayBundler, SmartPayFunder } from '@masknet/web3-providers'
-import type { Context, Middleware } from '../types.js'
 import { NoneWallet } from '../interceptors/None.js'
 import { MaskWallet } from '../interceptors/MaskWallet.js'
 import { WalletConnect } from '../interceptors/WalletConnect.js'
@@ -9,8 +8,8 @@ import { Fortmatic } from '../interceptors/Fortmatic.js'
 import { ContractWallet } from '../interceptors/ContractWallet.js'
 import { Popups } from '../interceptors/Popups.js'
 
-export class Interceptor implements Middleware<Context> {
-    private interceptors: Partial<Record<ProviderType, Array<Middleware<Context>>>> = {
+export class Interceptor implements Middleware<ConnectionContext> {
+    private interceptors: Partial<Record<ProviderType, Array<Middleware<ConnectionContext>>>> = {
         [ProviderType.None]: [new NoneWallet()],
         [ProviderType.MaskWallet]: [
             new Popups(),
@@ -27,14 +26,14 @@ export class Interceptor implements Middleware<Context> {
         [ProviderType.Clover]: [new MetaMask()],
     }
 
-    async fn(context: Context, next: () => Promise<void>) {
+    async fn(context: ConnectionContext, next: () => Promise<void>) {
         const interceptors = this.interceptors[context.providerType]
         if (!interceptors?.length || !context.writeable) {
             await next()
             return
         }
-        for (const [index, value] of interceptors.entries()) {
-            await value.fn(context, index === interceptors.length - 1 ? next : () => Promise.resolve())
+        for (const middleware of interceptors.values()) {
+            await middleware.fn(context, () => Promise.resolve())
             if (!context.writeable) break
         }
     }

@@ -1,4 +1,6 @@
 export * from './AccountTransaction.js'
+export * from './Composer.js'
+export * from './ConnectionContext.js'
 export * from './ContractTransaction.js'
 export * from './ContractWallet.js'
 export * from './Create2Factory.js'

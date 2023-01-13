@@ -1,12 +1,17 @@
 import type { TransactionReceipt } from 'web3-core'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
-import { EthereumMethodType, Transaction, UserTransaction } from '@masknet/web3-shared-evm'
-import type { Context, Middleware } from '../types.js'
+import {
+    EthereumMethodType,
+    Transaction,
+    UserTransaction,
+    Middleware,
+    ConnectionContext,
+} from '@masknet/web3-shared-evm'
 import { getReceiptStatus } from '../utils.js'
 import { Web3StateSettings } from '../../../settings/index.js'
 
-export class RecentTransaction implements Middleware<Context> {
-    async fn(context: Context, next: () => Promise<void>) {
+export class RecentTransaction implements Middleware<ConnectionContext> {
+    async fn(context: ConnectionContext, next: () => Promise<void>) {
         const { Transaction, TransactionWatcher, BalanceNotifier, BlockNumberNotifier } = Web3StateSettings.value
 
         await next()

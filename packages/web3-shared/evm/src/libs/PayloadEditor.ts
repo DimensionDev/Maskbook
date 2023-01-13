@@ -5,7 +5,7 @@ import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
 import { toFixed } from '@masknet/web3-shared-base'
 import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json'
-import { EthereumMethodType, Transaction, TransactionOptions, UserOperation } from '../types/index.js'
+import { ChainId, EthereumMethodType, Transaction, TransactionOptions, UserOperation } from '../types/index.js'
 import { createJsonRpcPayload } from '../helpers/index.js'
 import { ZERO_ADDRESS, getSmartPayConstant } from '../index.js'
 
@@ -60,7 +60,7 @@ export class PayloadEditor {
 
     get chainId() {
         if (typeof this.config?.chainId === 'string') {
-            return Number.parseInt(this.config.chainId, 16) || this.options?.chainId
+            return (Number.parseInt(this.config.chainId, 16) as ChainId) || this.options?.chainId
         }
         return this.options?.chainId
     }

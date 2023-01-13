@@ -1,8 +1,7 @@
-import { EthereumMethodType } from '@masknet/web3-shared-evm'
-import type { Context, Middleware } from '../types.js'
+import { ConnectionContext, EthereumMethodType, Middleware } from '@masknet/web3-shared-evm'
 
-export class Fortmatic implements Middleware<Context> {
-    async fn(context: Context, next: () => Promise<void>) {
+export class Fortmatic implements Middleware<ConnectionContext> {
+    async fn(context: ConnectionContext, next: () => Promise<void>) {
         switch (context.request.method) {
             case EthereumMethodType.PERSONAL_SIGN:
                 context.requestArguments = {

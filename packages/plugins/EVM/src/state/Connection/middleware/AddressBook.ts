@@ -1,9 +1,15 @@
-import { ChainId, EthereumMethodType, isZeroAddress, TransactionParameter } from '@masknet/web3-shared-evm'
-import type { Context, Middleware } from '../types.js'
+import {
+    ChainId,
+    EthereumMethodType,
+    isZeroAddress,
+    TransactionParameter,
+    Middleware,
+    ConnectionContext,
+} from '@masknet/web3-shared-evm'
 import { Web3StateSettings } from '../../../settings/index.js'
 import { isSameAddress, TransactionContext, TransactionDescriptorType } from '@masknet/web3-shared-base'
 
-export class AddressBook implements Middleware<Context> {
+export class AddressBook implements Middleware<ConnectionContext> {
     private getFrom(context?: TransactionContext<ChainId, TransactionParameter>) {
         return context?.from
     }
@@ -22,7 +28,7 @@ export class AddressBook implements Middleware<Context> {
         return
     }
 
-    async fn(context: Context, next: () => Promise<void>) {
+    async fn(context: ConnectionContext, next: () => Promise<void>) {
         const { AddressBook } = Web3StateSettings.value
 
         await next()

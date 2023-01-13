@@ -1,10 +1,9 @@
 import { toHex } from 'web3-utils'
 import { EthereumAddress } from 'wallet.ts'
 import { Web3 } from '@masknet/web3-providers'
-import { ChainId, EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
-import type { Context, Middleware } from '../types.js'
+import { ChainId, EthereumMethodType, ProviderType, Middleware, ConnectionContext } from '@masknet/web3-shared-evm'
 
-export class Nonce implements Middleware<Context> {
+export class Nonce implements Middleware<ConnectionContext> {
     static INITIAL_NONCE = -1
 
     private nonces = new Map<string, Map<ChainId, number>>()
@@ -30,7 +29,7 @@ export class Nonce implements Middleware<Context> {
         return addressNonces.get(chainId)!
     }
 
-    async fn(context: Context, next: () => Promise<void>) {
+    async fn(context: ConnectionContext, next: () => Promise<void>) {
         // set a nonce for Mask wallets
         if (
             !context.owner &&
