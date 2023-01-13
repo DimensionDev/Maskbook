@@ -58,7 +58,7 @@ export function useNonFungibleAssetsByCollection<
             setDone(true)
         }
         toggleLoading(false)
-        setAssets((pred) => [...pred, ...batchResult])
+        setAssets((pred) => [...pred, ...batchResult].sort((a, b) => Number(a.tokenId) - Number(b.tokenId)))
     }, [iterator, done])
 
     // Execute once after next update
@@ -72,9 +72,7 @@ export function useNonFungibleAssetsByCollection<
     }, [])
 
     return {
-        value: assets
-            .filter((x) => (options?.chainId ? x.chainId === options?.chainId : true))
-            .sort((a, b) => Number(a.tokenId) - Number(b.tokenId)),
+        value: assets.filter((x) => (options?.chainId ? x.chainId === options?.chainId : true)),
         next,
         loading,
         done,
