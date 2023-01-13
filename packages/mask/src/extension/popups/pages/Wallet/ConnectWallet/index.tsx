@@ -105,6 +105,7 @@ const ConnectWalletPage = memo(() => {
                 const account = await connection?.connect({
                     chainId: await connection?.getChainId(),
                 })
+                console.log(connection)
 
                 navigate(PopupRoutes.VerifyWallet, {
                     state: {
@@ -114,7 +115,7 @@ const ConnectWalletPage = memo(() => {
                 })
             }
         },
-        [isLocked, getLockStatusLoading, wallets.length],
+        [isLocked, getLockStatusLoading, wallets.length, Connection],
     )
     useTitle(t('plugin_wallet_on_connect'))
 
