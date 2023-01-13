@@ -114,7 +114,7 @@ const ConnectWalletPage = memo(() => {
                 })
             }
         },
-        [isLocked, getLockStatusLoading, wallets.length],
+        [isLocked, getLockStatusLoading, wallets.length, Connection],
     )
     useTitle(t('plugin_wallet_on_connect'))
 
