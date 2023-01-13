@@ -25,11 +25,16 @@ export function ConnectionContent(props: ConnectionContentProps) {
     const connection = useWeb3Connection()
 
     const onTransferCallback = useCallback(() => {
-        return connection?.transfer?.('0x66b57885E8E9D84742faBda0cE6E3496055b012d', '100', {
-            chainId: ChainId.Mumbai,
-            account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
-            providerType: EVM_ProviderType.MaskWallet,
-        })
+        return connection?.transferFungibleToken?.(
+            '0x0000000000000000000000000000000000000000',
+            '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
+            '100',
+            undefined,
+            {
+                chainId,
+                account,
+            },
+        )
     }, [connection])
 
     const onDeployCallback = useCallback(() => {
