@@ -21,7 +21,7 @@ export class ERC721Descriptor implements TransactionDescriptor {
         for (const { name, parameters } of context.methods) {
             switch (name) {
                 case 'approve': {
-                    if (!parameters?.to === undefined || parameters?.tokenId === undefined) break
+                    if (parameters?.to === undefined || parameters?.tokenId === undefined) break
 
                     const symbol = await this.getContractSymbol(context.chainId, context.to)
 
