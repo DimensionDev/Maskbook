@@ -22,6 +22,7 @@ import Lido from '@masknet/web3-contracts/abis/Lido.json'
 import AaveLendingPool from '@masknet/web3-contracts/abis/AaveLendingPool.json'
 import SmartPayEntryPoint from '@masknet/web3-contracts/abis/SmartPayEntryPoint.json'
 import WalletContract from '@masknet/web3-contracts/abis/Wallet.json'
+import Create2Factory from '@masknet/web3-contracts/abis/Create2Factory.json'
 
 class ABI {
     private coder = ABICoder as unknown as ABICoder.AbiCoder
@@ -46,6 +47,7 @@ class ABI {
         this.construct(AaveLendingPool as AbiItem[]) // Aave saving
         this.construct(SmartPayEntryPoint as AbiItem[]) // smart pay entrypoint
         this.construct(WalletContract as AbiItem[]) // Contract Wallet
+        this.construct(Create2Factory as AbiItem[]) // Create2Factory
     }
 
     read(signature?: string) {

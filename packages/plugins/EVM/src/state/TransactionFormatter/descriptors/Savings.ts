@@ -14,11 +14,9 @@ export class SavingsDescriptor implements TransactionDescriptor {
             chainId: context.chainId,
         })
 
-        for (const method of context.methods) {
-            const parameters = method.parameters
-
+        for (const { name, parameters } of context.methods) {
             // Lido
-            if (method.name === 'submit' && parameters?._referral) {
+            if (name === 'submit' && parameters?._referral) {
                 const token = await connection?.getNativeToken({
                     chainId: context.chainId,
                 })
@@ -43,7 +41,7 @@ export class SavingsDescriptor implements TransactionDescriptor {
             }
 
             // Aave
-            if (method.name === 'deposit' && parameters?.amount && parameters?.asset) {
+            if (name === 'deposit' && parameters?.amount && parameters?.asset) {
                 const token = await connection?.getFungibleToken(parameters?.asset, {
                     chainId: context.chainId,
                 })
@@ -67,7 +65,7 @@ export class SavingsDescriptor implements TransactionDescriptor {
                 }
             }
 
-            if (method.name === 'withdraw' && parameters?.amount && parameters?.asset) {
+            if (name === 'withdraw' && parameters?.amount && parameters?.asset) {
                 const token = await connection?.getFungibleToken(parameters?.asset, {
                     chainId: context.chainId,
                 })

@@ -8,7 +8,6 @@ import { Web3StateSettings } from '../../../settings/index.js'
 export class RecentTransaction implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
         const { Transaction, TransactionWatcher, BalanceNotifier, BlockNumberNotifier } = Web3StateSettings.value
-        const isSquashed = typeof context.result !== 'undefined'
 
         await next()
 
@@ -17,14 +16,10 @@ export class RecentTransaction implements Middleware<Context> {
                 case EthereumMethodType.ETH_SEND_TRANSACTION:
                 case EthereumMethodType.MASK_DEPLOY:
                 case EthereumMethodType.MASK_FUND:
-                    if (!context.config || typeof context.result !== 'string') return
-                    await Transaction?.addTransaction?.(
-                        context.chainId,
-                        context.account,
-                        context.result,
-                        context.config,
-                    )
-                    await TransactionWatcher?.watchTransaction(context.chainId, context.result, context.config)
+                    const tx = context.result as string
+                    if (!tx || !context.config) return
+                    await Transaction?.addTransaction?.(context.chainId, context.account, tx, context.config)
+                    await TransactionWatcher?.watchTransaction(context.chainId, tx, context.config)
                     break
                 case EthereumMethodType.ETH_SEND_USER_OPERATION:
                     if (!context.userOperation || typeof context.result !== 'string') return
@@ -33,6 +28,7 @@ export class RecentTransaction implements Middleware<Context> {
                     await TransactionWatcher?.watchTransaction(context.chainId, context.result, transaction)
                     break
                 case EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT:
+                    const isSquashed = typeof context.result !== 'undefined'
                     if (isSquashed) return
 
                     const receipt = context.result as TransactionReceipt | null

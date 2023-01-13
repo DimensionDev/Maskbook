@@ -105,18 +105,18 @@ export class ContractWallet implements Middleware<Context> {
         const provider = Providers[context.providerType] as BaseContractWalletProvider | undefined
 
         // not a SC wallet provider
-        if (!provider?.ownerAccount) {
+        if (!provider?.ownerAccount && !context.owner) {
             await next()
             return
         }
 
         switch (context.request.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
-                context.write(provider.hostedChainId)
+                context.write(provider?.hostedChainId)
                 break
             case EthereumMethodType.ETH_ACCOUNTS:
-                if (isValidAddress(provider.hostedAccount)) {
-                    context.write([provider.hostedAccount])
+                if (isValidAddress(provider?.hostedAccount)) {
+                    context.write([provider?.hostedAccount])
                 } else {
                     context.abort(new Error('Please connect a wallet.'))
                 }
@@ -190,7 +190,9 @@ export class ContractWallet implements Middleware<Context> {
                 break
             case EthereumMethodType.MASK_FUND:
                 try {
-                    context.write(await this.fund(context))
+                    const { message } = await this.fund(context)
+                    if (!isValidAddress(message.walletAddress)) throw new Error('Failed to fund.')
+                    context.write(message.tx)
                 } catch (error) {
                     context.abort(error)
                 }

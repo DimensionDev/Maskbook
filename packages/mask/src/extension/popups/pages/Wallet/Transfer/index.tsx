@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react'
+import { memo, useEffect, useMemo, useState } from 'react'
 import { MenuItem, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { chainResolver } from '@masknet/web3-shared-evm'
@@ -8,11 +8,12 @@ import { WalletContext } from '../hooks/useWalletContext.js'
 import { Transfer1559 } from './Transfer1559.js'
 import { Prior1559Transfer } from './Prior1559Transfer.js'
 import { useChainContext, useWallets } from '@masknet/web3-hooks-base'
-import { formatBalance } from '@masknet/web3-shared-base'
+import { formatBalance, isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { first } from 'lodash-es'
+import { useLocation } from 'react-router-dom'
 
 const useStyles = makeStyles()({
     assetItem: {
@@ -30,6 +31,7 @@ const useStyles = makeStyles()({
 })
 
 const Transfer = memo(() => {
+    const location = useLocation()
     const { t } = useI18N()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -69,6 +71,13 @@ const Transfer = memo(() => {
     )
 
     useTitle(t('popups_send'))
+
+    useEffect(() => {
+        const address = new URLSearchParams(location.search).get('selectedToken')
+        if (!address) return
+        const target = assets.find((x) => isSameAddress(x.address, address))
+        setSelectedAsset(target)
+    }, [assets, location])
 
     return (
         <>

@@ -14,7 +14,7 @@ export function ConnectionDialog(props: ConnectionDialogProps) {
     return (
         <InjectedDialog title="Connection" fullWidth open={open} onClose={closeDialog}>
             <DialogContent>
-                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
+                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Matic }}>
                     <ConnectionContent onClose={closeDialog} />
                 </Web3ContextProvider>
             </DialogContent>

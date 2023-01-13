@@ -50,6 +50,7 @@ export default function Wallet() {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         chainId: wallet?.owner && smartPayChainId ? smartPayChainId : undefined,
     })
+
     const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
     const { loading, retry } = useAsyncRetry(async () => {
