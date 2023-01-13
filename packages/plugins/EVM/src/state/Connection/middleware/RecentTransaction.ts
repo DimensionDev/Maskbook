@@ -4,12 +4,10 @@ import { EthereumMethodType, Transaction, UserTransaction } from '@masknet/web3-
 import type { Context, Middleware } from '../types.js'
 import { getReceiptStatus } from '../utils.js'
 import { Web3StateSettings } from '../../../settings/index.js'
-import type { FunderAPI } from '@masknet/web3-providers/types'
 
 export class RecentTransaction implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
         const { Transaction, TransactionWatcher, BalanceNotifier, BlockNumberNotifier } = Web3StateSettings.value
-        const isSquashed = typeof context.result !== 'undefined'
 
         await next()
 
@@ -18,8 +16,8 @@ export class RecentTransaction implements Middleware<Context> {
                 case EthereumMethodType.ETH_SEND_TRANSACTION:
                 case EthereumMethodType.MASK_DEPLOY:
                 case EthereumMethodType.MASK_FUND:
-                    const tx = (context.result as FunderAPI.Fund).message.tx
-                    if (!context.config || !tx) return
+                    const tx = context.result as string
+                    if (!tx || !context.config) return
                     await Transaction?.addTransaction?.(context.chainId, context.account, tx, context.config)
                     await TransactionWatcher?.watchTransaction(context.chainId, tx, context.config)
                     break
@@ -30,6 +28,7 @@ export class RecentTransaction implements Middleware<Context> {
                     await TransactionWatcher?.watchTransaction(context.chainId, context.result, transaction)
                     break
                 case EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT:
+                    const isSquashed = typeof context.result !== 'undefined'
                     if (isSquashed) return
 
                     const receipt = context.result as TransactionReceipt | null

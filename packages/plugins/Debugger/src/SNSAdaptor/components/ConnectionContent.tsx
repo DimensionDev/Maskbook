@@ -3,7 +3,7 @@ import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/
 import { makeStyles } from '@masknet/theme'
 import { useWeb3Connection, useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, ProofType } from '@masknet/shared-base'
 import { ChainId, ChainId as EVM_ChainId, ProviderType as EVM_ProviderType } from '@masknet/web3-shared-evm'
 import { ChainId as SolanaChainId, ProviderType as SolanaProviderType } from '@masknet/web3-shared-solana'
 import { ChainId as FlowChainId, ProviderType as FlowProviderType } from '@masknet/web3-shared-flow'
@@ -25,11 +25,16 @@ export function ConnectionContent(props: ConnectionContentProps) {
     const connection = useWeb3Connection()
 
     const onTransferCallback = useCallback(() => {
-        return connection?.transfer?.('0x66b57885E8E9D84742faBda0cE6E3496055b012d', '100', {
-            chainId: ChainId.Mumbai,
-            account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
-            providerType: EVM_ProviderType.MaskWallet,
-        })
+        return connection?.transferFungibleToken?.(
+            '0x0000000000000000000000000000000000000000',
+            '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
+            '100',
+            undefined,
+            {
+                chainId,
+                account,
+            },
+        )
     }, [connection])
 
     const onDeployCallback = useCallback(() => {
@@ -38,6 +43,25 @@ export function ConnectionContent(props: ConnectionContentProps) {
             account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
             providerType: EVM_ProviderType.MaskWallet,
         })
+    }, [connection])
+
+    const onFundCallback = useCallback(() => {
+        return connection?.fund?.(
+            {
+                publicKey: '',
+                type: ProofType.Persona,
+                payload: JSON.stringify({
+                    ownerAddress: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
+                    nonce: 0,
+                }),
+                signature: '',
+            },
+            {
+                chainId: ChainId.Mumbai,
+                account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
+                providerType: EVM_ProviderType.MaskWallet,
+            },
+        )
     }, [connection])
 
     const onChangeOwnerChange = useCallback(() => {
@@ -198,6 +222,18 @@ export function ConnectionContent(props: ConnectionContentProps) {
                         <TableCell>
                             <Button size="small" onClick={() => onDeployCallback()}>
                                 Deploy
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Fund
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button size="small" onClick={() => onFundCallback()}>
+                                Fund
                             </Button>
                         </TableCell>
                     </TableRow>

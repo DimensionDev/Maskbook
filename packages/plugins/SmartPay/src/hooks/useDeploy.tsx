@@ -1,16 +1,16 @@
+import { useCallback, useRef } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { NetworkPluginID, PersonaInformation, PopupRoutes, ProofType, SignType } from '@masknet/shared-base'
 import { useChainContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import type { AbstractAccountAPI } from '@masknet/web3-providers/types'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import type { ManagerAccount } from '../type.js'
 import type { Wallet } from '@masknet/web3-shared-base'
+import { Typography, useTheme } from '@mui/material'
 import getUnixTime from 'date-fns/getUnixTime'
 import { ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
+import type { ManagerAccount } from '../type.js'
 import { useI18N } from '../locales/index.js'
-import { Typography, useTheme } from '@mui/material'
-import { useCallback, useRef } from 'react'
 
 export function useDeploy(
     signPersona?: PersonaInformation,
@@ -57,7 +57,6 @@ export function useDeploy(
             return
 
         const hasPassword = await hasPaymentPassword()
-
         if (!hasPassword) return openPopupWindow(PopupRoutes.CreatePassword)
 
         const payload = JSON.stringify({
@@ -89,7 +88,7 @@ export function useDeploy(
         closeSnackbar()
 
         try {
-            const response = await connection?.fund?.(
+            const hash = await connection?.fund?.(
                 {
                     publicKey,
                     type: signPersona ? ProofType.Persona : ProofType.EOA,
@@ -100,11 +99,10 @@ export function useDeploy(
                     chainId,
                 },
             )
-
-            if (!response) throw new Error('Deploy Failed')
+            if (!hash) throw new Error('Deploy Failed')
 
             return TransactionWatcher?.emitter.on('progress', (txHash, status) => {
-                if (txHash !== response) return
+                if (txHash !== hash) return
                 Wallet?.addWallet({
                     name: 'Smart Pay',
                     address: contractAccount.address,
