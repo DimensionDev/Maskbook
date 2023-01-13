@@ -780,8 +780,6 @@ export interface TransactionContext<ChainId, Parameter = string | undefined> {
     }>
     /** nested children contexts */
     children?: Array<TransactionContext<ChainId, Parameter>>
-    /** 4337 wallet fund */
-    isFund?: boolean
 }
 
 export interface AddressName {
