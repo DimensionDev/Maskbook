@@ -110,3 +110,9 @@ export function resolveDeBankAssetId(id: string) {
     if (id === 'cfx') return 'Conflux'
     return id
 }
+
+export function resolveDeBankAssetIdReversed(id: string) {
+    if (id === 'bnb') return 'bsc'
+    if (id === 'Conflux') return 'cfx'
+    return id
+}
