@@ -137,7 +137,6 @@ export function TrendingView(props: TrendingViewProps) {
     useEffect(() => setTabIndex(0), [networkType])
     // #endregion
     // #region merge trending
-
     const { value: { trending } = {}, loading: loadingTrending } = useTrendingById(result, result.address)
     // #endregion
 
