@@ -755,6 +755,7 @@
     "plugin_collectible_nft_activity_empty": "crwdns18576:0crwdne18576:0",
     "plugin_collectible_chain_info": "crwdns5241:0crwdne5241:0",
     "plugin_collectible_creator_earning": "crwdns18578:0crwdne18578:0",
+    "plugin_collectible_creator_earning_tooltip": "crwdns19491:0crwdne19491:0",
     "plugin_collectible_platform_costs": "crwdns18580:0{{platform}}crwdne18580:0",
     "plugin_collectible_contract_address": "crwdns5243:0crwdne5243:0",
     "plugin_collectible_token_id": "crwdns5245:0crwdne5245:0",
