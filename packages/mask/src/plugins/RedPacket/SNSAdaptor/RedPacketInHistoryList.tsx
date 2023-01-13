@@ -351,11 +351,12 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     span: <span className={classes.span} />,
                                 }}
                                 values={{
-                                    amount: formatBalance(patchedHistory.total, historyToken?.decimals, 6),
+                                    amount: formatBalance(patchedHistory.total, historyToken?.decimals, 6, true),
                                     claimedAmount: formatBalance(
                                         new BigNumber(patchedHistory.total).minus(total_remaining ?? 0),
                                         historyToken?.decimals,
                                         6,
+                                        true,
                                     ),
                                     symbol: historyToken?.symbol,
                                 }}
