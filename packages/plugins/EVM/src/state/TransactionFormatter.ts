@@ -2,7 +2,6 @@ import { compact } from 'lodash-es'
 import * as ABICoder from 'web3-eth-abi'
 import type { Plugin } from '@masknet/plugin-infra'
 import {
-    isZero,
     isSameAddress,
     TransactionContext,
     TransactionDescriptor as TransactionDescriptorBase,
@@ -76,7 +75,6 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
             to,
             value,
             hash,
-            isFund: transaction.isFund,
         }
 
         if (data) {
@@ -116,11 +114,10 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
                 code = ''
             }
 
-            // smart pay tx
+            // smart pay user operation
             if (isSameAddress(to, getSmartPayConstant(chainId, 'EP_CONTRACT_ADDRESS'))) {
-                const userOperations = decodeUserOperations(transaction)
                 const allSettled = await Promise.allSettled(
-                    userOperations.map((x) => {
+                    decodeUserOperations(transaction).map((x) => {
                         const userTransaction = new UserTransaction(chainId, to, x)
                         return this.createContext(chainId, userTransaction.toTransaction())
                     }),
@@ -135,13 +132,8 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
                 }
             }
 
-            // cancel tx
-            if (isSameAddress(from, to) && isZero(value) && !context.isFund) {
-                return { ...context, type: TransactionDescriptorType.CANCEL }
-            }
-
-            // send ether
-            if (isEmptyHex(code) && !context.isFund) {
+            // send ether tx
+            if (isEmptyHex(code)) {
                 return { ...context, type: TransactionDescriptorType.TRANSFER }
             }
 
