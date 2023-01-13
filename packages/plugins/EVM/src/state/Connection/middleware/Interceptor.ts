@@ -1,4 +1,4 @@
-import { ConnectionContext, Middleware, ProviderType } from '@masknet/web3-shared-evm'
+import { Composer, ConnectionContext, Middleware, ProviderType } from '@masknet/web3-shared-evm'
 import { SmartPayAccount, SmartPayBundler, SmartPayFunder } from '@masknet/web3-providers'
 import { NoneWallet } from '../interceptors/None.js'
 import { MaskWallet } from '../interceptors/MaskWallet.js'
@@ -9,32 +9,30 @@ import { ContractWallet } from '../interceptors/ContractWallet.js'
 import { Popups } from '../interceptors/Popups.js'
 
 export class Interceptor implements Middleware<ConnectionContext> {
-    private interceptors: Partial<Record<ProviderType, Array<Middleware<ConnectionContext>>>> = {
-        [ProviderType.None]: [new NoneWallet()],
-        [ProviderType.MaskWallet]: [
+    private composers: Partial<Record<ProviderType, Composer<ConnectionContext>>> = {
+        [ProviderType.None]: Composer.from([new NoneWallet()]),
+        [ProviderType.MaskWallet]: Composer.from([
             new Popups(),
             new ContractWallet(ProviderType.MaskWallet, SmartPayAccount, SmartPayBundler, SmartPayFunder),
             new MaskWallet(),
-        ],
-        [ProviderType.MetaMask]: [new MetaMask()],
-        [ProviderType.WalletConnect]: [new WalletConnect()],
-        [ProviderType.Coin98]: [new MetaMask()],
-        [ProviderType.WalletLink]: [new MetaMask()],
-        [ProviderType.MathWallet]: [new MetaMask()],
-        [ProviderType.Fortmatic]: [new Fortmatic()],
-        [ProviderType.Opera]: [new MetaMask()],
-        [ProviderType.Clover]: [new MetaMask()],
+        ]),
+        [ProviderType.MetaMask]: Composer.from([new MetaMask()]),
+        [ProviderType.WalletConnect]: Composer.from([new WalletConnect()]),
+        [ProviderType.Coin98]: Composer.from([new MetaMask()]),
+        [ProviderType.WalletLink]: Composer.from([new MetaMask()]),
+        [ProviderType.MathWallet]: Composer.from([new MetaMask()]),
+        [ProviderType.Fortmatic]: Composer.from([new Fortmatic()]),
+        [ProviderType.Opera]: Composer.from([new MetaMask()]),
+        [ProviderType.Clover]: Composer.from([new MetaMask()]),
     }
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
-        const interceptors = this.interceptors[context.providerType]
-        if (!interceptors?.length || !context.writeable) {
+        const composer = this.composers[context.providerType]
+        if (!composer || !context.writeable) {
             await next()
             return
         }
-        for (const middleware of interceptors.values()) {
-            await middleware.fn(context, () => Promise.resolve())
-            if (!context.writeable) break
-        }
+
+        await composer.dispatch(context, next)
     }
 }

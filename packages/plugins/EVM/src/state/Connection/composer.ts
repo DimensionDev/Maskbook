@@ -7,15 +7,15 @@ import { RecentTransaction } from './middleware/RecentTransaction.js'
 import { Translator } from './middleware/Translator.js'
 import { TransactionWatcher } from './middleware/TransactionWatcher.js'
 
-const composer = new Composer<ConnectionContext>()
-
-composer.use(new Squash())
-composer.use(new Nonce())
-composer.use(new Translator())
-composer.use(new Interceptor())
-composer.use(new RecentTransaction())
-composer.use(new TransactionWatcher())
-composer.use(new AddressBook())
+const composer = Composer.from<ConnectionContext>([
+    new Squash(),
+    new Nonce(),
+    new Translator(),
+    new Interceptor(),
+    new RecentTransaction(),
+    new TransactionWatcher(),
+    new AddressBook(),
+])
 
 export function dispatch(context: ConnectionContext, next: () => Promise<void>) {
     return composer.dispatch(context, next)
