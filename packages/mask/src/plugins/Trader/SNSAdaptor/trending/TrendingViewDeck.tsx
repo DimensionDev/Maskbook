@@ -1,13 +1,14 @@
 import { Icons } from '@masknet/icons'
 import { useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { SourceType, formatCurrency, TokenType } from '@masknet/web3-shared-base'
+import { PluginTransakMessages, useTransakAllowanceCoin } from '@masknet/plugin-transak'
 import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
-import { PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles, MaskColors, MaskLightTheme, MaskDarkTheme } from '@masknet/theme'
+import { MaskColors, MaskDarkTheme, MaskLightTheme, makeStyles } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
+import { SourceType, TokenType, formatCurrency } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import {
     Avatar,
@@ -21,16 +22,15 @@ import {
     useTheme,
 } from '@mui/material'
 import { first, last, uniqBy } from 'lodash-es'
-import { useCallback, useRef, useState, useContext } from 'react'
+import { useCallback, useContext, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils/index.js'
-import { useTransakAllowanceCoin, PluginTransakMessages } from '@masknet/plugin-transak'
-import { Currency, Stat, ContentTabs } from '../../types/index.js'
+import { ContentTabs, Currency, Stat } from '../../types/index.js'
 import { CoinMenu } from './CoinMenu.js'
-import { TrendingViewContext } from './context.js'
-import { CoinIcon } from './components/index.js'
 import { PriceChanged } from './PriceChanged.js'
 import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
 import { TrendingViewDescriptor } from './TrendingViewDescriptor.js'
+import { CoinIcon } from './components/index.js'
+import { TrendingViewContext } from './context.js'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
