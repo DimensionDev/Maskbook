@@ -18,15 +18,15 @@ export function isValidAddress(address?: string): address is string {
     return EthereumAddress.isValid(address)
 }
 
-export function isValidChainId(chainId?: ChainId) {
+export function isValidChainId(chainId?: ChainId): chainId is ChainId {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
 }
 
-export function isZeroAddress(address?: string) {
+export function isZeroAddress(address?: string): address is string {
     return isSameAddress(address, ZERO_ADDRESS)
 }
 
-export function isNativeTokenAddress(address?: string) {
+export function isNativeTokenAddress(address?: string): address is string {
     const set = new Set(getEnumAsArray(ChainId).map((x) => getTokenConstant(x.value, 'NATIVE_TOKEN_ADDRESS')))
     return !!(address && set.has(address))
 }

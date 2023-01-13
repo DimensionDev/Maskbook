@@ -356,12 +356,18 @@ export class Web3API
             ],
         })
     }
-    sendSignedTransaction(chainId: ChainId, signed: string): Promise<string> {
-        const provider = this.getWeb3Provider(chainId)
-        return provider.request<string>({
-            method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
-            params: [signed],
+    async sendSignedTransaction(chainId: ChainId, signed: string): Promise<string> {
+        console.log('DEBIG: sendSignedTransaction')
+        console.log({
+            chainId,
+            signed,
         })
+        return '0x7d381e3585d9b384e7ce6c910cccced02de0e29c02805a9286504f3067e09f4a'
+        // const provider = this.getWeb3Provider(chainId)
+        // return provider.request<string>({
+        //     method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
+        //     params: [signed],
+        // })
     }
     async getNativeTokenBalance(chainId: ChainId, owner: string): Promise<string> {
         if (!isValidAddress(owner)) return '0'

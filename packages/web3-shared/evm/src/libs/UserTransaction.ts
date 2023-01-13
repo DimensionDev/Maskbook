@@ -293,7 +293,8 @@ export class UserTransaction {
             preVerificationGas: preVerificationGas ? toFixed(preVerificationGas) : '0',
             maxFeePerGas: maxFeePerGas ? toFixed(maxFeePerGas) : '0',
             maxPriorityFeePerGas: maxPriorityFeePerGas ? toFixed(maxPriorityFeePerGas) : '0',
-            signature: await signer.signMessage(this.requestId),
+            signature: '0x1',
+            // signature: await signer.signMessage(this.requestId),
         }
     }
 

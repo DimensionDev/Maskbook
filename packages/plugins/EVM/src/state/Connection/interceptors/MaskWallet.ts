@@ -14,14 +14,6 @@ export class MaskWallet implements Middleware<Context> {
             case EthereumMethodType.ETH_ACCOUNTS:
                 context.write([account])
                 break
-            case EthereumMethodType.ETH_SEND_TRANSACTION:
-                const config = context.config
-
-                if (!config?.from || !config?.to) {
-                    context.abort(new Error('Invalid JSON payload.'))
-                    break
-                }
-                break
             default:
                 break
         }

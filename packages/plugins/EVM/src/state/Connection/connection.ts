@@ -766,13 +766,7 @@ class Connection implements EVM_Connection {
 
     sendSignedTransaction(signature: string, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
-        return this.hijackedRequest<string>(
-            {
-                method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
-                params: [signature],
-            },
-            options,
-        )
+        return Web3.sendSignedTransaction(options.chainId, signature)
     }
 
     replaceTransaction(hash: string, transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {

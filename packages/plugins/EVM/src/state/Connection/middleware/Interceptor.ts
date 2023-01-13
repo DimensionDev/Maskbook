@@ -29,10 +29,13 @@ export class Interceptor implements Middleware<Context> {
 
     async fn(context: Context, next: () => Promise<void>) {
         const interceptors = this.interceptors[context.providerType]
-        if (context.writeable && interceptors) {
-            for (const [index, value] of interceptors.entries()) {
-                await value.fn(context, index === interceptors.length - 1 ? next : () => Promise.resolve())
-            }
-        } else await next()
+        if (!interceptors?.length || !context.writeable) {
+            await next()
+            return
+        }
+        for (const [index, value] of interceptors.entries()) {
+            await value.fn(context, index === interceptors.length - 1 ? next : () => Promise.resolve())
+            if (!context.writeable) break
+        }
     }
 }
