@@ -8,6 +8,9 @@ import { Web3StateSettings } from '../../../settings/index.js'
 export class SavingsDescriptor implements TransactionDescriptor {
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
         const context = context_ as TransactionContext<ChainId, string | undefined>
+        const hub = Web3StateSettings.value.Hub?.getHub?.({
+            chainId: context.chainId,
+        })
         if (!context.methods?.length) return
 
         const connection = Web3StateSettings.value.Connection?.getConnection?.({
@@ -44,9 +47,7 @@ export class SavingsDescriptor implements TransactionDescriptor {
 
             // Aave
             if (method.name === 'deposit' && parameters?.amount && parameters?.asset) {
-                const token = await connection?.getFungibleToken(parameters?.asset, {
-                    chainId: context.chainId,
-                })
+                const token = await hub?.getFungibleToken?.(parameters?.asset ?? '', { chainId: context.chainId })
 
                 return {
                     chainId: context.chainId,
@@ -68,9 +69,7 @@ export class SavingsDescriptor implements TransactionDescriptor {
             }
 
             if (method.name === 'withdraw' && parameters?.amount && parameters?.asset) {
-                const token = await connection?.getFungibleToken(parameters?.asset, {
-                    chainId: context.chainId,
-                })
+                const token = await hub?.getFungibleToken?.(parameters?.asset ?? '', { chainId: context.chainId })
 
                 return {
                     chainId: context.chainId,
