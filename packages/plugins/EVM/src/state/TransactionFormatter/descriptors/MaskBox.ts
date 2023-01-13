@@ -9,9 +9,10 @@ import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } fr
 
 export class MaskBoxDescriptor extends DescriptorWithTransactionDecodedReceipt implements TransactionDescriptor {
     async getPurchaseTokenInfo(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
-        const connection = Web3StateSettings.value.Connection?.getConnection?.({
+        const hub = Web3StateSettings.value.Hub?.getHub?.({
             chainId,
         })
+
         const events = await this.getReceipt(chainId, contractAddress, MaskBox_ABI as AbiItem[], hash)
 
         const { amount, token_address } = (events?.ClaimPayment.returnValues ?? {}) as {
@@ -21,7 +22,7 @@ export class MaskBoxDescriptor extends DescriptorWithTransactionDecodedReceipt i
 
         if (!token_address) return
 
-        const token = await connection?.getFungibleToken(token_address ?? '')
+        const token = await hub?.getFungibleToken?.(token_address ?? '', { chainId })
 
         if (!token) return
 

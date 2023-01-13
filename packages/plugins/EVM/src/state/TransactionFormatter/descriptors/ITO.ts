@@ -9,7 +9,7 @@ import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } fr
 
 export class ITODescriptor extends DescriptorWithTransactionDecodedReceipt implements TransactionDescriptor {
     async getClaimTokenInfo(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
-        const connection = Web3StateSettings.value.Connection?.getConnection?.({
+        const hub = Web3StateSettings.value.Hub?.getHub?.({
             chainId,
         })
         const events = await this.getReceipt(chainId, contractAddress, ITO_ABI as AbiItem[], hash)
@@ -22,7 +22,7 @@ export class ITODescriptor extends DescriptorWithTransactionDecodedReceipt imple
 
         if (!token_address) return
 
-        const token = await connection?.getFungibleToken(token_address ?? to_address ?? '')
+        const token = await hub?.getFungibleToken?.(token_address ?? to_address ?? '', { chainId })
 
         if (!token) return
 
@@ -30,16 +30,17 @@ export class ITODescriptor extends DescriptorWithTransactionDecodedReceipt imple
     }
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
         const context = context_ as TransactionContext<ChainId, string | undefined>
+        const hub = Web3StateSettings.value.Hub?.getHub?.({
+            chainId: context.chainId,
+        })
 
         const { ITO2_CONTRACT_ADDRESS } = getITOConstants(context.chainId)
         if (!isSameAddress(context.to, ITO2_CONTRACT_ADDRESS)) return
         const method = context.methods?.find((x) => ['fill_pool', 'swap', 'claim', 'destruct'].includes(x.name ?? ''))
         if (method?.name === 'fill_pool') {
-            const connection = Web3StateSettings.value.Connection?.getConnection?.({
+            const token = await hub?.getFungibleToken?.(method.parameters?._token_addr ?? '', {
                 chainId: context.chainId,
-                account: context.from,
             })
-            const token = await connection?.getFungibleToken(method.parameters?._token_addr ?? '')
 
             return {
                 chainId: context.chainId,

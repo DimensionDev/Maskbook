@@ -1196,6 +1196,10 @@ export interface HubOptions<ChainId, Indicator = HubIndicator> {
 }
 
 export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
+    getFungibleToken?: (
+        address: string,
+        initial?: Web3HubOptions,
+    ) => Promise<FungibleToken<ChainId, SchemaType> | undefined>
     /** Get a fungible asset. */
     getFungibleAsset?: (
         address: string,
