@@ -72,7 +72,9 @@ export function useNonFungibleAssetsByCollection<
     }, [])
 
     return {
-        value: assets.filter((x) => (options?.chainId ? x.chainId === options?.chainId : true)),
+        value: assets
+            .filter((x) => (options?.chainId ? x.chainId === options?.chainId : true))
+            .sort((a, b) => Number(a.tokenId) - Number(b.tokenId)),
         next,
         loading,
         done,
