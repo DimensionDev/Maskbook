@@ -2,7 +2,6 @@ import { compact } from 'lodash-es'
 import * as ABICoder from 'web3-eth-abi'
 import type { Plugin } from '@masknet/plugin-infra'
 import {
-    isZero,
     isSameAddress,
     TransactionContext,
     TransactionDescriptor as TransactionDescriptorBase,
@@ -36,6 +35,7 @@ import { ERC20Descriptor } from './TransactionFormatter/descriptors/ERC20.js'
 import { ERC721Descriptor } from './TransactionFormatter/descriptors/ERC721.js'
 import { SwapDescriptor } from './TransactionFormatter/descriptors/Swap.js'
 import { SavingsDescriptor } from './TransactionFormatter/descriptors/Savings.js'
+import { SmartPayDescriptor } from './TransactionFormatter/descriptors/SmartPay.js'
 
 export class TransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
     private coder = ABICoder as unknown as ABICoder.AbiCoder
@@ -47,6 +47,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
             new ITODescriptor(),
             new MaskBoxDescriptor(),
             new RedPacketDescriptor(),
+            new SmartPayDescriptor(),
             new ERC20Descriptor(),
             new ERC721Descriptor(),
             new SwapDescriptor(),
@@ -113,11 +114,10 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
                 code = ''
             }
 
-            // smart pay tx
+            // smart pay user operation
             if (isSameAddress(to, getSmartPayConstant(chainId, 'EP_CONTRACT_ADDRESS'))) {
-                const userOperations = decodeUserOperations(transaction)
                 const allSettled = await Promise.allSettled(
-                    userOperations.map((x) => {
+                    decodeUserOperations(transaction).map((x) => {
                         const userTransaction = new UserTransaction(chainId, to, x)
                         return this.createContext(chainId, userTransaction.toTransaction())
                     }),
@@ -132,12 +132,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
                 }
             }
 
-            // cancel tx
-            if (isSameAddress(from, to) && isZero(value)) {
-                return { ...context, type: TransactionDescriptorType.CANCEL }
-            }
-
-            // send ether
+            // send ether tx
             if (isEmptyHex(code)) {
                 return { ...context, type: TransactionDescriptorType.TRANSFER }
             }

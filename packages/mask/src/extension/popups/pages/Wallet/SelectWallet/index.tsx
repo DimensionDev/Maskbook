@@ -175,14 +175,19 @@ const SelectWallet = memo(() => {
                     </div>
                 ) : null}
                 <List dense className={classes.list}>
-                    {wallets.map((item, index) => (
-                        <WalletItem
-                            key={index}
-                            wallet={item}
-                            onClick={() => setSelected(item.address)}
-                            isSelected={isSameAddress(item.address, selected)}
-                        />
-                    ))}
+                    {wallets
+                        .filter((x) => {
+                            if (chainId === smartPayChainId) return true
+                            return !x.owner
+                        })
+                        .map((item, index) => (
+                            <WalletItem
+                                key={index}
+                                wallet={item}
+                                onClick={() => setSelected(item.address)}
+                                isSelected={isSameAddress(item.address, selected)}
+                            />
+                        ))}
                 </List>
             </div>
             <div className={classes.controller}>

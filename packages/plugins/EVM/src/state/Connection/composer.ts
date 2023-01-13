@@ -87,7 +87,7 @@ class RequestContext implements Context {
     }
 
     private get payloadEditor() {
-        return PayloadEditor.fromPayload(this.request)
+        return PayloadEditor.fromPayload(this.request, this._options)
     }
 
     get writeable() {
@@ -162,12 +162,12 @@ class RequestContext implements Context {
 
     get owner() {
         const provider = Providers[this.providerType] as BaseContractWalletProvider | undefined
-        return this._options?.owner ?? provider?.ownerAccount ?? this.payloadEditor.owner
+        return this._options?.owner || provider?.ownerAccount || this.payloadEditor.owner
     }
 
     get identifier() {
         const provider = Providers[this.providerType] as BaseContractWalletProvider | undefined
-        return this._options?.identifier ?? provider?.ownerIdentifier ?? this.payloadEditor.identifier
+        return this._options?.identifier || provider?.ownerIdentifier || this.payloadEditor.identifier
     }
 
     get requestOptions() {

@@ -13,10 +13,8 @@ export class ERC20Descriptor implements TransactionDescriptor {
         const connection = Web3StateSettings.value.Connection?.getConnection?.({
             chainId: context.chainId,
         })
-        for (const method of context.methods) {
-            const parameters = method.parameters
-
-            switch (method.name) {
+        for (const { name, parameters } of context.methods) {
+            switch (name) {
                 case 'approve':
                     if (parameters?.spender === undefined || parameters?.value === undefined) break
                     const token = await connection?.getFungibleToken(context.to ?? '', {
@@ -65,7 +63,7 @@ export class ERC20Descriptor implements TransactionDescriptor {
             }
 
             if (
-                (method.name === 'transfer' || method.name === 'transferFrom') &&
+                (name === 'transfer' || name === 'transferFrom') &&
                 parameters?.to &&
                 parameters.value &&
                 !parameters.tokenId

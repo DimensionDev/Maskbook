@@ -247,15 +247,17 @@ export class UserTransaction {
     /**
      * Estimate a raw transaction.
      */
-    estimate(web3: Web3) {
+    async estimate(web3: Web3) {
         const transaction = this.toTransaction()
         if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
         const walletContract = createContract<Wallet>(web3, transaction.from, WalletABI as AbiItem[])
         if (!walletContract) throw new Error('Failed to create wallet contract.')
 
-        return walletContract?.methods
+        const result = await walletContract?.methods
             .exec(transaction.to, transaction.value ?? '0', transaction.data ?? '0x')
             .estimateGas()
+
+        return toHex(result)
     }
 
     async signTransaction(web3: Web3, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {

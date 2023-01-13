@@ -68,6 +68,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
                         createdAt: now,
                         updatedAt: now,
                         owner: x.owner,
+                        deployed: x.deployed,
                         identifier: allPersonas.find((persona) => isSameAddress(x.owner, persona.address))?.identifier,
                     })),
             ].map((x) => ({

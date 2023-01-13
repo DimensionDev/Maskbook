@@ -1,6 +1,4 @@
-import { PopupRoutes } from '@masknet/shared-base'
 import { memo } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useI18N } from '../../../../../utils/index.js'
@@ -12,6 +10,7 @@ import { Icons } from '@masknet/icons'
 import { Controller } from 'react-hook-form'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { LoadingButton } from '@mui/lab'
+import Services from '../../../../service.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -71,7 +70,6 @@ const useStyles = makeStyles()((theme) => ({
 const CreatePassword = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const navigate = useNavigate()
     const {
         control,
         handleSubmit,
@@ -84,7 +82,7 @@ const CreatePassword = memo(() => {
         async (data: zod.infer<typeof schema>) => {
             try {
                 await WalletRPC.setPassword(data.password)
-                navigate(PopupRoutes.ImportWallet, { replace: true })
+                await Services.Helper.removePopupWindow()
             } catch (error) {
                 if (error instanceof Error) {
                     setError('password', { message: error.message })
