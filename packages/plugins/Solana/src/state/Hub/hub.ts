@@ -8,9 +8,19 @@ import {
     NFTScanNonFungibleTokenSolana,
 } from '@masknet/web3-providers'
 import type { FungibleTokenAPI, NonFungibleTokenAPI, PriceAPI } from '@masknet/web3-providers/types'
-import { CurrencyType, GasOptionType, HubOptions, Pageable, SourceType, Transaction } from '@masknet/web3-shared-base'
+import {
+    attemptUntil,
+    CurrencyType,
+    GasOptionType,
+    HubIndicator,
+    HubOptions,
+    Pageable,
+    SourceType,
+    Transaction,
+} from '@masknet/web3-shared-base'
 import { ChainId, GasOption, SchemaType } from '@masknet/web3-shared-solana'
 import type { SolanaHub } from './types.js'
+import { Web3StateSettings } from '../../settings/index.js'
 
 class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
     protected override getProviders(initial?: HubOptions<ChainId>) {
@@ -26,6 +36,24 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
             },
             [SolanaFungible, CoinGeckoPriceSolana],
             initial,
+        )
+    }
+
+    override getFungibleToken(address: string, initial?: HubOptions<ChainId, HubIndicator> | undefined) {
+        const connection = Web3StateSettings.value.Connection?.getConnection?.({
+            chainId: initial?.chainId,
+        })
+
+        return attemptUntil(
+            [
+                () =>
+                    Web3StateSettings.value.Token?.createFungibleToken?.(
+                        initial?.chainId ?? ChainId.Mainnet,
+                        address ?? '',
+                    ),
+                () => connection?.getFungibleToken?.(address ?? '', initial),
+            ],
+            undefined,
         )
     }
 }
