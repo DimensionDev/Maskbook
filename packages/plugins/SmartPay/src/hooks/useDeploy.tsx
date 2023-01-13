@@ -101,10 +101,10 @@ export function useDeploy(
                 },
             )
 
-            if (!response?.message.walletAddress) throw new Error('Deploy Failed')
+            if (!response) throw new Error('Deploy Failed')
 
             return TransactionWatcher?.emitter.on('progress', (txHash, status) => {
-                if (txHash !== response.message.tx) return
+                if (txHash !== response) return
                 Wallet?.addWallet({
                     name: 'Smart Pay',
                     address: contractAccount.address,
