@@ -4,6 +4,11 @@ import { SharedContextSettings } from '../../../settings/index.js'
 
 export class MaskWallet implements Middleware<ConnectionContext> {
     async fn(context: ConnectionContext, next: () => Promise<void>) {
+        if (!context.writeable) {
+            await next()
+            return
+        }
+
         const { account, chainId } = SharedContextSettings.value
 
         switch (context.request.method) {

@@ -55,7 +55,7 @@ export class Squash implements Middleware<ConnectionContext> {
         const id = this.createRequestID(context.request, context.requestOptions)
 
         // unable to cache the request
-        if (!id) {
+        if (!id || !context.writeable) {
             await next()
             return
         }

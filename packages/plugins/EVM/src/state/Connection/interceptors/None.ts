@@ -2,7 +2,7 @@ import type { ConnectionContext, Middleware } from '@masknet/web3-shared-evm'
 
 export class NoneWallet implements Middleware<ConnectionContext> {
     async fn(context: ConnectionContext, next: () => Promise<void>) {
-        if (context.risky) {
+        if (context.risky && context.writeable) {
             context.abort(new Error('No allowed.'))
         }
         await next()

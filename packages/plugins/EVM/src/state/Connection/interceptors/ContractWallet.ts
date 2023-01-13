@@ -105,6 +105,11 @@ export class ContractWallet implements Middleware<ConnectionContext> {
     async fn(context: ConnectionContext, next: () => Promise<void>) {
         const provider = Providers[context.providerType] as BaseContractWalletProvider | undefined
 
+        if (!context.writeable) {
+            await next()
+            return
+        }
+
         // not a SC wallet provider
         if (!provider?.ownerAccount && !context.owner) {
             await next()
