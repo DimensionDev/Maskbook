@@ -22,6 +22,6 @@ export async function attemptUntil<T>(
             continue
         }
     }
-    if (hasError) throw new Error('Failed to fetch.')
+    if (hasError) throw new Error('At least one of the attempts fails.')
     return fallback
 }

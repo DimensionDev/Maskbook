@@ -58,8 +58,13 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
     const { value: nativeTokenDetailed = null } = useFungibleToken(pluginID, undefined, undefined, {
         chainId,
     })
+
     const [userSelectedToken, setToken] = useState<TipContextOptions['token']>(nativeTokenDetailed)
     const token = userSelectedToken ?? nativeTokenDetailed
+    useEffect(() => {
+        setToken(nativeTokenDetailed)
+    }, [nativeTokenDetailed])
+
     const [nonFungibleTokenId, setNonFungibleTokenId] = useState<TipContextOptions['nonFungibleTokenId']>(null)
     const storedTokens = useSubscription(getStorage().addedTokens.subscription)
     const validation = useTipValidate({ tipType, amount, token, nonFungibleTokenId, nonFungibleTokenAddress })
