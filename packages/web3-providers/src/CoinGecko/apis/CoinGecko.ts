@@ -86,17 +86,33 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
             : ''
 
         const platforms = await this.getSupportedPlatform()
+        const avaxContracts = [
+            {
+                address: '0x1ce0c2827e2ef14d5c4f29a091d735a204794041',
+                chainId: ChainId.BSC,
+                pluginID: NetworkPluginID.PLUGIN_EVM,
+            },
+            {
+                address: '0x4792c1ecb969b036eb51330c63bd27899a13d84e',
+                chainId: ChainId.Moonbeam,
+                pluginID: NetworkPluginID.PLUGIN_EVM,
+            },
+        ]
 
         return {
             lastUpdated: info.last_updated,
             dataProvider: SourceType.CoinGecko,
-            contracts: Object.entries(info.platforms)
-                .map(([key, address]) => ({
-                    chainId: platforms.find((x) => x.id === key)?.chain_identifier ?? resolveCoinGeckoChainId(key),
-                    address,
-                    pluginID: key === 'solana' ? NetworkPluginID.PLUGIN_SOLANA : NetworkPluginID.PLUGIN_EVM,
-                }))
-                .filter((x) => x.chainId && x.address),
+            contracts:
+                info.id === 'avalanche-2'
+                    ? avaxContracts
+                    : Object.entries(info.platforms)
+                          .map(([key, address]) => ({
+                              chainId:
+                                  platforms.find((x) => x.id === key)?.chain_identifier ?? resolveCoinGeckoChainId(key),
+                              address,
+                              pluginID: key === 'solana' ? NetworkPluginID.PLUGIN_SOLANA : NetworkPluginID.PLUGIN_EVM,
+                          }))
+                          .filter((x) => x.chainId && x.address),
             currency,
             coin: {
                 id,
