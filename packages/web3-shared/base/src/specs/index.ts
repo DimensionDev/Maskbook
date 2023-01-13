@@ -1142,10 +1142,7 @@ export interface Connection<
     /** Change owner of contract wallet */
     changeOwner?: (recipient: string, initial?: Web3ConnectionOptions) => Promise<string>
     /** Fund contract wallet */
-    fund?: (
-        proof: Proof,
-        initial?: Web3ConnectionOptions,
-    ) => Promise<{ message: { walletAddress: string; tx: string } }>
+    fund?: (proof: Proof, initial?: Web3ConnectionOptions) => Promise<string>
     /** Deploy contract wallet */
     deploy?: (owner: string, identifier?: ECKeyIdentifier, initial?: Web3ConnectionOptions) => Promise<string>
     /** Sign a transaction */

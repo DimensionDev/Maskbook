@@ -43,7 +43,6 @@ import { createContext, dispatch } from './composer.js'
 import { Providers } from './provider.js'
 import type { EVM_Connection, EVM_Web3ConnectionOptions } from './types.js'
 import { Web3StateSettings } from '../../settings/index.js'
-import type { FunderAPI } from '@masknet/web3-providers/types'
 
 class Connection implements EVM_Connection {
     constructor(
@@ -710,7 +709,7 @@ class Connection implements EVM_Connection {
 
     async fund(proof: Proof, initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
         const options = this.getOptions(initial)
-        return this.hijackedRequest<FunderAPI.Fund>(
+        return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.MASK_FUND,
                 params: [proof],
