@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import type { MaskFixedSizeListProps, MaskTextFieldProps } from '@masknet/theme'
 import { useSelectFungibleToken, FungibleTokenInput, FungibleTokenInputProps } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../../utils/index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
@@ -44,7 +44,7 @@ export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
     } = props
 
     // #region select token
-    const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
+    const selectFungibleToken = useSelectFungibleToken<void, NetworkPluginID.PLUGIN_EVM>()
     const onSelectTokenChipClick = useCallback(async () => {
         const picked = await selectFungibleToken({
             disableNativeToken,

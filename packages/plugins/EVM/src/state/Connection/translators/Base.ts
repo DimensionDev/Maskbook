@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js'
 import { toHex } from 'web3-utils'
 import { GasOptionType, isLessThan, toFixed } from '@masknet/web3-shared-base'
-import { addGasMargin, chainResolver, formatWeiToGwei, PayloadEditor } from '@masknet/web3-shared-evm'
+import { addGasMargin, ChainId, chainResolver, formatWeiToGwei, PayloadEditor } from '@masknet/web3-shared-evm'
 import type { Context, Translator } from '../types.js'
 import { Web3StateSettings } from '../../../settings/index.js'
 
@@ -14,7 +14,12 @@ export class Base implements Translator {
         try {
             // add gas margin
             if (config.gas) {
-                config.gas = toHex(BigNumber.max(toHex(addGasMargin(config.gas as string).toFixed()), 21000).toFixed())
+                config.gas = toHex(
+                    BigNumber.max(
+                        toHex(addGasMargin(config.gas as string).toFixed()),
+                        context.chainId === ChainId.Optimism ? 25000 : 21000,
+                    ).toFixed(),
+                )
             }
 
             // add gas price

@@ -5,6 +5,7 @@ import {
     useNonFungibleTokenContract,
     useNetworkContext,
     useChainContext,
+    getDefaultChainId,
 } from '@masknet/web3-hooks-base'
 import { isSameAddress, SocialAccount } from '@masknet/web3-shared-base'
 import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
@@ -47,7 +48,7 @@ function useDirtyDetection(deps: any[]): [boolean, Dispatch<SetStateAction<boole
 
 export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ children, task }) => {
     const { pluginID, setPluginID } = useNetworkContext()
-    const { chainId } = useChainContext()
+    const { chainId, setChainId } = useChainContext()
 
     const [_recipientAddress, setRecipient] = useState(task.recipient ?? '')
     const recipients = useRecipients(pluginID, task.accounts)
@@ -98,12 +99,11 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
 
     useEffect(reset, [chainId])
 
-    const wrappedSendTip = useCallback(() => {
-        setIsDirty(false)
-        return sendTip()
-    }, [sendTip])
-
     const contextValue = useMemo((): TipContextOptions => {
+        const wrappedSendTip = () => {
+            setIsDirty(false)
+            return sendTip()
+        }
         return {
             recipient,
             recipientSnsId: task.recipientSnsId || '',
@@ -146,7 +146,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
         nonFungibleTokenContract,
         nonFungibleTokenAddress,
         token,
-        wrappedSendTip,
+        sendTip,
         isSending,
         reset,
         gasOption,
@@ -157,11 +157,9 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
     ])
 
     useEffect(() => {
-        if (recipient?.pluginID) {
-            setPluginID(recipient.pluginID)
-        } else {
-            setPluginID(NetworkPluginID.PLUGIN_EVM)
-        }
+        const pid = recipient?.pluginID ?? NetworkPluginID.PLUGIN_EVM
+        setPluginID(pid)
+        setChainId(getDefaultChainId(pid))
     }, [recipient?.pluginID])
 
     return <TipContext.Provider value={contextValue}>{children}</TipContext.Provider>

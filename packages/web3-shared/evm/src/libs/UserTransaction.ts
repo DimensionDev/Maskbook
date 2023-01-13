@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js'
 import { isUndefined, omitBy } from 'lodash-es'
 import type Web3 from 'web3'
 import * as ABICoder from 'web3-eth-abi'
-import { AbiItem, bytesToHex, hexToBytes, keccak256, padLeft, toHex, toNumber } from 'web3-utils'
+import { AbiItem, hexToBytes, keccak256, padLeft, toHex, toNumber } from 'web3-utils'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
 import { plus, toFixed } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
@@ -346,18 +346,24 @@ export class UserTransaction {
     }
 
     static toTransaction(chainId: ChainId, userOperation: UserOperation): Transaction {
-        const callBytes = userOperation.callData ? hexToBytes(userOperation.callData) : []
+        const parameters = !isEmptyHex(userOperation.callData)
+            ? (coder.decodeParameters(CALL_WALLET_TYPE.inputs ?? [], userOperation.callData.slice(10)) as {
+                  dest: string
+                  value: string
+                  func: string
+              })
+            : undefined
 
         return {
             chainId,
             from: userOperation.sender,
-            to: bytesToHex(callBytes.slice(16, 36)),
-            value: bytesToHex(callBytes.slice(36, 68)),
+            to: parameters?.dest,
+            value: toHex(parameters?.value ?? '0'),
             gas: userOperation.callGas,
             maxFeePerGas: userOperation.maxFeePerGas,
             maxPriorityFeePerGas: userOperation.maxPriorityFeePerGas,
             nonce: toNumber(userOperation.nonce ?? '0'),
-            data: bytesToHex(callBytes.slice(68)),
+            data: parameters?.func ?? '0x',
         }
     }
 }
