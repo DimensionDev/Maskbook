@@ -1,5 +1,5 @@
 import { useUpdateEffect } from 'react-use'
-import { useNetworkDescriptors, useNetworkContext, useChainContext } from '@masknet/web3-hooks-base'
+import { useNetworkDescriptors, useChainContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { MaskTabList, useTabs } from '@masknet/theme'
 import { WalletIcon } from '../WalletIcon/index.js'
@@ -14,8 +14,7 @@ interface NetworkTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'ind
 }
 
 export function NetworkTab(props: NetworkTabProps) {
-    const { chains } = props
-    const { pluginID } = useNetworkContext(props.pluginID)
+    const { chains, pluginID } = props
     const { chainId, setChainId } = useChainContext()
     const networks = useNetworkDescriptors(pluginID)
     const usedNetworks = networks.filter((x) => chains.find((c) => c === x.chainId))

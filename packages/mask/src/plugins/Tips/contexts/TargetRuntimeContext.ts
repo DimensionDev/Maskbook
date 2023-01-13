@@ -1,14 +1,26 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createContainer } from 'unstated-next'
+import { useChainId, useChainIdValid, useDefaultChainId, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 
-function useTargetPluginId() {
-    const [pluginID, setPluginID] = useState<NetworkPluginID>(NetworkPluginID.PLUGIN_EVM)
+function useTargetChainId() {
+    const [expectedPluginID, setExpectedPluginID] = useState<NetworkPluginID>(NetworkPluginID.PLUGIN_EVM)
+    const { pluginID } = useNetworkContext(expectedPluginID)
+    const chainId = useChainId(pluginID)
+    const [targetChainId, setTargetChainId] = useState<number>(chainId)
+    const chainIdValid = useChainIdValid(pluginID)
+    const defaultChainId = useDefaultChainId(pluginID)
+
+    useEffect(() => {
+        setTargetChainId(chainIdValid ? chainId : defaultChainId)
+    }, [chainId, chainIdValid, defaultChainId])
 
     return {
         pluginID,
-        setPluginID,
+        setPluginID: setExpectedPluginID,
+        targetChainId,
+        setTargetChainId,
     }
 }
 
-export const TargetRuntimeContext = createContainer(useTargetPluginId)
+export const TargetRuntimeContext = createContainer(useTargetChainId)

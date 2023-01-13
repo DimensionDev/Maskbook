@@ -104,11 +104,12 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
 
     useEffect(reset, [chainId])
 
+    const wrappedSendTip = useCallback(() => {
+        setIsDirty(false)
+        return sendTip()
+    }, [sendTip])
+
     const contextValue = useMemo((): TipContextOptions => {
-        const wrappedSendTip = () => {
-            setIsDirty(false)
-            return sendTip()
-        }
         return {
             recipient,
             recipientSnsId: task.recipientSnsId || '',
@@ -151,7 +152,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
         nonFungibleTokenContract,
         nonFungibleTokenAddress,
         token,
-        sendTip,
+        wrappedSendTip,
         isSending,
         reset,
         gasOption,
