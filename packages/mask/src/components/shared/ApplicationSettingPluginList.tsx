@@ -172,7 +172,7 @@ function AppListItem(props: AppListItemProps) {
     return (
         <ShadowRootTooltip
             PopperProps={{
-                disablePortal: true,
+                disablePortal: false,
                 placement: 'bottom',
                 modifiers: [
                     {
