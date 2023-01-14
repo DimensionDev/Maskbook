@@ -85,6 +85,9 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         textAlign: 'center',
     },
+    link: {
+        color: theme.palette.maskColor.second,
+    },
 }))
 
 export const getFungibleTokenItem = <T extends NetworkPluginID>(
@@ -222,7 +225,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                                     style={{ width: 18, height: 18 }}
                                     target="_blank"
                                     rel="noopener noreferrer">
-                                    <Icons.PopupLink size={18} />
+                                    <Icons.PopupLink size={18} className={classes.link} />
                                 </Link>
                                 {isTrust && (
                                     <span className={classes.byUser}>
