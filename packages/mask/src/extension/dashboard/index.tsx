@@ -6,8 +6,8 @@ import { MaskMessages } from '../../../shared/messages.js'
 import { createPluginHost, createPartialSharedUIContext } from '../../../shared/plugin-infra/host.js'
 import { createNormalReactRoot } from '../../utils/createNormalReactRoot.js'
 import { status } from '../../setup.ui.js'
-import { PluginTransakMessages } from '../../plugins/Transak/messages.js'
 import { RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
+import { PluginTransakMessages } from '@masknet/plugin-transak'
 import { createSubscriptionFromAsync } from '@masknet/shared-base'
 
 setService(Services)
