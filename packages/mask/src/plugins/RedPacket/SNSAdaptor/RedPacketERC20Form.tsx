@@ -20,7 +20,6 @@ import {
     ChainBoundary,
     WalletConnectedBoundary,
     EthereumERC20TokenApprovedBoundary,
-    SelectGasSettingsToolbar,
 } from '@masknet/shared'
 import {
     useFungibleToken,
@@ -269,18 +268,6 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     value={message}
                 />
             </Box>
-            {nativeToken && nativeTokenPrice ? (
-                <Box margin={2}>
-                    <SelectGasSettingsToolbar
-                        supportMultiCurrency={false}
-                        nativeToken={nativeToken}
-                        nativeTokenPrice={nativeTokenPrice}
-                        gasConfig={gasOption}
-                        gasLimit={Number.parseInt(params?.gas ?? '0', 10)}
-                        onChange={onGasOptionChange}
-                    />
-                </Box>
-            ) : null}
             <Box style={{ width: '100%' }}>
                 <PluginWalletStatusBar>
                     <ChainBoundary
