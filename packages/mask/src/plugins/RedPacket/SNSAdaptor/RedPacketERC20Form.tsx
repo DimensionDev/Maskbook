@@ -272,7 +272,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             {nativeToken && nativeTokenPrice ? (
                 <Box margin={2}>
                     <SelectGasSettingsToolbar
-                        supportMultiCurrency={chainId === smartPayChainId}
+                        supportMultiCurrency={false}
                         nativeToken={nativeToken}
                         nativeTokenPrice={nativeTokenPrice}
                         gasConfig={gasOption}
