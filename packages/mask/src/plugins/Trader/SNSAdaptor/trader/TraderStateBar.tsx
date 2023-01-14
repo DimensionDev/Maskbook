@@ -8,7 +8,7 @@ import {
     EthereumERC20TokenApprovedBoundary,
     useTokenSecurity,
 } from '@masknet/shared'
-import { isPopupPage, NetworkPluginID, PluginID, PopupRoutes } from '@masknet/shared-base'
+import { getSiteType, isPopupPage, NetworkPluginID, PluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
@@ -27,6 +27,8 @@ import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed.js'
 import type { TradeInfo } from '../../types/trader.js'
 import { Box } from '@mui/material'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -83,6 +85,11 @@ export function TraderStateBar({
     const { Others } = useWeb3State()
 
     const { isSwapping } = AllProviderTradeContext.useContainer()
+
+    const site = getSiteType()
+    const pluginIDs = useValueRef(pluginIDSettings)
+
+    const pluginId = site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM
 
     // #region if `isPopup` be true, click the plugin status bar need to  open popup window
     const openSelectWalletPopup = useCallback(() => {
@@ -177,10 +184,13 @@ export function TraderStateBar({
 
     return (
         <Box className={classes.stateBar}>
-            <PluginWalletStatusBar onClick={isPopup ? openSelectWalletPopup : undefined}>
+            <PluginWalletStatusBar actualPluginID={pluginId} onClick={isPopup ? openSelectWalletPopup : undefined}>
                 {/* TODO: remove the chain boundary after sol network dex be added */}
-                {settings || pluginID !== NetworkPluginID.PLUGIN_EVM ? (
-                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId as ChainId}>
+                {settings || pluginId !== NetworkPluginID.PLUGIN_EVM ? (
+                    <ChainBoundary
+                        actualNetworkPluginID={pluginId}
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        expectedChainId={chainId as ChainId}>
                         <WalletConnectedBoundary offChain>
                             <EthereumERC20TokenApprovedBoundary
                                 onlyInfiniteUnlock
