@@ -28,13 +28,16 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         super(providerType)
 
         // setup storage
-        SharedContextSettings.readyPromise.then((context) => {
+        SharedContextSettings.readyPromise.then(async (context) => {
             const { storage } = context.createKVStorage('memory', {}).createSubScope(`${this.providerType}_hosted`, {
                 account: this.options.getDefaultAccount(),
                 chainId: this.options.getDefaultChainId(),
             })
 
             this.hostedStorage = storage
+
+            await this.hostedStorage.account.initializedPromise
+            await this.hostedStorage.chainId.initializedPromise
 
             this.hostedStorage?.account.subscription.subscribe(() => {
                 if (this.hostedAccount) this.emitter.emit('accounts', [this.hostedAccount])

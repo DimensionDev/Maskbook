@@ -101,8 +101,9 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         return Services.Settings.getCurrentPersonaIdentifier()
     }, [open])
 
-    const { value: currentPersona } = useAsyncRetry(() => {
-        return Services.Identity.queryPersona(currentPersonaIdentifier!)
+    const { value: currentPersona } = useAsyncRetry(async () => {
+        if (!currentPersonaIdentifier) return
+        return Services.Identity.queryPersona(currentPersonaIdentifier)
     }, [currentPersonaIdentifier])
 
     const { loading, value: proofRes } = useProvedWallets()
