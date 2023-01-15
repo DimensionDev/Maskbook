@@ -6,15 +6,19 @@ import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
-import { useI18N } from '../../utils/index.js'
+import { MaskMessages, useI18N } from '../../utils/index.js'
 import { Application, getUnlistedApp } from './ApplicationSettingPluginList.js'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea.js'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
+import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus.js'
 import { WalletMessages } from '../../plugins/Wallet/messages.js'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext.js'
 import { useTimeout } from 'react-use'
+import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
+import { useCurrentPersonaConnectStatus } from '@masknet/shared'
+import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
+import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
+import Services from '../../extension/service.js'
 
 const useStyles = makeStyles<{
     shouldScroll: boolean
@@ -261,7 +265,16 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
 ApplicationEntryStatusContext.displayName = 'ApplicationEntryStatusContext'
 
 function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
-    const { value: personaConnectStatus, loading: personaStatusLoading } = useCurrentPersonaConnectStatus()
+    const allPersonas = usePersonasFromDB()
+    const lastRecognized = useLastRecognizedIdentity()
+    const currentIdentifier = useValueRef(currentPersonaIdentifier)
+    const { value: personaConnectStatus, loading: personaStatusLoading } = useCurrentPersonaConnectStatus(
+        allPersonas,
+        currentIdentifier,
+        Services.Helper.openDashboard,
+        lastRecognized,
+        MaskMessages,
+    )
     const { value: ApplicationCurrentStatus, loading: personaAgainstSNSConnectStatusLoading } =
         usePersonaAgainstSNSConnectStatus()
 

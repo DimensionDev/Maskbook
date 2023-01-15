@@ -6,7 +6,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { OfferCard } from './OfferCard.js'
-import { useI18N } from '../../../../../utils/i18n-next-ui.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -37,7 +37,7 @@ export function OffersList(props: OffersListProps) {
     const _offers = offers.value?.data ?? EMPTY_LIST
 
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const t = useI18N()
 
     if (offers.loading)
         return (
@@ -48,9 +48,9 @@ export function OffersList(props: OffersListProps) {
     if (offers.error || !offers.value)
         return (
             <div className={classes.wrapper}>
-                <Typography className={classes.emptyText}>{t('load_failed')}</Typography>
+                <Typography className={classes.emptyText}>{t.load_failed()}</Typography>
                 <Button variant="text" onClick={() => offers.retry()}>
-                    {t('retry')}
+                    {t.retry()}
                 </Button>
             </div>
         )
@@ -58,7 +58,7 @@ export function OffersList(props: OffersListProps) {
         return (
             <div className={classes.wrapper}>
                 <Icons.EmptySimple className={classes.emptyIcon} />
-                <Typography className={classes.emptyText}>{t('plugin_collectible_nft_offers_empty')}</Typography>
+                <Typography className={classes.emptyText}>{t.plugin_collectible_nft_offers_empty()}</Typography>
             </div>
         )
     return (

@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { PluginID, PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
-import { useCurrentPersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus.js'
+import { PluginCardFrameMini, useCurrentPersonaConnectStatus, usePersonaProofs } from '@masknet/shared'
 import Services from '../../../extension/service.js'
 import { BindDialog } from './BindDialog.js'
 import { PluginEnableBoundary } from '../../../components/shared/PluginEnableBoundary.js'
@@ -12,15 +12,26 @@ import {
     OtherLackWalletAction,
     SelectConnectPersonaAction,
 } from './Actions/index.js'
-import { PluginCardFrameMini, usePersonaProofs } from '@masknet/shared'
+
 import { ThemeProvider } from '@mui/material'
 import { MaskLightTheme } from '@masknet/theme'
 import { MaskMessages } from '../../../utils/messages.js'
+import { useAllPersonas } from '@masknet/plugin-infra/content-script'
+import { currentPersonaIdentifier } from '../../../../shared/legacy-settings/settings.js'
+import { useValueRef } from '@masknet/shared-base-ui'
 
 export function NextIdPage() {
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
-    const { value: personaConnectStatus, loading: statusLoading } = useCurrentPersonaConnectStatus()
+    const allPersonas = useAllPersonas()
+    const currentIdentifier = useValueRef(currentPersonaIdentifier)
+    const { value: personaConnectStatus, loading: statusLoading } = useCurrentPersonaConnectStatus(
+        allPersonas,
+        currentIdentifier,
+        Services.Helper.openDashboard,
+        currentProfileIdentifier,
+        MaskMessages,
+    )
 
     const [openBindDialog, toggleBindDialog] = useState(false)
     const isOwn = currentProfileIdentifier.identifier === visitingPersonaIdentifier.identifier

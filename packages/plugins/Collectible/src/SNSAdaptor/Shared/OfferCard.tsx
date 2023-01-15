@@ -6,8 +6,8 @@ import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
 import { TokenIcon } from '@masknet/shared'
-import { useI18N } from '../../../../../utils/index.js'
 import { CollectibleProviderIcon } from './CollectibleProviderIcon.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -59,7 +59,7 @@ export function OfferCard(props: OfferCardProps) {
     const { offer } = props
     const { classes } = useStyles()
     const { Others } = useWeb3State()
-    const { t } = useI18N()
+    const t = useI18N()
 
     const renderTokenIcon = () => {
         if (offer.priceInToken?.token.logoURL)
@@ -110,7 +110,7 @@ export function OfferCard(props: OfferCardProps) {
                     </div>
                 </div>
                 <div className={classes.flex}>
-                    <Typography className={classes.textBase}>{t('plugin_collectible_from')}</Typography>
+                    <Typography className={classes.textBase}>{t.plugin_collectible_from()}</Typography>
 
                     <Typography className={classes.textBase} style={{ marginRight: 6 }}>
                         {offer.maker?.address ? (
@@ -130,7 +130,7 @@ export function OfferCard(props: OfferCardProps) {
                             : '-'}
                         {isValidTimestamp(offer.expiredAt) && (
                             <>
-                                <span style={{ margin: '0 4px' }}>{t('plugin_collectible_expires_in')}</span>
+                                <span style={{ margin: '0 4px' }}>{t.plugin_collectible_expires_in()}</span>
                                 {formatDistanceToNow(Math.ceil(offer.expiredAt!), {
                                     addSuffix: true,
                                 })}

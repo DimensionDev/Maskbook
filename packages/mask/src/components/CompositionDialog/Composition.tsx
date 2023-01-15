@@ -1,5 +1,5 @@
 import type { CompositionType } from '@masknet/plugin-infra/content-script'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, useCurrentPersonaConnectStatus } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_OBJECT } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { DialogActions, DialogContent } from '@mui/material'
@@ -9,12 +9,14 @@ import { Flags } from '../../../shared/index.js'
 import Services from '../../extension/service.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, useI18N } from '../../utils/index.js'
-import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
-import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
+import { useCurrentIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import { CompositionDialogUI, CompositionRef, E2EUnavailableReason } from './CompositionUI.js'
 import { useCompositionClipboardRequest } from './useCompositionClipboardRequest.js'
 import { useRecipientsList } from './useRecipientsList.js'
 import { useSubmit } from './useSubmit.js'
+import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
+import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
+import { useValueRef } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()({
     dialogRoot: {
@@ -40,7 +42,16 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const { t } = useI18N()
     const { classes, cx } = useStyles()
     const currentIdentity = useCurrentIdentity()?.identifier
-    const { value: connectStatus } = useCurrentPersonaConnectStatus()
+    const allPersonas = usePersonasFromDB()
+    const lastRecognized = useLastRecognizedIdentity()
+    const currentIdentifier = useValueRef(currentPersonaIdentifier)
+    const { value: connectStatus } = useCurrentPersonaConnectStatus(
+        allPersonas,
+        currentIdentifier,
+        Services.Helper.openDashboard,
+        lastRecognized,
+        MaskMessages,
+    )
     /** @deprecated */
     const { value: hasLocalKey } = useAsync(
         async () => (currentIdentity ? Services.Identity.hasLocalKey(currentIdentity) : false),

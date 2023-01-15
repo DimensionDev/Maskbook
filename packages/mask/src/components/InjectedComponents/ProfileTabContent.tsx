@@ -12,8 +12,10 @@ import { getAvailablePlugins } from '@masknet/plugin-infra'
 import {
     AccountIcon,
     AddressItem,
+    ConnectPersonaBoundary,
     GrantPermissions,
     PluginCardFrameMini,
+    useCurrentPersonaConnectStatus,
     useSocialAccountsBySettings,
 } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID } from '@masknet/shared-base'
@@ -24,14 +26,16 @@ import { Button, Link, MenuItem, Stack, Tab, ThemeProvider, Typography } from '@
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, addressSorter, useI18N, useLocationChange } from '../../utils/index.js'
-import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI.js'
+import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import { useCollectionByTwitterHandler } from '../../plugins/Trader/trending/useTrending.js'
-import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
-import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
 import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry.js'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
 import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
 import { SearchResultInspector } from './SearchResultInspector.js'
+import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
+import Services from '../../extension/service.js'
 
 const MENU_ITEM_HEIGHT = 40
 const MENU_LIST_PADDING = 8
@@ -139,12 +143,23 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const [hidden, setHidden] = useState(true)
     const [selectedAddress, setSelectedAddress] = useState<string | undefined>()
     const [menuOpen, setMenuOpen] = useState(false)
+    const allPersonas = usePersonasFromDB()
+
+    const lastRecognized = useLastRecognizedIdentity()
+    const currentIdentifier = useValueRef(currentPersonaIdentifier)
+
     const {
         value: personaStatus,
         loading: loadingPersonaStatus,
         error: loadPersonaStatusError,
         retry: retryLoadPersonaStatus,
-    } = useCurrentPersonaConnectStatus()
+    } = useCurrentPersonaConnectStatus(
+        allPersonas,
+        currentIdentifier,
+        Services.Helper.openDashboard,
+        lastRecognized,
+        MaskMessages,
+    )
 
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
 
@@ -452,6 +467,11 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                             </Typography>
                             {isOwnerIdentity && isTwitter(activatedSocialNetworkUI) ? (
                                 <ConnectPersonaBoundary
+                                    personas={allPersonas}
+                                    identity={lastRecognized}
+                                    currentPersonaIdentifier={currentIdentifier}
+                                    openDashboard={Services.Helper.openDashboard}
+                                    ownPersonaChanged={MaskMessages.events.ownPersonaChanged}
                                     customHint
                                     handlerPosition="top-right"
                                     directTo={PluginID.Web3Profile}>

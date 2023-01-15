@@ -32,4 +32,7 @@ export interface CollectibleToken {
     provider?: SourceType
 }
 
-export type { CollectibleGridProps } from '../../../extension/options-page/types.js'
+export interface CollectibleGridProps {
+    columns?: number
+    gap?: string | number
+}

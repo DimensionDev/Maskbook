@@ -2,9 +2,10 @@ import { memo, ReactNode, useCallback, useMemo } from 'react'
 import { Button, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import type { PluginID } from '@masknet/shared-base'
-import { PersonaConnectStatus, useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
-import { useI18N } from '../../utils/index.js'
+import type { DashboardRoutes, MaskEvents, PersonaInformation, PluginID } from '@masknet/shared-base'
+import { PersonaConnectStatus, useCurrentPersonaConnectStatus, useSharedI18N } from '../../../index.js'
+import type { IdentityResolved } from '@masknet/plugin-infra'
+import type { UnboundedRegistry, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -40,8 +41,13 @@ interface ConnectPersonaBoundaryProps {
     children: SupportChildren
     createConfirm?: boolean
     enableVerify?: boolean
+    personas: PersonaInformation[]
     beforeAction?: (status: PersonaConnectStatus) => Promise<void> | void
     afterAction?: (status: PersonaConnectStatus) => Promise<void> | void
+    currentPersonaIdentifier: string
+    openDashboard: (route?: DashboardRoutes, search?: string) => Promise<any>
+    identity?: IdentityResolved
+    ownPersonaChanged: UnboundedRegistry<void>
 }
 
 export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
@@ -52,13 +58,24 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
         customHint = false,
         createConfirm = true,
         enableVerify = true,
+        personas,
         beforeAction,
         afterAction,
+        currentPersonaIdentifier,
+        ownPersonaChanged,
+        identity,
+        openDashboard,
     }) => {
-        const { t } = useI18N()
+        const t = useSharedI18N()
         const { classes } = useStyles()
 
-        const { value: status, loading: statusLoading } = useCurrentPersonaConnectStatus()
+        const { value: status, loading: statusLoading } = useCurrentPersonaConnectStatus(
+            personas,
+            currentPersonaIdentifier,
+            openDashboard,
+            identity,
+            { events: { ownPersonaChanged } } as WebExtensionMessage<MaskEvents>,
+        )
         const isFnChildren = typeof children === 'function'
 
         const actionComponent = useMemo(() => {
@@ -70,7 +87,7 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
                 return (
                     <Button disabled={statusLoading} className={classes.button}>
                         <Icons.Identity size={18} sx={{ marginRight: '8px' }} />
-                        {t('persona_boundary_create_persona')}
+                        {t.persona_boundary_create_persona()}
                     </Button>
                 )
 
@@ -78,14 +95,14 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
                 return (
                     <Button disabled={statusLoading} className={classes.button}>
                         <Icons.Connect size={18} sx={{ marginRight: '8px' }} />
-                        {t('persona_boundary_connect_persona')}
+                        {t.persona_boundary_connect_persona()}
                     </Button>
                 )
             if (!status.verified)
                 return (
                     <Button disabled={statusLoading} className={classes.button}>
                         <Icons.Connect size={18} sx={{ marginRight: '8px' }} />
-                        {t('persona_boundary_verify_persona')}
+                        {t.persona_boundary_verify_persona()}
                     </Button>
                 )
             return null

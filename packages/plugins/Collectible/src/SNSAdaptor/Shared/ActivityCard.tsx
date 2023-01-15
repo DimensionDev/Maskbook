@@ -5,7 +5,7 @@ import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
 import { NonFungibleTokenEvent, formatBalance, isZero, isValidTimestamp, ActivityType } from '@masknet/web3-shared-base'
-import { useI18N } from '../../../../../utils/index.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -86,7 +86,7 @@ export interface ActivityCardProps {
 export function ActivityCard(props: ActivityCardProps) {
     const { activity } = props
     const { type } = activity
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State()
 
@@ -126,7 +126,7 @@ export function ActivityCard(props: ActivityCardProps) {
             <div className={classes.flex}>
                 {activity.from && (
                     <Typography className={classes.textBase}>
-                        {t('plugin_collectible_from')}
+                        {t.plugin_collectible_from()}
                         <strong title={activity.from.address}>
                             {activity.from.nickname ||
                                 (activity.from.address ? Others?.formatAddress(activity.from.address, 4) : '-')}
@@ -136,7 +136,7 @@ export function ActivityCard(props: ActivityCardProps) {
                 <Typography className={classes.textBase}>
                     {activity.to && (
                         <>
-                            {t('plugin_collectible_to')}
+                            {t.plugin_collectible_to()}
                             <strong title={activity.to.address}>
                                 {activity.to.nickname ||
                                     (activity.to.address ? Others?.formatAddress(activity.to.address, 4) : '-')}

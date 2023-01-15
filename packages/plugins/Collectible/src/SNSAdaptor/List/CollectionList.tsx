@@ -18,8 +18,8 @@ import { Box, Button, Stack, Typography, styled } from '@mui/material'
 import { CollectibleList } from './CollectibleList.js'
 import { CollectionIcon } from './CollectionIcon.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
-import { useI18N } from '../../../../../utils/index.js'
 import type { CollectibleGridProps } from '../../types.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const AllButton = styled(Button)(({ theme }) => ({
     display: 'inline-block',
@@ -92,7 +92,7 @@ export interface CollectionListProps {
 
 export function CollectionList({ socialAccount, persona, profile, gridProps = EMPTY_OBJECT }: CollectionListProps) {
     const { address: account } = socialAccount
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles(gridProps)
     const [selectedCollection, setSelectedCollection] = useState<
         NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | undefined
@@ -184,7 +184,7 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height={400}>
                 <Icons.EmptySimple size={32} />
                 <Typography color={(theme) => theme.palette.maskColor.second} fontSize="14px" marginTop="12px">
-                    {t('no_NFTs_found')}
+                    {t.no_NFTs_found()}
                 </Typography>
             </Box>
         )
