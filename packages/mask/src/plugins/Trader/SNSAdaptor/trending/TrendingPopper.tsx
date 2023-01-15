@@ -5,7 +5,7 @@ import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginTraderMessages } from '../../messages.js'
 import { WalletMessages } from '../../../Wallet/messages.js'
-import { PluginTransakMessages } from '../../../Transak/messages.js'
+import { PluginTransakMessages } from '@masknet/plugin-transak'
 import type { PopperUnstyledOwnProps } from '@mui/base'
 
 export interface TrendingPopperProps extends Omit<PopperProps, 'children' | 'open'> {

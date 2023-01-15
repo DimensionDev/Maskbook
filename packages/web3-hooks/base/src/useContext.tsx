@@ -34,7 +34,7 @@ NetworkContext.displayName = 'NetworkContext'
 const ChainContext = createContext<ChainContext>(null!)
 ChainContext.displayName = 'ChainContext'
 
-function NetworkContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
+export function NetworkContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     return (
         <NetworkContext.Provider

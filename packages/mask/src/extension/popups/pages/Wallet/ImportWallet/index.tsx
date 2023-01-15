@@ -143,13 +143,16 @@ const ImportWallet = memo(() => {
                         })
                         break
                     case tabs.json:
+                        const address = await WalletRPC.recoverWalletFromKeyStoreJSON(
+                            data.name,
+                            keyStoreContent,
+                            keyStorePassword,
+                        )
                         await connection?.connect({
-                            account: await WalletRPC.recoverWalletFromKeyStoreJSON(
-                                data.name,
-                                keyStoreContent,
-                                keyStorePassword,
-                            ),
+                            account: address,
                         })
+                        await WalletRPC.resolveMaskAccount([{ address }])
+                        await Services.Helper.removePopupWindow()
                         navigate(PopupRoutes.Wallet, { replace: true })
                         break
                     case tabs.privateKey:

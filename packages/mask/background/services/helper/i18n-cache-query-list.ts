@@ -43,4 +43,6 @@ export default {
     '/[DimensionDev.Maskbook] develop/packages/plugins/Approval/src/locales/%locale%.json': 'com.maskbook.approval',
     '/[DimensionDev.Maskbook] develop/packages/plugins/ScamWarning/src/locales/%locale%.json': 'com.mask.scam-warning',
     '/[DimensionDev.Maskbook] develop/packages/plugins/SmartPay/src/locales/%locale%.json': 'com.mask.smart-pay',
+    '/[DimensionDev.Maskbook] develop/packages/plugins/VCent/src/locales/%locale%.json': 'com.maskbook.tweet',
+    '/[DimensionDev.Maskbook] develop/packages/plugins/Transak/src/locales/%locale%.json': 'com.maskbook.transak',
 }

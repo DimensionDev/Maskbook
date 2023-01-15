@@ -54,6 +54,7 @@ export interface ChainBoundaryProps<T extends NetworkPluginID> extends withClass
     forceShowingWrongNetworkButton?: boolean
     children?: React.ReactNode
     ActionButtonPromiseProps?: Partial<ActionButtonPromiseProps>
+    actualNetworkPluginID?: T
 }
 
 export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryProps<T>) {
@@ -62,6 +63,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         expectedPluginID,
         expectedChainId,
         expectedAccount,
+        actualNetworkPluginID,
         switchChainWithoutPopup = false,
         forceShowingWrongNetworkButton = false,
         predicate = (actualPluginID, actualChainId) =>
@@ -71,7 +73,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const t = useSharedI18N()
     const { classes } = useStyles(undefined, { props })
 
-    const { pluginID: actualPluginID } = useNetworkContext()
+    const { pluginID: actualPluginID } = useNetworkContext(actualNetworkPluginID)
     const plugin = useActivatedPlugin(actualPluginID, 'any')
     const expectedPlugin = useActivatedPlugin(expectedPluginID, 'any')
 
@@ -83,6 +85,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     } = useChainContext({
         account: expectedAccount,
     })
+
     const actualProviderDescriptor = useProviderDescriptor(actualPluginID)
     const actualChainName = actualOthers?.chainResolver.chainName(actualChainId)
 
@@ -129,6 +132,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                     chainId: expectedChainId,
                 })
             }
+            await delay(1500)
         }
         return 'complete'
     }, [

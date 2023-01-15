@@ -137,7 +137,6 @@ export function TrendingView(props: TrendingViewProps) {
     useEffect(() => setTabIndex(0), [networkType])
     // #endregion
     // #region merge trending
-
     const { value: { trending } = {}, loading: loadingTrending } = useTrendingById(result, result.address)
     // #endregion
 
@@ -162,7 +161,7 @@ export function TrendingView(props: TrendingViewProps) {
         !isNFT &&
         !!trending?.coin.contract_address &&
         chainIdValid &&
-        trending.contracts?.[0].pluginID === NetworkPluginID.PLUGIN_EVM
+        trending.contracts?.[0]?.pluginID === NetworkPluginID.PLUGIN_EVM
     // #endregion
 
     // #region expected chainId

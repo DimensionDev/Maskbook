@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => {
             textOverflow: 'ellipsis',
         },
         span: {
-            maxWidth: 350,
+            maxWidth: 400,
             display: 'inline-flex',
         },
         root: {
@@ -220,7 +220,9 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         (patchedHistory as RedPacketJSONPayload).token?.address ??
         (patchedHistory as RedPacketJSONPayloadFromChain).token_address
 
-    const { value: tokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress ?? '')
+    const { value: tokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress ?? '', undefined, {
+        chainId,
+    })
 
     const historyToken = {
         ...(tokenDetailed ?? (patchedHistory as RedPacketJSONPayload).token),
@@ -349,11 +351,12 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     span: <span className={classes.span} />,
                                 }}
                                 values={{
-                                    amount: formatBalance(patchedHistory.total, historyToken?.decimals, 6),
+                                    amount: formatBalance(patchedHistory.total, historyToken?.decimals, 6, true),
                                     claimedAmount: formatBalance(
                                         new BigNumber(patchedHistory.total).minus(total_remaining ?? 0),
                                         historyToken?.decimals,
                                         6,
+                                        true,
                                     ),
                                     symbol: historyToken?.symbol,
                                 }}

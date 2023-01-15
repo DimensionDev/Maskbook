@@ -39,12 +39,10 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
             await this.hostedStorage.account.initializedPromise
             await this.hostedStorage.chainId.initializedPromise
 
-            this.hostedStorage?.account.subscription.subscribe(() => {
-                if (this.hostedAccount) this.emitter.emit('accounts', [this.hostedAccount])
-            })
-            this.hostedStorage?.chainId.subscription.subscribe(() => {
-                if (this.hostedChainId) this.emitter.emit('chainId', toHex(this.hostedChainId))
-            })
+            this.onAccountChanged()
+            this.onChainChanged()
+            this.hostedStorage?.account.subscription.subscribe(this.onAccountChanged)
+            this.hostedStorage?.chainId.subscription.subscribe(this.onChainChanged)
         })
     }
 
@@ -64,6 +62,14 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
 
     get hostedChainId() {
         return this.hostedStorage?.chainId.value ?? this.options.getDefaultChainId()
+    }
+
+    private onAccountChanged() {
+        if (this.hostedAccount) this.emitter.emit('accounts', [this.hostedAccount])
+    }
+
+    private onChainChanged() {
+        if (this.hostedChainId) this.emitter.emit('chainId', toHex(this.hostedChainId))
     }
 
     /**
