@@ -41,8 +41,8 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
 
             this.onAccountChanged()
             this.onChainChanged()
-            this.hostedStorage?.account.subscription.subscribe(this.onAccountChanged)
-            this.hostedStorage?.chainId.subscription.subscribe(this.onChainChanged)
+            this.hostedStorage?.account.subscription.subscribe(this.onAccountChanged.bind(this))
+            this.hostedStorage?.chainId.subscription.subscribe(this.onChainChanged.bind(this))
         })
     }
 
