@@ -5,9 +5,9 @@ import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
 import { toFixed } from '@masknet/web3-shared-base'
 import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json'
-import { EthereumMethodType, Transaction, TransactionOptions, UserOperation } from '../types/index.js'
+import { ChainId, EthereumMethodType, Transaction, TransactionOptions, UserOperation } from '../types/index.js'
 import { createJsonRpcPayload } from '../helpers/index.js'
-import { getSmartPayConstant } from '../index.js'
+import { ZERO_ADDRESS, getSmartPayConstant } from '../index.js'
 
 export class PayloadEditor {
     constructor(private payload: JsonRpcPayload, private options?: TransactionOptions) {}
@@ -60,7 +60,7 @@ export class PayloadEditor {
 
     get chainId() {
         if (typeof this.config?.chainId === 'string') {
-            return Number.parseInt(this.config.chainId, 16) || this.options?.chainId
+            return (Number.parseInt(this.config.chainId, 16) as ChainId) || this.options?.chainId
         }
         return this.options?.chainId
     }
@@ -99,8 +99,8 @@ export class PayloadEditor {
                 // compose a fake transaction to be accepted by Transaction Watcher
                 return {
                     from: ownerAddress,
-                    // it's a not-exist address, use the original owner's address as a placeholder
-                    to: ownerAddress,
+                    // it's a not-exist address, use the zero address as a placeholder
+                    to: ZERO_ADDRESS,
                     chainId: this.options?.chainId,
                     data: new Web3().eth.abi.encodeFunctionCall(
                         CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem,

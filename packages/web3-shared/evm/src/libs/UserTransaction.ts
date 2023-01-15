@@ -152,6 +152,10 @@ export class UserTransaction {
         return toFixed(plus(this.userOperation.callGas ?? 0, this.userOperation.preVerificationGas ?? 0))
     }
 
+    get operation() {
+        return this.userOperation
+    }
+
     /**
      * Fill up an incomplete user operation.
      */
@@ -201,12 +205,16 @@ export class UserTransaction {
         }
 
         if (!isEmptyHex(callData)) {
-            const estimatedGas = await web3.eth.estimateGas({
-                from: this.entryPoint,
-                to: sender,
-                data: callData,
-            })
-            this.userOperation.callGas = toFixed(addGasMargin(estimatedGas, 5000))
+            try {
+                const estimatedGas = await web3.eth.estimateGas({
+                    from: this.entryPoint,
+                    to: sender,
+                    data: callData,
+                })
+                this.userOperation.callGas = toFixed(addGasMargin(estimatedGas, 5000))
+            } catch (error) {
+                this.userOperation.callGas = toFixed(addGasMargin(DEFAULT_USER_OPERATION.callGas, 5000))
+            }
         }
         if (isZeroString(maxFeePerGas)) {
             const block = await web3.eth.getBlock('latest')
@@ -248,7 +256,9 @@ export class UserTransaction {
      * Estimate a raw transaction.
      */
     async estimate(web3: Web3) {
-        const transaction = this.toTransaction()
+        await this.fill(web3)
+
+        const transaction = UserTransaction.toTransaction(this.chainId, this.userOperation)
         if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
         const walletContract = createContract<Wallet>(web3, transaction.from, WalletABI as AbiItem[])
         if (!walletContract) throw new Error('Failed to create wallet contract.')
@@ -261,7 +271,9 @@ export class UserTransaction {
     }
 
     async signTransaction(web3: Web3, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {
-        const transaction = this.toTransaction()
+        await this.fill(web3)
+
+        const transaction = UserTransaction.toTransaction(this.chainId, this.userOperation)
         if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
         const walletContract = createContract<Wallet>(web3, transaction.from, WalletABI as AbiItem[])
         if (!walletContract) throw new Error('Failed to create wallet contract.')
@@ -295,10 +307,6 @@ export class UserTransaction {
             maxPriorityFeePerGas: maxPriorityFeePerGas ? toFixed(maxPriorityFeePerGas) : '0',
             signature: await signer.signMessage(this.requestId),
         }
-    }
-
-    toTransaction(): Transaction {
-        return UserTransaction.toTransaction(this.chainId, this.userOperation)
     }
 
     static async fromTransaction(

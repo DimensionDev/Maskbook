@@ -80,7 +80,6 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
     }
     async sendUserOperation(chainId: ChainId, userOperation: UserOperation): Promise<string> {
         await this.assetChainId(chainId)
-
         return this.handle(userOperation)
     }
 }

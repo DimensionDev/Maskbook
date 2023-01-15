@@ -1,5 +1,6 @@
 import { useCallback, useRef } from 'react'
 import { useAsyncFn } from 'react-use'
+import getUnixTime from 'date-fns/getUnixTime'
 import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { NetworkPluginID, PersonaInformation, PopupRoutes, ProofType, SignType } from '@masknet/shared-base'
 import { useChainContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
@@ -7,7 +8,6 @@ import type { AbstractAccountAPI } from '@masknet/web3-providers/types'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import type { Wallet } from '@masknet/web3-shared-base'
 import { Typography, useTheme } from '@mui/material'
-import getUnixTime from 'date-fns/getUnixTime'
 import { ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import type { ManagerAccount } from '../type.js'
 import { useI18N } from '../locales/index.js'
@@ -101,7 +101,7 @@ export function useDeploy(
             )
             if (!hash) throw new Error('Deploy Failed')
 
-            return TransactionWatcher?.emitter.on('progress', (txHash, status) => {
+            return TransactionWatcher?.emitter.on('progress', (chainId, txHash, status) => {
                 if (txHash !== hash) return
                 Wallet?.addWallet({
                     name: 'Smart Pay',
@@ -116,12 +116,8 @@ export function useDeploy(
         } catch (error) {
             showSingletonSnackbar(t.create_smart_pay_wallet(), {
                 processing: false,
-                variant: 'default',
-                message: (
-                    <Typography sx={{ color: theme.palette.maskColor.danger }}>
-                        {t.user_cancelled_the_transaction()}
-                    </Typography>
-                ),
+                variant: 'error',
+                message: <Typography>{t.user_cancelled_the_transaction()}</Typography>,
             })
         }
     }, [

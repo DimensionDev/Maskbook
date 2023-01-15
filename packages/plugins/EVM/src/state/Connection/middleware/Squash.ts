@@ -1,13 +1,13 @@
 import { sha3 } from 'web3-utils'
 import type { RequestArguments, TransactionConfig } from 'web3-core'
 import { defer } from '@masknet/kit'
-import { EthereumMethodType } from '@masknet/web3-shared-evm'
-import type { Context, Middleware, EVM_Web3ConnectionOptions } from '../types.js'
+import { ConnectionContext, EthereumMethodType, Middleware } from '@masknet/web3-shared-evm'
+import type { EVM_Web3ConnectionOptions } from '../types.js'
 
 /**
  * Squash multiple RPC requests into a single one.
  */
-export class Squash implements Middleware<Context> {
+export class Squash implements Middleware<ConnectionContext> {
     private cache = new Map<string, Promise<unknown>>()
 
     /**
@@ -51,11 +51,11 @@ export class Squash implements Middleware<Context> {
         }
     }
 
-    async fn(context: Context, next: () => Promise<void>) {
+    async fn(context: ConnectionContext, next: () => Promise<void>) {
         const id = this.createRequestID(context.request, context.requestOptions)
 
         // unable to cache the request
-        if (!id) {
+        if (!id || !context.writeable) {
             await next()
             return
         }

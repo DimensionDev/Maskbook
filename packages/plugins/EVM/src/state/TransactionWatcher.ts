@@ -29,7 +29,7 @@ export class TransactionWatcher extends TransactionWatcherState<ChainId, Transac
 
     override async watchTransaction(chainId: ChainId, id: string, transaction: Transaction) {
         await super.watchTransaction(chainId, id, transaction)
-        this.emitter.emit('progress', id, TransactionStatusType.NOT_DEPEND, transaction)
+        this.emitter.emit('progress', chainId, id, TransactionStatusType.NOT_DEPEND, transaction)
     }
 
     override async notifyTransaction(
@@ -49,10 +49,10 @@ export class TransactionWatcher extends TransactionWatcherState<ChainId, Transac
             // only tracked records will get notified
             if (transaction.from) {
                 const stored = await Transaction.getTransaction?.(chainId, transaction.from, id)
-                if (stored) this.emitter.emit('progress', id, status, transaction)
+                if (stored) this.emitter.emit('progress', chainId, id, status, transaction)
             }
         } else {
-            this.emitter.emit('progress', id, status, transaction)
+            this.emitter.emit('progress', chainId, id, status, transaction)
         }
     }
 }

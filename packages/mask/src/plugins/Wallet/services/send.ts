@@ -4,7 +4,6 @@ import { defer } from '@masknet/kit'
 import { SmartPayAccount, Web3 } from '@masknet/web3-providers'
 import {
     ChainId,
-    createJsonRpcPayload,
     createJsonRpcResponse,
     ErrorEditor,
     EthereumMethodType,
@@ -54,12 +53,12 @@ async function internalSend(
                         ),
                     )
                 } else {
-                    await Web3.getWeb3Provider(chainId).send(
-                        createJsonRpcPayload(pid, {
-                            method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
-                            params: [await signer.signTransaction(signableConfig)],
-                        }),
-                        callback,
+                    callback(
+                        null,
+                        createJsonRpcResponse(
+                            pid,
+                            await Web3.sendSignedTransaction(chainId, await signer.signTransaction(signableConfig)),
+                        ),
                     )
                 }
             } catch (error) {

@@ -39,7 +39,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
 
     const onDeployCallback = useCallback(() => {
         return connection?.deploy?.('0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC', undefined, {
-            chainId: ChainId.Mumbai,
+            chainId: ChainId.Matic,
             account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
             providerType: EVM_ProviderType.MaskWallet,
         })
@@ -57,7 +57,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                 signature: '',
             },
             {
-                chainId: ChainId.Mumbai,
+                chainId: ChainId.Matic,
                 account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
                 providerType: EVM_ProviderType.MaskWallet,
             },
@@ -66,7 +66,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
 
     const onChangeOwnerChange = useCallback(() => {
         return connection?.changeOwner?.('0x66b57885E8E9D84742faBda0cE6E3496055b012d', {
-            chainId: ChainId.Mumbai,
+            chainId: ChainId.Matic,
             account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
             providerType: EVM_ProviderType.MaskWallet,
         })
@@ -74,14 +74,13 @@ export function ConnectionContent(props: ConnectionContentProps) {
 
     const onApproveFungibleTokenCallback = useCallback(() => {
         if (pluginID !== NetworkPluginID.PLUGIN_EVM) return
-        if (chainId !== ChainId.Mainnet) return
         return connection?.approveFungibleToken(
-            '0xF8935Df67cAB7BfcA9532D1Ac2088C5c39b995b5',
+            '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
             '0x31f42841c2db5173425b5223809cf3a38fede360',
             '1',
             {
-                chainId: ChainId.Mumbai,
-                account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
+                chainId: ChainId.Matic,
+                account: '0xF8935Df67cAB7BfcA9532D1Ac2088C5c39b995b5',
                 providerType: EVM_ProviderType.MaskWallet,
             },
         )
@@ -188,14 +187,6 @@ export function ConnectionContent(props: ConnectionContentProps) {
         },
         [connection],
     )
-
-    if (!account) {
-        return (
-            <section className={classes.container}>
-                <Typography>Please connect a wallet.</Typography>
-            </section>
-        )
-    }
 
     return (
         <section className={classes.container}>
