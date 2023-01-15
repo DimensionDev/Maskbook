@@ -287,10 +287,10 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
 
             return this.bundler.sendUserOperation(chainId, await userTransaction.signUserOperation(signer))
         } else {
-            return this.web3.getWeb3Provider(chainId).request<string>({
-                method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
-                params: [await userTransaction.signTransaction(this.web3.getWeb3(chainId), signer)],
-            })
+            return this.web3.sendSignedTransaction(
+                chainId,
+                await userTransaction.signTransaction(this.web3.getWeb3(chainId), signer),
+            )
         }
     }
 
