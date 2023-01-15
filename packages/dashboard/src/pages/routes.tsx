@@ -1,9 +1,9 @@
-import React, { lazy, Suspense, useCallback, useEffect } from 'react'
+import React, { lazy, Suspense, useCallback } from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom'
 import { DashboardFrame } from '../components/DashboardFrame/index.js'
 import { DashboardRoutes, RestoreSuccessEvent } from '@masknet/shared-base'
 import NoPersonaGuardRoute from './GuardRoute.js'
-import { Messages, Services } from '../API.js'
+import { Services } from '../API.js'
 import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
 import { compact } from 'lodash-es'
 import { useCustomSnackbar } from '@masknet/theme'
@@ -37,9 +37,6 @@ export function Pages() {
         })
     }, [])
 
-    useEffect(() => {
-        return Messages.events.restoreSuccess.on(restoreCallback)
-    }, [restoreCallback])
     return (
         <Suspense fallback={null}>
             <Routes>
