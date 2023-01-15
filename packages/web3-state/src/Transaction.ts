@@ -1,6 +1,6 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
-import { EMPTY_ARRAY, EMPTY_LIST, mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
+import { mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
 import {
     RecentTransaction,
     TransactionStatusType,

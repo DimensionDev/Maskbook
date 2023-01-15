@@ -45,7 +45,7 @@ async function internalSend(
         case EthereumMethodType.MASK_REPLACE_TRANSACTION:
             try {
                 if (!signableConfig) throw new Error('No transaction to be sent.')
-                if (owner && gasCurrency && !isZeroAddress(gasCurrency)) {
+                if (owner && gasCurrency) {
                     callback(
                         null,
                         createJsonRpcResponse(
