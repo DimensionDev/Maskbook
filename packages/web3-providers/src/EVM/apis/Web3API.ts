@@ -26,6 +26,7 @@ import {
     createNativeToken,
     getTokenConstant,
     getEthereumConstant,
+    TransactionSignature,
 } from '@masknet/web3-shared-evm'
 import {
     FungibleToken,
@@ -75,6 +76,7 @@ export class Web3API
             Transaction,
             TransactionDetailed,
             TransactionReceipt,
+            TransactionSignature,
             Block,
             Web3Provider,
             Web3
