@@ -357,7 +357,7 @@ export class Web3API
         })
     }
     async sendSignedTransaction(chainId: ChainId, signed: string): Promise<string> {
-        console.log('DEBIG: sendSignedTransaction')
+        console.log('DEBUG: sendSignedTransaction')
         console.log({
             chainId,
             signed,

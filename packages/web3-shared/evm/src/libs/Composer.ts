@@ -31,10 +31,19 @@ export class Composer<T> {
         }
     }
 
+    /**
+     * Use a middleware
+     * @param middleware
+     */
     public use(middleware: Middleware<T>) {
         this.items.push(middleware)
     }
 
+    /**
+     * Run all registered middleware
+     * @param context
+     * @param next
+     */
     public async dispatch(context: T, next: () => Promise<void>) {
         await this.compose()(context, next)
     }

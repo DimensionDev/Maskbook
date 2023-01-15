@@ -1,4 +1,4 @@
-import { ChainId, Middleware, Translator as ChainTranslator, ConnectionContext } from '@masknet/web3-shared-evm'
+import { ChainId, Middleware, Translator as Translator_, ConnectionContext } from '@masknet/web3-shared-evm'
 import { Base } from '../translators/Base.js'
 import { Polygon } from '../translators/Polygon.js'
 
@@ -8,7 +8,7 @@ import { Polygon } from '../translators/Polygon.js'
 export class Translator implements Middleware<ConnectionContext> {
     private base = new Base()
 
-    private translators: Partial<Record<ChainId, ChainTranslator<ConnectionContext>>> = {
+    private translators: Partial<Record<ChainId, Translator_<ConnectionContext>>> = {
         [ChainId.Mumbai]: new Polygon(),
     }
 

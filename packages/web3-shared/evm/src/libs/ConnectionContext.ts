@@ -1,6 +1,6 @@
-import type { Connection, ConnectionOptions } from '@masknet/web3-shared-base'
 import type { RequestArguments } from 'web3-core'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
+import type { Connection, ConnectionOptions } from '@masknet/web3-shared-base'
 import { ErrorEditor } from './ErrorEditor.js'
 import { PayloadEditor } from './PayloadEditor.js'
 import { createJsonRpcPayload, createJsonRpcResponse } from '../helpers/index.js'
@@ -145,10 +145,16 @@ export class ConnectionContext {
         return this.id
     }
 
+    /**
+     * Abstract account owner address
+     */
     get owner() {
         return this.payloadEditor.owner || this._options?.owner || this._init?.getDefaultOwner?.(this.providerType)
     }
 
+    /**
+     * Abstract account owner persona public key
+     */
     get identifier() {
         return (
             this.payloadEditor.identifier ||
@@ -158,7 +164,9 @@ export class ConnectionContext {
     }
 
     get requestOptions() {
-        return this._options
+        return {
+            ...this._options,
+        }
     }
 
     get requestArguments() {
@@ -169,6 +177,9 @@ export class ConnectionContext {
         this._requestArguments = requestArguments
     }
 
+    /**
+     * JSON RPC request payload
+     */
     get request() {
         return createJsonRpcPayload(this.id, {
             params: [],
@@ -176,6 +187,9 @@ export class ConnectionContext {
         })
     }
 
+    /**
+     * JSON RPC response object
+     */
     get response() {
         if (this._writeable) return
         return createJsonRpcResponse(this.id, this._result)
@@ -199,14 +213,23 @@ export class ConnectionContext {
         this._result = result
     }
 
+    /**
+     * Resolve a request and write down the result into the context. Alias of end(null, result)
+     */
     write(result?: unknown) {
         this.end(null, result)
     }
 
+    /**
+     * Reject a request and throw an error. Alias of end(error)
+     */
     abort(error: unknown, fallback = 'Failed to send request.') {
         this.end((error as Error) || new Error(fallback))
     }
 
+    /**
+     * Seal a request by resolving or rejecting it.
+     */
     end(error: Error | null = null, result?: unknown) {
         if (!this._writeable) return
         this._writeable = false

@@ -10,7 +10,7 @@ export class TransactionWatcher implements Middleware<ConnectionContext> {
 
         if (
             (context.method === EthereumMethodType.ETH_SEND_TRANSACTION && recognizedError) ||
-            (recognizedError?.isRecognized && context.method === EthereumMethodType.ETH_ESTIMATE_GAS)
+            (context.method === EthereumMethodType.ETH_ESTIMATE_GAS && recognizedError?.isRecognized)
         ) {
             Web3StateSettings.value.TransactionWatcher?.notifyError(recognizedError, context.request)
         }
