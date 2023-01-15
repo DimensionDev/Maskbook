@@ -75,7 +75,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
     const onApproveFungibleTokenCallback = useCallback(() => {
         if (pluginID !== NetworkPluginID.PLUGIN_EVM) return
         return connection?.approveFungibleToken(
-            '0xF8935Df67cAB7BfcA9532D1Ac2088C5c39b995b5',
+            '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
             '0x31f42841c2db5173425b5223809cf3a38fede360',
             '1',
             {
@@ -187,14 +187,6 @@ export function ConnectionContent(props: ConnectionContentProps) {
         },
         [connection],
     )
-
-    if (!account) {
-        return (
-            <section className={classes.container}>
-                <Typography>Please connect a wallet.</Typography>
-            </section>
-        )
-    }
 
     return (
         <section className={classes.container}>

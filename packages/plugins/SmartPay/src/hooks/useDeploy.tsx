@@ -101,7 +101,7 @@ export function useDeploy(
             )
             if (!hash) throw new Error('Deploy Failed')
 
-            return TransactionWatcher?.emitter.on('progress', (txHash, status) => {
+            return TransactionWatcher?.emitter.on('progress', (chainId, txHash, status) => {
                 if (txHash !== hash) return
                 Wallet?.addWallet({
                     name: 'Smart Pay',

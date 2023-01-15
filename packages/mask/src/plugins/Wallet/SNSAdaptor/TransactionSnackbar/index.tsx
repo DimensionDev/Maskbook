@@ -51,7 +51,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
     }, [TransactionWatcher])
 
     useEffect(() => {
-        const off = TransactionWatcher?.emitter.on('progress', (txHash, status, transaction) => {
+        const off = TransactionWatcher?.emitter.on('progress', (chainId, txHash, status, transaction) => {
             if (!transaction || !pluginID) return
             setProgress({
                 chainId,
@@ -64,7 +64,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
         return () => {
             off?.()
         }
-    }, [TransactionWatcher, chainId, pluginID])
+    }, [TransactionWatcher, pluginID])
 
     useEffect(() => {
         setProgress(undefined)

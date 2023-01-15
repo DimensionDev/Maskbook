@@ -1,6 +1,6 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
-import { mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
+import { EMPTY_ARRAY, EMPTY_LIST, mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
 import {
     RecentTransaction,
     TransactionStatusType,
@@ -188,6 +188,13 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
                 [address_]: all[chainId][address_]?.filter((x) => !Object.keys(x.candidates).includes(id)),
             },
         })
+    }
+
+    async getTransactions(chainId: ChainId, address: string): Promise<RecentTransaction<ChainId, Transaction>[]> {
+        const all = this.storage.value
+        const address_ = this.options.formatAddress(address)
+
+        return all[chainId][address_] ?? []
     }
 
     async clearTransactions(chainId: ChainId, address: string) {

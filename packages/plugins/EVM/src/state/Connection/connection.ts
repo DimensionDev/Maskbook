@@ -3,7 +3,7 @@ import { AbiItem, toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import { ECKeyIdentifier, getSubscriptionCurrentValue, PartialRequired, Proof } from '@masknet/shared-base'
+import type { ECKeyIdentifier, PartialRequired, Proof } from '@masknet/shared-base'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
 import type { ERC1155 } from '@masknet/web3-contracts/types/ERC1155.js'
@@ -752,9 +752,14 @@ class Connection implements EVM_Connection {
         return new Promise<string>((resolve, reject) => {
             if (!this.Transaction || !this.TransactionWatcher) reject(new Error('No context found.'))
 
-            const onProgress = async (id: string, status: TransactionStatusType, transaction?: Transaction) => {
+            const onProgress = async (
+                chainId: ChainId,
+                id: string,
+                status: TransactionStatusType,
+                transaction?: Transaction,
+            ) => {
                 if (status === TransactionStatusType.NOT_DEPEND) return
-                const transactions = await getSubscriptionCurrentValue(() => this.Transaction?.transactions)
+                const transactions = await this.Transaction?.getTransactions?.(chainId, transaction?.from!)
                 const currentTransaction = transactions?.find((x) => {
                     const hashes = Object.keys(x.candidates)
                     return hashes.includes(hash) && hashes.includes(id)
