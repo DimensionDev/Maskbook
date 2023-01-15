@@ -11,7 +11,6 @@ import {
     PayloadEditor,
     TransactionOptions,
     Signer,
-    isZeroAddress,
 } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../messages.js'
 import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper/index.js'
@@ -58,8 +57,7 @@ async function internalSend(
                         null,
                         createJsonRpcResponse(
                             pid,
-                            await Web3.sendSignedTransaction(chainId, '0x1'),
-                            // await Web3.sendSignedTransaction(chainId, await signer.signTransaction(signableConfig)),
+                            await Web3.sendSignedTransaction(chainId, await signer.signTransaction(signableConfig)),
                         ),
                     )
                 }

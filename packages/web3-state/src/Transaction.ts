@@ -190,7 +190,7 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
         })
     }
 
-    async getTransactions(chainId: ChainId, address: string): Promise<RecentTransaction<ChainId, Transaction>[]> {
+    async getTransactions(chainId: ChainId, address: string): Promise<Array<RecentTransaction<ChainId, Transaction>>> {
         const all = this.storage.value
         const address_ = this.options.formatAddress(address)
 

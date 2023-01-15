@@ -5,7 +5,6 @@ import {
     ChainId,
     ContractWallet,
     Create2Factory,
-    EthereumMethodType,
     Signer,
     Transaction,
     UserOperation,
@@ -146,72 +145,45 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
     }
 
     async getAccountByNonce(chainId: ChainId, owner: string, nonce: number) {
-        const address = '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F'
-        return [
-            {
-                pluginID: NetworkPluginID.PLUGIN_EVM,
-                chainId: ChainId.Matic,
-                id: `${NetworkPluginID.PLUGIN_EVM}_${chainId}_${address}`,
-                address,
-                owner,
-                creator: owner,
-                deployed: true,
-                funded: true,
-            },
-        ]
-        // const create2Factory = await this.createCreate2Factory(chainId, owner)
-        // const contractWallet = await this.createContractWallet(chainId, owner)
-        // const address = create2Factory.derive(contractWallet.initCode, nonce)
+        const create2Factory = await this.createCreate2Factory(chainId, owner)
+        const contractWallet = await this.createContractWallet(chainId, owner)
+        const address = create2Factory.derive(contractWallet.initCode, nonce)
 
-        // const operations = await this.funder.getOperationsByOwner(chainId, owner)
+        const operations = await this.funder.getOperationsByOwner(chainId, owner)
 
-        // // TODO: ensure account is deployed
-        // return this.createContractAccount(
-        //     chainId,
-        //     address,
-        //     owner,
-        //     owner,
-        //     false,
-        //     operations.some((operation) => isSameAddress(operation.walletAddress, address)),
-        // )
+        // TODO: ensure account is deployed
+        return this.createContractAccount(
+            chainId,
+            address,
+            owner,
+            owner,
+            false,
+            operations.some((operation) => isSameAddress(operation.walletAddress, address)),
+        )
     }
 
     async getAccountsByOwner(
         chainId: ChainId,
         owner: string,
     ): Promise<Array<AbstractAccountAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>>> {
-        if (!isSameAddress(owner, '0x96ec3286a049b42133c3ddd26777051612bdf61f')) return []
+        const create2Factory = await this.createCreate2Factory(chainId, owner)
+        const contractWallet = await this.createContractWallet(chainId, owner)
+        const operations = await this.funder.getOperationsByOwner(chainId, owner)
 
-        return [
-            {
-                pluginID: NetworkPluginID.PLUGIN_EVM,
+        const allSettled = await Promise.allSettled([
+            this.getAccountsFromMulticall(
                 chainId,
-                id: Date.now().toFixed(),
-                address: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
                 owner,
-                creator: owner,
-                deployed: true,
-                funded: true,
-            },
-        ]
-        // const create2Factory = await this.createCreate2Factory(chainId, owner)
-        // const contractWallet = await this.createContractWallet(chainId, owner)
-        // const operations = await this.funder.getOperationsByOwner(chainId, owner)
-
-        // const allSettled = await Promise.allSettled([
-        //     this.getAccountsFromMulticall(
-        //         chainId,
-        //         owner,
-        //         create2Factory.deriveUntil(contractWallet.initCode, MAX_ACCOUNT_LENGTH),
-        //     ),
-        //     // this.getAccountsFromChainbase(chainId, owner),
-        // ])
-        // return allSettled
-        //     .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
-        //     .map((y) => ({
-        //         ...y,
-        //         funded: operations.some((operation) => isSameAddress(operation.walletAddress, y.address)),
-        //     }))
+                create2Factory.deriveUntil(contractWallet.initCode, MAX_ACCOUNT_LENGTH),
+            ),
+            // this.getAccountsFromChainbase(chainId, owner),
+        ])
+        return allSettled
+            .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
+            .map((y) => ({
+                ...y,
+                funded: operations.some((operation) => isSameAddress(operation.walletAddress, y.address)),
+            }))
     }
 
     async getAccountsByOwners(
