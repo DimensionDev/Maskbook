@@ -1,7 +1,7 @@
 import { compact, uniq, uniqBy } from 'lodash-es'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { attemptUntil, TokenType, SourceType } from '@masknet/web3-shared-base'
-import { getCoinGeckoConstants } from '@masknet/web3-shared-evm'
+import { ChainId, getCoinGeckoConstants } from '@masknet/web3-shared-evm'
 import { COINGECKO_CHAIN_ID_LIST, COINGECKO_URL_BASE } from '../constants.js'
 import { getCommunityLink, isMirroredKeyword } from '../../Trending/helpers.js'
 import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../../Trending/constants.js'
