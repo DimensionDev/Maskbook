@@ -85,6 +85,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     } = useChainContext({
         account: expectedAccount,
     })
+
     const actualProviderDescriptor = useProviderDescriptor(actualPluginID)
     const actualChainName = actualOthers?.chainResolver.chainName(actualChainId)
 
@@ -131,6 +132,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                     chainId: expectedChainId,
                 })
             }
+            await delay(1500)
         }
         return 'complete'
     }, [
