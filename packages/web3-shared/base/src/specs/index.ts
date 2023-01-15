@@ -1640,11 +1640,11 @@ export interface ConnectionState<
     >,
 > {
     /** Get web3 SDK */
-    getWeb3?: (initial?: Web3ConnectionOptions) => Web3
+    getWeb3?: (initial?: Web3ConnectionOptions) => Web3 | undefined
     /** Get web3 provider instance */
-    getWeb3Provider?: (initial?: Web3ConnectionOptions) => Web3Provider
+    getWeb3Provider?: (initial?: Web3ConnectionOptions) => Web3Provider | undefined
     /** Get connection */
-    getConnection?: (initial?: Web3ConnectionOptions) => Web3Connection
+    getConnection?: (initial?: Web3ConnectionOptions) => Web3Connection | undefined
 }
 export interface WalletState<Transaction> {
     ready: boolean
