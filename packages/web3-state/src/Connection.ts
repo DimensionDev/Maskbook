@@ -1,7 +1,7 @@
 import { memoize } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import type { Connection, ConnectionOptions, ConnectionState as Web3ConnectionState } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
+import type { Connection, ConnectionOptions, ConnectionState as Web3ConnectionState } from '@masknet/web3-shared-base'
 
 export class ConnectionState<
     ChainId,
@@ -40,7 +40,7 @@ export class ConnectionState<
             Web3ConnectionOptions
         >
 {
-    private createConnectionCached: (ReturnType<typeof memoize> & typeof this.createConnection) | undefined
+    private createConnectionCached: typeof this.createConnection | undefined
 
     constructor(
         protected context: Plugin.Shared.SharedUIContext,
@@ -109,7 +109,7 @@ export class ConnectionState<
 
     getWeb3Provider(options?: Web3ConnectionOptions) {
         const connection = this.getConnection(options)
-        return connection.getWeb3Provider(options)
+        return connection?.getWeb3Provider(options)
     }
 
     getConnection(options?: Web3ConnectionOptions) {
