@@ -3,9 +3,9 @@ import { useSubscription } from 'use-subscription'
 import {
     useFungibleToken,
     useNonFungibleTokenContract,
-    useNetworkContext,
     useChainContext,
     getDefaultChainId,
+    useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import { isSameAddress, SocialAccount } from '@masknet/web3-shared-base'
 import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
@@ -59,11 +59,18 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
         chainId,
     })
 
-    const [userSelectedToken, setToken] = useState<TipContextOptions['token']>(nativeTokenDetailed)
-    const token = userSelectedToken ?? nativeTokenDetailed
-    useEffect(() => {
-        setToken(nativeTokenDetailed)
-    }, [nativeTokenDetailed])
+    const [tokenMap, setTokenMap] = useState<Record<string, TipContextOptions['token']>>({})
+    const key = `${pluginID}:${chainId}`
+    const setToken: TipContextOptions['setToken'] = useCallback(
+        (val) => {
+            setTokenMap((map) => {
+                const newToken = typeof val === 'function' ? val(map[key]) : val
+                return { ...map, [key]: newToken }
+            })
+        },
+        [key],
+    )
+    const token = tokenMap[key] ?? nativeTokenDetailed
 
     const [nonFungibleTokenId, setNonFungibleTokenId] = useState<TipContextOptions['nonFungibleTokenId']>(null)
     const storedTokens = useSubscription(getStorage().addedTokens.subscription)
@@ -104,11 +111,12 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
 
     useEffect(reset, [chainId])
 
+    const wrappedSendTip = useCallback(() => {
+        setIsDirty(false)
+        return sendTip()
+    }, [sendTip])
+
     const contextValue = useMemo((): TipContextOptions => {
-        const wrappedSendTip = () => {
-            setIsDirty(false)
-            return sendTip()
-        }
         return {
             recipient,
             recipientSnsId: task.recipientSnsId || '',
@@ -151,7 +159,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
         nonFungibleTokenContract,
         nonFungibleTokenAddress,
         token,
-        sendTip,
+        wrappedSendTip,
         isSending,
         reset,
         gasOption,
@@ -169,6 +177,8 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
 
     return <TipContext.Provider value={contextValue}>{children}</TipContext.Provider>
 })
+
+TipTaskProvider.displayName = 'TipTaskProvider'
 
 export function useTip() {
     return useContext(TipContext)
