@@ -1,4 +1,4 @@
-export * from './components//index.js'
+export * from './components/index.js'
 export * from './debug/index.js'
 export * from './hooks/index.js'
 export * from './shadow-root/index.js'

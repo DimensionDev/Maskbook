@@ -11,6 +11,7 @@ import {
     CrossIsolationMessages,
 } from '@masknet/shared-base'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
+import { usePersonaProofs } from '@masknet/shared'
 import Services from '../../extension/service.js'
 import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
@@ -18,7 +19,6 @@ import { SetupGuideStep } from '../../../shared/legacy-settings/types.js'
 import { useLastRecognizedIdentity } from './useActivatedUI.js'
 import { usePersonasFromDB } from './usePersonasFromDB.js'
 import { MaskMessages, useI18N } from '../../utils/index.js'
-import { usePersonaProofs } from '@masknet/shared'
 
 const createPersona = () => {
     Services.Helper.openDashboard(DashboardRoutes.Setup)
