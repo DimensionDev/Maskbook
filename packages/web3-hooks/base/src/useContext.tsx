@@ -35,11 +35,11 @@ const ChainContext = createContext<ChainContext>(null!)
 ChainContext.displayName = 'ChainContext'
 
 export function NetworkContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
-    const [pluginID, setPluginID] = useState<NetworkPluginID>()
+    const [pluginID = value, setPluginID] = useState<NetworkPluginID>()
     return (
         <NetworkContext.Provider
             value={{
-                pluginID: pluginID ?? value,
+                pluginID,
                 setPluginID,
             }}>
             {children}
@@ -76,16 +76,6 @@ function ChainContextProvider({ value, children }: React.ProviderProps<ChainCont
     )
 }
 
-export function ActualChainContextProvider({ children }: { children: ReactNode | undefined }) {
-    const value = {
-        account: useAccount(),
-        chainId: useChainId(),
-        networkType: useNetworkType(),
-        providerType: useProviderType(),
-    }
-    return <ChainContext.Provider value={value} children={children} />
-}
-
 export function Web3ContextProvider({
     value,
     children,
@@ -98,6 +88,32 @@ export function Web3ContextProvider({
     return compose(
         (children) => NetworkContextProvider({ value: pluginID, children }),
         (children) => <ChainContextProvider value={rest} children={children} />,
+        <>{children}</>,
+    )
+}
+
+export function ActualNetworkContextProvider({ children }: { children: ReactNode | undefined }) {
+    const value = {
+        pluginID: NetworkPluginID.PLUGIN_EVM,
+        setPluginID: (pluginID: NetworkPluginID) => {},
+    }
+    return <NetworkContext.Provider value={value} children={children} />
+}
+
+export function ActualChainContextProvider({ children }: { children: ReactNode | undefined }) {
+    const value = {
+        account: useAccount(),
+        chainId: useChainId(),
+        networkType: useNetworkType(),
+        providerType: useProviderType(),
+    }
+    return <ChainContext.Provider value={value} children={children} />
+}
+
+export function ActualWeb3ContextProvider({ children }: React.ProviderProps<null>) {
+    return compose(
+        (children) => ActualNetworkContextProvider({ children }),
+        (children) => ActualChainContextProvider({ children }),
         <>{children}</>,
     )
 }
