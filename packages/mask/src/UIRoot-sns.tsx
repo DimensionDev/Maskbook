@@ -38,7 +38,7 @@ function MaskUIRoot({ children }: React.PropsWithChildren<{}>) {
     const context = { pluginID: site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM }
     return compose(
         (children) => DialogStackingProvider({ children, hasGlobalBackdrop: false }),
-        (children) => EnvironmentContextProvider({ value: context.pluginID, children }),
+        (children) => EnvironmentContextProvider({ value: context, children }),
         (children) => Web3ContextProvider({ value: context, children }),
         (children) => I18NextProviderHMR({ i18n: i18NextInstance, children }),
         <>{children}</>,

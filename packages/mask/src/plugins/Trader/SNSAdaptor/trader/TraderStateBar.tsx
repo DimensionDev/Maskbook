@@ -85,8 +85,6 @@ export function TraderStateBar({
 
     const { isSwapping } = AllProviderTradeContext.useContainer()
 
-    // const pluginId = site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM
-
     // #region if `isPopup` be true, click the plugin status bar need to  open popup window
     const openSelectWalletPopup = useCallback(() => {
         Services.Helper.openPopupWindow(PopupRoutes.SelectWallet, {

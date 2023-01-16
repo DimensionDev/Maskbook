@@ -39,8 +39,8 @@ NetworkContext.displayName = 'NetworkContext'
 const ChainContext = createContext<ChainContextGetter & ChainContextSetter>(null!)
 ChainContext.displayName = 'ChainContext'
 
-export function EnvironmentContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
-    return <EnvironmentContext.Provider value={{ pluginID: value }}>{children}</EnvironmentContext.Provider>
+export function EnvironmentContextProvider({ value, children }: React.ProviderProps<EnvironmentContext>) {
+    return <EnvironmentContext.Provider value={value}>{children}</EnvironmentContext.Provider>
 }
 
 export function NetworkContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
@@ -151,5 +151,5 @@ export function useChainContext<T extends NetworkPluginID = NetworkPluginID>(def
     return {
         ...context,
         ...omitBy(defaults, isUndefined),
-    } as Required<ChainContextGetter<T>>
+    } as Required<ChainContextGetter<T> & ChainContextSetter<T>>
 }
