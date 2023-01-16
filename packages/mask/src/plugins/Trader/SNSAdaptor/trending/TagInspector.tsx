@@ -57,7 +57,7 @@ function TrendingViewWrapper({ name, type, reposition, address, isNFTProjectPopp
             isNFTProjectPopper ? SearchResultType.NonFungibleCollection : undefined,
         )
     }, [name, type, isNFTProjectPopper])
-
+    console.log({ name, resultList })
     if (!resultList?.length) return null
 
     return (

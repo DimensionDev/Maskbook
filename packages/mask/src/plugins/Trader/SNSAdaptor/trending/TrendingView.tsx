@@ -9,7 +9,7 @@ import {
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
-import { SourceType, createFungibleToken, TokenType } from '@masknet/web3-shared-base'
+import { createFungibleToken, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTList, PluginCardFrameMini } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
@@ -125,7 +125,6 @@ export function TrendingView(props: TrendingViewProps) {
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
     const isWeb3ProfileMinimalMode = useIsMinimalMode(PluginID.Web3Profile)
-    const [tabIndex, setTabIndex] = useState(result.source !== SourceType.UniswapInfo ? 1 : 0)
     const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
 
@@ -133,9 +132,6 @@ export function TrendingView(props: TrendingViewProps) {
     const pluginIDs = useValueRef(pluginIDSettings)
     const context = { pluginID: site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM }
 
-    // #region track network type
-    useEffect(() => setTabIndex(0), [networkType])
-    // #endregion
     // #region merge trending
     const { value: { trending } = {}, loading: loadingTrending } = useTrendingById(result, result.address)
     // #endregion
@@ -227,7 +223,7 @@ export function TrendingView(props: TrendingViewProps) {
     // #region api ready callback
     useEffect(() => {
         props.onUpdate?.()
-    }, [tabIndex, loadingTrending])
+    }, [loadingTrending])
     // #endregion
     const collectionId =
         trending?.coin.type === TokenType.NonFungible
