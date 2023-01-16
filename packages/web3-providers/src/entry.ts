@@ -53,6 +53,7 @@ import { ENS_API } from './ENS/index.js'
 import { LensAPI } from './Lens/index.js'
 import { Web3SignerAPI } from './EVM/apis/Web3SignerAPI.js'
 import { FlowWeb3API } from './Flow/apis/Web3API.js'
+import { SolanaWeb3API } from './Solana/apis/Web3API.js'
 
 export * from './Sentry/index.js'
 export { resolveActivityTypeBackgroundColor } from './entry-helpers.js'
@@ -106,6 +107,7 @@ export const FlowWeb3 = new FlowWeb3API()
 export const FlowFungible = new FlowFungibleAPI()
 
 // Solana RPC
+export const SolanaWeb3 = new SolanaWeb3API()
 export const SolanaFungible = new SolanaFungibleAPI()
 export const SolanaNonFungible = new SolanaNonFungibleAPI()
 

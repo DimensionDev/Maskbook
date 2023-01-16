@@ -15,14 +15,15 @@ import {
     createClient,
     createNativeToken,
     isNativeTokenAddress,
+    TransactionSignature,
 } from '@masknet/web3-shared-flow'
 import {
-    TransactionStatusType,
     FungibleToken,
     NonFungibleToken,
     NonFungibleTokenMetadata,
     NonFungibleTokenContract,
     NonFungibleCollection,
+    TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import type { Web3BaseAPI } from '../../entry-types.js'
 
@@ -40,6 +41,7 @@ export class FlowWeb3API
             Transaction,
             TransactionDetailed,
             TransactionReceipt,
+            TransactionSignature,
             Block,
             Web3Provider,
             Web3
@@ -123,10 +125,10 @@ export class FlowWeb3API
         const web3 = this.getWeb3(chainId)
         return web3.getTransaction(hash)
     }
-    getTransactionReceipt(chainId: ChainId, hash: string): Promise<TransactionReceipt | null> {
-        throw new Error('Method not implemented.')
+    async getTransactionReceipt(chainId: ChainId, hash: string): Promise<TransactionReceipt | null> {
+        return null
     }
-    getTransactionStatus(chainId: ChainId, hash: string): Promise<TransactionStatusType> {
+    async getTransactionStatus(chainId: ChainId, hash: string): Promise<TransactionStatusType> {
         const web3 = this.getWeb3(chainId)
         const { status } = web3.getTransactionStatus(hash)
         const status_ = status as TransactionStatusCode
