@@ -11,8 +11,8 @@ import {
     useReverseAddress,
     useWeb3State,
     useChainContext,
-    ActualChainContextProvider,
     NetworkContextProvider,
+    ActualWeb3ContextProvider,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -126,9 +126,9 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
 
 export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>((props) => {
     const children = (
-        <ActualChainContextProvider>
+        <ActualWeb3ContextProvider>
             <PluginWalletStatusBarWithoutContext {...props} />
-        </ActualChainContextProvider>
+        </ActualWeb3ContextProvider>
     )
 
     return props.actualPluginID ? (

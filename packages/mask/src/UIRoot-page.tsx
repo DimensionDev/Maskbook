@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import { StyledEngineProvider, Theme } from '@mui/material'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { EnvironmentContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
 import { ErrorBoundary, BuildInfo, useValueRef } from '@masknet/shared-base-ui'
@@ -36,6 +36,7 @@ function MaskUIRoot({ children, useTheme, fallback }: MaskUIRootProps) {
     return compose(
         (children) => DialogStackingProvider({ children, hasGlobalBackdrop: false }),
         (children) => MaskThemeProvider({ useMaskIconPalette: (theme) => theme.palette.mode, useTheme, children }),
+        (children) => EnvironmentContextProvider({ value: context.pluginID, children }),
         (children) => Web3ContextProvider({ value: context, children }),
         (children) => SharedContextProvider({ children }),
         <Suspense fallback={fallback}>
