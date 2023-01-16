@@ -37,6 +37,10 @@ export namespace AbstractAccountAPI {
         topic1: string
     }
 
+    export interface Options {
+        paymentToken?: string
+    }
+
     export interface Provider<
         T extends NetworkPluginID,
         ChainId = Web3Helper.Definition[T]['ChainId'],
@@ -72,7 +76,7 @@ export namespace AbstractAccountAPI {
             owner: string,
             transaction: Transaction,
             signer: Signer<ECKeyIdentifier> | Signer<string>,
-            gasCurrency?: string,
+            options?: Options,
         ): Promise<string>
         /** Send a user operation by the account. */
         sendUserOperation(
@@ -80,10 +84,11 @@ export namespace AbstractAccountAPI {
             owner: string,
             userOperation: UserOperation,
             signer: Signer<ECKeyIdentifier> | Signer<string>,
+            options?: Options,
         ): Promise<string>
         /** Estimate a transaction. */
-        estimateTransaction(chainId: ChainId, transaction: Transaction): Promise<string>
+        estimateTransaction(chainId: ChainId, transaction: Transaction, options?: Options): Promise<string>
         /** Estimate a user operation. */
-        estimateUserOperation(chainId: ChainId, userOperation: UserOperation): Promise<string>
+        estimateUserOperation(chainId: ChainId, userOperation: UserOperation, options?: Options): Promise<string>
     }
 }

@@ -13,9 +13,9 @@ import {
     Signer,
 } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../messages.js'
+import { signWithWallet } from './wallet/index.js'
 import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper/index.js'
 import { signWithPersona } from '../../../../background/services/identity/index.js'
-import { signWithWallet } from './wallet/index.js'
 
 /**
  * Send to built-in RPC endpoints.
@@ -49,7 +49,9 @@ async function internalSend(
                         null,
                         createJsonRpcResponse(
                             pid,
-                            await SmartPayAccount.sendTransaction(chainId, owner, signableConfig, signer, gasCurrency),
+                            await SmartPayAccount.sendTransaction(chainId, owner, signableConfig, signer, {
+                                paymentToken: gasCurrency,
+                            }),
                         ),
                     )
                 } else {
