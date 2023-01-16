@@ -52,6 +52,7 @@ import { MulticallAPI } from './Multicall/index.js'
 import { ENS_API } from './ENS/index.js'
 import { LensAPI } from './Lens/index.js'
 import { Web3SignerAPI } from './EVM/apis/Web3SignerAPI.js'
+import { FlowWeb3API } from './Flow/apis/Web3API.js'
 
 export * from './Sentry/index.js'
 export { resolveActivityTypeBackgroundColor } from './entry-helpers.js'
@@ -101,6 +102,7 @@ export const AlchemyEVM = new AlchemyEVM_API()
 export const AlchemyFlow = new AlchemyFlowAPI()
 
 // Flow RPC
+export const FlowWeb3 = new FlowWeb3API()
 export const FlowFungible = new FlowFungibleAPI()
 
 // Solana RPC

@@ -83,7 +83,7 @@ export namespace Web3BaseAPI {
         /** Get the latest transaction status. */
         getTransactionStatus(chainId: ChainId, hash: string): Promise<TransactionStatusType>
         /** Get transaction nonce */
-        getTransactionNonce(chainId: ChainId, hash: string): Promise<number>
+        getTransactionNonce(chainId: ChainId, address: string): Promise<number>
         /** Get a native fungible token. */
         getNativeToken(chainId: ChainId): Promise<FungibleToken<ChainId, SchemaType>>
         /** Get fungible token */
