@@ -18,14 +18,6 @@ export const CURRENCIES_MAP: Record<SourceType, undefined | TrendingAPI.Currency
             description: 'Unite State Dollar',
         },
     ],
-    [SourceType.UniswapInfo]: [
-        {
-            id: 'usd',
-            name: 'USD',
-            symbol: '$',
-            description: 'Unite State Dollar',
-        },
-    ],
     [SourceType.NFTScan]: [
         {
             id: 'eth',
@@ -34,6 +26,7 @@ export const CURRENCIES_MAP: Record<SourceType, undefined | TrendingAPI.Currency
             description: 'Ethereum',
         },
     ],
+    [SourceType.UniswapInfo]: undefined,
     [SourceType.X2Y2]: undefined,
     [SourceType.Chainbase]: undefined,
     [SourceType.Zerion]: undefined,

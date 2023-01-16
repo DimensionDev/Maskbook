@@ -50,7 +50,7 @@ interface TrendingViewWrapperProps {
 }
 
 function TrendingViewWrapper({ name, type, reposition, address, isNFTProjectPopper }: TrendingViewWrapperProps) {
-    const { value: resultList } = useAsyncRetry(async () => {
+    const { value: resultList, loading: loadingResultList } = useAsyncRetry(async () => {
         if (!name || !type) return EMPTY_LIST
         return DSearch.search<Web3Helper.TokenResultAll>(
             isNFTProjectPopper ? name : `${type === TrendingAPI.TagType.CASH ? '$' : '#'}${name}`,
@@ -58,7 +58,7 @@ function TrendingViewWrapper({ name, type, reposition, address, isNFTProjectPopp
         )
     }, [name, type, isNFTProjectPopper])
 
-    if (!resultList?.length) return null
+    if (!resultList?.length || loadingResultList) return null
 
     return (
         <TrendingViewProvider

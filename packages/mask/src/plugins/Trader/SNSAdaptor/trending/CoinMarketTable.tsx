@@ -92,30 +92,28 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
             <TableContainer className={classes.container} component={Paper} elevation={0}>
                 <Table size="small">
                     <TableBody>
-                        {SourceType.UniswapInfo !== dataProvider ? (
-                            <TableRow>
-                                <TableCell className={classes.head} component="th">
-                                    <Typography color="textSecondary" variant="body2" className={classes.label}>
-                                        {t('plugin_trader_market_cap')}
-                                    </Typography>
-                                </TableCell>
-                                <TableCell className={classes.cell}>
-                                    {market?.market_cap ? formatMarketCap(market.market_cap) : '--'}
-                                </TableCell>
-                            </TableRow>
-                        ) : null}
-                        {SourceType.UniswapInfo !== dataProvider ? (
-                            <TableRow>
-                                <TableCell className={classes.head} component="th">
-                                    <Typography color="textSecondary" variant="body2" className={classes.label}>
-                                        {t('plugin_trader_circulating_supply')}
-                                    </Typography>
-                                </TableCell>
-                                <TableCell className={classes.cell}>
-                                    {formatSupply(market?.circulating_supply, '--')}
-                                </TableCell>
-                            </TableRow>
-                        ) : null}
+                        <TableRow>
+                            <TableCell className={classes.head} component="th">
+                                <Typography color="textSecondary" variant="body2" className={classes.label}>
+                                    {t('plugin_trader_market_cap')}
+                                </Typography>
+                            </TableCell>
+                            <TableCell className={classes.cell}>
+                                {market?.market_cap ? formatMarketCap(market.market_cap) : '--'}
+                            </TableCell>
+                        </TableRow>
+
+                        <TableRow>
+                            <TableCell className={classes.head} component="th">
+                                <Typography color="textSecondary" variant="body2" className={classes.label}>
+                                    {t('plugin_trader_circulating_supply')}
+                                </Typography>
+                            </TableCell>
+                            <TableCell className={classes.cell}>
+                                {formatSupply(market?.circulating_supply, '--')}
+                            </TableCell>
+                        </TableRow>
+
                         <TableRow>
                             <TableCell className={classes.head} component="th">
                                 <Typography color="textSecondary" variant="body2" className={classes.label}>
@@ -126,18 +124,14 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                                 {market?.total_volume ? `$${formatSupply(market.total_volume)}` : '--'}
                             </TableCell>
                         </TableRow>
-                        {dataProvider !== SourceType.UniswapInfo ? (
-                            <TableRow>
-                                <TableCell className={classes.head} component="th">
-                                    <Typography color="textSecondary" variant="body2" className={classes.label}>
-                                        {t('plugin_trader_total_supply')}
-                                    </Typography>
-                                </TableCell>
-                                <TableCell className={classes.cell}>
-                                    {formatSupply(market?.total_supply, '--')}
-                                </TableCell>
-                            </TableRow>
-                        ) : null}
+                        <TableRow>
+                            <TableCell className={classes.head} component="th">
+                                <Typography color="textSecondary" variant="body2" className={classes.label}>
+                                    {t('plugin_trader_total_supply')}
+                                </Typography>
+                            </TableCell>
+                            <TableCell className={classes.cell}>{formatSupply(market?.total_supply, '--')}</TableCell>
+                        </TableRow>
                     </TableBody>
                 </Table>
             </TableContainer>

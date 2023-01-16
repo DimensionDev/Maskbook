@@ -17,8 +17,8 @@ import { formatCurrency, SourceType } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils/index.js'
 import type { Ticker } from '../../types/index.js'
 import { formatElapsed } from '../../../Wallet/formatter.js'
-import { ReactNode, useMemo } from 'react'
-import { compact, pick } from 'lodash-es'
+import type { ReactNode } from 'react'
+import { pick } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -70,7 +70,6 @@ type Cells = 'exchange' | 'pair' | 'price' | 'volume' | 'updated'
 export function TickersTable({ dataProvider, tickers }: TickersTableProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const isUniswap = dataProvider === SourceType.UniswapInfo
 
     const headCellMap: Record<Cells, string> = {
         volume: t('plugin_trader_table_volume'),
@@ -80,9 +79,7 @@ export function TickersTable({ dataProvider, tickers }: TickersTableProps) {
         price: t('plugin_trader_table_price'),
     }
 
-    const columns: Cells[] = useMemo(() => {
-        return compact(['exchange', 'pair', isUniswap ? null : 'price', 'volume', 'updated'])
-    }, [isUniswap])
+    const columns: Cells[] = ['exchange', 'pair', 'price', 'volume', 'updated']
     const tickerRows = tickers.map((ticker, index) => {
         const price = ticker.price ?? ticker.floor_price
         const volume = ticker.volume
