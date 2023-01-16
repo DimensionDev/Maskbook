@@ -54,7 +54,6 @@
     "@types/socket.io-client": "^1.4.36",
     "bignumber.js": "9.1.0",
     "bloom-filters": "^3.0.0",
-    "@blocto/fcl": "^0.0.78-alpha.10",
     "date-fns": "^2.29.3",
     "ethjs-ens": "^2.0.1",
     "fuse.js": "6.6.2",
