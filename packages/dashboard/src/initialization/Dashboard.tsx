@@ -9,10 +9,11 @@ import {
     useSystemPreferencePalette,
     DialogStackingProvider,
 } from '@masknet/theme'
+import { LogPlatform } from '@masknet/web3-providers'
 import { I18NextProviderHMR, SharedContextProvider, LoggerContextProvider } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { EnvironmentContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { i18NextInstance, NetworkPluginID, queryRemoteI18NBundle } from '@masknet/shared-base'
 
 import '../utils/kv-storage.js'
@@ -22,7 +23,6 @@ import { useAppearance } from '../pages/Personas/api.js'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext.js'
 import { Services } from '../API.js'
 import { useLogSettings } from '../hooks/useLogSettings.js'
-import { LogPlatform } from '@masknet/web3-providers'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
@@ -44,30 +44,32 @@ export default function DashboardRoot() {
     // #endregion
 
     return (
-        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
-            <I18NextProviderHMR i18n={i18NextInstance}>
-                <StyledEngineProvider injectFirst>
-                    <ThemeProvider theme={theme}>
-                        <LoggerContextProvider value={{ platform: LogPlatform.Dashboard, loggerId }}>
-                            <DialogStackingProvider>
-                                <PersonaContext.Provider>
-                                    <ErrorBoundary>
-                                        <CssBaseline />
-                                        <CustomSnackbarProvider>
-                                            <SharedContextProvider>
-                                                <HashRouter>
-                                                    <Pages />
-                                                </HashRouter>
-                                                <PluginRender />
-                                            </SharedContextProvider>
-                                        </CustomSnackbarProvider>
-                                    </ErrorBoundary>
-                                </PersonaContext.Provider>
-                            </DialogStackingProvider>
-                        </LoggerContextProvider>
-                    </ThemeProvider>
-                </StyledEngineProvider>
-            </I18NextProviderHMR>
-        </Web3ContextProvider>
+        <EnvironmentContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+            <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+                <I18NextProviderHMR i18n={i18NextInstance}>
+                    <StyledEngineProvider injectFirst>
+                        <ThemeProvider theme={theme}>
+                            <LoggerContextProvider value={{ platform: LogPlatform.Dashboard, loggerId }}>
+                                <DialogStackingProvider>
+                                    <PersonaContext.Provider>
+                                        <ErrorBoundary>
+                                            <CssBaseline />
+                                            <CustomSnackbarProvider>
+                                                <SharedContextProvider>
+                                                    <HashRouter>
+                                                        <Pages />
+                                                    </HashRouter>
+                                                    <PluginRender />
+                                                </SharedContextProvider>
+                                            </CustomSnackbarProvider>
+                                        </ErrorBoundary>
+                                    </PersonaContext.Provider>
+                                </DialogStackingProvider>
+                            </LoggerContextProvider>
+                        </ThemeProvider>
+                    </StyledEngineProvider>
+                </I18NextProviderHMR>
+            </Web3ContextProvider>
+        </EnvironmentContextProvider>
     )
 }
