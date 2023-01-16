@@ -7,30 +7,28 @@ import { useChainId } from './useChainId.js'
 import { useNetworkType } from './useNetworkType.js'
 import { useProviderType } from './useProviderType.js'
 
-interface EnvironmentContext {
-    pluginID: NetworkPluginID
+interface EnvironmentContext<T extends NetworkPluginID = NetworkPluginID> {
+    pluginID: T
 }
 
-interface NetworkContext {
-    pluginID: NetworkPluginID
-    setPluginID: (pluginID: NetworkPluginID) => void
+interface NetworkContext<T extends NetworkPluginID = NetworkPluginID> {
+    pluginID: T
+    setPluginID: (pluginID: T) => void
 }
 
-interface ChainContext<T extends NetworkPluginID = NetworkPluginID> {
+interface ChainContextGetter<T extends NetworkPluginID = NetworkPluginID> {
     account?: string
     chainId?: Web3Helper.Definition[T]['ChainId']
     networkType?: Web3Helper.Definition[T]['NetworkType']
     providerType?: Web3Helper.Definition[T]['ProviderType']
-    setAccount?: (account: string) => void
-    setChainId?: (chainId: Web3Helper.Definition[T]['ChainId']) => void
-    setNetworkType?: (provider: Web3Helper.Definition[T]['NetworkType']) => void
-    setProviderType?: (provider: Web3Helper.Definition[T]['ProviderType']) => void
 }
 
-type ChainContextDefaults<T extends NetworkPluginID = NetworkPluginID> = Omit<
-    ChainContext<T>,
-    'setChainId' | 'setAccount' | 'setNetworkType' | 'setProviderType'
->
+interface ChainContextSetter<T extends NetworkPluginID = NetworkPluginID> {
+    setAccount?: (account: string) => void
+    setChainId?: (chainId: Web3Helper.Definition[T]['ChainId']) => void
+    setNetworkType?: (networkType: Web3Helper.Definition[T]['NetworkType']) => void
+    setProviderType?: (providerType: Web3Helper.Definition[T]['ProviderType']) => void
+}
 
 const EnvironmentContext = createContext<EnvironmentContext>(null!)
 EnvironmentContext.displayName = 'EnvironmentContext'
@@ -38,7 +36,7 @@ EnvironmentContext.displayName = 'EnvironmentContext'
 const NetworkContext = createContext<NetworkContext>(null!)
 NetworkContext.displayName = 'NetworkContext'
 
-const ChainContext = createContext<ChainContext>(null!)
+const ChainContext = createContext<ChainContextGetter & ChainContextSetter>(null!)
 ChainContext.displayName = 'ChainContext'
 
 export function EnvironmentContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
@@ -58,7 +56,7 @@ export function NetworkContextProvider({ value, children }: React.ProviderProps<
     )
 }
 
-export function ChainContextProvider({ value, children }: React.ProviderProps<ChainContextDefaults>) {
+export function ChainContextProvider({ value, children }: React.ProviderProps<ChainContextGetter>) {
     const { pluginID } = useNetworkContext()
     const globalAccount = useAccount(pluginID)
     const globalChainId = useChainId(pluginID)
@@ -93,7 +91,7 @@ export function Web3ContextProvider({
 }: React.ProviderProps<
     {
         pluginID: NetworkPluginID
-    } & ChainContextDefaults
+    } & ChainContextGetter
 >) {
     const { pluginID, ...rest } = value
     return compose(
@@ -132,6 +130,14 @@ export function ActualWeb3ContextProvider({ children }: Omit<React.ProviderProps
     )
 }
 
+export function useEnvironmentContext(defaults?: EnvironmentContext) {
+    const context = useContext(EnvironmentContext)
+    return {
+        ...context,
+        ...omitBy(defaults, isUndefined),
+    }
+}
+
 export function useNetworkContext<T extends NetworkPluginID = NetworkPluginID>(defaults?: T) {
     const context = useContext(NetworkContext)
     return {
@@ -140,10 +146,10 @@ export function useNetworkContext<T extends NetworkPluginID = NetworkPluginID>(d
     }
 }
 
-export function useChainContext<T extends NetworkPluginID = NetworkPluginID>(defaults?: ChainContextDefaults) {
+export function useChainContext<T extends NetworkPluginID = NetworkPluginID>(defaults?: ChainContextGetter) {
     const context = useContext(ChainContext)
     return {
         ...context,
         ...omitBy(defaults, isUndefined),
-    } as Required<ChainContext<T>>
+    } as Required<ChainContextGetter<T>>
 }
