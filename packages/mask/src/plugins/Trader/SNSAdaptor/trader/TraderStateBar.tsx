@@ -1,3 +1,7 @@
+import { useCallback, useMemo } from 'react'
+import { BigNumber } from 'bignumber.js'
+import { alpha } from '@mui/system'
+import { Box } from '@mui/material'
 import { TokenSecurityBoundary } from '@masknet/plugin-go-plus-security'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
@@ -8,16 +12,13 @@ import {
     EthereumERC20TokenApprovedBoundary,
     useTokenSecurity,
 } from '@masknet/shared'
-import { getSiteType, isPopupPage, NetworkPluginID, PluginID, PopupRoutes } from '@masknet/shared-base'
+import { isPopupPage, NetworkPluginID, PluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useEnvironmentContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { isLessThan, leftShift, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, formatWeiToEther, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { alpha } from '@mui/system'
-import { BigNumber } from 'bignumber.js'
 
-import { useCallback, useMemo } from 'react'
 import Services from '../../../../extension/service.js'
 import { MINIMUM_AMOUNT, MIN_GAS_LIMIT } from '../../constants/trader.js'
 import { isNativeTokenWrapper } from '../../helpers/trader.js'
@@ -26,9 +27,6 @@ import { resolveTradeProviderName } from '../../pipes.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed.js'
 import type { TradeInfo } from '../../types/trader.js'
-import { Box } from '@mui/material'
-import { useValueRef } from '@masknet/shared-base-ui'
-import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -82,14 +80,10 @@ export function TraderStateBar({
 
     const { chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
+    const { pluginID: actualPluginID } = useEnvironmentContext()
     const { Others } = useWeb3State()
 
     const { isSwapping } = AllProviderTradeContext.useContainer()
-
-    const site = getSiteType()
-    const pluginIDs = useValueRef(pluginIDSettings)
-
-    const pluginId = site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM
 
     // #region if `isPopup` be true, click the plugin status bar need to  open popup window
     const openSelectWalletPopup = useCallback(() => {
@@ -184,11 +178,13 @@ export function TraderStateBar({
 
     return (
         <Box className={classes.stateBar}>
-            <PluginWalletStatusBar actualPluginID={pluginId} onClick={isPopup ? openSelectWalletPopup : undefined}>
+            <PluginWalletStatusBar
+                actualPluginID={actualPluginID}
+                onClick={isPopup ? openSelectWalletPopup : undefined}>
                 {/* TODO: remove the chain boundary after sol network dex be added */}
-                {settings || pluginId !== NetworkPluginID.PLUGIN_EVM ? (
+                {settings || actualPluginID !== NetworkPluginID.PLUGIN_EVM ? (
                     <ChainBoundary
-                        actualNetworkPluginID={pluginId}
+                        actualNetworkPluginID={actualPluginID}
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         expectedChainId={chainId as ChainId}>
                         <WalletConnectedBoundary offChain>

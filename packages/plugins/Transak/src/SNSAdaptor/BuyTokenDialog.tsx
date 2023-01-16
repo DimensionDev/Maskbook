@@ -1,9 +1,9 @@
+import { useState } from 'react'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { DialogContent, IconButton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Close as CloseIcon } from '@mui/icons-material'
-import { useState } from 'react'
 import { useTransakURL } from '../hooks/useTransakURL.js'
 import { PluginTransakMessages } from '../messages.js'
 

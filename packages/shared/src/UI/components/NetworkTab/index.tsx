@@ -2,10 +2,10 @@ import { useUpdateEffect } from 'react-use'
 import { useNetworkDescriptors, useNetworkContext, useChainContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { MaskTabList, useTabs } from '@masknet/theme'
-import { WalletIcon } from '../WalletIcon/index.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { TabContext } from '@mui/lab'
 import { Stack, Tab, Typography } from '@mui/material'
+import { WalletIcon } from '../WalletIcon/index.js'
 
 interface NetworkTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
     chains: Array<Web3Helper.Definition[NetworkPluginID]['ChainId']>
