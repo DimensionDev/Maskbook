@@ -1,6 +1,5 @@
 import { first, memoize } from 'lodash-es'
 import getUnixTime from 'date-fns/getUnixTime'
-import { BlockHeaderObject, QueryOptions, TransactionStatusCode } from '@blocto/fcl'
 import { unreachable } from '@masknet/kit'
 import {
     AddressType,
@@ -15,7 +14,10 @@ import {
     createClient,
     createNativeToken,
     isNativeTokenAddress,
+    TransactionQuery,
     TransactionSignature,
+    TransactionStatusCode,
+    BlockHeader,
 } from '@masknet/web3-shared-flow'
 import {
     FungibleToken,
@@ -118,7 +120,7 @@ export class FlowWeb3API
     }
     async getBlockTimestamp(chainId: ChainId): Promise<number> {
         const web3 = this.getWeb3(chainId)
-        const blockHeader: BlockHeaderObject = await web3.send([web3.getBlockHeader()]).then(web3.decode)
+        const blockHeader: BlockHeader = await web3.send([web3.getBlockHeader()]).then(web3.decode)
         return getUnixTime(new Date(blockHeader.timestamp as unknown as string))
     }
     async getTransaction(chainId: ChainId, hash: string): Promise<TransactionDetailed | null> {
@@ -210,7 +212,7 @@ export class FlowWeb3API
     ): Promise<NonFungibleCollection<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
-    callTransaction(chainId: ChainId, transaction: QueryOptions): Promise<string> {
+    callTransaction(chainId: ChainId, transaction: TransactionQuery): Promise<string> {
         const web3 = this.getWeb3(chainId)
         return web3.query(transaction)
     }
