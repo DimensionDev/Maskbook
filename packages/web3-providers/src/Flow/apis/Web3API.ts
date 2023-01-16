@@ -1,5 +1,5 @@
-import { getUnixTime } from 'date-fns'
 import { first, memoize } from 'lodash-es'
+import getUnixTime from 'date-fns/getUnixTime'
 import { BlockHeaderObject, QueryOptions, TransactionStatusCode } from '@blocto/fcl'
 import { unreachable } from '@masknet/kit'
 import {

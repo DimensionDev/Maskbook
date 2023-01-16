@@ -1,4 +1,3 @@
-import getUnixTime from 'date-fns/getUnixTime'
 import { first } from 'lodash-es'
 import type { BlockObject, MutateOptions, QueryOptions } from '@blocto/fcl'
 import { AddressType, ChainId, ProviderType, SchemaType } from '@masknet/web3-shared-flow'
@@ -13,10 +12,10 @@ import type {
 } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { PartialRequired, toHex } from '@masknet/shared-base'
+import { FlowWeb3 } from '@masknet/web3-providers'
 import { Providers } from './provider.js'
 import type { FlowWeb3Connection as BaseConnection, FlowConnectionOptions } from './types.js'
 import { Web3StateSettings } from '../../settings/index.js'
-import { FlowWeb3 } from '@masknet/web3-providers'
 
 class Connection implements BaseConnection {
     constructor(
