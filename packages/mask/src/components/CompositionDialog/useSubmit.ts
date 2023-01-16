@@ -93,7 +93,7 @@ function decorateEncryptedText(encrypted: string, t: I18NFunction, meta?: Meta):
                   account: officialAccount,
               })
             : t('additional_post_box__encrypted_post_pre_ito', { encrypted })
-    } else if (meta?.has(`${PluginID.FileService}:2`)) {
+    } else if (meta?.has(`${PluginID.FileService}:3`)) {
         return hasOfficialAccount
             ? t('additional_post_box__encrypted_post_pre_file_service_twitter_official_account', {
                   encrypted,
