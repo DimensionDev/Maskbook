@@ -1,5 +1,5 @@
 import { useUpdateEffect } from 'react-use'
-import { useNetworkDescriptors, useNetworkContext, useChainContext } from '@masknet/web3-hooks-base'
+import { useNetworkDescriptors, useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { MaskTabList, useTabs } from '@masknet/theme'
 import type { NetworkPluginID } from '@masknet/shared-base'

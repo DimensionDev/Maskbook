@@ -1,13 +1,15 @@
-import { useCallback, useMemo } from 'react'
-import { useBoolean } from 'react-use'
-import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { InjectedDialog, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { ChainBoundary, InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
+import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, MaskTabList } from '@masknet/theme'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { NonFungibleAsset } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
+import { useCallback, useMemo } from 'react'
+import { useBoolean } from 'react-use'
+import { pluginIDSettings } from '../../../../shared/legacy-settings/settings.js'
 import { useCreateTipsTransaction, useTip } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
 import { TipsType } from '../types/index.js'
@@ -54,6 +56,7 @@ export interface TipDialogProps {
     onClose?: () => void
 }
 
+const site = getSiteType()
 export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const t = useI18N()
     const { classes } = useStyles()
@@ -132,6 +135,9 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         : NetworkPluginID.PLUGIN_EVM
     const submitDisabled = !isValid || (isSending && !isDirty)
 
+    const pluginIDs = useValueRef(pluginIDSettings)
+
+    const pluginId = site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM
     return (
         <TabContext value={currentTab}>
             <InjectedDialog
@@ -154,7 +160,10 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                     <TabPanel value={TipsType.Collectibles} className={classes.tabPanel} style={{ padding: 0 }}>
                         <NFTSection className={classes.section} />
                     </TabPanel>
-                    <PluginWalletStatusBar expectedPluginID={expectedPluginID} expectedChainId={chainId}>
+                    <PluginWalletStatusBar
+                        actualPluginID={pluginId}
+                        expectedPluginID={expectedPluginID}
+                        expectedChainId={chainId}>
                         <ChainBoundary
                             expectedPluginID={expectedPluginID}
                             expectedChainId={chainId!}
