@@ -211,7 +211,7 @@ export class UserTransaction {
                     to: sender,
                     data: callData,
                 })
-                this.userOperation.callGas = toFixed(addGasMargin(estimatedGas, 5000))
+                this.userOperation.callGas = toFixed(estimatedGas * 2)
             } catch (error) {
                 this.userOperation.callGas = toFixed(addGasMargin(DEFAULT_USER_OPERATION.callGas, 5000))
             }

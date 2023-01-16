@@ -6,7 +6,7 @@ import { NetworkPluginID, PersonaInformation, PopupRoutes, ProofType, SignType }
 import { useChainContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import type { AbstractAccountAPI } from '@masknet/web3-providers/types'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import type { Wallet } from '@masknet/web3-shared-base'
+import { TransactionStatusType, Wallet } from '@masknet/web3-shared-base'
 import { Typography, useTheme } from '@mui/material'
 import { ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import type { ManagerAccount } from '../type.js'
@@ -47,47 +47,47 @@ export function useDeploy(
     })
 
     return useAsyncFn(async () => {
-        if (
-            !chainId ||
-            !lastRecognizedIdentity?.identifier?.userId ||
-            !signAccount?.address ||
-            !contractAccount ||
-            (!signPersona && !signWallet)
-        )
-            return
-
-        const hasPassword = await hasPaymentPassword()
-        if (!hasPassword) return openPopupWindow(PopupRoutes.CreatePassword)
-
-        const payload = JSON.stringify({
-            twitterHandler: lastRecognizedIdentity.identifier.userId,
-            ts: getUnixTime(new Date()),
-            ownerAddress: signAccount.address,
-            nonce,
-        })
-
-        let signature: string | undefined
-
-        showSingletonSnackbar(t.create_smart_pay_wallet(), {
-            message: t.waiting_for_user_signature(),
-            processing: true,
-            variant: 'default',
-        })
-
-        if (signPersona) {
-            signature = await signWithPersona(SignType.Message, payload, signPersona.identifier)
-        } else if (signWallet) {
-            signature = await connection?.signMessage(payload, 'personalSign', {
-                account: signWallet.address,
-                providerType: ProviderType.MaskWallet,
-            })
-        }
-        const publicKey = signPersona ? signPersona.identifier.publicKeyAsHex : signWallet?.address
-        if (!signature || !publicKey) return
-
-        closeSnackbar()
-
         try {
+            if (
+                !chainId ||
+                !lastRecognizedIdentity?.identifier?.userId ||
+                !signAccount?.address ||
+                !contractAccount ||
+                (!signPersona && !signWallet)
+            )
+                return
+
+            const hasPassword = await hasPaymentPassword()
+            if (!hasPassword) return openPopupWindow(PopupRoutes.CreatePassword)
+
+            const payload = JSON.stringify({
+                twitterHandler: lastRecognizedIdentity.identifier.userId,
+                ts: getUnixTime(new Date()),
+                ownerAddress: signAccount.address,
+                nonce,
+            })
+
+            let signature: string | undefined
+
+            showSingletonSnackbar(t.create_smart_pay_wallet(), {
+                message: t.waiting_for_user_signature(),
+                processing: true,
+                variant: 'default',
+            })
+
+            if (signPersona) {
+                signature = await signWithPersona(SignType.Message, payload, signPersona.identifier)
+            } else if (signWallet) {
+                signature = await connection?.signMessage(payload, 'personalSign', {
+                    account: signWallet.address,
+                    providerType: ProviderType.MaskWallet,
+                })
+            }
+            const publicKey = signPersona ? signPersona.identifier.publicKeyAsHex : signWallet?.address
+            if (!signature || !publicKey) return
+
+            closeSnackbar()
+
             const hash = await connection?.fund?.(
                 {
                     publicKey,
@@ -101,24 +101,50 @@ export function useDeploy(
             )
             if (!hash) throw new Error('Deploy Failed')
 
-            return TransactionWatcher?.emitter.on('progress', (chainId, txHash, status) => {
-                if (txHash !== hash) return
-                Wallet?.addWallet({
-                    name: 'Smart Pay',
-                    address: contractAccount.address,
-                    hasDerivationPath: false,
-                    hasStoredKeyInfo: false,
-                    id: contractAccount.address,
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                }).then(onSuccess)
+            return TransactionWatcher?.emitter.on('progress', async (_, txHash, status) => {
+                try {
+                    if (txHash !== hash || !signAccount.address || status !== TransactionStatusType.SUCCEED) return
+
+                    const result = await connection?.deploy?.(signAccount.address, signPersona?.identifier, {
+                        chainId,
+                    })
+
+                    Wallet?.addWallet({
+                        name: 'Smart Pay',
+                        owner: signAccount.address,
+                        address: contractAccount.address,
+                        hasDerivationPath: false,
+                        hasStoredKeyInfo: false,
+                        id: contractAccount.address,
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                    }).then(() => {
+                        onSuccess?.()
+                    })
+                } catch (error) {
+                    console.log(error)
+                }
             })
         } catch (error) {
-            showSingletonSnackbar(t.create_smart_pay_wallet(), {
-                processing: false,
-                variant: 'error',
-                message: <Typography>{t.user_cancelled_the_transaction()}</Typography>,
-            })
+            if (error instanceof Error) {
+                let message = ''
+                switch (error.message) {
+                    case 'Failed To Fund':
+                        message = t.transaction_rejected()
+                        break
+                    case 'Persona Rejected':
+                        message = t.user_cancelled_the_transaction()
+                        break
+                    default:
+                        message = t.network_error()
+                }
+
+                showSingletonSnackbar(t.create_smart_pay_wallet(), {
+                    processing: false,
+                    variant: 'error',
+                    message: <Typography>{message}</Typography>,
+                })
+            }
         }
     }, [
         chainId,
@@ -131,5 +157,6 @@ export function useDeploy(
         nonce,
         onSuccess,
         TransactionWatcher,
+        Wallet,
     ])
 }

@@ -4,7 +4,7 @@ import { useCustomSnackbar } from '@masknet/theme'
 import { DashboardRoutes, ECKeyIdentifier } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { SignUpRoutePath } from '../routePath.js'
-import { Services } from '../../../API.js'
+import { Messages, Services } from '../../../API.js'
 import { PersonaNameUI } from './PersonaNameUI.js'
 import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
@@ -53,6 +53,8 @@ export const PersonaRecovery = () => {
                 navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`)
             } catch (error) {
                 setError((error as Error).message)
+            } finally {
+                Messages.events.restoreSuccess.sendToAll({ wallets: [] })
             }
         },
         [state?.mnemonic, state?.privateKey],

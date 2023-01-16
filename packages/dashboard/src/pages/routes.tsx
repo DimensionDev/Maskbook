@@ -40,6 +40,7 @@ export function Pages() {
     useEffect(() => {
         return Messages.events.restoreSuccess.on(restoreCallback)
     }, [restoreCallback])
+
     return (
         <Suspense fallback={null}>
             <Routes>
