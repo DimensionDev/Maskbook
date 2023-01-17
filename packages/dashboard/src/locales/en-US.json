@@ -392,5 +392,7 @@
     "create_wallet_mnemonic_word_not_match": "The mnemonic word is incorrect",
     "recovery_smart_pay_wallet_title": "Recovery SmartPay wallet",
     "recovery_smart_pay_wallet_description_one": "{{count}} SmartPay wallet is detected locally. Recovering successfully.",
-    "recovery_smart_pay_wallet_description_other": "{{count}} SmartPay wallets are detected locally. Recovering successfully."
+    "recovery_smart_pay_wallet_description_other": "{{count}} SmartPay wallets are detected locally. Recovering successfully.",
+    "welcome_request_to_collect": "Allow us to collect your usage information to help us make improvements.",
+    "welcome_agreement_policy": "I have read and agree to the <agreement>Service Agreement</Agree> and <policy>Privacy Policy</policy>."
 }
