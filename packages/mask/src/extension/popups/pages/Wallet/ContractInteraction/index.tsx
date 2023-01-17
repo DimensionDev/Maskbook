@@ -471,13 +471,13 @@ const ContractInteraction = memo(() => {
                                 }
                                 significant={4}
                                 symbol={
-                                    Others?.isNativeTokenAddress(gasCurrency) ? nativeToken?.symbol : maskToken?.symbol
+                                    gasCurrency && !Others?.isNativeTokenAddress(gasCurrency)
+                                        ? maskToken?.symbol
+                                        : nativeToken?.symbol
                                 }
                                 formatter={formatBalance}
                             />
-                            {request?.owner && availableBalanceTooLow ? (
-                                <Icons.ArrowDrop onClick={openCurrencyMenu} />
-                            ) : null}
+                            {request?.owner ? <Icons.ArrowDrop onClick={openCurrencyMenu} /> : null}
                             <Link
                                 component="button"
                                 onClick={() => navigate(PopupRoutes.GasSetting)}
@@ -485,7 +485,7 @@ const ContractInteraction = memo(() => {
                                 {t('popups_wallet_contract_interaction_edit')}
                             </Link>
                         </Typography>
-                        {request?.owner && availableBalanceTooLow ? currencyMenu : null}
+                        {request?.owner ? currencyMenu : null}
                     </div>
 
                     {!isGreaterThan(totalUSD, pow10(9)) ? (
