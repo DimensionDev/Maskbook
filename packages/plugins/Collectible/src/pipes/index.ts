@@ -112,21 +112,3 @@ export function resolveUserUrlOnCurrentProvider(
             return ''
     }
 }
-
-export function resolveAvatarLinkOnCurrentProvider(chainId: ChainId, asset: any, provider: SourceType) {
-    switch (provider) {
-        case SourceType.OpenSea:
-            return urlcat(resolveLinkOnOpenSea(chainId as OpenSeaSupportedChainId), `/collection/${asset.slug ?? ''}`)
-        case SourceType.Rarible:
-            return urlcat(
-                resolveLinkOnRarible(chainId as RaribleSupportedChainId),
-                `/collection/${asset.token_address ?? ''}`,
-            )
-        case SourceType.NFTScan:
-            return ''
-        case SourceType.Zora:
-            return ''
-        default:
-            return ''
-    }
-}
