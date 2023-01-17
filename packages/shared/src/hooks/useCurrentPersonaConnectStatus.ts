@@ -34,9 +34,6 @@ export function useCurrentPersonaConnectStatus(
 ) {
     const t = useSharedI18N()
 
-    // const lastRecognized = useLastRecognizedIdentity()
-    //  const { , currentPersonaIdentifier, ownProofChanged, openDashboard } = useSNSAdaptorContext()
-    //  const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const { setDialog: setPersonaSelectPanelDialog } = useRemoteControlledDialog(
         CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
     )

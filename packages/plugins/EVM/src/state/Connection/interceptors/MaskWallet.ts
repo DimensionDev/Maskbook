@@ -1,10 +1,14 @@
 import { toHex } from 'web3-utils'
-import { EthereumMethodType } from '@masknet/web3-shared-evm'
-import type { Context, Middleware } from '../types.js'
+import { ConnectionContext, EthereumMethodType, Middleware } from '@masknet/web3-shared-evm'
 import { SharedContextSettings } from '../../../settings/index.js'
 
-export class MaskWallet implements Middleware<Context> {
-    async fn(context: Context, next: () => Promise<void>) {
+export class MaskWallet implements Middleware<ConnectionContext> {
+    async fn(context: ConnectionContext, next: () => Promise<void>) {
+        if (!context.writeable) {
+            await next()
+            return
+        }
+
         const { account, chainId } = SharedContextSettings.value
 
         switch (context.request.method) {
@@ -13,14 +17,6 @@ export class MaskWallet implements Middleware<Context> {
                 break
             case EthereumMethodType.ETH_ACCOUNTS:
                 context.write([account])
-                break
-            case EthereumMethodType.ETH_SEND_TRANSACTION:
-                const config = context.config
-
-                if (!config?.from || !config?.to) {
-                    context.abort(new Error('Invalid JSON payload.'))
-                    break
-                }
                 break
             default:
                 break

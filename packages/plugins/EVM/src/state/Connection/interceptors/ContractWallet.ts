@@ -3,9 +3,11 @@ import type { BundlerAPI, AbstractAccountAPI, FunderAPI } from '@masknet/web3-pr
 import { NetworkPluginID, SignType } from '@masknet/shared-base'
 import {
     ChainId,
+    ConnectionContext,
     createContract,
     EthereumMethodType,
     isValidAddress,
+    Middleware,
     ProviderType,
     Signer,
     Transaction,
@@ -13,12 +15,11 @@ import {
 import { Web3 } from '@masknet/web3-providers'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
-import type { Middleware, Context } from '../types.js'
 import { Providers } from '../provider.js'
 import type { BaseContractWalletProvider } from '../providers/BaseContractWallet.js'
 import { SharedContextSettings } from '../../../settings/index.js'
 
-export class ContractWallet implements Middleware<Context> {
+export class ContractWallet implements Middleware<ConnectionContext> {
     constructor(
         protected providerType: ProviderType,
         protected account: AbstractAccountAPI.Provider<NetworkPluginID.PLUGIN_EVM>,
@@ -26,19 +27,19 @@ export class ContractWallet implements Middleware<Context> {
         protected funder: FunderAPI.Provider<ChainId>,
     ) {}
 
-    private createWallet(context: Context) {
+    private createWallet(context: ConnectionContext) {
         const web3 = Web3.getWeb3(context.chainId)
         const contract = createContract<WalletContract>(web3, context.account, WalletABI as AbiItem[])
         if (!contract) throw new Error('Failed to create wallet contract.')
         return contract
     }
 
-    private async getNonce(context: Context) {
+    private async getNonce(context: ConnectionContext) {
         const walletContract = this.createWallet(context)
         return walletContract.methods.nonce().call()
     }
 
-    private getSigner(context: Context) {
+    private getSigner(context: ConnectionContext) {
         if (context.identifier) return new Signer(context.identifier, SharedContextSettings.value.signWithPersona)
         if (context.owner)
             return new Signer(context.owner, (type: SignType, message: string | Transaction, account: string) => {
@@ -65,7 +66,7 @@ export class ContractWallet implements Middleware<Context> {
         throw new Error('Failed to create signer.')
     }
 
-    private async send(context: Context): Promise<string> {
+    private async send(context: ConnectionContext): Promise<string> {
         if (!context.owner) throw new Error('No owner.')
         if (context.userOperation)
             return this.account.sendUserOperation(
@@ -75,34 +76,33 @@ export class ContractWallet implements Middleware<Context> {
                 this.getSigner(context),
             )
         if (context.config)
-            return this.account.sendTransaction(
-                context.chainId,
-                context.owner,
-                context.config,
-                this.getSigner(context),
-                context.config.gasCurrency,
-            )
+            return this.account.sendTransaction(context.chainId, context.owner, context.config, this.getSigner(context))
         throw new Error('No user operation to be sent.')
     }
 
-    private estimate(context: Context): Promise<string> {
+    private estimate(context: ConnectionContext): Promise<string> {
         if (context.userOperation) return this.account.estimateUserOperation(context.chainId, context.userOperation)
         if (context.config) return this.account.estimateTransaction(context.chainId, context.config)
         throw new Error('No user operation to be estimated.')
     }
 
-    private async fund(context: Context) {
+    private async fund(context: ConnectionContext) {
         if (!context.proof) throw new Error('No proof.')
         return this.funder.fund(context.chainId, context.proof)
     }
 
-    private async deploy(context: Context) {
+    private async deploy(context: ConnectionContext) {
         if (!context.owner) throw new Error('No owner.')
         return this.account.deploy(context.chainId, context.owner, this.getSigner(context))
     }
 
-    async fn(context: Context, next: () => Promise<void>) {
+    async fn(context: ConnectionContext, next: () => Promise<void>) {
         const provider = Providers[context.providerType] as BaseContractWalletProvider | undefined
+
+        if (!context.writeable) {
+            await next()
+            return
+        }
 
         // not a SC wallet provider
         if (!provider?.ownerAccount && !context.owner) {

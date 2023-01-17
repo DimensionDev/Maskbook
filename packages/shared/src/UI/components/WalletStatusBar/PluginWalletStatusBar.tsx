@@ -11,6 +11,7 @@ import {
     useReverseAddress,
     useWeb3State,
     useChainContext,
+    NetworkContextProvider,
     ActualChainContextProvider,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -51,6 +52,7 @@ export const useStyles = makeStyles()((theme) => ({
 
 export interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWithChildren<{}> {
     className?: string
+    actualPluginID?: T
     expectedPluginID?: T
     expectedChainId?: Web3Helper.Definition[T]['ChainId']
     onClick?: (ev: React.MouseEvent<HTMLDivElement>) => void
@@ -123,9 +125,15 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
 )
 
 export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>((props) => {
-    return (
+    const children = (
         <ActualChainContextProvider>
             <PluginWalletStatusBarWithoutContext {...props} />
         </ActualChainContextProvider>
+    )
+
+    return props.actualPluginID ? (
+        <NetworkContextProvider value={props.actualPluginID}>{children}</NetworkContextProvider>
+    ) : (
+        children
     )
 })

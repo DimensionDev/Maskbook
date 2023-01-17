@@ -3,7 +3,7 @@ import { AbiItem, toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import { ECKeyIdentifier, getSubscriptionCurrentValue, PartialRequired, Proof } from '@masknet/shared-base'
+import type { ECKeyIdentifier, PartialRequired, Proof } from '@masknet/shared-base'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
 import type { ERC1155 } from '@masknet/web3-contracts/types/ERC1155.js'
@@ -39,7 +39,8 @@ import {
 } from '@masknet/web3-shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
-import { createContext, dispatch } from './composer.js'
+import { dispatch } from './composer.js'
+import { createContext } from './context.js'
 import { Providers } from './provider.js'
 import type { EVM_Connection, EVM_Web3ConnectionOptions } from './types.js'
 import { Web3StateSettings } from '../../settings/index.js'
@@ -751,9 +752,14 @@ class Connection implements EVM_Connection {
         return new Promise<string>((resolve, reject) => {
             if (!this.Transaction || !this.TransactionWatcher) reject(new Error('No context found.'))
 
-            const onProgress = async (id: string, status: TransactionStatusType, transaction?: Transaction) => {
+            const onProgress = async (
+                chainId: ChainId,
+                id: string,
+                status: TransactionStatusType,
+                transaction?: Transaction,
+            ) => {
                 if (status === TransactionStatusType.NOT_DEPEND) return
-                const transactions = await getSubscriptionCurrentValue(() => this.Transaction?.transactions)
+                const transactions = await this.Transaction?.getTransactions?.(chainId, transaction?.from!)
                 const currentTransaction = transactions?.find((x) => {
                     const hashes = Object.keys(x.candidates)
                     return hashes.includes(hash) && hashes.includes(id)
@@ -766,13 +772,7 @@ class Connection implements EVM_Connection {
 
     sendSignedTransaction(signature: string, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
-        return this.hijackedRequest<string>(
-            {
-                method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
-                params: [signature],
-            },
-            options,
-        )
+        return Web3.sendSignedTransaction(options.chainId, signature)
     }
 
     replaceTransaction(hash: string, transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {

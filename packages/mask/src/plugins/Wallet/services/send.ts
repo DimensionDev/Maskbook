@@ -4,7 +4,6 @@ import { defer } from '@masknet/kit'
 import { SmartPayAccount, Web3 } from '@masknet/web3-providers'
 import {
     ChainId,
-    createJsonRpcPayload,
     createJsonRpcResponse,
     ErrorEditor,
     EthereumMethodType,
@@ -14,9 +13,9 @@ import {
     Signer,
 } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../messages.js'
+import { signWithWallet } from './wallet/index.js'
 import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper/index.js'
 import { signWithPersona } from '../../../../background/services/identity/index.js'
-import { signWithWallet } from './wallet/index.js'
 
 /**
  * Send to built-in RPC endpoints.
@@ -50,16 +49,18 @@ async function internalSend(
                         null,
                         createJsonRpcResponse(
                             pid,
-                            await SmartPayAccount.sendTransaction(chainId, owner, signableConfig, signer, gasCurrency),
+                            await SmartPayAccount.sendTransaction(chainId, owner, signableConfig, signer, {
+                                paymentToken: gasCurrency,
+                            }),
                         ),
                     )
                 } else {
-                    await Web3.getWeb3Provider(chainId).send(
-                        createJsonRpcPayload(pid, {
-                            method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
-                            params: [await signer.signTransaction(signableConfig)],
-                        }),
-                        callback,
+                    callback(
+                        null,
+                        createJsonRpcResponse(
+                            pid,
+                            await Web3.sendSignedTransaction(chainId, await signer.signTransaction(signableConfig)),
+                        ),
                     )
                 }
             } catch (error) {

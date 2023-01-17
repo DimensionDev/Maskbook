@@ -6,12 +6,11 @@ import { getTokenAmountDescription } from '../utils.js'
 
 export class BaseTransactionDescriptor implements TransactionDescriptor {
     async compute(context: TransactionContext<ChainId, TransactionParameter>) {
-        const connection = Web3StateSettings.value.Connection?.getConnection?.({
+        const { NATIVE_TOKEN_ADDRESS } = getTokenConstants(context.chainId)
+        const hub = Web3StateSettings.value.Hub?.getHub?.({
             chainId: context.chainId,
         })
-
-        const { NATIVE_TOKEN_ADDRESS } = getTokenConstants(context.chainId)
-        const nativeToken = await connection?.getFungibleToken(NATIVE_TOKEN_ADDRESS!)
+        const nativeToken = await hub?.getFungibleToken?.(NATIVE_TOKEN_ADDRESS!, { chainId: context.chainId })
 
         return {
             chainId: context.chainId,

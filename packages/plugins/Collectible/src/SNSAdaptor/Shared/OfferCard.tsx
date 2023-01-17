@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: 12,
         borderRadius: 8,
         // there is no public bg have to hardcode
-        background: '#fff',
+        background: theme.palette.mode === 'dark' ? theme.palette.maskColor.bg : '#fff',
         boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
     },
     offerDetail: {
@@ -34,16 +34,16 @@ const useStyles = makeStyles()((theme) => ({
     },
     textBase: {
         fontSize: 12,
-        color: theme.palette.maskColor.publicSecond,
+        color: theme.palette.maskColor.second,
         '& > strong': {
-            color: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.main,
         },
     },
     symbol: {
         marginLeft: theme.spacing(0.2),
     },
     fallbackSymbol: {
-        color: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.main,
         fontWeight: 700,
         lineHeight: '18px',
         display: 'flex',

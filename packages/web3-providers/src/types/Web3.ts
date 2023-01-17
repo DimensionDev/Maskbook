@@ -28,6 +28,7 @@ export namespace Web3BaseAPI {
         Transaction,
         TransactionDetailed,
         TransactionReceipt,
+        TransactionSignature,
         Block,
         Provider,
         Web3,
@@ -73,9 +74,9 @@ export namespace Web3BaseAPI {
         /** Get the latest block by number. */
         getBlock(chainId: ChainId, noOrId: number | string): Promise<Block | null>
         /** Get the latest block number. */
-        getBlockNumber(chainid: ChainId): Promise<number>
+        getBlockNumber(chainId: ChainId): Promise<number>
         /** Get the latest block unix timestamp. */
-        getBlockTimestamp(chainid: ChainId): Promise<number>
+        getBlockTimestamp(chainId: ChainId): Promise<number>
         /** Get the detailed of transaction by id. */
         getTransaction(chainId: ChainId, hash: string): Promise<TransactionDetailed | null>
         /** Get the transaction receipt. */
@@ -83,7 +84,7 @@ export namespace Web3BaseAPI {
         /** Get the latest transaction status. */
         getTransactionStatus(chainId: ChainId, hash: string): Promise<TransactionStatusType>
         /** Get transaction nonce */
-        getTransactionNonce(chainId: ChainId, hash: string): Promise<number>
+        getTransactionNonce(chainId: ChainId, address: string): Promise<number>
         /** Get a native fungible token. */
         getNativeToken(chainId: ChainId): Promise<FungibleToken<ChainId, SchemaType>>
         /** Get fungible token */
@@ -133,6 +134,6 @@ export namespace Web3BaseAPI {
         /** Estimate a transaction  */
         estimateTransaction(chainId: ChainId, transaction: Transaction, fallback?: number): Promise<string>
         /** Send a signed transaction */
-        sendSignedTransaction(chainId: ChainId, signed: string): Promise<string>
+        sendSignedTransaction(chainId: ChainId, signed: TransactionSignature): Promise<string>
     }
 }

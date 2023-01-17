@@ -906,11 +906,11 @@ export interface RecognizableError extends Error {
     isRecognized?: boolean
 }
 
-export interface WatchEvents<Transaction> {
+export interface WatchEvents<ChainId, Transaction> {
     /** Emit when error occur */
     error: [RecognizableError, JsonRpcPayload]
     /** Emit when the watched transaction status updated. */
-    progress: [string, TransactionStatusType, Transaction | undefined]
+    progress: [ChainId, string, TransactionStatusType, Transaction | undefined]
 }
 
 export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
@@ -1196,6 +1196,10 @@ export interface HubOptions<ChainId, Indicator = HubIndicator> {
 }
 
 export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
+    getFungibleToken?: (
+        address: string,
+        initial?: Web3HubOptions,
+    ) => Promise<FungibleToken<ChainId, SchemaType> | undefined>
     /** Get a fungible asset. */
     getFungibleAsset?: (
         address: string,
@@ -1537,6 +1541,8 @@ export interface TransactionState<ChainId, Transaction> {
     ) => Promise<void>
     /** Remove a transaction record. */
     removeTransaction?: (chainId: ChainId, address: string, id: string) => Promise<void>
+    /** Get all transaction records. */
+    getTransactions?: (chainId: ChainId, address: string) => Promise<Array<RecentTransaction<ChainId, Transaction>>>
     /** Clear all transactions of the account under given chain */
     clearTransactions?: (chainId: ChainId, address: string) => Promise<void>
 }
@@ -1560,7 +1566,7 @@ export interface TransactionWatcherState<ChainId, Transaction> {
     ready: boolean
     readyPromise: Promise<void>
 
-    emitter: Emitter<WatchEvents<Transaction>>
+    emitter: Emitter<WatchEvents<ChainId, Transaction>>
 
     /** Add a transaction into the watch list. */
     watchTransaction: (chainId: ChainId, id: string, transaction: Transaction) => Promise<void>

@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { Card, keyframes, Typography } from '@mui/material'
+import { Card, Typography } from '@mui/material'
 import { ChainId, chainResolver, networkResolver } from '@masknet/web3-shared-evm'
 import { useOpenShareTxDialog } from '@masknet/shared'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo.js'
@@ -20,10 +20,6 @@ import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
 
 export const useStyles = makeStyles()((theme) => {
-    const spinningAnimationKeyFrames = keyframes`
-to {
-  transform: rotate(360deg)
-}`
     return {
         root: {
             borderRadius: theme.spacing(1),

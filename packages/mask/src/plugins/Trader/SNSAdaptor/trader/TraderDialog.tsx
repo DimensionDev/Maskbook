@@ -8,7 +8,6 @@ import {
     useNetworkContext,
     useWeb3State,
     useFungibleToken,
-    Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
 import { ChainId, GasEditor, SchemaType, Transaction } from '@masknet/web3-shared-evm'
 import { DialogContent, dialogTitleClasses, IconButton } from '@mui/material'
@@ -199,26 +198,24 @@ export function TraderDialog() {
             }
             className={classes.dialog}>
             <DialogContent className={classes.content}>
-                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
-                    <div className={classes.abstractTabWrapper}>
-                        <NetworkTab
-                            classes={{
-                                indicator: classes.indicator,
-                            }}
-                            chains={chainIdList}
-                            pluginID={NetworkPluginID.PLUGIN_EVM}
-                        />
-                    </div>
-                    <AllProviderTradeContext.Provider>
-                        <Trader
-                            defaultInputCoin={defaultInputCoin ? inputToken : undefined}
-                            defaultOutputCoin={defaultOutputCoin ? outputToken : undefined}
-                            chainId={chainId}
-                            classes={{ root: classes.tradeRoot }}
-                            ref={tradeRef}
-                        />
-                    </AllProviderTradeContext.Provider>
-                </Web3ContextProvider>
+                <div className={classes.abstractTabWrapper}>
+                    <NetworkTab
+                        classes={{
+                            indicator: classes.indicator,
+                        }}
+                        chains={chainIdList}
+                        pluginID={NetworkPluginID.PLUGIN_EVM}
+                    />
+                </div>
+                <AllProviderTradeContext.Provider>
+                    <Trader
+                        defaultInputCoin={defaultInputCoin ? inputToken : undefined}
+                        defaultOutputCoin={defaultOutputCoin ? outputToken : undefined}
+                        chainId={chainId}
+                        classes={{ root: classes.tradeRoot }}
+                        ref={tradeRef}
+                    />
+                </AllProviderTradeContext.Provider>
             </DialogContent>
         </InjectedDialog>
     )

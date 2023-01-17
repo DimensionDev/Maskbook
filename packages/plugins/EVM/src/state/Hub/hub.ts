@@ -37,11 +37,13 @@ import {
     Pageable,
     CurrencyType,
     Transaction,
+    HubIndicator,
     attemptUntil,
     createPageable,
     createIndicator,
 } from '@masknet/web3-shared-base'
 import { ChainId, chainResolver, SchemaType } from '@masknet/web3-shared-evm'
+import { Web3StateSettings } from '../../settings/index.js'
 import type { EVM_Hub } from './types.js'
 
 class Hub extends HubStateBaseClient<ChainId> implements EVM_Hub {
@@ -101,6 +103,24 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
             },
             [DeBank, Zerion, ChainbaseFungibleToken, Rabby, GoPlusAuthorization, R2D2, Cloudflare, CoinGeckoPriceEVM],
             initial,
+        )
+    }
+
+    override getFungibleToken(address: string, initial?: HubOptions<ChainId, HubIndicator> | undefined) {
+        const connection = Web3StateSettings.value.Connection?.getConnection?.({
+            chainId: initial?.chainId,
+        })
+
+        return attemptUntil(
+            [
+                () =>
+                    Web3StateSettings.value.Token?.createFungibleToken?.(
+                        initial?.chainId ?? ChainId.Mainnet,
+                        address ?? '',
+                    ),
+                () => connection?.getFungibleToken?.(address ?? '', initial),
+            ],
+            undefined,
         )
     }
 }
