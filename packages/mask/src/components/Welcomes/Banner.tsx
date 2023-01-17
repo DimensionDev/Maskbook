@@ -5,11 +5,13 @@ import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import Services from '../../extension/service.js'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network/index.js'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { MaskIconInMinds, MaskSharpIcon } from '@masknet/shared'
+import { MaskIconInMinds, MaskSharpIcon, useCurrentPersonaConnectStatus } from '@masknet/shared'
 import { useMount } from 'react-use'
-import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc/index.js'
 import { useValueRef } from '@masknet/shared-base-ui'
+import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
+import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
+import { MaskMessages } from '../../utils/messages.js'
 
 interface BannerUIProps extends withClasses<'header' | 'content' | 'actions' | 'buttonText'> {
     description?: string
@@ -55,7 +57,15 @@ export interface BannerProps extends Partial<BannerUIProps> {}
 
 export function Banner(props: BannerProps) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
-    const { value: personaConnectStatus } = useCurrentPersonaConnectStatus()
+    const allPersonas = usePersonasFromDB()
+    const currentIdentifier = useValueRef(currentPersonaIdentifier)
+    const { value: personaConnectStatus } = useCurrentPersonaConnectStatus(
+        allPersonas,
+        currentIdentifier,
+        Services.Helper.openDashboard,
+        lastRecognizedIdentity,
+        MaskMessages,
+    )
     const { nextStep } = props
     const networkIdentifier = activatedSocialNetworkUI.networkIdentifier
     const identities = useValueRef(globalUIState.profiles)

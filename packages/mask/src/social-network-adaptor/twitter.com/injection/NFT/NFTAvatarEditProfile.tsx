@@ -1,13 +1,17 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton.js'
-import { startWatch, createReactRootShadowed } from '../../../../utils/index.js'
+import { startWatch, createReactRootShadowed, MaskMessages } from '../../../../utils/index.js'
 import { searchEditProfileSelector } from '../../utils/selector.js'
-import { ConnectPersonaBoundary } from '../../../../components/shared/ConnectPersonaBoundary.js'
 import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog } from './NFTAvatarEditProfileDialog.js'
 import { ButtonStyle, ButtonProps } from '../../constant.js'
-import { useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
+import { useLastRecognizedIdentity, useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
+import { usePersonasFromDB } from '../../../../components/DataSource/usePersonasFromDB.js'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { currentPersonaIdentifier } from '../../../../../shared/legacy-settings/settings.js'
+import { ConnectPersonaBoundary } from '@masknet/shared'
+import Services from '../../../../extension/service.js'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     injectOpenNFTAvatarEditProfileButtonAtProfilePage(signal)
@@ -48,6 +52,9 @@ function useNFTAvatarButtonStyles() {
 }
 function OpenNFTAvatarEditProfileButtonInTwitter() {
     const { classes } = useNFTAvatarButtonStyles()
+    const allPersonas = usePersonasFromDB()
+    const lastRecognized = useLastRecognizedIdentity()
+    const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
     const clickHandler = () => {
         CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
@@ -57,7 +64,15 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     }
 
     return (
-        <ConnectPersonaBoundary handlerPosition="top-right" customHint directTo={PluginID.Avatar}>
+        <ConnectPersonaBoundary
+            currentPersonaIdentifier={currentIdentifier}
+            personas={allPersonas}
+            identity={lastRecognized}
+            openDashboard={Services.Helper.openDashboard}
+            ownPersonaChanged={MaskMessages.events.ownPersonaChanged}
+            handlerPosition="top-right"
+            customHint
+            directTo={PluginID.Avatar}>
             <NFTAvatarButton classes={{ root: classes.root, text: classes.text }} onClick={clickHandler} />
         </ConnectPersonaBoundary>
     )

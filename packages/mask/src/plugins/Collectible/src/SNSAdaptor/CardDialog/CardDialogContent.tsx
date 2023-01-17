@@ -1,21 +1,26 @@
 import { useCallback } from 'react'
-import { openWindow } from '@masknet/shared-base-ui'
+import { openWindow, useValueRef } from '@masknet/shared-base-ui'
 import { Button, Typography } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { PluginWalletStatusBar } from '@masknet/shared'
+import { ConnectPersonaBoundary, PluginWalletStatusBar } from '@masknet/shared'
 import { PluginID, NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { SourceType, resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { useI18N as useBaseI18n } from '../../../../../utils/index.js'
+import { MaskMessages, useI18N as useBaseI18n } from '../../../../../utils/index.js'
 import { AboutTab } from './tabs/AboutTab.js'
 import { OffersTab } from './tabs/OffersTab.js'
 import { ActivitiesTab } from './tabs/ActivitiesTab.js'
 import { TabType } from '../../types.js'
 import { FigureCard } from '../Shared/FigureCard.js'
 import { Context } from '../Context/index.js'
-import { useCurrentVisitingIdentity } from '../../../../../components/DataSource/useActivatedUI.js'
-import { ConnectPersonaBoundary } from '../../../../../components/shared/ConnectPersonaBoundary.js'
+import {
+    useCurrentVisitingIdentity,
+    useLastRecognizedIdentity,
+} from '../../../../../components/DataSource/useActivatedUI.js'
+import { usePersonasFromDB } from '../../../../../components/DataSource/usePersonasFromDB.js'
+import { currentPersonaIdentifier } from '../../../../../../shared/legacy-settings/settings.js'
+import Services from '../../../../../extension/service.js'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
     (theme, props) => ({
@@ -93,6 +98,10 @@ export function CardDialogContent(props: CardDialogContentProps) {
         props.setOpen(false)
     }, [props.setOpen])
 
+    const allPersonas = usePersonasFromDB()
+    const lastRecognized = useLastRecognizedIdentity()
+    const currentIdentifier = useValueRef(currentPersonaIdentifier)
+
     const onPFPButtonClick = useCallback(() => {
         CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
             open: true,
@@ -150,6 +159,11 @@ export function CardDialogContent(props: CardDialogContentProps) {
                 <PluginWalletStatusBar className={classes.footer} expectedPluginID={pluginID} expectedChainId={chainId}>
                     {origin === 'pfp' && currentVisitingIdentity.isOwner ? (
                         <ConnectPersonaBoundary
+                            personas={allPersonas}
+                            identity={lastRecognized}
+                            currentPersonaIdentifier={currentIdentifier}
+                            openDashboard={Services.Helper.openDashboard}
+                            ownPersonaChanged={MaskMessages.events.ownPersonaChanged}
                             handlerPosition="top-right"
                             customHint
                             directTo={PluginID.Avatar}

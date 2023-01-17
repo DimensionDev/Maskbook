@@ -1,4 +1,4 @@
-import { useI18N } from '../../utils/index.js'
+import { MaskMessages, useI18N } from '../../utils/index.js'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { PopoverListTrigger } from './PopoverListTrigger.js'
@@ -8,7 +8,12 @@ import { E2EUnavailableReason } from './CompositionUI.js'
 import { Icons } from '@masknet/icons'
 import { EncryptionTargetType } from '@masknet/shared-base'
 import { unreachable } from '@masknet/kit'
-import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
+import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
+import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
+import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { ConnectPersonaBoundary } from '@masknet/shared'
+import Services from '../../extension/service.js'
 
 const useStyles = makeStyles()((theme) => ({
     optionTitle: {
@@ -54,12 +59,20 @@ export interface EncryptionTargetSelectorProps {
 export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
+    const allPersonas = usePersonasFromDB()
+    const lastRecognized = useLastRecognizedIdentity()
+    const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const e2eDisabledMessage =
         props.e2eDisabled && props.e2eDisabled !== E2EUnavailableReason.NoLocalKey ? (
             <div className={classes.flex}>
                 <Typography className={classes.mainTitle}>{t('persona_required')}</Typography>
                 <ConnectPersonaBoundary
+                    personas={allPersonas}
+                    identity={lastRecognized}
+                    currentPersonaIdentifier={currentIdentifier}
+                    openDashboard={Services.Helper.openDashboard}
+                    ownPersonaChanged={MaskMessages.events.ownPersonaChanged}
                     customHint
                     handlerPosition="top-right"
                     enableVerify={false}
