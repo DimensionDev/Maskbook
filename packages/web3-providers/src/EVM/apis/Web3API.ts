@@ -319,8 +319,6 @@ export class Web3API
                     {
                         ...transaction,
                         value: transaction.value ? toHex(transaction.value) : undefined,
-                        // rpc hack, alchemy rpc must pass gas parameter
-                        gas: chainId === ChainId.Astar ? '0x135168' : undefined,
                     },
                 ],
             })
