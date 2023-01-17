@@ -2,7 +2,6 @@ import React, { lazy, Suspense, useCallback, useEffect } from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom'
 import { DashboardFrame } from '../components/DashboardFrame/index.js'
 import { DashboardRoutes, RestoreSuccessEvent } from '@masknet/shared-base'
-import NoPersonaGuardRoute from './GuardRoute.js'
 import { Messages, Services } from '../API.js'
 import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
 import { compact } from 'lodash-es'
@@ -44,14 +43,7 @@ export function Pages() {
     return (
         <Suspense fallback={null}>
             <Routes>
-                <Route
-                    path={DashboardRoutes.Welcome}
-                    element={
-                        <NoPersonaGuardRoute redirectTo={DashboardRoutes.Personas}>
-                            <Welcome />
-                        </NoPersonaGuardRoute>
-                    }
-                />
+                <Route path={DashboardRoutes.Welcome} element={<Welcome />} />
                 <Route path={DashboardRoutes.Setup} element={<Setup />} />
                 <Route path={`${DashboardRoutes.SignUp}/*`} element={<SignUp />} />
                 <Route path={DashboardRoutes.SignIn} element={<SignIn />} />
