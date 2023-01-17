@@ -17,7 +17,6 @@ import {
     isEmptyHex,
     isZeroAddress,
     formatEthereumAddress,
-    addGasMargin,
 } from '../helpers/index.js'
 import { getSmartPayConstants } from '../constants/index.js'
 import type { Signer } from './Signer.js'
@@ -185,7 +184,7 @@ export class UserTransaction {
 
             this.userOperation.callGas = toHex(result)
         } catch (error) {
-            this.userOperation.callGas = toFixed(addGasMargin(DEFAULT_USER_OPERATION.callGas, 5000))
+            this.userOperation.callGas = DEFAULT_USER_OPERATION.callGas
         }
 
         if (isZeroString(maxFeePerGas)) {
@@ -235,7 +234,7 @@ export class UserTransaction {
                 new BigNumber(DEFAULT_USER_OPERATION.verificationGas).plus(32000 + (200 * initCode.length) / 2),
             )
         } else {
-            this.userOperation.verificationGas = toFixed(DEFAULT_USER_OPERATION.verificationGas)
+            this.userOperation.verificationGas = DEFAULT_USER_OPERATION.verificationGas
         }
 
         // caution: the creator needs to set the latest index of the contract account.
@@ -258,9 +257,9 @@ export class UserTransaction {
                 to: sender,
                 data: callData,
             })
-            this.userOperation.callGas = toFixed(addGasMargin(estimatedGas * 2))
+            this.userOperation.callGas = toFixed(estimatedGas)
         } catch (error) {
-            this.userOperation.callGas = toFixed(addGasMargin(DEFAULT_USER_OPERATION.callGas, 5000))
+            this.userOperation.callGas = DEFAULT_USER_OPERATION.callGas
         }
 
         if (isZeroString(maxFeePerGas)) {
@@ -275,7 +274,7 @@ export class UserTransaction {
             this.userOperation.maxPriorityFeePerGas = DEFAULT_USER_OPERATION.maxPriorityFeePerGas
         }
         if (isZeroString(verificationGas)) {
-            this.userOperation.verificationGas = toFixed(DEFAULT_USER_OPERATION.verificationGas)
+            this.userOperation.verificationGas = DEFAULT_USER_OPERATION.verificationGas
         }
         if (isZeroString(preVerificationGas)) {
             this.userOperation.preVerificationGas = toFixed(
