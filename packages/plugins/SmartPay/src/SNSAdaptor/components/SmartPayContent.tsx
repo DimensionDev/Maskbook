@@ -220,7 +220,6 @@ export const SmartPayContent = memo(() => {
                   balance: maskBalance ?? '0',
               }
             : undefined
-        console.log(maskAsset)
         return compact([...target, maskAsset])
     }, [assets, maskToken, maskBalance, chainId])
 

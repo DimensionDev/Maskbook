@@ -35,7 +35,6 @@ const useStyles = makeStyles()((theme) => ({
         color: '#FF5555',
         fontSize: 13,
         lineHeight: '18px',
-        // wordBreak: 'break-all',
     },
     controller: {
         padding: '0 16px 16px 16px',
