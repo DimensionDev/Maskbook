@@ -1,9 +1,9 @@
 import { useRef } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import type { NonFungibleToken } from '@masknet/web3-shared-base'
-import { useWeb3Connection } from '@masknet/web3-hooks-base'
+import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
+import { useWeb3Connection, useNonFungibleAssets } from '@masknet/web3-hooks-base'
 
 import { useERC721TokenContract } from './useERC721TokenContract.js'
 
@@ -19,8 +19,26 @@ export function useNonFungibleOwnerTokens(
     const nonFungibleTokenContract = useERC721TokenContract(chainId, contractAddress ?? '')
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
 
+    const { value: collectibles = EMPTY_LIST, done: loadFinish } = useNonFungibleAssets(
+        NetworkPluginID.PLUGIN_EVM,
+        SchemaType.ERC721,
+        { chainId, account: ownerAccount },
+    )
+
+    allListRef.current = collectibles
+        ?.filter((x) => isSameAddress(contractAddress, x.address))
+        .map((x) => ({ ...x, ownerId: x.owner?.address })) as Array<NonFungibleToken<ChainId, SchemaType.ERC721>>
+
     const asyncRetry = useAsyncRetry(async () => {
-        if (!contractAddress || !ownerAccount || !connection || !nonFungibleTokenContract) return
+        if (
+            !contractAddress ||
+            !ownerAccount ||
+            !connection ||
+            !nonFungibleTokenContract ||
+            allListRef.current.length > 0
+        ) {
+            return
+        }
 
         const isEnumerable = await nonFungibleTokenContract.methods
             .supportsInterface(ERC721_ENUMERABLE_INTERFACE_ID)
@@ -60,7 +78,7 @@ export function useNonFungibleOwnerTokens(
     const clearTokenDetailedOwnerList = () => (allListRef.current = [])
 
     return {
-        asyncRetry,
+        asyncRetry: { ...asyncRetry, loading: asyncRetry.loading || loadFinish },
         tokenDetailedOwnerList: allListRef.current,
         clearTokenDetailedOwnerList,
     }

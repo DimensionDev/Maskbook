@@ -78,7 +78,7 @@ export type SelectNftContractDialogEvent = {
     open: boolean
 
     chainId?: ChainId
-    balance?: string
+    balance?: number
     /**
      * The selected detailed nft contract.
      */

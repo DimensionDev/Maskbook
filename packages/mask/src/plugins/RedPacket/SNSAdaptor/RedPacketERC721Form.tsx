@@ -232,10 +232,8 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const tokenDetailedOwnerList = _tokenDetailedOwnerList.map((v, index) => ({ ...v, index } as OrderedERC721Token))
     const removeToken = useCallback(
         (token: NonFungibleToken<ChainId, SchemaType.ERC721>) => {
-            ;(selectOption === NFTSelectOption.Partial ? setExistTokenDetailedList : setAllTokenDetailedList)((list) =>
-                list.filter((t) => t.tokenId !== token.tokenId),
-            )
-
+            setExistTokenDetailedList((list) => list.filter((t) => t.tokenId !== token.tokenId))
+            setAllTokenDetailedList(EMPTY_LIST)
             setSelectOption(NFTSelectOption.Partial)
         },
         [selectOption, setSelectOption, setExistTokenDetailedList, setAllTokenDetailedList],
@@ -332,6 +330,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                 )}
                                 onClick={() => {
                                     setSelectOption(NFTSelectOption.All)
+                                    setExistTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
                                     setAllTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
                                 }}>
                                 <div
