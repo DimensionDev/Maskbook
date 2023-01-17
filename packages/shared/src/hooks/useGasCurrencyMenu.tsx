@@ -3,9 +3,8 @@ import { makeStyles } from '@masknet/theme'
 import { useFungibleToken, useMaskTokenAddress, useNativeToken } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { MenuItem, Radio as MuiRadio, RadioProps, Typography } from '@mui/material'
-import { useUpdateEffect } from '@react-hookz/web'
 import { compact } from 'lodash-es'
-import { useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { TokenIcon } from '../index.js'
 import { useMenuConfig } from './useMenu.js'
 
@@ -32,45 +31,44 @@ const useStyles = makeStyles()((theme) => ({
 export function useGasCurrencyMenu(
     pluginId?: NetworkPluginID,
     onCurrencyChange?: (address: string) => void,
-    initialCurrencyAddress?: string,
+    selectedAddress?: string,
     // TODO: remove this after override popups theme
     Radio: React.ComponentType<RadioProps> = MuiRadio,
 ) {
     const { classes } = useStyles()
-    const [current, setCurrent] = useState(initialCurrencyAddress)
+    const [current, setCurrent] = useState('')
     const { value: nativeToken } = useNativeToken(pluginId)
     const maskAddress = useMaskTokenAddress(pluginId)
     const { value: maskToken } = useFungibleToken(pluginId, maskAddress)
 
-    useUpdateEffect(() => {
-        setCurrent((prev) => {
-            if (!prev && nativeToken?.address) return nativeToken.address
-            return prev
-        })
-    }, [nativeToken])
+    const handleChange = useCallback(
+        (address: string) => {
+            setCurrent(address)
+            onCurrencyChange?.(address)
+        },
+        [onCurrencyChange],
+    )
 
-    useEffect(() => {
-        if (!current || !onCurrencyChange) return
-        onCurrencyChange(current)
-    }, [current, onCurrencyChange])
+    const selected = selectedAddress || current || nativeToken?.address
+
     return useMenuConfig(
         compact([
             nativeToken ? (
-                <MenuItem className={classes.item} onClick={() => setCurrent(nativeToken.address)}>
+                <MenuItem className={classes.item} onClick={() => handleChange(nativeToken.address)}>
                     <Typography className={classes.token}>
                         <TokenIcon {...nativeToken} size={30} />
                         {nativeToken.symbol}
                     </Typography>
-                    <Radio checked={isSameAddress(current, nativeToken.address)} />
+                    <Radio checked={isSameAddress(selected, nativeToken.address)} />
                 </MenuItem>
             ) : null,
             maskToken ? (
-                <MenuItem className={classes.item} onClick={() => setCurrent(maskToken.address)}>
+                <MenuItem className={classes.item} onClick={() => handleChange(maskToken.address)}>
                     <Typography className={classes.token}>
                         <TokenIcon {...maskToken} size={30} />
                         {maskToken.symbol}
                     </Typography>
-                    <Radio checked={isSameAddress(current, maskAddress)} />
+                    <Radio checked={isSameAddress(selected, maskAddress)} />
                 </MenuItem>
             ) : null,
         ]),
