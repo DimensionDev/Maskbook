@@ -88,7 +88,7 @@ export class ConnectionContext {
     }
 
     get providerType() {
-        return this.requestOptions?.providerType ?? this._providerType
+        return this.requestOptions?.providerType ?? this._options?.providerType ?? this._providerType
     }
 
     get method() {
@@ -104,7 +104,10 @@ export class ConnectionContext {
     }
 
     get config() {
-        return this.payloadEditor.config
+        return {
+            ...this.payloadEditor.config,
+            ...this._options?.overrides,
+        }
     }
 
     get userOperation() {

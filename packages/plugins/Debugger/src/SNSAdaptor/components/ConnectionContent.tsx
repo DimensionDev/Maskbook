@@ -44,6 +44,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
             {
                 from: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
                 to: '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
+                value: '1',
                 data: contract?.methods.approve('0x31f42841c2db5173425b5223809cf3a38fede360', '1').encodeABI(),
             },
             0,
@@ -51,6 +52,9 @@ export function ConnectionContent(props: ConnectionContentProps) {
                 chainId: ChainId.Matic,
                 account: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
                 providerType: EVM_ProviderType.MaskWallet,
+                overrides: {
+                    gasCurrency: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
+                },
             },
         )
         window.alert(estimated)
