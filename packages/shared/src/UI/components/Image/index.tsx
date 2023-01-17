@@ -51,13 +51,14 @@ export function Image({
     classes: extraClasses,
     onClick,
     containerProps,
+    src,
     ...rest
 }: ImageProps) {
     const { classes, cx } = useStyles({ size, rounded }, { props: { classes: extraClasses } })
     const theme = useTheme()
     const [failed, setFailed] = useState(false)
 
-    const { value: imageURL, loading: loadingImageURL } = useImageURL(rest.src)
+    const { value: imageURL, loading: loadingImageURL } = useImageURL(src)
 
     if (loadingImageURL && !disableSpinner) {
         return (

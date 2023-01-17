@@ -1,4 +1,5 @@
 import { useAsync } from 'react-use'
+import LRU from 'lru-cache'
 import {
     attemptUntil,
     fetchImageViaDOM,
@@ -30,18 +31,45 @@ function fetchImage(url: string) {
     )
 }
 
+const cache = new LRU<string, string | Promise<string>>({
+    max: 2000,
+})
+
+/**
+ * useImageURL will memorize loaded image at runtime, with url as key
+ *
+ * @param {string} url
+ */
 export function useImageURL(url?: string) {
     return useAsync(async () => {
         if (!url) return
-        if (isLocaleResource(url)) return resolveLocalURL(url)
+        const hit = cache.get(url)
+        if (hit) return hit
+        if (isLocaleResource(url)) {
+            const resolved = resolveLocalURL(url)
+            cache.set(url, resolved)
+            return resolved
+        }
 
         const resolvedURL = resolveResourceURL(url)
         if (!resolvedURL) return url
 
-        try {
-            return fetchImage(resolvedURL)
-        } catch {
-            return resolvedURL
-        }
+        // Delete the cached if fails to fetch, so that we can try again.
+        const pending = fetchImage(resolvedURL).then(
+            (fetched) => {
+                if (fetched) {
+                    cache.set(url, fetched)
+                    return fetched
+                }
+                throw new Error('Failed to fetch')
+            },
+            () => {
+                cache.delete(url)
+                return resolvedURL
+            },
+        )
+        cache.set(url, pending)
+
+        return pending
     }, [url])
 }
