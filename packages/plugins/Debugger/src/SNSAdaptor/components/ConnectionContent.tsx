@@ -1,12 +1,21 @@
 import { useCallback } from 'react'
+import type { AbiItem } from 'web3-utils'
 import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useWeb3Connection, useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useWeb3Connection, useChainContext, useNetworkContext, useWeb3 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID, ProofType } from '@masknet/shared-base'
-import { ChainId, ChainId as EVM_ChainId, ProviderType as EVM_ProviderType } from '@masknet/web3-shared-evm'
+import {
+    Web3,
+    ChainId,
+    ChainId as EVM_ChainId,
+    ProviderType as EVM_ProviderType,
+    createContract,
+} from '@masknet/web3-shared-evm'
 import { ChainId as SolanaChainId, ProviderType as SolanaProviderType } from '@masknet/web3-shared-solana'
 import { ChainId as FlowChainId, ProviderType as FlowProviderType } from '@masknet/web3-shared-flow'
+import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
+import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 
 export interface ConnectionContentProps {
     onClose?: () => void
@@ -22,7 +31,30 @@ export function ConnectionContent(props: ConnectionContentProps) {
     const { classes } = useStyles()
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext()
+    const web3 = useWeb3()
     const connection = useWeb3Connection()
+
+    const onEstimateCallback = useCallback(async () => {
+        const contract = createContract<ERC20>(
+            web3 as Web3,
+            '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
+            ERC20ABI as AbiItem[],
+        )
+        const estimated = await connection?.estimateTransaction?.(
+            {
+                from: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
+                to: '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
+                data: contract?.methods.approve('0x31f42841c2db5173425b5223809cf3a38fede360', '1').encodeABI(),
+            },
+            0,
+            {
+                chainId: ChainId.Matic,
+                account: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
+                providerType: EVM_ProviderType.MaskWallet,
+            },
+        )
+        window.alert(estimated)
+    }, [web3, connection])
 
     const onTransferCallback = useCallback(() => {
         return connection?.transferFungibleToken?.(
@@ -80,7 +112,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
             '1',
             {
                 chainId: ChainId.Matic,
-                account: '0xF8935Df67cAB7BfcA9532D1Ac2088C5c39b995b5',
+                account: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
                 providerType: EVM_ProviderType.MaskWallet,
             },
         )
@@ -192,6 +224,18 @@ export function ConnectionContent(props: ConnectionContentProps) {
         <section className={classes.container}>
             <Table size="small">
                 <TableBody>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Estimate
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button size="small" onClick={() => onEstimateCallback()}>
+                                Estimate
+                            </Button>
+                        </TableCell>
+                    </TableRow>
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">
