@@ -4,7 +4,7 @@ import type Web3 from 'web3'
 import * as ABICoder from 'web3-eth-abi'
 import { AbiItem, hexToBytes, keccak256, padLeft, toHex, toNumber } from 'web3-utils'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
-import { plus, toFixed } from '@masknet/web3-shared-base'
+import { multipliedBy, plus, toFixed } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import EntryPointABI from '@masknet/web3-contracts/abis/EntryPoint.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
@@ -80,6 +80,10 @@ const CALL_WALLET_TYPE: AbiItem = {
 
 const coder = ABICoder as unknown as ABICoder.AbiCoder
 
+export interface Options {
+    paymentToken?: string
+}
+
 /**
  * The wrapped UserOperation helper.
  * Learn more: https://github.com/eth-infinitism/account-abstraction/blob/develop/test/UserOp.ts
@@ -98,9 +102,7 @@ export class UserTransaction {
         private chainId: ChainId,
         private entryPoint: string,
         private userOperation: UserOperation,
-        private options?: {
-            paymentToken?: string
-        },
+        private options?: Options,
     ) {}
 
     get paymentToken() {
@@ -156,10 +158,52 @@ export class UserTransaction {
         return this.userOperation
     }
 
-    /**
-     * Fill up an incomplete user operation.
-     */
-    async fill(web3: Web3, overrides?: Required<Pick<UserOperation, 'initCode' | 'nonce'>>) {
+    async fillTransaction(web3: Web3) {
+        const { sender, nonce, callData, maxFeePerGas, maxPriorityFeePerGas } = this.userOperation
+
+        // fill nonce
+        if (sender && (typeof nonce === 'undefined' || nonce === 0)) {
+            const walletContract = createContract<Wallet>(web3, sender, WalletABI as AbiItem[])
+            if (!walletContract) throw new Error('Failed to create wallet contract.')
+            try {
+                const nonce = await walletContract.methods.nonce().call()
+                this.userOperation.nonce = toNumber(nonce)
+            } catch (error) {
+                this.userOperation.nonce = 0
+            }
+        }
+
+        try {
+            if (isEmptyHex(callData)) throw new Error('Invalid call data.')
+            const transaction = UserTransaction.toTransaction(this.chainId, this.userOperation)
+            if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
+            const walletContract = createContract<Wallet>(web3, sender, WalletABI as AbiItem[])
+            if (!walletContract) throw new Error('Failed to create wallet contract.')
+            const result = await walletContract?.methods
+                .exec(transaction.to, transaction.value ?? '0', transaction.data ?? '0x')
+                .estimateGas()
+
+            this.userOperation.callGas = toHex(result)
+        } catch (error) {
+            this.userOperation.callGas = toFixed(addGasMargin(DEFAULT_USER_OPERATION.callGas, 5000))
+        }
+
+        if (isZeroString(maxFeePerGas)) {
+            const block = await web3.eth.getBlock('latest')
+            this.userOperation.maxFeePerGas = toFixed(
+                new BigNumber(block.baseFeePerGas ?? 0).plus(
+                    maxPriorityFeePerGas ?? DEFAULT_USER_OPERATION.maxPriorityFeePerGas,
+                ),
+            )
+        }
+        if (isZeroString(maxPriorityFeePerGas)) {
+            this.userOperation.maxPriorityFeePerGas = DEFAULT_USER_OPERATION.maxPriorityFeePerGas
+        }
+
+        return this
+    }
+
+    async fillUserOperation(web3: Web3, overrides?: Required<Pick<UserOperation, 'initCode' | 'nonce'>>) {
         // from overrides
         if (overrides) {
             this.userOperation.nonce = overrides.nonce
@@ -178,22 +222,25 @@ export class UserTransaction {
             paymaster,
         } = this.userOperation
 
-        if (!isEmptyHex(initCode)) {
-            if (!sender) {
-                const entryPointContract = createContract<EntryPoint>(web3, this.entryPoint, EntryPointABI as AbiItem[])
-                if (!entryPointContract) throw new Error('Failed to create entry point contract.')
-                this.userOperation.sender = await entryPointContract.methods.getSenderAddress(initCode, nonce).call()
-            }
+        // add sender
+        if (!isEmptyHex(initCode) && !sender) {
+            const entryPointContract = createContract<EntryPoint>(web3, this.entryPoint, EntryPointABI as AbiItem[])
+            if (!entryPointContract) throw new Error('Failed to create entry point contract.')
+            this.userOperation.sender = await entryPointContract.methods.getSenderAddress(initCode, nonce).call()
+        }
 
-            // add more verification gas
+        // add more verification gas
+        if (!isEmptyHex(initCode)) {
             this.userOperation.verificationGas = toFixed(
                 new BigNumber(DEFAULT_USER_OPERATION.verificationGas).plus(32000 + (200 * initCode.length) / 2),
             )
+        } else {
+            this.userOperation.verificationGas = toFixed(DEFAULT_USER_OPERATION.verificationGas)
         }
 
         // caution: the creator needs to set the latest index of the contract account.
         // otherwise, always treat the operation to create the initial account.
-        if (typeof overrides === 'undefined' && nonce === 0) {
+        if (this.userOperation.sender && typeof overrides === 'undefined' && nonce === 0) {
             const walletContract = createContract<Wallet>(web3, this.userOperation.sender, WalletABI as AbiItem[])
             if (!walletContract) throw new Error('Failed to create wallet contract.')
             try {
@@ -204,18 +251,18 @@ export class UserTransaction {
             }
         }
 
-        if (!isEmptyHex(callData)) {
-            try {
-                const estimatedGas = await web3.eth.estimateGas({
-                    from: this.entryPoint,
-                    to: sender,
-                    data: callData,
-                })
-                this.userOperation.callGas = toFixed(estimatedGas * 2)
-            } catch (error) {
-                this.userOperation.callGas = toFixed(addGasMargin(DEFAULT_USER_OPERATION.callGas, 5000))
-            }
+        try {
+            if (isEmptyHex(callData)) throw new Error('Invalid call data.')
+            const estimatedGas = await web3.eth.estimateGas({
+                from: this.entryPoint,
+                to: sender,
+                data: callData,
+            })
+            this.userOperation.callGas = toFixed(addGasMargin(estimatedGas, 5000))
+        } catch (error) {
+            this.userOperation.callGas = toFixed(addGasMargin(DEFAULT_USER_OPERATION.callGas, 5000))
         }
+
         if (isZeroString(maxFeePerGas)) {
             const block = await web3.eth.getBlock('latest')
             this.userOperation.maxFeePerGas = toFixed(
@@ -252,27 +299,17 @@ export class UserTransaction {
         return this
     }
 
-    /**
-     * Estimate a raw transaction.
-     */
-    async estimate(web3: Web3) {
-        await this.fill(web3)
+    estimateTransaction() {
+        const { callGas = DEFAULT_USER_OPERATION.callGas } = this.userOperation
+        return toFixed(multipliedBy(callGas, 2))
+    }
 
-        const transaction = UserTransaction.toTransaction(this.chainId, this.userOperation)
-        if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
-        const walletContract = createContract<Wallet>(web3, transaction.from, WalletABI as AbiItem[])
-        if (!walletContract) throw new Error('Failed to create wallet contract.')
-
-        const result = await walletContract?.methods
-            .exec(transaction.to, transaction.value ?? '0', transaction.data ?? '0x')
-            .estimateGas()
-
-        return toHex(result)
+    estimateUserOperation() {
+        const { preVerificationGas = '0', verificationGas = '0', callGas = '0' } = this.userOperation
+        return toFixed(multipliedBy(plus(preVerificationGas, plus(verificationGas, callGas)), 2))
     }
 
     async signTransaction(web3: Web3, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {
-        await this.fill(web3)
-
         const transaction = UserTransaction.toTransaction(this.chainId, this.userOperation)
         if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
         const walletContract = createContract<Wallet>(web3, transaction.from, WalletABI as AbiItem[])
@@ -294,7 +331,7 @@ export class UserTransaction {
     }
 
     async signUserOperation(signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<UserOperation> {
-        const { nonce, callGas, verificationGas, preVerificationGas, maxFeePerGas, maxPriorityFeePerGas, signature } =
+        const { nonce, callGas, verificationGas, preVerificationGas, maxFeePerGas, maxPriorityFeePerGas } =
             this.userOperation
         return {
             ...this.userOperation,
@@ -309,26 +346,24 @@ export class UserTransaction {
         }
     }
 
-    static async fromTransaction(
+    static fromTransaction(
         chainId: ChainId,
         entryPoint: string,
         transaction: Transaction,
-        gasCurrency?: string,
-    ): Promise<UserTransaction> {
+        options?: Options,
+    ): UserTransaction {
         return new UserTransaction(chainId, entryPoint, UserTransaction.toUserOperation(transaction), {
-            paymentToken: gasCurrency,
+            paymentToken: transaction.gasCurrency,
+            ...options,
         })
     }
 
-    static async fromUserOperation(
+    static fromUserOperation(
         chainId: ChainId,
-        web3: Web3,
         entryPoint: string,
         userOperation: UserOperation,
-        options?: {
-            paymentToken?: string
-        },
-    ): Promise<UserTransaction> {
+        options?: Options,
+    ): UserTransaction {
         return new UserTransaction(
             chainId,
             entryPoint,
@@ -337,7 +372,7 @@ export class UserTransaction {
                 ...userOperation,
             },
             options,
-        ).fill(web3)
+        )
     }
 
     static toUserOperation(transaction: Transaction): UserOperation {

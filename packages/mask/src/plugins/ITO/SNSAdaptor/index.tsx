@@ -12,10 +12,11 @@ import type { JSON_PayloadComposeMask } from '../types.js'
 import { ITO_MetadataReader, payloadIntoMask } from './helpers.js'
 import { CompositionDialog } from './CompositionDialog.js'
 import { Icons } from '@masknet/icons'
-import { ApplicationEntry } from '@masknet/shared'
+import { ApplicationEntry, SOCIAL_MEDIA_NAME } from '@masknet/shared'
 import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import { ClaimAllDialog } from './ClaimAllDialog.js'
 import { useFungibleToken } from '@masknet/web3-hooks-base'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { formatBalance } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -95,7 +96,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 marketListSortingPriority: 4,
                 icon,
                 iconFilterColor,
-                description: <Trans i18nKey="plugin_ito_description" />,
+                description: (
+                    <Trans
+                        i18nKey="plugin_ito_description"
+                        values={{ sns: SOCIAL_MEDIA_NAME[activatedSocialNetworkUI.networkIdentifier] }}
+                    />
+                ),
                 category: 'dapp',
                 name,
                 tutorialLink: 'https://realmasknetwork.notion.site/d84c60903f974f4880d2085a13906d55',
