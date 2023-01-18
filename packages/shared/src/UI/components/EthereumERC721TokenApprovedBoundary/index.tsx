@@ -1,7 +1,7 @@
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useSharedI18N } from '../../../locales/index.js'
 import { makeStyles, ActionButtonProps, ActionButton } from '@masknet/theme'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { useERC721ContractIsApproveForAll, useERC721ContractSetApproveForAllCallback } from '@masknet/web3-hooks-evm'
@@ -23,7 +23,11 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
     const t = useSharedI18N()
     const { Others } = useWeb3State()
     const { classes } = useStyles(undefined, { props })
-    const { value, loading, retry } = useERC721ContractIsApproveForAll(collection?.address, owner, operator, chainId)
+    const {
+        value: isApproveForAll,
+        loading,
+        retry,
+    } = useERC721ContractIsApproveForAll(collection?.address, owner, operator, chainId)
     const [approveState, approveCallback] = useERC721ContractSetApproveForAllCallback(
         collection?.address,
         operator,
@@ -32,6 +36,10 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
         chainId,
     )
 
+    useEffect(() => {
+        retry()
+    }, [approveState.loading])
+    console.log({ owner, collection, chainId, approveState, isApproveForAll })
     const validationMessage = useMemo(() => {
         if (!collection?.address || !Others?.isValidAddress(collection?.address))
             return t.plugin_wallet_select_a_nft_contract()
@@ -81,7 +89,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 {...props.ActionButtonProps}
             />
         )
-    } else if (value === false) {
+    } else if (isApproveForAll === false) {
         return (
             <ActionButton
                 className={classes.approveButton}
@@ -98,7 +106,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 })}
             </ActionButton>
         )
-    } else if (value === undefined) {
+    } else if (isApproveForAll === undefined) {
         return (
             <ActionButton
                 className={classes.approveButton}
