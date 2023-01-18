@@ -5,9 +5,9 @@ import { Avatar, Box, DialogContent, Link, List, ListItem, Typography } from '@m
 import { SchemaType, explorerResolver, ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
-import type { NonFungibleAsset, NonFungibleCollection } from '@masknet/web3-shared-base'
+import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { WalletMessages } from '../messages.js'
 import { useI18N } from '../../../utils/index.js'
 import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput.js'
@@ -95,7 +95,6 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     const { classes } = useStyles()
 
     const [keyword, setKeyword] = useState('')
-    const [assets, setAssets] = useState<Array<NonFungibleAsset<ChainId, SchemaType>>>(EMPTY_LIST)
     const { chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     // #region remote controlled dialog
