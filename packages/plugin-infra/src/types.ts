@@ -23,7 +23,7 @@ import type {
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { LogHubBase } from '@masknet/web3-providers/types'
+import type { LogHubBaseAPI } from '@masknet/web3-providers/types'
 import type {
     ChainDescriptor,
     NetworkDescriptor,
@@ -161,7 +161,7 @@ export namespace Plugin.Shared {
         /**
          * A Logger.
          */
-        createLogger(): LogHubBase | undefined
+        createLogger(): LogHubBaseAPI.Logger | undefined
     }
 
     export interface SharedUIContext extends SharedContext {

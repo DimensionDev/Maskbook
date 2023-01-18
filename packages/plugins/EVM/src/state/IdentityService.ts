@@ -18,8 +18,8 @@ import { Lens, MaskX, NextIDProof, NextIDStorage, RSS3, Twitter } from '@masknet
 import { MaskX_BaseAPI } from '@masknet/web3-providers/types'
 import { ENS_Resolver } from './NameService/ENS.js'
 import { ChainbaseResolver } from './NameService/Chainbase.js'
-import { Web3StateSettings } from '../settings/index.js'
 import { SpaceID_Resolver } from './NameService/SpaceID.js'
+import { Web3StateSettings } from '../settings/index.js'
 
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
 const SID_RE = /[^\t\n\v()[\]]{1,256}\.bnb\b/gi

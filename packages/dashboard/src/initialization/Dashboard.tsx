@@ -9,7 +9,7 @@ import {
     useSystemPreferencePalette,
     DialogStackingProvider,
 } from '@masknet/theme'
-import { LogPlatform } from '@masknet/web3-providers'
+import { LogHubBaseAPI } from '@masknet/web3-providers/types'
 import { I18NextProviderHMR, SharedContextProvider, LoggerContextProvider } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
@@ -49,7 +49,7 @@ export default function DashboardRoot() {
                 <I18NextProviderHMR i18n={i18NextInstance}>
                     <StyledEngineProvider injectFirst>
                         <ThemeProvider theme={theme}>
-                            <LoggerContextProvider value={{ platform: LogPlatform.Dashboard, loggerId }}>
+                            <LoggerContextProvider value={{ platform: LogHubBaseAPI.Platform.Dashboard, loggerId }}>
                                 <DialogStackingProvider>
                                     <PersonaContext.Provider>
                                         <ErrorBoundary>

@@ -1,7 +1,7 @@
+import { useContext } from 'react'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { CardContent, Stack, Typography } from '@mui/material'
 import { useI18N } from '../../../../utils/index.js'
-import { useContext } from 'react'
 import { TrendingViewContext } from './context.js'
 import { PluginDescriptor } from './PluginDescriptor.js'
 import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
