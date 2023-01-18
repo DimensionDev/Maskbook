@@ -9,6 +9,7 @@ export class Astar extends Base {
 
         context.config = {
             ...context.config,
+            // rpc hack, alchemy rpc must pass gas parameter
             gas: '0x135168',
         }
     }

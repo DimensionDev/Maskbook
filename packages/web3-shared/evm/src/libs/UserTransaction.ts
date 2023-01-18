@@ -321,12 +321,12 @@ export class UserTransaction {
 
     estimateTransaction() {
         const { callGas = DEFAULT_USER_OPERATION.callGas } = this.userOperation
-        return toFixed(multipliedBy(callGas, 2))
+        return toHex(toFixed(multipliedBy(callGas, 2)))
     }
 
     estimateUserOperation() {
         const { preVerificationGas = '0', verificationGas = '0', callGas = '0' } = this.userOperation
-        return toFixed(multipliedBy(plus(preVerificationGas, plus(verificationGas, callGas)), 2))
+        return toHex(toFixed(multipliedBy(plus(preVerificationGas, plus(verificationGas, callGas)), 2)))
     }
 
     async signTransaction(web3: Web3, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {
@@ -340,7 +340,6 @@ export class UserTransaction {
                 {
                     ...transaction,
                     to: transaction.from,
-                    nonce: await web3.eth.getTransactionCount(transaction.from),
                     data: walletContract?.methods
                         .exec(transaction.to, transaction.value ?? '0', transaction.data ?? '0x')
                         .encodeABI(),
