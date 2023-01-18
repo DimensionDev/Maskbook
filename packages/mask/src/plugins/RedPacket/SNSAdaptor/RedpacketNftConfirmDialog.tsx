@@ -27,7 +27,7 @@ import { RedPacketNftMetaKey } from '../constants.js'
 import { WalletMessages } from '../../Wallet/messages.js'
 import { RedPacketRPC } from '../messages.js'
 import { useChainContext, useWallet, useWeb3 } from '@masknet/web3-hooks-base'
-import type { NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
+import type { NonFungibleToken, NonFungibleCollection } from '@masknet/web3-shared-base'
 import Services from '../../../extension/service.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -83,7 +83,7 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: theme.spacing(2.5),
         background: theme.palette.mode === 'light' ? '#fff' : '#2F3336',
         width: 120,
-        height: 195,
+        height: 180,
         overflow: 'hidden',
     },
     nftNameWrapper: {
@@ -123,12 +123,16 @@ const useStyles = makeStyles()((theme) => ({
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
     },
+    assetImgWrapper: {
+        maxHeight: 155,
+        overflow: 'hidden',
+    },
 }))
 export interface RedpacketNftConfirmDialogProps {
     onBack: () => void
     onClose: () => void
-    contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721>
-    tokenList: Array<NonFungibleToken<ChainId, SchemaType.ERC721>>
+    contract: NonFungibleCollection<ChainId, SchemaType>
+    tokenList: Array<NonFungibleToken<ChainId, SchemaType>>
     message: string
 }
 export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps) {
@@ -163,7 +167,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
         duration,
         message,
         senderName,
-        contract.address,
+        contract.address ?? '',
         tokenIdList,
     )
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
@@ -198,7 +202,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 senderName,
                 contractName: contract.name,
                 contractAddress: contract.address,
-                contractTokenURI: contract.logoURL ?? '',
+                contractTokenURI: contract.iconURL ?? '',
                 contractVersion: 1,
                 privateKey,
                 chainId: contract.chainId,
@@ -315,7 +319,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
 }
 
 interface NFTCardProps {
-    token: NonFungibleToken<ChainId, SchemaType.ERC721>
+    token: NonFungibleToken<ChainId, SchemaType>
     renderOrder: number
 }
 
@@ -328,13 +332,16 @@ function NFTCard(props: NFTCardProps) {
             <NFTCardStyledAssetPlayer
                 contractAddress={token.contract?.address}
                 chainId={token.contract?.chainId}
+                url={token.metadata?.mediaURL || token.metadata?.imageURL}
                 tokenId={token.tokenId}
                 renderOrder={renderOrder}
                 setERC721TokenName={setName}
                 classes={{
                     fallbackImage: classes.fallbackImage,
                     iframe: classes.iframe,
+                    imgWrapper: classes.assetImgWrapper,
                 }}
+                disableQueryNonFungibleAsset
             />
 
             <div className={classes.nftNameWrapper}>
