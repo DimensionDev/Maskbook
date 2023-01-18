@@ -1,17 +1,17 @@
-import type { EnhanceableSite } from '@masknet/shared-base'
 import { createContext, useContext, useMemo } from 'react'
-import type { LogHubBase } from '@masknet/web3-providers/types'
-import { LogHub, LogPlatform } from '@masknet/web3-providers'
+import type { EnhanceableSite } from '@masknet/shared-base'
+import { LogHub } from '@masknet/web3-providers'
+import type { LogHubBaseAPI } from '@masknet/web3-providers/types'
 
 interface LoggerContext {
-    logger?: LogHubBase
+    logger?: LogHubBaseAPI.Logger
 }
 
 const LoggerContext = createContext<LoggerContext>(null!)
 LoggerContext.displayName = 'LoggerContext'
 
 interface LoggerContextProvider {
-    platform: LogPlatform | EnhanceableSite
+    platform: LogHubBaseAPI.Platform | EnhanceableSite
     loggerId: string
 }
 
@@ -22,7 +22,7 @@ export function PluginLoggerContextProvider({ children, value }: React.ProviderP
 export function LoggerContextProvider({ value, children }: React.ProviderProps<LoggerContextProvider>) {
     const logger = useMemo(() => {
         if (!value.loggerId) return
-        return new LogHub(value.platform, value.loggerId)
+        return LogHub.createLogger(value.platform, value.loggerId)
     }, [value.platform, value.loggerId])
 
     return <LoggerContext.Provider value={{ logger }}>{children}</LoggerContext.Provider>
