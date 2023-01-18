@@ -25,7 +25,7 @@ export const SOCIAL_MEDIA_ROUND_ICON_MAPPING: Record<EnhanceableSite | string, R
 export const SOCIAL_MEDIA_NAME: Record<EnhanceableSite | string, string> = {
     [EnhanceableSite.Twitter]: 'Twitter',
     [EnhanceableSite.Facebook]: 'Facebook',
-    [EnhanceableSite.Minds]: 'Mind',
+    [EnhanceableSite.Minds]: 'Minds',
     [EnhanceableSite.Instagram]: 'Instagram',
     [EnhanceableSite.OpenSea]: 'OpenSea',
     [EnhanceableSite.Localhost]: 'Localhost',

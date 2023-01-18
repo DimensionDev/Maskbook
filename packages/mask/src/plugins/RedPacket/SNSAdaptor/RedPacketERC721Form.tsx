@@ -188,6 +188,7 @@ const useStyles = makeStyles()((theme) => {
         },
         assetImgWrapper: {
             maxHeight: 155,
+            overflow: 'hidden',
         },
         approveButton: {
             height: 40,
@@ -224,18 +225,17 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const tokenDetailedList =
         selectOption === NFTSelectOption.Partial ? manualSelectedTokenDetailedList : onceAllSelectedTokenDetailedList
     const [message, setMessage] = useState('Best Wishes!')
-    const {
-        asyncRetry: { loading: loadingOwnerList },
-        tokenDetailedOwnerList: _tokenDetailedOwnerList = [],
-        clearTokenDetailedOwnerList,
-    } = useNonFungibleOwnerTokens(contract?.address ?? '', account, chainId, balance)
+    const { loading: loadingOwnerList, value: _tokenDetailedOwnerList = [] } = useNonFungibleOwnerTokens(
+        contract?.address ?? '',
+        account,
+        chainId,
+        balance,
+    )
     const tokenDetailedOwnerList = _tokenDetailedOwnerList.map((v, index) => ({ ...v, index } as OrderedERC721Token))
     const removeToken = useCallback(
         (token: NonFungibleToken<ChainId, SchemaType.ERC721>) => {
-            ;(selectOption === NFTSelectOption.Partial ? setExistTokenDetailedList : setAllTokenDetailedList)((list) =>
-                list.filter((t) => t.tokenId !== token.tokenId),
-            )
-
+            setExistTokenDetailedList((list) => list.filter((t) => t.tokenId !== token.tokenId))
+            setAllTokenDetailedList(EMPTY_LIST)
             setSelectOption(NFTSelectOption.Partial)
         },
         [selectOption, setSelectOption, setExistTokenDetailedList, setAllTokenDetailedList],
@@ -244,10 +244,10 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const maxSelectShares = Math.min(NFT_RED_PACKET_MAX_SHARES, tokenDetailedOwnerList.length)
 
     const clearToken = useCallback(() => {
-        setExistTokenDetailedList([])
-        clearTokenDetailedOwnerList()
+        setExistTokenDetailedList(EMPTY_LIST)
+        setAllTokenDetailedList(EMPTY_LIST)
         setOpenNFTConfirmDialog(false)
-    }, [clearTokenDetailedOwnerList])
+    }, [])
 
     const clearContract = useCallback(() => {
         setContract(undefined)
@@ -262,7 +262,12 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     }, [tokenDetailedOwnerList, selectOption, loadingOwnerList])
 
     useEffect(() => {
+        clearContract()
+    }, [account])
+
+    useEffect(() => {
         clearToken()
+        setSelectOption(undefined)
         setOpenSelectNFTDialog(false)
     }, [contract, account])
 
@@ -332,6 +337,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                 )}
                                 onClick={() => {
                                     setSelectOption(NFTSelectOption.All)
+                                    setExistTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
                                     setAllTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
                                 }}>
                                 <div
@@ -398,6 +404,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                             <EthereumERC721TokenApprovedBoundary
                                 validationMessage={validationMessage}
                                 owner={account}
+                                chainId={chainId}
                                 contractDetailed={contract}
                                 classes={{ approveButton: classes.approveButton }}
                                 operator={RED_PACKET_NFT_ADDRESS}>
