@@ -197,6 +197,9 @@ export const SelectableFileList: FC<SelectableFileListProps> = ({
 }
 interface DisplayingFileFileListProps extends FileListBaseProps, Pick<DisplayingFileProps, 'onSave' | 'onDownload'> {}
 
+/**
+ * Render in decrypted post
+ */
 export const DisplayingFileList: FC<DisplayingFileFileListProps> = ({
     files,
     className,
@@ -208,20 +211,13 @@ export const DisplayingFileList: FC<DisplayingFileFileListProps> = ({
 
     return (
         <section className={cx(classes.container, className)} {...rest}>
-            <Boundary>
-                <List className={classes.list} classes={{ root: classes.listRoot }}>
-                    {files.map((file) => (
-                        <ListItem key={file.id} className={classes.listItem} classes={{ root: classes.itemRoot }}>
-                            <DisplayingFile
-                                className={classes.file}
-                                file={file}
-                                onSave={onSave}
-                                onDownload={onDownload}
-                            />
-                        </ListItem>
-                    ))}
-                </List>
-            </Boundary>
+            <List className={classes.list} classes={{ root: classes.listRoot }}>
+                {files.map((file) => (
+                    <ListItem key={file.id} className={classes.listItem} classes={{ root: classes.itemRoot }}>
+                        <DisplayingFile className={classes.file} file={file} onSave={onSave} onDownload={onDownload} />
+                    </ListItem>
+                ))}
+            </List>
         </section>
     )
 }
