@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material'
 import { SelectNftContractDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
-import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import type { NonFungibleCollection, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { useSharedI18N } from '../../../locales/index.js'
 
@@ -66,9 +66,18 @@ export interface ERC721TokenSelectPanelProps {
     onBalanceChange: (balance: number) => void
     balance: number
     contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721> | null | undefined
+    customCollections?: Array<NonFungibleCollection<ChainId, SchemaType.ERC721>>
 }
 export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
-    const { onContractChange, onBalanceChange, contract, label, chainId = ChainId.Mainnet, balance } = props
+    const {
+        onContractChange,
+        onBalanceChange,
+        contract,
+        label,
+        chainId = ChainId.Mainnet,
+        balance,
+        customCollections,
+    } = props
     const t = useSharedI18N()
     const { classes, cx } = useStyles({ hasIcon: Boolean(contract?.logoURL) })
     const { Others } = useWeb3State()
@@ -89,8 +98,9 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
         setNftContractDialog({
             open: true,
             chainId,
+            customCollections,
         })
-    }, [setNftContractDialog, chainId])
+    }, [setNftContractDialog, chainId, JSON.stringify(customCollections)])
     // #endregion
 
     return (

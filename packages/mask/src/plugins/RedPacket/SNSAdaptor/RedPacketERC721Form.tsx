@@ -16,6 +16,7 @@ import { RedpacketMessagePanel } from './RedpacketMessagePanel.js'
 import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog.js'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog.js'
 import { NFTSelectOption } from '../types.js'
+import { useNFTRedpacketCustomCollections } from './hooks/useNFTRedpacketCustomCollections.js'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useNonFungibleOwnerTokens } from '@masknet/web3-hooks-evm'
@@ -271,6 +272,8 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
 
     const { RED_PACKET_NFT_ADDRESS } = useNftRedPacketConstants(chainId)
 
+    const { value: customCollections = [] } = useNFTRedpacketCustomCollections(account, chainId)
+
     const validationMessage = useMemo(() => {
         if (!balance) return t.erc721_insufficient_balance()
         if (tokenDetailedList.length === 0) return t.select_a_token()
@@ -314,6 +317,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         balance={balance}
                         onBalanceChange={setBalance}
                         chainId={chainId}
+                        customCollections={customCollections}
                     />
                 </Box>
                 {contract && balance ? (
