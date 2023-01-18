@@ -233,19 +233,21 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     <DialogContent className={classes.dialogContent}>
                         {step === CreateRedPacketPageStep.NewRedPacketPage ? (
                             <>
-                                <div className={classes.abstractTabWrapper}>
-                                    <NetworkTab
-                                        classes={{
-                                            tab: classes.tab,
-                                            tabPanel: classes.tabPanel,
-                                            indicator: classes.indicator,
-                                            tabPaper: classes.tabPaper,
-                                        }}
-                                        chains={chainIdList}
-                                        hideArrowButton={currentTab === tabs.collectibles}
-                                        pluginID={NetworkPluginID.PLUGIN_EVM}
-                                    />
-                                </div>
+                                {openNFTConfirmDialog ? null : (
+                                    <div className={classes.abstractTabWrapper}>
+                                        <NetworkTab
+                                            classes={{
+                                                tab: classes.tab,
+                                                tabPanel: classes.tabPanel,
+                                                indicator: classes.indicator,
+                                                tabPaper: classes.tabPaper,
+                                            }}
+                                            chains={chainIdList}
+                                            hideArrowButton={currentTab === tabs.collectibles}
+                                            pluginID={NetworkPluginID.PLUGIN_EVM}
+                                        />
+                                    </div>
+                                )}
                                 <div
                                     style={{
                                         visibility: showHistory ? 'hidden' : 'visible',
