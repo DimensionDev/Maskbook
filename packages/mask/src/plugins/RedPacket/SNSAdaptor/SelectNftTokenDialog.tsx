@@ -236,6 +236,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     imageWrapper: {
         height: 150,
+        width: '100%',
         overflow: 'hidden',
     },
 }))
