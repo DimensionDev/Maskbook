@@ -2,9 +2,16 @@
 import { Menu, Popper, Tooltip } from '@mui/material'
 import { createShadowRootForwardedComponent, createShadowRootForwardedPopperComponent } from './ShadowRoot/Portal.js'
 
-export const ShadowRootTooltip: typeof Tooltip = createShadowRootForwardedPopperComponent(Tooltip) as any
-export const ShadowRootMenu: typeof Menu = createShadowRootForwardedComponent(Menu) as any
-export const ShadowRootPopper: typeof Popper = createShadowRootForwardedComponent(Popper) as any
+type SFC<T> = T & { displayName?: string }
+
+export const ShadowRootTooltip: SFC<typeof Tooltip> = createShadowRootForwardedPopperComponent(Tooltip) as any
+ShadowRootTooltip.displayName = 'ShadowRootTooltip'
+
+export const ShadowRootMenu: SFC<typeof Menu> = createShadowRootForwardedComponent(Menu) as any
+ShadowRootMenu.displayName = 'ShadowRootTooltip'
+
+export const ShadowRootPopper: SFC<typeof Popper> = createShadowRootForwardedComponent(Popper) as any
+ShadowRootPopper.displayName = 'ShadowRootTooltip'
 
 export * from './entry-base.js'
 export * from './Components/index.js'
