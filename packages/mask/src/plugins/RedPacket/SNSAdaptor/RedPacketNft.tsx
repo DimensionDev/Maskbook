@@ -71,7 +71,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     link: {
         display: 'flex',
-        width: 120,
         cursor: 'pointer',
         '&>:first-child': {
             marginRight: theme.spacing(1),

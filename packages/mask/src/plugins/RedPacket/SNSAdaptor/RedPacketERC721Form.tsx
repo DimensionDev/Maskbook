@@ -189,6 +189,7 @@ const useStyles = makeStyles()((theme) => {
         },
         assetImgWrapper: {
             maxHeight: 155,
+            overflow: 'hidden',
         },
         approveButton: {
             height: 40,
