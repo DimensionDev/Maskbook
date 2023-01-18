@@ -258,6 +258,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                                         tabPaper: classes.tabPaper,
                                         indicator: classes.indicator,
                                     }}
+                                    pluginID={NetworkPluginID.PLUGIN_EVM}
                                 />
                             </div>
                         ) : null}

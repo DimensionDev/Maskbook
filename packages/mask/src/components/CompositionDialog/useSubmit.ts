@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { socialNetworkEncoder } from '@masknet/encryption'
 import { PluginID, ProfileIdentifier } from '@masknet/shared-base'
+import { SOCIAL_MEDIA_NAME } from '@masknet/shared'
 import type { Meta } from '@masknet/typed-message'
 import Services from '../../extension/service.js'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network/index.js'
@@ -81,25 +82,33 @@ function decorateEncryptedText(encrypted: string, t: I18NFunction, meta?: Meta):
     // Note: since this is in the composition stage, we can assume plugins don't insert old version of meta.
     if (meta?.has(`${PluginID.RedPacket}:1`) || meta?.has(`${PluginID.RedPacket}_nft:1`)) {
         return hasOfficialAccount
-            ? t('additional_post_box__encrypted_post_pre_red_packet_twitter_official_account', {
+            ? t('additional_post_box__encrypted_post_pre_red_packet_sns_official_account', {
                   encrypted,
                   account: officialAccount,
               })
             : t('additional_post_box__encrypted_post_pre_red_packet', { encrypted })
     } else if (meta?.has(`${PluginID.ITO}:2`)) {
         return hasOfficialAccount
-            ? t('additional_post_box__encrypted_post_pre_ito_twitter_official_account', {
+            ? t('additional_post_box__encrypted_post_pre_ito_sns_official_account', {
                   encrypted,
                   account: officialAccount,
+                  sns: SOCIAL_MEDIA_NAME[activatedSocialNetworkUI.networkIdentifier],
               })
-            : t('additional_post_box__encrypted_post_pre_ito', { encrypted })
-    } else if (meta?.has(`${PluginID.FileService}:2`)) {
+            : t('additional_post_box__encrypted_post_pre_ito', {
+                  encrypted,
+                  sns: SOCIAL_MEDIA_NAME[activatedSocialNetworkUI.networkIdentifier],
+              })
+    } else if (meta?.has(`${PluginID.FileService}:3`)) {
         return hasOfficialAccount
-            ? t('additional_post_box__encrypted_post_pre_file_service_twitter_official_account', {
+            ? t('additional_post_box__encrypted_post_pre_file_service_sns_official_account', {
                   encrypted,
                   account: officialAccount,
+                  sns: SOCIAL_MEDIA_NAME[activatedSocialNetworkUI.networkIdentifier],
               })
-            : t('additional_post_box__encrypted_post_pre_file_service', { encrypted })
+            : t('additional_post_box__encrypted_post_pre_file_service', {
+                  encrypted,
+                  sns: SOCIAL_MEDIA_NAME[activatedSocialNetworkUI.networkIdentifier],
+              })
     }
     return null
 }

@@ -8,8 +8,8 @@ import {
     useNonFungibleAssetsByCollection,
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
-import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
-import { SourceType, createFungibleToken, TokenType } from '@masknet/web3-shared-base'
+import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
+import { createFungibleToken, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTList, PluginCardFrameMini } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
@@ -32,6 +32,7 @@ import { NonFungibleTickersTable } from './NonFungibleTickersTable.js'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 import { PluginEnableBoundary } from '../../../../components/shared/PluginEnableBoundary.js'
+import { ContentTabs } from '../../types/index.js'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -97,8 +98,15 @@ const useStyles = makeStyles<{
             boxSizing: 'border-box',
             overflow: 'auto',
         },
+        priceChartWrapper: {
+            padding: theme.spacing(4, 2, props.isTokenTagPopper ? 8 : 4, 2),
+        },
         nftList: {
             gap: 12,
+        },
+        hidden: {
+            visibility: 'hidden',
+            height: 0,
         },
     }
 })
@@ -106,27 +114,17 @@ const useStyles = makeStyles<{
 export interface TrendingViewProps {
     resultList: Web3Helper.TokenResultAll[]
     address?: string
-    searchedContractAddress?: string
     onUpdate?: () => void
 }
 
-enum ContentTabs {
-    Market = 'market',
-    Price = 'price',
-    Exchange = 'exchange',
-    Swap = 'swap',
-    NFTItems = 'nft-items',
-}
-
 export function TrendingView(props: TrendingViewProps) {
-    const { searchedContractAddress, resultList } = props
+    const { resultList } = props
     const [result, setResult] = useState(resultList[0])
     const { isTokenTagPopper, isNFTProjectPopper, isProfilePage } = useContext(TrendingViewContext)
     const { t } = useI18N()
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
     const isWeb3ProfileMinimalMode = useIsMinimalMode(PluginID.Web3Profile)
-    const [tabIndex, setTabIndex] = useState(result.source !== SourceType.UniswapInfo ? 1 : 0)
     const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
 
@@ -134,14 +132,9 @@ export function TrendingView(props: TrendingViewProps) {
     const pluginIDs = useValueRef(pluginIDSettings)
     const context = { pluginID: site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM }
 
-    // #region track network type
-    useEffect(() => setTabIndex(0), [networkType])
-    // #endregion
     // #region merge trending
-
-    const { value: { trending } = {}, loading: loadingTrending } = useTrendingById(result, searchedContractAddress)
+    const { value: { trending } = {}, loading: loadingTrending } = useTrendingById(result, result.address)
     // #endregion
-    const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
 
     // #region stats
     const [days, setDays] = useState(TrendingAPI.Days.ONE_WEEK)
@@ -162,16 +155,27 @@ export function TrendingView(props: TrendingViewProps) {
     const isSwappable =
         !isMinimalMode &&
         !isNFT &&
-        (!!trending?.coin.contract_address || isNativeTokenSymbol(coinSymbol)) &&
+        !!trending?.coin.contract_address &&
         chainIdValid &&
-        trending?.coin.pluginID === NetworkPluginID.PLUGIN_EVM
+        trending.contracts?.[0]?.pluginID === NetworkPluginID.PLUGIN_EVM
     // #endregion
 
     // #region expected chainId
     const swapExpectedChainId = useMemo(() => {
-        const contracts = trending?.contracts?.filter((x) => x.chainId === chainId) ?? []
-        if (contracts.length > 0) return chainId
-        return trending?.contracts?.[0]?.chainId ?? chainId
+        const contracts =
+            trending?.contracts?.filter((x) => x.chainId && x.address) ??
+            (trending?.coin.chainId && trending.coin.contract_address)
+                ? [
+                      {
+                          chainId: trending.coin.chainId,
+                          address: trending.coin.contract_address,
+                          pluginID: NetworkPluginID.PLUGIN_EVM,
+                      },
+                  ]
+                : []
+        const _contracts = contracts?.filter((x) => x.chainId === chainId) ?? []
+        if (_contracts.length > 0) return chainId
+        return contracts?.[0]?.chainId ?? chainId
     }, [trending?.contracts, chainId])
     // #endregion
 
@@ -214,12 +218,12 @@ export function TrendingView(props: TrendingViewProps) {
     }, [t, isSwappable, isNFT])
     // #endregion
 
-    const { classes } = useStyles({ isTokenTagPopper, isNFTProjectPopper, currentTab })
+    const { classes, cx } = useStyles({ isTokenTagPopper, isNFTProjectPopper, currentTab })
 
     // #region api ready callback
     useEffect(() => {
         props.onUpdate?.()
-    }, [tabIndex, loadingTrending])
+    }, [loadingTrending])
     // #endregion
     const collectionId =
         trending?.coin.type === TokenType.NonFungible
@@ -257,6 +261,7 @@ export function TrendingView(props: TrendingViewProps) {
                 content: classes.content,
                 cardHeader: classes.cardHeader,
             }}
+            currentTab={currentTab}
             stats={stats}
             setResult={setResult}
             resultList={resultList}
@@ -280,7 +285,7 @@ export function TrendingView(props: TrendingViewProps) {
                     <CoinMarketPanel dataProvider={trending.dataProvider} trending={trending} result={result} />
                 ) : null}
                 {currentTab === ContentTabs.Price ? (
-                    <Box px={2} py={4}>
+                    <Box className={classes.priceChartWrapper}>
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}
@@ -345,8 +350,9 @@ export function TrendingView(props: TrendingViewProps) {
                         />
                     </Web3ContextProvider>
                 ) : null}
-                {currentTab === ContentTabs.NFTItems && isNFT ? (
-                    <Box className={classes.nftItems}>
+
+                {isNFT && (
+                    <Box className={cx(classes.nftItems, currentTab === ContentTabs.NFTItems ? '' : classes.hidden)}>
                         <NFTList
                             pluginID={result.pluginID}
                             className={classes.nftList}
@@ -357,7 +363,7 @@ export function TrendingView(props: TrendingViewProps) {
                             gap={16}
                         />
                     </Box>
-                ) : null}
+                )}
             </Stack>
         </TrendingViewDeck>
     )

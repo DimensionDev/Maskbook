@@ -68,3 +68,26 @@ export enum TYPE {
     launch = 'launch',
     donate = 'donate',
 }
+
+export interface RSS3ProfileResult {
+    address: string
+    network: NETWORK
+    platform: PLATFORM
+    source: 'Lens'
+    /** @example vitalik.lens */
+    name: string
+    /** @example vitalik.lens */
+    handle: string
+    bio: string
+    url: string
+    /** Could be http url, or ipfs url */
+    profile_uri: string[]
+}
+export type RSS3ProfilesResponse =
+    | {
+          total: number
+          result: RSS3ProfileResult[]
+      }
+    | {
+          error: string
+      }

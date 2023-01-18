@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { formatPersonaFingerprint, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useChainContext, useWallets, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet, useWallets, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Link, Popover, Typography, Button } from '@mui/material'
@@ -134,6 +134,7 @@ export default function ChangeOwner() {
     const { smartPayChainId } = useContainer(PopupContext)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets()
+    const wallet = useWallet()
 
     const { selectedWallet: contractAccount } = useContainer(WalletContext)
 
@@ -146,6 +147,8 @@ export default function ChangeOwner() {
 
     const [, handleConfirm] = useAsyncFn(async () => {
         if (!manageAccount?.address || !contractAccount) return
+        if (!isSameAddress(wallet?.address, contractAccount.address))
+            await connection?.connect({ account: contractAccount?.address, chainId: smartPayChainId })
         return connection?.changeOwner?.(manageAccount.address, {
             chainId: smartPayChainId,
             account: contractAccount?.address,
@@ -153,7 +156,7 @@ export default function ChangeOwner() {
             owner: contractAccount?.owner,
             identifier: contractAccount?.identifier,
         })
-    }, [manageAccount?.address, smartPayChainId, contractAccount])
+    }, [manageAccount?.address, smartPayChainId, contractAccount, wallet])
 
     useTitle(t('popups_wallet_change_owner'))
 
@@ -195,6 +198,7 @@ export default function ChangeOwner() {
                     onMouseDown={(event) => {
                         setAnchorEl(event.currentTarget)
                     }}
+                    inputProps={{ style: { cursor: 'pointer' } }}
                 />
                 <Popover
                     open={!!anchorEl}
@@ -245,7 +249,7 @@ export default function ChangeOwner() {
                         </Box>
                     ) : (
                         <Box className={classes.placeholder}>
-                            <Typography>{t('popups_wallet_no_encrypted_placeholder')}</Typography>
+                            <Typography>{t('popups_no_persona_found')}</Typography>
                         </Box>
                     )}
                     <Typography className={classes.popoverTitle}>{t('popups_wallet_wallets')}</Typography>
@@ -276,6 +280,13 @@ export default function ChangeOwner() {
                                                 {formatEthereumAddress(wallet.address, 4)}
 
                                                 <CopyIconButton text={wallet.address} className={classes.copy} />
+                                                <Link
+                                                    sx={{ display: 'flex', alignItems: 'center', color: 'inherit' }}
+                                                    href={explorerResolver.addressLink(chainId, wallet.address)}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer">
+                                                    <Icons.PopupLink className={classes.copy} />
+                                                </Link>
                                             </Typography>
                                         </Box>
                                     </Box>
@@ -285,7 +296,7 @@ export default function ChangeOwner() {
                         </Box>
                     ) : (
                         <Box className={classes.placeholder}>
-                            <Typography>{t('popups_wallet_no_encrypted_placeholder')}</Typography>
+                            <Typography>{t('popups_no_wallets_found')}</Typography>
                         </Box>
                     )}
                 </Popover>

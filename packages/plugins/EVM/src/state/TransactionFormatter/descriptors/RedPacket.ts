@@ -10,7 +10,7 @@ import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } fr
 
 export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt implements TransactionDescriptor {
     async getClaimTokenInfo(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
-        const connection = Web3StateSettings.value.Connection?.getConnection?.({
+        const hub = Web3StateSettings.value.Hub?.getHub?.({
             chainId,
         })
         const events = await this.getReceipt(chainId, contractAddress, HappyRedPacketV4ABI as AbiItem[], hash)
@@ -22,7 +22,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
 
         if (!token_address) return
 
-        const token = await connection?.getFungibleToken(token_address ?? '')
+        const token = await hub?.getFungibleToken?.(token_address ?? '', { chainId })
 
         if (!token) return
 
@@ -30,7 +30,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
     }
 
     async getRefundTokenInfo(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
-        const connection = Web3StateSettings.value.Connection?.getConnection?.({
+        const hub = Web3StateSettings.value.Hub?.getHub?.({
             chainId,
         })
         const events = await this.getReceipt(chainId, contractAddress, HappyRedPacketV4ABI as AbiItem[], hash)
@@ -42,7 +42,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
 
         if (!token_address) return
 
-        const token = await connection?.getFungibleToken(token_address ?? '')
+        const token = await hub?.getFungibleToken?.(token_address ?? '', { chainId })
 
         if (!token) return
 
@@ -92,17 +92,17 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                 HAPPY_RED_PACKET_ADDRESS_V4,
             ].some((x) => isSameAddress(x, context.to))
         ) {
-            const connection = Web3StateSettings.value.Connection?.getConnection?.({
-                chainId: context.chainId,
-                account: context.from,
-            })
-
             if (
                 method?.name === 'create_red_packet' &&
                 method?.parameters?._token_addr &&
                 method?.parameters?._total_tokens
             ) {
-                const token = await connection?.getFungibleToken(method?.parameters?._token_addr ?? '')
+                const hub = Web3StateSettings.value.Hub?.getHub?.({
+                    chainId: context.chainId,
+                })
+                const token = await hub?.getFungibleToken?.(method?.parameters?._token_addr ?? '', {
+                    chainId: context.chainId,
+                })
                 const tokenAmountDescription = getTokenAmountDescription(method.parameters?._total_tokens, token)
                 return {
                     chainId: context.chainId,

@@ -73,7 +73,7 @@ export interface MaskTextFieldProps extends Exclude<StandardTextFieldProps, 'var
 }
 
 export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: ForwardedRef<any>) => {
-    const { label, sx, required = false, className, wrapperProps, ...rest } = props
+    const { label, sx, required = false, className, wrapperProps, helperText, ...rest } = props
     const inputProps = (props.InputProps as InputProps) ?? {}
     const { classes } = useStyles()
     return (
@@ -96,6 +96,7 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                     classes={{ root: classes.field }}
                     variant="standard"
                     required={required}
+                    helperText={helperText}
                     InputProps={{
                         disableUnderline: true,
                         className: classes.input,

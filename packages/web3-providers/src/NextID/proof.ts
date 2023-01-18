@@ -12,11 +12,9 @@ import {
     toBase64,
 } from '@masknet/shared-base'
 import { PROOF_BASE_URL_PROD, RELATION_SERVICE_URL, PROOF_BASE_URL_DEV } from './constants.js'
-import type { NextIDBaseAPI } from '../entry-types.js'
-import { fetchJSON, fetchR2D2 } from '../entry-helpers.js'
 import { staleNextIDCached } from './helpers.js'
-import { fetchSquashed } from '../helpers/fetchSquashed.js'
-import { fetch } from '../helpers/fetch.js'
+import type { NextIDBaseAPI } from '../entry-types.js'
+import { fetchJSON } from '../entry-helpers.js'
 
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
@@ -79,14 +77,10 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             created_at: createdAt,
         }
 
-        const result = await fetch<NextIDErrorBody | void>(
-            urlcat(BASE_URL, '/v1/proof'),
-            {
-                body: JSON.stringify(requestBody),
-                method: 'POST',
-            },
-            [fetchR2D2, fetchJSON],
-        )
+        const result = await fetchJSON<NextIDErrorBody | undefined>(urlcat(BASE_URL, '/v1/proof'), {
+            body: JSON.stringify(requestBody),
+            method: 'POST',
+        })
 
         if (result?.message) throw new Error(result.message)
 
@@ -102,15 +96,15 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
     async queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean) {
         const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
-        const response = await fetch<NextIDBindings>(url, undefined, [fetchSquashed, fetchR2D2, fetchJSON])
+        const { ids } = await fetchJSON<NextIDBindings>(url)
         // Will have only one item when query by personaPublicKey
-        return first(response.ids)
+        return first(ids)
     }
 
     async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page = 1) {
         if (!platform && !identity) return []
 
-        const response = await fetch<NextIDBindings>(
+        const response = await fetchJSON<NextIDBindings>(
             urlcat(BASE_URL, '/v1/proof', {
                 platform,
                 identity,
@@ -119,8 +113,6 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 sort: 'activated_at',
                 order: 'desc',
             }),
-            undefined,
-            [fetchSquashed, fetchR2D2, fetchJSON],
         )
 
         return response.ids
@@ -142,7 +134,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         const nextIDPersonaBindings: NextIDPersonaBindings[] = []
         let page = 1
         do {
-            const result = await fetch<NextIDBindings>(
+            const result = await fetchJSON<NextIDBindings>(
                 urlcat(BASE_URL, '/v1/proof', {
                     platform,
                     identity,
@@ -150,8 +142,6 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                     page,
                     order: 'desc',
                 }),
-                undefined,
-                [fetchSquashed, fetchR2D2, fetchJSON],
             )
 
             const personaBindings = result.ids
@@ -171,8 +161,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             if (!platform && !identity) return false
 
             const url = getExistedBindingQueryURL(platform, identity, personaPublicKey)
-            const result = await fetch<BindingProof>(url, undefined, [fetchSquashed, fetchR2D2, fetchJSON])
-
+            const result = await fetchJSON<BindingProof | undefined>(url)
             return !!result?.is_valid
         } catch {
             return false
@@ -180,7 +169,17 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     }
 
     async queryProfilesByRelationService(identity: string) {
-        const response = await fetch(RELATION_SERVICE_URL, {
+        const response = await fetchJSON<{
+            data: {
+                identity: {
+                    neighborWithTraversal: Array<{
+                        source: NextIDPlatform
+                        to: { platform: NextIDPlatform; displayName: string }
+                        from: { platform: NextIDPlatform; displayName: string }
+                    }>
+                }
+            }
+        }>(RELATION_SERVICE_URL, {
             method: 'POST',
             mode: 'cors',
             body: JSON.stringify({
@@ -206,15 +205,13 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             }),
         })
 
-        const res = (await response.json())?.data.identity.neighborWithTraversal as Array<{
-            source: NextIDPlatform
-            to: { platform: NextIDPlatform; displayName: string }
-            from: { platform: NextIDPlatform; displayName: string }
-        }>
-
-        const rawData = res
+        const rawData = response.data.identity.neighborWithTraversal
             .map((x) => createBindingProofFromProfileQuery(x.to.platform, x.source, x.to.displayName))
-            .concat(res.map((x) => createBindingProofFromProfileQuery(x.from.platform, x.source, x.from.displayName)))
+            .concat(
+                response.data.identity.neighborWithTraversal.map((x) =>
+                    createBindingProofFromProfileQuery(x.from.platform, x.source, x.from.displayName),
+                ),
+            )
 
         return uniqWith(rawData, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
             (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform),
@@ -237,14 +234,10 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
         const nextIDLanguageFormat = language?.replace('-', '_') as PostContentLanguages
 
-        const response = await fetch<CreatePayloadResponse>(
-            urlcat(BASE_URL, '/v1/proof/payload'),
-            {
-                body: JSON.stringify(requestBody),
-                method: 'POST',
-            },
-            [fetchR2D2, fetchJSON],
-        )
+        const response = await fetchJSON<CreatePayloadResponse>(urlcat(BASE_URL, '/v1/proof/payload'), {
+            body: JSON.stringify(requestBody),
+            method: 'POST',
+        })
 
         return response
             ? {

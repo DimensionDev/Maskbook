@@ -18,7 +18,7 @@ export enum PluginID {
     Avatar = 'com.maskbook.avatar',
     ArtBlocks = 'io.artblocks',
     Collectible = 'com.maskbook.collectibles',
-    ENS = 'com.maskbook.ens',
+    Handle = 'com.maskbook.handle',
     NextID = 'com.mask.next_id',
     External = 'io.mask.external',
     Gitcoin = 'co.gitcoin',

@@ -19,7 +19,7 @@ export async function signWithPersona<T>(
         if (!identifier || !silent) {
             const requestID = uuid()
             await openPopupWindow(PopupRoutes.PersonaSignRequest, {
-                message,
+                message: JSON.stringify(message),
                 requestID,
                 identifier: identifier?.toText(),
             })

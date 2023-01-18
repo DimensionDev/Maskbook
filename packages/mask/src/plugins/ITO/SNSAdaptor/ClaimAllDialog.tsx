@@ -1,7 +1,7 @@
 import { useState, useLayoutEffect, useRef, useCallback } from 'react'
 import { flatten, uniq } from 'lodash-es'
 import formatDateTime from 'date-fns/format'
-import { useChainContext, useFungibleToken, useNetworkContext, useFungibleTokens } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken, useFungibleTokens } from '@masknet/web3-hooks-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { SnackbarProvider, makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
 import {
@@ -185,8 +185,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { t } = useI18N()
     const { open, onClose } = props
     const ITO_Definition = useActivatedPlugin(PluginID.ITO, 'any')
-    const { pluginID } = useNetworkContext()
-    const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
+    const chainIdList = ITO_Definition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
     const DialogRef = useRef<HTMLDivElement>(null)
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
@@ -246,6 +245,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                 indicator: classes.indicator,
                             }}
                             chains={chainIdList}
+                            pluginID={NetworkPluginID.PLUGIN_EVM}
                         />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>

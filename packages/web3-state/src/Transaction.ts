@@ -61,6 +61,18 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
         return this.storage.initializedPromise
     }
 
+    async getTransaction(chainId: ChainId, address: string, id: string): Promise<Transaction | undefined> {
+        const all = this.storage.value
+        const address_ = this.options.formatAddress(address)
+
+        for (const recentTransaction of all[chainId][address_] ?? []) {
+            for (const [id_, transaction] of Object.entries(recentTransaction.candidates)) {
+                if (id_ === id) return transaction
+            }
+        }
+        return
+    }
+
     async addTransaction(chainId: ChainId, address: string, id: string, transaction: Transaction) {
         const now = new Date()
         const all = this.storage.value
@@ -176,6 +188,13 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
                 [address_]: all[chainId][address_]?.filter((x) => !Object.keys(x.candidates).includes(id)),
             },
         })
+    }
+
+    async getTransactions(chainId: ChainId, address: string): Promise<Array<RecentTransaction<ChainId, Transaction>>> {
+        const all = this.storage.value
+        const address_ = this.options.formatAddress(address)
+
+        return all[chainId][address_] ?? []
     }
 
     async clearTransactions(chainId: ChainId, address: string) {

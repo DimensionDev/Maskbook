@@ -9,8 +9,8 @@ import {
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import RSS3 from 'rss3-next'
 import urlcat, { query } from 'urlcat'
-import { NEW_RSS3_ENDPOINT, RSS3_ENDPOINT } from './constants.js'
-import { TAG, TYPE } from './types.js'
+import { RSS3_FEED_ENDPOINT, RSS3_LEGACY_ENDPOINT, RSS3_ENDPOINT } from './constants.js'
+import { RSS3ProfilesResponse, TAG, TYPE } from './types.js'
 import { normalizedFeed } from './helpers.js'
 import { fetchJSON } from '../entry-helpers.js'
 import { NonFungibleTokenAPI, RSS3BaseAPI } from '../entry-types.js'
@@ -29,7 +29,7 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
         },
     ): RSS3 {
         return new RSS3({
-            endpoint: RSS3_ENDPOINT,
+            endpoint: RSS3_LEGACY_ENDPOINT,
             address,
             sign,
         })
@@ -54,7 +54,7 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
     }
     async getDonations(address: string, { indicator, size = 100 }: HubOptions<ChainId> = {}) {
         if (!address) return createPageable([], createIndicator(indicator))
-        const collectionURL = urlcat(NEW_RSS3_ENDPOINT, address, {
+        const collectionURL = urlcat(RSS3_FEED_ENDPOINT, address, {
             tag: TAG.donation,
             type: TYPE.donate,
             limit: size,
@@ -73,7 +73,7 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
     }
     async getFootprints(address: string, { indicator, size = 100 }: HubOptions<ChainId> = {}) {
         if (!address) return createPageable([], createIndicator(indicator))
-        const collectionURL = urlcat(NEW_RSS3_ENDPOINT, address, {
+        const collectionURL = urlcat(RSS3_FEED_ENDPOINT, address, {
             tag: TAG.collectible,
             type: TYPE.poap,
             limit: size,
@@ -88,20 +88,11 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
         const url = urlcat('https://rss3.domains/name/:id', { id })
         return fetchJSON<RSS3BaseAPI.NameInfo>(url)
     }
-    async getProfileInfo(address: string) {
-        if (!address) return
-
-        const url = urlcat(RSS3_ENDPOINT, '/:address', { address })
-        const rsp = await fetchJSON<{
-            profile: RSS3BaseAPI.ProfileInfo
-        }>(url)
-        return rsp?.profile
-    }
     async getAssets(address: string, { chainId, indicator, size = 50 }: HubOptions<ChainId> = {}) {
         if (chainId !== ChainId.Mainnet && chainId !== ChainId.Matic)
             return createPageable([], createIndicator(indicator))
 
-        const url = urlcat(RSS3_ENDPOINT, '/assets/list', {
+        const url = urlcat(RSS3_LEGACY_ENDPOINT, '/assets/list', {
             personaID: address,
             type: RSS3BaseAPI.AssetType.NFT,
         })
@@ -145,7 +136,7 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
             cursor: indicator?.id ?? '',
             include_poap: true,
         })}`
-        const url = urlcat(NEW_RSS3_ENDPOINT, `/:address?${queryString}`, {
+        const url = urlcat(RSS3_FEED_ENDPOINT, `/:address?${queryString}`, {
             address,
         })
         const { result, cursor } = await fetchJSON<{
@@ -161,7 +152,7 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
         { indicator, size = 100 }: HubOptions<ChainId> = {},
     ) {
         if (!address) return createPageable([], createIndicator(indicator))
-        const url = urlcat(NEW_RSS3_ENDPOINT, '/:address', {
+        const url = urlcat(RSS3_FEED_ENDPOINT, '/:address', {
             ...options,
             address,
             limit: size,
@@ -179,5 +170,15 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
             createIndicator(indicator),
             cursor ? createNextIndicator(indicator, cursor) : undefined,
         )
+    }
+
+    async getProfiles(handle: string) {
+        const url = urlcat(RSS3_ENDPOINT, '/profiles/:handle', {
+            handle,
+        })
+        const response = await fetchJSON<RSS3ProfilesResponse>(url)
+
+        if ('error' in response) return []
+        return response.result
     }
 }

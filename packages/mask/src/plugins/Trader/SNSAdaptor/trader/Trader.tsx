@@ -28,6 +28,7 @@ import { useUpdateBalance } from './hooks/useUpdateBalance.js'
 import { TradeForm } from './TradeForm.js'
 import { WalletMessages } from '../../../Wallet/messages.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { TraderStateBar } from './TraderStateBar.js'
 
 export interface TraderProps extends withClasses<'root'> {
     defaultInputCoin?: Web3Helper.FungibleTokenAll
@@ -49,6 +50,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const { chainId, account } = useChainContext({
         chainId: targetChainId,
     })
+
     const { pluginID } = useNetworkContext()
     const chainIdValid = useChainIdValid(pluginID, chainId)
     const { Others } = useWeb3State()
@@ -328,7 +330,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                 onTokenChipClick={onTokenChipClick}
                 focusedTrade={focusedTrade}
                 onFocusedTradeChange={(trade) => setFocusTrade(trade)}
-                onSwap={onSwap}
                 gasPrice={gasPrice}
                 gasConfig={gasConfig}
                 onSwitch={onSwitchToken}
@@ -346,6 +347,18 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                     onClose={onConfirmDialogClose}
                 />
             ) : null}
+
+            <TraderStateBar
+                settings={settings}
+                trades={sortedAllTradeComputed}
+                inputToken={inputToken}
+                outputToken={outputToken}
+                inputTokenBalance={inputTokenBalance}
+                inputAmount={inputAmount}
+                focusedTrade={focusedTrade}
+                gasPrice={gasPrice}
+                onSwap={onSwap}
+            />
         </>
     )
 })

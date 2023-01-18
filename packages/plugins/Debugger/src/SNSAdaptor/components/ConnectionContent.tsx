@@ -1,12 +1,21 @@
 import { useCallback } from 'react'
+import type { AbiItem } from 'web3-utils'
 import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useWeb3Connection, useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useWeb3Connection, useChainContext, useNetworkContext, useWeb3 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId, ChainId as EVM_ChainId, ProviderType as EVM_ProviderType } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, ProofType } from '@masknet/shared-base'
+import {
+    Web3,
+    ChainId,
+    ChainId as EVM_ChainId,
+    ProviderType as EVM_ProviderType,
+    createContract,
+} from '@masknet/web3-shared-evm'
 import { ChainId as SolanaChainId, ProviderType as SolanaProviderType } from '@masknet/web3-shared-solana'
 import { ChainId as FlowChainId, ProviderType as FlowProviderType } from '@masknet/web3-shared-flow'
+import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
+import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 
 export interface ConnectionContentProps {
     onClose?: () => void
@@ -22,27 +31,81 @@ export function ConnectionContent(props: ConnectionContentProps) {
     const { classes } = useStyles()
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext()
+    const web3 = useWeb3()
     const connection = useWeb3Connection()
 
+    const onEstimateCallback = useCallback(async () => {
+        const contract = createContract<ERC20>(
+            web3 as Web3,
+            '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
+            ERC20ABI as AbiItem[],
+        )
+        const estimatedGas = await connection?.estimateTransaction?.(
+            {
+                from: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
+                to: '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
+                value: '1',
+                data: contract?.methods.approve('0x31f42841c2db5173425b5223809cf3a38fede360', '1').encodeABI(),
+            },
+            0,
+            {
+                chainId: ChainId.Matic,
+                account: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
+                providerType: EVM_ProviderType.MaskWallet,
+                overrides: {
+                    gas: '88888',
+                    maxFeePerGas: '88888',
+                    maxPriorityFeePerGas: '88888',
+                    gasCurrency: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
+                },
+            },
+        )
+        window.alert(estimatedGas)
+    }, [web3, connection])
+
     const onTransferCallback = useCallback(() => {
-        return connection?.transfer?.('0x66b57885E8E9D84742faBda0cE6E3496055b012d', '100', {
-            chainId: ChainId.Mumbai,
+        return connection?.transferFungibleToken?.(
+            '0x0000000000000000000000000000000000000000',
+            '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
+            '100',
+            undefined,
+            {
+                chainId,
+                account,
+            },
+        )
+    }, [connection])
+
+    const onDeployCallback = useCallback(() => {
+        return connection?.deploy?.('0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC', undefined, {
+            chainId: ChainId.Matic,
             account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
             providerType: EVM_ProviderType.MaskWallet,
         })
     }, [connection])
 
-    const onDeployCallback = useCallback(() => {
-        return connection?.deploy?.('0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC', {
-            chainId: ChainId.Mumbai,
-            account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
-            providerType: EVM_ProviderType.MaskWallet,
-        })
+    const onFundCallback = useCallback(() => {
+        return connection?.fund?.(
+            {
+                publicKey: '',
+                type: ProofType.Persona,
+                payload: JSON.stringify({
+                    ownerAddress: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
+                    nonce: 0,
+                }),
+                signature: '',
+            },
+            {
+                chainId: ChainId.Matic,
+                account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
+                providerType: EVM_ProviderType.MaskWallet,
+            },
+        )
     }, [connection])
 
     const onChangeOwnerChange = useCallback(() => {
         return connection?.changeOwner?.('0x66b57885E8E9D84742faBda0cE6E3496055b012d', {
-            chainId: ChainId.Mumbai,
+            chainId: ChainId.Matic,
             account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
             providerType: EVM_ProviderType.MaskWallet,
         })
@@ -50,15 +113,17 @@ export function ConnectionContent(props: ConnectionContentProps) {
 
     const onApproveFungibleTokenCallback = useCallback(() => {
         if (pluginID !== NetworkPluginID.PLUGIN_EVM) return
-        if (chainId !== ChainId.Mainnet) return
         return connection?.approveFungibleToken(
-            '0xF8935Df67cAB7BfcA9532D1Ac2088C5c39b995b5',
+            '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
             '0x31f42841c2db5173425b5223809cf3a38fede360',
             '1',
             {
-                chainId: ChainId.Mumbai,
-                account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
+                chainId: ChainId.Matic,
+                account: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
                 providerType: EVM_ProviderType.MaskWallet,
+                overrides: {
+                    gasCurrency: '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
+                },
             },
         )
     }, [pluginID, connection])
@@ -165,18 +230,22 @@ export function ConnectionContent(props: ConnectionContentProps) {
         [connection],
     )
 
-    if (!account) {
-        return (
-            <section className={classes.container}>
-                <Typography>Please connect a wallet.</Typography>
-            </section>
-        )
-    }
-
     return (
         <section className={classes.container}>
             <Table size="small">
                 <TableBody>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Estimate
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button size="small" onClick={() => onEstimateCallback()}>
+                                Estimate
+                            </Button>
+                        </TableCell>
+                    </TableRow>
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">
@@ -198,6 +267,18 @@ export function ConnectionContent(props: ConnectionContentProps) {
                         <TableCell>
                             <Button size="small" onClick={() => onDeployCallback()}>
                                 Deploy
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Fund
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button size="small" onClick={() => onFundCallback()}>
+                                Fund
                             </Button>
                         </TableCell>
                     </TableRow>

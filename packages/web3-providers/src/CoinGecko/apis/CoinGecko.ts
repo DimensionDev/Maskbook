@@ -1,4 +1,5 @@
 import { compact, uniq, uniqBy } from 'lodash-es'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { attemptUntil, TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId, getCoinGeckoConstants } from '@masknet/web3-shared-evm'
 import { COINGECKO_CHAIN_ID_LIST, COINGECKO_URL_BASE } from '../constants.js'
@@ -11,9 +12,8 @@ import { resolveCoinGeckoChainId } from '../helpers.js'
 import { FuseTrendingAPI } from '../../Fuse/index.js'
 import { fetchJSON } from '../../entry-helpers.js'
 import type { TrendingAPI } from '../../entry-types.js'
-import { NetworkPluginID } from '@masknet/shared-base'
 
-export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
+export class CoinGeckoTrending_API implements TrendingAPI.Provider<Web3Helper.ChainIdAll> {
     private fuse = new FuseTrendingAPI()
     private coins: Map<string, TrendingAPI.Coin> = new Map()
 
@@ -34,7 +34,7 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
         return coins.map((coin) => ({ ...coin, type: TokenType.Fungible }))
     }
 
-    async getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
+    async getCoinsByKeyword(chainId: Web3Helper.ChainIdAll, keyword: string): Promise<TrendingAPI.Coin[]> {
         try {
             await this.createCoins()
             const coinThumbs = await getThumbCoins(keyword)
@@ -86,17 +86,35 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
             : ''
 
         const platforms = await this.getSupportedPlatform()
+        const avaxContracts = [
+            {
+                address: '0x1ce0c2827e2ef14d5c4f29a091d735a204794041',
+                chainId: ChainId.BSC,
+                pluginID: NetworkPluginID.PLUGIN_EVM,
+            },
+            {
+                address: '0x4792c1ecb969b036eb51330c63bd27899a13d84e',
+                chainId: ChainId.Moonbeam,
+                pluginID: NetworkPluginID.PLUGIN_EVM,
+            },
+        ]
+
         return {
             lastUpdated: info.last_updated,
             dataProvider: SourceType.CoinGecko,
-            contracts: Object.entries(info.platforms).map(([key, address]) => ({
-                chainId: platforms.find((x) => x.id === key)?.chain_identifier ?? resolveCoinGeckoChainId(key),
-                address,
-            })),
+            contracts:
+                info.id === 'avalanche-2'
+                    ? avaxContracts
+                    : Object.entries(info.platforms)
+                          .map(([key, address]) => ({
+                              chainId:
+                                  platforms.find((x) => x.id === key)?.chain_identifier ?? resolveCoinGeckoChainId(key),
+                              address,
+                              pluginID: key === 'solana' ? NetworkPluginID.PLUGIN_SOLANA : NetworkPluginID.PLUGIN_EVM,
+                          }))
+                          .filter((x) => x.chainId && x.address),
             currency,
             coin: {
-                pluginID:
-                    info.asset_platform_id === 'solana' ? NetworkPluginID.PLUGIN_SOLANA : NetworkPluginID.PLUGIN_EVM,
                 id,
                 name: info.name,
                 symbol: info.symbol.toUpperCase(),
@@ -157,7 +175,7 @@ export class CoinGeckoTrending_API implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinPriceStats(
-        chainId: ChainId,
+        chainId: Web3Helper.ChainIdAll,
         coinId: string,
         currency: TrendingAPI.Currency,
         days: number,

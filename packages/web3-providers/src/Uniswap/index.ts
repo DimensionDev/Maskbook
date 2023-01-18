@@ -2,10 +2,8 @@ import { TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { isMirroredKeyword } from '../Trending/helpers.js'
 import * as BaseAPI from './base-api.js'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { BTC_FIRST_LEGER_DATE, getAllCoinsByKeyword, getPriceStats as getStats } from './base-api.js'
 import type { TrendingAPI } from '../entry-types.js'
-import { NetworkPluginID } from '@masknet/shared-base'
 
 export enum Days {
     MAX = 0,
@@ -15,7 +13,7 @@ export enum Days {
     ONE_YEAR = 365,
 }
 
-export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
+export class UniswapAPI implements TrendingAPI.Provider<ChainId> {
     getAllCoins(): Promise<TrendingAPI.Coin[]> {
         return Promise.resolve([])
     }
@@ -24,11 +22,7 @@ export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
         return getAllCoinsByKeyword(chainId, keyword)
     }
 
-    async getCoinTrending(
-        chainId: Web3Helper.ChainIdAll,
-        id: string,
-        currency: TrendingAPI.Currency,
-    ): Promise<TrendingAPI.Trending> {
+    async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
         const { token, marketInfo, tickersInfo } = await BaseAPI.getCoinInfo(chainId ?? ChainId.Mainnet, id)
         return {
             currency,
@@ -37,7 +31,6 @@ export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
             coin: {
                 id,
                 chainId,
-                pluginID: NetworkPluginID.PLUGIN_EVM,
                 name: token?.name || '',
                 symbol: token?.symbol || '',
                 type: TokenType.Fungible,

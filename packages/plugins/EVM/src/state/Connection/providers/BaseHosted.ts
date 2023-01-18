@@ -28,7 +28,7 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         super(providerType)
 
         // setup storage
-        SharedContextSettings.readyPromise.then((context) => {
+        SharedContextSettings.readyPromise.then(async (context) => {
             const { storage } = context.createKVStorage('memory', {}).createSubScope(`${this.providerType}_hosted`, {
                 account: this.options.getDefaultAccount(),
                 chainId: this.options.getDefaultChainId(),
@@ -36,12 +36,13 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
 
             this.hostedStorage = storage
 
-            this.hostedStorage?.account.subscription.subscribe(() => {
-                if (this.hostedAccount) this.emitter.emit('accounts', [this.hostedAccount])
-            })
-            this.hostedStorage?.chainId.subscription.subscribe(() => {
-                if (this.hostedChainId) this.emitter.emit('chainId', toHex(this.hostedChainId))
-            })
+            await this.hostedStorage.account.initializedPromise
+            await this.hostedStorage.chainId.initializedPromise
+
+            this.onAccountChanged()
+            this.onChainChanged()
+            this.hostedStorage?.account.subscription.subscribe(this.onAccountChanged.bind(this))
+            this.hostedStorage?.chainId.subscription.subscribe(this.onChainChanged.bind(this))
         })
     }
 
@@ -61,6 +62,14 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
 
     get hostedChainId() {
         return this.hostedStorage?.chainId.value ?? this.options.getDefaultChainId()
+    }
+
+    private onAccountChanged() {
+        if (this.hostedAccount) this.emitter.emit('accounts', [this.hostedAccount])
+    }
+
+    private onChainChanged() {
+        if (this.hostedChainId) this.emitter.emit('chainId', toHex(this.hostedChainId))
     }
 
     /**

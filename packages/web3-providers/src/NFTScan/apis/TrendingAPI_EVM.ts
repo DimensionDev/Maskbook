@@ -6,9 +6,8 @@ import {
     NonFungibleCollectionOverview,
     NonFungibleTokenActivity,
 } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { ChainId, isValidChainId } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import { COIN_RECOMMENDATION_SIZE } from '../../Trending/constants.js'
 import type { EVM, Response } from '../types/index.js'
 import { fetchFromNFTScanV2, getContractSymbol, createNonFungibleAsset } from '../helpers/EVM.js'
@@ -23,10 +22,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
     private looksrare = new LooksRareAPI()
     private opensea = new OpenSeaAPI()
 
-    private async getCollection(
-        chainId: Web3Helper.ChainIdAll,
-        id: string,
-    ): Promise<NonFungibleTokenAPI.Collection | undefined> {
+    private async getCollection(chainId: ChainId, id: string): Promise<NonFungibleTokenAPI.Collection | undefined> {
         const path = urlcat('/api/v2/collections/:address', {
             address: id,
             contract_address: id,
@@ -51,20 +47,16 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
         return response?.data ?? EMPTY_LIST
     }
 
-    async getCollectionOverview(
-        chainId: Web3Helper.ChainIdAll,
-        id: string,
-    ): Promise<NonFungibleCollectionOverview | undefined> {
+    async getCollectionOverview(chainId: ChainId, id: string): Promise<NonFungibleCollectionOverview | undefined> {
         const path = urlcat('/api/v2/statistics/collection/:address', {
             address: id,
         })
-
         const response = await fetchFromNFTScanV2<Response<NonFungibleCollectionOverview>>(chainId, path)
         if (!response?.data) return
         return response.data
     }
 
-    async getAssetsBatch(chainId: Web3Helper.ChainIdAll, list: Array<{ contract_address: string; token_id: string }>) {
+    async getAssetsBatch(chainId: ChainId, list: Array<{ contract_address: string; token_id: string }>) {
         const path = urlcat('/api/v2/assets/batch', {})
         const response = await fetchFromNFTScanV2<Response<EVM.Asset[]>>(chainId, path, {
             method: 'POST',
@@ -77,19 +69,21 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinActivities(
-        chainId: Web3Helper.ChainIdAll,
+        chainId: ChainId,
         id: string,
         cursor: string,
-    ): Promise<{ content: NonFungibleTokenActivity[]; cursor: string } | undefined> {
+    ): Promise<{ content: Array<NonFungibleTokenActivity<ChainId, SchemaType>>; cursor: string } | undefined> {
         const path = urlcat('/api/v2/transactions/:contract', {
             contract: id,
             cursor,
             limit: 50,
         })
-        const response = await fetchFromNFTScanV2<Response<{ content: NonFungibleTokenActivity[]; next: string }>>(
-            chainId,
-            path,
-        )
+        const response = await fetchFromNFTScanV2<
+            Response<{
+                content: Array<NonFungibleTokenActivity<ChainId, SchemaType>>
+                next: string
+            }>
+        >(chainId, path)
 
         if (!response?.data?.content) return
 
@@ -108,7 +102,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
                     ...x,
                     nftscan_uri: asset?.metadata?.imageURL ?? '',
                     transaction_link: `${resolveNFTScanHostName(NetworkPluginID.PLUGIN_EVM, chainId)}/${x.hash}`,
-                    trade_token_logo: getPaymentToken(chainId, { symbol: x.trade_symbol })?.logoURL ?? '',
+                    trade_token: getPaymentToken(chainId, { symbol: x.trade_symbol }),
                 }
             }),
         }
@@ -163,7 +157,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinTrending(
-        chainId: Web3Helper.ChainIdAll,
+        chainId: ChainId,
         /** address as id */ id: string,
         currency: TrendingAPI.Currency,
     ): Promise<TrendingAPI.Trending> {
@@ -173,7 +167,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
         }
         const address = collection.contract_address
         const [symbol, openseaStats, looksrareStats] = await Promise.all([
-            getContractSymbol(id, chainId),
+            getContractSymbol(chainId, id),
             this.opensea.getStats(address).catch(() => null),
             this.looksrare.getStats(address).catch(() => null),
         ])
@@ -205,7 +199,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
         return {
             lastUpdated: new Date().toJSON(),
             dataProvider: SourceType.NFTScan,
-            contracts: [{ chainId, address }],
+            contracts: [{ chainId, address, pluginID: NetworkPluginID.PLUGIN_EVM }],
             currency,
             coin: {
                 id,

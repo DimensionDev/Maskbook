@@ -6,6 +6,7 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { LoadingButton } from '@mui/lab'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
+import { Trans } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { Services } from '../../../../API.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
@@ -52,11 +53,15 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(({ open, onClo
                     {t.personas_logout_warning()}
                 </Typography>
                 {manageWallets.length ? (
-                    <Typography color="error" variant="body2" fontSize={13}>
-                        {t.personas_logout_manage_wallet_warning({
-                            persona: nickname ?? '',
-                            addresses: manageWallets.map((x) => formatEthereumAddress(x.address, 4)).join(','),
-                        })}
+                    <Typography color="error" variant="body2" fontSize={13} sx={{ wordBreak: 'break-all' }}>
+                        <Trans
+                            i18nKey="personas_logout_manage_wallet_warning"
+                            values={{
+                                persona: nickname ?? '',
+                                addresses: manageWallets.map((x) => formatEthereumAddress(x.address, 4)).join(','),
+                            }}
+                            components={{ span: <Typography component="span" sx={{ wordBreak: 'break-all' }} /> }}
+                        />
                     </Typography>
                 ) : null}
             </DialogContent>

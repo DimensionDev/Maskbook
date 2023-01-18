@@ -1,17 +1,7 @@
-import getUnixTime from 'date-fns/getUnixTime'
 import { first } from 'lodash-es'
-import { unreachable } from '@masknet/kit'
-import type { BlockHeaderObject, BlockObject, MutateOptions, QueryOptions } from '@blocto/fcl'
-import {
-    AddressType,
-    ChainId,
-    createNativeToken,
-    isNativeTokenAddress,
-    ProviderType,
-    SchemaType,
-    TransactionStatusCode,
-} from '@masknet/web3-shared-flow'
-import {
+import type { BlockObject, MutateOptions, QueryOptions } from '@blocto/fcl'
+import { AddressType, ChainId, ProviderType, SchemaType } from '@masknet/web3-shared-flow'
+import type {
     Account,
     FungibleToken,
     NonFungibleToken,
@@ -22,6 +12,7 @@ import {
 } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { PartialRequired, toHex } from '@masknet/shared-base'
+import { FlowWeb3 } from '@masknet/web3-providers'
 import { Providers } from './provider.js'
 import type { FlowWeb3Connection as BaseConnection, FlowConnectionOptions } from './types.js'
 import { Web3StateSettings } from '../../settings/index.js'
@@ -33,6 +24,7 @@ class Connection implements BaseConnection {
         private providerType: ProviderType,
         private context?: Plugin.Shared.SharedContext,
     ) {}
+
     private getOptions(
         initial?: FlowConnectionOptions,
         overrides?: Partial<FlowConnectionOptions>,
@@ -96,14 +88,11 @@ class Connection implements BaseConnection {
     }
     async getBlock(no: number, initial?: FlowConnectionOptions): Promise<BlockObject | null> {
         const options = this.getOptions(initial)
-        const web3 = this.getWeb3(options)
-        return web3.send([web3.getBlock(), web3.atBlockHeight(no)]).then(web3.decode)
+        return FlowWeb3.getBlock(options.chainId, no)
     }
     async getBlockTimestamp(initial?: FlowConnectionOptions): Promise<number> {
         const options = this.getOptions(initial)
-        const web3 = this.getWeb3(options)
-        const blockHeader: BlockHeaderObject = await web3.send([web3.getBlockHeader()]).then(web3.decode)
-        return getUnixTime(new Date(blockHeader.timestamp as unknown as string))
+        return FlowWeb3.getBlockTimestamp(options.chainId)
     }
     approveFungibleToken(
         address: string,
@@ -152,19 +141,14 @@ class Connection implements BaseConnection {
     }
     getNativeToken(initial?: FlowConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.getOptions(initial)
-        const token = createNativeToken(options.chainId)
-        return Promise.resolve(token)
+        return FlowWeb3.getNativeToken(options.chainId)
     }
     getNativeTokenBalance(initial?: FlowConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
     getFungibleTokenBalance(address: string, schema?: SchemaType, initial?: FlowConnectionOptions): Promise<string> {
         const options = this.getOptions(initial)
-        if (!address || isNativeTokenAddress(address)) {
-            return this.getNativeTokenBalance(options)
-        }
-        // TODO
-        return Promise.resolve('0')
+        return FlowWeb3.getFungibleTokenBalance(options.chainId, address, options.account, schema)
     }
     getNonFungibleTokenBalance(
         address: string,
@@ -189,13 +173,9 @@ class Connection implements BaseConnection {
     getCode(address: string, initial?: FlowConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-
     getFungibleToken(address: string, initial?: FlowConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.getOptions(initial)
-        if (!address || isNativeTokenAddress(address)) {
-            return this.getNativeToken(options)
-        }
-        throw new Error('Method not implemented.')
+        return FlowWeb3.getFungibleToken(options.chainId, address)
     }
     async getNonFungibleToken(
         address: string,
@@ -242,50 +222,27 @@ class Connection implements BaseConnection {
     }
     async getBlockNumber(initial?: FlowConnectionOptions): Promise<number> {
         const options = this.getOptions(initial)
-        const web3 = this.getWeb3(options)
-        const blockHeader = await web3.send([web3.getBlockHeader()]).then(web3.decode)
-        return blockHeader.height
+        return FlowWeb3.getBlockNumber(options.chainId)
     }
     async getBalance(address: string, initial?: FlowConnectionOptions): Promise<string> {
         const options = this.getOptions(initial)
-        const web3 = this.getWeb3(options)
-        const account = await web3.send([web3.getAccount(address)]).then(web3.decode)
-        return account.balance.toFixed()
+        return FlowWeb3.getBalance(options.chainId, address)
     }
     async getTransaction(id: string, initial?: FlowConnectionOptions) {
         const options = this.getOptions(initial)
-        const web3 = this.getWeb3(options)
-        return web3.getTransaction(id)
+        return FlowWeb3.getTransaction(options.chainId, id)
     }
     async getTransactionReceipt(id: string, initial?: FlowConnectionOptions) {
-        return null
+        const options = this.getOptions(initial)
+        return FlowWeb3.getTransactionReceipt(options.chainId, id)
     }
     async getTransactionStatus(id: string, initial?: FlowConnectionOptions): Promise<TransactionStatusType> {
         const options = this.getOptions(initial)
-        const web3 = this.getWeb3(options)
-        const { status } = web3.getTransactionStatus(id)
-        const status_ = status as TransactionStatusCode
-        switch (status_) {
-            case TransactionStatusCode.UNKNOWN:
-                return TransactionStatusType.NOT_DEPEND
-            case TransactionStatusCode.PENDING:
-            case TransactionStatusCode.FINALIZED:
-            case TransactionStatusCode.EXECUTED:
-                return TransactionStatusType.NOT_DEPEND
-            case TransactionStatusCode.SEALED:
-                return TransactionStatusType.NOT_DEPEND
-            case TransactionStatusCode.EXPIRED:
-                return TransactionStatusType.FAILED
-            default:
-                unreachable(status_)
-        }
+        return FlowWeb3.getTransactionStatus(options.chainId, id)
     }
     async getTransactionNonce(address: string, initial?: FlowConnectionOptions): Promise<number> {
         const options = this.getOptions(initial)
-        const web3 = this.getWeb3(options)
-        const account = web3.getAccount(address)
-        const key = first(account.keys)
-        return key?.sequenceNumber ?? 0
+        return FlowWeb3.getTransactionNonce(options.chainId, address)
     }
     async switchChain(chainId: ChainId, initial?: FlowConnectionOptions): Promise<void> {
         const options = this.getOptions(initial)
@@ -318,8 +275,7 @@ class Connection implements BaseConnection {
     }
     async callTransaction(query: QueryOptions, initial?: FlowConnectionOptions) {
         const options = this.getOptions(initial)
-        const web3 = this.getWeb3(options)
-        return web3.query(query)
+        return FlowWeb3.callTransaction(options.chainId, query)
     }
     async sendTransaction(mutation: MutateOptions, initial?: FlowConnectionOptions): Promise<string> {
         const options = this.getOptions(initial)

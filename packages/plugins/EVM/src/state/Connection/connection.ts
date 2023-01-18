@@ -3,7 +3,7 @@ import { AbiItem, toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import { getSubscriptionCurrentValue, PartialRequired, Proof } from '@masknet/shared-base'
+import type { ECKeyIdentifier, PartialRequired, Proof } from '@masknet/shared-base'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
 import type { ERC1155 } from '@masknet/web3-contracts/types/ERC1155.js'
@@ -39,13 +39,11 @@ import {
 } from '@masknet/web3-shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
-import { createContext, dispatch } from './composer.js'
+import { dispatch } from './composer.js'
+import { createContext } from './context.js'
 import { Providers } from './provider.js'
 import type { EVM_Connection, EVM_Web3ConnectionOptions } from './types.js'
 import { Web3StateSettings } from '../../settings/index.js'
-
-const EMPTY_STRING = Promise.resolve('')
-const ZERO = Promise.resolve(0)
 
 class Connection implements EVM_Connection {
     constructor(
@@ -498,8 +496,23 @@ class Connection implements EVM_Connection {
     }
 
     async estimateTransaction(transaction: Transaction, fallback = 21000, initial?: EVM_Web3ConnectionOptions) {
-        const options = this.getOptions(initial)
-        return Web3.estimateTransaction(options.chainId, transaction, fallback)
+        try {
+            const options = this.getOptions(initial)
+            return this.hijackedRequest<string>(
+                {
+                    method: EthereumMethodType.ETH_ESTIMATE_GAS,
+                    params: [
+                        {
+                            from: options.account,
+                            ...transaction,
+                        },
+                    ],
+                },
+                options,
+            )
+        } catch {
+            return toHex(fallback)
+        }
     }
 
     getTransactionReceipt(hash: string, initial?: EVM_Web3ConnectionOptions) {
@@ -647,14 +660,19 @@ class Connection implements EVM_Connection {
         const contract = this.getWalletContract(options.account, options)
         if (!contract) throw new Error('Failed to create contract.')
 
+        const tx = {
+            from: options.account,
+            to: options.account,
+            data: contract.methods.transfer(recipient, amount).encodeABI(),
+        }
+
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_TRANSACTION,
                 params: [
                     {
-                        from: options.account,
-                        to: options.account,
-                        data: contract.methods.transfer(recipient, amount).encodeABI(),
+                        ...tx,
+                        gas: await this.estimateTransaction(tx, 50000, options),
                     },
                 ],
             },
@@ -667,14 +685,19 @@ class Connection implements EVM_Connection {
         const contract = this.getWalletContract(options.account, options)
         if (!contract) throw new Error('Failed to create contract.')
 
+        const tx = {
+            from: options.account,
+            to: options.account,
+            data: contract.methods.changeOwner(recipient).encodeABI(),
+        }
+
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_TRANSACTION,
                 params: [
                     {
-                        from: options.account,
-                        to: options.account,
-                        data: contract.methods.changeOwner(recipient).encodeABI(),
+                        ...tx,
+                        gas: await this.estimateTransaction(tx, 50000, options),
                     },
                 ],
             },
@@ -693,12 +716,16 @@ class Connection implements EVM_Connection {
         )
     }
 
-    async deploy(owner: string, initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
+    async deploy(
+        owner: string,
+        identifier?: ECKeyIdentifier,
+        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.MASK_DEPLOY,
-                params: [owner],
+                params: [owner, identifier],
             },
             options,
         )
@@ -722,9 +749,14 @@ class Connection implements EVM_Connection {
         return new Promise<string>((resolve, reject) => {
             if (!this.Transaction || !this.TransactionWatcher) reject(new Error('No context found.'))
 
-            const onProgress = async (id: string, status: TransactionStatusType, transaction?: Transaction) => {
+            const onProgress = async (
+                chainId: ChainId,
+                id: string,
+                status: TransactionStatusType,
+                transaction?: Transaction,
+            ) => {
                 if (status === TransactionStatusType.NOT_DEPEND) return
-                const transactions = await getSubscriptionCurrentValue(() => this.Transaction?.transactions)
+                const transactions = await this.Transaction?.getTransactions?.(chainId, transaction?.from!)
                 const currentTransaction = transactions?.find((x) => {
                     const hashes = Object.keys(x.candidates)
                     return hashes.includes(hash) && hashes.includes(id)
@@ -737,13 +769,7 @@ class Connection implements EVM_Connection {
 
     sendSignedTransaction(signature: string, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
-        return this.hijackedRequest<string>(
-            {
-                method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
-                params: [signature],
-            },
-            options,
-        )
+        return Web3.sendSignedTransaction(options.chainId, signature)
     }
 
     replaceTransaction(hash: string, transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {

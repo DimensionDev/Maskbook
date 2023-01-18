@@ -3,7 +3,6 @@ import { useAsyncFn } from 'react-use'
 import { PluginID, NetworkPluginID, isDashboardPage, CrossIsolationMessages, TokenType } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import {
-    Web3ContextProvider,
     useChainContext,
     useChainIdValid,
     useNetworkContext,
@@ -80,7 +79,7 @@ export function TraderDialog() {
     const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
     const { pluginID } = useNetworkContext()
     const { Others } = useWeb3State()
-    const chainIdList = traderDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
+    const chainIdList = traderDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -205,19 +204,18 @@ export function TraderDialog() {
                             indicator: classes.indicator,
                         }}
                         chains={chainIdList}
+                        pluginID={NetworkPluginID.PLUGIN_EVM}
                     />
                 </div>
-                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId }}>
-                    <AllProviderTradeContext.Provider>
-                        <Trader
-                            defaultInputCoin={defaultInputCoin ? inputToken : undefined}
-                            defaultOutputCoin={defaultOutputCoin ? outputToken : undefined}
-                            chainId={chainId}
-                            classes={{ root: classes.tradeRoot }}
-                            ref={tradeRef}
-                        />
-                    </AllProviderTradeContext.Provider>
-                </Web3ContextProvider>
+                <AllProviderTradeContext.Provider>
+                    <Trader
+                        defaultInputCoin={defaultInputCoin ? inputToken : undefined}
+                        defaultOutputCoin={defaultOutputCoin ? outputToken : undefined}
+                        chainId={chainId}
+                        classes={{ root: classes.tradeRoot }}
+                        ref={tradeRef}
+                    />
+                </AllProviderTradeContext.Provider>
             </DialogContent>
         </InjectedDialog>
     )

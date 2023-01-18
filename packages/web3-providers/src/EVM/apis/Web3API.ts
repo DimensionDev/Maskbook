@@ -26,6 +26,7 @@ import {
     createNativeToken,
     getTokenConstant,
     getEthereumConstant,
+    TransactionSignature,
 } from '@masknet/web3-shared-evm'
 import {
     FungibleToken,
@@ -75,6 +76,7 @@ export class Web3API
             Transaction,
             TransactionDetailed,
             TransactionReceipt,
+            TransactionSignature,
             Block,
             Web3Provider,
             Web3
@@ -317,8 +319,6 @@ export class Web3API
                     {
                         ...transaction,
                         value: transaction.value ? toHex(transaction.value) : undefined,
-                        // rpc hack, alchemy rpc must pass gas parameter
-                        gas: chainId === ChainId.Astar ? '0x135168' : undefined,
                     },
                 ],
             })
@@ -356,7 +356,7 @@ export class Web3API
             ],
         })
     }
-    sendSignedTransaction(chainId: ChainId, signed: string): Promise<string> {
+    async sendSignedTransaction(chainId: ChainId, signed: string): Promise<string> {
         const provider = this.getWeb3Provider(chainId)
         return provider.request<string>({
             method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,

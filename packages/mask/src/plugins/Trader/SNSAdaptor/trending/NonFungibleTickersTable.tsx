@@ -15,7 +15,7 @@ import { Icons } from '@masknet/icons'
 import { TokenIcon, FormattedAddress, Image, WalletIcon } from '@masknet/shared'
 import { useScrollBottomEvent } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useWeb3State, useNetworkDescriptor } from '@masknet/web3-hooks-base'
+import { useWeb3State, useNetworkDescriptor, useFungibleToken } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatCurrency } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
@@ -124,7 +124,6 @@ export function NonFungibleTickersTable({
         id,
         chainId,
     )
-    const chain = useNetworkDescriptor(result.pluginID, chainId)
     useScrollBottomEvent(containerRef, fetchMore)
     const headCellMap: Record<Cells, string> = {
         nft: t('plugin_trader_table_nft'),
@@ -161,34 +160,11 @@ export function NonFungibleTickersTable({
                         </div>
                     </div>
                 ),
-                value: (
-                    <div className={classes.cellWrapper}>
-                        {result.pluginID === NetworkPluginID.PLUGIN_SOLANA ? (
-                            <div className={classes.tokenIcon}>
-                                <WalletIcon mainIcon={chain?.icon} size={16} />
-                            </div>
-                        ) : x.trade_symbol?.toUpperCase() === 'WETH' ? (
-                            <Icons.WETH size={16} className={classes.tokenIcon} />
-                        ) : (
-                            <TokenIcon
-                                logoURL={x.trade_token_logo}
-                                symbol={x.trade_symbol}
-                                address={x.contract_address}
-                                className={classes.tokenIcon}
-                            />
-                        )}
-
-                        <Typography fontSize={12}>
-                            {formatCurrency((x.trade_price ?? x.fee ?? 0).toFixed(4), '', {
-                                boundaries: { min: 0.00001 },
-                            })}
-                        </Typography>
-                    </div>
-                ),
+                value: <TransactionValue chainId={chainId} activity={x} result={result} />,
                 from: (
                     <Typography fontSize={12}>
                         <FormattedAddress
-                            address={x.from ?? x.source}
+                            address={x.send ?? x.from ?? x.source}
                             formatter={(address) =>
                                 Others?.formatAddress(Others?.formatDomainName(address, 12), 4) ?? address
                             }
@@ -198,7 +174,7 @@ export function NonFungibleTickersTable({
                 to: (
                     <Typography fontSize={12}>
                         <FormattedAddress
-                            address={x.send ?? x.receive ?? x.destination}
+                            address={x.receive ?? x.destination}
                             formatter={(address) =>
                                 Others?.formatAddress(Others?.formatDomainName(address, 12), 4) ?? address
                             }
@@ -277,5 +253,44 @@ export function NonFungibleTickersTable({
                 </Table>
             )}
         </TableContainer>
+    )
+}
+
+interface TransactionValueProps {
+    result: Web3Helper.TokenResultAll
+    chainId: Web3Helper.ChainIdAll
+    activity: Web3Helper.NonFungibleTokenActivityAll
+}
+
+function TransactionValue({ result, chainId, activity }: TransactionValueProps) {
+    const { classes } = useStyles({ isNFTProjectPopper: false })
+    const chain = useNetworkDescriptor(result.pluginID, chainId)
+    const { value: token } = useFungibleToken(result.pluginID, activity.trade_token?.address, activity.trade_token, {
+        chainId: result.chainId,
+    })
+
+    return (
+        <div className={classes.cellWrapper}>
+            {result.pluginID === NetworkPluginID.PLUGIN_SOLANA ? (
+                <div className={classes.tokenIcon}>
+                    <WalletIcon mainIcon={chain?.icon} size={16} />
+                </div>
+            ) : activity.trade_symbol?.toUpperCase() === 'WETH' ? (
+                <Icons.WETH size={16} className={classes.tokenIcon} />
+            ) : (
+                <TokenIcon
+                    logoURL={token?.logoURL || activity.trade_token?.logoURL}
+                    symbol={activity.trade_symbol}
+                    address={activity.contract_address}
+                    className={classes.tokenIcon}
+                />
+            )}
+
+            <Typography fontSize={12}>
+                {formatCurrency((activity.trade_price ?? activity.fee ?? 0).toFixed(4), '', {
+                    boundaries: { min: 0.00001 },
+                })}
+            </Typography>
+        </div>
     )
 }

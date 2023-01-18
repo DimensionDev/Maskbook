@@ -1,12 +1,12 @@
 import { identity, pickBy } from 'lodash-es'
-import { hexToNumber, toHex } from 'web3-utils'
+import { toHex } from 'web3-utils'
 import type {
     BaseContract,
     PayableTx,
     NonPayableTransactionObject,
     PayableTransactionObject,
 } from '@masknet/web3-contracts/types/types.js'
-import { ChainId, Transaction } from '../types/index.js'
+import type { Transaction } from '../types/index.js'
 
 type TransactionResolver<T extends BaseContract | null> =
     | PayableTransactionObject<unknown>
@@ -66,8 +66,6 @@ export class ContractTransaction<T extends BaseContract | null> {
                     to: transactionEncoded.to,
                     data: transactionEncoded.data,
                     value: transactionEncoded.value,
-                    // rpc hack, alchemy rpc must pass gas parameter
-                    gas: hexToNumber(overrides?.chainId ?? '0x0') === ChainId.Astar ? '0x135168' : undefined,
                 })
 
                 if (gas) {

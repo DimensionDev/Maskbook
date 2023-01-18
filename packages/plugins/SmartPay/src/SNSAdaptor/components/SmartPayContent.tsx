@@ -146,6 +146,20 @@ const useStyles = makeStyles()((theme) => ({
     },
     menu: {
         padding: theme.spacing(1.5),
+        maxHeight: 320,
+    },
+    menuPaper: {
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 20,
+        },
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+            backgroundClip: 'padding-box',
+        },
     },
 }))
 
@@ -183,7 +197,7 @@ export const SmartPayContent = memo(() => {
         chainId,
     })
 
-    const { value: maskToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, maskAddress)
+    const { value: maskToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, maskAddress, undefined, { chainId })
 
     const { PAYMASTER_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
     const { value: allowance = '0' } = useERC20TokenAllowance(maskAddress, PAYMASTER_CONTRACT_ADDRESS, {
@@ -279,6 +293,9 @@ export const SmartPayContent = memo(() => {
             MenuListProps: {
                 className: classes.menu,
             },
+            classes: {
+                paper: classes.menuPaper,
+            },
         },
     )
 
@@ -310,8 +327,8 @@ export const SmartPayContent = memo(() => {
 
     const [{ loading: openSendLoading }, handleSendClick] = useAsyncFn(async () => {
         await connectToCurrent()
-        await openPopupWindow(PopupRoutes.Transfer, { toBeClose: 1 })
-    }, [connectToCurrent, openPopupWindow])
+        await openPopupWindow(PopupRoutes.Transfer, { toBeClose: 1, selectedToken: maskToken?.address })
+    }, [connectToCurrent, openPopupWindow, maskToken])
 
     const handleReceiveClick = useCallback(() => {
         setReceiveDialog({

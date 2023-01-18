@@ -2,22 +2,21 @@ import { useUpdateEffect } from 'react-use'
 import { useNetworkDescriptors, useNetworkContext, useChainContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { MaskTabList, useTabs } from '@masknet/theme'
-import { WalletIcon } from '../WalletIcon/index.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { TabContext } from '@mui/lab'
 import { Stack, Tab, Typography } from '@mui/material'
+import { WalletIcon } from '../WalletIcon/index.js'
 
-interface NetworkTabProps<T extends NetworkPluginID>
-    extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
-    chains: Array<Web3Helper.Definition[T]['ChainId']>
+interface NetworkTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
+    chains: Array<Web3Helper.Definition[NetworkPluginID]['ChainId']>
     hideArrowButton?: boolean
+    pluginID: NetworkPluginID
 }
 
-export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EVM>(props: NetworkTabProps<T>) {
+export function NetworkTab(props: NetworkTabProps) {
     const { chains } = props
-    const { pluginID } = useNetworkContext()
+    const { pluginID } = useNetworkContext(props.pluginID)
     const { chainId, setChainId } = useChainContext()
-
     const networks = useNetworkDescriptors(pluginID)
     const usedNetworks = networks.filter((x) => chains.find((c) => c === x.chainId))
     const networkIds = usedNetworks.map((x) => x.chainId.toString())

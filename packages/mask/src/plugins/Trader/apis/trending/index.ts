@@ -1,14 +1,9 @@
-import { SourceType, NonFungibleCollectionOverview, NonFungibleTokenActivity } from '@masknet/web3-shared-base'
+import { SourceType, NonFungibleCollectionOverview } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import {
-    CoinGeckoTrending,
-    CoinMarketCap,
-    NFTScanTrending_EVM,
-    NFTScanTrending_Solana,
-    UniSwap,
-} from '@masknet/web3-providers'
+import { CoinGeckoTrending, CoinMarketCap, NFTScanTrending_EVM, NFTScanTrending_Solana } from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
+import type { ChainId as ChainIdSolana } from '@masknet/web3-shared-solana'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { Currency, Stat, Trending } from '../../types/index.js'
 
@@ -26,13 +21,12 @@ export async function getCoinTrending(
         case SourceType.CoinGecko:
             return CoinGeckoTrending.getCoinTrending(chainId, id, currency)
         case SourceType.CoinMarketCap:
-            return CoinMarketCap.getCoinTrending(chainId, id, currency)
-        case SourceType.UniswapInfo:
-            return UniSwap.getCoinTrending(chainId, id, currency)
+            return CoinMarketCap.getCoinTrending(chainId as ChainIdEVM, id, currency)
+
         case SourceType.NFTScan:
             return pluginID === NetworkPluginID.PLUGIN_SOLANA
-                ? NFTScanTrending_Solana.getCoinTrending(chainId, name, currency)
-                : NFTScanTrending_EVM.getCoinTrending(chainId, address, currency)
+                ? NFTScanTrending_Solana.getCoinTrending(chainId as ChainIdSolana, name, currency)
+                : NFTScanTrending_EVM.getCoinTrending(chainId as ChainIdEVM, address, currency)
         default:
             return
     }
@@ -41,7 +35,7 @@ export async function getCoinTrending(
 
 // #region get price stats info
 export async function getPriceStats(
-    chainId: ChainId,
+    chainId: Web3Helper.ChainIdAll,
     id: string,
     currency: Currency,
     days: number,
@@ -50,17 +44,15 @@ export async function getPriceStats(
     switch (dataProvider) {
         case SourceType.CoinGecko:
             return CoinGeckoTrending.getCoinPriceStats(
-                chainId,
+                chainId as ChainIdEVM,
                 id,
                 currency,
                 days === TrendingAPI.Days.MAX ? 11430 : days,
             )
         case SourceType.CoinMarketCap:
-            return CoinMarketCap.getCoinPriceStats(chainId, id, currency, days)
-        case SourceType.UniswapInfo:
-            return UniSwap.getCoinPriceStats(chainId, id, currency, days)
+            return CoinMarketCap.getCoinPriceStats(chainId as ChainIdEVM, id, currency, days)
         case SourceType.NFTScan:
-            return NFTScanTrending_EVM.getCoinPriceStats(chainId, id, currency, days)
+            return NFTScanTrending_EVM.getCoinPriceStats(chainId as ChainIdEVM, id, currency, days)
         default:
             return EMPTY_LIST
     }
@@ -74,8 +66,8 @@ export async function getNFT_TrendingOverview(
     result: Web3Helper.TokenResultAll,
 ): Promise<NonFungibleCollectionOverview | undefined> {
     return pluginID === NetworkPluginID.PLUGIN_SOLANA
-        ? NFTScanTrending_Solana.getCollectionOverview(chainId, result.name)
-        : NFTScanTrending_EVM.getCollectionOverview(chainId, result.address ?? '')
+        ? NFTScanTrending_Solana.getCollectionOverview(chainId as ChainIdSolana, result.name)
+        : NFTScanTrending_EVM.getCollectionOverview(chainId as ChainIdEVM, result.address ?? '')
 }
 // #endregion
 
@@ -85,9 +77,9 @@ export async function getNonFungibleTokenActivities(
     chainId: Web3Helper.ChainIdAll,
     contractAddress: string,
     cursor: string,
-): Promise<{ content: NonFungibleTokenActivity[]; cursor: string } | undefined> {
+): Promise<{ content: Web3Helper.NonFungibleTokenActivityAll[]; cursor: string } | undefined> {
     return pluginID === NetworkPluginID.PLUGIN_SOLANA
-        ? NFTScanTrending_Solana.getCoinActivities(chainId, contractAddress, cursor)
-        : NFTScanTrending_EVM.getCoinActivities(chainId, contractAddress, cursor)
+        ? NFTScanTrending_Solana.getCoinActivities(chainId as ChainIdSolana, contractAddress, cursor)
+        : NFTScanTrending_EVM.getCoinActivities(chainId as ChainIdEVM, contractAddress, cursor)
 }
 // #endregion

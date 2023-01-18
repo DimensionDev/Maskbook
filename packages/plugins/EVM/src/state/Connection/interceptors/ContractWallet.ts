@@ -1,42 +1,45 @@
 import type { AbiItem } from 'web3-utils'
-import type { BundlerAPI, AbstractAccountAPI } from '@masknet/web3-providers/types'
+import type { BundlerAPI, AbstractAccountAPI, FunderAPI } from '@masknet/web3-providers/types'
 import { NetworkPluginID, SignType } from '@masknet/shared-base'
 import {
+    ChainId,
+    ConnectionContext,
     createContract,
     EthereumMethodType,
     isValidAddress,
+    Middleware,
     ProviderType,
     Signer,
     Transaction,
 } from '@masknet/web3-shared-evm'
-import { SmartPayFunder, Web3 } from '@masknet/web3-providers'
+import { Web3 } from '@masknet/web3-providers'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
-import type { Middleware, Context } from '../types.js'
 import { Providers } from '../provider.js'
 import type { BaseContractWalletProvider } from '../providers/BaseContractWallet.js'
 import { SharedContextSettings } from '../../../settings/index.js'
 
-export class ContractWallet implements Middleware<Context> {
+export class ContractWallet implements Middleware<ConnectionContext> {
     constructor(
         protected providerType: ProviderType,
         protected account: AbstractAccountAPI.Provider<NetworkPluginID.PLUGIN_EVM>,
         protected bundler: BundlerAPI.Provider,
+        protected funder: FunderAPI.Provider<ChainId>,
     ) {}
 
-    private createWallet(context: Context) {
+    private createWallet(context: ConnectionContext) {
         const web3 = Web3.getWeb3(context.chainId)
         const contract = createContract<WalletContract>(web3, context.account, WalletABI as AbiItem[])
         if (!contract) throw new Error('Failed to create wallet contract.')
         return contract
     }
 
-    private async getNonce(context: Context) {
+    private async getNonce(context: ConnectionContext) {
         const walletContract = this.createWallet(context)
         return walletContract.methods.nonce().call()
     }
 
-    private getSigner(context: Context) {
+    private getSigner(context: ConnectionContext) {
         if (context.identifier) return new Signer(context.identifier, SharedContextSettings.value.signWithPersona)
         if (context.owner)
             return new Signer(context.owner, (type: SignType, message: string | Transaction, account: string) => {
@@ -63,7 +66,7 @@ export class ContractWallet implements Middleware<Context> {
         throw new Error('Failed to create signer.')
     }
 
-    private async send(context: Context): Promise<string> {
+    private async send(context: ConnectionContext): Promise<string> {
         if (!context.owner) throw new Error('No owner.')
         if (context.userOperation)
             return this.account.sendUserOperation(
@@ -73,48 +76,47 @@ export class ContractWallet implements Middleware<Context> {
                 this.getSigner(context),
             )
         if (context.config)
-            return this.account.sendTransaction(
-                context.chainId,
-                context.owner,
-                context.config,
-                this.getSigner(context),
-                context.config.gasCurrency,
-            )
+            return this.account.sendTransaction(context.chainId, context.owner, context.config, this.getSigner(context))
         throw new Error('No user operation to be sent.')
     }
 
-    private estimate(context: Context): Promise<string> {
+    private estimate(context: ConnectionContext): Promise<string> {
         if (context.userOperation) return this.account.estimateUserOperation(context.chainId, context.userOperation)
         if (context.config) return this.account.estimateTransaction(context.chainId, context.config)
         throw new Error('No user operation to be estimated.')
     }
 
-    private async fund(context: Context) {
+    private async fund(context: ConnectionContext) {
         if (!context.proof) throw new Error('No proof.')
-        return SmartPayFunder.fund(context.chainId, context.proof)
+        return this.funder.fund(context.chainId, context.proof)
     }
 
-    private async deploy(context: Context) {
+    private async deploy(context: ConnectionContext) {
         if (!context.owner) throw new Error('No owner.')
         return this.account.deploy(context.chainId, context.owner, this.getSigner(context))
     }
 
-    async fn(context: Context, next: () => Promise<void>) {
+    async fn(context: ConnectionContext, next: () => Promise<void>) {
         const provider = Providers[context.providerType] as BaseContractWalletProvider | undefined
 
+        if (!context.writeable) {
+            await next()
+            return
+        }
+
         // not a SC wallet provider
-        if (!provider?.ownerAccount) {
+        if (!provider?.ownerAccount && !context.owner) {
             await next()
             return
         }
 
         switch (context.request.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
-                context.write(provider.hostedChainId)
+                context.write(provider?.hostedChainId)
                 break
             case EthereumMethodType.ETH_ACCOUNTS:
-                if (isValidAddress(provider.hostedAccount)) {
-                    context.write([provider.hostedAccount])
+                if (isValidAddress(provider?.hostedAccount)) {
+                    context.write([provider?.hostedAccount])
                 } else {
                     context.abort(new Error('Please connect a wallet.'))
                 }
@@ -188,7 +190,9 @@ export class ContractWallet implements Middleware<Context> {
                 break
             case EthereumMethodType.MASK_FUND:
                 try {
-                    context.write(await this.fund(context))
+                    const { message } = await this.fund(context)
+                    if (!isValidAddress(message.walletAddress)) throw new Error('Failed to fund.')
+                    context.write(message.tx)
                 } catch (error) {
                     context.abort(error)
                 }

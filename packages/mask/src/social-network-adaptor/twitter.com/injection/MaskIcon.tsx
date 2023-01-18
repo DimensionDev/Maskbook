@@ -1,17 +1,17 @@
-import { MutationObserverWatcher, DOMProxy, LiveSelector } from '@dimensiondev/holoflows-kit'
-import { bioPageUserNickNameSelector, floatingBioCardSelector, bioPageUserIDSelector } from '../utils/selector.js'
-import type { PostInfo } from '@masknet/plugin-infra/content-script'
-import Services from '../../../extension/service.js'
-import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
-import { MaskIcon } from '@masknet/shared'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { Icons } from '@masknet/icons'
 import { memoizePromise } from '@masknet/kit'
-import { startWatch } from '../../../utils/watcher.js'
+import type { PostInfo } from '@masknet/plugin-infra/content-script'
+import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { memoize } from 'lodash-es'
+import Services from '../../../extension/service.js'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { startWatch } from '../../../utils/watcher.js'
+import { bioPageUserIDSelector, bioPageUserNickNameSelector, floatingBioCardSelector } from '../utils/selector.js'
 
 function Icon(props: { size: number }) {
     return (
-        <MaskIcon
+        <Icons.MaskBlue
             size={props.size}
             style={{
                 verticalAlign: 'text-bottom',

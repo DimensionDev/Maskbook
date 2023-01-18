@@ -47,6 +47,7 @@ export const NetworkSection: FC<Props> = () => {
                     tabPaper: classes.tabPaper,
                 }}
                 chains={chainIdList}
+                pluginID={pluginID}
             />
         </div>
     )

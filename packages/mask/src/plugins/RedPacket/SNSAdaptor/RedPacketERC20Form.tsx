@@ -20,7 +20,6 @@ import {
     ChainBoundary,
     WalletConnectedBoundary,
     EthereumERC20TokenApprovedBoundary,
-    SelectGasSettingsToolbar,
 } from '@masknet/shared'
 import {
     useFungibleToken,
@@ -93,7 +92,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         origin?.token,
     )
 
-    const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
+    const selectFungibleToken = useSelectFungibleToken<void, NetworkPluginID.PLUGIN_EVM>()
     const onSelectTokenChipClick = useCallback(async () => {
         const picked = await selectFungibleToken({
             disableNativeToken: false,
@@ -269,18 +268,6 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     value={message}
                 />
             </Box>
-            {nativeToken && nativeTokenPrice ? (
-                <Box margin={2}>
-                    <SelectGasSettingsToolbar
-                        supportMultiCurrency={chainId === smartPayChainId}
-                        nativeToken={nativeToken}
-                        nativeTokenPrice={nativeTokenPrice}
-                        gasConfig={gasOption}
-                        gasLimit={Number.parseInt(params?.gas ?? '0', 10)}
-                        onChange={onGasOptionChange}
-                    />
-                </Box>
-            ) : null}
             <Box style={{ width: '100%' }}>
                 <PluginWalletStatusBar>
                     <ChainBoundary

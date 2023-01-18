@@ -28,7 +28,7 @@ import { AlchemyEVM_API, AlchemyFlowAPI } from './Alchemy/index.js'
 import { Web3API, Web3GasOptionAPI } from './EVM/index.js'
 import { MagicEdenAPI } from './MagicEden/index.js'
 import { CoinMarketCapAPI } from './CoinMarketCap/index.js'
-import { UniSwapAPI } from './Uniswap/index.js'
+import { UniswapAPI } from './Uniswap/index.js'
 import { RabbyAPI } from './Rabby/index.js'
 import { GemAPI } from './Gem/index.js'
 import { X2Y2API } from './X2Y2/index.js'
@@ -50,9 +50,10 @@ import { NomicsAPI } from './Nomics/index.js'
 import { DSearchAPI } from './DSearch/index.js'
 import { MulticallAPI } from './Multicall/index.js'
 import { ENS_API } from './ENS/index.js'
-import { SpaceID_API } from './SpaceID/index.js'
 import { LensAPI } from './Lens/index.js'
 import { Web3SignerAPI } from './EVM/apis/Web3SignerAPI.js'
+import { FlowWeb3API } from './Flow/apis/Web3API.js'
+import { SolanaWeb3API } from './Solana/apis/Web3API.js'
 
 export * from './Sentry/index.js'
 export { resolveActivityTypeBackgroundColor } from './entry-helpers.js'
@@ -90,7 +91,7 @@ export const Web3GasOption = new Web3GasOptionAPI()
 export const Web3Signer = new Web3SignerAPI()
 export const Nomics = new NomicsAPI()
 export const CoinMarketCap = new CoinMarketCapAPI()
-export const UniSwap = new UniSwapAPI()
+export const Uniswap = new UniswapAPI()
 export const Rabby = new RabbyAPI()
 export const X2Y2 = new X2Y2API()
 export const Cloudflare = new CloudflareAPI()
@@ -102,9 +103,11 @@ export const AlchemyEVM = new AlchemyEVM_API()
 export const AlchemyFlow = new AlchemyFlowAPI()
 
 // Flow RPC
+export const FlowWeb3 = new FlowWeb3API()
 export const FlowFungible = new FlowFungibleAPI()
 
 // Solana RPC
+export const SolanaWeb3 = new SolanaWeb3API()
 export const SolanaFungible = new SolanaFungibleAPI()
 export const SolanaNonFungible = new SolanaNonFungibleAPI()
 
@@ -128,9 +131,6 @@ export const ZerionGas = new ZerionGasAPI()
 
 // ENS
 export const ENS = new ENS_API()
-
-// SpaceID
-export const SpaceID = new SpaceID_API()
 
 // Fuse
 export const FuseTrending = new FuseTrendingAPI()

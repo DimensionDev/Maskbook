@@ -435,7 +435,7 @@ export interface NonFungibleCollectionOverview {
     average_price?: number
 }
 
-export interface NonFungibleTokenActivity {
+export interface NonFungibleTokenActivity<ChainId, SchemaType> {
     hash: string
     event_type: ActivityType
     transaction_link: string
@@ -453,7 +453,7 @@ export interface NonFungibleTokenActivity {
     cover: string
     contract_address: string
     token_id?: string
-    trade_token_logo: string
+    trade_token?: FungibleToken<ChainId, SchemaType>
     trade_symbol?: string
     // #region solana
     source?: string
@@ -647,7 +647,11 @@ export interface Result<ChainId> {
     /** The original searched keyword */
     keyword: string
     /** alias name list, e.g. binance for bnb. */
-    alias?: string[]
+    alias?: Array<{
+        value: string
+        // If pin this to top of results
+        isPin?: boolean
+    }>
 }
 
 export interface EOAResult<ChainId> extends Result<ChainId> {
@@ -672,7 +676,6 @@ export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId
     name: string
     symbol: string
     source: SourceType
-    alias?: string[]
     token?: FungibleToken<ChainId, SchemaType>
 }
 
@@ -814,6 +817,8 @@ export interface Wallet {
     updatedAt: Date
     /** an abstract wallet has a owner */
     owner?: string
+    /** an abstract wallet has been deployed */
+    deployed?: boolean
     /** persona identifier */
     identifier?: ECKeyIdentifier
 }
@@ -901,11 +906,11 @@ export interface RecognizableError extends Error {
     isRecognized?: boolean
 }
 
-export interface WatchEvents<Transaction> {
+export interface WatchEvents<ChainId, Transaction> {
     /** Emit when error occur */
     error: [RecognizableError, JsonRpcPayload]
     /** Emit when the watched transaction status updated. */
-    progress: [string, TransactionStatusType, Transaction | undefined]
+    progress: [ChainId, string, TransactionStatusType, Transaction | undefined]
 }
 
 export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
@@ -1139,7 +1144,7 @@ export interface Connection<
     /** Fund contract wallet */
     fund?: (proof: Proof, initial?: Web3ConnectionOptions) => Promise<string>
     /** Deploy contract wallet */
-    deploy?: (owner: string, initial?: Web3ConnectionOptions) => Promise<string>
+    deploy?: (owner: string, identifier?: ECKeyIdentifier, initial?: Web3ConnectionOptions) => Promise<string>
     /** Sign a transaction */
     signTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): Promise<TransactionSignature>
     /** Sign multiple transactions */
@@ -1191,6 +1196,10 @@ export interface HubOptions<ChainId, Indicator = HubIndicator> {
 }
 
 export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
+    getFungibleToken?: (
+        address: string,
+        initial?: Web3HubOptions,
+    ) => Promise<FungibleToken<ChainId, SchemaType> | undefined>
     /** Get a fungible asset. */
     getFungibleAsset?: (
         address: string,
@@ -1511,6 +1520,8 @@ export interface TransactionState<ChainId, Transaction> {
     /** The tracked transactions of currently chosen sub-network */
     transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
 
+    /** Get a transaction record. */
+    getTransaction?: (chainId: ChainId, address: string, id: string) => Promise<Transaction | undefined>
     /** Add a transaction record. */
     addTransaction?: (chainId: ChainId, address: string, id: string, transaction: Transaction) => Promise<void>
     /** Replace a transaction with new record. */
@@ -1530,6 +1541,8 @@ export interface TransactionState<ChainId, Transaction> {
     ) => Promise<void>
     /** Remove a transaction record. */
     removeTransaction?: (chainId: ChainId, address: string, id: string) => Promise<void>
+    /** Get all transaction records. */
+    getTransactions?: (chainId: ChainId, address: string) => Promise<Array<RecentTransaction<ChainId, Transaction>>>
     /** Clear all transactions of the account under given chain */
     clearTransactions?: (chainId: ChainId, address: string) => Promise<void>
 }
@@ -1553,7 +1566,7 @@ export interface TransactionWatcherState<ChainId, Transaction> {
     ready: boolean
     readyPromise: Promise<void>
 
-    emitter: Emitter<WatchEvents<Transaction>>
+    emitter: Emitter<WatchEvents<ChainId, Transaction>>
 
     /** Add a transaction into the watch list. */
     watchTransaction: (chainId: ChainId, id: string, transaction: Transaction) => Promise<void>

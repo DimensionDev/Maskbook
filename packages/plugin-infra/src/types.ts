@@ -232,6 +232,8 @@ export namespace Plugin.Shared {
         ): Promise<JsonRpcResponse | void>
         /** Reject a request */
         rejectRequest(payload: JsonRpcPayload): Promise<void>
+
+        hasPaymentPassword(): Promise<boolean>
     }
 
     export interface Definition<

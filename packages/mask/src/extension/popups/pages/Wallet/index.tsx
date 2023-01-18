@@ -50,8 +50,10 @@ export default function Wallet() {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         chainId: wallet?.owner && smartPayChainId ? smartPayChainId : undefined,
     })
+
     const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
+
     const { loading, retry } = useAsyncRetry(async () => {
         if (
             [
@@ -93,7 +95,7 @@ export default function Wallet() {
         ) {
             navigate(PopupRoutes.ContractInteraction, { replace: true })
         }
-    }, [location.search, location.pathname, chainId])
+    }, [location.search, location.pathname, chainId, TransactionFormatter])
 
     useEffect(() => {
         if (!(isLocked && !getLockStatusLoading && !exclusionDetectLocked.some((x) => x === location.pathname))) return

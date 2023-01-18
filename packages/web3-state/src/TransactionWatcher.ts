@@ -161,7 +161,7 @@ export class TransactionWatcherState<ChainId, Transaction>
     private watchers: Map<ChainId, Watcher<ChainId, Transaction>> = new Map()
 
     public storage: StorageItem<TransactionWatcher<ChainId, Transaction>> = null!
-    public emitter: Emitter<WatchEvents<Transaction>> = new Emitter()
+    public emitter: Emitter<WatchEvents<ChainId, Transaction>> = new Emitter()
 
     constructor(
         protected context: Plugin.Shared.SharedContext,

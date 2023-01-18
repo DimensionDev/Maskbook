@@ -6,15 +6,15 @@ import {
     getTokens,
     getUserViaWebAPI,
     getDefaultUserSettings,
-    getUserSettingsCached,
+    getUserSettings,
     getUserViaTwitterIdentity,
     staleUserViaWebAPI,
+    getUserNFTAvatar,
     getUserNFTContainer,
     staleUserViaIdentity,
 } from './apis/index.js'
 import type { TwitterBaseAPI } from '../entry-types.js'
 import { fetchJSON } from '../entry-helpers.js'
-import { getUserNFTAvatar } from './apis/getUserNFTAvatar.js'
 
 const UPLOAD_AVATAR_URL = 'https://upload.twitter.com/i/media/upload.json'
 const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
@@ -22,21 +22,18 @@ const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
 export class TwitterAPI implements TwitterBaseAPI.Provider {
     getAvatarId(avatarURL?: string) {
         if (!avatarURL) return ''
-        const url = new URL(avatarURL)
-        const match = url.pathname.match(TWITTER_AVATAR_ID_MATCH)
-        if (!match) return ''
-
-        return match[1]
+        const match = new URL(avatarURL).pathname.match(TWITTER_AVATAR_ID_MATCH)
+        return match ? match[1] : ''
     }
+
     getSettings() {
         return getSettings()
     }
 
-    async getUserSettings(fresh = false) {
+    async getUserSettings() {
         const defaults = getDefaultUserSettings()
         try {
-            if (fresh) await this.staleUserSettings()
-            const userSettings = await timeout(getUserSettingsCached(), 5000)
+            const userSettings = await timeout(getUserSettings(), 5000)
             return {
                 ...defaults,
                 ...userSettings,
@@ -44,10 +41,6 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         } catch {
             return defaults
         }
-    }
-
-    async staleUserSettings() {
-        getUserSettingsCached.cache.clear()
     }
 
     async getUserNftContainer(screenName: string) {
@@ -101,9 +94,9 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             credentials: 'include',
             headers,
         })
-        const mediaId = initRes.media_id_string
-        // APPEND
 
+        // APPEND
+        const mediaId = initRes.media_id_string
         const appendURL = `${UPLOAD_AVATAR_URL}?command=APPEND&media_id=${mediaId}&segment_index=0`
         const formData = new FormData()
         formData.append('media', image)

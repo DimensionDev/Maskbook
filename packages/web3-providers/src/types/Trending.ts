@@ -74,7 +74,6 @@ export namespace TrendingAPI {
         facebook_url?: string
         twitter_url?: string
         telegram_url?: string
-        pluginID?: NetworkPluginID
     }
 
     export interface CoinInfo {
@@ -144,6 +143,7 @@ export namespace TrendingAPI {
         chainId?: Web3Helper.ChainIdAll
         address: string
         icon_url?: string
+        pluginID: NetworkPluginID
     }
 
     export interface Trending {

@@ -1,14 +1,15 @@
 import { PluginSnapshotRPC } from '../../messages.js'
 import type { ProposalIdentifier, VoteItem } from '../../types.js'
 import { cache, use } from 'react'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { useProposal } from './useProposal.js'
 import { sumBy } from 'lodash-es'
 
 const Request = cache(Suspender)
-export function useVotes(identifier: ProposalIdentifier) {
-    return use(Request(identifier.id, identifier.space))
+export function useVotes(identifier: ProposalIdentifier, account?: string) {
+    return use(Request(identifier.id, identifier.space, account))
 }
-async function Suspender(id: ProposalIdentifier['id'], space: ProposalIdentifier['space']) {
+async function Suspender(id: ProposalIdentifier['id'], space: ProposalIdentifier['space'], account?: string) {
     const proposal = useProposal(id)
 
     const voters = proposal.votes.map((v) => v.voter)
@@ -54,6 +55,6 @@ async function Suspender(id: ProposalIdentifier['id'], space: ProposalIdentifier
                 timestamp: v.created,
             }
         })
-        .sort((a, b) => b.balance - a.balance)
+        .sort((a, b) => (isSameAddress(a.address, account) ? -1 : b.balance - a.balance))
         .filter((v) => v.balance > 0)
 }

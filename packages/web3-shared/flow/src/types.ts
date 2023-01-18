@@ -1,7 +1,7 @@
 /// <reference path="./blocto-fcl.d.ts" />
 /// <reference types="@masknet/global-types/webpack" />
 
-import type { MutateOptions, BlockObject, TransactionObject } from '@blocto/fcl'
+import type { MutateOptions, BlockObject, TransactionObject, QueryOptions, BlockHeaderObject } from '@blocto/fcl'
 
 export enum ChainId {
     Mainnet = 1,
@@ -53,8 +53,10 @@ export type Web3Provider = {}
 export type Signature = string
 export type GasOption = never
 export type Block = BlockObject
+export type BlockHeader = BlockHeaderObject
 export type Operation = never
 export type Transaction = MutateOptions
+export type TransactionQuery = QueryOptions
 export type TransactionReceipt = never
 export type TransactionDetailed = TransactionObject
 export type TransactionSignature = never

@@ -72,4 +72,5 @@ export const RestPartOfPluginUIContextShared: Omit<
     addWallet: WalletRPC.updateWallet,
     updateWallet: WalletRPC.updateWallet,
     removeWallet: WalletRPC.removeWallet,
+    hasPaymentPassword: WalletRPC.hasPassword,
 }

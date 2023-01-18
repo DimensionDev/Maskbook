@@ -1,13 +1,14 @@
 import { Icons } from '@masknet/icons'
 import { useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { SourceType, formatCurrency, TokenType } from '@masknet/web3-shared-base'
+import { PluginTransakMessages, useTransakAllowanceCoin } from '@masknet/plugin-transak'
 import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
-import { PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles, MaskColors, MaskLightTheme, MaskDarkTheme } from '@masknet/theme'
+import { MaskColors, MaskDarkTheme, MaskLightTheme, makeStyles } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
+import { SourceType, TokenType, formatCurrency } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import {
     Avatar,
@@ -21,18 +22,15 @@ import {
     useTheme,
 } from '@mui/material'
 import { first, last, uniqBy } from 'lodash-es'
-import { useCallback, useRef, useState, useContext } from 'react'
+import { useCallback, useContext, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils/index.js'
-import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin.js'
-import { PluginTransakMessages } from '../../../Transak/messages.js'
-import type { Currency, Stat } from '../../types/index.js'
-import { useTrendingOverview } from '../../trending/useTrending.js'
+import { ContentTabs, Currency, Stat } from '../../types/index.js'
 import { CoinMenu } from './CoinMenu.js'
-import { TrendingViewContext } from './context.js'
-import { CoinIcon } from './components/index.js'
 import { PriceChanged } from './PriceChanged.js'
 import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
 import { TrendingViewDescriptor } from './TrendingViewDescriptor.js'
+import { CoinIcon } from './components/index.js'
+import { TrendingViewContext } from './context.js'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -53,7 +51,7 @@ const useStyles = makeStyles<{
                 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
         },
         headline: {
-            marginTop: props.isNFTProjectPopper || props.isTokenTagPopper ? 0 : 30,
+            marginTop: props.isNFTProjectPopper || props.isTokenTagPopper ? 0 : 16,
             alignItems: 'center',
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -136,6 +134,7 @@ const useStyles = makeStyles<{
 export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | 'footer' | 'content' | 'cardHeader'> {
     stats: Stat[]
     currency: Currency
+    currentTab: ContentTabs
     trending: TrendingAPI.Trending
     setResult: (a: Web3Helper.TokenResultAll) => void
     result: Web3Helper.TokenResultAll
@@ -145,12 +144,10 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
 }
 
 export function TrendingViewDeck(props: TrendingViewDeckProps) {
-    const { trending, stats, children, TrendingCardProps, resultList = [], result, setResult } = props
+    const { trending, stats, children, TrendingCardProps, resultList = [], result, setResult, currentTab } = props
 
     const { coin, market } = trending
     const { isNFTProjectPopper, isTokenTagPopper, isPreciseSearch } = useContext(TrendingViewContext)
-
-    const { value: overview } = useTrendingOverview(result.pluginID, result, props.trending.coin.chainId)
 
     const { t } = useI18N()
     const theme = useTheme()
@@ -191,7 +188,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     const displayResultList = uniqBy(
         [result, ...resultList],
-        (x) => `${x.address?.toLowerCase()}_${x.chainId}_${x.type}`,
+        (x) => `${x.address?.toLowerCase()}_${x.chainId}_${x.type}_${x.name?.toLowerCase()}`,
     )
 
     return (
@@ -305,17 +302,15 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             {t('plugin_trader_no_data')}
                                         </Typography>
                                     )}
-                                    <PriceChanged
-                                        amount={
-                                            market?.price_change_percentage_1h_in_currency ??
-                                            market?.price_change_24h ??
-                                            (overview?.average_price_change
-                                                ? Number.parseFloat(overview?.average_price_change ?? '0')
-                                                : overview?.average_price_change_1d
-                                                ? Number.parseFloat(overview?.average_price_change_1d ?? '0')
-                                                : 0)
-                                        }
-                                    />
+                                    {isNFT ? null : (
+                                        <PriceChanged
+                                            amount={
+                                                market?.price_change_percentage_1h_in_currency ??
+                                                market?.price_change_24h ??
+                                                0
+                                            }
+                                        />
+                                    )}
                                 </Stack>
                                 {isTokenSecurityEnable && tokenSecurityInfo && !error && !isNFT && (
                                     <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
@@ -329,11 +324,12 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 <Paper className={classes.body} elevation={0}>
                     {children}
                 </Paper>
-                {isNFTProjectPopper || isTokenTagPopper ? (
-                    <section className={classes.pluginDescriptorWrapper}>
-                        <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
-                    </section>
-                ) : null}
+                {isNFTProjectPopper ||
+                    (isTokenTagPopper && currentTab !== ContentTabs.Swap && (
+                        <section className={classes.pluginDescriptorWrapper}>
+                            <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
+                        </section>
+                    ))}
             </CardContent>
         </TrendingCard>
     )

@@ -1,9 +1,8 @@
-import { EthereumMethodType, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
-import type { Context } from '../types.js'
+import { ConnectionContext, EthereumMethodType, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
 import { Base } from './Base.js'
 
 export class Polygon extends Base {
-    override async encode(context: Context): Promise<void> {
+    override async encode(context: ConnectionContext): Promise<void> {
         await super.encode(context)
         if (!context.config) return
 

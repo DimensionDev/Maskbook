@@ -13,15 +13,15 @@ export class ERC20Descriptor implements TransactionDescriptor {
         const connection = Web3StateSettings.value.Connection?.getConnection?.({
             chainId: context.chainId,
         })
-        for (const method of context.methods) {
-            const parameters = method.parameters
+        const hub = Web3StateSettings.value.Hub?.getHub?.({
+            chainId: context.chainId,
+        })
 
-            switch (method.name) {
+        for (const { name, parameters } of context.methods) {
+            switch (name) {
                 case 'approve':
                     if (parameters?.spender === undefined || parameters?.value === undefined) break
-                    const token = await connection?.getFungibleToken(context.to ?? '', {
-                        chainId: context.chainId,
-                    })
+                    const token = await hub?.getFungibleToken?.(context.to ?? '', { chainId: context.chainId })
                     if (isZero(parameters?.value)) {
                         return {
                             chainId: context.chainId,
@@ -65,16 +65,14 @@ export class ERC20Descriptor implements TransactionDescriptor {
             }
 
             if (
-                (method.name === 'transfer' || method.name === 'transferFrom') &&
+                (name === 'transfer' || name === 'transferFrom') &&
                 parameters?.to &&
                 parameters.value &&
                 !parameters.tokenId
             ) {
                 const schemaType = await connection?.getSchemaType(context.to ?? '', { chainId: context.chainId })
                 if (schemaType === SchemaType.ERC721) return
-                const token = await connection?.getFungibleToken(context.to ?? '', {
-                    chainId: context.chainId,
-                })
+                const token = await hub?.getFungibleToken?.(context.to ?? '', { chainId: context.chainId })
                 return {
                     chainId: context.chainId,
                     tokenInAddress: token?.address,

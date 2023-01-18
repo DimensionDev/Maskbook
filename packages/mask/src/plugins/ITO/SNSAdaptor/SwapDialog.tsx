@@ -111,7 +111,7 @@ export function SwapDialog(props: SwapDialogProps) {
         swapAmount.isZero() ? '' : leftShift(swapAmount, swapToken?.decimals).toFixed(),
     )
     // #region select token
-    const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
+    const selectFungibleToken = useSelectFungibleToken<void, NetworkPluginID.PLUGIN_EVM>()
     const onSelectTokenChipClick = useCallback(async () => {
         const picked = await selectFungibleToken({
             disableNativeToken: !exchangeTokens.some((x) => isNativeTokenAddress(x.address)),

@@ -54,13 +54,16 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         fontWeight: 400,
     },
+    gridItemValue: {
+        fontSize: 14,
+        fontWeight: 700,
+    },
     amountWrapper: {
         display: 'flex',
         alignItems: 'center',
     },
     amount: {
         marginLeft: 4,
-        fontWeight: 700,
     },
 }))
 
@@ -89,30 +92,28 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
             <TableContainer className={classes.container} component={Paper} elevation={0}>
                 <Table size="small">
                     <TableBody>
-                        {SourceType.UniswapInfo !== dataProvider ? (
-                            <TableRow>
-                                <TableCell className={classes.head} component="th">
-                                    <Typography color="textSecondary" variant="body2" className={classes.label}>
-                                        {t('plugin_trader_market_cap')}
-                                    </Typography>
-                                </TableCell>
-                                <TableCell className={classes.cell}>
-                                    {market?.market_cap ? formatMarketCap(market.market_cap) : '--'}
-                                </TableCell>
-                            </TableRow>
-                        ) : null}
-                        {SourceType.UniswapInfo !== dataProvider ? (
-                            <TableRow>
-                                <TableCell className={classes.head} component="th">
-                                    <Typography color="textSecondary" variant="body2" className={classes.label}>
-                                        {t('plugin_trader_circulating_supply')}
-                                    </Typography>
-                                </TableCell>
-                                <TableCell className={classes.cell}>
-                                    {formatSupply(market?.circulating_supply, '--')}
-                                </TableCell>
-                            </TableRow>
-                        ) : null}
+                        <TableRow>
+                            <TableCell className={classes.head} component="th">
+                                <Typography color="textSecondary" variant="body2" className={classes.label}>
+                                    {t('plugin_trader_market_cap')}
+                                </Typography>
+                            </TableCell>
+                            <TableCell className={classes.cell}>
+                                {market?.market_cap ? formatMarketCap(market.market_cap) : '--'}
+                            </TableCell>
+                        </TableRow>
+
+                        <TableRow>
+                            <TableCell className={classes.head} component="th">
+                                <Typography color="textSecondary" variant="body2" className={classes.label}>
+                                    {t('plugin_trader_circulating_supply')}
+                                </Typography>
+                            </TableCell>
+                            <TableCell className={classes.cell}>
+                                {formatSupply(market?.circulating_supply, '--')}
+                            </TableCell>
+                        </TableRow>
+
                         <TableRow>
                             <TableCell className={classes.head} component="th">
                                 <Typography color="textSecondary" variant="body2" className={classes.label}>
@@ -123,18 +124,14 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                                 {market?.total_volume ? `$${formatSupply(market.total_volume)}` : '--'}
                             </TableCell>
                         </TableRow>
-                        {dataProvider !== SourceType.UniswapInfo ? (
-                            <TableRow>
-                                <TableCell className={classes.head} component="th">
-                                    <Typography color="textSecondary" variant="body2" className={classes.label}>
-                                        {t('plugin_trader_total_supply')}
-                                    </Typography>
-                                </TableCell>
-                                <TableCell className={classes.cell}>
-                                    {formatSupply(market?.total_supply, '--')}
-                                </TableCell>
-                            </TableRow>
-                        ) : null}
+                        <TableRow>
+                            <TableCell className={classes.head} component="th">
+                                <Typography color="textSecondary" variant="body2" className={classes.label}>
+                                    {t('plugin_trader_total_supply')}
+                                </Typography>
+                            </TableCell>
+                            <TableCell className={classes.cell}>{formatSupply(market?.total_supply, '--')}</TableCell>
+                        </TableRow>
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -146,7 +143,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
     const { t } = useI18N()
     const chainId = props.result.chainId ?? props.trending.coin.chainId
     const { value: overview } = useTrendingOverview(props.result.pluginID, props.result, chainId)
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const chain = useNetworkDescriptor(props.result.pluginID ?? NetworkPluginID.PLUGIN_EVM, chainId)
     const ChainIcon = () => <WalletIcon mainIcon={chain?.icon} size={14} />
     return (
@@ -156,13 +153,17 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
                         {t('plugin_trader_total_assets')}
                     </Typography>
-                    {formatSupply(overview?.items_total, '--')}
+                    <Typography color="textPrimary" variant="body2" className={classes.gridItemValue}>
+                        {formatSupply(overview?.items_total, '--')}
+                    </Typography>
                 </Grid>
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
                         {t('plugin_trader_owners_count')}
                     </Typography>
-                    {formatInteger(overview?.owners_total, '--')}
+                    <Typography color="textPrimary" variant="body2" className={classes.gridItemValue}>
+                        {formatInteger(overview?.owners_total, '--')}
+                    </Typography>
                 </Grid>
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
@@ -170,7 +171,12 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                     </Typography>
                     <div className={classes.amountWrapper}>
                         {overview?.market_cap ? <ChainIcon /> : null}
-                        <span className={classes.amount}>{formatInteger(overview?.market_cap, '--')}</span>
+                        <Typography
+                            color="textPrimary"
+                            variant="body2"
+                            className={cx(classes.gridItemValue, classes.amount)}>
+                            {formatInteger(overview?.market_cap, '--')}
+                        </Typography>
                     </div>
                 </Grid>
                 <Grid item className={classes.gridItem}>
@@ -179,7 +185,12 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                     </Typography>
                     <div className={classes.amountWrapper}>
                         {overview?.highest_price ? <ChainIcon /> : null}
-                        <span className={classes.amount}>{formatSupply(overview?.highest_price, '--')}</span>
+                        <Typography
+                            color="textPrimary"
+                            variant="body2"
+                            className={cx(classes.gridItemValue, classes.amount)}>
+                            {formatSupply(overview?.highest_price, '--')}
+                        </Typography>
                     </div>
                 </Grid>
 
@@ -189,7 +200,12 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                     </Typography>
                     <div className={classes.amountWrapper}>
                         {overview?.total_volume ? <ChainIcon /> : null}
-                        <span className={classes.amount}>{formatSupply(overview?.total_volume, '--')}</span>
+                        <Typography
+                            color="textPrimary"
+                            variant="body2"
+                            className={cx(classes.gridItemValue, classes.amount)}>
+                            {formatSupply(overview?.total_volume, '--')}
+                        </Typography>
                     </div>
                 </Grid>
 
@@ -199,9 +215,12 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                     </Typography>
                     <div className={classes.amountWrapper}>
                         {overview?.average_price_24h ?? overview?.average_price ? <ChainIcon /> : null}
-                        <span className={classes.amount}>
+                        <Typography
+                            color="textPrimary"
+                            variant="body2"
+                            className={cx(classes.gridItemValue, classes.amount)}>
                             {formatSupply(overview?.average_price_24h ?? overview?.average_price, '--')}
-                        </span>
+                        </Typography>
                     </div>
                 </Grid>
 
@@ -211,9 +230,12 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                     </Typography>
                     <div className={classes.amountWrapper}>
                         {overview?.volume_24h ?? overview?.volume ? <ChainIcon /> : null}
-                        <span className={classes.amount}>
+                        <Typography
+                            color="textPrimary"
+                            variant="body2"
+                            className={cx(classes.gridItemValue, classes.amount)}>
                             {formatSupply(overview?.volume_24h ?? overview?.volume, '--')}
-                        </span>
+                        </Typography>
                     </div>
                 </Grid>
 
@@ -221,7 +243,9 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
                         {t('plugin_trader_one_day_sale')}
                     </Typography>
-                    {formatSupply(overview?.sales_24h ?? overview?.sales, '--')}
+                    <Typography color="textPrimary" variant="body2" className={classes.gridItemValue}>
+                        {formatSupply(overview?.sales_24h ?? overview?.sales, '--')}
+                    </Typography>
                 </Grid>
             </Grid>
         </Stack>

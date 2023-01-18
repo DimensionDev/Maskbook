@@ -39,6 +39,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     list: {
         padding: theme.spacing(2, 0),
+        display: 'flex',
+        flexDirection: 'column',
+        rowGap: 10,
     },
     item: {
         display: 'flex',
@@ -80,6 +83,7 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
 
     return usePortalShadowRoot((container) => (
         <Popover
+            disableScrollLock
             container={container}
             open={open}
             anchorEl={anchorEl}

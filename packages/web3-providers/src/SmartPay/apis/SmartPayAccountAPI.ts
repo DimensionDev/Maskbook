@@ -5,7 +5,6 @@ import {
     ChainId,
     ContractWallet,
     Create2Factory,
-    EthereumMethodType,
     Signer,
     Transaction,
     UserOperation,
@@ -13,10 +12,11 @@ import {
     createContract,
     getSmartPayConstants,
     isEmptyHex,
+    isNativeTokenAddress,
     isValidAddress,
 } from '@masknet/web3-shared-evm'
 import { ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
-import { isSameAddress, toFixed } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import { LOG_ROOT, MAX_ACCOUNT_LENGTH } from '../constants.js'
@@ -25,29 +25,7 @@ import { SmartPayFunderAPI } from './SmartPayFunderAPI.js'
 import { MulticallAPI } from '../../Multicall/index.js'
 import { Web3API } from '../../EVM/index.js'
 import type { AbstractAccountAPI } from '../../entry-types.js'
-import { fetchJSON, fetchSquashed } from '../../entry-helpers.js'
-
-/**
- * A chainbase SQL query log
- *  select *
- *  from polygon.transaction_logs
- *  where block_number>36808978 -- the deployment block height of the logic wallet contract
- *  -- AND address="0x1778fcc4a26091d66e29dbb9aaa198cc652e73e1" -- the address of the WalletProxy contract (unknown)
- *  AND topics_count=3 -- the topics count of ChangeOwner event
- *  AND topic0="0xb532073b38c83145e3e5135377a08bf9aab55bc0fd7c1179cd4fb995d2a5159c" -- topic signature of ChangeOwner event
- *  -- AND topic1="..." The previousOwner address
- *  AND topic2="0x00000000000000000000000033a7209f653727a2ff688c81e661d61bcfffd809" -- the newOwner address (from FE)
- *  -- example tx: https://polygonscan.com/tx/0x7d381e3585d9b384e7ce6c910cccced02de0e29c02805a9286504f3067e09f4a
- */
-export interface Log {
-    transaction_hash: string
-    /** the address of contract account */
-    address: string
-    /** topic signature */
-    topic0: string
-    /** the previous owner address */
-    topic1: string
-}
+import { fetchJSON } from '../../entry-helpers.js'
 
 export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPluginID.PLUGIN_EVM> {
     private web3 = new Web3API()
@@ -142,14 +120,12 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
      * @returns
      */
     private async getAccountsFromChainbase(chainId: ChainId, owner: string) {
-        const { records: logs } = await fetchJSON<{ records: Log[]; count: number }>(
+        const { records: logs } = await fetchJSON<{ records: AbstractAccountAPI.Log[]; count: number }>(
             urlcat(LOG_ROOT, '/records', {
                 newOwnerAddress: padLeft(owner, 64),
                 size: MAX_ACCOUNT_LENGTH,
                 offset: 0,
             }),
-            {},
-            fetchSquashed,
         )
 
         if (!logs) {
@@ -218,6 +194,96 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
     }
 
+    /**
+     * The internal method to send a UserTransaction.
+     */
+    private async sendUserTransaction(
+        chainId: ChainId,
+        owner: string,
+        userTransaction: UserTransaction,
+        signer: Signer<ECKeyIdentifier> | Signer<string>,
+    ) {
+        const web3 = this.web3.getWeb3(chainId)
+
+        if (userTransaction.paymentToken && !isNativeTokenAddress(userTransaction.paymentToken)) {
+            await userTransaction.fillUserOperation(web3)
+
+            // fill in initCode
+            if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
+                const accounts = await this.getAccountsByOwner(chainId, owner)
+                const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
+
+                if (!accountsDeployed.length) {
+                    await userTransaction.fillUserOperation(web3, {
+                        initCode: await this.getInitCode(chainId, owner),
+                        nonce: accountsDeployed.length,
+                    })
+                }
+            }
+
+            return this.bundler.sendUserOperation(chainId, await userTransaction.signUserOperation(signer))
+        } else {
+            await userTransaction.fillTransaction(web3)
+            return this.web3.sendSignedTransaction(chainId, await userTransaction.signTransaction(web3, signer))
+        }
+    }
+
+    private async estimateUserTransaction(chainId: ChainId, userTransaction: UserTransaction) {
+        const web3 = this.web3.getWeb3(chainId)
+
+        if (userTransaction.paymentToken && !isNativeTokenAddress(userTransaction.paymentToken)) {
+            await userTransaction.fillUserOperation(web3)
+            return userTransaction.estimateUserOperation()
+        } else {
+            await userTransaction.fillTransaction(web3)
+            return userTransaction.estimateTransaction()
+        }
+    }
+
+    async sendTransaction(
+        chainId: ChainId,
+        owner: string,
+        transaction: Transaction,
+        signer: Signer<ECKeyIdentifier> | Signer<string>,
+        options?: AbstractAccountAPI.Options,
+    ): Promise<string> {
+        const entryPoint = await this.getEntryPoint(chainId)
+        const userTransaction = UserTransaction.fromTransaction(chainId, entryPoint, transaction, options)
+        return this.sendUserTransaction(chainId, owner, userTransaction, signer)
+    }
+
+    async sendUserOperation(
+        chainId: ChainId,
+        owner: string,
+        operation: UserOperation,
+        signer: Signer<ECKeyIdentifier> | Signer<string>,
+        options?: AbstractAccountAPI.Options,
+    ): Promise<string> {
+        const entryPoint = await this.getEntryPoint(chainId)
+        const userTransaction = UserTransaction.fromUserOperation(chainId, entryPoint, operation, options)
+        return this.sendUserTransaction(chainId, owner, userTransaction, signer)
+    }
+
+    async estimateTransaction(
+        chainId: ChainId,
+        transaction: Transaction,
+        options?: AbstractAccountAPI.Options,
+    ): Promise<string> {
+        const entryPoint = await this.getEntryPoint(chainId)
+        const userTransaction = UserTransaction.fromTransaction(chainId, entryPoint, transaction, options)
+        return this.estimateUserTransaction(chainId, userTransaction)
+    }
+
+    async estimateUserOperation(
+        chainId: ChainId,
+        operation: UserOperation,
+        options?: AbstractAccountAPI.Options,
+    ): Promise<string> {
+        const entryPoint = await this.getEntryPoint(chainId)
+        const userTransaction = UserTransaction.fromUserOperation(chainId, entryPoint, operation, options)
+        return this.estimateUserTransaction(chainId, userTransaction)
+    }
+
     async deploy(chainId: ChainId, owner: string, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {
         if (!isValidAddress(owner)) throw new Error('Invalid owner address.')
 
@@ -256,90 +322,5 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         signer: Signer<ECKeyIdentifier> | Signer<string>,
     ): Promise<string> {
         throw new Error('Method not implemented.')
-    }
-
-    /**
-     * The internal method to send a UserTransaction.
-     */
-    private async sendUserTransaction(
-        chainId: ChainId,
-        owner: string,
-        userTransaction: UserTransaction,
-        signer: Signer<ECKeyIdentifier> | Signer<string>,
-    ) {
-        if (userTransaction.paymentToken) {
-            // fill in initCode
-            if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
-                const accounts = await this.getAccountsByOwner(chainId, owner)
-                const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
-
-                if (!accountsDeployed.length) {
-                    await userTransaction.fill(this.web3.getWeb3(chainId), {
-                        initCode: await this.getInitCode(chainId, owner),
-                        nonce: accountsDeployed.length,
-                    })
-                }
-            }
-
-            return this.bundler.sendUserOperation(chainId, await userTransaction.signUserOperation(signer))
-        } else {
-            return this.web3.getWeb3Provider(chainId).request<string>({
-                method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
-                params: [await userTransaction.signTransaction(this.web3.getWeb3(chainId), signer)],
-            })
-        }
-    }
-
-    async sendTransaction(
-        chainId: ChainId,
-        owner: string,
-        transaction: Transaction,
-        signer: Signer<ECKeyIdentifier> | Signer<string>,
-        gasCurrency?: string,
-    ): Promise<string> {
-        const userTransaction = await UserTransaction.fromTransaction(
-            chainId,
-            this.web3.getWeb3(chainId),
-            await this.getEntryPoint(chainId),
-            transaction,
-            gasCurrency,
-        )
-        return this.sendUserTransaction(chainId, owner, userTransaction, signer)
-    }
-
-    async sendUserOperation(
-        chainId: ChainId,
-        owner: string,
-        userOperation: UserOperation,
-        signer: Signer<ECKeyIdentifier> | Signer<string>,
-    ): Promise<string> {
-        const userTransaction = await UserTransaction.fromUserOperation(
-            chainId,
-            this.web3.getWeb3(chainId),
-            await this.getEntryPoint(chainId),
-            userOperation,
-        )
-        return this.sendUserTransaction(chainId, owner, userTransaction, signer)
-    }
-
-    async estimateTransaction(chainId: ChainId, transaction: Transaction): Promise<string> {
-        const web3 = this.web3.getWeb3(chainId)
-        const userTransaction = await UserTransaction.fromTransaction(
-            chainId,
-            web3,
-            await this.getEntryPoint(chainId),
-            transaction,
-        )
-        return toFixed(await userTransaction.estimate(web3))
-    }
-
-    async estimateUserOperation(chainId: ChainId, userOperation: UserOperation): Promise<string> {
-        const userTransaction = await UserTransaction.fromUserOperation(
-            chainId,
-            this.web3.getWeb3(chainId),
-            await this.getEntryPoint(chainId),
-            userOperation,
-        )
-        return userTransaction.gas
     }
 }
