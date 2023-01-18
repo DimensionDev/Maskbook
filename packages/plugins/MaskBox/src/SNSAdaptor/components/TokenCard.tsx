@@ -5,7 +5,7 @@ import { NonFungibleTokenContract, SourceType } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { memo } from 'react'
-import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard.js'
+import { CollectibleCard } from './CollectibleCard.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
