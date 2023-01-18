@@ -158,7 +158,7 @@ export class UserTransaction {
     }
 
     async fillTransaction(web3: Web3) {
-        const { sender, nonce, callData, maxFeePerGas, maxPriorityFeePerGas } = this.userOperation
+        const { sender, nonce, callData, callGas, maxFeePerGas, maxPriorityFeePerGas } = this.userOperation
 
         // fill nonce
         if (sender && (typeof nonce === 'undefined' || nonce === 0)) {
@@ -172,29 +172,39 @@ export class UserTransaction {
             }
         }
 
-        try {
-            if (isEmptyHex(callData)) throw new Error('Invalid call data.')
-            const transaction = UserTransaction.toTransaction(this.chainId, this.userOperation)
-            if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
-            const walletContract = createContract<Wallet>(web3, sender, WalletABI as AbiItem[])
-            if (!walletContract) throw new Error('Failed to create wallet contract.')
-            const result = await walletContract?.methods
-                .exec(transaction.to, transaction.value ?? '0', transaction.data ?? '0x')
-                .estimateGas()
+        if (!isEmptyHex(callData)) {
+            try {
+                const transaction = UserTransaction.toTransaction(this.chainId, this.userOperation)
+                if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
+                const walletContract = createContract<Wallet>(web3, sender, WalletABI as AbiItem[])
+                if (!walletContract) throw new Error('Failed to create wallet contract.')
+                const estimatedGas =
+                    callGas ??
+                    (await walletContract?.methods
+                        .exec(transaction.to, transaction.value ?? '0', transaction.data ?? '0x')
+                        .estimateGas())
 
-            this.userOperation.callGas = toHex(result)
-        } catch (error) {
-            this.userOperation.callGas = DEFAULT_USER_OPERATION.callGas
+                this.userOperation.callGas = toHex(estimatedGas)
+            } catch (error) {
+                this.userOperation.callGas = callGas ?? DEFAULT_USER_OPERATION.callGas
+            }
+        } else {
+            this.userOperation.callGas = callGas ?? DEFAULT_USER_OPERATION.callGas
         }
 
         if (isZeroString(maxFeePerGas)) {
-            const block = await web3.eth.getBlock('latest')
-            this.userOperation.maxFeePerGas = toFixed(
-                new BigNumber(block.baseFeePerGas ?? 0).plus(
-                    maxPriorityFeePerGas ?? DEFAULT_USER_OPERATION.maxPriorityFeePerGas,
-                ),
-            )
+            try {
+                const block = await web3.eth.getBlock('latest')
+                this.userOperation.maxFeePerGas = toFixed(
+                    new BigNumber(block.baseFeePerGas ?? 0).plus(
+                        maxPriorityFeePerGas ?? DEFAULT_USER_OPERATION.maxPriorityFeePerGas,
+                    ),
+                )
+            } catch (error) {
+                this.userOperation.maxFeePerGas = DEFAULT_USER_OPERATION.maxPriorityFeePerGas
+            }
         }
+
         if (isZeroString(maxPriorityFeePerGas)) {
             this.userOperation.maxPriorityFeePerGas = DEFAULT_USER_OPERATION.maxPriorityFeePerGas
         }
@@ -214,6 +224,7 @@ export class UserTransaction {
             nonce,
             sender,
             callData,
+            callGas,
             verificationGas,
             preVerificationGas,
             maxFeePerGas,
@@ -228,7 +239,7 @@ export class UserTransaction {
             this.userOperation.sender = await entryPointContract.methods.getSenderAddress(initCode, nonce).call()
         }
 
-        // add more verification gas
+        // add more verification gas according to the size of initCode
         if (!isEmptyHex(initCode)) {
             this.userOperation.verificationGas = toFixed(
                 new BigNumber(DEFAULT_USER_OPERATION.verificationGas).plus(32000 + (200 * initCode.length) / 2),
@@ -250,26 +261,36 @@ export class UserTransaction {
             }
         }
 
-        try {
-            if (isEmptyHex(callData)) throw new Error('Invalid call data.')
-            const estimatedGas = await web3.eth.estimateGas({
-                from: this.entryPoint,
-                to: sender,
-                data: callData,
-            })
-            this.userOperation.callGas = toFixed(estimatedGas)
-        } catch (error) {
-            this.userOperation.callGas = DEFAULT_USER_OPERATION.callGas
+        if (!isEmptyHex(callData)) {
+            try {
+                this.userOperation.callGas = toFixed(
+                    callGas ??
+                        (await web3.eth.estimateGas({
+                            from: this.entryPoint,
+                            to: sender,
+                            data: callData,
+                        })),
+                )
+            } catch (error) {
+                this.userOperation.callGas = callGas ?? DEFAULT_USER_OPERATION.callGas
+            }
+        } else {
+            this.userOperation.callGas = callGas ?? DEFAULT_USER_OPERATION.callGas
         }
 
         if (isZeroString(maxFeePerGas)) {
-            const block = await web3.eth.getBlock('latest')
-            this.userOperation.maxFeePerGas = toFixed(
-                new BigNumber(block.baseFeePerGas ?? 0).plus(
-                    maxPriorityFeePerGas ?? DEFAULT_USER_OPERATION.maxPriorityFeePerGas,
-                ),
-            )
+            try {
+                const block = await web3.eth.getBlock('latest')
+                this.userOperation.maxFeePerGas = toFixed(
+                    new BigNumber(block.baseFeePerGas ?? 0).plus(
+                        maxPriorityFeePerGas ?? DEFAULT_USER_OPERATION.maxPriorityFeePerGas,
+                    ),
+                )
+            } catch (error) {
+                this.userOperation.maxFeePerGas = DEFAULT_USER_OPERATION.maxPriorityFeePerGas
+            }
         }
+
         if (isZeroString(maxPriorityFeePerGas)) {
             this.userOperation.maxPriorityFeePerGas = DEFAULT_USER_OPERATION.maxPriorityFeePerGas
         }
@@ -300,12 +321,12 @@ export class UserTransaction {
 
     estimateTransaction() {
         const { callGas = DEFAULT_USER_OPERATION.callGas } = this.userOperation
-        return toFixed(multipliedBy(callGas, 2))
+        return toHex(toFixed(multipliedBy(callGas, 2)))
     }
 
     estimateUserOperation() {
         const { preVerificationGas = '0', verificationGas = '0', callGas = '0' } = this.userOperation
-        return toFixed(multipliedBy(plus(preVerificationGas, plus(verificationGas, callGas)), 2))
+        return toHex(toFixed(multipliedBy(plus(preVerificationGas, plus(verificationGas, callGas)), 2)))
     }
 
     async signTransaction(web3: Web3, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {
@@ -319,7 +340,6 @@ export class UserTransaction {
                 {
                     ...transaction,
                     to: transaction.from,
-                    nonce: await web3.eth.getTransactionCount(transaction.from),
                     data: walletContract?.methods
                         .exec(transaction.to, transaction.value ?? '0', transaction.data ?? '0x')
                         .encodeABI(),
@@ -382,7 +402,11 @@ export class UserTransaction {
             ...DEFAULT_USER_OPERATION,
             sender: formatEthereumAddress(from),
             nonce: toNumber(nonce as number),
+            callGas: transaction.gas ?? DEFAULT_USER_OPERATION.callGas,
             callData: coder.encodeFunctionCall(CALL_WALLET_TYPE, [to, value, data]),
+            maxFeePerGas: transaction.maxFeePerGas ?? transaction.gasPrice ?? DEFAULT_USER_OPERATION.maxFeePerGas,
+            maxPriorityFeePerGas:
+                transaction.maxPriorityFeePerGas ?? transaction.gasPrice ?? DEFAULT_USER_OPERATION.maxPriorityFeePerGas,
             signature: '0x',
         }
     }

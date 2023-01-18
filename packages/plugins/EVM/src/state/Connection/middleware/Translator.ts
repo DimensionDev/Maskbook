@@ -1,5 +1,6 @@
 import { ChainId, Middleware, Translator as Translator_, ConnectionContext } from '@masknet/web3-shared-evm'
 import { Base } from '../translators/Base.js'
+import { Astar } from '../translators/Astar.js'
 import { Polygon } from '../translators/Polygon.js'
 
 /**
@@ -9,6 +10,7 @@ export class Translator implements Middleware<ConnectionContext> {
     private base = new Base()
 
     private translators: Partial<Record<ChainId, Translator_<ConnectionContext>>> = {
+        [ChainId.Astar]: new Astar(),
         [ChainId.Mumbai]: new Polygon(),
     }
 
