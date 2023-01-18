@@ -27,7 +27,7 @@ import { RedPacketNftMetaKey } from '../constants.js'
 import { WalletMessages } from '../../Wallet/messages.js'
 import { RedPacketRPC } from '../messages.js'
 import { useChainContext, useWallet, useWeb3 } from '@masknet/web3-hooks-base'
-import type { NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
+import type { NonFungibleToken, NonFungibleCollection } from '@masknet/web3-shared-base'
 import Services from '../../../extension/service.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -131,8 +131,8 @@ const useStyles = makeStyles()((theme) => ({
 export interface RedpacketNftConfirmDialogProps {
     onBack: () => void
     onClose: () => void
-    contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721>
-    tokenList: Array<NonFungibleToken<ChainId, SchemaType.ERC721>>
+    contract: NonFungibleCollection<ChainId, SchemaType>
+    tokenList: Array<NonFungibleToken<ChainId, SchemaType>>
     message: string
 }
 export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps) {
@@ -167,7 +167,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
         duration,
         message,
         senderName,
-        contract.address,
+        contract.address ?? '',
         tokenIdList,
     )
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
@@ -202,7 +202,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 senderName,
                 contractName: contract.name,
                 contractAddress: contract.address,
-                contractTokenURI: contract.logoURL ?? '',
+                contractTokenURI: contract.iconURL ?? '',
                 contractVersion: 1,
                 privateKey,
                 chainId: contract.chainId,
@@ -319,7 +319,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
 }
 
 interface NFTCardProps {
-    token: NonFungibleToken<ChainId, SchemaType.ERC721>
+    token: NonFungibleToken<ChainId, SchemaType>
     renderOrder: number
 }
 

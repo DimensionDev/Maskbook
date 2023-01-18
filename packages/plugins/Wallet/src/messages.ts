@@ -2,7 +2,7 @@ import type { BigNumber } from 'bignumber.js'
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { PluginID, NetworkPluginID } from '@masknet/shared-base'
-import type { GasOptionType, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import type { GasOptionType, NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from './constants.js'
 
@@ -80,9 +80,9 @@ export type SelectNftContractDialogEvent = {
     chainId?: ChainId
     balance?: number
     /**
-     * The selected detailed nft contract.
+     * The selected detailed nft collection.
      */
-    contract?: NonFungibleTokenContract<ChainId, SchemaType>
+    collection?: NonFungibleCollection<ChainId, SchemaType>
 }
 
 export interface SocketMessageUpdatedEvent {
