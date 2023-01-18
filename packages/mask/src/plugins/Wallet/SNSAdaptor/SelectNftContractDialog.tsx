@@ -163,7 +163,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     const searchedTokenList = fuse.search(keyword).map((x) => x.item)
     // #endregion
     return (
-        <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_nft_collection')}>
+        <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_a_nft_contract')}>
             <DialogContent className={classes.dialogContent}>
                 <div className={classes.search}>
                     <SearchInput
