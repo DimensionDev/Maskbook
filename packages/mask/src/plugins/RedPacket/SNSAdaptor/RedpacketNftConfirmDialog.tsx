@@ -341,6 +341,7 @@ function NFTCard(props: NFTCardProps) {
                     iframe: classes.iframe,
                     imgWrapper: classes.assetImgWrapper,
                 }}
+                disableQueryNonFungibleAsset
             />
 
             <div className={classes.nftNameWrapper}>
