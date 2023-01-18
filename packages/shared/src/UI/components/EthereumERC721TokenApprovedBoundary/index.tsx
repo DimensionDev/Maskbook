@@ -11,7 +11,6 @@ const useStyles = makeStyles()(() => ({}))
 export interface EthereumERC712TokenApprovedBoundaryProps extends withClasses<'approveButton'> {
     children?: React.ReactNode
     owner: string | undefined
-    chainId: ChainId
     contractDetailed: NonFungibleTokenContract<ChainId, SchemaType.ERC721> | undefined
     validationMessage?: string
     operator: string | undefined
@@ -19,22 +18,16 @@ export interface EthereumERC712TokenApprovedBoundaryProps extends withClasses<'a
 }
 
 export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenApprovedBoundaryProps) {
-    const { owner, contractDetailed, operator, children, validationMessage: _validationMessage, chainId } = props
+    const { owner, contractDetailed, operator, children, validationMessage: _validationMessage } = props
     const t = useSharedI18N()
     const { Others } = useWeb3State()
     const { classes } = useStyles(undefined, { props })
-    const { value, loading, retry } = useERC721ContractIsApproveForAll(
-        contractDetailed?.address,
-        owner,
-        operator,
-        chainId,
-    )
+    const { value, loading, retry } = useERC721ContractIsApproveForAll(contractDetailed?.address, owner, operator)
     const [approveState, approveCallback] = useERC721ContractSetApproveForAllCallback(
         contractDetailed?.address,
         operator,
         true,
         retry,
-        chainId,
     )
 
     const validationMessage = useMemo(() => {

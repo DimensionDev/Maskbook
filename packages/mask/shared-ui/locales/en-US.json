@@ -349,7 +349,6 @@
     "plugin_wallet_disconnect": "Disconnect",
     "plugin_wallet_dialog_title": "Wallet Account",
     "plugin_wallet_select_a_nft_contract": "Select an NFT Contract",
-    "plugin_wallet_select_nft_collection": "Search NFT collection name, symbol or contract address",
     "plugin_wallet_select_a_nft_owner": "Select an NFT Contract Owner",
     "plugin_wallet_select_a_nft_operator": "Select an NFT Contract Operator",
     "plugin_wallet_fail_to_load_nft_contract": "Click to retry",

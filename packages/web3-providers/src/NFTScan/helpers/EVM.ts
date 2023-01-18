@@ -196,7 +196,7 @@ export function createNonFungibleCollectionFromGroup(
         address: group.contract_address,
         description: group.description || payload?.description,
         iconURL: group.logo_url,
-        balance: group.assets.length,
+        tokensTotal: group.assets.length,
         source: SourceType.NFTScan,
     }
 }

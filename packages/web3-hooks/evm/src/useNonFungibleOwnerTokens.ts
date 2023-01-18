@@ -1,8 +1,9 @@
+import { useRef } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
-import { useWeb3Connection, useNonFungibleAssets } from '@masknet/web3-hooks-base'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import { useWeb3Connection } from '@masknet/web3-hooks-base'
 
 import { useERC721TokenContract } from './useERC721TokenContract.js'
 
@@ -14,24 +15,12 @@ export function useNonFungibleOwnerTokens(
     chainId: ChainId,
     _balance?: number,
 ) {
+    const allListRef = useRef<Array<NonFungibleToken<ChainId, SchemaType.ERC721>>>([])
     const nonFungibleTokenContract = useERC721TokenContract(chainId, contractAddress ?? '')
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
 
-    const { value: collectibles_ = EMPTY_LIST, done: loadFinish } = useNonFungibleAssets(
-        NetworkPluginID.PLUGIN_EVM,
-        SchemaType.ERC721,
-        { chainId, account: ownerAccount },
-    )
-
-    const collectibles = collectibles_
-        ?.filter((x) => isSameAddress(contractAddress, x.address))
-        .map((x) => ({ ...x, ownerId: x.owner?.address })) as Array<NonFungibleToken<ChainId, SchemaType.ERC721>>
-
-    return useAsyncRetry(async () => {
-        if (collectibles.length > 0) return collectibles
-        if (!contractAddress || !ownerAccount || !connection || !nonFungibleTokenContract) {
-            return
-        }
+    const asyncRetry = useAsyncRetry(async () => {
+        if (!contractAddress || !ownerAccount || !connection || !nonFungibleTokenContract) return
 
         const isEnumerable = await nonFungibleTokenContract.methods
             .supportsInterface(ERC721_ENUMERABLE_INTERFACE_ID)
@@ -58,21 +47,21 @@ export function useNonFungibleOwnerTokens(
 
         if (!listOfPairs.length) return
 
-        return Promise.all(
+        allListRef.current = (await Promise.all(
             listOfPairs?.map((x) =>
                 connection.getNonFungibleToken(x[0], x[1], SchemaType.ERC721, {
                     chainId,
                     account: ownerAccount,
                 }),
             ) ?? [],
-        ) as Promise<Array<NonFungibleToken<ChainId, SchemaType.ERC721>>>
-    }, [
-        chainId,
-        contractAddress,
-        ownerAccount,
-        connection,
-        nonFungibleTokenContract,
-        _balance,
-        JSON.stringify(collectibles),
-    ])
+        )) as Array<NonFungibleToken<ChainId, SchemaType.ERC721>>
+    }, [chainId, contractAddress, ownerAccount, chainId, connection, nonFungibleTokenContract, _balance])
+
+    const clearTokenDetailedOwnerList = () => (allListRef.current = [])
+
+    return {
+        asyncRetry,
+        tokenDetailedOwnerList: allListRef.current,
+        clearTokenDetailedOwnerList,
+    }
 }
