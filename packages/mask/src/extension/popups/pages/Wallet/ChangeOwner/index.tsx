@@ -249,7 +249,7 @@ export default function ChangeOwner() {
                         </Box>
                     ) : (
                         <Box className={classes.placeholder}>
-                            <Typography>{t('popups_wallet_no_encrypted_placeholder')}</Typography>
+                            <Typography>{t('popups_no_persona_found')}</Typography>
                         </Box>
                     )}
                     <Typography className={classes.popoverTitle}>{t('popups_wallet_wallets')}</Typography>
@@ -280,6 +280,13 @@ export default function ChangeOwner() {
                                                 {formatEthereumAddress(wallet.address, 4)}
 
                                                 <CopyIconButton text={wallet.address} className={classes.copy} />
+                                                <Link
+                                                    sx={{ display: 'flex', alignItems: 'center', color: 'inherit' }}
+                                                    href={explorerResolver.addressLink(chainId, wallet.address)}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer">
+                                                    <Icons.PopupLink className={classes.copy} />
+                                                </Link>
                                             </Typography>
                                         </Box>
                                     </Box>
@@ -289,7 +296,7 @@ export default function ChangeOwner() {
                         </Box>
                     ) : (
                         <Box className={classes.placeholder}>
-                            <Typography>{t('popups_wallet_no_encrypted_placeholder')}</Typography>
+                            <Typography>{t('popups_no_wallets_found')}</Typography>
                         </Box>
                     )}
                 </Popover>

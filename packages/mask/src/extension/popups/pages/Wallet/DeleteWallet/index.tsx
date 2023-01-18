@@ -52,7 +52,7 @@ const useStyles = makeStyles()({
         display: 'grid',
         gridTemplateColumns: 'repeat(2, 1fr)',
         gap: 20,
-        padding: '0 16px 16px 16px',
+        padding: 16,
     },
     cancelButton: {
         padding: '9px 0',

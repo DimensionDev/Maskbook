@@ -5,6 +5,7 @@ import { ChainId, chainResolver, isValidAddress, ProviderType } from '@masknet/w
 import type { EVM_Provider } from '../types.js'
 import { BaseContractWalletProvider } from './BaseContractWallet.js'
 import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
+import { SmartPayBundler } from '@masknet/web3-providers'
 
 export class MaskWalletProvider extends BaseContractWalletProvider implements EVM_Provider {
     constructor() {
@@ -18,11 +19,11 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
         // the initial setup of selecting the primary wallet
         getReadyPromise().then(() => {
             Web3StateSettings.value.Wallet?.wallets?.subscribe(async () => {
-                const primaryWallet = first(this.wallets)?.address
-
+                const primaryWallet = first(this.wallets)
+                const smartPayChainId = await SmartPayBundler.getSupportedChainId()
                 if (!this.hostedAccount && primaryWallet) {
-                    await this.switchAccount(primaryWallet)
-                    await this.switchChain(ChainId.Mainnet)
+                    await this.switchAccount(primaryWallet.address)
+                    await this.switchChain(primaryWallet.owner ? smartPayChainId : ChainId.Mainnet)
                 }
             })
         })

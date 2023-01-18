@@ -136,10 +136,9 @@ const WalletRecovery = memo(() => {
                         chainId: ChainId.Mainnet,
                     })
                 }
-
-                await Services.Helper.removePopupWindow()
             }
         }
+        await Services.Helper.removePopupWindow()
     }, [onSubmit, hasPassword, currentPersona, backupId, web3State])
 
     return loading || getHasPasswordLoading ? (

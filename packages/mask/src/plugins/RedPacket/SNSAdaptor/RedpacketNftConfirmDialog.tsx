@@ -83,7 +83,7 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: theme.spacing(2.5),
         background: theme.palette.mode === 'light' ? '#fff' : '#2F3336',
         width: 120,
-        height: 195,
+        height: 180,
         overflow: 'hidden',
     },
     nftNameWrapper: {
@@ -122,6 +122,10 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
+    },
+    assetImgWrapper: {
+        maxHeight: 155,
+        overflow: 'hidden',
     },
 }))
 export interface RedpacketNftConfirmDialogProps {
@@ -328,12 +332,14 @@ function NFTCard(props: NFTCardProps) {
             <NFTCardStyledAssetPlayer
                 contractAddress={token.contract?.address}
                 chainId={token.contract?.chainId}
+                url={token.metadata?.mediaURL || token.metadata?.imageURL}
                 tokenId={token.tokenId}
                 renderOrder={renderOrder}
                 setERC721TokenName={setName}
                 classes={{
                     fallbackImage: classes.fallbackImage,
                     iframe: classes.iframe,
+                    imgWrapper: classes.assetImgWrapper,
                 }}
             />
 

@@ -79,7 +79,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
             (ev: SelectNftContractDialogEvent) => {
                 if (ev.open || !ev.contract) return
                 onContractChange(ev.contract as NonFungibleTokenContract<ChainId, SchemaType.ERC721>)
-                onBalanceChange(Number.parseInt(ev.balance ?? '0', 10))
+                onBalanceChange(ev.balance ?? 0)
             },
             [onContractChange, onBalanceChange],
         ),

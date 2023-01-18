@@ -67,6 +67,7 @@ export const AccountsManagerPopover = memo<AccountsManagePopoverProps>(
 
         return usePortalShadowRoot((container) => (
             <Popover
+                disableScrollLock
                 container={container}
                 open={open}
                 onClose={onClose}

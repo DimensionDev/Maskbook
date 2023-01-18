@@ -5,7 +5,7 @@ export function useBoundedPopperProps() {
     const { boundaryRef } = useBoundary()
 
     const tooltipPopperProps: Partial<PopperProps> = {
-        disablePortal: true,
+        disablePortal: !!boundaryRef.current,
         placement: 'top',
         modifiers: [
             {
