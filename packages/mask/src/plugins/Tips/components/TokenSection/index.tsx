@@ -10,7 +10,7 @@ import { useTip } from '../../contexts/index.js'
 import { GasSettingsBar } from './GasSettingsBar.js'
 import { TokenValue } from './TokenValue.js'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()({
     container: {
         display: 'flex',
         flexDirection: 'column',
@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
     tokenValue: {
         flexGrow: 1,
     },
-}))
+})
 
 interface Props extends HTMLProps<HTMLDivElement> {}
 
@@ -26,14 +26,14 @@ const ETH_GAS_LIMIT = 21000
 
 export const TokenSection: FC<Props> = ({ className, ...rest }) => {
     const { classes, cx } = useStyles()
-    const { token, setToken, amount, setAmount } = useTip()
+    const { token, setToken, amount, setAmount, recipientAddress } = useTip()
     const { pluginID } = useNetworkContext()
-    const { account, chainId } = useChainContext()
+    const { chainId } = useChainContext()
 
     // balance
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(pluginID, token?.address, {
         chainId,
-        account,
+        account: recipientAddress,
     })
     const { gasPrice } = useGasConfig(chainId)
     const { value: defaultGasPrice = '1' } = useGasPrice(pluginID, { chainId })
