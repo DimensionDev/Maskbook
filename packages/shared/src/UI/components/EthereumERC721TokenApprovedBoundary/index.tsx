@@ -1,9 +1,9 @@
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useSharedI18N } from '../../../locales/index.js'
 import { makeStyles, ActionButtonProps, ActionButton } from '@masknet/theme'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useWeb3State } from '@masknet/web3-hooks-base'
-import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { useERC721ContractIsApproveForAll, useERC721ContractSetApproveForAllCallback } from '@masknet/web3-hooks-evm'
 
 const useStyles = makeStyles()(() => ({}))
@@ -12,39 +12,41 @@ export interface EthereumERC712TokenApprovedBoundaryProps extends withClasses<'a
     children?: React.ReactNode
     owner: string | undefined
     chainId: ChainId
-    contractDetailed: NonFungibleTokenContract<ChainId, SchemaType.ERC721> | undefined
+    collection: NonFungibleCollection<ChainId, SchemaType> | undefined
     validationMessage?: string
     operator: string | undefined
     ActionButtonProps?: ActionButtonProps
 }
 
 export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenApprovedBoundaryProps) {
-    const { owner, contractDetailed, operator, children, validationMessage: _validationMessage, chainId } = props
+    const { owner, collection, operator, children, validationMessage: _validationMessage, chainId } = props
     const t = useSharedI18N()
     const { Others } = useWeb3State()
     const { classes } = useStyles(undefined, { props })
-    const { value, loading, retry } = useERC721ContractIsApproveForAll(
-        contractDetailed?.address,
-        owner,
-        operator,
-        chainId,
-    )
+    const {
+        value: isApproveForAll,
+        loading,
+        retry,
+    } = useERC721ContractIsApproveForAll(collection?.address, owner, operator, chainId)
     const [approveState, approveCallback] = useERC721ContractSetApproveForAllCallback(
-        contractDetailed?.address,
+        collection?.address,
         operator,
         true,
         retry,
         chainId,
     )
 
+    useEffect(() => {
+        retry()
+    }, [approveState.loading])
     const validationMessage = useMemo(() => {
-        if (!contractDetailed?.address || !Others?.isValidAddress(contractDetailed?.address))
+        if (!collection?.address || !Others?.isValidAddress(collection?.address))
             return t.plugin_wallet_select_a_nft_contract()
         if (!owner || !Others?.isValidAddress(owner)) return t.plugin_wallet_select_a_nft_owner()
         if (!operator || !Others?.isValidAddress(operator)) return t.plugin_wallet_select_a_nft_operator()
         if (_validationMessage) return _validationMessage
         return ''
-    }, [contractDetailed, owner, operator, _validationMessage])
+    }, [collection, owner, operator, _validationMessage])
 
     if (approveState.loading) {
         return (
@@ -56,10 +58,10 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 disabled
                 {...props.ActionButtonProps}>
                 {t.plugin_wallet_nft_approving_all({
-                    symbol: contractDetailed?.symbol
-                        ? contractDetailed.symbol.toLowerCase() === 'unknown'
+                    symbol: collection?.symbol
+                        ? collection.symbol.toLowerCase() === 'unknown'
                             ? 'All'
-                            : contractDetailed?.symbol
+                            : collection?.symbol
                         : 'All',
                 })}
             </ActionButton>
@@ -86,7 +88,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 {...props.ActionButtonProps}
             />
         )
-    } else if (value === false) {
+    } else if (isApproveForAll === false) {
         return (
             <ActionButton
                 className={classes.approveButton}
@@ -95,15 +97,15 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 onClick={approveCallback}
                 {...props.ActionButtonProps}>
                 {t.plugin_wallet_approve_all_nft({
-                    symbol: contractDetailed?.symbol
-                        ? contractDetailed?.symbol.toLowerCase() === 'unknown'
+                    symbol: collection?.symbol
+                        ? collection?.symbol.toLowerCase() === 'unknown'
                             ? 'All'
-                            : contractDetailed?.symbol
+                            : collection?.symbol
                         : 'All',
                 })}
             </ActionButton>
         )
-    } else if (value === undefined) {
+    } else if (isApproveForAll === undefined) {
         return (
             <ActionButton
                 className={classes.approveButton}
