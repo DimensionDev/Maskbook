@@ -36,11 +36,11 @@ export function createWeb3Request(
     return <T>(requestArguments: RequestArguments) =>
         new Promise<T>((resolve, reject) => {
             send(createJsonRpcPayload(0, requestArguments), (error, response) => {
-                if (error) {
-                    reject(error)
-                    return
+                if (error || response?.error) {
+                    reject(error ?? new Error(response?.error?.message ?? 'Failed to send RPC request.'))
+                } else {
+                    resolve(response?.result)
                 }
-                resolve(response?.result)
             })
         })
 }

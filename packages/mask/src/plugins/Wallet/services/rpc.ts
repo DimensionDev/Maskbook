@@ -54,7 +54,7 @@ export async function pushUnconfirmedRequest(payload: RequestPayload) {
     return payload
 }
 
-export async function updateUnconfirmedRequest(payload: JsonRpcPayload) {
+export async function updateUnconfirmedRequest(payload: RequestPayload) {
     const now = new Date()
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('UnconfirmedRequestChunk')
 

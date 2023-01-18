@@ -1,10 +1,10 @@
 import { makeStyles } from '@masknet/theme'
-import { Button, Checkbox, FormControlLabel, FormGroup, Typography } from '@mui/material'
+import { Button, Checkbox, FormControlLabel, FormGroup } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
 import { Services } from '../../API.js'
 import { FooterLine } from '../../components/FooterLine/index.js'
 import { HeaderLine } from '../../components/HeaderLine/index.js'
-import { useDashboardI18N } from '../../locales/index.js'
+import { DashboardTrans, useDashboardI18N } from '../../locales/index.js'
 import { Article } from './Article.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -30,8 +30,13 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 500,
     },
     checkboxGroup: {},
-    label: {
+    checkboxRow: {
         marginTop: theme.spacing(2),
+        marginLeft: 0,
+    },
+    label: {
+        fontSize: 14,
+        color: theme.palette.maskColor.second,
         fontFamily: 'PingFang SC',
         marginRight: 0,
         marginLeft: 0,
@@ -70,7 +75,7 @@ export default memo(function Welcome() {
         if (allowedToCollect) {
             Services.Settings.setLogEnable(true)
         }
-    }, [])
+    }, [allowedToCollect])
 
     const t = useDashboardI18N()
     const { classes } = useStyles()
@@ -81,7 +86,8 @@ export default memo(function Welcome() {
                 <Article className={classes.article} />
                 <FormGroup className={classes.checkboxGroup}>
                     <FormControlLabel
-                        className={classes.label}
+                        className={classes.checkboxRow}
+                        classes={{ label: classes.label }}
                         control={
                             <Checkbox
                                 className={classes.checkbox}
@@ -92,27 +98,29 @@ export default memo(function Welcome() {
                             />
                         }
                         label={
-                            <Typography>
-                                I have read and agree to the{' '}
-                                <a
-                                    className={classes.link}
-                                    target="_blank"
-                                    href="https://legal.mask.io/maskbook/service-agreement-beta-browser.html">
-                                    Service Agreement
-                                </a>{' '}
-                                and{' '}
-                                <a
-                                    className={classes.link}
-                                    target="_blank"
-                                    href="https://legal.mask.io/maskbook/privacy-policy-browser.html">
-                                    Privacy Policy
-                                </a>
-                                .
-                            </Typography>
+                            <DashboardTrans.welcome_agreement_policy
+                                components={{
+                                    agreement: (
+                                        <a
+                                            className={classes.link}
+                                            target="_blank"
+                                            href="https://legal.mask.io/maskbook/service-agreement-beta-browser.html"
+                                        />
+                                    ),
+                                    policy: (
+                                        <a
+                                            className={classes.link}
+                                            target="_blank"
+                                            href="https://legal.mask.io/maskbook/privacy-policy-browser.html"
+                                        />
+                                    ),
+                                }}
+                            />
                         }
                     />
                     <FormControlLabel
-                        className={classes.label}
+                        className={classes.checkboxRow}
+                        classes={{ label: classes.label }}
                         control={
                             <Checkbox
                                 className={classes.checkbox}
@@ -122,7 +130,7 @@ export default memo(function Welcome() {
                                 }}
                             />
                         }
-                        label="Allow us to collect your usage information to help us make improvements."
+                        label={t.welcome_request_to_collect()}
                     />
                 </FormGroup>
                 <div className={classes.buttonGroup}>

@@ -13,6 +13,7 @@ export namespace FunderAPI {
         message: {
             walletAddress: string
             tx: string
+            code?: string
         }
     }
 
