@@ -1,12 +1,7 @@
 import type { EnhanceableSite } from '@masknet/shared-base'
-import Web3Utils from 'web3-utils'
 import type { LogHubBase } from '../types/Log.js'
 
 const Sentry = (globalThis as any).Sentry
-
-function hash(value: string) {
-    return Web3Utils.sha3(value)
-}
 
 export class LogHub implements LogHubBase {
     private _platform: LogPlatform | EnhanceableSite

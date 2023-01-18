@@ -57,7 +57,6 @@ import { SolanaWeb3API } from './Solana/apis/Web3API.js'
 import { NFTLuckyDropAPI } from './EVM/apis/NFTLuckyDropAPI.js'
 
 export * from './Sentry/index.js'
-export { resolveActivityTypeBackgroundColor } from './entry-helpers.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
