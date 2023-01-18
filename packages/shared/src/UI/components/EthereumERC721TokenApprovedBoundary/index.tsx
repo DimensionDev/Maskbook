@@ -39,7 +39,6 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
     useEffect(() => {
         retry()
     }, [approveState.loading])
-    console.log({ owner, collection, chainId, approveState, isApproveForAll })
     const validationMessage = useMemo(() => {
         if (!collection?.address || !Others?.isValidAddress(collection?.address))
             return t.plugin_wallet_select_a_nft_contract()
