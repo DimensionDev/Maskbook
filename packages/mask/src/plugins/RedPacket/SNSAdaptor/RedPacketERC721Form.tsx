@@ -11,6 +11,7 @@ import {
     ChainBoundary,
     EthereumERC721TokenApprovedBoundary,
 } from '@masknet/shared'
+import { useNonFungibleOwnerTokens } from '@masknet/web3-hooks-evm'
 import { ChainId, SchemaType, useNftRedPacketConstants, formatTokenId } from '@masknet/web3-shared-evm'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel.js'
 import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog.js'
@@ -221,7 +222,15 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const tokenDetailedList =
         selectOption === NFTSelectOption.Partial ? manualSelectedTokenDetailedList : onceAllSelectedTokenDetailedList
     const [message, setMessage] = useState('Best Wishes!')
-    const tokenDetailedOwnerList = (collection?.assets ?? EMPTY_LIST).map(
+
+    const { value: _tokenDetailedOwnerList = EMPTY_LIST } = useNonFungibleOwnerTokens(
+        !collection || collection.assets?.length ? '' : collection?.address ?? '',
+        account,
+        chainId,
+        balance,
+    )
+
+    const tokenDetailedOwnerList = (collection?.assets ?? _tokenDetailedOwnerList ?? EMPTY_LIST).map(
         (v, index) => ({ ...v, index } as OrderedERC721Token),
     )
     const removeToken = useCallback(
