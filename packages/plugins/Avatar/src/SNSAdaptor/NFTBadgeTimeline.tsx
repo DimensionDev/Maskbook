@@ -4,7 +4,8 @@ import { RainbowBox } from './RainbowBox.js'
 import type { RSS3_KEY_SNS } from '../constants.js'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar.js'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
+import type { NFTAvatarEvent } from '@masknet/shared-base'
 
 interface NFTBadgeTimelineProps extends withClasses<'root'> {
     userId: string
@@ -12,6 +13,7 @@ interface NFTBadgeTimelineProps extends withClasses<'root'> {
     width: number
     height: number
     snsKey: RSS3_KEY_SNS
+    timelineUpdated: UnboundedRegistry<NFTAvatarEvent>
 }
 
 const useStyles = makeStyles()(() => ({
@@ -21,12 +23,12 @@ const useStyles = makeStyles()(() => ({
 }))
 
 export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
-    const { userId, avatarId, width, height, snsKey } = props
+    const { userId, avatarId, width, height, snsKey, timelineUpdated } = props
     const { loading, value: _avatar } = usePersonaNFTAvatar(userId, avatarId, '', snsKey)
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const [avatarId_, setAvatarId_] = useState('')
     const { classes } = useStyles(undefined, { props })
-    const { NFTAvatarTimelineUpdated } = useSNSAdaptorContext()
+    // const { NFTAvatarTimelineUpdated } = useSNSAdaptorContext()
 
     const onUpdate = (data: AvatarMetaDB) => {
         if (!data.address || !data.tokenId) {
@@ -45,7 +47,7 @@ export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
         setAvatar(_avatar)
     }, [_avatar])
 
-    useEffect(() => NFTAvatarTimelineUpdated.on((data) => onUpdate(data as AvatarMetaDB)), [])
+    useEffect(() => timelineUpdated.on((data) => onUpdate(data as AvatarMetaDB)), [])
 
     if (!avatar) return null
     if (avatarId_ && avatar.avatarId !== avatarId_) return null

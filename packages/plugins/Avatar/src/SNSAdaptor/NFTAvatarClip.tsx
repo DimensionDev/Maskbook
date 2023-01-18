@@ -8,7 +8,7 @@ import { formatPrice, formatText } from '../utils/index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import type { IdentityResolved } from '@masknet/plugin-infra/content-script'
 
 // from twitter page
 const ViewBoxWidth = 200
@@ -22,6 +22,7 @@ interface NFTAvatarClipProps extends withClasses<'root' | 'text' | 'icon'> {
     className?: string
     viewBoxHeight?: number
     viewBoxWidth?: number
+    identity?: IdentityResolved
 }
 
 const rainbowBorderKeyFrames: Keyframes = keyframes`
@@ -231,10 +232,17 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
 }
 
 export function NFTAvatarMiniClip(props: NFTAvatarClipProps) {
-    const { width, height, viewBoxHeight = ViewBoxHeight, viewBoxWidth = ViewBoxWidth, screenName, className } = props
+    const {
+        width,
+        height,
+        viewBoxHeight = ViewBoxHeight,
+        viewBoxWidth = ViewBoxWidth,
+        screenName,
+        className,
+        identity,
+    } = props
     const id = useMemo(() => props.id ?? uuid(), [props.id])
     const { classes, cx } = useStyles(undefined, { props })
-    const identity = useLastRecognizedIdentity()
     const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName ?? identity?.identifier?.userId)
 
     if (loading || !avatarMetadata?.address || !avatarMetadata?.token_id) return null

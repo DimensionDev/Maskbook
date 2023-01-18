@@ -1,5 +1,5 @@
-import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { DOMProxy, LiveSelector, MutationObserverWatcher, UnboundedRegistry } from '@dimensiondev/holoflows-kit'
+import { MaskMessages, NFTAvatarEvent, createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { NFTBadgeTimeline, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
 import { searchInstagramPostAvatarSelector } from '../../utils/selector.js'
@@ -13,7 +13,19 @@ const useStyles = makeStyles()(() => ({
 }))
 
 const TimeLineRainbow = memo(
-    ({ userId, avatarId, width, height }: { userId: string; avatarId: string; width: number; height: number }) => {
+    ({
+        userId,
+        avatarId,
+        width,
+        height,
+        timelineUpdated,
+    }: {
+        userId: string
+        avatarId: string
+        width: number
+        height: number
+        timelineUpdated: UnboundedRegistry<NFTAvatarEvent>
+    }) => {
         const { classes } = useStyles()
         return (
             <div
@@ -24,6 +36,7 @@ const TimeLineRainbow = memo(
                     zIndex: 2,
                 }}>
                 <NFTBadgeTimeline
+                    timelineUpdated={timelineUpdated}
                     userId={userId}
                     avatarId={avatarId}
                     width={width}
@@ -63,6 +76,7 @@ function _(selector: () => LiveSelector<HTMLImageElement, false>, signal: AbortS
 
                 root.render(
                     <TimeLineRainbow
+                        timelineUpdated={MaskMessages.events.NFTAvatarTimelineUpdated}
                         userId={id}
                         avatarId={info.avatarId}
                         width={info.width - 4}
