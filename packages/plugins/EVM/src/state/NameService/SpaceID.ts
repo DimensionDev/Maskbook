@@ -9,7 +9,7 @@ export class SpaceID_Resolver implements NameServiceResolver {
     }
 
     async lookup(name: string) {
-        return ChainbaseDomain.lookup(ChainId.BSC, name)
+        return ChainbaseDomain.lookup(ChainId.BSC, name.toLowerCase())
     }
 
     async reverse(address: string) {
