@@ -19,17 +19,18 @@ export function useNonFungibleOwnerTokens(
     const nonFungibleTokenContract = useERC721TokenContract(chainId, contractAddress ?? '')
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
 
-    const { value: collectibles = EMPTY_LIST, done: loadFinish } = useNonFungibleAssets(
+    const { value: collectibles_ = EMPTY_LIST, done: loadFinish } = useNonFungibleAssets(
         NetworkPluginID.PLUGIN_EVM,
         SchemaType.ERC721,
         { chainId, account: ownerAccount },
     )
 
-    allListRef.current = collectibles
+    const collectibles = collectibles_
         ?.filter((x) => isSameAddress(contractAddress, x.address))
         .map((x) => ({ ...x, ownerId: x.owner?.address })) as Array<NonFungibleToken<ChainId, SchemaType.ERC721>>
 
-    const asyncRetry = useAsyncRetry(async () => {
+    return useAsyncRetry(async () => {
+        if (collectibles.length > 0) return collectibles
         if (
             !contractAddress ||
             !ownerAccount ||
@@ -65,21 +66,22 @@ export function useNonFungibleOwnerTokens(
 
         if (!listOfPairs.length) return
 
-        allListRef.current = (await Promise.all(
+        return Promise.all(
             listOfPairs?.map((x) =>
                 connection.getNonFungibleToken(x[0], x[1], SchemaType.ERC721, {
                     chainId,
                     account: ownerAccount,
                 }),
             ) ?? [],
-        )) as Array<NonFungibleToken<ChainId, SchemaType.ERC721>>
-    }, [chainId, contractAddress, ownerAccount, chainId, connection, nonFungibleTokenContract, _balance])
-
-    const clearTokenDetailedOwnerList = () => (allListRef.current = [])
-
-    return {
-        asyncRetry: { ...asyncRetry, loading: asyncRetry.loading || loadFinish },
-        tokenDetailedOwnerList: allListRef.current,
-        clearTokenDetailedOwnerList,
-    }
+        ) as Promise<Array<NonFungibleToken<ChainId, SchemaType.ERC721>>>
+    }, [
+        chainId,
+        contractAddress,
+        ownerAccount,
+        chainId,
+        connection,
+        nonFungibleTokenContract,
+        _balance,
+        JSON.stringify(collectibles),
+    ])
 }

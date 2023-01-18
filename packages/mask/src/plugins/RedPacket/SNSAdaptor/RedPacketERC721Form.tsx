@@ -225,11 +225,12 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const tokenDetailedList =
         selectOption === NFTSelectOption.Partial ? manualSelectedTokenDetailedList : onceAllSelectedTokenDetailedList
     const [message, setMessage] = useState('Best Wishes!')
-    const {
-        asyncRetry: { loading: loadingOwnerList },
-        tokenDetailedOwnerList: _tokenDetailedOwnerList = [],
-        clearTokenDetailedOwnerList,
-    } = useNonFungibleOwnerTokens(contract?.address ?? '', account, chainId, balance)
+    const { loading: loadingOwnerList, value: _tokenDetailedOwnerList = [] } = useNonFungibleOwnerTokens(
+        contract?.address ?? '',
+        account,
+        chainId,
+        balance,
+    )
     const tokenDetailedOwnerList = _tokenDetailedOwnerList.map((v, index) => ({ ...v, index } as OrderedERC721Token))
     const removeToken = useCallback(
         (token: NonFungibleToken<ChainId, SchemaType.ERC721>) => {
@@ -244,9 +245,8 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
 
     const clearToken = useCallback(() => {
         setExistTokenDetailedList([])
-        clearTokenDetailedOwnerList()
         setOpenNFTConfirmDialog(false)
-    }, [clearTokenDetailedOwnerList])
+    }, [])
 
     const clearContract = useCallback(() => {
         setContract(undefined)
