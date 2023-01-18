@@ -78,7 +78,6 @@ export function useNonFungibleOwnerTokens(
         chainId,
         contractAddress,
         ownerAccount,
-        chainId,
         connection,
         nonFungibleTokenContract,
         _balance,
