@@ -1,3 +1,6 @@
+import { useEffect, useMemo, useState } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { sortBy } from 'lodash-es'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
 import { InjectedDialog, LoadGuard, PersonaAction, usePersonaProofs, WalletTypes } from '@masknet/shared'
@@ -11,12 +14,9 @@ import {
 } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { LogMessage } from '@masknet/web3-providers'
+import { LogHubBaseAPI } from '@masknet/web3-providers/types'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { DialogActions, DialogContent } from '@mui/material'
-import { sortBy } from 'lodash-es'
-import { useEffect, useMemo, useState } from 'react'
-import { useAsyncRetry } from 'react-use'
 import { SceneMap, Scene } from '../../constants.js'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { context } from '../context.js'
@@ -56,7 +56,7 @@ export function Web3ProfileDialog() {
     const [open, setOpen] = useState(false)
     useEffect(() => {
         return CrossIsolationMessages.events.web3ProfileDialogEvent.on(({ open }) => {
-            if (open) logger?.captureMessage(LogMessage.Web3ProfileDialogAccess)
+            if (open) logger?.captureMessage(LogHubBaseAPI.Message.Web3ProfileDialogAccess)
             setOpen(open)
         })
     }, [])
