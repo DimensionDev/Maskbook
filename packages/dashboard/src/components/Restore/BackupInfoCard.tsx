@@ -3,7 +3,7 @@ import { Box, Card, Grid, Stack, Typography, Tooltip } from '@mui/material'
 import formatDateTime from 'date-fns/format'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import type { BackupFileInfo } from '../../pages/Settings/type.js'
-import { formatFileSize } from '@masknet/kit'
+import { formatFileSize } from '@masknet/shared-base'
 
 interface BackupInfoProps {
     info: BackupFileInfo
@@ -30,7 +30,7 @@ export const BackupInfoCard = memo(({ info }: BackupInfoProps) => {
                 <Grid item xs={2}>
                     <Box>
                         <Typography align="right" variant="body2">
-                            {formatFileSize(info.size, false)}
+                            {formatFileSize(info.size)}
                         </Typography>
                     </Box>
                 </Grid>

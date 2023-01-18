@@ -8,7 +8,7 @@ import { PluginFileServiceRPC } from '../Worker/rpc.js'
 import { downloadFile } from '../helpers.js'
 import { useI18N } from '../locales/i18n_generated.js'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()({
     file: {
         width: '100%',
     },
@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
         backgroundColor: 'transparent',
     },
-}))
+})
 
 export function FileViewer({ files }: { files: FileInfo[] }) {
     usePluginWrapper(true)
