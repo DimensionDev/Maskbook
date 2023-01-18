@@ -213,7 +213,6 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         setOpenSelectNFTDialog,
     } = props
     const { classes, cx } = useStyles()
-    const [balance, setBalance] = useState(0)
     const [selectOption, setSelectOption] = useState<NFTSelectOption | undefined>(undefined)
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [collection, setCollection] = useState<NonFungibleCollection<ChainId, SchemaType>>()
@@ -227,12 +226,13 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         !collection || collection.assets?.length ? '' : collection?.address ?? '',
         account,
         chainId,
-        balance,
     )
 
     const tokenDetailedOwnerList = (collection?.assets ?? _tokenDetailedOwnerList ?? EMPTY_LIST).map(
         (v, index) => ({ ...v, index } as OrderedERC721Token),
     )
+
+    const balance = tokenDetailedOwnerList.length
     const removeToken = useCallback(
         (token: NonFungibleToken<ChainId, SchemaType.ERC721>) => {
             setExistTokenDetailedList((list) => list.filter((t) => t.tokenId !== token.tokenId))
@@ -242,7 +242,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         [selectOption, setSelectOption, setExistTokenDetailedList, setAllTokenDetailedList],
     )
 
-    const maxSelectShares = Math.min(NFT_RED_PACKET_MAX_SHARES, tokenDetailedOwnerList.length)
+    const maxSelectShares = Math.min(NFT_RED_PACKET_MAX_SHARES, balance)
 
     const clearToken = useCallback(() => {
         setExistTokenDetailedList(EMPTY_LIST)
@@ -316,8 +316,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     <ERC721ContractSelectPanel
                         collection={collection}
                         onContractChange={setCollection}
-                        balance={tokenDetailedOwnerList.length}
-                        onBalanceChange={setBalance}
+                        balance={balance}
                         chainId={chainId}
                     />
                 </Box>
@@ -328,7 +327,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                             className={cx(
                                 classes.optionLeft,
                                 classes.option,
-                                tokenDetailedOwnerList.length === 0 ? classes.disabledSelector : null,
+                                balance === 0 ? classes.disabledSelector : null,
                             )}
                             onClick={() => {
                                 setSelectOption(NFTSelectOption.All)
@@ -343,13 +342,10 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                 <CheckIcon className={classes.checkIcon} />
                             </div>
                             <Typography color="textPrimary">
-                                {tokenDetailedOwnerList.length === 0
+                                {balance === 0
                                     ? 'All'
                                     : t.nft_select_all_option({
-                                          total: Math.min(
-                                              NFT_RED_PACKET_MAX_SHARES,
-                                              tokenDetailedOwnerList.length,
-                                          ).toString(),
+                                          total: Math.min(NFT_RED_PACKET_MAX_SHARES, balance).toString(),
                                       })}
                             </Typography>
                         </div>
