@@ -1,4 +1,3 @@
-import { useRef } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -15,7 +14,6 @@ export function useNonFungibleOwnerTokens(
     chainId: ChainId,
     _balance?: number,
 ) {
-    const allListRef = useRef<Array<NonFungibleToken<ChainId, SchemaType.ERC721>>>([])
     const nonFungibleTokenContract = useERC721TokenContract(chainId, contractAddress ?? '')
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
 
@@ -31,13 +29,7 @@ export function useNonFungibleOwnerTokens(
 
     return useAsyncRetry(async () => {
         if (collectibles.length > 0) return collectibles
-        if (
-            !contractAddress ||
-            !ownerAccount ||
-            !connection ||
-            !nonFungibleTokenContract ||
-            allListRef.current.length > 0
-        ) {
+        if (!contractAddress || !ownerAccount || !connection || !nonFungibleTokenContract) {
             return
         }
 
