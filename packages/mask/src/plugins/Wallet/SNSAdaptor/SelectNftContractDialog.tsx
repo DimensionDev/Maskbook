@@ -1,5 +1,4 @@
 import { useCallback, useMemo, useState } from 'react'
-import { uniqBy } from 'lodash-es'
 import Fuse from 'fuse.js'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Avatar, Box, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
@@ -8,7 +7,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
-import type { NonFungibleCollection, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { WalletMessages } from '../messages.js'
 import { useI18N } from '../../../utils/index.js'
 import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput.js'
@@ -97,14 +96,13 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
 
     const [keyword, setKeyword] = useState('')
     const { chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const [customCollections, setCustomCollections] = useState<Array<NonFungibleCollection<ChainId, SchemaType>>>([])
+
     // #region remote controlled dialog
     const { open, setDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectNftContractDialogUpdated,
         (ev) => {
             if (!ev.open) return
             if (ev.chainId) setChainId(ev.chainId)
-            if (ev.customCollections) setCustomCollections(ev.customCollections)
         },
     )
     const onSubmit = useCallback(
@@ -130,25 +128,21 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
         chainId,
     })
 
-    const contractList = uniqBy(
-        assets
-            .concat(customCollections)
-            .filter((x) => x.schema === SchemaType.ERC721)
-            .map(
-                (x) =>
-                    ({
-                        address: x.address,
-                        chainId,
-                        schema: SchemaType.ERC721,
-                        name: x.name,
-                        symbol: x.symbol,
-                        baseURI: x.iconURL,
-                        iconURL: x.iconURL,
-                        balance: x.balance,
-                    } as NonFungibleTokenContract<ChainId, SchemaType>),
-            ),
-        (x) => x.address + x.chainId,
-    )
+    const contractList = assets
+        .filter((x) => x.schema === SchemaType.ERC721)
+        .map(
+            (x) =>
+                ({
+                    address: x.address,
+                    chainId,
+                    schema: SchemaType.ERC721,
+                    name: x.name,
+                    symbol: x.symbol,
+                    baseURI: x.iconURL,
+                    iconURL: x.iconURL,
+                    balance: x.balance,
+                } as NonFungibleTokenContract<ChainId, SchemaType>),
+        )
 
     // #region fuse
     const fuse = useMemo(
