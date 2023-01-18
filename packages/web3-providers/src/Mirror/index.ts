@@ -211,7 +211,7 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
                 symbol: response.entry.writingNFT.symbol,
                 description: response.entry.writingNFT.description,
                 address: response.entry.writingNFT.proxyAddress,
-                tokensTotal: response.entry.writingNFT.quantity,
+                balance: response.entry.writingNFT.quantity,
                 iconURL: response.entry.writingNFT.media.url,
                 createAt: response.entry.writingNFT.timestamp,
             },

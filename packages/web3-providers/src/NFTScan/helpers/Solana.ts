@@ -129,7 +129,7 @@ export function createNonFungibleCollection(
         symbol: collection.symbol,
         slug: collection.symbol || '',
         address: '',
-        tokensTotal: collection.items_total,
+        balance: collection.items_total,
         description: collection.description,
         iconURL: collection.logo_url,
         verified: collection.verified,

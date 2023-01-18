@@ -359,6 +359,7 @@ export interface NonFungibleTokenContract<ChainId, SchemaType> {
     address: string
     schema: SchemaType
     owner?: string
+    balance?: number
     logoURL?: string
     iconURL?: string
     /** @example 2.5% */
@@ -394,8 +395,8 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     address?: string
     schema?: SchemaType
     iconURL?: string | null
-    /** the amount of mint tokens */
-    tokensTotal?: number
+    /** the balance of the current owner */
+    balance?: number
     /** the amount of holders */
     ownersTotal?: number
     /** verified by provider */
