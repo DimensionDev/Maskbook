@@ -273,7 +273,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
 
     const { RED_PACKET_NFT_ADDRESS } = useNftRedPacketConstants(chainId)
 
-    const { value: customCollections = [] } = useNFTRedpacketCustomCollections(account, chainId)
+    const { value: customCollections = EMPTY_LIST } = useNFTRedpacketCustomCollections(account, chainId)
 
     const validationMessage = useMemo(() => {
         if (!balance) return t.erc721_insufficient_balance()
