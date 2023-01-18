@@ -1,7 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { v4 as uuid } from 'uuid'
 import { unionBy } from 'lodash-es'
 import { z } from 'zod'
 import { EthereumAddress } from 'wallet.ts'
@@ -78,7 +77,6 @@ export const TransferERC721 = memo(() => {
     } | null>(null)
     const [minPopoverWidth, setMinPopoverWidth] = useState(0)
     const [contract, setContract] = useState<NonFungibleTokenContract<ChainId, SchemaType>>()
-    const [id] = useState(uuid)
     const [gasLimit_, setGasLimit_] = useState(0)
     const network = useNetworkDescriptor()
     const { Others } = useWeb3State()
@@ -194,11 +192,11 @@ export const TransferERC721 = memo(() => {
         },
     )
 
-    const {
-        asyncRetry: { loading: loadingOwnerList },
-        tokenDetailedOwnerList = [],
-        clearTokenDetailedOwnerList,
-    } = useNonFungibleOwnerTokens(contract?.address ?? '', account, chainId)
+    const { loading: loadingOwnerList, value: tokenDetailedOwnerList = [] } = useNonFungibleOwnerTokens(
+        contract?.address ?? '',
+        account,
+        chainId,
+    )
 
     const onTransfer = useCallback(
         async (data: FormInputs) => {
