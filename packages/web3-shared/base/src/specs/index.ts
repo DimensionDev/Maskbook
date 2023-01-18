@@ -408,6 +408,7 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     createdAt?: number
     /** source type */
     source?: SourceType
+    assets?: Array<NonFungibleAsset<ChainId, SchemaType>>
     socialLinks?: {
         website?: string
         email?: string

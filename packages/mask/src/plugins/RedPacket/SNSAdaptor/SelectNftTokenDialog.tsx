@@ -3,13 +3,13 @@ import { useUpdate } from 'react-use'
 import { findLastIndex, uniq } from 'lodash-es'
 import { AssetPreviewer } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { isSameAddress, NonFungibleToken, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { isSameAddress, NonFungibleCollection, NonFungibleToken } from '@masknet/web3-shared-base'
 import { SchemaType, formatTokenId, ChainId } from '@masknet/web3-shared-evm'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { Translate, useI18N } from '../locales/index.js'
 import { DialogContent, Box, InputBase, Button, Typography, ListItem, useTheme } from '@mui/material'
 import { QuestionMark as QuestionMarkIcon, Check as CheckIcon } from '@mui/icons-material'
-import { LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
@@ -103,12 +103,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         width: 120,
         height: 180,
         overflow: 'hidden',
-    },
-    loadingWrapper: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'transparent',
     },
     selectWrapperNftNameWrapper: {
         width: '100%',
@@ -246,23 +240,15 @@ export type OrderedERC721Token = NonFungibleToken<ChainId, SchemaType.ERC721> & 
 }
 
 export interface SelectNftTokenDialogProps {
-    loadingOwnerList: boolean
     onClose: () => void
-    contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721> | null | undefined
+    contract: NonFungibleCollection<ChainId, SchemaType> | null | undefined
     existTokenDetailedList: OrderedERC721Token[]
     tokenDetailedOwnerList: OrderedERC721Token[]
     setExistTokenDetailedList: React.Dispatch<React.SetStateAction<OrderedERC721Token[]>>
 }
 
 export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
-    const {
-        contract,
-        existTokenDetailedList,
-        tokenDetailedOwnerList,
-        setExistTokenDetailedList,
-        onClose,
-        loadingOwnerList,
-    } = props
+    const { contract, existTokenDetailedList, tokenDetailedOwnerList, setExistTokenDetailedList, onClose } = props
     const theme = useTheme()
     const { t: tr } = useBaseI18N()
     const t = useI18N()
@@ -572,11 +558,6 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                         </div>
                                     )
                                 })}
-                                {loadingOwnerList ? (
-                                    <ListItem className={cx(classes.selectWrapper, classes.loadingWrapper)}>
-                                        <LoadingBase size={25} />
-                                    </ListItem>
-                                ) : null}
                             </div>
                         )}
                     </>
