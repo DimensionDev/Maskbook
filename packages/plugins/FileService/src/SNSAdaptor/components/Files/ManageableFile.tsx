@@ -1,8 +1,8 @@
-import { FC, memo, useRef, useState } from 'react'
 import { Icons } from '@masknet/icons'
-import { MenuItem, Typography } from '@mui/material'
+import { formatFileSize } from '@masknet/shared-base'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
-import { formatFileSize } from '@masknet/kit'
+import { MenuItem, Typography } from '@mui/material'
+import { FC, memo, useRef, useState } from 'react'
 import { Translate, useI18N } from '../../../locales/index.js'
 import type { FileInfo } from '../../../types.js'
 import { FileBaseProps, FileFrame } from './FileFrame.js'
@@ -117,7 +117,7 @@ export const ManageableFile: FC<ManageableFileProps> = memo(
                         </ShadowRootMenu>
                     </div>
                 }>
-                <Typography className={classes.desc}>{formatFileSize(file.size, true)}</Typography>
+                <Typography className={classes.desc}>{formatFileSize(file.size)}</Typography>
                 {file.key ? (
                     <Typography className={classes.meta}>
                         <Translate.file_key
