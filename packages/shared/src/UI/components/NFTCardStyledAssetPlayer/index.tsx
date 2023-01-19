@@ -126,7 +126,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
                     }}
                     containerProps={{ className: classes.container }}
                     size="100%"
-                    style={{ objectFit: 'cover' }}
+                    style={{ objectFit: 'contain' }}
                     src={urlComputed}
                     fallback={fallbackImageURL}
                 />
