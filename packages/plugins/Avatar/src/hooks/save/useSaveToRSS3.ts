@@ -1,4 +1,4 @@
-import { EnhanceableSite, getSiteType } from '@masknet/shared-base'
+import { getEnhanceableSiteType } from '@masknet/shared-base'
 import { useCallback } from 'react'
 import { RSS3_KEY_SNS } from '../../constants.js'
 import type { NextIDAvatarMeta } from '../../types.js'
@@ -9,7 +9,9 @@ export function useSaveToRSS3() {
 
     return useCallback(
         async (info: NextIDAvatarMeta, account: string) => {
-            return saveNFTAvatar(account, info, getSiteType() as EnhanceableSite, RSS3_KEY_SNS.TWITTER)
+            const siteType = getEnhanceableSiteType()
+            if (!siteType) return
+            return saveNFTAvatar(account, info, siteType, RSS3_KEY_SNS.TWITTER)
         },
         [saveNFTAvatar],
     )

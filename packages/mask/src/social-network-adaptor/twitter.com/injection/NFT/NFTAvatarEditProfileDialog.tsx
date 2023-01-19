@@ -3,7 +3,6 @@ import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { Twitter } from '@masknet/web3-providers'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { NFTAvatarButton } from '@masknet/plugin-avatar'
 import { startWatch, createReactRootShadowed, MaskMessages } from '../../../../utils/index.js'
 import { searchProfileAvatarSelector, searchProfileSaveSelector } from '../../utils/selector.js'
 import {
@@ -17,6 +16,7 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import { currentPersonaIdentifier } from '../../../../../shared/legacy-settings/settings.js'
 import { ConnectPersonaBoundary } from '@masknet/shared'
 import { Services } from '../../../../extension/service.js'
+import { NFTAvatarButton } from '@masknet/plugin-avatar'
 
 export function injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())

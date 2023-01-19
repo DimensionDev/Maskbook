@@ -1,6 +1,6 @@
 import LRU from 'lru-cache'
 import { useAsyncRetry } from 'react-use'
-import { EnhanceableSite, NetworkPluginID, getSiteType } from '@masknet/shared-base'
+import { EnhanceableSite, NetworkPluginID, getEnhanceableSiteType, getSiteType } from '@masknet/shared-base'
 import type { RSS3_KEY_SNS } from '../constants.js'
 import type { AvatarMetaDB, NextIDAvatarMeta } from '../types.js'
 import { useGetNFTAvatar } from './useGetNFTAvatar.js'
@@ -41,7 +41,9 @@ async function getNFTAvatarForCache(
 ) {
     const avatarMetaFromPersona = await getNFTAvatarByUserId(userId, avatarId, persona)
     if (avatarMetaFromPersona) return avatarMetaFromPersona
-    const avatarMeta = await fn(userId, getSiteType() as EnhanceableSite, snsKey)
+    const siteType = getEnhanceableSiteType()
+    if (!siteType) return
+    const avatarMeta = await fn(userId, siteType, snsKey)
     if (!avatarMeta) return
     if (avatarId && avatarId !== avatarMeta.avatarId) return
     if (avatarMeta.pluginId === NetworkPluginID.PLUGIN_SOLANA) {

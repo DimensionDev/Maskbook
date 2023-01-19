@@ -113,11 +113,6 @@ async function getAvatarFromNextIDStorage(
     return
 }
 
-function getNextIDPlatform() {
-    if (getSiteType() === EnhanceableSite.Twitter) return NextIDPlatform.Twitter
-    return
-}
-
 /**
  * find latest used persona binding
  */
@@ -138,7 +133,8 @@ export async function getNFTAvatarByUserId(
     avatarId: string,
     persona: string,
 ): Promise<NextIDAvatarMeta | undefined> {
-    const platform = getNextIDPlatform() ?? NextIDPlatform.Twitter
+    const platform = getSiteType() === EnhanceableSite.Twitter ? NextIDPlatform.Twitter : undefined
+    if (!platform) return
     const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)
 
     if (persona) {

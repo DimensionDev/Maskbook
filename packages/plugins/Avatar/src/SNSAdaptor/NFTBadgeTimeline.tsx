@@ -28,7 +28,6 @@ export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const [avatarId_, setAvatarId_] = useState('')
     const { classes } = useStyles(undefined, { props })
-    // const { NFTAvatarTimelineUpdated } = useSNSAdaptorContext()
 
     const onUpdate = (data: AvatarMetaDB) => {
         if (!data.address || !data.tokenId) {
