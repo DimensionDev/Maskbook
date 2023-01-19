@@ -1,7 +1,7 @@
-import { first, memoize } from 'lodash-es'
+import { nth, memoize } from 'lodash-es'
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
-import { AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
+import { AbiItem, hexToNumber, numberToHex, sha3, toHex, toNumber } from 'web3-utils'
 import {
     AddressType,
     SchemaType,
@@ -61,6 +61,10 @@ import { fetchJSON } from '../../entry-helpers.js'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
+const FOOTPRINT =
+    sha3([navigator.userAgent, navigator.language, screen.width, screen.height].join()) ??
+    '0x0000000000000000000000000000000000000000000000000000000000000000'
+const SEED = hexToNumber(FOOTPRINT.slice(0, 10))
 
 const createWeb3SDK = memoize(
     (url: string) => new Web3(url),
@@ -139,9 +143,14 @@ export class Web3API
         if (result?.length !== listOfAddress.length) return {}
         return Object.fromEntries(listOfAddress.map<[string, string]>((x, i) => [x, result[i]]))
     }
+
     getWeb3(chainId: ChainId) {
-        const RPC_URL = first(getRPCConstants(chainId).RPC_URLS)
+        const { RPC_URLS = [] } = getRPCConstants(chainId)
+        if (!RPC_URLS.length) throw new Error('No RPC preset.')
+
+        const RPC_URL = nth(RPC_URLS, SEED % RPC_URLS.length)
         if (!RPC_URL) throw new Error('Failed to create web3 provider.')
+
         return createWeb3SDK(RPC_URL)
     }
 
