@@ -5,7 +5,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
-import { useI18N } from '../../../../../utils/index.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const PLATFORM_COSTS: {
     [k in SourceType]?: number
@@ -62,7 +62,7 @@ export interface DetailsCardProps {
 
 export function DetailsCard(props: DetailsCardProps) {
     const { asset, sourceType } = props
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const { Others } = useWeb3State()
     const { pluginID } = useNetworkContext()
@@ -70,28 +70,28 @@ export function DetailsCard(props: DetailsCardProps) {
     const infos: Array<{ title: string; value?: string; link?: boolean; tooltip?: string }> = []
     if (pluginID === NetworkPluginID.PLUGIN_SOLANA) {
         infos.push({
-            title: t('plugin_collectible_mint_address'),
+            title: t.plugin_collectible_mint_address(),
             value: Others?.formatAddress(asset.address, 4),
             link: true,
         })
     } else if (pluginID === NetworkPluginID.PLUGIN_EVM) {
         infos.push(
-            { title: t('plugin_collectible_token_id'), value: Others?.formatTokenId(asset.tokenId, 4) },
-            { title: t('contract'), value: Others?.formatAddress(asset.address, 4) ?? '-', link: true },
+            { title: t.plugin_collectible_token_id(), value: Others?.formatTokenId(asset.tokenId, 4) },
+            { title: t.contract(), value: Others?.formatAddress(asset.address, 4) ?? '-', link: true },
         )
     }
     infos.push(
-        { title: t('plugin_collectible_block_chain'), value: Others?.chainResolver.chainFullName(asset.chainId) },
-        { title: t('token_standard'), value: Others?.formatSchemaType(asset.schema || asset.contract?.schema) },
+        { title: t.plugin_collectible_block_chain(), value: Others?.chainResolver.chainFullName(asset.chainId) },
+        { title: t.token_standard(), value: Others?.formatSchemaType(asset.schema || asset.contract?.schema) },
         {
-            title: t('plugin_collectible_creator_earning'),
+            title: t.plugin_collectible_creator_earning(),
             value: asset.contract?.creatorEarning ?? '-',
-            tooltip: t('plugin_collectible_creator_earning_tooltip'),
+            tooltip: t.plugin_collectible_creator_earning_tooltip(),
         },
     )
     if (sourceType && PLATFORM_COSTS[sourceType]) {
         infos.push({
-            title: t('plugin_collectible_platform_costs', { platform: sourceType ?? SourceType.NFTScan }),
+            title: t.plugin_collectible_platform_costs({ platform: sourceType ?? SourceType.NFTScan }),
             value: `${PLATFORM_COSTS[sourceType]}%`,
         })
     }

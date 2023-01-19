@@ -6,7 +6,7 @@ import { Icons } from '@masknet/icons'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ActivityCard } from './ActivityCard.js'
-import { useI18N } from '../../../../../utils/index.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -36,7 +36,7 @@ export function ActivitiesList(props: ActivitiesListProps) {
     const { events } = props
     const _events = events.value?.data ?? EMPTY_LIST
 
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
 
     if (events.loading)
@@ -48,9 +48,9 @@ export function ActivitiesList(props: ActivitiesListProps) {
     if (events.error || !events.value)
         return (
             <div className={classes.wrapper}>
-                <Typography className={classes.emptyText}>{t('load_failed')}</Typography>
+                <Typography className={classes.emptyText}>{t.load_failed()}</Typography>
                 <Button variant="text" onClick={() => events.retry()}>
-                    {t('retry')}
+                    {t.retry()}
                 </Button>
             </div>
         )
@@ -58,7 +58,7 @@ export function ActivitiesList(props: ActivitiesListProps) {
         return (
             <div className={classes.wrapper}>
                 <Icons.EmptySimple className={classes.emptyIcon} />
-                <Typography className={classes.emptyText}>{t('plugin_collectible_nft_activity_empty')}</Typography>
+                <Typography className={classes.emptyText}>{t.plugin_collectible_nft_activity_empty()}</Typography>
             </div>
         )
 

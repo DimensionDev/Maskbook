@@ -13,10 +13,10 @@ import {
 } from '../../../../components/DataSource/useActivatedUI.js'
 import { ButtonStyle } from '../../constant.js'
 import { usePersonasFromDB } from '../../../../components/DataSource/usePersonasFromDB.js'
+import { ConnectPersonaBoundary } from '@masknet/shared'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { currentPersonaIdentifier } from '../../../../../shared/legacy-settings/settings.js'
-import { ConnectPersonaBoundary } from '@masknet/shared'
-import { Services } from '../../../../extension/service.js'
+import Services from '../../../../extension/service.js'
 
 export function injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())
@@ -74,20 +74,20 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
             pluginID: PluginID.Avatar,
         })
     }
+    const personas = usePersonasFromDB()
+    const lastRecognized = useLastRecognizedIdentity()
+    const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const themeSettings = useThemeSettings()
     const buttonStyle = ButtonStyle[themeSettings.size]
 
     const { classes } = useStyles({ buttonSize: buttonStyle.buttonSize, fontSize: buttonStyle.fontSize })
-    const allPersonas = usePersonasFromDB()
-    const lastRecognized = useLastRecognizedIdentity()
-    const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
     return (
         <div className={classes.root}>
             <ConnectPersonaBoundary
-                currentPersonaIdentifier={currentIdentifier}
-                personas={allPersonas}
+                personas={personas}
                 identity={lastRecognized}
+                currentPersonaIdentifier={currentIdentifier}
                 openDashboard={Services.Helper.openDashboard}
                 ownPersonaChanged={MaskMessages.events.ownPersonaChanged}
                 handlerPosition="top-right"

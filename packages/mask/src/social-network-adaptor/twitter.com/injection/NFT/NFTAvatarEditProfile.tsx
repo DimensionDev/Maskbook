@@ -8,9 +8,9 @@ import { injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog } from './NFTAv
 import { ButtonStyle, ButtonProps } from '../../constant.js'
 import { useLastRecognizedIdentity, useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
 import { usePersonasFromDB } from '../../../../components/DataSource/usePersonasFromDB.js'
+import { ConnectPersonaBoundary } from '@masknet/shared'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { currentPersonaIdentifier } from '../../../../../shared/legacy-settings/settings.js'
-import { ConnectPersonaBoundary } from '@masknet/shared'
 import Services from '../../../../extension/service.js'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
@@ -65,9 +65,9 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
 
     return (
         <ConnectPersonaBoundary
-            currentPersonaIdentifier={currentIdentifier}
             personas={allPersonas}
             identity={lastRecognized}
+            currentPersonaIdentifier={currentIdentifier}
             openDashboard={Services.Helper.openDashboard}
             ownPersonaChanged={MaskMessages.events.ownPersonaChanged}
             handlerPosition="top-right"

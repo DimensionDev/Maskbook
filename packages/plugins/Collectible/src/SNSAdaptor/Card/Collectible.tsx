@@ -15,7 +15,8 @@ import { ActivitiesTab } from './tabs/ActivitiesTab.js'
 import { DetailsTab } from './tabs/DetailsTab.js'
 import { OffersTab } from './tabs/OffersTab.js'
 import { Context } from '../Context/index.js'
-import { useI18N, useSwitcher } from '../../../../../utils/index.js'
+import { useI18N } from '../../locales/i18n_generated.js'
+import { useSwitcher } from '../hooks/useSwitcher.js'
 
 const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) => {
     return {
@@ -111,7 +112,7 @@ const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) =
 export interface CollectibleProps {}
 
 export function Collectible(props: CollectibleProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activities')
     const { classes } = useStyles({ currentTab })
     const { asset, events, orders, sourceType, setSourceType } = Context.useContainer()
@@ -137,20 +138,20 @@ export function Collectible(props: CollectibleProps) {
                 padding={1}
                 minHeight={148}>
                 <LoadingBase />
-                <Typography>{t('loading')}</Typography>
+                <Typography>{t.loading()}</Typography>
             </Box>
         )
     if (!asset.value)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                 <Typography color={MaskColorVar.textPluginColor} sx={{ marginTop: 8, marginBottom: 8 }}>
-                    {t('plugin_collectible_failed_load', { source: resolveSourceTypeName(sourceType) })}
+                    {t.plugin_collectible_failed_load({ source: resolveSourceTypeName(sourceType) })}
                 </Typography>
                 <Box alignItems="center" sx={{ padding: 1, display: 'flex', flexDirection: 'row', width: '100%' }}>
                     <Box sx={{ flex: 1, padding: 1 }}> {CollectibleProviderSwitcher}</Box>
                     <Box sx={{ flex: 1, padding: 1 }}>
                         <Button fullWidth onClick={() => asset.retry()} variant="roundedDark">
-                            {t('plugin_collectible_refresh')}
+                            {t.plugin_collectible_refresh()}
                         </Button>
                     </Box>
                 </Box>
@@ -170,10 +171,10 @@ export function Collectible(props: CollectibleProps) {
         return tabMap[currentTab] || null
     }
     const Tabs = [
-        { value: tabs.about, label: t('plugin_collectible_about') },
-        { value: tabs.details, label: t('plugin_collectible_details') },
-        { value: tabs.offers, label: t('plugin_collectible_offers') },
-        { value: tabs.activities, label: t('plugin_collectible_activities') },
+        { value: tabs.about, label: t.plugin_collectible_about() },
+        { value: tabs.details, label: t.plugin_collectible_details() },
+        { value: tabs.offers, label: t.plugin_collectible_offers() },
+        { value: tabs.activities, label: t.plugin_collectible_activities() },
     ]
 
     return (
@@ -228,7 +229,7 @@ export function Collectible(props: CollectibleProps) {
             {endDate && isValidDate(endDate) && isAfter(endDate, Date.now()) && (
                 <Box sx={{ marginTop: 1 }}>
                     <Typography className={classes.countdown}>
-                        {t('plugin_collectible_sale_end', {
+                        {t.plugin_collectible_sale_end({
                             time: formatDateTime(endDate, 'yyyy-MM-dd HH:mm:ss'),
                         })}
                     </Typography>

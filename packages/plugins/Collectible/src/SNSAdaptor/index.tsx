@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { Box } from '@mui/material'
@@ -5,11 +6,16 @@ import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { SocialAddressType, SearchResultType } from '@masknet/web3-shared-base'
 import { NetworkPluginID, parseURLs } from '@masknet/shared-base'
-import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
+import {
+    type Plugin,
+    usePostInfoDetails,
+    usePluginWrapper,
+    SNSAdaptorContext,
+} from '@masknet/plugin-infra/content-script'
 import { PostInspector } from './PostInspector.js'
 import { base } from '../base.js'
 import { getPayloadFromURLs } from '../helpers/index.js'
-import { setupContext } from '../context.js'
+import { SharedContextSettings, setupContext } from '../context.js'
 import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
 import { DialogInspector } from './DialogInspector.js'
 import { CollectionList } from './List/CollectionList.js'
@@ -22,9 +28,15 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
         TabContent({ socialAccount, identity }) {
             if (!socialAccount) return null
             return (
-                <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
-                    <CollectionList socialAccount={socialAccount} persona={identity?.publicKey} profile={identity} />
-                </Web3ContextProvider>
+                <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
+                    <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
+                        <CollectionList
+                            socialAccount={socialAccount}
+                            persona={identity?.publicKey}
+                            profile={identity}
+                        />
+                    </Web3ContextProvider>
+                </SNSAdaptorContext.Provider>
             )
         },
     },
@@ -48,12 +60,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
         setupContext(context)
+        SharedContextSettings.value = context
     },
     GlobalInjection() {
         return (
-            <>
+            <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
                 <DialogInspector />
-            </>
+            </SNSAdaptorContext.Provider>
         )
     },
     PostInspector() {
@@ -77,15 +90,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 TabContent({ socialAccount, identity }) {
                     if (!socialAccount) return null
                     return (
-                        <Box pr={1.5}>
-                            <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
-                                <CollectionList
-                                    socialAccount={socialAccount}
-                                    persona={identity?.publicKey}
-                                    profile={identity}
-                                />
-                            </Web3ContextProvider>
-                        </Box>
+                        <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
+                            <Box pr={1.5}>
+                                <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
+                                    <CollectionList
+                                        socialAccount={socialAccount}
+                                        persona={identity?.publicKey}
+                                        profile={identity}
+                                    />
+                                </Web3ContextProvider>
+                            </Box>
+                        </SNSAdaptorContext.Provider>
                     )
                 },
             },
@@ -116,11 +131,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     }
 
                     return (
-                        <Box pr={1.5} style={{ minHeight: 300 }}>
-                            <Web3ContextProvider value={{ pluginID: result.pluginID }}>
-                                <CollectionList socialAccount={socialAccount} persona={undefined} profile={undefined} />
-                            </Web3ContextProvider>
-                        </Box>
+                        <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
+                            <Box pr={1.5} style={{ minHeight: 300 }}>
+                                <Web3ContextProvider value={{ pluginID: result.pluginID }}>
+                                    <CollectionList
+                                        socialAccount={socialAccount}
+                                        persona={undefined}
+                                        profile={undefined}
+                                    />
+                                </Web3ContextProvider>
+                            </Box>
+                        </SNSAdaptorContext.Provider>
                     )
                 },
             },

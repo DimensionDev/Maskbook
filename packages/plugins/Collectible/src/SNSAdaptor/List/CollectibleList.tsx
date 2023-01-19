@@ -3,10 +3,10 @@ import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NonFungibleAsset } from '@masknet/web3-shared-base'
 import { Box, Button, Typography } from '@mui/material'
-import { useI18N } from '../../../../../utils/index.js'
 import type { CollectibleGridProps } from '../../types.js'
 import { CollectibleItem } from './CollectibleItem.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 3, gap = 2 }) => {
     const gapIsNumber = typeof gap === 'number'
@@ -51,7 +51,7 @@ export interface CollectibleListProps extends withClasses<'empty' | 'button'>, C
 
 export function CollectibleList(props: CollectibleListProps) {
     const { pluginID, collectibles, columns, gap, loading, retry, error, hasRetry = true } = props
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles({ columns, gap }, { props: { classes: props.classes } })
 
     return (
@@ -59,10 +59,10 @@ export function CollectibleList(props: CollectibleListProps) {
             {loading && <LoadingSkeleton className={classes.root} />}
             {error || (collectibles.length === 0 && !loading) ? (
                 <Box className={classes.text}>
-                    <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
+                    <Typography color="textSecondary">{t.dashboard_no_collectible_found()}</Typography>
                     {hasRetry ? (
                         <Button className={classes.button} variant="text" onClick={retry}>
-                            {t('plugin_collectible_retry')}
+                            {t.plugin_collectible_retry()}
                         </Button>
                     ) : null}
                 </Box>

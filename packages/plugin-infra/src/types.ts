@@ -20,6 +20,7 @@ import type {
     ProfileIdentifier,
     ScopedStorage,
     SignType,
+    ValueRefWithReady,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -384,7 +385,9 @@ export namespace Plugin.SNSAdaptor {
             identity: IdentityResolved | undefined,
         ) => Promise<SocialIdentity | undefined>
         ownProofChanged: UnboundedRegistry<void>
+        ownPersonaChanged: UnboundedRegistry<void>
         setMinimalMode: (id: string, enabled: boolean) => Promise<void>
+        currentPersonaIdentifier: ValueRefWithReady<string>
 
         getPostURL?: (identifier: PostIdentifier) => URL | null
         share?: (text: string) => void

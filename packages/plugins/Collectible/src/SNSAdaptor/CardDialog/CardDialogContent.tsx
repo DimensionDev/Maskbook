@@ -1,26 +1,26 @@
+/* eslint-disable no-nested-ternary */
 import { useCallback } from 'react'
 import { openWindow, useValueRef } from '@masknet/shared-base-ui'
 import { Button, Typography } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { ConnectPersonaBoundary, PluginWalletStatusBar } from '@masknet/shared'
+import { PluginWalletStatusBar } from '@masknet/shared'
 import { PluginID, NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { SourceType, resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { MaskMessages, useI18N as useBaseI18n } from '../../../../../utils/index.js'
 import { AboutTab } from './tabs/AboutTab.js'
 import { OffersTab } from './tabs/OffersTab.js'
 import { ActivitiesTab } from './tabs/ActivitiesTab.js'
 import { TabType } from '../../types.js'
 import { FigureCard } from '../Shared/FigureCard.js'
 import { Context } from '../Context/index.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 import {
+    useAllPersonas,
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
-} from '../../../../../components/DataSource/useActivatedUI.js'
-import { usePersonasFromDB } from '../../../../../components/DataSource/usePersonasFromDB.js'
-import { currentPersonaIdentifier } from '../../../../../../shared/legacy-settings/settings.js'
-import Services from '../../../../../extension/service.js'
+    useSNSAdaptorContext,
+} from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
     (theme, props) => ({
@@ -82,7 +82,7 @@ export interface CardDialogContentProps {
 export function CardDialogContent(props: CardDialogContentProps) {
     const { currentTab } = props
     const { classes } = useStyles()
-    const { t } = useBaseI18n()
+    const t = useI18N()
     const {
         asset,
         orders,
@@ -93,14 +93,13 @@ export function CardDialogContent(props: CardDialogContentProps) {
         chainId,
     } = Context.useContainer()
     const currentVisitingIdentity = useCurrentVisitingIdentity()
-
+    const lastRecognized = useLastRecognizedIdentity()
+    const { ownPersonaChanged, currentPersonaIdentifier, openDashboard } = useSNSAdaptorContext()
+    const currentIdentifier = useValueRef(currentPersonaIdentifier)
+    const personas = useAllPersonas()
     const onBeforeAction = useCallback(() => {
         props.setOpen(false)
     }, [props.setOpen])
-
-    const allPersonas = usePersonasFromDB()
-    const lastRecognized = useLastRecognizedIdentity()
-    const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
     const onPFPButtonClick = useCallback(() => {
         CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
@@ -130,9 +129,9 @@ export function CardDialogContent(props: CardDialogContentProps) {
         return (
             <div className={classes.contentWrapper}>
                 <div className={classes.loadingPlaceholder}>
-                    <Typography className={classes.emptyText}>{t('load_failed')}</Typography>
+                    <Typography className={classes.emptyText}>{t.load_failed()}</Typography>
                     <Button variant="text" onClick={() => asset.retry()}>
-                        {t('retry')}
+                        {t.retry()}
                     </Button>
                 </div>
             </div>
@@ -157,13 +156,13 @@ export function CardDialogContent(props: CardDialogContentProps) {
 
             <Web3ContextProvider value={{ pluginID: parentPluginID }}>
                 <PluginWalletStatusBar className={classes.footer} expectedPluginID={pluginID} expectedChainId={chainId}>
-                    {origin === 'pfp' && currentVisitingIdentity.isOwner ? (
+                    {origin === 'pfp' && currentVisitingIdentity?.isOwner ? (
                         <ConnectPersonaBoundary
-                            personas={allPersonas}
+                            personas={personas}
                             identity={lastRecognized}
                             currentPersonaIdentifier={currentIdentifier}
-                            openDashboard={Services.Helper.openDashboard}
-                            ownPersonaChanged={MaskMessages.events.ownPersonaChanged}
+                            openDashboard={openDashboard}
+                            ownPersonaChanged={ownPersonaChanged}
                             handlerPosition="top-right"
                             customHint
                             directTo={PluginID.Avatar}
@@ -175,7 +174,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
                                 onClick={onPFPButtonClick}
                                 fullWidth>
                                 <Icons.Avatar size={20} />
-                                <span className={classes.buttonText}>{t('plugin_collectibles_pfp_button')}</span>
+                                <span className={classes.buttonText}>{t.plugin_collectibles_pfp_button()}</span>
                             </Button>
                         </ConnectPersonaBoundary>
                     ) : asset.value.link && asset.value.source ? (
@@ -186,7 +185,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
                             onClick={onMoreButtonClick}
                             fullWidth>
                             <span className={classes.buttonText}>
-                                {t('plugin_collectibles_more_on_button', {
+                                {t.plugin_collectibles_more_on_button({
                                     provider:
                                         asset.value.source === SourceType.NFTScan
                                             ? resolveSourceTypeName(asset.value.source)

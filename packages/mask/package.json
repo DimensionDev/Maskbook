@@ -35,6 +35,7 @@
     "@masknet/plugin-gitcoin": "workspace:^",
     "@masknet/plugin-maskbox": "workspace:^",
     "@masknet/plugin-transak": "workspace:^",
+    "@masknet/plugin-collectible": "workspace:^",
     "@masknet/plugin-vcent": "workspace:^",
     "@masknet/plugin-go-plus-security": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",

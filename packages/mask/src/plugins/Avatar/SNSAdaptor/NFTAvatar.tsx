@@ -143,7 +143,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
         <Box className={classes.error}>
             <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
             <Button className={classes.button} variant="text" onClick={nextPage}>
-                {t('plugin_collectible_retry')}
+                {t('retry')}
             </Button>
         </Box>
     )
