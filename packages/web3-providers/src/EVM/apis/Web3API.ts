@@ -61,10 +61,7 @@ import { fetchJSON } from '../../entry-helpers.js'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
-const FOOTPRINT =
-    process.env.NODE_ENV === 'test'
-        ? undefined
-        : sha3([navigator.userAgent, navigator.language, screen.width, screen.height].join())
+const FOOTPRINT = sha3([navigator.userAgent, navigator.language, screen.width, screen.height].join())
 const SEED = FOOTPRINT ? hexToNumber(FOOTPRINT.slice(0, 10)) : 0
 console.log(`The EVM RPC selection seed is ${SEED}.`)
 
