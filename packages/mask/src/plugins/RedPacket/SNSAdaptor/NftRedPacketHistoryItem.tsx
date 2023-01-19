@@ -4,9 +4,9 @@ import { TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { NetworkPluginID } from '@masknet/shared-base'
-import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
-import { useChainContext, useNonFungibleTokenContract } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { isSameAddress, NonFungibleCollection } from '@masknet/web3-shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
 import { dateTimeFormat } from '../../ITO/assets/formatDate.js'
@@ -122,32 +122,29 @@ const useStyles = makeStyles()((theme) => {
 
 export interface NftRedPacketHistoryItemProps {
     history: NftRedPacketHistory
-    onSend: (history: NftRedPacketHistory, contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721>) => void
+    collections: Array<NonFungibleCollection<ChainId, SchemaType>>
+    onSend: (history: NftRedPacketHistory, contract: NonFungibleCollection<ChainId, SchemaType>) => void
     onShowPopover: (anchorEl: HTMLElement, text: string) => void
     onHidePopover: () => void
 }
 export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
-    ({ history, onSend, onShowPopover, onHidePopover }) => {
+    ({ history, onSend, onShowPopover, onHidePopover, collections }) => {
         const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const t = useI18N()
         const { classes, cx } = useStyles()
         const {
             computed: { canSend, isPasswordValid },
         } = useNftAvailabilityComputed(account, history.payload)
-        const { value: contractDetailed } = useNonFungibleTokenContract(
-            NetworkPluginID.PLUGIN_EVM,
-            history.token_contract.address,
-            undefined,
-            { account },
-        )
+
+        const collection = collections.find((x) => isSameAddress(x.address, history.token_contract.address))
         const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
             WalletMessages.events.ApplicationDialogUpdated,
         )
         const handleSend = useCallback(() => {
-            if (!(canSend && contractDetailed && isPasswordValid)) return
-            onSend(history, contractDetailed as NonFungibleTokenContract<ChainId, SchemaType.ERC721>)
+            if (!(canSend && collection && isPasswordValid)) return
+            onSend(history, collection)
             closeApplicationBoardDialog()
-        }, [onSend, closeApplicationBoardDialog, canSend, history, contractDetailed, isPasswordValid])
+        }, [onSend, closeApplicationBoardDialog, canSend, history, collection, isPasswordValid])
 
         const { value: redpacketStatus } = useAvailabilityNftRedPacket(history.rpid, account)
         const bitStatusList = redpacketStatus
@@ -167,10 +164,10 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                 <Box className={classes.box}>
                     <TokenIcon
                         className={classes.icon}
-                        address={contractDetailed?.address ?? ''}
-                        name={contractDetailed?.name ?? '-'}
+                        address={collection?.address ?? ''}
+                        name={collection?.name ?? '-'}
                         logoURL={
-                            contractDetailed?.iconURL ??
+                            collection?.iconURL ??
                             new URL('../../../resources/maskFilledIcon.png', import.meta.url).toString()
                         }
                     />
@@ -204,11 +201,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                             ) : null}
                         </section>
                         <section className={classes.nftList}>
-                            <NftList
-                                contract={contractDetailed ?? history.token_contract}
-                                statusList={bitStatusList}
-                                tokenIds={history.token_ids}
-                            />
+                            <NftList collection={collection} statusList={bitStatusList} tokenIds={history.token_ids} />
                         </section>
                         <section className={classes.footer}>
                             <Typography variant="body1" className={classes.footerInfo}>

@@ -33,7 +33,7 @@ export default {
     '/[DimensionDev.Maskbook] develop/packages/plugins/Gitcoin/src/locales/%locale%.json': 'co.gitcoin',
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Referral/locales/%locale%.json':
         'com.maskbook.referral',
-    '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/MaskBox/locales/%locale%.json': 'com.maskbook.box',
+    '/[DimensionDev.Maskbook] develop/packages/plugins/MaskBox/src/locales/%locale%.json': 'com.maskbook.box',
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Game/locales/%locale%.json': 'com.maskbook.game',
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Pets/locales/%locale%.json': 'com.maskbook.pets',
     '/[DimensionDev.Maskbook] develop/packages/plugins/Web3Profile/src/locales/%locale%.json': 'io.mask.web3-profile',
@@ -45,4 +45,6 @@ export default {
     '/[DimensionDev.Maskbook] develop/packages/plugins/SmartPay/src/locales/%locale%.json': 'com.mask.smart-pay',
     '/[DimensionDev.Maskbook] develop/packages/plugins/VCent/src/locales/%locale%.json': 'com.maskbook.tweet',
     '/[DimensionDev.Maskbook] develop/packages/plugins/Transak/src/locales/%locale%.json': 'com.maskbook.transak',
+    '/[DimensionDev.Maskbook] develop/packages/plugins/Collectible/src/locales/%locale%.json':
+        'com.maskbook.collectibles',
 }

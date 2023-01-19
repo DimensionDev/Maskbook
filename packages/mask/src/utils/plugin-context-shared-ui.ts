@@ -22,6 +22,8 @@ export const RestPartOfPluginUIContextShared: Omit<
     | 'connectPersona'
     | 'createPersona'
     | 'NFTAvatarTimelineUpdated'
+    | 'currentPersonaIdentifier'
+    | 'ownPersonaChanged'
 > = {
     currentPersona: createSubscriptionFromAsync(
         Services.Settings.getCurrentPersonaIdentifier,

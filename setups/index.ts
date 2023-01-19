@@ -11,6 +11,20 @@ globalThis.Headers = Headers
 globalThis.Request = Request
 globalThis.Response = Response
 
+// Add `navigator` polyfill.
+// @ts-ignore
+globalThis.navigator = {
+    userAgent: 'vitest',
+    language: 'en',
+}
+
+// Add `screen` polyfill.
+// @ts-ignore
+globalThis.screen = {
+    width: 0,
+    height: 0,
+}
+
 const server = setupServer(...AccountHandlers, ...BundlerHandlers, ...DSearchHandlers)
 
 // Start server before all tests

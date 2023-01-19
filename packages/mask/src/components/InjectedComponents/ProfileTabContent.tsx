@@ -143,10 +143,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const [hidden, setHidden] = useState(true)
     const [selectedAddress, setSelectedAddress] = useState<string | undefined>()
     const [menuOpen, setMenuOpen] = useState(false)
-
     const allPersonas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
+
     const {
         value: personaStatus,
         loading: loadingPersonaStatus,
@@ -466,8 +466,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                             </Typography>
                             {isOwnerIdentity && isTwitter(activatedSocialNetworkUI) ? (
                                 <ConnectPersonaBoundary
-                                    identity={lastRecognized}
                                     personas={allPersonas}
+                                    identity={lastRecognized}
                                     currentPersonaIdentifier={currentIdentifier}
                                     openDashboard={Services.Helper.openDashboard}
                                     ownPersonaChanged={MaskMessages.events.ownPersonaChanged}

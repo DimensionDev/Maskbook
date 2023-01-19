@@ -42,7 +42,6 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const { t } = useI18N()
     const { classes, cx } = useStyles()
     const currentIdentity = useCurrentIdentity()?.identifier
-
     const allPersonas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
@@ -53,7 +52,6 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
         lastRecognized,
         MaskMessages,
     )
-
     /** @deprecated */
     const { value: hasLocalKey } = useAsync(
         async () => (currentIdentity ? Services.Identity.hasLocalKey(currentIdentity) : false),

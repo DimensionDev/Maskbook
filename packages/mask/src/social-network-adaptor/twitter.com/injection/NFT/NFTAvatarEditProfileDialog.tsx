@@ -74,20 +74,20 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
             pluginID: PluginID.Avatar,
         })
     }
+    const personas = usePersonasFromDB()
+    const lastRecognized = useLastRecognizedIdentity()
+    const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const themeSettings = useThemeSettings()
     const buttonStyle = ButtonStyle[themeSettings.size]
 
     const { classes } = useStyles({ buttonSize: buttonStyle.buttonSize, fontSize: buttonStyle.fontSize })
-    const allPersonas = usePersonasFromDB()
-    const lastRecognized = useLastRecognizedIdentity()
-    const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
     return (
         <div className={classes.root}>
             <ConnectPersonaBoundary
-                currentPersonaIdentifier={currentIdentifier}
-                personas={allPersonas}
+                personas={personas}
                 identity={lastRecognized}
+                currentPersonaIdentifier={currentIdentifier}
                 openDashboard={Services.Helper.openDashboard}
                 ownPersonaChanged={MaskMessages.events.ownPersonaChanged}
                 handlerPosition="top-right"

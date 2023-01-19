@@ -15,10 +15,10 @@ import { WalletMessages } from '../../plugins/Wallet/messages.js'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext.js'
 import { useTimeout } from 'react-use'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
+import { useCurrentPersonaConnectStatus } from '@masknet/shared'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
 import Services from '../../extension/service.js'
-import { useCurrentPersonaConnectStatus } from '@masknet/shared'
 
 const useStyles = makeStyles<{
     shouldScroll: boolean

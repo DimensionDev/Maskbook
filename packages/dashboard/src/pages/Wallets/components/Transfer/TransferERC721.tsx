@@ -180,13 +180,13 @@ export const TransferERC721 = memo(() => {
     const { setDialog: setSelectContractDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectNftContractDialogUpdated,
         (ev) => {
-            if (ev.open || !ev.contract) return
-            if (!contract || (contract && !isSameAddress(contract.address, ev.contract.address))) {
+            if (ev.open || !ev.collection) return
+            if (!contract || (contract && !isSameAddress(contract.address, ev.collection.address))) {
                 if (contract && defaultToken && !isSameAddress(contract.address, defaultToken.address)) {
                     setDefaultToken(null)
                 }
-                setValue('contract', ev.contract.name || ev.contract.address, { shouldValidate: true })
-                setContract(ev.contract)
+                setValue('contract', ev.collection.name || ev.collection.address || '', { shouldValidate: true })
+                setContract(ev.collection as NonFungibleTokenContract<ChainId, SchemaType>)
                 setValue('tokenId', '')
             }
         },

@@ -59,10 +59,12 @@ export interface EncryptionTargetSelectorProps {
 export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
+
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const allPersonas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
-    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+
     const e2eDisabledMessage =
         props.e2eDisabled && props.e2eDisabled !== E2EUnavailableReason.NoLocalKey ? (
             <div className={classes.flex}>

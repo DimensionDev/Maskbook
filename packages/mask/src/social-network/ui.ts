@@ -16,8 +16,8 @@ import {
 } from '@masknet/shared-base'
 import type { ThemeSettings } from '@masknet/web3-shared-base'
 import { Flags } from '../../shared/index.js'
-import { currentSetupGuideStatus } from '../../shared/legacy-settings/settings.js'
 import { SetupGuideContext, SetupGuideStep } from '../../shared/legacy-settings/types.js'
+import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../shared/legacy-settings/settings.js'
 import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
 import Services from '../extension/service.js'
 import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils.js'
@@ -187,6 +187,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
                     createPersona,
                     connectPersona,
+                    ownPersonaChanged: MaskMessages.events.ownPersonaChanged,
+                    currentPersonaIdentifier,
                 }
             },
             Services.Settings.getPluginMinimalModeEnabled,

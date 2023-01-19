@@ -4,8 +4,8 @@ import isValid from 'date-fns/isValid'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Typography } from '@mui/material'
-import { useI18N } from '../../../../../utils/index.js'
 import { Rank } from './Rank.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -85,7 +85,7 @@ function isReasonableDate(value: string | number) {
 export function PropertiesCard(props: PropertiesCardProps) {
     const { asset, rank, timeline } = props
     const { classes, cx } = useStyles()
-    const { t } = useI18N()
+    const t = useI18N()
 
     if (!asset.traits?.length) return null
 
@@ -93,7 +93,7 @@ export function PropertiesCard(props: PropertiesCardProps) {
         <div className={classes.wrapper}>
             <div className={classes.titleBox}>
                 <Typography className={timeline ? cx(classes.title, classes.unset) : classes.title}>
-                    {t('plugin_collectible_properties')}
+                    {t.plugin_collectible_properties()}
                 </Typography>
                 {rank ? (
                     <div className={classes.rankBox}>
