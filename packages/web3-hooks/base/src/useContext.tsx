@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext, useState } from 'react'
+import React, { createContext, ReactNode, useCallback, useContext, useState } from 'react'
 import { compose, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount } from './useAccount.js'
@@ -53,10 +53,27 @@ function ChainContextProvider({ value, children }: React.ProviderProps<ChainCont
     const globalChainId = useChainId(pluginID)
     const globalNetworkType = useNetworkType(pluginID)
     const globalProviderType = useProviderType(pluginID)
-    const [account, setAccount] = useState<string>()
-    const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
     const [networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
     const [providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
+
+    const [chainIdMap, setChainIdMap] = useState<Partial<Record<NetworkPluginID, Web3Helper.ChainIdAll>>>({})
+    const chainId = chainIdMap[pluginID]
+    const setChainId = useCallback(
+        (id: Web3Helper.ChainIdAll) => {
+            setChainIdMap((map) => ({ ...map, [pluginID]: id }))
+        },
+        [pluginID],
+    )
+
+    const [accountMap, setAccountMap] = useState<Record<string, string>>({})
+    const accountKey = `${pluginID}:${chainId}`
+    const account = accountMap[accountKey]
+    const setAccount = useCallback(
+        (account: string) => {
+            setAccountMap((map) => ({ ...map, [accountKey]: account }))
+        },
+        [accountKey],
+    )
 
     return (
         <ChainContext.Provider
