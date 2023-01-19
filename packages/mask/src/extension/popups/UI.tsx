@@ -15,7 +15,7 @@ import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import Services from '../service.js'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { LogPlatform } from '@masknet/web3-providers'
+import { LogHubBaseAPI } from '@masknet/web3-providers/types'
 import { LoggerContextProvider } from '@masknet/shared'
 
 function usePopupTheme() {
@@ -53,7 +53,7 @@ export default function Popups() {
             <Web3ContextProvider
                 value={{ pluginID: NetworkPluginID.PLUGIN_EVM, providerType: ProviderType.MaskWallet }}>
                 <PopupContext.Provider>
-                    <LoggerContextProvider value={{ platform: LogPlatform.Popup, loggerId }}>
+                    <LoggerContextProvider value={{ platform: LogHubBaseAPI.Platform.Popup, loggerId }}>
                         <PageTitleContext.Provider value={{ title, setTitle }}>
                             <HashRouter>
                                 <Routes>

@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { delay } from '@masknet/kit'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
-import { openWindow, useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
+import { getSiteType, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
+import { openWindow, useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { getRegisteredWeb3Networks, getRegisteredWeb3Providers } from '@masknet/plugin-infra'
 import { useNetworkDescriptor, useWeb3State, useWeb3UI } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -11,8 +13,6 @@ import { WalletMessages } from '../../messages.js'
 import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc/index.js'
 import { PluginProviderRender } from './PluginProviderRender.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
-import { getSiteType, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
-import { delay } from '@masknet/kit'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

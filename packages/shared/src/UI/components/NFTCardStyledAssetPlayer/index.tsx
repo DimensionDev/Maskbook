@@ -1,5 +1,5 @@
-import { useNetworkDescriptor, useNonFungibleToken } from '@masknet/web3-hooks-base'
-import { makeStyles } from '@masknet/theme'
+import { useNetworkDescriptor, useNonFungibleAsset } from '@masknet/web3-hooks-base'
+import { makeStyles, LoadingBase } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
@@ -29,7 +29,14 @@ const useStyles = makeStyles()((theme) => ({
     },
     imgWrapper: {
         width: '100%',
-        height: '100%',
+        height: 180,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    loadingWrapper: {
+        width: '100%',
+        height: 180,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -38,6 +45,9 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         top: 6,
         left: 6,
+    },
+    container: {
+        background: 'unset !important',
     },
 }))
 
@@ -76,11 +86,10 @@ export function NFTCardStyledAssetPlayer(props: Props) {
     } = props
     const { classes, cx } = useStyles(undefined, { props })
     const theme = useTheme()
-    const { value: tokenDetailed } = useNonFungibleToken<'all'>(
+    const { value: tokenDetailed, loading: loadingAsset } = useNonFungibleAsset<'all'>(
         NetworkPluginID.PLUGIN_EVM,
         contractAddress,
-        url ? undefined : tokenId,
-        undefined,
+        tokenId,
         {
             chainId,
         },
@@ -99,7 +108,12 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         return networkDescriptor?.icon
     }, [networkDescriptor?.icon, pluginID])
 
-    if (loadingIsImageURL) return null
+    if (loadingIsImageURL || (!url && loadingAsset))
+        return (
+            <div className={classes.loadingWrapper}>
+                <LoadingBase color="primary" size={25} />
+            </div>
+        )
 
     if (isImageURL || isImageOnly || !urlComputed) {
         return (
@@ -108,6 +122,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
                     classes={{
                         fallbackImage: classes.fallbackImage,
                     }}
+                    containerProps={{ className: classes.container }}
                     size="100%"
                     style={{ objectFit: 'cover' }}
                     src={urlComputed}

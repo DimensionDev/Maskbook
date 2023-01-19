@@ -2,8 +2,10 @@
 import './register.js'
 import type { BooleanPreference, Plugin } from '@masknet/plugin-infra'
 import { Emitter } from '@servie/events'
-import { MaskMessages } from '../../shared/messages.js'
+import { LogHub } from '@masknet/web3-providers'
 import { createI18NBundle, createSubscriptionFromValueRef, i18NextInstance } from '@masknet/shared-base'
+import { LogHubBaseAPI } from '@masknet/web3-providers/types'
+import { MaskMessages } from '../../shared/messages.js'
 import { InMemoryStorages, PersistentStorages } from '../../shared/index.js'
 import { nativeAPI, hasNativeAPI } from '../../shared/native-rpc/index.js'
 import {
@@ -11,8 +13,6 @@ import {
     currentMaskWalletChainIdSettings,
 } from '../legacy-settings/wallet-settings.js'
 import { logSettings } from '../legacy-settings/settings.js'
-import { LogHub, LogPlatform } from '@masknet/web3-providers'
-import type { LogHubBase } from '@masknet/web3-providers/types'
 
 export type PartialSharedUIContext = Pick<
     Plugin.Shared.SharedUIContext,
@@ -36,9 +36,9 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
             if (type === 'memory') return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
             else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
         },
-        createLogger(): LogHubBase | undefined {
+        createLogger() {
             if (!logSettings.value) return
-            return new LogHub(LogPlatform.Plugin, pluginID)
+            return LogHub.createLogger(LogHubBaseAPI.Platform.Plugin, pluginID)
         },
     }
 }

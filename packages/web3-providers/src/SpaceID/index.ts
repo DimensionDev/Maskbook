@@ -6,8 +6,8 @@ export class SpaceID_API implements DomainAPI.Provider<ChainId> {
     private sid = new ChainbaseDomainAPI()
 
     async lookup(chainId: ChainId, name: string): Promise<string | undefined> {
-        if (!name.endsWith('.bnb')) return
-        return this.sid.lookup(chainId, name)
+        if (!name.toLowerCase().endsWith('.bnb')) return
+        return this.sid.lookup(chainId, name.toLowerCase())
     }
     async reverse(chainId: ChainId, address: string): Promise<string | undefined> {
         return this.sid?.reverse(chainId, address)

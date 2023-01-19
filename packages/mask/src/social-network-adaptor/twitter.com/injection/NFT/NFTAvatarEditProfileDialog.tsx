@@ -4,11 +4,19 @@ import { Twitter } from '@masknet/web3-providers'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { NFTAvatarButton } from '@masknet/plugin-avatar'
-import { startWatch, createReactRootShadowed } from '../../../../utils/index.js'
+import { startWatch, createReactRootShadowed, MaskMessages } from '../../../../utils/index.js'
 import { searchProfileAvatarSelector, searchProfileSaveSelector } from '../../utils/selector.js'
-import { ConnectPersonaBoundary } from '../../../../components/shared/ConnectPersonaBoundary.js'
-import { useCurrentVisitingIdentity, useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
+import {
+    useCurrentVisitingIdentity,
+    useLastRecognizedIdentity,
+    useThemeSettings,
+} from '../../../../components/DataSource/useActivatedUI.js'
 import { ButtonStyle } from '../../constant.js'
+import { usePersonasFromDB } from '../../../../components/DataSource/usePersonasFromDB.js'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { currentPersonaIdentifier } from '../../../../../shared/legacy-settings/settings.js'
+import { ConnectPersonaBoundary } from '@masknet/shared'
+import { Services } from '../../../../extension/service.js'
 
 export function injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())
@@ -70,9 +78,21 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     const buttonStyle = ButtonStyle[themeSettings.size]
 
     const { classes } = useStyles({ buttonSize: buttonStyle.buttonSize, fontSize: buttonStyle.fontSize })
+    const allPersonas = usePersonasFromDB()
+    const lastRecognized = useLastRecognizedIdentity()
+    const currentIdentifier = useValueRef(currentPersonaIdentifier)
+
     return (
         <div className={classes.root}>
-            <ConnectPersonaBoundary handlerPosition="top-right" customHint directTo={PluginID.Avatar}>
+            <ConnectPersonaBoundary
+                currentPersonaIdentifier={currentIdentifier}
+                personas={allPersonas}
+                identity={lastRecognized}
+                openDashboard={Services.Helper.openDashboard}
+                ownPersonaChanged={MaskMessages.events.ownPersonaChanged}
+                handlerPosition="top-right"
+                customHint
+                directTo={PluginID.Avatar}>
                 <NFTAvatarButton classes={{ root: classes.button, text: classes.text }} onClick={clickHandler} />
             </ConnectPersonaBoundary>
         </div>

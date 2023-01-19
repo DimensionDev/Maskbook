@@ -5,11 +5,11 @@ import { Tune } from '@mui/icons-material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import { Box, IconButton, Typography } from '@mui/material'
-import { WalletMessages } from '../../messages.js'
-import { TokenPrice } from '../../../../components/shared/TokenPrice.js'
 import { GasOptionType, multipliedBy } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useFungibleToken, useGasPrice } from '@masknet/web3-hooks-base'
+import { TokenPrice } from '@masknet/shared'
+import { WalletMessages } from '@masknet/plugin-wallet'
 
 export interface GasSettingBarProps {
     gasLimit: number
