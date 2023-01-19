@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material'
 import { SelectNftContractDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
-import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { useSharedI18N } from '../../../locales/index.js'
 
@@ -62,26 +62,24 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
 export interface ERC721TokenSelectPanelProps {
     label?: string
     chainId?: ChainId
-    onContractChange: (contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721>) => void
-    onBalanceChange: (balance: number) => void
+    onContractChange: (contract: NonFungibleCollection<ChainId, SchemaType>) => void
     balance: number
-    contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721> | null | undefined
+    collection: NonFungibleCollection<ChainId, SchemaType> | null | undefined
 }
 export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
-    const { onContractChange, onBalanceChange, contract, label, chainId = ChainId.Mainnet, balance } = props
+    const { onContractChange, collection, label, chainId = ChainId.Mainnet, balance } = props
     const t = useSharedI18N()
-    const { classes, cx } = useStyles({ hasIcon: Boolean(contract?.logoURL) })
+    const { classes, cx } = useStyles({ hasIcon: Boolean(collection?.iconURL) })
     const { Others } = useWeb3State()
 
     const { setDialog: setNftContractDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectNftContractDialogUpdated,
         useCallback(
             (ev: SelectNftContractDialogEvent) => {
-                if (ev.open || !ev.contract) return
-                onContractChange(ev.contract as NonFungibleTokenContract<ChainId, SchemaType.ERC721>)
-                onBalanceChange(ev.balance ?? 0)
+                if (ev.open || !ev.collection) return
+                onContractChange(ev.collection)
             },
-            [onContractChange, onBalanceChange],
+            [onContractChange],
         ),
     )
 
@@ -99,7 +97,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
                 <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
                     {label ?? t.select_an_nft()}
                 </Typography>
-                {!contract?.address || !Others?.isValidAddress(contract.address) ? null : (
+                {!collection?.address || !Others?.isValidAddress(collection.address) ? null : (
                     <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
                         {t.wallet_balance()}: {balance ? balance : '0'}
                     </Typography>
@@ -107,10 +105,10 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
             </div>
             <div className={cx(classes.wrapper, classes.pointer)} onClick={openDialog}>
                 <div className={classes.tokenWrapper}>
-                    {contract?.logoURL ? <img className={classes.icon} src={contract?.logoURL} /> : null}
-                    {contract?.name ? (
+                    {collection?.iconURL ? <img className={classes.icon} src={collection?.iconURL} /> : null}
+                    {collection?.name ? (
                         <Typography className={classes.nftName} color="textPrimary">
-                            {contract?.name}
+                            {collection?.name}
                         </Typography>
                     ) : null}
                 </div>

@@ -1,7 +1,7 @@
 import { FC, useCallback, useEffect, useState } from 'react'
 import { isEqual } from 'lodash-es'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { getDefaultChainId, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { NetworkContextProvider } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TipDialog } from '../components/index.js'
 import { PluginTipsMessages } from '../messages.js'
@@ -47,18 +47,13 @@ export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) =>
                 const tipsAccount = task.accounts.find((x) => isSameAddress(x.address, task.recipient))
                 const pluginID = tipsAccount?.pluginID ?? task.accounts[0].pluginID
                 return (
-                    <Web3ContextProvider
-                        key={task.id}
-                        value={{
-                            pluginID,
-                            chainId: getDefaultChainId(pluginID),
-                        }}>
-                        <TipTaskProvider key={task.id} task={task}>
+                    <NetworkContextProvider key={task.id} value={pluginID}>
+                        <TipTaskProvider task={task}>
                             <TipsTransactionProvider>
                                 <TipDialog open key={task.id} onClose={() => removeTask(task)} />
                             </TipsTransactionProvider>
                         </TipTaskProvider>
-                    </Web3ContextProvider>
+                    </NetworkContextProvider>
                 )
             })}
             {children}

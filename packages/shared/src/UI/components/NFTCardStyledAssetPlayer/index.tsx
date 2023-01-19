@@ -60,6 +60,7 @@ interface Props extends withClasses<'fallbackImage' | 'iframe' | 'wrapper' | 'lo
     fallbackResourceLoader?: JSX.Element
     renderOrder?: number
     isImageOnly?: boolean
+    disableQueryNonFungibleAsset?: boolean
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
     showNetwork?: boolean
@@ -75,6 +76,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         contractAddress = '',
         tokenId = '',
         isImageOnly = false,
+        disableQueryNonFungibleAsset = false,
         fallbackImage,
         fallbackResourceLoader,
         url,
@@ -88,7 +90,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
     const theme = useTheme()
     const { value: tokenDetailed, loading: loadingAsset } = useNonFungibleAsset<'all'>(
         NetworkPluginID.PLUGIN_EVM,
-        contractAddress,
+        disableQueryNonFungibleAsset ? '' : contractAddress,
         tokenId,
         {
             chainId,

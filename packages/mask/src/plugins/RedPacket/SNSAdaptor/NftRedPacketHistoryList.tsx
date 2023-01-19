@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react'
 import { useScrollBottomEvent } from '@masknet/shared-base-ui'
 import { makeStyles, LoadingBase } from '@masknet/theme'
-import type { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useNonFungibleCollections } from '@masknet/web3-hooks-base'
+import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { List, Popper, Typography, Box } from '@mui/material'
 import type { NftRedPacketHistory } from '../types.js'
@@ -84,7 +84,7 @@ const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
 })
 
 interface Props {
-    onSend: (history: NftRedPacketHistory, contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721>) => void
+    onSend: (history: NftRedPacketHistory, contract: NonFungibleCollection<ChainId, SchemaType>) => void
 }
 
 export function NftRedPacketHistoryList({ onSend }: Props) {
@@ -95,6 +95,9 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     const containerRef = useRef(null)
     const [popperText, setPopperText] = useState('')
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+    const { value: collections = [] } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
+        chainId,
+    })
 
     useScrollBottomEvent(containerRef, fetchMore)
 
@@ -138,6 +141,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
                     {histories.map((history) => (
                         <NftRedPacketHistoryItem
                             key={history.rpid}
+                            collections={collections}
                             history={history}
                             onSend={onSend}
                             onShowPopover={handleShowPopover}

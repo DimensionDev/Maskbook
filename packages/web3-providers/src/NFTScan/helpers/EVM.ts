@@ -190,6 +190,7 @@ export function createNonFungibleCollectionFromGroup(
     const payload = parseJSON<EVM.Payload>(sample?.metadata_json)
     return {
         chainId,
+        assets: group.assets.map((x) => createNonFungibleAsset(chainId, x)),
         schema: sample?.erc_type === 'erc1155' ? SchemaType.ERC1155 : SchemaType.ERC721,
         name: group.contract_name,
         slug: group.contract_name,

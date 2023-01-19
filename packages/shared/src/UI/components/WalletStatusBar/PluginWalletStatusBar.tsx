@@ -124,6 +124,8 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
     },
 )
 
+PluginWalletStatusBarWithoutContext.displayName = 'PluginWalletStatusBarWithoutContext'
+
 export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>((props) => {
     const children = (
         <ActualChainContextProvider>
@@ -137,3 +139,5 @@ export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>
         children
     )
 })
+
+PluginWalletStatusBar.displayName = 'PluginWalletStatusBar'
