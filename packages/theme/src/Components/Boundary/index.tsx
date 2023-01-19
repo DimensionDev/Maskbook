@@ -14,7 +14,7 @@ interface BoundaryProps {
 
 export const Boundary: FC<BoundaryProps> = memo(({ children }) => {
     const boundaryRef = useRef<HTMLElement>(null)
-    const contextValue = useMemo(() => ({ boundaryRef }), [])
+    const contextValue = useMemo(() => ({ boundaryRef }), [boundaryRef.current])
     return (
         <BoundaryContext.Provider value={contextValue}>
             {cloneElement(children, { ...children.props, ref: boundaryRef })}

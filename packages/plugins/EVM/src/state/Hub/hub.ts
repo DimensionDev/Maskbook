@@ -22,6 +22,7 @@ import {
     ZerionNonFungibleToken,
     X2Y2,
     GoPlusAuthorization,
+    NFTLuckyDropEVM,
 } from '@masknet/web3-providers'
 import type {
     AuthorizationAPI,
@@ -136,6 +137,7 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
             {
                 [SourceType.X2Y2]: X2Y2,
                 [SourceType.Chainbase]: ChainbaseNonFungibleToken,
+                [SourceType.NFTLuckyDrop]: NFTLuckyDropEVM,
                 [SourceType.Zerion]: ZerionNonFungibleToken,
                 [SourceType.NFTScan]: NFTScanNonFungibleTokenEVM,
                 [SourceType.Rarible]: Rarible,
@@ -152,6 +154,7 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                 ? [
                       X2Y2,
                       NFTScanNonFungibleTokenEVM,
+                      NFTLuckyDropEVM,
                       ZerionNonFungibleToken,
                       Rarible,
                       OpenSea,
@@ -165,6 +168,7 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                   ]
                 : [
                       NFTScanNonFungibleTokenEVM,
+                      NFTLuckyDropEVM,
                       ZerionNonFungibleToken,
                       Rarible,
                       AlchemyEVM,

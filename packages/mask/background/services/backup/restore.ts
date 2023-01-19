@@ -1,11 +1,14 @@
 import { unreachable } from '@masknet/kit'
 import { BackupPreview, getBackupPreviewInfo, normalizeBackup, NormalizedBackup } from '@masknet/backup-format'
-import { PopupRoutes } from '@masknet/shared-base'
+import { fromBase64URL, PopupRoutes } from '@masknet/shared-base'
 import { Result } from 'ts-results-es'
 import { v4 as uuid } from 'uuid'
 import { openPopupWindow } from '../helper/popup-opener.js'
 import { requestHostPermission } from '../helper/request-permission.js'
 import { restoreNormalizedBackup } from './internal_restore.js'
+import { bufferToHex, privateToPublic, publicToAddress } from 'ethereumjs-util'
+import { compact } from 'lodash-es'
+import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
 
 const unconfirmedBackup = new Map<string, NormalizedBackup.Data>()
 export interface RestoreUnconfirmedBackupOptions {
@@ -61,7 +64,32 @@ export async function getUnconfirmedBackup(id: string): Promise<
 > {
     if (!unconfirmedBackup.has(id)) return undefined
     const backup = unconfirmedBackup.get(id)!
-    return {
-        wallets: backup.wallets.map((x) => ({ address: x.address, name: x.name })),
+    const wallets = backup.wallets.map((x) => ({ address: x.address, name: x.name }))
+    try {
+        const personaAddresses = compact(
+            [...backup.personas.values()].map((x) => {
+                const privateKey = x.privateKey.unwrap()
+                if (!privateKey.d) return
+                return bufferToHex(publicToAddress(privateToPublic(Buffer.from(fromBase64URL(privateKey.d)))))
+            }),
+        )
+
+        const chainId = await SmartPayBundler.getSupportedChainId()
+        const smartPayAccounts = await SmartPayAccount.getAccountsByOwners(chainId, [
+            ...wallets.map((x) => x.address),
+            ...personaAddresses,
+        ])
+        return {
+            wallets: [
+                ...wallets,
+                ...smartPayAccounts
+                    .filter((x) => x.funded || x.deployed)
+                    .map((x, index) => ({ address: x.address, name: `Smart Pay ${index + 1}` })),
+            ],
+        }
+    } catch {
+        return {
+            wallets,
+        }
     }
 }

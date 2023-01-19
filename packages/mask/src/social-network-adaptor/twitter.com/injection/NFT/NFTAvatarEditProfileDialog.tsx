@@ -81,6 +81,7 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     const buttonStyle = ButtonStyle[themeSettings.size]
 
     const { classes } = useStyles({ buttonSize: buttonStyle.buttonSize, fontSize: buttonStyle.fontSize })
+
     return (
         <div className={classes.root}>
             <ConnectPersonaBoundary

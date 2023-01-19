@@ -83,6 +83,7 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
 
     return usePortalShadowRoot((container) => (
         <Popover
+            disableScrollLock
             container={container}
             open={open}
             anchorEl={anchorEl}

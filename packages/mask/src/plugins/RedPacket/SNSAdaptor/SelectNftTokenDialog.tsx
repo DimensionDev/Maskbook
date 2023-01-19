@@ -36,7 +36,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     ownerTokenBox: {
         background: theme.palette.background.default,
         width: '96%',
-        height: 320,
+        height: 270,
         borderRadius: 12,
         margin: '14px auto',
         padding: 10,
@@ -82,7 +82,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         gridTemplateColumns: 'repeat(4, 1fr)',
         gap: 12,
         width: '100%',
-        height: 305,
+        height: 255,
         overflowY: 'auto',
         borderRadius: 12,
         marginBottom: theme.spacing(1.5),
@@ -233,6 +233,10 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    imageWrapper: {
+        height: 150,
+        overflow: 'hidden',
     },
 }))
 
@@ -643,12 +647,14 @@ function NFTCard(props: NFTCardProps) {
     const { classes, cx } = useStyles({ isSelectSharesExceed })
     return (
         <ListItem className={classes.selectWrapper}>
-            <AssetPreviewer
-                url={token.metadata?.mediaURL || token.metadata?.imageURL}
-                classes={{
-                    fallbackImage: classes.fallbackImage,
-                }}
-            />
+            <div className={classes.imageWrapper}>
+                <AssetPreviewer
+                    url={token.metadata?.mediaURL || token.metadata?.imageURL}
+                    classes={{
+                        fallbackImage: classes.fallbackImage,
+                    }}
+                />
+            </div>
             <div className={classes.selectWrapperNftNameWrapper}>
                 <Typography className={classes.selectWrapperNftName} color="textSecondary">
                     {formatTokenId(token.tokenId, 2)}

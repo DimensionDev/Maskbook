@@ -9,7 +9,7 @@ export function useNonFungibleCollections<S extends 'all' | void = void, T exten
     pluginID?: T,
     options?: Web3Helper.Web3HubOptionsScope<S, T>,
 ) {
-    const { account } = useChainContext({ account: options?.account })
+    const { account, chainId } = useChainContext({ account: options?.account, chainId: options?.chainId })
     const hub = useWeb3Hub(pluginID, options)
 
     return useAsyncRetry<
@@ -17,14 +17,15 @@ export function useNonFungibleCollections<S extends 'all' | void = void, T exten
     >(async () => {
         if (!account || !hub) return []
 
-        const iterator = pageableToIterator(async (indicator?: HubIndicator) => {
-            if (!hub.getNonFungibleCollectionsByOwner) return
-            return hub.getNonFungibleCollectionsByOwner(account, {
-                indicator,
-                size: 50,
-                ...options,
-            })
-        })
-        return asyncIteratorToArray(iterator)
-    }, [account, hub, JSON.stringify(options)])
+        return asyncIteratorToArray(
+            pageableToIterator(async (indicator?: HubIndicator) => {
+                if (!hub.getNonFungibleCollectionsByOwner) return
+                return hub.getNonFungibleCollectionsByOwner(account, {
+                    indicator,
+                    size: 50,
+                    ...options,
+                })
+            }),
+        )
+    }, [account, hub, chainId, JSON.stringify(options)])
 }

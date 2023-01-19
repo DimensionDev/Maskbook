@@ -1,15 +1,16 @@
 import { useCallback, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useCustomSnackbar } from '@masknet/theme'
-import { DashboardRoutes, ECKeyIdentifier } from '@masknet/shared-base'
+import { DashboardRoutes, ECKeyIdentifier, PopupRoutes } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { SignUpRoutePath } from '../routePath.js'
-import { Services } from '../../../API.js'
+import { Messages, PluginServices, Services } from '../../../API.js'
 import { PersonaNameUI } from './PersonaNameUI.js'
 import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
 import { delay } from '@masknet/kit'
 import { useAsync } from 'react-use'
+import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
 
 export const PersonaRecovery = () => {
     const t = useDashboardI18N()
@@ -46,10 +47,52 @@ export const PersonaRecovery = () => {
                     return
                 }
 
+                const hasPaymentPassword = await PluginServices.Wallet.hasPassword()
+                if (!hasPaymentPassword) {
+                    const persona = await Services.Identity.queryPersonaDB(identifier)
+                    const chainId = await SmartPayBundler.getSupportedChainId()
+                    if (persona?.address) {
+                        const smartPayAccounts = await SmartPayAccount.getAccountsByOwners(chainId, [persona?.address])
+
+                        if (smartPayAccounts.filter((x) => x.deployed || x.funded).length) {
+                            const backupInfo = await Services.Backup.addUnconfirmedBackup(
+                                JSON.stringify({
+                                    _meta_: {
+                                        maskbookVersion: '',
+                                        createdAt: null,
+                                        type: 'maskbook-backup',
+                                        version: 2,
+                                    },
+                                    personas: [
+                                        {
+                                            ...persona,
+                                            linkedProfiles: [],
+                                        },
+                                    ],
+                                    posts: [],
+                                    profiles: [],
+                                    relations: [],
+                                    wallets: [],
+                                    userGroups: [],
+                                    grantedHostPermissions: [],
+                                    plugin: [],
+                                }),
+                            )
+
+                            if (backupInfo.ok) {
+                                return Services.Helper.openPopupWindow(PopupRoutes.WalletRecovered, {
+                                    backupId: backupInfo.val.id,
+                                })
+                            }
+                        }
+                    }
+                }
+
                 await changeCurrentPersona(identifier)
                 showSnackbar(t.create_account_persona_successfully(), { variant: 'success' })
 
                 await delay(300)
+                Messages.events.restoreSuccess.sendToAll({ wallets: [] })
                 navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`)
             } catch (error) {
                 setError((error as Error).message)

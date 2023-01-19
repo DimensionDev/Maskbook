@@ -9,10 +9,10 @@ import { Icons } from '@masknet/icons'
 import { EncryptionTargetType } from '@masknet/shared-base'
 import { unreachable } from '@masknet/kit'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
-import { ConnectPersonaBoundary } from '@masknet/shared'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
-import { useValueRef } from '@masknet/shared-base-ui'
 import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { ConnectPersonaBoundary } from '@masknet/shared'
 import Services from '../../extension/service.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -59,6 +59,7 @@ export interface EncryptionTargetSelectorProps {
 export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
+
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const allPersonas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
@@ -69,12 +70,12 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
             <div className={classes.flex}>
                 <Typography className={classes.mainTitle}>{t('persona_required')}</Typography>
                 <ConnectPersonaBoundary
+                    personas={allPersonas}
                     identity={lastRecognized}
-                    openDashboard={Services.Helper.openDashboard}
                     currentPersonaIdentifier={currentIdentifier}
+                    openDashboard={Services.Helper.openDashboard}
                     ownPersonaChanged={MaskMessages.events.ownPersonaChanged}
                     customHint
-                    personas={allPersonas}
                     handlerPosition="top-right"
                     enableVerify={false}
                     createConfirm={false}>

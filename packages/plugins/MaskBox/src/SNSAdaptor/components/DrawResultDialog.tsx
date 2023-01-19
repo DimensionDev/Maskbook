@@ -5,12 +5,11 @@ import { Box, DialogContent } from '@mui/material'
 import type { BoxInfo } from '../../type.js'
 import { TokenCard } from './TokenCard.js'
 import { InjectedDialog } from '@masknet/shared'
-import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
-import { usePostLink } from '../../../../components/DataSource/usePostInfo.js'
 import { Context } from '../../hooks/useContext.js'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
+import { usePostLink, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
     main: { padding: 8 },
@@ -37,7 +36,7 @@ export interface DrawResultDialogProps {
 export function DrawResultDialog(props: DrawResultDialogProps) {
     const { open, onClose, boxInfo, contractDetailed } = props
     const { classes } = useStyles()
-
+    const { share } = useSNSAdaptorContext()
     const { lastPurchasedTokenIds } = useContainer(Context)
 
     const postLink = usePostLink()
@@ -45,7 +44,7 @@ export function DrawResultDialog(props: DrawResultDialogProps) {
 
     const onShare = () => {
         onClose()
-        activatedSocialNetworkUI.utils.share?.(shareText)
+        share?.(shareText)
     }
 
     if (!contractDetailed) return null

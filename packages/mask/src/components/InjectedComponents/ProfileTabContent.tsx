@@ -144,7 +144,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const [selectedAddress, setSelectedAddress] = useState<string | undefined>()
     const [menuOpen, setMenuOpen] = useState(false)
     const allPersonas = usePersonasFromDB()
-
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 

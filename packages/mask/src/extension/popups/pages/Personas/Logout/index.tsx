@@ -14,6 +14,7 @@ import { useTitle } from '../../../hook/useTitle.js'
 import { useWallets } from '@masknet/web3-hooks-base'
 import type { Wallet } from '@masknet/web3-shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -34,7 +35,6 @@ const useStyles = makeStyles()((theme) => ({
         color: '#FF5555',
         fontSize: 13,
         lineHeight: '18px',
-        wordBreak: 'break-all',
     },
     controller: {
         padding: '0 16px 16px 16px',
@@ -179,10 +179,14 @@ export const LogoutUI = memo<LogoutUIProps>(
                     <Typography className={classes.tips}>{t('popups_persona_disconnect_tip')}</Typography>
                     {manageWallets.length ? (
                         <Typography className={classes.tips} sx={{ my: 2 }}>
-                            {t('popups_persona_disconnect_manage_wallet_warning', {
-                                persona: selectedPersona?.nickname ?? '',
-                                addresses: manageWallets.map((x) => formatEthereumAddress(x.address, 4)).join(','),
-                            })}
+                            <Trans
+                                i18nKey="popups_persona_disconnect_manage_wallet_warning"
+                                values={{
+                                    addresses: manageWallets.map((x) => formatEthereumAddress(x.address, 4)).join(','),
+                                    persona: selectedPersona?.nickname ?? '',
+                                }}
+                                components={{ span: <Typography component="span" sx={{ wordBreak: 'break-all' }} /> }}
+                            />
                         </Typography>
                     ) : null}
                 </div>

@@ -1,5 +1,4 @@
 import { Icons } from '@masknet/icons'
-import { formatFileSize } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
@@ -15,7 +14,7 @@ import { FileViewer } from './FileViewer.js'
 import { setupStorage, StorageOptions } from './storage.js'
 import { openBrowser, openPicker } from './emitter.js'
 import { FileServiceInjection } from './FileServiceInjection.js'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, formatFileSize } from '@masknet/shared-base'
 
 type BadgeRenderer<T> = (f: T) => Plugin.SNSAdaptor.BadgeDescriptor
 

@@ -1,13 +1,13 @@
+import { useContext } from 'react'
+import { uniqBy } from 'lodash-es'
 import { Box } from '@mui/system'
 import { SourceSwitcher } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { useContext } from 'react'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Stack, Typography } from '@mui/material'
 import { useI18N } from '../../../../utils/index.js'
 import { TrendingViewContext } from './context.js'
 import { PluginDescriptor } from './PluginDescriptor.js'
-import { uniqBy } from 'lodash-es'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean

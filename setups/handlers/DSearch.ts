@@ -74,7 +74,7 @@ export const DSearchHandlers = [
                     name: 'Terraforms',
                     symbol: 'TERRAFORMS',
                     iconURL: 'https://logo.nftscan.com/logo/0x4e1f41613c9084fdb9e34e11fae9412427480e56.png',
-                    tokensTotal: 9909,
+                    balance: 9909,
                     verified: false,
                     source: 'NFTScan',
                     collection: {
@@ -101,7 +101,7 @@ export const DSearchHandlers = [
                     name: 'Meebits',
                     symbol: '⚇',
                     iconURL: 'https://logo.nftscan.com/logo/0x7bd29408f11d2bfc23c34f18275bbf23bb716bc7.png',
-                    tokensTotal: 20000,
+                    balance: 20000,
                     verified: false,
                     source: 'NFTScan',
                     collection: {
@@ -128,7 +128,7 @@ export const DSearchHandlers = [
                     name: 'TestEth',
                     symbol: '⚇',
                     iconURL: 'https://logo.nftscan.com/logo/0x7bd29408f11d2bfc23c34f18275bbf23bb716bc7.png',
-                    tokensTotal: 20000,
+                    balance: 20000,
                     verified: false,
                     source: 'NFTScan',
                     collection: {
