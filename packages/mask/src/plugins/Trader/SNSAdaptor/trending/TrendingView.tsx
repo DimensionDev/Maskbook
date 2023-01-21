@@ -151,34 +151,34 @@ export function TrendingView(props: TrendingViewProps) {
     // #endregion
 
     const isNFT = trending?.coin.type === TokenType.NonFungible
+
+    // #region expected chainId
+    const swapExpectedContract = useMemo(() => {
+        const contracts = trending?.contracts?.filter((x) => x.chainId && x.address) ?? []
+        const fallbackContracts: TrendingAPI.Contract[] =
+            trending?.coin.chainId && trending.coin.contract_address
+                ? [
+                      {
+                          chainId: trending.coin.chainId,
+                          address: trending.coin.contract_address,
+                          pluginID: NetworkPluginID.PLUGIN_EVM,
+                      },
+                  ]
+                : []
+
+        const _contracts = (contracts.length ? contracts : fallbackContracts).filter((x) => x.chainId === chainId) ?? []
+        if (_contracts.length > 0) return _contracts[0]
+        return contracts?.[0]
+    }, [trending, chainId])
+    // #endregion
+
     // #region if the coin is a native token or contract address exists
     const isSwappable =
         !isMinimalMode &&
         !isNFT &&
         !!trending?.coin.contract_address &&
         chainIdValid &&
-        trending.contracts?.[0]?.pluginID === NetworkPluginID.PLUGIN_EVM
-    // #endregion
-
-    // #region expected chainId
-    const swapExpectedContract = useMemo(() => {
-        let contracts = trending?.contracts?.filter((x) => x.chainId && x.address)
-        if (!contracts?.length)
-            contracts =
-                trending?.coin.chainId && trending.coin.contract_address
-                    ? [
-                          {
-                              chainId: trending.coin.chainId,
-                              address: trending.coin.contract_address,
-                              pluginID: NetworkPluginID.PLUGIN_EVM,
-                          },
-                      ]
-                    : []
-
-        const _contracts = contracts?.filter((x) => x.chainId === chainId) ?? []
-        if (_contracts.length > 0) return _contracts[0]
-        return contracts?.[0]
-    }, [trending, chainId])
+        swapExpectedContract.pluginID === NetworkPluginID.PLUGIN_EVM
     // #endregion
 
     // #region tabs
