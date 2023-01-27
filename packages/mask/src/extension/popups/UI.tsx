@@ -1,4 +1,4 @@
-import { lazy, useEffect, useState } from 'react'
+import { lazy, useEffect, useState, useMemo } from 'react'
 import { Navigate, Route, Routes, HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { NetworkPluginID, PopupRoutes, queryRemoteI18NBundle } from '@masknet/shared-base'
@@ -42,19 +42,21 @@ function PluginRenderDelayed() {
     return <PluginRender />
 }
 
+const web3ContextType = { pluginID: NetworkPluginID.PLUGIN_EVM, providerType: ProviderType.MaskWallet }
 export default function Popups() {
     const [title, setTitle] = useState('')
     useEffect(queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
     const loggerId = useLogSettings()
+    const loggerContext = useMemo(() => ({ platform: LogHubBaseAPI.Platform.Popup, loggerId }), [loggerId])
+    const titleContext = useMemo(() => ({ title, setTitle }), [title])
 
     return MaskUIRootPage(
         usePopupTheme,
         <PopupSnackbarProvider>
-            <Web3ContextProvider
-                value={{ pluginID: NetworkPluginID.PLUGIN_EVM, providerType: ProviderType.MaskWallet }}>
+            <Web3ContextProvider value={web3ContextType}>
                 <PopupContext.Provider>
-                    <LoggerContextProvider value={{ platform: LogHubBaseAPI.Platform.Popup, loggerId }}>
-                        <PageTitleContext.Provider value={{ title, setTitle }}>
+                    <LoggerContextProvider value={loggerContext}>
+                        <PageTitleContext.Provider value={titleContext}>
                             <HashRouter>
                                 <Routes>
                                     <Route path={PopupRoutes.Personas + '/*'} element={frame(<Personas />)} />

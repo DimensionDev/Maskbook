@@ -16,7 +16,8 @@ interface LoggerContextProvider {
 }
 
 export function PluginLoggerContextProvider({ children, value }: React.ProviderProps<LoggerContext>) {
-    return <LoggerContext.Provider value={{ logger: value.logger }}>{children}</LoggerContext.Provider>
+    const logger = useMemo(() => ({ logger: value.logger }), [value.logger])
+    return <LoggerContext.Provider value={logger}>{children}</LoggerContext.Provider>
 }
 
 export function LoggerContextProvider({ value, children }: React.ProviderProps<LoggerContextProvider>) {
@@ -24,8 +25,9 @@ export function LoggerContextProvider({ value, children }: React.ProviderProps<L
         if (!value.loggerId) return
         return LogHub.createLogger(value.platform, value.loggerId)
     }, [value.platform, value.loggerId])
+    const loggerContext = useMemo(() => ({ logger }), [logger])
 
-    return <LoggerContext.Provider value={{ logger }}>{children}</LoggerContext.Provider>
+    return <LoggerContext.Provider value={loggerContext}>{children}</LoggerContext.Provider>
 }
 
 export function useLoggerContext() {
