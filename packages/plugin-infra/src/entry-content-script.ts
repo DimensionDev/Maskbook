@@ -31,6 +31,7 @@ export {
     getSettingsTabContent,
     useAllPersonas,
     useCompositionContext,
+    useCurrentPersonaInformation,
     useCurrentVisitingIdentity,
     useCurrentVisitingSocialIdentity,
     useLastRecognizedIdentity,
@@ -43,5 +44,3 @@ export {
     useThemeSettings,
     useThemeSize,
 } from './sns-adaptor/index.js'
-
-export { useCurrentPersonaInformation } from './hooks/useCurrentPersonaInformation.js'

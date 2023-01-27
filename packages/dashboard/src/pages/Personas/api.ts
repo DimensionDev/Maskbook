@@ -1,8 +1,9 @@
 import type {} from 'react/next'
 import { noop } from 'lodash-es'
 import { Services, Messages } from '../../API.js'
-import { createHook } from '../../utils/createHook.js'
-
+import { use, cache } from 'react'
+import { ValueRef } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared-base-ui'
 export type SocialNetwork = {
     networkIdentifier: string
 }
@@ -32,3 +33,16 @@ export const usePersonaAvatar = createHook(
     },
 )
 export const useLanguage = createHook(Services.Settings.getLanguage, Messages.events.languageSettings.on)
+export const useLogSettings = createHook(Services.Settings.getLogSettings, Messages.events.logSettings.on)
+
+// Do not move or export this function.
+// This function should not be encouraged to use everywhere
+function createHook<T>(f: () => Promise<T>, subscribe: (callback: () => void) => void) {
+    const Request = cache((_cacheKey: number) => f())
+    const cacheKey = new ValueRef(0)
+    subscribe(() => (cacheKey.value += 1))
+
+    return function useData() {
+        return use(Request(useValueRef(cacheKey)))
+    }
+}
