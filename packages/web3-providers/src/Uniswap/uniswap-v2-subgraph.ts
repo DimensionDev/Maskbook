@@ -1,7 +1,8 @@
-import { ChainId, getTrendingConstants, isValidChainId } from '@masknet/web3-shared-evm'
-import stringify from 'json-stable-stringify'
 import { chunk, first, flatten } from 'lodash-es'
+import stringify from 'json-stable-stringify'
+import { ChainId, getTrendingConstants, isValidChainId } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { fetchJSON } from '../entry-helpers.js'
 
 const TokenFields = `
   fragment TokenFields on Token {
@@ -91,14 +92,11 @@ export type Bundle = {
 async function fetchFromUniswapV2Subgraph<T>(chainId: Web3Helper.ChainIdAll, query: string) {
     const subgraphURL = getTrendingConstants(chainId).UNISWAP_V2_SUBGRAPH_URL
     if (!subgraphURL) return null
-    const response = await fetch(subgraphURL, {
+    const { data } = await fetchJSON<{ data: T }>(subgraphURL, {
         method: 'POST',
         mode: 'cors',
         body: stringify({ query }),
     })
-    const { data } = (await response.json()) as {
-        data: T
-    }
     return data
 }
 

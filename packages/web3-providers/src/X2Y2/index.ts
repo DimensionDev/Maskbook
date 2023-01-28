@@ -16,20 +16,19 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, createERC20Token, createNativeToken, isZeroAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { X2Y2_API_URL, X2Y2_PAGE_SIZE } from './constants.js'
 import type { Contract, Event, Order } from './types.js'
-import { resolveActivityType } from '../entry-helpers.js'
+import { fetchJSON, resolveActivityType } from '../entry-helpers.js'
 import type { NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromX2Y2<T>(pathname: string) {
-    const response = await globalThis.fetch(urlcat(X2Y2_API_URL, pathname))
-    const json = await response.json()
-    const data = json as
+    const response = await fetchJSON<
         | {
               success: boolean
               next?: string
               data?: T
           }
         | undefined
-    return data?.success ? ([data.data, data.next] as const) : EMPTY_LIST
+    >(urlcat(X2Y2_API_URL, pathname))
+    return response?.success ? ([response.data, response.next] as const) : EMPTY_LIST
 }
 
 export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
@@ -182,7 +181,6 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         const data = [...listData, ...saleData]
 
         const next = `${listNext}_${saleNext}`
-
         const events = data.map((x) => this.createEvent(address, tokenId, x))
 
         return createPageable(

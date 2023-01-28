@@ -1,10 +1,11 @@
 import urlcat from 'urlcat'
 import { getTokens } from './getTokens.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
+import { fetchJSON } from '../../entry-helpers.js'
 
-export async function getSettings(): Promise<TwitterBaseAPI.Settings> {
+export async function getSettings() {
     const { bearerToken, csrfToken } = await getTokens()
-    const response = await fetch(
+    return fetchJSON<TwitterBaseAPI.Settings>(
         urlcat('https://twitter.com/i/api/1.1/account/settings.json', {
             include_mention_filter: false,
             include_nsfw_user_flag: false,
@@ -25,5 +26,4 @@ export async function getSettings(): Promise<TwitterBaseAPI.Settings> {
             },
         },
     )
-    return response.json()
 }

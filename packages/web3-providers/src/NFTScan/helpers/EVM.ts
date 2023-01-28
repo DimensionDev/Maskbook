@@ -35,9 +35,10 @@ import { resolveActivityType } from '../../helpers/resolveActivityType.js'
 import { getPaymentToken } from '../../helpers/getPaymentToken.js'
 import { parseJSON } from '../../helpers/parseJSON.js'
 import type { NonFungibleTokenAPI } from '../../entry-types.js'
+import { fetchJSON } from '../../entry-helpers.js'
 
 export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, init?: RequestInit) {
-    const response = await fetch(urlcat(NFTSCAN_URL, pathname), {
+    return fetchJSON<T>(urlcat(NFTSCAN_URL, pathname), {
         ...init,
         headers: {
             'content-type': 'application/json',
@@ -46,8 +47,6 @@ export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, 
         },
         cache: 'no-cache',
     })
-    const json = await response.json()
-    return json as T
 }
 
 export async function getContractSymbol(chainId: ChainId, address: string) {

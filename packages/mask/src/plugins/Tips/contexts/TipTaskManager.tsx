@@ -1,13 +1,13 @@
 import { FC, useCallback, useEffect, useState } from 'react'
 import { isEqual } from 'lodash-es'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { NetworkContextProvider } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TipDialog } from '../components/index.js'
 import { PluginTipsMessages } from '../messages.js'
 import type { TipTask } from '../types/index.js'
 import { TipTaskProvider } from './Tip/TipTaskProvider.js'
 import { TipsTransactionProvider } from './TipsTransaction.js'
+import { TargetRuntimeContext, ChainRuntime } from './TargetRuntimeContext.js'
 
 let id = 0
 
@@ -47,13 +47,15 @@ export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) =>
                 const tipsAccount = task.accounts.find((x) => isSameAddress(x.address, task.recipient))
                 const pluginID = tipsAccount?.pluginID ?? task.accounts[0].pluginID
                 return (
-                    <NetworkContextProvider key={task.id} value={pluginID}>
-                        <TipTaskProvider task={task}>
-                            <TipsTransactionProvider>
-                                <TipDialog open key={task.id} onClose={() => removeTask(task)} />
-                            </TipsTransactionProvider>
-                        </TipTaskProvider>
-                    </NetworkContextProvider>
+                    <TargetRuntimeContext.Provider key={task.id} initialState={pluginID}>
+                        <ChainRuntime>
+                            <TipTaskProvider task={task}>
+                                <TipsTransactionProvider>
+                                    <TipDialog open onClose={() => removeTask(task)} />
+                                </TipsTransactionProvider>
+                            </TipTaskProvider>
+                        </ChainRuntime>
+                    </TargetRuntimeContext.Provider>
                 )
             })}
             {children}
