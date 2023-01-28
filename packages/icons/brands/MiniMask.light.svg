@@ -5,7 +5,7 @@
     </g>
     <defs>
         <clipPath id="MiniMask_light_svg__a">
-            <path fill="#fff" d="M0 0h47.83v48H0z" transform="translate(.085 .52)"/>
+            <path fill="#fff" d="M.085.52h47.83v48H.085z"/>
         </clipPath>
     </defs>
 </svg>
