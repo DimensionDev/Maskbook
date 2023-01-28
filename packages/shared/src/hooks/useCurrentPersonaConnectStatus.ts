@@ -16,7 +16,7 @@ import { useAsyncRetry } from 'react-use'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 
-const defaultStatus: PersonaConnectStatus = {
+const DEFAULT_PERSONA_CONNECT_STATUS: PersonaConnectStatus = {
     action: undefined,
     currentPersona: undefined,
     connected: false,
@@ -73,7 +73,7 @@ export function useCurrentPersonaConnectStatus(
     )
 
     const {
-        value = defaultStatus,
+        value = DEFAULT_PERSONA_CONNECT_STATUS,
         loading,
         error,
         retry,

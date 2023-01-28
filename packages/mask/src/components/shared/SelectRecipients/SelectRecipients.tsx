@@ -11,12 +11,12 @@ import { batch } from 'async-call-rpc'
 import { cloneDeep, uniqBy } from 'lodash-es'
 import { useEffect, useMemo, useState } from 'react'
 import Services from '../../../extension/service.js'
-import { useI18N } from '../../../utils/index.js'
+import { MaskMessages, useI18N } from '../../../utils/index.js'
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI.js'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI.js'
-import { usePersonasFromNextID } from '../../DataSource/usePersonasFromNextID.js'
 import { SelectRecipientsDialogUI } from './SelectRecipientsDialog.js'
 import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch.js'
+import { usePersonasFromNextID } from '@masknet/shared'
 
 export interface SelectRecipientsUIProps {
     items: LazyRecipients
@@ -56,6 +56,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const { loading: searchLoading, value: NextIDResults } = usePersonasFromNextID(
         value,
         type ?? NextIDPlatform.NextID,
+        MaskMessages.events.ownProofChanged,
         false,
     )
 

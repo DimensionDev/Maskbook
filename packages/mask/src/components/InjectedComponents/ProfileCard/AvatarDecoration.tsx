@@ -1,9 +1,9 @@
 import { Twitter } from '@masknet/web3-providers'
 import type { FC } from 'react'
 import { useAsync } from 'react-use'
-import { RSS3_KEY_SNS } from '../../../plugins/Avatar/constants.js'
-import { NFTAvatarMiniClip } from '../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip.js'
-import { NFTBadgeTimeline } from '../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline.js'
+import { RSS3_KEY_SNS, NFTAvatarMiniClip, NFTBadgeTimeline } from '@masknet/plugin-avatar'
+import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
+import { MaskMessages } from '../../../utils/messages.js'
 
 interface Props {
     className?: string
@@ -12,6 +12,7 @@ interface Props {
     userId?: string
 }
 export const AvatarDecoration: FC<Props> = ({ clipPathId, userId, className, size }) => {
+    const identity = useLastRecognizedIdentity()
     const { value: user } = useAsync(async () => {
         if (!userId) return null
         return Twitter.getUserByScreenName(userId, true)
@@ -22,9 +23,17 @@ export const AvatarDecoration: FC<Props> = ({ clipPathId, userId, className, siz
     const avatarId = Twitter.getAvatarId(user.legacy?.profile_image_url_https)
 
     return user.has_nft_avatar ? (
-        <NFTAvatarMiniClip className={className} id={clipPathId} height={size} width={size} screenName={userId} />
+        <NFTAvatarMiniClip
+            identity={identity}
+            className={className}
+            id={clipPathId}
+            height={size}
+            width={size}
+            screenName={userId}
+        />
     ) : (
         <NFTBadgeTimeline
+            timelineUpdated={MaskMessages.events.NFTAvatarTimelineUpdated}
             classes={{ root: className }}
             userId={userId}
             avatarId={avatarId}

@@ -1,0 +1,22 @@
+import { useEffect } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { NextIDProof } from '@masknet/web3-providers'
+import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
+
+/**
+ * Get all personas bound with the given identity from NextID service
+ */
+export function usePersonasFromNextID(
+    userId: string,
+    platform: NextIDPlatform,
+    ownProofChanged: UnboundedRegistry<void>,
+    exact?: boolean,
+) {
+    const asyncRetry = useAsyncRetry(async () => {
+        if (!platform || !userId) return EMPTY_LIST
+        return NextIDProof.queryAllExistedBindingsByPlatform(platform, userId, exact)
+    }, [platform, userId, exact])
+    useEffect(() => ownProofChanged.on(asyncRetry.retry), [asyncRetry.retry, ownProofChanged])
+    return asyncRetry
+}

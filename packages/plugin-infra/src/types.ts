@@ -20,6 +20,7 @@ import type {
     ProfileIdentifier,
     ScopedStorage,
     SignType,
+    NFTAvatarEvent,
     ValueRefWithReady,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
@@ -374,6 +375,7 @@ export namespace Plugin.SNSAdaptor {
     export interface SNSAdaptorContext extends Shared.SharedUIContext {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
+        NFTAvatarTimelineUpdated: UnboundedRegistry<NFTAvatarEvent>
         allPersonas?: Subscription<PersonaInformation[]>
         themeSettings: Subscription<ThemeSettings | undefined>
         /** The default theme settings. */
@@ -391,6 +393,10 @@ export namespace Plugin.SNSAdaptor {
 
         getPostURL?: (identifier: PostIdentifier) => URL | null
         share?: (text: string) => void
+
+        queryPersonaByProfile: (id: ProfileIdentifier) => Promise<PersonaInformation | undefined>
+        connectPersona: () => Promise<void>
+        createPersona: () => void
     }
 
     export type SelectProviderDialogEvent =

@@ -1,10 +1,9 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { NFTBadgeTweet } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTweet.js'
-import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { NFTBadgeTweet, NFTAvatarMiniClip, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
+import { MaskMessages, createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { searchRetweetAvatarSelector, searchTweetAvatarSelector } from '../../utils/selector.js'
-import { NFTAvatarMiniClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip.js'
-import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
+import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 
 function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
     startWatch(
@@ -22,9 +21,15 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                 root.render(
                     <div style={{ position: 'absolute', top: 0, left: 0, zIndex: 2 }}>
                         {info.isTwitterNFT ? (
-                            <NFTAvatarMiniClip width={info.width} height={info.height} />
+                            <NFTAvatarMiniClip
+                                identity={activatedSocialNetworkUI.collecting.identityProvider?.recognized.value}
+                                width={info.width}
+                                height={info.height}
+                            />
                         ) : (
                             <NFTBadgeTweet
+                                timelineUpdated={MaskMessages.events.NFTAvatarTimelineUpdated}
+                                identity={activatedSocialNetworkUI.collecting.identityProvider?.recognized.value}
                                 width={info.width - 4}
                                 height={info.height - 4}
                                 avatarId={info.avatarId}

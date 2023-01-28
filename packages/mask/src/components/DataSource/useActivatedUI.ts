@@ -123,7 +123,8 @@ export function useCurrentVisitingSocialIdentity() {
 
 export function useThemeSettings() {
     const themeSettings = useValueRef(
-        activatedSocialNetworkUI.collecting.themeSettingsProvider?.recognized || defaultThemeSettings,
+        (activatedSocialNetworkUI.collecting.themeSettingsProvider?.recognized ||
+            defaultThemeSettings) as ValueRef<ThemeSettings>,
     )
     return useMemo<ThemeSettings>(
         () => ({

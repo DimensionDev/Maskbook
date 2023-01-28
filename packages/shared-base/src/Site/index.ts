@@ -18,7 +18,7 @@ const matchExtensionSitePathname: Record<ExtensionSite, RegExp> = {
     [ExtensionSite.PopupConnect]: /popups-connect\.html/i,
 }
 
-function getEnhanceableSiteType(url?: string) {
+export function getEnhanceableSiteType(url?: string) {
     const { host } = location
     const target = url ?? host
     for (const [type, regexp] of Object.entries(matchEnhanceableSiteHost)) {
