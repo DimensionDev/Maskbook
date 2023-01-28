@@ -7,6 +7,7 @@ import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions.j
 import { requestSiteAdaptorsPermission } from '../helper/request-permission.js'
 import stringify from 'json-stable-stringify'
 import { compact } from 'lodash-es'
+import type { SiteAdaptor } from '../../../shared/site-adaptors/types.js'
 
 const hasPermission = async (origin: string): Promise<boolean> => {
     return browser.permissions.contains({
@@ -54,6 +55,20 @@ export async function getOriginsWithoutPermission(options: SitesQueryOptions = {
             networkIdentifier,
             origins: compact(unGrantedOrigins),
         }
+    })
+    return compact(await Promise.all(promises))
+}
+
+export async function getSitesWithoutPermission(): Promise<SiteAdaptor.Definition[]> {
+    const groups = [...definedSiteAdaptors.values()]
+    console.log('groups,', groups)
+    const promises = groups.map(async (x) => {
+        const origins = x.declarativePermissions.origins
+        const unGrantedOrigins = compact(
+            await Promise.all(origins.map((origin) => hasPermission(origin).then((yes) => (yes ? true : origin)))),
+        )
+        if (!unGrantedOrigins.length) return null
+        return x
     })
     return compact(await Promise.all(promises))
 }
