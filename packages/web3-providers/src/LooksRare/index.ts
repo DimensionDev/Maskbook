@@ -24,7 +24,7 @@ import type { NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromLooksRare<T>(chainId: ChainId, url: string) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
-    return await fetchJSON<T>(urlcat(LOOKSRARE_API_URL, url), { method: 'GET' })
+    return fetchJSON<T>(urlcat(LOOKSRARE_API_URL, url), { method: 'GET' })
 }
 
 function createAssetLink(chainId: ChainId, address: string, tokenId: string) {
