@@ -1,7 +1,8 @@
-import { ChainId, getTrendingConstants } from '@masknet/web3-shared-evm'
+import { chunk, first, flatten } from 'lodash-es'
 import stringify from 'json-stable-stringify'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { chunk, first, flatten } from 'lodash-es'
+import { ChainId, getTrendingConstants } from '@masknet/web3-shared-evm'
+import { fetchJSON } from '../../entry-helpers.js'
 
 interface Block {
     number: string
@@ -10,14 +11,11 @@ interface Block {
 async function fetchFromEthereumBlocksSubgraph<T>(chainId: Web3Helper.ChainIdAll, query: string) {
     const subgraphURL = getTrendingConstants(chainId).ETHEREUM_BLOCKS_SUBGRAPH_URL
     if (!subgraphURL) return null
-    const response = await fetch(subgraphURL, {
+    const { data } = await fetchJSON<{ data: T }>(subgraphURL, {
         method: 'POST',
         mode: 'cors',
         body: stringify({ query }),
     })
-    const { data } = (await response.json()) as {
-        data: T
-    }
     return data
 }
 

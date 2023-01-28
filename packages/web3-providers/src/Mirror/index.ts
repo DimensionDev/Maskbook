@@ -2,6 +2,7 @@ import formatDateTime from 'date-fns/format'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { MirrorBaseAPI, Publisher, Writer } from '../entry-types.js'
+import { fetchJSON } from '../entry-helpers.js'
 
 const MIRROR_API_URL = 'https://mirror-api.com/graphql'
 
@@ -47,7 +48,7 @@ interface requestBody {
 
 async function fetchFromMirror<T>(body: requestBody) {
     if (!body) return null
-    const response = await globalThis.fetch(MIRROR_API_URL, {
+    const { data } = await fetchJSON<{ data: T }>(MIRROR_API_URL, {
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify(body),
@@ -55,9 +56,6 @@ async function fetchFromMirror<T>(body: requestBody) {
             'Content-Type': 'application/json',
         },
     })
-    const { data } = (await response.json()) as {
-        data: T
-    }
     return data
 }
 

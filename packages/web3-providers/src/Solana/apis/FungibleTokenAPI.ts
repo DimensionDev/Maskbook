@@ -26,12 +26,12 @@ import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants.js'
 import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers.js'
 import type { GetBalanceResponse, GetProgramAccountsResponse, RaydiumTokenList } from '../types.js'
 import type { FungibleTokenAPI, TokenListAPI } from '../../entry-types.js'
+import { fetchJSON } from '../../entry-helpers.js'
 
 const fetchTokenList = memoizePromise(
     memoize,
     async (url: string): Promise<Array<FungibleToken<ChainId, SchemaType>>> => {
-        const response = await fetch(url, { cache: 'force-cache' })
-        const tokenList = (await response.json()) as RaydiumTokenList
+        const tokenList = await fetchJSON<RaydiumTokenList>(url, { cache: 'force-cache' })
         const tokens: Array<FungibleToken<ChainId, SchemaType>> = [...tokenList.official, ...tokenList.unOfficial].map(
             (token) => {
                 if (isSameAddress(token.mint, '11111111111111111111111111111111'))
