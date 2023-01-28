@@ -63,12 +63,9 @@ export class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
 
         if (!networkType || !account || !isValidChainId(chainId)) return []
 
-        const response = await fetch(
+        const rawData = await fetchJSON<RawTokenInfo[]>(
             urlcat(FUNGIBLE_TOKEN_API_URL, { id: account, chain_id: resolveNetworkOnRabby(networkType) }),
         )
-
-        const rawData: RawTokenInfo[] = await response.json()
-
         return rawData
             .reduce<TokenSpender[]>((acc, cur) => {
                 const tokenInfo = omit({ ...cur, address: cur.id, logoURL: cur.logo_url }, ['spenders'])

@@ -24,9 +24,7 @@ export function createPermalink(chainId: ChainId, address?: string) {
 }
 
 export async function fetchFromNFTScan<T>(url: string) {
-    const response = await fetch(resolveCrossOriginURL(url)!)
-    const json = await response.json()
-    return json as T
+    return fetchJSON<T>(resolveCrossOriginURL(url)!)
 }
 
 export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, init?: RequestInit) {
