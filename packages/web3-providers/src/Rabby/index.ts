@@ -6,6 +6,7 @@ import { getAllMaskDappContractInfo, resolveNetworkOnRabby } from './helpers.js'
 import { NON_FUNGIBLE_TOKEN_API_URL, FUNGIBLE_TOKEN_API_URL } from './constants.js'
 import type { NFTInfo, RawTokenInfo, TokenSpender } from './types.js'
 import type { AuthorizationAPI } from '../entry-types.js'
+import { fetchJSON } from '../entry-helpers.js'
 
 export class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
     async getNonFungibleTokenSpenders(chainId: ChainId, account: string) {
@@ -13,12 +14,9 @@ export class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
         const networkType = chainResolver.networkType(chainId)
 
         if (!networkType || !account || !isValidChainId(chainId)) return []
-        const response = await fetch(
+        const rawData = await fetchJSON<{ contracts: NFTInfo[] }>(
             urlcat(NON_FUNGIBLE_TOKEN_API_URL, { id: account, chain_id: resolveNetworkOnRabby(networkType) }),
         )
-        const rawData: {
-            contracts: NFTInfo[]
-        } = await response.json()
 
         return rawData.contracts
             .filter((x) => x.amount !== '0' && x.is_erc721)

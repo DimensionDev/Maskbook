@@ -37,13 +37,12 @@ import {
 } from './types.js'
 import { getOrderUSDPrice } from './utils.js'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants.js'
-import { getAssetFullName, getPaymentToken, resolveActivityType } from '../entry-helpers.js'
+import { fetchJSON, getAssetFullName, getPaymentToken, resolveActivityType } from '../entry-helpers.js'
 import type { NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, init?: RequestInit) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
-    const response = await fetch(urlcat(OPENSEA_API_URL, url), { method: 'GET', ...init })
-    return response.json() as T
+    return fetchJSON<T>(urlcat(OPENSEA_API_URL, url), { method: 'GET', ...init })
 }
 
 function createTokenDetailed(

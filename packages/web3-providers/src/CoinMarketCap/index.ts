@@ -18,13 +18,12 @@ export async function getQuotesInfo(id: string, currency: string) {
     params.append('convert', currency)
 
     try {
-        const response = await fetch(`${THIRD_PARTY_V1_BASE_URL}/cryptocurrency/widget?${params.toString()}`, {
-            cache: 'default',
-        })
-        return response.json() as Promise<{
+        return await fetchJSON<{
             data: Record<string, QuotesInfo>
             status: Status
-        }>
+        }>(`${THIRD_PARTY_V1_BASE_URL}/cryptocurrency/widget?${params.toString()}`, {
+            cache: 'default',
+        })
     } catch {
         return {
             data: null,
@@ -38,14 +37,13 @@ export async function getCoinInfo(id: string) {
     const params = new URLSearchParams('aux=urls,logo,description,tags,platform,date_added,notice,status')
     params.append('id', id)
 
-    const response_ = await fetch(`${CMC_V1_BASE_URL}/cryptocurrency/info?${params.toString()}`, {
-        cache: 'default',
-    })
-    const response = (await response_.json()) as {
+    const response = await fetchJSON<{
         /** id, coin-info pair */
         data: Record<string, CoinInfo>
         status: Status
-    }
+    }>(`${CMC_V1_BASE_URL}/cryptocurrency/info?${params.toString()}`, {
+        cache: 'default',
+    })
     return {
         data: response.data[id],
         status: response.status,
@@ -63,10 +61,7 @@ export async function getLatestMarketPairs(id: string, currency: string) {
     params.append('id', id)
 
     try {
-        const response = await fetch(`${CMC_V1_BASE_URL}/cryptocurrency/market-pairs/latest?${params.toString()}`, {
-            cache: 'default',
-        })
-        return response.json() as Promise<{
+        return await fetchJSON<{
             data: {
                 id: number
                 market_pairs: Pair[]
@@ -75,7 +70,9 @@ export async function getLatestMarketPairs(id: string, currency: string) {
                 symbol: string
             }
             status: Status
-        }>
+        }>(`${CMC_V1_BASE_URL}/cryptocurrency/market-pairs/latest?${params.toString()}`, {
+            cache: 'default',
+        })
     } catch {
         return {
             data: {

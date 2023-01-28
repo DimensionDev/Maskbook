@@ -19,14 +19,12 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, createERC20Token, formatWeiToEther, isValidChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { Collection, Event, Order, Stats, Token } from './types.js'
 import { LOOKSRARE_API_URL, LOOKSRARE_PAGE_SIZE } from './constants.js'
-import { getPaymentToken, resolveActivityType } from '../entry-helpers.js'
+import { fetchJSON, getPaymentToken, resolveActivityType } from '../entry-helpers.js'
 import type { NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromLooksRare<T>(chainId: ChainId, url: string) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
-    const response = await fetch(urlcat(LOOKSRARE_API_URL, url), { method: 'GET' })
-    if (response.ok) return (await response.json()) as T
-    return
+    return await fetchJSON<T>(urlcat(LOOKSRARE_API_URL, url), { method: 'GET' })
 }
 
 function createAssetLink(chainId: ChainId, address: string, tokenId: string) {

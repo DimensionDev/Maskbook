@@ -10,12 +10,12 @@ import {
     getTokenListConstants,
 } from '@masknet/web3-shared-evm'
 import type { TokenListAPI } from '../entry-types.js'
+import { fetchJSON } from '../entry-helpers.js'
 
 const fetchTokenList = memoizePromise(
     memoize,
     async (url: string) => {
-        const response = await fetch(url, { cache: 'default' })
-        return response.json() as Promise<TokenListAPI.TokenList<ChainId> | TokenListAPI.TokenObject<ChainId>>
+        return fetchJSON<TokenListAPI.TokenList<ChainId> | TokenListAPI.TokenObject<ChainId>>(url, { cache: 'default' })
     },
     (url) => url,
 )

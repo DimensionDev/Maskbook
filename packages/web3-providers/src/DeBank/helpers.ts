@@ -54,8 +54,7 @@ export function formatTransactions(
     { cate_dict, history_list, token_dict }: HistoryResponse['data'],
 ): Array<Transaction<ChainId, SchemaType>> {
     return history_list
-        .filter((transaction) => transaction.tx?.name || transaction.cate_id)
-        .filter(({ cate_id }) => cate_id !== 'approve')
+        .filter((transaction) => (transaction.tx?.name || transaction.cate_id) && transaction.cate_id !== 'approve')
         .map((transaction) => {
             let type = transaction.tx?.name
             if (!type && !isNil(transaction.cate_id)) {
