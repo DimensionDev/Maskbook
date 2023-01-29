@@ -205,22 +205,23 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
     ) {
         const web3 = this.web3.getWeb3(chainId)
 
-        if (userTransaction.paymentToken && !isNativeTokenAddress(userTransaction.paymentToken)) {
-            await userTransaction.fillUserOperation(web3)
+        if (isValidAddress(userTransaction.paymentToken) && !isNativeTokenAddress(userTransaction.paymentToken)) {
+            const getOverrides = async () => {
+                if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
+                    const accounts = await this.getAccountsByOwner(chainId, owner)
+                    const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
 
-            // fill in initCode
-            if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
-                const accounts = await this.getAccountsByOwner(chainId, owner)
-                const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
-
-                if (!accountsDeployed.length) {
-                    await userTransaction.fillUserOperation(web3, {
-                        initCode: await this.getInitCode(chainId, owner),
-                        nonce: accountsDeployed.length,
-                    })
+                    if (!accountsDeployed.length) {
+                        return {
+                            initCode: await this.getInitCode(chainId, owner),
+                            nonce: accountsDeployed.length,
+                        }
+                    }
                 }
+                return
             }
 
+            await userTransaction.fillUserOperation(web3, await getOverrides())
             return this.bundler.sendUserOperation(chainId, await userTransaction.signUserOperation(signer))
         } else {
             await userTransaction.fillTransaction(web3)

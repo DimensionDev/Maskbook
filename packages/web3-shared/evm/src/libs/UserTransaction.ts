@@ -17,6 +17,7 @@ import {
     isEmptyHex,
     isZeroAddress,
     formatEthereumAddress,
+    isValidAddress,
 } from '../helpers/index.js'
 import { getSmartPayConstants } from '../constants/index.js'
 import type { Signer } from './Signer.js'
@@ -157,15 +158,25 @@ export class UserTransaction {
         return this.userOperation
     }
 
+    createWalletContract(web3: Web3, sender: string) {
+        const contract = createContract<Wallet>(web3, sender, WalletABI as AbiItem[])
+        if (!contract) throw new Error('Failed to create wallet contract.')
+        return contract
+    }
+
+    createEntryPointContract(web3: Web3) {
+        const contract = createContract<EntryPoint>(web3, this.entryPoint, EntryPointABI as AbiItem[])
+        if (!contract) throw new Error('Failed to create entry point contract.')
+        return contract
+    }
+
     async fillTransaction(web3: Web3) {
         const { sender, nonce, callData, callGas, maxFeePerGas, maxPriorityFeePerGas } = this.userOperation
 
         // fill nonce
-        if (sender && (typeof nonce === 'undefined' || nonce === 0)) {
-            const walletContract = createContract<Wallet>(web3, sender, WalletABI as AbiItem[])
-            if (!walletContract) throw new Error('Failed to create wallet contract.')
+        if (isValidAddress(sender) && !nonce) {
             try {
-                const nonce = await walletContract.methods.nonce().call()
+                const nonce = await this.createWalletContract(web3, sender).methods.nonce().call()
                 this.userOperation.nonce = toNumber(nonce)
             } catch (error) {
                 this.userOperation.nonce = 0
@@ -176,12 +187,10 @@ export class UserTransaction {
             try {
                 const transaction = UserTransaction.toTransaction(this.chainId, this.userOperation)
                 if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
-                const walletContract = createContract<Wallet>(web3, sender, WalletABI as AbiItem[])
-                if (!walletContract) throw new Error('Failed to create wallet contract.')
                 const estimatedGas =
                     callGas ??
-                    (await walletContract?.methods
-                        .exec(transaction.to, transaction.value ?? '0', transaction.data ?? '0x')
+                    (await this.createWalletContract(web3, sender)
+                        ?.methods.exec(transaction.to, transaction.value ?? '0', transaction.data ?? '0x')
                         .estimateGas())
 
                 this.userOperation.callGas = toHex(estimatedGas)
@@ -233,10 +242,10 @@ export class UserTransaction {
         } = this.userOperation
 
         // add sender
-        if (!isEmptyHex(initCode) && !sender) {
-            const entryPointContract = createContract<EntryPoint>(web3, this.entryPoint, EntryPointABI as AbiItem[])
-            if (!entryPointContract) throw new Error('Failed to create entry point contract.')
-            this.userOperation.sender = await entryPointContract.methods.getSenderAddress(initCode, nonce).call()
+        if (!isEmptyHex(initCode) && !isValidAddress(sender)) {
+            this.userOperation.sender = await this.createEntryPointContract(web3)
+                .methods.getSenderAddress(initCode, nonce)
+                .call()
         }
 
         // add more verification gas according to the size of initCode
@@ -250,11 +259,9 @@ export class UserTransaction {
 
         // caution: the creator needs to set the latest index of the contract account.
         // otherwise, always treat the operation to create the initial account.
-        if (this.userOperation.sender && typeof overrides === 'undefined' && nonce === 0) {
-            const walletContract = createContract<Wallet>(web3, this.userOperation.sender, WalletABI as AbiItem[])
-            if (!walletContract) throw new Error('Failed to create wallet contract.')
+        if (isValidAddress(this.userOperation.sender) && typeof overrides === 'undefined' && nonce === 0) {
             try {
-                const nonce_ = await walletContract.methods.nonce().call()
+                const nonce_ = await this.createWalletContract(web3, sender).methods.nonce().call()
                 this.userOperation.nonce = toNumber(nonce_)
             } catch (error) {
                 this.userOperation.nonce = 0
@@ -267,7 +274,7 @@ export class UserTransaction {
                     callGas ??
                         (await web3.eth.estimateGas({
                             from: this.entryPoint,
-                            to: sender,
+                            to: this.userOperation.sender,
                             data: callData,
                         })),
                 )
@@ -332,16 +339,14 @@ export class UserTransaction {
     async signTransaction(web3: Web3, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {
         const transaction = UserTransaction.toTransaction(this.chainId, this.userOperation)
         if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
-        const walletContract = createContract<Wallet>(web3, transaction.from, WalletABI as AbiItem[])
-        if (!walletContract) throw new Error('Failed to create wallet contract.')
 
         return signer.signTransaction(
             omitBy(
                 {
                     ...transaction,
                     to: transaction.from,
-                    data: walletContract?.methods
-                        .exec(transaction.to, transaction.value ?? '0', transaction.data ?? '0x')
+                    data: this.createWalletContract(web3, transaction.from)
+                        .methods.exec(transaction.to, transaction.value ?? '0', transaction.data ?? '0x')
                         .encodeABI(),
                 },
                 isUndefined,
