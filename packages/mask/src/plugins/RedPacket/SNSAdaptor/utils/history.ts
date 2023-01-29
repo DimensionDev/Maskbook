@@ -2,12 +2,10 @@ import urlcat from 'urlcat'
 import type { BigNumber } from 'bignumber.js'
 import { first } from 'lodash-es'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, chainResolver, getExplorerConstants, getRedPacketConstants } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
 import type { RedPacketJSONPayloadFromChain } from '../../types.js'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
-import type { Web3Helper } from '@masknet/web3-helpers'
 
 const interFace = new Interface(REDPACKET_ABI)
 
@@ -16,7 +14,6 @@ export async function getRedPacketHistory(
     startBlock: number | undefined,
     endBlock: number,
     senderAddress: string,
-    connection: Web3Helper.Web3Connection<NetworkPluginID.PLUGIN_EVM>,
 ) {
     const { EXPLORER_API, API_KEYS = [] } = getExplorerConstants(chainId)
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = getRedPacketConstants(chainId)
