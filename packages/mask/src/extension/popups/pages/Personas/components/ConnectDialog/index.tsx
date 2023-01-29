@@ -80,8 +80,9 @@ export const ConnectDialog = memo<ConnectDialogProps>(({ open, onClose, networks
                     const Icon = SOCIAL_MEDIA_ROUND_ICON_MAPPING[networkIdentifier]
                     return (
                         <div
-                            className={classes.item}
                             key={networkIdentifier}
+                            className={classes.item}
+                            role="button"
                             onClick={() => onConnect(networkIdentifier)}>
                             <div className={classes.networkIcon}>{Icon ? <Icon size={24} /> : null}</div>
                             <Typography className={classes.network}>{SOCIAL_MEDIA_NAME[networkIdentifier]}</Typography>

@@ -61,7 +61,6 @@ export async function getOriginsWithoutPermission(options: SitesQueryOptions = {
 
 export async function getSitesWithoutPermission(): Promise<SiteAdaptor.Definition[]> {
     const groups = [...definedSiteAdaptors.values()]
-    console.log('groups,', groups)
     const promises = groups.map(async (x) => {
         const origins = x.declarativePermissions.origins
         const unGrantedOrigins = compact(
