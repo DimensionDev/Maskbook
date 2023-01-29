@@ -13,7 +13,7 @@ export function useWeb3<S extends 'all' | void = void, T extends NetworkPluginID
     const { account, chainId, providerType } = useChainContext()
 
     const web3 = useMemo(() => {
-        if (!Others?.isValidAddress(account) || !Others?.isValidChainId(chainId)) return
+        if (!Others?.isValidChainId(chainId)) return
         return Connection?.getWeb3?.({
             account,
             chainId,
