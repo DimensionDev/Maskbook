@@ -4,7 +4,7 @@ import type Web3 from 'web3'
 import * as ABICoder from 'web3-eth-abi'
 import { AbiItem, hexToBytes, keccak256, padLeft, toHex, toNumber } from 'web3-utils'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
-import { multipliedBy, plus, toFixed } from '@masknet/web3-shared-base'
+import { isGreaterThan, multipliedBy, plus, toFixed } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import EntryPointABI from '@masknet/web3-contracts/abis/EntryPoint.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
@@ -150,10 +150,6 @@ export class UserTransaction {
         )
     }
 
-    get gas() {
-        return toFixed(plus(this.userOperation.callGas ?? 0, this.userOperation.preVerificationGas ?? 0))
-    }
-
     get operation() {
         return this.userOperation
     }
@@ -286,7 +282,12 @@ export class UserTransaction {
         }
 
         // double up
-        this.userOperation.callGas = toHex(toFixed(multipliedBy(this.userOperation.callData ?? '0', 2)))
+        this.userOperation.callGas = toHex(toFixed(multipliedBy(this.userOperation.callGas ?? '0', 2)))
+
+        // recover to the original callGas when extra gas could be provided
+        if (isGreaterThan(callGas ?? '0', this.userOperation.callGas)) {
+            this.userOperation.callGas = callGas
+        }
 
         if (isZeroString(maxFeePerGas)) {
             try {
