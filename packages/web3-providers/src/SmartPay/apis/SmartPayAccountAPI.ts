@@ -296,9 +296,9 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
             chainId,
             owner,
             {
-                sender: accounts[accountsDeployed.length].address,
                 initCode,
                 nonce: accountsDeployed.length,
+                sender: accounts[accountsDeployed.length].address,
             },
             signer,
         )

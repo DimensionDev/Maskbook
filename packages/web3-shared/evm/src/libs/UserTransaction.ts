@@ -380,7 +380,7 @@ export class UserTransaction {
         transaction: Transaction,
         options?: Options,
     ): UserTransaction {
-        return new UserTransaction(chainId, entryPoint, UserTransaction.toUserOperation(transaction), {
+        return new UserTransaction(chainId, entryPoint, UserTransaction.toUserOperation(chainId, transaction), {
             paymentToken: transaction.gasCurrency,
             ...options,
         })
@@ -392,23 +392,37 @@ export class UserTransaction {
         userOperation: UserOperation,
         options?: Options,
     ): UserTransaction {
-        return new UserTransaction(
-            chainId,
-            entryPoint,
-            {
-                ...DEFAULT_USER_OPERATION,
-                ...userOperation,
-            },
-            options,
-        )
+        const { PAYMENT_TOKEN_ADDRESS } = getSmartPayConstants(chainId)
+
+        return new UserTransaction(chainId, entryPoint, UserTransaction.fillUserOperation(chainId, userOperation), {
+            paymentToken: options?.paymentToken ?? PAYMENT_TOKEN_ADDRESS,
+            ...options,
+        })
     }
 
-    static toUserOperation(transaction: Transaction): UserOperation {
+    static fillUserOperation(chainId: ChainId, userOperation: UserOperation) {
+        const { PAYMASTER_CONTRACT_ADDRESS, PAYMENT_TOKEN_ADDRESS } = getSmartPayConstants(chainId)
+
+        return {
+            ...DEFAULT_USER_OPERATION,
+            paymaster: PAYMASTER_CONTRACT_ADDRESS || DEFAULT_USER_OPERATION.paymaster,
+            paymasterData: PAYMENT_TOKEN_ADDRESS
+                ? padLeft(PAYMENT_TOKEN_ADDRESS, 64)
+                : DEFAULT_USER_OPERATION.paymasterData,
+            ...userOperation,
+        }
+    }
+
+    static fillTransaction(chainId: ChainId, transaction: Transaction) {
+        throw new Error('Method not implemented.')
+    }
+
+    static toUserOperation(chainId: ChainId, transaction: Transaction): UserOperation {
         const { from, to, nonce = 0, value = '0', data = '0x' } = transaction
         if (!from) throw new Error('No sender address.')
         if (!to) throw new Error('No destination address.')
-        return {
-            ...DEFAULT_USER_OPERATION,
+
+        return UserTransaction.fillUserOperation(chainId, {
             sender: formatEthereumAddress(from),
             nonce: toNumber(nonce as number),
             callGas: transaction.gas ?? DEFAULT_USER_OPERATION.callGas,
@@ -417,7 +431,7 @@ export class UserTransaction {
             maxPriorityFeePerGas:
                 transaction.maxPriorityFeePerGas ?? transaction.gasPrice ?? DEFAULT_USER_OPERATION.maxPriorityFeePerGas,
             signature: '0x',
-        }
+        })
     }
 
     static toTransaction(chainId: ChainId, userOperation: UserOperation): Transaction {
