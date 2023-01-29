@@ -59,7 +59,6 @@ export const ResultModal: FC<ResultModalProps> = ({
 }) => {
     const { classes } = useStyles()
     const t = useI18N()
-    confirmLabel = confirmLabel || t.share()
     return (
         <InjectedDialog
             title={t.donate()}
@@ -91,7 +90,7 @@ export const ResultModal: FC<ResultModalProps> = ({
                         onShare?.()
                         onSubmit?.()
                     }}>
-                    {confirmLabel}
+                    {confirmLabel || t.share()}
                 </Button>
             </DialogActions>
         </InjectedDialog>
