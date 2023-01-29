@@ -285,6 +285,9 @@ export class UserTransaction {
             this.userOperation.callGas = callGas ?? DEFAULT_USER_OPERATION.callGas
         }
 
+        // double up
+        this.userOperation.callGas = toHex(toFixed(multipliedBy(this.userOperation.callData ?? '0', 2)))
+
         if (isZeroString(maxFeePerGas)) {
             try {
                 const block = await web3.eth.getBlock('latest')
@@ -328,12 +331,12 @@ export class UserTransaction {
 
     estimateTransaction() {
         const { callGas = DEFAULT_USER_OPERATION.callGas } = this.userOperation
-        return toHex(toFixed(multipliedBy(callGas, 2)))
+        return toHex(callGas)
     }
 
     estimateUserOperation() {
-        const { preVerificationGas = '0', verificationGas = '0', callGas = '0' } = this.userOperation
-        return toHex(toFixed(multipliedBy(plus(preVerificationGas, plus(verificationGas, callGas)), 2)))
+        const { callGas = DEFAULT_USER_OPERATION.callGas } = this.userOperation
+        return toHex(callGas)
     }
 
     async signTransaction(web3: Web3, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {
