@@ -6,12 +6,7 @@ import * as nftDb from './databaseForNft.js'
 
 export { addRedPacketNft, getRedPacketNft, updateRedPacketNft } from './databaseForNft.js'
 
-export async function discoverRedPacket(record: RedPacketRecord, chainId: ChainId) {
-    if (record.contract_version === 1) {
-        const txid = await subgraph.getRedPacketTxid(chainId, record.id)
-        if (!txid) return
-        record.id = txid
-    }
+export async function addRedPacketToDatabase(record: RedPacketRecord, chainId: ChainId) {
     await database.addRedPacket(record)
 }
 

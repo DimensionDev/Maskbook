@@ -27,7 +27,7 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
             password: payload.password,
             contract_version: payload.contract_version,
         }
-        RedPacketRPC.discoverRedPacket(record, chainId)
+        RedPacketRPC.addRedPacketToDatabase(record, chainId)
     }, [fromUrl, chainId])
     // #endregion
 
