@@ -84,7 +84,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
     const { BULK_CHECKOUT_ADDRESS } = useGitcoinConstants(chainId)
 
     // #region the selected token
-    const [tokenMap, setTokenMap] = useState<Record<string, FungibleToken<ChainId, SchemaType>>>({})
+    const [tokenMap, setTokenMap] = useState<Partial<Record<ChainId, FungibleToken<ChainId, SchemaType>>>>({})
     const token = tokenMap[chainId] ?? nativeTokenDetailed.value
 
     const tokenBalance = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address)
@@ -105,8 +105,8 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
     const [rawAmount, setRawAmount] = useState('')
     const amount = rightShift(rawAmount || '0', token?.decimals)
     const [giveBack, setGiveBack] = useState<number>(0.05)
-    const tipAmount = rawAmount ? new BigNumber(rawAmount).times(giveBack) : ZERO
-    const total = rawAmount ? new BigNumber(rawAmount).plus(tipAmount).toFixed() : '0'
+    const tipAmount = amount.gt(0) ? new BigNumber(amount).times(giveBack) : ZERO
+    const total = rawAmount ? new BigNumber(rawAmount).times(1 + giveBack).toFixed() : '0'
     // #endregion
 
     // #region blocking
@@ -121,8 +121,8 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
         const cashTag = isTwitter() ? '$' : ''
         const shareText = token
             ? t.share_text({
-                  balance: formatBalance(amount, token?.decimals),
-                  symbol: `${cashTag}${token?.symbol || ''}`,
+                  balance: formatBalance(amount, token.decimals),
+                  symbol: `${cashTag}${token.symbol || ''}`,
                   promote: t.promote(),
                   project_name: title,
               })
@@ -147,7 +147,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
         if (!amount || amount.isZero()) return t.enter_an_amount()
         if (amount.isGreaterThan(tokenBalance.value ?? '0'))
             return t.insufficient_balance({
-                symbol: token.symbol!,
+                symbol: token.symbol,
             })
         return ''
     }, [account, address, amount.toFixed(), chainId, token, tokenBalance.value ?? '0'])

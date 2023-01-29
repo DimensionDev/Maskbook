@@ -29,15 +29,16 @@ export function useDonateCallback(
     const bulkCheckoutContract = useBulkCheckoutContract(chainId)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
+    const totalAmount = toFixed(new BigNumber(grantAmount).plus(tipAmount ?? 0))
     const donations = useMemo<DonationTuple[]>(() => {
-        if (!connection || !address || !token || !GITCOIN_ETH_ADDRESS) return EMPTY_LIST
+        if (!address || !token || !GITCOIN_ETH_ADDRESS) return EMPTY_LIST
         return compact([
             [
                 token.schema === SchemaType.Native ? GITCOIN_ETH_ADDRESS : token.address,
                 grantAmount,
                 address, // dest
             ],
-            GITCOIN_MAINTAINER_ADDRESS && tipAmount && new BigNumber(tipAmount).isGreaterThan(0)
+            GITCOIN_MAINTAINER_ADDRESS && tipAmount && new BigNumber(tipAmount).gt(0)
                 ? [
                       token.schema === SchemaType.Native ? GITCOIN_ETH_ADDRESS : token.address,
                       tipAmount,
@@ -45,15 +46,7 @@ export function useDonateCallback(
                   ]
                 : undefined,
         ])
-    }, [
-        address,
-        grantAmount,
-        tipAmount,
-        token?.address,
-        token?.schema,
-        GITCOIN_MAINTAINER_ADDRESS,
-        GITCOIN_ETH_ADDRESS,
-    ])
+    }, [address, grantAmount, tipAmount, token, GITCOIN_MAINTAINER_ADDRESS, GITCOIN_ETH_ADDRESS])
 
     return useAsyncFn(async () => {
         if (!connection || !token || !bulkCheckoutContract || !donations.length) {
@@ -65,9 +58,9 @@ export function useDonateCallback(
             bulkCheckoutContract.methods.donate(donations),
             {
                 from: account,
-                value: toFixed(token.schema === SchemaType.Native ? grantAmount : 0),
+                value: token.schema === SchemaType.Native ? totalAmount : '0',
             },
         )
         return connection.sendTransaction(tx)
-    }, [account, grantAmount, token, donations, connection])
+    }, [account, totalAmount, token, donations, connection])
 }
