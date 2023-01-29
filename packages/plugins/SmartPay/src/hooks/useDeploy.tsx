@@ -78,7 +78,7 @@ export function useDeploy(
             if (signPersona) {
                 signature = await signWithPersona(SignType.Message, payload, signPersona.identifier)
             } else if (signWallet) {
-                signature = await connection?.signMessage(payload, 'personalSign', {
+                signature = await connection?.signMessage('message', payload, {
                     account: signWallet.address,
                     providerType: ProviderType.MaskWallet,
                 })
@@ -105,9 +105,9 @@ export function useDeploy(
                 try {
                     if (txHash !== hash || !signAccount.address || status !== TransactionStatusType.SUCCEED) return
 
-                    const result = await connection?.deploy?.(signAccount.address, signPersona?.identifier, {
-                        chainId,
-                    })
+                    // const result = await connection?.deploy?.(signAccount.address, signPersona?.identifier, {
+                    //     chainId,
+                    // })
 
                     Wallet?.addWallet({
                         name: 'Smart Pay',

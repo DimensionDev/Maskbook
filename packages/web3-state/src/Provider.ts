@@ -102,11 +102,13 @@ export class ProviderState<
                     account,
                 })
             })
-            provider.emitter.on('accounts', async (accounts) => {
+            provider.emitter.on('accounts', async (accounts, chainId) => {
                 const account = first(accounts)
+
                 if (account && this.options.isValidAddress(account))
                     await this.setAccount(providerType, {
                         account,
+                        chainId: chainId ? (Number.parseInt(chainId, 16) as ChainId) : undefined,
                     })
             })
             provider.emitter.on('disconnect', async () => {

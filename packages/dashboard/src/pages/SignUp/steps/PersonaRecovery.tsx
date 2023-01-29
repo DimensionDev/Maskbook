@@ -47,44 +47,42 @@ export const PersonaRecovery = () => {
                     return
                 }
 
-                const hasPaymentPassword = await PluginServices.Wallet.hasPassword()
-                if (!hasPaymentPassword) {
-                    const persona = await Services.Identity.queryPersonaDB(identifier)
-                    const chainId = await SmartPayBundler.getSupportedChainId()
-                    if (persona?.address) {
-                        const smartPayAccounts = await SmartPayAccount.getAccountsByOwners(chainId, [persona?.address])
-
-                        if (smartPayAccounts.filter((x) => x.deployed || x.funded).length) {
-                            const backupInfo = await Services.Backup.addUnconfirmedBackup(
-                                JSON.stringify({
-                                    _meta_: {
-                                        maskbookVersion: '',
-                                        createdAt: null,
-                                        type: 'maskbook-backup',
-                                        version: 2,
+                const persona = await Services.Identity.queryPersonaDB(identifier)
+                const chainId = await SmartPayBundler.getSupportedChainId()
+                if (persona?.address) {
+                    const smartPayAccounts = await SmartPayAccount.getAccountsByOwners(chainId, [persona?.address])
+                    const hasPaymentPassword = await PluginServices.Wallet.hasPassword()
+                    if (smartPayAccounts.filter((x) => x.deployed || x.funded).length && !hasPaymentPassword) {
+                        const backupInfo = await Services.Backup.addUnconfirmedBackup(
+                            JSON.stringify({
+                                _meta_: {
+                                    maskbookVersion: '',
+                                    createdAt: null,
+                                    type: 'maskbook-backup',
+                                    version: 2,
+                                },
+                                personas: [
+                                    {
+                                        ...persona,
+                                        linkedProfiles: [],
                                     },
-                                    personas: [
-                                        {
-                                            ...persona,
-                                            linkedProfiles: [],
-                                        },
-                                    ],
-                                    posts: [],
-                                    profiles: [],
-                                    relations: [],
-                                    wallets: [],
-                                    userGroups: [],
-                                    grantedHostPermissions: [],
-                                    plugin: [],
-                                }),
-                            )
+                                ],
+                                posts: [],
+                                profiles: [],
+                                relations: [],
+                                wallets: [],
+                                userGroups: [],
+                                grantedHostPermissions: [],
+                                plugin: [],
+                            }),
+                        )
 
-                            if (backupInfo.ok) {
-                                return Services.Helper.openPopupWindow(PopupRoutes.WalletRecovered, {
-                                    backupId: backupInfo.val.id,
-                                })
-                            }
+                        if (backupInfo.ok) {
+                            await Services.Helper.openPopupWindow(PopupRoutes.WalletRecovered, {
+                                backupId: backupInfo.val.id,
+                            })
                         }
+                        return
                     }
                 }
 
