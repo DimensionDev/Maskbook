@@ -900,7 +900,7 @@ export interface ProviderEvents<ChainId, ProviderType> {
     /** Emit when the chain id changed. */
     chainId: [string]
     /** Emit when the accounts changed. */
-    accounts: [string[], string | undefined]
+    accounts: [string[], string | void]
     /** Emit when the site connects with a provider. */
     connect: [Account<ChainId>]
     /** Emit when the site disconnect with a provider. */
