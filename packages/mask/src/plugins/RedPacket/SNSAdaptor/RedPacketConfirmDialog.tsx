@@ -142,7 +142,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
             password: privateKey,
             contract_version,
         }
-        RedPacketRPC.addRedPacketToDatabase(record, chainId)
+        RedPacketRPC.addRedPacket(record, chainId)
 
         // output the redpacket as JSON payload
         onCreated(payload.current)
