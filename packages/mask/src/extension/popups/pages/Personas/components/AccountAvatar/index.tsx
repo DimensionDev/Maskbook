@@ -50,6 +50,8 @@ export interface AccountAvatar {
 export const AccountAvatar = memo<AccountAvatar>(({ avatar, network, isValid }) => {
     const { classes } = useStyles()
 
+    const Icon = network ? SOCIAL_MEDIA_ROUND_ICON_MAPPING[network] : null
+
     return (
         <div className={classes.container}>
             {avatar ? (
@@ -57,7 +59,11 @@ export const AccountAvatar = memo<AccountAvatar>(({ avatar, network, isValid }) 
             ) : (
                 <Icons.GrayMasks className={classes.avatar} />
             )}
-            {network ? <div className={classes.network}>{SOCIAL_MEDIA_ROUND_ICON_MAPPING[network]}</div> : null}
+            {Icon ? (
+                <div className={classes.network}>
+                    <Icon size={24} />
+                </div>
+            ) : null}
             {!isValid && network === EnhanceableSite.Twitter ? <div className={classes.valid} /> : null}
         </div>
     )

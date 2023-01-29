@@ -7,6 +7,7 @@ if (import.meta.webpackHot) import.meta.webpackHot.accept()
 
 const origins = ['https://mobile.twitter.com/*', 'https://twitter.com/*']
 export const TwitterAdaptor: SiteAdaptor.Definition = {
+    name: 'Twitter',
     networkIdentifier: EnhanceableSite.Twitter,
     declarativePermissions: { origins },
     homepage: 'https://twitter.com',

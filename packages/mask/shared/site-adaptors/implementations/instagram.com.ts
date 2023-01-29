@@ -6,6 +6,7 @@ if (import.meta.webpackHot) import.meta.webpackHot.accept()
 
 const origins = ['https://www.instagram.com/*', 'https://m.instagram.com/*', 'https://instagram.com/*']
 export const InstagramAdaptor: SiteAdaptor.Definition = {
+    name: 'Instagram',
     networkIdentifier: EnhanceableSite.Instagram,
     declarativePermissions: { origins },
     homepage: 'https://www.instagram.com/',
