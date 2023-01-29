@@ -1,13 +1,14 @@
 {
     "name": "Gitcoin",
     "description": "Display specific information of Gitcoin projects, donate to a project directly on social media.",
-    "promote": "Share or browse Gitcoin projects you have donated or interested in. Install mask.io and try to browse or donate projects directly on Twitter.",
+    "promote": "Install mask.io to join free assets launch activity.",
     "select_a_token": "Select a token",
     "grant_not_available": "Grant not available",
     "enter_an_amount": "Enter an amount",
     "insufficient_balance": "Insufficient {{symbol}} balance",
     "gitcoin_readme": "By using this service, you will also be contributing 5% of your contribution to the <fund>Gitcoin grants development fund</fund>.",
     "donate": "Donate",
+    "share": "Share",
     "last_updated": "Last update:",
     "by": "By",
     "view_on": "View on Gitcoin",
@@ -18,7 +19,7 @@
     "readme_fund_link": "https://gitcoin.co/grants/86/gitcoin-sustainability-fund",
     "plugin_gitcoin_select_a_token": "Select a token",
     "plugin_gitcoin_insufficient_balance": "Insufficient {{symbol}} balance",
-    "share_text": "I just donated {{project_name}} with {{balance}} {{symbol}}.\n\n{{promote}}",
+    "share_text": "I participated {{grant_name}} donation event and donated {{amount}} {{symbol}}.\n\n$t(promote)",
     "active": "Active",
     "grant_status$active": "Active",
     "grant_status$closed": "Close",
@@ -26,5 +27,6 @@
     "admin": "by <bold>{{admin}}</bold>",
     "give_back_to_match_pool": "Give back to the Gitcoin match pool",
     "total_contribution": "Your Total Contribution",
-    "give_back_tooltip": "Contribute towards the Gitcoin Match Pool! Funds are used for current and future Grant rounds. The selected amount will be added on top of your grant contributions."
+    "give_back_tooltip": "Contribute towards the Gitcoin Match Pool! Funds are used for current and future Grant rounds. The selected amount will be added on top of your grant contributions.",
+    "donate_successfully": "You have donated {{uiAmount}} {{symbol}} successfully."
 }

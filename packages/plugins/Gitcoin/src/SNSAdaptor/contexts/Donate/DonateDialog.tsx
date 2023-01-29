@@ -7,7 +7,6 @@ import {
     NetworkTab,
     PluginWalletStatusBar,
     TokenIcon,
-    useOpenShareTxDialog,
     useSelectFungibleToken,
     WalletConnectedBoundary,
 } from '@masknet/shared'
@@ -25,6 +24,7 @@ import type { GitcoinGrant } from '../../../apis/index.js'
 import { Icons } from '@masknet/icons'
 import { GiveBackSelect } from './GiveBackSelect.js'
 import { BigNumber } from 'bignumber.js'
+import { useShowResult } from '../ResultModal/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     banner: {},
@@ -113,31 +113,30 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
     const [{ loading }, donateCallback] = useDonateCallback(address ?? '', amount.toFixed(), tipAmount.toFixed(), token)
     // #endregion
 
-    const openShareTxDialog = useOpenShareTxDialog()
+    const showConfirm = useShowResult()
     const donate = useCallback(async () => {
-        const hash = await donateCallback()
-        if (typeof hash !== 'string') return
+        // const hash = await donateCallback()
+        // if (typeof hash !== 'string') return
 
         const cashTag = isTwitter() ? '$' : ''
-        const shareText = token
-            ? t.share_text({
-                  balance: formatBalance(amount, token.decimals),
-                  symbol: `${cashTag}${token.symbol || ''}`,
-                  promote: t.promote(),
-                  project_name: title,
-              })
-            : ''
-        await openShareTxDialog({
-            hash,
+        if (!token) return
+        const uiAmount = formatBalance(amount.plus(tipAmount), token.decimals)
+        const shareText = t.share_text({
+            amount: uiAmount,
+            symbol: `${cashTag}${token.symbol}`,
+            grant_name: title,
+        })
+        await showConfirm({
+            token,
+            uiAmount,
             onShare() {
                 share?.(shareText)
             },
         })
-        // onSubmit()
 
-        // clean dialog
+        // clean up dialog
         setRawAmount('')
-    }, [openShareTxDialog, token, donateCallback, t, title])
+    }, [showConfirm, amount, tipAmount, token, donateCallback, t, title])
 
     // #region submit button
     const validationMessage = useMemo(() => {

@@ -99,13 +99,13 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface PreviewCardProps {
-    id: string
+    grantId: string
 }
 
 export function PreviewCard(props: PreviewCardProps) {
     const t = useI18N()
     const { classes, theme } = useStyles()
-    const { value: grant, error, loading, retry } = useGrant(props.id)
+    const { value: grant, error, loading, retry } = useGrant(props.grantId)
 
     // #region the donation dialog
     const openDonate = useDonate()

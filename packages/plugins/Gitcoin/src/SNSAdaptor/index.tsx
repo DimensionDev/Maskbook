@@ -1,14 +1,14 @@
+import { Icons } from '@masknet/icons'
+import { Plugin, SNSAdaptorContext, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import { parseURLs, PluginID } from '@masknet/shared-base'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
-import { usePostInfoDetails, Plugin, usePluginWrapper, SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { parseURLs, PluginID } from '@masknet/shared-base'
-import { Icons } from '@masknet/icons'
-import { PreviewCard } from './PreviewCard.js'
 import { base } from '../base.js'
 import { PLUGIN_META_KEY, PLUGIN_NAME } from '../constants.js'
 import { SharedContextSettings } from '../settings.js'
-import { DonateProvider } from './contexts/index.js'
+import { ResultModalProvider, DonateProvider } from './contexts/index.js'
+import { PreviewCard } from './PreviewCard.js'
 
 const isGitcoin = (x: string): boolean => /^https:\/\/gitcoin.co\/grants\/\d+/.test(x)
 
@@ -17,9 +17,11 @@ function Renderer(props: { id: string }) {
 
     return (
         <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
-            <DonateProvider>
-                <PreviewCard id={props.id} />
-            </DonateProvider>
+            <ResultModalProvider>
+                <DonateProvider>
+                    <PreviewCard grantId={props.id} />
+                </DonateProvider>
+            </ResultModalProvider>
         </SNSAdaptorContext.Provider>
     )
 }
