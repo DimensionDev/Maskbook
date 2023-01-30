@@ -37,20 +37,24 @@ export const PersonaRecovery = () => {
         async (personaName: string) => {
             setError('')
             try {
-                let identifier: ECKeyIdentifier
+                let result:
+                    | {
+                          address: string
+                          identifier: ECKeyIdentifier
+                      }
+                    | undefined
                 if (state.mnemonic) {
-                    identifier = await createPersona(state?.mnemonic.join(' '), personaName)
+                    result = await Services.Identity.queryPersonaEOAByMnemonic(state?.mnemonic.join(' '), '')
                 } else if (state.privateKey) {
-                    identifier = await createPersonaByPrivateKey(state.privateKey, personaName)
+                    result = await Services.Identity.queryPersonaEOAByPrivateKey(state.privateKey)
                 } else {
                     setError('no available identifier')
                     return
                 }
 
-                const persona = await Services.Identity.queryPersonaDB(identifier)
                 const chainId = await SmartPayBundler.getSupportedChainId()
-                if (persona?.address) {
-                    const smartPayAccounts = await SmartPayAccount.getAccountsByOwners(chainId, [persona?.address])
+                if (result?.address) {
+                    const smartPayAccounts = await SmartPayAccount.getAccountsByOwners(chainId, [result.address])
                     const hasPaymentPassword = await PluginServices.Wallet.hasPassword()
                     if (smartPayAccounts.filter((x) => x.deployed || x.funded).length && !hasPaymentPassword) {
                         const backupInfo = await Services.Backup.addUnconfirmedBackup(
@@ -63,7 +67,9 @@ export const PersonaRecovery = () => {
                                 },
                                 personas: [
                                     {
-                                        ...persona,
+                                        address: result.address,
+                                        identifier: result.identifier,
+                                        publicKeyHex: result.identifier.publicKeyAsHex,
                                         linkedProfiles: [],
                                     },
                                 ],
@@ -84,6 +90,16 @@ export const PersonaRecovery = () => {
                         }
                         return
                     }
+                }
+
+                let identifier: ECKeyIdentifier
+                if (state.mnemonic) {
+                    identifier = await createPersona(state?.mnemonic.join(' '), personaName)
+                } else if (state.privateKey) {
+                    identifier = await createPersonaByPrivateKey(state.privateKey, personaName)
+                } else {
+                    setError('no available identifier')
+                    return
                 }
 
                 await changeCurrentPersona(identifier)
