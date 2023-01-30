@@ -1,3 +1,4 @@
+import { PersonaInformation } from '@masknet/shared-base'
 import { context } from '../context.js'
 import { useSubscription } from 'use-subscription'
 
@@ -13,6 +14,6 @@ export function useLastRecognizedProfile() {
     return useSubscription(context.lastRecognizedProfile)
 }
 
-export function useAllPersonas() {
+export function useAllPersonas(): PersonaInformation[] {
     return useSubscription(context.allPersonas!)
 }

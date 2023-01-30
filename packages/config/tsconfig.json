@@ -23,9 +23,8 @@
     // Emit
     "declaration": true,
     "declarationMap": true,
-    "importsNotUsedAsValues": "error",
+    "verbatimModuleSyntax": false,
     "noEmitOnError": true,
-    "preserveValueImports": true,
     "sourceMap": true,
     "stripInternal": true, // skip type emit for @internal types
 

@@ -850,6 +850,14 @@ export namespace Plugin.SNSAdaptor {
         }
     }
 
+    export interface SettingsTabContentProps {
+        onClose: () => void
+        onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
+        bindingWallets?: BindingProof[]
+        currentPersona?: ECKeyIdentifier
+        pluginID: PluginID
+    }
+
     export interface SettingTab {
         ID: PluginID
         /**
@@ -863,13 +871,7 @@ export namespace Plugin.SNSAdaptor {
         priority: number
 
         UI?: {
-            TabContent: InjectUI<{
-                onClose: () => void
-                onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
-                bindingWallets?: BindingProof[]
-                currentPersona?: ECKeyIdentifier
-                pluginID: PluginID
-            }>
+            TabContent: InjectUI<SettingsTabContentProps>
         }
     }
 
