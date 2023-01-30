@@ -1,5 +1,5 @@
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
-import { Typography, Button } from '@mui/material'
+import { Typography, Button, Box } from '@mui/material'
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import type { NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -7,6 +7,7 @@ import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { OfferCard } from './OfferCard.js'
 import { useI18N } from '../../locales/i18n_generated.js'
+import { SourceIcons } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -63,6 +64,9 @@ export function OffersList(props: OffersListProps) {
         )
     return (
         <div className={classes.wrapper} style={{ justifyContent: 'unset' }}>
+            <Box>
+                <SourceIcons />
+            </Box>
             {_offers?.map((x, idx) => (
                 <OfferCard key={idx} offer={x} />
             ))}
