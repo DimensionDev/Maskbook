@@ -190,7 +190,7 @@ export function Deploy({ open }: { open: boolean }) {
                 type: ManagerAccountType.Persona,
                 name: firstPersona?.nickname,
                 address: firstPersona?.address,
-                rawPublicKey: firstPersona?.identifier.rawPublicKey,
+                identifier: firstPersona?.identifier,
             })
 
             return
@@ -254,7 +254,7 @@ export function Deploy({ open }: { open: boolean }) {
                             <Icons.MaskBlue size={24} className={classes.maskIcon} />
                             <Typography fontSize={18} fontWeight={700} lineHeight="22px">
                                 {manager?.type === 'Persona'
-                                    ? formatPersonaFingerprint(manager.rawPublicKey ?? '', 4)
+                                    ? formatPersonaFingerprint(manager?.identifier?.rawPublicKey ?? '', 4)
                                     : formatEthereumAddress(manager?.address ?? '', 4)}
                             </Typography>
                         </Box>

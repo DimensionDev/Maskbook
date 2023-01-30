@@ -115,7 +115,7 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
                                     type: ManagerAccountType.Persona,
                                     name: persona.nickname,
                                     address: persona.address,
-                                    rawPublicKey: persona.identifier.rawPublicKey,
+                                    identifier: persona.identifier,
                                 })
                             }>
                             <Box display="flex" alignItems="center" columnGap={0.5}>

@@ -107,6 +107,7 @@ export class ConnectionContext {
         return {
             ...this.payloadEditor.config,
             ...this._options?.overrides,
+            from: this._options?.overrides?.from || this.payloadEditor.config?.from,
         }
     }
 

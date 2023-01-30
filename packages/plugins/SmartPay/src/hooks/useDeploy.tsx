@@ -7,7 +7,7 @@ import { useChainContext, useWeb3Connection, useWeb3State } from '@masknet/web3-
 import type { AbstractAccountAPI } from '@masknet/web3-providers/types'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { TransactionStatusType, Wallet } from '@masknet/web3-shared-base'
-import { Typography, useTheme } from '@mui/material'
+import { Typography } from '@mui/material'
 import { ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import type { ManagerAccount } from '../type.js'
 import { useI18N } from '../locales/index.js'
@@ -20,7 +20,6 @@ export function useDeploy(
     nonce?: number,
     onSuccess?: () => void,
 ) {
-    const theme = useTheme()
     const snackbarKeyRef = useRef<SnackbarKey>()
     const t = useI18N()
 
@@ -43,6 +42,7 @@ export function useDeploy(
     )
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, {
         providerType: ProviderType.MaskWallet,
+        account: undefined,
         chainId,
     })
 
@@ -105,9 +105,9 @@ export function useDeploy(
                 try {
                     if (txHash !== hash || !signAccount.address || status !== TransactionStatusType.SUCCEED) return
 
-                    // const result = await connection?.deploy?.(signAccount.address, signPersona?.identifier, {
-                    //     chainId,
-                    // })
+                    const result = await connection?.deploy?.(signAccount.address, undefined, {
+                        chainId,
+                    })
 
                     Wallet?.addWallet({
                         name: 'Smart Pay',
