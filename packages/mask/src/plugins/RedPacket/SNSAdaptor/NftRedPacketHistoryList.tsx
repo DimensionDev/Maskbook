@@ -3,7 +3,7 @@ import { makeStyles, LoadingBase } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNonFungibleCollections } from '@masknet/web3-hooks-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { List, Popper, Typography, Box } from '@mui/material'
 import type { NftRedPacketJSONPayload } from '../types.js'
 import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory.js'
@@ -104,14 +104,6 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     }
     const handleHidePopover = () => {
         setAnchorEl(null)
-    }
-
-    if (chainId === ChainId.BSC) {
-        return (
-            <Typography className={classes.placeholder} color="textSecondary">
-                {t.chain_not_supported({ chain: 'Binance Smart Chain' })}
-            </Typography>
-        )
     }
 
     if (loading) {
