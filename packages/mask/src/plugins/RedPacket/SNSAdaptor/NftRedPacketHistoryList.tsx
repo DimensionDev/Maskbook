@@ -1,12 +1,11 @@
 import { useRef, useState } from 'react'
-import { useScrollBottomEvent } from '@masknet/shared-base-ui'
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNonFungibleCollections } from '@masknet/web3-hooks-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { List, Popper, Typography, Box } from '@mui/material'
-import type { NftRedPacketHistory } from '../types.js'
+import type { NftRedPacketJSONPayload } from '../types.js'
 import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory.js'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem.js'
 import { useI18N } from '../locales/index.js'
@@ -84,22 +83,20 @@ const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
 })
 
 interface Props {
-    onSend: (history: NftRedPacketHistory, contract: NonFungibleCollection<ChainId, SchemaType>) => void
+    onSend: (history: NftRedPacketJSONPayload, contract: NonFungibleCollection<ChainId, SchemaType>) => void
 }
 
 export function NftRedPacketHistoryList({ onSend }: Props) {
     const { classes, cx } = useStyles()
     const t = useI18N()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { histories, fetchMore, loading } = useNftRedPacketHistory(account, chainId)
-    const containerRef = useRef(null)
+    const { value: histories, loading } = useNftRedPacketHistory(account, chainId)
+    const containerRef = useRef<HTMLDivElement>(null)
     const [popperText, setPopperText] = useState('')
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const { value: collections = [] } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
         chainId,
     })
-
-    useScrollBottomEvent(containerRef, fetchMore)
 
     const handleShowPopover = (anchor: HTMLElement, text: string) => {
         setAnchorEl(anchor)
@@ -107,14 +104,6 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     }
     const handleHidePopover = () => {
         setAnchorEl(null)
-    }
-
-    if (chainId === ChainId.BSC) {
-        return (
-            <Typography className={classes.placeholder} color="textSecondary">
-                {t.chain_not_supported({ chain: 'Binance Smart Chain' })}
-            </Typography>
-        )
     }
 
     if (loading) {
@@ -140,7 +129,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
                 <List style={{ padding: '16px 0 0' }}>
                     {histories.map((history) => (
                         <NftRedPacketHistoryItem
-                            key={history.rpid}
+                            key={history.txid}
                             collections={collections}
                             history={history}
                             onSend={onSend}

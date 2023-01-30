@@ -1,6 +1,7 @@
-import { curryRight, isNil } from 'lodash-es'
+import { isNil } from 'lodash-es'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { defer } from '@masknet/kit'
+import type { ECKeyIdentifier, SignType } from '@masknet/shared-base'
 import { SmartPayAccount, Web3 } from '@masknet/web3-providers'
 import {
     ChainId,
@@ -36,7 +37,9 @@ async function internalSend(
     const identifier = options?.identifier
     const gasCurrency = options?.gasCurrency
     const signer = identifier
-        ? new Signer(identifier, curryRight(signWithPersona)(true))
+        ? new Signer(identifier, <T>(type: SignType, message: T, identifier?: ECKeyIdentifier) =>
+              signWithPersona(type, message, identifier, true),
+          )
         : new Signer(owner || from!, signWithWallet)
 
     switch (payload.method) {
