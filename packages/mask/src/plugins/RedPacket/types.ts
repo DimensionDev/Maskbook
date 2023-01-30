@@ -105,36 +105,12 @@ export enum NFTSelectOption {
     Partial = 'Partial',
 }
 
-export interface NftRedPacketSubgraphInMask extends Omit<RedPacketBasic, 'is_random'> {
-    token: NonFungibleToken<ChainId, SchemaType>
-    contract_version: number
-    token_contract: NonFungibleTokenContract<ChainId, SchemaType>
-    address: string
-    chain_id: number
-    message: string
-    token_ids: string[]
-    creator: {
-        name: string
-        address: string
-    }
-    total_remaining: string
-}
-
 export type NonFungibleTokenOutMask = Omit<NonFungibleToken<ChainId, SchemaType.ERC721>, 'chainId'> & {
     chain_id: ChainId
 }
 
 export type NonFungibleTokenContractOutMask = Omit<NonFungibleTokenContract<ChainId, SchemaType.ERC721>, 'chainId'> & {
     chain_id: ChainId
-}
-
-export interface NftRedPacketSubgraphOutMask extends Omit<NftRedPacketSubgraphInMask, 'token' | 'token_contract'> {
-    token: NonFungibleTokenOutMask
-    token_contract: NonFungibleTokenContractOutMask
-}
-
-export interface NftRedPacketHistory extends NftRedPacketSubgraphInMask {
-    payload: NftRedPacketJSONPayload
 }
 
 export interface RedPacketNftRecord {
