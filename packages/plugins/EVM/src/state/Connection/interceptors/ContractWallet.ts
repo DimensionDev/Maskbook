@@ -1,3 +1,4 @@
+import { curryRight } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import type { BundlerAPI, AbstractAccountAPI, FunderAPI } from '@masknet/web3-providers/types'
 import { NetworkPluginID, SignType } from '@masknet/shared-base'
@@ -40,7 +41,8 @@ export class ContractWallet implements Middleware<ConnectionContext> {
     }
 
     private getSigner(context: ConnectionContext) {
-        if (context.identifier) return new Signer(context.identifier, SharedContextSettings.value.signWithPersona)
+        if (context.identifier)
+            return new Signer(context.identifier, curryRight(SharedContextSettings.value.signWithPersona)(true))
         if (context.owner)
             return new Signer(context.owner, (type: SignType, message: string | Transaction, account: string) => {
                 switch (type) {
