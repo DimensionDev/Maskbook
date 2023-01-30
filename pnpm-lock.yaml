@@ -774,6 +774,9 @@ importers:
       '@msgpack/msgpack':
         specifier: ^2.8.0
         version: 2.8.0
+      '@react-hookz/web':
+        specifier: ^19.2.0
+        version: 19.2.0
       '@servie/events':
         specifier: ^3.0.0
         version: 3.0.0

@@ -1,4 +1,5 @@
-import { FC, memo, MouseEventHandler, useCallback, useMemo } from 'react'
+import { FC, memo, MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useIntersectionObserver } from '@react-hookz/web'
 import { fill } from 'lodash-es'
 import { TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -131,6 +132,9 @@ export interface NftRedPacketHistoryItemProps {
 export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
     ({ history, onSend, onShowPopover, onHidePopover, collections }) => {
         const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+        const [isVisible, setVisible] = useState(false)
+        const ref = useRef<HTMLLIElement | null>(null)
+        const entry = useIntersectionObserver(ref, {})
         const t = useI18N()
         const { classes, cx } = useStyles()
         const { value: receipt } = useCreateNftRedPacketReceipt(history.txid)
@@ -140,6 +144,10 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
             () => ({ ...history, rpid, creation_time }),
             [history, rpid, creation_time],
         )
+
+        useEffect(() => {
+            if (entry?.isIntersecting && rpid) setVisible(true)
+        }, [entry?.isIntersecting, rpid])
 
         const {
             computed: { canSend, isPasswordValid },
@@ -169,71 +177,78 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
             onShowPopover(anchor, t.nft_data_broken())
         }
 
-        return !rpid ? null : (
-            <ListItem className={classes.root}>
-                <Box className={classes.box}>
-                    <TokenIcon
-                        className={classes.icon}
-                        address={collection?.address ?? ''}
-                        name={collection?.name ?? '-'}
-                        logoURL={
-                            collection?.iconURL ??
-                            new URL('../../../resources/maskFilledIcon.png', import.meta.url).toString()
-                        }
-                    />
-                    <Box className={classes.content}>
-                        <section className={classes.section}>
-                            <div>
-                                <Typography
-                                    variant="body1"
-                                    className={cx(classes.title, classes.message, classes.ellipsis)}>
-                                    {patchedHistory.sender.message === ''
-                                        ? t.best_wishes()
-                                        : patchedHistory.sender.message}
+        return (
+            <ListItem className={classes.root} ref={ref}>
+                {!rpid ? null : (
+                    <Box className={classes.box}>
+                        <TokenIcon
+                            className={classes.icon}
+                            address={collection?.address ?? ''}
+                            name={collection?.name ?? '-'}
+                            logoURL={
+                                collection?.iconURL ??
+                                new URL('../../../resources/maskFilledIcon.png', import.meta.url).toString()
+                            }
+                        />
+                        <Box className={classes.content}>
+                            <section className={classes.section}>
+                                <div>
+                                    <Typography
+                                        variant="body1"
+                                        className={cx(classes.title, classes.message, classes.ellipsis)}>
+                                        {patchedHistory.sender.message === ''
+                                            ? t.best_wishes()
+                                            : patchedHistory.sender.message}
+                                    </Typography>
+                                    <Typography variant="body1" className={cx(classes.info, classes.message)}>
+                                        {t.history_duration({
+                                            startTime: dateTimeFormat(new Date(patchedHistory.creation_time)),
+                                            endTime: dateTimeFormat(
+                                                new Date(patchedHistory.creation_time + patchedHistory.duration),
+                                                false,
+                                            ),
+                                        })}
+                                    </Typography>
+                                </div>
+                                {canSend ? (
+                                    <ActionButton
+                                        onMouseEnter={handleMouseEnter}
+                                        onMouseLeave={onHidePopover}
+                                        onClick={handleSend}
+                                        className={cx(
+                                            classes.actionButton,
+                                            isPasswordValid ? '' : classes.disabledButton,
+                                        )}
+                                        size="large">
+                                        {t.send()}
+                                    </ActionButton>
+                                ) : null}
+                            </section>
+                            <section className={classes.nftList}>
+                                {isVisible ? (
+                                    <NftList
+                                        collection={collection}
+                                        statusList={bitStatusList}
+                                        tokenIds={patchedHistory.token_ids}
+                                    />
+                                ) : null}
+                            </section>
+                            <section className={classes.footer}>
+                                <Typography variant="body1" className={classes.footerInfo}>
+                                    <Translate.history_claimed
+                                        components={{
+                                            strong: <strong />,
+                                        }}
+                                        values={{
+                                            claimedShares: bitStatusList.filter((x) => x).length.toString(),
+                                            shares: patchedHistory.shares.toString(),
+                                        }}
+                                    />
                                 </Typography>
-                                <Typography variant="body1" className={cx(classes.info, classes.message)}>
-                                    {t.history_duration({
-                                        startTime: dateTimeFormat(new Date(patchedHistory.creation_time)),
-                                        endTime: dateTimeFormat(
-                                            new Date(patchedHistory.creation_time + patchedHistory.duration),
-                                            false,
-                                        ),
-                                    })}
-                                </Typography>
-                            </div>
-                            {canSend ? (
-                                <ActionButton
-                                    onMouseEnter={handleMouseEnter}
-                                    onMouseLeave={onHidePopover}
-                                    onClick={handleSend}
-                                    className={cx(classes.actionButton, isPasswordValid ? '' : classes.disabledButton)}
-                                    size="large">
-                                    {t.send()}
-                                </ActionButton>
-                            ) : null}
-                        </section>
-                        <section className={classes.nftList}>
-                            <NftList
-                                collection={collection}
-                                statusList={bitStatusList}
-                                tokenIds={patchedHistory.token_ids}
-                            />
-                        </section>
-                        <section className={classes.footer}>
-                            <Typography variant="body1" className={classes.footerInfo}>
-                                <Translate.history_claimed
-                                    components={{
-                                        strong: <strong />,
-                                    }}
-                                    values={{
-                                        claimedShares: bitStatusList.filter((x) => x).length.toString(),
-                                        shares: patchedHistory.shares.toString(),
-                                    }}
-                                />
-                            </Typography>
-                        </section>
+                            </section>
+                        </Box>
                     </Box>
-                </Box>
+                )}
             </ListItem>
         )
     },
