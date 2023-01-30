@@ -105,6 +105,11 @@ export type ApplicationDialogEvent = {
     pluginID: string
 }
 
+export type AvatarSettingDialogEvent = {
+    open: boolean
+    startPicking?: boolean
+}
+
 export interface NFTProjectTwitterDetectEvent {
     address?: string
 }

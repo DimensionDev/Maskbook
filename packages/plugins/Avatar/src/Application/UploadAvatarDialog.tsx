@@ -1,17 +1,19 @@
-import { useCallback, useState } from 'react'
+import { FC, useCallback, useState } from 'react'
 import AvatarEditor from 'react-avatar-editor'
 import { useSubscription } from 'use-subscription'
 import { Button, DialogActions, DialogContent, Slider } from '@mui/material'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
-import type { BindingProof, NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../locales/i18n_generated.js'
 import { context } from '../context.js'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { AvatarInfo, useSave } from '../hooks/save/useSave.js'
-import type { AllChainsNonFungibleToken } from '../types.js'
 import { delay } from '@masknet/kit'
 import { usePersonaConnectStatus } from '@masknet/shared'
+import { useAvatarManagement } from '../contexts/index.js'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { useNavigate } from 'react-router-dom'
+import { RoutePaths } from './Routes.js'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -40,17 +42,6 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface UploadAvatarDialogProps {
-    account?: string
-    isBindAccount?: boolean
-    image?: string | File
-    token?: AllChainsNonFungibleToken
-    proof?: BindingProof
-    pluginID?: NetworkPluginID
-    onBack: () => void
-    onClose: () => void
-}
-
 async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | undefined> {
     try {
         const media = await Twitter.uploadUserAvatar(userId, blob)
@@ -65,10 +56,12 @@ async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | un
     }
 }
 
-export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
-    const { image, account, token, onClose, onBack, proof, isBindAccount = false, pluginID } = props
+export const UploadAvatarDialog: FC = () => {
     const t = useI18N()
     const { classes } = useStyles()
+    const { proof, proofs, selectedTokenInfo } = useAvatarManagement()
+    const { image, account, token, pluginID } = selectedTokenInfo ?? {}
+    const isBindAccount = proofs.some((x) => isSameAddress(x.identity, selectedTokenInfo?.account))
     const { pluginID: currentPluginID } = useNetworkContext(pluginID)
     const identifier = useSubscription(context.currentVisitingProfile)
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
@@ -78,6 +71,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const { currentPersona } = usePersonaConnectStatus()
 
     const [, saveAvatar] = useSave(currentPluginID)
+    const navigate = useNavigate()
 
     const onSave = useCallback(async () => {
         if (!editor || !account || !token || !currentPersona?.identifier || !proof) return
@@ -107,12 +101,12 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             await Twitter.staleUserByScreenName(identifier?.identifier?.userId ?? '')
             showSnackbar(t.upload_avatar_success_message(), { variant: 'success' })
 
-            onClose()
+            navigate(RoutePaths.Exit)
             setDisabled(false)
             await delay(500)
             location.reload()
         }, 'image/png')
-    }, [account, editor, identifier, onClose, currentPersona, proof, isBindAccount, saveAvatar])
+    }, [account, editor, identifier, navigate, currentPersona, proof, isBindAccount, saveAvatar])
 
     if (!account || !image || !token || !proof) return null
 
@@ -123,7 +117,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                     ref={(e) => setEditor(e)}
                     image={image!}
                     style={{ width: 'auto', height: 400, borderRadius: 8 }}
-                    scale={scale ?? 1}
+                    scale={scale}
                     rotate={0}
                     border={50}
                     borderRadius={300}
@@ -151,7 +145,12 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 />
             </DialogContent>
             <DialogActions className={classes.actions}>
-                <Button disabled={disabled} className={classes.cancel} fullWidth variant="outlined" onClick={onBack}>
+                <Button
+                    disabled={disabled}
+                    className={classes.cancel}
+                    fullWidth
+                    variant="outlined"
+                    onClick={() => navigate(-1)}>
                     {t.cancel()}
                 </Button>
                 <Button fullWidth onClick={onSave} disabled={disabled}>

@@ -3,7 +3,7 @@ import { ElementAnchor, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, List, ListItem, Stack, Typography } from '@mui/material'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { supportPluginIds } from '../constants.js'
 import { useI18N } from '../locales/index.js'
 import { NFTImage } from '../SNSAdaptor/NFTImage.js'
@@ -60,21 +60,19 @@ interface NFTListPageProps {
 }
 
 export function NFTListPage(props: NFTListPageProps) {
+    const t = useI18N()
     const { onChange, tokenInfo, tokens, children, pluginID, nextPage, loadError, loadFinish } = props
     const { classes } = useStyles({ networkPluginID: pluginID })
-    const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>(tokenInfo)
-    const t = useI18N()
+    const [pendingToken, setPendingToken] = useState<AllChainsNonFungibleToken | undefined>()
+    const selectedToken = pendingToken ?? tokenInfo
 
     const onSelect = useCallback(
         (token: AllChainsNonFungibleToken) => {
-            if (!token) return
-            setSelectedToken(token)
+            setPendingToken(token)
             onChange?.(token)
         },
         [onChange],
     )
-
-    useEffect(() => setSelectedToken(tokenInfo), [tokenInfo])
 
     if (!supportPluginIds.includes(pluginID)) {
         return (
@@ -101,7 +99,6 @@ export function NFTListPage(props: NFTListPageProps) {
                 {tokens.map((token: AllChainsNonFungibleToken, i) => (
                     <ListItem key={i} className={classes.nftItem}>
                         <NFTImage
-                            key={i}
                             token={token}
                             selected={isSameNFT(pluginID, token, selectedToken)}
                             onSelect={onSelect}
@@ -114,12 +111,7 @@ export function NFTListPage(props: NFTListPageProps) {
                     <RetryHint hint={false} retry={nextPage} />
                 </Stack>
             )}
-            <ElementAnchor
-                callback={() => {
-                    if (nextPage) nextPage()
-                }}>
-                {!loadFinish && tokens.length !== 0 && <LoadingBase />}
-            </ElementAnchor>
+            <ElementAnchor callback={nextPage}>{!loadFinish && tokens.length !== 0 && <LoadingBase />}</ElementAnchor>
         </Box>
     )
 }
