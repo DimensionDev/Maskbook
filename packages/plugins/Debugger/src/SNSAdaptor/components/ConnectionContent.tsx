@@ -66,7 +66,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
     const onTransferCallback = useCallback(() => {
         return connection?.transferFungibleToken?.(
             '0x0000000000000000000000000000000000000000',
-            '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
+            '0x96ec3286a049b42133c3ddd26777051612bdf61f',
             '100',
             undefined,
             {
@@ -77,9 +77,9 @@ export function ConnectionContent(props: ConnectionContentProps) {
     }, [connection])
 
     const onDeployCallback = useCallback(() => {
-        return connection?.deploy?.('0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC', undefined, {
+        return connection?.deploy?.('0x96ec3286a049b42133c3ddd26777051612bdf61f', undefined, {
             chainId: ChainId.Matic,
-            account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
+            account: '0x96ec3286a049b42133c3ddd26777051612bdf61f',
             providerType: EVM_ProviderType.MaskWallet,
         })
     }, [connection])
@@ -90,14 +90,14 @@ export function ConnectionContent(props: ConnectionContentProps) {
                 publicKey: '',
                 type: ProofType.Persona,
                 payload: JSON.stringify({
-                    ownerAddress: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
+                    ownerAddress: '0x96ec3286a049b42133c3ddd26777051612bdf61f',
                     nonce: 0,
                 }),
                 signature: '',
             },
             {
                 chainId: ChainId.Matic,
-                account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
+                account: '0x96ec3286a049b42133c3ddd26777051612bdf61f',
                 providerType: EVM_ProviderType.MaskWallet,
             },
         )
@@ -106,7 +106,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
     const onChangeOwnerChange = useCallback(() => {
         return connection?.changeOwner?.('0x66b57885E8E9D84742faBda0cE6E3496055b012d', {
             chainId: ChainId.Matic,
-            account: '0xDCA2d88dfd48F40927B6ACAA6538c1C999fF9eFC',
+            account: '0x96ec3286a049b42133c3ddd26777051612bdf61f',
             providerType: EVM_ProviderType.MaskWallet,
         })
     }, [connection])

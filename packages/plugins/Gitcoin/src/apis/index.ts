@@ -7,12 +7,12 @@ export interface AdminProfile {
     id: number
     url: string
     handle: string
-    keywords: string[]
-    position: number
+    keywords?: string[]
+    position?: number
     avatar_url: string
-    github_url: string
-    total_earned: number
-    organizations: Metadata
+    github_url?: string
+    total_earned?: number
+    organizations?: Metadata
 }
 
 export interface GitcoinGrant {
@@ -36,6 +36,8 @@ export interface GitcoinGrant {
     required_gas_price: string
     admin_profile: AdminProfile
     team_members: AdminProfile[]
+    twitter_handle_1?: string
+    twitter_handle_2?: string
 }
 
 export async function fetchGrant(id: string) {

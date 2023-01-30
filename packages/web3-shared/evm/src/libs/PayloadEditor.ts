@@ -1,9 +1,8 @@
 import { first, isUndefined, omitBy } from 'lodash-es'
 import Web3 from 'web3'
-import { AbiItem, hexToNumber, hexToNumberString } from 'web3-utils'
+import { AbiItem, hexToNumber, hexToNumberString, toHex } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
-import { toFixed } from '@masknet/web3-shared-base'
 import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json'
 import { ChainId, EthereumMethodType, Transaction, TransactionOptions, UserOperation } from '../types/index.js'
 import { createJsonRpcPayload } from '../helpers/index.js'
@@ -87,7 +86,7 @@ export class PayloadEditor {
                     chainId: this.options?.chainId,
                     data: new Web3().eth.abi.encodeFunctionCall(
                         CREATE2_FACTORY_ABI.find((x) => x.name === 'deploy')! as AbiItem,
-                        ['0x', toFixed(0)],
+                        ['0x', toHex(0)],
                     ),
                 }
             case EthereumMethodType.MASK_FUND:
@@ -104,7 +103,7 @@ export class PayloadEditor {
                     chainId: this.options?.chainId,
                     data: new Web3().eth.abi.encodeFunctionCall(
                         CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem,
-                        [ownerAddress, toFixed(nonce)],
+                        [ownerAddress, toHex(nonce)],
                     ),
                 }
             default:
@@ -184,7 +183,6 @@ export class PayloadEditor {
             EthereumMethodType.ETH_SEND_TRANSACTION,
             EthereumMethodType.ETH_SIGN_TRANSACTION,
             EthereumMethodType.MASK_REPLACE_TRANSACTION,
-            EthereumMethodType.MASK_DEPLOY,
         ].includes(method as EthereumMethodType)
     }
 
