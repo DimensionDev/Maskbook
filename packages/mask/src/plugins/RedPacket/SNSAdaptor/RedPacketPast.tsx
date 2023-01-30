@@ -6,7 +6,7 @@ import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { RedPacketHistoryList } from './RedPacketHistoryList.js'
 import { NftRedPacketHistoryList } from './NftRedPacketHistoryList.js'
-import type { NftRedPacketHistory, RedPacketJSONPayload } from '../types.js'
+import type { RedPacketJSONPayload, NftRedPacketJSONPayload } from '../types.js'
 import { RedPacketNftMetaKey } from '../constants.js'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 
@@ -32,19 +32,19 @@ export function RedPacketPast({ onSelect, onClose, tabs }: Props) {
     const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
     const { attachMetadata } = useCompositionContext()
     const handleSendNftRedpacket = useCallback(
-        (history: NftRedPacketHistory, collection: NonFungibleCollection<ChainId, SchemaType>) => {
-            const { rpid, txid, duration, message, payload } = history
+        (history: NftRedPacketJSONPayload, collection: NonFungibleCollection<ChainId, SchemaType>) => {
+            const { rpid, txid, duration, sender, password, chainId } = history
             attachMetadata(RedPacketNftMetaKey, {
                 id: rpid,
                 txid,
                 duration,
-                message,
+                message: sender.message,
                 senderName,
                 contractName: collection.name,
                 contractAddress: collection.address,
                 contractTokenURI: collection.iconURL ?? '',
-                privateKey: payload.password,
-                chainId: history.chain_id,
+                privateKey: password,
+                chainId,
             })
             onClose?.()
         },
