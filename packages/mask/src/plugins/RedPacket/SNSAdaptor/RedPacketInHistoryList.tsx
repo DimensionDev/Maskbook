@@ -1,12 +1,9 @@
 import { MouseEvent, useCallback, useState, useMemo } from 'react'
-import { useAsync } from 'react-use'
-import { Interface } from '@ethersproject/abi'
 import { BigNumber } from 'bignumber.js'
 import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
-import { ChainId, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
-import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import intervalToDuration from 'date-fns/intervalToDuration'
 import nextDay from 'date-fns/nextDay'
 import { Translate, useI18N } from '../locales/index.js'
@@ -14,12 +11,11 @@ import { dateTimeFormat } from '../../ITO/assets/formatDate.js'
 import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress.js'
 import { RedPacketJSONPayload, RedPacketJSONPayloadFromChain, RedPacketStatus } from '../types.js'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
+import { useCreateRedPacketReceipt } from './hooks/useCreateRedPacketReceipt.js'
 import { useRefundCallback } from './hooks/useRefundCallback.js'
-import { useChainContext, useFungibleToken, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { formatBalance, FungibleToken, isSameAddress } from '@masknet/web3-shared-base'
-
-const interFace = new Interface(REDPACKET_ABI)
+import { formatBalance, FungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -168,45 +164,21 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const t = useI18N()
     const { classes, cx } = useStyles()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
-    const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
-
-    const { value: receipt } = useAsync(async () => {
-        const result = await connection?.getTransactionReceipt(history.txid)
-        if (!result) return null
-
-        const log = result.logs.find((log) => isSameAddress(log.address, HAPPY_RED_PACKET_ADDRESS_V4))
-        if (!log) return null
-
-        type CreationSuccessEventParams = {
-            id: string
-            creation_time: BigNumber
-        }
-        const eventParams = interFace.decodeEventLog(
-            'CreationSuccess',
-            log.data,
-            log.topics,
-        ) as unknown as CreationSuccessEventParams
-
-        return {
-            rpid: eventParams.id,
-            creation_time: eventParams.creation_time.toNumber() * 1000,
-        }
-    }, [connection, history.txid, HAPPY_RED_PACKET_ADDRESS_V4])
+    const { value: receipt } = useCreateRedPacketReceipt(history.txid)
 
     const rpid = receipt?.rpid ?? ''
     const creation_time = receipt?.creation_time ?? 0
 
     const patchedHistory: RedPacketJSONPayload | RedPacketJSONPayloadFromChain = useMemo(
-        () => ({ ...props.history, rpid }),
-        [props.history, rpid],
+        () => ({ ...props.history, rpid, creation_time }),
+        [props.history, rpid, creation_time],
     )
     const {
         value: availability,
         computed: { canRefund, canSend, listOfStatus, isPasswordValid },
         retry: revalidateAvailability,
-    } = useAvailabilityComputed(account, { ...patchedHistory, creation_time })
+    } = useAvailabilityComputed(account, patchedHistory)
 
     const claimerNumber = availability ? Number(availability.claimed) : 0
     const total_remaining = availability?.balance
