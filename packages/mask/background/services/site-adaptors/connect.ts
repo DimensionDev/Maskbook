@@ -64,7 +64,7 @@ export async function getSitesWithoutPermission(): Promise<SiteAdaptor.Definitio
     const promises = groups.map(async (x) => {
         const origins = x.declarativePermissions.origins
         const unGrantedOrigins = compact(
-            await Promise.all(origins.map((origin) => hasPermission(origin).then((yes) => (yes ? true : origin)))),
+            await Promise.all(origins.map((origin) => hasPermission(origin).then((yes) => (yes ? null : origin)))),
         )
         if (!unGrantedOrigins.length) return null
         return x
