@@ -18,13 +18,13 @@
   },
   "devDependencies": {
     "@storybook/addons": "^6.5.13",
-    "@storybook/react": "^6.5.13",
+    "@storybook/react": "^6.5.16",
     "stream-browserify": "3",
     "swc-loader": "^0.2.3",
     "webpack": "^5.75.0"
   },
   "peerDependencies": {
     "@storybook/addons": "^6",
-    "@storybook/react": "^6"
+    "@storybook/react": "^6.5.16"
   }
 }

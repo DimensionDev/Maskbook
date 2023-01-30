@@ -85,8 +85,9 @@ async function generateIcons() {
             const currentVariant = getVariant(parsedPath.name)
             variants[base] ??= []
 
+            const absolutePath = new URL(path, ROOT_PATH)
             // cross platform, use URL to calculate relative path
-            const importPath = './' + new URL(path, ROOT_PATH).toString().slice(relativePrefix)
+            const importPath = './' + absolutePath.toString().slice(relativePrefix)
             const identifier = snakeCase(parsedPath.name)
 
             const url = ` /*#__PURE__*/ new URL(${JSON.stringify(importPath)}, import.meta.url)`
@@ -101,7 +102,8 @@ async function generateIcons() {
             currentLine += `${identifier}_url: string`
             asURL.dts.push(currentLine)
 
-            const source = parsedPath.ext.toLowerCase() === '.svg' ? await readFile(path, 'utf8').then(svg2jsx) : null
+            const source =
+                parsedPath.ext.toLowerCase() === '.svg' ? await readFile(absolutePath, 'utf8').then(svg2jsx) : null
             variants[base].push({
                 args: [currentVariant, url, source, !!source?.match(currentColorRe)],
                 assetPath: importPath,
