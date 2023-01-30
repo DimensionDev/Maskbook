@@ -1,6 +1,6 @@
 import type { AbiItem } from 'web3-utils'
 import type { BundlerAPI, AbstractAccountAPI, FunderAPI } from '@masknet/web3-providers/types'
-import { NetworkPluginID, SignType } from '@masknet/shared-base'
+import { ECKeyIdentifier, NetworkPluginID, SignType } from '@masknet/shared-base'
 import {
     ChainId,
     ConnectionContext,
@@ -40,7 +40,10 @@ export class ContractWallet implements Middleware<ConnectionContext> {
     }
 
     private getSigner(context: ConnectionContext) {
-        if (context.identifier) return new Signer(context.identifier, SharedContextSettings.value.signWithPersona)
+        if (context.identifier)
+            return new Signer(context.identifier, <T>(type: SignType, message: T, identifier?: ECKeyIdentifier) =>
+                SharedContextSettings.value.signWithPersona(type, message, identifier, true),
+            )
         if (context.owner)
             return new Signer(context.owner, (type: SignType, message: string | Transaction, account: string) => {
                 switch (type) {
