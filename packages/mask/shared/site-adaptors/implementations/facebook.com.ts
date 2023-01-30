@@ -7,6 +7,7 @@ if (import.meta.webpackHot) import.meta.webpackHot.accept()
 
 const origins = ['https://www.facebook.com/*', 'https://m.facebook.com/*', 'https://facebook.com/*']
 export const FacebookAdaptor: SiteAdaptor.Definition = {
+    name: 'Facebook',
     networkIdentifier: EnhanceableSite.Facebook,
     declarativePermissions: { origins },
     homepage: 'https://www.facebook.com',

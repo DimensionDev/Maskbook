@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Icons } from '@masknet/icons'
+import { GeneratedIcon, Icons } from '@masknet/icons'
 import { EnhanceableSite, NextIDPlatform } from '@masknet/shared-base'
 
 export const SOCIAL_MEDIA_ICON_MAPPING: Record<EnhanceableSite | string, ReactNode> = {
@@ -12,13 +12,13 @@ export const SOCIAL_MEDIA_ICON_MAPPING: Record<EnhanceableSite | string, ReactNo
     [EnhanceableSite.Localhost]: null,
 }
 
-export const SOCIAL_MEDIA_ROUND_ICON_MAPPING: Record<EnhanceableSite | string, ReactNode> = {
-    [EnhanceableSite.Twitter]: <Icons.TwitterRound />,
-    [EnhanceableSite.Facebook]: <Icons.FacebookRound />,
-    [EnhanceableSite.Minds]: <Icons.MindsRound />,
-    [EnhanceableSite.Instagram]: <Icons.InstagramRound />,
-    [EnhanceableSite.OpenSea]: <Icons.OpenSeaColored />,
-    [EnhanceableSite.Mirror]: <Icons.Mirror />,
+export const SOCIAL_MEDIA_ROUND_ICON_MAPPING: Record<EnhanceableSite | string, GeneratedIcon | null> = {
+    [EnhanceableSite.Twitter]: Icons.TwitterRound,
+    [EnhanceableSite.Facebook]: Icons.FacebookRound,
+    [EnhanceableSite.Minds]: Icons.MindsRound,
+    [EnhanceableSite.Instagram]: Icons.InstagramRoundColored,
+    [EnhanceableSite.OpenSea]: Icons.OpenSeaColored,
+    [EnhanceableSite.Mirror]: Icons.Mirror,
     [EnhanceableSite.Localhost]: null,
 }
 

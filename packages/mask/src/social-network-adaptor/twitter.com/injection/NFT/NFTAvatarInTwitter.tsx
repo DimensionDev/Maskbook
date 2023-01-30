@@ -10,17 +10,20 @@ import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge.js'
+import {
+    NFTBadge,
+    rainbowBorderKeyFrames,
+    RSS3_KEY_SNS,
+    usePersonaNFTAvatar,
+    useWallet,
+    useNFT,
+    useSaveNFTAvatar,
+} from '@masknet/plugin-avatar'
 import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use'
-import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox.js'
-import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
-import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersonaNFTAvatar.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Box, Typography } from '@mui/material'
-import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet.js'
-import { useNFT, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks/index.js'
 import { NFTCardStyledAssetPlayer, useShowConfirm } from '@masknet/shared'
-import type { AvatarMetaDB } from '../../../../plugins/Avatar/types.js'
+import type { AvatarMetaDB } from '@masknet/plugin-avatar'
 import { NetworkPluginID, EnhanceableSite, NFTAvatarEvent, CrossIsolationMessages } from '@masknet/shared-base'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 import { Twitter } from '@masknet/web3-providers'

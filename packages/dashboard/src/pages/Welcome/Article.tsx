@@ -1,4 +1,5 @@
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { Icons } from '@masknet/icons'
+import { SOCIAL_MEDIA_ROUND_ICON_MAPPING } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import type { FC, HTMLProps } from 'react'
@@ -33,6 +34,9 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(2),
         paddingLeft: 0,
         marginLeft: 0,
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: theme.spacing(3),
     },
     listItem: {
         fontStyle: 'normal',
@@ -43,34 +47,24 @@ const useStyles = makeStyles()((theme) => ({
         listStyleType: 'none',
         paddingLeft: 0,
         marginLeft: 0,
-        ['&::before']: {
-            content: '"\u00B7"',
-            color: 'inherit',
-            display: 'inline-flex',
-            alignItems: 'center',
-            width: '1em',
-        },
+        display: 'flex',
+        alignItems: 'center',
+    },
+    siteName: {
+        color: theme.palette.maskColor.second,
+        fontSize: 14,
+        lineHeight: '20px',
+        marginLeft: theme.spacing(1),
     },
 }))
 
-const formatOrigins = (origins: string[]) => {
-    const hosts = origins.map((origin) => {
-        try {
-            return decodeURIComponent(new URL(origin).host)
-        } catch {
-            return origin
-        }
-    })
-    return hosts.join(', ')
-}
-
 const Permissions: FC = () => {
     const { classes } = useStyles()
-    const { value: originGroups = EMPTY_LIST } = useAsync(() => {
-        return Services.SiteAdaptor.getOriginsWithoutPermission()
+    const { value: sites = [] } = useAsync(() => {
+        return Services.SiteAdaptor.getSitesWithoutPermission()
     }, [])
 
-    if (!originGroups.length) return null
+    if (!sites.length) return null
 
     return (
         <>
@@ -80,11 +74,17 @@ const Permissions: FC = () => {
             </Typography>
 
             <ul className={classes.list}>
-                {originGroups.map(({ networkIdentifier, origins }) => (
-                    <li className={classes.listItem} key={networkIdentifier}>
-                        {formatOrigins(origins)}
-                    </li>
-                ))}
+                {sites.map(({ networkIdentifier, name }) => {
+                    const Icon = SOCIAL_MEDIA_ROUND_ICON_MAPPING[networkIdentifier] ?? Icons.Globe
+                    return (
+                        <li className={classes.listItem} key={networkIdentifier}>
+                            <Icon size={20} />
+                            <Typography component="span" className={classes.siteName}>
+                                {name}
+                            </Typography>
+                        </li>
+                    )
+                })}
             </ul>
         </>
     )

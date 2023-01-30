@@ -552,6 +552,8 @@
     "plugin_poll_status_voted": "Voted.",
     "plugin_poll_deadline": "{{time}} left until vote ends",
     "plugin_ito_empty_token": "No need to unlock any token on this ITO.",
+    "plugin_collectibles_name": "Collectibles",
+    "plugin_collectibles_description": "Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media.",
     "plugin_ito_locked": "ITO locked",
     "plugin_ito_share": "Share",
     "plugin_ito_enter": "Enter",

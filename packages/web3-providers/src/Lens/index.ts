@@ -1,9 +1,10 @@
+import { fetchJSON } from '../entry-helpers.js'
 import type { LensBaseAPI } from '../types/Lens.js'
 import { LENS_ROOT_API } from './constants.js'
 
 export class LensAPI implements LensBaseAPI.Provider {
     async getProfileByHandle(handle: string): Promise<LensBaseAPI.Profile> {
-        const response = await fetch(LENS_ROOT_API, {
+        const { data } = await fetchJSON<{ data: { profile: LensBaseAPI.Profile } }>(LENS_ROOT_API, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -18,7 +19,6 @@ export class LensAPI implements LensBaseAPI.Provider {
                   }`,
             }),
         })
-        const json: { data: { profile: LensBaseAPI.Profile } } = await response.json()
-        return json.data.profile
+        return data.profile
     }
 }

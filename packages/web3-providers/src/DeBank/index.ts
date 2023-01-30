@@ -14,7 +14,7 @@ import {
 import { ChainId, formatGweiToWei, getDeBankConstants, SchemaType, GasOption } from '@masknet/web3-shared-evm'
 import { formatAssets, formatTransactions, resolveDeBankAssetId, resolveDeBankAssetIdReversed } from './helpers.js'
 import type { WalletTokenRecord, GasPriceDictResponse, HistoryRecord } from './types.js'
-import { getNativeAssets } from '../entry-helpers.js'
+import { fetchJSON, getNativeAssets } from '../entry-helpers.js'
 import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../entry-types.js'
 
 const DEBANK_OPEN_API = 'https://debank-proxy.r2d2.to'
@@ -44,8 +44,9 @@ export class DeBankAPI
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
         if (!CHAIN_ID) throw new Error('Failed to get gas price.')
 
-        const response = await fetch(urlcat(DEBANK_OPEN_API, '/v1/wallet/gas_market', { chain_id: CHAIN_ID }))
-        const result = (await response.json()) as GasPriceDictResponse
+        const result = await fetchJSON<GasPriceDictResponse>(
+            urlcat(DEBANK_OPEN_API, '/v1/wallet/gas_market', { chain_id: CHAIN_ID }),
+        )
         if (result.error_code !== 0) throw new Error('Failed to get gas price.')
 
         const responseModified = gasModifier(result, CHAIN_ID)
@@ -69,13 +70,12 @@ export class DeBankAPI
     }
 
     async getAssets(address: string, options?: HubOptions<ChainId>) {
-        const response = await fetch(
+        const result = await fetchJSON<WalletTokenRecord[] | undefined>(
             urlcat(DEBANK_OPEN_API, '/v1/user/all_token_list', {
                 id: address,
                 is_all: false,
             }),
         )
-        const result = (await response.json()) as WalletTokenRecord[] | undefined
         return createPageable(
             unionWith(
                 formatAssets(
@@ -107,15 +107,12 @@ export class DeBankAPI
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
         if (!CHAIN_ID) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
-        const response = await fetch(
+        const result = await fetchJSON<HistoryRecord>(
             `${DEBANK_OPEN_API}/v1/user/history_list?id=${address.toLowerCase()}&chain_id=${resolveDeBankAssetIdReversed(
                 CHAIN_ID,
             )}`,
         )
-        if (!response.ok) throw new Error('Fail to load transactions.')
-        const data: HistoryRecord = await response.json()
-
-        const transactions = formatTransactions(chainId, data)
+        const transactions = formatTransactions(chainId, result)
         return createPageable(transactions, createIndicator(indicator))
     }
 }

@@ -4,7 +4,7 @@
     </g>
     <defs>
         <clipPath id="shared_svg__a">
-            <path fill="#fff" d="M0 0h18v18H0z" transform="translate(.5)"/>
+            <path fill="#fff" d="M.5 0h18v18H.5z"/>
         </clipPath>
     </defs>
 </svg>

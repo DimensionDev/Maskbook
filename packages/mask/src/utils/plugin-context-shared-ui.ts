@@ -18,6 +18,10 @@ export const RestPartOfPluginUIContextShared: Omit<
     | 'getPersonaAvatar'
     | 'ownProofChanged'
     | 'setMinimalMode'
+    | 'queryPersonaByProfile'
+    | 'connectPersona'
+    | 'createPersona'
+    | 'NFTAvatarTimelineUpdated'
     | 'currentPersonaIdentifier'
     | 'ownPersonaChanged'
 > = {

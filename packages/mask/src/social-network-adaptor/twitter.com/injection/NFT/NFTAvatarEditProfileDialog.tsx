@@ -3,7 +3,6 @@ import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { Twitter } from '@masknet/web3-providers'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton.js'
 import { startWatch, createReactRootShadowed, MaskMessages } from '../../../../utils/index.js'
 import { searchProfileAvatarSelector, searchProfileSaveSelector } from '../../utils/selector.js'
 import {
@@ -13,10 +12,11 @@ import {
 } from '../../../../components/DataSource/useActivatedUI.js'
 import { ButtonStyle } from '../../constant.js'
 import { usePersonasFromDB } from '../../../../components/DataSource/usePersonasFromDB.js'
-import { ConnectPersonaBoundary } from '@masknet/shared'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { currentPersonaIdentifier } from '../../../../../shared/legacy-settings/settings.js'
-import Services from '../../../../extension/service.js'
+import { ConnectPersonaBoundary } from '@masknet/shared'
+import { Services } from '../../../../extension/service.js'
+import { NFTAvatarButton } from '@masknet/plugin-avatar'
 
 export function injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())

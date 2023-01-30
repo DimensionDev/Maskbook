@@ -633,6 +633,9 @@ importers:
       '@masknet/plugin-approval':
         specifier: workspace:^
         version: link:../plugins/Approval
+      '@masknet/plugin-avatar':
+        specifier: workspace:^
+        version: link:../plugins/Avatar
       '@masknet/plugin-collectible':
         specifier: workspace:^
         version: link:../plugins/Collectible
@@ -771,6 +774,9 @@ importers:
       '@msgpack/msgpack':
         specifier: ^2.8.0
         version: 2.8.0
+      '@react-hookz/web':
+        specifier: ^19.2.0
+        version: 19.2.0
       '@servie/events':
         specifier: ^3.0.0
         version: 3.0.0
@@ -1238,6 +1244,75 @@ importers:
       urlcat:
         specifier: ^2.0.4
         version: 2.0.4_fggwetex7eobhq3hztj4obsulu
+
+  packages/plugins/Avatar:
+    dependencies:
+      '@masknet/icons':
+        specifier: workspace:^
+        version: link:../../icons
+      '@masknet/plugin-infra':
+        specifier: workspace:^
+        version: link:../../plugin-infra
+      '@masknet/plugin-wallet':
+        specifier: workspace:^
+        version: link:../Wallet
+      '@masknet/shared':
+        specifier: workspace:^
+        version: link:../../shared
+      '@masknet/shared-base':
+        specifier: workspace:^
+        version: link:../../shared-base
+      '@masknet/shared-base-ui':
+        specifier: workspace:^
+        version: link:../../shared-base-ui
+      '@masknet/theme':
+        specifier: workspace:^
+        version: link:../../theme
+      '@masknet/web3-helpers':
+        specifier: workspace:^
+        version: link:../../web3-helpers
+      '@masknet/web3-hooks-base':
+        specifier: workspace:^
+        version: link:../../web3-hooks/base
+      '@masknet/web3-providers':
+        specifier: workspace:^
+        version: link:../../web3-providers
+      '@masknet/web3-shared-base':
+        specifier: workspace:^
+        version: link:../../web3-shared/base
+      '@masknet/web3-shared-evm':
+        specifier: workspace:^
+        version: link:../../web3-shared/evm
+      '@types/react-avatar-editor':
+        specifier: ^13.0.0
+        version: 13.0.0_6wzwgbn4gsisp2tjbg76iifhqq
+      '@types/use-subscription':
+        specifier: ^1.0.0
+        version: 1.0.0
+      '@types/uuid':
+        specifier: ^8.3.4
+        version: 8.3.4
+      bignumber.js:
+        specifier: 9.1.0
+        version: 9.1.0
+      lru-cache:
+        specifier: ^7.10.1
+        version: 7.10.1
+      react-avatar-editor:
+        specifier: ^13.0.0
+        version: 13.0.0
+      react-use:
+        specifier: ^17.4.0
+        version: 17.4.0
+      ts-results:
+        specifier: ^3.3.0
+        version: 3.3.0
+      use-subscription:
+        specifier: ^1.8.0
+        version: 1.8.0
+      uuid:
+        specifier: ^9.0.0
+        version: 9.0.0
 
   packages/plugins/Collectible:
     dependencies:
@@ -3942,7 +4017,7 @@ packages:
     resolution: {integrity: sha512-0NFvs3VkuSYbFi1x2Vd6tKrywq+z/cLeYC/RJNFrIX/30Bf5aiGYbtvGXolEktzJH8o5E5KJ3tT+nkxuuZFVlA==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/types': 7.19.0
+      '@babel/types': 7.20.2
 
   /@babel/helper-module-transforms/7.20.2:
     resolution: {integrity: sha512-zvBKyJXRbmK07XhMuujYoJ48B5yvvmM6+wcpv6Ivj4Yg6qO7NOZOSnvZN9CRl1zz1Z4cKf8YejmCMh8clOoOeA==}
@@ -4038,10 +4113,6 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/types': 7.20.2
-
-  /@babel/helper-string-parser/7.18.10:
-    resolution: {integrity: sha512-XtIfWmeNY3i4t7t4D2t02q50HvqHybPqW2ki1kosnvWCwuCMeo81Jf0gwr85jy/neUdg5XDdeFE/80DXiO+njw==}
-    engines: {node: '>=6.9.0'}
 
   /@babel/helper-string-parser/7.19.4:
     resolution: {integrity: sha512-nHtDoQcuqFmwYNYPz3Rah5ph2p8PFeFCsZk9A/48dPc/rGocJ5J3hAAZ7pb76VWX3fZKu+uEr/FhH5jLx7umrw==}
@@ -5660,14 +5731,6 @@ packages:
       '@babel/helper-validator-identifier': 7.18.6
       to-fast-properties: 2.0.0
     dev: false
-
-  /@babel/types/7.19.0:
-    resolution: {integrity: sha512-YuGopBq3ke25BVSiS6fgF49Ul9gH1x70Bcr6bqRLjWCkcX8Hre1/5+z+IiWOIerRMSSEfGZVB9z9kyq7wVs9YA==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      '@babel/helper-string-parser': 7.18.10
-      '@babel/helper-validator-identifier': 7.19.1
-      to-fast-properties: 2.0.0
 
   /@babel/types/7.20.2:
     resolution: {integrity: sha512-FnnvsNWgZCr232sqtXggapvlkk/tuwR/qhGzcmxI0GXLCjmPYQPzio2FbdlWuY6y1sHFfQKk+rRbUZ9VStQMog==}
@@ -11057,9 +11120,9 @@ packages:
       '@babel/preset-env': 7.20.2_@babel+core@7.20.2
       '@babel/types': 7.20.2
       '@mdx-js/mdx': 1.6.22
-      '@types/lodash': 4.14.188
+      '@types/lodash': 4.14.190
       js-string-escape: 1.0.1
-      loader-utils: 2.0.3
+      loader-utils: 2.0.4
       lodash: 4.17.21
       prettier: 2.3.0
       ts-dedent: 2.2.0
@@ -11359,7 +11422,7 @@ packages:
       core-js: 3.26.0
       estraverse: 5.3.0
       global: 4.4.0
-      loader-utils: 2.0.3
+      loader-utils: 2.0.4
       lodash: 4.17.21
       prettier: 2.3.0
       regenerator-runtime: 0.13.11
@@ -12151,10 +12214,6 @@ packages:
     resolution: {integrity: sha512-R+zTeVUKDdfoRxpAryaQNRKk3105Rrgx2CFRClIgRGaqDTdjsm8h6IYA8ir584W3ePzkZfst5xIgDwYrlh9HLg==}
     dependencies:
       '@types/lodash': 4.14.190
-    dev: true
-
-  /@types/lodash/4.14.188:
-    resolution: {integrity: sha512-zmEmF5OIM3rb7SbLCFYoQhO4dGt2FRM9AMkxvA3LaADOF1n8in/zGJlWji9fmafLoNyz+FoL6FE0SLtGIArD7w==}
     dev: true
 
   /@types/lodash/4.14.190:
@@ -15511,7 +15570,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001431
+      caniuse-lite: 1.0.30001434
       electron-to-chromium: 1.4.284
       node-releases: 2.0.6
       update-browserslist-db: 1.0.10_browserslist@4.21.4
@@ -15865,10 +15924,10 @@ packages:
 
   /caniuse-lite/1.0.30001431:
     resolution: {integrity: sha512-zBUoFU0ZcxpvSt9IU66dXVT/3ctO1cy4y9cscs1szkPlcWb6pasYM144GqrUygUbT+k7cmUCW61cvskjcv0enQ==}
+    dev: true
 
   /caniuse-lite/1.0.30001434:
     resolution: {integrity: sha512-aOBHrLmTQw//WFa2rcF1If9fa3ypkC1wzqqiKHgfdrXTWcU8C4gKVZT77eQAPWN1APys3+uQ0Df07rKauXGEYA==}
-    dev: false
 
   /canonicalize/1.0.8:
     resolution: {integrity: sha512-0CNTVCLZggSh7bc5VkX5WWPWO+cyZbNd07IHIsSXLia/eAq+r836hgk+8BKoEh7949Mda87VUOitx5OddVj64A==}
@@ -23823,7 +23882,7 @@ packages:
     resolution: {integrity: sha512-aKS4WQjPenRxiQsC93MNfjx+nbF4PAdYzmd/1JIj8HYzqfbu86beTuNgXDzPknWk0n0uARlyewZo4s++ES36Ow==}
     hasBin: true
     dependencies:
-      minimist: 1.2.6
+      minimist: 1.2.7
 
   /json5/2.2.1:
     resolution: {integrity: sha512-1hqLFMSrGHRHxav9q9gNjJ5EXznIxGVO09xQRrwplcS8qs28pZ8s8hupZAmqDwZUmVZ2Qb2jnyPOWcDH8m8dlA==}
@@ -24346,7 +24405,7 @@ packages:
     dev: false
 
   /lodash.debounce/4.0.8:
-    resolution: {integrity: sha1-gteb/zCmfEAF/9XiUVMArZyk168=}
+    resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
 
   /lodash.eq/4.0.0:
     resolution: {integrity: sha512-vbrJpXL6kQNG6TkInxX12DZRfuYVllSxhwYqjYB78g2zF3UI15nFO/0AgmZnZRnaQ38sZtjCiVjGr2rnKt4v0g==}

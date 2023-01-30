@@ -2,6 +2,7 @@ import urlcat from 'urlcat'
 import type { Transaction } from './types.js'
 import { toTransaction } from './helpers.js'
 import type { ExplorerAPI } from '../entry-types.js'
+import { fetchJSON } from '../entry-helpers.js'
 
 export class NativeExplorerAPI implements ExplorerAPI.Provider {
     async getLatestTransactions(
@@ -9,7 +10,11 @@ export class NativeExplorerAPI implements ExplorerAPI.Provider {
         url: string,
         { offset = 10, apikey }: ExplorerAPI.PageInfo = {},
     ): Promise<ExplorerAPI.Transaction[]> {
-        const response = await fetch(
+        const { result: transactions = [] } = await fetchJSON<{
+            message: string
+            result?: Transaction[]
+            status: '0' | '1'
+        }>(
             urlcat(url, {
                 module: 'account',
                 action: 'txlist',
@@ -22,11 +27,6 @@ export class NativeExplorerAPI implements ExplorerAPI.Provider {
                 apikey,
             }),
         )
-        const rawTransactions = (await response.json()) as {
-            message: string
-            result?: Transaction[]
-            status: '0' | '1'
-        }
-        return rawTransactions.result?.map(toTransaction) ?? []
+        return transactions.map(toTransaction)
     }
 }

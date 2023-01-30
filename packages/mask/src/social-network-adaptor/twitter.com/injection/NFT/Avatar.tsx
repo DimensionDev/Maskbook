@@ -1,10 +1,9 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline.js'
-import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { NFTBadgeTimeline, NFTAvatarMiniClip, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
+import { MaskMessages, createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { postAvatarsContentSelector } from '../../utils/selector.js'
-import { NFTAvatarMiniClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip.js'
-import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
+import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 
 function getTwitterId(ele: HTMLElement) {
     const twitterIdNodes = (ele.firstChild?.nextSibling as HTMLElement).querySelectorAll<HTMLElement>(
@@ -43,9 +42,15 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                             zIndex: 2,
                         }}>
                         {info.isTwitterNFT ? (
-                            <NFTAvatarMiniClip width={info.width} height={info.height} screenName={twitterId} />
+                            <NFTAvatarMiniClip
+                                identity={activatedSocialNetworkUI.collecting.identityProvider?.recognized.value}
+                                width={info.width}
+                                height={info.height}
+                                screenName={twitterId}
+                            />
                         ) : (
                             <NFTBadgeTimeline
+                                timelineUpdated={MaskMessages.events.NFTAvatarTimelineUpdated}
                                 userId={twitterId}
                                 avatarId={info.avatarId}
                                 width={info.width - 4}

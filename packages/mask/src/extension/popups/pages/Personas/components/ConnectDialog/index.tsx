@@ -76,12 +76,19 @@ export const ConnectDialog = memo<ConnectDialogProps>(({ open, onClose, networks
                 </IconButton>
             </DialogTitle>
             <DialogContent className={classes.content}>
-                {networks.map((networkIdentifier) => (
-                    <div className={classes.item} key={networkIdentifier} onClick={() => onConnect(networkIdentifier)}>
-                        <div className={classes.networkIcon}>{SOCIAL_MEDIA_ROUND_ICON_MAPPING[networkIdentifier]}</div>
-                        <Typography className={classes.network}>{SOCIAL_MEDIA_NAME[networkIdentifier]}</Typography>
-                    </div>
-                ))}
+                {networks.map((networkIdentifier) => {
+                    const Icon = SOCIAL_MEDIA_ROUND_ICON_MAPPING[networkIdentifier]
+                    return (
+                        <div
+                            key={networkIdentifier}
+                            className={classes.item}
+                            role="button"
+                            onClick={() => onConnect(networkIdentifier)}>
+                            <div className={classes.networkIcon}>{Icon ? <Icon size={24} /> : null}</div>
+                            <Typography className={classes.network}>{SOCIAL_MEDIA_NAME[networkIdentifier]}</Typography>
+                        </div>
+                    )
+                })}
             </DialogContent>
         </Dialog>
     )
