@@ -54,7 +54,6 @@ export interface RedPacketJSONPayload extends RedPacketBasic {
     }
     network?: string
     token?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
-    claimers?: Array<{ address: string; name: string }>
     total_remaining?: string
 }
 
@@ -87,14 +86,17 @@ export interface RedPacketNftJSONPayload {
     chainId: ChainId
 }
 
-export interface NftRedPacketJSONPayload extends RedPacketBasic {
+export interface NftRedPacketJSONPayload extends Omit<RedPacketBasic, 'is_random' | 'total'> {
     contract_version: number
     sender: {
         address: string
         name: string
         message: string
     }
+    chainId: ChainId
     network?: string
+    token_ids: string[]
+    token_address: string
     token?: Pick<FungibleToken<ChainId, SchemaType>, 'address' | 'name' | 'decimals' | 'symbol'>
 }
 
@@ -111,10 +113,6 @@ export interface NftRedPacketSubgraphInMask extends Omit<RedPacketBasic, 'is_ran
     chain_id: number
     message: string
     token_ids: string[]
-    claimers: Array<{
-        name: string
-        address: string
-    }>
     creator: {
         name: string
         address: string
@@ -159,4 +157,12 @@ export enum DialogTabs {
 export enum RpTypeTabs {
     ERC20 = 0,
     ERC721 = 1,
+}
+
+export type TxType = {
+    hash: string
+    input: string
+    from: string
+    to: string
+    blockNumber: string
 }

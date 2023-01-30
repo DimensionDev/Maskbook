@@ -1,6 +1,5 @@
 import type { ChainId } from '@masknet/web3-shared-evm'
-import type { RedPacketRecord, RedPacketJSONPayloadFromChain } from '../types.js'
-import * as subgraph from './apis/subgraph.js'
+import type { RedPacketRecord, RedPacketJSONPayloadFromChain, NftRedPacketJSONPayload } from '../types.js'
 import * as database from './database.js'
 import * as nftDb from './databaseForNft.js'
 
@@ -24,17 +23,14 @@ export async function getRedPacketHistoryFromDatabase(redpacketsFromChain: RedPa
     // #endregion
 }
 
-export async function getNftRedPacketHistory(address: string, chainId: ChainId, page: number, pageSize?: number) {
-    const histories = await subgraph.getNftRedPacketHistory(chainId, address, page, pageSize)
+export async function getNftRedPacketHistory(histories: NftRedPacketJSONPayload[]) {
     const historiesWithPassword = []
     for (const history of histories) {
         const record = await nftDb.getRedPacketNft(history.txid)
-        if (history.chain_id === chainId && record) {
+        if (record) {
             history.password = record.password
-            history.payload.password = record.password
         } else {
             history.password = ''
-            history.payload.password = ''
         }
         historiesWithPassword.push(history)
     }

@@ -1,43 +1,29 @@
-import { EMPTY_LIST } from '@masknet/shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
-import { eq, uniqBy } from 'lodash-es'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
+import { ChainId, getNftRedPacketConstants } from '@masknet/web3-shared-evm'
+import { useWeb3Connection } from '@masknet/web3-hooks-base'
+import * as history from '../utils/history.js'
 import { RedPacketRPC } from '../../messages.js'
-import type { NftRedPacketHistory } from '../../types.js'
 
-const PAGE_SIZE = 5
-export function useNftRedPacketHistory(creatorAddress: string, chainId: ChainId) {
-    const pageRef = useRef<Record<string, number>>({})
-    const [loading, setLoading] = useState(false)
-    const [historyDb, setHistoryDb] = useState<Record<string, NftRedPacketHistory[]>>({})
+export function useNftRedPacketHistory(address: string, chainId: ChainId) {
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
 
-    const dbKey = `${creatorAddress}_${chainId}`
-    const getHistories = useCallback(async () => {
-        setLoading(true)
-        const histories = await RedPacketRPC.getNftRedPacketHistory(
-            creatorAddress,
-            chainId,
-            pageRef.current[dbKey] ?? 1,
-            PAGE_SIZE,
-        )
-        setLoading(false)
-        setHistoryDb((db) => {
-            const oldList = db[dbKey] ?? []
-            const list = uniqBy([...oldList, ...histories], (x) => x.rpid)
-            if (eq(oldList, list)) return db
-            pageRef.current[dbKey] = Math.ceil(list.length / PAGE_SIZE) + 1
-            return {
-                ...db,
-                [dbKey]: list,
-            }
-        })
-    }, [creatorAddress, chainId, dbKey])
+    return useAsyncRetry(async () => {
+        if (!connection) return EMPTY_LIST
+        const blockNumber = await connection.getBlockNumber()
+        return getNftRedPacketHistory(address, chainId, blockNumber)
+    }, [address, chainId, connection])
+}
 
-    useEffect(() => {
-        getHistories()
-    }, [getHistories])
-
-    const histories = historyDb[dbKey] ?? EMPTY_LIST
-
-    return { histories, fetchMore: getHistories, loading }
+async function getNftRedPacketHistory(address: string, chainId: ChainId, endBlock: number) {
+    const { NFT_RED_PACKET_ADDRESS_BLOCK_HEIGHT } = getNftRedPacketConstants(chainId)
+    const redpacketsFromChain = await history.getNFTRedPacketHistory(
+        chainId,
+        NFT_RED_PACKET_ADDRESS_BLOCK_HEIGHT,
+        endBlock,
+        address,
+    )
+    // #region Inject password from database
+    return RedPacketRPC.getNftRedPacketHistory(redpacketsFromChain)
+    // #endregion
 }

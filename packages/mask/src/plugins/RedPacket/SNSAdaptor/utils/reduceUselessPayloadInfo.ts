@@ -8,5 +8,5 @@ export function reduceUselessPayloadInfo(payload: RedPacketJSONPayload): RedPack
         ChainId,
         SchemaType.Native | SchemaType.ERC20
     >
-    return { ...omit(payload, ['claimers', 'block_number']), token }
+    return { ...omit(payload, ['block_number']), token }
 }
