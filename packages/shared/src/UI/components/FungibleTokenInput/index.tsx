@@ -1,28 +1,18 @@
 import { ChangeEvent, memo, useCallback, useMemo } from 'react'
 import { useWeb3State } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatBalance } from '@masknet/web3-shared-base'
-import { FungibleTokenInputUI } from './UI.js'
+import { FungibleTokenInputUI, FungibleTokenInputUIProps } from './UI.js'
 import { BigNumber } from 'bignumber.js'
 
 const MIN_AMOUNT_LENGTH = 1
 const MAX_AMOUNT_LENGTH = 79
 
-export interface FungibleTokenInputProps {
+export interface FungibleTokenInputProps extends Omit<FungibleTokenInputUIProps, 'onMaxClick'> {
     amount: string
     maxAmount?: string
     maxAmountShares?: number
-    maxAmountSignificant?: number
-    balance: string
-    label: string
     disabled?: boolean
-    disableMax?: boolean
-    disableToken?: boolean
-    disableBalance?: boolean
     placeholder?: string
-    loadingBalance?: boolean
-    token?: Web3Helper.FungibleTokenAll | null
-    onSelectToken?: () => void
     onAmountChange: (amount: string) => void
 }
 
@@ -43,6 +33,7 @@ export const FungibleTokenInput = memo<FungibleTokenInputProps>(
         maxAmountSignificant,
         placeholder = '0.0',
         maxAmountShares = 1,
+        className,
     }) => {
         const { Others } = useWeb3State()
 
@@ -74,6 +65,7 @@ export const FungibleTokenInput = memo<FungibleTokenInputProps>(
                 onSelectToken={onSelectToken}
                 value={amount}
                 onChange={onChange}
+                className={className}
                 inputProps={{
                     autoComplete: 'off',
                     autoCorrect: 'off',

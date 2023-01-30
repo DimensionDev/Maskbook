@@ -37,7 +37,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         />
                     )
                 },
-                appBoardSortingDefaultPriority: 11,
+                appBoardSortingDefaultPriority: 16,
                 marketListSortingPriority: 12,
                 icon,
                 description: <Trans i18nKey="plugin_game_description" />,

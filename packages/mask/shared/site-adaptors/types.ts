@@ -5,6 +5,7 @@ export declare namespace SiteAdaptor {
         origins: readonly string[]
     }
     export interface Definition {
+        name: string
         networkIdentifier: string
         // Note: if declarativePermissions is no longer sufficient, use "false" to indicate it need a load().
         declarativePermissions: DeclarativePermissions
