@@ -52,11 +52,11 @@ export function ConnectionContent(props: ConnectionContentProps) {
                 chainId: ChainId.Matic,
                 account: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
                 providerType: EVM_ProviderType.MaskWallet,
+                paymentToken: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
                 overrides: {
                     gas: '88888',
                     maxFeePerGas: '88888',
                     maxPriorityFeePerGas: '88888',
-                    gasCurrency: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
                 },
             },
         )
@@ -121,9 +121,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                 chainId: ChainId.Matic,
                 account: '0xfBFc40D6E771880DDA2c7285817c8A93Fc4F1D2F',
                 providerType: EVM_ProviderType.MaskWallet,
-                overrides: {
-                    gasCurrency: '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
-                },
+                paymentToken: '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
             },
         )
     }, [pluginID, connection])

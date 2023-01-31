@@ -5,6 +5,7 @@ export type { LegacyWalletRecord } from '../../../../shared/definitions/wallet.j
 export interface RequestPayload extends JsonRpcPayload {
     owner?: string
     identifier?: string
+    paymentToken?: string
 }
 export interface UnconfirmedRequestChunkRecord {
     /** A chunk of unconfirmed rpc requests */
