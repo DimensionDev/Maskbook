@@ -109,16 +109,21 @@ export async function queryPersonaEOAByMnemonic(mnemonicWord: string, password: 
     return {
         address: bufferToHex(publicToAddress(privateToPublic(Buffer.from(fromBase64URL(privateKey.d))))),
         identifier: await ECKeyIdentifierFromJsonWebKey(publicKey),
+        privateKey,
+        publicKey,
     }
 }
 
 export async function queryPersonaEOAByPrivateKey(privateKeyString: string) {
     const privateKey = decode(decodeArrayBuffer(privateKeyString))
-    if (!isEC_Private_JsonWebKey(privateKey) || !privateKey.d) throw new TypeError('Invalid private key')
 
+    if (!isEC_Private_JsonWebKey(privateKey) || !privateKey.d) throw new TypeError('Invalid private key')
+    const publicKey = omit(privateKey, 'd') as EC_Public_JsonWebKey
     return {
         address: bufferToHex(publicToAddress(privateToPublic(Buffer.from(fromBase64URL(privateKey.d))))),
-        identifier: await ECKeyIdentifierFromJsonWebKey(omit(privateKey, 'd') as EC_Public_JsonWebKey),
+        identifier: await ECKeyIdentifierFromJsonWebKey(publicKey),
+        privateKey,
+        publicKey,
     }
 }
 

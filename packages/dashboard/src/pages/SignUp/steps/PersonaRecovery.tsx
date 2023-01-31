@@ -1,7 +1,13 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useCustomSnackbar } from '@masknet/theme'
-import { DashboardRoutes, ECKeyIdentifier, PopupRoutes } from '@masknet/shared-base'
+import {
+    DashboardRoutes,
+    ECKeyIdentifier,
+    EC_Private_JsonWebKey,
+    EC_Public_JsonWebKey,
+    PopupRoutes,
+} from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { SignUpRoutePath } from '../routePath.js'
 import { Messages, PluginServices, Services } from '../../../API.js'
@@ -9,7 +15,7 @@ import { PersonaNameUI } from './PersonaNameUI.js'
 import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
 import { delay } from '@masknet/kit'
-import { useAsync } from 'react-use'
+import { useAsync, useAsyncFn } from 'react-use'
 import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
 
 export const PersonaRecovery = () => {
@@ -33,7 +39,7 @@ export const PersonaRecovery = () => {
         navigate(DashboardRoutes.SignUp, { replace: true })
     }, [state.mnemonic, state.privateKey])
 
-    const onNext = useCallback(
+    const [{ loading: submitLoading }, onNext] = useAsyncFn(
         async (personaName: string) => {
             setError('')
             try {
@@ -41,6 +47,8 @@ export const PersonaRecovery = () => {
                     | {
                           address: string
                           identifier: ECKeyIdentifier
+                          privateKey: EC_Private_JsonWebKey
+                          publicKey: EC_Public_JsonWebKey
                       }
                     | undefined
                 if (state.mnemonic) {
@@ -70,6 +78,8 @@ export const PersonaRecovery = () => {
                                         address: result.address,
                                         identifier: result.identifier,
                                         publicKeyHex: result.identifier.publicKeyAsHex,
+                                        privateKey: result.privateKey,
+                                        publicKey: result.publicKey,
                                         linkedProfiles: [],
                                     },
                                 ],
@@ -88,6 +98,9 @@ export const PersonaRecovery = () => {
                                 backupId: backupInfo.val.id,
                             })
                         }
+                        Messages.events.restoreSuccess.on(() => {
+                            navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`)
+                        })
                         return
                     }
                 }
@@ -115,5 +128,5 @@ export const PersonaRecovery = () => {
         [state?.mnemonic, state?.privateKey],
     )
 
-    return <PersonaNameUI onNext={onNext} error={error} />
+    return <PersonaNameUI onNext={onNext} loading={submitLoading} error={error} />
 }
