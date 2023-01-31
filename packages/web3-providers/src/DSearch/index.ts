@@ -32,7 +32,7 @@ import {
 } from '@masknet/web3-shared-solana'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import { CoinGeckoSearchAPI } from '../CoinGecko/apis/DSearchAPI.js'
-import { CoinMarketCapSearchAPI } from '../CoinMarketCap/DSearchAPI.js'
+import { CoinMarketCapSearchAPI } from '../CoinMarketCap/apis/CoinMarketCapSearchAPI.js'
 import { NFTScanSearchAPI, NFTScanCollectionSearchAPI } from '../NFTScan/index.js'
 import type { DSearchBaseAPI } from '../types/DSearch.js'
 import { getHandlers } from './rules.js'
