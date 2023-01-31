@@ -104,8 +104,8 @@ export interface EIP1559GasConfig {
 
 export interface PriorEIP1559GasConfig {
     gas?: string
-    gasCurrency?: string
     gasPrice: string
+    gasCurrency?: string
 }
 
 export type GasConfig = EIP1559GasConfig | PriorEIP1559GasConfig
@@ -264,9 +264,6 @@ export interface Transaction {
     nonce?: number
     chainId?: number
 
-    // 4337
-    gasCurrency?: string
-
     // CELO
     feeCurrency?: string // address of the ERC20 contract to use to pay for gas and the gateway fee
     gatewayFeeRecipient?: string // coinbase address of the full serving the light client's transactions
@@ -296,7 +293,9 @@ export interface TransactionOptions {
     chainId?: ChainId
     owner?: string
     identifier?: ECKeyIdentifier
-    gasCurrency?: string
+    paymentToken?: string
+
+    // popups control
     disableClose?: boolean
     popupsWindow?: boolean
 }

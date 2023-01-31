@@ -110,10 +110,6 @@ export class ConnectionContext {
         }
     }
 
-    get userOperation() {
-        return this.payloadEditor.userOperation
-    }
-
     set config(config: Transaction | undefined) {
         if (!this.config || !config) return
         const method = this._requestArguments.method
@@ -134,6 +130,10 @@ export class ConnectionContext {
             default:
                 break
         }
+    }
+
+    get userOperation() {
+        return this.payloadEditor.userOperation
     }
 
     get proof() {
@@ -164,6 +164,10 @@ export class ConnectionContext {
             this._options?.identifier ||
             this._init?.getDefaultIdentifier?.(this.providerType)
         )
+    }
+
+    get paymentToken() {
+        return this._options?.paymentToken
     }
 
     get requestOptions() {

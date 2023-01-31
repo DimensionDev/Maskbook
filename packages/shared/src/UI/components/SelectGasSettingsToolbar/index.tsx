@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from 'react'
+import { useAsync } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { useMenuConfig, FormattedBalance, useSharedI18N, useSelectAdvancedSettings } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
@@ -23,10 +24,9 @@ import {
     useFungibleTokenPrice,
 } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
-import { SettingsContext } from '../SettingsBoard/Context.js'
-import { useAsync } from 'react-use'
-import { useGasCurrencyMenu } from '../../../hooks/useGasCurrencyMenu.js'
 import { SmartPayBundler } from '@masknet/web3-providers'
+import { SettingsContext } from '../SettingsBoard/Context.js'
+import { useGasCurrencyMenu } from '../../../hooks/useGasCurrencyMenu.js'
 
 interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPluginID> {
     pluginID?: T
