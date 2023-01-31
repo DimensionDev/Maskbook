@@ -11,6 +11,8 @@ import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 
 const redPacketInterFace = new Interface(REDPACKET_ABI)
 
+const CREATE_RED_PACKET_METHOD_ID = '0x5db05aba'
+
 export function useRedPacketHistory(address: string, chainId: ChainId) {
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT, HAPPY_RED_PACKET_ADDRESS_V4 } = getRedPacketConstants(chainId)
@@ -22,11 +24,11 @@ export function useRedPacketHistory(address: string, chainId: ChainId) {
             chainId,
             address,
             HAPPY_RED_PACKET_ADDRESS_V4,
-            '0x5db05aba',
+            CREATE_RED_PACKET_METHOD_ID,
             HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT,
             blockNumber,
         )
-        if (!historyTransactions) return []
+        if (!historyTransactions) return EMPTY_LIST
 
         type CreateRedpacketParam = {
             _duration: BigNumber
