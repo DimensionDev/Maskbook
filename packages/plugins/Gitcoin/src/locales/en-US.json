@@ -22,7 +22,7 @@
     "share_text": "I participated {{grant_name}} donation event and donated {{amount}} {{symbol}}.\n\n$t(promote)",
     "active": "Active",
     "grant_status$active": "Active",
-    "grant_status$closed": "Close",
+    "grant_status$closed": "Closed",
     "total_raised": "Total Raised <bold>{{amount}}</bold>",
     "admin": "by <bold>{{admin}}</bold>",
     "give_back_to_match_pool": "Give back to the Gitcoin match pool",

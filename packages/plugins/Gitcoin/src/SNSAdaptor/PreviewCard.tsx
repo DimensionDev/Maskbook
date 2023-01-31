@@ -4,13 +4,13 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { alpha, Box, Button, Card, Link, Stack, Typography } from '@mui/material'
-import { compact, uniq } from 'lodash-es'
 import urlcat from 'urlcat'
 import { useGrant } from './hooks/useGrant.js'
 import { Translate, useI18N } from '../locales/i18n_generated.js'
 import { useDonate } from './contexts/index.js'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { SUPPORTED_CHAIN_IDS } from '../constants.js'
+import { BigNumber } from 'bignumber.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -47,6 +47,7 @@ const useStyles = makeStyles()((theme) => ({
     main: {
         padding: theme.spacing(2),
         marginTop: theme.spacing(2.5),
+        borderRadius: 12,
     },
     network: {
         marginRight: theme.spacing(1.5),
@@ -59,6 +60,7 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
+        marginRight: theme.spacing(2),
     },
     bold: {
         fontWeight: 'bold',
@@ -133,12 +135,10 @@ export function PreviewCard(props: PreviewCardProps) {
 
     const isSupportedRuntime = pluginID === NetworkPluginID.PLUGIN_EVM && SUPPORTED_CHAIN_IDS.includes(chainId)
 
-    const twitters = uniq(compact([grant.twitter_handle_1, grant.twitter_handle_2])).map(
-        (handle) => `https://twitter.com/${handle}`,
-    )
+    const twitterProfile = grant.twitter_handle_1 ? `https://twitter.com/${grant.twitter_handle_1}` : null
 
     return (
-        <Box className={classes.root}>
+        <article className={classes.root}>
             <div className={classes.header}>
                 <Icons.ETH className={classes.network} size={36} />
                 <Stack flexGrow={1} overflow="auto">
@@ -161,10 +161,10 @@ export function PreviewCard(props: PreviewCardProps) {
                         </Button>
                     </Box>
                     <div className={classes.metas}>
-                        <Typography color="second" fontSize={14}>
+                        <Typography color={theme.palette.maskColor.second} fontSize={14}>
                             <Translate.total_raised
                                 values={{
-                                    amount: `$${grant.amount_received}`,
+                                    amount: `$${new BigNumber(grant.amount_received).toFixed(2)}`,
                                 }}
                                 components={{
                                     bold: <Typography component="span" className={classes.bold} />,
@@ -180,18 +180,18 @@ export function PreviewCard(props: PreviewCardProps) {
                                     }}
                                 />
                             </Typography>
-                            {twitters.map((url) => (
-                                <Link key={url} className={classes.link} target="_blank" href={url}>
-                                    <SocialIcon url={url} size={16} />
+                            {twitterProfile ? (
+                                <Link className={classes.link} target="_blank" href={twitterProfile}>
+                                    <SocialIcon url={twitterProfile} size={16} />
                                 </Link>
-                            ))}
+                            ) : null}
                             {grant.admin_profile.github_url ? (
                                 <Link className={classes.link} href={grant.admin_profile.github_url} target="_blank">
                                     <SocialIcon url={grant.admin_profile.github_url} size={16} />
                                 </Link>
                             ) : null}
-                            <Link className={classes.link} href={grant.admin_profile.url}>
-                                <SocialIcon url={grant.admin_profile.url} size={16} />
+                            <Link className={classes.link} href={grant.reference_url}>
+                                <SocialIcon url={grant.reference_url} size={16} />
                             </Link>
                         </div>
                     </div>
@@ -214,8 +214,8 @@ export function PreviewCard(props: PreviewCardProps) {
                     </div>
                 </div>
             </Card>
-            <Box sx={{ display: 'flex', width: '100%' }}>
-                <Box sx={{ flex: 1, padding: '12px 5px' }}>
+            <Box sx={{ display: 'flex', width: '100%', mt: 1 }}>
+                <Box sx={{ flex: 1 }}>
                     <Button
                         fullWidth
                         variant="roundedDark"
@@ -228,7 +228,7 @@ export function PreviewCard(props: PreviewCardProps) {
                     </Button>
                 </Box>
                 {grant.active && isSupportedRuntime ? (
-                    <Box sx={{ flex: 1, padding: '12px 5px' }}>
+                    <Box sx={{ flex: 1 }}>
                         <ChainBoundary
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                             expectedChainId={ChainId.Mainnet}
@@ -248,6 +248,6 @@ export function PreviewCard(props: PreviewCardProps) {
                     </Box>
                 ) : null}
             </Box>
-        </Box>
+        </article>
     )
 }
