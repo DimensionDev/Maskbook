@@ -57,6 +57,7 @@ export interface ConfirmDialogProps extends Omit<InjectedDialogProps, 'title' | 
     onSubmit?(result: boolean | null): void
 }
 
+// Yet, another Confirm Dialog
 export const ConfirmDialog: FC<ConfirmDialogProps> = memo(
     ({ title, message, description, confirmLabel = 'Confirm', onSubmit, onClose, ...rest }) => {
         const { classes } = useStyles()

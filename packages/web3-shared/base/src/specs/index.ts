@@ -966,14 +966,16 @@ export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
     account?: string
     /** Designate the sub-network id of the transaction. */
     chainId?: ChainId
-    /** Designate the provider to handle the transaction. */
-    providerType?: ProviderType
-    /** Fragments to merge into the transaction. */
-    overrides?: Partial<Transaction>
     /** an abstract wallet has a owner */
     owner?: string
     /** persona identifier */
     identifier?: ECKeyIdentifier
+    /** Designate the provider to handle the transaction. */
+    providerType?: ProviderType
+    /** Gas payment token. */
+    paymentToken?: string
+    /** Fragments to merge into the transaction. */
+    overrides?: Partial<Transaction>
 }
 export interface Connection<
     ChainId,

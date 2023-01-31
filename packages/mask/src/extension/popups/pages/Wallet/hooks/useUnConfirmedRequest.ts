@@ -1,12 +1,12 @@
+import { omit } from 'lodash-es'
 import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { PayloadEditor } from '@masknet/web3-shared-evm'
 import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
-import { omit } from 'lodash-es'
-import type { JsonRpcPayload } from 'web3-core-helpers'
 
 export const useUnconfirmedRequest = () => {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -21,7 +21,8 @@ export const useUnconfirmedRequest = () => {
         return {
             owner: payload.owner,
             identifier: payload.identifier ? ECKeyIdentifier.from(payload.identifier).unwrap() : undefined,
-            payload: omit(payload, 'owner', 'identifier') as JsonRpcPayload,
+            paymentToken: payload.paymentToken,
+            payload: omit(payload, 'owner', 'identifier', 'paymentToken') as JsonRpcPayload,
             computedPayload,
             formatterTransaction,
             transactionContext,

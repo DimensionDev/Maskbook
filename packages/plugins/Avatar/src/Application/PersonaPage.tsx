@@ -16,6 +16,9 @@ import {
     useLastRecognizedSocialIdentity,
     useSNSAdaptorContext,
 } from '@masknet/plugin-infra/content-script'
+import { useNavigate } from 'react-router-dom'
+import { RoutePaths } from './Routes.js'
+import { useAvatarManagement } from '../contexts/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     messageBox: {
@@ -30,16 +33,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface PersonaPageProps {
-    onNext: () => void
-    onClose(): void
-    onChange: (proof: BindingProof, wallets: BindingProof[], tokenInfo?: AllChainsNonFungibleToken) => void
-}
-
-export function PersonaPage({ onNext, onChange }: PersonaPageProps) {
+export function PersonaPage() {
     const t = useI18N()
-    const [visible, setVisible] = useState(true)
     const { classes } = useStyles()
+    const [visible, setVisible] = useState(true)
+    const navigate = useNavigate()
+    const { setProofs, setTokenInfo, setProof } = useAvatarManagement()
     const { loading, value: socialIdentity } = useLastRecognizedSocialIdentity()
     const network = socialIdentity?.identifier?.network.replace('.com', '')
     const userId = socialIdentity?.identifier?.userId
@@ -62,18 +61,17 @@ export function PersonaPage({ onNext, onChange }: PersonaPageProps) {
         () => bindingPersonas.map((x) => x.proofs.filter((y) => y.is_valid && y.platform === network)).flat(),
         [bindingPersonas, network],
     )
-    const onSelect = useCallback(
+    const handleSelect = useCallback(
         (proof: BindingProof, tokenInfo?: AllChainsNonFungibleToken) => {
-            onChange(
-                proof,
-                socialIdentity?.binding?.proofs.filter(
-                    (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
-                ) ?? EMPTY_LIST,
-                tokenInfo,
+            const proofs = socialIdentity?.binding?.proofs.filter(
+                (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
             )
-            onNext()
+            setProofs(proofs ?? EMPTY_LIST)
+            setTokenInfo(tokenInfo)
+            setProof(proof)
+            navigate(RoutePaths.NFTPicker)
         },
-        [onNext, bindingProofs],
+        [navigate],
     )
     const { value: avatar } = useAsyncRetry(async () => context.getPersonaAvatar(currentPersona?.identifier), [])
 
@@ -89,16 +87,14 @@ export function PersonaPage({ onNext, onChange }: PersonaPageProps) {
                         {visible ? (
                             <Box className={classes.messageBox}>
                                 <Icons.Info size={20} />
-                                <Typography color="currentColor" fontSize={14} fontFamily="Helvetica">
+                                <Typography fontSize={14} fontFamily="Helvetica">
                                     {t.persona_hint()}
                                 </Typography>
                                 <Icons.Close size={20} onClick={() => setVisible(true)} />
                             </Box>
                         ) : null}
                         {bindingProofs
-                            .filter(
-                                (x) => x.identity.toLowerCase() === socialIdentity!.identifier?.userId.toLowerCase(),
-                            )
+                            .filter((x) => x.identity.toLowerCase() === userId?.toLowerCase())
                             .map((x, i) => (
                                 <PersonaItem
                                     persona={socialIdentity!.binding?.persona}
@@ -108,11 +104,11 @@ export function PersonaPage({ onNext, onChange }: PersonaPageProps) {
                                     nickname={socialIdentity!.nickname}
                                     proof={x}
                                     userId={userId ?? x.identity}
-                                    onSelect={onSelect}
+                                    onSelect={handleSelect}
                                 />
                             ))}
 
-                        {myPersonas?.[0].linkedProfiles
+                        {myPersonas[0].linkedProfiles
                             .filter((x) => x.identifier.network === network)
                             .map((x, i) =>
                                 socialIdentity?.binding?.proofs.some(
@@ -125,9 +121,9 @@ export function PersonaPage({ onNext, onChange }: PersonaPageProps) {
                             .filter((x) => x.identity.toLowerCase() !== userId?.toLowerCase())
                             .map((x, i) => (
                                 <PersonaItem
+                                    key={i}
                                     persona={socialIdentity!.binding?.persona}
                                     avatar=""
-                                    key={i}
                                     userId={x.identity}
                                     proof={x}
                                 />
