@@ -51,8 +51,6 @@ export const FileManagementContext = createContext<FileManagementContextOptions>
     attachToPost: noop,
 })
 
-FileManagementContext.displayName = 'FileManagementContext'
-
 function openCompositionWithFiles(type: CompositionType, files: FileInfo[]) {
     CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
         reason: type,
@@ -65,7 +63,10 @@ function openCompositionWithFiles(type: CompositionType, files: FileInfo[]) {
     })
 }
 
-interface Props extends PropsWithChildren<{ compositionType: CompositionType }> {}
+interface Props extends PropsWithChildren<{}> {
+    // The file management could be opened via different ways
+    compositionType: CompositionType
+}
 
 export const FileManagementProvider: FC<Props> = memo(({ children, compositionType }) => {
     const { value: files = EMPTY_LIST, retry: refetchFiles } = useAsyncRetry(
@@ -184,6 +185,8 @@ export const FileManagementProvider: FC<Props> = memo(({ children, compositionTy
 
     return <FileManagementContext.Provider value={contextValue}>{children}</FileManagementContext.Provider>
 })
+
+FileManagementProvider.displayName = 'FileManagementProvider'
 
 export function useFileManagement() {
     return useContext(FileManagementContext)

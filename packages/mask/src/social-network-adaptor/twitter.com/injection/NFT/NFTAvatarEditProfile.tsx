@@ -57,9 +57,9 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
     const clickHandler = () => {
-        CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
+        CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
             open: true,
-            pluginID: PluginID.Avatar,
+            startPicking: true,
         })
     }
 

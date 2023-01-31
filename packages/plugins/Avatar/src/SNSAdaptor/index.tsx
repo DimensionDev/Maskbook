@@ -1,10 +1,11 @@
 import { Icons } from '@masknet/icons'
 import { Plugin, PluginI18NFieldRender, SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
-import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { useEffect, useState } from 'react'
 import { Trans } from 'react-i18next'
-import { NFTAvatarDialog } from '../Application/NFTAvatarsDialog.js'
+import { NFTAvatarDialog } from '../Application/NFTAvatarDialog.js'
 import { base } from '../base.js'
 import { setupContext } from '../context.js'
 import { SharedContextSettings } from '../settings.js'
@@ -18,10 +19,20 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection() {
         const { pluginID } = useNetworkContext()
         const { chainId } = useChainContext()
+        const [picking, setPicking] = useState<boolean>()
+        const [open, setOpen] = useState(false)
+        useEffect(() => {
+            return CrossIsolationMessages.events.avatarSettingDialogEvent.on(({ open, startPicking }) => {
+                setOpen(open)
+                setPicking(startPicking)
+            })
+        }, [])
+        if (!open) return null
+
         return (
             <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
                 <Web3ContextProvider value={{ pluginID, chainId }}>
-                    <NFTAvatarDialog />
+                    <NFTAvatarDialog startPicking={!!picking} open={open} onClose={() => setOpen(false)} />
                 </Web3ContextProvider>
             </SNSAdaptorContext.Provider>
         )
@@ -37,9 +48,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
             return {
                 RenderEntryComponent(EntryComponentProps) {
                     const clickHandler = () => {
-                        CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
+                        CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
                             open: true,
-                            pluginID: PluginID.Avatar,
                         })
                     }
                     return (

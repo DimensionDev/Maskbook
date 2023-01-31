@@ -40,7 +40,7 @@ export function NFTAvatarButton(props: NFTAvatarButtonProps) {
     const { classes } = useStyles(undefined, { props })
 
     return (
-        <div className={classes.root} onClick={onClick}>
+        <div className={classes.root} onClick={onClick} role="button">
             <Icons.Avatar className={classes.icon} size={20} />
             <Stack display="inline-flex" gap={1}>
                 <Typography style={{ marginLeft: 4 }} className={classes.text}>
