@@ -13,10 +13,12 @@ import { SUPPORTED_CHAIN_IDS } from '../constants.js'
 import { BigNumber } from 'bignumber.js'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
+    card: {
         padding: theme.spacing(1.5),
         maxHeight: 500,
         overflow: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
         '&::-webkit-scrollbar': {
             display: 'none',
         },
@@ -48,6 +50,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2),
         marginTop: theme.spacing(2.5),
         borderRadius: 12,
+        overflow: 'auto',
     },
     network: {
         marginRight: theme.spacing(1.5),
@@ -138,7 +141,7 @@ export function PreviewCard(props: PreviewCardProps) {
     const twitterProfile = grant.twitter_handle_1 ? `https://twitter.com/${grant.twitter_handle_1}` : null
 
     return (
-        <article className={classes.root}>
+        <article className={classes.card}>
             <div className={classes.header}>
                 <Icons.ETH className={classes.network} size={36} />
                 <Stack flexGrow={1} overflow="auto">
