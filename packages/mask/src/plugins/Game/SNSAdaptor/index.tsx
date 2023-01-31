@@ -43,7 +43,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 description: <Trans i18nKey="plugin_game_description" />,
                 name,
                 tutorialLink: 'https://twitter.com/NonFFriend',
-                category: 'dapp',
+                category: 'other',
             }
         })(),
     ],
