@@ -2,15 +2,18 @@ import { Icons } from '@masknet/icons'
 import { ChainBoundary, SocialIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { alpha, Box, Button, Card, Link, Stack, Typography } from '@mui/material'
+import { BigNumber } from 'bignumber.js'
+import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html'
+import { useMemo } from 'react'
 import urlcat from 'urlcat'
-import { useGrant } from './hooks/useGrant.js'
+import { SUPPORTED_CHAIN_IDS } from '../constants.js'
 import { Translate, useI18N } from '../locales/i18n_generated.js'
 import { useDonate } from './contexts/index.js'
-import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { SUPPORTED_CHAIN_IDS } from '../constants.js'
-import { BigNumber } from 'bignumber.js'
+import { grantDetailStyle } from './gitcoin-grant-detail-style.js'
+import { useGrant } from './hooks/useGrant.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -80,6 +83,12 @@ const useStyles = makeStyles()((theme) => ({
     description: {
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(1),
+        whiteSpace: 'pre-wrap',
+        wordBreak: 'break-word',
+        tabSize: 4,
+        img: {
+            maxWidth: '100%',
+        },
     },
     data: {
         display: 'flex',
@@ -93,13 +102,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
-    text: {
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        display: '-webkit-box',
-        WebkitLineCamp: '4',
-        WebkitBoxOrient: 'vertical',
-    },
     button: {
         width: '100%',
     },
@@ -111,7 +113,7 @@ export interface PreviewCardProps {
 
 export function PreviewCard(props: PreviewCardProps) {
     const t = useI18N()
-    const { classes, theme } = useStyles()
+    const { classes, cx, theme } = useStyles()
     const { value: grant, error, loading, retry } = useGrant(props.grantId)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { pluginID } = useNetworkContext()
@@ -119,11 +121,28 @@ export function PreviewCard(props: PreviewCardProps) {
     // #region the donation dialog
     const openDonate = useDonate()
 
+    const description = useMemo(() => {
+        if (!grant?.description_rich) return grant?.description
+        const ops = JSON.parse(grant.description_rich).ops as object[]
+        const converter = new QuillDeltaToHtmlConverter(ops)
+        const html = converter.convert()
+        return `<style type='text/css'>${grantDetailStyle}</style>${html}`
+    }, [grant?.description_rich, grant?.description])
+
     if (loading)
         return (
-            <Typography color="textPrimary" textAlign="center" sx={{ padding: 2 }}>
+            <Box
+                flex={1}
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                gap={1}
+                padding={1}
+                minHeight={148}>
                 <LoadingBase />
-            </Typography>
+                <Typography>{t.loading()}</Typography>
+            </Box>
         )
     if (error)
         return (
@@ -138,6 +157,7 @@ export function PreviewCard(props: PreviewCardProps) {
 
     const isSupportedRuntime = pluginID === NetworkPluginID.PLUGIN_EVM && SUPPORTED_CHAIN_IDS.includes(chainId)
 
+    // Use handle_1 as Gitcoin does
     const twitterProfile = grant.twitter_handle_1 ? `https://twitter.com/${grant.twitter_handle_1}` : null
 
     return (
@@ -204,11 +224,10 @@ export function PreviewCard(props: PreviewCardProps) {
                 <div className={classes.banner}>
                     <img src={grant.logo_url} />
                 </div>
-                <div className={classes.description}>
-                    <Typography variant="body2" color="textSecondary" className={classes.text}>
-                        {grant.description}
-                    </Typography>
-                </div>
+                <div
+                    className={cx(classes.description, 'grant-detail')}
+                    dangerouslySetInnerHTML={{ __html: description }}
+                />
                 <div className={classes.data}>
                     <div className={classes.meta}>
                         <Typography variant="body2" color="textSecondary">
@@ -217,7 +236,7 @@ export function PreviewCard(props: PreviewCardProps) {
                     </div>
                 </div>
             </Card>
-            <Box sx={{ display: 'flex', width: '100%', mt: 1 }}>
+            <Box sx={{ display: 'flex', width: '100%', gap: 1, mt: 1 }}>
                 <Box sx={{ flex: 1 }}>
                     <Button
                         fullWidth

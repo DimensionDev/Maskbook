@@ -21,6 +21,7 @@ export interface GitcoinGrant {
     title: string
     slug: string
     description: string
+    description_rich: string
     reference_url: string
     logo_url: string
     logo: string

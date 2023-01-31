@@ -13,6 +13,7 @@
     "by": "By",
     "view_on": "View on Gitcoin",
     "amount": "Amount",
+    "loading": "Loading",
     "go_wrong": "Something went wrong.",
     "retry": "Retry",
     "plugin_wallet_connect_a_wallet": "Connect Wallet",
