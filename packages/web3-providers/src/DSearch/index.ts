@@ -42,7 +42,6 @@ import { ENS_API } from '../ENS/index.js'
 import { CoinGeckoTrending_API } from '../CoinGecko/apis/CoinGecko.js'
 import { RSS3API } from '../RSS3/index.js'
 import { PlatformToChainIdMap } from '../RSS3/constants.js'
-import { GraphQL, Thegraph } from '../entry.js'
 
 const CoinGeckoTrending = new CoinGeckoTrending_API()
 const ENS = new ENS_API()
@@ -113,8 +112,6 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                 () => ENS.lookup(ChainIdEVM.Mainnet, domain).then((x = '') => [x, ChainIdEVM.Mainnet]),
                 () => ChainbaseDomain.lookup(ChainIdEVM.Mainnet, domain).then((x = '') => [x, ChainIdEVM.Mainnet]),
                 () => ChainbaseDomain.lookup(ChainIdEVM.BSC, domain).then((x = '') => [x, ChainIdEVM.BSC]),
-                () => GraphQL.lookup(ChainIdEVM.Mainnet, domain).then((x = '') => [x, ChainIdEVM.Mainnet]),
-                () => Thegraph.lookup(ChainIdEVM.Mainnet, domain).then((x = '') => [x, ChainIdEVM.Mainnet]),
             ],
             ['', ChainIdEVM.Mainnet],
         )
@@ -160,8 +157,6 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                 () => ENS.reverse(ChainIdEVM.Mainnet, address).then((x) => [x, ChainIdEVM.Mainnet]),
                 () => ChainbaseDomain.reverse(ChainIdEVM.Mainnet, address).then((x) => [x, ChainIdEVM.Mainnet]),
                 () => ChainbaseDomain.reverse(ChainIdEVM.BSC, address).then((x) => [x, ChainIdEVM.BSC]),
-                () => GraphQL.reverse(ChainIdEVM.Mainnet, address).then((x = '') => [x, ChainIdEVM.Mainnet]),
-                () => Thegraph.reverse(ChainIdEVM.Mainnet, address).then((x = '') => [x, ChainIdEVM.Mainnet]),
             ],
             ['', ChainIdEVM.Mainnet],
         )
