@@ -13,6 +13,7 @@ import {
 import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
 import { isSameAddress, Wallet as WalletItem } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, ProviderType, Transaction } from '@masknet/web3-shared-evm'
+import { Web3StateSettings } from '../settings/index.js'
 
 export class Wallet extends WalletState<ProviderType, Transaction> {
     private ref = new ValueRef(this.context.wallets.getCurrentValue())
@@ -54,7 +55,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
 
             const now = new Date()
 
-            this.ref.value = [
+            const result = [
                 ...wallets,
                 ...accounts
                     .filter((x) => x.funded || x.deployed)
@@ -77,6 +78,16 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
                     this.storage.value[ProviderType.MaskWallet]?.find((item) => isSameAddress(item.address, x.address))
                         ?.name ?? x.name,
             }))
+
+            const account = Web3StateSettings.value.Provider?.account?.getCurrentValue()
+
+            // If the currently connected account no longer exists, then disconnect
+            if (result.length && !result.find((x) => isSameAddress(x.address, account))) {
+                const connection = Web3StateSettings.value.Connection?.getConnection?.()
+                connection?.disconnect()
+            }
+
+            this.ref.value = result
         }
 
         update()

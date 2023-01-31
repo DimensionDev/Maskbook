@@ -51,7 +51,6 @@ import { PopupContext } from '../../../hook/usePopupContext.js'
 import { Icons } from '@masknet/icons'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { StyledRadio } from '../../../components/StyledRadio/index.js'
-import { SmartPayAccount } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -160,8 +159,9 @@ const ContractInteraction = memo(() => {
     const location = useLocation()
     const navigate = useNavigate()
     const wallet = useWallet()
+
     const { smartPayChainId } = useContainer(PopupContext)
-    const { Others, TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { Others, TransactionFormatter, Connection } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [transferError, setTransferError] = useState(false)
     const [gasCurrency, setGasCurrency] = useState<string>()
@@ -262,13 +262,11 @@ const ContractInteraction = memo(() => {
                 })
 
                 if (!signableConfig) return
-                const gas = await SmartPayAccount.estimateTransaction(
-                    request.owner && smartPayChainId ? smartPayChainId : chainId,
-                    signableConfig,
-                    {
-                        paymentToken: address,
-                    },
-                )
+                const connection = Connection?.getConnection?.()
+
+                const gas = await connection?.estimateTransaction?.(signableConfig)
+
+                if (!gas) return
 
                 const config = request.payload.params!.map((param) =>
                     param === 'latest'
