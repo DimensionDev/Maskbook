@@ -256,9 +256,6 @@ const ContractInteraction = memo(() => {
                 if (!request) return
                 const { signableConfig } = PayloadEditor.fromPayload(request?.payload, {
                     chainId: request.owner ? smartPayChainId : chainId,
-                    owner: request.owner,
-                    identifier: request.identifier,
-                    paymentToken: address,
                 })
 
                 if (!signableConfig) return
