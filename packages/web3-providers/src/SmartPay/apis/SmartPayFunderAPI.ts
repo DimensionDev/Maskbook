@@ -4,7 +4,7 @@ import { EMPTY_LIST, Proof } from '@masknet/shared-base'
 import { FunderAPI } from '../../types/Funder.js'
 import { Web3API } from '../../EVM/index.js'
 import { fetchJSON } from '../../entry-helpers.js'
-import { FUNDER_DEV } from '../constants.js'
+import { FUNDER_PROD } from '../constants.js'
 
 export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     private web3 = new Web3API()
@@ -14,7 +14,7 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     }
 
     private async getWhiteList(handler: string) {
-        return fetchJSON<FunderAPI.WhiteList>(urlcat(FUNDER_DEV, '/whitelist', { twitterHandler: handler }))
+        return fetchJSON<FunderAPI.WhiteList>(urlcat(FUNDER_PROD, '/whitelist', { twitterHandler: handler }))
     }
 
     async getRemainFrequency(handler: string) {
@@ -32,7 +32,7 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
 
         try {
             const operations = await fetchJSON<FunderAPI.Operation[]>(
-                urlcat(FUNDER_DEV, '/operation', { scanKey: FunderAPI.ScanKey.OwnerAddress, scanValue: owner }),
+                urlcat(FUNDER_PROD, '/operation', { scanKey: FunderAPI.ScanKey.OwnerAddress, scanValue: owner }),
             )
             const web3 = this.web3.getWeb3(chainId)
             const allSettled = await Promise.allSettled(
@@ -53,7 +53,7 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     async fund(chainId: ChainId, proof: Proof): Promise<FunderAPI.Fund> {
         await this.assetChainId(chainId)
 
-        return fetchJSON<FunderAPI.Fund>(urlcat(FUNDER_DEV, '/verify'), {
+        return fetchJSON<FunderAPI.Fund>(urlcat(FUNDER_PROD, '/verify'), {
             method: 'POST',
             body: JSON.stringify(proof),
             headers: { 'Content-Type': 'application/json' },
