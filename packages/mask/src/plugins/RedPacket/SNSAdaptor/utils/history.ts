@@ -57,7 +57,7 @@ export async function getRedPacketHistory(
     }
 
     const {
-        result,
+        result = [],
     }: {
         result: TxType[]
     } = await response.json()

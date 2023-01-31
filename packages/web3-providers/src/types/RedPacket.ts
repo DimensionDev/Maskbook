@@ -2,7 +2,14 @@ import type { Transaction, HubOptions, Pageable, HubIndicator, NonFungibleCollec
 
 export namespace RedPacketBaseAPI {
     export interface Provider<ChainId, SchemaType> {
-        getHistories(): Promise<Array<Transaction<ChainId, SchemaType>>>
+        getHistories(
+            chainId: ChainId,
+            senderAddress: string,
+            contractAddress: string,
+            methodId: string,
+            startBlock?: number,
+            endBlock?: number,
+        ): Promise<Array<Transaction<ChainId, SchemaType>> | undefined>
 
         /** Get non-fungible collections owned by the given account. */
         getCollectionsByOwner?: (
@@ -12,6 +19,13 @@ export namespace RedPacketBaseAPI {
     }
 
     export interface DataSourceProvider<ChainId, SchemaType> {
-        getHistories(): Promise<Array<Transaction<ChainId, SchemaType>>>
+        getHistories(
+            chainId: ChainId,
+            senderAddress: string,
+            contractAddress: string,
+            methodId: string,
+            startBlock?: number,
+            endBlock?: number,
+        ): Promise<Array<Transaction<ChainId, SchemaType>> | undefined>
     }
 }

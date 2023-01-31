@@ -850,6 +850,10 @@ export interface Transaction<ChainId, SchemaType> {
     >
     /** estimated tx fee */
     fee?: Price
+    input?: string
+    hash?: string
+    methodId?: string
+    blockNumber?: number
 }
 
 export interface RecentTransaction<ChainId, Transaction> {
