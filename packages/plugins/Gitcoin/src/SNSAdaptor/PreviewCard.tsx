@@ -9,6 +9,8 @@ import urlcat from 'urlcat'
 import { useGrant } from './hooks/useGrant.js'
 import { Translate, useI18N } from '../locales/i18n_generated.js'
 import { useDonate } from './contexts/index.js'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { SUPPORTED_CHAIN_IDS } from '../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -106,6 +108,8 @@ export function PreviewCard(props: PreviewCardProps) {
     const t = useI18N()
     const { classes, theme } = useStyles()
     const { value: grant, error, loading, retry } = useGrant(props.grantId)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { pluginID } = useNetworkContext()
 
     // #region the donation dialog
     const openDonate = useDonate()
@@ -126,6 +130,8 @@ export function PreviewCard(props: PreviewCardProps) {
             </Box>
         )
     if (!grant) return null
+
+    const isSupportedRuntime = pluginID === NetworkPluginID.PLUGIN_EVM && SUPPORTED_CHAIN_IDS.includes(chainId)
 
     const twitters = uniq(compact([grant.twitter_handle_1, grant.twitter_handle_2])).map(
         (handle) => `https://twitter.com/${handle}`,
@@ -221,7 +227,7 @@ export function PreviewCard(props: PreviewCardProps) {
                         {t.view_on()}
                     </Button>
                 </Box>
-                {grant.active ? (
+                {grant.active && isSupportedRuntime ? (
                     <Box sx={{ flex: 1, padding: '12px 5px' }}>
                         <ChainBoundary
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}
