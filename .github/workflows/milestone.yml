@@ -1,0 +1,58 @@
+name: "Check Milestone"
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - milestoned
+      - demilestoned
+    branchs:
+      - 'develop'
+      - 'release/*'
+      - 'hotfix/*'
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Milestone
+        if: github.event.pull_request.milestone == null
+        run: |
+          echo "Please set a milestone."
+          exit 1
+
+      - name: Check target branch of develop
+        if: ${{ github.base_ref == 'develop' }} # merge to develop
+        run: |
+          if [[ ${{ github.event.pull_request.milestone.title }} =~ ^[0-9]+.[0-9]+.0$ ]]
+          then
+            echo "Well Done"
+          else
+            echo "Don't patch on the develop branch."
+            exit 1
+          fi
+          
+      - name: Check target branch of release/*
+        if: ${{ startsWith(github.base_ref, 'release/') }} # merge to release/*
+        run: |
+          if [[ ${{ github.event.pull_request.milestone.title }} =~ ^[0-9]+.[0-9]+.0$ ]]
+          then
+            echo "Well Done"
+          else
+            echo "Don't patch on a pre-release branch."
+          fi
+
+      - name: Check target branch of hotfix/*
+        if: ${{ startsWith(github.base_ref, 'hotfix/') }} # merge to hotfix/*
+        run: |
+          if [[ ${{ github.event.pull_request.milestone.title }} =~ ^[0-9]+.[0-9]+.0$ ]]
+          then
+            echo "A hotfix branch only allows patch requests."
+          else
+            echo "Well Done"
+          fi

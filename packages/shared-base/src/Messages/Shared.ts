@@ -12,6 +12,7 @@ import type {
     WalletSettingsDialogEvent,
     OpenPageConfirmEvent,
     PersonaSelectPanelDialogEvent,
+    AvatarSettingDialogEvent,
 } from './Mask.js'
 
 /**
@@ -40,6 +41,7 @@ export interface CrossIsolationEvents {
     profileCardEvent: ProfileCardEvent
     nonFungibleTokenDialogEvent: NonFungibleTokenDialogEvent
     walletSettingsDialogEvent: WalletSettingsDialogEvent
+    avatarSettingDialogEvent: AvatarSettingDialogEvent
 
     /** emit when open new page . */
     openPageConfirm: OpenPageConfirmEvent

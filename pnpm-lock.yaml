@@ -1301,6 +1301,9 @@ importers:
       react-avatar-editor:
         specifier: ^13.0.0
         version: 13.0.0
+      react-router-dom:
+        specifier: ^6.4.3
+        version: 6.4.3
       react-use:
         specifier: ^17.4.0
         version: 17.4.0
@@ -24190,7 +24193,7 @@ packages:
     dev: false
 
   /level-ws/0.0.0:
-    resolution: {integrity: sha512-XUTaO/+Db51Uiyp/t7fCMGVFOTdtLS/NIACxE/GHsij15mKzxksZifKVjlXDF41JMUP/oM1Oc4YNGdKnc3dVLw==}
+    resolution: {integrity: sha1-Ny5RIXeSSgBCSwtDrvK7QkltIos=}
     dependencies:
       readable-stream: 1.0.34
       xtend: 2.1.2

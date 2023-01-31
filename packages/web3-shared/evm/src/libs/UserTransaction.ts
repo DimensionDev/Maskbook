@@ -380,10 +380,7 @@ export class UserTransaction {
         transaction: Transaction,
         options?: Options,
     ): UserTransaction {
-        return new UserTransaction(chainId, entryPoint, UserTransaction.toUserOperation(chainId, transaction), {
-            paymentToken: transaction.gasCurrency,
-            ...options,
-        })
+        return new UserTransaction(chainId, entryPoint, UserTransaction.toUserOperation(chainId, transaction), options)
     }
 
     static fromUserOperation(

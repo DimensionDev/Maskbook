@@ -4,7 +4,7 @@ import { openWindow, useValueRef } from '@masknet/shared-base-ui'
 import { Button, Typography } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { PluginWalletStatusBar } from '@masknet/shared'
+import { ConnectPersonaBoundary, PluginWalletStatusBar } from '@masknet/shared'
 import { PluginID, NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { SourceType, resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
@@ -102,9 +102,9 @@ export function CardDialogContent(props: CardDialogContentProps) {
     }, [props.setOpen])
 
     const onPFPButtonClick = useCallback(() => {
-        CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
+        CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
             open: true,
-            pluginID: PluginID.Avatar,
+            startPicking: true,
         })
     }, [])
 
