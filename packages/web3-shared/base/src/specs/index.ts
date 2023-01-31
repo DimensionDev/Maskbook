@@ -95,8 +95,8 @@ export enum SourceType {
     // Token List
     R2D2 = 'R2D2',
 
-    // NFT Lucky drop
-    NFTLuckyDrop = 'NFTLuckyDrop',
+    // Red Packet
+    RedPacket = 'RedPacket',
 }
 
 export enum SearchResultType {
