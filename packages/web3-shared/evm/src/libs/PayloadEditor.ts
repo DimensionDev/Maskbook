@@ -8,8 +8,10 @@ import { ChainId, EthereumMethodType, Transaction, TransactionOptions, UserOpera
 import { createJsonRpcPayload } from '../helpers/index.js'
 import { ZERO_ADDRESS, getSmartPayConstant } from '../index.js'
 
+type Options = Pick<TransactionOptions, 'account' | 'chainId'>
+
 export class PayloadEditor {
-    constructor(private payload: JsonRpcPayload, private options?: Pick<TransactionOptions, 'account' | 'chainId'>) {}
+    constructor(private payload: JsonRpcPayload, private options?: Options) {}
 
     get pid() {
         const { id } = this.payload
@@ -221,7 +223,7 @@ export class PayloadEditor {
         return this.payload
     }
 
-    static from<T extends unknown>(id: number, method: string, params: T[] = [], options?: TransactionOptions) {
+    static from<T extends unknown>(id: number, method: string, params: T[] = [], options?: Options) {
         return new PayloadEditor(
             createJsonRpcPayload(id, {
                 method,
@@ -231,11 +233,11 @@ export class PayloadEditor {
         )
     }
 
-    static fromMethod<T extends unknown>(method: string, params: T[] = [], options?: TransactionOptions) {
+    static fromMethod<T extends unknown>(method: string, params: T[] = [], options?: Options) {
         return PayloadEditor.from(0, method, params, options)
     }
 
-    static fromPayload(payload: JsonRpcPayload, options?: TransactionOptions) {
+    static fromPayload(payload: JsonRpcPayload, options?: Options) {
         return new PayloadEditor(payload, options)
     }
 }
