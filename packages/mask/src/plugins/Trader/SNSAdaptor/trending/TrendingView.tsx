@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useContext } from 'react'
-import { compact } from 'lodash-es'
+import { compact, first } from 'lodash-es'
 import { TrendingViewContext } from './context.js'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import {
@@ -167,8 +167,8 @@ export function TrendingView(props: TrendingViewProps) {
                 : []
 
         const _contracts = (contracts.length ? contracts : fallbackContracts).filter((x) => x.chainId === chainId) ?? []
-        if (_contracts.length > 0) return _contracts[0]
-        return contracts?.[0]
+        if (_contracts.length > 0) return first(_contracts)
+        return first(contracts)
     }, [trending, chainId])
     // #endregion
 
@@ -178,7 +178,7 @@ export function TrendingView(props: TrendingViewProps) {
         !isNFT &&
         !!trending?.coin.contract_address &&
         chainIdValid &&
-        swapExpectedContract.pluginID === NetworkPluginID.PLUGIN_EVM
+        swapExpectedContract?.pluginID === NetworkPluginID.PLUGIN_EVM
     // #endregion
 
     // #region tabs
