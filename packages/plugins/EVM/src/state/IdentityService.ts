@@ -20,6 +20,8 @@ import { ENS_Resolver } from './NameService/ENS.js'
 import { ChainbaseResolver } from './NameService/Chainbase.js'
 import { SpaceID_Resolver } from './NameService/SpaceID.js'
 import { Web3StateSettings } from '../settings/index.js'
+import { GraphQLResolver } from './NameService/GraphQL.js'
+import { ThegraphResolver } from './NameService/Thegraph.js'
 
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
 const SID_RE = /[^\t\n\v()[\]]{1,256}\.bnb\b/gi
@@ -176,9 +178,11 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         const allSettled = await Promise.allSettled(
             names.map(async (name) => {
                 const address = await attemptUntil(
-                    [new ENS_Resolver(), new ChainbaseResolver()].map((resolver) => {
-                        return async () => resolver.lookup(name)
-                    }),
+                    [new ENS_Resolver(), new ChainbaseResolver(), new GraphQLResolver(), new ThegraphResolver()].map(
+                        (resolver) => {
+                            return async () => resolver.lookup(name)
+                        },
+                    ),
                     undefined,
                 )
                 if (!address) return
