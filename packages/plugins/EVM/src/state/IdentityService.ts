@@ -17,7 +17,6 @@ import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm
 import { Lens, MaskX, NextIDProof, NextIDStorage, RSS3, Twitter } from '@masknet/web3-providers'
 import { MaskX_BaseAPI } from '@masknet/web3-providers/types'
 import { ENS_Resolver } from './NameService/ENS.js'
-import { ChainbaseResolver } from './NameService/Chainbase.js'
 import { SpaceID_Resolver } from './NameService/SpaceID.js'
 import { Web3StateSettings } from '../settings/index.js'
 import { GraphQLResolver } from './NameService/GraphQL.js'
@@ -178,11 +177,9 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         const allSettled = await Promise.allSettled(
             names.map(async (name) => {
                 const address = await attemptUntil(
-                    [new ENS_Resolver(), new ChainbaseResolver(), new GraphQLResolver(), new ThegraphResolver()].map(
-                        (resolver) => {
-                            return async () => resolver.lookup(name)
-                        },
-                    ),
+                    [new ENS_Resolver(), new GraphQLResolver(), new ThegraphResolver()].map((resolver) => {
+                        return async () => resolver.lookup(name)
+                    }),
                     undefined,
                 )
                 if (!address) return
@@ -271,7 +268,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             results.map(async (y) => {
                 try {
                     const name = await attemptUntil(
-                        [new ENS_Resolver(), new ChainbaseResolver()].map((resolver) => {
+                        [new ENS_Resolver(), new GraphQLResolver(), new ThegraphResolver()].map((resolver) => {
                             return async () => resolver.reverse(y.web3_addr)
                         }),
                         undefined,

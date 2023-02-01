@@ -53,8 +53,6 @@ export class Thegraph_Domain_API implements DomainAPI.Provider<ChainId> {
             }),
         })
 
-        console.log('111111111111111111111111')
-        console.log(response)
         return first(response.data.domains)?.name
     }
 }
