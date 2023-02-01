@@ -54,8 +54,8 @@ import { LensAPI } from './Lens/index.js'
 import { Web3SignerAPI } from './EVM/apis/Web3SignerAPI.js'
 import { FlowWeb3API } from './Flow/apis/Web3API.js'
 import { SolanaWeb3API } from './Solana/apis/Web3API.js'
-import { NFTLuckyDropAPI } from './EVM/apis/NFTLuckyDropAPI.js'
 import { LogHubAPI } from './Sentry/index.js'
+import { RedPacketAPI } from './RedPacket/index.js'
 import { GraphQL_Domain_API } from './GraphQL/index.js'
 import { Thegraph_Domain_API } from './Thegraph/index.js'
 
@@ -118,9 +118,6 @@ export const NFTScanTrending_Solana = new NFTScanTrendingAPI_Solana()
 export const NFTScanNonFungibleTokenEVM = new NFTScanNonFungibleTokenAPI_EVM()
 export const NFTScanNonFungibleTokenSolana = new NFTScanNonFungibleTokenAPI_Solana()
 
-// NFTLuckyDrop
-export const NFTLuckyDropEVM = new NFTLuckyDropAPI()
-
 // Chainbase
 export const ChainbaseHistory = new ChainbaseHistoryAPI()
 export const ChainbaseFungibleToken = new ChainbaseFungibleTokenAPI()
@@ -153,6 +150,8 @@ export const Lens = new LensAPI()
 // Sentry
 export const LogHub = new LogHubAPI()
 
+// RedPacket
+export const RedPacket = new RedPacketAPI()
 // GraphQL ENS
 export const GraphQL = new GraphQL_Domain_API()
 
