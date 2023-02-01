@@ -7,17 +7,18 @@ import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { OfferCard } from './OfferCard.js'
 import { useI18N } from '../../locales/i18n_generated.js'
-import { SourceIcons } from '@masknet/shared'
+import { SourceProviderSwitcher } from '@masknet/shared'
+import { Context } from '../Context/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        minHeight: 300,
+        minHeight: 260,
         width: '100%',
         gap: 12,
-        height: 327,
+        height: 287,
         justifyContent: 'center',
     },
     emptyIcon: {
@@ -35,6 +36,7 @@ export interface OffersListProps {
 
 export function OffersList(props: OffersListProps) {
     const { offers } = props
+    const { setSourceType, sourceType } = Context.useContainer()
     const _offers = offers.value?.data ?? EMPTY_LIST
 
     const { classes } = useStyles()
@@ -64,12 +66,21 @@ export function OffersList(props: OffersListProps) {
         )
     return (
         <div className={classes.wrapper} style={{ justifyContent: 'unset' }}>
-            <Box>
-                <SourceIcons />
-            </Box>
             {_offers?.map((x, idx) => (
                 <OfferCard key={idx} offer={x} />
             ))}
+        </div>
+    )
+}
+
+export function OffersListWrapper(props: OffersListProps) {
+    const { setSourceType, sourceType } = Context.useContainer()
+    return (
+        <div>
+            <Box mb={2}>
+                <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} />
+            </Box>
+            <OffersList offers={props.offers} />
         </div>
     )
 }

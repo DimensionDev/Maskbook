@@ -31,6 +31,7 @@ function useContext(initialState?: InitialState) {
     const orders = useNonFungibleOrders(pluginID, tokenAddress, tokenId, {
         chainId,
         account: ownerAddress,
+        sourceType,
     })
     const events = useNonFungibleEvents(pluginID, tokenAddress, tokenId, {
         chainId,

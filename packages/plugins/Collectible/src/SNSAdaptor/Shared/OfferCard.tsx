@@ -6,7 +6,6 @@ import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
 import { TokenIcon } from '@masknet/shared'
-import { CollectibleProviderIcon } from './CollectibleProviderIcon.js'
 import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -89,7 +88,6 @@ export function OfferCard(props: OfferCardProps) {
 
     return (
         <div className={classes.wrapper}>
-            {offer.source ? <CollectibleProviderIcon active={false} provider={offer.source} /> : null}
             <div className={classes.offerDetail}>
                 <div className={classes.flex}>
                     {renderTokenIcon()}
