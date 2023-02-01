@@ -56,6 +56,8 @@ import { FlowWeb3API } from './Flow/apis/Web3API.js'
 import { SolanaWeb3API } from './Solana/apis/Web3API.js'
 import { NFTLuckyDropAPI } from './EVM/apis/NFTLuckyDropAPI.js'
 import { LogHubAPI } from './Sentry/index.js'
+import { GraphQL_Domain_API } from './GraphQL/index.js'
+import { Thegraph_Domain_API } from './Thegraph/index.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
@@ -150,3 +152,9 @@ export const Lens = new LensAPI()
 
 // Sentry
 export const LogHub = new LogHubAPI()
+
+// GraphQL ENS
+export const GraphQL = new GraphQL_Domain_API()
+
+// Thegraph ENS
+export const Thegraph = new Thegraph_Domain_API()
