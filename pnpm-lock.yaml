@@ -1802,6 +1802,9 @@ importers:
       bignumber.js:
         specifier: 9.1.0
         version: 9.1.0
+      quill-delta-to-html:
+        specifier: ^0.12.1
+        version: 0.12.1
       react-use:
         specifier: ^17.4.0
         version: 17.4.0
@@ -27730,6 +27733,12 @@ packages:
   /quick-lru/5.1.1:
     resolution: {integrity: sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==}
     engines: {node: '>=10'}
+
+  /quill-delta-to-html/0.12.1:
+    resolution: {integrity: sha512-QhpeMk9+5ge3HYbL5A0Ewz3pXCsbemqGvIF/kw5D6D4V68AtcUp7yt9xNUkzOk/0IQz43hKy3IkzBzRhLIE+oA==}
+    dependencies:
+      lodash.isequal: 4.5.0
+    dev: false
 
   /ramda/0.26.1:
     resolution: {integrity: sha512-hLWjpy7EnsDBb0p+Z3B7rPi3GDeRG5ZtiI33kJhTt+ORCd38AbAIjB/9zRIUoeTbE/AVX5ZkU7m6bznsvrf8eQ==}
