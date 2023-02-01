@@ -54,6 +54,7 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(2.5),
         borderRadius: 12,
         overflow: 'auto',
+        overscrollBehavior: 'contain',
     },
     network: {
         marginRight: theme.spacing(1.5),
