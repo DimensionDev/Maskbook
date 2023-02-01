@@ -156,6 +156,21 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             })
     }
 
+    private async searchRSS3NameService(handle: string): Promise<Array<DomainResult<ChainId>>> {
+        const result = await this.RSS3.getNameService(handle)
+        if (!result) return []
+        return [
+            {
+                type: SearchResultType.Domain,
+                pluginID: NetworkPluginID.PLUGIN_EVM,
+                chainId: result.chainId as ChainId,
+                keyword: handle,
+                domain: handle,
+                address: result.address,
+            },
+        ]
+    }
+
     private async searchAddress(address: string): Promise<Array<EOAResult<ChainId>>> {
         // only EVM address
         if (!isValidAddressEVM(address)) return EMPTY_LIST
@@ -398,8 +413,12 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         if (word && ['token', 'twitter'].includes(field ?? '')) return this.searchTokenByName(word) as Promise<T[]>
 
         // vitalik.lens, vitalik.bit, etc. including ENS BNB
-        if (isValidHandle(keyword)) {
+        // Can't get .bit domain via RSS3 profile API.
+        if (isValidHandle(keyword) && !keyword.endsWith('.bit')) {
             return this.searchRSS3Handle(keyword) as Promise<T[]>
+        }
+        if (keyword.endsWith('.bit')) {
+            return this.searchRSS3NameService(keyword) as Promise<T[]>
         }
 
         // vitalik.eth

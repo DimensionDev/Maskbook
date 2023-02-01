@@ -83,11 +83,21 @@ export interface RSS3ProfileResult {
     /** Could be http url, or ipfs url */
     profile_uri: string[]
 }
-export type RSS3ProfilesResponse =
-    | {
-          total: number
-          result: RSS3ProfileResult[]
-      }
-    | {
-          error: string
-      }
+
+type Response<T> = T | { error: string }
+export type RSS3ProfilesResponse = Response<{
+    total: number
+    result: RSS3ProfileResult[]
+}>
+
+export type RSS3NameServiceResponse = Response<{
+    ens: string
+    crossbell: string
+    lens: string
+    spaceid: string
+    unstoppable_domains: string
+    bit: string
+    avvy: string
+    /** hex address */
+    address: string
+}>
