@@ -1,7 +1,9 @@
 import { Icons } from '@masknet/icons'
 import { Plugin, SNSAdaptorContext, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { parseURLs, PluginID } from '@masknet/shared-base'
+import { MaskLightTheme } from '@masknet/theme'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { ThemeProvider } from '@mui/material'
 import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
 import { base } from '../base.js'
@@ -19,7 +21,9 @@ function Renderer(props: { id: string }) {
         <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
             <ResultModalProvider>
                 <DonateProvider>
-                    <PreviewCard grantId={props.id} />
+                    <ThemeProvider theme={MaskLightTheme}>
+                        <PreviewCard grantId={props.id} />
+                    </ThemeProvider>
                 </DonateProvider>
             </ResultModalProvider>
         </SNSAdaptorContext.Provider>

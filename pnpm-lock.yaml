@@ -1802,6 +1802,9 @@ importers:
       bignumber.js:
         specifier: 9.1.0
         version: 9.1.0
+      quill-delta-to-html:
+        specifier: ^0.12.1
+        version: 0.12.1
       react-use:
         specifier: ^17.4.0
         version: 17.4.0
@@ -3156,9 +3159,6 @@ importers:
       '@dimensiondev/mask-wallet-core':
         specifier: 0.1.0-20211013082857-eb62e5f
         version: 0.1.0-20211013082857-eb62e5f
-      '@ensdomains/eth-ens-namehash':
-        specifier: ^2.0.15
-        version: 2.0.15
       '@masknet/icons':
         specifier: workspace:^
         version: link:../icons
@@ -3225,9 +3225,6 @@ importers:
       date-fns:
         specifier: ^2.29.3
         version: 2.29.3
-      ethjs-ens:
-        specifier: ^2.0.1
-        version: 2.0.1
       fuse.js:
         specifier: 6.6.2
         version: 6.6.2_b2o4qvyfvxmpo7347sqko6h22a
@@ -15746,7 +15743,7 @@ packages:
       mississippi: 3.0.0
       mkdirp: 0.5.6
       move-concurrently: 1.0.1
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 2.7.1
       ssri: 6.0.2
       unique-filename: 1.1.1
@@ -15770,7 +15767,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.12
@@ -19572,13 +19569,6 @@ packages:
       - supports-color
     dev: false
 
-  /eth-ens-namehash/1.0.2:
-    resolution: {integrity: sha512-UCAyRNC3WIhEdGhnczqntMSjbRk8JsusBd5CfHkfctwqXI3ArwAJyTVqYQ/Y+w2IRojiq7dMUROqOQePF/2I2w==}
-    dependencies:
-      idna-uts46: 1.1.0
-      js-sha3: 0.5.7
-    dev: false
-
   /eth-ens-namehash/2.0.8:
     resolution: {integrity: sha1-IprEbsqG1S4MmR58sq74P/D2i88=}
     dependencies:
@@ -19665,10 +19655,6 @@ packages:
       scrypt-js: 3.0.1
       secp256k1: 4.0.2
       setimmediate: 1.0.5
-
-  /ethereum-ens-network-map/1.0.2:
-    resolution: {integrity: sha512-5qwJ5n3YhjSpE6O/WEBXCAb2nagUgyagJ6C0lGUBWC4LjKp/rRzD+pwtDJ6KCiITFEAoX4eIrWOjRy0Sylq5Hg==}
-    dev: false
 
   /ethereumjs-abi/0.6.8:
     resolution: {integrity: sha512-Tx0r/iXI6r+lRsdvkFDlut0N08jWMnKRZ6Gkq+Nmw75lZe4e6o3EkSnkaBP5NF6+m5PTGAr9JP43N3LyeoglsA==}
@@ -19896,82 +19882,12 @@ packages:
       - utf-8-validate
     dev: false
 
-  /ethjs-abi/0.2.0:
-    resolution: {integrity: sha512-ELExSTNV7rm9WA22pA3kxNmaQz1o/peM8X1pZdWypEhuNzFjOR+hIV09Mcfw69Q0kbdd7JNGAFb5dyoL/bnItA==}
-    engines: {node: '>=6.5.0', npm: '>=3'}
-    dependencies:
-      bn.js: 4.11.6
-      js-sha3: 0.5.5
-      number-to-bn: 1.7.0
-    dev: false
-
-  /ethjs-contract/0.1.9:
-    resolution: {integrity: sha512-0+5p2jZoVYA1rp+pDfhxGBdvHHw8jtyxsryM1CC05sT+vPYWAkDnlahBDBwF3wTtMq2Tslf/rGOJfCh7lEE6fQ==}
-    engines: {node: '>=6.5.0', npm: '>=3'}
-    dependencies:
-      ethjs-abi: 0.2.0
-      ethjs-filter: 0.1.5
-      ethjs-util: 0.1.3
-      js-sha3: 0.5.5
-    dev: false
-
-  /ethjs-ens/2.0.1:
-    resolution: {integrity: sha512-rQ8hbjGr5Nqitc3wFGsmR/RbZ3iKVWNiPQQuEdKsXEndUVPLaWA8rD+/gl49fzIJ8M0JiZUmAY6umWVT8vMAyw==}
-    dependencies:
-      eth-ens-namehash: 1.0.2
-      ethereum-ens-network-map: 1.0.2
-      ethjs-contract: 0.1.9
-      ethjs-query: 0.2.9
-    dev: false
-
-  /ethjs-filter/0.1.5:
-    resolution: {integrity: sha512-ii+Av0Kv0mOzQSP2aBSWTeamTntWDXgHN0Sj1UnTpzYH+gQdJCvirsc0BO07MWcsk0kuLogITDOPVFFd7qcUMQ==}
-    engines: {node: '>=6.5.0', npm: '>=3'}
-    dev: false
-
-  /ethjs-format/0.2.2:
-    resolution: {integrity: sha512-+iLG5SkJReHkdti/rtHXWNXX9f7S3snouBjs8IOwOUT5uZnkcVuzRDClAamZ+27DVDuPxU1UL/nkXpHl8KO5DQ==}
-    engines: {node: '>=6.5.0', npm: '>=3'}
-    dependencies:
-      bn.js: 4.11.6
-      ethjs-schema: 0.1.5
-      ethjs-util: 0.1.3
-      is-hex-prefixed: 1.0.0
-      number-to-bn: 1.7.0
-      strip-hex-prefix: 1.0.0
-    dev: false
-
-  /ethjs-query/0.2.9:
-    resolution: {integrity: sha512-ZTaV0zze6/OQWwaZQmTzg+RoF5V8s/IZ4Up2GAj8+EzLQ+SnInlyeOYhJLSo93bnv1gdvCK/hJXh8zqzeYWD/Q==}
-    engines: {node: '>=6.5.0', npm: '>=3'}
-    dependencies:
-      ethjs-format: 0.2.2
-      ethjs-rpc: 0.1.5
-    dev: false
-
-  /ethjs-rpc/0.1.5:
-    resolution: {integrity: sha512-RSqGrUjkA1UHl0d/FteGHFCv3spO/sA+lQHiIYIczYKE1nkM1Q2fKjiqssq+6LnYc+g3NWOBr4AIKQzXc8RQ1g==}
-    engines: {node: '>=6.5.0', npm: '>=3'}
-    dev: false
-
-  /ethjs-schema/0.1.5:
-    resolution: {integrity: sha512-QH+Gu7yVYEIXDcLbdDfYxn1CAT0vkH97ZQfaG2wHy6BthuHoUjM0RUgqWaDMM8S8BUKsHq/nAMPPszaROELlbg==}
-    dev: false
-
   /ethjs-unit/0.1.6:
     resolution: {integrity: sha1-xmWSHkduh7ziqdWIpv4EBbLEFpk=}
     engines: {node: '>=6.5.0', npm: '>=3'}
     dependencies:
       bn.js: 4.11.6
       number-to-bn: 1.7.0
-
-  /ethjs-util/0.1.3:
-    resolution: {integrity: sha512-QqpX2dsEG2geSMG9dTMJVhfP1kGRdGMNjiHPiTjkju+X5cB0PQIwUzRr5k21pFkgF5zuLccqe83p7Gh5fFM5tQ==}
-    engines: {node: '>=6.5.0', npm: '>=3'}
-    dependencies:
-      is-hex-prefixed: 1.0.0
-      strip-hex-prefix: 1.0.0
-    dev: false
 
   /ethjs-util/0.1.6:
     resolution: {integrity: sha512-CUnVOQq7gSpDHZVVrQW8ExxUETWrnrvXYvYz55wOU8Uj4VCgw56XC2B/fVqQN+f7gmrnRHSLVnFAwsCuNwji8w==}
@@ -22392,13 +22308,6 @@ packages:
       punycode: 2.1.0
     dev: false
 
-  /idna-uts46/1.1.0:
-    resolution: {integrity: sha512-edsPih0TrHpA+8yUtGK7+fBBBCJfajYcFbKVPs3d4ls0O1sGnrvF1tl8jl9/nJssMOnyu0HGH89yHfe7syxyHA==}
-    engines: {node: '>=4.0.0'}
-    dependencies:
-      punycode: 2.1.1
-    dev: false
-
   /ieee754/1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
 
@@ -23672,10 +23581,6 @@ packages:
 
   /js-sha256/0.9.0:
     resolution: {integrity: sha512-sga3MHh9sgQN2+pJ9VYZ+1LPwXOxuBJBA5nrR5/ofPfuiJBE2hnjsaN8se8JznOmGLN2p49Pe5U/ttafcs/apA==}
-    dev: false
-
-  /js-sha3/0.5.5:
-    resolution: {integrity: sha512-yLLwn44IVeunwjpDVTDZmQeVbB0h+dZpY2eO68B/Zik8hu6dH+rKeLxwua79GGIvW6xr8NBAcrtiUbYrTjEFTA==}
     dev: false
 
   /js-sha3/0.5.7:
@@ -27408,13 +27313,15 @@ packages:
   /promievent/0.1.5:
     resolution: {integrity: sha512-Yqve4y2sFIz5hHmVpoZWXNayROyAyf3KWeEHZPh60yYiVpmHMKuJt6UoLbs6pC8uEMdFkqukz97mQXaAkHDPAw==}
 
-  /promise-inflight/1.0.1:
+  /promise-inflight/1.0.1_bluebird@3.7.2:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
     peerDependencies:
       bluebird: '*'
     peerDependenciesMeta:
       bluebird:
         optional: true
+    dependencies:
+      bluebird: 3.7.2
     dev: true
 
   /promise-to-callback/1.0.0:
@@ -27730,6 +27637,12 @@ packages:
   /quick-lru/5.1.1:
     resolution: {integrity: sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==}
     engines: {node: '>=10'}
+
+  /quill-delta-to-html/0.12.1:
+    resolution: {integrity: sha512-QhpeMk9+5ge3HYbL5A0Ewz3pXCsbemqGvIF/kw5D6D4V68AtcUp7yt9xNUkzOk/0IQz43hKy3IkzBzRhLIE+oA==}
+    dependencies:
+      lodash.isequal: 4.5.0
+    dev: false
 
   /ramda/0.26.1:
     resolution: {integrity: sha512-hLWjpy7EnsDBb0p+Z3B7rPi3GDeRG5ZtiI33kJhTt+ORCd38AbAIjB/9zRIUoeTbE/AVX5ZkU7m6bznsvrf8eQ==}
@@ -30652,7 +30565,7 @@ packages:
       '@swc/core': ^1.2.147
       webpack: '>=2'
     dependencies:
-      webpack: 5.75.0
+      webpack: 5.75.0_webpack-cli@5.0.0
     dev: true
 
   /symbol-tree/3.2.4:
@@ -31770,7 +31683,7 @@ packages:
     dependencies:
       source-map: 0.5.7
       uglify-js: 2.8.29
-      webpack: 3.12.0
+      webpack: 3.12.0_webpack-cli@5.0.0
       webpack-sources: 1.4.3
     dev: false
 

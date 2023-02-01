@@ -109,13 +109,21 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
         const [address, chainId] = await attemptUntil(
             [
-                () => ENS.lookup(ChainIdEVM.Mainnet, domain).then((x = '') => [x, ChainIdEVM.Mainnet]),
-                () => ChainbaseDomain.lookup(ChainIdEVM.Mainnet, domain).then((x = '') => [x, ChainIdEVM.Mainnet]),
+                () =>
+                    ENS.lookup(ChainIdEVM.Mainnet, domain).then((x = '') => {
+                        if (isZeroAddressEVM(address)) throw new Error(`No result for ${domain}`)
+                        return [x, ChainIdEVM.Mainnet]
+                    }),
+                () =>
+                    ChainbaseDomain.lookup(ChainIdEVM.Mainnet, domain).then((x = '') => {
+                        if (!x || isZeroAddressEVM(address)) throw new Error(`No result for ${domain}`)
+                        return [x, ChainIdEVM.Mainnet]
+                    }),
                 () => ChainbaseDomain.lookup(ChainIdEVM.BSC, domain).then((x = '') => [x, ChainIdEVM.BSC]),
             ],
             ['', ChainIdEVM.Mainnet],
         )
-        if (!isValidAddressEVM(address)) return EMPTY_LIST
+        if (!isValidAddressEVM(address) || isZeroAddressEVM(address)) return EMPTY_LIST
 
         return [
             {
@@ -389,13 +397,13 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         const { word, field } = this.parseKeyword(keyword)
         if (word && ['token', 'twitter'].includes(field ?? '')) return this.searchTokenByName(word) as Promise<T[]>
 
-        // vitalik.eth
-        if (isValidDomain(keyword)) return this.searchDomain(keyword) as Promise<T[]>
-
-        // vitalik.lens, vitalik.bit, etc.
+        // vitalik.lens, vitalik.bit, etc. including ENS BNB
         if (isValidHandle(keyword)) {
             return this.searchRSS3Handle(keyword) as Promise<T[]>
         }
+
+        // vitalik.eth
+        if (isValidDomain(keyword)) return this.searchDomain(keyword) as Promise<T[]>
 
         // 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045
         if (isValidAddress?.(keyword) && !isZeroAddress?.(keyword)) {

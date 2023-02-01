@@ -3,7 +3,8 @@ import { NameServiceState } from '@masknet/web3-state'
 import { ChainId, formatEthereumAddress, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { ENS_Resolver } from './NameService/ENS.js'
 import { SpaceID_Resolver } from './NameService/SpaceID.js'
-import { ChainbaseResolver } from './NameService/Chainbase.js'
+import { GraphQLResolver } from './NameService/GraphQL.js'
+import { ThegraphResolver } from './NameService/Thegraph.js'
 
 export class NameService extends NameServiceState<ChainId> {
     constructor(context: Plugin.Shared.SharedContext) {
@@ -15,6 +16,6 @@ export class NameService extends NameServiceState<ChainId> {
     }
 
     override createResolvers(chainId?: ChainId) {
-        return [new ENS_Resolver(), new ChainbaseResolver(), new SpaceID_Resolver()]
+        return [new ENS_Resolver(), new SpaceID_Resolver(), new GraphQLResolver(), new ThegraphResolver()]
     }
 }
