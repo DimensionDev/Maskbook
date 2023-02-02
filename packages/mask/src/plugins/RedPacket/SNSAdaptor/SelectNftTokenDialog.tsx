@@ -389,7 +389,6 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 <div key={i}>
                                     <NFTCard
                                         findToken={findToken}
-                                        renderOrder={i}
                                         token={token}
                                         selectToken={selectToken}
                                         isSelectSharesExceed={isSelectSharesExceed}
@@ -496,7 +495,6 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                     <div key={i}>
                                         <NFTCard
                                             findToken={findToken}
-                                            renderOrder={i}
                                             token={token}
                                             selectToken={selectToken}
                                             isSelectSharesExceed={isSelectSharesExceed}
@@ -547,7 +545,6 @@ interface NFTCardProps {
     findToken: OrderedERC721Token | undefined
     token: OrderedERC721Token
     isSelectSharesExceed: boolean
-    renderOrder: number
     selectToken: (
         token: OrderedERC721Token,
         findToken: OrderedERC721Token | undefined,
@@ -557,7 +554,7 @@ interface NFTCardProps {
 }
 
 function NFTCard(props: NFTCardProps) {
-    const { findToken, token, isSelectSharesExceed, renderOrder, selectToken } = props
+    const { findToken, token, isSelectSharesExceed, selectToken } = props
     const { classes, cx } = useStyles({ isSelectSharesExceed })
     return (
         <ListItem className={classes.selectWrapper}>

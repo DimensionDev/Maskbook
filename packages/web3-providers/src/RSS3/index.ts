@@ -9,8 +9,8 @@ import {
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import RSS3 from 'rss3-next'
 import urlcat, { query } from 'urlcat'
-import { RSS3_FEED_ENDPOINT, RSS3_LEGACY_ENDPOINT, RSS3_ENDPOINT } from './constants.js'
-import { RSS3ProfilesResponse, TAG, TYPE } from './types.js'
+import { RSS3_FEED_ENDPOINT, RSS3_LEGACY_ENDPOINT, RSS3_ENDPOINT, NameServiceToChainMap } from './constants.js'
+import { RSS3NameServiceResponse, RSS3ProfilesResponse, TAG, TYPE } from './types.js'
 import { normalizedFeed } from './helpers.js'
 import { fetchJSON } from '../entry-helpers.js'
 import { NonFungibleTokenAPI, RSS3BaseAPI } from '../entry-types.js'
@@ -180,5 +180,20 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
 
         if ('error' in response) return []
         return response.result
+    }
+
+    async getNameService(handle: string) {
+        const url = urlcat(RSS3_ENDPOINT, '/ns/:handle', {
+            handle,
+        })
+        const response = await fetchJSON<RSS3NameServiceResponse>(url)
+        const suffix = handle.split('.').pop() as keyof typeof NameServiceToChainMap
+
+        if ('error' in response) return
+
+        return {
+            address: response.address,
+            chainId: NameServiceToChainMap[suffix],
+        }
     }
 }

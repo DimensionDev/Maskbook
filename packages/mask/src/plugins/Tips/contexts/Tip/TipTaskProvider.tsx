@@ -1,4 +1,15 @@
-import { Dispatch, FC, memo, SetStateAction, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import {
+    Dispatch,
+    FC,
+    memo,
+    SetStateAction,
+    useCallback,
+    useContext,
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useState,
+} from 'react'
 import { useSubscription } from 'use-subscription'
 import { useFungibleToken, useNonFungibleTokenContract, useChainContext } from '@masknet/web3-hooks-base'
 import { isSameAddress, SocialAccount } from '@masknet/web3-shared-base'
@@ -42,7 +53,8 @@ function useDirtyDetection(deps: any[]): [boolean, Dispatch<SetStateAction<boole
 }
 
 export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ children, task }) => {
-    const { targetPluginID, targetChainId, setTargetPluginID } = TargetRuntimeContext.useContainer()
+    const { targetPluginID, setTargetPluginID } = TargetRuntimeContext.useContainer()
+    const { chainId: targetChainId } = useChainContext()
 
     const [_recipientAddress, setRecipient] = useState(task.recipient ?? '')
     const recipients = useRecipients(targetPluginID, task.accounts)
@@ -64,6 +76,11 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
         },
         [key],
     )
+    useLayoutEffect(() => {
+        if (nativeTokenDetailed) {
+            setToken(nativeTokenDetailed)
+        }
+    }, [nativeTokenDetailed, setToken])
     const token = tokenMap[key] ?? nativeTokenDetailed
 
     const [nonFungibleTokenId, setNonFungibleTokenId] = useState<TipContextOptions['nonFungibleTokenId']>(null)

@@ -15,6 +15,10 @@
         "pnpm-lock.yaml"
     ],
     "words": [
+        "algorand",
+        "kusama",
+        "polkadot",
+        "zilliqa",
         "aave",
         "activityv",
         "adai",
@@ -36,6 +40,7 @@
         "attrace",
         "avalanche",
         "avax",
+        "avvy",
         "bgcolor",
         "bignumber",
         "binancecoin",
@@ -232,6 +237,7 @@
         "solflare",
         "sollet",
         "solsea",
+        "spaceid",
         "steganographic",
         "steganography",
         "stego",

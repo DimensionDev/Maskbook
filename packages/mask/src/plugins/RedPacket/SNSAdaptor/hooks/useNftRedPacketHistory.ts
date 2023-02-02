@@ -1,29 +1,82 @@
 import { useAsyncRetry } from 'react-use'
+import type { BigNumber } from 'bignumber.js'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
-import { ChainId, getNftRedPacketConstants } from '@masknet/web3-shared-evm'
+import { ChainId, getNftRedPacketConstants, chainResolver } from '@masknet/web3-shared-evm'
 import { useWeb3Connection } from '@masknet/web3-hooks-base'
-import * as history from '../utils/history.js'
+import { RedPacket } from '@masknet/web3-providers'
+import { Interface } from '@ethersproject/abi'
+import type { NftRedPacketJSONPayload } from '../../types.js'
+import REDPACKET_ABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
+
 import { RedPacketRPC } from '../../messages.js'
+
+const redPacketInterFace = new Interface(REDPACKET_ABI)
+
+const CREATE_RED_PACKET_METHOD_ID = '0x29e744bf'
 
 export function useNftRedPacketHistory(address: string, chainId: ChainId) {
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const { NFT_RED_PACKET_ADDRESS_BLOCK_HEIGHT, RED_PACKET_NFT_ADDRESS } = getNftRedPacketConstants(chainId)
 
     return useAsyncRetry(async () => {
-        if (!connection) return EMPTY_LIST
+        if (!connection || !RED_PACKET_NFT_ADDRESS) return EMPTY_LIST
         const blockNumber = await connection.getBlockNumber()
-        return getNftRedPacketHistory(address, chainId, blockNumber)
-    }, [address, chainId, connection])
-}
+        const historyTransactions = await RedPacket.getHistories(
+            chainId,
+            address,
+            RED_PACKET_NFT_ADDRESS,
+            CREATE_RED_PACKET_METHOD_ID,
+            NFT_RED_PACKET_ADDRESS_BLOCK_HEIGHT,
+            blockNumber,
+        )
+        if (!historyTransactions) return EMPTY_LIST
 
-async function getNftRedPacketHistory(address: string, chainId: ChainId, endBlock: number) {
-    const { NFT_RED_PACKET_ADDRESS_BLOCK_HEIGHT } = getNftRedPacketConstants(chainId)
-    const redpacketsFromChain = await history.getNFTRedPacketHistory(
-        chainId,
-        NFT_RED_PACKET_ADDRESS_BLOCK_HEIGHT,
-        endBlock,
-        address,
-    )
-    // #region Inject password from database
-    return RedPacketRPC.getNftRedPacketHistory(redpacketsFromChain)
-    // #endregion
+        type CreateRedpacketParam = {
+            _public_key: string
+            _duration: BigNumber
+            _seed: string
+            _message: string
+            _name: string
+            _token_addr: string
+            _erc721_token_ids: BigNumber[]
+        }
+
+        const payloadList: NftRedPacketJSONPayload[] = historyTransactions.flatMap((tx) => {
+            try {
+                const decodedInputParam = redPacketInterFace.decodeFunctionData(
+                    'create_red_packet',
+                    tx.input ?? '',
+                ) as unknown as CreateRedpacketParam
+
+                const redpacketPayload: NftRedPacketJSONPayload = {
+                    contract_address: tx.to,
+                    txid: tx.hash ?? '',
+                    contract_version: 1,
+                    shares: decodedInputParam._erc721_token_ids.length,
+                    network: chainResolver.networkType(chainId),
+                    token_address: decodedInputParam._token_addr,
+                    chainId,
+                    sender: {
+                        address,
+                        name: decodedInputParam._name,
+                        message: decodedInputParam._message,
+                    },
+                    duration: decodedInputParam._duration.toNumber() * 1000,
+                    token_ids: decodedInputParam._erc721_token_ids.map((x) => x.toString()),
+                    // #region Retrieve at NFT History List Item.
+                    rpid: '',
+                    creation_time: 0,
+                    // #endregion
+                    // #region Retrieve from database
+                    password: '',
+                    // #endregion
+                }
+
+                return redpacketPayload
+            } catch {
+                return []
+            }
+        })
+        return RedPacketRPC.getNftRedPacketHistory(payloadList)
+    }, [address, chainId, connection])
 }

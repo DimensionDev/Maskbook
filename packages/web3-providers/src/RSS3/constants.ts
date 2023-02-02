@@ -25,3 +25,20 @@ export const PlatformToChainIdMap: Partial<Record<NETWORK, ChainId>> = {
     [NETWORK.optimism]: ChainId.Optimism,
     [NETWORK.fantom]: ChainId.Fantom,
 }
+
+export const NameServiceToChainMap = {
+    eth: ChainId.Mainnet,
+    csb: ChainId.Crossbell,
+    lens: ChainId.Matic,
+    bnb: ChainId.BSC,
+    bit: ChainId.Mainnet,
+    888: ChainId.Mainnet,
+    bitcoin: ChainId.Mainnet,
+    blockchain: ChainId.Mainnet,
+    crypto: ChainId.Mainnet,
+    dao: ChainId.Mainnet,
+    nft: ChainId.Mainnet,
+    wallet: ChainId.Mainnet,
+    x: ChainId.Mainnet,
+    zil: ChainId.Mainnet,
+} as const

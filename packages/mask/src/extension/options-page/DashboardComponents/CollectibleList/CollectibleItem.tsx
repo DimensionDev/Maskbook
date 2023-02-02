@@ -1,7 +1,7 @@
+import { forwardRef, HTMLProps, memo } from 'react'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
 import { Checkbox, Radio, Skeleton, Typography } from '@mui/material'
-import { forwardRef, HTMLProps, memo } from 'react'
 import { CollectibleCard, CollectibleCardProps } from './CollectibleCard.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -72,7 +72,6 @@ export const CollectibleItem = memo(
             provider,
             asset,
             readonly,
-            renderOrder,
             pluginID,
             checked,
             inactive,
@@ -113,7 +112,6 @@ export const CollectibleItem = memo(
                     asset={asset}
                     provider={provider}
                     readonly={readonly}
-                    renderOrder={renderOrder}
                     pluginID={pluginID}
                     showNetworkIcon={showNetworkIcon}
                     disableLink={disableLink || selectable}

@@ -31,6 +31,7 @@ export * from './types/Trending.js'
 export * from './types/Twitter.js'
 export * from './types/Web3.js'
 export * from './types/LogHub.js'
+export * from './types/RedPacket.js'
 
 // Implementations
 export * from './DeBank/types.js'

@@ -60,7 +60,6 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
             fontWeight: 400,
             marginLeft: 4,
             fontSize: 14,
-            whiteSpace: 'nowrap',
         },
         rightSpace: {
             marginRight: 6,
