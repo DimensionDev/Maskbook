@@ -1,7 +1,7 @@
 import { rest } from 'msw'
 
 export const AccountHandlers = [
-    rest.post('https://polygon-mainnet.infura.io/v3/*', async (request, response, context) => {
+    rest.post('https://evm-proxy.r2d2.to', async (request, response, context) => {
         function createResponse(id: number, result: unknown) {
             return response(
                 context.status(200),
