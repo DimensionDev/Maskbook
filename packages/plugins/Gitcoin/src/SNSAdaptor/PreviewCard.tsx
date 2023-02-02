@@ -195,11 +195,17 @@ export function PreviewCard(props: PreviewCardProps) {
                             />
                         </Typography>
                         <div className={classes.admin}>
-                            <Typography>
+                            <Typography color={theme.palette.maskColor.second}>
                                 <Translate.admin
                                     values={{ admin: grant.admin_profile.handle }}
                                     components={{
-                                        bold: <Typography component="span" className={classes.bold} />,
+                                        bold: (
+                                            <Link
+                                                className={classes.bold}
+                                                target="_blank"
+                                                href={`https://gitcoin.co/profile/${grant.admin_profile.handle}`}
+                                            />
+                                        ),
                                     }}
                                 />
                             </Typography>
