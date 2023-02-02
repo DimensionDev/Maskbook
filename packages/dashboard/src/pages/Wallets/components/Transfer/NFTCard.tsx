@@ -20,16 +20,6 @@ const useStyles = makeStyles()({
         padding: 0,
         lineHeight: '16px',
     },
-    wrapper: {
-        borderTopRightRadius: '12px',
-        borderTopLeftRadius: '12px',
-        width: '140px !important',
-        height: '186px !important',
-    },
-    loadingPlaceholder: {
-        width: '140px !important',
-        height: '186px !important',
-    },
     fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',
@@ -43,13 +33,11 @@ export interface NFTCardProps {
     token: NonFungibleToken<ChainId, SchemaType>
     selectedTokenId: string
     onSelect(tokenId: string): void
-    renderOrder: number
 }
 
-export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect, renderOrder }) => {
+export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect }) => {
     const { classes } = useStyles()
     const [checked, setChecked] = useState(!!selectedTokenId && selectedTokenId === token.tokenId)
-    const [name, setName] = useState(token.tokenId)
     const isDisabled = useMemo(
         () => !!selectedTokenId && selectedTokenId !== token.tokenId,
         [selectedTokenId, token.tokenId],
@@ -66,11 +54,11 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect, r
                     background: (theme) => (theme.palette.mode === 'dark' ? MaskColorVar.primaryBackground : '#F9F9FA'),
                 }}
                 classes={{ titleWrap: classes.barTitle }}
-                subtitle={<span>{name}</span>}
+                subtitle={<span>{token.tokenId}</span>}
                 position="below"
             />
         )
-    }, [name])
+    }, [token.tokenId])
 
     return (
         <ImageListItem
@@ -86,12 +74,8 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect, r
                 contractAddress={token.address}
                 chainId={token.chainId}
                 tokenId={token.tokenId}
-                setERC721TokenName={setName}
-                renderOrder={renderOrder}
                 classes={{
                     fallbackImage: classes.fallbackImage,
-                    loadingPlaceholder: classes.loadingPlaceholder,
-                    wrapper: classes.wrapper,
                 }}
             />
             {NFTNameBar}

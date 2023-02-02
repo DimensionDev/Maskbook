@@ -115,9 +115,6 @@ const useStyles = makeStyles()((theme) => ({
         width: 64,
         height: 64,
     },
-    iframe: {
-        minHeight: 147,
-    },
     ellipsis: {
         overflow: 'hidden',
         textOverflow: 'ellipsis',
@@ -275,7 +272,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                     <List className={classes.tokenSelector}>
                         {tokenList.map((value, i) => (
                             <div key={i}>
-                                <NFTCard token={value} renderOrder={i} />
+                                <NFTCard token={value} />
                             </div>
                         ))}
                     </List>
@@ -320,13 +317,11 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
 
 interface NFTCardProps {
     token: NonFungibleToken<ChainId, SchemaType>
-    renderOrder: number
 }
 
 function NFTCard(props: NFTCardProps) {
-    const { token, renderOrder } = props
+    const { token } = props
     const { classes, cx } = useStyles()
-    const [name, setName] = useState(formatTokenId(token.tokenId, 2))
     return (
         <ListItem className={cx(classes.tokenSelectorWrapper)}>
             <NFTCardStyledAssetPlayer
@@ -334,19 +329,15 @@ function NFTCard(props: NFTCardProps) {
                 chainId={token.contract?.chainId}
                 url={token.metadata?.mediaURL || token.metadata?.imageURL}
                 tokenId={token.tokenId}
-                renderOrder={renderOrder}
-                setERC721TokenName={setName}
                 classes={{
                     fallbackImage: classes.fallbackImage,
-                    iframe: classes.iframe,
                     imgWrapper: classes.assetImgWrapper,
                 }}
                 disableQueryNonFungibleAsset
             />
-
             <div className={classes.nftNameWrapper}>
                 <Typography className={classes.nftName} color="textSecondary">
-                    {name}
+                    {formatTokenId(token.tokenId, 2)}
                 </Typography>
             </div>
         </ListItem>

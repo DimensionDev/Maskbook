@@ -33,14 +33,6 @@ const useStyles = makeStyles()((theme) => ({
         width: 30,
         height: 30,
     },
-    wrapper: {
-        width: '100% !important',
-        height: '100% !important',
-        background:
-            theme.palette.mode === 'light'
-                ? 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)'
-                : 'linear-gradient(180deg, #202020 0%, #181818 100%)',
-    },
     blocker: {
         position: 'absolute',
         zIndex: 2,
@@ -60,7 +52,6 @@ export interface CollectibleCardProps {
     asset: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     link?: string
     readonly?: boolean
-    renderOrder: number
     pluginID?: NetworkPluginID
     disableLink?: boolean
     showNetworkIcon?: boolean
@@ -71,7 +62,6 @@ export const CollectibleCard = memo(function CollectibleCard({
     wallet,
     asset,
     readonly,
-    renderOrder,
     pluginID,
     disableLink,
     showNetworkIcon,
@@ -92,12 +82,10 @@ export const CollectibleCard = memo(function CollectibleCard({
                     chainId={asset.chainId}
                     isImageOnly
                     url={asset.metadata?.mediaURL || asset.metadata?.imageURL}
-                    renderOrder={renderOrder}
                     tokenId={asset.tokenId}
                     pluginID={pluginID}
                     classes={{
                         fallbackImage: classes.fallbackImage,
-                        wrapper: classes.wrapper,
                         imgWrapper: classes.wrapper,
                     }}
                     showNetwork={showNetworkIcon}

@@ -77,10 +77,9 @@ const useStyles = makeStyles()((theme) => ({
 export interface CollectibleCardProps {
     asset: Web3Helper.NonFungibleAssetScope<'all'>
     onSend(): void
-    renderOrder: number
 }
 
-export const CollectibleCard = memo<CollectibleCardProps>(({ asset, onSend, renderOrder }) => {
+export const CollectibleCard = memo<CollectibleCardProps>(({ asset, onSend }) => {
     const t = useDashboardI18N()
     const { chainId } = useChainContext()
     const { classes } = useStyles()
