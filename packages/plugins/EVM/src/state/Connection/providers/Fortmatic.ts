@@ -4,7 +4,7 @@ import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
 import { timeout } from '@masknet/kit'
 import type { FmProvider } from 'fortmatic/dist/cjs/src/core/fm-provider.js'
-import { ChainId, chainResolver, ProviderEditor, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver, ProviderURL, ProviderType } from '@masknet/web3-shared-evm'
 import { createLookupTableResolver } from '@masknet/shared-base'
 import type { EVM_Provider } from '../types.js'
 import { BaseProvider } from './Base.js'
@@ -81,7 +81,7 @@ export default class FortmaticProvider extends BaseProvider implements EVM_Provi
     private createFortmatic(chainId: ChainIdFortmatic) {
         return new Fortmatic(resolveAPI_Key(chainId), {
             chainId,
-            rpcUrl: ProviderEditor.from(chainId),
+            rpcUrl: ProviderURL.from(chainId),
         })
     }
 

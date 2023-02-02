@@ -10,7 +10,7 @@ import {
     createWeb3Provider,
     ChainId,
     ProviderType,
-    ProviderEditor,
+    ProviderURL,
     EthereumMethodType,
 } from '@masknet/web3-shared-evm'
 import type { EVM_Provider } from '../types.js'
@@ -67,7 +67,7 @@ export class BaseProvider implements EVM_Provider {
                             chainId: toHex(chainId),
                             chainName: chainResolver.chainFullName(chainId) ?? chainResolver.chainName(chainId),
                             nativeCurrency: chainResolver.nativeCurrency(chainId),
-                            rpcUrls: ProviderEditor.fromOfficial(chainId),
+                            rpcUrls: ProviderURL.fromOfficial(chainId),
                             blockExplorerUrls: [chainResolver.explorerURL(chainId)?.url],
                         },
                     ],

@@ -1,5 +1,5 @@
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
-import { ChainId, ProviderEditor, isNativeTokenAddress, useTraderConstants } from '@masknet/web3-shared-evm'
+import { ChainId, ProviderURL, isNativeTokenAddress, useTraderConstants } from '@masknet/web3-shared-evm'
 import { useChainContext, useDoubleBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
 import { isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -40,7 +40,7 @@ export function useTrade(
                 fromAmount: inputAmount,
                 slippage: slippage / 100,
                 userAddr: account,
-                rpc: ProviderEditor.from(chainId as ChainId),
+                rpc: ProviderURL.from(chainId as ChainId),
                 chainId,
             })
         },

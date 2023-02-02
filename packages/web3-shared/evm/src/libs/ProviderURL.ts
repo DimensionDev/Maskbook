@@ -3,7 +3,7 @@ import { hexToNumber, sha3 } from 'web3-utils'
 import { getRPCConstants } from '../constants/constants.js'
 import type { ChainId } from '../types/index.js'
 
-export class ProviderEditor {
+export class ProviderURL {
     /**
      * @deprecated Don't new ProviderEditor()
      * Use ProviderEditor.from(chainId) stead.
@@ -24,7 +24,7 @@ export class ProviderEditor {
 
         return urlcat(RPC_URL, {
             chain_id: chainId,
-            seed: new ProviderEditor().seed,
+            seed: new ProviderURL().seed,
         })
     }
 

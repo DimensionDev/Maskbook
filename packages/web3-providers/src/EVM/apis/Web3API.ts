@@ -26,7 +26,7 @@ import {
     getTokenConstant,
     getEthereumConstant,
     TransactionSignature,
-    ProviderEditor,
+    ProviderURL,
 } from '@masknet/web3-shared-evm'
 import {
     FungibleToken,
@@ -141,7 +141,7 @@ export class Web3API
     }
 
     getWeb3(chainId: ChainId) {
-        return createWeb3SDK(ProviderEditor.from(chainId))
+        return createWeb3SDK(ProviderURL.from(chainId))
     }
 
     getWeb3Provider(chainId: ChainId) {
