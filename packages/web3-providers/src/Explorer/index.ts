@@ -1,4 +1,5 @@
 import urlcat from 'urlcat'
+import { ChainId, ExplorerURL } from '@masknet/web3-shared-evm'
 import type { Transaction } from './types.js'
 import { toTransaction } from './helpers.js'
 import type { ExplorerAPI } from '../entry-types.js'
@@ -6,10 +7,11 @@ import { fetchJSON } from '../entry-helpers.js'
 
 export class NativeExplorerAPI implements ExplorerAPI.Provider {
     async getLatestTransactions(
+        chainId: ChainId,
         account: string,
-        url: string,
-        { offset = 10, apikey }: ExplorerAPI.PageInfo = {},
+        { offset = 10 }: ExplorerAPI.Options = {},
     ): Promise<ExplorerAPI.Transaction[]> {
+        const { key, url } = ExplorerURL.from(chainId)
         const { result: transactions = [] } = await fetchJSON<{
             message: string
             result?: Transaction[]
@@ -24,7 +26,7 @@ export class NativeExplorerAPI implements ExplorerAPI.Provider {
                 page: 1,
                 offset,
                 sort: 'desc',
-                apikey,
+                apikey: key,
             }),
         )
         return transactions.map(toTransaction)
