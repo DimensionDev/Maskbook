@@ -1,7 +1,7 @@
-import { nth, memoize } from 'lodash-es'
+import { memoize } from 'lodash-es'
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
-import { AbiItem, hexToNumber, numberToHex, sha3, toHex, toNumber } from 'web3-utils'
+import { AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
 import {
     AddressType,
     SchemaType,
@@ -9,7 +9,6 @@ import {
     createContract,
     createWeb3Provider,
     createWeb3Request,
-    getRPCConstants,
     isValidAddress,
     Web3Provider,
     Transaction,
@@ -27,6 +26,7 @@ import {
     getTokenConstant,
     getEthereumConstant,
     TransactionSignature,
+    ProviderEditor,
 } from '@masknet/web3-shared-evm'
 import {
     FungibleToken,
@@ -61,9 +61,6 @@ import { fetchJSON } from '../../entry-helpers.js'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
-const FOOTPRINT = sha3([navigator.userAgent, navigator.language, screen.width, screen.height].join())
-const SEED = FOOTPRINT ? hexToNumber(FOOTPRINT.slice(0, 10)) : 0
-console.log(`The EVM RPC selection seed is ${SEED}.`)
 
 const createWeb3SDK = memoize(
     (url: string) => new Web3(url),
@@ -144,13 +141,7 @@ export class Web3API
     }
 
     getWeb3(chainId: ChainId) {
-        const { RPC_URLS = [] } = getRPCConstants(chainId)
-        if (!RPC_URLS.length) throw new Error('No RPC preset.')
-
-        const RPC_URL = nth(RPC_URLS, SEED % RPC_URLS.length)
-        if (!RPC_URL) throw new Error('Failed to create web3 provider.')
-
-        return createWeb3SDK(RPC_URL)
+        return createWeb3SDK(ProviderEditor.from(chainId))
     }
 
     getWeb3Provider(chainId: ChainId) {
