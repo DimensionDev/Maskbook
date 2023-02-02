@@ -261,7 +261,9 @@ const ContractInteraction = memo(() => {
                 if (!signableConfig) return
                 const connection = Connection?.getConnection?.()
 
-                const gas = await connection?.estimateTransaction?.(signableConfig)
+                const gas = await connection?.estimateTransaction?.(signableConfig, undefined, {
+                    paymentToken: address,
+                })
 
                 if (!gas) return
 
@@ -348,7 +350,7 @@ const ContractInteraction = memo(() => {
 
         if (!gasCurrency || isNativeTokenAddress(gasCurrency)) return result
         if (!currencyRatio) return ZERO
-        return result.dividedBy(currencyRatio)
+        return new BigNumber(result.multipliedBy(currencyRatio).toFixed(0))
     }, [
         gas,
         isSupport1559,
@@ -358,6 +360,7 @@ const ContractInteraction = memo(() => {
         gasCurrency,
         currencyRatio,
     ])
+
     // token decimals
     const tokenAmount = (amount ?? 0) as number
     const tokenDecimals = token?.decimals

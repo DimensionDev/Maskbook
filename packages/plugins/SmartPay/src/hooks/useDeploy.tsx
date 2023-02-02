@@ -101,29 +101,33 @@ export function useDeploy(
             )
             if (!hash) throw new Error('Deploy Failed')
 
-            return TransactionWatcher?.emitter.on('progress', async (_, txHash, status) => {
-                try {
-                    if (txHash !== hash || !signAccount.address || status !== TransactionStatusType.SUCCEED) return
+            return new Promise((resolve, reject) => {
+                return TransactionWatcher?.emitter.on('progress', async (_, txHash, status) => {
+                    try {
+                        if (txHash !== hash || !signAccount.address || status !== TransactionStatusType.SUCCEED) return
 
-                    const result = await connection?.deploy?.(signAccount.address, undefined, {
-                        chainId,
-                    })
+                        const result = await connection?.deploy?.(signAccount.address, signAccount.identifier, {
+                            chainId,
+                        })
 
-                    Wallet?.addWallet({
-                        name: 'Smart Pay',
-                        owner: signAccount.address,
-                        address: contractAccount.address,
-                        hasDerivationPath: false,
-                        hasStoredKeyInfo: false,
-                        id: contractAccount.address,
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                    }).then(() => {
-                        onSuccess?.()
-                    })
-                } catch (error) {
-                    console.log(error)
-                }
+                        Wallet?.addWallet({
+                            name: 'Smart Pay',
+                            owner: signAccount.address,
+                            address: contractAccount.address,
+                            hasDerivationPath: false,
+                            hasStoredKeyInfo: false,
+                            id: contractAccount.address,
+                            createdAt: new Date(),
+                            updatedAt: new Date(),
+                        }).then(() => {
+                            onSuccess?.()
+                            resolve(result)
+                        })
+                    } catch (error) {
+                        console.log(error)
+                        reject(error)
+                    }
+                })
             })
         } catch (error) {
             if (error instanceof Error) {
