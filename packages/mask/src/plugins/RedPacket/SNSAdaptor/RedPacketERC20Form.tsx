@@ -274,7 +274,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         expectedChainId={chainId}
                         forceShowingWrongNetworkButton>
-                        <WalletConnectedBoundary>
+                        <WalletConnectedBoundary expectedChainId={chainId}>
                             <EthereumERC20TokenApprovedBoundary
                                 onlyInfiniteUnlock
                                 amount={totalAmount.toFixed()}

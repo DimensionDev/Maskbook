@@ -123,7 +123,11 @@ export function RedPacket(props: RedPacketProps) {
 
     // context
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+
+    const token = payload.token
+
+    const payloadChainId = token?.chainId ?? chainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
+    const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: payloadChainId })
 
     // #region token detailed
     const {
@@ -132,11 +136,9 @@ export function RedPacket(props: RedPacketProps) {
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account ?? payload.contract_address, payload)
 
-    const token = payload.token
-
     // #endregion
 
-    const { canFetch, canClaim, canRefund, listOfStatus } = availabilityComputed
+    const { canClaim, canRefund, listOfStatus } = availabilityComputed
 
     // #region remote controlled transaction dialog
     const postLink = usePostLink()
@@ -146,6 +148,7 @@ export function RedPacket(props: RedPacketProps) {
         account,
         payload.rpid,
         payload.contract_version > 3 ? web3?.eth.accounts.sign(account, payload.password).signature : payload.password,
+        payloadChainId,
     )
 
     const shareText = useMemo(() => {
@@ -246,7 +249,7 @@ export function RedPacket(props: RedPacketProps) {
             <Card className={classes.root} component="article" elevation={0}>
                 <div className={classes.header}>
                     {/* it might be fontSize: 12 on twitter based on theme? */}
-                    {canFetch && listOfStatus.length ? (
+                    {listOfStatus.length ? (
                         <Typography className={classes.label} variant="body2">
                             {resolveRedPacketStatus(listOfStatus)}
                         </Typography>
@@ -272,7 +275,7 @@ export function RedPacket(props: RedPacketProps) {
             {listOfStatus.includes(RedPacketStatus.empty) ||
             (!canRefund && listOfStatus.includes(RedPacketStatus.expired)) ? null : (
                 <OperationFooter
-                    chainId={payload.token?.chainId ?? chainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet}
+                    chainId={payloadChainId}
                     canClaim={canClaim}
                     canRefund={canRefund}
                     isClaiming={isClaiming}

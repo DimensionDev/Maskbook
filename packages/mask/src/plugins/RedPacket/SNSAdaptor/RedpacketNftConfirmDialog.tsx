@@ -296,6 +296,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 <PluginWalletStatusBar>
                     <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
                         <WalletConnectedBoundary
+                            expectedChainId={chainId}
                             classes={{
                                 connectWallet: cx(classes.button, classes.sendButton),
                             }}>

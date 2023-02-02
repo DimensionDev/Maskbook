@@ -61,7 +61,6 @@ export function OperationFooter({
         WalletMessages.events.selectProviderDialogUpdated,
     )
     // #endregion
-
     const ObtainButton = () => {
         if (!canClaim && !canRefund) return null
 
@@ -103,28 +102,25 @@ export function OperationFooter({
 
     return (
         <Box style={{ flex: 1, padding: 12 }}>
-            <ChainBoundary
-                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                expectedChainId={chainId ?? ChainId.Mainnet}
-                ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
-                <WalletConnectedBoundary
-                    hideRiskWarningConfirmed
-                    startIcon={<Icons.ConnectWallet size={18} />}
-                    ActionButtonProps={{ variant: 'roundedDark' }}>
-                    <Box className={classes.footer}>
-                        {canRefund ? null : (
-                            <ActionButton
-                                fullWidth
-                                variant="roundedDark"
-                                startIcon={<Icons.Shared size={18} />}
-                                onClick={onShare}>
-                                {tr('share')}
-                            </ActionButton>
-                        )}
+            <Box className={classes.footer}>
+                <ActionButton fullWidth variant="roundedDark" startIcon={<Icons.Shared size={18} />} onClick={onShare}>
+                    {tr('share')}
+                </ActionButton>
+
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={chainId ?? ChainId.Mainnet}
+                    switchChainWithoutPopup
+                    ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
+                    <WalletConnectedBoundary
+                        hideRiskWarningConfirmed
+                        expectedChainId={chainId ?? ChainId.Mainnet}
+                        startIcon={<Icons.ConnectWallet size={18} />}
+                        ActionButtonProps={{ variant: 'roundedDark' }}>
                         <ObtainButton />
-                    </Box>
-                </WalletConnectedBoundary>
-            </ChainBoundary>
+                    </WalletConnectedBoundary>
+                </ChainBoundary>
+            </Box>
         </Box>
     )
 }

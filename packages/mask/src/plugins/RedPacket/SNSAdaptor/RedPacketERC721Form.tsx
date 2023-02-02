@@ -390,7 +390,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         expectedChainId={chainId}
                         forceShowingWrongNetworkButton>
-                        <WalletConnectedBoundary>
+                        <WalletConnectedBoundary expectedChainId={chainId}>
                             <EthereumERC721TokenApprovedBoundary
                                 validationMessage={validationMessage}
                                 owner={account}

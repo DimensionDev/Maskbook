@@ -370,6 +370,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                 ActionButtonPromiseProps={{ variant: 'roundedDark' }}
                                 expectedChainId={payload.chainId}>
                                 <WalletConnectedBoundary
+                                    expectedChainId={payload.chainId}
                                     startIcon={<Icons.ConnectWallet size={18} />}
                                     classes={{
                                         connectWallet: classes.button,
