@@ -30,9 +30,9 @@ export class ChainbaseAPI implements RedPacketBaseAPI.DataSourceProvider<ChainId
                             senderAddress,
                             contractAddress,
                             chainId,
-                            methodId: `${methodId}%`,
+                            methodId: `${methodId}%`, // '%' for sql string match.
                             size: MAX_SIZE_PER_PAGE,
-                            offset: Number(indicator?.id ? indicator?.id : 0) * MAX_SIZE_PER_PAGE,
+                            offset: Number(indicator?.id ?? 0) * MAX_SIZE_PER_PAGE,
                         }),
                     )
 
