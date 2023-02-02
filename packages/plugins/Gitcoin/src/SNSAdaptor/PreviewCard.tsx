@@ -17,7 +17,7 @@ import { useGrant } from './hooks/useGrant.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
-        padding: theme.spacing(1.5),
+        padding: theme.spacing(0, 1.5, 1.5),
         maxHeight: 500,
         overflow: 'auto',
         display: 'flex',
