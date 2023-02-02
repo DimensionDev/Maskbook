@@ -1,7 +1,5 @@
-import { PluginSnapshotRPC } from '../../messages.js'
 import type { ProposalIdentifier, VoteItem } from '../../types.js'
 import { cache, use } from 'react'
-import { isSameAddress } from '@masknet/web3-shared-base'
 import { useProposal } from './useProposal.js'
 import { sumBy } from 'lodash-es'
 
@@ -11,15 +9,6 @@ export function useVotes(identifier: ProposalIdentifier, account?: string) {
 }
 async function Suspender(id: ProposalIdentifier['id'], space: ProposalIdentifier['space'], account?: string) {
     const proposal = useProposal(id)
-
-    const voters = proposal.votes.map((v) => v.voter)
-    const scores = await PluginSnapshotRPC.getScores(
-        proposal.snapshot,
-        voters,
-        proposal.network,
-        space,
-        proposal.strategies,
-    )
     const strategies = proposal.strategies
     return proposal.votes
         .map((v): VoteItem => {
@@ -49,12 +38,11 @@ async function Suspender(id: ProposalIdentifier['id'], space: ProposalIdentifier
                     : undefined,
                 address: v.voter,
                 authorIpfsHash: v.ipfs ?? v.id,
-                balance: sumBy(scores, (score) => score[v.voter.toLowerCase()] ?? 0),
-                scores: strategies.map((_strategy, i) => scores[i][v.voter] || 0),
+                balance: v.vp,
+                scores: [],
                 strategySymbol: proposal.space.symbol ?? strategies[0].params.symbol,
                 timestamp: v.created,
             }
         })
-        .sort((a, b) => (isSameAddress(a.address, account) ? -1 : b.balance - a.balance))
         .filter((v) => v.balance > 0)
 }
