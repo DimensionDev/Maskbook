@@ -2,7 +2,7 @@ import { makeStyles, ActionButton } from '@masknet/theme'
 import { explorerResolver, networkResolver } from '@masknet/web3-shared-evm'
 import { Launch as LaunchIcon } from '@mui/icons-material'
 import { Card, CardHeader, Typography, Link, CardMedia, CardContent, Button, Box, Skeleton } from '@mui/material'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { useI18N } from '../locales/index.js'
 import { WalletConnectedBoundary, NFTCardStyledAssetPlayer, ChainBoundary } from '@masknet/shared'
@@ -166,16 +166,9 @@ const useStyles = makeStyles()((theme) => ({
         maxWidth: 400,
         fontSize: '1.5rem',
     },
-    assetPlayerIframe: {
-        marginBottom: 16,
-        height: '160px !important',
-    },
     imgWrapper: {
         maxWidth: 180,
         marginBottom: 10,
-    },
-    assetPlayerVideoIframe: {
-        minWidth: 'fit-content',
     },
     fallbackImage: {
         height: 160,
@@ -215,8 +208,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const openAddressLinkOnExplorer = useCallback(() => {
         openWindow(explorerResolver.addressLink(payload.chainId, payload.contractAddress))
     }, [payload])
-
-    const [sourceType, setSourceType] = useState('')
 
     useEffect(() => {
         retryAvailability()
@@ -293,12 +284,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                             chainId={payload.chainId}
                             contractAddress={payload.contractAddress}
                             tokenId={availability.claimed_id}
-                            setSourceType={setSourceType}
                             classes={{
-                                iframe: cx(
-                                    classes.assetPlayerIframe,
-                                    sourceType === 'video' ? classes.assetPlayerVideoIframe : '',
-                                ),
                                 imgWrapper: classes.imgWrapper,
                                 fallbackImage: classes.fallbackImage,
                             }}
