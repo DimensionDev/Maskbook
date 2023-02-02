@@ -1,4 +1,3 @@
-import { timeout } from '@masknet/kit'
 import type { CompositionType } from '@masknet/plugin-infra/content-script'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
@@ -112,31 +111,25 @@ export const FileManagementProvider: FC<Props> = memo(({ children, compositionTy
             ])
             setUploadProgress(id, 0)
 
-            const payloadTxID = await timeout(
-                PluginFileServiceRPC.makeAttachment(provider, {
-                    key,
-                    name: file.name,
-                    type: file.type,
-                    block: buffer,
-                }),
-                60000,
-            )
+            const payloadTxID = await PluginFileServiceRPC.makeAttachment(provider, {
+                key,
+                name: file.name,
+                type: file.type,
+                block: buffer,
+            })
             // Uploading
             for await (const progress of PluginFileServiceRPCGenerator.upload(provider, payloadTxID)) {
                 setUploadProgress(id, progress)
             }
 
-            const landingTxID = await timeout(
-                PluginFileServiceRPC.uploadLandingPage(provider, {
-                    name: file.name,
-                    size: file.size,
-                    txId: payloadTxID,
-                    type: file.type,
-                    key,
-                    useCDN,
-                }),
-                300000, // = 5 minutes
-            )
+            const landingTxID = await PluginFileServiceRPC.uploadLandingPage(provider, {
+                name: file.name,
+                size: file.size,
+                txId: payloadTxID,
+                type: file.type,
+                key,
+                useCDN,
+            })
 
             const fileInfo: FileInfo = {
                 type: 'file',

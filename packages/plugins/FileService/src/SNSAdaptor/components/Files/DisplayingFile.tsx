@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { formatFileSize } from '@masknet/shared-base'
+import { formatFileSize } from '@masknet/kit'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
 import { FC, memo } from 'react'
@@ -61,7 +61,7 @@ export const DisplayingFile: FC<DisplayingFileProps> = memo(({ file, onSave, onD
                     </Button>
                 </div>
             }>
-            <Typography className={classes.desc}>{formatFileSize(file.size)}</Typography>
+            <Typography className={classes.desc}>{formatFileSize(file.size, true)}</Typography>
             {file.key ? (
                 <Typography className={classes.meta}>
                     <Translate.file_key

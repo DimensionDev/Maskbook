@@ -14,7 +14,8 @@ import { FileViewer } from './FileViewer.js'
 import { setupStorage, StorageOptions } from './storage.js'
 import { openBrowser, openPicker } from './emitter.js'
 import { FileServiceInjection } from './FileServiceInjection.js'
-import { EMPTY_LIST, formatFileSize } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { formatFileSize } from '@masknet/kit'
 
 type BadgeRenderer<T> = (f: T) => Plugin.SNSAdaptor.BadgeDescriptor
 
@@ -100,7 +101,7 @@ export default definition
 
 function onAttachedFile(file: FileInfo): Plugin.SNSAdaptor.BadgeDescriptor {
     const name = truncate(file.name, { length: 10 })
-    const size = formatFileSize(file.size)
+    const size = formatFileSize(file.size, true)
 
     return {
         text: (
