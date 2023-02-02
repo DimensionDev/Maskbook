@@ -1,18 +1,21 @@
-import { ReactNode, useCallback } from 'react'
-import { useSubscription } from 'use-subscription'
-import type { Option } from 'ts-results-es'
+import { Icons } from '@masknet/icons'
 import {
-    useActivatedPluginsSNSAdaptor,
-    registeredPlugins,
-    usePostInfoDetails,
+    BooleanPreference,
     Plugin,
     PluginI18NFieldRender,
+    registeredPlugins,
+    useActivatedPluginsSNSAdaptor,
+    usePostInfoDetails,
 } from '@masknet/plugin-infra/content-script'
 import { MaskPostExtraInfoWrapper } from '@masknet/shared'
-import { Box, BoxProps, Button, Skeleton, useTheme } from '@mui/material'
-import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { makeStyles, MaskLightTheme } from '@masknet/theme'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { Box, BoxProps, Button, Skeleton, Typography, useTheme } from '@mui/material'
+import { ReactNode, useCallback } from 'react'
+import { useAsync } from 'react-use'
+import type { Option } from 'ts-results-es'
+import { useSubscription } from 'use-subscription'
 import Services from '../../extension/service.js'
 import { useI18N } from '../../utils/index.js'
 
@@ -41,7 +44,7 @@ export function useDisabledPluginSuggestionFromPost(postContent: Option<string>,
 
 export function useDisabledPluginSuggestionFromMeta(meta: undefined | ReadonlyMap<string, unknown>) {
     const disabled = useDisabledPlugins().filter((x) => x.contribution?.metadataKeys)
-    if (!meta) return []
+    if (!meta) return EMPTY_LIST
     const keys = [...meta.keys()]
 
     const matches = disabled.filter((x) => {
@@ -91,6 +94,15 @@ export function PossiblePluginSuggestionUISingle(props: {
         }
     }, [lackHostPermission, define])
 
+    const { value: disabled } = useAsync(async () => {
+        const status = await Services.Settings.getPluginMinimalModeEnabled(define.ID)
+        return status === BooleanPreference.True
+    }, [define.ID])
+
+    const ButtonIcon = lackHostPermission ? Icons.Approve : Icons.Plugin
+    const wrapperContent = content ?? <FallbackContent disabled={disabled} height={74} />
+    const buttonLabel = lackHostPermission ? t('approve') : t('plugin_enables')
+
     return (
         <MaskPostExtraInfoWrapper
             ID={props.define.ID}
@@ -106,13 +118,7 @@ export function PossiblePluginSuggestionUISingle(props: {
             action={
                 <Button
                     size="small"
-                    startIcon={
-                        lackHostPermission ? (
-                            <Icons.Approve size={18} sx={{ lineHeight: 1 }} />
-                        ) : (
-                            <Icons.Plugin size={18} sx={{ lineHeight: 1 }} />
-                        )
-                    }
+                    startIcon={<ButtonIcon size={18} sx={{ lineHeight: 1 }} />}
                     variant="roundedDark"
                     onClick={onClick}
                     sx={{
@@ -127,26 +133,38 @@ export function PossiblePluginSuggestionUISingle(props: {
                             backgroundColor: theme.palette.maskColor.dark,
                         },
                     }}>
-                    {lackHostPermission ? t('approve') : t('plugin_enables')}
+                    {buttonLabel}
                 </Button>
             }
-            content={content ?? <Rectangle style={{ paddingLeft: 8, marginBottom: 42 }} />}
+            content={wrapperContent}
         />
     )
 }
 
-const useRectangleStyles = makeStyles()(() => ({
+const useStyles = makeStyles()(() => ({
+    text: {
+        color: MaskLightTheme.palette.maskColor.main,
+    },
     rectangle: {
-        background: 'rgba(255, 255, 255, 0.5)',
+        backgroundColor: 'rgba(255,255,255,0.5)',
     },
 }))
 
-export interface RectangleProps extends BoxProps {}
+export interface FallbackContentProps extends BoxProps {
+    disabled?: boolean
+}
 
-export function Rectangle(props: RectangleProps) {
-    const { classes } = useRectangleStyles()
+export function FallbackContent({ disabled, ...rest }: FallbackContentProps) {
+    const { t } = useI18N()
+    const { classes } = useStyles()
+    if (disabled)
+        return (
+            <Box component="div" flexDirection="column" justifyContent="center" {...rest}>
+                <Typography className={classes.text}>{t('plugin_disabled_tip')}</Typography>
+            </Box>
+        )
     return (
-        <Box component="div" {...props}>
+        <Box component="div" flexDirection="column" pl={1} justifyContent="center" {...rest}>
             <Skeleton className={classes.rectangle} variant="text" animation={false} width={103} height={16} />
             <Skeleton className={classes.rectangle} variant="text" animation={false} width={68} height={16} />
             <Skeleton className={classes.rectangle} variant="text" animation={false} width={48} height={16} />

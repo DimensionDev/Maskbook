@@ -1,5 +1,5 @@
 import { Typography, SnackbarContent, Link } from '@mui/material'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles, MaskColorVar, MaskLightTheme } from '@masknet/theme'
 import { Suspense, ReactNode, useMemo, forwardRef, useImperativeHandle, useState } from 'react'
 import { useSharedI18N } from '@masknet/shared'
 import { Box } from '@mui/system'
@@ -77,7 +77,9 @@ const useStyles = makeStyles<{
         },
         providerBy: {
             marginRight: theme.spacing(0.5),
-            color: theme.palette.mode === 'dark' ? theme.palette.grey[700] : theme.palette.text.secondary,
+            fontSize: 14,
+            fontWeight: 700,
+            color: MaskLightTheme.palette.maskColor.second,
         },
     }
 })
@@ -97,7 +99,7 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
             <Typography
                 variant="body1"
                 fontSize={14}
-                fontWeight="500"
+                fontWeight="700"
                 component="div"
                 color={MaskColorVar.textPluginColor}>
                 {publisher}
@@ -105,13 +107,17 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
         )
         return (
             <Box className={classes.provider}>
-                <Typography variant="body1" fontSize={14} fontWeight="400" className={classes.providerBy}>
+                <Typography variant="body1" className={classes.providerBy}>
                     {ID === PluginID.CyberConnect ? t.powered_by() : t.plugin_provider_by()}
                 </Typography>
                 {main}
                 {publisherLink ? (
                     <Link href={publisherLink} underline="none" target="_blank" rel="noopener">
-                        <Icons.Provider size={18} style={{ marginLeft: 4 }} />
+                        <Icons.Provider
+                            size={18}
+                            style={{ marginLeft: 4 }}
+                            color={MaskLightTheme.palette.maskColor.main}
+                        />
                     </Link>
                 ) : null}
             </Box>

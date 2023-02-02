@@ -9,7 +9,7 @@ import { BigNumber } from 'bignumber.js'
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html'
 import { useMemo } from 'react'
 import urlcat from 'urlcat'
-import { SUPPORTED_CHAIN_IDS } from '../constants.js'
+import { SUPPORTED_CHAIN_IDS, SUPPORTED_TENANTS, TenantToChainIconMap } from '../constants.js'
 import { Translate, useI18N } from '../locales/i18n_generated.js'
 import { useDonate } from './contexts/index.js'
 import { grantDetailStyle } from './gitcoin-grant-detail-style.js'
@@ -17,7 +17,7 @@ import { useGrant } from './hooks/useGrant.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
-        padding: theme.spacing(1.5),
+        padding: theme.spacing(0, 1.5, 1.5),
         maxHeight: 500,
         overflow: 'auto',
         display: 'flex',
@@ -54,6 +54,7 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(2.5),
         borderRadius: 12,
         overflow: 'auto',
+        overscrollBehavior: 'contain',
     },
     network: {
         marginRight: theme.spacing(1.5),
@@ -155,15 +156,21 @@ export function PreviewCard(props: PreviewCardProps) {
         )
     if (!grant) return null
 
-    const isSupportedRuntime = pluginID === NetworkPluginID.PLUGIN_EVM && SUPPORTED_CHAIN_IDS.includes(chainId)
+    const tenant = grant.tenants[0]
+
+    const isSupportedRuntime =
+        pluginID === NetworkPluginID.PLUGIN_EVM &&
+        SUPPORTED_CHAIN_IDS.includes(chainId) &&
+        SUPPORTED_TENANTS.includes(tenant)
 
     // Use handle_1 as Gitcoin does
     const twitterProfile = grant.twitter_handle_1 ? `https://twitter.com/${grant.twitter_handle_1}` : null
 
+    const ChainIcon = TenantToChainIconMap[tenant]
     return (
         <article className={classes.card}>
             <div className={classes.header}>
-                <Icons.ETH className={classes.network} size={36} />
+                {ChainIcon ? <ChainIcon className={classes.network} size={36} /> : null}
                 <Stack flexGrow={1} overflow="auto">
                     <Box display="flex" flexDirection="row" alignItems="center">
                         <Typography variant="h1" className={classes.title} title={grant.title}>
@@ -195,11 +202,17 @@ export function PreviewCard(props: PreviewCardProps) {
                             />
                         </Typography>
                         <div className={classes.admin}>
-                            <Typography>
+                            <Typography color={theme.palette.maskColor.second}>
                                 <Translate.admin
                                     values={{ admin: grant.admin_profile.handle }}
                                     components={{
-                                        bold: <Typography component="span" className={classes.bold} />,
+                                        bold: (
+                                            <Link
+                                                className={classes.bold}
+                                                target="_blank"
+                                                href={`https://gitcoin.co/profile/${grant.admin_profile.handle}`}
+                                            />
+                                        ),
                                     }}
                                 />
                             </Typography>

@@ -23,7 +23,7 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
         return attemptUntil(
             [
                 async () =>
-                    this.ExplorerClient.getHistories(
+                    this.ChainbaseClient.getHistories(
                         chainId,
                         senderAddress,
                         contractAddress,
@@ -32,7 +32,7 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
                         endBlock,
                     ),
                 async () =>
-                    this.ChainbaseClient.getHistories(
+                    this.ExplorerClient.getHistories(
                         chainId,
                         senderAddress,
                         contractAddress,

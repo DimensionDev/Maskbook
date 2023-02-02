@@ -1,7 +1,17 @@
 import type { PluginWrapperComponent, Plugin, PluginWrapperMethods } from '@masknet/plugin-infra/content-script'
 import { MaskPostExtraPluginWrapper, useSharedI18N } from '@masknet/shared'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { Typography, useTheme } from '@mui/material'
-import { forwardRef, memo, PropsWithChildren, ReactElement, useImperativeHandle, useMemo, useState } from 'react'
+import {
+    forwardRef,
+    memo,
+    PropsWithChildren,
+    ReactElement,
+    useImperativeHandle,
+    useMemo,
+    useRef,
+    useState,
+} from 'react'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { useCheckPermissions, useGrantPermissions } from '../DataSource/usePluginHostPermission.js'
 import { PossiblePluginSuggestionUISingle } from './DisabledPluginSuggestion.js'
@@ -25,26 +35,26 @@ const PermissionBoundary = memo<PermissionBoundaryProps>(({ permissions, fallbac
 
 export const MaskPostExtraPluginWrapperWithPermission: PluginWrapperComponent<Plugin.SNSAdaptor.Definition> =
     forwardRef((props, ref) => {
-        const [postWrapperRef, setRef] = useState<PluginWrapperMethods | null>(null)
+        const wrapperMethodsRef = useRef<PluginWrapperMethods | null>(null)
         const theme = useTheme()
         const t = useSharedI18N()
         const [open, setOpen] = useState<boolean>(false)
 
         const refItem = useMemo((): PluginWrapperMethods => {
             return {
-                setWidth: (width) => postWrapperRef?.setWidth(width),
+                setWidth: (width) => wrapperMethodsRef.current?.setWidth(width),
                 setWrap: (open) => {
                     setOpen(open)
-                    postWrapperRef?.setWrap(open)
+                    wrapperMethodsRef.current?.setWrap(open)
                 },
-                setWrapperName: (name) => postWrapperRef?.setWrapperName(name),
+                setWrapperName: (name) => wrapperMethodsRef.current?.setWrapperName(name),
             }
-        }, [postWrapperRef])
+        }, [])
 
         useImperativeHandle(ref, () => refItem, [refItem])
         return (
             <PermissionBoundary
-                permissions={props.definition.enableRequirement.host_permissions ?? []}
+                permissions={props.definition.enableRequirement.host_permissions ?? EMPTY_LIST}
                 fallback={
                     open ? (
                         <PossiblePluginSuggestionUISingle
@@ -71,7 +81,7 @@ export const MaskPostExtraPluginWrapperWithPermission: PluginWrapperComponent<Pl
                 <MaskPostExtraPluginWrapper
                     {...props}
                     ref={(methods) => {
-                        if (methods) setRef(methods)
+                        if (methods) wrapperMethodsRef.current = methods
                     }}
                 />
             </PermissionBoundary>
