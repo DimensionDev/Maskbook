@@ -1,15 +1,31 @@
-import type { ProposalIdentifier, VoteItem } from '../../types.js'
+import type { Proposal, ProposalIdentifier, VoteItem } from '../../types.js'
 import { cache, use } from 'react'
 import { useProposal } from './useProposal.js'
 import { sumBy } from 'lodash-es'
+import { isSameAddress } from '@masknet/web3-shared-base'
 
 const Request = cache(Suspender)
 export function useVotes(identifier: ProposalIdentifier, account?: string) {
     return use(Request(identifier.id, identifier.space, account))
 }
+
+function getScores(proposal: Proposal) {
+    const scores = []
+    for (let i = 0; i < proposal.choices.length; i += 1) {
+        const score: Record<string, number> = {}
+        for (const vote of proposal.votes) {
+            if (vote.vp_by_strategy[i] > 0) score[vote.voter.toLowerCase()] = vote.vp_by_strategy[i]
+        }
+        scores.push(score)
+    }
+
+    return scores
+}
+
 async function Suspender(id: ProposalIdentifier['id'], space: ProposalIdentifier['space'], account?: string) {
     const proposal = useProposal(id)
     const strategies = proposal.strategies
+    const scores = getScores(proposal)
     return proposal.votes
         .map((v): VoteItem => {
             const choices =
@@ -38,11 +54,12 @@ async function Suspender(id: ProposalIdentifier['id'], space: ProposalIdentifier
                     : undefined,
                 address: v.voter,
                 authorIpfsHash: v.ipfs ?? v.id,
-                balance: v.vp,
-                scores: [],
+                balance: sumBy(scores, (score) => score[v.voter.toLowerCase()] ?? 0),
+                scores: strategies.map((_strategy, i) => scores[i][v.voter] || 0),
                 strategySymbol: proposal.space.symbol ?? strategies[0].params.symbol,
                 timestamp: v.created,
             }
         })
+        .sort((a, b) => (isSameAddress(a.address, account) ? -1 : b.balance - a.balance))
         .filter((v) => v.balance > 0)
 }
