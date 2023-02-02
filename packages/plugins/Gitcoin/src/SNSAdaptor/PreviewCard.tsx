@@ -9,7 +9,7 @@ import { BigNumber } from 'bignumber.js'
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html'
 import { useMemo } from 'react'
 import urlcat from 'urlcat'
-import { SUPPORTED_CHAIN_IDS, TenentToChainIconMap } from '../constants.js'
+import { SUPPORTED_CHAIN_IDS, SUPPORTED_TENANTS, TenantToChainIconMap } from '../constants.js'
 import { Translate, useI18N } from '../locales/i18n_generated.js'
 import { useDonate } from './contexts/index.js'
 import { grantDetailStyle } from './gitcoin-grant-detail-style.js'
@@ -155,12 +155,17 @@ export function PreviewCard(props: PreviewCardProps) {
         )
     if (!grant) return null
 
-    const isSupportedRuntime = pluginID === NetworkPluginID.PLUGIN_EVM && SUPPORTED_CHAIN_IDS.includes(chainId)
+    const tenant = grant.tenants[0]
+
+    const isSupportedRuntime =
+        pluginID === NetworkPluginID.PLUGIN_EVM &&
+        SUPPORTED_CHAIN_IDS.includes(chainId) &&
+        SUPPORTED_TENANTS.includes(tenant)
 
     // Use handle_1 as Gitcoin does
     const twitterProfile = grant.twitter_handle_1 ? `https://twitter.com/${grant.twitter_handle_1}` : null
 
-    const ChainIcon = TenentToChainIconMap[grant.tenants[0]]
+    const ChainIcon = TenantToChainIconMap[tenant]
     return (
         <article className={classes.card}>
             <div className={classes.header}>
