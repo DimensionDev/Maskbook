@@ -978,5 +978,6 @@
     "plugin_collectible_insufficient_balance": "crwdns7963:0crwdne7963:0",
     "persona_boundary_create_persona": "crwdns18594:0crwdne18594:0",
     "persona_boundary_connect_persona": "crwdns18596:0crwdne18596:0",
-    "persona_boundary_verify_persona": "crwdns18598:0crwdne18598:0"
+    "persona_boundary_verify_persona": "crwdns18598:0crwdne18598:0",
+    "plugin_disabled_tip": "crwdns19815:0crwdne19815:0"
 }
