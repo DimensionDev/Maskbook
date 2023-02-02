@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { GITCOIN_API_GRANTS_V1 } from '../constants.js'
+import { GITCOIN_API_GRANTS_V1, TenantTypes } from '../constants.js'
 
 export interface Metadata {}
 
@@ -39,6 +39,7 @@ export interface GitcoinGrant {
     team_members: AdminProfile[]
     twitter_handle_1?: string
     twitter_handle_2?: string
+    tenants: TenantTypes[]
 }
 
 export async function fetchGrant(id: string) {
