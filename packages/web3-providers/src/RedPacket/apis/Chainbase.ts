@@ -13,7 +13,7 @@ import { fetchJSON } from '../../entry-helpers.js'
 import { TRANSACTIONS_BY_CONTRACT_METHOD_ENDPOINT, MAX_SIZE_PER_PAGE } from '../constants.js'
 import type { Tx } from '../../Chainbase/types.js'
 
-export class ChainbaseAPI implements RedPacketBaseAPI.DataSourceProvider<ChainId, SchemaType> {
+export class ChainbaseAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
     async getHistories(
         chainId: ChainId,
         senderAddress: string,

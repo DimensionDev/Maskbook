@@ -6,7 +6,7 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { RedPacketBaseAPI } from '../../types/RedPacket.js'
 import { fetchJSON } from '../../entry-helpers.js'
 
-export class ExplorerAPI implements RedPacketBaseAPI.DataSourceProvider<ChainId, SchemaType> {
+export class ExplorerAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
     async getHistories(
         chainId: ChainId,
         senderAddress: string,
