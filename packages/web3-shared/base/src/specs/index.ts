@@ -93,9 +93,6 @@ export enum SourceType {
 
     // Token List
     R2D2 = 'R2D2',
-
-    // Red Packet
-    RedPacket = 'RedPacket',
 }
 
 export enum SearchResultType {

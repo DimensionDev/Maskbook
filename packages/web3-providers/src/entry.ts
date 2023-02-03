@@ -9,7 +9,7 @@ import {
     NFTScanNonFungibleTokenAPI_Solana,
 } from './NFTScan/index.js'
 import { ZoraAPI } from './Zora/index.js'
-import { EtherscanExplorerAPI } from './Etherscan/index.js'
+import { EtherscanExplorerAPI, EtherscanRedPacketAPI } from './Etherscan/index.js'
 import { RiskWarningAPI } from './RiskWarning/index.js'
 import { RSS3API, RSS3NonFungibleTokenAPI } from './RSS3/index.js'
 import { TwitterAPI } from './Twitter/index.js'
@@ -36,6 +36,7 @@ import {
     ChainbaseFungibleTokenAPI,
     ChainbaseNonFungibleTokenAPI,
     ChainbaseDomainAPI,
+    ChainbaseRedPacketAPI,
 } from './Chainbase/index.js'
 import { SolanaFungibleAPI, SolanaNonFungibleAPI } from './Solana/index.js'
 import { FlowFungibleAPI } from './Flow/index.js'
@@ -53,7 +54,6 @@ import { Web3SignerAPI } from './EVM/apis/Web3SignerAPI.js'
 import { FlowWeb3API } from './Flow/apis/Web3API.js'
 import { SolanaWeb3API } from './Solana/apis/Web3API.js'
 import { LogHubAPI } from './Sentry/index.js'
-import { RedPacketAPI } from './RedPacket/index.js'
 import { TheGraphDomainAPI } from './TheGraph/index.js'
 import { ENS_API } from './ENS/index.js'
 import { SpaceID_API } from './SpaceID/index.js'
@@ -88,11 +88,11 @@ export const CryptoScamDB = new CryptoScamDB_API()
 export const Multicall = new MulticallAPI()
 export const Lens = new LensAPI()
 export const LogHub = new LogHubAPI()
-export const RedPacket = new RedPacketAPI()
 export const TheGraphDomain = new TheGraphDomainAPI()
 
 // Etherscan
 export const EtherscanExplorer = new EtherscanExplorerAPI()
+export const EtherscanRedPacket = new EtherscanRedPacketAPI()
 
 // NextID
 export const NextIDProof = new NextIDProofAPI()
@@ -150,6 +150,7 @@ export const ChainbaseHistory = new ChainbaseHistoryAPI()
 export const ChainbaseFungibleToken = new ChainbaseFungibleTokenAPI()
 export const ChainbaseNonFungibleToken = new ChainbaseNonFungibleTokenAPI()
 export const ChainbaseDomain = new ChainbaseDomainAPI()
+export const ChainbaseRedPacket = new ChainbaseRedPacketAPI()
 
 // Zerion
 export const Zerion = new ZerionAPI()
