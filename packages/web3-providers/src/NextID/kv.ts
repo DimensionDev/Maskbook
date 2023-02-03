@@ -77,8 +77,8 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
         const result = compact(response.values.map((x) => x.content[pluginID]))
         return Ok(result)
     }
-    async get<T>(personaPublicKey: string): Promise<Result<T, string>> {
-        return fetchJSON(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
+    async get<T>(personaPublicKey: string): Promise<T> {
+        return fetchJSON<T>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
     }
     /**
      * Get signature payload for updating
