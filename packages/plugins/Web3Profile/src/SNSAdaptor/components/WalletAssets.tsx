@@ -37,9 +37,6 @@ const useStyles = makeStyles()((theme) => {
             height: 126,
             borderRadius: 12,
             userSelect: 'none',
-            '&:nth-last-child(-n+4)': {
-                marginBottom: 0,
-            },
         },
         link: {
             cursor: 'pointer',
@@ -168,15 +165,10 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
             ) : (
                 <Box>
                     <Empty
-                        content={
-                            hasUnlisted
-                                ? t.all_collection_hidden({
-                                      collection: collectionName ?? SceneMap[Scene.NFTSetting].title,
-                                  })
-                                : t.no_collection_item({
-                                      collection: collectionName ?? SceneMap[Scene.NFTSetting].title,
-                                  })
-                        }
+                        content={t.no_collection({
+                            context: hasUnlisted ? 'hidden' : 'empty',
+                            collection: collectionName ?? SceneMap[Scene.NFTSetting].title,
+                        })}
                     />
                 </Box>
             )}

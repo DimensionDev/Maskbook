@@ -1,4 +1,5 @@
 import { useAsyncRetry } from 'react-use'
+import { useMemo } from 'react'
 import type { BigNumber } from 'bignumber.js'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, getRedPacketConstants, chainResolver } from '@masknet/web3-shared-evm'
@@ -16,8 +17,7 @@ const CREATE_RED_PACKET_METHOD_ID = '0x5db05aba'
 export function useRedPacketHistory(address: string, chainId: ChainId) {
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT, HAPPY_RED_PACKET_ADDRESS_V4 } = getRedPacketConstants(chainId)
-
-    return useAsyncRetry(async () => {
+    const result = useAsyncRetry(async () => {
         if (!connection || !HAPPY_RED_PACKET_ADDRESS_V4) return EMPTY_LIST
         const blockNumber = await connection.getBlockNumber()
         const historyTransactions = await RedPacket.getHistories(
@@ -53,6 +53,7 @@ export function useRedPacketHistory(address: string, chainId: ChainId) {
                 const redpacketPayload: RedPacketJSONPayloadFromChain = {
                     contract_address: tx.to,
                     txid: tx.hash ?? '',
+                    chainId,
                     shares: decodedInputParam._number.toNumber(),
                     is_random: decodedInputParam._ifrandom,
                     total: decodedInputParam._total_tokens.toString(),
@@ -80,7 +81,10 @@ export function useRedPacketHistory(address: string, chainId: ChainId) {
                 return []
             }
         })
-
         return RedPacketRPC.getRedPacketHistoryFromDatabase(payloadList)
-    }, [address, chainId, connection])
+    }, [address, chainId])
+
+    const value = useMemo(() => result.value?.filter((x) => x.chainId === chainId), [chainId, result.value])
+
+    return { ...result, value }
 }
