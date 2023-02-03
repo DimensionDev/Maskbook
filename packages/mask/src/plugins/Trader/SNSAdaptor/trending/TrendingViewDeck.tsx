@@ -218,8 +218,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                 <Typography className={classes.title} variant="h6">
                                     <Linking
                                         href={first(coin.home_urls)}
-                                        LinkProps={{ className: classes.name, title: coinName.toUpperCase() }}>
-                                        {coinName.toUpperCase()}
+                                        LinkProps={{ className: classes.name, title: coinName }}>
+                                        {coinName}
                                     </Linking>
                                     {coin.symbol ? (
                                         <Typography component="span" className={classes.symbol}>
