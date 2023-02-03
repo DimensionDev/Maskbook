@@ -55,7 +55,7 @@ import { FlowWeb3API } from './Flow/apis/Web3API.js'
 import { SolanaWeb3API } from './Solana/apis/Web3API.js'
 import { LogHubAPI } from './Sentry/index.js'
 import { RedPacketAPI } from './RedPacket/index.js'
-import { TheGraphDomainAPI } from './Thegraph/index.js'
+import { TheGraphDomainAPI } from './TheGraph/index.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
