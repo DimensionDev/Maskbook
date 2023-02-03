@@ -87,6 +87,11 @@ export enum SourceType {
     Element = 'Element',
     Solsea = 'Solsea',
     Solanart = 'Solanart',
+    OKX = 'OKX',
+    Uniswap = 'Uniswap',
+    NFTX = 'NFTX',
+    Etherscan = 'Etherscan',
+    Cryptopunks = 'Cryptopunks',
 
     // Rarity
     RaritySniper = 'RaritySniper',

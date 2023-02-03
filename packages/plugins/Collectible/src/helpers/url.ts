@@ -5,6 +5,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { CollectiblePayload } from '../types.js'
 
 const ZORA_COLLECTION_ADDRESS = '0xabEFBc9fD2F806065b4f3C237d4b59D9A97Bcac7'
+const CRYPTOPUNKS_COLLECTION_ADDRESS = '0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB'
 
 const RULES = [
     // opensea
@@ -81,6 +82,7 @@ const RULES = [
         pluginID: NetworkPluginID.PLUGIN_EVM,
         chainId: ChainIdEVM.Mainnet,
         provider: SourceType.Zora,
+        address: (matched: string) => matched.replace('zora', ZORA_COLLECTION_ADDRESS),
     },
 
     // x2y2
@@ -150,6 +152,47 @@ const RULES = [
         chainId: ChainIdSolana.Mainnet,
         provider: SourceType.Solanart,
     },
+    // Etherscan
+    {
+        hosts: ['etherscan.io'],
+        pathname: /^\/nft\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+        pluginID: NetworkPluginID.PLUGIN_EVM,
+        chainId: ChainIdEVM.Mainnet,
+        provider: SourceType.NFTScan,
+    },
+    // Punks
+    {
+        hosts: ['cryptopunks.app'],
+        pathname: /^\/cryptopunks\/(details)\/(\d+)/,
+        pluginID: NetworkPluginID.PLUGIN_EVM,
+        chainId: ChainIdEVM.Mainnet,
+        provider: SourceType.NFTScan,
+        address: () => CRYPTOPUNKS_COLLECTION_ADDRESS,
+    },
+    // OKX
+    {
+        hosts: ['www.okx.com'],
+        pathname: /^\/web3\/nft\/markets\/eth\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+        pluginID: NetworkPluginID.PLUGIN_EVM,
+        chainId: ChainIdEVM.Mainnet,
+        provider: SourceType.OKX,
+    },
+    // Uniswap
+    {
+        hosts: ['app.uniswap.org'],
+        hash: /#\/nfts\/asset\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+        pluginID: NetworkPluginID.PLUGIN_EVM,
+        chainId: ChainIdEVM.Mainnet,
+        provider: SourceType.Uniswap,
+    },
+    // NFTX
+    {
+        hosts: ['nftx.io'],
+        pathname: /^\/vault\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+        pluginID: NetworkPluginID.PLUGIN_EVM,
+        chainId: ChainIdEVM.Mainnet,
+        provider: SourceType.NFTX,
+    },
 ]
 
 export function getPayloadFromURLs(urls: readonly string[]): CollectiblePayload | undefined {
@@ -169,19 +212,19 @@ export function getPayloadFromURL(url?: string): CollectiblePayload | undefined 
         return
     }
 
+    console.log(_url)
+
     for (const rule of RULES) {
         const isHostMatched = rule.hosts.includes(_url.hostname)
-        const matched = _url.pathname.match(rule.pathname)
+        const matched =
+            (rule.pathname && _url.pathname.match(rule.pathname)) || (rule.hash && _url.hash.match(rule.hash))
 
         if (isHostMatched && matched) {
             return {
                 pluginID: rule.pluginID,
                 chainId: rule.chainId,
                 provider: rule.provider,
-                address:
-                    rule.provider === SourceType.Zora
-                        ? matched[1].replace('zora', ZORA_COLLECTION_ADDRESS)
-                        : matched[1],
+                address: rule.address?.(matched[1]) ?? matched[1],
                 tokenId: rule.pluginID === NetworkPluginID.PLUGIN_SOLANA ? '' : matched[2],
             }
         }
