@@ -7,10 +7,10 @@ import {
     pageableToIterator,
 } from '@masknet/web3-shared-base'
 import { asyncIteratorToArray } from '@masknet/shared-base'
-import type { RedPacketBaseAPI } from '../../types/RedPacket.js'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { fetchJSON } from '../../entry-helpers.js'
 import { TRANSACTIONS_BY_CONTRACT_METHOD_ENDPOINT, MAX_SIZE_PER_PAGE } from '../constants.js'
+import type { RedPacketBaseAPI } from '../../entry-types.js'
+import { fetchJSON } from '../../entry-helpers.js'
 import type { Tx } from '../../Chainbase/types.js'
 
 export class ChainbaseAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
