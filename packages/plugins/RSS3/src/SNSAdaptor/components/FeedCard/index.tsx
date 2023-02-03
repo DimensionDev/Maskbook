@@ -1,5 +1,6 @@
 import { memo } from 'react'
 import type { FeedCardProps } from '../base.js'
+import { CollectibleApprovalCard, isCollectibleApprovalFeed } from './CollectibleApprovalCard.js'
 import { CollectibleCard, isCollectibleFeed } from './CollectibleCard.js'
 import { CommentCard, isCommentFeed } from './CommentCard.js'
 import { DonationCard, isDonationFeed } from './DonationCard.js'
@@ -7,7 +8,10 @@ import { isLiquidityFeed, LiquidityCard } from './LiquidityCard.js'
 import { isNoteFeed, NoteCard } from './NoteCard.js'
 import { isProfileFeed, ProfileCard } from './ProfileCard.js'
 import { isProfileLinkFeed, ProfileLinkCard } from './ProfileLinkCard.js'
+import { isProfileProxyFeed, ProfileProxyCard } from './ProfileProxy.js'
 import { isProposeFeed, ProposeCard } from './ProposeCard.js'
+import { isTokenApprovalFeed, TokenApprovalCard } from './TokenApprovalCard.js'
+import { isTokenBridgeFeed, TokenBridgeCard } from './TokenBridgeCard.js'
 import { isTokenOperationFeed, TokenOperationCard } from './TokenOperationCard.js'
 import { isTokenSwapFeed, TokenSwapCard } from './TokenSwapCard.js'
 import { isVoteFeed, VoteCard } from './VoteCard.js'
@@ -34,6 +38,14 @@ export const FeedCard = memo(({ feed, ...rest }: FeedCardProps) => {
     if (isProposeFeed(feed)) return <ProposeCard feed={feed} {...rest} />
 
     if (isVoteFeed(feed)) return <VoteCard feed={feed} {...rest} />
+
+    if (isTokenApprovalFeed(feed)) return <TokenApprovalCard feed={feed} {...rest} />
+
+    if (isCollectibleApprovalFeed(feed)) return <CollectibleApprovalCard feed={feed} {...rest} />
+
+    if (isTokenBridgeFeed(feed)) return <TokenBridgeCard feed={feed} {...rest} />
+
+    if (isProfileProxyFeed(feed)) return <ProfileProxyCard feed={feed} {...rest} />
 
     return null
 })
