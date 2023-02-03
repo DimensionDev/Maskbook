@@ -33,9 +33,11 @@ export class ExplorerAPI implements RedPacketBaseAPI.DataSourceProvider<ChainId,
 
             if (!result) return
 
-            return result.filter(
-                (x) => x.methodId?.toLowerCase() === methodId.toLowerCase() && isSameAddress(x.from, senderAddress),
-            )
+            return result
+                .filter(
+                    (x) => x.methodId?.toLowerCase() === methodId.toLowerCase() && isSameAddress(x.from, senderAddress),
+                )
+                .map((x) => ({ ...x, chainId }))
         } catch {
             return
         }
