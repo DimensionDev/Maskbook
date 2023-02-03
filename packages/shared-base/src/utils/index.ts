@@ -1,6 +1,5 @@
 export * from './asyncIterator.js'
 export * from './detect.js'
-export * from './file.js'
 export * from './getLocalImplementation.js'
 export * from './markdown.js'
 export * from './mixin.js'
