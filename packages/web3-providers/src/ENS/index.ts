@@ -1,14 +1,35 @@
-import type { DomainAPI } from '../entry-types.js'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { attemptUntil } from '@masknet/web3-shared-base'
+import { NameServiceID } from '@masknet/shared-base'
 import { ChainbaseDomainAPI } from '../Chainbase/index.js'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { R2D2DomainAPI } from '../R2D2/index.js'
+import { TheGraphDomainAPI } from '../TheGraph/index.js'
+import type { NameServiceAPI } from '../entry-types.js'
 
-export class ENS_API implements DomainAPI.Provider<ChainId> {
-    private chainBaseDomainAPI = new ChainbaseDomainAPI()
+export class ENS_API implements NameServiceAPI.Provider {
+    private ChainbaseDomain = new ChainbaseDomainAPI()
+    private R2D2Domain = new R2D2DomainAPI()
+    private TheGraphDomain = new TheGraphDomainAPI()
 
-    async lookup(chainId: ChainId, name: string): Promise<string | undefined> {
-        return this.chainBaseDomainAPI.lookup(chainId, name)
+    get id() {
+        return NameServiceID.ENS
     }
-    async reverse(chainId: ChainId, address: string): Promise<string | undefined> {
-        return this.chainBaseDomainAPI.reverse(chainId, address)
+
+    async lookup(name: string) {
+        return attemptUntil(
+            [this.ChainbaseDomain, this.R2D2Domain, this.TheGraphDomain].map(
+                (x) => () => x.lookup(ChainId.Mainnet, name),
+            ),
+            undefined,
+        )
+    }
+
+    async reverse(address: string) {
+        return attemptUntil(
+            [this.ChainbaseDomain, this.R2D2Domain, this.TheGraphDomain].map(
+                (x) => () => x.reverse(ChainId.Mainnet, address),
+            ),
+            undefined,
+        )
     }
 }

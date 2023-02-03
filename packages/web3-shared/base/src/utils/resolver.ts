@@ -232,7 +232,6 @@ export const resolveSourceTypeName = createLookupTableResolver<SourceType, strin
         [SourceType.CoinGecko]: 'CoinGecko',
         [SourceType.CF]: 'CloudFlare',
         [SourceType.GoPlus]: 'GoPlus',
-        [SourceType.RedPacket]: 'RedPacket',
     },
     (providerType) => {
         throw new Error(`Unknown source type: ${providerType}.`)

@@ -32,20 +32,16 @@ import {
 } from '@masknet/web3-shared-solana'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import { CoinGeckoSearchAPI } from '../CoinGecko/apis/DSearchAPI.js'
-import { CoinMarketCapSearchAPI } from '../CoinMarketCap/apis/CoinMarketCapSearchAPI.js'
+import { CoinMarketCapSearchAPI } from '../CoinMarketCap/apis/DSearchAPI.js'
 import { NFTScanSearchAPI, NFTScanCollectionSearchAPI } from '../NFTScan/index.js'
 import type { DSearchBaseAPI } from '../types/DSearch.js'
 import { getHandlers } from './rules.js'
 import { DSEARCH_BASE_URL } from './constants.js'
-import { ChainbaseDomainAPI } from '../Chainbase/index.js'
-import { ENS_API } from '../ENS/index.js'
-import { CoinGeckoTrending_API } from '../CoinGecko/apis/CoinGecko.js'
+import { CoinGeckoTrendingAPI } from '../CoinGecko/apis/TrendingAPI.js'
 import { RSS3API } from '../RSS3/index.js'
 import { PlatformToChainIdMap } from '../RSS3/constants.js'
-
-const CoinGeckoTrending = new CoinGeckoTrending_API()
-const ENS = new ENS_API()
-const ChainbaseDomain = new ChainbaseDomainAPI()
+import { ENS_API } from '../ENS/index.js'
+import { SpaceID_API } from '../SpaceID/index.js'
 
 const isValidAddress = (address?: string): boolean => {
     return isValidAddressEVM(address) || isValidAddressFlow(address) || isValidAddressSolana(address)
@@ -89,6 +85,9 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
     private CoinGeckoClient = new CoinGeckoSearchAPI<ChainId, SchemaType>()
     private CoinMarketCapClient = new CoinMarketCapSearchAPI<ChainId, SchemaType>()
     private RSS3 = new RSS3API()
+    private CoinGeckoTrending = new CoinGeckoTrendingAPI()
+    private ENS = new ENS_API()
+    private SpaceID = new SpaceID_API()
 
     private parseKeyword(keyword: string): { word: string; field?: string } {
         const words = keyword.split(':')
@@ -110,16 +109,15 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         const [address, chainId] = await attemptUntil(
             [
                 () =>
-                    ENS.lookup(ChainIdEVM.Mainnet, domain).then((x = '') => {
-                        if (isZeroAddressEVM(address)) throw new Error(`No result for ${domain}`)
-                        return [x, ChainIdEVM.Mainnet]
-                    }),
-                () =>
-                    ChainbaseDomain.lookup(ChainIdEVM.Mainnet, domain).then((x = '') => {
+                    this.ENS.lookup(domain).then((x = '') => {
                         if (!x || isZeroAddressEVM(address)) throw new Error(`No result for ${domain}`)
                         return [x, ChainIdEVM.Mainnet]
                     }),
-                () => ChainbaseDomain.lookup(ChainIdEVM.BSC, domain).then((x = '') => [x, ChainIdEVM.BSC]),
+                () =>
+                    this.SpaceID.lookup(domain).then((x = '') => {
+                        if (!x || isZeroAddressEVM(address)) throw new Error(`No result for ${domain}`)
+                        return [x, ChainIdEVM.BSC]
+                    }),
             ],
             ['', ChainIdEVM.Mainnet],
         )
@@ -177,9 +175,8 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
         const [domain, chainId] = await attemptUntil(
             [
-                () => ENS.reverse(ChainIdEVM.Mainnet, address).then((x) => [x, ChainIdEVM.Mainnet]),
-                () => ChainbaseDomain.reverse(ChainIdEVM.Mainnet, address).then((x) => [x, ChainIdEVM.Mainnet]),
-                () => ChainbaseDomain.reverse(ChainIdEVM.BSC, address).then((x) => [x, ChainIdEVM.BSC]),
+                () => this.ENS.reverse(address).then((x) => [x, ChainIdEVM.Mainnet]),
+                () => this.SpaceID.reverse(address).then((x) => [x, ChainIdEVM.BSC]),
             ],
             ['', ChainIdEVM.Mainnet],
         )
@@ -282,7 +279,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
         if (normalTokensFiltered.length > 0) return [normalTokensFiltered[0]]
 
-        const coinInfo = await CoinGeckoTrending.getCoinInfoByAddress(address)
+        const coinInfo = await this.CoinGeckoTrending.getCoinInfoByAddress(address)
 
         if (coinInfo?.id) {
             return [

@@ -1,5 +1,5 @@
 import { sha3, toHex } from 'web3-utils'
-import { Explorer } from '@masknet/web3-providers'
+import { EtherscanExplorer } from '@masknet/web3-providers'
 import type { ExplorerAPI } from '@masknet/web3-providers/types'
 import { TransactionChecker, TransactionStatusType } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
@@ -47,7 +47,7 @@ export class AccountChecker implements TransactionChecker<ChainId, Transaction> 
         const hit = this.ttl.get(key)
         if (hit) return hit
 
-        const transactions = await Explorer.getLatestTransactions(chainId, account, {
+        const transactions = await EtherscanExplorer.getLatestTransactions(chainId, account, {
             offset: AccountChecker.CHECK_LATEST_TRANSACTION_SIZE,
         })
         this.ttl.set(key, transactions, 15 * 1000)

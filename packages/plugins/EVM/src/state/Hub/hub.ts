@@ -2,7 +2,6 @@ import { EMPTY_LIST, mixin } from '@masknet/shared-base'
 import { HubStateBaseClient, HubStateFungibleClient, HubStateNonFungibleClient } from '@masknet/web3-state'
 import {
     AlchemyEVM,
-    DeBank,
     Web3GasOption,
     MetaSwap,
     AstarGas,
@@ -14,7 +13,7 @@ import {
     LooksRare,
     Gem,
     Zora,
-    R2D2,
+    R2D2TokenList,
     Cloudflare,
     CoinGeckoPriceEVM,
     ChainbaseFungibleToken,
@@ -22,7 +21,9 @@ import {
     ZerionNonFungibleToken,
     X2Y2,
     GoPlusAuthorization,
-    RedPacket,
+    DeBankGasOption,
+    DeBankFungibleToken,
+    DeBankHistory,
 } from '@masknet/web3-providers'
 import type {
     AuthorizationAPI,
@@ -56,7 +57,7 @@ class Hub extends HubStateBaseClient<ChainId> implements EVM_Hub {
             const isEIP1559 = chainResolver.isSupport(options.chainId, 'EIP1559')
             if (isEIP1559 && chainId !== ChainId.Astar) return await MetaSwap.getGasOptions(options.chainId)
             if (chainId === ChainId.Astar) return await AstarGas.getGasOptions(options.chainId)
-            return await DeBank.getGasOptions(options.chainId)
+            return await DeBankGasOption.getGasOptions(options.chainId)
         } catch (error) {
             return Web3GasOption.getGasOptions(options.chainId)
         }
@@ -72,7 +73,7 @@ class Hub extends HubStateBaseClient<ChainId> implements EVM_Hub {
             chainId,
         })
         return attemptUntil(
-            [DeBank, Zerion].map((x) => () => x.getTransactions(options.account, options)),
+            [DeBankHistory, Zerion].map((x) => () => x.getTransactions(options.account, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
         )
     }
@@ -80,10 +81,10 @@ class Hub extends HubStateBaseClient<ChainId> implements EVM_Hub {
 
 class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
     protected override getProviders(initial?: HubOptions<ChainId>) {
-        const options = this.getOptions(initial)
+        const { indicator } = this.getOptions(initial)
 
         // only the first page is available
-        if ((options.indicator ?? 0) > 0) return []
+        if ((indicator?.index ?? 0) > 0) return []
 
         return this.getPredicateProviders<
             AuthorizationAPI.Provider<ChainId> &
@@ -94,15 +95,24 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
         >(
             {
                 [SourceType.Chainbase]: ChainbaseFungibleToken,
-                [SourceType.DeBank]: DeBank,
+                [SourceType.DeBank]: DeBankFungibleToken,
                 [SourceType.Zerion]: Zerion,
                 [SourceType.GoPlus]: GoPlusAuthorization,
                 [SourceType.Rabby]: Rabby,
-                [SourceType.R2D2]: R2D2,
+                [SourceType.R2D2]: R2D2TokenList,
                 [SourceType.CF]: Cloudflare,
                 [SourceType.CoinGecko]: CoinGeckoPriceEVM,
             },
-            [DeBank, Zerion, ChainbaseFungibleToken, Rabby, GoPlusAuthorization, R2D2, Cloudflare, CoinGeckoPriceEVM],
+            [
+                DeBankFungibleToken,
+                Zerion,
+                ChainbaseFungibleToken,
+                Rabby,
+                GoPlusAuthorization,
+                R2D2TokenList,
+                Cloudflare,
+                CoinGeckoPriceEVM,
+            ],
             initial,
         )
     }
@@ -137,7 +147,6 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
             {
                 [SourceType.X2Y2]: X2Y2,
                 [SourceType.Chainbase]: ChainbaseNonFungibleToken,
-                [SourceType.RedPacket]: RedPacket,
                 [SourceType.Zerion]: ZerionNonFungibleToken,
                 [SourceType.NFTScan]: NFTScanNonFungibleTokenEVM,
                 [SourceType.Rarible]: Rarible,
@@ -148,13 +157,12 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                 [SourceType.Gem]: Gem,
                 [SourceType.GoPlus]: GoPlusAuthorization,
                 [SourceType.Rabby]: Rabby,
-                [SourceType.R2D2]: R2D2,
+                [SourceType.R2D2]: R2D2TokenList,
             },
             options.chainId === ChainId.Mainnet
                 ? [
                       X2Y2,
                       NFTScanNonFungibleTokenEVM,
-                      RedPacket,
                       ZerionNonFungibleToken,
                       Rarible,
                       OpenSea,
@@ -164,11 +172,10 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                       Gem,
                       GoPlusAuthorization,
                       Rabby,
-                      R2D2,
+                      R2D2TokenList,
                   ]
                 : [
                       NFTScanNonFungibleTokenEVM,
-                      RedPacket,
                       ZerionNonFungibleToken,
                       Rarible,
                       AlchemyEVM,
@@ -178,7 +185,7 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                       Gem,
                       GoPlusAuthorization,
                       Rabby,
-                      R2D2,
+                      R2D2TokenList,
                   ],
             initial,
         )

@@ -17,15 +17,4 @@ export namespace RedPacketBaseAPI {
             options?: HubOptions<ChainId, HubIndicator>,
         ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, HubIndicator>>
     }
-
-    export interface DataSourceProvider<ChainId, SchemaType> {
-        getHistories(
-            chainId: ChainId,
-            senderAddress: string,
-            contractAddress: string,
-            methodId: string,
-            startBlock?: number,
-            endBlock?: number,
-        ): Promise<Array<Transaction<ChainId, SchemaType>> | undefined>
-    }
 }
