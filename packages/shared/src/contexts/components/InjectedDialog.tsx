@@ -40,18 +40,30 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogTitleWithTabs: {
         display: 'grid !important',
         paddingBottom: '0 !important',
-        gridTemplateRows: `${theme.spacing(3.5)} ${theme.spacing(4.5)}`,
-        gridRowGap: theme.spacing(1.5),
+        paddingLeft: '0 !important',
+        paddingRight: '0 !important',
+        gridTemplateRows: `${theme.spacing(3.5)} ${theme.spacing(1.5)} ${theme.spacing(4.5)}`,
         gridTemplateAreas: `
             ". . ."
-            "tabs tabs tabs"
+            "gap gap gap"
+            "titleTab titleTab titleTab"
+            "networkTab networkTab networkTab"
         `,
     },
     dialogContent: {
         overscrollBehavior: 'contain',
     },
+
+    dialogGap: {
+        gridArea: 'gap',
+    },
     dialogTitleTabs: {
-        gridArea: 'tabs',
+        paddingLeft: '16px !important',
+        paddingRight: '16px !important',
+        gridArea: 'titleTab',
+    },
+    dialogNetworkTabs: {
+        gridArea: 'networkTab',
     },
     dialogTitleTypography: {
         flex: 1,
@@ -69,6 +81,12 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         '& > svg': {
             fontSize: 24,
         },
+    },
+    dialogCloseButtonWithTabs: {
+        marginLeft: 16,
+    },
+    dialogTitleEndingContentWithTabs: {
+        marginRight: 16,
     },
     paper: clean ? { width: 'auto', backgroundImage: 'none' } : {},
     tabs: {
@@ -93,6 +111,7 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
     title?: React.ReactNode
     titleTail?: React.ReactNode | null
     titleTabs?: React.ReactNode | null
+    networkTabs?: React.ReactNode | null
     disableBackdropClick?: boolean
     disableTitleBorder?: boolean
     isOpenFromApplicationBoard?: boolean
@@ -123,8 +142,12 @@ export function InjectedDialog(props: InjectedDialogProps) {
         dialogContent,
         dialogTitle,
         dialogTitleEndingContent,
+        dialogTitleEndingContentWithTabs,
         dialogTitleTabs,
+        dialogNetworkTabs,
         dialogTitleWithTabs,
+        dialogCloseButtonWithTabs,
+        dialogGap,
         dialogTitleTypography,
         dialogBackdropRoot,
         container,
@@ -142,6 +165,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
         onClose,
         title,
         titleTabs,
+        networkTabs,
         titleTail = null,
         disableTitleBorder,
         isOpenFromApplicationBoard,
@@ -202,7 +226,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             <IconButton
                                 size="large"
                                 disableRipple
-                                classes={{ root: dialogCloseButton }}
+                                classes={{ root: cx(dialogCloseButton, titleTabs ? dialogCloseButtonWithTabs : '') }}
                                 aria-label={t.dialog_dismiss()}
                                 onClick={!props.isOnBack ? closeBothCompositionDialog : onClose}>
                                 <DialogDismissIcon
@@ -216,8 +240,17 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             <Typography className={dialogTitleTypography} display="inline" variant="inherit">
                                 {title}
                             </Typography>
-                            <Stack className={dialogTitleEndingContent}>{titleTail}</Stack>
+                            <Stack
+                                className={cx(
+                                    dialogTitleEndingContent,
+                                    titleTabs ? dialogTitleEndingContentWithTabs : '',
+                                )}>
+                                {titleTail}
+                            </Stack>
+
+                            <Stack className={dialogGap} />
                             {titleTabs && <Stack className={dialogTitleTabs}>{titleTabs}</Stack>}
+                            {networkTabs && <Stack className={dialogNetworkTabs}>{networkTabs}</Stack>}
                         </DialogTitle>
                     ) : null}
 

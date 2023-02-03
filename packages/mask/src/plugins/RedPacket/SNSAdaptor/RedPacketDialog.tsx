@@ -227,27 +227,29 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                             </MaskTabList>
                         ) : null
                     }
+                    networkTabs={
+                        step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog ? (
+                            <div className={classes.abstractTabWrapper}>
+                                <NetworkTab
+                                    classes={{
+                                        tab: classes.tab,
+                                        tabPanel: classes.tabPanel,
+                                        indicator: classes.indicator,
+                                        tabPaper: classes.tabPaper,
+                                    }}
+                                    chains={chainIdList}
+                                    hideArrowButton={currentTab === tabs.collectibles}
+                                    pluginID={NetworkPluginID.PLUGIN_EVM}
+                                />
+                            </div>
+                        ) : null
+                    }
                     onClose={onDialogClose}
                     isOnBack={showHistory || step !== CreateRedPacketPageStep.NewRedPacketPage}
                     disableTitleBorder>
                     <DialogContent className={classes.dialogContent}>
                         {step === CreateRedPacketPageStep.NewRedPacketPage ? (
                             <>
-                                {openNFTConfirmDialog ? null : (
-                                    <div className={classes.abstractTabWrapper}>
-                                        <NetworkTab
-                                            classes={{
-                                                tab: classes.tab,
-                                                tabPanel: classes.tabPanel,
-                                                indicator: classes.indicator,
-                                                tabPaper: classes.tabPaper,
-                                            }}
-                                            chains={chainIdList}
-                                            hideArrowButton={currentTab === tabs.collectibles}
-                                            pluginID={NetworkPluginID.PLUGIN_EVM}
-                                        />
-                                    </div>
-                                )}
                                 <div
                                     style={{
                                         visibility: showHistory ? 'hidden' : 'visible',

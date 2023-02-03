@@ -55,6 +55,7 @@ export class ChainbaseAPI implements RedPacketBaseAPI.DataSourceProvider<ChainId
                             to: x.to_address,
                             from: x.from_address,
                             hash: x.transaction_hash,
+                            chainId,
                             blockNumber: Number(x.block_number),
                         } as Transaction<ChainId, SchemaType>),
                 )

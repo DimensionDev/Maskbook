@@ -75,9 +75,11 @@ export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
     return (
         <div className={classes.root}>
             <List style={{ padding: '16px 0 0' }}>
-                {histories.map((history, i) => (
-                    <RedPacketInHistoryList key={i} history={history} onSelect={onSelect} />
-                ))}
+                {histories
+                    .filter((x) => x.chainId === chainId)
+                    .map((history, i) => (
+                        <RedPacketInHistoryList key={i} history={history} onSelect={onSelect} />
+                    ))}
             </List>
         </div>
     )

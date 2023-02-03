@@ -53,6 +53,7 @@ export function useRedPacketHistory(address: string, chainId: ChainId) {
                 const redpacketPayload: RedPacketJSONPayloadFromChain = {
                     contract_address: tx.to,
                     txid: tx.hash ?? '',
+                    chainId,
                     shares: decodedInputParam._number.toNumber(),
                     is_random: decodedInputParam._ifrandom,
                     total: decodedInputParam._total_tokens.toString(),
