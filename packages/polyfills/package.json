@@ -7,7 +7,7 @@
     "build": "node ./builder.js"
   },
   "dependencies": {
-    "@types/webextension-polyfill": "^0.9.2",
+    "@types/webextension-polyfill": "^0.10.0",
     "buffer": "^6.0.3",
     "clipboard-polyfill": "^3.0.3",
     "core-js": "3.26.1",
