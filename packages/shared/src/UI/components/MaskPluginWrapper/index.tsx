@@ -11,7 +11,6 @@ import {
     PluginWrapperMethods,
 } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
-import { PluginID } from '@masknet/shared-base'
 
 interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     open?: boolean
@@ -108,7 +107,7 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
         return (
             <Box className={classes.provider}>
                 <Typography variant="body1" className={classes.providerBy}>
-                    {ID === PluginID.CyberConnect ? t.powered_by() : t.plugin_provider_by()}
+                    {t.powered_by()}
                 </Typography>
                 {main}
                 {publisherLink ? (
