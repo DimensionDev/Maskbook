@@ -2,7 +2,6 @@ import { EMPTY_LIST, mixin } from '@masknet/shared-base'
 import { HubStateBaseClient, HubStateFungibleClient, HubStateNonFungibleClient } from '@masknet/web3-state'
 import {
     AlchemyEVM,
-    DeBank,
     Web3GasOption,
     MetaSwap,
     AstarGas,
@@ -23,6 +22,9 @@ import {
     X2Y2,
     GoPlusAuthorization,
     RedPacket,
+    DeBankGasOption,
+    DeBankFungibleToken,
+    DeBankHistory,
 } from '@masknet/web3-providers'
 import type {
     AuthorizationAPI,
@@ -56,7 +58,7 @@ class Hub extends HubStateBaseClient<ChainId> implements EVM_Hub {
             const isEIP1559 = chainResolver.isSupport(options.chainId, 'EIP1559')
             if (isEIP1559 && chainId !== ChainId.Astar) return await MetaSwap.getGasOptions(options.chainId)
             if (chainId === ChainId.Astar) return await AstarGas.getGasOptions(options.chainId)
-            return await DeBank.getGasOptions(options.chainId)
+            return await DeBankGasOption.getGasOptions(options.chainId)
         } catch (error) {
             return Web3GasOption.getGasOptions(options.chainId)
         }
@@ -72,7 +74,7 @@ class Hub extends HubStateBaseClient<ChainId> implements EVM_Hub {
             chainId,
         })
         return attemptUntil(
-            [DeBank, Zerion].map((x) => () => x.getTransactions(options.account, options)),
+            [DeBankHistory, Zerion].map((x) => () => x.getTransactions(options.account, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
         )
     }
@@ -80,10 +82,10 @@ class Hub extends HubStateBaseClient<ChainId> implements EVM_Hub {
 
 class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
     protected override getProviders(initial?: HubOptions<ChainId>) {
-        const options = this.getOptions(initial)
+        const { indicator } = this.getOptions(initial)
 
         // only the first page is available
-        if ((options.indicator ?? 0) > 0) return []
+        if ((indicator?.index ?? 0) > 0) return []
 
         return this.getPredicateProviders<
             AuthorizationAPI.Provider<ChainId> &
@@ -94,7 +96,7 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
         >(
             {
                 [SourceType.Chainbase]: ChainbaseFungibleToken,
-                [SourceType.DeBank]: DeBank,
+                [SourceType.DeBank]: DeBankFungibleToken,
                 [SourceType.Zerion]: Zerion,
                 [SourceType.GoPlus]: GoPlusAuthorization,
                 [SourceType.Rabby]: Rabby,
@@ -103,7 +105,7 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
                 [SourceType.CoinGecko]: CoinGeckoPriceEVM,
             },
             [
-                DeBank,
+                DeBankFungibleToken,
                 Zerion,
                 ChainbaseFungibleToken,
                 Rabby,

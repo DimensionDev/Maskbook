@@ -86,7 +86,7 @@ export async function getLatestMarketPairs(id: string, currency: string) {
 
 // #endregion
 
-export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
+export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
     private fuse = new FuseTrendingAPI()
 
     private async getHistorical(

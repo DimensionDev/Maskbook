@@ -15,7 +15,7 @@ import { RSS3API } from './RSS3/index.js'
 import { TwitterAPI } from './Twitter/index.js'
 import { R2D2KeyValueAPI, R2D2DomainAPI, R2D2TokenListAPI } from './R2D2/index.js'
 import { InstagramAPI } from './Instagram/index.js'
-import { DeBankAPI } from './DeBank/index.js'
+import { DeBankFungibleTokenAPI, DeBankGasOptionAPI, DeBankHistoryAPI } from './DeBank/index.js'
 import { ZerionAPI, ZerionGasAPI, ZerionNonFungibleTokenAPI, ZerionTrendingAPI } from './Zerion/index.js'
 import { MaskAPI } from './Mask/index.js'
 import { MaskX_API } from './MaskX/index.js'
@@ -26,7 +26,7 @@ import { NextIDProofAPI, NextIDStorageAPI } from './NextID/index.js'
 import { AlchemyEVM_API, AlchemyFlowAPI } from './Alchemy/index.js'
 import { Web3API, Web3GasOptionAPI } from './EVM/index.js'
 import { MagicEdenAPI } from './MagicEden/index.js'
-import { CoinMarketCapAPI } from './CoinMarketCap/index.js'
+import { CoinMarketCapTrendingAPI } from './CoinMarketCap/index.js'
 import { UniswapAPI } from './Uniswap/index.js'
 import { RabbyAPI } from './Rabby/index.js'
 import { GemAPI } from './Gem/index.js'
@@ -89,8 +89,12 @@ export const ENS = new ENS_API()
 export const SpaceID = new SpaceID_API()
 export const Bonfida = new BonfidaAPI()
 
+// Debank
+export const DeBankGasOption = new DeBankGasOptionAPI()
+export const DeBankFungibleToken = new DeBankFungibleTokenAPI()
+export const DeBankHistory = new DeBankHistoryAPI()
+
 export const DSearch = new DSearchAPI()
-export const DeBank = new DeBankAPI()
 
 export const MetaSwap = new MetaSwapAPI()
 export const AstarGas = new AstarAPI()
@@ -100,7 +104,7 @@ export const Web3 = new Web3API()
 export const Web3GasOption = new Web3GasOptionAPI()
 export const Web3Signer = new Web3SignerAPI()
 export const Nomics = new NomicsAPI()
-export const CoinMarketCap = new CoinMarketCapAPI()
+export const CoinMarketCap = new CoinMarketCapTrendingAPI()
 export const Uniswap = new UniswapAPI()
 export const Rabby = new RabbyAPI()
 export const X2Y2 = new X2Y2API()
