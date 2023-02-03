@@ -12,7 +12,7 @@ import {
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, isNativeTokenAddress, isValidAddress, isValidChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { FT, FT_Price } from '../types.js'
-import { fetchFromChainbase } from './helpers.js'
+import { fetchFromChainbase } from '../helpers.js'
 import type { FungibleTokenAPI } from '../../entry-types.js'
 
 export class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, SchemaType> {

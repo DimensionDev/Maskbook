@@ -4,8 +4,8 @@ import { first } from 'lodash-es'
 import { ChainId, formatEthereumAddress, isValidAddress, isValidChainId, isValidDomain } from '@masknet/web3-shared-evm'
 import { formatAddress } from '@masknet/web3-shared-solana'
 import type { ENSRecord } from '../types.js'
+import { fetchFromChainbase } from '../helpers.js'
 import type { DomainAPI } from '../../entry-types.js'
-import { fetchFromChainbase } from './helpers.js'
 
 const domainCache = new LRUCache<ChainId, Record<string, string>>({
     max: 100,

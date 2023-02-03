@@ -24,7 +24,7 @@ import {
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import type { NFT, NFT_FloorPrice, NFT_Metadata, NFT_TransferEvent } from '../types.js'
-import { fetchFromChainbase } from './helpers.js'
+import { fetchFromChainbase } from '../helpers.js'
 import type { NonFungibleTokenAPI } from '../../entry-types.js'
 
 export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {

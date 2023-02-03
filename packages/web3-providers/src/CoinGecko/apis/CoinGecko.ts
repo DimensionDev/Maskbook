@@ -13,7 +13,7 @@ import { FuseTrendingAPI } from '../../Fuse/index.js'
 import { fetchJSON } from '../../entry-helpers.js'
 import type { TrendingAPI } from '../../entry-types.js'
 
-export class CoinGeckoTrending_API implements TrendingAPI.Provider<Web3Helper.ChainIdAll> {
+export class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.ChainIdAll> {
     private fuse = new FuseTrendingAPI()
     private coins: Map<string, TrendingAPI.Coin> = new Map()
 

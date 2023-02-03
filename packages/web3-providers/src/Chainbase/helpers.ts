@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
-import { CHAINBASE_API_URL } from '../constants.js'
-import { fetchJSON } from '../../entry-helpers.js'
+import { CHAINBASE_API_URL } from './constants.js'
+import { fetchJSON } from '../entry-helpers.js'
 
 export async function fetchFromChainbase<T>(pathname: string) {
     const data = await fetchJSON<

@@ -10,7 +10,7 @@ import {
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, isValidChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { Tx } from '../types.js'
-import { fetchFromChainbase } from './helpers.js'
+import { fetchFromChainbase } from '../helpers.js'
 import type { HistoryAPI } from '../../entry-types.js'
 
 export class ChainbaseHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType> {
