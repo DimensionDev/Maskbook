@@ -14,7 +14,7 @@ import {
     LooksRare,
     Gem,
     Zora,
-    R2D2,
+    R2D2TokenList,
     Cloudflare,
     CoinGeckoPriceEVM,
     ChainbaseFungibleToken,
@@ -98,11 +98,20 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
                 [SourceType.Zerion]: Zerion,
                 [SourceType.GoPlus]: GoPlusAuthorization,
                 [SourceType.Rabby]: Rabby,
-                [SourceType.R2D2]: R2D2,
+                [SourceType.R2D2]: R2D2TokenList,
                 [SourceType.CF]: Cloudflare,
                 [SourceType.CoinGecko]: CoinGeckoPriceEVM,
             },
-            [DeBank, Zerion, ChainbaseFungibleToken, Rabby, GoPlusAuthorization, R2D2, Cloudflare, CoinGeckoPriceEVM],
+            [
+                DeBank,
+                Zerion,
+                ChainbaseFungibleToken,
+                Rabby,
+                GoPlusAuthorization,
+                R2D2TokenList,
+                Cloudflare,
+                CoinGeckoPriceEVM,
+            ],
             initial,
         )
     }
@@ -148,7 +157,7 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                 [SourceType.Gem]: Gem,
                 [SourceType.GoPlus]: GoPlusAuthorization,
                 [SourceType.Rabby]: Rabby,
-                [SourceType.R2D2]: R2D2,
+                [SourceType.R2D2]: R2D2TokenList,
             },
             options.chainId === ChainId.Mainnet
                 ? [
@@ -164,7 +173,7 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                       Gem,
                       GoPlusAuthorization,
                       Rabby,
-                      R2D2,
+                      R2D2TokenList,
                   ]
                 : [
                       NFTScanNonFungibleTokenEVM,
@@ -178,7 +187,7 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                       Gem,
                       GoPlusAuthorization,
                       Rabby,
-                      R2D2,
+                      R2D2TokenList,
                   ],
             initial,
         )

@@ -14,7 +14,7 @@ import { RiskWarningAPI } from './RiskWarning/index.js'
 import { RSS3API } from './RSS3/index.js'
 import { KeyValueAPI } from './KV/index.js'
 import { TwitterAPI } from './Twitter/index.js'
-import { R2D2API } from './R2D2/index.js'
+import { R2D2DomainAPI, R2D2TokenListAPI } from './R2D2/index.js'
 import { InstagramAPI } from './Instagram/index.js'
 import { DeBankAPI } from './DeBank/index.js'
 import { ZerionAPI, ZerionGasAPI, ZerionNonFungibleTokenAPI, ZerionTrendingAPI } from './Zerion/index.js'
@@ -56,8 +56,7 @@ import { FlowWeb3API } from './Flow/apis/Web3API.js'
 import { SolanaWeb3API } from './Solana/apis/Web3API.js'
 import { LogHubAPI } from './Sentry/index.js'
 import { RedPacketAPI } from './RedPacket/index.js'
-import { GraphQL_Domain_API } from './GraphQL/index.js'
-import { Thegraph_Domain_API } from './Thegraph/index.js'
+import { TheGraphDomainAPI } from './Thegraph/index.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
@@ -79,7 +78,8 @@ export const Minds = new MindsAPI()
 export const Instagram = new InstagramAPI()
 export const GoPlusLabs = new GoPlusLabsAPI()
 export const GoPlusAuthorization = new GoPlusAuthorizationAPI()
-export const R2D2 = new R2D2API()
+export const R2D2TokenList = new R2D2TokenListAPI()
+export const R2D2Domain = new R2D2DomainAPI()
 export const DSearch = new DSearchAPI()
 export const DeBank = new DeBankAPI()
 
@@ -152,8 +152,6 @@ export const LogHub = new LogHubAPI()
 
 // RedPacket
 export const RedPacket = new RedPacketAPI()
-// GraphQL ENS
-export const GraphQL = new GraphQL_Domain_API()
 
 // Thegraph ENS
-export const Thegraph = new Thegraph_Domain_API()
+export const TheGraphDomain = new TheGraphDomainAPI()

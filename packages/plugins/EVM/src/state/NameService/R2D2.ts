@@ -1,16 +1,16 @@
 import { NameServiceID } from '@masknet/shared-base'
-import { GraphQL } from '@masknet/web3-providers'
+import { R2D2Domain } from '@masknet/web3-providers'
 import type { NameServiceResolver } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 
-export class GraphQLResolver implements NameServiceResolver {
+export class R2D2Resolver implements NameServiceResolver {
     get id(): NameServiceID {
         return NameServiceID.ENS
     }
     async lookup(name: string) {
-        return GraphQL.lookup(ChainId.Mainnet, name)
+        return R2D2Domain.lookup(ChainId.Mainnet, name)
     }
     async reverse(address: string) {
-        return GraphQL.reverse(ChainId.Mainnet, address)
+        return R2D2Domain.reverse(ChainId.Mainnet, address)
     }
 }
