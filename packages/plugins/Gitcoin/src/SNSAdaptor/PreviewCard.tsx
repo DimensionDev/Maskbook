@@ -51,10 +51,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     main: {
         padding: theme.spacing(2),
+        boxSizing: 'border-box',
         marginTop: theme.spacing(2.5),
         borderRadius: 12,
         overflow: 'auto',
         overscrollBehavior: 'contain',
+        minHeight: 366,
     },
     network: {
         marginRight: theme.spacing(1.5),
@@ -78,6 +80,8 @@ const useStyles = makeStyles()((theme) => ({
         img: {
             width: '100%',
             maxWidth: '100%',
+            maxHeight: 176,
+            objectFit: 'cover',
             borderRadius: theme.spacing(1.5),
         },
     },
@@ -87,6 +91,9 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'pre-wrap',
         wordBreak: 'break-word',
         tabSize: 4,
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
         img: {
             maxWidth: '100%',
         },
