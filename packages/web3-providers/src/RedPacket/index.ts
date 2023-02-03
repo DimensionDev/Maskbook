@@ -1,17 +1,18 @@
 import urlcat from 'urlcat'
 import { mapKeys } from 'lodash-es'
 import { Transaction, attemptUntil, createIndicator, createPageable } from '@masknet/web3-shared-base'
-import { ChainbaseAPI } from './apis/Chainbase.js'
-import { ExplorerAPI } from './apis/Explorer.js'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { HubIndicator, HubOptions, NonFungibleCollection, Pageable } from '@masknet/web3-shared-base'
 import { DSEARCH_BASE_URL } from '../DSearch/constants.js'
+import { ChainbaseRedPacketAPI } from '../Chainbase/index.js'
+import { EtherscanRedPacketAPI } from '../Etherscan/index.js'
 import { fetchJSON } from '../entry-helpers.js'
 import type { RedPacketBaseAPI } from '../entry-types.js'
 
 export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
-    private ChainbaseClient = new ChainbaseAPI()
-    private ExplorerClient = new ExplorerAPI()
+    private ChainbaseRedPacket = new ChainbaseRedPacketAPI()
+    private EtherscanRedPacket = new EtherscanRedPacketAPI()
+
     getHistories(
         chainId: ChainId,
         senderAddress: string,
@@ -23,7 +24,7 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
         return attemptUntil(
             [
                 async () =>
-                    this.ChainbaseClient.getHistories(
+                    this.ChainbaseRedPacket.getHistories(
                         chainId,
                         senderAddress,
                         contractAddress,
@@ -32,7 +33,7 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
                         endBlock,
                     ),
                 async () =>
-                    this.ExplorerClient.getHistories(
+                    this.EtherscanRedPacket.getHistories(
                         chainId,
                         senderAddress,
                         contractAddress,
