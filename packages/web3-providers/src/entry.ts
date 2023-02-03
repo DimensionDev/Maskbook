@@ -1,4 +1,4 @@
-import { CoinGeckoTrendingAPI, CoinGeckoPriceSolanaAPI, CoinGeckoPriceEVM_API } from './CoinGecko/index.js'
+import { CoinGeckoTrendingAPI, CoinGeckoPriceAPI_EVM, CoinGeckoPriceAPI_Solana } from './CoinGecko/index.js'
 import { OpenSeaAPI } from './OpenSea/index.js'
 import { LooksRareAPI } from './LooksRare/index.js'
 import { RaribleAPI } from './Rarible/index.js'
@@ -65,18 +65,47 @@ export const MagicEden = new MagicEdenAPI()
 export const Rarible = new RaribleAPI()
 export const Zora = new ZoraAPI()
 export const Gem = new GemAPI()
-export const CoinGeckoTrending = new CoinGeckoTrendingAPI()
-export const CoinGeckoPriceEVM = new CoinGeckoPriceEVM_API()
-export const CoinGeckoPriceSolana = new CoinGeckoPriceSolanaAPI()
-export const EtherscanExplorer = new EtherscanExplorerAPI()
 export const RiskWarning = new RiskWarningAPI()
 export const Twitter = new TwitterAPI()
 export const Mask = new MaskAPI()
 export const MaskX = new MaskX_API()
 export const Minds = new MindsAPI()
 export const Instagram = new InstagramAPI()
+export const DSearch = new DSearchAPI()
+export const MetaSwap = new MetaSwapAPI()
+export const AstarGas = new AstarAPI()
+export const Web3 = new Web3API()
+export const Web3GasOption = new Web3GasOptionAPI()
+export const Web3Signer = new Web3SignerAPI()
+export const Nomics = new NomicsAPI()
+export const CoinMarketCap = new CoinMarketCapTrendingAPI()
+export const Uniswap = new UniswapAPI()
+export const Rabby = new RabbyAPI()
+export const X2Y2 = new X2Y2API()
+export const Cloudflare = new CloudflareAPI()
+export const Mirror = new MirrorAPI()
+export const CryptoScamDB = new CryptoScamDB_API()
+export const Multicall = new MulticallAPI()
+export const Lens = new LensAPI()
+export const LogHub = new LogHubAPI()
+export const RedPacket = new RedPacketAPI()
+export const TheGraphDomain = new TheGraphDomainAPI()
+
+// Etherscan
+export const EtherscanExplorer = new EtherscanExplorerAPI()
+
+// NextID
+export const NextIDProof = new NextIDProofAPI()
+export const NextIDStorage = new NextIDStorageAPI()
+
+// GoPlusLabs
 export const GoPlusLabs = new GoPlusLabsAPI()
 export const GoPlusAuthorization = new GoPlusAuthorizationAPI()
+
+// CoinGecko
+export const CoinGeckoTrending = new CoinGeckoTrendingAPI()
+export const CoinGeckoPriceEVM = new CoinGeckoPriceAPI_EVM()
+export const CoinGeckoPriceSolana = new CoinGeckoPriceAPI_Solana()
 
 // R2D2
 export const R2D2TokenList = new R2D2TokenListAPI()
@@ -96,24 +125,6 @@ export const RSS3NonFungibleToken = new RSS3NonFungibleTokenAPI()
 export const DeBankGasOption = new DeBankGasOptionAPI()
 export const DeBankFungibleToken = new DeBankFungibleTokenAPI()
 export const DeBankHistory = new DeBankHistoryAPI()
-
-export const DSearch = new DSearchAPI()
-
-export const MetaSwap = new MetaSwapAPI()
-export const AstarGas = new AstarAPI()
-export const NextIDProof = new NextIDProofAPI()
-export const NextIDStorage = new NextIDStorageAPI()
-export const Web3 = new Web3API()
-export const Web3GasOption = new Web3GasOptionAPI()
-export const Web3Signer = new Web3SignerAPI()
-export const Nomics = new NomicsAPI()
-export const CoinMarketCap = new CoinMarketCapTrendingAPI()
-export const Uniswap = new UniswapAPI()
-export const Rabby = new RabbyAPI()
-export const X2Y2 = new X2Y2API()
-export const Cloudflare = new CloudflareAPI()
-export const Mirror = new MirrorAPI()
-export const CryptoScamDB = new CryptoScamDB_API()
 
 // Alchemy
 export const AlchemyEVM = new AlchemyEVM_API()
@@ -153,18 +164,3 @@ export const FuseTrending = new FuseTrendingAPI()
 export const SmartPayBundler = new SmartPayBundlerAPI()
 export const SmartPayFunder = new SmartPayFunderAPI()
 export const SmartPayAccount = new SmartPayAccountAPI()
-
-// EVM multicall
-export const Multicall = new MulticallAPI()
-
-// Lens
-export const Lens = new LensAPI()
-
-// Sentry
-export const LogHub = new LogHubAPI()
-
-// RedPacket
-export const RedPacket = new RedPacketAPI()
-
-// Thegraph ENS
-export const TheGraphDomain = new TheGraphDomainAPI()
