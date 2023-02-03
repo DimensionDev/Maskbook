@@ -58,6 +58,7 @@ import { TheGraphDomainAPI } from './TheGraph/index.js'
 import { ENS_API } from './ENS/index.js'
 import { SpaceID_API } from './SpaceID/index.js'
 import { BonfidaAPI } from './Bonfida/index.js'
+import { RedPacketAPI } from './RedPacket/index.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
@@ -89,6 +90,7 @@ export const Multicall = new MulticallAPI()
 export const Lens = new LensAPI()
 export const LogHub = new LogHubAPI()
 export const TheGraphDomain = new TheGraphDomainAPI()
+export const RedPacket = new RedPacketAPI()
 
 // Etherscan
 export const EtherscanExplorer = new EtherscanExplorerAPI()
