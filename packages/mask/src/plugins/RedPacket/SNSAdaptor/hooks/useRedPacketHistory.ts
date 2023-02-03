@@ -16,8 +16,7 @@ const CREATE_RED_PACKET_METHOD_ID = '0x5db05aba'
 export function useRedPacketHistory(address: string, chainId: ChainId) {
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT, HAPPY_RED_PACKET_ADDRESS_V4 } = getRedPacketConstants(chainId)
-
-    return useAsyncRetry(async () => {
+    const result = useAsyncRetry(async () => {
         if (!connection || !HAPPY_RED_PACKET_ADDRESS_V4) return EMPTY_LIST
         const blockNumber = await connection.getBlockNumber()
         const historyTransactions = await RedPacket.getHistories(
@@ -81,7 +80,8 @@ export function useRedPacketHistory(address: string, chainId: ChainId) {
                 return []
             }
         })
-
         return RedPacketRPC.getRedPacketHistoryFromDatabase(payloadList)
-    }, [address, chainId, connection])
+    }, [address, chainId])
+
+    return { ...result, value: result.value?.filter((x) => x.chainId === chainId) }
 }

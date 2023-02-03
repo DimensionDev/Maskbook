@@ -1,5 +1,4 @@
 import { MouseEvent, useCallback, useState, useMemo, useRef, useEffect } from 'react'
-import { BigNumber } from 'bignumber.js'
 import { useIntersectionObserver } from '@react-hookz/web'
 import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
@@ -16,9 +15,9 @@ import { useCreateRedPacketReceipt } from './hooks/useCreateRedPacketReceipt.js'
 import { useRefundCallback } from './hooks/useRefundCallback.js'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { formatBalance, FungibleToken } from '@masknet/web3-shared-base'
+import { formatBalance, FungibleToken, minus } from '@masknet/web3-shared-base'
 
-const useStyles = makeStyles<{ isVisible: boolean }>()((theme, { isVisible }) => {
+const useStyles = makeStyles<{ isViewed: boolean }>()((theme, { isViewed }) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         message: {
@@ -39,7 +38,7 @@ const useStyles = makeStyles<{ isVisible: boolean }>()((theme, { isVisible }) =>
         },
         root: {
             borderRadius: 10,
-            border: isVisible ? `solid 1px ${theme.palette.divider}` : 'unset',
+            border: isViewed ? `solid 1px ${theme.palette.divider}` : 'unset',
             marginBottom: theme.spacing(1.5),
             position: 'static !important' as any,
             height: 'auto !important',
@@ -163,18 +162,18 @@ export interface RedPacketInHistoryListProps {
 export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const { history, onSelect } = props
     const t = useI18N()
-    const [isVisible, setVisible] = useState(false)
+    const [isViewed, setIsViewed] = useState(false)
 
     const ref = useRef<HTMLLIElement | null>(null)
     const entry = useIntersectionObserver(ref, {})
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
-    const { value: receipt } = useCreateRedPacketReceipt(isVisible ? history.txid : '')
+    const { value: receipt } = useCreateRedPacketReceipt(isViewed ? history.txid : '')
 
     const rpid = receipt?.rpid ?? ''
     const creation_time = receipt?.creation_time ?? 0
 
-    const { classes, cx } = useStyles({ isVisible: isVisible && Boolean(rpid) })
+    const { classes, cx } = useStyles({ isViewed: isViewed && Boolean(rpid) })
 
     const patchedHistory: RedPacketJSONPayload | RedPacketJSONPayloadFromChain = useMemo(
         () => ({ ...props.history, rpid, creation_time }),
@@ -182,7 +181,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     )
 
     useEffect(() => {
-        if (entry?.isIntersecting) setVisible(true)
+        if (entry?.isIntersecting) setIsViewed(true)
     }, [entry?.isIntersecting])
 
     const {
@@ -235,7 +234,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         <ListItem className={classes.root} ref={ref}>
             {!rpid ? null : (
                 <Box className={classes.box}>
-                    {isVisible && (
+                    {isViewed && (
                         <TokenIcon
                             className={classes.icon}
                             address={historyToken?.address ?? ''}
@@ -279,7 +278,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     <ActionButton
                                         loading={isRefunding}
                                         fullWidth={isSmall}
-                                        onClick={canSend && !isPasswordValid ? () => undefined : onSendOrRefund}
+                                        onClick={canSend && !isPasswordValid ? undefined : onSendOrRefund}
                                         onMouseEnter={(event: MouseEvent<HTMLButtonElement>) => {
                                             canSend && !isPasswordValid ? setAnchorEl(event.currentTarget) : undefined
                                         }}
@@ -344,7 +343,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     values={{
                                         amount: formatBalance(patchedHistory.total, historyToken?.decimals, 6, true),
                                         claimedAmount: formatBalance(
-                                            new BigNumber(patchedHistory.total).minus(total_remaining ?? 0),
+                                            minus(patchedHistory.total, total_remaining ?? 0),
                                             historyToken?.decimals,
                                             6,
                                             true,
