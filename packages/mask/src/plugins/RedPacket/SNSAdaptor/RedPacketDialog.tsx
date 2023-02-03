@@ -107,12 +107,17 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [openSelectNFTDialog, setOpenSelectNFTDialog] = useState(false)
     // #endregion
 
+    const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
+        WalletMessages.events.ApplicationDialogUpdated,
+    )
+
     const onClose = useCallback(() => {
         setStep(CreateRedPacketPageStep.NewRedPacketPage)
         setSettings(undefined)
         const [, setValue] = state
         setValue(DialogTabs.create)
         props.onClose()
+        closeApplicationBoardDialog()
     }, [props, state, step])
 
     const currentIdentity = useCurrentIdentity()
@@ -120,9 +125,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { value: linkedPersona } = useCurrentLinkedPersona()
     const senderName =
         lastRecognized.identifier?.userId ?? currentIdentity?.identifier.userId ?? linkedPersona?.nickname
-    const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
-    )
+
     const onCreateOrSelect = useCallback(
         async (payload: RedPacketJSONPayload) => {
             if (payload.password === '') {
@@ -141,12 +144,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 }
             }
 
-            if (payload) {
-                senderName && (payload.sender.name = senderName)
-                attachMetadata(RedPacketMetaKey, reduceUselessPayloadInfo(payload))
-            } else dropMetadata(RedPacketMetaKey)
+            senderName && (payload.sender.name = senderName)
+            attachMetadata(RedPacketMetaKey, reduceUselessPayloadInfo(payload))
             onClose()
-            closeApplicationBoardDialog()
         },
         [onClose, chainId, senderName, connection],
     )
