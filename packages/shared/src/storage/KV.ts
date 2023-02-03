@@ -1,6 +1,6 @@
-import { KeyValue } from '@masknet/web3-providers'
-import type { Storage } from '@masknet/web3-shared-base'
 import LRU from 'lru-cache'
+import { R2D2KeyValue } from '@masknet/web3-providers'
+import type { Storage } from '@masknet/web3-shared-base'
 
 const caches = new Map<string, LRU<string, unknown>>()
 
@@ -24,7 +24,7 @@ export class KVStorage implements Storage {
     }
 
     private getKV<T>() {
-        return KeyValue.createJSON_Storage<T>(this.namespace)
+        return R2D2KeyValue.createJSON_Storage<T>(this.namespace)
     }
 
     async has(key: string) {

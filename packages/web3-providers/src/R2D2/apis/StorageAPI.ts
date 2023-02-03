@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
-import { KV_ROOT_URL } from './constants.js'
-import { fetchJSON } from '../entry-helpers.js'
-import type { StorageAPI } from '../entry-types.js'
+import { KV_ROOT_URL } from '../constants.js'
+import { fetchJSON } from '../../entry-helpers.js'
+import type { StorageAPI } from '../../entry-types.js'
 
 export class JSON_Storage<T> implements StorageAPI.Storage<T> {
     constructor(private prefix: string) {}
@@ -41,7 +41,7 @@ export class JSON_Storage<T> implements StorageAPI.Storage<T> {
     }
 }
 
-export class KeyValueAPI implements StorageAPI.Provider {
+export class R2D2KeyValueAPI implements StorageAPI.Provider {
     createJSON_Storage<T>(key: string): StorageAPI.Storage<T> {
         return new JSON_Storage<T>(key)
     }

@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { API_URL } from '../constants.js'
+import { ENS_ROOT_URL } from '../constants.js'
 import type { DomainAPI } from '../../entry-types.js'
 import { fetchJSON } from '../../entry-helpers.js'
 
@@ -10,7 +10,7 @@ export class R2D2DomainAPI implements DomainAPI.Provider<ChainId> {
     }
 
     async reverse(chainId: ChainId, address: string): Promise<string | undefined> {
-        const response = await fetchJSON<{ reverseRecord: string; domains: string[] }>(urlcat(API_URL, address))
+        const response = await fetchJSON<{ reverseRecord: string; domains: string[] }>(urlcat(ENS_ROOT_URL, address))
         return response?.reverseRecord
     }
 }

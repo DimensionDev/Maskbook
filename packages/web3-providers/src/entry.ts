@@ -12,9 +12,8 @@ import { ZoraAPI } from './Zora/index.js'
 import { EtherscanExplorerAPI } from './Etherscan/index.js'
 import { RiskWarningAPI } from './RiskWarning/index.js'
 import { RSS3API } from './RSS3/index.js'
-import { KeyValueAPI } from './KV/index.js'
 import { TwitterAPI } from './Twitter/index.js'
-import { R2D2DomainAPI, R2D2TokenListAPI } from './R2D2/index.js'
+import { R2D2KeyValueAPI, R2D2DomainAPI, R2D2TokenListAPI } from './R2D2/index.js'
 import { InstagramAPI } from './Instagram/index.js'
 import { DeBankAPI } from './DeBank/index.js'
 import { ZerionAPI, ZerionGasAPI, ZerionNonFungibleTokenAPI, ZerionTrendingAPI } from './Zerion/index.js'
@@ -70,7 +69,6 @@ export const CoinGeckoPriceSolana = new CoinGeckoPriceSolanaAPI()
 export const EtherscanExplorer = new EtherscanExplorerAPI()
 export const RiskWarning = new RiskWarningAPI()
 export const RSS3 = new RSS3API()
-export const KeyValue = new KeyValueAPI()
 export const Twitter = new TwitterAPI()
 export const Mask = new MaskAPI()
 export const MaskX = new MaskX_API()
@@ -78,8 +76,12 @@ export const Minds = new MindsAPI()
 export const Instagram = new InstagramAPI()
 export const GoPlusLabs = new GoPlusLabsAPI()
 export const GoPlusAuthorization = new GoPlusAuthorizationAPI()
+
+// R2D2
 export const R2D2TokenList = new R2D2TokenListAPI()
 export const R2D2Domain = new R2D2DomainAPI()
+export const R2D2KeyValue = new R2D2KeyValueAPI()
+
 export const DSearch = new DSearchAPI()
 export const DeBank = new DeBankAPI()
 
