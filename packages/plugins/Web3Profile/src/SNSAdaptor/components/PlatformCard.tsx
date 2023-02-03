@@ -28,9 +28,6 @@ const useStyles = makeStyles()((theme) => {
             ':hover': {
                 cursor: 'pointer',
             },
-            '&:first-child:hover': {
-                cursor: 'default',
-            },
         },
         currentTag: {
             width: '46px',
