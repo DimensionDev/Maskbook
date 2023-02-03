@@ -9,7 +9,7 @@ import {
     NFTScanNonFungibleTokenAPI_Solana,
 } from './NFTScan/index.js'
 import { ZoraAPI } from './Zora/index.js'
-import { NativeExplorerAPI } from './Explorer/index.js'
+import { EtherscanExplorerAPI } from './Etherscan/index.js'
 import { RiskWarningAPI } from './RiskWarning/index.js'
 import { RSS3API } from './RSS3/index.js'
 import { KeyValueAPI } from './KV/index.js'
@@ -68,7 +68,7 @@ export const Gem = new GemAPI()
 export const CoinGeckoTrending = new CoinGeckoTrending_API()
 export const CoinGeckoPriceEVM = new CoinGeckoPriceEVM_API()
 export const CoinGeckoPriceSolana = new CoinGeckoPriceSolanaAPI()
-export const Explorer = new NativeExplorerAPI()
+export const EtherscanExplorer = new EtherscanExplorerAPI()
 export const RiskWarning = new RiskWarningAPI()
 export const RSS3 = new RSS3API()
 export const KeyValue = new KeyValueAPI()
