@@ -842,7 +842,6 @@
     "popups_wallet_unsupported_network": "不支持的网络类型",
     "plugin_default_title": "默认",
     "plugin_provider_by": "提供方：",
-    "plugin_enables": "开启插件",
     "applications_create_persona_hint": "使用此功能需要先创建一个身份并验证您的社交媒体账号。",
     "applications_create_persona_title": "身份",
     "applications_create_persona_action": "创建身份",
