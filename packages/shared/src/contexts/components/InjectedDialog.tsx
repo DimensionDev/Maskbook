@@ -248,7 +248,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                                 {titleTail}
                             </Stack>
 
-                            <Stack className={dialogGap} />
+                            {titleTabs && <Stack className={dialogGap} />}
                             {titleTabs && <Stack className={dialogTitleTabs}>{titleTabs}</Stack>}
                             {networkTabs && <Stack className={dialogNetworkTabs}>{networkTabs}</Stack>}
                         </DialogTitle>
