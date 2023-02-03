@@ -1,4 +1,5 @@
 import { useAsyncRetry } from 'react-use'
+import { useMemo } from 'react'
 import type { BigNumber } from 'bignumber.js'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, getRedPacketConstants, chainResolver } from '@masknet/web3-shared-evm'
@@ -83,5 +84,7 @@ export function useRedPacketHistory(address: string, chainId: ChainId) {
         return RedPacketRPC.getRedPacketHistoryFromDatabase(payloadList)
     }, [address, chainId])
 
-    return { ...result, value: result.value?.filter((x) => x.chainId === chainId) }
+    const value = useMemo(() => result.value?.filter((x) => x.chainId === chainId), [chainId, result.value])
+
+    return { ...result, value }
 }
