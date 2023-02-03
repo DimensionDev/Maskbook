@@ -40,8 +40,6 @@ const sns: Plugin.SNSAdaptor.Definition<
             Content({ result: _resultList, isProfilePage }) {
                 const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
                 const resultList = _resultList as Web3Helper.TokenResultAll[]
-                console.log('---------------------------')
-                console.log(resultList)
                 if (!resultList.length) return null
                 const { chainId, keyword, address, pluginID } = resultList[0]
                 return (
