@@ -61,6 +61,7 @@ import { SentryAPI } from './Sentry/index.js'
 import { TheGraphDomainAPI, TheGraphRedPacketAPI } from './TheGraph/index.js'
 import { ENS_API } from './ENS/index.js'
 import { SpaceID_API } from './SpaceID/index.js'
+import { ARBID_API } from './ARBID/index.js'
 import { BonfidaAPI } from './Bonfida/index.js'
 import { RedPacketAPI } from './RedPacket/index.js'
 import { SmartPayOwnerAPI } from './SmartPay/apis/OwnerAPI.js'
@@ -156,6 +157,7 @@ export const R2D2Domain = new R2D2DomainAPI()
 
 // Name Service
 export const ENS = new ENS_API()
+export const ARBID = new ARBID_API()
 export const SpaceID = new SpaceID_API()
 export const Bonfida = new BonfidaAPI()
 

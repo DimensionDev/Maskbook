@@ -5,6 +5,7 @@ import type { NetworkPluginID } from '../index.js'
 export enum SocialAddressType {
     Address = 'Address',
     ENS = 'ENS',
+    ARBID = 'ARBID',
     SPACE_ID = 'SPACE_ID',
     RSS3 = 'RSS3',
     SOL = 'SOL',
