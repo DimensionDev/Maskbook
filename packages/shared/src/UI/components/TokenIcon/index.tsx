@@ -23,10 +23,16 @@ export function TokenIcon(props: TokenIconProps) {
     const hub = useWeb3Hub(props.pluginID)
     const isNFT = tokenType === TokenType.NonFungible
     const { value } = useAsyncRetry(async () => {
+        const key = address ? [chainId, address].join('/') : logoURL
+        if (logoURL) {
+            return {
+                key,
+                urls: [logoURL],
+            }
+        }
         const logoURLs = isNFT
             ? await hub?.getNonFungibleTokenIconURLs?.(chainId, address)
             : await hub?.getFungibleTokenIconURLs?.(chainId, address).catch(() => [])
-        const key = address ? [chainId, address].join('/') : logoURL
         return {
             key,
             urls: compact([logoURL, ...(logoURLs ?? [])]),

@@ -1,9 +1,9 @@
-import { KeyValue } from '@masknet/web3-providers'
+import { R2D2KeyValue } from '@masknet/web3-providers'
 import { PLUGIN_ID } from '../constants.js'
 import type { ScamResult, PostDetail } from '@scamsniffer/detector'
 import { reportScam, Detector } from '@scamsniffer/detector'
 
-const storage = KeyValue.createJSON_Storage(PLUGIN_ID)
+const storage = R2D2KeyValue.createJSON_Storage(PLUGIN_ID)
 const reportKey = 'auto_report'
 
 let detector: Detector | null = null

@@ -52,6 +52,7 @@ export interface RedPacketJSONPayload extends RedPacketBasic {
         name: string
         message: string
     }
+    chainId?: ChainId
     network?: string
     token?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
     total_remaining?: string

@@ -1,4 +1,4 @@
-import { CoinGeckoTrending_API, CoinGeckoPriceSolanaAPI, CoinGeckoPriceEVM_API } from './CoinGecko/index.js'
+import { CoinGeckoTrendingAPI, CoinGeckoPriceAPI_EVM, CoinGeckoPriceAPI_Solana } from './CoinGecko/index.js'
 import { OpenSeaAPI } from './OpenSea/index.js'
 import { LooksRareAPI } from './LooksRare/index.js'
 import { RaribleAPI } from './Rarible/index.js'
@@ -9,14 +9,13 @@ import {
     NFTScanNonFungibleTokenAPI_Solana,
 } from './NFTScan/index.js'
 import { ZoraAPI } from './Zora/index.js'
-import { NativeExplorerAPI } from './Explorer/index.js'
+import { EtherscanExplorerAPI, EtherscanRedPacketAPI } from './Etherscan/index.js'
 import { RiskWarningAPI } from './RiskWarning/index.js'
-import { RSS3API } from './RSS3/index.js'
-import { KeyValueAPI } from './KV/index.js'
+import { RSS3API, RSS3NonFungibleTokenAPI } from './RSS3/index.js'
 import { TwitterAPI } from './Twitter/index.js'
-import { R2D2API } from './R2D2/index.js'
+import { R2D2KeyValueAPI, R2D2DomainAPI, R2D2TokenListAPI } from './R2D2/index.js'
 import { InstagramAPI } from './Instagram/index.js'
-import { DeBankAPI } from './DeBank/index.js'
+import { DeBankFungibleTokenAPI, DeBankGasOptionAPI, DeBankHistoryAPI } from './DeBank/index.js'
 import { ZerionAPI, ZerionGasAPI, ZerionNonFungibleTokenAPI, ZerionTrendingAPI } from './Zerion/index.js'
 import { MaskAPI } from './Mask/index.js'
 import { MaskX_API } from './MaskX/index.js'
@@ -27,7 +26,7 @@ import { NextIDProofAPI, NextIDStorageAPI } from './NextID/index.js'
 import { AlchemyEVM_API, AlchemyFlowAPI } from './Alchemy/index.js'
 import { Web3API, Web3GasOptionAPI } from './EVM/index.js'
 import { MagicEdenAPI } from './MagicEden/index.js'
-import { CoinMarketCapAPI } from './CoinMarketCap/index.js'
+import { CoinMarketCapTrendingAPI } from './CoinMarketCap/index.js'
 import { UniswapAPI } from './Uniswap/index.js'
 import { RabbyAPI } from './Rabby/index.js'
 import { GemAPI } from './Gem/index.js'
@@ -37,6 +36,7 @@ import {
     ChainbaseFungibleTokenAPI,
     ChainbaseNonFungibleTokenAPI,
     ChainbaseDomainAPI,
+    ChainbaseRedPacketAPI,
 } from './Chainbase/index.js'
 import { SolanaFungibleAPI, SolanaNonFungibleAPI } from './Solana/index.js'
 import { FlowFungibleAPI } from './Flow/index.js'
@@ -44,20 +44,21 @@ import { CloudflareAPI } from './Cloudflare/index.js'
 import { MirrorAPI } from './Mirror/index.js'
 import { MindsAPI } from './Minds/index.js'
 import { FuseTrendingAPI } from './Fuse/index.js'
-import { CryptoScamDBAPI } from './CryptoScamDB/index.js'
+import { CryptoScamDB_API } from './CryptoScamDB/index.js'
 import { SmartPayAccountAPI, SmartPayBundlerAPI, SmartPayFunderAPI } from './SmartPay/index.js'
 import { NomicsAPI } from './Nomics/index.js'
 import { DSearchAPI } from './DSearch/index.js'
 import { MulticallAPI } from './Multicall/index.js'
-import { ENS_API } from './ENS/index.js'
 import { LensAPI } from './Lens/index.js'
 import { Web3SignerAPI } from './EVM/apis/Web3SignerAPI.js'
 import { FlowWeb3API } from './Flow/apis/Web3API.js'
 import { SolanaWeb3API } from './Solana/apis/Web3API.js'
 import { LogHubAPI } from './Sentry/index.js'
+import { TheGraphDomainAPI } from './TheGraph/index.js'
+import { ENS_API } from './ENS/index.js'
+import { SpaceID_API } from './SpaceID/index.js'
+import { BonfidaAPI } from './Bonfida/index.js'
 import { RedPacketAPI } from './RedPacket/index.js'
-import { GraphQL_Domain_API } from './GraphQL/index.js'
-import { Thegraph_Domain_API } from './Thegraph/index.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
@@ -65,39 +66,67 @@ export const MagicEden = new MagicEdenAPI()
 export const Rarible = new RaribleAPI()
 export const Zora = new ZoraAPI()
 export const Gem = new GemAPI()
-export const CoinGeckoTrending = new CoinGeckoTrending_API()
-export const CoinGeckoPriceEVM = new CoinGeckoPriceEVM_API()
-export const CoinGeckoPriceSolana = new CoinGeckoPriceSolanaAPI()
-export const Explorer = new NativeExplorerAPI()
 export const RiskWarning = new RiskWarningAPI()
-export const RSS3 = new RSS3API()
-export const KeyValue = new KeyValueAPI()
 export const Twitter = new TwitterAPI()
 export const Mask = new MaskAPI()
 export const MaskX = new MaskX_API()
 export const Minds = new MindsAPI()
 export const Instagram = new InstagramAPI()
-export const GoPlusLabs = new GoPlusLabsAPI()
-export const GoPlusAuthorization = new GoPlusAuthorizationAPI()
-export const R2D2 = new R2D2API()
 export const DSearch = new DSearchAPI()
-export const DeBank = new DeBankAPI()
-
 export const MetaSwap = new MetaSwapAPI()
 export const AstarGas = new AstarAPI()
-export const NextIDProof = new NextIDProofAPI()
-export const NextIDStorage = new NextIDStorageAPI()
 export const Web3 = new Web3API()
 export const Web3GasOption = new Web3GasOptionAPI()
 export const Web3Signer = new Web3SignerAPI()
 export const Nomics = new NomicsAPI()
-export const CoinMarketCap = new CoinMarketCapAPI()
+export const CoinMarketCap = new CoinMarketCapTrendingAPI()
 export const Uniswap = new UniswapAPI()
 export const Rabby = new RabbyAPI()
 export const X2Y2 = new X2Y2API()
 export const Cloudflare = new CloudflareAPI()
 export const Mirror = new MirrorAPI()
-export const CryptoScamDB = new CryptoScamDBAPI()
+export const CryptoScamDB = new CryptoScamDB_API()
+export const Multicall = new MulticallAPI()
+export const Lens = new LensAPI()
+export const LogHub = new LogHubAPI()
+export const TheGraphDomain = new TheGraphDomainAPI()
+export const RedPacket = new RedPacketAPI()
+
+// Etherscan
+export const EtherscanExplorer = new EtherscanExplorerAPI()
+export const EtherscanRedPacket = new EtherscanRedPacketAPI()
+
+// NextID
+export const NextIDProof = new NextIDProofAPI()
+export const NextIDStorage = new NextIDStorageAPI()
+
+// GoPlusLabs
+export const GoPlusLabs = new GoPlusLabsAPI()
+export const GoPlusAuthorization = new GoPlusAuthorizationAPI()
+
+// CoinGecko
+export const CoinGeckoTrending = new CoinGeckoTrendingAPI()
+export const CoinGeckoPriceEVM = new CoinGeckoPriceAPI_EVM()
+export const CoinGeckoPriceSolana = new CoinGeckoPriceAPI_Solana()
+
+// R2D2
+export const R2D2TokenList = new R2D2TokenListAPI()
+export const R2D2Domain = new R2D2DomainAPI()
+export const R2D2KeyValue = new R2D2KeyValueAPI()
+
+// Name Service
+export const ENS = new ENS_API()
+export const SpaceID = new SpaceID_API()
+export const Bonfida = new BonfidaAPI()
+
+// RSS3
+export const RSS3 = new RSS3API()
+export const RSS3NonFungibleToken = new RSS3NonFungibleTokenAPI()
+
+// Debank
+export const DeBankGasOption = new DeBankGasOptionAPI()
+export const DeBankFungibleToken = new DeBankFungibleTokenAPI()
+export const DeBankHistory = new DeBankHistoryAPI()
 
 // Alchemy
 export const AlchemyEVM = new AlchemyEVM_API()
@@ -123,15 +152,13 @@ export const ChainbaseHistory = new ChainbaseHistoryAPI()
 export const ChainbaseFungibleToken = new ChainbaseFungibleTokenAPI()
 export const ChainbaseNonFungibleToken = new ChainbaseNonFungibleTokenAPI()
 export const ChainbaseDomain = new ChainbaseDomainAPI()
+export const ChainbaseRedPacket = new ChainbaseRedPacketAPI()
 
 // Zerion
 export const Zerion = new ZerionAPI()
 export const ZerionNonFungibleToken = new ZerionNonFungibleTokenAPI()
 export const ZerionTrending = new ZerionTrendingAPI()
 export const ZerionGas = new ZerionGasAPI()
-
-// ENS
-export const ENS = new ENS_API()
 
 // Fuse
 export const FuseTrending = new FuseTrendingAPI()
@@ -140,20 +167,3 @@ export const FuseTrending = new FuseTrendingAPI()
 export const SmartPayBundler = new SmartPayBundlerAPI()
 export const SmartPayFunder = new SmartPayFunderAPI()
 export const SmartPayAccount = new SmartPayAccountAPI()
-
-// EVM multicall
-export const Multicall = new MulticallAPI()
-
-// Lens
-export const Lens = new LensAPI()
-
-// Sentry
-export const LogHub = new LogHubAPI()
-
-// RedPacket
-export const RedPacket = new RedPacketAPI()
-// GraphQL ENS
-export const GraphQL = new GraphQL_Domain_API()
-
-// Thegraph ENS
-export const Thegraph = new Thegraph_Domain_API()
