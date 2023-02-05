@@ -1,10 +1,10 @@
+import type { FC, PropsWithChildren } from 'react'
 import { Icons } from '@masknet/icons'
 import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { useNetworkContext, useNonFungibleAsset, useWeb3State } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
-import type { FC, PropsWithChildren } from 'react'
 import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard.js'
 import type { TipContextOptions } from '../../contexts/index.js'
 import { useI18N } from '../../locales/index.js'
@@ -135,7 +135,6 @@ export const ConfirmModal: FC<ConfirmModalProps> = ({
                                         provider={SourceType.OpenSea}
                                         readonly
                                         disableLink
-                                        renderOrder={0}
                                         pluginID={pluginID}
                                     />
                                 </div>

@@ -18,10 +18,10 @@ import {
     HubIndicator,
     createIndicator,
 } from '@masknet/web3-shared-base'
-import { CoinGeckoPriceEVM_API } from '../../CoinGecko/index.js'
+import { CoinGeckoPriceAPI_EVM } from '../../CoinGecko/index.js'
 import type { FungibleTokenAPI, TokenListAPI } from '../../entry-types.js'
 
-const CoinGeckoPriceEVM = new CoinGeckoPriceEVM_API()
+const CoinGeckoPriceEVM = new CoinGeckoPriceAPI_EVM()
 
 async function getTokenBalance(
     chainId: ChainId,

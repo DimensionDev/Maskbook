@@ -1,7 +1,7 @@
+import type { FC, HTMLProps } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { ChainId, formatTokenId, SchemaType } from '@masknet/web3-shared-evm'
 import { List, ListItem, ListProps, Typography } from '@mui/material'
-import { FC, HTMLProps, useState } from 'react'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { useI18N } from '../locales/index.js'
@@ -83,13 +83,11 @@ interface NftItemProps extends HTMLProps<HTMLDivElement> {
     collection?: NonFungibleCollection<ChainId, SchemaType>
     tokenId: string
     claimed?: boolean
-    renderOrder: number
 }
 
-export const NftItem: FC<NftItemProps> = ({ collection, tokenId, className, claimed, renderOrder, ...rest }) => {
+export const NftItem: FC<NftItemProps> = ({ collection, tokenId, className, claimed, ...rest }) => {
     const t = useI18N()
     const { classes, cx } = useStyles()
-    const [name, setName] = useState(formatTokenId(tokenId, 2))
     const asset = collection?.assets?.find((x) => x.tokenId === tokenId)
 
     return (
@@ -100,13 +98,11 @@ export const NftItem: FC<NftItemProps> = ({ collection, tokenId, className, clai
                 }}
                 url={asset?.metadata?.imageURL || asset?.metadata?.mediaURL}
                 tokenId={tokenId}
-                renderOrder={renderOrder}
                 contractAddress={collection?.address ?? ''}
                 chainId={collection?.chainId}
-                setERC721TokenName={setName}
                 disableQueryNonFungibleAsset
             />
-            <Typography className={classes.name}>{name}</Typography>
+            <Typography className={classes.name}>{formatTokenId(tokenId, 2)}</Typography>
             {claimed && <Typography className={classes.claimedBadge}>{t.claimed()}</Typography>}
         </div>
     )
@@ -124,12 +120,7 @@ export const NftList: FC<NftListProps> = ({ collection, statusList, tokenIds, cl
         <List className={cx(className, classes.list)} {...rest}>
             {tokenIds.map((tokenId, index) => (
                 <ListItem className={classes.listItem} key={tokenId}>
-                    <NftItem
-                        collection={collection}
-                        claimed={statusList[index]}
-                        tokenId={tokenId}
-                        renderOrder={index}
-                    />
+                    <NftItem collection={collection} claimed={statusList[index]} tokenId={tokenId} />
                 </ListItem>
             ))}
         </List>

@@ -256,9 +256,6 @@ const ContractInteraction = memo(() => {
                 if (!request) return
                 const { signableConfig } = PayloadEditor.fromPayload(request?.payload, {
                     chainId: request.owner ? smartPayChainId : chainId,
-                    owner: request.owner,
-                    identifier: request.identifier,
-                    gasCurrency: address,
                 })
 
                 if (!signableConfig) return
@@ -275,7 +272,6 @@ const ContractInteraction = memo(() => {
                         ? param
                         : {
                               ...param,
-                              gasCurrency: address,
                               gas: toHex(gas),
                           },
                 )
@@ -284,6 +280,7 @@ const ContractInteraction = memo(() => {
                     ...request.payload,
                     owner: request.owner,
                     identifier: request.identifier?.toText(),
+                    paymentToken: address,
                     params: config,
                 })
             } finally {
@@ -329,7 +326,7 @@ const ContractInteraction = memo(() => {
                 chainId: request.owner ? smartPayChainId : chainId,
                 owner: request.owner,
                 identifier: request.identifier,
-                gasCurrency,
+                paymentToken: gasCurrency,
             })
             navigate(-1)
         } catch (error_) {
@@ -399,8 +396,8 @@ const ContractInteraction = memo(() => {
         if (!request && !requestLoading) {
             navigate(PopupRoutes.Wallet, { replace: true })
         }
-        if (request?.computedPayload.gasCurrency) {
-            setGasCurrency(request.computedPayload.gasCurrency)
+        if (request?.paymentToken) {
+            setGasCurrency(request.paymentToken)
         }
     }, [request, requestLoading])
 

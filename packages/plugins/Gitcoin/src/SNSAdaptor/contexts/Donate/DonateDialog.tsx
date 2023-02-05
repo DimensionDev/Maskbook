@@ -115,6 +115,8 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
 
     const showConfirm = useShowResult()
     const donate = useCallback(async () => {
+        const hash = await donateCallback()
+        if (typeof hash !== 'string') return
         const cashTag = isTwitter() ? '$' : ''
         if (!token) return
         const uiAmount = formatBalance(amount.plus(tipAmount), token.decimals)

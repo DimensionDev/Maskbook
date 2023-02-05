@@ -143,7 +143,7 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
                             <div className={classes.root}>
                                 {dataSource.map((x, index) => (
                                     <div className={classes.card} key={index}>
-                                        <CollectibleCard asset={x} renderOrder={index} onSend={() => onSend(x)} />
+                                        <CollectibleCard asset={x} onSend={() => onSend(x)} />
                                     </div>
                                 ))}
                             </div>

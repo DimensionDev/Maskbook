@@ -27,16 +27,11 @@ export class ContractWallet implements Middleware<ConnectionContext> {
         protected funder: FunderAPI.Provider<ChainId>,
     ) {}
 
-    private createWallet(context: ConnectionContext) {
+    private async getNonce(context: ConnectionContext) {
         const web3 = Web3.getWeb3(context.chainId)
         const contract = createContract<WalletContract>(web3, context.account, WalletABI as AbiItem[])
         if (!contract) throw new Error('Failed to create wallet contract.')
-        return contract
-    }
-
-    private async getNonce(context: ConnectionContext) {
-        const walletContract = this.createWallet(context)
-        return walletContract.methods.nonce().call()
+        return contract.methods.nonce().call()
     }
 
     private getSigner(context: ConnectionContext) {
@@ -77,15 +72,32 @@ export class ContractWallet implements Middleware<ConnectionContext> {
                 context.owner,
                 context.userOperation,
                 this.getSigner(context),
+                {
+                    paymentToken: context.paymentToken,
+                },
             )
         if (context.config)
-            return this.account.sendTransaction(context.chainId, context.owner, context.config, this.getSigner(context))
+            return this.account.sendTransaction(
+                context.chainId,
+                context.owner,
+                context.config,
+                this.getSigner(context),
+                {
+                    paymentToken: context.paymentToken,
+                },
+            )
         throw new Error('No user operation to be sent.')
     }
 
     private estimate(context: ConnectionContext): Promise<string> {
-        if (context.userOperation) return this.account.estimateUserOperation(context.chainId, context.userOperation)
-        if (context.config) return this.account.estimateTransaction(context.chainId, context.config)
+        if (context.userOperation)
+            return this.account.estimateUserOperation(context.chainId, context.userOperation, {
+                paymentToken: context.paymentToken,
+            })
+        if (context.config)
+            return this.account.estimateTransaction(context.chainId, context.config, {
+                paymentToken: context.paymentToken,
+            })
         throw new Error('No user operation to be estimated.')
     }
 

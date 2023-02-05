@@ -35,7 +35,7 @@ async function internalSend(
     } = PayloadEditor.fromPayload(payload, options)
     const owner = options?.owner
     const identifier = options?.identifier
-    const gasCurrency = options?.gasCurrency
+    const paymentToken = options?.paymentToken
     const signer = identifier
         ? new Signer(identifier, <T>(type: SignType, message: T, identifier?: ECKeyIdentifier) =>
               signWithPersona(type, message, identifier, true),
@@ -47,13 +47,13 @@ async function internalSend(
         case EthereumMethodType.MASK_REPLACE_TRANSACTION:
             try {
                 if (!signableConfig) throw new Error('No transaction to be sent.')
-                if (owner && gasCurrency) {
+                if (owner && paymentToken) {
                     callback(
                         null,
                         createJsonRpcResponse(
                             pid,
                             await SmartPayAccount.sendTransaction(chainId, owner, signableConfig, signer, {
-                                paymentToken: gasCurrency,
+                                paymentToken,
                             }),
                         ),
                     )
@@ -145,6 +145,7 @@ export async function send(payload: JsonRpcPayload, options?: TransactionOptions
                 ...editor.fill(),
                 owner: options?.owner,
                 identifier: options?.identifier?.toText(),
+                paymentToken: options?.paymentToken,
             })
             UNCONFIRMED_CALLBACK_MAP.set(editor.pid!, callback)
             if (options?.popupsWindow) openPopupWindow()

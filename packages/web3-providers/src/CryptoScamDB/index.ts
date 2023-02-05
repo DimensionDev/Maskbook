@@ -5,7 +5,7 @@ import { fetchJSON } from '../entry-helpers.js'
 
 const baseURL = 'https://scam.mask.r2d2.to/cryptoscam-db'
 
-export class CryptoScamDBAPI implements ScamWarningAPI.Provider {
+export class CryptoScamDB_API implements ScamWarningAPI.Provider {
     bloomFilter?: ScalableBloomFilter
 
     async getBloomFilter() {

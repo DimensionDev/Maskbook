@@ -218,7 +218,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                 expectedPluginID={pluginID}
                 open={open_}
                 onClose={() => setOpen_(false)}
-                onAddClick={onAddClick}
+                onAddToken={onAddClick}
             />
         </>
     )

@@ -950,7 +950,7 @@
     "popups_wallet_unsupported_network": "Unsupported network type",
     "plugin_default_title": "Default",
     "plugin_provider_by": "Provided by",
-    "plugin_enables": "Enable plugins",
+    "plugin_enable": "Enable plugin",
     "show_wallet_setting_intro": "Please select the wallet to activate the function after saving the settings.",
     "show_wallet_setting_button": "Go to Settings",
     "web3_profile_no_social_address_list": "Can’t find a valid user address data source.",
@@ -978,5 +978,6 @@
     "plugin_collectible_insufficient_balance": "Insufficient balance",
     "persona_boundary_create_persona": "Create Persona",
     "persona_boundary_connect_persona": "Connect Persona",
-    "persona_boundary_verify_persona": "Verify your Twitter ID"
+    "persona_boundary_verify_persona": "Verify your Twitter ID",
+    "plugin_disabled_tip": "You need to open the DAPP to view the specific content."
 }

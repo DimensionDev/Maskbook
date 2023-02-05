@@ -35,10 +35,10 @@ export interface AddNFTProps {
     open: boolean
     title?: string
     onClose: () => void
-    onAddClick?: (token: AllChainsNonFungibleToken) => void
+    onAddToken?: (token: AllChainsNonFungibleToken) => void
 }
 export function AddNFT(props: AddNFTProps) {
-    const { onClose, open, onAddClick, title, chainId, account, expectedPluginID } = props
+    const { onClose, open, onAddToken, title, chainId, account, expectedPluginID } = props
     const t = useI18N()
     const { classes } = useStyles()
     const [address, setAddress] = useState('')
@@ -98,7 +98,7 @@ export function AddNFT(props: AddNFTProps) {
                 return
             }
 
-            onAddClick?.(tokenDetailed as AllChainsNonFungibleToken)
+            onAddToken?.(tokenDetailed as AllChainsNonFungibleToken)
             toggleChecking(false)
             handleClose()
         } catch {
@@ -106,7 +106,7 @@ export function AddNFT(props: AddNFTProps) {
             toggleChecking(false)
             return
         }
-    }, [tokenId, address, onAddClick, onClose, _chainId, hub, _account, connection])
+    }, [tokenId, address, onAddToken, onClose, _chainId, hub, _account, connection])
 
     const onAddressChange = useCallback((address: string) => {
         setMessage('')

@@ -2,7 +2,8 @@ import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { StorageItem, NameServiceID } from '@masknet/shared-base'
-import { attemptUntil, NameServiceResolver, NameServiceState as Web3NameServiceState } from '@masknet/web3-shared-base'
+import type { NameServiceAPI } from '@masknet/web3-providers/types'
+import { attemptUntil, NameServiceState as Web3NameServiceState } from '@masknet/web3-shared-base'
 
 export class NameServiceState<
     ChainId extends number,
@@ -96,7 +97,7 @@ export class NameServiceState<
         return attemptUntil(callbacks, undefined, () => false)
     }
 
-    createResolvers(chainId: ChainId): NameServiceResolver[] {
+    createResolvers(chainId: ChainId): NameServiceAPI.Provider[] {
         throw new Error('Method not implemented.')
     }
 }

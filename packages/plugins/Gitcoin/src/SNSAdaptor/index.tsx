@@ -1,12 +1,14 @@
 import { Icons } from '@masknet/icons'
 import { Plugin, SNSAdaptorContext, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { parseURLs, PluginID } from '@masknet/shared-base'
+import { MaskLightTheme } from '@masknet/theme'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { ThemeProvider } from '@mui/material'
 import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
 import { base } from '../base.js'
 import { PLUGIN_META_KEY, PLUGIN_NAME } from '../constants.js'
-import { SharedContextSettings } from '../settings.js'
+import { SharedContext } from '../settings.js'
 import { ResultModalProvider, DonateProvider } from './contexts/index.js'
 import { PreviewCard } from './PreviewCard.js'
 
@@ -16,10 +18,12 @@ function Renderer(props: { id: string }) {
     usePluginWrapper(true)
 
     return (
-        <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
+        <SNSAdaptorContext.Provider value={SharedContext.value!}>
             <ResultModalProvider>
                 <DonateProvider>
-                    <PreviewCard grantId={props.id} />
+                    <ThemeProvider theme={MaskLightTheme}>
+                        <PreviewCard grantId={props.id} />
+                    </ThemeProvider>
                 </DonateProvider>
             </ResultModalProvider>
         </SNSAdaptorContext.Provider>
@@ -29,7 +33,7 @@ function Renderer(props: { id: string }) {
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(_, context) {
-        SharedContextSettings.value = context
+        SharedContext.value = context
     },
     DecryptedInspector(props) {
         const link = useMemo(() => {
@@ -40,7 +44,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const id = link?.match(/\d+/)?.[0]
         if (!id) return null
         return (
-            <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
+            <SNSAdaptorContext.Provider value={SharedContext.value!}>
                 <Renderer id={id} />
             </SNSAdaptorContext.Provider>
         )
@@ -74,6 +78,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 style={{ filter: 'drop-shadow(0px 6px 12px rgba(255, 159, 10, 0.2))' }}
             />
         ),
+        backgroundGradient:
+            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(41, 228, 253, 0.2) 100%), #FFFFFF',
     },
 }
 

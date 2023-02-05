@@ -31,8 +31,8 @@
     }
   },
   "dependencies": {
+    "@bonfida/spl-name-service": "^0.1.50",
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
-    "@ensdomains/eth-ens-namehash": "^2.0.15",
     "@masknet/icons": "workspace:^",
     "@masknet/public-api": "workspace:^",
     "@masknet/shared-base": "workspace:^",
@@ -55,7 +55,6 @@
     "bignumber.js": "9.1.0",
     "bloom-filters": "^3.0.0",
     "date-fns": "^2.29.3",
-    "ethjs-ens": "^2.0.1",
     "fuse.js": "6.6.2",
     "graphql-request": "^3.4.0",
     "json-stable-stringify": "^1.0.2",

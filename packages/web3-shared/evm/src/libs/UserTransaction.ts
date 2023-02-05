@@ -183,11 +183,9 @@ export class UserTransaction {
             try {
                 const transaction = UserTransaction.toTransaction(this.chainId, this.userOperation)
                 if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
-                const estimatedGas =
-                    callGas ??
-                    (await this.createWalletContract(web3, sender)
-                        ?.methods.exec(transaction.to, transaction.value ?? '0', transaction.data ?? '0x')
-                        .estimateGas())
+                const estimatedGas = await this.createWalletContract(web3, sender)
+                    ?.methods.exec(transaction.to, transaction.value ?? '0', transaction.data ?? '0x')
+                    .estimateGas()
 
                 this.userOperation.callGas = toHex(estimatedGas)
             } catch (error) {
@@ -195,6 +193,14 @@ export class UserTransaction {
             }
         } else {
             this.userOperation.callGas = callGas ?? DEFAULT_USER_OPERATION.callGas
+        }
+
+        // 1.5x scale up callGas
+        this.userOperation.callGas = toHex(toFixed(multipliedBy(this.userOperation.callGas ?? '0', 1.5)))
+
+        // recover to the original callGas when extra gas could be provided
+        if (isGreaterThan(callGas ?? '0', this.userOperation.callGas)) {
+            this.userOperation.callGas = callGas
         }
 
         if (isZeroString(maxFeePerGas)) {
@@ -230,7 +236,6 @@ export class UserTransaction {
             sender,
             callData,
             callGas,
-            verificationGas,
             preVerificationGas,
             maxFeePerGas,
             maxPriorityFeePerGas,
@@ -244,17 +249,7 @@ export class UserTransaction {
                 .call()
         }
 
-        // add more verification gas according to the size of initCode
-        if (!isEmptyHex(initCode)) {
-            this.userOperation.verificationGas = toFixed(
-                new BigNumber(DEFAULT_USER_OPERATION.verificationGas).plus(32000 + (200 * initCode.length) / 2),
-            )
-        } else {
-            this.userOperation.verificationGas = DEFAULT_USER_OPERATION.verificationGas
-        }
-
-        // caution: the creator needs to set the latest index of the contract account.
-        // otherwise, always treat the operation to create the initial account.
+        // fill nonce
         if (isValidAddress(this.userOperation.sender) && typeof overrides === 'undefined' && nonce === 0) {
             try {
                 const nonce_ = await this.createWalletContract(web3, sender).methods.nonce().call()
@@ -266,14 +261,12 @@ export class UserTransaction {
 
         if (!isEmptyHex(callData)) {
             try {
-                this.userOperation.callGas = toFixed(
-                    callGas ??
-                        (await web3.eth.estimateGas({
-                            from: this.entryPoint,
-                            to: this.userOperation.sender,
-                            data: callData,
-                        })),
-                )
+                const estimatedGas = await web3.eth.estimateGas({
+                    from: this.entryPoint,
+                    to: this.userOperation.sender,
+                    data: callData,
+                })
+                this.userOperation.callGas = toHex(estimatedGas)
             } catch (error) {
                 this.userOperation.callGas = callGas ?? DEFAULT_USER_OPERATION.callGas
             }
@@ -281,7 +274,7 @@ export class UserTransaction {
             this.userOperation.callGas = callGas ?? DEFAULT_USER_OPERATION.callGas
         }
 
-        // double up
+        // 1.5x scale up callGas
         this.userOperation.callGas = toHex(toFixed(multipliedBy(this.userOperation.callGas ?? '0', 1.5)))
 
         // recover to the original callGas when extra gas could be provided
@@ -305,7 +298,13 @@ export class UserTransaction {
         if (isZeroString(maxPriorityFeePerGas)) {
             this.userOperation.maxPriorityFeePerGas = DEFAULT_USER_OPERATION.maxPriorityFeePerGas
         }
-        if (isZeroString(verificationGas)) {
+
+        // add more verification gas according to the size of initCode
+        if (!isEmptyHex(initCode)) {
+            this.userOperation.verificationGas = toFixed(
+                new BigNumber(DEFAULT_USER_OPERATION.verificationGas).plus(32000 + (200 * initCode.length) / 2),
+            )
+        } else {
             this.userOperation.verificationGas = DEFAULT_USER_OPERATION.verificationGas
         }
         if (isZeroString(preVerificationGas)) {
@@ -380,10 +379,7 @@ export class UserTransaction {
         transaction: Transaction,
         options?: Options,
     ): UserTransaction {
-        return new UserTransaction(chainId, entryPoint, UserTransaction.toUserOperation(chainId, transaction), {
-            paymentToken: transaction.gasCurrency,
-            ...options,
-        })
+        return new UserTransaction(chainId, entryPoint, UserTransaction.toUserOperation(chainId, transaction), options)
     }
 
     static fromUserOperation(

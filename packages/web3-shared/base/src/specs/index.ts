@@ -8,7 +8,6 @@ import type {
     ECKeyIdentifier,
     NextIDPersonaBindings,
     NextIDPlatform,
-    NameServiceID,
     NetworkPluginID,
     Proof,
 } from '@masknet/shared-base'
@@ -99,9 +98,6 @@ export enum SourceType {
 
     // Token List
     R2D2 = 'R2D2',
-
-    // NFT Lucky drop
-    NFTLuckyDrop = 'NFTLuckyDrop',
 }
 
 export enum SearchResultType {
@@ -855,6 +851,10 @@ export interface Transaction<ChainId, SchemaType> {
     >
     /** estimated tx fee */
     fee?: Price
+    input?: string
+    hash?: string
+    methodId?: string
+    blockNumber?: number
 }
 
 export interface RecentTransaction<ChainId, Transaction> {
@@ -967,14 +967,16 @@ export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
     account?: string
     /** Designate the sub-network id of the transaction. */
     chainId?: ChainId
-    /** Designate the provider to handle the transaction. */
-    providerType?: ProviderType
-    /** Fragments to merge into the transaction. */
-    overrides?: Partial<Transaction>
     /** an abstract wallet has a owner */
     owner?: string
     /** persona identifier */
     identifier?: ECKeyIdentifier
+    /** Designate the provider to handle the transaction. */
+    providerType?: ProviderType
+    /** Gas payment token. */
+    paymentToken?: string
+    /** Fragments to merge into the transaction. */
+    overrides?: Partial<Transaction>
 }
 export interface Connection<
     ChainId,
@@ -1466,25 +1468,16 @@ export interface IdentityServiceState<ChainId> {
     lookup(identity: SocialIdentity): Promise<Array<SocialAddress<ChainId>>>
 }
 
-export interface NameServiceResolver {
-    get id(): NameServiceID
-    /** get address of domain name */
-    lookup?: (domain: string) => Promise<string | undefined>
-    /** get domain name of address */
-    reverse?: (address: string) => Promise<string | undefined>
-}
-
 export interface NameServiceState<ChainId> {
     ready: boolean
     readyPromise: Promise<void>
 
-    /** create name resolver */
-    createResolvers: (chainId: ChainId) => NameServiceResolver[]
     /** get address of domain name */
     lookup?: (chainId: ChainId, domain: string) => Promise<string | undefined>
     /** get domain name of address */
     reverse?: (chainId: ChainId, address: string) => Promise<string | undefined>
 }
+
 export interface TokenState<ChainId, SchemaType> {
     ready: boolean
     readyPromise: Promise<void>

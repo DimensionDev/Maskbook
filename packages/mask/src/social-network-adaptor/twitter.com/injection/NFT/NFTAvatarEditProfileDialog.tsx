@@ -1,22 +1,22 @@
-import { useEffect } from 'react'
-import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
-import { Twitter } from '@masknet/web3-providers'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { NFTAvatarButton } from '@masknet/plugin-avatar'
+import { ConnectPersonaBoundary } from '@masknet/shared'
+import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { startWatch, createReactRootShadowed, MaskMessages } from '../../../../utils/index.js'
-import { searchProfileAvatarSelector, searchProfileSaveSelector } from '../../utils/selector.js'
+import { Twitter } from '@masknet/web3-providers'
+import { useEffect } from 'react'
+import { currentPersonaIdentifier } from '../../../../../shared/legacy-settings/settings.js'
 import {
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
     useThemeSettings,
 } from '../../../../components/DataSource/useActivatedUI.js'
-import { ButtonStyle } from '../../constant.js'
 import { usePersonasFromDB } from '../../../../components/DataSource/usePersonasFromDB.js'
-import { useValueRef } from '@masknet/shared-base-ui'
-import { currentPersonaIdentifier } from '../../../../../shared/legacy-settings/settings.js'
-import { ConnectPersonaBoundary } from '@masknet/shared'
 import { Services } from '../../../../extension/service.js'
-import { NFTAvatarButton } from '@masknet/plugin-avatar'
+import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils/index.js'
+import { ButtonStyle } from '../../constant.js'
+import { searchProfileAvatarSelector, searchProfileSaveSelector } from '../../utils/selector.js'
 
 export function injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())
@@ -69,9 +69,8 @@ const useStyles = makeStyles<{ buttonSize: number; fontSize: number }>()((theme,
 
 function OpenNFTAvatarEditProfileButtonInTwitter() {
     const clickHandler = () => {
-        CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
+        CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
             open: true,
-            pluginID: PluginID.Avatar,
         })
     }
     const personas = usePersonasFromDB()

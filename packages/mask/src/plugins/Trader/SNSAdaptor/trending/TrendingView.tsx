@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useContext } from 'react'
-import { compact } from 'lodash-es'
+import { compact, first } from 'lodash-es'
 import { TrendingViewContext } from './context.js'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import {
@@ -151,20 +151,12 @@ export function TrendingView(props: TrendingViewProps) {
     // #endregion
 
     const isNFT = trending?.coin.type === TokenType.NonFungible
-    // #region if the coin is a native token or contract address exists
-    const isSwappable =
-        !isMinimalMode &&
-        !isNFT &&
-        !!trending?.coin.contract_address &&
-        chainIdValid &&
-        trending.contracts?.[0]?.pluginID === NetworkPluginID.PLUGIN_EVM
-    // #endregion
 
     // #region expected chainId
-    const swapExpectedChainId = useMemo(() => {
-        const contracts =
-            trending?.contracts?.filter((x) => x.chainId && x.address) ??
-            (trending?.coin.chainId && trending.coin.contract_address)
+    const swapExpectedContract = useMemo(() => {
+        const contracts = trending?.contracts?.filter((x) => x.chainId && x.address) ?? []
+        const fallbackContracts: TrendingAPI.Contract[] =
+            trending?.coin.chainId && trending.coin.contract_address
                 ? [
                       {
                           chainId: trending.coin.chainId,
@@ -173,10 +165,20 @@ export function TrendingView(props: TrendingViewProps) {
                       },
                   ]
                 : []
-        const _contracts = contracts?.filter((x) => x.chainId === chainId) ?? []
-        if (_contracts.length > 0) return chainId
-        return contracts?.[0]?.chainId ?? chainId
-    }, [trending?.contracts, chainId])
+
+        const _contracts = (contracts.length ? contracts : fallbackContracts).filter((x) => x.chainId === chainId) ?? []
+        if (_contracts.length > 0) return first(_contracts)
+        return first(contracts)
+    }, [trending, chainId])
+    // #endregion
+
+    // #region if the coin is a native token or contract address exists
+    const isSwappable =
+        !isMinimalMode &&
+        !isNFT &&
+        !!trending?.coin.contract_address &&
+        chainIdValid &&
+        swapExpectedContract?.pluginID === NetworkPluginID.PLUGIN_EVM
     // #endregion
 
     // #region tabs
@@ -320,7 +322,7 @@ export function TrendingView(props: TrendingViewProps) {
                     </Box>
                 ) : null}
                 {currentTab === ContentTabs.Swap && isSwappable ? (
-                    <Web3ContextProvider value={{ pluginID: context.pluginID, chainId: swapExpectedChainId }}>
+                    <Web3ContextProvider value={{ pluginID: context.pluginID, chainId: swapExpectedContract.chainId }}>
                         <TradeView
                             classes={{ root: classes.tradeViewRoot }}
                             TraderProps={{
@@ -336,13 +338,13 @@ export function TrendingView(props: TrendingViewProps) {
                                     : undefined,
                                 defaultOutputCoin: trending.coin
                                     ? createFungibleToken(
-                                          trending.coin.chainId ?? chainId,
-                                          isNativeTokenAddress(trending.coin.address)
+                                          swapExpectedContract.chainId ?? chainId,
+                                          isNativeTokenAddress(swapExpectedContract.address)
                                               ? SchemaType.Native
                                               : SchemaType.ERC20,
-                                          trending.coin.address ?? trending.coin.contract_address ?? '',
-                                          trending.coin.name,
-                                          trending.coin.symbol,
+                                          swapExpectedContract.address,
+                                          '',
+                                          '',
                                           trending.coin.decimals ?? 0,
                                       )
                                     : undefined,
