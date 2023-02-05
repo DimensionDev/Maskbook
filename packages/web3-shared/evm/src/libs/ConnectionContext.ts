@@ -108,7 +108,9 @@ export class ConnectionContext {
             ...this.payloadEditor.config,
             ...this._options?.overrides,
             from: this._options?.overrides?.from || this.payloadEditor.config?.from,
-            chainId: Number.parseInt(this._options?.overrides?.from, 10) || this.payloadEditor.config?.chainId,
+            chainId: this._options?.overrides?.from
+                ? Number.parseInt(this._options?.overrides?.from, 10)
+                : this.payloadEditor.config?.chainId,
         }
     }
 

@@ -1,13 +1,7 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useCustomSnackbar } from '@masknet/theme'
-import {
-    DashboardRoutes,
-    ECKeyIdentifier,
-    EC_Private_JsonWebKey,
-    EC_Public_JsonWebKey,
-    PopupRoutes,
-} from '@masknet/shared-base'
+import { DashboardRoutes, ECKeyIdentifier, EC_Public_JsonWebKey, PopupRoutes } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { SignUpRoutePath } from '../routePath.js'
 import { Messages, PluginServices, Services } from '../../../API.js'
@@ -47,7 +41,6 @@ export const PersonaRecovery = () => {
                     | {
                           address: string
                           identifier: ECKeyIdentifier
-                          privateKey: EC_Private_JsonWebKey
                           publicKey: EC_Public_JsonWebKey
                       }
                     | undefined
@@ -78,7 +71,6 @@ export const PersonaRecovery = () => {
                                         address: result.address,
                                         identifier: result.identifier,
                                         publicKeyHex: result.identifier.publicKeyAsHex,
-                                        privateKey: result.privateKey,
                                         publicKey: result.publicKey,
                                         linkedProfiles: [],
                                     },

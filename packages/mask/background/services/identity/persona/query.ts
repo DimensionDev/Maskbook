@@ -109,7 +109,6 @@ export async function queryPersonaEOAByMnemonic(mnemonicWord: string, password: 
     return {
         address: bufferToHex(publicToAddress(privateToPublic(Buffer.from(fromBase64URL(privateKey.d))))),
         identifier: await ECKeyIdentifierFromJsonWebKey(publicKey),
-        privateKey,
         publicKey,
     }
 }
@@ -122,7 +121,6 @@ export async function queryPersonaEOAByPrivateKey(privateKeyString: string) {
     return {
         address: bufferToHex(publicToAddress(privateToPublic(Buffer.from(fromBase64URL(privateKey.d))))),
         identifier: await ECKeyIdentifierFromJsonWebKey(publicKey),
-        privateKey,
         publicKey,
     }
 }
