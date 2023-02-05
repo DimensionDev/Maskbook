@@ -90,7 +90,7 @@ export enum SourceType {
     Uniswap = 'Uniswap',
     NFTX = 'NFTX',
     Etherscan = 'Etherscan',
-    Cryptopunks = 'Cryptopunks',
+    CryptoPunks = 'CryptoPunks',
 
     // Rarity
     RaritySniper = 'RaritySniper',
