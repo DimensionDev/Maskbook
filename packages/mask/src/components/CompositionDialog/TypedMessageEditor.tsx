@@ -7,7 +7,7 @@ import {
 } from '@masknet/typed-message'
 import { editTypedMessageMeta } from '@masknet/typed-message-react'
 import { makeStyles } from '@masknet/theme'
-import { InputBase, Alert, Button, inputBaseClasses } from '@mui/material'
+import { InputBase, Alert, Button, inputBaseClasses, alpha } from '@mui/material'
 import { useCallback, useImperativeHandle, useState, useRef, forwardRef, memo, useMemo } from 'react'
 import { useI18N } from '../../utils/index.js'
 import { BadgeRenderer } from './BadgeRenderer.js'
@@ -24,6 +24,11 @@ const useStyles = makeStyles()((theme) => ({
         [`& > .${inputBaseClasses.input}`]: {
             height: 'calc(100% - 22px) !important',
             overflow: 'unset',
+        },
+        [`&.${inputBaseClasses.focused}`]: {
+            backgroundColor: 'transparent',
+            border: 0,
+            outline: `2px solid ${alpha(theme.palette.maskColor.primary, 0.2)}`,
         },
     },
     badgeInput: {
