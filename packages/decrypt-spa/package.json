@@ -1,0 +1,37 @@
+{
+    "name": "@masknet/decrypt-spa",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "mask-src": "./src/index.ts",
+            "default": "./dist/index.js"
+        }
+    },
+    "types": "./dist/index.d.ts",
+    "scripts": {
+        "start": "npx webpack serve"
+    },
+    "dependencies": {
+        "@masknet/base": "workspace:^",
+        "@masknet/encryption": "workspace:^",
+        "@masknet/plugin-infra": "workspace:^",
+        "@masknet/shared-base": "workspace:*",
+        "@masknet/typed-message": "workspace:^",
+        "@masknet/typed-message-react": "workspace:^",
+        "@servie/events": "^3.0.0"
+    },
+    "devDependencies": {
+        "@dimensiondev/webextension-shim": "0.0.3-20210823035705-4257e12",
+        "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
+        "copy-webpack-plugin": "^11.0.0",
+        "html-webpack-plugin": "^5.5.0",
+        "react-refresh": "^0.14.0",
+        "source-map-loader": "^4.0.1",
+        "swc-loader": "^0.2.3",
+        "webpack": "^5.75.0",
+        "webpack-cli": "^5.0.0",
+        "webpack-dev-server": "^4.11.1"
+    }
+}

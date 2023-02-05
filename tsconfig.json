@@ -3,6 +3,7 @@
   "references": [
     // Only list top-level projects here
     { "path": "./packages/polyfills/" },
+    { "path": "./packages/decrypt-spa/" },
     { "path": "./packages/mask/" },
     { "path": "./packages/injected-script/main" },
     { "path": "./packages/mask-sdk/main" },
@@ -104,6 +105,7 @@
       "@masknet/sandboxed-plugin-runtime/extension-page": ["./packages/sandboxed-plugin-runtime/src/extension-page"],
       "@masknet/base": ["./packages/base/src"],
       "@masknet/config": ["./packages/config/src"],
+      "@masknet/decrypt-spa": ["./packages/decrypt-spa/src"],
       // @masknet/scripts: insert-here 2
 
       // Plugins
