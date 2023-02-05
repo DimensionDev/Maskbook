@@ -2,11 +2,11 @@ import formatDateTime from 'date-fns/format'
 import isAfter from 'date-fns/isAfter'
 import isValidDate from 'date-fns/isValid'
 import { Icons } from '@masknet/icons'
-import { ChainBoundary, Markdown, WalletConnectedBoundary } from '@masknet/shared'
-import { LoadingBase, makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
+import { ChainBoundary, Markdown, RetryHint, WalletConnectedBoundary } from '@masknet/shared'
+import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
-import { Box, Button, CardContent, CardHeader, Paper, Tab, Typography } from '@mui/material'
+import { Box, CardContent, CardHeader, Paper, Tab, Typography } from '@mui/material'
 import { SUPPORTED_PROVIDERS } from '../../constants.js'
 import { CollectiblePaper } from './CollectiblePaper.js'
 import { LinkingAvatar } from '../Shared/LinkingAvatar.js'
@@ -142,22 +142,16 @@ export function Collectible(props: CollectibleProps) {
                 <Typography>{t.loading()}</Typography>
             </Box>
         )
-    if (!asset.value)
+    if (!asset.value) {
         return (
-            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-                <Typography color={MaskColorVar.textPluginColor} sx={{ marginTop: 8, marginBottom: 8 }}>
-                    {t.plugin_collectible_failed_load({ source: resolveSourceTypeName(sourceType) })}
-                </Typography>
-                <Box alignItems="center" sx={{ padding: 1, display: 'flex', flexDirection: 'row', width: '100%' }}>
-                    <Box sx={{ flex: 1, padding: 1 }}> {CollectibleProviderSwitcher}</Box>
-                    <Box sx={{ flex: 1, padding: 1 }}>
-                        <Button fullWidth onClick={() => asset.retry()} variant="roundedDark">
-                            {t.plugin_collectible_refresh()}
-                        </Button>
-                    </Box>
-                </Box>
+            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" pb={2} pt={4}>
+                <RetryHint
+                    ButtonProps={{ startIcon: <Icons.Restore color="white" size={18} />, sx: { width: 256 } }}
+                    retry={() => asset.retry()}
+                />
             </Box>
         )
+    }
 
     const _asset = asset.value
     const endDate = _asset.auction?.endAt
