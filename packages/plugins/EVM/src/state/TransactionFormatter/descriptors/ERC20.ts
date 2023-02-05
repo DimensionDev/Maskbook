@@ -42,7 +42,6 @@ export class ERC20Descriptor implements TransactionDescriptor {
                         }
                     }
 
-                    console.log(parameters)
                     return {
                         chainId: context.chainId,
                         title: i18NextInstance.t('plugin_infra_descriptor_token_approve_title'),

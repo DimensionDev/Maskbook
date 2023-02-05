@@ -101,32 +101,28 @@ export function useDeploy(
             )
             if (!hash) throw new Error('Deploy Failed')
 
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 return TransactionWatcher?.emitter.on('progress', async (_, txHash, status) => {
-                    try {
-                        if (txHash !== hash || !signAccount.address || status !== TransactionStatusType.SUCCEED) return
+                    if (txHash !== hash || !signAccount.address || status !== TransactionStatusType.SUCCEED) return
 
-                        const result = await connection?.deploy?.(signAccount.address, signAccount.identifier, {
-                            chainId,
-                        })
+                    const result = await connection?.deploy?.(signAccount.address, signAccount.identifier, {
+                        chainId,
+                    })
 
-                        Wallet?.addWallet({
-                            name: 'Smart Pay',
-                            owner: signAccount.address,
-                            address: contractAccount.address,
-                            hasDerivationPath: false,
-                            hasStoredKeyInfo: false,
-                            id: contractAccount.address,
-                            createdAt: new Date(),
-                            updatedAt: new Date(),
-                        }).then(() => {
-                            onSuccess?.()
-                            resolve(result)
-                        })
-                    } catch (error) {
-                        console.log(error)
-                        reject(error)
-                    }
+                    await Wallet?.addWallet({
+                        name: 'Smart Pay',
+                        owner: signAccount.address,
+                        address: contractAccount.address,
+                        hasDerivationPath: false,
+                        hasStoredKeyInfo: false,
+                        id: contractAccount.address,
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                    })
+
+                    onSuccess?.()
+
+                    resolve(result)
                 })
             })
         } catch (error) {

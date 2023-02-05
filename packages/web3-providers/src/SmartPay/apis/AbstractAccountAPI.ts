@@ -203,34 +203,29 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         userTransaction: UserTransaction,
         signer: Signer<ECKeyIdentifier> | Signer<string>,
     ) {
-        try {
-            const web3 = this.web3.getWeb3(chainId)
+        const web3 = this.web3.getWeb3(chainId)
 
-            if (isValidAddress(userTransaction.paymentToken) && !isNativeTokenAddress(userTransaction.paymentToken)) {
-                const getOverrides = async () => {
-                    if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
-                        const accounts = await this.getAccountsByOwner(chainId, owner)
-                        const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
+        if (isValidAddress(userTransaction.paymentToken) && !isNativeTokenAddress(userTransaction.paymentToken)) {
+            const getOverrides = async () => {
+                if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
+                    const accounts = await this.getAccountsByOwner(chainId, owner)
+                    const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
 
-                        if (!accountsDeployed.length) {
-                            return {
-                                initCode: await this.getInitCode(chainId, owner),
-                                nonce: accountsDeployed.length,
-                            }
+                    if (!accountsDeployed.length) {
+                        return {
+                            initCode: await this.getInitCode(chainId, owner),
+                            nonce: accountsDeployed.length,
                         }
                     }
-                    return
                 }
-
-                await userTransaction.fillUserOperation(web3, await getOverrides())
-                return this.bundler.sendUserOperation(chainId, await userTransaction.signUserOperation(signer))
-            } else {
-                await userTransaction.fillTransaction(web3)
-                return this.web3.sendSignedTransaction(chainId, await userTransaction.signTransaction(web3, signer))
+                return
             }
-        } catch (error) {
-            console.log(error)
-            return
+
+            await userTransaction.fillUserOperation(web3, await getOverrides())
+            return this.bundler.sendUserOperation(chainId, await userTransaction.signUserOperation(signer))
+        } else {
+            await userTransaction.fillTransaction(web3)
+            return this.web3.sendSignedTransaction(chainId, await userTransaction.signTransaction(web3, signer))
         }
     }
 

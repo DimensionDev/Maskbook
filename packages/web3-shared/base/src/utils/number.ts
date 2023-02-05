@@ -1,4 +1,5 @@
 import { BigNumber } from 'bignumber.js'
+import { isUndefined } from 'lodash-es'
 
 export const ZERO = new BigNumber('0')
 export const ONE = new BigNumber('1')
@@ -100,7 +101,7 @@ export function toFixed(value: BigNumber.Value | undefined): string
 export function toFixed(value: BigNumber.Value | undefined, decimalPlaces: number): string
 export function toFixed(value: BigNumber.Value = 0, decimalPlaces?: number) {
     const n = new BigNumber(value)
-    return decimalPlaces ? n.toFixed(decimalPlaces) : n.toFixed()
+    return !isUndefined(decimalPlaces) ? n.toFixed(decimalPlaces) : n.toFixed()
 }
 
 export function formatInteger(value: BigNumber.Value | null | undefined, fallback?: string | number) {

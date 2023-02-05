@@ -40,6 +40,7 @@ import {
     isLessThan,
     leftShift,
     pow10,
+    toFixed,
     TransactionDescriptorType,
     ZERO,
 } from '@masknet/web3-shared-base'
@@ -238,9 +239,9 @@ const ContractInteraction = memo(() => {
             // Gwei to wei
             return {
                 maxPriorityFeePerGas: toHex(
-                    formatGweiToWei(gasOptions?.normal.suggestedMaxPriorityFeePerGas ?? 0).toFixed(0),
+                    toFixed(formatGweiToWei(gasOptions?.normal.suggestedMaxPriorityFeePerGas ?? 0), 0),
                 ),
-                maxFeePerGas: toHex(formatGweiToWei(gasOptions?.normal.suggestedMaxFeePerGas ?? 0).toFixed(0)),
+                maxFeePerGas: toHex(toFixed(formatGweiToWei(gasOptions?.normal.suggestedMaxFeePerGas ?? 0), 0)),
             }
         } else if (!gasPrice) {
             return {
@@ -350,7 +351,7 @@ const ContractInteraction = memo(() => {
 
         if (!gasCurrency || isNativeTokenAddress(gasCurrency)) return result
         if (!currencyRatio) return ZERO
-        return new BigNumber(result.multipliedBy(currencyRatio).toFixed(0))
+        return new BigNumber(toFixed(result.multipliedBy(currencyRatio), 0))
     }, [
         gas,
         isSupport1559,

@@ -168,7 +168,7 @@ export default function ChangeOwner() {
 
     useTitle(t('popups_wallet_change_owner'))
 
-    const onCreatePersona = useCallback(() => {
+    const onCreatePersona = useCallback(async () => {
         browser.tabs.create({
             active: true,
             url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.SignUp}`),
@@ -176,7 +176,7 @@ export default function ChangeOwner() {
         if (process.env.engine === 'firefox') {
             window.close()
         }
-        Services.Helper.removePopupWindow()
+        await Services.Helper.removePopupWindow()
     }, [])
 
     const onCreateWallet = useCallback(() => {
