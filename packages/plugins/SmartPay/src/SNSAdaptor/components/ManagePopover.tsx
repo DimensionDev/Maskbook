@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
                 ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
                 : '0px 4px 30px rgba(0, 0, 0, 0.1)',
         borderRadius: 16,
-        maxHeight: 320,
+        maxHeight: 296,
         '::-webkit-scrollbar': {
             backgroundColor: 'transparent',
             width: 20,
