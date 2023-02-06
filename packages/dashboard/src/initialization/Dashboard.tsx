@@ -9,7 +9,7 @@ import {
     useSystemPreferencePalette,
     DialogStackingProvider,
 } from '@masknet/theme'
-import { LogHubBaseAPI } from '@masknet/web3-providers/types'
+import { LoggerAPI } from '@masknet/web3-providers/types'
 import { I18NextProviderHMR, SharedContextProvider, LoggerContextProvider } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
@@ -32,7 +32,7 @@ export default function DashboardRoot() {
     // #region theme
     const appearance = useAppearance()
     const loggerId = useLogSettings()
-    const logContext = useMemo(() => ({ platform: LogHubBaseAPI.Platform.Dashboard, loggerId }), [loggerId])
+    const logContext = useMemo(() => ({ platform: LoggerAPI.Platform.Dashboard, loggerId }), [loggerId])
     const mode = useSystemPreferencePalette()
     const theme = {
         dark: DashboardDarkTheme,

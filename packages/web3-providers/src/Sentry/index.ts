@@ -1,8 +1,8 @@
 import { NetworkPluginID, getSiteType } from '@masknet/shared-base'
-import type { LogHubBaseAPI } from '../types/LogHub.js'
+import type { LoggerAPI } from '../types/Logger.js'
 
-class Logger implements LogHubBaseAPI.Logger {
-    constructor(private id: string, private pluginID?: NetworkPluginID) {
+class Logger implements LoggerAPI.Logger {
+    constructor() {
         Sentry.init({
             dsn: process.env.MASK_SENTRY_DSN,
             defaultIntegrations: false,
@@ -17,7 +17,7 @@ class Logger implements LogHubBaseAPI.Logger {
         return getSiteType()
     }
 
-    private createScope() {
+    private createScope(options?: ScopeOp) {
         const scope = new Sentry.Scope()
 
         if (this.id) scope.setTag('id', this.id)
@@ -39,8 +39,8 @@ class Logger implements LogHubBaseAPI.Logger {
     }
 }
 
-export class LogHubAPI implements LogHubBaseAPI.Provider {
-    createLogger(id: string, pluginID?: NetworkPluginID): LogHubBaseAPI.Logger {
-        return new Logger(id, pluginID)
+export class SentryLoggerAPI implements LoggerAPI.Provider {
+    createLogger() {
+        return new Logger()
     }
 }

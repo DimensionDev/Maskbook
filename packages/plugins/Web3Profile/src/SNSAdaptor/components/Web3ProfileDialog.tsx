@@ -14,7 +14,7 @@ import {
 } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { LogHubBaseAPI } from '@masknet/web3-providers/types'
+import { LoggerAPI } from '@masknet/web3-providers/types'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { DialogActions, DialogContent } from '@mui/material'
 import { SceneMap, Scene } from '../../constants.js'
@@ -56,7 +56,7 @@ export function Web3ProfileDialog() {
     const [open, setOpen] = useState(false)
     useEffect(() => {
         return CrossIsolationMessages.events.web3ProfileDialogEvent.on(({ open }) => {
-            if (open) logger?.captureMessage(LogHubBaseAPI.Message.Web3ProfileDialogAccess)
+            if (open) logger?.captureMessage(LoggerAPI.Message.Web3ProfileDialogAccess)
             setOpen(open)
         })
     }, [])

@@ -4,7 +4,7 @@ import type { BooleanPreference, Plugin } from '@masknet/plugin-infra'
 import { Emitter } from '@servie/events'
 import { LogHub } from '@masknet/web3-providers'
 import { createI18NBundle, createSubscriptionFromValueRef, i18NextInstance } from '@masknet/shared-base'
-import { LogHubBaseAPI } from '@masknet/web3-providers/types'
+import { LoggerAPI } from '@masknet/web3-providers/types'
 import { MaskMessages } from '../../shared/messages.js'
 import { InMemoryStorages, PersistentStorages } from '../../shared/index.js'
 import { nativeAPI, hasNativeAPI } from '../../shared/native-rpc/index.js'
@@ -38,7 +38,7 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
         },
         createLogger() {
             if (!logSettings.value) return
-            return LogHub.createLogger(LogHubBaseAPI.Platform.Plugin, pluginID)
+            return LogHub.createLogger(LoggerAPI.Platform.Plugin, pluginID)
         },
     }
 }
