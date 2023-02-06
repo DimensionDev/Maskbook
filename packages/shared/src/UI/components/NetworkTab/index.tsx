@@ -29,7 +29,6 @@ export function NetworkTab(props: NetworkTabProps) {
         return chains.filter((x) => x === smartPaySupportChainId)
     }, [smartPaySupportChainId, wallet, chains])
 
-    console.log(supportedChains)
     const usedNetworks = networks.filter((x) => supportedChains.find((c) => c === x.chainId))
     const networkIds = usedNetworks.map((x) => x.chainId.toString())
     const [tab, , , setTab] = useTabs(chainId?.toString() ?? networkIds[0], ...networkIds)
