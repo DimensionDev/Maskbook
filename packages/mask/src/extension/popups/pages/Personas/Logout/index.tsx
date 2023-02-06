@@ -120,7 +120,7 @@ const Logout = memo(() => {
                     chainId: newWallet?.owner ? smartPayChainId : undefined,
                 })
             }
-            CrossIsolationMessages.events.ownerDeleteionEvent.sendToAll({ owner: selectedPersona.address })
+            CrossIsolationMessages.events.ownerDeletionEvent.sendToAll({ owner: selectedPersona.address })
         }
         const currentPersona = await Services.Settings.getCurrentPersonaIdentifier()
         if (!currentPersona) {

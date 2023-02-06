@@ -91,7 +91,7 @@ export function ChainContextProvider({ value, children }: React.ProviderProps<Ch
 
     useEffect(
         () =>
-            CrossIsolationMessages.events.ownerDeleteionEvent.on(({ owner }) => {
+            CrossIsolationMessages.events.ownerDeletionEvent.on(({ owner }) => {
                 const account = Provider?.account?.getCurrentValue()
                 const targets = Wallet?.wallets?.getCurrentValue().filter((x) => isSameAddress(x.owner, owner))
                 if (targets?.some((x) => isSameAddress(x.address, account))) Connection?.getConnection?.().disconnect()

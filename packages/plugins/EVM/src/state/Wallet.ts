@@ -99,7 +99,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
     override async removeWallet(address: string, password?: string | undefined): Promise<void> {
         if (this.providerType === ProviderType.MaskWallet) {
             await this.context.removeWallet(address, password)
-            CrossIsolationMessages.events.ownerDeleteionEvent.sendToAll({ owner: address })
+            CrossIsolationMessages.events.ownerDeletionEvent.sendToAll({ owner: address })
         } else {
             await super.removeWallet(address, password)
         }

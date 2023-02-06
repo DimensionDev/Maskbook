@@ -32,7 +32,7 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(
             const lastCreatedPersona = await Services.Identity.queryLastPersonaCreated()
 
             if (address) {
-                CrossIsolationMessages.events.ownerDeleteionEvent.sendToAll({ owner: address })
+                CrossIsolationMessages.events.ownerDeletionEvent.sendToAll({ owner: address })
             }
             if (lastCreatedPersona) {
                 await changeCurrentPersona(lastCreatedPersona)

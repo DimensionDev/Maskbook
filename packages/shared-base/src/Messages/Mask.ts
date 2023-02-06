@@ -165,7 +165,7 @@ export interface RestoreSuccessEvent {
     }>
 }
 
-export interface OwnerDeleteionEvnet {
+export interface OwnerDeletionEvent {
     owner: string
 }
 
