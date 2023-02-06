@@ -165,6 +165,10 @@ export interface RestoreSuccessEvent {
     }>
 }
 
+export interface OwnerDeletionEvent {
+    owner: string
+}
+
 export interface ProfileNFTsPageEvent {
     show: boolean
 }

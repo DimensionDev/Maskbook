@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { formatBalance, leftShift } from '../src/index.js'
+import { formatBalance, leftShift, toFixed } from '../src/index.js'
 
 describe('formatBalance util test', () => {
     test.each([
@@ -37,5 +37,11 @@ describe('leftShift util test', () => {
         { give: 1, shift: 4, expected: '0.0001' },
     ])('.format($give)', ({ give, shift, expected }) => {
         expect(leftShift(give, shift).toFixed()).toBe(expected)
+    })
+})
+
+describe('toFixed', () => {
+    test.each([{ give: '10428.8', expected: '10429' }])('.format($give)', ({ give, expected }) => {
+        expect(toFixed(give, 0)).toBe(expected)
     })
 })

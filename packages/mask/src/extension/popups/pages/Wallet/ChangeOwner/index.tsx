@@ -1,12 +1,12 @@
 import { Icons } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
-import { formatPersonaFingerprint, NetworkPluginID } from '@masknet/shared-base'
+import { DashboardRoutes, formatPersonaFingerprint, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, useWallet, useWallets, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Link, Popover, Typography, Button } from '@mui/material'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useContainer } from 'unstated-next'
@@ -57,6 +57,14 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 16,
         lineHeight: '20px',
         fontWeight: 700,
+        display: 'flex',
+        justifyContent: 'space-between',
+    },
+    add: {
+        fontSize: 16,
+        lineHeight: '20px',
+        fontWeight: 700,
+        cursor: 'pointer',
     },
     placeholder: {
         padding: theme.spacing(3.5, 1),
@@ -160,6 +168,21 @@ export default function ChangeOwner() {
 
     useTitle(t('popups_wallet_change_owner'))
 
+    const onCreatePersona = useCallback(async () => {
+        browser.tabs.create({
+            active: true,
+            url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.SignUp}`),
+        })
+        if (process.env.engine === 'firefox') {
+            window.close()
+        }
+        await Services.Helper.removePopupWindow()
+    }, [])
+
+    const onCreateWallet = useCallback(() => {
+        navigate(PopupRoutes.SwitchWallet, { replace: true })
+    }, [])
+
     return (
         <>
             <div className={classes.content}>
@@ -209,7 +232,12 @@ export default function ChangeOwner() {
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
                     PaperProps={{ style: { minWidth: `${anchorEl?.clientWidth ?? 568}px` }, className: classes.paper }}
                     disableRestoreFocus>
-                    <Typography className={classes.popoverTitle}>{t('persona')}</Typography>
+                    <Typography className={classes.popoverTitle}>
+                        {t('persona')}{' '}
+                        <Typography className={classes.add} onClick={onCreatePersona}>
+                            {t('add')}
+                        </Typography>
+                    </Typography>
                     {personaManagers?.length ? (
                         <Box className={classes.list}>
                             {personaManagers.map((persona, index) => (
@@ -240,6 +268,15 @@ export default function ChangeOwner() {
                                                     text={persona.identifier.rawPublicKey}
                                                     className={classes.copy}
                                                 />
+                                                {persona.address ? (
+                                                    <Link
+                                                        sx={{ display: 'flex', alignItems: 'center', color: 'inherit' }}
+                                                        href={explorerResolver.addressLink(chainId, persona.address)}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer">
+                                                        <Icons.PopupLink className={classes.copy} />
+                                                    </Link>
+                                                ) : null}
                                             </Typography>
                                         </Box>
                                     </Box>
@@ -252,7 +289,12 @@ export default function ChangeOwner() {
                             <Typography>{t('popups_no_persona_found')}</Typography>
                         </Box>
                     )}
-                    <Typography className={classes.popoverTitle}>{t('popups_wallet_wallets')}</Typography>
+                    <Typography className={classes.popoverTitle}>
+                        {t('popups_wallet_wallets')}
+                        <Typography className={classes.add} onClick={onCreateWallet}>
+                            {t('add')}
+                        </Typography>
+                    </Typography>
                     {walletManagers?.length ? (
                         <Box className={classes.list}>
                             {walletManagers?.map((wallet, index) => (

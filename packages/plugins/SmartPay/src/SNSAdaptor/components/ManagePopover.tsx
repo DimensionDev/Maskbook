@@ -30,6 +30,18 @@ const useStyles = makeStyles()((theme) => ({
                 ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
                 : '0px 4px 30px rgba(0, 0, 0, 0.1)',
         borderRadius: 16,
+        maxHeight: 320,
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 20,
+        },
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+            backgroundClip: 'padding-box',
+        },
     },
     title: {
         color: theme.palette.maskColor.main,
@@ -103,7 +115,7 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
                                     type: ManagerAccountType.Persona,
                                     name: persona.nickname,
                                     address: persona.address,
-                                    rawPublicKey: persona.identifier.rawPublicKey,
+                                    identifier: persona.identifier,
                                 })
                             }>
                             <Box display="flex" alignItems="center" columnGap={0.5}>

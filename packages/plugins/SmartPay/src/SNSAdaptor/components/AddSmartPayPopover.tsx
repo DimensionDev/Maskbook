@@ -1,13 +1,18 @@
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
 import { Box, Button, Popover, Typography } from '@mui/material'
 import { useI18N } from '../../locales/i18n_generated.js'
-import { Icon } from '@masknet/shared'
-import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { Icon, useSharedI18N } from '@masknet/shared'
+import { useAllPersonas, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { useAsync } from 'react-use'
 import { SmartPayFunder } from '@masknet/web3-providers'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
+import { useQueryQualifications } from '../../hooks/useQueryQualifications.js'
+import { useWallets } from '@masknet/web3-hooks-base'
+import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
+import { CrossIsolationMessages, DashboardRoutes } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -54,13 +59,80 @@ export interface AddSmartPayPopoverProps {
 
 export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorEl, onClose }) => {
     const t = useI18N()
+    const sharedI18N = useSharedI18N()
     const navigate = useNavigate()
     const { classes } = useStyles()
+    const { setSigner } = SmartPayContext.useContainer()
+    const wallets = useWallets()
+    const personas = useAllPersonas()
     const currentProfile = useLastRecognizedIdentity()
     const { value = 0 } = useAsync(async () => {
         if (!currentProfile?.identifier?.userId) return 0
         return SmartPayFunder.getRemainFrequency(currentProfile.identifier.userId)
     }, [currentProfile])
+
+    const { value: qualifications, loading } = useQueryQualifications()
+
+    const { setDialog: setPersonaSelectPanelDialog } = useRemoteControlledDialog(
+        CrossIsolationMessages.events.PersonaSelectPanelDialogUpdated,
+    )
+
+    const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(
+        CrossIsolationMessages.events.openPageConfirm,
+    )
+
+    const handleCreate = useCallback(() => {
+        if (loading || !qualifications) return
+
+        // Contract account already exists
+        if (wallets.filter((x) => x.owner).length) {
+            setSigner({
+                signPersona: qualifications?.signPersona,
+                signWallet: qualifications?.signWallet,
+            })
+            navigate(RoutePaths.Deploy, {
+                state: {
+                    canBack: true,
+                },
+            })
+        }
+
+        // If there is no persona and no signer
+        if (!personas.length && !qualifications.signPersona && !qualifications.signWallet) {
+            return setCreatePersonaConfirmDialog({
+                open: true,
+                target: 'dashboard',
+                url: DashboardRoutes.Setup,
+                text: sharedI18N.create_persona_hint(),
+                title: sharedI18N.create_persona_title(),
+                actionHint: sharedI18N.create_persona_action(),
+                position: 'center',
+            })
+        }
+
+        // if there is verified persona but current persona isn't verified
+        if (
+            (qualifications.hasVerifiedPersona || personas.length) &&
+            !qualifications.signPersona &&
+            !qualifications.signWallet
+        ) {
+            return setPersonaSelectPanelDialog({
+                open: true,
+                enableVerify: true,
+            })
+        }
+
+        setSigner({
+            signPersona: qualifications?.signPersona,
+            signWallet: qualifications?.signWallet,
+        })
+        navigate(RoutePaths.Deploy, {
+            state: {
+                canBack: true,
+            },
+        })
+    }, [loading, qualifications])
+
     return usePortalShadowRoot((container) => (
         <Popover
             disableScrollLock
@@ -87,16 +159,7 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
                 </Box>
             </Box>
             <Typography className={classes.tips}>{t.remain_times_tips({ count: value })}</Typography>
-            <Button
-                fullWidth
-                variant="roundedContained"
-                onClick={() => {
-                    navigate(RoutePaths.Deploy, {
-                        state: {
-                            canBack: true,
-                        },
-                    })
-                }}>
+            <Button fullWidth variant="roundedContained" onClick={handleCreate}>
                 {t.create()}
             </Button>
         </Popover>

@@ -8,13 +8,22 @@ import { PersonaContext } from '../hooks/usePersonaContext.js'
 import Services from '../../../../service.js'
 import { LoadingButton } from '@mui/lab'
 import { useNavigate } from 'react-router-dom'
-import { PopupRoutes, formatPersonaFingerprint, type PersonaInformation, NetworkPluginID } from '@masknet/shared-base'
+import {
+    PopupRoutes,
+    formatPersonaFingerprint,
+    type PersonaInformation,
+    NetworkPluginID,
+    CrossIsolationMessages,
+} from '@masknet/shared-base'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
-import { useWallets } from '@masknet/web3-hooks-base'
-import type { Wallet } from '@masknet/web3-shared-base'
+import { useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
+import { isSameAddress, Wallet } from '@masknet/web3-shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Trans } from 'react-i18next'
+import { first } from 'lodash-es'
+import { useContainer } from 'unstated-next'
+import { PopupContext } from '../../../hook/usePopupContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -84,7 +93,12 @@ const useStyles = makeStyles()((theme) => ({
 const Logout = memo(() => {
     const { selectedPersona } = PersonaContext.useContainer()
     const navigate = useNavigate()
+    const wallet = useWallet()
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection()
+    const { Provider } = useWeb3State()
+    const { smartPayChainId } = useContainer(PopupContext)
+
     const backupPassword = useMemo(() => {
         try {
             const password = localStorage.getItem('backupPassword')
@@ -98,13 +112,23 @@ const Logout = memo(() => {
     const [{ loading, error }, onLogout] = useAsyncFn(async () => {
         if (!selectedPersona) return
         await Services.Identity.logoutPersona(selectedPersona.identifier)
+        if (selectedPersona.address) {
+            if (isSameAddress(selectedPersona.address, wallet?.owner)) {
+                const newWallet = first(wallets)
+                await connection?.connect({
+                    account: newWallet?.address,
+                    chainId: newWallet?.owner ? smartPayChainId : undefined,
+                })
+            }
+            CrossIsolationMessages.events.ownerDeletionEvent.sendToAll({ owner: selectedPersona.address })
+        }
         const currentPersona = await Services.Settings.getCurrentPersonaIdentifier()
         if (!currentPersona) {
             const lastCreatedPersona = await Services.Identity.queryLastPersonaCreated()
             await Services.Settings.setCurrentPersonaIdentifier(lastCreatedPersona)
         }
         navigate(PopupRoutes.Personas, { replace: true })
-    }, [selectedPersona, history])
+    }, [selectedPersona, history, Provider, wallet, wallets, connection, smartPayChainId])
 
     const manageWallets = useMemo(() => {
         return wallets.filter((x) => x.identifier?.toText() === selectedPersona?.identifier.toText())

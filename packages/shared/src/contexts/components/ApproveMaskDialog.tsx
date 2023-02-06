@@ -93,7 +93,11 @@ export const ApproveMaskDialog = memo<ApproveMaskDialogProps>(({ open, handleClo
                 </ActionButton>
             )
         }
-        return null
+        return (
+            <ActionButton fullWidth variant="roundedContained" disabled>
+                {sharedI18N.dialog_confirm()}
+            </ActionButton>
+        )
     }, [approveStateType, approveCallback, sharedI18N, transactionState, onApprove])
 
     return usePortalShadowRoot((container) => (
