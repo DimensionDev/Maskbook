@@ -9,11 +9,11 @@ import {
     ValueRef,
     createSubscriptionFromValueRef,
     SignType,
+    CrossIsolationMessages,
 } from '@masknet/shared-base'
 import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
 import { isSameAddress, Wallet as WalletItem } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, ProviderType, Transaction } from '@masknet/web3-shared-evm'
-import { Web3StateSettings } from '../settings/index.js'
 
 export class Wallet extends WalletState<ProviderType, Transaction> {
     private ref = new ValueRef(this.context.wallets.getCurrentValue())
@@ -79,14 +79,6 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
                         ?.name ?? x.name,
             }))
 
-            const account = Web3StateSettings.value.Provider?.account?.getCurrentValue()
-
-            // If the currently connected account no longer exists, then disconnect
-            if (result.length && account && !result.find((x) => isSameAddress(x.address, account))) {
-                const connection = Web3StateSettings.value.Connection?.getConnection?.()
-                connection?.disconnect()
-            }
-
             this.ref.value = result
         }
 
@@ -107,6 +99,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
     override async removeWallet(address: string, password?: string | undefined): Promise<void> {
         if (this.providerType === ProviderType.MaskWallet) {
             await this.context.removeWallet(address, password)
+            CrossIsolationMessages.events.ownerDeleteionEvent.sendToAll({ owner: address })
         } else {
             await super.removeWallet(address, password)
         }

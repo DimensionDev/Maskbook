@@ -13,6 +13,7 @@ import type {
     OpenPageConfirmEvent,
     PersonaSelectPanelDialogEvent,
     AvatarSettingDialogEvent,
+    OwnerDeleteionEvnet,
 } from './Mask.js'
 
 /**
@@ -37,7 +38,7 @@ export interface CrossIsolationEvents {
     applicationDialogEvent: ApplicationDialogEvent
     swapDialogEvent: SwapDialogEvent
     settingsDialogEvent: SettingsDialogEvent
-
+    ownerDeleteionEvent: OwnerDeleteionEvnet
     profileCardEvent: ProfileCardEvent
     nonFungibleTokenDialogEvent: NonFungibleTokenDialogEvent
     walletSettingsDialogEvent: WalletSettingsDialogEvent

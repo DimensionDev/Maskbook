@@ -1,11 +1,14 @@
-import React, { createContext, ReactNode, useCallback, useContext, useState } from 'react'
+import React, { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react'
 import { isUndefined, omitBy } from 'lodash-es'
-import { compose, NetworkPluginID } from '@masknet/shared-base'
+import { compose, CrossIsolationMessages, MaskEvents, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
 import { useNetworkType } from './useNetworkType.js'
 import { useProviderType } from './useProviderType.js'
+import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import { useWeb3State } from './useWeb3State.js'
+import { isSameAddress } from '@masknet/web3-shared-base'
 
 interface EnvironmentContext<T extends NetworkPluginID = NetworkPluginID> {
     pluginID: T
@@ -58,6 +61,8 @@ export function NetworkContextProvider({ value, children }: React.ProviderProps<
 
 export function ChainContextProvider({ value, children }: React.ProviderProps<ChainContextGetter>) {
     const { pluginID } = useNetworkContext()
+    const { Wallet, Connection, Provider } = useWeb3State()
+
     const globalAccount = useAccount(pluginID)
     const globalChainId = useChainId(pluginID)
     const globalNetworkType = useNetworkType(pluginID)
@@ -84,6 +89,16 @@ export function ChainContextProvider({ value, children }: React.ProviderProps<Ch
         [accountKey],
     )
 
+    useEffect(
+        () =>
+            CrossIsolationMessages.events.ownerDeleteionEvent.on(({ owner }) => {
+                const account = Provider?.account?.getCurrentValue()
+                const targets = Wallet?.wallets?.getCurrentValue().filter((x) => isSameAddress(x.owner, owner))
+                if (targets?.some((x) => isSameAddress(x.address, account))) Connection?.getConnection?.().disconnect()
+            }),
+        [Wallet, Connection, Provider],
+    )
+
     return (
         <ChainContext.Provider
             value={{
@@ -108,6 +123,7 @@ export function Web3ContextProvider({
 }: React.ProviderProps<
     {
         pluginID: NetworkPluginID
+        messages?: WebExtensionMessage<MaskEvents>
     } & ChainContextGetter
 >) {
     const { pluginID, ...rest } = value

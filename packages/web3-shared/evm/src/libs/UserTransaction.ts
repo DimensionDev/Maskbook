@@ -196,7 +196,7 @@ export class UserTransaction {
         }
 
         // 1.5x scale up callGas
-        this.userOperation.callGas = toHex(multipliedBy(this.userOperation.callGas ?? '0', 1.5).toFixed(0))
+        this.userOperation.callGas = toHex(toFixed(multipliedBy(this.userOperation.callGas ?? '0', 1.5), 0))
 
         // recover to the original callGas when extra gas could be provided
         if (isGreaterThan(callGas ?? '0', this.userOperation.callGas)) {
