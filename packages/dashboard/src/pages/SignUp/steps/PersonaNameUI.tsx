@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { MaskTextField } from '@masknet/theme'
+import { ActionButton, MaskTextField } from '@masknet/theme'
 import {
     Body,
     ColumnContentLayout,
@@ -10,7 +10,7 @@ import {
 } from '../../../components/RegisterFrame/ColumnContentLayout.js'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader.js'
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer.js'
 
@@ -25,9 +25,10 @@ const Label = ({ value }: { value: string }) => (
 export interface PersonaNameUIProps {
     error?: string
     onNext(personaName: string): void
+    loading?: boolean
 }
 
-export const PersonaNameUI = ({ onNext, error }: PersonaNameUIProps) => {
+export const PersonaNameUI = ({ onNext, error, loading }: PersonaNameUIProps) => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
 
@@ -64,14 +65,15 @@ export const PersonaNameUI = ({ onNext, error }: PersonaNameUIProps) => {
                         helperText={helper}
                     />
                     <ButtonContainer>
-                        <Button
+                        <ActionButton
+                            loading={loading}
                             size="large"
                             variant="rounded"
                             color="primary"
                             onClick={() => onNext(personaName)}
-                            disabled={!personaName}>
+                            disabled={!personaName || loading}>
                             {t.next()}
-                        </Button>
+                        </ActionButton>
                     </ButtonContainer>
                 </Box>
             </Body>

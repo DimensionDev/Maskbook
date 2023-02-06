@@ -65,7 +65,10 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
     }
 
     private onAccountChanged() {
-        if (this.hostedAccount) this.emitter.emit('accounts', [this.hostedAccount])
+        if (!this.hostedAccount) return
+
+        this.emitter.emit('accounts', [this.hostedAccount])
+        this.emitter.emit('chainId', toHex(this.hostedChainId))
     }
 
     private onChainChanged() {

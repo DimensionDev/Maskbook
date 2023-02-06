@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { ImageIcon, PersonaAction, useSnackbarCallback, WalletDescription } from '@masknet/shared'
-import { formatPersonaFingerprint, NetworkPluginID, PersonaInformation } from '@masknet/shared-base'
+import { formatPersonaFingerprint, NetworkPluginID } from '@masknet/shared-base'
 import { explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Typography, alpha, Box } from '@mui/material'
 import { useChainContext, useNetworkDescriptor, useProviderDescriptor } from '@masknet/web3-hooks-base'
@@ -21,7 +21,7 @@ import { CreateSuccessDialog } from './CreateSuccessDialog.js'
 import { RoutePaths } from '../../constants.js'
 import { useDeploy } from '../../hooks/useDeploy.js'
 import { useManagers } from '../../hooks/useManagers.js'
-import type { Wallet } from '@masknet/web3-shared-base'
+import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     walletDescription: {
@@ -117,15 +117,7 @@ const useStyles = makeStyles()((theme) => ({
     bottomFixed: { height: 68, boxSizing: 'border-box' },
 }))
 
-export function Deploy({
-    open,
-    signWallet,
-    signPersona,
-}: {
-    open: boolean
-    signWallet?: Wallet
-    signPersona?: PersonaInformation
-}) {
+export function Deploy({ open }: { open: boolean }) {
     const t = useI18N()
     const navigate = useNavigate()
     const { classes } = useStyles()
@@ -138,6 +130,8 @@ export function Deploy({
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
+    const { signer } = SmartPayContext.useContainer()
+    const { signWallet, signPersona } = signer || {}
     const maskProviderDescriptor = useProviderDescriptor(NetworkPluginID.PLUGIN_EVM, ProviderType.MaskWallet)
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const currentVisitingProfile = useLastRecognizedIdentity()
@@ -196,7 +190,7 @@ export function Deploy({
                 type: ManagerAccountType.Persona,
                 name: firstPersona?.nickname,
                 address: firstPersona?.address,
-                rawPublicKey: firstPersona?.identifier.rawPublicKey,
+                identifier: firstPersona?.identifier,
             })
 
             return
@@ -260,7 +254,7 @@ export function Deploy({
                             <Icons.MaskBlue size={24} className={classes.maskIcon} />
                             <Typography fontSize={18} fontWeight={700} lineHeight="22px">
                                 {manager?.type === 'Persona'
-                                    ? formatPersonaFingerprint(manager.rawPublicKey ?? '', 4)
+                                    ? formatPersonaFingerprint(manager?.identifier?.rawPublicKey ?? '', 4)
                                     : formatEthereumAddress(manager?.address ?? '', 4)}
                             </Typography>
                         </Box>

@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { formatFileSize } from '@masknet/shared-base'
+import { formatFileSize } from '@masknet/kit'
 import { makeStyles } from '@masknet/theme'
 import { Checkbox, Typography } from '@mui/material'
 import { FC, memo } from 'react'
@@ -46,7 +46,7 @@ export const SelectableFile: FC<SelectableFileProps> = memo(({ file, selected, o
                     }}
                 />
             }>
-            <Typography className={classes.desc}>{formatFileSize(file.size)}</Typography>
+            <Typography className={classes.desc}>{formatFileSize(file.size, true)}</Typography>
             {file.key ? (
                 <Typography className={classes.meta}>
                     <Translate.file_key

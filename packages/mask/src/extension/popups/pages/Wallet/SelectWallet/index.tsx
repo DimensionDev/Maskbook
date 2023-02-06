@@ -15,6 +15,7 @@ import { useI18N } from '../../../../../utils/index.js'
 import Services from '../../../../service.js'
 import { WalletItem } from './WalletItem.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
+import { WalletStartUp } from '../components/StartUp/index.js'
 
 const useStyles = makeStyles()({
     content: {
@@ -152,6 +153,11 @@ const SelectWallet = memo(() => {
     useEffect(() => {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
     }, [selected, wallets, location.state])
+
+    // Only SmartPay wallets exist and the chainId is not the support chainId
+    if (!wallets.filter((x) => !x.owner).length && chainId !== smartPayChainId) {
+        return <WalletStartUp />
+    }
 
     return chainIdValid ? (
         <>

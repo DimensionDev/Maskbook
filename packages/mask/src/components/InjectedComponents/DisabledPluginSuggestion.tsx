@@ -101,7 +101,7 @@ export function PossiblePluginSuggestionUISingle(props: {
 
     const ButtonIcon = lackHostPermission ? Icons.Approve : Icons.Plugin
     const wrapperContent = content ?? <FallbackContent disabled={disabled} height={74} />
-    const buttonLabel = lackHostPermission ? t('approve') : t('plugin_enables')
+    const buttonLabel = lackHostPermission ? t('approve') : t('plugin_enable')
 
     return (
         <MaskPostExtraInfoWrapper
@@ -142,6 +142,11 @@ export function PossiblePluginSuggestionUISingle(props: {
 }
 
 const useStyles = makeStyles()(() => ({
+    content: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
     text: {
         color: MaskLightTheme.palette.maskColor.main,
     },
@@ -156,15 +161,15 @@ export interface FallbackContentProps extends BoxProps {
 
 export function FallbackContent({ disabled, ...rest }: FallbackContentProps) {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     if (disabled)
         return (
-            <Box component="div" flexDirection="column" justifyContent="center" {...rest}>
+            <Box component="div" {...rest} className={cx(classes.content, rest.className)}>
                 <Typography className={classes.text}>{t('plugin_disabled_tip')}</Typography>
             </Box>
         )
     return (
-        <Box component="div" flexDirection="column" pl={1} justifyContent="center" {...rest}>
+        <Box component="div" pl={1} {...rest} className={cx(classes.content, rest.className)}>
             <Skeleton className={classes.rectangle} variant="text" animation={false} width={103} height={16} />
             <Skeleton className={classes.rectangle} variant="text" animation={false} width={68} height={16} />
             <Skeleton className={classes.rectangle} variant="text" animation={false} width={48} height={16} />
