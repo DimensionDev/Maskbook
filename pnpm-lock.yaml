@@ -3271,6 +3271,9 @@ importers:
         specifier: 1.8.0
         version: 1.8.0
     devDependencies:
+      '@sentry/browser':
+        specifier: 7.3.0
+        version: 7.3.0
       '@types/json-stable-stringify':
         specifier: ^1.0.34
         version: 1.0.34
@@ -9478,7 +9481,6 @@ packages:
       '@sentry/types': 7.3.0
       '@sentry/utils': 7.3.0
       tslib: 1.14.1
-    dev: false
 
   /@sentry/core/7.3.0:
     resolution: {integrity: sha512-EvuWVlYm0F0+BtIEmQiCL31Fw0cfKSwUTmxc99wvouaabpHBr2zCJHRxaXOWzxS705bYBJEQiFDTIHfoOQZMzA==}
@@ -9488,7 +9490,6 @@ packages:
       '@sentry/types': 7.3.0
       '@sentry/utils': 7.3.0
       tslib: 1.14.1
-    dev: false
 
   /@sentry/hub/7.3.0:
     resolution: {integrity: sha512-0GtTaWf/hoAMoIFY7Ke6eozIbG3FdIPM364sER4SxUQVSklp6AORrV6p82IgWPROK6aj83cPk9Bszgi6RiF/BA==}
@@ -9497,12 +9498,10 @@ packages:
       '@sentry/types': 7.3.0
       '@sentry/utils': 7.3.0
       tslib: 1.14.1
-    dev: false
 
   /@sentry/types/7.3.0:
     resolution: {integrity: sha512-cGkHdh9+uvbFTj65TjWcXuhe6vQiMY+U+N2GE5xCfmZT9hwuouCASViNsbJMpZqvCg+Yi0fasQLZ71rujiRNOA==}
     engines: {node: '>=8'}
-    dev: false
 
   /@sentry/utils/7.3.0:
     resolution: {integrity: sha512-xUP8TBf2p/c6CN8eFQ7Y+xk0IFrJXsph5ScozqNl/2l/Xs8hd2EiYETqgUklphoYD4J2RxvPwMyqBL15QN6wNg==}
@@ -9510,7 +9509,6 @@ packages:
     dependencies:
       '@sentry/types': 7.3.0
       tslib: 1.14.1
-    dev: false
 
   /@servie/events/3.0.0:
     resolution: {integrity: sha512-Zd79bWhTuG8NvPgSiOcivorJIDg+goMw76TIqYTIR5ua5HOEkS29fmIh2VVSeDeabNF6z8ceTwzB0pSh/BhXyw==}
@@ -14243,7 +14241,7 @@ packages:
   /axios/0.25.0:
     resolution: {integrity: sha512-cD8FOb0tRH3uuEe6+evtAbgJtfxr7ly3fQjYcMcuPlgkwVS9xboaVIpcDV+cYQe+yGykgwZCs1pzjntcGa6l5g==}
     dependencies:
-      follow-redirects: 1.15.1
+      follow-redirects: 1.15.1_debug@4.3.4
     transitivePeerDependencies:
       - debug
     dev: false
@@ -20711,6 +20709,18 @@ packages:
       debug:
         optional: true
 
+  /follow-redirects/1.15.1_debug@4.3.4:
+    resolution: {integrity: sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dependencies:
+      debug: 4.3.4_supports-color@6.1.0
+    dev: false
+
   /follow-redirects/1.15.2:
     resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
     engines: {node: '>=4.0'}
@@ -22179,7 +22189,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.15.1
+      follow-redirects: 1.15.1_debug@4.3.4
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug

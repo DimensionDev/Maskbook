@@ -1,8 +1,6 @@
 import type { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import type { LogHubBaseAPI } from '../types/LogHub.js'
 
-const Sentry = (globalThis as any).Sentry
-
 class Logger implements LogHubBaseAPI.Logger {
     constructor(
         private platform: LogHubBaseAPI.Platform | EnhanceableSite,
