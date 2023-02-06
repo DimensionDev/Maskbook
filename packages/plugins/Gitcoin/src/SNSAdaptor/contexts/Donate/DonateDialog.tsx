@@ -15,7 +15,7 @@ import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useChainContext, useFungibleTokenBalance, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { formatBalance, FungibleToken, rightShift, ZERO } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
-import { DialogActions, DialogContent, Typography } from '@mui/material'
+import { Box, DialogActions, DialogContent, Typography } from '@mui/material'
 import { FC, memo, useCallback, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { useDonateCallback } from '../../hooks/useDonateCallback.js'
@@ -30,6 +30,9 @@ const useStyles = makeStyles()((theme) => ({
     banner: {},
     bannerImage: {
         width: '100%',
+        maxWidth: '100%',
+        maxHeight: 176,
+        objectFit: 'cover',
         borderRadius: theme.spacing(1.5),
     },
     input: {
@@ -110,7 +113,16 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
     // #endregion
 
     // #region blocking
-    const [{ loading }, donateCallback] = useDonateCallback(address ?? '', amount.toFixed(), tipAmount.toFixed(), token)
+    const [{ loading }, { value: gasFee }, donateCallback] = useDonateCallback(
+        address ?? '',
+        amount.toFixed(0),
+        tipAmount.toFixed(0),
+        token,
+    )
+    const maxAmount = new BigNumber(tokenBalance.value ?? 0)
+        .div(1 + giveBack)
+        .minus(gasFee ?? '1')
+        .toFixed(0)
     // #endregion
 
     const showConfirm = useShowResult()
@@ -160,10 +172,13 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
                     <img className={classes.bannerImage} src={grant.logo_url} />
                 </div>
                 <form className={classes.form} noValidate autoComplete="off">
-                    <NetworkTab pluginID={NetworkPluginID.PLUGIN_EVM} chains={availableChains} />
+                    <Box ml={-1.5}>
+                        <NetworkTab pluginID={NetworkPluginID.PLUGIN_EVM} chains={availableChains} />
+                    </Box>
                     <FungibleTokenInput
                         label={t.amount()}
                         amount={rawAmount}
+                        maxAmount={maxAmount}
                         balance={tokenBalance.value ?? '0'}
                         token={token}
                         onAmountChange={setRawAmount}
@@ -221,6 +236,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
                                 loading={loading}
                                 fullWidth
                                 size="large"
+                                startIcon={<Icons.ConnectWallet size={18} />}
                                 disabled={!!validationMessage || loading}
                                 onClick={donate}>
                                 {validationMessage || t.donate()}
