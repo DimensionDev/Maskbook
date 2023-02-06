@@ -57,6 +57,9 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
         overscrollBehavior: 'contain',
         minHeight: 366,
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     network: {
         marginRight: theme.spacing(1.5),
@@ -91,9 +94,6 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'pre-wrap',
         wordBreak: 'break-word',
         tabSize: 4,
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
         img: {
             maxWidth: '100%',
         },
