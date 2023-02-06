@@ -121,6 +121,9 @@ function resolveCurrentVisitingIdentityInner(
 ) {
     const update = async (twitterId: string) => {
         const user = await Twitter.getUserByScreenName(twitterId)
+        if (process.env.NODE_ENV === 'development') {
+            console.assert(user?.legacy, `Can't get get user by screen name ${twitterId}`)
+        }
         if (!user?.legacy) return
 
         const nickname = user.legacy.name
