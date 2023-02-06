@@ -1,4 +1,4 @@
-import type { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 
 export namespace LogHubBaseAPI {
     export enum Message {
@@ -18,10 +18,10 @@ export namespace LogHubBaseAPI {
 
     export interface Logger {
         captureException(error: Error): void
-        captureMessage(message: string | object): void
+        captureMessage(message: string): void
     }
 
     export interface Provider {
-        createLogger(platform: LogHubBaseAPI.Platform | EnhanceableSite, id: string, pluginID?: NetworkPluginID): Logger
+        createLogger(id: string, pluginID?: NetworkPluginID): Logger
     }
 }
