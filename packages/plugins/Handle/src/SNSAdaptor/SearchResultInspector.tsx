@@ -14,6 +14,7 @@ import { Icons } from '@masknet/icons'
 import { useI18N } from '../locales/index.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
 import { PluginHeader } from './PluginHeader.js'
+import { SuffixToChainIconMap } from '../constants.js'
 
 interface StyleProps {
     isMenuScroll?: boolean
@@ -113,12 +114,14 @@ export function SearchResultInspectorContent() {
         successText: t.wallets_address_copied(),
     })
     const isShowSocialAccountList = nextIdBindings.length > 3
+    const suffix = domain.split('.').pop()!
+    const ChainIcon = SuffixToChainIconMap[suffix] ?? Icons.ETH
     return (
         <>
             <PluginHeader />
             <Box className={classes.root}>
                 <section className={classes.ensInfo}>
-                    <Icons.ETH size={30} className={classes.ensIcon} />
+                    <ChainIcon size={30} className={classes.ensIcon} />
                     <div>
                         <Typography className={classes.domain}>{domain}</Typography>
                         {reversedAddress ? (
