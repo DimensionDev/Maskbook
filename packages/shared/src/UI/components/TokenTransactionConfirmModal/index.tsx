@@ -1,6 +1,6 @@
 import type { FC, PropsWithChildren } from 'react'
 import { Icons } from '@masknet/icons'
-import { InjectedDialog, InjectedDialogProps, AssetPreviewer } from '@masknet/shared'
+import { InjectedDialog, InjectedDialogProps, AssetPreviewer, TokenIcon } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles } from '@masknet/theme'
 import { useNonFungibleAsset, useWeb3State } from '@masknet/web3-hooks-base'
@@ -58,11 +58,11 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface TransactionConfirmModalProps extends PropsWithChildren<InjectedDialogProps> {
+export interface TokenTransactionConfirmModalProps extends PropsWithChildren<InjectedDialogProps> {
     amount: string | null
-    token: Web3Helper.FungibleTokenAll | null
-    nonFungibleTokenId: string | null
-    nonFungibleTokenAddress: string
+    token?: Web3Helper.FungibleTokenAll | null
+    nonFungibleTokenId?: string | null
+    nonFungibleTokenAddress?: string
     tokenType: TokenType
     messageTextForNFT?: string
     messageTextForFT?: string
@@ -70,7 +70,7 @@ export interface TransactionConfirmModalProps extends PropsWithChildren<Injected
     onConfirm?(): void
 }
 
-export const TransactionConfirmModal: FC<TransactionConfirmModalProps> = ({
+export const TokenTransactionConfirmModal: FC<TokenTransactionConfirmModalProps> = ({
     className,
     confirmText,
     onConfirm,
@@ -109,7 +109,7 @@ export const TransactionConfirmModal: FC<TransactionConfirmModalProps> = ({
             <DialogContent className={classes.content}>
                 {isTokenTip ? (
                     <Box>
-                        <Icons.Success size={75} />
+                        <TokenIcon address={token?.address || ''} logoURL={token?.logoURL} size={90} />
                         <Typography className={classes.congratulation} mt="19.5px">
                             {t.congratulations()}
                         </Typography>

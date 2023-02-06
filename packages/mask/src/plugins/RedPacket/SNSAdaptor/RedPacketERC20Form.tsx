@@ -21,19 +21,12 @@ import {
     WalletConnectedBoundary,
     EthereumERC20TokenApprovedBoundary,
 } from '@masknet/shared'
-import {
-    useFungibleToken,
-    useFungibleTokenBalance,
-    useChainContext,
-    useNativeToken,
-    useNativeTokenPrice,
-    useWeb3,
-} from '@masknet/web3-hooks-base'
+import { useFungibleToken, useFungibleTokenBalance, useChainContext } from '@masknet/web3-hooks-base'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18n } from '../../../utils/index.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
-import { RedPacketSettings, useCreateParams } from './hooks/useCreateCallback.js'
+import type { RedPacketSettings } from './hooks/useCreateCallback.js'
 import { useAsync } from 'react-use'
 import { SmartPayBundler } from '@masknet/web3-providers'
 
@@ -190,16 +183,6 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     }, [creatingParams, onChange, onNext])
 
     const selectRef = useRef(null)
-
-    // #region gas
-    const { value: nativeToken } = useNativeToken()
-    const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
-
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const { address: publicKey } = useMemo(() => web3?.eth.accounts.create() ?? { address: '', privateKey: '' }, [web3])
-    const contract_version = 4
-    const { value: params } = useCreateParams(creatingParams, contract_version, publicKey)
-    // #endregion
 
     if (!token) return null
     return (

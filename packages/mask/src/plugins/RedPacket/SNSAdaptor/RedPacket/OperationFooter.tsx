@@ -9,6 +9,7 @@ import { Icons } from '@masknet/icons'
 import { useI18N as useBaseI18n } from '../../../../utils/index.js'
 import { useI18N } from '../../locales/index.js'
 import { ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export const useStyles = makeStyles()((theme) => {
     const spinningAnimationKeyFrames = keyframes`
@@ -33,7 +34,7 @@ to {
 })
 
 interface OperationFooterProps {
-    chainId?: ChainId
+    chainId?: Web3Helper.ChainIdAll
     canClaim: boolean
     canRefund: boolean
     isClaiming: boolean
@@ -53,7 +54,7 @@ export function OperationFooter({
     const { classes } = useStyles()
     const { t: tr } = useBaseI18n()
     const t = useI18N()
-    const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId })
     const theme = useTheme()
 
     // #region remote controlled select provider dialog
@@ -107,19 +108,21 @@ export function OperationFooter({
                     {tr('share')}
                 </ActionButton>
 
-                <ChainBoundary
-                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                    expectedChainId={chainId ?? ChainId.Mainnet}
-                    switchChainWithoutPopup
-                    ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
-                    <WalletConnectedBoundary
-                        hideRiskWarningConfirmed
-                        expectedChainId={chainId ?? ChainId.Mainnet}
-                        startIcon={<Icons.ConnectWallet size={18} />}
-                        ActionButtonProps={{ variant: 'roundedDark' }}>
-                        <ObtainButton />
-                    </WalletConnectedBoundary>
-                </ChainBoundary>
+                {(canClaim || canRefund) && (
+                    <ChainBoundary
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        expectedChainId={(chainId as ChainId) ?? ChainId.Mainnet}
+                        switchChainWithoutPopup
+                        ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
+                        <WalletConnectedBoundary
+                            hideRiskWarningConfirmed
+                            expectedChainId={chainId ?? ChainId.Mainnet}
+                            startIcon={<Icons.ConnectWallet size={18} />}
+                            ActionButtonProps={{ variant: 'roundedDark' }}>
+                            <ObtainButton />
+                        </WalletConnectedBoundary>
+                    </ChainBoundary>
+                )}
             </Box>
         </Box>
     )

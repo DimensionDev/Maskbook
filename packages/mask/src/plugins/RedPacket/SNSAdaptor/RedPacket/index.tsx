@@ -1,7 +1,7 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState, useEffect } from 'react'
 import { Card, Typography } from '@mui/material'
 import { ChainId, chainResolver, networkResolver } from '@masknet/web3-shared-evm'
-import { useOpenShareTxDialog } from '@masknet/shared'
+import { useTransactionConfirmDialog } from '../context/TokenTransactionConfirmDialogContext.js'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base.js'
@@ -14,7 +14,7 @@ import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
 import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
-import { formatBalance } from '@masknet/web3-shared-base'
+import { formatBalance, isZero, TokenType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
@@ -171,30 +171,46 @@ export function RedPacket(props: RedPacketProps) {
             : t.share_unclaimed_message_not_twitter(shareTextOption)
     }, [payload, postLink, networkType, claimTxHash, listOfStatus, activatedSocialNetworkUI, t, tr])
 
-    const [{ loading: isRefunding }, isRefunded, refundCallback] = useRefundCallback(
+    const [{ loading: isRefunding }, _isRefunded, refundCallback] = useRefundCallback(
         payload.contract_version,
         account,
         payload.rpid,
     )
 
-    const openShareTxDialog = useOpenShareTxDialog()
+    const [isClaimed, setIsClaimed] = useState(false)
+    const [isConfirmedDialogOpened, setIsConfirmedDialogOpened] = useState(false)
+
+    const openTransactionConfirmDialog = useTransactionConfirmDialog()
 
     const onClaimOrRefund = useCallback(async () => {
         let hash: string | undefined
         if (canClaim) {
             hash = await claimCallback()
+            setIsClaimed(true)
         } else if (canRefund) {
             hash = await refundCallback()
         }
         revalidateAvailability()
-        if (typeof hash !== 'string' || canRefund) return
-        openShareTxDialog({
-            hash,
-            onShare() {
-                activatedSocialNetworkUI.utils.share?.(shareText)
-            },
+    }, [canClaim, canRefund, claimCallback])
+
+    useEffect(() => {
+        if (!isClaimed || isConfirmedDialogOpened || isZero(availability?.claimed_amount ?? '0')) return
+
+        openTransactionConfirmDialog({
+            shareText,
+            amount: formatBalance(availability?.claimed_amount, token?.decimals, 2),
+            token,
+            tokenType: TokenType.Fungible,
         })
-    }, [canClaim, canRefund, claimCallback, isRefunded, openShareTxDialog])
+
+        setIsConfirmedDialogOpened(true)
+    }, [
+        isClaimed,
+        isConfirmedDialogOpened,
+        openTransactionConfirmDialog,
+        JSON.stringify(token),
+        availability?.claimed_amount,
+    ])
 
     const myStatus = useMemo(() => {
         if (!availability) return ''

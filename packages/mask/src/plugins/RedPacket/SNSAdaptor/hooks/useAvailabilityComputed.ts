@@ -1,6 +1,4 @@
 import { compact } from 'lodash-es'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { RedPacketJSONPayload, RedPacketStatus } from '../../types.js'
@@ -11,7 +9,6 @@ import { useAvailability } from './useAvailability.js'
  * @param payload
  */
 export function useAvailabilityComputed(account: string, payload: RedPacketJSONPayload) {
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const parsedChainId =
         payload.token?.chainId ??
         networkResolver.networkChainId((payload.network ?? '') as NetworkType) ??
