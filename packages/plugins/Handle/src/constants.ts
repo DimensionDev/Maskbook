@@ -15,11 +15,11 @@ export const SUPPORTED_SOURCE_TYPES = [
 ]
 
 export const SuffixToChainIconMap: Record<string, GeneratedIcon> = {
-    eth: Icons.ETH,
-    bnb: Icons.BSC,
+    eth: Icons.ENS,
+    bnb: Icons.SpaceId,
     csb: Icons.Crossbell,
     avax: Icons.Avalanche,
-    bit: Icons.Unstoppable,
+    bit: Icons.Bit,
     x: Icons.Unstoppable,
     dao: Icons.Unstoppable,
     crypto: Icons.Unstoppable,
