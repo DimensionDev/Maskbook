@@ -5,6 +5,9 @@ import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isZero, NonFungibleTokenOrder, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
 import { useI18N } from '../../locales/i18n_generated.js'
+import { SourceProviderSwitcher } from '@masknet/shared'
+import { Context } from '../Context/index.js'
+import { Stack } from '@mui/system'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -33,12 +36,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     priceZone: {
         display: 'flex',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        gap: 24,
-        margin: '20px 0',
+        gap: 0.5,
     },
     priceText: {
-        fontSize: 36,
+        fontSize: 18,
         fontWeight: 700,
         color: theme.palette.maskColor.publicMain,
     },
@@ -64,6 +67,7 @@ export interface PriceCardProps {
 
 export function PriceCard(props: PriceCardProps) {
     const { asset, topOffer } = props
+    const { setSourceType, sourceType } = Context.useContainer()
     const t = useI18N()
     const { classes } = useStyles()
 
@@ -72,16 +76,15 @@ export function PriceCard(props: PriceCardProps) {
     const priceTokenImg = (() => {
         const url = asset.priceInToken.token.logoURL
         if (url) {
-            return <img width={48} height={48} src={url} />
+            return <img width={18} height={18} src={url} />
         }
-        if (asset.priceInToken.token.symbol.toUpperCase() === 'WETH') return <Icons.WETH size={48} />
+        if (asset.priceInToken.token.symbol.toUpperCase() === 'WETH') return <Icons.WETH size={18} />
         return <Typography className={classes.fallbackSymbol}>{asset.priceInToken?.token.symbol}</Typography>
     })()
 
     return (
         <div className={classes.wrapper}>
             <div className={classes.header}>
-                <Typography className={classes.textPrimary}>{t.price()}</Typography>
                 {asset.auction?.endAt && !isZero(asset.auction.endAt) && (
                     <Typography className={classes.textBase}>
                         {t.plugin_collectible_time_left()}
@@ -92,12 +95,15 @@ export function PriceCard(props: PriceCardProps) {
                 )}
             </div>
             <div className={classes.priceZone}>
-                {priceTokenImg}
-                <Typography className={classes.priceText}>
-                    {asset.priceInToken
-                        ? formatBalance(asset.priceInToken.amount, asset.priceInToken.token.decimals || 18, 6)
-                        : '-'}
-                </Typography>
+                <Stack direction="row" gap={0.5} alignItems="center">
+                    {priceTokenImg}
+                    <Typography className={classes.priceText}>
+                        {asset.priceInToken
+                            ? formatBalance(asset.priceInToken.amount, asset.priceInToken.token.decimals || 18, 6)
+                            : '-'}
+                    </Typography>
+                </Stack>
+                <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} />
             </div>
             {topOffer && (
                 <div className={classes.offerBox}>

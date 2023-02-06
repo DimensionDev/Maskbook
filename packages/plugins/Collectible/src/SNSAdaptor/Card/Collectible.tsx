@@ -142,6 +142,7 @@ export function Collectible(props: CollectibleProps) {
                 <Typography>{t.loading()}</Typography>
             </Box>
         )
+
     if (!asset.value) {
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" pb={2} pt={4}>

@@ -23,6 +23,8 @@ export function SourceProviderIcon(props: SourceProviderIconProps) {
             return <Icons.CoinMarketCap size={size} />
         case SourceType.UniswapInfo:
             return <Icons.Uniswap size={size} />
+        case SourceType.LooksRare:
+            return <Icons.LooksRare size={size} />
         default:
             return <></>
     }
