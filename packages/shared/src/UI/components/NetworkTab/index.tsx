@@ -1,11 +1,13 @@
-import { useUpdateEffect } from 'react-use'
-import { useNetworkDescriptors, useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useAsync, useUpdateEffect } from 'react-use'
+import { useNetworkDescriptors, useChainContext, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { MaskTabList, useTabs } from '@masknet/theme'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { TabContext } from '@mui/lab'
 import { Stack, Tab, Typography } from '@mui/material'
 import { WalletIcon } from '../WalletIcon/index.js'
+import { SmartPayBundler } from '@masknet/web3-providers'
+import { useMemo } from 'react'
 
 interface NetworkTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
     chains: Array<Web3Helper.Definition[NetworkPluginID]['ChainId']>
@@ -18,7 +20,17 @@ export function NetworkTab(props: NetworkTabProps) {
     const { pluginID } = useNetworkContext(props.pluginID)
     const { chainId, setChainId } = useChainContext()
     const networks = useNetworkDescriptors(pluginID)
-    const usedNetworks = networks.filter((x) => chains.find((c) => c === x.chainId))
+    const wallet = useWallet()
+
+    const { value: smartPaySupportChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
+
+    const supportedChains = useMemo(() => {
+        if (!wallet?.owner) return chains
+        return chains.filter((x) => x === smartPaySupportChainId)
+    }, [smartPaySupportChainId, wallet, chains])
+
+    console.log(supportedChains)
+    const usedNetworks = networks.filter((x) => supportedChains.find((c) => c === x.chainId))
     const networkIds = usedNetworks.map((x) => x.chainId.toString())
     const [tab, , , setTab] = useTabs(chainId?.toString() ?? networkIds[0], ...networkIds)
 

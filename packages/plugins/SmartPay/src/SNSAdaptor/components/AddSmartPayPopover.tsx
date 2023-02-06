@@ -84,19 +84,6 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
     const handleCreate = useCallback(() => {
         if (loading || !qualifications) return
 
-        // Contract account already exists
-        if (wallets.filter((x) => x.owner).length) {
-            setSigner({
-                signPersona: qualifications?.signPersona,
-                signWallet: qualifications?.signWallet,
-            })
-            navigate(RoutePaths.Deploy, {
-                state: {
-                    canBack: true,
-                },
-            })
-        }
-
         // If there is no persona and no signer
         if (!personas.length && !qualifications.signPersona && !qualifications.signWallet) {
             return setCreatePersonaConfirmDialog({
