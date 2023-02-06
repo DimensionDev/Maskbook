@@ -30,6 +30,9 @@ const useStyles = makeStyles()((theme) => ({
     banner: {},
     bannerImage: {
         width: '100%',
+        maxWidth: '100%',
+        maxHeight: 176,
+        objectFit: 'cover',
         borderRadius: theme.spacing(1.5),
     },
     input: {
