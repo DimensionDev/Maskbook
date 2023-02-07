@@ -420,7 +420,6 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         // vitalik.lens, vitalik.bit, etc. including ENS BNB
         // Can't get .bit domain via RSS3 profile API.
         if (isValidHandle(keyword) && !keyword.endsWith('.bit')) {
-            console.log('searchRSS3Handle', keyword)
             return this.searchRSS3Handle(keyword) as Promise<T[]>
         }
         if (keyword.endsWith('.bit')) {
