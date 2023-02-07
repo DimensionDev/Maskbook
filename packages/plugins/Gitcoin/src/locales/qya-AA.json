@@ -29,5 +29,6 @@
     "give_back_to_match_pool": "crwdns19805:0crwdne19805:0",
     "total_contribution": "crwdns19807:0crwdne19807:0",
     "give_back_tooltip": "crwdns19809:0crwdne19809:0",
-    "donate_successfully": "crwdns19811:0{{uiAmount}}crwdnd19811:0{{symbol}}crwdne19811:0"
+    "donate_successfully": "crwdns19811:0{{uiAmount}}crwdnd19811:0{{symbol}}crwdne19811:0",
+    "donate_dialog_title": "crwdns19837:0crwdne19837:0"
 }
