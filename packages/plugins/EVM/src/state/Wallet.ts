@@ -48,6 +48,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
             const allPersonas = this.context.allPersonas?.getCurrentValue() ?? []
 
             const chainId = await SmartPayBundler.getSupportedChainId()
+
             const accounts = await SmartPayAccount.getAccountsByOwners(chainId, [
                 ...wallets.map((x) => x.address),
                 ...compact(allPersonas.map((x) => x.address)),
