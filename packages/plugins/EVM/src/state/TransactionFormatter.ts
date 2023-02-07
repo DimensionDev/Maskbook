@@ -24,6 +24,7 @@ import { ContractDeploymentDescriptor } from './TransactionFormatter/descriptors
 import { CancelDescriptor } from './TransactionFormatter/descriptors/Cancel.js'
 import { BaseTransactionDescriptor } from './TransactionFormatter/descriptors/Base.js'
 import { ITODescriptor } from './TransactionFormatter/descriptors/ITO.js'
+import { GitcoinDescriptor } from './TransactionFormatter/descriptors/Gitcoin.js'
 import { MaskBoxDescriptor } from './TransactionFormatter/descriptors/MaskBox.js'
 import { RedPacketDescriptor } from './TransactionFormatter/descriptors/RedPacket.js'
 import { ERC20Descriptor } from './TransactionFormatter/descriptors/ERC20.js'
@@ -40,6 +41,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
         [TransactionDescriptorType.INTERACTION]: [
             new SavingsDescriptor(),
             new ITODescriptor(),
+            new GitcoinDescriptor(),
             new MaskBoxDescriptor(),
             new RedPacketDescriptor(),
             new SmartPayDescriptor(),
