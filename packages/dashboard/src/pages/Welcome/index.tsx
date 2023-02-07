@@ -70,11 +70,11 @@ export default memo(function Welcome() {
     const [allowedToCollect, setAllowedToCollect] = useState(false)
 
     const handleAgree = useCallback(async () => {
+        if (allowedToCollect) {
+            await Services.Settings.setLogEnable(true)
+        }
         const url = await Services.SocialNetwork.setupSite('twitter.com', false)
         if (url) location.assign(url)
-        if (allowedToCollect) {
-            Services.Settings.setLogEnable(true)
-        }
     }, [allowedToCollect])
 
     const t = useDashboardI18N()
