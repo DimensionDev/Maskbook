@@ -84,7 +84,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
         return connection?.getNativeToken({ chainId })
     }, [chainId])
 
-    const { BULK_CHECKOUT_ADDRESS } = useGitcoinConstants(chainId)
+    const { BULK_CHECKOUT_ADDRESS, TOKEN_LIST } = useGitcoinConstants(chainId)
 
     // #region the selected token
     const [tokenMap, setTokenMap] = useState<Partial<Record<ChainId, FungibleToken<ChainId, SchemaType>>>>({})
@@ -96,12 +96,13 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
     const selectFungibleToken = useSelectFungibleToken<void, NetworkPluginID.PLUGIN_EVM>()
     const onSelectTokenChipClick = useCallback(async () => {
         const pickedToken = await selectFungibleToken({
+            whitelist: TOKEN_LIST,
             disableNativeToken: false,
             selectedTokens: token?.address ? [token.address] : EMPTY_LIST,
             enableManage: false,
         })
         if (pickedToken) setTokenMap((map) => ({ ...map, [chainId]: pickedToken }))
-    }, [selectFungibleToken, token?.address, chainId])
+    }, [selectFungibleToken, token?.address, chainId, TOKEN_LIST])
     // #endregion
 
     // #region form

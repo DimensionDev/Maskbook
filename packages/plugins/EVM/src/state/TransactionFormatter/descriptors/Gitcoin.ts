@@ -38,7 +38,7 @@ export class GitcoinDescriptor implements TransactionDescriptor {
                     tokenInAddress: address,
                     tokenInAmount: value,
                     title: i18NextInstance.t('plugin_infra_descriptor_gitcoin_donate_title'),
-                    description: i18NextInstance.t('plugin_infra_descriptor_gitcoin_submited', {
+                    description: i18NextInstance.t('plugin_infra_descriptor_gitcoin_submitted', {
                         amount: formatBalance(value, token?.decimals, 6),
                         symbol: token?.symbol,
                     }),
