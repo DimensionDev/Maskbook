@@ -28,7 +28,7 @@ type ResultTuple = [
 export function useDonateCallback(
     address: string,
     grantAmount: string,
-    tipAmount?: string,
+    tipAmount: string,
     token?: FungibleToken<ChainId, SchemaType>,
 ): ResultTuple {
     const { GITCOIN_ETH_ADDRESS, GITCOIN_MAINTAINER_ADDRESS } = useGitcoinConstants()
@@ -37,7 +37,7 @@ export function useDonateCallback(
     const bulkCheckoutContract = useBulkCheckoutContract(chainId)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
-    const totalAmount = toFixed(new BigNumber(grantAmount).plus(tipAmount ?? 0))
+    const totalAmount = toFixed(new BigNumber(grantAmount).plus(tipAmount))
     const donations = useMemo<DonationTuple[]>(() => {
         if (!address || !token || !GITCOIN_ETH_ADDRESS) return EMPTY_LIST
         return compact([
@@ -46,7 +46,7 @@ export function useDonateCallback(
                 grantAmount,
                 address, // dest
             ],
-            GITCOIN_MAINTAINER_ADDRESS && tipAmount && new BigNumber(tipAmount).gt(0)
+            GITCOIN_MAINTAINER_ADDRESS && new BigNumber(tipAmount).gt(0)
                 ? [
                       token.schema === SchemaType.Native ? GITCOIN_ETH_ADDRESS : token.address,
                       tipAmount,

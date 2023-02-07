@@ -51,7 +51,10 @@ const domainAddressMap: Record<string, string[]> = {
     'mdex.com': collect(Trader, ['MDEX_ROUTER_ADDRESS', 'MDEX_FACTORY_ADDRESS']),
     'aave.com': collect(Aave, ['AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS']),
     'www.artblocks.io': collect(ArtBlocks, ['GEN_ART_721_MINTER']),
-    'gitcoin.co': collect(Gitcoin, ['GITCOIN_ETH_ADDRESS', 'BULK_CHECKOUT_ADDRESS']),
+    'gitcoin.co': collect(Gitcoin as Pick<typeof Gitcoin, 'GITCOIN_ETH_ADDRESS' | 'BULK_CHECKOUT_ADDRESS'>, [
+        'GITCOIN_ETH_ADDRESS',
+        'BULK_CHECKOUT_ADDRESS',
+    ]),
     'lido.fi': collect(Lido, ['LIDO_stETH_ADDRESS', 'LIDO_REFERRAL_ADDRESS']),
     'mask.io': [
         ...collect(ITO, ['ITO_CONTRACT_ADDRESS']),

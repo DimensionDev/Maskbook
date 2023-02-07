@@ -84,7 +84,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
         return connection?.getNativeToken({ chainId })
     }, [chainId])
 
-    const { BULK_CHECKOUT_ADDRESS } = useGitcoinConstants(chainId)
+    const { BULK_CHECKOUT_ADDRESS, TOKEN_LIST } = useGitcoinConstants(chainId)
 
     // #region the selected token
     const [tokenMap, setTokenMap] = useState<Partial<Record<ChainId, FungibleToken<ChainId, SchemaType>>>>({})
@@ -96,12 +96,13 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
     const selectFungibleToken = useSelectFungibleToken<void, NetworkPluginID.PLUGIN_EVM>()
     const onSelectTokenChipClick = useCallback(async () => {
         const pickedToken = await selectFungibleToken({
+            whitelist: TOKEN_LIST,
             disableNativeToken: false,
             selectedTokens: token?.address ? [token.address] : EMPTY_LIST,
             enableManage: false,
         })
         if (pickedToken) setTokenMap((map) => ({ ...map, [chainId]: pickedToken }))
-    }, [selectFungibleToken, token?.address, chainId])
+    }, [selectFungibleToken, token?.address, chainId, TOKEN_LIST])
     // #endregion
 
     // #region form
@@ -109,7 +110,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
     const amount = rightShift(rawAmount || '0', token?.decimals)
     const [giveBack, setGiveBack] = useState<number>(0.05)
     const tipAmount = amount.gt(0) ? new BigNumber(amount).times(giveBack) : ZERO
-    const total = rawAmount ? new BigNumber(rawAmount).times(1 + giveBack).toFixed() : '0'
+    const total = amount.times(1 + giveBack)
     // #endregion
 
     // #region blocking
@@ -215,7 +216,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
                         </Typography>
                         <div className={classes.contribution}>
                             <Typography mr={1} fontSize={24} fontWeight={700}>
-                                {total}
+                                {formatBalance(total, token.decimals, 6)}
                             </Typography>
                             <TokenIcon chainId={chainId} address={token.address} size={18} />
                             <Typography ml={1}>{token.symbol}</Typography>
