@@ -10,13 +10,12 @@ import {
 export type TransactionStorage<ChainId, Transaction> = Record<
     // @ts-ignore
     ChainId,
-    Partial<
-        Record<
-            // address
-            string,
-            Array<RecentTransaction<ChainId, Transaction>>
-        >
-    >
+    | Record<
+          // address
+          string,
+          Array<RecentTransaction<ChainId, Transaction>>
+      >
+    | undefined
 >
 
 export class TransactionState<ChainId, Transaction> implements Web3TransactionState<ChainId, Transaction> {
@@ -47,7 +46,7 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
                 mergeSubscription(this.subscriptions.chainId, this.subscriptions.account, this.storage.subscription),
                 ([chainId, account, transactionStorage]) => {
                     if (!this.options.isValidChainId(chainId)) return []
-                    return transactionStorage[chainId][this.options.formatAddress(account)] ?? []
+                    return transactionStorage[chainId]?.[this.options.formatAddress(account)] ?? []
                 },
             )
         }
@@ -67,7 +66,7 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
         const address_ = this.options.formatAddress(address)
 
         // to ensure that the transaction doesn't exist
-        const transaction_ = all[chainId][address_]?.find((x) => Object.keys(x.candidates).includes(id))
+        const transaction_ = all[chainId]?.[address_]?.find((x) => Object.keys(x.candidates).includes(id))
         if (transaction_) return
 
         const transactions: Array<RecentTransaction<ChainId, Transaction>> = [
@@ -83,7 +82,7 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
                     [id]: transaction as Transaction,
                 },
             },
-            ...(all[chainId][address_] ?? []),
+            ...(all[chainId]?.[address_] ?? []),
         ]
 
         await this.storage.setValue({
@@ -102,10 +101,10 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
         const address_ = this.options.formatAddress(address)
 
         // to ensure that the transaction exists
-        const transaction_ = all[chainId][address_]?.find((x) => Object.keys(x.candidates).includes(id))
+        const transaction_ = all[chainId]?.[address_]?.find((x) => Object.keys(x.candidates).includes(id))
         if (!transaction_) return
 
-        const transactions: Array<RecentTransaction<ChainId, Transaction>> = (all[chainId][address_] ?? []).map((x) =>
+        const transactions: Array<RecentTransaction<ChainId, Transaction>> = (all[chainId]?.[address_] ?? []).map((x) =>
             Object.keys(x.candidates).includes(id)
                 ? {
                       ...x,
@@ -140,10 +139,10 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
         const address_ = this.options.formatAddress(address)
 
         // to ensure that the transaction exists
-        const transaction_ = all[chainId][address_]?.find((x) => Object.keys(x.candidates).includes(id))
+        const transaction_ = all[chainId]?.[address_]?.find((x) => Object.keys(x.candidates).includes(id))
         if (!transaction_) return
 
-        const transactions: Array<RecentTransaction<ChainId, Transaction>> = (all[chainId][address_] ?? []).map((x) =>
+        const transactions: Array<RecentTransaction<ChainId, Transaction>> = (all[chainId]?.[address_] ?? []).map((x) =>
             Object.keys(x.candidates).includes(id)
                 ? {
                       ...x,
@@ -173,7 +172,7 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
             // @ts-ignore
             [chainId]: {
                 ...all[chainId],
-                [address_]: all[chainId][address_]?.filter((x) => !Object.keys(x.candidates).includes(id)),
+                [address_]: all[chainId]?.[address_]?.filter((x) => !Object.keys(x.candidates).includes(id)),
             },
         })
     }
