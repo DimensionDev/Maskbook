@@ -277,8 +277,7 @@ export function PreviewCard(props: PreviewCardProps) {
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                             expectedChainId={ChainId.Mainnet}
                             predicate={(pluginID, chainId) =>
-                                pluginID === NetworkPluginID.PLUGIN_EVM &&
-                                [ChainId.Mainnet, ChainId.Matic].includes(chainId)
+                                pluginID === NetworkPluginID.PLUGIN_EVM && supportedChainIds.includes(chainId)
                             }
                             ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                             <Button

@@ -97,6 +97,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
     const selectFungibleToken = useSelectFungibleToken<void, NetworkPluginID.PLUGIN_EVM>()
     const onSelectTokenChipClick = useCallback(async () => {
         const pickedToken = await selectFungibleToken({
+            chainId,
             whitelist: TOKEN_LIST,
             disableNativeToken: false,
             selectedTokens: token?.address ? [token.address] : EMPTY_LIST,
