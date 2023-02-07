@@ -50,7 +50,7 @@
     "erc721_insufficient_balance": "Insufficient Balance",
     "erc721_tab_title": "Collectibles",
     "erc20_tab_title": "Tokens",
-    "claimed": "Claimed",
+    "claimed": "Claimed {{amount}}",
     "details": "Lucky Drop Details",
     "display_name": "Lucky Drop",
     "select_existing": "History",
@@ -89,5 +89,11 @@
     "description_broken": "The Lucky Drop is broken.",
     "description_empty": "The Lucky Drop is empty.",
     "description_failover": "{{shares}} shares / {{total}} {{symbol}}",
-    "recommend_feature_description": "Send a surprise crypto giveaway. Tokens and NFTs on multiple chains are supported."
+    "recommend_feature_description": "Send a surprise crypto giveaway. Tokens and NFTs on multiple chains are supported.",
+    "claim_token_successful": "You claimed {{amount}} {{name}}.",
+    "claim_nft_successful": "Claimed 1 {{name}} successfully.",
+    "lucky_drop": "Lucky Drop",
+    "share": "Share",
+    "ok": "OK",
+    "got_nft": "You got 1 {{name}}"
 }

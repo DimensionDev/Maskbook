@@ -231,7 +231,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
             </DialogContent>
             <DialogActions className={classes.actions}>
                 <PluginWalletStatusBar>
-                    <WalletConnectedBoundary>
+                    <WalletConnectedBoundary expectedChainId={chainId}>
                         <EthereumERC20TokenApprovedBoundary
                             classes={{ button: classes.button }}
                             amount={amount.toFixed()}

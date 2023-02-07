@@ -63,6 +63,5 @@
     "view_on_explorer": "View on Explorer",
     "tips_guide_description": "Send authors tips by using Mask Network’s Tips function.",
     "tips_guide_action": "Close",
-    "nft_amount": "NFT Amount: <strong>{{count}}</strong>",
-    "congratulations": "Congratulations!"
+    "nft_amount": "NFT Amount: <strong>{{count}}</strong>"
 }

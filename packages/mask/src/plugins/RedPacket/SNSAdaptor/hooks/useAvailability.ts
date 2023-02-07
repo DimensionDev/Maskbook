@@ -9,7 +9,7 @@ export function useAvailability(
     id: string,
     contract_address: string,
     version: number,
-    options?: Web3Helper.Web3ConnectionOptions<NetworkPluginID.PLUGIN_EVM>,
+    options?: Web3Helper.Web3ConnectionOptionsAll,
 ) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         account: options?.account,

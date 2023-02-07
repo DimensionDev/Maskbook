@@ -458,7 +458,7 @@ export function CreateForm(props: CreateFormProps) {
 
             <PluginWalletStatusBar className={classes.controller}>
                 <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
-                    <WalletConnectedBoundary>
+                    <WalletConnectedBoundary expectedChainId={chainId}>
                         <EthereumERC20TokenApprovedBoundary
                             amount={inputTokenAmount}
                             spender={ITO2_CONTRACT_ADDRESS}

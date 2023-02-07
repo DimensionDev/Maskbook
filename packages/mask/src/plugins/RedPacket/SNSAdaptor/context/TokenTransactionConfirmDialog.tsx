@@ -4,11 +4,11 @@ import { useI18N } from '../../locales/index.js'
 import { useNonFungibleAsset } from '@masknet/web3-hooks-base'
 import { TokenTransactionConfirmModal, TokenTransactionConfirmModalProps } from '@masknet/shared'
 
-export interface TipsTransactionProps extends TokenTransactionConfirmModalProps {
+export interface TransactionConfirmDialogProps extends TokenTransactionConfirmModalProps {
     shareText: string
     onSubmit?(): void
 }
-export function TipsTransaction({ onSubmit, shareText, ...rest }: TipsTransactionProps) {
+export function TransactionConfirmDialog({ onSubmit, shareText, ...rest }: TransactionConfirmDialogProps) {
     const t = useI18N()
     const enableShare = !!activatedSocialNetworkUI.utils.share
     const handleConfirm = useCallback(() => {
@@ -23,20 +23,18 @@ export function TipsTransaction({ onSubmit, shareText, ...rest }: TipsTransactio
         rest.nonFungibleTokenAddress,
         rest.nonFungibleTokenId ?? '',
     )
-
     return (
         <TokenTransactionConfirmModal
             {...rest}
-            messageTextForNFT={t.send_specific_tip_successfully({
-                amount: '1',
+            messageTextForNFT={t.claim_nft_successful({
                 name: nonFungibleToken?.contract?.name || 'NFT',
             })}
-            messageTextForFT={t.send_specific_tip_successfully({
+            messageTextForFT={t.claim_token_successful({
                 amount: rest.amount ?? '',
                 name: `$${rest.token?.symbol}`,
             })}
-            title={t.tips()}
-            confirmText={enableShare ? t.tip_share() : t.tip_success_ok()}
+            title={t.lucky_drop()}
+            confirmText={enableShare ? t.share() : t.ok()}
             onConfirm={handleConfirm}
         />
     )

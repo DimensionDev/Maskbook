@@ -151,7 +151,7 @@ export function CreatedFarms(props: PageInterface) {
 
     return (
         <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
-            <WalletConnectedBoundary offChain>
+            <WalletConnectedBoundary offChain expectedChainId={requiredChainId}>
                 <div className={classes.container}>
                     <Grid container justifyContent="space-between" rowSpacing="20px" className={classes.heading}>
                         <Grid item xs={8} className={classes.col}>
