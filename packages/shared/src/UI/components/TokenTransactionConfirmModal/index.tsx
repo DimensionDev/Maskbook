@@ -53,8 +53,19 @@ const useStyles = makeStyles()((theme) => ({
     },
     messageText: {
         fontSize: 16,
-        color: theme.palette.maskColor.second,
-        lineHeight: '30px',
+        color: theme.palette.maskColor.dark,
+        fontWeight: 700,
+        lineHeight: '20px',
+    },
+    nftMessageText: {
+        fontSize: 16,
+        color: theme.palette.maskColor.secondaryDark,
+        fontWeight: 700,
+        lineHeight: '20px',
+    },
+    tokenIcon: {
+        margin: 'auto',
+        border: `1px ${theme.palette.maskColor.secondaryLine} solid`,
     },
 }))
 
@@ -109,7 +120,12 @@ export const TokenTransactionConfirmModal: FC<TokenTransactionConfirmModalProps>
             <DialogContent className={classes.content}>
                 {isTokenTip ? (
                     <Box>
-                        <TokenIcon address={token?.address || ''} logoURL={token?.logoURL} size={90} />
+                        <TokenIcon
+                            className={classes.tokenIcon}
+                            address={token?.address || ''}
+                            logoURL={token?.logoURL}
+                            size={90}
+                        />
                         <Typography className={classes.congratulation} mt="19.5px">
                             {t.congratulations()}
                         </Typography>
@@ -140,7 +156,7 @@ export const TokenTransactionConfirmModal: FC<TokenTransactionConfirmModalProps>
                         <Typography className={classes.congratulation} mt="24px">
                             {t.congratulations()}
                         </Typography>
-                        <Typography className={classes.messageText} mt="14px">
+                        <Typography className={classes.nftMessageText} mt="14px">
                             {messageTextForNFT}
                         </Typography>
                     </div>

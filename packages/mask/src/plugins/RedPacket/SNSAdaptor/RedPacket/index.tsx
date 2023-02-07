@@ -178,23 +178,21 @@ export function RedPacket(props: RedPacketProps) {
     )
 
     const [isClaimed, setIsClaimed] = useState(false)
-    const [isConfirmedDialogOpened, setIsConfirmedDialogOpened] = useState(false)
 
     const openTransactionConfirmDialog = useTransactionConfirmDialog()
 
     const onClaimOrRefund = useCallback(async () => {
-        let hash: string | undefined
         if (canClaim) {
-            hash = await claimCallback()
+            await claimCallback()
             setIsClaimed(true)
         } else if (canRefund) {
-            hash = await refundCallback()
+            await refundCallback()
         }
         revalidateAvailability()
     }, [canClaim, canRefund, claimCallback])
 
     useEffect(() => {
-        if (!isClaimed || isConfirmedDialogOpened || isZero(availability?.claimed_amount ?? '0')) return
+        if (!isClaimed || isZero(availability?.claimed_amount ?? '0')) return
 
         openTransactionConfirmDialog({
             shareText,
@@ -202,15 +200,7 @@ export function RedPacket(props: RedPacketProps) {
             token,
             tokenType: TokenType.Fungible,
         })
-
-        setIsConfirmedDialogOpened(true)
-    }, [
-        isClaimed,
-        isConfirmedDialogOpened,
-        openTransactionConfirmDialog,
-        JSON.stringify(token),
-        availability?.claimed_amount,
-    ])
+    }, [isClaimed, openTransactionConfirmDialog, JSON.stringify(token), availability?.claimed_amount])
 
     const myStatus = useMemo(() => {
         if (!availability) return ''

@@ -96,23 +96,19 @@ export function NFTCardStyledAssetPlayer(props: Props) {
             </div>
         )
 
-    if (isImageURL || isImageOnly || !urlComputed) {
-        return (
-            <div className={classes.imgWrapper}>
-                <Image
-                    classes={{
-                        fallbackImage: classes.fallbackImage,
-                    }}
-                    containerProps={{ className: classes.container }}
-                    size="100%"
-                    style={{ objectFit: 'contain' }}
-                    src={urlComputed}
-                    fallback={fallbackImageURL}
-                />
-                {showNetwork && <ImageIcon icon={networkIcon} size={24} classes={{ icon: classes.networkIcon }} />}
-            </div>
-        )
-    }
-
-    return null
+    return (
+        <div className={classes.imgWrapper}>
+            <Image
+                classes={{
+                    fallbackImage: classes.fallbackImage,
+                }}
+                containerProps={{ className: classes.container }}
+                size="100%"
+                style={{ objectFit: 'contain' }}
+                src={isImageURL || isImageOnly || !urlComputed ? urlComputed : fallbackImageURL.toString()}
+                fallback={fallbackImageURL}
+            />
+            {showNetwork && <ImageIcon icon={networkIcon} size={24} classes={{ icon: classes.networkIcon }} />}
+        </div>
+    )
 }

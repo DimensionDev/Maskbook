@@ -2,7 +2,8 @@ import { makeStyles, ActionButton } from '@masknet/theme'
 import { explorerResolver, networkResolver } from '@masknet/web3-shared-evm'
 import { Launch as LaunchIcon } from '@mui/icons-material'
 import { Card, CardHeader, Typography, Link, CardMedia, CardContent, Button, Box, Skeleton } from '@mui/material'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useTransactionConfirmDialog } from './context/TokenTransactionConfirmDialogContext.js'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { useI18N } from '../locales/index.js'
 import { WalletConnectedBoundary, NFTCardStyledAssetPlayer, ChainBoundary } from '@masknet/shared'
@@ -15,6 +16,7 @@ import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
+import { TokenType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 
@@ -198,9 +200,12 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         web3?.eth.accounts.sign(account, payload.privateKey).signature ?? '',
     )
 
+    const [isClaimed, setIsClaimed] = useState(false)
+
     const claim = useCallback(async () => {
         const hash = await claimCallback()
         if (typeof hash === 'string') {
+            setIsClaimed(true)
             retryAvailability()
         }
     }, [claimCallback, retryAvailability])
@@ -208,6 +213,8 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const openAddressLinkOnExplorer = useCallback(() => {
         openWindow(explorerResolver.addressLink(payload.chainId, payload.contractAddress))
     }, [payload])
+
+    const openTransactionConfirmDialog = useTransactionConfirmDialog()
 
     useEffect(() => {
         retryAvailability()
@@ -237,6 +244,18 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         if (shareText) activatedSocialNetworkUI.utils.share?.(shareText)
     }, [shareText])
     // #endregion
+
+    useEffect(() => {
+        if (!isClaimed || !availability || availability?.claimed_id === '0' || !availability?.token_address) return
+
+        openTransactionConfirmDialog({
+            shareText,
+            amount: '1',
+            nonFungibleTokenId: availability?.claimed_id,
+            nonFungibleTokenAddress: availability?.token_address,
+            tokenType: TokenType.NonFungible,
+        })
+    }, [isClaimed, openTransactionConfirmDialog, availability?.claimed_id, availability?.token_address])
 
     if (availabilityError)
         return (
