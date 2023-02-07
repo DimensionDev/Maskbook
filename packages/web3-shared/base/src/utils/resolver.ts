@@ -232,6 +232,7 @@ export const resolveSourceTypeName = createLookupTableResolver<SourceType, strin
         [SourceType.CoinGecko]: 'CoinGecko',
         [SourceType.CF]: 'CloudFlare',
         [SourceType.GoPlus]: 'GoPlus',
+        [SourceType.Center]: 'Center',
         [SourceType.OKX]: 'OKX',
         [SourceType.Uniswap]: 'Uniswap',
         [SourceType.NFTX]: 'NFTX',

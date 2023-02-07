@@ -24,6 +24,7 @@ import {
     DeBankGasOption,
     DeBankFungibleToken,
     DeBankHistory,
+    CenterEVM,
 } from '@masknet/web3-providers'
 import type {
     AuthorizationAPI,
@@ -158,9 +159,11 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                 [SourceType.GoPlus]: GoPlusAuthorization,
                 [SourceType.Rabby]: Rabby,
                 [SourceType.R2D2]: R2D2TokenList,
+                [SourceType.Center]: CenterEVM,
             },
             options.chainId === ChainId.Mainnet
                 ? [
+                      CenterEVM,
                       X2Y2,
                       NFTScanNonFungibleTokenEVM,
                       ZerionNonFungibleToken,
@@ -175,7 +178,9 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                       R2D2TokenList,
                   ]
                 : [
+                      CenterEVM,
                       NFTScanNonFungibleTokenEVM,
+
                       ZerionNonFungibleToken,
                       Rarible,
                       AlchemyEVM,

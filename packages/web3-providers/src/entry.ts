@@ -59,6 +59,7 @@ import { ENS_API } from './ENS/index.js'
 import { SpaceID_API } from './SpaceID/index.js'
 import { BonfidaAPI } from './Bonfida/index.js'
 import { RedPacketAPI } from './RedPacket/index.js'
+import { CenterEVM_API, CenterSolana_API } from './Center/index.js'
 import { SmartPayOwnerAPI } from './SmartPay/apis/OwnerAPI.js'
 
 export const OpenSea = new OpenSeaAPI()
@@ -169,3 +170,7 @@ export const SmartPayBundler = new SmartPayBundlerAPI()
 export const SmartPayFunder = new SmartPayFunderAPI()
 export const SmartPayOwner = new SmartPayOwnerAPI()
 export const SmartPayAccount = new SmartPayAccountAPI()
+
+// Center
+export const CenterEVM = new CenterEVM_API()
+export const CenterSolana = new CenterSolana_API()

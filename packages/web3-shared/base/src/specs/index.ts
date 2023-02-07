@@ -86,6 +86,7 @@ export enum SourceType {
     Element = 'Element',
     Solsea = 'Solsea',
     Solanart = 'Solanart',
+    Center = 'Center',
     OKX = 'OKX',
     Uniswap = 'Uniswap',
     NFTX = 'NFTX',
