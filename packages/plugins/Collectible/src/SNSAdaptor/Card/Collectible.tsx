@@ -2,7 +2,7 @@ import formatDateTime from 'date-fns/format'
 import isAfter from 'date-fns/isAfter'
 import isValidDate from 'date-fns/isValid'
 import { Icons } from '@masknet/icons'
-import { ChainBoundary, Markdown, RetryHint, WalletConnectedBoundary } from '@masknet/shared'
+import { Markdown, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
@@ -17,7 +17,6 @@ import { OffersTab } from './tabs/OffersTab.js'
 import { Context } from '../Context/index.js'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { useSwitcher } from '../hooks/useSwitcher.js'
-import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) => {
     return {
@@ -116,7 +115,7 @@ export function Collectible(props: CollectibleProps) {
     const t = useI18N()
     const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activities')
     const { classes } = useStyles({ currentTab })
-    const { asset, events, orders, sourceType, setSourceType, pluginID, chainId } = Context.useContainer()
+    const { asset, events, orders, sourceType, setSourceType } = Context.useContainer()
 
     // #region provider switcher
     const CollectibleProviderSwitcher = useSwitcher(
@@ -220,11 +219,6 @@ export function Collectible(props: CollectibleProps) {
                     <Paper className={classes.body} elevation={0}>
                         {renderTab()}
                     </Paper>
-                    <ChainBoundary
-                        expectedPluginID={pluginID ?? NetworkPluginID.PLUGIN_EVM}
-                        expectedChainId={_asset.chainId}>
-                        <WalletConnectedBoundary />
-                    </ChainBoundary>
                 </CardContent>
             </CollectiblePaper>
             {endDate && isValidDate(endDate) && isAfter(endDate, Date.now()) && (
