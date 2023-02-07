@@ -1,7 +1,8 @@
 import { NetworkPluginID, getSiteType } from '@masknet/shared-base'
 import type { LoggerAPI } from '../types/Logger.js'
+import type { Event } from '@sentry/browser'
 
-class Logger implements LoggerAPI.Logger {
+export class SentryAPI implements LoggerAPI.Provider<Event, Error> {
     constructor() {
         Sentry.init({
             dsn: process.env.MASK_SENTRY_DSN,
@@ -17,30 +18,46 @@ class Logger implements LoggerAPI.Logger {
         return getSiteType()
     }
 
-    private createScope(options?: ScopeOp) {
-        const scope = new Sentry.Scope()
-
-        if (this.id) scope.setTag('id', this.id)
-        if (this.site) scope.setTag('site_id', this.site)
-        if (this.pluginID) scope.setTag('plugin_id', this.pluginID)
-
-        return scope
+    createEvent(options: LoggerAPI.EventOptions): Event {
+        return {
+            event_id: options.eventID,
+            message: 'An Event Message',
+            platform: 'twitter.com',
+        }
+    }
+    createException(options: LoggerAPI.ExceptionOptions): Error {
+        return options.error ?? new Error('Something went wrong!')
     }
 
-    public captureException(error: Error): void {
-        const scope = this.createScope()
-        Sentry.captureException(error, scope)
-        Sentry.captureEvent
+    // private createScope(options?: ScopeOp) {
+    //     const scope = new Sentry.Scope()
+
+    //     if (this.id) scope.setTag('id', this.id)
+    //     if (this.site) scope.setTag('site_id', this.site)
+    //     if (this.pluginID) scope.setTag('plugin_id', this.pluginID)
+
+    //     return scope
+    // }
+
+    captureEvent(options: LoggerAPI.EventOptions) {
+        Sentry.captureEvent(this.createEvent(options))
     }
 
-    public captureMessage(message: string): void {
-        const scope = this.createScope()
-        Sentry.captureMessage(message, scope)
+    captureException(options: LoggerAPI.ExceptionOptions) {
+        Sentry.captureException(this.createException(options), {
+            tags: {
+                pageID: 'index',
+                pluginID: NetworkPluginID.PLUGIN_SOLANA,
+            },
+        })
     }
-}
 
-export class SentryLoggerAPI implements LoggerAPI.Provider {
-    createLogger() {
-        return new Logger()
+    captureMessage(message: string) {
+        Sentry.captureMessage(message, {
+            tags: {
+                pageID: 'index',
+                pluginID: NetworkPluginID.PLUGIN_EVM,
+            },
+        })
     }
 }

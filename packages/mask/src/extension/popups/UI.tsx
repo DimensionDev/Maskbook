@@ -2,20 +2,19 @@ import { lazy, useEffect, useState, useMemo } from 'react'
 import { Navigate, Route, Routes, HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { NetworkPluginID, PopupRoutes, queryRemoteI18NBundle } from '@masknet/shared-base'
-import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
-import '../../social-network-adaptor/browser-action/index.js'
-import { PopupContext } from './hook/usePopupContext.js'
-import { PopupFrame } from './components/PopupFrame/index.js'
-import { MaskUIRootPage } from '../../UIRoot-page.js'
-import { PageTitleContext } from './context.js'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { logSettings, languageSettings } from '../../../shared/legacy-settings/settings.js'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
-import Services from '../service.js'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { LoggerAPI } from '@masknet/web3-providers/types'
+import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
+import { logSettings, languageSettings } from '../../../shared/legacy-settings/settings.js'
+import '../../social-network-adaptor/browser-action/index.js'
+import { PopupFrame } from './components/PopupFrame/index.js'
+import { PopupContext } from './hook/usePopupContext.js'
+import { MaskUIRootPage } from '../../UIRoot-page.js'
+import { PageTitleContext } from './context.js'
+import Services from '../service.js'
 
 function usePopupTheme() {
     return usePopupFullPageTheme(useValueRef(languageSettings))
@@ -45,8 +44,6 @@ const web3ContextType = { pluginID: NetworkPluginID.PLUGIN_EVM, providerType: Pr
 export default function Popups() {
     const [title, setTitle] = useState('')
     useEffect(queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
-    const loggerId = useLogSettings()
-    const loggerContext = useMemo(() => ({ platform: LoggerAPI.Platform.Popup, loggerId }), [loggerId])
     const titleContext = useMemo(() => ({ title, setTitle }), [title])
 
     return MaskUIRootPage(

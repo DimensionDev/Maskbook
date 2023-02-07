@@ -3,6 +3,7 @@ import { useAsyncRetry } from 'react-use'
 import { sortBy } from 'lodash-es'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
+import { DialogActions, DialogContent } from '@mui/material'
 import { InjectedDialog, LoadGuard, PersonaAction, usePersonaProofs, WalletTypes } from '@masknet/shared'
 import {
     CrossIsolationMessages,
@@ -16,7 +17,7 @@ import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { LoggerAPI } from '@masknet/web3-providers/types'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { DialogActions, DialogContent } from '@mui/material'
+import { Sentry } from '@masknet/web3-providers'
 import { SceneMap, Scene } from '../../constants.js'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { context } from '../context.js'
@@ -24,7 +25,6 @@ import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../
 import { getDonationList, getFootprintList, getNFTList, getUnlistedConfig, getWalletList } from '../utils.js'
 import { ImageManagement } from './ImageManagement.js'
 import { Main } from './Main.js'
-import { logger } from '../logger.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -54,9 +54,10 @@ export function Web3ProfileDialog() {
     const [accountId, setAccountId] = useState<string>()
 
     const [open, setOpen] = useState(false)
+
     useEffect(() => {
         return CrossIsolationMessages.events.web3ProfileDialogEvent.on(({ open }) => {
-            if (open) logger?.captureMessage(LoggerAPI.Message.Web3ProfileDialogAccess)
+            if (open) Sentry?.captureMessage(LoggerAPI.EventID.Web3ProfileDialogAccess)
             setOpen(open)
         })
     }, [])

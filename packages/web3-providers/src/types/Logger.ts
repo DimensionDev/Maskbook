@@ -46,18 +46,16 @@ export namespace LoggerAPI {
 
     export interface ExceptionOptions extends CommonOptions {
         exceptionID?: ExceptionID
-    }
-
-    export interface Logger<Event, Exception> {
-        createEvent(options: EventOptions): Event
-        createException(options: ExceptionOptions): Exception
-
-        captureEvent(event: Event): void
-        captureException(error: Exception): void
-        captureMessage(message: string): void
+        error?: Error
     }
 
     export interface Provider<Event, Exception> {
-        createLogger(id: string, pluginID?: NetworkPluginID): Logger<Event, Exception>
+        createEvent(options: EventOptions): Event
+        createException(options: ExceptionOptions): Exception
+
+        captureEvent(options: EventOptions): void
+        captureException(options: ExceptionOptions): void
+
+        captureMessage(message: string): void
     }
 }
