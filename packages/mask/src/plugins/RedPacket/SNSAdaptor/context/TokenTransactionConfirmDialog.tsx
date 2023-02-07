@@ -23,7 +23,6 @@ export function TransactionConfirmDialog({ onSubmit, shareText, ...rest }: Trans
         rest.nonFungibleTokenAddress,
         rest.nonFungibleTokenId ?? '',
     )
-    rest.token?.logoURL
     return (
         <TokenTransactionConfirmModal
             {...rest}
