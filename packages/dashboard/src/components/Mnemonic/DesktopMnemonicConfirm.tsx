@@ -1,7 +1,7 @@
-import { MaskTextField } from '@masknet/theme'
-import { Grid } from '@mui/material'
 import { memo, useCallback } from 'react'
 import { useDrop } from 'react-use'
+import { MaskTextField } from '@masknet/theme'
+import { Grid } from '@mui/material'
 
 export interface DesktopMnemonicConfirmProps {
     puzzleWords: string[]
