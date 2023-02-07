@@ -1,12 +1,12 @@
 import { Icons } from '@masknet/icons'
 import { useLastRecognizedSocialIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { ChainBoundary, NetworkTab, PluginVerifiedWalletStatusBar } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useNetworkContext, useNonFungibleAssets } from '@masknet/web3-hooks-base'
 import { isGreaterThan } from '@masknet/web3-shared-base'
-import { ChainId, isValidAddress } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { first, uniqBy } from 'lodash-es'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
@@ -111,6 +111,7 @@ const useStyles = makeStyles()((theme) => ({
 export const NFTListDialog: FC = () => {
     const t = useI18N()
     const { classes } = useStyles()
+    const { loading, value: socialIdentity } = useLastRecognizedSocialIdentity()
     const {
         pfpType,
         proofs,
@@ -121,27 +122,13 @@ export const NFTListDialog: FC = () => {
         setProofs,
         setProof,
         proof,
-    } = useAvatarManagement()
+    } = useAvatarManagement(socialIdentity)
     const navigate = useNavigate()
-
-    const { loading, value: socialIdentity } = useLastRecognizedSocialIdentity()
-    const nextIDWallets =
-        socialIdentity?.binding?.proofs.filter(
-            (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
-        ) ?? EMPTY_LIST
-
-    const nextIDPersonas =
-        socialIdentity?.binding?.proofs.filter(
-            (x) => x.identity.toLowerCase() === socialIdentity.identifier?.userId.toLowerCase(),
-        ) ?? EMPTY_LIST
 
     const { pluginID } = useNetworkContext()
     const { account, chainId, setChainId } = useChainContext()
-
     const [selectedPluginId, setSelectedPluginId] = useState(pluginID ?? NetworkPluginID.PLUGIN_EVM)
-
     const [addDialogOpen, setAddDialogOpen] = useState(false)
-
     const [selectedToken, setSelectedToken] = useState<Web3Helper.NonFungibleTokenAll | undefined>(tokenInfo)
     const [disabled, setDisabled] = useState(false)
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
@@ -185,9 +172,6 @@ export const NFTListDialog: FC = () => {
         if (!selectedToken?.metadata?.imageURL) return
         setDisabled(true)
 
-        if (!proof) setProof(nextIDPersonas[0])
-        if (!proofs.length) setProofs(nextIDWallets)
-
         try {
             const image = await toPNG(selectedToken.metadata.imageURL)
             if (!image) {
@@ -207,7 +191,7 @@ export const NFTListDialog: FC = () => {
         } finally {
             setDisabled(false)
         }
-    }, [selectedToken, targetAccount, selectedPluginId, navigate, proof, proofs, nextIDWallets, nextIDPersonas])
+    }, [selectedToken, targetAccount, selectedPluginId, navigate, proof, proofs])
 
     const openAddDialog = useCallback(() => {
         if (!account && !proofs.length) {

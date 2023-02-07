@@ -1,4 +1,4 @@
-import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
+import { BindingProof, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { noop } from 'lodash-es'
@@ -10,10 +10,13 @@ import {
     PropsWithChildren,
     SetStateAction,
     useContext,
+    useEffect,
     useMemo,
     useState,
 } from 'react'
 import { PFP_TYPE, SelectTokenInfo } from '../../types.js'
+import { isValidAddress } from '@masknet/web3-shared-evm'
+import type { SocialIdentity } from '@masknet/web3-shared-base'
 
 interface AvatarManagementContextOptions {
     targetAccount: string
@@ -76,6 +79,22 @@ export const AvatarManagementProvider: FC<Props> = memo(({ children }) => {
 
 AvatarManagementProvider.displayName = 'AvatarManagementProvider'
 
-export function useAvatarManagement() {
-    return useContext(AvatarManagementContext)
+export function useAvatarManagement(socialIdentity?: SocialIdentity) {
+    const context = useContext(AvatarManagementContext)
+    useEffect(() => {
+        if (!socialIdentity) return
+        const nextIDWallets =
+            socialIdentity.binding?.proofs.filter(
+                (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
+            ) ?? EMPTY_LIST
+
+        const nextIDPersonas =
+            socialIdentity.binding?.proofs.filter(
+                (x) => x.identity.toLowerCase() === socialIdentity.identifier?.userId.toLowerCase(),
+            ) ?? EMPTY_LIST
+        context.setProof(nextIDPersonas[0])
+        context.setProofs(nextIDWallets)
+    }, [socialIdentity, context])
+
+    return context
 }
