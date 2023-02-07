@@ -18,7 +18,8 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapRouteSuccessRe
         if (!account || !tradeComputed?.trade_) return null
         return {
             from: account,
-            ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
+            value: tradeComputed.trade_.value ? toHex(tradeComputed.trade_.value) : undefined,
+            ...pick(tradeComputed.trade_, ['to', 'data']),
         } as Transaction
     }, [account, tradeComputed])
 
@@ -30,10 +31,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapRouteSuccessRe
         const hash = await connection.sendTransaction(
             {
                 ...config,
-                gas: await connection.estimateTransaction?.({
-                    ...config,
-                    value: config.value ? toHex(config.value) : undefined,
-                }),
+                gas: await connection.estimateTransaction?.(config),
                 ...gasConfig,
             },
             { chainId, overrides: { ...gasConfig } },

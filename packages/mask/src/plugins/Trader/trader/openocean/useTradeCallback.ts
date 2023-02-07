@@ -16,9 +16,11 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapOOSuccessRespo
     // compose transaction config
     const config = useMemo(() => {
         if (!account || !tradeComputed?.trade_ || pluginID !== NetworkPluginID.PLUGIN_EVM) return null
+
         return {
             from: account,
-            ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
+            value: tradeComputed.trade_.value ? toHex(tradeComputed.trade_.value) : undefined,
+            ...pick(tradeComputed.trade_, ['to', 'data']),
             ...gasConfig,
         } as Transaction
     }, [account, tradeComputed, gasConfig])
@@ -31,10 +33,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapOOSuccessRespo
         const hash = await connection.sendTransaction(
             {
                 ...config,
-                gas: await connection.estimateTransaction?.({
-                    ...config,
-                    value: config.value ? toHex(config.value) : undefined,
-                }),
+                gas: await connection.estimateTransaction?.(config),
             },
             { chainId, overrides: { ...gasConfig } },
         )
