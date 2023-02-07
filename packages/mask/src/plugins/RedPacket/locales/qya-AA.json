@@ -50,7 +50,7 @@
     "erc721_insufficient_balance": "crwdns16820:0crwdne16820:0",
     "erc721_tab_title": "crwdns16822:0crwdne16822:0",
     "erc20_tab_title": "crwdns16824:0crwdne16824:0",
-    "claimed": "crwdns16826:0crwdne16826:0",
+    "claimed": "crwdns16826:0{{amount}}crwdne16826:0",
     "details": "crwdns16828:0crwdne16828:0",
     "display_name": "crwdns16830:0crwdne16830:0",
     "select_existing": "crwdns16832:0crwdne16832:0",
@@ -89,5 +89,11 @@
     "description_broken": "crwdns16888:0crwdne16888:0",
     "description_empty": "crwdns16890:0crwdne16890:0",
     "description_failover": "crwdns16892:0{{shares}}crwdnd16892:0{{total}}crwdnd16892:0{{symbol}}crwdne16892:0",
-    "recommend_feature_description": "crwdns16894:0crwdne16894:0"
+    "recommend_feature_description": "crwdns16894:0crwdne16894:0",
+    "claim_token_successful": "crwdns19839:0{{amount}}crwdnd19839:0{{name}}crwdne19839:0",
+    "claim_nft_successful": "crwdns19841:0{{name}}crwdne19841:0",
+    "lucky_drop": "crwdns19843:0crwdne19843:0",
+    "share": "crwdns19845:0crwdne19845:0",
+    "ok": "crwdns19847:0crwdne19847:0",
+    "got_nft": "crwdns19849:0{{name}}crwdne19849:0"
 }
