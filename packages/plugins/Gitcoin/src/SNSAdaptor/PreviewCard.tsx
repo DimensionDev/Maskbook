@@ -6,10 +6,11 @@ import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { alpha, Box, Button, Card, Link, Stack, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
+import { compact } from 'lodash-es'
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html'
 import { useMemo } from 'react'
 import urlcat from 'urlcat'
-import { SUPPORTED_CHAIN_IDS, SUPPORTED_TENANTS, TenantToChainIconMap } from '../constants.js'
+import { SUPPORTED_TENANTS, TenantToChainIconMap, TenantToChainMap } from '../constants.js'
 import { Translate, useI18N } from '../locales/i18n_generated.js'
 import { useDonate } from './contexts/index.js'
 import { grantDetailStyle } from './gitcoin-grant-detail-style.js'
@@ -164,10 +165,11 @@ export function PreviewCard(props: PreviewCardProps) {
     if (!grant) return null
 
     const tenant = grant.tenants[0]
+    const supportedChainIds = compact(grant.tenants.map((tenant) => TenantToChainMap[tenant]))
 
     const isSupportedRuntime =
         pluginID === NetworkPluginID.PLUGIN_EVM &&
-        SUPPORTED_CHAIN_IDS.includes(chainId) &&
+        supportedChainIds.includes(chainId) &&
         SUPPORTED_TENANTS.includes(tenant)
 
     // Use handle_1 as Gitcoin does

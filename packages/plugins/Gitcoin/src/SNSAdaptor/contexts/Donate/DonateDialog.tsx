@@ -25,6 +25,8 @@ import { Icons } from '@masknet/icons'
 import { GiveBackSelect } from './GiveBackSelect.js'
 import { BigNumber } from 'bignumber.js'
 import { useShowResult } from '../ResultModal/index.js'
+import { TenantToChainMap } from '../../../constants.js'
+import { compact } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     banner: {},
@@ -71,11 +73,10 @@ export interface DonateDialogProps extends InjectedDialogProps {
     grant: GitcoinGrant
 }
 
-const availableChains = [ChainId.Mainnet, ChainId.Matic]
 export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...rest }) => {
     const t = useI18N()
     const { classes, theme } = useStyles()
-    const { title, admin_address: address } = grant
+    const { title, admin_address: address, tenants } = grant
     const { share } = useSNSAdaptorContext()
 
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -119,6 +120,10 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
         amount.toFixed(0),
         tipAmount.toFixed(0),
         token,
+    )
+    const availableChains = useMemo(
+        () => compact(grant.tenants.map((tenant) => TenantToChainMap[tenant])),
+        [grant.tenants],
     )
     // #endregion
 
@@ -166,7 +171,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
     const maxAmount = availableBalance.div(1 + giveBack).toFixed(0)
 
     return (
-        <InjectedDialog {...rest} title={grant.title} maxWidth="xs">
+        <InjectedDialog {...rest} title={t.donate_dialog_title()} maxWidth="xs">
             <DialogContent style={{ padding: 16 }}>
                 <div className={classes.banner}>
                     <img className={classes.bannerImage} src={grant.logo_url} />
