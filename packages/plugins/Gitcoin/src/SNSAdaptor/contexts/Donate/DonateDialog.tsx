@@ -109,7 +109,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
     const amount = rightShift(rawAmount || '0', token?.decimals)
     const [giveBack, setGiveBack] = useState<number>(0.05)
     const tipAmount = amount.gt(0) ? new BigNumber(amount).times(giveBack) : ZERO
-    const total = rawAmount ? new BigNumber(rawAmount).times(1 + giveBack).toFixed() : '0'
+    const total = amount.times(1 + giveBack)
     // #endregion
 
     // #region blocking
@@ -215,7 +215,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
                         </Typography>
                         <div className={classes.contribution}>
                             <Typography mr={1} fontSize={24} fontWeight={700}>
-                                {total}
+                                {formatBalance(total, token.decimals, 6)}
                             </Typography>
                             <TokenIcon chainId={chainId} address={token.address} size={18} />
                             <Typography ml={1}>{token.symbol}</Typography>
