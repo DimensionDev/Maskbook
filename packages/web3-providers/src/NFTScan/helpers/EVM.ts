@@ -112,9 +112,6 @@ export function createNonFungibleAsset(
     const schema = asset.erc_type === 'erc1155' ? SchemaType.ERC1155 : SchemaType.ERC721
     const symbol = asset.contract_name
 
-    console.log('nftscan-api')
-    console.log(asset)
-
     return {
         id: asset.contract_address,
         chainId,
