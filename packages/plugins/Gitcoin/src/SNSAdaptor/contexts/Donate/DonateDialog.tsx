@@ -14,7 +14,7 @@ import { EMPTY_LIST, isTwitter, NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useChainContext, useFungibleTokenBalance, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { formatBalance, FungibleToken, rightShift, ZERO } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
+import { ChainId, isNativeTokenAddress, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
 import { Box, DialogActions, DialogContent, Typography } from '@mui/material'
 import { FC, memo, useCallback, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
@@ -114,16 +114,12 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
     // #endregion
 
     // #region blocking
-    const [{ loading }, { value: gasFee }, donateCallback] = useDonateCallback(
+    const [{ loading }, { value: gasFee = '1' }, donateCallback] = useDonateCallback(
         address ?? '',
         amount.toFixed(0),
         tipAmount.toFixed(0),
         token,
     )
-    const maxAmount = new BigNumber(tokenBalance.value ?? 0)
-        .div(1 + giveBack)
-        .minus(gasFee ?? '1')
-        .toFixed(0)
     // #endregion
 
     const showConfirm = useShowResult()
@@ -165,6 +161,9 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
     // #endregion
 
     if (!token || !address) return null
+    const balance = new BigNumber(tokenBalance.value ?? '0')
+    const availableBalance = isNativeTokenAddress(token.address) && balance.gt(gasFee) ? balance.minus(gasFee) : balance
+    const maxAmount = availableBalance.div(1 + giveBack).toFixed(0)
 
     return (
         <InjectedDialog {...rest} title={grant.title} maxWidth="xs">
@@ -180,7 +179,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
                         label={t.amount()}
                         amount={rawAmount}
                         maxAmount={maxAmount}
-                        balance={tokenBalance.value ?? '0'}
+                        balance={availableBalance.toFixed(0)}
                         token={token}
                         onAmountChange={setRawAmount}
                         onSelectToken={onSelectTokenChipClick}
