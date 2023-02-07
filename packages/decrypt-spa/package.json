@@ -20,7 +20,9 @@
         "@masknet/shared-base": "workspace:*",
         "@masknet/typed-message": "workspace:^",
         "@masknet/typed-message-react": "workspace:^",
-        "@servie/events": "^3.0.0"
+        "@servie/events": "^3.0.0",
+        "crypto-browserify": "^3.12.0",
+        "stream-browserify": "^3.0.0"
     },
     "devDependencies": {
         "@dimensiondev/webextension-shim": "0.0.3-20210823035705-4257e12",

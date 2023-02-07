@@ -547,6 +547,12 @@ importers:
       '@servie/events':
         specifier: ^3.0.0
         version: 3.0.0
+      crypto-browserify:
+        specifier: ^3.12.0
+        version: 3.12.0
+      stream-browserify:
+        specifier: ^3.0.0
+        version: 3.0.0
     devDependencies:
       '@dimensiondev/webextension-shim':
         specifier: 0.0.3-20210823035705-4257e12
@@ -30540,7 +30546,7 @@ packages:
       '@swc/core': ^1.2.147
       webpack: '>=2'
     dependencies:
-      webpack: 5.75.0
+      webpack: 5.75.0_webpack-cli@5.0.0
     dev: true
 
   /symbol-tree/3.2.4:
@@ -30706,7 +30712,7 @@ packages:
       schema-utils: 3.1.1
       serialize-javascript: 6.0.0
       terser: 5.15.1
-      webpack: 5.75.0
+      webpack: 5.75.0_webpack-cli@5.0.0
 
   /terser/4.8.1:
     resolution: {integrity: sha512-4GnLC0x667eJG0ewJTa6z/yXrbLGv80D9Ru6HIpCQmO+Q4PfEtBFi0ObSckqwL6VyQv/7ENJieXHo2ANmdQwgw==}
@@ -33377,6 +33383,7 @@ packages:
       - '@swc/core'
       - esbuild
       - uglify-js
+    dev: true
 
   /webpack/5.75.0_webpack-cli@5.0.0:
     resolution: {integrity: sha512-piaIaoVJlqMsPtX/+3KTTO6jfvrSYgauFVdt8cr9LTHKmcq/AMd4mhzsiP7ZF/PGRNPGA8336jldh9l2Kt2ogQ==}

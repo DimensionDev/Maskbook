@@ -6,6 +6,9 @@
 import { fileURLToPath } from 'url'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import webpack from 'webpack'
+import { createRequire } from 'module'
+
+const require = createRequire(import.meta.url)
 
 /**
  *
@@ -14,8 +17,8 @@ import webpack from 'webpack'
  * @returns {Configuration}
  */
 function Configuration(a, b) {
-    console.log(a, b)
     return {
+        mode: 'development',
         entry: './src/entry.tsx',
         experiments: { asyncWebAssembly: true },
         resolve: {
@@ -51,10 +54,27 @@ function Configuration(a, b) {
             ],
         },
         plugins: [
+            new webpack.ProvidePlugin({
+                // Polyfill for Node global "Buffer" variable
+                Buffer: [require.resolve('buffer'), 'Buffer'],
+                stream: require.resolve('stream-browserify'),
+                crypto: require.resolve('crypto-browserify'),
+            }),
             new HtmlWebpackPlugin(),
             new webpack.DefinePlugin({
                 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
                 'process.env.NODE_DEBUG': 'undefined',
+                'process.env.engine': `(${(ua) =>
+                    ua.includes('Chrom')
+                        ? 'chromium'
+                        : ua.includes('Firefox')
+                        ? 'firefox'
+                        : 'safari'})(navigator.userAgent)`,
+                'process.env.channel': JSON.stringify('stable'),
+                'process.env.architecture': JSON.stringify('web'),
+                'process.env.shadowRootMode': JSON.stringify('open'),
+                'process.version': JSON.stringify('v19.0.0'),
+                'process.browser': 'true',
             }),
         ],
     }
