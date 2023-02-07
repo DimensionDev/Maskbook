@@ -7,7 +7,7 @@ import { DSearchAPI } from '../../src/DSearch/index.js'
 describe('DSearch test', () => {
     test('should return from specific list only', async () => {
         const DSearch = new DSearchAPI()
-        const result = await DSearch.search('token:eth')
+        const result = await DSearch.search('eth')
 
         expect(result.length).toBe(1)
         expect(result[0]).toStrictEqual({
@@ -21,7 +21,7 @@ describe('DSearch test', () => {
 
     test('should return by name', async () => {
         const DSearch = new DSearchAPI()
-        const result = await DSearch.search('token:eth1')
+        const result = await DSearch.search('eth1')
 
         expect(result.length).toBe(1)
         expect(result[0]).toStrictEqual({
@@ -35,7 +35,7 @@ describe('DSearch test', () => {
     })
     test('should return by fuzzy search', async () => {
         const DSearch = new DSearchAPI()
-        const result = await DSearch.search('token:efuzzy')
+        const result = await DSearch.search('efuzzy')
 
         expect(result.length).toBe(1)
         expect(result[0]).toStrictEqual({
@@ -48,7 +48,7 @@ describe('DSearch test', () => {
     })
     test('should return by fuzzy search without empty string', async () => {
         const DSearch = new DSearchAPI()
-        const result = await DSearch.search('token:searchempty')
+        const result = await DSearch.search('searchempty')
 
         expect(result.length).toBe(1)
         expect(result[0]).toStrictEqual({
@@ -62,7 +62,7 @@ describe('DSearch test', () => {
 
     test('should return collection by twitter handle', async () => {
         const DSearch = new DSearchAPI()
-        const result = (await DSearch.search('twitter:mathcastles')) as Array<
+        const result = (await DSearch.search('mathcastles')) as Array<
             NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
         >
 

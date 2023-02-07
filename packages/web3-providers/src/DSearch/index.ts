@@ -403,8 +403,8 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         keyword: string,
         type?: SearchResultType,
     ): Promise<T[]> {
-        // #MASK or $MASK
-        const [_, name = ''] = keyword.match(/[#$](\w+)/) ?? []
+        // #MASK or $MASK or MASK
+        const [_, name = ''] = keyword.match(/(\w+)/) ?? []
         if (name) return this.searchTokenByName(name) as Promise<T[]>
 
         // BoredApeYC or CryptoPunks nft twitter project
