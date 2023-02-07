@@ -25,6 +25,8 @@ export function SourceProviderIcon(props: SourceProviderIconProps) {
             return <Icons.Uniswap size={size} />
         case SourceType.LooksRare:
             return <Icons.LooksRare size={size} />
+        case SourceType.X2Y2:
+            return <Icons.X2Y2 size={size} />
         default:
             return <></>
     }

@@ -4,7 +4,7 @@ import { SourceType } from '@masknet/web3-shared-base'
 import { Stack } from '@mui/material'
 import { SourceProviderIcon } from '../index.js'
 
-const sourceList = [SourceType.NFTScan, SourceType.LooksRare, SourceType.OpenSea, SourceType.Rarible]
+const sourceList = [SourceType.LooksRare, SourceType.OpenSea, SourceType.Rarible, SourceType.X2Y2]
 
 interface SourceProviderSwitcherProps {
     // default is all
