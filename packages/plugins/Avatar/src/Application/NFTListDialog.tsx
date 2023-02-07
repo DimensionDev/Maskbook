@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { useLastRecognizedSocialIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { ChainBoundary, NetworkTab, PluginVerifiedWalletStatusBar } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
@@ -111,18 +111,8 @@ const useStyles = makeStyles()((theme) => ({
 export const NFTListDialog: FC = () => {
     const t = useI18N()
     const { classes } = useStyles()
-    const { loading, value: socialIdentity } = useLastRecognizedSocialIdentity()
-    const {
-        pfpType,
-        proofs,
-        tokenInfo,
-        targetAccount,
-        setTargetAccount,
-        setSelectedTokenInfo,
-        setProofs,
-        setProof,
-        proof,
-    } = useAvatarManagement(socialIdentity)
+    const { pfpType, proofs, tokenInfo, targetAccount, setTargetAccount, setSelectedTokenInfo, proof } =
+        useAvatarManagement()
     const navigate = useNavigate()
 
     const { pluginID } = useNetworkContext()
@@ -279,7 +269,7 @@ export const NFTListDialog: FC = () => {
                             children={NoNFTList()}
                             nextPage={nextPage}
                             loadError={!!loadError}
-                            loadFinish={loadFinish || loading}
+                            loadFinish={loadFinish}
                         />
                     </>
                 ) : (

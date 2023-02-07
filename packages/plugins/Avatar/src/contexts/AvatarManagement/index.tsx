@@ -47,9 +47,9 @@ export const AvatarManagementContext = createContext<AvatarManagementContextOpti
     setSelectedTokenInfo: noop,
 })
 
-interface Props extends PropsWithChildren<{}> {}
+interface Props extends PropsWithChildren<{ socialIdentity?: SocialIdentity }> {}
 
-export const AvatarManagementProvider: FC<Props> = memo(({ children }) => {
+export const AvatarManagementProvider: FC<Props> = memo(({ children, socialIdentity }) => {
     const [proof, setProof] = useState<BindingProof>()
     const [proofs, setProofs] = useState<BindingProof[]>(EMPTY_LIST)
     const [tokenInfo, setTokenInfo] = useState<Web3Helper.NonFungibleTokenAll>()
@@ -57,6 +57,21 @@ export const AvatarManagementProvider: FC<Props> = memo(({ children }) => {
     const [selectedAccount, setSelectedAccount] = useState(account)
     const targetAccount = selectedAccount || account || proofs[0]?.identity
     const [selectedTokenInfo, setSelectedTokenInfo] = useState<SelectTokenInfo>()
+
+    useEffect(() => {
+        if (!socialIdentity) return
+        const nextIDWallets =
+            socialIdentity.binding?.proofs.filter(
+                (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
+            ) ?? EMPTY_LIST
+
+        const nextIDPersonas =
+            socialIdentity.binding?.proofs.filter(
+                (x) => x.identity.toLowerCase() === socialIdentity.identifier?.userId.toLowerCase(),
+            ) ?? EMPTY_LIST
+        setProof(nextIDPersonas[0])
+        setProofs(nextIDWallets)
+    }, [socialIdentity])
 
     const contextValue: AvatarManagementContextOptions = useMemo(() => {
         return {
@@ -79,22 +94,6 @@ export const AvatarManagementProvider: FC<Props> = memo(({ children }) => {
 
 AvatarManagementProvider.displayName = 'AvatarManagementProvider'
 
-export function useAvatarManagement(socialIdentity?: SocialIdentity) {
-    const context = useContext(AvatarManagementContext)
-    useEffect(() => {
-        if (!socialIdentity) return
-        const nextIDWallets =
-            socialIdentity.binding?.proofs.filter(
-                (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
-            ) ?? EMPTY_LIST
-
-        const nextIDPersonas =
-            socialIdentity.binding?.proofs.filter(
-                (x) => x.identity.toLowerCase() === socialIdentity.identifier?.userId.toLowerCase(),
-            ) ?? EMPTY_LIST
-        context.setProof(nextIDPersonas[0])
-        context.setProofs(nextIDWallets)
-    }, [socialIdentity, context])
-
-    return context
+export function useAvatarManagement() {
+    return useContext(AvatarManagementContext)
 }

@@ -6,6 +6,7 @@ import { AvatarRoutes, RoutePaths } from './Routes.js'
 import { AvatarManagementProvider } from '../contexts/index.js'
 import { RouterDialog } from './RouterDialog.js'
 import type { InjectedDialogProps } from '@masknet/shared'
+import { useLastRecognizedSocialIdentity } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()({
     root: {
@@ -28,10 +29,10 @@ export const NFTAvatarDialog: FC<NFTAvatarDialogProps> = ({ startPicking, ...res
     const initialEntries = useMemo(() => {
         return [RoutePaths.Exit, startPicking ? RoutePaths.NFTPicker : RoutePaths.Personas]
     }, [!startPicking])
-
+    const { loading, value: socialIdentity } = useLastRecognizedSocialIdentity()
     return (
         <MemoryRouter initialEntries={initialEntries} initialIndex={1}>
-            <AvatarManagementProvider>
+            <AvatarManagementProvider socialIdentity={socialIdentity}>
                 <RouterDialog {...rest}>
                     <DialogContent className={classes.root}>
                         <AvatarRoutes />
