@@ -50,7 +50,7 @@
     "erc721_insufficient_balance": "Insufficient Balance",
     "erc721_tab_title": "Collectibles",
     "erc20_tab_title": "Tokens",
-    "claimed": "Claimed",
+    "claimed": "Claimed {{amount}}",
     "details": "Lucky Drop Details",
     "display_name": "Lucky Drop",
     "select_existing": "History",
@@ -94,5 +94,6 @@
     "claim_nft_successful": "Claimed 1 {{name}} successfully.",
     "lucky_drop": "Lucky Drop",
     "share": "Share",
-    "ok": "OK"
+    "ok": "OK",
+    "got_nft": "You got 1 {{name}}"
 }

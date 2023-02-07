@@ -103,7 +103,7 @@ export const NftItem: FC<NftItemProps> = ({ collection, tokenId, className, clai
                 disableQueryNonFungibleAsset
             />
             <Typography className={classes.name}>{formatTokenId(tokenId, 2)}</Typography>
-            {claimed && <Typography className={classes.claimedBadge}>{t.claimed()}</Typography>}
+            {claimed && <Typography className={classes.claimedBadge}>{t.claimed({ amount: '' })}</Typography>}
         </div>
     )
 }

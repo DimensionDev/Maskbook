@@ -46,6 +46,7 @@ interface Props extends withClasses<'fallbackImage' | 'imgWrapper'> {
     fallbackImage?: URL
     isImageOnly?: boolean
     disableQueryNonFungibleAsset?: boolean
+    hideLoadingIcon?: boolean
     showNetwork?: boolean
     pluginID?: NetworkPluginID
 }
@@ -61,6 +62,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         isImageOnly = false,
         disableQueryNonFungibleAsset = false,
         fallbackImage,
+        hideLoadingIcon = false,
         url,
         pluginID,
         showNetwork = false,
@@ -90,7 +92,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
     }, [networkDescriptor?.icon, pluginID])
 
     if (loadingIsImageURL || (!url && loadingAsset))
-        return (
+        return hideLoadingIcon ? null : (
             <div className={classes.loadingWrapper}>
                 <LoadingBase color="primary" size={25} />
             </div>

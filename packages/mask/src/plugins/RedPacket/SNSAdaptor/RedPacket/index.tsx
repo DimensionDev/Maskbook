@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState, useEffect } from 'react'
-import { Card, Typography } from '@mui/material'
+import { Card, Typography, Box } from '@mui/material'
 import { ChainId, chainResolver, networkResolver } from '@masknet/web3-shared-evm'
 import { useTransactionConfirmDialog } from '../context/TokenTransactionConfirmDialogContext.js'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo.js'
@@ -8,6 +8,7 @@ import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base.js'
 import { useI18N as useBaseI18n } from '../../../../utils/index.js'
 import { useI18N } from '../../locales/index.js'
+import { LoadingBase, makeStyles, parseColor } from '@masknet/theme'
 import type { RedPacketJSONPayload } from '../../types.js'
 import { RedPacketStatus } from '../../types.js'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
@@ -17,29 +18,32 @@ import { OperationFooter } from './OperationFooter.js'
 import { formatBalance, isZero, TokenType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
-import { makeStyles } from '@masknet/theme'
+import { Stack } from '@mui/system'
 
 export const useStyles = makeStyles()((theme) => {
     return {
         root: {
-            borderRadius: theme.spacing(1),
-            padding: theme.spacing(3),
-            background: '#DB0632',
+            borderRadius: theme.spacing(2),
+            padding: theme.spacing(1.5, 2),
             position: 'relative',
             display: 'flex',
+            backgroundColor: 'transparent',
             color: theme.palette.common.white,
             flexDirection: 'column',
             justifyContent: 'space-between',
             height: 335,
+            margin: 'auto',
             boxSizing: 'border-box',
-            backgroundImage: `url(${new URL('./cover.png', import.meta.url)})`,
-            backgroundSize: 'contain',
+            backgroundImage: `url(${new URL('../assets/cover.png', import.meta.url)})`,
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
             [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                 padding: theme.spacing(1, 1.5),
                 height: 202,
             },
-            width: '100%',
+            width: 'calc(100% - 32px)',
         },
+
         header: {
             display: 'flex',
             justifyContent: 'space-between',
@@ -59,9 +63,9 @@ export const useStyles = makeStyles()((theme) => {
             flexWrap: 'wrap',
         },
         myStatus: {
-            fontSize: 14,
-            color: '#FAD85A',
-            fontWeight: 'bold',
+            fontSize: 12,
+            fontWeight: 600,
+            lineHeight: 1.8,
             [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                 fontSize: 14,
                 left: 12,
@@ -70,8 +74,9 @@ export const useStyles = makeStyles()((theme) => {
         },
         from: {
             fontSize: '14px',
-            color: '#FFFFFF',
-            fontWeight: 'bold',
+            color: theme.palette.common.white,
+            alignSelf: 'end',
+            fontWeight: 500,
             [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                 fontSize: 14,
                 right: 12,
@@ -79,33 +84,43 @@ export const useStyles = makeStyles()((theme) => {
             },
         },
         label: {
+            width: 76,
+            height: 27,
+            display: 'flex',
+            justifyContent: 'center',
+            fontSize: 12,
+            alignItems: 'center',
             borderRadius: theme.spacing(1),
-            padding: theme.spacing(0.2, 1),
-            background: 'rgba(0, 0, 0, 0.2)',
+            backgroundColor: parseColor(theme.palette.common.black).setAlpha(0.5).toString(),
             textTransform: 'capitalize',
             position: 'absolute',
             right: 12,
-            top: 8,
+            top: 12,
         },
         words: {
-            color: '#FAD85A',
-            fontSize: 20,
-            whiteSpace: 'pre',
+            display: '-webkit-box',
+            '-webkit-line-clamp': '2',
+            '-webkit-box-orient': 'vertical',
+            color: theme.palette.common.white,
+            fontSize: 24,
+            fontWeight: 700,
             textOverflow: 'ellipsis',
             overflow: 'hidden',
-            width: '85%',
+            width: '60%',
             minWidth: 300,
             [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                 fontSize: 14,
             },
         },
-        fullWidthBox: {
+        messageBox: {
             width: '100%',
         },
-        loadingText: {
-            textAlign: 'center',
-            fontSize: 24,
-            marginTop: 210,
+        tokenLabel: {
+            width: 48,
+            height: 48,
+            position: 'absolute',
+            top: 0,
+            left: 0,
         },
     }
 })
@@ -119,7 +134,6 @@ export function RedPacket(props: RedPacketProps) {
 
     const t = useI18N()
     const { t: tr } = useBaseI18n()
-    const { classes } = useStyles()
 
     // context
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
@@ -179,16 +193,23 @@ export function RedPacket(props: RedPacketProps) {
 
     const [isClaimed, setIsClaimed] = useState(false)
 
+    useEffect(() => {
+        setIsClaimed(false)
+    }, [account])
+
     const openTransactionConfirmDialog = useTransactionConfirmDialog()
 
     const onClaimOrRefund = useCallback(async () => {
+        let hash: string | undefined
         if (canClaim) {
-            await claimCallback()
+            hash = await claimCallback()
             setIsClaimed(true)
         } else if (canRefund) {
-            await refundCallback()
+            hash = await refundCallback()
         }
-        revalidateAvailability()
+        if (typeof hash === 'string') {
+            revalidateAvailability()
+        }
     }, [canClaim, canRefund, claimCallback])
 
     useEffect(() => {
@@ -240,19 +261,32 @@ export function RedPacket(props: RedPacketProps) {
         activatedSocialNetworkUI.utils.share(shareText)
     }, [shareText])
 
+    const { classes } = useStyles()
+
     // the red packet can fetch without account
     if (!availability || !token)
         return (
-            <Card className={classes.root} component="article" elevation={0}>
-                <Typography className={classes.loadingText} variant="body2">
-                    {tr('loading')}
-                </Typography>
-            </Card>
+            <Box
+                flex={1}
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                gap={1}
+                padding={1}
+                minHeight={148}>
+                <LoadingBase />
+                <Typography>{tr('loading')}</Typography>
+            </Box>
         )
 
     return (
         <>
             <Card className={classes.root} component="article" elevation={0}>
+                <img
+                    src={new URL('../assets/tokenLabel.png', import.meta.url).toString()}
+                    className={classes.tokenLabel}
+                />
                 <div className={classes.header}>
                     {/* it might be fontSize: 12 on twitter based on theme? */}
                     {listOfStatus.length ? (
@@ -262,18 +296,23 @@ export function RedPacket(props: RedPacketProps) {
                     ) : null}
                 </div>
                 <div className={classes.content}>
-                    <div className={classes.fullWidthBox}>
+                    <Stack />
+                    <div className={classes.messageBox}>
                         <Typography className={classes.words} variant="h6">
                             {payload.sender.message}
                         </Typography>
-                        <Typography variant="body2">{subtitle}</Typography>
                     </div>
                     <div className={classes.bottomContent}>
-                        <Typography className={classes.myStatus} variant="body1">
-                            {myStatus}
-                        </Typography>
+                        <div>
+                            <Typography variant="body2" className={classes.myStatus}>
+                                {subtitle}
+                            </Typography>
+                            <Typography className={classes.myStatus} variant="body1">
+                                {myStatus}
+                            </Typography>
+                        </div>
                         <Typography className={classes.from} variant="body1">
-                            {t.from({ name: payload.sender.name ?? '-' })}
+                            {t.from({ name: payload.sender.name || '-' })}
                         </Typography>
                     </div>
                 </div>
