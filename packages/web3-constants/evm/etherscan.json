@@ -1,5 +1,5 @@
 {
-    "EXPLORER_API": {
+    "ETHERSCAN_URL": {
         "Mainnet": "https://etherscan.r2d2.to",
         "Ropsten": "",
         "Rinkeby": "",

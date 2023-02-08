@@ -10,9 +10,9 @@ export class EtherscanURL {
     constructor() {}
 
     static from(chainId: ChainId) {
-        const { EXPLORER_API = '' } = getExplorerConstants(chainId)
+        const { ETHERSCAN_URL = '' } = getExplorerConstants(chainId)
 
-        return urlcat(EXPLORER_API, {
+        return urlcat(ETHERSCAN_URL, {
             chain_id: chainId,
         })
     }

@@ -25,6 +25,8 @@ export interface Create2Factory extends BaseContract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions): Create2Factory
     clone(): Create2Factory
     methods: {
+        fund(owner: string, nonce: number | string | BN): NonPayableTransactionObject<void>
+
         deploy(initCode: string | number[], salt: string | number[]): NonPayableTransactionObject<string>
     }
     events: {
