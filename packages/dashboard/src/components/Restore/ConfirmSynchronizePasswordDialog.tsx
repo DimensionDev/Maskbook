@@ -1,8 +1,8 @@
-import { useDashboardI18N } from '../../locales/index.js'
 import { memo } from 'react'
+import { Icons } from '@masknet/icons'
 import { getMaskColor, MaskDialog } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
-import { Icons } from '@masknet/icons'
+import { useDashboardI18N } from '../../locales/index.js'
 
 export interface ConfirmSynchronizePasswordDialogProps {
     open: boolean

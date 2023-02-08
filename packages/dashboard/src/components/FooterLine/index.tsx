@@ -1,13 +1,13 @@
-import { styled, Breadcrumbs, Dialog, IconButton, Link, Typography } from '@mui/material'
+import { memo, useState } from 'react'
 import { useHref, useNavigate } from 'react-router-dom'
+import { styled, Breadcrumbs, Dialog, IconButton, Link, Typography } from '@mui/material'
+import { Close } from '@mui/icons-material'
+import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales/index.js'
-import { memo, useState } from 'react'
 import { About } from './About.js'
-import { Close } from '@mui/icons-material'
 import { Version } from './Version.js'
 import links from './links.json'
-import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     navRoot: {

@@ -17,6 +17,7 @@ export interface SwapOOSuccessResponse {
     code: number
     status: 200
     data: SwapOOData
+    value: string
 }
 
 export interface SwapOOErrorResponse {

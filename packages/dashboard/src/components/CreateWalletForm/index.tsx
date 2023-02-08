@@ -1,3 +1,4 @@
+import { useCallback, useState } from 'react'
 import {
     FormControl,
     ListItemIcon,
@@ -9,7 +10,6 @@ import {
     SelectChangeEvent,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useCallback, useState } from 'react'
 import { useDashboardI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
