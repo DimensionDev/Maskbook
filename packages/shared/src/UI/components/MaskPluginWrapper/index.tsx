@@ -151,7 +151,11 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                     <div className={classes.action}>{action}</div>
                 </>
             ) : null}
-            {children ? <div className={classes.body}>{children}</div> : null}
+            {children ? (
+                <div className={classes.body} key={open ? 'open' : 'close'}>
+                    {children}
+                </div>
+            ) : null}
         </div>
     )
 
