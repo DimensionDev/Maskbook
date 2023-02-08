@@ -203,7 +203,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                                     }                                                                                          
                                 }
                             }
-                        }                      
+                        }
                     }
                 `,
             }),
