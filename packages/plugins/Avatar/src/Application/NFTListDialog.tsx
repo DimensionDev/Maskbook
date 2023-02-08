@@ -11,6 +11,7 @@ import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@m
 import { first, uniqBy } from 'lodash-es'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useUpdateEffect } from 'react-use'
 import { SUPPORTED_CHAIN_IDS, supportPluginIds } from '../constants.js'
 import { useAvatarManagement } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
@@ -241,6 +242,10 @@ export const NFTListDialog: FC = () => {
     const walletItems = proofs.sort((a, z) => {
         return isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1
     })
+
+    useUpdateEffect(() => {
+        setTargetAccount(account)
+    }, [account])
 
     return (
         <>

@@ -165,6 +165,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
     async getAccountsByOwner(
         chainId: ChainId,
         owner: string,
+        exact = true,
     ): Promise<Array<AbstractAccountAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>>> {
         const create2Factory = await this.createCreate2Factory(chainId, owner)
         const contractWallet = await this.createContractWallet(chainId, owner)
@@ -178,19 +179,22 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
             ),
             // this.getAccountsFromChainbase(chainId, owner),
         ])
-        return allSettled
+        const result = allSettled
             .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
             .map((y) => ({
                 ...y,
                 funded: operations.some((operation) => isSameAddress(operation.walletAddress, y.address)),
             }))
+
+        return result.filter((x) => (exact ? isSameAddress(x.owner, owner) : true))
     }
 
     async getAccountsByOwners(
         chainId: ChainId,
         owners: string[],
+        exact = true,
     ): Promise<Array<AbstractAccountAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>>> {
-        const allSettled = await Promise.allSettled(owners.map((x) => this.getAccountsByOwner(chainId, x)))
+        const allSettled = await Promise.allSettled(owners.map((x) => this.getAccountsByOwner(chainId, x), exact))
         return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
     }
 

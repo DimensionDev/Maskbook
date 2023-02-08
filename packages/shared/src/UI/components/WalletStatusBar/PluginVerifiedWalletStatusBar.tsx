@@ -15,6 +15,7 @@ import {
     useWeb3State,
     useDefaultChainId,
     useRecentTransactions,
+    useWallets,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
@@ -66,7 +67,9 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const { classes, cx } = useStyles()
 
         const { account, chainId } = useChainContext()
+        const allWallets = useWallets()
 
+        const isSmartPay = allWallets.find((x) => isSameAddress(x.address, account) && x.owner)
         const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
             WalletMessages.events.selectProviderDialogUpdated,
         )
@@ -91,7 +94,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
             ? resolveNextID_NetworkPluginID(defaultVerifiedWallet?.platform)
             : undefined
 
-        const isNextIdWallet = !account || !isSameAddress(account, expectedAddress)
+        const isNextIdWallet = (!account || !isSameAddress(account, expectedAddress)) && !isSmartPay
 
         const defaultPluginId = isNextIdWallet ? pluginIdByDefaultVerifiedWallet : currentPluginID
 

@@ -67,6 +67,7 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
         )
 
         const account = first(await SharedContextSettings.value.selectAccount())
+
         if (!account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}`)
 
         // switch account

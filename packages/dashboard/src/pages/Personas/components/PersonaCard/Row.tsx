@@ -15,7 +15,7 @@ import { useDashboardI18N } from '../../../../locales/index.js'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import { RenameDialog } from '../RenameDialog/index.js'
 import type { SocialNetwork } from '../../api.js'
-import { useToggle } from 'react-use'
+import { useAsync, useToggle } from 'react-use'
 import { UploadAvatarDialog } from '../UploadAvatarDialog/index.js'
 import { MaskAvatar } from '../../../../components/MaskAvatar/index.js'
 import { useNavigate } from 'react-router-dom'
@@ -25,7 +25,9 @@ import { styled } from '@mui/material/styles'
 import { PreviewDialog as ExportPersonaDialog } from '../../../SignUp/steps/PreviewDialog.js'
 import { useExportPrivateKey } from '../../hooks/useExportPrivateKey.js'
 import { useExportMnemonicWords } from '../../hooks/useExportMnemonicWords.js'
-import { Messages } from '../../../../API.js'
+import { Messages, PluginServices } from '../../../../API.js'
+import { useWallets } from '@masknet/web3-hooks-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     setting: {
@@ -58,12 +60,17 @@ const MenuText = styled('span')(`
 `)
 
 export const PersonaRowCard = memo(() => {
+    const wallets = useWallets()
     const { currentPersona, connectPersona, disconnectPersona, renamePersona, deleteBound, definedSocialNetworks } =
         PersonaContext.useContainer()
+
+    const { value: hasPaymentPassword = false } = useAsync(PluginServices.Wallet.hasPassword, [])
     if (!currentPersona?.identifier.publicKeyAsHex) return null
 
     return (
         <PersonaRowCardUI
+            hasSmartPay={!!wallets.filter((x) => isSameAddress(x.owner, currentPersona.address)).length}
+            hasPaymentPassword={hasPaymentPassword}
             publicKey={currentPersona.identifier.publicKeyAsHex}
             nickname={currentPersona.nickname}
             identifier={currentPersona.identifier}
@@ -85,6 +92,8 @@ export interface PersonaRowCardUIProps {
     profiles: ProfileInformation[]
     definedSocialNetworks: SocialNetwork[]
     publicKey: string
+    hasSmartPay: boolean
+    hasPaymentPassword: boolean
     onConnect: (
         identifier: PersonaIdentifier,
         networkIdentifier: string,
@@ -108,7 +117,16 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const { classes } = useStyles()
     const { confirmPassword } = useContext(UserContext)
 
-    const { nickname, definedSocialNetworks, identifier, profiles, publicKey, address } = props
+    const {
+        nickname,
+        definedSocialNetworks,
+        identifier,
+        profiles,
+        publicKey,
+        address,
+        hasSmartPay,
+        hasPaymentPassword,
+    } = props
     const { onConnect, onDisconnect, onRename, onDeleteBound } = props
     const { value: privateKey } = useExportPrivateKey(identifier)
     const { value: words } = useExportMnemonicWords(identifier)
@@ -124,6 +142,8 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
             tipContent: t.personas_logout_confirm_password_tip(),
             confirmTitle: t.personas_logout(),
             force: false,
+            hasSmartPay,
+            hasPaymentPassword,
         })
 
     const exportPersonaConfirmedPasswordCallback = () =>

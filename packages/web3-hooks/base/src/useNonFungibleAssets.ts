@@ -4,8 +4,8 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { flattenAsyncIterator, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { pageableToIterator } from '@masknet/web3-shared-base'
 import { useChainContext } from './useContext.js'
-import { useWeb3Hub } from './useWeb3Hub.js'
 import { useNetworkDescriptors } from './useNetworkDescriptors.js'
+import { useWeb3State } from './useWeb3State.js'
 
 export function useNonFungibleAssets<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
@@ -16,16 +16,18 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
     const [done, setDone] = useState(false)
     const [loading, toggleLoading] = useState(false)
     const [error, setError] = useState<string>()
-
-    const { account } = useChainContext({ account: options?.account })
-    const hub = useWeb3Hub(pluginID)
+    const { Hub } = useWeb3State(pluginID)
+    const { account, chainId } = useChainContext({ account: options?.account })
+    // const hub = useWeb3Hub(pluginID)
     const networks = useNetworkDescriptors(pluginID)
 
     // create iterator
     const iterator = useMemo(() => {
+        const hub = Hub?.getHub?.({ account, chainId, ...options })
         if (!account || !hub?.getNonFungibleAssets || !networks) return
         setAssets(EMPTY_LIST)
         setDone(false)
+        console.log(account)
         return flattenAsyncIterator(
             networks
                 .filter((x) => x.isMainnet && (options?.chainId ? x.chainId === options.chainId : true))
@@ -40,7 +42,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
                     })
                 }),
         )
-    }, [hub?.getNonFungibleAssets, account, JSON.stringify(options), networks.length])
+    }, [Hub, account, JSON.stringify(options), networks.length, chainId])
 
     const next = useCallback(async () => {
         if (!iterator || done) return
