@@ -59,7 +59,7 @@
         "Rinkeby": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
         "Kovan": "",
         "Gorli": "",
-        "BSC": "",
+        "BSC": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
         "BSCT": "",
         "Matic": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
         "Mumbai": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -79,33 +79,6 @@
         "Harmony": "",
         "Harmony_Test": "",
         "Astar": ""
-    },
-    "GITCOIN_TIP_PERCENTAGE": {
-        "Mainnet": 5,
-        "Ropsten": 5,
-        "Rinkeby": 5,
-        "Kovan": 5,
-        "Gorli": 5,
-        "BSC": 5,
-        "BSCT": 5,
-        "Matic": 5,
-        "Mumbai": 5,
-        "Arbitrum": 5,
-        "Arbitrum_Rinkeby": 5,
-        "xDai": 5,
-        "Optimism": 5,
-        "Optimism_Kovan": 0,
-        "Optimism_Goerli": 0,
-        "Avalanche": 5,
-        "Avalanche_Fuji": 0,
-        "Celo": 0,
-        "Fantom": 0,
-        "Aurora": 0,
-        "Aurora_Testnet": 0,
-        "Conflux": 0,
-        "Harmony": 0,
-        "Harmony_Test": 0,
-        "Astar": 0
     },
     "TOKEN_LIST": {
         "Mainnet": [
@@ -136,6 +109,10 @@
             "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
             "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063"
         ],
-        "BSC": ["0x0000000000000000000000000000000000000000", "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"]
+        "BSC": [
+            "0x0000000000000000000000000000000000000000",
+            "0xcf6bb5389c92bdda8a3747ddb454cb7a64626c63",
+            "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"
+        ]
     }
 }

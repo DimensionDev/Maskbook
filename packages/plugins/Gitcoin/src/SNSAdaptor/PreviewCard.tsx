@@ -51,13 +51,20 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
     },
     main: {
-        padding: theme.spacing(2),
+        padding: theme.spacing(2, 2, 0),
         boxSizing: 'border-box',
         marginTop: theme.spacing(2.5),
         borderRadius: 12,
+        minHeight: 366,
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    article: {
+        borderRadius: '12px 12px 0 0',
+        height: '100%',
+        boxSizing: 'border-box',
         overflow: 'auto',
         overscrollBehavior: 'contain',
-        minHeight: 366,
         '&::-webkit-scrollbar': {
             display: 'none',
         },
@@ -240,18 +247,20 @@ export function PreviewCard(props: PreviewCardProps) {
                 </Stack>
             </div>
             <Card variant="outlined" className={classes.main} elevation={0}>
-                <div className={classes.banner}>
-                    <img src={grant.logo_url} />
-                </div>
-                <div
-                    className={cx(classes.description, 'grant-detail')}
-                    dangerouslySetInnerHTML={{ __html: description }}
-                />
-                <div className={classes.data}>
-                    <div className={classes.meta}>
-                        <Typography variant="body2" color="textSecondary">
-                            {t.last_updated()} {grant.last_update_natural}
-                        </Typography>
+                <div className={classes.article}>
+                    <div className={classes.banner}>
+                        <img src={grant.logo_url} />
+                    </div>
+                    <div
+                        className={cx(classes.description, 'grant-detail')}
+                        dangerouslySetInnerHTML={{ __html: description }}
+                    />
+                    <div className={classes.data}>
+                        <div className={classes.meta}>
+                            <Typography variant="body2" color="textSecondary">
+                                {t.last_updated()} {grant.last_update_natural}
+                            </Typography>
+                        </div>
                     </div>
                 </div>
             </Card>
