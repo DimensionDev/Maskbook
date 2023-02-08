@@ -64,7 +64,7 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
         const all = this.storage.value
         const address_ = this.options.formatAddress(address)
 
-        for (const recentTransaction of all[chainId][address_] ?? []) {
+        for (const recentTransaction of all[chainId]?.[address_] ?? []) {
             for (const [id_, transaction] of Object.entries(recentTransaction.candidates)) {
                 if (id_ === id) return transaction
             }
@@ -193,7 +193,7 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
         const all = this.storage.value
         const address_ = this.options.formatAddress(address)
 
-        return all[chainId][address_] ?? []
+        return all[chainId]?.[address_] ?? []
     }
 
     async clearTransactions(chainId: ChainId, address: string) {
