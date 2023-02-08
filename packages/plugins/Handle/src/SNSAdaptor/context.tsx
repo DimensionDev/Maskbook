@@ -30,7 +30,7 @@ export function ENSProvider({ children, result }: PropsWithChildren<SearchResult
     const tokenId = resolveNonFungibleTokenIdFromEnsDomain(domain)
 
     const { value: nextIdBindings = EMPTY_LIST } = useAsync(
-        async () => (reversedAddress ? NextIDProof.queryProfilesByRelationService(reversedAddress) : EMPTY_LIST),
+        async () => (reversedAddress ? NextIDProof.queryProfilesByRelationService(domain) : EMPTY_LIST),
         [reversedAddress],
     )
 
