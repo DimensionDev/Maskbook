@@ -21,6 +21,7 @@ const DEFAULT_PARAMETERS: TransakConfig = {
     widgetWidth: '100%',
     widgetHeight: '630px',
     hideMenu: true,
+    excludeFiatCurrencies: 'KRW',
 }
 
 export function useTransakURL(config?: Partial<TransakConfig>) {

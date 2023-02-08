@@ -1,11 +1,11 @@
-import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
+import { useNavigate } from 'react-router-dom'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { styled } from '@mui/material/styles'
 import { Box, Container, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
-import { DashboardRoutes } from '@masknet/shared-base'
-import { useNavigate } from 'react-router-dom'
 import { ActionCard } from '../../components/ActionCard'
+import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
 
 const Title = styled('div')(
     ({ theme }) => `

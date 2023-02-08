@@ -16,4 +16,5 @@ export interface TransakConfig {
     widgetWidth?: string
     hideMenu?: boolean
     exchangeScreenTitle?: string
+    excludeFiatCurrencies?: string
 }
