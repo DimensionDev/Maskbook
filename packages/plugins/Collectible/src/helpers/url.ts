@@ -212,8 +212,6 @@ export function getPayloadFromURL(url?: string): CollectiblePayload | undefined 
         return
     }
 
-    console.log(_url)
-
     for (const rule of RULES) {
         const isHostMatched = rule.hosts.includes(_url.hostname)
         const matched =
