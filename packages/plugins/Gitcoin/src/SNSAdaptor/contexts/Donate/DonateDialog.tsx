@@ -25,8 +25,7 @@ import { Icons } from '@masknet/icons'
 import { GiveBackSelect } from './GiveBackSelect.js'
 import { BigNumber } from 'bignumber.js'
 import { useShowResult } from '../ResultModal/index.js'
-import { TenantToChainMap } from '../../../constants.js'
-import { compact } from 'lodash-es'
+import { getSupportedChainIds } from '../../../utils.js'
 
 const useStyles = makeStyles()((theme) => ({
     banner: {},
@@ -122,10 +121,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
         tipAmount.toFixed(0),
         token,
     )
-    const availableChains = useMemo(
-        () => compact(grant.tenants.map((tenant) => TenantToChainMap[tenant])),
-        [grant.tenants],
-    )
+    const availableChains = useMemo(() => getSupportedChainIds(grant.tenants), [grant.tenants])
     // #endregion
 
     const showConfirm = useShowResult()

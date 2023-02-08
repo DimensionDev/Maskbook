@@ -35,7 +35,7 @@ export const TenantToChainIconMap: Record<TenantTypes, GeneratedIcon> = {
     ZIL: Icons.Zilliqa,
 }
 
-export const TenantToChainMap: Partial<Record<TenantTypes, ChainId>> = {
-    BINANCE: ChainId.BSC,
-    ETH: ChainId.Mainnet,
+export const TenantToChainMap: Partial<Record<TenantTypes, ChainId[]>> = {
+    BINANCE: [ChainId.BSC],
+    ETH: [ChainId.Mainnet, ChainId.Matic],
 }
