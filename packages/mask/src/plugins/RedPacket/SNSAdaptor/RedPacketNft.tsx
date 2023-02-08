@@ -47,6 +47,7 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
     title: {
         fontSize: 24,
         textAlign: 'left',
+        color: theme.palette.common.white,
     },
     remain: {
         fontSize: 12,
@@ -91,16 +92,11 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         fontSize: 12,
         fontWeight: 600,
     },
-    hide: {
-        opacity: 0,
-    },
-    whiteText: {
-        color: theme.palette.common.white,
-    },
     badge: {
         width: 76,
         height: 27,
         display: 'flex',
+        color: theme.palette.common.white,
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
@@ -269,7 +265,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 />
                 <Stack />
                 <CardHeader
-                    className={cx(classes.title, availability.isEnd ? classes.hide : '', classes.whiteText)}
+                    className={classes.title}
                     title={<Typography className={classes.titleText}>{payload.message}</Typography>}
                 />
 
@@ -305,13 +301,13 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 </div>
 
                 {availability.isClaimed ? (
-                    <div className={cx(classes.badge, classes.whiteText)}>
+                    <div className={classes.badge}>
                         <Typography variant="body2" className={classes.badgeText}>
                             {t.claimed({ amount: '' })}
                         </Typography>
                     </div>
                 ) : availability.isEnd ? (
-                    <div className={cx(classes.badge, classes.whiteText)}>
+                    <div className={classes.badge}>
                         <Typography variant="body2" className={classes.badgeText}>
                             {availability.expired ? t.expired() : t.completed()}
                         </Typography>
