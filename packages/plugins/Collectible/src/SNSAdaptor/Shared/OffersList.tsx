@@ -1,7 +1,6 @@
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
-import { Typography, Button, Box } from '@mui/material'
+import { Typography, Button, Box, Stack } from '@mui/material'
 import { makeStyles, LoadingBase } from '@masknet/theme'
-import type { NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
+import type { NonFungibleTokenOrder } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -9,6 +8,7 @@ import { OfferCard } from './OfferCard.js'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { SourceProviderSwitcher } from '@masknet/shared'
 import { Context } from '../Context/index.js'
+import type { AsyncStatePageable } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -31,18 +31,17 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface OffersListProps {
-    offers: AsyncStateRetry<Pageable<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
+    offers: AsyncStatePageable<Array<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
 }
 
 export function OffersList(props: OffersListProps) {
     const { offers } = props
-    const { setSourceType, sourceType } = Context.useContainer()
-    const _offers = offers.value?.data ?? EMPTY_LIST
+    const _offers = offers.value ?? EMPTY_LIST
 
     const { classes } = useStyles()
     const t = useI18N()
 
-    if (offers.loading)
+    if (offers.loading && !_offers.length)
         return (
             <div className={classes.wrapper}>
                 <LoadingBase />
@@ -69,6 +68,13 @@ export function OffersList(props: OffersListProps) {
             {_offers?.map((x, idx) => (
                 <OfferCard key={idx} offer={x} />
             ))}
+            <Stack pb="1px" width="100%" direction="row" justifyContent="center">
+                {!offers.ended && (
+                    <Button sx={{ mb: 2 }} onClick={() => offers.next()}>
+                        {t.load_more()}
+                    </Button>
+                )}
+            </Stack>
         </div>
     )
 }

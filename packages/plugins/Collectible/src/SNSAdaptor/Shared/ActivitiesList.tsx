@@ -72,7 +72,7 @@ export function ActivitiesList(props: ActivitiesListProps) {
             <Stack pb="1px" width="100%" direction="row" justifyContent="center">
                 {!events.ended && (
                     <Button sx={{ mb: 2 }} onClick={() => events.next()}>
-                        Load More
+                        {t.load_more()}
                     </Button>
                 )}
             </Stack>
