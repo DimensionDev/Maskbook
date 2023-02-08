@@ -121,7 +121,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
         tipAmount.toFixed(0),
         token,
     )
-    const availableChains = useMemo(() => getSupportedChainIds(grant.tenants), [grant.tenants])
+    const availableChains = useMemo(() => getSupportedChainIds(tenants), [tenants])
     // #endregion
 
     const showConfirm = useShowResult()
@@ -148,31 +148,38 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
         setRawAmount('')
     }, [showConfirm, amount, tipAmount, token, donateCallback, t, title])
 
+    const balance = new BigNumber(tokenBalance.value ?? '0')
+    const availableBalance = useMemo(() => {
+        if (!isNativeTokenAddress(token?.address)) return balance
+        // Add gas padding.
+        return balance.gt(gasFee) ? balance.minus(new BigNumber(gasFee).times(2)) : ZERO
+    }, [token?.address, balance.toFixed(), gasFee])
+    const maxAmount = availableBalance.div(1 + giveBack).toFixed(0)
+
     // #region submit button
     const validationMessage = useMemo(() => {
         if (!token) return t.select_a_token()
         if (!account) return t.plugin_wallet_connect_a_wallet()
         if (!address) return t.grant_not_available()
         if (!amount || amount.isZero()) return t.enter_an_amount()
-        if (amount.isGreaterThan(tokenBalance.value ?? '0'))
+        if (total.gt(availableBalance))
             return t.insufficient_balance({
                 symbol: token.symbol,
             })
         return ''
-    }, [account, address, amount.toFixed(), chainId, token, tokenBalance.value ?? '0'])
+    }, [account, address, amount.toFixed(0), total.toFixed(0), chainId, token, availableBalance])
     // #endregion
 
     if (!token || !address) return null
-    const balance = new BigNumber(tokenBalance.value ?? '0')
-    const availableBalance = isNativeTokenAddress(token.address) && balance.gt(gasFee) ? balance.minus(gasFee) : balance
-    const maxAmount = availableBalance.div(1 + giveBack).toFixed(0)
 
     return (
         <InjectedDialog {...rest} title={t.donate_dialog_title()} maxWidth="xs">
             <DialogContent style={{ padding: 16 }}>
-                <div className={classes.banner}>
-                    <img className={classes.bannerImage} src={grant.logo_url} />
-                </div>
+                {grant.logo_url ? (
+                    <div className={classes.banner}>
+                        <img className={classes.bannerImage} src={grant.logo_url} />
+                    </div>
+                ) : null}
                 <form className={classes.form} noValidate autoComplete="off">
                     <Box ml={-1.5}>
                         <NetworkTab pluginID={NetworkPluginID.PLUGIN_EVM} chains={availableChains} />
