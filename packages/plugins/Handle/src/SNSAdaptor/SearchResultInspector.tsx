@@ -106,7 +106,7 @@ export function SearchResultInspectorContent() {
     const t = useI18N()
     const { classes, cx } = useStyles({})
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const { reversedAddress, nextIdBindings, firstNextIdBinding, domain } = useContext(ENSContext)
+    const { reversedAddress, nextIdBindings, domain } = useContext(ENSContext)
     const [, copyToClipboard] = useCopyToClipboard()
     const copyWalletAddress = useSnackbarCallback({
         executor: async (address: string) => copyToClipboard(address),
@@ -145,7 +145,7 @@ export function SearchResultInspectorContent() {
                         ) : null}
                     </div>
                 </section>
-                {firstNextIdBinding?.identity ? (
+                {nextIdBindings?.[0]?.identity ? (
                     <div className={classes.nextIdVerified}>
                         <section className={classes.bindingsWrapper}>
                             {nextIdBindings.map((x, i) => (

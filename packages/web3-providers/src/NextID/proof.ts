@@ -218,7 +218,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             )
 
         return uniqWith(rawData, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
-            (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform),
+            (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
         )
     }
 
