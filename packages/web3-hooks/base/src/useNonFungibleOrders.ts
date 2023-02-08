@@ -20,8 +20,9 @@ export function useNonFungibleOrders<S extends 'all' | void = void, T extends Ne
     return usePageableAsync(
         async (nextIndicator?: HubIndicator) => {
             if (!hub) return
-            return hub.getNonFungibleTokenOffers?.(address ?? '', id ?? '', options)
+            return hub.getNonFungibleTokenOffers?.(address ?? '', id ?? '', { ...options, indicator: nextIndicator })
         },
         [address, id, hub],
+        options?.sourceType,
     )
 }

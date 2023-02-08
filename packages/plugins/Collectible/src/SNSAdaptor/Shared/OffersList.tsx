@@ -6,7 +6,7 @@ import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { OfferCard } from './OfferCard.js'
 import { useI18N } from '../../locales/i18n_generated.js'
-import { SourceProviderSwitcher } from '@masknet/shared'
+import { SourceProviderSwitcher, RetryHint } from '@masknet/shared'
 import { Context } from '../Context/index.js'
 import type { AsyncStatePageable } from '@masknet/web3-hooks-base'
 
@@ -50,10 +50,10 @@ export function OffersList(props: OffersListProps) {
     if (offers.error || !offers.value)
         return (
             <div className={classes.wrapper}>
-                <Typography className={classes.emptyText}>{t.load_failed()}</Typography>
-                <Button variant="text" onClick={() => offers.retry()}>
-                    {t.retry()}
-                </Button>
+                <RetryHint
+                    ButtonProps={{ startIcon: <Icons.Restore color="white" size={18} />, sx: { width: 256 } }}
+                    retry={() => offers.retry()}
+                />
             </div>
         )
     if (!_offers.length)
@@ -70,7 +70,7 @@ export function OffersList(props: OffersListProps) {
             ))}
             <Stack pb="1px" width="100%" direction="row" justifyContent="center">
                 {!offers.ended && (
-                    <Button sx={{ mb: 2 }} onClick={() => offers.next()}>
+                    <Button variant="roundedContained" sx={{ mb: 2 }} onClick={() => offers.next()}>
                         {t.load_more()}
                     </Button>
                 )}

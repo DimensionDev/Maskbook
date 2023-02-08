@@ -11,9 +11,12 @@ export type AsyncStatePageable<T> = AsyncStateRetry<T> & {
 export const usePageableAsync = <T>(
     fn: (nextIndicator?: HubIndicator) => Promise<Pageable<T, unknown> | undefined>,
     deps: DependencyList = [],
+    key?: string,
 ) => {
     const [indicator, setIndicator] = useState<HubIndicator | undefined>()
-    const [list, { push }] = useList()
+    const [list, { push, clear }] = useList()
+
+    useEffect(() => clear(), [key])
 
     const state = useAsyncRetry(() => fn(indicator), [...deps, indicator])
 
