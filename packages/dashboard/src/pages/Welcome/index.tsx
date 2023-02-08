@@ -1,6 +1,9 @@
+import { DashboardRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, Checkbox, FormControlLabel, FormGroup } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import urlcat from 'urlcat'
 import { Services } from '../../API.js'
 import { FooterLine } from '../../components/FooterLine/index.js'
 import { HeaderLine } from '../../components/HeaderLine/index.js'
@@ -68,14 +71,22 @@ const useStyles = makeStyles()((theme) => ({
 export default memo(function Welcome() {
     const [read, setRead] = useState(false)
     const [allowedToCollect, setAllowedToCollect] = useState(false)
+    const [params] = useSearchParams()
+    const navigate = useNavigate()
 
     const handleAgree = useCallback(async () => {
         if (allowedToCollect) {
             await Services.Settings.setLogEnable(true)
         }
+        const from = params.get('from')
+        if (from && from !== DashboardRoutes.Personas) {
+            const search = params.get('search')
+            navigate(urlcat(from, search ? new URLSearchParams(search).entries() : {}))
+            return
+        }
         const url = await Services.SocialNetwork.setupSite('twitter.com', false)
         if (url) location.assign(url)
-    }, [allowedToCollect])
+    }, [params, allowedToCollect])
 
     const t = useDashboardI18N()
     const { classes } = useStyles()
