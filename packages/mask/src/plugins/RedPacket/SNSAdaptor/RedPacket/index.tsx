@@ -20,7 +20,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
 import { Stack } from '@mui/system'
 
-export const useStyles = makeStyles()((theme) => {
+export const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
         root: {
             borderRadius: theme.spacing(2),
@@ -33,6 +33,7 @@ export const useStyles = makeStyles()((theme) => {
             justifyContent: 'space-between',
             height: 335,
             margin: 'auto',
+            marginBottom: outdated ? '12px' : 'auto',
             boxSizing: 'border-box',
             backgroundImage: `url(${new URL('../assets/cover.png', import.meta.url)})`,
             backgroundRepeat: 'no-repeat',
@@ -261,7 +262,10 @@ export function RedPacket(props: RedPacketProps) {
         activatedSocialNetworkUI.utils.share(shareText)
     }, [shareText])
 
-    const { classes } = useStyles()
+    const outdated =
+        listOfStatus.includes(RedPacketStatus.empty) || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
+
+    const { classes } = useStyles({ outdated })
 
     // the red packet can fetch without account
     if (!availability || !token)
@@ -317,8 +321,7 @@ export function RedPacket(props: RedPacketProps) {
                     </div>
                 </div>
             </Card>
-            {listOfStatus.includes(RedPacketStatus.empty) ||
-            (!canRefund && listOfStatus.includes(RedPacketStatus.expired)) ? null : (
+            {outdated ? null : (
                 <OperationFooter
                     chainId={payloadChainId}
                     canClaim={canClaim}

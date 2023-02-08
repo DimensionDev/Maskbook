@@ -53,13 +53,13 @@ const useStyles = makeStyles()((theme) => ({
     },
     messageText: {
         fontSize: 16,
-        color: theme.palette.maskColor.dark,
+        color: theme.palette.maskColor.main,
         fontWeight: 700,
         lineHeight: '20px',
     },
     nftMessageText: {
         fontSize: 16,
-        color: theme.palette.maskColor.secondaryDark,
+        color: theme.palette.maskColor.second,
         fontWeight: 700,
         lineHeight: '20px',
     },

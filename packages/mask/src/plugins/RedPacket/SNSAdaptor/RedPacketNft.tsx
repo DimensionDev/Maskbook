@@ -19,7 +19,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { Stack } from '@mui/system'
 
-const useStyles = makeStyles<{ claimed: boolean }>()((theme, { claimed }) => ({
+const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, { claimed, outdated }) => ({
     root: {
         position: 'relative',
         width: '100%',
@@ -41,6 +41,7 @@ const useStyles = makeStyles<{ claimed: boolean }>()((theme, { claimed }) => ({
         backgroundRepeat: 'no-repeat',
         width: 'calc(100% - 32px)',
         margin: 'auto',
+        marginBottom: outdated ? '12px' : 'auto',
         height: 335,
     },
     title: {
@@ -170,7 +171,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         retry: retryAvailability,
         error: availabilityError,
     } = useAvailabilityNftRedPacket(payload.id, account, payload.chainId)
-    const { classes, cx } = useStyles({ claimed: Boolean(availability?.isClaimed) })
+
     const [{ loading: isClaiming }, claimCallback] = useClaimNftRedpacketCallback(
         payload.id,
         availability?.totalAmount,
@@ -195,6 +196,8 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         retryAvailability()
     }, [account])
 
+    const outdated = Boolean(availability?.isClaimedAll || availability?.isCompleted)
+    const { classes, cx } = useStyles({ claimed: Boolean(availability?.isClaimed), outdated })
     // #region on share
     const postLink = usePostLink()
     const shareText = useMemo(() => {
@@ -315,7 +318,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     </div>
                 ) : null}
             </Card>
-            {availability.isClaimedAll || availability.isCompleted ? null : (
+            {outdated ? null : (
                 <Box className={classes.buttonWrapper}>
                     <Box sx={{ flex: 1, padding: 1.5 }}>
                         <Button
