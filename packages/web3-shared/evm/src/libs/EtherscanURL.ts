@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import type { ChainId } from '../types/index.js'
-import { getExplorerConstants } from '../constants/index.js'
+import { getEtherscanConstants } from '../constants/index.js'
 
 export class EtherscanURL {
     /**
@@ -10,7 +10,7 @@ export class EtherscanURL {
     constructor() {}
 
     static from(chainId: ChainId) {
-        const { ETHERSCAN_URL = '' } = getExplorerConstants(chainId)
+        const { ETHERSCAN_URL = '' } = getEtherscanConstants(chainId)
 
         return urlcat(ETHERSCAN_URL, {
             chain_id: chainId,

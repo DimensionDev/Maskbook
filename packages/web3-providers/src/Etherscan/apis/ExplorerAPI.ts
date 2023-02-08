@@ -11,13 +11,12 @@ export class EtherscanExplorerAPI implements ExplorerAPI.Provider {
         account: string,
         { offset = 10 }: ExplorerAPI.Options = {},
     ): Promise<ExplorerAPI.Transaction[]> {
-        const url = EtherscanURL.from(chainId)
         const { result: transactions = [] } = await fetchJSON<{
             message: string
             result?: Transaction[]
             status: '0' | '1'
         }>(
-            urlcat(url, {
+            urlcat(EtherscanURL.from(chainId), {
                 module: 'account',
                 action: 'txlist',
                 address: account.toLowerCase(),
