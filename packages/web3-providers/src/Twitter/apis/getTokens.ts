@@ -42,8 +42,7 @@ export async function getTokens(operationName?: string) {
         x.status === 'fulfilled' ? x.value ?? '' : '',
     )
     const mainContent = mainContentPrimary || mainContentSecondary
-
-    const bearerToken = getScriptContentMatched(mainContent ?? '', /,\w=\(\)=>"(\w{20,}%3D\w{20,})",/)
+    const bearerToken = getScriptContentMatched(mainContent ?? '', /,x=\(\)=>\(0,t.y\)\(\)\?".*?:"(\w{20,}%3D\w{20,})"/)
     const queryToken = getScriptContentMatched(nftContent ?? '', /{\s?id:\s?"([\w-]+)"/)
     const csrfToken = getCSRFToken()
     const queryId = operationName
