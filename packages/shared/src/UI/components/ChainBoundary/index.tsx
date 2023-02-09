@@ -118,7 +118,6 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
 
     const [{ loading }, onSwitchChain] = useAsyncFn(async () => {
         // a short time loading makes the user fells better
-        console.log('eee')
         await delay(1000)
 
         if (!isPluginIDMatched || actualProviderType === ProviderType.WalletConnect) {
