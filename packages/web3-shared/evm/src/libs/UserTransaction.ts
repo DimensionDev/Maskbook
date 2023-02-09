@@ -318,11 +318,11 @@ export class UserTransaction {
             )
         }
         if (!paymaster || isZeroAddress(paymaster)) {
-            const { PAYMASTER_CONTRACT_ADDRESS } = getSmartPayConstants(this.chainId)
-            if (!PAYMASTER_CONTRACT_ADDRESS) throw new Error('No paymaster address.')
+            const { PAYMASTER_MASK_CONTRACT_ADDRESS } = getSmartPayConstants(this.chainId)
+            if (!PAYMASTER_MASK_CONTRACT_ADDRESS) throw new Error('No paymaster address.')
             if (!this.paymentToken) throw new Error('No payment token address.')
 
-            this.userOperation.paymaster = PAYMASTER_CONTRACT_ADDRESS
+            this.userOperation.paymaster = PAYMASTER_MASK_CONTRACT_ADDRESS
             this.userOperation.paymasterData = padLeft(this.paymentToken, 64)
         }
 
@@ -397,11 +397,11 @@ export class UserTransaction {
     }
 
     static fillUserOperation(chainId: ChainId, userOperation: UserOperation) {
-        const { PAYMASTER_CONTRACT_ADDRESS, PAYMENT_TOKEN_ADDRESS } = getSmartPayConstants(chainId)
+        const { PAYMASTER_MASK_CONTRACT_ADDRESS, PAYMENT_TOKEN_ADDRESS } = getSmartPayConstants(chainId)
 
         return {
             ...DEFAULT_USER_OPERATION,
-            paymaster: PAYMASTER_CONTRACT_ADDRESS || DEFAULT_USER_OPERATION.paymaster,
+            paymaster: PAYMASTER_MASK_CONTRACT_ADDRESS || DEFAULT_USER_OPERATION.paymaster,
             paymasterData: PAYMENT_TOKEN_ADDRESS
                 ? padLeft(PAYMENT_TOKEN_ADDRESS, 64)
                 : DEFAULT_USER_OPERATION.paymasterData,

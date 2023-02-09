@@ -48,12 +48,12 @@ export const ApproveMaskDialog = memo<ApproveMaskDialogProps>(({ open, handleClo
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const maskAddress = Others?.getMaskTokenAddress(chainId)
-    const { PAYMASTER_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
+    const { PAYMASTER_MASK_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
 
     const [{ type: approveStateType }, transactionState, approveCallback] = useERC20TokenApproveCallback(
         maskAddress ?? '',
         amount,
-        PAYMASTER_CONTRACT_ADDRESS ?? '',
+        PAYMASTER_MASK_CONTRACT_ADDRESS ?? '',
         noop,
         chainId,
     )
