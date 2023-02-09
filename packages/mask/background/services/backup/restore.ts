@@ -57,8 +57,8 @@ export async function addUnconfirmedPersonaRestore({
     let privateKey: EC_Private_JsonWebKey
 
     if (mnemonic) {
-        const verify = bip39.validateMnemonic(mnemonic)
-        if (!verify) throw new Error('Verify error')
+        const verified = bip39.validateMnemonic(mnemonic)
+        if (!verified) throw new Error('Verify error')
         const { key } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonic, '')
 
         publicKey = key.publicKey

@@ -18,7 +18,6 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
     const [error, setError] = useState<string>()
     const { Hub } = useWeb3State(pluginID)
     const { account, chainId } = useChainContext({ account: options?.account })
-    // const hub = useWeb3Hub(pluginID)
     const networks = useNetworkDescriptors(pluginID)
 
     // create iterator
@@ -27,7 +26,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
         if (!account || !hub?.getNonFungibleAssets || !networks) return
         setAssets(EMPTY_LIST)
         setDone(false)
-        console.log(account)
+
         return flattenAsyncIterator(
             networks
                 .filter((x) => x.isMainnet && (options?.chainId ? x.chainId === options.chainId : true))
