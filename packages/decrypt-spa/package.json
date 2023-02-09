@@ -16,10 +16,16 @@
     "dependencies": {
         "@masknet/base": "workspace:^",
         "@masknet/encryption": "workspace:^",
+        "@masknet/plugin-evm": "workspace:*",
+        "@masknet/plugin-gitcoin": "workspace:*",
         "@masknet/plugin-infra": "workspace:^",
+        "@masknet/plugin-wallet": "workspace:*",
         "@masknet/shared-base": "workspace:*",
         "@masknet/typed-message": "workspace:^",
         "@masknet/typed-message-react": "workspace:^",
+        "@masknet/web3-hooks-base": "workspace:*",
+        "@masknet/web3-shared-base": "workspace:*",
+        "@masknet/web3-shared-evm": "workspace:*",
         "@servie/events": "^3.0.0",
         "crypto-browserify": "^3.12.0",
         "stream-browserify": "^3.0.0"

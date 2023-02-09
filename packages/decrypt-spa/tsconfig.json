@@ -12,6 +12,7 @@
     { "path": "../encryption" },
     { "path": "../plugin-infra" },
     { "path": "../typed-message/base" },
-    { "path": "../typed-message/react" }
+    { "path": "../typed-message/react" },
+    { "path": "../web3-shared/base" }
   ]
 }

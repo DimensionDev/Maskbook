@@ -20,7 +20,7 @@ function Configuration(a, b) {
     return {
         mode: 'development',
         entry: './src/entry.tsx',
-        experiments: { asyncWebAssembly: true },
+        experiments: { asyncWebAssembly: true, topLevelAwait: true },
         resolve: {
             extensionAlias: {
                 '.js': ['.tsx', '.ts', '.js'],
@@ -28,7 +28,12 @@ function Configuration(a, b) {
             },
             extensions: ['.js', '.ts', '.tsx'],
             conditionNames: ['mask-src', '...'],
-            fallback: { https: false, http: false, crypto: false, stream: false },
+            fallback: {
+                https: false,
+                http: false,
+                crypto: require.resolve('crypto-browserify'),
+                stream: require.resolve('stream-browserify'),
+            },
         },
         module: {
             rules: [
@@ -57,12 +62,9 @@ function Configuration(a, b) {
             new webpack.ProvidePlugin({
                 // Polyfill for Node global "Buffer" variable
                 Buffer: [require.resolve('buffer'), 'Buffer'],
-                stream: require.resolve('stream-browserify'),
-                crypto: require.resolve('crypto-browserify'),
             }),
             new HtmlWebpackPlugin(),
             new webpack.DefinePlugin({
-                'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
                 'process.env.NODE_DEBUG': 'undefined',
                 'process.env.engine': `(${(ua) =>
                     ua.includes('Chrom')
@@ -77,6 +79,11 @@ function Configuration(a, b) {
                 'process.browser': 'true',
             }),
         ],
+        devServer: {
+            client: {
+                overlay: false,
+            },
+        },
     }
 }
 export default Configuration
