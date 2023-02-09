@@ -1,5 +1,5 @@
 import type { TransactionContext } from '@masknet/web3-shared-base'
-import { ChainId, TransactionParameter, isEmptyHex } from '@masknet/web3-shared-evm'
+import type { ChainId, TransactionParameter } from '@masknet/web3-shared-evm'
 
 export class SmartPayDescriptor {
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
@@ -20,7 +20,6 @@ export class SmartPayDescriptor {
                         },
                     }
                 case 'deploy':
-                    if (isEmptyHex(parameters?.initCode) || !parameters?.salt) break
                     return {
                         chainId: context.chainId,
                         title: 'Deploy Smarty Pay wallet',

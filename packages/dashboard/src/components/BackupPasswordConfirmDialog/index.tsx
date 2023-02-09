@@ -1,4 +1,4 @@
-import { memo, useContext, useMemo, useState } from 'react'
+import { memo, useCallback, useContext, useMemo, useState } from 'react'
 import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { ConfirmPasswordOption, UserContext } from '../../pages/Settings/hooks/UserContext.js'
 import { MaskDialog } from '@masknet/theme'
@@ -6,6 +6,7 @@ import { useDashboardI18N } from '../../locales/index.js'
 import { useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 import PasswordField from '../PasswordField/index.js'
+import { PluginServices } from '../../API.js'
 
 interface DialogProps {
     open: boolean
@@ -29,30 +30,47 @@ export const BackupPasswordConfirmDialog = memo<DialogProps>(({ onConfirmed, onC
         }
     }
 
+    const onSubmitPaymentPassword = useCallback(async () => {
+        const verified = await PluginServices.Wallet.verifyPassword(password)
+        if (verified) {
+            onConfirmed()
+        } else {
+            setError(t.settings_dialogs_incorrect_password())
+        }
+    }, [password])
+
     const title = useMemo(() => {
         return (user.backupPassword ? option?.confirmTitle : option?.tipTitle) ?? t.confirm_password()
     }, [option?.tipTitle, option?.confirmTitle])
 
-    return (
-        <MaskDialog open={open} title={title} onClose={onClose} maxWidth="xs">
-            {!user.backupPassword && (
+    const content = useMemo(() => {
+        if (option?.hasSmartPay && option.hasPaymentPassword) {
+            return (
                 <>
                     <DialogContent sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
-                        <Typography variant="body2" fontSize={13}>
-                            {option?.tipContent}
-                        </Typography>
+                        <PasswordField
+                            sx={{ flex: 1 }}
+                            onChange={(e) => {
+                                setPassword(e.currentTarget.value)
+                                setError('')
+                            }}
+                            placeholder={t.settings_label_payment_password()}
+                            error={!!error}
+                            helperText={error}
+                        />
                     </DialogContent>
                     <DialogActions>
                         <Button color="secondary" onClick={onClose}>
                             {t.personas_cancel()}
                         </Button>
-                        <Button onClick={() => navigate(DashboardRoutes.Settings, { state: { open: 'password' } })}>
-                            {t.settings()}
+                        <Button disabled={!!error} onClick={onSubmitPaymentPassword}>
+                            {t.personas_confirm()}
                         </Button>
                     </DialogActions>
                 </>
-            )}
-            {user.backupPassword && (
+            )
+        } else if (user.backupPassword) {
+            return (
                 <>
                     <DialogContent sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
                         <PasswordField
@@ -75,7 +93,31 @@ export const BackupPasswordConfirmDialog = memo<DialogProps>(({ onConfirmed, onC
                         </Button>
                     </DialogActions>
                 </>
-            )}
+            )
+        }
+
+        return (
+            <>
+                <DialogContent sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
+                    <Typography variant="body2" fontSize={13}>
+                        {option?.tipContent}
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button color="secondary" onClick={onClose}>
+                        {t.personas_cancel()}
+                    </Button>
+                    <Button onClick={() => navigate(DashboardRoutes.Settings, { state: { open: 'password' } })}>
+                        {t.settings()}
+                    </Button>
+                </DialogActions>
+            </>
+        )
+    }, [option, user.backupPassword, onSubmitPaymentPassword, onSubmitPassword, error, t, onClose])
+
+    return (
+        <MaskDialog open={open} title={title} onClose={onClose} maxWidth="xs">
+            {content}
         </MaskDialog>
     )
 })

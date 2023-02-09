@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useCustomSnackbar } from '@masknet/theme'
-import { DashboardRoutes, ECKeyIdentifier, EC_Public_JsonWebKey, PopupRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, ECKeyIdentifier, EC_Public_JsonWebKey } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { SignUpRoutePath } from '../routePath.js'
 import { Messages, PluginServices, Services } from '../../../API.js'
@@ -58,40 +58,14 @@ export const PersonaRecovery = () => {
                     const smartPayAccounts = await SmartPayAccount.getAccountsByOwners(chainId, [result.address])
                     const hasPaymentPassword = await PluginServices.Wallet.hasPassword()
                     if (smartPayAccounts.filter((x) => x.deployed || x.funded).length && !hasPaymentPassword) {
-                        const backupInfo = await Services.Backup.addUnconfirmedBackup(
-                            JSON.stringify({
-                                _meta_: {
-                                    maskbookVersion: '',
-                                    createdAt: null,
-                                    type: 'maskbook-backup',
-                                    version: 2,
-                                },
-                                personas: [
-                                    {
-                                        address: result.address,
-                                        identifier: result.identifier,
-                                        publicKeyHex: result.identifier.publicKeyAsHex,
-                                        publicKey: result.publicKey,
-                                        linkedProfiles: [],
-                                    },
-                                ],
-                                posts: [],
-                                profiles: [],
-                                relations: [],
-                                wallets: [],
-                                userGroups: [],
-                                grantedHostPermissions: [],
-                                plugin: [],
-                            }),
-                        )
-
-                        if (backupInfo.ok) {
-                            await Services.Helper.openPopupWindow(PopupRoutes.WalletRecovered, {
-                                backupId: backupInfo.val.id,
-                            })
-                        }
+                        await Services.Backup.addUnconfirmedPersonaRestore({
+                            mnemonic: state?.mnemonic?.join(' '),
+                            privateKeyString: state.privateKey,
+                            personaName,
+                        })
                         Messages.events.restoreSuccess.on(() => {
                             navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`)
+                            changeCurrentPersona(result?.identifier)
                         })
                         return
                     }

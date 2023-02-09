@@ -187,7 +187,9 @@ const DeleteWallet = memo(() => {
                             values={{
                                 addresses: manageWallets.map((x) => formatEthereumAddress(x.address, 4)).join(','),
                             }}
-                            components={{ span: <Typography component="span" sx={{ wordBreak: 'break-all' }} /> }}
+                            components={{
+                                span: <Typography component="span" sx={{ wordBreak: 'break-all', fontSize: 12 }} />,
+                            }}
                         />
                     ) : (
                         t('popups_wallet_delete_tip')
