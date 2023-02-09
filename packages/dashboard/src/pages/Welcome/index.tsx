@@ -7,6 +7,7 @@ import urlcat from 'urlcat'
 import { Services } from '../../API.js'
 import { FooterLine } from '../../components/FooterLine/index.js'
 import { HeaderLine } from '../../components/HeaderLine/index.js'
+import { TermsAgreedContext } from '../../hooks/useTermsAgreed.js'
 import { DashboardTrans, useDashboardI18N } from '../../locales/index.js'
 import { Article } from './Article.js'
 
@@ -69,7 +70,8 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export default memo(function Welcome() {
-    const [read, setRead] = useState(false)
+    const [agreed, setAgreed] = TermsAgreedContext.useContainer()
+    const [read, setRead] = useState(agreed)
     const [allowedToCollect, setAllowedToCollect] = useState(false)
     const [params] = useSearchParams()
     const navigate = useNavigate()
@@ -78,6 +80,7 @@ export default memo(function Welcome() {
         if (allowedToCollect) {
             await Services.Settings.setLogEnable(true)
         }
+        setAgreed(true)
         const from = params.get('from')
         if (from && from !== DashboardRoutes.Personas) {
             const search = params.get('search')

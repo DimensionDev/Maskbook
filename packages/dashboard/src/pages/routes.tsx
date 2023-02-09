@@ -7,7 +7,7 @@ import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
 import { compact } from 'lodash-es'
 import { useCustomSnackbar } from '@masknet/theme'
 import { useDashboardI18N } from '../locales/index.js'
-import { LogGuard } from './LogGuard.js'
+import { TermsGuard } from './TermsGuard.js'
 
 const Wallets = lazy(() => import(/* webpackPrefetch: true */ './Wallets/index.js'))
 const Setup = lazy(() => import('./Setup/index.js'))
@@ -43,7 +43,7 @@ export function Pages() {
 
     return (
         <Suspense fallback={null}>
-            <LogGuard>
+            <TermsGuard>
                 <Routes>
                     <Route path={DashboardRoutes.Welcome} element={<Welcome />} />
                     <Route path={DashboardRoutes.Setup} element={<Setup />} />
@@ -56,7 +56,7 @@ export function Pages() {
                     <Route path={`${DashboardRoutes.CreateMaskWallet}/*`} element={<CreateWallet />} />
                     <Route path="*" element={<Navigate to={DashboardRoutes.Personas} />} />
                 </Routes>
-            </LogGuard>
+            </TermsGuard>
         </Suspense>
     )
 }
