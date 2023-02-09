@@ -73,10 +73,12 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         top: 80,
         right: 50,
         display: 'flex',
-        flexDirection: 'column',
+        overflow: 'hidden',
         alignItems: 'center',
-        maxHeight: 180,
-        maxWidth: 126,
+        height: 126,
+        width: 126,
+        boxShadow: `0 0 0 3px ${theme.palette.maskColor.publicBg}`,
+        borderRadius: 8,
         '& > div': {
             display: 'flex',
             justifyContent: 'center',
@@ -284,7 +286,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                 imgWrapper: classes.imgWrapper,
                                 fallbackImage: classes.fallbackImage,
                             }}
-                            fallbackImage={new URL('./assets/nft-preview.png', import.meta.url)}
+                            objectFit="cover"
                         />
                     </Box>
                 ) : null}
