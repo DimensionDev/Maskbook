@@ -1,6 +1,6 @@
 import { makeStyles, ActionButton, LoadingBase, parseColor } from '@masknet/theme'
 import { networkResolver } from '@masknet/web3-shared-evm'
-import { Card, CardHeader, Typography, Button, Box } from '@mui/material'
+import { Card, Typography, Button, Box } from '@mui/material'
 import { useTransactionConfirmDialog } from './context/TokenTransactionConfirmDialogContext.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
@@ -43,11 +43,6 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         margin: 'auto',
         marginBottom: outdated ? '12px' : 'auto',
         height: 335,
-    },
-    title: {
-        fontSize: 24,
-        textAlign: 'left',
-        color: theme.palette.common.white,
     },
     remain: {
         fontSize: 12,
@@ -123,11 +118,15 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         top: 0,
         left: 0,
     },
-    titleText: {
+    messageBox: {
+        width: '100%',
+    },
+    words: {
         display: '-webkit-box',
-        '-webkit-line-clamp': '2',
-        '-webkit-box-orient': 'vertical',
+        WebkitLineClamp: 2,
+        WebkitBoxOrient: 'vertical',
         color: theme.palette.common.white,
+        wordBreak: 'break-all',
         fontSize: 24,
         fontWeight: 700,
         textOverflow: 'ellipsis',
@@ -267,10 +266,12 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     className={classes.tokenLabel}
                 />
                 <Stack />
-                <CardHeader
-                    className={classes.title}
-                    title={<Typography className={classes.titleText}>{payload.message}</Typography>}
-                />
+
+                <div className={classes.messageBox}>
+                    <Typography className={classes.words} variant="h6">
+                        {payload.message}
+                    </Typography>
+                </div>
 
                 {availability.isClaimed ? (
                     <Box className={classes.tokenWrapper}>
