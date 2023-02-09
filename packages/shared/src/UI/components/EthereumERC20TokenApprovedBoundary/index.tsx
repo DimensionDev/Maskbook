@@ -1,13 +1,13 @@
-import { makeStyles, ActionButton, ActionButtonProps, ShadowRootTooltip } from '@masknet/theme'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { unreachable } from '@masknet/kit'
-import { useSharedI18N } from '../../../locales/index.js'
-import type { FungibleToken } from '@masknet/web3-shared-base'
-import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
 import { TokenIcon } from '@masknet/shared'
+import { ActionButton, ActionButtonProps, makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { HelpOutline } from '@mui/icons-material'
-import React, { useCallback } from 'react'
 import { noop } from 'lodash-es'
+import React, { useCallback } from 'react'
+import { useSharedI18N } from '../../../locales/index.js'
 
 const useStyles = makeStyles<void, 'icon'>()((theme, _, refs) => ({
     icon: {},
@@ -37,26 +37,16 @@ export interface EthereumERC20TokenApprovedBoundaryProps extends withClasses<'bu
     ActionButtonProps?: ActionButtonProps
     onlyInfiniteUnlock?: boolean
     contractName?: string
-    expectedChainId?: ChainId
 }
 
 export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenApprovedBoundaryProps) {
-    const {
-        children = null,
-        amount,
-        spender,
-        token,
-        fallback,
-        infiniteUnlockContent,
-        contractName,
-        expectedChainId,
-    } = props
+    const { children = null, amount, spender, token, fallback, infiniteUnlockContent, contractName } = props
 
     const t = useSharedI18N()
     const { classes } = useStyles(undefined, { props })
 
     const [{ type: approveStateType, allowance }, transactionState, approveCallback, resetApproveCallback] =
-        useERC20TokenApproveCallback(token?.address ?? '', amount, spender ?? '', noop, expectedChainId)
+        useERC20TokenApproveCallback(token?.address ?? '', amount, spender ?? '', noop, token?.chainId)
 
     const onApprove = useCallback(async () => {
         if (approveStateType !== ApproveStateType.NOT_APPROVED) return
