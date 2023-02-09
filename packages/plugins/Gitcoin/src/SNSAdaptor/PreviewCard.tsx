@@ -9,8 +9,9 @@ import { BigNumber } from 'bignumber.js'
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html'
 import { useMemo } from 'react'
 import urlcat from 'urlcat'
-import { SUPPORTED_CHAIN_IDS, SUPPORTED_TENANTS, TenantToChainIconMap } from '../constants.js'
+import { TenantToChainIconMap } from '../constants.js'
 import { Translate, useI18N } from '../locales/i18n_generated.js'
+import { getSupportedChainIds } from '../utils.js'
 import { useDonate } from './contexts/index.js'
 import { grantDetailStyle } from './gitcoin-grant-detail-style.js'
 import { useGrant } from './hooks/useGrant.js'
@@ -50,13 +51,23 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
     },
     main: {
-        padding: theme.spacing(2),
+        padding: theme.spacing(2, 2, 0),
         boxSizing: 'border-box',
         marginTop: theme.spacing(2.5),
         borderRadius: 12,
+        minHeight: 366,
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    article: {
+        borderRadius: '12px 12px 0 0',
+        height: '100%',
+        boxSizing: 'border-box',
         overflow: 'auto',
         overscrollBehavior: 'contain',
-        minHeight: 366,
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     network: {
         marginRight: theme.spacing(1.5),
@@ -91,9 +102,6 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'pre-wrap',
         wordBreak: 'break-word',
         tabSize: 4,
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
         img: {
             maxWidth: '100%',
         },
@@ -164,11 +172,9 @@ export function PreviewCard(props: PreviewCardProps) {
     if (!grant) return null
 
     const tenant = grant.tenants[0]
+    const supportedChainIds = getSupportedChainIds(grant.tenants)
 
-    const isSupportedRuntime =
-        pluginID === NetworkPluginID.PLUGIN_EVM &&
-        SUPPORTED_CHAIN_IDS.includes(chainId) &&
-        SUPPORTED_TENANTS.includes(tenant)
+    const isSupportedRuntime = pluginID === NetworkPluginID.PLUGIN_EVM && supportedChainIds.includes(chainId)
 
     // Use handle_1 as Gitcoin does
     const twitterProfile = grant.twitter_handle_1 ? `https://twitter.com/${grant.twitter_handle_1}` : null
@@ -241,18 +247,20 @@ export function PreviewCard(props: PreviewCardProps) {
                 </Stack>
             </div>
             <Card variant="outlined" className={classes.main} elevation={0}>
-                <div className={classes.banner}>
-                    <img src={grant.logo_url} />
-                </div>
-                <div
-                    className={cx(classes.description, 'grant-detail')}
-                    dangerouslySetInnerHTML={{ __html: description }}
-                />
-                <div className={classes.data}>
-                    <div className={classes.meta}>
-                        <Typography variant="body2" color="textSecondary">
-                            {t.last_updated()} {grant.last_update_natural}
-                        </Typography>
+                <div className={classes.article}>
+                    <div className={classes.banner}>
+                        <img src={grant.logo_url} />
+                    </div>
+                    <div
+                        className={cx(classes.description, 'grant-detail')}
+                        dangerouslySetInnerHTML={{ __html: description }}
+                    />
+                    <div className={classes.data}>
+                        <div className={classes.meta}>
+                            <Typography variant="body2" color="textSecondary">
+                                {t.last_updated()} {grant.last_update_natural}
+                            </Typography>
+                        </div>
                     </div>
                 </div>
             </Card>
@@ -275,8 +283,7 @@ export function PreviewCard(props: PreviewCardProps) {
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                             expectedChainId={ChainId.Mainnet}
                             predicate={(pluginID, chainId) =>
-                                pluginID === NetworkPluginID.PLUGIN_EVM &&
-                                [ChainId.Mainnet, ChainId.Matic].includes(chainId)
+                                pluginID === NetworkPluginID.PLUGIN_EVM && supportedChainIds.includes(chainId)
                             }
                             ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                             <Button

@@ -68,6 +68,7 @@ export const PersonaRowCard = memo(() => {
             nickname={currentPersona.nickname}
             identifier={currentPersona.identifier}
             profiles={currentPersona.linkedProfiles}
+            address={currentPersona.address}
             onConnect={connectPersona}
             onDisconnect={disconnectPersona}
             onDeleteBound={deleteBound}
@@ -79,6 +80,7 @@ export const PersonaRowCard = memo(() => {
 
 export interface PersonaRowCardUIProps {
     nickname?: string
+    address?: string
     identifier: PersonaIdentifier
     profiles: ProfileInformation[]
     definedSocialNetworks: SocialNetwork[]
@@ -106,7 +108,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const { classes } = useStyles()
     const { confirmPassword } = useContext(UserContext)
 
-    const { nickname, definedSocialNetworks, identifier, profiles, publicKey } = props
+    const { nickname, definedSocialNetworks, identifier, profiles, publicKey, address } = props
     const { onConnect, onDisconnect, onRename, onDeleteBound } = props
     const { value: privateKey } = useExportPrivateKey(identifier)
     const { value: words } = useExportMnemonicWords(identifier)
@@ -233,6 +235,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                 nickname={nickname}
                 open={logoutDialogOpen}
                 identifier={identifier}
+                address={address}
                 onClose={() => setLogoutDialogOpen(false)}
             />
             <ExportPersonaDialog

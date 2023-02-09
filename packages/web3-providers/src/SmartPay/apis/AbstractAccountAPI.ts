@@ -100,14 +100,16 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         const names = Array.from<'owner'>({ length: options.length }).fill('owner')
         const calls = this.multicall.createMultipleContractSingleData(contracts, names, [])
         const results = await this.multicall.call(chainId, contracts, names, calls)
-        const owners = results.flatMap((x) => (x.succeed && x.value ? x.value : ''))
+        const accounts = results
+            .flatMap((x) => (x.succeed && x.value ? x.value : ''))
+            .filter((x) => isSameAddress(x, owner))
 
-        if (!owners.length) {
+        if (!accounts.length) {
             return []
         }
 
         return compact(
-            owners.map((x, index) =>
+            accounts.map((x, index) =>
                 this.createContractAccount(chainId, options[index], x || owner, owner, isValidAddress(x)),
             ),
         )

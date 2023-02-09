@@ -183,19 +183,24 @@ export function useLineChart(
                         ? -(position.x + boxHalfWidth - contentWidth)
                         : 0
                 const boxArrowX = 42.5 - offset
+                const isFirstIndex = position.x === 35
 
                 if (position.y + 54 > contentHeight) {
                     text.attr('transform', `translate(${-boxHalfWidth + offset},${-46 - yValue})`)
                     path.attr(
                         'd',
-                        `M-${boxArrowX} -54h85s4 0 4 4v38s0 4 -4 4h-85s-4 0 -4 -4v-38s0 -4 4 -4 M0 0L-7 -10L12 -10L7 -10Z`,
+                        `M-${boxArrowX} -54h105s4 0 4 4v38s0 4 -4 4h-120s-4 0 -4 -4v-38s0 -4 4 -4 ${
+                            isFirstIndex ? 'M -35 0 L -42 -10 L 11 -10 L -28 -10 Z' : 'M0 0L-7 -10L12 -10L7 -10Z'
+                        }`,
                     ).attr('fill', alpha(theme.palette.background.tipMask, 0.9))
                 } else {
                     text.attr('transform', `translate(${-boxHalfWidth + offset},${18 - yValue})`)
 
                     path.attr(
                         'd',
-                        `M-${boxArrowX} 10h85s4 0 4 4v38s0 4 -4 4h-85s-4 0 -4 -4v-38s0 -4 4 -4 M0 2L-7 10L12 10L7 10Z`,
+                        `M-${boxArrowX} 10h105s4 0 4 4v38s0 4 -4 4h-120s-4 0 -4 -4v-38s0 -4 4 -4 ${
+                            isFirstIndex ? 'M -35 2 L -41 10 L 12 10 L -23 16 Z' : 'M0 2L-7 10L12 10L7 10Z'
+                        } `,
                     ).attr('fill', alpha(theme.palette.background.tipMask, 0.9))
                 }
             }
@@ -227,17 +232,20 @@ export function useLineChart(
                         Date
                     >((d) => d.date)
                     .left(data, date, 0)
-                return data[index]
+                return { ...data[index], index }
             }
 
-            const { date, value } = bisect(fixedX)
+            const { date, value, index } = bisect(fixedX)
+
             tooltipLine.attr('transform', `translate(${Number(x(date))}, 0)`).call(lineCallout, date)
 
-            tooltip.attr('transform', `translate(${Number(x(date))},${y(value)})`).call(callout, {
-                text: `${formatTooltip(value)}
-                ${format(date, 'MMM d, yyyy')}`,
-                position: { x: Number(x(date)), y: y(value) },
-            })
+            tooltip
+                .attr('transform', `translate(${index === 0 ? Number(x(date)) + 35 : Number(x(date))},${y(value)})`)
+                .call(callout, {
+                    text: `${formatTooltip(value)}
+                ${format(date, 'MMM d, yyyy hh:mm')}`,
+                    position: { x: index === 0 ? Number(x(date)) + 35 : Number(x(date)), y: y(value) },
+                })
         })
 
         d3.select(svgRef.current).on('mouseleave', hide)

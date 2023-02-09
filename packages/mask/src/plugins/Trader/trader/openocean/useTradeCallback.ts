@@ -6,6 +6,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { GasConfig, Transaction } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { SwapOOSuccessResponse, TradeComputed } from '../../types/index.js'
+import { toHex } from 'web3-utils'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapOOSuccessResponse> | null, gasConfig?: GasConfig) {
     const connection = useWeb3Connection()
@@ -15,9 +16,11 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapOOSuccessRespo
     // compose transaction config
     const config = useMemo(() => {
         if (!account || !tradeComputed?.trade_ || pluginID !== NetworkPluginID.PLUGIN_EVM) return null
+
         return {
             from: account,
-            ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
+            value: tradeComputed.trade_.value ? toHex(tradeComputed.trade_.value) : undefined,
+            ...pick(tradeComputed.trade_, ['to', 'data']),
             ...gasConfig,
         } as Transaction
     }, [account, tradeComputed, gasConfig])

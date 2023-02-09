@@ -187,7 +187,7 @@ export function TraderStateBar({
                         actualNetworkPluginID={actualPluginID}
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         expectedChainId={chainId as ChainId}>
-                        <WalletConnectedBoundary offChain>
+                        <WalletConnectedBoundary offChain expectedChainId={chainId}>
                             <EthereumERC20TokenApprovedBoundary
                                 onlyInfiniteUnlock
                                 spender={approveAddress}
@@ -246,7 +246,7 @@ export function TraderStateBar({
                         </WalletConnectedBoundary>
                     </ChainBoundary>
                 ) : (
-                    <WalletConnectedBoundary offChain>
+                    <WalletConnectedBoundary offChain expectedChainId={chainId}>
                         <EthereumERC20TokenApprovedBoundary
                             onlyInfiniteUnlock
                             spender={approveAddress}

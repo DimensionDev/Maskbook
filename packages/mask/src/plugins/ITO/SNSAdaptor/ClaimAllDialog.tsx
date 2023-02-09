@@ -271,7 +271,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             expectedChainId={chainId}
                             noSwitchNetworkTip>
                             {swappedTokens?.length ? (
-                                <WalletConnectedBoundary>
+                                <WalletConnectedBoundary expectedChainId={chainId}>
                                     <ActionButton
                                         fullWidth
                                         className={cx(classes.actionButton)}

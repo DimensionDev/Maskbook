@@ -36,6 +36,7 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'space-between',
         padding: theme.spacing(0, 1),
         marginBottom: theme.spacing(1),
+        color: theme.palette.maskColor.main,
     },
 }))
 

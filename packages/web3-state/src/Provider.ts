@@ -104,6 +104,7 @@ export class ProviderState<
             })
             provider.emitter.on('accounts', async (accounts) => {
                 const account = first(accounts)
+
                 if (account && this.options.isValidAddress(account))
                     await this.setAccount(providerType, {
                         account,

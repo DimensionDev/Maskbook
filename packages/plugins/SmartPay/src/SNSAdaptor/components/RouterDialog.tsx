@@ -1,18 +1,18 @@
 import { Icons } from '@masknet/icons'
 import { useCurrentPersonaInformation, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog } from '@masknet/shared'
-import type { PersonaInformation } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { SmartPayFunder } from '@masknet/web3-providers'
-import { isSameAddress, Wallet } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { DialogContent, CircularProgress } from '@mui/material'
 import { Box } from '@mui/system'
 import { useCallback, useMemo, useState } from 'react'
 import { matchPath, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { RoutePaths } from '../../constants.js'
+import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
 import { Deploy } from './Deploy.js'
@@ -44,13 +44,9 @@ export function RouterDialog() {
     const wallets = useWallets()
     const currentPersona = useCurrentPersonaInformation()
     const [hasAccounts, setHasAccounts] = useState(false)
-    const [signer, setSigner] = useState<
-        | {
-              signWallet?: Wallet
-              signPersona?: PersonaInformation
-          }
-        | undefined
-    >()
+
+    const { signer, setSigner } = SmartPayContext.useContainer()
+
     const { setDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDescriptionDialogEvent)
 
     const { open, closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent, (ev) => {
@@ -119,12 +115,7 @@ export function RouterDialog() {
                     </Box>
                 ) : (
                     <Routes>
-                        <Route
-                            path={RoutePaths.Deploy}
-                            element={
-                                <Deploy open={open} signPersona={signer?.signPersona} signWallet={signer?.signWallet} />
-                            }
-                        />
+                        <Route path={RoutePaths.Deploy} element={<Deploy open={open} />} />
                         <Route path={RoutePaths.InEligibility} element={<InEligibilityTips />} />
                         <Route path={RoutePaths.Main} element={<SmartPayContent />} />
                     </Routes>

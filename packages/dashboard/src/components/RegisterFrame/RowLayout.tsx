@@ -1,6 +1,6 @@
+import { memo } from 'react'
 import { Icons } from '@masknet/icons'
 import { styled } from '@mui/material/styles'
-import { memo } from 'react'
 import { Container } from '@mui/material'
 import { MaskColorVar } from '@masknet/theme'
 

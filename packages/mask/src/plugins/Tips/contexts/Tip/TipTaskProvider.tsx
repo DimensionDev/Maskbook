@@ -12,12 +12,12 @@ import {
 } from 'react'
 import { useSubscription } from 'use-subscription'
 import { useFungibleToken, useNonFungibleTokenContract, useChainContext } from '@masknet/web3-hooks-base'
-import { isSameAddress, SocialAccount } from '@masknet/web3-shared-base'
+import { isSameAddress, SocialAccount, TokenType } from '@masknet/web3-shared-base'
 import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { getStorage } from '../../storage/index.js'
-import { TipTask, TipsType } from '../../types/index.js'
+import type { TipTask } from '../../types/index.js'
 import { TipContextOptions, TipContext } from './TipContext.js'
 import { useTipAccountsCompletion } from './useTipAccountsCompletion.js'
 import { useNftTip } from './useNftTip.js'
@@ -58,7 +58,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
 
     const [_recipientAddress, setRecipient] = useState(task.recipient ?? '')
     const recipients = useRecipients(targetPluginID, task.accounts)
-    const [tipType, setTipType] = useState(TipsType.Tokens)
+    const [tipType, setTipType] = useState(TokenType.Fungible)
     const [amount, setAmount] = useState('')
     const [nonFungibleTokenAddress, setNonFungibleTokenAddress] = useState('')
     const { value: nativeTokenDetailed = null } = useFungibleToken(targetPluginID, undefined, undefined, {
@@ -108,7 +108,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
         connectionOptions,
     )
 
-    const sendTipTuple = tipType === TipsType.Tokens ? tokenTipTuple : nftTipTuple
+    const sendTipTuple = tipType === TokenType.Fungible ? tokenTipTuple : nftTipTuple
     const [isDirty, setIsDirty] = useDirtyDetection([tipType, recipientAddress, targetChainId, amount, token])
     const isSending = sendTipTuple[0]
     const sendTip = sendTipTuple[1]

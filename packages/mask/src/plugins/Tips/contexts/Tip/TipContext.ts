@@ -1,17 +1,17 @@
 import { noop } from 'lodash-es'
 import { createContext, Dispatch, SetStateAction } from 'react'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NonFungibleTokenContract, SocialAccount } from '@masknet/web3-shared-base'
+import { NonFungibleTokenContract, SocialAccount, TokenType } from '@masknet/web3-shared-base'
 import type { GasConfig } from '@masknet/web3-shared-evm'
-import { TipsType, ValidationTuple } from '../../types/index.js'
+import type { ValidationTuple } from '../../types/index.js'
 
 export interface TipContextOptions {
     recipient: SocialAccount<Web3Helper.ChainIdAll> | undefined
     recipientSnsId: string
     recipientAddress: string
     setRecipient: Dispatch<SetStateAction<string>>
-    tipType: TipsType
-    setTipType: Dispatch<SetStateAction<TipsType>>
+    tipType: TokenType
+    setTipType: Dispatch<SetStateAction<TokenType>>
     recipients: Array<SocialAccount<Web3Helper.ChainIdAll>>
     token: Web3Helper.FungibleTokenAll | null
     setToken: Dispatch<SetStateAction<Web3Helper.FungibleTokenAll | null>>
@@ -39,7 +39,7 @@ export const TipContext = createContext<TipContextOptions>({
     recipientAddress: '',
     recipientSnsId: '',
     setRecipient: noop,
-    tipType: TipsType.Collectibles,
+    tipType: TokenType.NonFungible,
     setTipType: noop,
     recipients: [],
     token: null,

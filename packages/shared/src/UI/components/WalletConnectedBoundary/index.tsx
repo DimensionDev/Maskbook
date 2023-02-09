@@ -9,6 +9,7 @@ import {
     useNativeTokenBalance,
     useRiskWarningApproved,
 } from '@masknet/web3-hooks-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 const useStyles = makeStyles()({
     button: {
@@ -19,20 +20,23 @@ const useStyles = makeStyles()({
 export interface WalletConnectedBoundaryProps extends withClasses<'connectWallet' | 'button'> {
     offChain?: boolean
     children?: React.ReactNode
+    expectedChainId: Web3Helper.ChainIdAll
     hideRiskWarningConfirmed?: boolean
     ActionButtonProps?: ActionButtonProps
     startIcon?: React.ReactNode
 }
 
 export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
-    const { children = null, offChain = false, hideRiskWarningConfirmed = false } = props
+    const { children = null, offChain = false, hideRiskWarningConfirmed = false, expectedChainId } = props
 
     const t = useSharedI18N()
     const { classes, cx } = useStyles(undefined, { props })
 
     const { pluginID } = useNetworkContext()
-    const { account, chainId: chainIdValid } = useChainContext()
-    const nativeTokenBalance = useNativeTokenBalance()
+    const { account, chainId: chainIdValid } = useChainContext({ chainId: expectedChainId })
+    const nativeTokenBalance = useNativeTokenBalance(undefined, {
+        chainId: chainIdValid,
+    })
     const approved = useRiskWarningApproved()
 
     const { setDialog: setRiskWarningDialog } = useRemoteControlledDialog(

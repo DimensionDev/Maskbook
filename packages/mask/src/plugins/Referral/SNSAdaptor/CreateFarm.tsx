@@ -404,7 +404,7 @@ export function CreateFarm(props: PageInterface) {
                         </Grid>
                     </Grid>
                     <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
-                        <WalletConnectedBoundary>
+                        <WalletConnectedBoundary expectedChainId={requiredChainId}>
                             <ActionButton
                                 fullWidth
                                 size="medium"

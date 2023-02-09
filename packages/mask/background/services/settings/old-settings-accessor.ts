@@ -28,16 +28,16 @@ function create<T>(settings: ValueRefWithReady<T>) {
     return [get, set] as const
 }
 export const [getTheme, setTheme] = create(appearanceSettings)
-export const [getLogSettings] = create(logSettings)
+export const [getLogSettings, setLogSettings] = create(logSettings)
 export const [getLanguage, setLanguage] = create(languageSettings)
 
 export async function setLogEnable(enable: boolean) {
     if (enable) {
         const newLoggerId = uuid()
         await logSettings.readyPromise
-        logSettings.value = newLoggerId
+        setLogSettings(newLoggerId)
     } else {
-        logSettings.value = ''
+        setLogSettings('')
     }
 }
 

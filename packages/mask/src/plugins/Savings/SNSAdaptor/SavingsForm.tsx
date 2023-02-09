@@ -235,6 +235,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                         classes: { root: classes.button, disabled: classes.disabledButton },
                     }}>
                     <WalletConnectedBoundary
+                        expectedChainId={chainId}
                         ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
                         classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
                         <EthereumERC20TokenApprovedBoundary
@@ -270,6 +271,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                     classes: { root: classes.button, disabled: classes.disabledButton },
                 }}>
                 <WalletConnectedBoundary
+                    expectedChainId={chainId}
                     ActionButtonProps={{ classes: { root: classes.button } }}
                     classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
                     <ActionButtonPromise

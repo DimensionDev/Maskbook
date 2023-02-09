@@ -97,8 +97,6 @@ export const UploadAvatarDialog: FC = () => {
                 return
             }
 
-            // clear cache
-            await Twitter.staleUserByScreenName(identifier?.identifier?.userId ?? '')
             showSnackbar(t.upload_avatar_success_message(), { variant: 'success' })
 
             navigate(RoutePaths.Exit)

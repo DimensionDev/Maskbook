@@ -55,10 +55,8 @@ const isValidDomain = (domain?: string): boolean => {
     return isValidDomainEVM(domain) || isValidDomainFlow(domain) || isValidDomainSolana(domain)
 }
 
-const isValidHandle = (handler: string): boolean => {
-    const suffix = handler.split('.').pop()
-    if (!suffix) return false
-    return [
+const handleRe = new RegExp(
+    `\\.(${[
         'avax',
         'csb',
         'bit',
@@ -74,7 +72,12 @@ const isValidHandle = (handler: string): boolean => {
         '888',
         'zil',
         'blockchain',
-    ].includes(suffix.toLowerCase())
+    ].join('|')})$`,
+    'i',
+)
+
+const isValidHandle = (handle: string): boolean => {
+    return handleRe.test(handle)
 }
 
 export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.SchemaTypeAll>
@@ -403,9 +406,8 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         keyword: string,
         type?: SearchResultType,
     ): Promise<T[]> {
-        // #MASK or $MASK
-        const [_, name = ''] = keyword.match(/[#$](\w+)/) ?? []
-        if (name) return this.searchTokenByName(name) as Promise<T[]>
+        // #MASK or $MASK or MASK
+        const [_, name = ''] = keyword.match(/(\w+)/) ?? []
 
         // BoredApeYC or CryptoPunks nft twitter project
         if (type === SearchResultType.NonFungibleCollection)
@@ -438,6 +440,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             // TODO: query fungible token by coingecko
         }
 
+        if (name) return this.searchTokenByName(name) as Promise<T[]>
         return EMPTY_LIST
     }
 }
