@@ -174,8 +174,6 @@ export function PreviewCard(props: PreviewCardProps) {
     const tenant = grant.tenants[0]
     const supportedChainIds = getSupportedChainIds(grant.tenants)
 
-    const isSupportedRuntime = pluginID === NetworkPluginID.PLUGIN_EVM && supportedChainIds.includes(chainId)
-
     // Use handle_1 as Gitcoin does
     const twitterProfile = grant.twitter_handle_1 ? `https://twitter.com/${grant.twitter_handle_1}` : null
 
@@ -277,7 +275,7 @@ export function PreviewCard(props: PreviewCardProps) {
                         {t.view_on()}
                     </Button>
                 </Box>
-                {grant.active && isSupportedRuntime ? (
+                {grant.active ? (
                     <Box sx={{ flex: 1 }}>
                         <ChainBoundary
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}
