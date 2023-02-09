@@ -15,10 +15,10 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        minHeight: 260,
+        minHeight: 247,
         width: '100%',
         gap: 12,
-        height: 287,
+        height: 247,
         justifyContent: 'center',
     },
     emptyIcon: {
