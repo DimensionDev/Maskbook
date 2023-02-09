@@ -143,13 +143,9 @@ export function createNonFungibleAsset(
             : undefined,
         metadata: {
             chainId,
-            name: (isValidDomain(asset.name)
+            name: isValidDomain(asset.name)
                 ? asset.name
-                : getAssetFullName(asset.contract_address, contractName, payload?.name || asset.name, asset.token_id)
-            )
-                .replace(symbol, '')
-                .trim()
-                .replace(/^#/, ''),
+                : getAssetFullName(asset.contract_address, contractName, payload?.name || asset.name, asset.token_id),
             symbol,
             description,
             imageURL: mediaURL,

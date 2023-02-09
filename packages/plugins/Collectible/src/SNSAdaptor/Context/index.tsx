@@ -22,7 +22,7 @@ interface InitialState {
 
 function useContext(initialState?: InitialState) {
     const { parentPluginID, pluginID, chainId, tokenId, tokenAddress, ownerAddress, origin } = initialState ?? {}
-    const [sourceType, setSourceType] = useState(SourceType.NFTScan)
+    const [sourceType, setSourceType] = useState(SourceType.LooksRare)
 
     const asset = useNonFungibleAsset(pluginID, tokenAddress, tokenId, {
         chainId,
@@ -31,6 +31,7 @@ function useContext(initialState?: InitialState) {
     const orders = useNonFungibleOrders(pluginID, tokenAddress, tokenId, {
         chainId,
         account: ownerAddress,
+        sourceType,
     })
     const events = useNonFungibleEvents(pluginID, tokenAddress, tokenId, {
         chainId,
