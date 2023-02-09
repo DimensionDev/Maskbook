@@ -13,7 +13,7 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
-import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3, useNetworkContext } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
@@ -159,7 +159,10 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const t = useI18N()
 
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { pluginID } = useNetworkContext()
+    const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>(
+        pluginID === NetworkPluginID.PLUGIN_EVM ? {} : { account: '' },
+    )
 
     const {
         value: availability,

@@ -17,7 +17,7 @@ import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
 import { formatBalance, isZero, TokenType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3, useNetworkContext } from '@masknet/web3-hooks-base'
 import { Stack } from '@mui/system'
 
 export const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
@@ -140,9 +140,12 @@ export function RedPacket(props: RedPacketProps) {
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
 
     const token = payload.token
-
+    const { pluginID } = useNetworkContext()
     const payloadChainId = token?.chainId ?? chainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
-    const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: payloadChainId })
+    const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
+        chainId: payloadChainId,
+        account: pluginID === NetworkPluginID.PLUGIN_EVM ? undefined : '',
+    })
 
     // #region token detailed
     const {
