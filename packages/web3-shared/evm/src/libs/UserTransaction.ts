@@ -18,6 +18,7 @@ import {
     isZeroAddress,
     formatEthereumAddress,
     isValidAddress,
+    isNativeTokenAddress,
 } from '../helpers/index.js'
 import { getSmartPayConstants } from '../constants/index.js'
 import type { Signer } from './Signer.js'
@@ -261,12 +262,18 @@ export class UserTransaction {
             )
         }
         if (!paymaster || isZeroAddress(paymaster)) {
-            const { PAYMASTER_MASK_CONTRACT_ADDRESS } = getSmartPayConstants(this.chainId)
-            if (!PAYMASTER_MASK_CONTRACT_ADDRESS) throw new Error('No paymaster address.')
-            if (!this.paymentToken) throw new Error('No payment token address.')
+            const { PAYMASTER_MASK_CONTRACT_ADDRESS, PAYMASTER_NATIVE_CONTRACT_ADDRESS } = getSmartPayConstants(
+                this.chainId,
+            )
+            if (!PAYMASTER_MASK_CONTRACT_ADDRESS && !PAYMASTER_NATIVE_CONTRACT_ADDRESS)
+                throw new Error('No paymaster address.')
 
-            this.userOperation.paymaster = PAYMASTER_MASK_CONTRACT_ADDRESS
-            this.userOperation.paymasterData = padLeft(this.paymentToken, 64)
+            if (!this.paymentToken || isNativeTokenAddress(this.paymentToken)) {
+                this.userOperation.paymaster = PAYMASTER_NATIVE_CONTRACT_ADDRESS
+            } else {
+                this.userOperation.paymaster = PAYMASTER_MASK_CONTRACT_ADDRESS
+                this.userOperation.paymasterData = padLeft(this.paymentToken, 64)
+            }
         }
 
         return this
