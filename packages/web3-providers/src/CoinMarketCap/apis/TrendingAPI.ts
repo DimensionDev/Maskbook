@@ -3,7 +3,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { TokenType, SourceType } from '@masknet/web3-shared-base'
 import {
     ChainId,
-    getNativeTokenChainId,
+    chainResolver,
     getTokenConstant,
     isNativeTokenSymbol,
     isValidAddress,
@@ -184,7 +184,7 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
             coin: {
                 id,
                 chainId: isNativeTokenSymbol(coinInfo.symbol)
-                    ? getNativeTokenChainId(coinInfo.symbol)
+                    ? chainResolver.chainId(coinInfo.name)
                     : getPlatform(contracts, coinInfo.platform?.token_address)?.chainId,
                 name: coinInfo.name,
                 symbol: coinInfo.symbol,
@@ -213,10 +213,11 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
                 telegram_url: coinInfo.urls.chat?.find((x) => x.includes('telegram')),
                 market_cap_rank: quotesInfo?.[id]?.cmc_rank,
                 description: coinInfo.description,
-                contract_address: isNativeTokenSymbol(coinInfo.symbol)
-                    ? getTokenConstant(getNativeTokenChainId(coinInfo.symbol), 'NATIVE_TOKEN_ADDRESS')
-                    : getPlatform(contracts, coinInfo.platform?.token_address)?.address ??
-                      coinInfo.platform?.token_address,
+                contract_address:
+                    isNativeTokenSymbol(coinInfo.symbol) && chainResolver.chainId(coinInfo.name)
+                        ? getTokenConstant(chainResolver.chainId(coinInfo.name)!, 'NATIVE_TOKEN_ADDRESS')
+                        : getPlatform(contracts, coinInfo.platform?.token_address)?.address ??
+                          coinInfo.platform?.token_address,
             },
             currency,
             dataProvider: SourceType.CoinMarketCap,

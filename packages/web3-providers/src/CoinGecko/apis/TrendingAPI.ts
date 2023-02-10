@@ -3,8 +3,8 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { attemptUntil, TokenType, SourceType } from '@masknet/web3-shared-base'
 import {
     ChainId,
+    chainResolver,
     getCoinGeckoConstants,
-    getNativeTokenChainId,
     getTokenConstant,
     isNativeTokenSymbol,
 } from '@masknet/web3-shared-evm'
@@ -122,7 +122,7 @@ export class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.Cha
             currency,
             coin: {
                 id,
-                chainId: isNativeTokenSymbol(info.symbol) ? getNativeTokenChainId(info.symbol) : undefined,
+                chainId: isNativeTokenSymbol(info.symbol) ? chainResolver.chainId(info.name) : undefined,
                 name: info.name,
                 symbol: info.symbol.toUpperCase(),
                 type: TokenType.Fungible,
@@ -156,9 +156,10 @@ export class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.Cha
                 facebook_url,
                 twitter_url,
                 telegram_url,
-                contract_address: isNativeTokenSymbol(info.symbol)
-                    ? getTokenConstant(getNativeTokenChainId(info.symbol), 'NATIVE_TOKEN_ADDRESS')
-                    : info.contract_address,
+                contract_address:
+                    chainResolver.chainId(info.name) && isNativeTokenSymbol(info.symbol)
+                        ? getTokenConstant(chainResolver.chainId(info.name)!, 'NATIVE_TOKEN_ADDRESS')
+                        : info.contract_address,
             },
             market: (() => {
                 const entries = Object.entries(info.market_data).map(([key, value]) => {
