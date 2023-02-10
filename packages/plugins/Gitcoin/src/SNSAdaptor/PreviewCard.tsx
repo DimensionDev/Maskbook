@@ -5,10 +5,11 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { alpha, Box, Button, Card, Link, Stack, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
+import { intersection } from 'lodash-es'
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html'
 import { useMemo } from 'react'
 import urlcat from 'urlcat'
-import { TenantToChainIconMap } from '../constants.js'
+import { SUPPORTED_TENANTS, TenantToChainIconMap } from '../constants.js'
 import { Translate, useI18N } from '../locales/i18n_generated.js'
 import { useDonate } from './contexts/index.js'
 import { grantDetailStyle } from './gitcoin-grant-detail-style.js'
@@ -169,6 +170,7 @@ export function PreviewCard(props: PreviewCardProps) {
     if (!grant) return null
 
     const tenant = grant.tenants[0]
+    const isSupportedTenant = intersection(grant.tenants, SUPPORTED_TENANTS).length > 0
 
     // Use handle_1 as Gitcoin does
     const twitterProfile = grant.twitter_handle_1 ? `https://twitter.com/${grant.twitter_handle_1}` : null
@@ -271,7 +273,7 @@ export function PreviewCard(props: PreviewCardProps) {
                         {t.view_on()}
                     </Button>
                 </Box>
-                {grant.active ? (
+                {grant.active && isSupportedTenant ? (
                     <Box sx={{ flex: 1 }}>
                         <ChainBoundary
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}
