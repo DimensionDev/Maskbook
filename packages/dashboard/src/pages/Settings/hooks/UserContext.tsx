@@ -44,6 +44,8 @@ export type ConfirmPasswordOption = {
     tipContent?: string
     confirmTitle?: string
     force?: boolean
+    hasSmartPay?: boolean
+    hasPaymentPassword?: boolean
 }
 
 export function UserProvider({ children }: PropsWithChildren<{}>) {

@@ -3,6 +3,7 @@ export {
     addUnconfirmedBackup,
     getUnconfirmedBackup,
     restoreUnconfirmedBackup,
+    addUnconfirmedPersonaRestore,
     type RestoreUnconfirmedBackupOptions,
 } from './restore.js'
 export { backupPersonaPrivateKey, backupPersonaMnemonicWords } from './persona.js'

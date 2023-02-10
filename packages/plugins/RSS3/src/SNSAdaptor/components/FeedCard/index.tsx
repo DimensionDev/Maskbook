@@ -37,3 +37,5 @@ export const FeedCard = memo(({ feed, ...rest }: FeedCardProps) => {
 
     return null
 })
+
+FeedCard.displayName = 'FeedCard'

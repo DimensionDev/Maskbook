@@ -1,3 +1,4 @@
+import type { MouseEventHandler } from 'react'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -62,7 +63,7 @@ export function OperationFooter({
         WalletMessages.events.selectProviderDialogUpdated,
     )
     // #endregion
-    const ObtainButton = () => {
+    const ObtainButton = (props: { onClick?: MouseEventHandler<HTMLButtonElement> | undefined }) => {
         if (!canClaim && !canRefund) return null
 
         if (!account) {
@@ -95,7 +96,7 @@ export function OperationFooter({
                 fullWidth
                 loading={isLoading}
                 disabled={isLoading}
-                onClick={onClaimOrRefund}>
+                onClick={props.onClick}>
                 {canClaim ? (isClaiming ? t.claiming() : t.claim()) : isRefunding ? t.refunding() : t.refund()}
             </ActionButton>
         )
@@ -119,7 +120,7 @@ export function OperationFooter({
                             expectedChainId={chainId ?? ChainId.Mainnet}
                             startIcon={<Icons.ConnectWallet size={18} />}
                             ActionButtonProps={{ variant: 'roundedDark' }}>
-                            <ObtainButton />
+                            <ObtainButton onClick={onClaimOrRefund} />
                         </WalletConnectedBoundary>
                     </ChainBoundary>
                 )}

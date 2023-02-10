@@ -1,6 +1,6 @@
 import { makeStyles, ActionButton, LoadingBase, parseColor } from '@masknet/theme'
 import { networkResolver } from '@masknet/web3-shared-evm'
-import { Card, CardHeader, Typography, Button, Box } from '@mui/material'
+import { Card, Typography, Button, Box } from '@mui/material'
 import { useTransactionConfirmDialog } from './context/TokenTransactionConfirmDialogContext.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
@@ -13,7 +13,7 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
-import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3, useNetworkContext } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
@@ -44,10 +44,6 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         marginBottom: outdated ? '12px' : 'auto',
         height: 335,
     },
-    title: {
-        fontSize: 24,
-        textAlign: 'left',
-    },
     remain: {
         fontSize: 12,
         fontWeight: 600,
@@ -77,10 +73,12 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         top: 80,
         right: 50,
         display: 'flex',
-        flexDirection: 'column',
+        overflow: 'hidden',
         alignItems: 'center',
-        maxHeight: 180,
-        maxWidth: 126,
+        height: 126,
+        width: 126,
+        boxShadow: `0 0 0 3px ${theme.palette.maskColor.publicBg}`,
+        borderRadius: 8,
         '& > div': {
             display: 'flex',
             justifyContent: 'center',
@@ -91,16 +89,11 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         fontSize: 12,
         fontWeight: 600,
     },
-    hide: {
-        opacity: 0,
-    },
-    whiteText: {
-        color: theme.palette.common.white,
-    },
     badge: {
         width: 76,
         height: 27,
         display: 'flex',
+        color: theme.palette.common.white,
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
@@ -127,11 +120,15 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         top: 0,
         left: 0,
     },
-    titleText: {
+    messageBox: {
+        width: '100%',
+    },
+    words: {
         display: '-webkit-box',
-        '-webkit-line-clamp': '2',
-        '-webkit-box-orient': 'vertical',
+        WebkitLineClamp: 2,
+        WebkitBoxOrient: 'vertical',
         color: theme.palette.common.white,
+        wordBreak: 'break-all',
         fontSize: 24,
         fontWeight: 700,
         textOverflow: 'ellipsis',
@@ -163,7 +160,10 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const t = useI18N()
 
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { pluginID } = useNetworkContext()
+    const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>(
+        pluginID === NetworkPluginID.PLUGIN_EVM ? {} : { account: '' },
+    )
 
     const {
         value: availability,
@@ -196,7 +196,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         retryAvailability()
     }, [account])
 
-    const outdated = Boolean(availability?.isClaimedAll || availability?.isCompleted)
+    const outdated = Boolean(availability?.isClaimedAll || availability?.isCompleted || availability?.expired)
     const { classes, cx } = useStyles({ claimed: Boolean(availability?.isClaimed), outdated })
     // #region on share
     const postLink = usePostLink()
@@ -268,10 +268,12 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     className={classes.tokenLabel}
                 />
                 <Stack />
-                <CardHeader
-                    className={cx(classes.title, availability.isEnd ? classes.hide : '', classes.whiteText)}
-                    title={<Typography className={classes.titleText}>{payload.message}</Typography>}
-                />
+
+                <div className={classes.messageBox}>
+                    <Typography className={classes.words} variant="h6">
+                        {payload.message}
+                    </Typography>
+                </div>
 
                 {availability.isClaimed ? (
                     <Box className={classes.tokenWrapper}>
@@ -284,7 +286,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                 imgWrapper: classes.imgWrapper,
                                 fallbackImage: classes.fallbackImage,
                             }}
-                            fallbackImage={new URL('./assets/nft-preview.png', import.meta.url)}
+                            objectFit="cover"
                         />
                     </Box>
                 ) : null}
@@ -305,13 +307,13 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 </div>
 
                 {availability.isClaimed ? (
-                    <div className={cx(classes.badge, classes.whiteText)}>
+                    <div className={classes.badge}>
                         <Typography variant="body2" className={classes.badgeText}>
                             {t.claimed({ amount: '' })}
                         </Typography>
                     </div>
                 ) : availability.isEnd ? (
-                    <div className={cx(classes.badge, classes.whiteText)}>
+                    <div className={classes.badge}>
                         <Typography variant="body2" className={classes.badgeText}>
                             {availability.expired ? t.expired() : t.completed()}
                         </Typography>

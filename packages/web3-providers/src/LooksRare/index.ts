@@ -21,6 +21,7 @@ import type { Collection, Event, Order, Stats, Token } from './types.js'
 import { LOOKSRARE_API_URL, LOOKSRARE_PAGE_SIZE } from './constants.js'
 import { fetchJSON, getPaymentToken, resolveActivityType } from '../entry-helpers.js'
 import type { NonFungibleTokenAPI } from '../entry-types.js'
+import fromUnixTime from 'date-fns/fromUnixTime'
 
 async function fetchFromLooksRare<T>(chainId: ChainId, url: string) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
@@ -143,8 +144,8 @@ function createNonFungibleTokenOrderFromOrder(
         maker: {
             address: order.signer,
         },
-        createdAt: order.startTime,
-        expiredAt: order.endTime,
+        createdAt: fromUnixTime(order.startTime).getTime(),
+        expiredAt: fromUnixTime(order.endTime).getTime(),
         priceInToken: {
             amount: order.price,
             token: paymentToken ?? createERC20Token(chainId, order.currencyAddress),

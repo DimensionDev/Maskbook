@@ -100,9 +100,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         const names = Array.from<'owner'>({ length: options.length }).fill('owner')
         const calls = this.multicall.createMultipleContractSingleData(contracts, names, [])
         const results = await this.multicall.call(chainId, contracts, names, calls)
-        const accounts = results
-            .flatMap((x) => (x.succeed && x.value ? x.value : ''))
-            .filter((x) => isSameAddress(x, owner))
+        const accounts = results.flatMap((x) => (x.succeed && x.value ? x.value : ''))
 
         if (!accounts.length) {
             return []
@@ -167,6 +165,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
     async getAccountsByOwner(
         chainId: ChainId,
         owner: string,
+        exact = true,
     ): Promise<Array<AbstractAccountAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>>> {
         const create2Factory = await this.createCreate2Factory(chainId, owner)
         const contractWallet = await this.createContractWallet(chainId, owner)
@@ -180,19 +179,23 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
             ),
             // this.getAccountsFromChainbase(chainId, owner),
         ])
-        return allSettled
+
+        const result = allSettled
             .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
             .map((y) => ({
                 ...y,
                 funded: operations.some((operation) => isSameAddress(operation.walletAddress, y.address)),
             }))
+
+        return result.filter((x) => (exact ? isSameAddress(x.owner, owner) : true))
     }
 
     async getAccountsByOwners(
         chainId: ChainId,
         owners: string[],
+        exact = true,
     ): Promise<Array<AbstractAccountAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>>> {
-        const allSettled = await Promise.allSettled(owners.map((x) => this.getAccountsByOwner(chainId, x)))
+        const allSettled = await Promise.allSettled(owners.map((x) => this.getAccountsByOwner(chainId, x, exact)))
         return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
     }
 
@@ -291,7 +294,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         if (!isValidAddress(owner)) throw new Error('Invalid owner address.')
 
         const initCode = await this.getInitCode(chainId, owner)
-        const accounts = await this.getAccountsByOwner(chainId, owner)
+        const accounts = await this.getAccountsByOwner(chainId, owner, false)
         const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
 
         return this.sendUserOperation(

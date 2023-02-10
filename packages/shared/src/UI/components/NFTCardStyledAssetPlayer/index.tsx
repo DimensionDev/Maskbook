@@ -49,6 +49,7 @@ interface Props extends withClasses<'fallbackImage' | 'imgWrapper'> {
     hideLoadingIcon?: boolean
     showNetwork?: boolean
     pluginID?: NetworkPluginID
+    objectFit?: 'contain' | 'cover'
 }
 
 const fallbackImageDark = new URL('../Image/mask-dark.png', import.meta.url)
@@ -66,6 +67,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         url,
         pluginID,
         showNetwork = false,
+        objectFit = 'contain',
     } = props
     const { classes, cx } = useStyles(undefined, { props })
     const theme = useTheme()
@@ -106,7 +108,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
                 }}
                 containerProps={{ className: classes.container }}
                 size="100%"
-                style={{ objectFit: 'contain' }}
+                style={{ objectFit }}
                 src={isImageURL || isImageOnly || !urlComputed ? urlComputed : fallbackImageURL.toString()}
                 fallback={fallbackImageURL}
             />

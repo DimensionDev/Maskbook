@@ -1,13 +1,14 @@
 import { memo } from 'react'
-import { Button, Stack, Typography } from '@mui/material'
+import { Button, ButtonProps, Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales/index.js'
 
 interface RetryHintProps {
     hint?: boolean
     retry(): void
+    ButtonProps?: ButtonProps
 }
 
-export const RetryHint = memo<RetryHintProps>(({ retry, hint = true }) => {
+export const RetryHint = memo<RetryHintProps>(({ retry, hint = true, ButtonProps }) => {
     const t = useSharedI18N()
     return (
         <Stack justifyContent="center" direction="row" alignItems="center" height={hint ? '100%' : '100px'}>
@@ -17,7 +18,7 @@ export const RetryHint = memo<RetryHintProps>(({ retry, hint = true }) => {
                         {t.load_failed()}
                     </Typography>
                 )}
-                <Button size="small" style={{ borderRadius: 16 }} onClick={retry}>
+                <Button {...ButtonProps} size="small" style={{ borderRadius: 16 }} onClick={retry}>
                     {t.load_retry()}
                 </Button>
             </Stack>

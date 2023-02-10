@@ -6,8 +6,6 @@ import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import { resolveNonFungibleTokenIdFromEnsDomain, ChainId } from '@masknet/web3-shared-evm'
 
 interface ENSContextProps {
-    firstNextIdBinding: BindingProof | undefined
-    restOfNextIdBindings: BindingProof[]
     nextIdBindings: BindingProof[]
     reversedAddress: string | undefined
     domain: string
@@ -15,8 +13,6 @@ interface ENSContextProps {
 }
 
 export const ENSContext = createContext<ENSContextProps>({
-    firstNextIdBinding: undefined,
-    restOfNextIdBindings: [],
     nextIdBindings: [],
     reversedAddress: undefined,
     tokenId: undefined,
@@ -30,12 +26,9 @@ export function ENSProvider({ children, result }: PropsWithChildren<SearchResult
     const tokenId = resolveNonFungibleTokenIdFromEnsDomain(domain)
 
     const { value: nextIdBindings = EMPTY_LIST } = useAsync(
-        async () => (reversedAddress ? NextIDProof.queryProfilesByRelationService(reversedAddress) : EMPTY_LIST),
+        async () => (reversedAddress ? NextIDProof.queryProfilesByRelationService(domain) : EMPTY_LIST),
         [reversedAddress],
     )
-
-    const firstNextIdBinding = nextIdBindings[0]
-    const restOfNextIdBindings = nextIdBindings.slice(1)
 
     return (
         <ENSContext.Provider
@@ -44,8 +37,6 @@ export function ENSProvider({ children, result }: PropsWithChildren<SearchResult
                 tokenId,
                 domain,
                 nextIdBindings,
-                firstNextIdBinding,
-                restOfNextIdBindings,
             }}>
             {children}
         </ENSContext.Provider>
