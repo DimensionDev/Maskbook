@@ -1,12 +1,12 @@
 import Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
-import { first } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import DepositPaymasterABI from '@masknet/web3-contracts/abis/DepositPaymaster.json'
 import type { DepositPaymaster as DepositPaymasterType } from '@masknet/web3-contracts/types/DepositPaymaster.js'
 import type { ChainId } from '../types/index.js'
-import { getRPCConstants, getSmartPayConstants } from '../constants/constants.js'
+import { getSmartPayConstants } from '../constants/constants.js'
 import { createContract } from '../helpers/index.js'
+import { ProviderURL } from './ProviderURL.js'
 
 export class DepositPaymaster {
     /**
@@ -18,9 +18,7 @@ export class DepositPaymaster {
     private get contract() {
         const { PAYMASTER_CONTRACT_ADDRESS } = getSmartPayConstants(this.chainId)
         if (!PAYMASTER_CONTRACT_ADDRESS) return
-        const RPC_URL = first(getRPCConstants(this.chainId).RPC_URLS)
-        if (!RPC_URL) throw new Error('Failed to create web3 provider.')
-        const web3 = new Web3(RPC_URL)
+        const web3 = new Web3(ProviderURL.from(this.chainId))
         return createContract<DepositPaymasterType>(web3, PAYMASTER_CONTRACT_ADDRESS, DepositPaymasterABI as AbiItem[])
     }
 

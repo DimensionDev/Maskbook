@@ -1,4 +1,4 @@
-import { FC, HTMLProps, useMemo } from 'react'
+import type { FC, HTMLProps } from 'react'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 
 interface ModelViewProps extends HTMLProps<HTMLDivElement> {
@@ -6,14 +6,13 @@ interface ModelViewProps extends HTMLProps<HTMLDivElement> {
 }
 
 const ModelView: FC<ModelViewProps> = ({ source, ...rest }) => {
-    return useMemo(() => {
-        if (!source) return null
-        return (
-            <div {...rest}>
-                <NFTCardStyledAssetPlayer url={source} />
-            </div>
-        )
-    }, [source])
+    if (!source) return null
+
+    return (
+        <div {...rest}>
+            <NFTCardStyledAssetPlayer url={source} />
+        </div>
+    )
 }
 
 export default ModelView
