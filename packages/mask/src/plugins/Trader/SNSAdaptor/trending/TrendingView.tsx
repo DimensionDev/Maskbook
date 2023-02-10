@@ -8,7 +8,7 @@ import {
     useNonFungibleAssetsByCollection,
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
-import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
 import { createFungibleToken, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTList, PluginCardFrameMini } from '@masknet/shared'
@@ -149,7 +149,6 @@ export function TrendingView(props: TrendingViewProps) {
         days,
     })
     // #endregion
-
     const isNFT = trending?.coin.type === TokenType.NonFungible
 
     // #region expected chainId
@@ -322,7 +321,13 @@ export function TrendingView(props: TrendingViewProps) {
                     </Box>
                 ) : null}
                 {currentTab === ContentTabs.Swap && isSwappable ? (
-                    <Web3ContextProvider value={{ pluginID: context.pluginID, chainId: swapExpectedContract.chainId }}>
+                    <Web3ContextProvider
+                        value={{
+                            pluginID: context.pluginID,
+                            chainId: isNativeTokenSymbol(trending.coin.symbol)
+                                ? trending.coin.chainId
+                                : swapExpectedContract.chainId,
+                        }}>
                         <TradeView
                             classes={{ root: classes.tradeViewRoot }}
                             TraderProps={{
@@ -338,11 +343,13 @@ export function TrendingView(props: TrendingViewProps) {
                                     : undefined,
                                 defaultOutputCoin: trending.coin
                                     ? createFungibleToken(
-                                          swapExpectedContract.chainId ?? chainId,
-                                          isNativeTokenAddress(swapExpectedContract.address)
+                                          trending.coin.chainId ?? swapExpectedContract.chainId ?? chainId,
+                                          isNativeTokenAddress(
+                                              trending.coin.contract_address ?? swapExpectedContract.address,
+                                          )
                                               ? SchemaType.Native
                                               : SchemaType.ERC20,
-                                          swapExpectedContract.address,
+                                          trending.coin.contract_address ?? swapExpectedContract.address,
                                           '',
                                           '',
                                           trending.coin.decimals ?? 0,

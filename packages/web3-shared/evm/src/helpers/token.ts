@@ -11,6 +11,12 @@ export function isNativeTokenSymbol(symbol: string) {
         .includes(symbol.toLowerCase())
 }
 
+export function getNativeTokenChainId(symbol: string) {
+    return CHAIN_DESCRIPTORS.filter(
+        (x) => x.network === 'mainnet' && x.nativeCurrency.symbol.toLowerCase() === symbol.toLowerCase(),
+    )?.[0].chainId
+}
+
 export function createNativeToken(chainId: ChainId) {
     const nativeCurrency = chainResolver.nativeCurrency(chainId)
     return createFungibleToken<ChainId, SchemaType.Native>(

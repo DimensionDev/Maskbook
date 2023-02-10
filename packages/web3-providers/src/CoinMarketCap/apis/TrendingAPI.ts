@@ -1,7 +1,14 @@
 import getUnixTime from 'date-fns/getUnixTime'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { TokenType, SourceType } from '@masknet/web3-shared-base'
-import { ChainId, isValidAddress, isValidChainId } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    getNativeTokenChainId,
+    getTokenConstant,
+    isNativeTokenSymbol,
+    isValidAddress,
+    isValidChainId,
+} from '@masknet/web3-shared-evm'
 import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from '../constants.js'
 import { resolveCoinMarketCapChainId } from '../helpers.js'
 import type { Coin, Pair, ResultData, Status, QuotesInfo, CoinInfo } from '../types.js'
@@ -176,7 +183,9 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
             contracts,
             coin: {
                 id,
-                chainId: getPlatform(contracts, coinInfo.platform?.token_address)?.chainId,
+                chainId: isNativeTokenSymbol(coinInfo.symbol)
+                    ? getNativeTokenChainId(coinInfo.symbol)
+                    : getPlatform(contracts, coinInfo.platform?.token_address)?.chainId,
                 name: coinInfo.name,
                 symbol: coinInfo.symbol,
                 type: TokenType.Fungible,
@@ -204,9 +213,10 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
                 telegram_url: coinInfo.urls.chat?.find((x) => x.includes('telegram')),
                 market_cap_rank: quotesInfo?.[id]?.cmc_rank,
                 description: coinInfo.description,
-                contract_address:
-                    getPlatform(contracts, coinInfo.platform?.token_address)?.address ??
-                    coinInfo.platform?.token_address,
+                contract_address: isNativeTokenSymbol(coinInfo.symbol)
+                    ? getTokenConstant(getNativeTokenChainId(coinInfo.symbol), 'NATIVE_TOKEN_ADDRESS')
+                    : getPlatform(contracts, coinInfo.platform?.token_address)?.address ??
+                      coinInfo.platform?.token_address,
             },
             currency,
             dataProvider: SourceType.CoinMarketCap,
