@@ -59,7 +59,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
             const result = [
                 ...wallets,
                 ...accounts
-                    .filter((x) => x.funded || x.deployed)
+                    .filter((x) => x.deployed)
                     .map((x) => ({
                         id: x.address,
                         name: 'Smart Pay',

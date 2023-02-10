@@ -147,7 +147,7 @@ export function Deploy({ open }: { open: boolean }) {
         if (!manager?.address || !open || !chainId) return
 
         const accounts = await SmartPayAccount.getAccountsByOwners(chainId, [manager?.address], false)
-        const nonce = accounts.filter((x) => x.funded).length
+        const nonce = accounts.filter((x) => x.deployed).length
 
         return {
             account: accounts[nonce],

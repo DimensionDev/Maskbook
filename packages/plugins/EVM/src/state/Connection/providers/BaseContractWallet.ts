@@ -4,7 +4,8 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { ProviderType, isValidAddress } from '@masknet/web3-shared-evm'
 import type { EVM_Provider } from '../types.js'
 import { BaseHostedProvider } from './BaseHosted.js'
-import { SharedContextSettings } from '../../../settings/index.js'
+import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
+import { SmartPayBundler } from '@masknet/web3-providers'
 
 const EMPTY_IDENTIFIER = new ECKeyIdentifier('secp256k1', 'EMPTY')
 
@@ -33,6 +34,24 @@ export class BaseContractWalletProvider extends BaseHostedProvider implements EV
             })
 
             this.ownerStorage = storage.value
+        })
+        Web3StateSettings.readyPromise.then(async (context) => {
+            Web3StateSettings.value.Wallet?.wallets?.subscribe(async () => {
+                console.log(this.hostedAccount)
+                if (!this.hostedAccount) return
+                const wallets = context.Wallet?.wallets?.getCurrentValue()
+                const target = wallets?.find((x) => isSameAddress(x.address, this.hostedAccount))
+                const smartPayChainId = await SmartPayBundler.getSupportedChainId()
+                if (target?.owner) {
+                    this.ownerStorage?.setValue({
+                        account: target.owner,
+                        identifier: target.identifier ?? EMPTY_IDENTIFIER,
+                    })
+                    if (this.hostedChainId !== smartPayChainId) {
+                        this.switchChain(smartPayChainId)
+                    }
+                }
+            })
         })
     }
 
