@@ -5,11 +5,10 @@ import type {
     ECKeyIdentifier,
     EnhanceableSite,
     ExtensionSite,
-    ProfileIdentifier,
+    NetworkPluginID,
     NextIDPersonaBindings,
     NextIDPlatform,
-    NameServiceID,
-    NetworkPluginID,
+    ProfileIdentifier,
     Proof,
 } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
