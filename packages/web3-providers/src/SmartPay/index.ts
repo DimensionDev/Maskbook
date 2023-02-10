@@ -1,3 +1,3 @@
-export * from './apis/SmartPayAccountAPI.js'
-export * from './apis/SmartPayBundlerAPI.js'
-export * from './apis/SmartPayFunderAPI.js'
+export * from './apis/AbstractAccountAPI.js'
+export * from './apis/BundlerAPI.js'
+export * from './apis/FunderAPI.js'

@@ -63,6 +63,7 @@ export interface FigureCardProps {
 }
 
 export function FigureCard(props: FigureCardProps) {
+    // TODO: the collection name maybe is wrong
     const { asset, hideSubTitle, timeline } = props
     const { classes, cx } = useStyles()
 

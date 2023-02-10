@@ -187,7 +187,7 @@ export function TraderStateBar({
                         actualNetworkPluginID={actualPluginID}
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         expectedChainId={chainId as ChainId}>
-                        <WalletConnectedBoundary offChain>
+                        <WalletConnectedBoundary offChain expectedChainId={chainId}>
                             <EthereumERC20TokenApprovedBoundary
                                 onlyInfiniteUnlock
                                 spender={approveAddress}
@@ -199,7 +199,6 @@ export function TraderStateBar({
                                 infiniteUnlockContent={t('plugin_trader_unlock_symbol', {
                                     symbol: approveToken?.symbol,
                                 })}
-                                expectedChainId={chainId as ChainId}
                                 token={
                                     !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
                                     approveToken?.schema === SchemaType.ERC20 &&
@@ -246,7 +245,7 @@ export function TraderStateBar({
                         </WalletConnectedBoundary>
                     </ChainBoundary>
                 ) : (
-                    <WalletConnectedBoundary offChain>
+                    <WalletConnectedBoundary offChain expectedChainId={chainId}>
                         <EthereumERC20TokenApprovedBoundary
                             onlyInfiniteUnlock
                             spender={approveAddress}
@@ -256,7 +255,6 @@ export function TraderStateBar({
                             infiniteUnlockContent={t('plugin_trader_unlock_symbol', {
                                 symbol: approveToken?.symbol,
                             })}
-                            expectedChainId={pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined}
                             token={
                                 !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
                                 approveToken?.schema === SchemaType.ERC20 &&

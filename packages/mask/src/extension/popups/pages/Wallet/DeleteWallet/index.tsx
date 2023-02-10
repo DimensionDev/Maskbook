@@ -15,6 +15,7 @@ import { WalletContext } from '../hooks/useWalletContext.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useContainer } from 'unstated-next'
 import { PopupContext } from '../../../hook/usePopupContext.js'
+import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()({
     content: {
@@ -179,7 +180,21 @@ const DeleteWallet = memo(() => {
                         </div>
                     )
                 })}
-                <Typography className={classes.tip}>{t('popups_wallet_delete_tip')}</Typography>
+                <Typography className={classes.tip}>
+                    {manageWallets.length ? (
+                        <Trans
+                            i18nKey="popups_smart_pay_delete_tip"
+                            values={{
+                                addresses: manageWallets.map((x) => formatEthereumAddress(x.address, 4)).join(','),
+                            }}
+                            components={{
+                                span: <Typography component="span" sx={{ wordBreak: 'break-all', fontSize: 12 }} />,
+                            }}
+                        />
+                    ) : (
+                        t('popups_wallet_delete_tip')
+                    )}
+                </Typography>
 
                 <Typography className={classes.label}>{t('popups_wallet_confirm_payment_password')}</Typography>
                 <PasswordField

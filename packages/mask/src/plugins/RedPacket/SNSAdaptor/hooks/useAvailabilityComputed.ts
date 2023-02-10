@@ -1,6 +1,4 @@
 import { compact } from 'lodash-es'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { RedPacketJSONPayload, RedPacketStatus } from '../../types.js'
@@ -11,7 +9,6 @@ import { useAvailability } from './useAvailability.js'
  * @param payload
  */
 export function useAvailabilityComputed(account: string, payload: RedPacketJSONPayload) {
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const parsedChainId =
         payload.token?.chainId ??
         networkResolver.networkChainId((payload.network ?? '') as NetworkType) ??
@@ -44,10 +41,9 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
     return {
         ...asyncResult,
         computed: {
-            canFetch: parsedChainId === chainId,
-            canClaim: !isExpired && !isEmpty && !isClaimed && parsedChainId === chainId && isPasswordValid,
-            canRefund: isExpired && !isEmpty && isCreator && parsedChainId === chainId,
-            canSend: !isEmpty && !isExpired && !isRefunded && isCreator && parsedChainId === chainId,
+            canClaim: !isExpired && !isEmpty && !isClaimed && isPasswordValid,
+            canRefund: isExpired && !isEmpty && isCreator,
+            canSend: !isEmpty && !isExpired && !isRefunded && isCreator,
             isPasswordValid,
             listOfStatus: compact([
                 isClaimed ? RedPacketStatus.claimed : undefined,

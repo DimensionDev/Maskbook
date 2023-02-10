@@ -58,12 +58,12 @@ const SwitchWallet = memo(() => {
     const { smartPayChainId } = PopupContext.useContainer()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
-    const { setChainId } = useChainContext()
+    const { setChainId, chainId } = useChainContext()
     const handleClickCreate = useCallback(() => {
         if (!wallets.filter((x) => x.hasDerivationPath).length) {
             browser.tabs.create({
                 active: true,
-                url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet'),
+                url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet/form'),
             })
         } else {
             navigate(PopupRoutes.CreateWallet)
@@ -74,13 +74,13 @@ const SwitchWallet = memo(() => {
         async (address: string | undefined, options?: { owner?: string; identifier?: ECKeyIdentifier }) => {
             await connection?.connect({
                 account: address,
-                chainId: options?.owner && smartPayChainId ? smartPayChainId : undefined,
+                chainId: options?.owner && smartPayChainId ? smartPayChainId : chainId,
                 ...options,
             })
             if (options?.owner && smartPayChainId) setChainId(smartPayChainId)
             navigate(PopupRoutes.Wallet, { replace: true })
         },
-        [history, connection, smartPayChainId],
+        [history, connection, smartPayChainId, chainId],
     )
     return (
         <>

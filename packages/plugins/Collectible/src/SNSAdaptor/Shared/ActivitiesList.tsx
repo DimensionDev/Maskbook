@@ -1,10 +1,10 @@
 import { makeStyles, LoadingBase } from '@masknet/theme'
-import type { NonFungibleTokenEvent, Pageable } from '@masknet/web3-shared-base'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
-import { Typography, Button } from '@mui/material'
+import type { NonFungibleTokenEvent } from '@masknet/web3-shared-base'
+import { Typography, Button, Stack } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { AsyncStatePageable } from '@masknet/web3-hooks-base'
 import { ActivityCard } from './ActivityCard.js'
 import { useI18N } from '../../locales/i18n_generated.js'
 
@@ -29,22 +29,23 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ActivitiesListProps {
-    events: AsyncStateRetry<Pageable<NonFungibleTokenEvent<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
+    events: AsyncStatePageable<Array<NonFungibleTokenEvent<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
 }
 
 export function ActivitiesList(props: ActivitiesListProps) {
     const { events } = props
-    const _events = events.value?.data ?? EMPTY_LIST
+    const _events = events.value ?? EMPTY_LIST
 
     const t = useI18N()
     const { classes } = useStyles()
 
-    if (events.loading)
+    if (events.loading && !_events.length)
         return (
             <div className={classes.wrapper}>
                 <LoadingBase />
             </div>
         )
+
     if (events.error || !events.value)
         return (
             <div className={classes.wrapper}>
@@ -54,6 +55,7 @@ export function ActivitiesList(props: ActivitiesListProps) {
                 </Button>
             </div>
         )
+
     if (!_events.length)
         return (
             <div className={classes.wrapper}>
@@ -67,6 +69,13 @@ export function ActivitiesList(props: ActivitiesListProps) {
             {_events?.map((x, idx) => (
                 <ActivityCard key={idx} activity={x} />
             ))}
+            <Stack pb="1px" width="100%" direction="row" justifyContent="center">
+                {!events.ended && (
+                    <Button sx={{ mb: 2 }} onClick={() => events.next()}>
+                        {t.load_more()}
+                    </Button>
+                )}
+            </Stack>
         </div>
     )
 }

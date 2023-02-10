@@ -89,7 +89,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
                     />
                 </Typography>
             ) : null}
-            <WalletConnectedBoundary>
+            <WalletConnectedBoundary expectedChainId={chainId}>
                 <EthereumERC20TokenApprovedBoundary
                     onlyInfiniteUnlock
                     amount={amount.toFixed()}

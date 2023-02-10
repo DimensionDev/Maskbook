@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { RedPacketRPC } from '../messages.js'
 import type { RedPacketNftJSONPayload } from '../types.js'
 import { RedPacketNft } from './RedPacketNft.js'
+import { TransactionConfirmDialogProvider } from './context/TokenTransactionConfirmDialogContext.js'
 
 export interface RedPacketNftInPostProps {
     payload: RedPacketNftJSONPayload
@@ -16,5 +17,9 @@ export function RedPacketNftInPost({ payload }: RedPacketNftInPostProps) {
             contract_version: payload.contractVersion,
         })
     }, [payload])
-    return <RedPacketNft payload={payload} />
+    return (
+        <TransactionConfirmDialogProvider>
+            <RedPacketNft payload={payload} />
+        </TransactionConfirmDialogProvider>
+    )
 }

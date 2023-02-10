@@ -7,7 +7,7 @@ import { useChainContext, useWeb3Connection, useWeb3State } from '@masknet/web3-
 import type { AbstractAccountAPI } from '@masknet/web3-providers/types'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { TransactionStatusType, Wallet } from '@masknet/web3-shared-base'
-import { Typography, useTheme } from '@mui/material'
+import { Typography } from '@mui/material'
 import { ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import type { ManagerAccount } from '../type.js'
 import { useI18N } from '../locales/index.js'
@@ -20,7 +20,6 @@ export function useDeploy(
     nonce?: number,
     onSuccess?: () => void,
 ) {
-    const theme = useTheme()
     const snackbarKeyRef = useRef<SnackbarKey>()
     const t = useI18N()
 
@@ -43,6 +42,7 @@ export function useDeploy(
     )
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, {
         providerType: ProviderType.MaskWallet,
+        account: undefined,
         chainId,
     })
 
@@ -78,7 +78,7 @@ export function useDeploy(
             if (signPersona) {
                 signature = await signWithPersona(SignType.Message, payload, signPersona.identifier)
             } else if (signWallet) {
-                signature = await connection?.signMessage(payload, 'personalSign', {
+                signature = await connection?.signMessage('message', payload, {
                     account: signWallet.address,
                     providerType: ProviderType.MaskWallet,
                 })
@@ -101,15 +101,15 @@ export function useDeploy(
             )
             if (!hash) throw new Error('Deploy Failed')
 
-            return TransactionWatcher?.emitter.on('progress', async (_, txHash, status) => {
-                try {
+            return new Promise((resolve) => {
+                return TransactionWatcher?.emitter.on('progress', async (_, txHash, status) => {
                     if (txHash !== hash || !signAccount.address || status !== TransactionStatusType.SUCCEED) return
 
-                    const result = await connection?.deploy?.(signAccount.address, signPersona?.identifier, {
+                    const result = await connection?.deploy?.(signAccount.address, signAccount.identifier, {
                         chainId,
                     })
 
-                    Wallet?.addWallet({
+                    await Wallet?.addWallet({
                         name: 'Smart Pay',
                         owner: signAccount.address,
                         address: contractAccount.address,
@@ -118,12 +118,12 @@ export function useDeploy(
                         id: contractAccount.address,
                         createdAt: new Date(),
                         updatedAt: new Date(),
-                    }).then(() => {
-                        onSuccess?.()
                     })
-                } catch (error) {
-                    console.log(error)
-                }
+
+                    onSuccess?.()
+
+                    resolve(result)
+                })
             })
         } catch (error) {
             if (error instanceof Error) {

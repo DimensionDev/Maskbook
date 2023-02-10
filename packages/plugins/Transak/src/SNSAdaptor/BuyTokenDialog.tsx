@@ -16,7 +16,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     close: {
         color: `${theme.palette.common.white} !important`,
-        backgroundColor: `${theme.palette.primary.light} !important`,
+        backgroundColor: `${theme.palette.maskColor.dark} !important`,
         top: theme.spacing(2),
         right: theme.spacing(2),
         position: 'absolute',
@@ -26,6 +26,9 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
         backgroundColor: theme.palette.common.white,
         position: 'relative',
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     frame: {
         display: 'block',

@@ -65,9 +65,9 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         cursor: 'pointer',
         marginLeft: 4,
-        top: theme.spacing(1.8),
-        right: theme.spacing(1),
-        position: 'absolute',
+    },
+    linkOut: {
+        color: theme.palette.maskColor.secondaryDark,
     },
     fallbackSymbol: {
         color: theme.palette.maskColor.main,
@@ -152,7 +152,7 @@ export function ActivityCard(props: ActivityCardProps) {
                             className={classes.link}
                             href={Others?.explorerResolver.transactionLink?.(activity.chainId, activity.hash) ?? ''}
                             target="_blank">
-                            <Icons.LinkOut size={16} />
+                            <Icons.LinkOut className={classes.linkOut} size={16} />
                         </Link>
                     )}
                 </Typography>

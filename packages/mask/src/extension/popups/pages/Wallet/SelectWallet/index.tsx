@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { first } from 'lodash-es'
 import { makeStyles } from '@masknet/theme'
@@ -15,6 +15,8 @@ import { useI18N } from '../../../../../utils/index.js'
 import Services from '../../../../service.js'
 import { WalletItem } from './WalletItem.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
+import { WalletStartUp } from '../components/StartUp/index.js'
+import { useAsync } from 'react-use'
 
 const useStyles = makeStyles()({
     content: {
@@ -92,6 +94,7 @@ const SelectWallet = memo(() => {
     const location = useLocation()
     const navigate = useNavigate()
     const { smartPayChainId } = PopupContext.useContainer()
+
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const networks = getRegisteredWeb3Networks().filter(
         (x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
@@ -106,8 +109,15 @@ const SelectWallet = memo(() => {
         chainId: chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : undefined,
     })
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
 
+    const { value: localWallets = [] } = useAsync(async () => WalletRPC.getWallets(), [])
+
+    const allWallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+
+    const wallets = useMemo(() => {
+        if (!allWallets.length && localWallets.length) return localWallets
+        return allWallets
+    }, [localWallets, allWallets])
     const [selected, setSelected] = useState(account)
 
     const currentNetwork = networks.find((x) => x.chainId === chainId)
@@ -152,6 +162,11 @@ const SelectWallet = memo(() => {
     useEffect(() => {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
     }, [selected, wallets, location.state])
+
+    // Only SmartPay wallets exist and the chainId is not the support chainId
+    if (!wallets.filter((x) => !x.owner).length && chainId !== smartPayChainId) {
+        return <WalletStartUp />
+    }
 
     return chainIdValid ? (
         <>

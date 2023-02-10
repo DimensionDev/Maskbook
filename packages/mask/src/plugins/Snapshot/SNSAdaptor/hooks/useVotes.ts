@@ -1,26 +1,19 @@
-import { PluginSnapshotRPC } from '../../messages.js'
 import type { ProposalIdentifier, VoteItem } from '../../types.js'
 import { cache, use } from 'react'
-import { isSameAddress } from '@masknet/web3-shared-base'
 import { useProposal } from './useProposal.js'
 import { sumBy } from 'lodash-es'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { getScores } from '../../utils.js'
 
 const Request = cache(Suspender)
 export function useVotes(identifier: ProposalIdentifier, account?: string) {
     return use(Request(identifier.id, identifier.space, account))
 }
+
 async function Suspender(id: ProposalIdentifier['id'], space: ProposalIdentifier['space'], account?: string) {
     const proposal = useProposal(id)
-
-    const voters = proposal.votes.map((v) => v.voter)
-    const scores = await PluginSnapshotRPC.getScores(
-        proposal.snapshot,
-        voters,
-        proposal.network,
-        space,
-        proposal.strategies,
-    )
     const strategies = proposal.strategies
+    const scores = getScores(proposal)
     return proposal.votes
         .map((v): VoteItem => {
             const choices =

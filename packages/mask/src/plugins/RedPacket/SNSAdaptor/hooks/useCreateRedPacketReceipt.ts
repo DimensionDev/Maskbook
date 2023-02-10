@@ -15,6 +15,8 @@ export function useCreateRedPacketReceipt(txid: string) {
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
 
     return useAsyncRetry(async () => {
+        if (!txid) return null
+
         const result = await connection?.getTransactionReceipt(txid)
         if (!result) return null
 

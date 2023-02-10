@@ -7,6 +7,7 @@ import { ChainId, getDefaultChainId, isValidAddress, PayloadEditor, ProviderType
 import type { EVM_Provider } from '../types.js'
 import { BaseProvider } from './Base.js'
 import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
+import { delay } from '@masknet/kit'
 
 export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
     private hostedStorage:
@@ -39,7 +40,7 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
             await this.hostedStorage.account.initializedPromise
             await this.hostedStorage.chainId.initializedPromise
 
-            this.onAccountChanged()
+            await this.onAccountChanged()
             this.onChainChanged()
             this.hostedStorage?.account.subscription.subscribe(this.onAccountChanged.bind(this))
             this.hostedStorage?.chainId.subscription.subscribe(this.onChainChanged.bind(this))
@@ -64,8 +65,12 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         return this.hostedStorage?.chainId.value ?? this.options.getDefaultChainId()
     }
 
-    private onAccountChanged() {
-        if (this.hostedAccount) this.emitter.emit('accounts', [this.hostedAccount])
+    private async onAccountChanged() {
+        if (!this.hostedAccount) return
+
+        this.emitter.emit('accounts', [this.hostedAccount])
+        await delay(100)
+        this.emitter.emit('chainId', toHex(this.hostedChainId))
     }
 
     private onChainChanged() {

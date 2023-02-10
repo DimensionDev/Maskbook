@@ -1,5 +1,5 @@
-import { Button, Stack, Typography } from '@mui/material'
 import { memo } from 'react'
+import { Button, Stack, Typography } from '@mui/material'
 import { AccountType } from '../../../pages/Settings/type.js'
 
 interface LabelProps {

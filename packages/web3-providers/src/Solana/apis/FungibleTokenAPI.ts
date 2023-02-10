@@ -21,7 +21,7 @@ import {
     getNativeTokenAddress,
 } from '@masknet/web3-shared-solana'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { CoinGeckoPriceSolanaAPI } from '../../CoinGecko/index.js'
+import { CoinGeckoPriceAPI_Solana } from '../../CoinGecko/index.js'
 import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants.js'
 import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers.js'
 import type { GetBalanceResponse, GetProgramAccountsResponse, RaydiumTokenList } from '../types.js'
@@ -57,7 +57,7 @@ const fetchTokenList = memoizePromise(
 export class SolanaFungibleAPI
     implements TokenListAPI.Provider<ChainId, SchemaType>, FungibleTokenAPI.Provider<ChainId, SchemaType>
 {
-    private coingecko = new CoinGeckoPriceSolanaAPI()
+    private coingecko = new CoinGeckoPriceAPI_Solana()
 
     private async getSplTokenList(chainId: ChainId, account: string) {
         if (!isValidChainId(chainId)) return []

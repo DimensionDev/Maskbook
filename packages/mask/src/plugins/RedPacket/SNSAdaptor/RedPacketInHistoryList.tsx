@@ -1,5 +1,5 @@
-import { MouseEvent, useCallback, useState, useMemo } from 'react'
-import { BigNumber } from 'bignumber.js'
+import { MouseEvent, useCallback, useState, useMemo, useRef, useEffect } from 'react'
+import { useIntersectionObserver } from '@react-hookz/web'
 import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
@@ -15,9 +15,9 @@ import { useCreateRedPacketReceipt } from './hooks/useCreateRedPacketReceipt.js'
 import { useRefundCallback } from './hooks/useRefundCallback.js'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { formatBalance, FungibleToken } from '@masknet/web3-shared-base'
+import { formatBalance, FungibleToken, minus } from '@masknet/web3-shared-base'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{ isViewed: boolean }>()((theme, { isViewed }) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         message: {
@@ -38,7 +38,7 @@ const useStyles = makeStyles()((theme) => {
         },
         root: {
             borderRadius: 10,
-            border: `solid 1px ${theme.palette.divider}`,
+            border: isViewed ? `solid 1px ${theme.palette.divider}` : 'unset',
             marginBottom: theme.spacing(1.5),
             position: 'static !important' as any,
             height: 'auto !important',
@@ -162,18 +162,28 @@ export interface RedPacketInHistoryListProps {
 export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const { history, onSelect } = props
     const t = useI18N()
-    const { classes, cx } = useStyles()
+    const [isViewed, setIsViewed] = useState(false)
+
+    const ref = useRef<HTMLLIElement | null>(null)
+    const entry = useIntersectionObserver(ref, {})
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
-    const { value: receipt } = useCreateRedPacketReceipt(history.txid)
+    const { value: receipt } = useCreateRedPacketReceipt(isViewed ? history.txid : '')
 
     const rpid = receipt?.rpid ?? ''
     const creation_time = receipt?.creation_time ?? 0
+
+    const { classes, cx } = useStyles({ isViewed: isViewed && Boolean(rpid) })
 
     const patchedHistory: RedPacketJSONPayload | RedPacketJSONPayloadFromChain = useMemo(
         () => ({ ...props.history, rpid, creation_time }),
         [props.history, rpid, creation_time],
     )
+
+    useEffect(() => {
+        if (entry?.isIntersecting) setIsViewed(true)
+    }, [entry?.isIntersecting])
+
     const {
         value: availability,
         computed: { canRefund, canSend, listOfStatus, isPasswordValid },
@@ -220,123 +230,132 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const formatRefundDuration = `${refundDuration?.hours}h ${refundDuration?.minutes}m`
     // #endregion
 
-    return !rpid ? null : (
-        <ListItem className={classes.root}>
-            <Box className={classes.box}>
-                <TokenIcon
-                    className={classes.icon}
-                    address={historyToken?.address ?? ''}
-                    name={historyToken?.name}
-                    logoURL={historyToken?.logoURL}
-                />
-                <Box className={classes.content}>
-                    <section className={classes.section}>
-                        <div className={classes.div}>
-                            <div className={classes.fullWidthBox}>
-                                <Typography variant="body1" className={cx(classes.title, classes.message)}>
-                                    {patchedHistory.sender.message === ''
-                                        ? t.best_wishes()
-                                        : patchedHistory.sender.message}
+    return (
+        <ListItem className={classes.root} ref={ref}>
+            {!rpid ? null : (
+                <Box className={classes.box}>
+                    {isViewed && (
+                        <TokenIcon
+                            className={classes.icon}
+                            address={historyToken?.address ?? ''}
+                            name={historyToken?.name}
+                            logoURL={historyToken?.logoURL}
+                        />
+                    )}
+                    <Box className={classes.content}>
+                        <section className={classes.section}>
+                            <div className={classes.div}>
+                                <div className={classes.fullWidthBox}>
+                                    <Typography variant="body1" className={cx(classes.title, classes.message)}>
+                                        {patchedHistory.sender.message === ''
+                                            ? t.best_wishes()
+                                            : patchedHistory.sender.message}
+                                    </Typography>
+                                </div>
+                                <Typography variant="body1" className={cx(classes.info, classes.message)}>
+                                    {t.history_duration({
+                                        startTime: dateTimeFormat(new Date(creation_time)),
+                                        endTime: dateTimeFormat(
+                                            new Date(creation_time + patchedHistory.duration),
+                                            false,
+                                        ),
+                                    })}
+                                </Typography>
+                                <Typography variant="body1" className={cx(classes.info, classes.message)}>
+                                    {t.history_total_amount({
+                                        amount: formatBalance(patchedHistory.total, historyToken?.decimals, 6),
+                                        symbol: historyToken?.symbol,
+                                    })}
+                                </Typography>
+                                <Typography variant="body1" className={cx(classes.info, classes.message)}>
+                                    {t.history_split_mode({
+                                        mode: patchedHistory.is_random ? t.random() : t.average(),
+                                    })}
                                 </Typography>
                             </div>
-                            <Typography variant="body1" className={cx(classes.info, classes.message)}>
-                                {t.history_duration({
-                                    startTime: dateTimeFormat(new Date(creation_time)),
-                                    endTime: dateTimeFormat(new Date(creation_time + patchedHistory.duration), false),
-                                })}
-                            </Typography>
-                            <Typography variant="body1" className={cx(classes.info, classes.message)}>
-                                {t.history_total_amount({
-                                    amount: formatBalance(patchedHistory.total, historyToken?.decimals, 6),
-                                    symbol: historyToken?.symbol,
-                                })}
-                            </Typography>
-                            <Typography variant="body1" className={cx(classes.info, classes.message)}>
-                                {t.history_split_mode({
-                                    mode: patchedHistory.is_random ? t.random() : t.average(),
-                                })}
-                            </Typography>
-                        </div>
-                        {canRefund || canSend || listOfStatus.includes(RedPacketStatus.empty) || refunded ? (
-                            <>
-                                <ActionButton
-                                    loading={isRefunding}
-                                    fullWidth={isSmall}
-                                    onClick={canSend && !isPasswordValid ? () => undefined : onSendOrRefund}
-                                    onMouseEnter={(event: MouseEvent<HTMLButtonElement>) => {
-                                        canSend && !isPasswordValid ? setAnchorEl(event.currentTarget) : undefined
+                            {canRefund || canSend || listOfStatus.includes(RedPacketStatus.empty) || refunded ? (
+                                <>
+                                    <ActionButton
+                                        loading={isRefunding}
+                                        fullWidth={isSmall}
+                                        onClick={canSend && !isPasswordValid ? undefined : onSendOrRefund}
+                                        onMouseEnter={(event: MouseEvent<HTMLButtonElement>) => {
+                                            canSend && !isPasswordValid ? setAnchorEl(event.currentTarget) : undefined
+                                        }}
+                                        onMouseLeave={() => {
+                                            canSend && !isPasswordValid ? setAnchorEl(null) : undefined
+                                        }}
+                                        disabled={
+                                            listOfStatus.includes(RedPacketStatus.empty) || refunded || isRefunding
+                                        }
+                                        className={cx(
+                                            classes.actionButton,
+                                            canSend && !isPasswordValid ? classes.disabledButton : '',
+                                        )}
+                                        size="large">
+                                        {canSend
+                                            ? t.send()
+                                            : refunded
+                                            ? t.refund()
+                                            : isRefunding
+                                            ? t.refunding()
+                                            : listOfStatus.includes(RedPacketStatus.empty)
+                                            ? t.empty()
+                                            : t.refund()}
+                                    </ActionButton>
+                                    <Popper
+                                        className={classes.popper}
+                                        id="popper"
+                                        open={openPopper}
+                                        anchorEl={anchorEl}
+                                        transition
+                                        disablePortal>
+                                        <Typography className={classes.popperText}>
+                                            {t.data_broken({ duration: formatRefundDuration })}
+                                        </Typography>
+                                        <div className={classes.arrow} />
+                                    </Popper>
+                                </>
+                            ) : null}
+                        </section>
+                        <StyledLinearProgress
+                            variant="determinate"
+                            value={100 * (1 - Number(total_remaining) / Number(patchedHistory.total))}
+                        />
+                        <section className={classes.footer}>
+                            <Typography variant="body1" className={classes.footerInfo}>
+                                <Translate.history_claimed
+                                    components={{
+                                        strong: <strong />,
                                     }}
-                                    onMouseLeave={() => {
-                                        canSend && !isPasswordValid ? setAnchorEl(null) : undefined
+                                    values={{
+                                        claimedShares: String(claimerNumber),
+                                        shares: String(patchedHistory.shares),
                                     }}
-                                    disabled={listOfStatus.includes(RedPacketStatus.empty) || refunded || isRefunding}
-                                    className={cx(
-                                        classes.actionButton,
-                                        canSend && !isPasswordValid ? classes.disabledButton : '',
-                                    )}
-                                    size="large">
-                                    {canSend
-                                        ? t.send()
-                                        : refunded
-                                        ? t.refund()
-                                        : isRefunding
-                                        ? t.refunding()
-                                        : listOfStatus.includes(RedPacketStatus.empty)
-                                        ? t.empty()
-                                        : t.refund()}
-                                </ActionButton>
-                                <Popper
-                                    className={classes.popper}
-                                    id="popper"
-                                    open={openPopper}
-                                    anchorEl={anchorEl}
-                                    transition
-                                    disablePortal>
-                                    <Typography className={classes.popperText}>
-                                        {t.data_broken({ duration: formatRefundDuration })}
-                                    </Typography>
-                                    <div className={classes.arrow} />
-                                </Popper>
-                            </>
-                        ) : null}
-                    </section>
-                    <StyledLinearProgress
-                        variant="determinate"
-                        value={100 * (1 - Number(total_remaining) / Number(patchedHistory.total))}
-                    />
-                    <section className={classes.footer}>
-                        <Typography variant="body1" className={classes.footerInfo}>
-                            <Translate.history_claimed
-                                components={{
-                                    strong: <strong />,
-                                }}
-                                values={{
-                                    claimedShares: String(claimerNumber),
-                                    shares: String(patchedHistory.shares),
-                                }}
-                            />
-                        </Typography>
-                        <Typography variant="body1" className={classes.footerInfo}>
-                            <Translate.history_total_claimed_amount
-                                components={{
-                                    strong: <strong className={classes.strong} />,
-                                    span: <span className={classes.span} />,
-                                }}
-                                values={{
-                                    amount: formatBalance(patchedHistory.total, historyToken?.decimals, 6, true),
-                                    claimedAmount: formatBalance(
-                                        new BigNumber(patchedHistory.total).minus(total_remaining ?? 0),
-                                        historyToken?.decimals,
-                                        6,
-                                        true,
-                                    ),
-                                    symbol: historyToken?.symbol,
-                                }}
-                            />
-                        </Typography>
-                    </section>
+                                />
+                            </Typography>
+                            <Typography variant="body1" className={classes.footerInfo}>
+                                <Translate.history_total_claimed_amount
+                                    components={{
+                                        strong: <strong className={classes.strong} />,
+                                        span: <span className={classes.span} />,
+                                    }}
+                                    values={{
+                                        amount: formatBalance(patchedHistory.total, historyToken?.decimals, 6, true),
+                                        claimedAmount: formatBalance(
+                                            minus(patchedHistory.total, total_remaining ?? 0),
+                                            historyToken?.decimals,
+                                            6,
+                                            true,
+                                        ),
+                                        symbol: historyToken?.symbol,
+                                    }}
+                                />
+                            </Typography>
+                        </section>
+                    </Box>
                 </Box>
-            </Box>
+            )}
         </ListItem>
     )
 }
