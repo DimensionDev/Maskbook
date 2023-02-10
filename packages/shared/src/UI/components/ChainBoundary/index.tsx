@@ -1,4 +1,12 @@
-import React, { useCallback, useMemo, cloneElement, Children, DetailedReactHTMLElement, isValidElement } from 'react'
+import React, {
+    memo,
+    useCallback,
+    useMemo,
+    cloneElement,
+    Children,
+    DetailedReactHTMLElement,
+    isValidElement,
+} from 'react'
 import { useAsyncFn } from 'react-use'
 import { Box, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, ShadowRootTooltip, ActionButton } from '@masknet/theme'
@@ -11,6 +19,7 @@ import {
     useWeb3Connection,
     useChainIdValid,
     useProviderDescriptor,
+    ActualChainContextProvider,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -57,7 +66,7 @@ export interface ChainBoundaryProps<T extends NetworkPluginID> extends withClass
     actualNetworkPluginID?: T
 }
 
-export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryProps<T>) {
+export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: ChainBoundaryProps<T>) {
     const {
         noSwitchNetworkTip = true,
         expectedPluginID,
@@ -279,6 +288,18 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
             : '',
     )
 }
+
+ChainBoundaryWithoutContext.displayName = 'ChainBoundaryWithoutContext'
+
+export const ChainBoundary = memo(function <T extends NetworkPluginID>(props: ChainBoundaryProps<T>) {
+    return (
+        <ActualChainContextProvider>
+            <ChainBoundaryWithoutContext {...props} />
+        </ActualChainContextProvider>
+    )
+})
+
+ChainBoundary.displayName = 'ChainBoundary'
 
 function CopyDeepElementWithEventHandler(
     children: React.ReactNode,

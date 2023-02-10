@@ -12,7 +12,7 @@ import Trader from '@masknet/web3-constants/evm/trader.json'
 import Trending from '@masknet/web3-constants/evm/trending.json'
 import MaskBox from '@masknet/web3-constants/evm/mask-box.json'
 import RPC from '@masknet/web3-constants/evm/rpc.json'
-import Explorer from '@masknet/web3-constants/evm/explorer.json'
+import Etherscan from '@masknet/web3-constants/evm/etherscan.json'
 import TokenList from '@masknet/web3-constants/evm/token-list.json'
 import TokenAssetBaseURL from '@masknet/web3-constants/evm/token-asset-base-url.json'
 import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json'
@@ -110,10 +110,10 @@ export const getRPCConstant = transformFromJSON(ChainId, getEnvConstants('WEB3_C
 export const useRPCConstant = transformHook(getRPCConstants)
 export const useRPCConstants = transformAllHook(getRPCConstants)
 
-export const getExplorerConstant = transform(ChainId, Explorer)
-export const getExplorerConstants = transformAll(ChainId, Explorer)
-export const useExplorerConstant = transformHook(getExplorerConstants)
-export const useExplorerConstants = transformAllHook(getExplorerConstants)
+export const getEtherscanConstant = transform(ChainId, Etherscan)
+export const getEtherscanConstants = transformAll(ChainId, Etherscan)
+export const useEtherscanConstant = transformHook(getEtherscanConstants)
+export const useEtherscanConstants = transformAllHook(getEtherscanConstants)
 
 export const getTokenListConstant = transform(ChainId, TokenList)
 export const getTokenListConstants = transformAll(ChainId, TokenList)

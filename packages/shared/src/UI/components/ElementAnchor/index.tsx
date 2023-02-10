@@ -1,6 +1,6 @@
-import { Stack } from '@mui/material'
-import { useIntersectionObserver } from '@react-hookz/web'
 import { memo, useEffect, useRef } from 'react'
+import { useIntersectionObserver } from '@react-hookz/web'
+import { Stack } from '@mui/material'
 
 interface ElementAnchorProps {
     callback: (intersection: IntersectionObserverEntry | undefined) => void

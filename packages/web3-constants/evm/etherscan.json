@@ -1,0 +1,29 @@
+{
+    "ETHERSCAN_URL": {
+        "Mainnet": "https://etherscan.r2d2.to",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "https://etherscan.r2d2.to",
+        "BSCT": "",
+        "Matic": "https://etherscan.r2d2.to",
+        "Mumbai": "",
+        "Arbitrum": "https://etherscan.r2d2.to",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "https://etherscan.r2d2.to",
+        "Optimism": "https://etherscan.r2d2.to",
+        "Optimism_Kovan": "https://etherscan.r2d2.to",
+        "Optimism_Goerli": "https://etherscan.r2d2.to",
+        "Avalanche": "https://etherscan.r2d2.to",
+        "Avalanche_Fuji": "https://etherscan.r2d2.to",
+        "Celo": "https://etherscan.r2d2.to",
+        "Fantom": "https://etherscan.r2d2.to",
+        "Aurora": "https://etherscan.r2d2.to",
+        "Aurora_Testnet": "https://etherscan.r2d2.to",
+        "Conflux": "https://etherscan.r2d2.to",
+        "Harmony": "https://etherscan.r2d2.to",
+        "Harmony_Test": "",
+        "Astar": "https://etherscan.r2d2.to"
+    }
+}

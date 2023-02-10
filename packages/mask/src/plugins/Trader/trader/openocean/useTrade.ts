@@ -1,14 +1,13 @@
-import { first } from 'lodash-es'
-import { ChainId, isNativeTokenAddress, useRPCConstants, useTraderConstants } from '@masknet/web3-shared-evm'
-import { PluginTraderRPC } from '../../messages.js'
-import type { SwapOOData, TradeStrategy } from '../../types/index.js'
-import { useSlippageTolerance } from './useSlippageTolerance.js'
-import { OPENOCEAN_SUPPORTED_CHAINS } from './constants.js'
-import { useChainContext, useDoubleBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import { ChainId, ProviderURL, isNativeTokenAddress, useTraderConstants } from '@masknet/web3-shared-evm'
+import { useChainContext, useDoubleBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
 import { isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { PluginTraderRPC } from '../../messages.js'
+import { OPENOCEAN_SUPPORTED_CHAINS } from './constants.js'
+import type { SwapOOData, TradeStrategy } from '../../types/index.js'
+import { useSlippageTolerance } from './useSlippageTolerance.js'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -22,9 +21,7 @@ export function useTrade(
     const slippage = temporarySlippage || slippageSetting
     const { account, chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
-    const { RPC_URLS } = useRPCConstants(chainId)
-    const providerURL = first(RPC_URLS)
-    const { OPENOCEAN_ETH_ADDRESS } = useTraderConstants(chainId)
+    const { OPENOCEAN_ETH_ADDRESS } = useTraderConstants(chainId as ChainId)
 
     return useDoubleBlockBeatRetry(
         NetworkPluginID.PLUGIN_EVM,
@@ -46,7 +43,7 @@ export function useTrade(
                 fromAmount: inputAmount,
                 slippage,
                 userAddr: account,
-                rpc: providerURL,
+                rpc: ProviderURL.from(chainId as ChainId),
                 chainId,
             })
         },
@@ -58,7 +55,6 @@ export function useTrade(
             outputToken?.address,
             slippage,
             account,
-            providerURL,
             chainId,
             pluginID,
         ],
