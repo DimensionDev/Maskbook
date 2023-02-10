@@ -166,63 +166,6 @@ export class UserTransaction {
         return contract
     }
 
-    async fillTransaction(web3: Web3) {
-        const { sender, nonce, callData, callGas, maxFeePerGas, maxPriorityFeePerGas } = this.userOperation
-
-        // fill nonce
-        if (isValidAddress(sender) && !nonce) {
-            try {
-                const nonce = await this.createWalletContract(web3, sender).methods.nonce().call()
-                this.userOperation.nonce = toNumber(nonce)
-            } catch (error) {
-                this.userOperation.nonce = 0
-            }
-        }
-
-        if (!isEmptyHex(callData)) {
-            try {
-                const transaction = UserTransaction.toTransaction(this.chainId, this.userOperation)
-                if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
-                const estimatedGas = await this.createWalletContract(web3, sender)
-                    ?.methods.exec(transaction.to, transaction.value ?? '0', transaction.data ?? '0x')
-                    .estimateGas()
-
-                this.userOperation.callGas = toHex(estimatedGas)
-            } catch (error) {
-                this.userOperation.callGas = callGas ?? DEFAULT_USER_OPERATION.callGas
-            }
-        } else {
-            this.userOperation.callGas = callGas ?? DEFAULT_USER_OPERATION.callGas
-        }
-
-        // 1.5x scale up callGas
-        this.userOperation.callGas = toHex(toFixed(multipliedBy(this.userOperation.callGas ?? '0', 1.5), 0))
-
-        // recover to the original callGas when extra gas could be provided
-        if (isGreaterThan(callGas ?? '0', this.userOperation.callGas)) {
-            this.userOperation.callGas = callGas
-        }
-
-        if (isZeroString(maxFeePerGas)) {
-            try {
-                const block = await web3.eth.getBlock('latest')
-                this.userOperation.maxFeePerGas = toFixed(
-                    new BigNumber(block.baseFeePerGas ?? 0).plus(
-                        maxPriorityFeePerGas ?? DEFAULT_USER_OPERATION.maxPriorityFeePerGas,
-                    ),
-                )
-            } catch (error) {
-                this.userOperation.maxFeePerGas = DEFAULT_USER_OPERATION.maxPriorityFeePerGas
-            }
-        }
-
-        if (isZeroString(maxPriorityFeePerGas)) {
-            this.userOperation.maxPriorityFeePerGas = DEFAULT_USER_OPERATION.maxPriorityFeePerGas
-        }
-
-        return this
-    }
-
     async fillUserOperation(web3: Web3, overrides?: Required<Pick<UserOperation, 'initCode' | 'nonce'>>) {
         // from overrides
         if (overrides) {
@@ -327,11 +270,6 @@ export class UserTransaction {
         }
 
         return this
-    }
-
-    estimateTransaction() {
-        const { callGas = DEFAULT_USER_OPERATION.callGas } = this.userOperation
-        return toHex(callGas)
     }
 
     estimateUserOperation() {
