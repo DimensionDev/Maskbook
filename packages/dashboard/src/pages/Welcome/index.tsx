@@ -85,10 +85,14 @@ export default memo(function Welcome() {
         if (from && from !== DashboardRoutes.Personas) {
             const search = params.get('search')
             navigate(urlcat(from, search ? new URLSearchParams(search).entries() : {}))
-            return
         }
         const url = await Services.SocialNetwork.setupSite('twitter.com', false)
-        if (url) location.assign(url)
+        if (url) {
+            browser.tabs.create({
+                active: true,
+                url,
+            })
+        }
     }, [params, allowedToCollect])
 
     const t = useDashboardI18N()
