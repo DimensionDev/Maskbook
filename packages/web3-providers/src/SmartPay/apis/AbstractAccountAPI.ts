@@ -180,15 +180,6 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
             // this.getAccountsFromChainbase(chainId, owner),
         ])
 
-        console.log(
-            allSettled
-                .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
-                .map((y) => ({
-                    ...y,
-                    funded: operations.some((operation) => isSameAddress(operation.walletAddress, y.address)),
-                })),
-            owner,
-        )
         const result = allSettled
             .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
             .map((y) => ({
