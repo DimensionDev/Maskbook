@@ -2,8 +2,7 @@ import { Icons } from '@masknet/icons'
 import { ChainBoundary, SocialIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { alpha, Box, Button, Card, Link, Stack, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html'
@@ -11,7 +10,6 @@ import { useMemo } from 'react'
 import urlcat from 'urlcat'
 import { TenantToChainIconMap } from '../constants.js'
 import { Translate, useI18N } from '../locales/i18n_generated.js'
-import { getSupportedChainIds } from '../utils.js'
 import { useDonate } from './contexts/index.js'
 import { grantDetailStyle } from './gitcoin-grant-detail-style.js'
 import { useGrant } from './hooks/useGrant.js'
@@ -132,7 +130,6 @@ export function PreviewCard(props: PreviewCardProps) {
     const { classes, cx, theme } = useStyles()
     const { value: grant, error, loading, retry } = useGrant(props.grantId)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { pluginID } = useNetworkContext()
 
     // #region the donation dialog
     const openDonate = useDonate()
@@ -172,7 +169,6 @@ export function PreviewCard(props: PreviewCardProps) {
     if (!grant) return null
 
     const tenant = grant.tenants[0]
-    const supportedChainIds = getSupportedChainIds(grant.tenants)
 
     // Use handle_1 as Gitcoin does
     const twitterProfile = grant.twitter_handle_1 ? `https://twitter.com/${grant.twitter_handle_1}` : null
@@ -279,10 +275,8 @@ export function PreviewCard(props: PreviewCardProps) {
                     <Box sx={{ flex: 1 }}>
                         <ChainBoundary
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                            expectedChainId={ChainId.Mainnet}
-                            predicate={(pluginID, chainId) =>
-                                pluginID === NetworkPluginID.PLUGIN_EVM && supportedChainIds.includes(chainId)
-                            }
+                            expectedChainId={chainId}
+                            predicate={(pluginID) => pluginID === NetworkPluginID.PLUGIN_EVM}
                             ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                             <Button
                                 fullWidth
