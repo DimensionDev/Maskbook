@@ -1,4 +1,3 @@
-import urlcat from 'urlcat'
 import { hexToNumber, sha3 } from 'web3-utils'
 import { getRPCConstants } from '../constants/constants.js'
 import type { ChainId } from '../types/index.js'
@@ -19,19 +18,16 @@ export class ProviderURL {
     }
 
     static from(chainId: ChainId) {
-        const { RPC_URL } = getRPCConstants(chainId)
-        if (!RPC_URL) throw new Error('No RPC preset.')
+        const { RPC_URLS, RPC_WEIGHTS } = getRPCConstants(chainId)
+        if (!RPC_URLS || !RPC_WEIGHTS) throw new Error('No RPC preset.')
 
-        return urlcat(RPC_URL, {
-            chain_id: chainId,
-            seed: new ProviderURL().seed,
-        })
+        return RPC_URLS[RPC_WEIGHTS[new ProviderURL().seed % RPC_URLS.length]]
     }
 
     static fromOfficial(chainId: ChainId) {
-        const { RPC_URL_OFFICIAL } = getRPCConstants(chainId)
-        if (!RPC_URL_OFFICIAL) throw new Error('No RPC preset.')
+        const { RPC_URLS_OFFICIAL } = getRPCConstants(chainId)
+        if (!RPC_URLS_OFFICIAL?.length) throw new Error('No RPC preset.')
 
-        return RPC_URL_OFFICIAL
+        return RPC_URLS_OFFICIAL[0]
     }
 }
