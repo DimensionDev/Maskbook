@@ -19,7 +19,7 @@ export const TENANTS = [
     'RSK',
     'ZIL',
 ] as const
-export const SUPPORTED_TENANTS = ['BINANCE', 'ETH']
+export const SUPPORTED_TENANTS = ['ETH']
 export type TenantTypes = typeof TENANTS[number]
 
 export const TenantToChainIconMap: Record<TenantTypes, GeneratedIcon> = {
@@ -36,6 +36,7 @@ export const TenantToChainIconMap: Record<TenantTypes, GeneratedIcon> = {
 }
 
 export const TenantToChainMap: Partial<Record<TenantTypes, ChainId[]>> = {
-    BINANCE: [ChainId.BSC],
+    // TODO We temporarily disable Binance
+    // BINANCE: [ChainId.BSC],
     ETH: [ChainId.Mainnet, ChainId.Matic],
 }

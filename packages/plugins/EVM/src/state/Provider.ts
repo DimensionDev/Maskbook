@@ -58,7 +58,7 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
         },
     ): Promise<Account<ChainId>> {
         // Disconnect WalletConnect, prevents its session lasting too long.
-        if (this.providers[ProviderType.WalletConnect].connected) {
+        if (providerType !== ProviderType.WalletConnect && this.providers[ProviderType.WalletConnect].connected) {
             try {
                 await super.disconnect(ProviderType.WalletConnect)
             } catch {
