@@ -17,6 +17,7 @@ import { OffersTab } from './tabs/OffersTab.js'
 import { Context } from '../Context/index.js'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { useSwitcher } from '../hooks/useSwitcher.js'
+import { useLayoutEffect, useRef, useState } from 'react'
 
 const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) => {
     return {
@@ -97,6 +98,7 @@ const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) =
             },
         },
         cardTitle: {
+            display: 'inline-flex',
             fontSize: 16,
             lineHeight: '20px',
             fontWeight: 700,
@@ -116,6 +118,20 @@ export function Collectible(props: CollectibleProps) {
     const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activities')
     const { classes } = useStyles({ currentTab })
     const { asset, events, orders, sourceType, setSourceType } = Context.useContainer()
+    const titleRef = useRef<HTMLDivElement>(null)
+    const [outVerified, setOutVerified] = useState(false)
+
+    useLayoutEffect(() => {
+        if (!titleRef) return
+        const offsetWidth = titleRef.current?.offsetWidth
+        const scrollWidth = titleRef.current?.scrollWidth
+
+        if (!offsetWidth || !scrollWidth) {
+            setOutVerified(false)
+        } else {
+            setOutVerified(scrollWidth > offsetWidth)
+        }
+    }, [])
 
     // #region provider switcher
     const CollectibleProviderSwitcher = useSwitcher(
@@ -189,8 +205,13 @@ export function Collectible(props: CollectibleProps) {
                     }
                     title={
                         <Typography component="div" style={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography className={classes.cardTitle}>{_asset.metadata?.name || '-'}</Typography>
-                            {_asset.collection?.verified ? (
+                            <Typography className={classes.cardTitle} ref={titleRef}>
+                                {_asset.metadata?.name || '-'}
+                                {_asset.collection?.verified && !outVerified ? (
+                                    <Icons.VerifiedCollection size={20} sx={{ marginLeft: 0.5 }} />
+                                ) : null}
+                            </Typography>
+                            {_asset.collection?.verified && outVerified ? (
                                 <Icons.VerifiedCollection size={20} sx={{ marginLeft: 0.5 }} />
                             ) : null}
                         </Typography>
