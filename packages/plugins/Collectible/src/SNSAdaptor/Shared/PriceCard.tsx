@@ -57,12 +57,24 @@ export function PriceCard(props: PriceCardProps) {
     const t = useI18N()
     const { classes } = useStyles()
 
-    if (!topOffer)
+    if (!topOffer && orders.error)
         return (
             <div className={classes.priceZone}>
                 <div className={classes.offerBox}>
                     <Typography textAlign="center" fontSize={12} fontWeight={700}>
                         {t.load_failed()}
+                    </Typography>
+                </div>
+                <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} />
+            </div>
+        )
+
+    if (!topOffer && !orders.loading)
+        return (
+            <div className={classes.priceZone}>
+                <div className={classes.offerBox}>
+                    <Typography textAlign="center" fontSize={12} fontWeight={700}>
+                        {t.plugin_collectible_nft_offers_empty()}
                     </Typography>
                 </div>
                 <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} />
