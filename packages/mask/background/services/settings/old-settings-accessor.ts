@@ -13,7 +13,6 @@ import {
 import { MaskMessages } from '../../../shared/messages.js'
 import { queryPersonasDB } from '../../../background/database/persona/db.js'
 import { __deprecated__getStorage } from '../../utils/deprecated-storage.js'
-import { Flags } from '../../../shared/flags.js'
 
 function create<T>(settings: ValueRefWithReady<T>) {
     async function get() {
@@ -26,9 +25,9 @@ function create<T>(settings: ValueRefWithReady<T>) {
     }
     return [get, set] as const
 }
+export const [getLog, setLog] = create(logSettings)
 export const [getTheme, setTheme] = create(appearanceSettings)
 export const [getLanguage, setLanguage] = create(languageSettings)
-export const [getLog, setLog] = create(logSettings)
 
 export async function getCurrentPersonaIdentifier(): Promise<PersonaIdentifier | undefined> {
     await currentPersonaIdentifier.readyPromise

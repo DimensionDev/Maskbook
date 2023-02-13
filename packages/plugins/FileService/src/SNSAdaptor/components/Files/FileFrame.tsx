@@ -1,4 +1,4 @@
-import { FC, HTMLProps, memo, PropsWithChildren, ReactNode, useLayoutEffect, useRef, useState } from 'react'
+import { FC, HTMLProps, memo, PropsWithChildren, ReactNode, useEffect, useRef, useState } from 'react'
 import { Icons } from '@masknet/icons'
 import { Typography } from '@mui/material'
 import { makeStyles, ShadowRootTooltip, useBoundedPopperProps } from '@masknet/theme'
@@ -54,11 +54,23 @@ export const FileFrame: FC<PropsWithChildren<FileFrameProps>> = memo(function Fi
 
     const nameRef = useRef<HTMLDivElement>(null)
     const [showTooltip, setShowTooltip] = useState(false)
-    useLayoutEffect(() => {
-        if (nameRef.current) {
-            setShowTooltip(nameRef.current.offsetWidth !== nameRef.current.scrollWidth)
+
+    // DecryptedInspector lazy loading makes it fail to get offsetWidth of name
+    // element correctly during rendering. So we do a checking after when mouse
+    // enter
+    useEffect(() => {
+        const root = rootRef.current
+        if (!root) return
+        const check = () => {
+            if (nameRef.current) {
+                setShowTooltip(nameRef.current.offsetWidth !== nameRef.current.scrollWidth)
+            }
         }
-    }, [nameRef.current])
+        root.addEventListener('mouseenter', check)
+        return () => {
+            root.removeEventListener('mouseenter', check)
+        }
+    }, [])
 
     const tooltipPopperProps = useBoundedPopperProps()
 

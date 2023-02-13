@@ -26,7 +26,11 @@ import { Button, Link, MenuItem, Stack, Tab, ThemeProvider, Typography } from '@
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, addressSorter, useI18N, useLocationChange } from '../../utils/index.js'
-import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
+import {
+    useCurrentVisitingIdentity,
+    useLastRecognizedIdentity,
+    useSocialIdentity,
+} from '../DataSource/useActivatedUI.js'
 import { useCollectionByTwitterHandler } from '../../plugins/Trader/trending/useTrending.js'
 import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry.js'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
@@ -141,7 +145,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const translate = usePluginI18NField()
 
     const [hidden, setHidden] = useState(true)
-    const [selectedAddress, setSelectedAddress] = useState<string | undefined>()
     const [menuOpen, setMenuOpen] = useState(false)
     const allPersonas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
@@ -161,6 +164,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     )
 
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
+    const { value: currentSocialIdentity } = useSocialIdentity(currentVisitingSocialIdentity)
 
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
     const isOwnerIdentity = currentVisitingSocialIdentity?.isOwner
@@ -170,21 +174,16 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         loading: loadingSocialAccounts,
         error: loadSocialAccounts,
         retry: retrySocialAccounts,
-    } = useSocialAccountsBySettings(currentVisitingSocialIdentity, undefined, addressSorter)
+    } = useSocialAccountsBySettings(currentSocialIdentity, undefined, addressSorter)
+    const [selectedAddress = first(socialAccounts)?.address, setSelectedAddress] = useState<string | undefined>()
 
-    const selectedSocialAccount = useMemo(() => {
-        return socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
-    }, [socialAccounts, selectedAddress])
+    const selectedSocialAccount = socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
             retrySocialAccounts()
         })
     }, [retrySocialAccounts])
-
-    useEffect(() => {
-        setSelectedAddress(first(socialAccounts)?.address)
-    }, [socialAccounts])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
     const displayPlugins = getAvailablePlugins(activatedPlugins, (plugins) => {

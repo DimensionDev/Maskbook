@@ -13,6 +13,58 @@ export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
         })
     }
 
+    private status = 'off'
+    private userOptions?: LoggerAPI.UserOptions
+    private deviceOptions?: LoggerAPI.DeviceOptions
+    private networkOptions?: LoggerAPI.NetworkOptions
+
+    get enable() {
+        return this.status === 'on'
+    }
+
+    set enable(on: boolean) {
+        this.status = on ? 'on' : 'off'
+    }
+
+    get user() {
+        return {
+            ...this.userOptions,
+        }
+    }
+
+    set user(options: LoggerAPI.UserOptions) {
+        this.userOptions = {
+            ...this.userOptions,
+            ...options,
+        }
+    }
+
+    get device() {
+        return {
+            ...this.deviceOptions,
+        }
+    }
+
+    set device(options: LoggerAPI.DeviceOptions) {
+        this.deviceOptions = {
+            ...this.deviceOptions,
+            ...options,
+        }
+    }
+
+    get network() {
+        return {
+            ...this.networkOptions,
+        }
+    }
+
+    set network(options: LoggerAPI.NetworkOptions) {
+        this.networkOptions = {
+            ...this.networkOptions,
+            ...options,
+        }
+    }
+
     private get site() {
         return getSiteType()
     }
@@ -25,7 +77,25 @@ export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
         return 'unknown'
     }
 
-    private createCommonEvent(type: LoggerAPI.TypeID, message: string, options: LoggerAPI.CommonOptions): Event {
+    private getOptions(initial?: LoggerAPI.CommonOptions): LoggerAPI.CommonOptions {
+        return {
+            user: {
+                ...this.userOptions,
+                ...initial?.user,
+            },
+            device: {
+                ...this.deviceOptions,
+                ...initial?.device,
+            },
+            network: {
+                ...this.networkOptions,
+                ...initial?.network,
+            },
+        }
+    }
+
+    private createCommonEvent(type: LoggerAPI.TypeID, message: string, initial: LoggerAPI.CommonOptions): Event {
+        const options = this.getOptions(initial)
         return {
             message,
             level: type === LoggerAPI.TypeID.Event ? 'info' : 'error',
@@ -57,10 +127,12 @@ export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
     }
 
     captureEvent(options: LoggerAPI.EventOptions) {
+        if (!this.enable) return
         Sentry.captureEvent(this.createEvent(options))
     }
 
     captureException(options: LoggerAPI.ExceptionOptions) {
+        if (!this.enable) return
         Sentry.captureException(options.error, this.createException(options))
     }
 }

@@ -246,7 +246,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
                                 await delay(500)
                                 closeWalletStatusDialog()
                                 await connection?.disconnect()
-                                openSelectProviderDialog()
                             }}>
                             {t('plugin_wallet_disconnect')}
                         </Button>

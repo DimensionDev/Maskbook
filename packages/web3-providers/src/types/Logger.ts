@@ -55,12 +55,10 @@ export namespace LoggerAPI {
     }
 
     export interface Provider<Event, Exception> {
-        enable(): void
-        disable(): void
-
-        setUserOptions(options: UserOptions): void
-        setDeviceOptions(options: DeviceOptions): void
-        setNetworkOptions(options: NetworkOptions): void
+        enable: boolean
+        user?: UserOptions
+        device?: DeviceOptions
+        network?: NetworkOptions
 
         createEvent(options: EventOptions): Event
         createException(options: ExceptionOptions): Exception

@@ -46,8 +46,10 @@ interface Props extends withClasses<'fallbackImage' | 'imgWrapper'> {
     fallbackImage?: URL
     isImageOnly?: boolean
     disableQueryNonFungibleAsset?: boolean
+    hideLoadingIcon?: boolean
     showNetwork?: boolean
     pluginID?: NetworkPluginID
+    objectFit?: 'contain' | 'cover'
 }
 
 const fallbackImageDark = new URL('../Image/mask-dark.png', import.meta.url)
@@ -61,9 +63,11 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         isImageOnly = false,
         disableQueryNonFungibleAsset = false,
         fallbackImage,
+        hideLoadingIcon = false,
         url,
         pluginID,
         showNetwork = false,
+        objectFit = 'contain',
     } = props
     const { classes, cx } = useStyles(undefined, { props })
     const theme = useTheme()
@@ -90,29 +94,25 @@ export function NFTCardStyledAssetPlayer(props: Props) {
     }, [networkDescriptor?.icon, pluginID])
 
     if (loadingIsImageURL || (!url && loadingAsset))
-        return (
+        return hideLoadingIcon ? null : (
             <div className={classes.loadingWrapper}>
                 <LoadingBase color="primary" size={25} />
             </div>
         )
 
-    if (isImageURL || isImageOnly || !urlComputed) {
-        return (
-            <div className={classes.imgWrapper}>
-                <Image
-                    classes={{
-                        fallbackImage: classes.fallbackImage,
-                    }}
-                    containerProps={{ className: classes.container }}
-                    size="100%"
-                    style={{ objectFit: 'contain' }}
-                    src={urlComputed}
-                    fallback={fallbackImageURL}
-                />
-                {showNetwork && <ImageIcon icon={networkIcon} size={24} classes={{ icon: classes.networkIcon }} />}
-            </div>
-        )
-    }
-
-    return null
+    return (
+        <div className={classes.imgWrapper}>
+            <Image
+                classes={{
+                    fallbackImage: classes.fallbackImage,
+                }}
+                containerProps={{ className: classes.container }}
+                size="100%"
+                style={{ objectFit }}
+                src={isImageURL || isImageOnly || !urlComputed ? urlComputed : fallbackImageURL.toString()}
+                fallback={fallbackImageURL}
+            />
+            {showNetwork && <ImageIcon icon={networkIcon} size={24} classes={{ icon: classes.networkIcon }} />}
+        </div>
+    )
 }

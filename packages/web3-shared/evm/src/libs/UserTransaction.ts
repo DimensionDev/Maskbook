@@ -44,7 +44,7 @@ const DEFAULT_USER_OPERATION: Required<UserOperation> = {
     nonce: 0,
     initCode: '0x',
     callData: '0x',
-    callGas: '21000',
+    callGas: '24000',
     // default verification gas. will add create2 cost (3200 + 200 * length) if initCode exists
     verificationGas: '100000',
     // should also cover calldata cost.
@@ -196,7 +196,7 @@ export class UserTransaction {
         }
 
         // 1.5x scale up callGas
-        this.userOperation.callGas = toHex(toFixed(multipliedBy(this.userOperation.callGas ?? '0', 1.5)))
+        this.userOperation.callGas = toHex(toFixed(multipliedBy(this.userOperation.callGas ?? '0', 1.5), 0))
 
         // recover to the original callGas when extra gas could be provided
         if (isGreaterThan(callGas ?? '0', this.userOperation.callGas)) {
@@ -275,7 +275,7 @@ export class UserTransaction {
         }
 
         // 1.5x scale up callGas
-        this.userOperation.callGas = toHex(toFixed(multipliedBy(this.userOperation.callGas ?? '0', 1.5)))
+        this.userOperation.callGas = toHex(toFixed(multipliedBy(this.userOperation.callGas ?? '0', 1.5), 0))
 
         // recover to the original callGas when extra gas could be provided
         if (isGreaterThan(callGas ?? '0', this.userOperation.callGas)) {

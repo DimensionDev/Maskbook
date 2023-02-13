@@ -14,8 +14,8 @@ import { EMPTY_LIST, isTwitter, NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useChainContext, useFungibleTokenBalance, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { formatBalance, FungibleToken, rightShift, ZERO } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
-import { DialogActions, DialogContent, Typography } from '@mui/material'
+import { ChainId, isNativeTokenAddress, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
+import { Box, DialogActions, DialogContent, Typography } from '@mui/material'
 import { FC, memo, useCallback, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { useDonateCallback } from '../../hooks/useDonateCallback.js'
@@ -25,11 +25,15 @@ import { Icons } from '@masknet/icons'
 import { GiveBackSelect } from './GiveBackSelect.js'
 import { BigNumber } from 'bignumber.js'
 import { useShowResult } from '../ResultModal/index.js'
+import { getSupportedChainIds } from '../../../utils.js'
 
 const useStyles = makeStyles()((theme) => ({
     banner: {},
     bannerImage: {
         width: '100%',
+        maxWidth: '100%',
+        maxHeight: 176,
+        objectFit: 'cover',
         borderRadius: theme.spacing(1.5),
     },
     input: {
@@ -68,20 +72,22 @@ export interface DonateDialogProps extends InjectedDialogProps {
     grant: GitcoinGrant
 }
 
-const availableChains = [ChainId.Mainnet, ChainId.Matic]
 export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...rest }) => {
     const t = useI18N()
     const { classes, theme } = useStyles()
-    const { title, admin_address: address } = grant
+    const { title, admin_address: address, tenants } = grant
     const { share } = useSNSAdaptorContext()
 
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const availableChains = useMemo(() => getSupportedChainIds(tenants), [tenants])
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
+        chainId: availableChains[0],
+    })
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const nativeTokenDetailed = useAsync(async () => {
         return connection?.getNativeToken({ chainId })
     }, [chainId])
 
-    const { BULK_CHECKOUT_ADDRESS } = useGitcoinConstants(chainId)
+    const { BULK_CHECKOUT_ADDRESS, TOKEN_LIST } = useGitcoinConstants(chainId)
 
     // #region the selected token
     const [tokenMap, setTokenMap] = useState<Partial<Record<ChainId, FungibleToken<ChainId, SchemaType>>>>({})
@@ -93,12 +99,14 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
     const selectFungibleToken = useSelectFungibleToken<void, NetworkPluginID.PLUGIN_EVM>()
     const onSelectTokenChipClick = useCallback(async () => {
         const pickedToken = await selectFungibleToken({
+            chainId,
+            whitelist: TOKEN_LIST,
             disableNativeToken: false,
             selectedTokens: token?.address ? [token.address] : EMPTY_LIST,
             enableManage: false,
         })
         if (pickedToken) setTokenMap((map) => ({ ...map, [chainId]: pickedToken }))
-    }, [selectFungibleToken, token?.address, chainId])
+    }, [selectFungibleToken, token?.address, chainId, TOKEN_LIST])
     // #endregion
 
     // #region form
@@ -106,11 +114,16 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
     const amount = rightShift(rawAmount || '0', token?.decimals)
     const [giveBack, setGiveBack] = useState<number>(0.05)
     const tipAmount = amount.gt(0) ? new BigNumber(amount).times(giveBack) : ZERO
-    const total = rawAmount ? new BigNumber(rawAmount).times(1 + giveBack).toFixed() : '0'
+    const total = amount.times(1 + giveBack)
     // #endregion
 
     // #region blocking
-    const [{ loading }, donateCallback] = useDonateCallback(address ?? '', amount.toFixed(), tipAmount.toFixed(), token)
+    const [{ loading }, { value: gasFee = '1' }, donateCallback] = useDonateCallback(
+        address ?? '',
+        amount.toFixed(0),
+        tipAmount.toFixed(0),
+        token,
+    )
     // #endregion
 
     const showConfirm = useShowResult()
@@ -137,34 +150,48 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
         setRawAmount('')
     }, [showConfirm, amount, tipAmount, token, donateCallback, t, title])
 
+    const balance = new BigNumber(tokenBalance.value ?? '0')
+    const availableBalance = useMemo(() => {
+        if (!isNativeTokenAddress(token?.address)) return balance
+        // Add gas padding.
+        return balance.gt(gasFee) ? balance.minus(new BigNumber(gasFee).times(2)) : ZERO
+    }, [token?.address, balance.toFixed(), gasFee])
+    const maxAmount = availableBalance.div(1 + giveBack).toFixed(0)
+
     // #region submit button
+    const insufficientBalance = total.gt(availableBalance)
     const validationMessage = useMemo(() => {
         if (!token) return t.select_a_token()
         if (!account) return t.plugin_wallet_connect_a_wallet()
         if (!address) return t.grant_not_available()
         if (!amount || amount.isZero()) return t.enter_an_amount()
-        if (amount.isGreaterThan(tokenBalance.value ?? '0'))
+        if (insufficientBalance)
             return t.insufficient_balance({
                 symbol: token.symbol,
             })
         return ''
-    }, [account, address, amount.toFixed(), chainId, token, tokenBalance.value ?? '0'])
+    }, [account, address, amount.toFixed(0), chainId, token, insufficientBalance])
     // #endregion
 
     if (!token || !address) return null
 
     return (
-        <InjectedDialog {...rest} title={grant.title} maxWidth="xs">
+        <InjectedDialog {...rest} title={t.donate_dialog_title()} maxWidth="xs">
             <DialogContent style={{ padding: 16 }}>
-                <div className={classes.banner}>
-                    <img className={classes.bannerImage} src={grant.logo_url} />
-                </div>
+                {grant.logo_url ? (
+                    <div className={classes.banner}>
+                        <img className={classes.bannerImage} src={grant.logo_url} />
+                    </div>
+                ) : null}
                 <form className={classes.form} noValidate autoComplete="off">
-                    <NetworkTab pluginID={NetworkPluginID.PLUGIN_EVM} chains={availableChains} />
+                    <Box ml={-1.5}>
+                        <NetworkTab pluginID={NetworkPluginID.PLUGIN_EVM} chains={availableChains} />
+                    </Box>
                     <FungibleTokenInput
                         label={t.amount()}
                         amount={rawAmount}
-                        balance={tokenBalance.value ?? '0'}
+                        maxAmount={maxAmount}
+                        balance={availableBalance.toFixed(0)}
                         token={token}
                         onAmountChange={setRawAmount}
                         onSelectToken={onSelectTokenChipClick}
@@ -200,7 +227,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
                         </Typography>
                         <div className={classes.contribution}>
                             <Typography mr={1} fontSize={24} fontWeight={700}>
-                                {total}
+                                {formatBalance(total, token.decimals, 6)}
                             </Typography>
                             <TokenIcon chainId={chainId} address={token.address} size={18} />
                             <Typography ml={1}>{token.symbol}</Typography>
@@ -210,10 +237,10 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
             </DialogContent>
             <DialogActions className={classes.actions}>
                 <PluginWalletStatusBar>
-                    <WalletConnectedBoundary>
+                    <WalletConnectedBoundary expectedChainId={chainId}>
                         <EthereumERC20TokenApprovedBoundary
                             classes={{ button: classes.button }}
-                            amount={amount.toFixed()}
+                            amount={total.toFixed(0)}
                             spender={BULK_CHECKOUT_ADDRESS}
                             token={token.schema === SchemaType.ERC20 ? token : undefined}>
                             <ActionButton
@@ -221,6 +248,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
                                 loading={loading}
                                 fullWidth
                                 size="large"
+                                startIcon={<Icons.ConnectWallet size={18} />}
                                 disabled={!!validationMessage || loading}
                                 onClick={donate}>
                                 {validationMessage || t.donate()}

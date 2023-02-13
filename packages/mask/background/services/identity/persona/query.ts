@@ -1,6 +1,15 @@
-import { first, orderBy } from 'lodash-es'
+import { first, omit, orderBy } from 'lodash-es'
 import type { MobilePersona } from '@masknet/public-api'
-import type { NextIDPlatform, PersonaIdentifier, PersonaInformation, ProfileIdentifier } from '@masknet/shared-base'
+import {
+    ECKeyIdentifierFromJsonWebKey,
+    EC_Public_JsonWebKey,
+    fromBase64URL,
+    isEC_Private_JsonWebKey,
+    NextIDPlatform,
+    PersonaIdentifier,
+    PersonaInformation,
+    ProfileIdentifier,
+} from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
@@ -14,7 +23,11 @@ import {
 import { queryPersonasDB as queryPersonasFromIndexedDB } from '../../../database/persona/web.js'
 import { toPersonaInformation } from '../../__utils__/convert.js'
 import { personaRecordToMobilePersona } from './mobile.js'
-
+import * as bip39 from 'bip39'
+import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from './utils.js'
+import { bufferToHex, privateToPublic, publicToAddress } from 'ethereumjs-util'
+import { decode } from '@msgpack/msgpack'
+import { decodeArrayBuffer } from '@masknet/kit'
 export { queryPersonaDB }
 
 export async function mobile_queryPersonaRecordsFromIndexedDB() {
@@ -83,6 +96,33 @@ export async function queryPersona(id: PersonaIdentifier): Promise<undefined | P
         result = toPersonaInformation([persona], t).mustNotAwaitThisWithInATransaction.then((x) => first(x)!)
     })
     return result
+}
+
+export async function queryPersonaEOAByMnemonic(mnemonicWord: string, password: string) {
+    const verify = bip39.validateMnemonic(mnemonicWord)
+    if (!verify) throw new Error('Verify error')
+
+    const { key } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonicWord, password)
+    const { privateKey, publicKey } = key
+
+    if (!privateKey.d) return
+    return {
+        address: bufferToHex(publicToAddress(privateToPublic(Buffer.from(fromBase64URL(privateKey.d))))),
+        identifier: await ECKeyIdentifierFromJsonWebKey(publicKey),
+        publicKey,
+    }
+}
+
+export async function queryPersonaEOAByPrivateKey(privateKeyString: string) {
+    const privateKey = decode(decodeArrayBuffer(privateKeyString))
+
+    if (!isEC_Private_JsonWebKey(privateKey) || !privateKey.d) throw new TypeError('Invalid private key')
+    const publicKey = omit(privateKey, 'd') as EC_Public_JsonWebKey
+    return {
+        address: bufferToHex(publicToAddress(privateToPublic(Buffer.from(fromBase64URL(privateKey.d))))),
+        identifier: await ECKeyIdentifierFromJsonWebKey(publicKey),
+        publicKey,
+    }
 }
 
 export async function queryPersonasFromNextID(platform: NextIDPlatform, identityResolved: IdentityResolved) {

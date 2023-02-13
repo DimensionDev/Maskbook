@@ -1,14 +1,12 @@
 import type { FC, PropsWithChildren } from 'react'
 import { Icons } from '@masknet/icons'
-import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
+import { InjectedDialog, InjectedDialogProps, AssetPreviewer, TokenIcon } from '@masknet/shared'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles } from '@masknet/theme'
-import { useNetworkContext, useNonFungibleAsset, useWeb3State } from '@masknet/web3-hooks-base'
-import { SourceType } from '@masknet/web3-shared-base'
+import { useNonFungibleAsset, useWeb3State } from '@masknet/web3-hooks-base'
+import { TokenType } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
-import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard.js'
-import type { TipContextOptions } from '../../contexts/index.js'
-import { useI18N } from '../../locales/index.js'
-import { TipsType } from '../../types/tip.js'
+import { useSharedI18N } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     confirmDialog: {
@@ -41,7 +39,6 @@ const useStyles = makeStyles()((theme) => ({
     nftContainer: {
         height: 126,
         width: 126,
-        boxShadow: '0px 6px 12px rgba(253, 194, 40, 0.2)',
     },
     nftName: {
         display: 'flex',
@@ -54,34 +51,45 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
     },
-    collectibleCard: {
-        width: '100%',
-        height: '100%',
-        aspectRatio: '1/1',
-        borderRadius: theme.spacing(1),
-        overflow: 'hidden',
-    },
     messageText: {
         fontSize: 16,
+        color: theme.palette.maskColor.main,
+        fontWeight: 700,
+        lineHeight: '20px',
+    },
+    nftMessageText: {
+        fontSize: 16,
         color: theme.palette.maskColor.second,
-        lineHeight: '30px',
+        fontWeight: 700,
+        lineHeight: '20px',
+    },
+    tokenIcon: {
+        margin: 'auto',
+        border: `1px ${theme.palette.maskColor.secondaryLine} solid`,
     },
 }))
 
-export interface ConfirmModalProps
-    extends PropsWithChildren<InjectedDialogProps>,
-        Pick<TipContextOptions, 'amount' | 'tipType' | 'token' | 'nonFungibleTokenAddress' | 'nonFungibleTokenId'> {
+export interface TokenTransactionConfirmModalProps extends PropsWithChildren<InjectedDialogProps> {
+    amount: string | null
+    token?: Web3Helper.FungibleTokenAll | null
+    nonFungibleTokenId?: string | null
+    nonFungibleTokenAddress?: string
+    tokenType: TokenType
+    messageTextForNFT?: string
+    messageTextForFT?: string
     confirmText?: string
     onConfirm?(): void
 }
 
-export const ConfirmModal: FC<ConfirmModalProps> = ({
+export const TokenTransactionConfirmModal: FC<TokenTransactionConfirmModalProps> = ({
     className,
     confirmText,
     onConfirm,
     children,
+    messageTextForNFT,
+    messageTextForFT,
     amount,
-    tipType,
+    tokenType,
     token,
     nonFungibleTokenAddress,
     nonFungibleTokenId,
@@ -89,10 +97,9 @@ export const ConfirmModal: FC<ConfirmModalProps> = ({
 }) => {
     const { Others } = useWeb3State()
     const { classes } = useStyles()
-    const t = useI18N()
-    const { pluginID } = useNetworkContext()
+    const t = useSharedI18N()
     confirmText = confirmText || 'Confirm'
-    const isTokenTip = tipType === TipsType.Tokens
+    const isTokenTip = tokenType === TokenType.Fungible
     const { value: nonFungibleToken } = useNonFungibleAsset(
         undefined,
         nonFungibleTokenAddress,
@@ -113,15 +120,17 @@ export const ConfirmModal: FC<ConfirmModalProps> = ({
             <DialogContent className={classes.content}>
                 {isTokenTip ? (
                     <Box>
-                        <Icons.Success size={75} />
+                        <TokenIcon
+                            className={classes.tokenIcon}
+                            address={token?.address || ''}
+                            logoURL={token?.logoURL}
+                            size={90}
+                        />
                         <Typography className={classes.congratulation} mt="19.5px">
-                            Congratulations!
+                            {t.congratulations()}
                         </Typography>
                         <Typography className={classes.messageText} mt="41px">
-                            {t.send_specific_tip_successfully({
-                                amount,
-                                name: `$${token?.symbol}`,
-                            })}
+                            {messageTextForFT}
                         </Typography>
                     </Box>
                 ) : (
@@ -129,13 +138,8 @@ export const ConfirmModal: FC<ConfirmModalProps> = ({
                         {nonFungibleToken ? (
                             <>
                                 <div className={classes.nftContainer}>
-                                    <CollectibleCard
-                                        className={classes.collectibleCard}
-                                        asset={nonFungibleToken}
-                                        provider={SourceType.OpenSea}
-                                        readonly
-                                        disableLink
-                                        pluginID={pluginID}
+                                    <AssetPreviewer
+                                        url={nonFungibleToken.metadata?.mediaURL || nonFungibleToken.metadata?.imageURL}
                                     />
                                 </div>
                                 <div className={classes.nftName}>
@@ -152,11 +156,8 @@ export const ConfirmModal: FC<ConfirmModalProps> = ({
                         <Typography className={classes.congratulation} mt="24px">
                             {t.congratulations()}
                         </Typography>
-                        <Typography className={classes.messageText} mt="14px">
-                            {t.send_specific_tip_successfully({
-                                amount: '1',
-                                name: nonFungibleToken?.contract?.name || 'NFT',
-                            })}
+                        <Typography className={classes.nftMessageText} mt="14px">
+                            {messageTextForNFT}
                         </Typography>
                     </div>
                 )}

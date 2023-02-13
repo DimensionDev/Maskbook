@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, MouseEventHandler } from 'react'
 import { useAsync } from 'react-use'
 import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
 import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
@@ -133,6 +133,16 @@ export function BuyToFarm(props: PageInterface) {
         }
     }, [props?.onChangePage, web3, account, token])
 
+    const BuyButton = (props: { onClick?: MouseEventHandler<HTMLButtonElement> | undefined }) => {
+        return (
+            <WalletConnectedBoundary offChain expectedChainId={requiredChainId}>
+                <ActionButton fullWidth size="medium" disabled={!token} onClick={props.onClick}>
+                    {t.buy_to_farm()}
+                </ActionButton>
+            </WalletConnectedBoundary>
+        )
+    }
+
     return (
         <Box className={classes.container}>
             <TabContext value={String(tab)}>
@@ -188,11 +198,7 @@ export function BuyToFarm(props: PageInterface) {
                         </Grid>
                     </Grid>
                     <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
-                        <WalletConnectedBoundary offChain>
-                            <ActionButton fullWidth size="medium" disabled={!token} onClick={onClickBuyToFarm}>
-                                {t.buy_to_farm()}
-                            </ActionButton>
-                        </WalletConnectedBoundary>
+                        <BuyButton onClick={onClickBuyToFarm} />
                     </ChainBoundary>
                 </TabPanel>
                 <TabPanel value={TabsReferAndBuy.MY_REWARDS} className={classes.tab}>

@@ -358,6 +358,7 @@ export function PreviewCard(props: PreviewCardProps) {
                         expectedChainId={chainId as ChainId}
                         ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                         <WalletConnectedBoundary
+                            expectedChainId={chainId}
                             ActionButtonProps={{ size: 'medium', variant: 'roundedDark' }}
                             classes={{ button: classes.button }}>
                             <ActionButton

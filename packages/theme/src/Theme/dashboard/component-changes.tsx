@@ -1,6 +1,7 @@
+import { Icons } from '@masknet/icons'
 import type { PaletteMode, ThemeOptions } from '@mui/material'
-import type { Color } from '../../CSSVariables/index.js'
 import { css_var } from '../../CSSVariables/createVars.js'
+import type { Color } from '../../CSSVariables/index.js'
 
 type Theme = ThemeOptions | ((mode: PaletteMode, colors: Color) => ThemeOptions)
 
@@ -336,6 +337,19 @@ export const Typography: Theme = (mode, colors) => ({
                     },
                 },
             ],
+        },
+    },
+})
+
+export const Checkbox: Theme = (mode, colors) => ({
+    components: {
+        MuiCheckbox: {
+            defaultProps: {
+                size: 'medium',
+                checkedIcon: <Icons.Checkbox size={18} color="#1C68F3" />,
+                icon: <Icons.CheckboxBlank size={18} />,
+                disableRipple: true,
+            },
         },
     },
 })

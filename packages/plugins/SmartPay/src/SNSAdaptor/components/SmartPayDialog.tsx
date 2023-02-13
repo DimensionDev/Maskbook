@@ -1,6 +1,7 @@
 import { memo } from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
+import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
 import { RouterDialog } from './RouterDialog.js'
 
 export const SmartPayDialog = memo(() => {
@@ -8,7 +9,9 @@ export const SmartPayDialog = memo(() => {
 
     return (
         <MemoryRouter initialEntries={entries} initialIndex={1}>
-            <RouterDialog />
+            <SmartPayContext.Provider>
+                <RouterDialog />
+            </SmartPayContext.Provider>
         </MemoryRouter>
     )
 })

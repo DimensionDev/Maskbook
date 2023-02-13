@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, MouseEventHandler } from 'react'
 import { useAsync } from 'react-use'
 import { Chip, Grid, InputAdornment, TextField, Typography } from '@mui/material'
 import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
@@ -261,6 +261,24 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
     const adjustRewardsBtnDisabled =
         (!dailyFarmRewardNum && !totalFarmRewardNum) || insufficientFunds || totalFarmRewardLessThanDailyFarmReward
 
+    const AdjustButton = (props: { onClick?: MouseEventHandler<HTMLButtonElement> | undefined }) => {
+        return (
+            <WalletConnectedBoundary expectedChainId={requiredChainId}>
+                <ActionButton fullWidth size="medium" disabled={adjustRewardsBtnDisabled} onClick={props.onClick}>
+                    {insufficientFunds || totalFarmRewardLessThanDailyFarmReward ? (
+                        <>
+                            {insufficientFunds
+                                ? t.error_insufficient_balance({ symbol: rewardToken?.symbol ?? '' })
+                                : t.error_daily_rewards()}
+                        </>
+                    ) : (
+                        t.adjust_rewards()
+                    )}
+                </ActionButton>
+            </WalletConnectedBoundary>
+        )
+    }
+
     return rewardToken ? (
         <Box display="flex" flexDirection="column">
             <Grid container marginY={3}>
@@ -346,23 +364,7 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
                 </Grid>
                 <Grid item xs={12} marginTop="24px">
                     <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
-                        <WalletConnectedBoundary>
-                            <ActionButton
-                                fullWidth
-                                size="medium"
-                                disabled={adjustRewardsBtnDisabled}
-                                onClick={onClickAdjustRewards}>
-                                {insufficientFunds || totalFarmRewardLessThanDailyFarmReward ? (
-                                    <>
-                                        {insufficientFunds
-                                            ? t.error_insufficient_balance({ symbol: rewardToken?.symbol ?? '' })
-                                            : t.error_daily_rewards()}
-                                    </>
-                                ) : (
-                                    t.adjust_rewards()
-                                )}
-                            </ActionButton>
-                        </WalletConnectedBoundary>
+                        <AdjustButton onClick={onClickAdjustRewards} />
                     </ChainBoundary>
                 </Grid>
             </Grid>

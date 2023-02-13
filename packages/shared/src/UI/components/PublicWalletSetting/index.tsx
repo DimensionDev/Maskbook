@@ -210,3 +210,4 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
         )
     },
 )
+PublicWalletSetting.displayName = 'PublicWalletSetting'

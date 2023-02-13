@@ -76,7 +76,7 @@ export function MyRewards(props: PageInterface) {
 
     return (
         <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
-            <WalletConnectedBoundary>
+            <WalletConnectedBoundary expectedChainId={requiredChainId}>
                 <div className={classes.container}>
                     <Grid container justifyContent="space-between" rowSpacing="20px" className={classes.heading}>
                         <Grid item xs={8}>

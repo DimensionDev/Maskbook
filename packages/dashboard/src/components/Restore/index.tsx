@@ -1,5 +1,7 @@
 import { memo } from 'react'
 import { Tab } from '@mui/material'
+import { TabContext, TabPanel } from '@mui/lab'
+import { Icons } from '@masknet/icons'
 import { makeStyles, ButtonGroupTabList, useTabs } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales/index.js'
 import { RestoreFromLocal } from './RestoreFromLocal.js'
@@ -7,8 +9,6 @@ import { RestoreFromMnemonic } from './RestoreFromMnemonic.js'
 import { RestoreFromCloud } from './RestoreFromCloud.js'
 import { RestoreFromPrivateKey } from './RestoreFromPrivateKey.js'
 import { PersonaLogoBox } from '../RegisterFrame/ColumnContentLayout.js'
-import { TabContext, TabPanel } from '@mui/lab'
-import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     tabs: {

@@ -1,5 +1,6 @@
 import type { FungibleToken, NonFungibleToken, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import type { SchemaType, ChainId } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 // #region erc20 red packet
 export interface RedPacketRecord {
@@ -54,7 +55,7 @@ export interface RedPacketJSONPayload extends RedPacketBasic {
     }
     chainId?: ChainId
     network?: string
-    token?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
+    token?: Web3Helper.FungibleTokenAll
     total_remaining?: string
 }
 

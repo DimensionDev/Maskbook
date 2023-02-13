@@ -49,6 +49,7 @@ export async function normalizeBackupVersion2(item: BackupJSONFileVersion2): Pro
             updatedAt: Some(new Date(persona.updatedAt)),
             nickname: persona.nickname ? Some(persona.nickname) : None,
             mnemonic: None,
+            address: persona.address,
         }
         for (const [profile] of persona.linkedProfiles) {
             const id = ProfileIdentifier.from(profile)
@@ -326,6 +327,7 @@ interface BackupJSONFileVersion2 {
         linkedProfiles: Array<[/** ProfileIdentifier.toText() */ string, LinkedProfileDetails]>
         createdAt: number // Unix timestamp
         updatedAt: number // Unix timestamp
+        address?: string
     }>
     profiles: Array<{
         identifier: string // ProfileIdentifier.toText()

@@ -1,7 +1,7 @@
-import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
+import { BindingProof, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { noop } from 'lodash-es'
+import { first, noop } from 'lodash-es'
 import {
     createContext,
     Dispatch,
@@ -14,6 +14,8 @@ import {
     useState,
 } from 'react'
 import { PFP_TYPE, SelectTokenInfo } from '../../types.js'
+import { isValidAddress } from '@masknet/web3-shared-evm'
+import type { SocialIdentity } from '@masknet/web3-shared-base'
 
 interface AvatarManagementContextOptions {
     targetAccount: string
@@ -44,21 +46,38 @@ export const AvatarManagementContext = createContext<AvatarManagementContextOpti
     setSelectedTokenInfo: noop,
 })
 
-interface Props extends PropsWithChildren<{}> {}
+interface Props extends PropsWithChildren<{ socialIdentity?: SocialIdentity }> {}
 
-export const AvatarManagementProvider: FC<Props> = memo(({ children }) => {
+export const AvatarManagementProvider: FC<Props> = memo(({ children, socialIdentity }) => {
+    const nextIDWallets = useMemo(
+        () =>
+            socialIdentity?.binding?.proofs.filter(
+                (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
+            ) ?? EMPTY_LIST,
+        [socialIdentity],
+    )
+
+    const nextIDPersonas = useMemo(
+        () =>
+            socialIdentity?.binding?.proofs.filter(
+                (x) => x.identity.toLowerCase() === socialIdentity.identifier?.userId.toLowerCase(),
+            ) ?? EMPTY_LIST,
+        [socialIdentity],
+    )
+
     const [proof, setProof] = useState<BindingProof>()
     const [proofs, setProofs] = useState<BindingProof[]>(EMPTY_LIST)
     const [tokenInfo, setTokenInfo] = useState<Web3Helper.NonFungibleTokenAll>()
     const { account } = useChainContext()
-    const [selectedAccount, setSelectedAccount] = useState(account)
-    const targetAccount = selectedAccount || account || proofs[0]?.identity
+    const [selectedAccount, setSelectedAccount] = useState(nextIDWallets[0]?.identity || account)
     const [selectedTokenInfo, setSelectedTokenInfo] = useState<SelectTokenInfo>()
 
     const contextValue: AvatarManagementContextOptions = useMemo(() => {
+        setProof(first(nextIDPersonas))
+        setProofs(nextIDWallets)
         return {
             pfpType: PFP_TYPE.PFP,
-            targetAccount,
+            targetAccount: selectedAccount,
             setTargetAccount: setSelectedAccount,
             proof,
             setProof,
@@ -69,7 +88,7 @@ export const AvatarManagementProvider: FC<Props> = memo(({ children }) => {
             selectedTokenInfo,
             setSelectedTokenInfo,
         }
-    }, [targetAccount, proof, proofs, tokenInfo, selectedTokenInfo])
+    }, [selectedAccount, proof, proofs, tokenInfo, selectedTokenInfo, nextIDPersonas, nextIDWallets])
 
     return <AvatarManagementContext.Provider value={contextValue}>{children}</AvatarManagementContext.Provider>
 })

@@ -6,7 +6,6 @@ import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
 import { TokenIcon } from '@masknet/shared'
-import { CollectibleProviderIcon } from './CollectibleProviderIcon.js'
 import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -33,14 +32,11 @@ const useStyles = makeStyles()((theme) => ({
         gap: 6,
     },
     textBase: {
-        fontSize: 12,
+        fontSize: 14,
         color: theme.palette.maskColor.second,
         '& > strong': {
             color: theme.palette.maskColor.main,
         },
-    },
-    symbol: {
-        marginLeft: theme.spacing(0.2),
     },
     fallbackSymbol: {
         color: theme.palette.maskColor.main,
@@ -63,7 +59,7 @@ export function OfferCard(props: OfferCardProps) {
 
     const renderTokenIcon = () => {
         if (offer.priceInToken?.token.logoURL)
-            return <img width={18} height={18} src={offer.priceInToken?.token.logoURL} alt="" />
+            return <img width={20} height={20} src={offer.priceInToken?.token.logoURL} alt="" />
 
         if (offer.priceInToken?.token.symbol.toUpperCase() === 'WETH') return <Icons.WETH size={18} />
 
@@ -74,9 +70,9 @@ export function OfferCard(props: OfferCardProps) {
                 address={offer.priceInToken.token.address}
                 AvatarProps={{
                     style: {
-                        width: 18,
-                        height: 18,
-                        fontSize: 12,
+                        width: 20,
+                        height: 20,
+                        fontSize: 14,
                     },
                 }}
             />
@@ -89,7 +85,6 @@ export function OfferCard(props: OfferCardProps) {
 
     return (
         <div className={classes.wrapper}>
-            {offer.source ? <CollectibleProviderIcon active={false} provider={offer.source} /> : null}
             <div className={classes.offerDetail}>
                 <div className={classes.flex}>
                     {renderTokenIcon()}
@@ -98,9 +93,6 @@ export function OfferCard(props: OfferCardProps) {
                             <strong>
                                 {formatBalance(offer.priceInToken?.amount, offer.priceInToken?.token.decimals || 18, 6)}
                             </strong>
-                            {offer.priceInToken ? (
-                                <span className={classes.symbol}>{offer.priceInToken?.token.symbol}</span>
-                            ) : null}
                         </Typography>
                         {offer.price?.usd && (
                             <Typography className={classes.textBase} fontSize={12}>
@@ -112,7 +104,7 @@ export function OfferCard(props: OfferCardProps) {
                 <div className={classes.flex}>
                     <Typography className={classes.textBase}>{t.plugin_collectible_from()}</Typography>
 
-                    <Typography className={classes.textBase} style={{ marginRight: 6 }}>
+                    <Typography className={classes.textBase} style={{ marginRight: 6, fontSize: '12px' }}>
                         {offer.maker?.address ? (
                             <strong style={{ margin: '0px 4px' }}>
                                 {Others?.formatAddress(offer.maker.address, 4)}
