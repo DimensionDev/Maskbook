@@ -34,6 +34,7 @@ export const NFTProjectAvatarBadge: FC<Props> = ({ address, userId, className, i
                     name: userId,
                     identity,
                     address,
+                    badgeBounding: button.getBoundingClientRect(),
                     type: TrendingAPI.TagType.HASH,
                     isCollectionProjectPopper: true,
                     element: button,

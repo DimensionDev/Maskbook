@@ -9,6 +9,7 @@ interface TrendingAnchorEvent {
     type: TagType
     element: HTMLElement | null
     dataProviders?: SourceType[]
+    badgeBounding?: DOMRect
     address?: string
     isCollectionProjectPopper?: boolean
     identity?: SocialIdentity

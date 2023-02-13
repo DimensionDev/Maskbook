@@ -128,7 +128,6 @@ const sns: Plugin.SNSAdaptor.Definition<
         priority: 99999,
         UI: {
             Decorator({ userId, identity }) {
-                console.log({ identity }, 123123)
                 const { value: collectionList } = useCollectionByTwitterHandler(userId)
                 const isMinimalMode = useIsMinimalMode(PluginID.Web3ProfileCard)
                 if (!userId || !collectionList?.[0] || isMinimalMode) return null

@@ -13,6 +13,8 @@ export interface TrendingPopperProps extends Omit<PopperProps, 'children' | 'ope
     children?: (
         name?: string,
         type?: TrendingAPI.TagType,
+        setActive?: (x: boolean) => void,
+        badgeBounding?: DOMRect,
         identity?: SocialIdentity,
         address?: string,
         isCollectionProjectPopper?: boolean,
@@ -30,11 +32,11 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
     const [name, setName] = useState('')
     const [isCollectionProjectPopper, setIsNFTProjectPopper] = useState(false)
     const [identity, setIdentity] = useState<SocialIdentity | undefined>()
+    const [badgeBounding, setBadgeBounding] = useState<DOMRect | undefined>()
     const [address, setAddress] = useState('')
     const [type, setType] = useState<TrendingAPI.TagType | undefined>()
     const [anchorEl, setAnchorEl] = useState<PopperUnstyledOwnProps['anchorEl']>(null)
     const popper = useRef<HTMLDivElement | null>(null)
-    console.log({ identity }, '99')
     // #region select token and provider dialog could be opened by trending view
     const onFreezed = useCallback((ev: { open: boolean }) => setFreezed(ev.open), [])
     useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated, onFreezed)
@@ -47,9 +49,9 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
     // open popper from message center
     useEffect(() => {
         return PluginTraderMessages.trendingAnchorObserved.on((ev) => {
-            console.log({ ev })
             setName(ev.name)
             setType(ev.type)
+            setBadgeBounding(ev.badgeBounding)
             setAddress(ev.address ?? '')
             setIdentity(ev.identity)
             setIsNFTProjectPopper(Boolean(ev.isCollectionProjectPopper))
@@ -106,8 +108,15 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
                 {({ TransitionProps }) => (
                     <Fade {...TransitionProps}>
                         <div>
-                            {children?.(name, type, identity, address, isCollectionProjectPopper, () =>
-                                setTimeout(() => popperRef.current?.update(), 100),
+                            {children?.(
+                                name,
+                                type,
+                                setActive,
+                                badgeBounding,
+                                identity,
+                                address,
+                                isCollectionProjectPopper,
+                                () => setTimeout(() => popperRef.current?.update(), 100),
                             )}
                         </div>
                     </Fade>

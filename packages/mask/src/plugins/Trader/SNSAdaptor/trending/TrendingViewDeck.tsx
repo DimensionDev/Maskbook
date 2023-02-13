@@ -138,6 +138,7 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     currentTab: ContentTabs
     trending: TrendingAPI.Trending
     identity?: SocialIdentity
+    setActive?: (x: boolean) => void
     setResult: (a: Web3Helper.TokenResultAll) => void
     result: Web3Helper.TokenResultAll
     resultList?: Web3Helper.TokenResultAll[]
@@ -154,6 +155,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         resultList = [],
         result,
         setResult,
+        setActive,
         currentTab,
         identity,
     } = props
@@ -203,7 +205,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         (x) => `${x.address?.toLowerCase()}_${x.chainId}_${x.type}_${x.name?.toLowerCase()}`,
     )
     const rss3Key = SNS_RSS3_FIELD_KEY_MAP[identity?.identifier?.network as EnhanceableSite]
-    console.log({ rss3Key, identity })
     return (
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.cardHeader}>
@@ -259,6 +260,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                 open={coinMenuOpen}
                                                 anchorEl={titleRef.current}
                                                 optionList={displayResultList}
+                                                setActive={setActive}
                                                 identity={identity}
                                                 result={result}
                                                 onChange={setResult}

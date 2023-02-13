@@ -118,12 +118,13 @@ const useStyles = makeStyles<{
 export interface TrendingViewProps {
     resultList: Web3Helper.TokenResultAll[]
     identity?: SocialIdentity
+    setActive?: (x: boolean) => void
     address?: string
     onUpdate?: () => void
 }
 
 export function TrendingView(props: TrendingViewProps) {
-    const { resultList, identity } = props
+    const { resultList, identity, setActive } = props
     const [result, setResult] = useState(resultList[0])
     const { isTokenTagPopper, isCollectionProjectPopper, isProfilePage } = useContext(TrendingViewContext)
     const { t } = useI18N()
@@ -271,6 +272,7 @@ export function TrendingView(props: TrendingViewProps) {
             currentTab={currentTab}
             stats={stats}
             identity={identity}
+            setActive={setActive}
             setResult={setResult}
             resultList={resultList}
             result={result}

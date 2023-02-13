@@ -294,7 +294,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             if (event.open) return
 
             if (event.gasConfig) {
-                console.log({ gasConfig: event.gasConfig })
                 setGasConfig(event.gasConfig)
             }
         })

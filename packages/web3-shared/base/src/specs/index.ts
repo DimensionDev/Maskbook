@@ -109,6 +109,7 @@ export enum SearchResultType {
     FungibleToken = 'FungibleToken',
     // e.g., #APE
     NonFungibleToken = 'NonFungibleToken',
+    // e.g., realMaskNetwork
     CollectionListByTwitterHandler = 'CollectionListByTwitterHandler',
 }
 

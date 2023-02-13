@@ -1,16 +1,17 @@
-import { FC, PropsWithChildren, useCallback, useMemo } from 'react'
+import { FC, PropsWithChildren, useCallback, useMemo, useContext } from 'react'
 import { groupBy, toPairs, isEqual } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { TokenIcon, useSocialAccountsBySettings, FormattedAddress } from '@masknet/shared'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../../utils/index.js'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
 import { SearchResultType, SocialIdentity, SocialAddressType } from '@masknet/web3-shared-base'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { RadioButtonUnchecked as RadioButtonUncheckedIcon } from '@mui/icons-material'
 import { Divider, MenuItem, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/system'
+import { TrendingViewContext } from './context.js'
 import type { Coin } from '../../types/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -152,6 +153,7 @@ export interface CoinMenuProps {
     optionList: Web3Helper.TokenResultAll[]
     identity?: SocialIdentity
     result: Web3Helper.TokenResultAll
+    setActive?: (x: boolean) => void
     onChange?: (a: Web3Helper.TokenResultAll) => void
     onClose?: () => void
 }
@@ -167,11 +169,13 @@ export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({
     result,
     optionList,
     identity,
+    setActive,
     anchorEl,
     onChange,
     onClose,
 }) => {
     const { classes } = useStyles()
+    const { badgeBounding } = useContext(TrendingViewContext)
     const { t } = useI18N()
     const onSelect = useCallback(
         (value: Web3Helper.TokenResultAll) => {
@@ -181,11 +185,21 @@ export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({
         [onChange, onClose],
     )
     const { value: allSocialAccounts = EMPTY_LIST } = useSocialAccountsBySettings(identity)
+    const socialAccount = allSocialAccounts[0]
     const { Others } = useWeb3State()
 
     const openRss3Profile = useCallback(() => {
+        if (!identity?.identifier?.userId || !badgeBounding) return
+
+        CrossIsolationMessages.events.profileCardEvent.sendToLocal({
+            open: true,
+            userId: identity?.identifier?.userId,
+            badgeBounding,
+            openFromTrendingCard: true,
+        })
         onClose?.()
-    }, [onClose])
+        setActive?.(false)
+    }, [JSON.stringify(identity)])
 
     const menuItems = useMemo(() => {
         const groups: Array<
@@ -207,26 +221,32 @@ export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({
                 </div>
             ))
             .concat(
-                <div key="rss3" className={classes.group}>
-                    <Typography className={classes.groupName}>{t('address')}</Typography>
-                    <Divider className={classes.divider} />
-                    {allSocialAccounts.map((x, i) => (
-                        <MenuItem key={x.address} className={classes.menuItem} onClick={openRss3Profile}>
+                socialAccount ? (
+                    <div key="rss3" className={classes.group}>
+                        <Typography className={classes.groupName}>{t('address')}</Typography>
+                        <Divider className={classes.divider} />
+                        <MenuItem key={socialAccount.address} className={classes.menuItem} onClick={openRss3Profile}>
                             <Typography
                                 fontSize={14}
                                 fontWeight={700}
                                 flexGrow={1}
                                 overflow="hidden"
                                 textOverflow="ellipsis">
-                                {x.supportedAddressTypes?.[0] === SocialAddressType.ENS ? (
-                                    x.label
+                                {socialAccount.supportedAddressTypes?.[0] === SocialAddressType.ENS ? (
+                                    socialAccount.label
                                 ) : (
-                                    <FormattedAddress address={x.address} size={4} formatter={Others?.formatAddress} />
+                                    <FormattedAddress
+                                        address={socialAccount.address}
+                                        size={4}
+                                        formatter={Others?.formatAddress}
+                                    />
                                 )}
                             </Typography>
                         </MenuItem>
-                    ))}
-                </div>,
+                    </div>
+                ) : (
+                    []
+                ),
             )
     }, [optionList, result, onSelect])
 

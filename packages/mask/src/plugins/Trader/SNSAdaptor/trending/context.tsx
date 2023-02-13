@@ -3,6 +3,7 @@ import { createContext, PropsWithChildren } from 'react'
 interface TrendingViewContextProps {
     isTokenTagPopper: boolean
     isCollectionProjectPopper: boolean
+    badgeBounding?: DOMRect
     isProfilePage: boolean
     isPreciseSearch: boolean
 }
@@ -10,6 +11,7 @@ interface TrendingViewContextProps {
 export const TrendingViewContext = createContext<TrendingViewContextProps>({
     isTokenTagPopper: true,
     isCollectionProjectPopper: false,
+    badgeBounding: undefined,
     isProfilePage: false,
     isPreciseSearch: false,
 })
@@ -17,6 +19,7 @@ export const TrendingViewContext = createContext<TrendingViewContextProps>({
 export function TrendingViewProvider({
     isTokenTagPopper,
     isCollectionProjectPopper,
+    badgeBounding,
     isProfilePage,
     isPreciseSearch,
     children,
@@ -26,6 +29,7 @@ export function TrendingViewProvider({
             value={{
                 isTokenTagPopper,
                 isCollectionProjectPopper,
+                badgeBounding,
                 isProfilePage,
                 isPreciseSearch,
             }}>
