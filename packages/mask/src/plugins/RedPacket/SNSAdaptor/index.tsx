@@ -7,6 +7,12 @@ import {
     NetworkType,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
+import { Trans } from 'react-i18next'
+import { Icons } from '@masknet/icons'
+import { PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { ApplicationEntry } from '@masknet/shared'
+import { useFungibleToken } from '@masknet/web3-hooks-base'
+import { formatBalance } from '@masknet/web3-shared-base'
 import { base } from '../base.js'
 import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants.js'
 import {
@@ -17,15 +23,11 @@ import {
 } from './helpers.js'
 import { useI18N } from '../locales/index.js'
 import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '../types.js'
+import { RedPacketInjection } from './RedPacketInjection.js'
 import RedPacketDialog from './RedPacketDialog.js'
 import { RedPacketInPost } from './RedPacketInPost.js'
 import { RedPacketNftInPost } from './RedPacketNftInPost.js'
-import { Trans } from 'react-i18next'
-import { Icons } from '@masknet/icons'
-import { CrossIsolationMessages, PluginID, NetworkPluginID } from '@masknet/shared-base'
-import { ApplicationEntry } from '@masknet/shared'
-import { useFungibleToken } from '@masknet/web3-hooks-base'
-import { formatBalance } from '@masknet/web3-shared-base'
+import { openDialog } from './emitter.js'
 
 function Render(
     props: React.PropsWithChildren<{
@@ -85,6 +87,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
         ],
     ]),
+    GlobalInjection: RedPacketInjection,
     CompositionDialogEntry: {
         dialog: RedPacketDialog,
         label: (
@@ -106,15 +109,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
-                    const clickHandler = () =>
-                        CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
-                            reason: 'timeline',
-                            open: true,
-                            options: {
-                                startupPlugin: base.ID,
-                                isOpenFromApplicationBoard: true,
-                            },
-                        })
                     return (
                         <ApplicationEntry
                             title={name}
@@ -123,8 +117,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             icon={icon}
                             onClick={
                                 EntryComponentProps.onClick
-                                    ? () => EntryComponentProps.onClick?.(clickHandler)
-                                    : clickHandler
+                                    ? () => EntryComponentProps.onClick?.(openDialog)
+                                    : openDialog
                             }
                         />
                     )

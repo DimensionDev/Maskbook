@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react'
 import { compact } from 'lodash-es'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
-import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import {
     useChainContext,
     useWeb3Connection,
@@ -12,7 +11,6 @@ import {
 } from '@masknet/web3-hooks-base'
 import { InjectedDialog, NetworkTab } from '@masknet/shared'
 import { ChainId, GasConfig, GasEditor } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { DialogContent, Tab } from '@mui/material'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
@@ -22,10 +20,11 @@ import {
     useCurrentLinkedPersona,
     useLastRecognizedIdentity,
 } from '../../../components/DataSource/useActivatedUI.js'
+import { WalletMessages } from '../../Wallet/messages.js'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
-import { WalletMessages } from '../../Wallet/messages.js'
 import { RedPacketMetaKey } from '../constants.js'
 import { DialogTabs, RedPacketJSONPayload } from '../types.js'
 import type { RedPacketSettings } from './hooks/useCreateCallback.js'
@@ -35,6 +34,7 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { Icons } from '@masknet/icons'
 import { RedPacketERC20Form } from './RedPacketERC20Form.js'
 import { RedPacketERC721Form } from './RedPacketERC721Form.js'
+import { openComposition } from './openComposition.js'
 
 const useStyles = makeStyles()((theme) => ({
     dialogContent: {
@@ -78,13 +78,13 @@ interface RedPacketDialogProps {
 export default function RedPacketDialog(props: RedPacketDialogProps) {
     const t = useI18N()
     const { t: i18n } = useBaseI18N()
+    const [open, setOpen] = useState(false)
     const [showHistory, setShowHistory] = useState(false)
     const [gasOption, setGasOption] = useState<GasConfig>()
     const { pluginID } = useNetworkContext()
 
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
     const { classes } = useStyles()
-    const { attachMetadata, dropMetadata } = useCompositionContext()
     const state = useState(DialogTabs.create)
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
@@ -107,20 +107,18 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [openSelectNFTDialog, setOpenSelectNFTDialog] = useState(false)
     // #endregion
 
-    const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
-    )
-
     const onClose = useCallback(() => {
         setStep(CreateRedPacketPageStep.NewRedPacketPage)
         setSettings(undefined)
         const [, setValue] = state
         setValue(DialogTabs.create)
         props.onClose()
-        closeApplicationBoardDialog()
     }, [props, state, step])
 
     const currentIdentity = useCurrentIdentity()
+    const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
+        WalletMessages.events.ApplicationDialogUpdated,
+    )
     const lastRecognized = useLastRecognizedIdentity()
     const { value: linkedPersona } = useCurrentLinkedPersona()
     const senderName =
@@ -145,10 +143,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             }
 
             senderName && (payload.sender.name = senderName)
-            attachMetadata(RedPacketMetaKey, reduceUselessPayloadInfo(payload))
+            openComposition(RedPacketMetaKey, reduceUselessPayloadInfo(payload))
+            closeApplicationBoardDialog()
             onClose()
         },
-        [onClose, chainId, senderName, connection],
+        [onClose, openComposition, closeApplicationBoardDialog, chainId, senderName, connection],
     )
 
     const onBack = useCallback(() => {
