@@ -59,29 +59,31 @@ export function PriceCard(props: PriceCardProps) {
 
     if (!topOffer && orders.error)
         return (
-            <div className={classes.priceZone}>
-                <div className={classes.offerBox}>
-                    <Typography textAlign="center" fontSize={12} fontWeight={700}>
-                        {t.load_failed()}
-                    </Typography>
+            <div className={classes.wrapper}>
+                <div className={classes.priceZone}>
+                    <div className={classes.offerBox}>
+                        <Typography textAlign="center" fontSize={12} fontWeight={700}>
+                            {t.load_failed()}
+                        </Typography>
+                    </div>
+                    <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} />
                 </div>
-                <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} />
             </div>
         )
 
     if (!topOffer && !orders.loading)
         return (
-            <div className={classes.priceZone}>
-                <div className={classes.offerBox}>
-                    <Typography textAlign="center" fontSize={12} fontWeight={700}>
-                        {t.plugin_collectible_nft_offers_empty()}
-                    </Typography>
+            <div className={classes.wrapper}>
+                <div className={classes.priceZone}>
+                    <div className={classes.offerBox}>
+                        <Typography textAlign="center" fontSize={12} fontWeight={700}>
+                            {t.plugin_collectible_nft_offers_empty()}
+                        </Typography>
+                    </div>
+                    <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} />
                 </div>
-                <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} />
             </div>
         )
-
-    if (!topOffer) return null
 
     return (
         <div className={classes.wrapper}>
@@ -90,14 +92,14 @@ export function PriceCard(props: PriceCardProps) {
                     <PriceLoadingSkeleton />
                 ) : (
                     <div className={classes.offerBox}>
-                        {(topOffer.priceInToken?.token.logoURL && (
+                        {(topOffer?.priceInToken?.token.logoURL && (
                             <img width={18} height={18} src={topOffer.priceInToken?.token.logoURL} alt="" />
                         )) ||
-                            (topOffer.priceInToken?.token.symbol.toUpperCase() === 'WETH' ? (
+                            (topOffer?.priceInToken?.token.symbol.toUpperCase() === 'WETH' ? (
                                 <Icons.WETH size={18} />
                             ) : (
                                 <Typography className={classes.fallbackSymbol}>
-                                    {topOffer.priceInToken?.token.symbol || topOffer.priceInToken?.token.name}
+                                    {topOffer?.priceInToken?.token.symbol || topOffer?.priceInToken?.token.name}
                                 </Typography>
                             ))}
                         <Typography className={classes.textBase}>
@@ -107,7 +109,7 @@ export function PriceCard(props: PriceCardProps) {
                                 6,
                             )}
                         </Typography>
-                        {topOffer.price?.usd && (
+                        {topOffer?.price?.usd && (
                             <Typography className={classes.textBase}>
                                 <strong>({formatCurrency(topOffer.price?.usd) || '-'})</strong>
                             </Typography>

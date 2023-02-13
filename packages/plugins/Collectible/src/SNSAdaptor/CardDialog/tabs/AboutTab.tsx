@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js'
 import { first } from 'lodash-es'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
+import type { NonFungibleTokenOrder } from '@masknet/web3-shared-base'
 import { DescriptionCard } from '../../Shared/DescriptionCard.js'
 import { PropertiesCard } from '../../Shared/PropertiesCard.js'
 import { PriceCard } from '../../Shared/PriceCard.js'
@@ -36,13 +36,13 @@ const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<Web3Helper.ChainId
 
 export interface AboutTabProps {
     asset: Web3Helper.NonFungibleAssetScope<void>
-    orders?: Pageable<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    orders?: Array<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
 export const AboutTab = memo(function AboutTab({ asset, orders }: AboutTabProps) {
     const { classes } = useStyles()
 
-    const topOffer = resolveTopOffer(orders?.data)
+    const topOffer = resolveTopOffer(orders)
     const { rarity } = Context.useContainer()
 
     if (!asset) return null
