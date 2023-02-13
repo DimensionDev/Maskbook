@@ -7,14 +7,15 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import type { AsyncStatePageable } from '@masknet/web3-hooks-base'
 import { ActivityCard } from './ActivityCard.js'
 import { useI18N } from '../../locales/i18n_generated.js'
+import { RetryHint } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        minHeight: 300,
-        height: 327,
+        minHeight: 280,
+        height: 280,
         width: '100%',
         gap: 12,
         justifyContent: 'center',
@@ -49,10 +50,10 @@ export function ActivitiesList(props: ActivitiesListProps) {
     if (events.error || !events.value)
         return (
             <div className={classes.wrapper}>
-                <Typography className={classes.emptyText}>{t.load_failed()}</Typography>
-                <Button variant="text" onClick={() => events.retry()}>
-                    {t.retry()}
-                </Button>
+                <RetryHint
+                    ButtonProps={{ startIcon: <Icons.Restore color="white" size={18} />, sx: { width: 256 } }}
+                    retry={() => events.retry()}
+                />
             </div>
         )
 
@@ -71,7 +72,7 @@ export function ActivitiesList(props: ActivitiesListProps) {
             ))}
             <Stack pb="1px" width="100%" direction="row" justifyContent="center">
                 {!events.ended && (
-                    <Button sx={{ mb: 2 }} onClick={() => events.next()}>
+                    <Button sx={{ mb: 2 }} onClick={() => events.next()} variant="roundedContained">
                         {t.load_more()}
                     </Button>
                 )}
