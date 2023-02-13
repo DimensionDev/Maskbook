@@ -20,6 +20,7 @@ export function formatBalance(
 
     // add leading zeros
     while (fraction.length < decimals) fraction = `0${fraction}`
+    fraction = fraction.slice(0, significant + 1)
 
     // match significant digits
     const matchSignificantDigits = new RegExp(`^0*[1-9]\\d{0,${significant > 0 ? significant - 1 : 0}}`)
