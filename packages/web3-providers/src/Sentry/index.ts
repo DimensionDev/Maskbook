@@ -1,15 +1,14 @@
-import { NetworkPluginID, getSiteType } from '@masknet/shared-base'
-import type { LoggerAPI } from '../types/Logger.js'
 import type { Event } from '@sentry/browser'
+import { getSiteType, isOpera, isFirefox, isEdge, isChromium } from '@masknet/shared-base'
+import { LoggerAPI } from '../types/Logger.js'
 
-export class SentryAPI implements LoggerAPI.Provider<Event, Error> {
+export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
     constructor() {
         Sentry.init({
             dsn: process.env.MASK_SENTRY_DSN,
             defaultIntegrations: false,
-            integrations: [new Sentry.Integrations.Breadcrumbs({ console: false })],
+            integrations: [],
             environment: process.env.NODE_ENV,
-            release: process.env.VERSION,
             tracesSampleRate: 1.0,
         })
     }
@@ -18,46 +17,50 @@ export class SentryAPI implements LoggerAPI.Provider<Event, Error> {
         return getSiteType()
     }
 
-    createEvent(options: LoggerAPI.EventOptions): Event {
+    private get agent() {
+        if (isEdge()) return 'edge'
+        if (isOpera()) return 'opera'
+        if (isFirefox()) return 'firefox'
+        if (isChromium()) return 'chromium'
+        return 'unknown'
+    }
+
+    private createCommonEvent(type: LoggerAPI.TypeID, message: string, options: LoggerAPI.CommonOptions): Event {
         return {
-            event_id: options.eventID,
-            message: 'An Event Message',
-            platform: 'twitter.com',
+            message,
+            level: type === LoggerAPI.TypeID.Event ? 'info' : 'error',
+            user: options.user
+                ? {
+                      username: options.user?.userID,
+                  }
+                : undefined,
+            tags: {
+                type: LoggerAPI.TypeID.Event,
+                chain_id: options.network?.chainId,
+                plugin_id: options.network?.pluginID,
+                agent: this.agent,
+                site: this.site,
+                ua: navigator.userAgent,
+                version: process.env.VERSION,
+            },
+            exception: {},
+            breadcrumbs: [],
         }
     }
-    createException(options: LoggerAPI.ExceptionOptions): Error {
-        return options.error ?? new Error('Something went wrong!')
+
+    createEvent(options: LoggerAPI.EventOptions): Event {
+        return this.createCommonEvent(LoggerAPI.TypeID.Event, options.eventID, options)
     }
 
-    // private createScope(options?: ScopeOp) {
-    //     const scope = new Sentry.Scope()
-
-    //     if (this.id) scope.setTag('id', this.id)
-    //     if (this.site) scope.setTag('site_id', this.site)
-    //     if (this.pluginID) scope.setTag('plugin_id', this.pluginID)
-
-    //     return scope
-    // }
+    createException(options: LoggerAPI.ExceptionOptions): Event {
+        return this.createCommonEvent(LoggerAPI.TypeID.Exception, options.exceptionID, options)
+    }
 
     captureEvent(options: LoggerAPI.EventOptions) {
         Sentry.captureEvent(this.createEvent(options))
     }
 
     captureException(options: LoggerAPI.ExceptionOptions) {
-        Sentry.captureException(this.createException(options), {
-            tags: {
-                pageID: 'index',
-                pluginID: NetworkPluginID.PLUGIN_SOLANA,
-            },
-        })
-    }
-
-    captureMessage(message: string) {
-        Sentry.captureMessage(message, {
-            tags: {
-                pageID: 'index',
-                pluginID: NetworkPluginID.PLUGIN_EVM,
-            },
-        })
+        Sentry.captureException(options.error, this.createException(options))
     }
 }

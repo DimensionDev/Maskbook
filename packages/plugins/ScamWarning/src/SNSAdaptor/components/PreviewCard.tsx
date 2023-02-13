@@ -39,18 +39,16 @@ export const PreviewCard = ({ links }: PreviewCardProps) => {
         <ThemeProvider theme={MaskDarkTheme}>
             <Stack p={1.5} pt={0} className={classes.root}>
                 <Stack className={classes.card}>
-                    {value.map((x) => {
-                        return (
-                            <Typography
-                                key={x.url}
-                                className={classes.title}
-                                variant="h6"
-                                fontWeight={700}
-                                color="textPrimary">
-                                {x.url}
-                            </Typography>
-                        )
-                    })}
+                    {value.map((x) => (
+                        <Typography
+                            key={x.url}
+                            className={classes.title}
+                            variant="h6"
+                            fontWeight={700}
+                            color="textPrimary">
+                            {x.url}
+                        </Typography>
+                    ))}
                     <Typography variant="body1" color="textPrimary">
                         {t.warning_description({ count: value.length })}
                     </Typography>

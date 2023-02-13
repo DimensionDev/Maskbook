@@ -50,6 +50,14 @@ export function isExtensionSiteType() {
     return !!getExtensionSiteType()
 }
 
+export function isChromium() {
+    return process.env.engine === 'chromium'
+}
+
+export function isEdge() {
+    return globalThis.navigator.userAgent.includes('Edg')
+}
+
 export function isFirefox() {
     return process.env.engine === 'firefox'
 }

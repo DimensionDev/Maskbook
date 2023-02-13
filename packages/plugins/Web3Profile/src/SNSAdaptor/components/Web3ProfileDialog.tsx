@@ -57,7 +57,10 @@ export function Web3ProfileDialog() {
 
     useEffect(() => {
         return CrossIsolationMessages.events.web3ProfileDialogEvent.on(({ open }) => {
-            if (open) Sentry?.captureMessage(LoggerAPI.EventID.Web3ProfileDialogAccess)
+            if (open)
+                Sentry?.captureEvent({
+                    eventID: LoggerAPI.EventID.Web3ProfileDialogAccess,
+                })
             setOpen(open)
         })
     }, [])

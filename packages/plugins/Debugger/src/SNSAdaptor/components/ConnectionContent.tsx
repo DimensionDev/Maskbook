@@ -4,6 +4,7 @@ import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/
 import { makeStyles } from '@masknet/theme'
 import { useWeb3Connection, useChainContext, useNetworkContext, useWeb3 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { Sentry } from '@masknet/web3-providers'
 import { NetworkPluginID, ProofType } from '@masknet/shared-base'
 import {
     Web3,
@@ -16,7 +17,7 @@ import { ChainId as SolanaChainId, ProviderType as SolanaProviderType } from '@m
 import { ChainId as FlowChainId, ProviderType as FlowProviderType } from '@masknet/web3-shared-flow'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
-import { Sentry } from '@masknet/web3-providers'
+import { LoggerAPI } from '@masknet/web3-providers/types'
 
 export interface ConnectionContentProps {
     onClose?: () => void
@@ -35,24 +36,17 @@ export function ConnectionContent(props: ConnectionContentProps) {
     const web3 = useWeb3()
     const connection = useWeb3Connection()
 
-    const onCaptureMessage = useCallback(async () => {
-        Sentry.captureMessage('This is a message.')
-    }, [])
-
     const onCaptureEvent = useCallback(async () => {
-        try {
-            await fetch('https://goodname.com/dfdf')
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                Sentry.captureException({
-                    error,
-                })
-            }
-        }
+        Sentry.captureEvent({
+            eventID: LoggerAPI.EventID.Debug,
+        })
     }, [])
 
     const onCaptureException = useCallback(async () => {
-        Sentry.captureException({})
+        Sentry.captureException({
+            exceptionID: LoggerAPI.ExceptionID.Debug,
+            error: new Error('A debug error.'),
+        })
     }, [])
 
     const onEstimateCallback = useCallback(async () => {
@@ -274,18 +268,6 @@ export function ConnectionContent(props: ConnectionContentProps) {
                         <TableCell>
                             <Button size="small" onClick={() => onCaptureException()}>
                                 Capture Exception
-                            </Button>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
-                                Capture Message
-                            </Typography>
-                        </TableCell>
-                        <TableCell>
-                            <Button size="small" onClick={() => onCaptureMessage()}>
-                                Capture Message
                             </Button>
                         </TableCell>
                     </TableRow>

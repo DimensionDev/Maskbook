@@ -7,22 +7,27 @@ export namespace LoggerAPI {
         Unknown = 'Unknown',
     }
 
+    export enum TypeID {
+        Event = 'event',
+        Exception = 'exception',
+    }
+
     export enum EventID {
-        DashboardAccess = 'dashboard-access',
         ApplicationBoardAccess = 'application-board-access',
+        DashboardAccess = 'dashboard-access',
         PopupAccess = 'popup-access',
-        PluginAccess = 'plugin-access',
         Web3ProfileDialogAccess = 'web3-profile-dialog-access',
+        Debug = 'debug',
     }
 
     export enum ExceptionID {
-        FETCH_ERROR = 'FetchError',
+        FetchError = 'FetchError',
+        Debug = 'DebugError',
     }
 
     export interface NetworkOptions {
         pluginID?: NetworkPluginID
         chainId?: Web3Helper.ChainIdAll
-        account?: string
     }
 
     export interface UserOptions {
@@ -38,15 +43,15 @@ export namespace LoggerAPI {
     }
 
     export interface EventOptions extends CommonOptions {
-        eventID?: EventID
-        previousEventID?: EventID
         pageID?: PageID
-        previousPageID?: PageID
+        eventID: EventID
+        message?: string
     }
 
     export interface ExceptionOptions extends CommonOptions {
-        exceptionID?: ExceptionID
-        error?: Error
+        pageID?: PageID
+        exceptionID: ExceptionID
+        error: Error
     }
 
     export interface Provider<Event, Exception> {
@@ -55,7 +60,5 @@ export namespace LoggerAPI {
 
         captureEvent(options: EventOptions): void
         captureException(options: ExceptionOptions): void
-
-        captureMessage(message: string): void
     }
 }
