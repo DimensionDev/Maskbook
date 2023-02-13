@@ -136,9 +136,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const [, copyToClipboard] = useCopyToClipboard()
     const onCopy = useSnackbarCallback(
         async (ev: React.MouseEvent<HTMLAnchorElement>) => {
-            if (Math.random() < 100) {
-                throw new Error('Some error occurred.')
-            }
             ev.stopPropagation()
             copyToClipboard(account)
         },

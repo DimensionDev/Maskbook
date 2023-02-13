@@ -1,5 +1,5 @@
 import type { Event } from '@sentry/browser'
-import { getSiteType, isOpera, isFirefox, isEdge, isChromium } from '@masknet/shared-base'
+import { getSiteType, getAgentType } from '@masknet/shared-base'
 import { LoggerAPI } from '../types/Logger.js'
 
 export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
@@ -65,18 +65,6 @@ export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
         }
     }
 
-    private get site() {
-        return getSiteType()
-    }
-
-    private get agent() {
-        if (isEdge()) return 'edge'
-        if (isOpera()) return 'opera'
-        if (isFirefox()) return 'firefox'
-        if (isChromium()) return 'chromium'
-        return 'unknown'
-    }
-
     private getOptions(initial?: LoggerAPI.CommonOptions): LoggerAPI.CommonOptions {
         return {
             user: {
@@ -101,15 +89,15 @@ export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
             level: type === LoggerAPI.TypeID.Event ? 'info' : 'error',
             user: options.user
                 ? {
-                      username: options.user?.userID,
+                      username: options.user?.userID ?? options.user.account,
                   }
                 : undefined,
             tags: {
                 type: LoggerAPI.TypeID.Event,
                 chain_id: options.network?.chainId,
                 plugin_id: options.network?.pluginID,
-                agent: this.agent,
-                site: this.site,
+                agent: getAgentType(),
+                site: getSiteType(),
                 ua: navigator.userAgent,
                 version: process.env.VERSION,
             },

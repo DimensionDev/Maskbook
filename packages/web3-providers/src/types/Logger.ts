@@ -2,11 +2,6 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 export namespace LoggerAPI {
-    export enum PageID {
-        Index = 'Index',
-        Unknown = 'Unknown',
-    }
-
     export enum TypeID {
         Event = 'event',
         Exception = 'exception',
@@ -32,6 +27,7 @@ export namespace LoggerAPI {
 
     export interface UserOptions {
         userID?: string
+        account?: string
     }
 
     export interface DeviceOptions {}
@@ -43,13 +39,11 @@ export namespace LoggerAPI {
     }
 
     export interface EventOptions extends CommonOptions {
-        pageID?: PageID
         eventID: EventID
         message?: string
     }
 
     export interface ExceptionOptions extends CommonOptions {
-        pageID?: PageID
         exceptionID: ExceptionID
         error: Error
     }
