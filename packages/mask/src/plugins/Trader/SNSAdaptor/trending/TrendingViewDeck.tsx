@@ -232,7 +232,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         {t('plugin_trader_rank', { rank: result.rank ?? coin.market_cap_rank })}
                                     </Typography>
                                 ) : null}
-                                {displayResultList.length > 1 && !isPreciseSearch && result.rank ? (
+                                {displayResultList.length > 1 && !isPreciseSearch ? (
                                     <>
                                         <IconButton
                                             sx={{ padding: 0 }}

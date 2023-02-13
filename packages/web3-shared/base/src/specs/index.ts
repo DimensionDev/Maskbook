@@ -2,13 +2,13 @@ import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Emitter } from '@servie/events'
 import type {
+    ECKeyIdentifier,
     EnhanceableSite,
     ExtensionSite,
-    ProfileIdentifier,
-    ECKeyIdentifier,
+    NetworkPluginID,
     NextIDPersonaBindings,
     NextIDPlatform,
-    NetworkPluginID,
+    ProfileIdentifier,
     Proof,
 } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
