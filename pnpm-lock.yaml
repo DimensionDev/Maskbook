@@ -580,21 +580,7 @@ importers:
         specifier: ^7.0.2
         version: 7.0.2_rollup@3.5.0
 
-  packages/logs:
-    dependencies:
-      '@sentry/browser':
-        specifier: 7.3.0
-        version: 7.3.0
-    devDependencies:
-      '@rollup/plugin-node-resolve':
-        specifier: ^13.3.0
-        version: 13.3.0_rollup@2.79.1
-      '@rollup/plugin-replace':
-        specifier: ^4.0.0
-        version: 4.0.0_rollup@2.79.1
-      rollup:
-        specifier: ^2.75.6
-        version: 2.79.1
+  packages/logs: {}
 
   packages/mask:
     dependencies:

@@ -18,7 +18,7 @@ import { i18NextInstance, NetworkPluginID, queryRemoteI18NBundle } from '@maskne
 import '../utils/kv-storage.js'
 
 import { Pages } from '../pages/routes.js'
-import { useAppearance, useLogSettings } from '../pages/Personas/api.js'
+import { useAppearance, useLog } from '../pages/Personas/api.js'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext.js'
 import { Services } from '../API.js'
 
@@ -30,7 +30,7 @@ export default function DashboardRoot() {
 
     // #region theme
     const appearance = useAppearance()
-    const loggerId = useLogSettings()
+    const log = useLog()
     const mode = useSystemPreferencePalette()
     const theme = {
         dark: DashboardDarkTheme,

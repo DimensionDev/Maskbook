@@ -20,7 +20,7 @@ function usePopupTheme() {
     return usePopupFullPageTheme(useValueRef(languageSettings))
 }
 
-function useLogSettings() {
+function useLog() {
     return useValueRef(logSettings)
 }
 

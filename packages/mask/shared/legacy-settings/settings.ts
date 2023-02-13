@@ -30,9 +30,7 @@ export const userGuideStatus = createBulkSettings('userGuideStatus', '')
 export const sayHelloShowed = createBulkSettings('sayHelloShowed', false)
 export const userPinExtension = createGlobalSettings('userPinExtension', false)
 export const dismissVerifyNextID = createBulkSettings<Record<string, boolean>>('dismissVerifyNextID', {}, isEqual)
-
-export const logSettings = createGlobalSettings<string>('log', '')
-
+export const logSettings = createGlobalSettings<boolean>('log', false)
 export const decentralizedSearchSettings = createGlobalSettings('decentralizedSearchSettings', true)
 
 /**
