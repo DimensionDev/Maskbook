@@ -53,7 +53,7 @@ export function RedPacketPast({ onSelect, onClose, tabs }: Props) {
             closeApplicationBoardDialog()
             onClose?.()
         },
-        [senderName, onClose, closeApplicationBoardDialog],
+        [senderName, onClose, openComposition, closeApplicationBoardDialog],
     )
 
     return (
