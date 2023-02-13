@@ -24,6 +24,7 @@ describe('formatBalance util test', () => {
         { give: 123456789, decimals: 15, significant: 18, expected: '<0.000001' },
         { give: 123456789, decimals: 15, significant: 19, expected: '<0.000001' },
         { give: 123456789, decimals: 20, significant: 20, expected: '<0.000001' },
+        { give: 1.05, decimals: 6, significant: 20, expected: '0.000001' },
     ])('.format($give)', ({ give, decimals, significant, expected }) => {
         expect(formatBalance(give, decimals, significant)).toBe(expected)
     })
