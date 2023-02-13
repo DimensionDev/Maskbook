@@ -78,7 +78,10 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
     const { title, admin_address: address, tenants } = grant
     const { share } = useSNSAdaptorContext()
 
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const availableChains = useMemo(() => getSupportedChainIds(tenants), [tenants])
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
+        chainId: availableChains[0],
+    })
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const nativeTokenDetailed = useAsync(async () => {
         return connection?.getNativeToken({ chainId })
@@ -121,7 +124,6 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
         tipAmount.toFixed(0),
         token,
     )
-    const availableChains = useMemo(() => getSupportedChainIds(tenants), [tenants])
     // #endregion
 
     const showConfirm = useShowResult()
