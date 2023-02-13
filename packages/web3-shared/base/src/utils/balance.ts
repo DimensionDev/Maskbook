@@ -1,6 +1,14 @@
 import { BigNumber } from 'bignumber.js'
 import { pow10 } from './number.js'
 
+/**
+ * Format token balance as a human-readable string.
+ * @param rawValue It must be an integer amount.
+ * @param decimals
+ * @param significant
+ * @param isPrecise
+ * @returns
+ */
 export function formatBalance(
     rawValue: BigNumber.Value = '0',
     decimals = 0,
