@@ -130,10 +130,12 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                 ) {
                     const data = compact<T>(
                         all
-                            .filter((x) => x.alias?.length && x.type === SearchResultType.NonFungibleCollection)
+                            .filter(
+                                (x) => x.alias?.length && x.type === SearchResultType.CollectionListByTwitterHandler,
+                            )
                             .flatMap((x) => {
                                 // Make ts work
-                                if (x.type !== SearchResultType.NonFungibleCollection) return []
+                                if (x.type !== SearchResultType.CollectionListByTwitterHandler) return []
                                 return x.alias
                                     ?.filter((x) => x.isPin)
                                     .map((y) => {
@@ -203,11 +205,11 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                 key: 'twitter',
                 type: 'exact',
                 filter: (data: SearchResult<ChainId, SchemaType>, keyword: string) => {
-                    if (data.type !== SearchResultType.NonFungibleCollection) return false
+                    if (data.type !== SearchResultType.CollectionListByTwitterHandler) return false
                     return Boolean(data.collection?.socialLinks?.twitter?.toLowerCase().endsWith(keyword.toLowerCase()))
                 },
             },
         ],
-        type: SearchResultType.NonFungibleCollection,
+        type: SearchResultType.CollectionListByTwitterHandler,
     },
 ]

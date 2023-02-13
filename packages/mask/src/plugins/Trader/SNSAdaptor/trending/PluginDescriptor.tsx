@@ -13,14 +13,14 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 interface PluginHeaderProps extends React.PropsWithChildren<{}> {
-    isNFTProjectPopper?: boolean
+    isCollectionProjectPopper?: boolean
     isProfilePage?: boolean
     isTokenTagPopper?: boolean
 }
 
 export const PluginDescriptor = ({
     children,
-    isNFTProjectPopper,
+    isCollectionProjectPopper,
     isProfilePage,
     isTokenTagPopper,
 }: PluginHeaderProps) => {
@@ -30,7 +30,7 @@ export const PluginDescriptor = ({
     return (
         <Stack flexDirection="row" justifyContent="space-between" alignItems="center" width="100%">
             <Stack flexDirection="row" justifyContent="space-between" gap={0.5} alignItems="center">
-                {isNFTProjectPopper || isTokenTagPopper ? (
+                {isCollectionProjectPopper || isTokenTagPopper ? (
                     <Icons.Web3ProfileCard className={classes.cardIcon} size={24} />
                 ) : isProfilePage ? (
                     <Icons.Web3Profile className={classes.cardIcon} size={24} />
@@ -41,11 +41,11 @@ export const PluginDescriptor = ({
                     fontWeight="bolder"
                     fontSize={16}
                     color={(theme) =>
-                        isNFTProjectPopper || isTokenTagPopper
+                        isCollectionProjectPopper || isTokenTagPopper
                             ? theme.palette.maskColor.main
                             : theme.palette.maskColor.dark
                     }>
-                    {isTokenTagPopper || isNFTProjectPopper
+                    {isTokenTagPopper || isCollectionProjectPopper
                         ? t.web3_profile_card_name()
                         : isProfilePage
                         ? t.profile_card_name()

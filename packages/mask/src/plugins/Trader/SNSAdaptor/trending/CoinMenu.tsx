@@ -2,8 +2,11 @@ import { FC, PropsWithChildren, useCallback, useMemo } from 'react'
 import { groupBy, toPairs, isEqual } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { TokenIcon } from '@masknet/shared'
-import { SearchResultType } from '@masknet/web3-shared-base'
+import { TokenIcon, useSocialAccountsBySettings, FormattedAddress } from '@masknet/shared'
+import { useWeb3State } from '@masknet/web3-hooks-base'
+import { useI18N } from '../../../../utils/index.js'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { SearchResultType, SocialIdentity, SocialAddressType } from '@masknet/web3-shared-base'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { RadioButtonUnchecked as RadioButtonUncheckedIcon } from '@mui/icons-material'
 import { Divider, MenuItem, Stack, Typography } from '@mui/material'
@@ -147,29 +150,29 @@ export interface CoinMenuProps {
     open: boolean
     anchorEl: HTMLElement | null
     optionList: Web3Helper.TokenResultAll[]
+    identity?: SocialIdentity
     result: Web3Helper.TokenResultAll
     onChange?: (a: Web3Helper.TokenResultAll) => void
     onClose?: () => void
 }
 
-const menuGroupNameMap: Record<
-    SearchResultType.FungibleToken | SearchResultType.NonFungibleToken | SearchResultType.NonFungibleCollection,
-    string
-> = {
-    [SearchResultType.FungibleToken]: 'Token',
-    [SearchResultType.NonFungibleToken]: 'NFT',
-    [SearchResultType.NonFungibleCollection]: 'NFT',
+const menuGroupNameMap: Record<'FungibleToken' | 'NonFungibleToken' | 'NonFungibleCollection', string> = {
+    FungibleToken: 'Token',
+    NonFungibleToken: 'NFT',
+    NonFungibleCollection: 'NFT',
 }
 
 export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({
     open,
     result,
     optionList,
+    identity,
     anchorEl,
     onChange,
     onClose,
 }) => {
     const { classes } = useStyles()
+    const { t } = useI18N()
     const onSelect = useCallback(
         (value: Web3Helper.TokenResultAll) => {
             onChange?.(value)
@@ -177,6 +180,12 @@ export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({
         },
         [onChange, onClose],
     )
+    const { value: allSocialAccounts = EMPTY_LIST } = useSocialAccountsBySettings(identity)
+    const { Others } = useWeb3State()
+
+    const openRss3Profile = useCallback(() => {
+        onClose?.()
+    }, [onClose])
 
     const menuItems = useMemo(() => {
         const groups: Array<
@@ -189,13 +198,36 @@ export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({
             optionList,
         ])
 
-        return groups.map(([type, groupOptions]) => (
-            <div key={type} className={classes.group}>
-                <Typography className={classes.groupName}>{menuGroupNameMap[type]}</Typography>
-                <Divider className={classes.divider} />
-                <TokenMenuList options={groupOptions} result={result} onSelect={onSelect} />
-            </div>
-        ))
+        return groups
+            .map(([type, groupOptions]) => (
+                <div key={type} className={classes.group}>
+                    <Typography className={classes.groupName}>{menuGroupNameMap[type]}</Typography>
+                    <Divider className={classes.divider} />
+                    <TokenMenuList options={groupOptions} result={result} onSelect={onSelect} />
+                </div>
+            ))
+            .concat(
+                <div key="rss3" className={classes.group}>
+                    <Typography className={classes.groupName}>{t('address')}</Typography>
+                    <Divider className={classes.divider} />
+                    {allSocialAccounts.map((x, i) => (
+                        <MenuItem key={x.address} className={classes.menuItem} onClick={openRss3Profile}>
+                            <Typography
+                                fontSize={14}
+                                fontWeight={700}
+                                flexGrow={1}
+                                overflow="hidden"
+                                textOverflow="ellipsis">
+                                {x.supportedAddressTypes?.[0] === SocialAddressType.ENS ? (
+                                    x.label
+                                ) : (
+                                    <FormattedAddress address={x.address} size={4} formatter={Others?.formatAddress} />
+                                )}
+                            </Typography>
+                        </MenuItem>
+                    ))}
+                </div>,
+            )
     }, [optionList, result, onSelect])
 
     return (

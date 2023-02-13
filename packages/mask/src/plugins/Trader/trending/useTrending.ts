@@ -33,7 +33,7 @@ export function useCollectionByTwitterHandler(twitterHandler?: string) {
         if (!twitterHandler) return
         return DSearch.search<NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>(
             twitterHandler,
-            SearchResultType.NonFungibleCollection,
+            SearchResultType.CollectionListByTwitterHandler,
         )
     }, [twitterHandler])
 }

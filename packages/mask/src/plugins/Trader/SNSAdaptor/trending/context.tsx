@@ -2,21 +2,21 @@ import { createContext, PropsWithChildren } from 'react'
 
 interface TrendingViewContextProps {
     isTokenTagPopper: boolean
-    isNFTProjectPopper: boolean
+    isCollectionProjectPopper: boolean
     isProfilePage: boolean
     isPreciseSearch: boolean
 }
 
 export const TrendingViewContext = createContext<TrendingViewContextProps>({
     isTokenTagPopper: true,
-    isNFTProjectPopper: false,
+    isCollectionProjectPopper: false,
     isProfilePage: false,
     isPreciseSearch: false,
 })
 
 export function TrendingViewProvider({
     isTokenTagPopper,
-    isNFTProjectPopper,
+    isCollectionProjectPopper,
     isProfilePage,
     isPreciseSearch,
     children,
@@ -25,7 +25,7 @@ export function TrendingViewProvider({
         <TrendingViewContext.Provider
             value={{
                 isTokenTagPopper,
-                isNFTProjectPopper,
+                isCollectionProjectPopper,
                 isProfilePage,
                 isPreciseSearch,
             }}>

@@ -48,7 +48,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 return (
                     <Box display="flex" alignItems="top" justifyContent="center">
                         <div style={{ display: 'flex', alignItems: 'top', justifyContent: 'center' }}>
-                            <AvatarBadge userId={identity.identifier.userId} />
+                            <AvatarBadge userId={identity.identifier.userId} identity={identity} />
                         </div>
                     </Box>
                 )

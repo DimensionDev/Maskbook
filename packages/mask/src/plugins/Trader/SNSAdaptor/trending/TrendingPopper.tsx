@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useLocation, useWindowScroll } from 'react-use'
 import { Popper, ClickAwayListener, PopperProps, Fade } from '@mui/material'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
+import type { SocialIdentity } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginTraderMessages } from '../../messages.js'
 import { WalletMessages } from '../../../Wallet/messages.js'
@@ -12,8 +13,9 @@ export interface TrendingPopperProps extends Omit<PopperProps, 'children' | 'ope
     children?: (
         name?: string,
         type?: TrendingAPI.TagType,
+        identity?: SocialIdentity,
         address?: string,
-        isNFTProjectPopper?: boolean,
+        isCollectionProjectPopper?: boolean,
         reposition?: () => void,
     ) => React.ReactNode
     PopperProps?: Partial<PopperProps>
@@ -26,12 +28,13 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
     const [active, setActive] = useState(false)
     const [freezed, setFreezed] = useState(false) // disable any click
     const [name, setName] = useState('')
-    const [isNFTProjectPopper, setIsNFTProjectPopper] = useState(false)
+    const [isCollectionProjectPopper, setIsNFTProjectPopper] = useState(false)
+    const [identity, setIdentity] = useState<SocialIdentity | undefined>()
     const [address, setAddress] = useState('')
     const [type, setType] = useState<TrendingAPI.TagType | undefined>()
     const [anchorEl, setAnchorEl] = useState<PopperUnstyledOwnProps['anchorEl']>(null)
     const popper = useRef<HTMLDivElement | null>(null)
-
+    console.log({ identity }, '99')
     // #region select token and provider dialog could be opened by trending view
     const onFreezed = useCallback((ev: { open: boolean }) => setFreezed(ev.open), [])
     useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated, onFreezed)
@@ -44,10 +47,12 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
     // open popper from message center
     useEffect(() => {
         return PluginTraderMessages.trendingAnchorObserved.on((ev) => {
+            console.log({ ev })
             setName(ev.name)
             setType(ev.type)
             setAddress(ev.address ?? '')
-            setIsNFTProjectPopper(Boolean(ev.isNFTProjectPopper))
+            setIdentity(ev.identity)
+            setIsNFTProjectPopper(Boolean(ev.isCollectionProjectPopper))
             setAnchorEl({ getBoundingClientRect: () => ev.element!.getBoundingClientRect() })
             setActive(true)
         })
@@ -101,7 +106,7 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
                 {({ TransitionProps }) => (
                     <Fade {...TransitionProps}>
                         <div>
-                            {children?.(name, type, address, isNFTProjectPopper, () =>
+                            {children?.(name, type, identity, address, isCollectionProjectPopper, () =>
                                 setTimeout(() => popperRef.current?.update(), 100),
                             )}
                         </div>
