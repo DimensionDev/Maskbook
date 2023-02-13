@@ -60,6 +60,24 @@ export function useDeploy(
             const hasPassword = await hasPaymentPassword()
             if (!hasPassword) return openPopupWindow(PopupRoutes.CreatePassword)
 
+            if (contractAccount.funded && !contractAccount.deployed) {
+                const result = await connection?.deploy?.(signAccount.address, signAccount.identifier, {
+                    chainId,
+                })
+                await Wallet?.addWallet({
+                    name: 'Smart Pay',
+                    owner: signAccount.address,
+                    address: contractAccount.address,
+                    hasDerivationPath: false,
+                    hasStoredKeyInfo: false,
+                    id: contractAccount.address,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                })
+
+                onSuccess?.()
+                return result
+            }
             const payload = JSON.stringify({
                 twitterHandler: lastRecognizedIdentity.identifier.userId,
                 ts: getUnixTime(new Date()),
