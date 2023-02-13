@@ -157,17 +157,18 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
     const maxAmount = availableBalance.div(1 + giveBack).toFixed(0)
 
     // #region submit button
+    const insufficientBalance = total.gt(availableBalance)
     const validationMessage = useMemo(() => {
         if (!token) return t.select_a_token()
         if (!account) return t.plugin_wallet_connect_a_wallet()
         if (!address) return t.grant_not_available()
         if (!amount || amount.isZero()) return t.enter_an_amount()
-        if (total.gt(availableBalance))
+        if (insufficientBalance)
             return t.insufficient_balance({
                 symbol: token.symbol,
             })
         return ''
-    }, [account, address, amount.toFixed(0), total.toFixed(0), chainId, token, availableBalance])
+    }, [account, address, amount.toFixed(0), chainId, token, insufficientBalance])
     // #endregion
 
     if (!token || !address) return null
@@ -237,7 +238,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
                     <WalletConnectedBoundary expectedChainId={chainId}>
                         <EthereumERC20TokenApprovedBoundary
                             classes={{ button: classes.button }}
-                            amount={amount.toFixed()}
+                            amount={total.toFixed(0)}
                             spender={BULK_CHECKOUT_ADDRESS}
                             token={token.schema === SchemaType.ERC20 ? token : undefined}>
                             <ActionButton
