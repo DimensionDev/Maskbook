@@ -1,3 +1,7 @@
+import { Result } from 'ts-results-es'
+import { compact, omit } from 'lodash-es'
+import { v4 as uuid } from 'uuid'
+import * as bip39 from 'bip39'
 import { decodeArrayBuffer, unreachable } from '@masknet/kit'
 import { BackupPreview, getBackupPreviewInfo, normalizeBackup, NormalizedBackup } from '@masknet/backup-format'
 import {
@@ -8,19 +12,16 @@ import {
     isEC_Private_JsonWebKey,
     PopupRoutes,
 } from '@masknet/shared-base'
-import { Result } from 'ts-results-es'
-import { v4 as uuid } from 'uuid'
-import * as bip39 from 'bip39'
 import { openPopupWindow } from '../helper/popup-opener.js'
 import { requestHostPermission } from '../helper/request-permission.js'
 import { restoreNormalizedBackup } from './internal_restore.js'
 import { bufferToHex, privateToPublic, publicToAddress } from 'ethereumjs-util'
-import { compact, omit } from 'lodash-es'
-import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
+import { SmartPayBundler, SmartPayOwner } from '@masknet/web3-providers'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../identity/persona/utils.js'
 import { decode } from '@msgpack/msgpack'
 
 const unconfirmedBackup = new Map<string, NormalizedBackup.Data>()
+
 export interface RestoreUnconfirmedBackupOptions {
     /** The backup ID */
     id: string
@@ -151,7 +152,7 @@ export async function getUnconfirmedBackup(id: string): Promise<
         )
 
         const chainId = await SmartPayBundler.getSupportedChainId()
-        const smartPayAccounts = await SmartPayAccount.getAccountsByOwners(chainId, [
+        const smartPayAccounts = await SmartPayOwner.getAccountsByOwners(chainId, [
             ...wallets.map((x) => x.address),
             ...personaAddresses,
         ])

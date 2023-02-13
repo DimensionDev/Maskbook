@@ -3,7 +3,7 @@ import { useAsync, useAsyncFn } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { delay } from '@masknet/kit'
 import { useCustomSnackbar } from '@masknet/theme'
-import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
+import { SmartPayOwner, SmartPayBundler } from '@masknet/web3-providers'
 import { DashboardRoutes, ECKeyIdentifier, EC_Public_JsonWebKey } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { SignUpRoutePath } from '../routePath.js'
@@ -55,7 +55,7 @@ export const PersonaRecovery = () => {
 
                 const chainId = await SmartPayBundler.getSupportedChainId()
                 if (result?.address) {
-                    const smartPayAccounts = await SmartPayAccount.getAccountsByOwners(chainId, [result.address])
+                    const smartPayAccounts = await SmartPayOwner.getAccountsByOwners(chainId, [result.address])
                     const hasPaymentPassword = await PluginServices.Wallet.hasPassword()
                     if (smartPayAccounts.filter((x) => x.deployed || x.funded).length && !hasPaymentPassword) {
                         await Services.Backup.addUnconfirmedPersonaRestore({
