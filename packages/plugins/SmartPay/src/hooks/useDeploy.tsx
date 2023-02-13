@@ -4,7 +4,7 @@ import getUnixTime from 'date-fns/getUnixTime'
 import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { NetworkPluginID, PersonaInformation, PopupRoutes, ProofType, SignType } from '@masknet/shared-base'
 import { useChainContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
-import type { AbstractAccountAPI } from '@masknet/web3-providers/types'
+import type { OwnerAPI } from '@masknet/web3-providers/types'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { TransactionStatusType, Wallet } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
@@ -16,7 +16,7 @@ export function useDeploy(
     signPersona?: PersonaInformation,
     signWallet?: Wallet,
     signAccount?: ManagerAccount,
-    contractAccount?: AbstractAccountAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>,
+    contractAccount?: OwnerAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>,
     nonce?: number,
     onSuccess?: () => void,
 ) {

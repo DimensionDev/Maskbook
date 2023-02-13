@@ -1,11 +1,11 @@
+import { compact } from 'lodash-es'
 import React, { lazy, Suspense, useCallback, useEffect } from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom'
+import { useCustomSnackbar } from '@masknet/theme'
+import { SmartPayOwner, SmartPayBundler } from '@masknet/web3-providers'
 import { DashboardFrame } from '../components/DashboardFrame/index.js'
 import { DashboardRoutes, RestoreSuccessEvent } from '@masknet/shared-base'
 import { Messages, Services } from '../API.js'
-import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
-import { compact } from 'lodash-es'
-import { useCustomSnackbar } from '@masknet/theme'
 import { useDashboardI18N } from '../locales/index.js'
 import { TermsGuard } from './TermsGuard.js'
 
@@ -25,7 +25,7 @@ export function Pages() {
     const restoreCallback = useCallback(async ({ wallets }: RestoreSuccessEvent) => {
         const chainId = await SmartPayBundler.getSupportedChainId()
         const personas = await Services.Identity.queryOwnedPersonaInformation(true)
-        const accounts = await SmartPayAccount.getAccountsByOwners(chainId, [
+        const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
             ...(wallets ? wallets.map((x) => x.address) : []),
             ...compact(personas.map((x) => x.address)),
         ])

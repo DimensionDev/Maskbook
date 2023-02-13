@@ -59,6 +59,7 @@ import { ENS_API } from './ENS/index.js'
 import { SpaceID_API } from './SpaceID/index.js'
 import { BonfidaAPI } from './Bonfida/index.js'
 import { RedPacketAPI } from './RedPacket/index.js'
+import { SmartPayOwnerAPI } from './SmartPay/apis/OwnerAPI.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
@@ -166,4 +167,5 @@ export const FuseTrending = new FuseTrendingAPI()
 // Smart Pay
 export const SmartPayBundler = new SmartPayBundlerAPI()
 export const SmartPayFunder = new SmartPayFunderAPI()
+export const SmartPayOwner = new SmartPayOwnerAPI()
 export const SmartPayAccount = new SmartPayAccountAPI()
