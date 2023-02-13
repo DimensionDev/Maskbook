@@ -127,6 +127,8 @@ export function useDeploy(
                         chainId,
                     })
 
+                    if (!result) throw new Error('Deploy Failed')
+
                     await Wallet?.addWallet({
                         name: 'Smart Pay',
                         owner: signAccount.address,
