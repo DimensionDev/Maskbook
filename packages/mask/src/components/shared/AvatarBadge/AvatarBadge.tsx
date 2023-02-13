@@ -12,7 +12,7 @@ interface Props extends IconButtonProps {
 export const AvatarBadge: FC<Props> = ({ userId, identity }) => {
     const { value: collectionList } = useCollectionByTwitterHandler(userId)
     if (collectionList?.[0]) {
-        return <NFTProjectAvatarBadge userId={userId} address={collectionList?.[0].address} identity={identity} />
+        return <NFTProjectAvatarBadge userId={userId} address={collectionList?.[0].address ?? ''} identity={identity} />
     }
 
     return <ProfileAvatarBadge userId={userId} />

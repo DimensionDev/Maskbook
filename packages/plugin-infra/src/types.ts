@@ -642,6 +642,8 @@ export namespace Plugin.SNSAdaptor {
             Content?: InjectUI<{
                 result: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
                 isProfilePage?: boolean
+                hideInspector?: (x: boolean) => void
+                identity?: SocialIdentity
             }>
         }
         Utils?: {

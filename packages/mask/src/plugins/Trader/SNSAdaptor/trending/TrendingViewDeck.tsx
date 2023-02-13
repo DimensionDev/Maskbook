@@ -137,6 +137,7 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     currency: Currency
     currentTab: ContentTabs
     trending: TrendingAPI.Trending
+    hideInspector?: (x: boolean) => void
     identity?: SocialIdentity
     setActive?: (x: boolean) => void
     setResult: (a: Web3Helper.TokenResultAll) => void
@@ -153,6 +154,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         children,
         TrendingCardProps,
         resultList = [],
+        hideInspector,
         result,
         setResult,
         setActive,
@@ -257,6 +259,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         <ThemeProvider
                                             theme={theme.palette.mode === 'light' ? MaskLightTheme : MaskDarkTheme}>
                                             <SocialMenu
+                                                isFromPopup={isCollectionProjectPopper}
+                                                hideInspector={hideInspector}
                                                 open={socialMenuOpen}
                                                 anchorEl={titleRef.current}
                                                 optionList={displayResultList}

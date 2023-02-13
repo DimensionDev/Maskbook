@@ -16,7 +16,7 @@ import { useTheme } from '@mui/system'
 import { TrendingViewContext } from './context.js'
 
 const useStyles = makeStyles()((theme) => ({
-    coinMenu: {
+    socialMenu: {
         maxHeight: 600,
         width: 400,
         backgroundColor: theme.palette.maskColor.bottom,
@@ -158,6 +158,8 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, result, onSelect }) =>
 export interface SocialMenuProps {
     open: boolean
     anchorEl: HTMLElement | null
+    isFromPopup: boolean
+    hideInspector?: (x: boolean) => void
     optionList: Web3Helper.TokenResultAll[]
     identity?: SocialIdentity
     result: Web3Helper.TokenResultAll
@@ -176,6 +178,8 @@ export const SocialMenu: FC<PropsWithChildren<SocialMenuProps>> = ({
     open,
     result,
     optionList,
+    isFromPopup = false,
+    hideInspector,
     identity,
     setActive,
     anchorEl,
@@ -197,6 +201,12 @@ export const SocialMenu: FC<PropsWithChildren<SocialMenuProps>> = ({
     const { Others } = useWeb3State()
 
     const openRss3Profile = useCallback(() => {
+        if (!isFromPopup) {
+            console.log(hideInspector)
+            hideInspector?.(true)
+            return
+        }
+
         if (!identity?.identifier?.userId || !badgeBounding) return
 
         CrossIsolationMessages.events.profileCardEvent.sendToLocal({
@@ -207,7 +217,7 @@ export const SocialMenu: FC<PropsWithChildren<SocialMenuProps>> = ({
         })
         onClose?.()
         setActive?.(false)
-    }, [JSON.stringify(identity)])
+    }, [JSON.stringify(identity), isFromPopup])
 
     const menuItems = useMemo(() => {
         const groups: Array<
@@ -276,7 +286,11 @@ export const SocialMenu: FC<PropsWithChildren<SocialMenuProps>> = ({
     }, [optionList, result, onSelect])
 
     return (
-        <ShadowRootMenu open={open} onClose={onClose} anchorEl={anchorEl} PaperProps={{ className: classes.coinMenu }}>
+        <ShadowRootMenu
+            open={open}
+            onClose={onClose}
+            anchorEl={anchorEl}
+            PaperProps={{ className: classes.socialMenu }}>
             {menuItems}
         </ShadowRootMenu>
     )

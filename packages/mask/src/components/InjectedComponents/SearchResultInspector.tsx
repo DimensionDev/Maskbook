@@ -4,7 +4,7 @@ import { first } from 'lodash-es'
 import { Tab } from '@mui/material'
 import { TabContext } from '@mui/lab'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { SearchResult } from '@masknet/web3-shared-base'
+import type { SearchResult, SocialIdentity } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { DSearch } from '@masknet/web3-providers'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
@@ -36,7 +36,9 @@ const useStyles = makeStyles()(() => ({
 
 export interface SearchResultInspectorProps {
     keyword?: string
+    identity?: SocialIdentity
     isProfilePage?: boolean
+    hideInspector?: (x: boolean) => void
     collectionList?: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
@@ -58,8 +60,15 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const contentComponent = useMemo(() => {
         if (!resultList.value?.length) return null
         const Component = getSearchResultContent(resultList.value[0])
-        return <Component result={resultList.value} isProfilePage={props.isProfilePage} />
-    }, [resultList.value])
+        return (
+            <Component
+                result={resultList.value}
+                isProfilePage={props.isProfilePage}
+                identity={props.identity}
+                hideInspector={props.hideInspector}
+            />
+        )
+    }, [resultList.value, props.isProfilePage, props.identity])
 
     const tabs = useMemo(() => {
         if (!resultList.value?.length) return EMPTY_LIST

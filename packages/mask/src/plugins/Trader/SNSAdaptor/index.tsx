@@ -37,7 +37,7 @@ const sns: Plugin.SNSAdaptor.Definition<
     SearchResultInspector: {
         ID: PluginID.Trader,
         UI: {
-            Content({ result: _resultList, isProfilePage }) {
+            Content({ result: _resultList, isProfilePage, identity, hideInspector }) {
                 const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
                 const resultList = _resultList as Web3Helper.TokenResultAll[]
                 if (!resultList.length) return null
@@ -53,7 +53,7 @@ const sns: Plugin.SNSAdaptor.Definition<
                             isProfilePage={Boolean(isProfilePage)}
                             isTokenTagPopper={false}
                             isPreciseSearch={Boolean(Others?.isValidAddress(keyword))}>
-                            <TrendingView resultList={resultList} />
+                            <TrendingView resultList={resultList} identity={identity} hideInspector={hideInspector} />
                         </TrendingViewProvider>
                     </Web3ContextProvider>
                 )
@@ -136,7 +136,7 @@ const sns: Plugin.SNSAdaptor.Definition<
                     <Box display="flex" alignItems="top" justifyContent="center">
                         <NFTProjectAvatarBadge
                             userId={userId}
-                            address={collectionList?.[0].address}
+                            address={collectionList?.[0].address ?? ''}
                             identity={identity}
                         />
                     </Box>
