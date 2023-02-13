@@ -41,13 +41,14 @@ export interface AboutTabProps {
 
 export const AboutTab = memo(function AboutTab({ asset, orders }: AboutTabProps) {
     const { classes } = useStyles()
+
     const topOffer = resolveTopOffer(orders?.data)
     const { rarity } = Context.useContainer()
 
     if (!asset) return null
     return (
         <div className={classes.root}>
-            <PriceCard topOffer={topOffer} asset={asset} />
+            <PriceCard topOffer={topOffer} />
             <DetailsCard asset={asset} />
             <DescriptionCard asset={asset} />
             <PropertiesCard timeline asset={asset} rank={rarity.value?.rank} />

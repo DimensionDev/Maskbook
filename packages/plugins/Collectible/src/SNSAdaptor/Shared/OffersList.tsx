@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface OffersListProps {
-    offers: AsyncStatePageable<Array<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
+    offers: AsyncStatePageable<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
 export function OffersList(props: OffersListProps) {

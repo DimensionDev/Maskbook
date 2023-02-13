@@ -81,6 +81,8 @@ export function PriceCard(props: PriceCardProps) {
             </div>
         )
 
+    if (!topOffer) return null
+
     return (
         <div className={classes.wrapper}>
             <div className={classes.priceZone}>
