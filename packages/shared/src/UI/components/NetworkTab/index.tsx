@@ -21,7 +21,6 @@ export function NetworkTab(props: NetworkTabProps) {
     const { chainId, setChainId } = useChainContext()
     const networks = useNetworkDescriptors(pluginID)
     const wallet = useWallet()
-
     const { value: smartPaySupportChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     const supportedChains = useMemo(() => {
@@ -31,14 +30,19 @@ export function NetworkTab(props: NetworkTabProps) {
 
     const usedNetworks = networks.filter((x) => supportedChains.find((c) => c === x.chainId))
     const networkIds = usedNetworks.map((x) => x.chainId.toString())
-    const [tab, , , setTab] = useTabs(chainId?.toString() ?? networkIds[0], ...networkIds)
+
+    const isValidChainId = useMemo(() => chains.includes(chainId), [chains, chainId])
+    const [tab, , , setTab] = useTabs(
+        !isValidChainId ? networkIds[0] : chainId?.toString() ?? networkIds[0],
+        ...networkIds,
+    )
 
     useUpdateEffect(() => {
         setTab((prev) => {
-            if (chainId && prev !== chainId?.toString()) return chainId.toString()
+            if (isValidChainId && chainId && prev !== chainId?.toString()) return chainId.toString()
             return prev
         })
-    }, [chainId])
+    }, [chainId, isValidChainId])
 
     return (
         <TabContext value={tab}>
