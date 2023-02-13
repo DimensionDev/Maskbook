@@ -202,7 +202,6 @@ export const SocialMenu: FC<PropsWithChildren<SocialMenuProps>> = ({
 
     const openRss3Profile = useCallback(() => {
         if (!isFromPopup) {
-            console.log(hideInspector)
             hideInspector?.(true)
             return
         }
