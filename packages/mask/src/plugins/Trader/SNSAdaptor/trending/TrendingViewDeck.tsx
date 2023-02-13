@@ -8,7 +8,7 @@ import { MaskColors, MaskDarkTheme, MaskLightTheme, makeStyles } from '@masknet/
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { SourceType, TokenType, formatCurrency, FormatterCurrencyOptions } from '@masknet/web3-shared-base'
+import { SourceType, TokenType, formatCurrency } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import {
     Avatar,
@@ -31,7 +31,6 @@ import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
 import { TrendingViewDescriptor } from './TrendingViewDescriptor.js'
 import { CoinIcon } from './components/index.js'
 import { TrendingViewContext } from './context.js'
-import type { BigNumber } from 'bignumber.js'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -295,13 +294,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                         : market.current_price) ?? 0
                                                 }
                                                 sign={isNFT ? market.price_symbol : 'USD'}
-                                                formatter={(
-                                                    value: BigNumber.Value,
-                                                    sign?: string,
-                                                    options?: FormatterCurrencyOptions,
-                                                ) =>
-                                                    formatCurrency(value, sign, { boundaries: { min: 0.000000000001 } })
-                                                }
+                                                formatter={formatCurrency}
                                             />
                                         </Typography>
                                     ) : (
