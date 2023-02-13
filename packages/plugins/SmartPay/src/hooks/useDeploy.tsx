@@ -11,6 +11,7 @@ import { Typography } from '@mui/material'
 import { ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import type { ManagerAccount } from '../type.js'
 import { useI18N } from '../locales/index.js'
+import { timeout } from '@masknet/kit'
 
 export function useDeploy(
     signPersona?: PersonaInformation,
@@ -64,19 +65,28 @@ export function useDeploy(
                 const result = await connection?.deploy?.(signAccount.address, signAccount.identifier, {
                     chainId,
                 })
-                await Wallet?.addWallet({
-                    name: 'Smart Pay',
-                    owner: signAccount.address,
-                    address: contractAccount.address,
-                    hasDerivationPath: false,
-                    hasStoredKeyInfo: false,
-                    id: contractAccount.address,
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                })
 
-                onSuccess?.()
-                return result
+                return timeout(
+                    new Promise((resolve) => {
+                        return TransactionWatcher?.emitter.on('progress', async (_, txHash, status) => {
+                            if (txHash !== result || status !== TransactionStatusType.SUCCEED) return
+                            await Wallet?.addWallet({
+                                name: 'Smart Pay',
+                                owner: signAccount.address,
+                                address: contractAccount.address,
+                                hasDerivationPath: false,
+                                hasStoredKeyInfo: false,
+                                id: contractAccount.address,
+                                createdAt: new Date(),
+                                updatedAt: new Date(),
+                            })
+                            onSuccess?.()
+                            resolve(result)
+                        })
+                    }),
+                    120 * 1000,
+                    'Timeout',
+                )
             }
             const payload = JSON.stringify({
                 twitterHandler: lastRecognizedIdentity.identifier.userId,
@@ -119,32 +129,38 @@ export function useDeploy(
             )
             if (!hash) throw new Error('Deploy Failed')
 
-            return new Promise((resolve) => {
-                return TransactionWatcher?.emitter.on('progress', async (_, txHash, status) => {
-                    if (txHash !== hash || !signAccount.address || status !== TransactionStatusType.SUCCEED) return
+            return timeout(
+                new Promise((resolve) => {
+                    return TransactionWatcher?.emitter.on('progress', async (_, txHash, status) => {
+                        if (txHash !== hash || !signAccount.address || status !== TransactionStatusType.SUCCEED) return
 
-                    const result = await connection?.deploy?.(signAccount.address, signAccount.identifier, {
-                        chainId,
+                        const result = await connection?.deploy?.(signAccount.address, signAccount.identifier, {
+                            chainId,
+                        })
+
+                        TransactionWatcher?.emitter.on('progress', async (_, deployHash, deployStatus) => {
+                            if (deployHash !== result || deployStatus !== TransactionStatusType.SUCCEED) return
+
+                            await Wallet?.addWallet({
+                                name: 'Smart Pay',
+                                owner: signAccount.address,
+                                address: contractAccount.address,
+                                hasDerivationPath: false,
+                                hasStoredKeyInfo: false,
+                                id: contractAccount.address,
+                                createdAt: new Date(),
+                                updatedAt: new Date(),
+                            })
+
+                            onSuccess?.()
+
+                            resolve(result)
+                        })
                     })
-
-                    if (!result) throw new Error('Deploy Failed')
-
-                    await Wallet?.addWallet({
-                        name: 'Smart Pay',
-                        owner: signAccount.address,
-                        address: contractAccount.address,
-                        hasDerivationPath: false,
-                        hasStoredKeyInfo: false,
-                        id: contractAccount.address,
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                    })
-
-                    onSuccess?.()
-
-                    resolve(result)
-                })
-            })
+                }),
+                120 * 1000,
+                'Timeout',
+            )
         } catch (error) {
             if (error instanceof Error) {
                 let message = ''
