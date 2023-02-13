@@ -7,7 +7,8 @@ export function formatBalance(
     significant = decimals,
     isPrecise = false,
 ) {
-    let balance = new BigNumber(rawValue).integerValue()
+    let balance = new BigNumber(rawValue)
+    if (!balance.isInteger()) throw new Error('Expect to pass integer')
     if (balance.isNaN()) return '0'
 
     const base = pow10(decimals) // 10n ** decimals
