@@ -15,21 +15,15 @@ import {
     selfInfoSelectors,
 } from '../utils/selector'
 
-function recognizeDesktop() {
-    const collect = () => {
-        const handle = selfInfoSelectors().handle.evaluate()
-        const nickname = selfInfoSelectors().name.evaluate()
-        const avatar = selfInfoSelectors().userAvatar.evaluate()
+function collectSelfInfo() {
+    const handle = selfInfoSelectors().handle.evaluate()
+    const nickname = selfInfoSelectors().name.evaluate()
+    const avatar = selfInfoSelectors().userAvatar.evaluate()
 
-        return { handle, nickname, avatar }
-    }
-
-    const watcher = new MutationObserverWatcher(selfInfoSelectors().handle)
-
-    return { watcher, collect }
+    return { handle, nickname, avatar }
 }
 
-function _getNickname(nickname?: string) {
+function getNickname(nickname?: string) {
     const nicknameNode = searchSelfNicknameSelector().closest<HTMLDivElement>(1).evaluate()
     let _nickname = ''
     if (!nicknameNode?.childNodes.length) return nickname
@@ -53,18 +47,18 @@ function resolveLastRecognizedIdentityInner(
 ) {
     const assign = async () => {
         await delay(2000)
-        const { collect } = recognizeDesktop()
-        const dataFromScript = collect()
-        const avatar = (searchSelfAvatarSelector().evaluate()?.getAttribute('src') || dataFromScript.avatar) ?? ''
-        const handle =
-            searchSelfHandleSelector().evaluate()?.textContent?.trim()?.replace(/^@/, '') || dataFromScript.handle
-        const nickname = _getNickname(dataFromScript.nickname) ?? ''
+
+        const selfInfo = collectSelfInfo()
+        const avatar = (searchSelfAvatarSelector().evaluate()?.getAttribute('src') || selfInfo.avatar) ?? ''
+        const handle = searchSelfHandleSelector().evaluate()?.textContent?.trim()?.replace(/^@/, '') || selfInfo.handle
+        const nickname = getNickname(selfInfo.nickname) ?? ''
 
         if (handle) {
             ref.value = {
                 avatar,
                 nickname,
                 identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
+                isOwner: true,
             }
         }
     }
@@ -105,6 +99,7 @@ function resolveLastRecognizedIdentityMobileInner(
             ref.value = {
                 ...ref.value,
                 identifier,
+                isOwner: true,
             }
         }
     }
@@ -120,16 +115,22 @@ function getFirstSlug() {
 
 function resolveCurrentVisitingIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
+    ownerRef: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
     const update = async (twitterId: string) => {
         const user = await Twitter.getUserByScreenName(twitterId)
-        if (!user) return
-        const bio = user.legacy.description
+        if (process.env.NODE_ENV === 'development') {
+            console.assert(user?.legacy, `Can't get get user by screen name ${twitterId}`)
+        }
+        if (!user?.legacy) return
 
         const nickname = user.legacy.name
         const handle = user.legacy.screen_name
+        const ownerHandle = ownerRef.value.identifier?.userId
+        const isOwner = !!(ownerHandle && handle.toLowerCase() === ownerHandle.toLowerCase())
         const avatar = user.legacy.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1')
+        const bio = user.legacy.description
         const homepage = user.legacy.entities.url?.urls[0]?.expanded_url ?? ''
 
         ref.value = {
@@ -138,6 +139,7 @@ function resolveCurrentVisitingIdentityInner(
             avatar,
             bio,
             homepage,
+            isOwner,
         }
     }
 
@@ -170,6 +172,6 @@ export const CurrentVisitingIdentityProviderTwitter: Next.CollectingCapabilities
     hasDeprecatedPlaceholderName: false,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
-        resolveCurrentVisitingIdentityInner(this.recognized, cancel)
+        resolveCurrentVisitingIdentityInner(this.recognized, IdentityProviderTwitter.recognized, cancel)
     },
 }
