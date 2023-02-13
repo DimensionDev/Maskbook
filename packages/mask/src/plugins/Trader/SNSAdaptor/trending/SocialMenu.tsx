@@ -1,8 +1,10 @@
 import { FC, PropsWithChildren, useCallback, useMemo, useContext } from 'react'
 import { groupBy, toPairs, isEqual } from 'lodash-es'
 import { Icons } from '@masknet/icons'
+import { openWindow } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { TokenIcon, useSocialAccountsBySettings, FormattedAddress } from '@masknet/shared'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { TokenIcon, useSocialAccountsBySettings, FormattedAddress, AccountIcon } from '@masknet/shared'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../../utils/index.js'
 import { EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
@@ -12,7 +14,6 @@ import { RadioButtonUnchecked as RadioButtonUncheckedIcon } from '@mui/icons-mat
 import { Divider, MenuItem, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/system'
 import { TrendingViewContext } from './context.js'
-import type { Coin } from '../../types/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     coinMenu: {
@@ -30,7 +31,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     groupName: {
         height: 18,
-        fontWeight: 'bold',
+        marginTop: 5,
+        fontWeight: 700,
+        fontSize: 14,
         padding: '0 12px',
     },
     menuItem: {
@@ -50,6 +53,11 @@ const useStyles = makeStyles()((theme) => ({
         flexGrow: 1,
         justifyContent: 'space-around',
         gap: theme.spacing(1),
+        alignItems: 'center',
+        overflow: 'hidden',
+    },
+    addressItem: {
+        flexDirection: 'row',
         alignItems: 'center',
         overflow: 'hidden',
     },
@@ -80,12 +88,12 @@ const useStyles = makeStyles()((theme) => ({
         filter: 'drop-shadow(0px 4px 10px rgba(28, 104, 243, 0.2))',
         color: theme.palette.maskColor.primary,
     },
+    addressIcon: {
+        marginLeft: 4,
+        color: theme.palette.maskColor.secondaryDark,
+    },
 }))
 
-export interface CoinMenuOption {
-    coin: Coin
-    value: string
-}
 interface TokenMenuListProps {
     options: Web3Helper.TokenResultAll[]
     result: Web3Helper.TokenResultAll
@@ -147,7 +155,7 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, result, onSelect }) =>
     )
 }
 
-export interface CoinMenuProps {
+export interface SocialMenuProps {
     open: boolean
     anchorEl: HTMLElement | null
     optionList: Web3Helper.TokenResultAll[]
@@ -164,7 +172,7 @@ const menuGroupNameMap: Record<'FungibleToken' | 'NonFungibleToken' | 'NonFungib
     NonFungibleCollection: 'NFT',
 }
 
-export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({
+export const SocialMenu: FC<PropsWithChildren<SocialMenuProps>> = ({
     open,
     result,
     optionList,
@@ -226,22 +234,39 @@ export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({
                         <Typography className={classes.groupName}>{t('address')}</Typography>
                         <Divider className={classes.divider} />
                         <MenuItem key={socialAccount.address} className={classes.menuItem} onClick={openRss3Profile}>
-                            <Typography
-                                fontSize={14}
-                                fontWeight={700}
-                                flexGrow={1}
-                                overflow="hidden"
-                                textOverflow="ellipsis">
-                                {socialAccount.supportedAddressTypes?.[0] === SocialAddressType.ENS ? (
-                                    socialAccount.label
-                                ) : (
-                                    <FormattedAddress
-                                        address={socialAccount.address}
-                                        size={4}
-                                        formatter={Others?.formatAddress}
-                                    />
-                                )}
-                            </Typography>
+                            <Stack className={classes.addressItem}>
+                                <Typography
+                                    fontSize={14}
+                                    fontWeight={700}
+                                    flexGrow={1}
+                                    overflow="hidden"
+                                    textOverflow="ellipsis">
+                                    {socialAccount.supportedAddressTypes?.[0] === SocialAddressType.ENS ? (
+                                        socialAccount.label
+                                    ) : (
+                                        <FormattedAddress
+                                            address={socialAccount.address}
+                                            size={4}
+                                            formatter={Others?.formatAddress}
+                                        />
+                                    )}
+                                </Typography>
+                                <Icons.LinkOut
+                                    className={classes.addressIcon}
+                                    size={20}
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        e.stopPropagation()
+                                        openWindow(
+                                            Others?.explorerResolver.addressLink(
+                                                ChainId.Mainnet,
+                                                socialAccount.address,
+                                            ),
+                                        )
+                                    }}
+                                />
+                                <AccountIcon socialAccount={socialAccount} />
+                            </Stack>
                         </MenuItem>
                     </div>
                 ) : (

@@ -25,7 +25,7 @@ import { first, last, uniqBy } from 'lodash-es'
 import { useCallback, useContext, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { ContentTabs, Currency, Stat } from '../../types/index.js'
-import { CoinMenu } from './CoinMenu.js'
+import { SocialMenu } from './SocialMenu.js'
 import { PriceChanged } from './PriceChanged.js'
 import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
 import { TrendingViewDescriptor } from './TrendingViewDescriptor.js'
@@ -196,7 +196,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     // #endregion
 
     const titleRef = useRef<HTMLElement>(null)
-    const [coinMenuOpen, setCoinMenuOpen] = useState(false)
+    const [socialMenuOpen, setSocialMenuOpen] = useState(false)
     const coinAddress = coin.address || coin.contract_address
     const coinName = result.name || coin.name
 
@@ -251,20 +251,20 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         <IconButton
                                             sx={{ padding: 0 }}
                                             size="small"
-                                            onClick={() => setCoinMenuOpen((v) => !v)}>
+                                            onClick={() => setSocialMenuOpen((v) => !v)}>
                                             <Icons.ArrowDrop size={24} className={classes.icon} />
                                         </IconButton>
                                         <ThemeProvider
                                             theme={theme.palette.mode === 'light' ? MaskLightTheme : MaskDarkTheme}>
-                                            <CoinMenu
-                                                open={coinMenuOpen}
+                                            <SocialMenu
+                                                open={socialMenuOpen}
                                                 anchorEl={titleRef.current}
                                                 optionList={displayResultList}
                                                 setActive={setActive}
                                                 identity={identity}
                                                 result={result}
                                                 onChange={setResult}
-                                                onClose={() => setCoinMenuOpen(false)}
+                                                onClose={() => setSocialMenuOpen(false)}
                                             />
                                         </ThemeProvider>
                                     </>
