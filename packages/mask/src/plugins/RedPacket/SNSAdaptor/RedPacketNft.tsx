@@ -298,7 +298,10 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                         </Typography>
                     ) : (
                         <Typography className={classes.remain}>
-                            {t.claimed({ amount: `${availability.claimedAmount}/${availability.totalAmount}` })}
+                            {t.claimed_amount({
+                                amount: availability.claimedAmount.toString(),
+                                totalAmount: availability.totalAmount.toString(),
+                            })}
                         </Typography>
                     )}
                     <Typography variant="body1" className={classes.from}>
@@ -309,7 +312,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 {availability.isClaimed ? (
                     <div className={classes.badge}>
                         <Typography variant="body2" className={classes.badgeText}>
-                            {t.claimed({ amount: '' })}
+                            {t.claimed()}
                         </Typography>
                     </div>
                 ) : availability.isEnd ? (

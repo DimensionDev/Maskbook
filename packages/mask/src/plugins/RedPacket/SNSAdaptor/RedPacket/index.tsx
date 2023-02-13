@@ -231,13 +231,19 @@ export function RedPacket(props: RedPacketProps) {
     const myStatus = useMemo(() => {
         if (!availability) return ''
         if (token && listOfStatus.includes(RedPacketStatus.claimed))
-            return t.description_claimed(
-                availability.claimed_amount
-                    ? {
-                          amount: formatBalance(availability.claimed_amount, token.decimals, 2),
-                          symbol: token.symbol,
-                      }
-                    : { amount: '-', symbol: '-' },
+            return (
+                <div
+                    dangerouslySetInnerHTML={{
+                        __html: t.description_claimed(
+                            availability.claimed_amount
+                                ? {
+                                      amount: formatBalance(availability.claimed_amount, token.decimals, 2),
+                                      symbol: token.symbol,
+                                  }
+                                : { amount: '-', symbol: '-' },
+                        ),
+                    }}
+                />
             )
         return ''
     }, [listOfStatus, t, token])
@@ -246,19 +252,31 @@ export function RedPacket(props: RedPacketProps) {
         if (!availability || !token) return
 
         if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
-            return t.description_refund({
-                balance: formatBalance(availability.balance, token.decimals, 2),
-                symbol: token.symbol ?? '-',
-            })
+            return (
+                <div
+                    dangerouslySetInnerHTML={{
+                        __html: t.description_refund({
+                            balance: formatBalance(availability.balance, token.decimals, 2),
+                            symbol: token.symbol ?? '-',
+                        }),
+                    }}
+                />
+            )
         if (listOfStatus.includes(RedPacketStatus.refunded)) return t.description_refunded()
         if (listOfStatus.includes(RedPacketStatus.expired)) return t.description_expired()
         if (listOfStatus.includes(RedPacketStatus.empty)) return t.description_empty()
         if (!payload.password) return t.description_broken()
-        return t.description_failover({
-            total: formatBalance(payload.total, token.decimals, 2),
-            symbol: token.symbol ?? '-',
-            shares: payload.shares.toString() ?? '-',
-        })
+        return (
+            <div
+                dangerouslySetInnerHTML={{
+                    __html: t.description_failover({
+                        total: formatBalance(payload.total, token.decimals, 2),
+                        symbol: token.symbol ?? '-',
+                        shares: payload.shares.toString() ?? '-',
+                    }),
+                }}
+            />
+        )
     }, [availability, canRefund, token, t, payload, listOfStatus])
 
     const handleShare = useCallback(() => {
