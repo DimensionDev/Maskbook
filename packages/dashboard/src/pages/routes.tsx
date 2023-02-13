@@ -32,7 +32,7 @@ export function Pages() {
         showSnackbar(t.recovery_smart_pay_wallet_title(), {
             variant: 'success',
             message: t.recovery_smart_pay_wallet_description({
-                count: accounts.filter((x) => x.funded || x.deployed).length,
+                count: accounts.filter((x) => x.deployed).length,
             }),
         })
     }, [])

@@ -213,7 +213,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         if (isValidAddress(userTransaction.paymentToken) && !isNativeTokenAddress(userTransaction.paymentToken)) {
             const getOverrides = async () => {
                 if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
-                    const accounts = await this.getAccountsByOwner(chainId, owner)
+                    const accounts = await this.getAccountsByOwner(chainId, owner, false)
                     const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
 
                     if (!accountsDeployed.length) {
