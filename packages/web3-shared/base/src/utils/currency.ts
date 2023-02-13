@@ -30,6 +30,13 @@ const digitalCurrencyModifier = (parts: Intl.NumberFormatPart[], symbols: Record
     return parts
 }
 
+const getDecimalPlaces = (min: number) => {
+    const str = min.toFixed(20)
+    const index = str.indexOf('.')
+    if (index === -1) return 0
+    return str.length - index - 1
+}
+
 /**
  * format token currency
  *
@@ -117,7 +124,9 @@ export function formatCurrency(
                 case 'currency':
                     return resolvedSymbols[value] ?? value
                 case 'fraction':
-                    const unFormatString = decimalValue.toFormat(isMoreThanOrEqualToOne ? 2 : 6).replace('0.', '')
+                    const unFormatString = decimalValue
+                        .toFormat(isMoreThanOrEqualToOne ? 2 : getDecimalPlaces(resolvedBoundaries.min))
+                        .replace('0.', '')
                     return isLessMinValue || bgValue.isGreaterThanOrEqualTo(1) || isMoreThanOrEqualToOne
                         ? unFormatString
                         : unFormatString.replace(/(0+)$/, '')
