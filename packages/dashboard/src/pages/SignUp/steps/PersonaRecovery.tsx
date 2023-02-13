@@ -1,6 +1,9 @@
 import { useState } from 'react'
+import { useAsync, useAsyncFn } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { delay } from '@masknet/kit'
 import { useCustomSnackbar } from '@masknet/theme'
+import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
 import { DashboardRoutes, ECKeyIdentifier, EC_Public_JsonWebKey } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { SignUpRoutePath } from '../routePath.js'
@@ -8,9 +11,6 @@ import { Messages, PluginServices, Services } from '../../../API.js'
 import { PersonaNameUI } from './PersonaNameUI.js'
 import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
-import { delay } from '@masknet/kit'
-import { useAsync, useAsyncFn } from 'react-use'
-import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
 
 export const PersonaRecovery = () => {
     const t = useDashboardI18N()
