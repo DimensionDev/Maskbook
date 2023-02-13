@@ -38,9 +38,8 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                 ) {
                     const data = compact<T>(
                         all
-                            .filter((x) => x.alias)
-                            .map((x) => {
-                                if (x.type !== SearchResultType.FungibleToken) return
+                            .filter((x) => x.alias && x.alias.length !== 0 && x.type === SearchResultType.FungibleToken)
+                            .flatMap((x) => {
                                 return x.alias
                                     ?.filter((x) => x.isPin)
                                     .map((y) => {
@@ -49,8 +48,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                                             __alias: y.value,
                                         }
                                     })
-                            })
-                            .flat(),
+                            }),
                     )
 
                     const fuse = new Fuse(data, {
@@ -132,9 +130,15 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                 ) {
                     const data = compact<T>(
                         all
-                            .filter((x) => x.alias)
-                            .map((x) => {
-                                if (x.type !== SearchResultType.FungibleToken) return
+                            .filter(
+                                (x) =>
+                                    x.alias &&
+                                    x.alias.length !== 0 &&
+                                    x.type === SearchResultType.NonFungibleCollection,
+                            )
+                            .flatMap((x) => {
+                                // Make ts work
+                                if (x.type !== SearchResultType.NonFungibleCollection) return []
                                 return x.alias
                                     ?.filter((x) => x.isPin)
                                     .map((y) => {
@@ -144,8 +148,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                                             __alias: y.value,
                                         }
                                     })
-                            })
-                            .flat(),
+                            }),
                     )
 
                     const fuse = new Fuse(data, {
