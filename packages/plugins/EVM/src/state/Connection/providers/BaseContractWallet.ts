@@ -37,18 +37,17 @@ export class BaseContractWalletProvider extends BaseHostedProvider implements EV
         })
         Web3StateSettings.readyPromise.then(async (context) => {
             Web3StateSettings.value.Wallet?.wallets?.subscribe(async () => {
-                console.log(this.hostedAccount)
                 if (!this.hostedAccount) return
                 const wallets = context.Wallet?.wallets?.getCurrentValue()
                 const target = wallets?.find((x) => isSameAddress(x.address, this.hostedAccount))
                 const smartPayChainId = await SmartPayBundler.getSupportedChainId()
                 if (target?.owner) {
-                    this.ownerStorage?.setValue({
+                    await this.ownerStorage?.setValue({
                         account: target.owner,
                         identifier: target.identifier ?? EMPTY_IDENTIFIER,
                     })
                     if (this.hostedChainId !== smartPayChainId) {
-                        this.switchChain(smartPayChainId)
+                        await this.switchChain(smartPayChainId)
                     }
                 }
             })
