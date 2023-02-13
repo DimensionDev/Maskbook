@@ -86,12 +86,16 @@ export default memo(function Welcome() {
             const search = params.get('search')
             navigate(urlcat(from, search ? new URLSearchParams(search).entries() : {}))
         }
+
         const url = await Services.SocialNetwork.setupSite('twitter.com', false)
-        if (url) {
+        if (!url) return
+        if (from && from !== DashboardRoutes.Personas) {
             browser.tabs.create({
                 active: true,
                 url,
             })
+        } else {
+            location.assign(url)
         }
     }, [params, allowedToCollect])
 
