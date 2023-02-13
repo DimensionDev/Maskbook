@@ -915,6 +915,7 @@ export interface IdentityResolved {
     bio?: string
     homepage?: string
     identifier?: ProfileIdentifier
+    isOwner?: boolean
 }
 
 /**

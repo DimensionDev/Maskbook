@@ -50,3 +50,13 @@ export async function contentFetch(url: string, config?: RequestInit) {
             : globalThis.fetch
     return fetch(url, config)
 }
+
+export async function fetchText(input: RequestInfo | URL, init?: RequestInit): Promise<string> {
+    const fetch =
+        process.env.engine === 'firefox' && process.env.manifest === '2' && typeof content === 'object'
+            ? content.fetch
+            : globalThis.fetch
+    const response = await fetch(input, init)
+    if (!response.ok) throw new Error('Failed to fetch as Text.')
+    return response.text()
+}
