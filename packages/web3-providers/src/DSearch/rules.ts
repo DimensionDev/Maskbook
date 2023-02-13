@@ -38,7 +38,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                 ) {
                     const data = compact<T>(
                         all
-                            .filter((x) => x.alias && x.alias.length !== 0 && x.type === SearchResultType.FungibleToken)
+                            .filter((x) => x.alias?.length && x.type === SearchResultType.FungibleToken)
                             .flatMap((x) => {
                                 return x.alias
                                     ?.filter((x) => x.isPin)
@@ -130,12 +130,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                 ) {
                     const data = compact<T>(
                         all
-                            .filter(
-                                (x) =>
-                                    x.alias &&
-                                    x.alias.length !== 0 &&
-                                    x.type === SearchResultType.NonFungibleCollection,
-                            )
+                            .filter((x) => x.alias?.length && x.type === SearchResultType.NonFungibleCollection)
                             .flatMap((x) => {
                                 // Make ts work
                                 if (x.type !== SearchResultType.NonFungibleCollection) return []
