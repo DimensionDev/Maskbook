@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest'
+import { describe, test, it, expect } from 'vitest'
 import { formatBalance, leftShift, toFixed } from '../src/index.js'
 
 describe('formatBalance util test', () => {
@@ -24,8 +24,13 @@ describe('formatBalance util test', () => {
         { give: 123456789, decimals: 15, significant: 18, expected: '<0.000001' },
         { give: 123456789, decimals: 15, significant: 19, expected: '<0.000001' },
         { give: 123456789, decimals: 20, significant: 20, expected: '<0.000001' },
+        { give: 1050000000000, decimals: 18, significant: 6, expected: '0.000001' },
     ])('.format($give)', ({ give, decimals, significant, expected }) => {
         expect(formatBalance(give, decimals, significant)).toBe(expected)
+    })
+
+    it('should raise an error if pass decimal number', () => {
+        expect(() => formatBalance(1.05)).toThrowError()
     })
 })
 
