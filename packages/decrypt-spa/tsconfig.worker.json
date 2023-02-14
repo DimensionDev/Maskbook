@@ -1,9 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": "./main/",
-    "outDir": "./dist/main",
-    "tsBuildInfoFile": "./dist/.tsbuildinfo"
+    "rootDir": "./plugin-worker",
+    "outDir": "./dist/plugin-worker",
+    "tsBuildInfoFile": "./dist/plugin-worker.tsbuildinfo",
+    "lib": ["WebWorker", "ES2022"]
   },
   "include": ["./main", "./main/**/*.json"],
   "references": [

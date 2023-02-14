@@ -533,19 +533,19 @@ importers:
         specifier: workspace:^
         version: link:../encryption
       '@masknet/plugin-evm':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../plugins/EVM
       '@masknet/plugin-gitcoin':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../plugins/Gitcoin
       '@masknet/plugin-infra':
         specifier: workspace:^
         version: link:../plugin-infra
       '@masknet/plugin-wallet':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../plugins/Wallet
       '@masknet/shared-base':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../shared-base
       '@masknet/typed-message':
         specifier: workspace:^
@@ -554,13 +554,13 @@ importers:
         specifier: workspace:^
         version: link:../typed-message/react
       '@masknet/web3-hooks-base':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../web3-hooks/base
       '@masknet/web3-shared-base':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../web3-shared/base
       '@masknet/web3-shared-evm':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../web3-shared/evm
       '@servie/events':
         specifier: ^3.0.0
@@ -568,13 +568,16 @@ importers:
       crypto-browserify:
         specifier: ^3.12.0
         version: 3.12.0
+      idb:
+        specifier: ^7.1.1
+        version: 7.1.1
+      safari-14-idb-fix:
+        specifier: ^3.0.0
+        version: 3.0.0
       stream-browserify:
         specifier: ^3.0.0
         version: 3.0.0
     devDependencies:
-      '@dimensiondev/webextension-shim':
-        specifier: 0.0.3-20210823035705-4257e12
-        version: 0.0.3-20210823035705-4257e12
       '@pmmmwh/react-refresh-webpack-plugin':
         specifier: ^0.5.10
         version: 0.5.10_e764yt37rymiplqgpb7fiwcihu
@@ -1399,43 +1402,43 @@ importers:
   packages/plugins/Collectible:
     dependencies:
       '@masknet/icons':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../icons
       '@masknet/plugin-infra':
         specifier: workspace:^
         version: link:../../plugin-infra
       '@masknet/shared':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../shared
       '@masknet/shared-base':
         specifier: workspace:^
         version: link:../../shared-base
       '@masknet/shared-base-ui':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../shared-base-ui
       '@masknet/theme':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../theme
       '@masknet/typed-message':
         specifier: workspace:^0.1.0
         version: link:../../typed-message/base
       '@masknet/web3-helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../web3-helpers
       '@masknet/web3-hooks-base':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../web3-hooks/base
       '@masknet/web3-providers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../web3-providers
       '@masknet/web3-shared-base':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../web3-shared/base
       '@masknet/web3-shared-evm':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../web3-shared/evm
       '@masknet/web3-shared-solana':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../web3-shared/solana
       bignumber.js:
         specifier: 9.1.0
@@ -1996,7 +1999,7 @@ importers:
   packages/plugins/MaskBox:
     dependencies:
       '@masknet/icons':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../icons
       '@masknet/plugin-infra':
         specifier: workspace:^
@@ -2023,7 +2026,7 @@ importers:
         specifier: workspace:^
         version: link:../../web3-contracts
       '@masknet/web3-helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../web3-helpers
       '@masknet/web3-hooks-base':
         specifier: workspace:^

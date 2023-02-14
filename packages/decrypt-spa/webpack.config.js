@@ -19,7 +19,7 @@ const require = createRequire(import.meta.url)
 function Configuration(a, b) {
     return {
         mode: 'development',
-        entry: './src/entry.tsx',
+        entry: './main/index.tsx',
         experiments: { asyncWebAssembly: true, topLevelAwait: true },
         resolve: {
             extensionAlias: {

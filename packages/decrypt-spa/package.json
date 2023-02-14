@@ -3,35 +3,31 @@
     "private": true,
     "type": "module",
     "exports": {
-        ".": {
-            "types": "./dist/index.d.ts",
-            "mask-src": "./src/index.ts",
-            "default": "./dist/index.js"
-        }
+        ".": null
     },
-    "types": "./dist/index.d.ts",
     "scripts": {
         "start": "npx webpack serve"
     },
     "dependencies": {
         "@masknet/base": "workspace:^",
         "@masknet/encryption": "workspace:^",
-        "@masknet/plugin-evm": "workspace:*",
-        "@masknet/plugin-gitcoin": "workspace:*",
+        "@masknet/plugin-evm": "workspace:^",
+        "@masknet/plugin-gitcoin": "workspace:^",
         "@masknet/plugin-infra": "workspace:^",
-        "@masknet/plugin-wallet": "workspace:*",
-        "@masknet/shared-base": "workspace:*",
+        "@masknet/plugin-wallet": "workspace:^",
+        "@masknet/shared-base": "workspace:^",
         "@masknet/typed-message": "workspace:^",
         "@masknet/typed-message-react": "workspace:^",
-        "@masknet/web3-hooks-base": "workspace:*",
-        "@masknet/web3-shared-base": "workspace:*",
-        "@masknet/web3-shared-evm": "workspace:*",
+        "@masknet/web3-hooks-base": "workspace:^",
+        "@masknet/web3-shared-base": "workspace:^",
+        "@masknet/web3-shared-evm": "workspace:^",
         "@servie/events": "^3.0.0",
         "crypto-browserify": "^3.12.0",
+        "idb": "^7.1.1",
+        "safari-14-idb-fix": "^3.0.0",
         "stream-browserify": "^3.0.0"
     },
     "devDependencies": {
-        "@dimensiondev/webextension-shim": "0.0.3-20210823035705-4257e12",
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
         "copy-webpack-plugin": "^11.0.0",
         "html-webpack-plugin": "^5.5.0",

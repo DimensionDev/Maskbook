@@ -41,7 +41,7 @@ export async function decrypt(
                 return false
             },
             async decryptByLocalKey() {
-                throw new Error('Function not implemented.')
+                throw new Error('not implemented.')
             },
             async queryAuthorPublicKey() {
                 return null
@@ -50,16 +50,16 @@ export async function decrypt(
                 return null
             },
             async *queryPostKey_version39() {
-                throw new Error('Function not implemented.')
+                throw new Error('not implemented.')
             },
             async *queryPostKey_version38() {
-                throw new Error('Function not implemented.')
+                throw new Error('not implemented.')
             },
             async *queryPostKey_version37() {
-                throw new Error('Function not implemented.')
+                throw new Error('not implemented.')
             },
             async deriveAESKey() {
-                throw new Error('Function not implemented.')
+                throw new Error('not implemented.')
             },
         },
     )
