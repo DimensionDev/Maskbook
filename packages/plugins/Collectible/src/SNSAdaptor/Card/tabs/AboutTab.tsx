@@ -42,7 +42,7 @@ export function AboutTab(props: AboutTabProps) {
     const { orders } = Context.useContainer()
     const { classes } = useStyles()
 
-    const topOffer = resolveTopOffer(orders.value?.data)
+    const topOffer = resolveTopOffer(orders?.value)
 
     if (asset.loading || !asset.value)
         return (
