@@ -103,15 +103,17 @@ export function PriceCard(props: PriceCardProps) {
                                 </Typography>
                             ))}
                         <Typography className={classes.textBase}>
-                            {formatBalance(
-                                topOffer?.priceInToken?.amount,
-                                topOffer?.priceInToken?.token.decimals || 18,
-                                6,
-                            )}
+                            <strong style={{ fontSize: '18px', lineHeight: '18px' }}>
+                                {formatBalance(
+                                    topOffer?.priceInToken?.amount,
+                                    topOffer?.priceInToken?.token.decimals || 18,
+                                    6,
+                                )}
+                            </strong>
                         </Typography>
                         {topOffer?.price?.usd && (
                             <Typography className={classes.textBase}>
-                                <strong>({formatCurrency(topOffer.price?.usd) || '-'})</strong>
+                                ({formatCurrency(topOffer.price?.usd) || '-'})
                             </Typography>
                         )}
                     </div>
