@@ -167,7 +167,12 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
             }))
             .filter((x) => isValidChainId(x.chainId as ChainId))
 
-        function getPlatform(contracts: TrendingAPI.Contract[], contract_address?: string) {
+        function getPlatform(coinInfo: CoinInfo, contracts: TrendingAPI.Contract[], contract_address?: string) {
+            if (isNativeTokenSymbol(coinInfo.symbol) && chainResolver.chainId(coinInfo.name))
+                return {
+                    chainId: chainResolver.chainId(coinInfo.name),
+                    address: getTokenConstant(chainResolver.chainId(coinInfo.name)!, 'NATIVE_TOKEN_ADDRESS'),
+                }
             const _contracts = contracts.filter(
                 (x) =>
                     contract_address === x.address && isValidChainId(x.chainId as ChainId) && isValidAddress(x.address),
@@ -183,9 +188,7 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
             contracts,
             coin: {
                 id,
-                chainId: isNativeTokenSymbol(coinInfo.symbol)
-                    ? chainResolver.chainId(coinInfo.name)
-                    : getPlatform(contracts, coinInfo.platform?.token_address)?.chainId,
+                chainId: getPlatform(coinInfo, contracts, coinInfo.platform?.token_address)?.chainId,
                 name: coinInfo.name,
                 symbol: coinInfo.symbol,
                 type: TokenType.Fungible,
@@ -214,10 +217,8 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
                 market_cap_rank: quotesInfo?.[id]?.cmc_rank,
                 description: coinInfo.description,
                 contract_address:
-                    isNativeTokenSymbol(coinInfo.symbol) && chainResolver.chainId(coinInfo.name)
-                        ? getTokenConstant(chainResolver.chainId(coinInfo.name)!, 'NATIVE_TOKEN_ADDRESS')
-                        : getPlatform(contracts, coinInfo.platform?.token_address)?.address ??
-                          coinInfo.platform?.token_address,
+                    getPlatform(coinInfo, contracts, coinInfo.platform?.token_address)?.address ??
+                    coinInfo.platform?.token_address,
             },
             currency,
             dataProvider: SourceType.CoinMarketCap,
