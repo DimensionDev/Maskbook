@@ -10,7 +10,6 @@
   "references": [
     { "path": "../../dashboard" },
     { "path": "../../public-api" },
-    { "path": "../../logs" },
     { "path": "../../shared" },
     { "path": "../../backup-format" },
     { "path": "../../shared-base" },
@@ -19,6 +18,7 @@
     { "path": "../../typed-message/react" },
     { "path": "../../web3-hooks/base" },
     { "path": "../../web3-hooks/evm" },
+    { "path": "../../web3-logs" },
     { "path": "../../web3-shared/base" },
     { "path": "../../web3-shared/evm" },
     { "path": "../../web3-shared/flow" },

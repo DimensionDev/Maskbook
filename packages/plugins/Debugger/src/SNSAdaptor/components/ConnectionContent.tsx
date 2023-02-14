@@ -4,7 +4,7 @@ import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/
 import { makeStyles } from '@masknet/theme'
 import { useWeb3Connection, useChainContext, useNetworkContext, useWeb3 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useLog } from '@masknet/logs/hooks'
+import { useLog } from '../../../../../web3-logs/src/entry-hooks.js'
 import { NetworkPluginID, ProofType } from '@masknet/shared-base'
 import {
     Web3,
