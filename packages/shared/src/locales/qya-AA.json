@@ -97,7 +97,7 @@
     "gas_settings_gas_option_type_normal": "crwdns17584:0crwdne17584:0",
     "gas_settings_gas_option_type_fast": "crwdns17586:0crwdne17586:0",
     "gas_settings_gas_option_estimate_distance": "crwdns18000:0{{distance}}crwdne18000:0",
-    "gas_settings_gas_option_amount_in_gwei": "crwdns17590:0{{amount}}crwdne17590:0",
+    "gas_settings_gas_option_amount_in_gwei": "crwdns17590:0{{- amount}}crwdne17590:0",
     "gas_settings_section_title_gas_price": "crwdns17592:0crwdne17592:0",
     "gas_settings_section_title_slippage_tolerance": "crwdns17594:0crwdne17594:0",
     "gas_settings_custom": "crwdns17596:0crwdne17596:0",
