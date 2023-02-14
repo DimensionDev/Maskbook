@@ -30,6 +30,7 @@ import {
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
     useSocialIdentity,
+    useSocialIdentityByUserId,
 } from '../DataSource/useActivatedUI.js'
 import { useCollectionByTwitterHandler } from '../../plugins/Trader/trending/useTrending.js'
 import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry.js'
@@ -291,14 +292,23 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const { value: collectionList } = useCollectionByTwitterHandler(currentVisitingUserId)
 
+    const { value: identity } = useSocialIdentityByUserId(currentVisitingUserId)
+    const [isHideInspector, hideInspector] = useState(false)
+
     if (hidden) return null
 
     const keyword = collectionList?.[0]?.address || collectionList?.[0]?.name
 
-    if (keyword)
+    if (keyword && !isHideInspector)
         return (
             <div className={classes.root}>
-                <SearchResultInspector keyword={keyword} isProfilePage collectionList={collectionList} />
+                <SearchResultInspector
+                    keyword={keyword}
+                    isProfilePage
+                    hideInspector={hideInspector}
+                    collectionList={collectionList}
+                    identity={identity}
+                />
             </div>
         )
 

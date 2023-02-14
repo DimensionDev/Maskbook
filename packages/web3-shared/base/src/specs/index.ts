@@ -109,7 +109,8 @@ export enum SearchResultType {
     FungibleToken = 'FungibleToken',
     // e.g., #APE
     NonFungibleToken = 'NonFungibleToken',
-    NonFungibleCollection = 'NonFungibleCollection',
+    // e.g., realMaskNetwork
+    CollectionListByTwitterHandler = 'CollectionListByTwitterHandler',
 }
 
 export enum ActivityType {
@@ -390,6 +391,17 @@ export interface NonFungibleTokenMetadata<ChainId> {
     source?: SourceType
 }
 
+export interface SocialLinks {
+    website?: string
+    email?: string
+    twitter?: string
+    discord?: string
+    telegram?: string
+    github?: string
+    instagram?: string
+    medium?: string
+}
+
 export interface NonFungibleCollection<ChainId, SchemaType> {
     chainId: ChainId
     name: string
@@ -410,16 +422,7 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     /** source type */
     source?: SourceType
     assets?: Array<NonFungibleAsset<ChainId, SchemaType>>
-    socialLinks?: {
-        website?: string
-        email?: string
-        twitter?: string
-        discord?: string
-        telegram?: string
-        github?: string
-        instagram?: string
-        medium?: string
-    }
+    socialLinks?: SocialLinks
 }
 
 export interface NonFungibleCollectionOverview {
@@ -683,6 +686,7 @@ export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId
     symbol: string
     source: SourceType
     token?: FungibleToken<ChainId, SchemaType>
+    socialLinks?: SocialLinks
 }
 
 export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
@@ -703,7 +707,7 @@ export type TokenResult<ChainId, SchemaType> =
     | NonFungibleTokenResult<ChainId, SchemaType>
 
 export interface NonFungibleCollectionResult<ChainId, SchemaType> extends Result<ChainId> {
-    type: SearchResultType.NonFungibleCollection
+    type: SearchResultType.CollectionListByTwitterHandler
     address: string
     id?: string
     rank?: number

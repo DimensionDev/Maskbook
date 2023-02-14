@@ -127,6 +127,7 @@ export type ProfileCardEvent =
           open: true
           userId: string
           badgeBounding: DOMRect
+          openFromTrendingCard?: boolean
       }
 
 export type NonFungibleTokenDialogEvent =

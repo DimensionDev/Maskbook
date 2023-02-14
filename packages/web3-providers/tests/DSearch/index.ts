@@ -1,5 +1,10 @@
 import { describe, expect, it, test } from 'vitest'
-import { DomainResult, NonFungibleCollectionResult, NonFungibleTokenResult } from '@masknet/web3-shared-base'
+import {
+    DomainResult,
+    NonFungibleCollectionResult,
+    NonFungibleTokenResult,
+    SearchResultType,
+} from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { DSearchAPI } from '../../src/DSearch/index.js'
 
@@ -64,7 +69,7 @@ describe('DSearch test', () => {
 
     it('should return collection by twitter handle', async () => {
         const DSearch = new DSearchAPI()
-        const result = (await DSearch.search('mathcastles')) as Array<
+        const result = (await DSearch.search('mathcastles', SearchResultType.CollectionListByTwitterHandler)) as Array<
             NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
         >
 
