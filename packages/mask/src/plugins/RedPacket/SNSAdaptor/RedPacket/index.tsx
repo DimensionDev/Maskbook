@@ -194,6 +194,7 @@ export function RedPacket(props: RedPacketProps) {
         payload.contract_version,
         account,
         payload.rpid,
+        payloadChainId,
     )
 
     const [isClaimed, setIsClaimed] = useState(false)
