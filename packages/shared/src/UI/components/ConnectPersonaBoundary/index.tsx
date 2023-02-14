@@ -110,7 +110,8 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
 
         const handleClick = useCallback(() => {
             beforeAction?.(status)
-            status.action?.(directTo, handlerPosition, enableVerify, !createConfirm)
+            if (!status.verified || !status.hasPersona || !status.connected)
+                status.action?.(directTo, handlerPosition, enableVerify, !createConfirm)
             afterAction?.(status)
         }, [directTo, handlerPosition, JSON.stringify(status), createConfirm])
 
