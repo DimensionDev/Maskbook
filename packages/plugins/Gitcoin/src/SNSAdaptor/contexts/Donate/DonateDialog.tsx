@@ -113,10 +113,13 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
 
     // #region form
     const [rawAmount, setRawAmount] = useState('')
-    const amount = rightShift(rawAmount || '0', token?.decimals)
+    const amount = useMemo(
+        () => rightShift(rawAmount || '0', token?.decimals).integerValue(),
+        [rawAmount, token?.decimals],
+    )
     const [giveBack, setGiveBack] = useState<number>(0.05)
-    const tipAmount = amount.gt(0) ? new BigNumber(amount).times(giveBack) : ZERO
-    const total = amount.times(1 + giveBack)
+    const tipAmount = useMemo(() => new BigNumber(amount).times(giveBack).integerValue(), [amount, giveBack])
+    const total = amount.plus(tipAmount)
     // #endregion
 
     // #region blocking

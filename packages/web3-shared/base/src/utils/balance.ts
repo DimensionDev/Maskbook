@@ -8,7 +8,15 @@ export function formatBalance(
     isPrecise = false,
 ) {
     let balance = new BigNumber(rawValue)
-    if (!balance.isInteger()) throw new Error('Expect to pass integer')
+    if (!balance.isInteger()) {
+        const message = `Expected an integer but got ${balance.toFixed()}`
+        if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
+            throw new Error(message)
+        } else {
+            console.error(message)
+        }
+    }
+    balance = balance.integerValue()
     if (balance.isNaN()) return '0'
 
     const base = pow10(decimals) // 10n ** decimals
