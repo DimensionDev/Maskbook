@@ -1,7 +1,7 @@
 import { FC, useEffect, useRef } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { SourceType, SocialIdentity } from '@masknet/web3-shared-base'
+import type { SocialIdentity } from '@masknet/web3-shared-base'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import { IconButton, IconButtonProps } from '@mui/material'
 import { PluginTraderMessages } from '../../../plugins/Trader/messages.js'
@@ -18,7 +18,7 @@ interface Props extends IconButtonProps {
     userId: string
     identity?: SocialIdentity
 }
-export const NFTProjectAvatarBadge: FC<Props> = ({ address, userId, className, identity, ...rest }) => {
+export const CollectionProjectAvatarBadge: FC<Props> = ({ address, userId, className, identity, ...rest }) => {
     const buttonRef = useRef<HTMLButtonElement>(null)
     const { classes, cx } = useStyles()
 
@@ -37,8 +37,6 @@ export const NFTProjectAvatarBadge: FC<Props> = ({ address, userId, className, i
                     badgeBounding: button.getBoundingClientRect(),
                     type: TrendingAPI.TagType.HASH,
                     isCollectionProjectPopper: true,
-                    element: button,
-                    dataProviders: [SourceType.NFTScan],
                 })
             }, 200)
         }
