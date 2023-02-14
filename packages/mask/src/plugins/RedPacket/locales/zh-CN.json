@@ -46,7 +46,7 @@
     "erc20_tab_title": "代币",
     "claimed": "已认领",
     "details": "红包详情",
-    "display_name": "插件：红包",
+    "display_name": "红包",
     "select_existing": "历史",
     "create_new": "新建",
     "token_send_symbol": "发送 {{amount}} {{symbol}}",
