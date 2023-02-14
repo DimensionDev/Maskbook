@@ -79,6 +79,7 @@
       "@masknet/global-types/*": ["./packages/polyfills/types/*"],
       "@masknet/public-api": ["./packages/public-api/src"],
       // @masknet/scripts is not listed. It does not mean to be installed as a dependency and not join the type check.
+      "@masknet/logs": ["./packages/logs/src"],
       "@masknet/shared": ["./packages/shared/src"],
       "@masknet/shared-base": ["./packages/shared-base/src"],
       "@masknet/shared-base-ui": ["./packages/shared-base-ui/src"],

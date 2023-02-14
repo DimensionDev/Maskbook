@@ -580,6 +580,8 @@ importers:
         specifier: ^7.0.2
         version: 7.0.2_rollup@3.5.0
 
+  packages/logs: {}
+
   packages/mask:
     dependencies:
       '@balancer-labs/sor':
@@ -630,6 +632,9 @@ importers:
       '@masknet/injected-script':
         specifier: workspace:^
         version: link:../injected-script
+      '@masknet/logs':
+        specifier: workspace:^
+        version: link:../logs
       '@masknet/plugin-approval':
         specifier: workspace:^
         version: link:../plugins/Approval
@@ -3271,6 +3276,9 @@ importers:
         specifier: 1.8.0
         version: 1.8.0
     devDependencies:
+      '@sentry/browser':
+        specifier: 7.3.0
+        version: 7.3.0
       '@types/json-stable-stringify':
         specifier: ^1.0.34
         version: 1.0.34
@@ -9478,7 +9486,6 @@ packages:
       '@sentry/types': 7.3.0
       '@sentry/utils': 7.3.0
       tslib: 1.14.1
-    dev: false
 
   /@sentry/core/7.3.0:
     resolution: {integrity: sha512-EvuWVlYm0F0+BtIEmQiCL31Fw0cfKSwUTmxc99wvouaabpHBr2zCJHRxaXOWzxS705bYBJEQiFDTIHfoOQZMzA==}
@@ -9488,7 +9495,6 @@ packages:
       '@sentry/types': 7.3.0
       '@sentry/utils': 7.3.0
       tslib: 1.14.1
-    dev: false
 
   /@sentry/hub/7.3.0:
     resolution: {integrity: sha512-0GtTaWf/hoAMoIFY7Ke6eozIbG3FdIPM364sER4SxUQVSklp6AORrV6p82IgWPROK6aj83cPk9Bszgi6RiF/BA==}
@@ -9497,12 +9503,10 @@ packages:
       '@sentry/types': 7.3.0
       '@sentry/utils': 7.3.0
       tslib: 1.14.1
-    dev: false
 
   /@sentry/types/7.3.0:
     resolution: {integrity: sha512-cGkHdh9+uvbFTj65TjWcXuhe6vQiMY+U+N2GE5xCfmZT9hwuouCASViNsbJMpZqvCg+Yi0fasQLZ71rujiRNOA==}
     engines: {node: '>=8'}
-    dev: false
 
   /@sentry/utils/7.3.0:
     resolution: {integrity: sha512-xUP8TBf2p/c6CN8eFQ7Y+xk0IFrJXsph5ScozqNl/2l/Xs8hd2EiYETqgUklphoYD4J2RxvPwMyqBL15QN6wNg==}
@@ -9510,7 +9514,6 @@ packages:
     dependencies:
       '@sentry/types': 7.3.0
       tslib: 1.14.1
-    dev: false
 
   /@servie/events/3.0.0:
     resolution: {integrity: sha512-Zd79bWhTuG8NvPgSiOcivorJIDg+goMw76TIqYTIR5ua5HOEkS29fmIh2VVSeDeabNF6z8ceTwzB0pSh/BhXyw==}
