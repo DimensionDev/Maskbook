@@ -40,7 +40,8 @@ function PluginRenderDelayed() {
     return <PluginRender />
 }
 
-const web3ContextType = { pluginID: NetworkPluginID.PLUGIN_EVM, providerType: ProviderType.MaskWallet }
+const Web3ContextType = { pluginID: NetworkPluginID.PLUGIN_EVM, providerType: ProviderType.MaskWallet }
+
 export default function Popups() {
     const [title, setTitle] = useState('')
     useEffect(queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
@@ -49,7 +50,7 @@ export default function Popups() {
     return MaskUIRootPage(
         usePopupTheme,
         <PopupSnackbarProvider>
-            <Web3ContextProvider value={web3ContextType}>
+            <Web3ContextProvider value={Web3ContextType}>
                 <PopupContext.Provider>
                     <PageTitleContext.Provider value={titleContext}>
                         <HashRouter>

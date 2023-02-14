@@ -580,7 +580,23 @@ importers:
         specifier: ^7.0.2
         version: 7.0.2_rollup@3.5.0
 
-  packages/logs: {}
+  packages/logs:
+    dependencies:
+      '@masknet/shared-base':
+        specifier: workspace:^
+        version: link:../shared-base
+      '@masknet/web3-helpers':
+        specifier: workspace:^
+        version: link:../web3-helpers
+      '@masknet/web3-hooks-base':
+        specifier: workspace:^
+        version: link:../web3-hooks/base
+      '@masknet/web3-providers':
+        specifier: workspace:^
+        version: link:../web3-providers
+      react-use:
+        specifier: ^17.4.0
+        version: 17.4.0
 
   packages/mask:
     dependencies:
@@ -3074,6 +3090,9 @@ importers:
       '@masknet/web3-helpers':
         specifier: workspace:^
         version: link:../../web3-helpers
+      '@masknet/web3-providers':
+        specifier: workspace:^
+        version: link:../../web3-providers
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../../web3-shared/base

@@ -1,4 +1,4 @@
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 export namespace LoggerAPI {
@@ -21,8 +21,11 @@ export namespace LoggerAPI {
     }
 
     export interface NetworkOptions {
-        pluginID?: NetworkPluginID
         chainId?: Web3Helper.ChainIdAll
+        pluginID?: PluginID
+        networkID?: NetworkPluginID
+        networkType?: Web3Helper.NetworkTypeAll
+        providerType?: Web3Helper.ProviderTypeAll
     }
 
     export interface UserOptions {

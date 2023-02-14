@@ -1,14 +1,14 @@
 import React, { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react'
 import { isUndefined, omitBy } from 'lodash-es'
+import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { compose, CrossIsolationMessages, MaskEvents, NetworkPluginID } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
 import { useNetworkType } from './useNetworkType.js'
 import { useProviderType } from './useProviderType.js'
-import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { useWeb3State } from './useWeb3State.js'
-import { isSameAddress } from '@masknet/web3-shared-base'
 
 interface EnvironmentContext<T extends NetworkPluginID = NetworkPluginID> {
     pluginID: T
@@ -111,9 +111,9 @@ export function ChainContextProvider({ value, children }: React.ProviderProps<Ch
                 setChainId,
                 setNetworkType,
                 setProviderType,
-            }}
-            children={children}
-        />
+            }}>
+            {children}
+        </ChainContext.Provider>
     )
 }
 
@@ -153,14 +153,6 @@ export function ActualChainContextProvider({ children }: { children: ReactNode |
         providerType: useProviderType(),
     }
     return <ChainContext.Provider value={value} children={children} />
-}
-
-export function ActualWeb3ContextProvider({ children }: Omit<React.ProviderProps<never>, 'value'>) {
-    return compose(
-        (children) => ActualNetworkContextProvider({ children }),
-        (children) => ActualChainContextProvider({ children }),
-        <>{children}</>,
-    )
 }
 
 export function useEnvironmentContext(defaults?: EnvironmentContext) {

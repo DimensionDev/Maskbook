@@ -23,8 +23,8 @@ import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext.js'
 import { Services } from '../API.js'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
+const Web3ContextType = { pluginID: NetworkPluginID.PLUGIN_EVM }
 
-const web3ContextType = { pluginID: NetworkPluginID.PLUGIN_EVM }
 export default function DashboardRoot() {
     useEffect(queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
 
@@ -42,8 +42,8 @@ export default function DashboardRoot() {
     // #endregion
 
     return (
-        <EnvironmentContextProvider value={web3ContextType}>
-            <Web3ContextProvider value={web3ContextType}>
+        <EnvironmentContextProvider value={Web3ContextType}>
+            <Web3ContextProvider value={Web3ContextType}>
                 <I18NextProviderHMR i18n={i18NextInstance}>
                     <StyledEngineProvider injectFirst>
                         <ThemeProvider theme={theme}>
