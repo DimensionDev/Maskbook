@@ -110,7 +110,7 @@ export class ConnectionContext {
             from: this._options?.overrides?.from || this.payloadEditor.config?.from,
             chainId:
                 typeof this._options?.overrides?.chainId === 'string'
-                    ? Number.parseInt(this._options?.overrides?.chainId, 16)
+                    ? Number.parseInt(this._options?.overrides?.chainId, 10)
                     : this.payloadEditor.config?.chainId,
         }
     }
