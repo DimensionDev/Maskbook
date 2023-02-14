@@ -4,7 +4,6 @@ import {
     fetchImageViaDOM,
     fetchImageViaHTTP,
     isLocaleResource,
-    resolveCrossOriginURL,
     resolveLocalURL,
     resolveResourceURL,
 } from '@masknet/web3-shared-base'
@@ -17,15 +16,8 @@ async function toBase64(blob: Blob | null | undefined) {
 }
 
 function fetchImage(url: string) {
-    const resolvedURL = resolveCrossOriginURL(url)!
-
     return attemptUntil<string | null>(
-        [
-            async () => toBase64(await fetchImageViaDOM(resolvedURL)),
-            async () => toBase64(await fetchImageViaDOM(url)),
-            async () => toBase64(await fetchImageViaHTTP(resolvedURL)),
-            async () => toBase64(await fetchImageViaHTTP(url)),
-        ],
+        [async () => toBase64(await fetchImageViaDOM(url)), async () => toBase64(await fetchImageViaHTTP(url))],
         url,
     )
 }

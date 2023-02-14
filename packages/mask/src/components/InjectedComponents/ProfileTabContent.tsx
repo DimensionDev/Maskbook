@@ -261,7 +261,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         if (!Component) return null
 
         return <Component identity={currentVisitingSocialIdentity} socialAccount={selectedSocialAccount} />
-    }, [componentTabId, selectedSocialAccount])
+    }, [componentTabId, selectedSocialAccount, currentVisitingSocialIdentity])
 
     const lackHostPermission = usePluginHostPermissionCheck(activatedPlugins.filter((x) => x.ProfileCardTabs?.length))
 

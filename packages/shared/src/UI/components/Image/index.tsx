@@ -4,6 +4,11 @@ import { useTheme } from '@mui/material'
 import { useImageURL } from '../../../hooks/useImageURL.js'
 
 const useStyles = makeStyles<Pick<ImageProps, 'size' | 'rounded'>, 'center'>()((theme, { size, rounded }, refs) => ({
+    optimistic: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     container: {
         width: size ?? '100%',
         height: size ?? '100%',
@@ -41,6 +46,8 @@ export interface ImageProps
     fallback?: URL | string | JSX.Element
     disableSpinner?: boolean
     containerProps?: HTMLProps<HTMLDivElement>
+    /** If optimistic is true, means that the resource is loadable */
+    optimistic?: boolean
 }
 
 export function Image({
@@ -51,13 +58,29 @@ export function Image({
     classes: extraClasses,
     onClick,
     containerProps,
+    optimistic,
     ...rest
 }: ImageProps) {
     const { classes, cx } = useStyles({ size, rounded }, { props: { classes: extraClasses } })
     const theme = useTheme()
     const [failed, setFailed] = useState(false)
+    const [optimismFailed, setOptimismFailed] = useState(false)
 
     const { value: imageURL, loading: loadingImageURL } = useImageURL(rest.src)
+    if (optimistic && rest.src && !optimismFailed) {
+        return (
+            <div {...containerProps} className={cx(classes.container, classes.optimistic, containerProps?.className)}>
+                <img
+                    className={classes.image}
+                    width={size}
+                    height={size}
+                    {...rest}
+                    src={rest.src}
+                    onError={() => setOptimismFailed(true)}
+                />
+            </div>
+        )
+    }
 
     if (loadingImageURL && !disableSpinner) {
         return (
