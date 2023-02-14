@@ -202,6 +202,7 @@ export function PreviewCard(props: PreviewCardProps) {
                     <div className={classes.metas}>
                         <Typography color={theme.palette.maskColor.second} fontSize={14}>
                             <Translate.total_raised
+                                shouldUnescape
                                 values={{
                                     amount: `$${new BigNumber(grant.amount_received).toFixed(2)}`,
                                 }}
