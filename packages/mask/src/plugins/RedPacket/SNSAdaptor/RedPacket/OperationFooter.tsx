@@ -105,9 +105,15 @@ export function OperationFooter({
     return (
         <Box style={{ flex: 1, padding: 12 }}>
             <Box className={classes.footer}>
-                <ActionButton fullWidth variant="roundedDark" startIcon={<Icons.Shared size={18} />} onClick={onShare}>
-                    {tr('share')}
-                </ActionButton>
+                {canRefund ? null : (
+                    <ActionButton
+                        fullWidth
+                        variant="roundedDark"
+                        startIcon={<Icons.Shared size={18} />}
+                        onClick={onShare}>
+                        {tr('share')}
+                    </ActionButton>
+                )}
 
                 {(canClaim || canRefund) && (
                     <ChainBoundary
