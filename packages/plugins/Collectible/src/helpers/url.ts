@@ -154,7 +154,7 @@ const RULES = [
     },
     // Etherscan
     {
-        hosts: ['etherscan.io'],
+        hosts: ['etherscan.io', 'cn.etherscan.com'],
         pathname: /^\/nft\/(0x[\dA-Fa-f]{40})\/(\d+)/,
         pluginID: NetworkPluginID.PLUGIN_EVM,
         chainId: ChainIdEVM.Mainnet,
@@ -191,6 +191,13 @@ const RULES = [
         pathname: /^\/vault\/(0x[\dA-Fa-f]{40})\/(\d+)/,
         pluginID: NetworkPluginID.PLUGIN_EVM,
         chainId: ChainIdEVM.Mainnet,
+        provider: SourceType.NFTX,
+    },
+    {
+        hosts: ['arbitrum.nftx.io'],
+        pathname: /^\/vault\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+        pluginID: NetworkPluginID.PLUGIN_EVM,
+        chainId: ChainIdEVM.Arbitrum,
         provider: SourceType.NFTX,
     },
 ]

@@ -3,7 +3,8 @@ import { DependencyList, useCallback, useEffect, useState } from 'react'
 import { useAsyncRetry, useList } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 
-export type AsyncStatePageable<T> = AsyncStateRetry<T> & {
+export type AsyncStatePageable<T> = Omit<AsyncStateRetry<T>, 'value'> & {
+    value: T[]
     next(): void
     ended: boolean
 }
@@ -12,9 +13,9 @@ export const usePageableAsync = <T>(
     fn: (nextIndicator?: HubIndicator) => Promise<Pageable<T, unknown> | undefined>,
     deps: DependencyList = [],
     key?: string,
-) => {
+): AsyncStatePageable<T> => {
     const [indicator, setIndicator] = useState<HubIndicator | undefined>()
-    const [list, { push, clear }] = useList()
+    const [list, { push, clear }] = useList<T>()
 
     useEffect(() => clear(), [key])
 

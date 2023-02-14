@@ -1,10 +1,10 @@
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
-import type { NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
+import type { NonFungibleTokenOrder } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { OffersListWrapper } from '../../Shared/OffersList.js'
 
+import type { AsyncStatePageable } from '@masknet/web3-hooks-base'
 export interface OffersTabProps {
-    offers: AsyncStateRetry<Pageable<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
+    offers: AsyncStatePageable<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
 export function OffersTab(props: OffersTabProps) {

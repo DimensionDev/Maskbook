@@ -2,8 +2,8 @@ import { isEqual } from 'lodash-es'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
 import { EnhanceableSite, ExtensionSite, updateLanguage, NetworkPluginID } from '@masknet/shared-base'
-import { createGlobalSettings, createBulkSettings } from './createSettings.js'
 import { BooleanPreference } from '@masknet/plugin-infra'
+import { createGlobalSettings, createBulkSettings } from './createSettings.js'
 
 export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default)
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__)
@@ -30,9 +30,7 @@ export const userGuideStatus = createBulkSettings('userGuideStatus', '')
 export const sayHelloShowed = createBulkSettings('sayHelloShowed', false)
 export const userPinExtension = createGlobalSettings('userPinExtension', false)
 export const dismissVerifyNextID = createBulkSettings<Record<string, boolean>>('dismissVerifyNextID', {}, isEqual)
-
-export const logSettings = createGlobalSettings<string>('log', '')
-
+export const logSettings = createGlobalSettings<boolean>('log', false)
 export const decentralizedSearchSettings = createGlobalSettings('decentralizedSearchSettings', true)
 
 /**

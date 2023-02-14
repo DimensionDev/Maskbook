@@ -4,6 +4,7 @@ import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/
 import { makeStyles } from '@masknet/theme'
 import { useWeb3Connection, useChainContext, useNetworkContext, useWeb3 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { Sentry } from '@masknet/web3-providers'
 import { NetworkPluginID, ProofType } from '@masknet/shared-base'
 import {
     Web3,
@@ -16,6 +17,7 @@ import { ChainId as SolanaChainId, ProviderType as SolanaProviderType } from '@m
 import { ChainId as FlowChainId, ProviderType as FlowProviderType } from '@masknet/web3-shared-flow'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
+import { LoggerAPI } from '@masknet/web3-providers/types'
 
 export interface ConnectionContentProps {
     onClose?: () => void
@@ -33,6 +35,19 @@ export function ConnectionContent(props: ConnectionContentProps) {
     const { account, chainId } = useChainContext()
     const web3 = useWeb3()
     const connection = useWeb3Connection()
+
+    const onCaptureEvent = useCallback(async () => {
+        Sentry.captureEvent({
+            eventID: LoggerAPI.EventID.Debug,
+        })
+    }, [])
+
+    const onCaptureException = useCallback(async () => {
+        Sentry.captureException({
+            exceptionID: LoggerAPI.ExceptionID.Debug,
+            error: new Error('A debug error.'),
+        })
+    }, [])
 
     const onEstimateCallback = useCallback(async () => {
         const contract = createContract<ERC20>(
@@ -232,6 +247,30 @@ export function ConnectionContent(props: ConnectionContentProps) {
         <section className={classes.container}>
             <Table size="small">
                 <TableBody>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Capture Event
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button size="small" onClick={() => onCaptureEvent()}>
+                                Capture Event
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Capture Exception
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button size="small" onClick={() => onCaptureException()}>
+                                Capture Exception
+                            </Button>
+                        </TableCell>
+                    </TableRow>
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">
