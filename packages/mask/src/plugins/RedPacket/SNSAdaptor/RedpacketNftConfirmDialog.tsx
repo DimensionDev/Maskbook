@@ -205,16 +205,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
             })
             closeApplicationBoardDialog()
         },
-        [
-            duration,
-            message,
-            senderName,
-            contract,
-            privateKey,
-            transactionId,
-            closeApplicationBoardDialog,
-            openComposition,
-        ],
+        [duration, message, senderName, contract, privateKey, transactionId],
     )
 
     return (
