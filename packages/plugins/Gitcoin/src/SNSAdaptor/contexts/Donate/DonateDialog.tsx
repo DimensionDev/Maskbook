@@ -16,7 +16,7 @@ import { useChainContext, useFungibleTokenBalance, useWeb3Connection } from '@ma
 import { formatBalance, FungibleToken, rightShift, ZERO } from '@masknet/web3-shared-base'
 import { ChainId, isNativeTokenAddress, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
 import { Box, DialogActions, DialogContent, Typography } from '@mui/material'
-import { FC, memo, useCallback, useMemo, useState } from 'react'
+import { FC, memo, useCallback, useLayoutEffect, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { useDonateCallback } from '../../hooks/useDonateCallback.js'
 import { useI18N } from '../../../locales/i18n_generated.js'
@@ -79,9 +79,11 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
     const { share } = useSNSAdaptorContext()
 
     const availableChains = useMemo(() => getSupportedChainIds(tenants), [tenants])
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
-        chainId: availableChains[0],
-    })
+    const { account, chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    useLayoutEffect(() => {
+        if (!availableChains.includes(chainId)) setChainId(availableChains[0])
+    }, [chainId, setChainId, availableChains])
+
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const nativeTokenDetailed = useAsync(async () => {
         return connection?.getNativeToken({ chainId })
