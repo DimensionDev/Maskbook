@@ -55,7 +55,7 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
             setAddress(ev.address ?? '')
             setIdentity(ev.identity)
             setIsNFTProjectPopper(Boolean(ev.isCollectionProjectPopper))
-            setAnchorEl({ getBoundingClientRect: () => ev.element!.getBoundingClientRect() })
+            setAnchorEl({ getBoundingClientRect: () => ev.badgeBounding })
             setActive(true)
         })
     }, [])

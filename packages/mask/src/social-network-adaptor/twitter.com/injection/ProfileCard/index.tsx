@@ -36,13 +36,19 @@ function ProfileCardHolder() {
     const { classes } = useStyles()
     const holderRef = useRef<HTMLDivElement>(null)
     const [twitterId, setTwitterId] = useState('')
+    const [badgeBounding, setBadgeBounding] = useState<DOMRect | undefined>()
     const [openFromTrendingCard, setOpenFromTrendingCard] = useState(false)
-    const { active, style } = useControlProfileCard(holderRef, setOpenFromTrendingCard)
+    const { active, setActive, style } = useControlProfileCard(holderRef, setOpenFromTrendingCard)
 
     useEffect(() => {
         return CrossIsolationMessages.events.profileCardEvent.on((event) => {
-            if (!event.open) return
+            if (!event.open) {
+                setActive(false)
+                setOpenFromTrendingCard(false)
+                return
+            }
             setTwitterId(event.userId)
+            setBadgeBounding(event.badgeBounding)
             setTimeout(() => {
                 setOpenFromTrendingCard(Boolean(event.openFromTrendingCard))
             }, 200)
@@ -80,7 +86,7 @@ function ProfileCardHolder() {
                         <LoadingBase size={36} />
                     </div>
                 ) : resolvedIdentity ? (
-                    <ProfileCard identity={resolvedIdentity} />
+                    <ProfileCard identity={resolvedIdentity} badgeBounding={badgeBounding} />
                 ) : null}
             </div>
         </Fade>

@@ -38,7 +38,6 @@ export interface SearchResultInspectorProps {
     keyword?: string
     identity?: SocialIdentity
     isProfilePage?: boolean
-    hideInspector?: (x: boolean) => void
     collectionList?: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
@@ -60,14 +59,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const contentComponent = useMemo(() => {
         if (!resultList.value?.length) return null
         const Component = getSearchResultContent(resultList.value[0])
-        return (
-            <Component
-                result={resultList.value}
-                isProfilePage={props.isProfilePage}
-                identity={props.identity}
-                hideInspector={props.hideInspector}
-            />
-        )
+        return <Component result={resultList.value} isProfilePage={props.isProfilePage} identity={props.identity} />
     }, [resultList.value, props.isProfilePage, props.identity])
 
     const tabs = useMemo(() => {

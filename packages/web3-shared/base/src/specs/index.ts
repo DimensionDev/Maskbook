@@ -705,6 +705,7 @@ export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<Chai
 export type TokenResult<ChainId, SchemaType> =
     | FungibleTokenResult<ChainId, SchemaType>
     | NonFungibleTokenResult<ChainId, SchemaType>
+    | NonFungibleCollectionResult<ChainId, SchemaType>
 
 export interface NonFungibleCollectionResult<ChainId, SchemaType> extends Result<ChainId> {
     type: SearchResultType.CollectionListByTwitterHandler

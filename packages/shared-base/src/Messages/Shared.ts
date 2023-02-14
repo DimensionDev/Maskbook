@@ -5,6 +5,7 @@ import type {
     Web3ProfileDialogEvent,
     CheckSecurityDialogEvent,
     ApplicationDialogEvent,
+    HideSearchResultInspectorEvent,
     SwapDialogEvent,
     ProfileCardEvent,
     SettingsDialogEvent,
@@ -33,6 +34,7 @@ export const CrossIsolationMessages = new WebExtensionMessage<CrossIsolationEven
 export interface CrossIsolationEvents {
     compositionDialogEvent: CompositionDialogEvent
     web3ProfileDialogEvent: Web3ProfileDialogEvent
+    hideSearchResultInspectorEvent: HideSearchResultInspectorEvent
     checkSecurityDialogEvent: CheckSecurityDialogEvent
     checkSecurityConfirmationDialogEvent: CheckSecurityConfirmationDialogEvent
     applicationDialogEvent: ApplicationDialogEvent
