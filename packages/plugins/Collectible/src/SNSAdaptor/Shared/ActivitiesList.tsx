@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ActivitiesListProps {
-    events: AsyncStatePageable<Array<NonFungibleTokenEvent<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
+    events: AsyncStatePageable<NonFungibleTokenEvent<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
 export function ActivitiesList(props: ActivitiesListProps) {
