@@ -10,6 +10,7 @@
   "references": [
     { "path": "../public-api" },
     { "path": "../theme/" },
+    { "path": "../logs/" },
     { "path": "../mask/background" },
     { "path": "../web3-hooks/base/" },
     { "path": "../web3-hooks/evm/" },

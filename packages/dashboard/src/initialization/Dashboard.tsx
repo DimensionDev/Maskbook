@@ -10,6 +10,7 @@ import {
     DialogStackingProvider,
 } from '@masknet/theme'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
+import { LogContextProvider } from '@masknet/logs/hooks'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { EnvironmentContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
@@ -18,7 +19,7 @@ import { i18NextInstance, NetworkPluginID, queryRemoteI18NBundle } from '@maskne
 import '../utils/kv-storage.js'
 
 import { Pages } from '../pages/routes.js'
-import { useAppearance, useLog } from '../pages/Personas/api.js'
+import { useAppearance } from '../pages/Personas/api.js'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext.js'
 import { Services } from '../API.js'
 
@@ -30,7 +31,6 @@ export default function DashboardRoot() {
 
     // #region theme
     const appearance = useAppearance()
-    const log = useLog()
     const mode = useSystemPreferencePalette()
     const theme = {
         dark: DashboardDarkTheme,
@@ -44,27 +44,29 @@ export default function DashboardRoot() {
     return (
         <EnvironmentContextProvider value={Web3ContextType}>
             <Web3ContextProvider value={Web3ContextType}>
-                <I18NextProviderHMR i18n={i18NextInstance}>
-                    <StyledEngineProvider injectFirst>
-                        <ThemeProvider theme={theme}>
-                            <DialogStackingProvider>
-                                <PersonaContext.Provider>
-                                    <ErrorBoundary>
-                                        <CssBaseline />
-                                        <CustomSnackbarProvider>
-                                            <SharedContextProvider>
-                                                <HashRouter>
-                                                    <Pages />
-                                                </HashRouter>
-                                                <PluginRender />
-                                            </SharedContextProvider>
-                                        </CustomSnackbarProvider>
-                                    </ErrorBoundary>
-                                </PersonaContext.Provider>
-                            </DialogStackingProvider>
-                        </ThemeProvider>
-                    </StyledEngineProvider>
-                </I18NextProviderHMR>
+                <LogContextProvider>
+                    <I18NextProviderHMR i18n={i18NextInstance}>
+                        <StyledEngineProvider injectFirst>
+                            <ThemeProvider theme={theme}>
+                                <DialogStackingProvider>
+                                    <PersonaContext.Provider>
+                                        <ErrorBoundary>
+                                            <CssBaseline />
+                                            <CustomSnackbarProvider>
+                                                <SharedContextProvider>
+                                                    <HashRouter>
+                                                        <Pages />
+                                                    </HashRouter>
+                                                    <PluginRender />
+                                                </SharedContextProvider>
+                                            </CustomSnackbarProvider>
+                                        </ErrorBoundary>
+                                    </PersonaContext.Provider>
+                                </DialogStackingProvider>
+                            </ThemeProvider>
+                        </StyledEngineProvider>
+                    </I18NextProviderHMR>
+                </LogContextProvider>
             </Web3ContextProvider>
         </EnvironmentContextProvider>
     )

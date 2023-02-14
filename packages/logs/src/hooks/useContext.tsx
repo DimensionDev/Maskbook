@@ -5,36 +5,33 @@ import { useNetworkContext, useChainContext, useProviderType, useNetworkType } f
 const LogContext = createContext<LoggerAPI.CommonOptions>(null!)
 LogContext.displayName = 'LogContext'
 
-export function LogContextProvider({ value, children }: React.ProviderProps<LoggerAPI.CommonOptions>) {
+export function LogContextProvider({ value, children }: Partial<React.ProviderProps<LoggerAPI.CommonOptions>>) {
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext()
+
     const networkType = useNetworkType()
     const providerType = useProviderType()
 
     const options = useMemo<LoggerAPI.CommonOptions>(() => {
         return {
             device: {
-                ...value.device,
+                ...value?.device,
             },
             network: {
                 chainId,
                 networkID: pluginID,
                 networkType,
                 providerType,
-                ...value.network,
+                ...value?.network,
             },
             user: {
                 account,
-                ...value.user,
+                ...value?.user,
             },
         }
     }, [pluginID, account, chainId, JSON.stringify(value)])
 
-    return (
-        <LogContext.Provider value={options}>
-            {children}
-        </LogContext.Provider>
-    )
+    return <LogContext.Provider value={options}>{children}</LogContext.Provider>
 }
 
 export function useLogContext() {

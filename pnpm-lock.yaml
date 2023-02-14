@@ -348,6 +348,9 @@ importers:
       '@masknet/icons':
         specifier: workspace:^
         version: link:../icons
+      '@masknet/logs':
+        specifier: workspace:^
+        version: link:../logs
       '@masknet/plugin-evm':
         specifier: workspace:^
         version: link:../plugins/EVM
@@ -1469,6 +1472,9 @@ importers:
       '@masknet/icons':
         specifier: workspace:^
         version: link:../../icons
+      '@masknet/logs':
+        specifier: workspace:^
+        version: link:../../logs
       '@masknet/plugin-infra':
         specifier: workspace:^
         version: link:../../plugin-infra

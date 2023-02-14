@@ -12,6 +12,7 @@
     { "path": "../../web3-helpers" },
     { "path": "../../web3-hooks/base" },
     { "path": "../../web3-hooks/evm" },
+    { "path": "../../logs" },
     { "path": "../../shared" },
     { "path": "../../shared-base-ui" }
   ]

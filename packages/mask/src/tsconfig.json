@@ -10,6 +10,7 @@
   "references": [
     { "path": "../../dashboard" },
     { "path": "../../public-api" },
+    { "path": "../../logs" },
     { "path": "../../shared" },
     { "path": "../../backup-format" },
     { "path": "../../shared-base" },

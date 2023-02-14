@@ -2,13 +2,14 @@ import { lazy, useEffect, useState, useMemo } from 'react'
 import { Navigate, Route, Routes, HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { NetworkPluginID, PopupRoutes, queryRemoteI18NBundle } from '@masknet/shared-base'
+import { LogContextProvider } from '@masknet/logs/hooks'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { PopupSnackbarProvider } from '@masknet/theme'
-import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
-import { logSettings, languageSettings } from '../../../shared/legacy-settings/settings.js'
+import { languageSettings } from '../../../shared/legacy-settings/settings.js'
+import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import '../../social-network-adaptor/browser-action/index.js'
 import { PopupFrame } from './components/PopupFrame/index.js'
 import { PopupContext } from './hook/usePopupContext.js'
@@ -18,10 +19,6 @@ import Services from '../service.js'
 
 function usePopupTheme() {
     return usePopupFullPageTheme(useValueRef(languageSettings))
-}
-
-function useLog() {
-    return useValueRef(logSettings)
 }
 
 const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))
@@ -51,29 +48,31 @@ export default function Popups() {
         usePopupTheme,
         <PopupSnackbarProvider>
             <Web3ContextProvider value={Web3ContextType}>
-                <PopupContext.Provider>
-                    <PageTitleContext.Provider value={titleContext}>
-                        <HashRouter>
-                            <Routes>
-                                <Route path={PopupRoutes.Personas + '/*'} element={frame(<Personas />)} />
-                                <Route path={PopupRoutes.Wallet + '/*'} element={frame(<Wallet />)} />
-                                <Route path={PopupRoutes.Swap} element={<SwapPage />} />
-                                <Route path={PopupRoutes.RequestPermission} element={<RequestPermissionPage />} />
-                                <Route
-                                    path={PopupRoutes.PermissionAwareRedirect}
-                                    element={<PermissionAwareRedirect />}
-                                />
-                                <Route
-                                    path={PopupRoutes.ThirdPartyRequestPermission}
-                                    element={<ThirdPartyRequestPermission />}
-                                />
-                                <Route path="*" element={<Navigate replace to={PopupRoutes.Personas} />} />
-                            </Routes>
-                            {/* TODO: Should only load plugins when the page is plugin-aware. */}
-                            <PluginRenderDelayed />
-                        </HashRouter>
-                    </PageTitleContext.Provider>
-                </PopupContext.Provider>
+                <LogContextProvider>
+                    <PopupContext.Provider>
+                        <PageTitleContext.Provider value={titleContext}>
+                            <HashRouter>
+                                <Routes>
+                                    <Route path={PopupRoutes.Personas + '/*'} element={frame(<Personas />)} />
+                                    <Route path={PopupRoutes.Wallet + '/*'} element={frame(<Wallet />)} />
+                                    <Route path={PopupRoutes.Swap} element={<SwapPage />} />
+                                    <Route path={PopupRoutes.RequestPermission} element={<RequestPermissionPage />} />
+                                    <Route
+                                        path={PopupRoutes.PermissionAwareRedirect}
+                                        element={<PermissionAwareRedirect />}
+                                    />
+                                    <Route
+                                        path={PopupRoutes.ThirdPartyRequestPermission}
+                                        element={<ThirdPartyRequestPermission />}
+                                    />
+                                    <Route path="*" element={<Navigate replace to={PopupRoutes.Personas} />} />
+                                </Routes>
+                                {/* TODO: Should only load plugins when the page is plugin-aware. */}
+                                <PluginRenderDelayed />
+                            </HashRouter>
+                        </PageTitleContext.Provider>
+                    </PopupContext.Provider>
+                </LogContextProvider>
             </Web3ContextProvider>
         </PopupSnackbarProvider>,
         frame(<LoadingPlaceholder />),

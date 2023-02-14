@@ -4,7 +4,7 @@ import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/
 import { makeStyles } from '@masknet/theme'
 import { useWeb3Connection, useChainContext, useNetworkContext, useWeb3 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Sentry } from '@masknet/web3-providers'
+import { useLog } from '@masknet/logs/hooks'
 import { NetworkPluginID, ProofType } from '@masknet/shared-base'
 import {
     Web3,
@@ -35,19 +35,15 @@ export function ConnectionContent(props: ConnectionContentProps) {
     const { account, chainId } = useChainContext()
     const web3 = useWeb3()
     const connection = useWeb3Connection()
+    const log = useLog()
 
     const onCaptureEvent = useCallback(async () => {
-        Sentry.captureEvent({
-            eventID: LoggerAPI.EventID.Debug,
-        })
-    }, [])
+        log.captureEvent(LoggerAPI.EventID.Debug)
+    }, [log])
 
     const onCaptureException = useCallback(async () => {
-        Sentry.captureException({
-            exceptionID: LoggerAPI.ExceptionID.Debug,
-            error: new Error('A debug error.'),
-        })
-    }, [])
+        log.captureException(LoggerAPI.ExceptionID.Debug, new Error('A debug error.'))
+    }, [log])
 
     const onEstimateCallback = useCallback(async () => {
         const contract = createContract<ERC20>(
