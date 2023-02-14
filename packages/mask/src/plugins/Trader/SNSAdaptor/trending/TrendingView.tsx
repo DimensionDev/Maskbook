@@ -183,7 +183,7 @@ export function TrendingView(props: TrendingViewProps) {
         !isNFT &&
         !!trending?.coin.contract_address &&
         chainIdValid &&
-        swapExpectedContract?.pluginID === NetworkPluginID.PLUGIN_EVM
+        (!swapExpectedContract?.pluginID || swapExpectedContract?.pluginID === NetworkPluginID.PLUGIN_EVM)
     // #endregion
 
     // #region tabs
