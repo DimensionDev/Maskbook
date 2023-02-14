@@ -32,7 +32,7 @@
     "history_send": "发送",
     "history_total_amount": "总额: {{- amount}} {{symbol}}",
     "history_split_mode": "分享模式：{{mode}}",
-    "history_total_claimed_amount": "总额： <span><strong>{{claimedAmount}}/{{- amount}}</strong></span> {{symbol}}",
+    "history_total_claimed_amount": "总额： <span><strong>{{claimedAmount}}/{{amount}}</strong></span> {{symbol}}",
     "attached_message": "附加信息",
     "indivisible": "每个份额的最小金额为 {{- amount}} {{symbol}}",
     "name": "红包",

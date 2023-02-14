@@ -49,7 +49,7 @@
     "sending_tip": "发送中...",
     "nft_not_belong_to_you": "此收藏品不存在或不属于您。",
     "send_tip_successfully": "小费发送成功。",
-    "send_specific_tip_successfully": "已成功发送 {- {amount}} {{name}} 小费。",
+    "send_specific_tip_successfully": "已成功发送 {{- amount}} {{name}} 小费。",
     "search": "搜索",
     "web3_profile": "Web3个人资料",
     "create_persona_intro": "请创建您的身份以使用 Web3 个人资料。",

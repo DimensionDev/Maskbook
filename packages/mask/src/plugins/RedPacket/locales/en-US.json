@@ -37,7 +37,7 @@
     "history_send": "Send",
     "history_total_amount": "Total Amount: {{- amount}} {{symbol}}",
     "history_split_mode": "Split Mode: {{mode}}",
-    "history_total_claimed_amount": "Total: <span><strong>{{claimedAmount}}/{{- amount}}</strong></span> {{symbol}}",
+    "history_total_claimed_amount": "Total: <span><strong>{{claimedAmount}}/{{amount}}</strong></span> {{symbol}}",
     "attached_message": "Attached Message",
     "indivisible": "The minimum amount for each share is {{- amount}} {{symbol}}",
     "name": "Lucky Drop",
