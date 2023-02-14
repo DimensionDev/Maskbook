@@ -29,7 +29,7 @@ export function LogContextProvider({ value, children }: Partial<React.ProviderPr
                 ...value?.user,
             },
         }
-    }, [pluginID, account, chainId, JSON.stringify(value)])
+    }, [pluginID, account, chainId, networkType, providerType, JSON.stringify(value)])
 
     return <LogContext.Provider value={options}>{children}</LogContext.Provider>
 }

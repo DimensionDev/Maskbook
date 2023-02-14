@@ -128,7 +128,7 @@ export function Web3ContextProvider({
 >) {
     const { pluginID, ...rest } = value
     return compose(
-        (children) => NetworkContextProvider({ value: pluginID, children }),
+        (children) => <NetworkContextProvider value={pluginID} children={children} />,
         (children) => <ChainContextProvider value={rest} children={children} />,
         <>{children}</>,
     )
