@@ -37,7 +37,7 @@ const sns: Plugin.SNSAdaptor.Definition<
     SearchResultInspector: {
         ID: PluginID.Trader,
         UI: {
-            Content({ result: _resultList, isProfilePage }) {
+            Content({ result: _resultList, isProfilePage, identity, hideInspector }) {
                 const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
                 const resultList = _resultList as Web3Helper.TokenResultAll[]
                 if (!resultList.length) return null
@@ -49,11 +49,11 @@ const sns: Plugin.SNSAdaptor.Definition<
                             chainId,
                         }}>
                         <TrendingViewProvider
-                            isNFTProjectPopper={false}
+                            isCollectionProjectPopper={false}
                             isProfilePage={Boolean(isProfilePage)}
                             isTokenTagPopper={false}
                             isPreciseSearch={Boolean(Others?.isValidAddress(keyword))}>
-                            <TrendingView resultList={resultList} />
+                            <TrendingView resultList={resultList} identity={identity} hideInspector={hideInspector} />
                         </TrendingViewProvider>
                     </Web3ContextProvider>
                 )
@@ -64,7 +64,7 @@ const sns: Plugin.SNSAdaptor.Definition<
                 return [
                     SearchResultType.FungibleToken,
                     SearchResultType.NonFungibleToken,
-                    SearchResultType.NonFungibleCollection,
+                    SearchResultType.CollectionListByTwitterHandler,
                 ].includes(result.type)
             },
         },
@@ -127,14 +127,18 @@ const sns: Plugin.SNSAdaptor.Definition<
         label: 'Web3 Profile Card',
         priority: 99999,
         UI: {
-            Decorator({ userId }) {
+            Decorator({ userId, identity }) {
                 const { value: collectionList } = useCollectionByTwitterHandler(userId)
                 const isMinimalMode = useIsMinimalMode(PluginID.Web3ProfileCard)
                 if (!userId || !collectionList?.[0] || isMinimalMode) return null
 
                 return (
                     <Box display="flex" alignItems="top" justifyContent="center">
-                        <NFTProjectAvatarBadge userId={userId} address={collectionList?.[0].address} />
+                        <NFTProjectAvatarBadge
+                            userId={userId}
+                            address={collectionList?.[0].address ?? ''}
+                            identity={identity}
+                        />
                     </Box>
                 )
             },

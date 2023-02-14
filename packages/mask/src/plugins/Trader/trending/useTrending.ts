@@ -8,6 +8,7 @@ import {
     NonFungibleTokenActivity,
     SearchResultType,
     NonFungibleCollectionResult,
+    FungibleTokenResult,
 } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
@@ -31,10 +32,10 @@ export function useTrendingOverview(
 export function useCollectionByTwitterHandler(twitterHandler?: string) {
     return useAsync(async () => {
         if (!twitterHandler) return
-        return DSearch.search<NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>(
-            twitterHandler,
-            SearchResultType.NonFungibleCollection,
-        )
+        return DSearch.search<
+            | NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+            | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+        >(twitterHandler, SearchResultType.CollectionListByTwitterHandler)
     }, [twitterHandler])
 }
 

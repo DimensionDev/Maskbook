@@ -5,7 +5,7 @@ import { OffersListWrapper } from '../../Shared/OffersList.js'
 import type { AsyncStatePageable } from '@masknet/web3-hooks-base'
 
 export interface OffersTabProps {
-    offers: AsyncStatePageable<Array<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
+    offers: AsyncStatePageable<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
 export function OffersTab(props: OffersTabProps) {

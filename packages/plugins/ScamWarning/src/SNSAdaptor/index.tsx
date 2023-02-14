@@ -1,20 +1,18 @@
+import { useMemo } from 'react'
 import type { Plugin } from '@masknet/plugin-infra'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { base } from '../base.js'
 import { setupContext } from './context.js'
 import { PreviewCard } from './components/PreviewCard.js'
 import { Icons } from '@masknet/icons'
-import { useMemo } from 'react'
 import { parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { PLUGIN_DESCRIPTION, PLUGIN_NAME } from '../constants.js'
-import { initLogger } from './logger.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
         setupContext(context)
-        initLogger(context.createLogger())
     },
     ApplicationEntries: [
         (() => {

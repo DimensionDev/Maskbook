@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, MouseEventHandler } from 'react'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Grid, Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -42,6 +42,16 @@ export function Deposit(props: DepositDialogInterface | undefined) {
         deposit.token?.decimals,
     )
 
+    const DepositButton = (props: { onClick?: MouseEventHandler<HTMLButtonElement> | undefined }) => {
+        return (
+            <WalletConnectedBoundary expectedChainId={deposit.requiredChainId}>
+                <ActionButton fullWidth size="medium" onClick={props.onClick}>
+                    {t.deposit()} {totalDeposit} {deposit.token?.symbol}
+                </ActionButton>
+            </WalletConnectedBoundary>
+        )
+    }
+
     return (
         <Grid container display="flex" flexDirection="column" className={classes.container}>
             <Grid item xs={12}>
@@ -70,9 +80,7 @@ export function Deposit(props: DepositDialogInterface | undefined) {
             <Grid item xs={12} marginTop="24px">
                 <ChainBoundary expectedChainId={deposit.requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
                     <WalletConnectedBoundary expectedChainId={deposit.requiredChainId}>
-                        <ActionButton fullWidth size="medium" onClick={onClickDeposit}>
-                            {t.deposit()} {totalDeposit} {deposit.token?.symbol}
-                        </ActionButton>
+                        <DepositButton onClick={onClickDeposit} />
                     </WalletConnectedBoundary>
                 </ChainBoundary>
             </Grid>
