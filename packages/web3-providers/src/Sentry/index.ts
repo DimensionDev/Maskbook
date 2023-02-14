@@ -80,9 +80,9 @@ export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
         return {
             message,
             level: type === LoggerAPI.TypeID.Event ? 'info' : 'error',
-            user: options.user
+            user: options.user?.account
                 ? {
-                      username: options.user?.userID ?? options.user.account,
+                      username: options.user.account,
                   }
                 : undefined,
             tags: {
