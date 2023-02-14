@@ -117,6 +117,7 @@ export class SolanaFungibleAPI
 
     async getAssets(
         address: string,
+        trustedFungibleTokens?: Array<FungibleToken<ChainId, SchemaType>>,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, HubIndicator>> {
         if (!isValidChainId(chainId)) {

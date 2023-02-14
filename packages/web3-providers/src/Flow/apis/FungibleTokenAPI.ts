@@ -17,6 +17,7 @@ import {
     HubOptions,
     HubIndicator,
     createIndicator,
+    FungibleToken,
 } from '@masknet/web3-shared-base'
 import { CoinGeckoPriceAPI_EVM } from '../../CoinGecko/index.js'
 import type { FungibleTokenAPI, TokenListAPI } from '../../entry-types.js'
@@ -152,6 +153,7 @@ export class FlowFungibleAPI
 {
     async getAssets(
         account: string,
+        trustedFungibleTokens?: Array<FungibleToken<ChainId, SchemaType>>,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, HubIndicator>> {
         if (!isValidChainId(chainId)) return createPageable([], createIndicator(indicator))

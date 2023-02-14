@@ -4,6 +4,7 @@ import {
     createNextIndicator,
     createPageable,
     FungibleAsset,
+    FungibleToken,
     HubIndicator,
     HubOptions,
     Pageable,
@@ -44,6 +45,7 @@ export class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<Chai
     }
     async getAssets(
         address: string,
+        trustedFungibleTokens?: Array<FungibleToken<ChainId, SchemaType>>,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, HubIndicator>> {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))

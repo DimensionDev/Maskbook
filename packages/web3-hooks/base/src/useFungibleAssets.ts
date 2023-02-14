@@ -35,7 +35,7 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
         const isBlockedToken = currySameAddress(blockedTokens.map((x) => x.address))
         const iterator = pageableToIterator(async (indicator?: HubIndicator) => {
             if (!hub.getFungibleAssets) return
-            return hub.getFungibleAssets(account, {
+            return hub.getFungibleAssets(account, trustedTokens, {
                 indicator,
                 size: 50,
             })

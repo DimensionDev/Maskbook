@@ -1209,6 +1209,7 @@ export interface HubOptions<ChainId, Indicator = HubIndicator> {
     size?: number
     /** The page index. */
     indicator?: Indicator
+    fungibleTokenAddressed?: string[]
 }
 
 export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
@@ -1224,6 +1225,7 @@ export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = Hu
     /** Get fungible assets owned by the given account. */
     getFungibleAssets?: (
         account: string,
+        trustedFungibleTokens?: Array<FungibleToken<ChainId, SchemaType>>,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
     /** Get balance of a fungible token owned by the given account. */

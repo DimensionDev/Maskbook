@@ -83,7 +83,7 @@ export class SolanaWeb3API
         if (isNativeTokenAddress(address)) {
             return this.getNativeTokenBalance(chainId, owner)
         }
-        const { data: assets } = await this.SolanaFungible.getAssets(owner, {
+        const { data: assets } = await this.SolanaFungible.getAssets(owner, undefined, {
             chainId,
         })
         const asset = assets.find((x) => isSameAddress(x.address, address))
@@ -104,7 +104,7 @@ export class SolanaWeb3API
         owner: string,
     ): Promise<Record<string, string>> {
         if (!owner) return {}
-        const { data: assets } = await this.SolanaFungible.getAssets(owner, {
+        const { data: assets } = await this.SolanaFungible.getAssets(owner, undefined, {
             chainId,
         })
         const records = assets.reduce<Record<string, string>>(
