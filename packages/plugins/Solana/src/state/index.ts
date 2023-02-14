@@ -12,7 +12,10 @@ import { IdentityService } from './IdentityService.js'
 import { NameService } from './NameService.js'
 import { Storage } from './Storage/index.js'
 
-export async function createWeb3State(context: Plugin.Shared.SharedUIContext): Promise<SolanaWeb3State> {
+export async function createWeb3State(
+    signal: AbortSignal,
+    context: Plugin.Shared.SharedUIContext,
+): Promise<SolanaWeb3State> {
     const Provider_ = new Provider(context)
     const Settings_ = new Settings(context)
 

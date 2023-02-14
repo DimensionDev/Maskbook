@@ -20,7 +20,10 @@ import { BalanceNotifier } from './BalanceNotifier.js'
 import { BlockNumberNotifier } from './BlockNumberNotifier.js'
 import { Storage } from './Storage/index.js'
 
-export async function createWeb3State(context: Plugin.Shared.SharedUIContext): Promise<EVM_Web3State> {
+export async function createWeb3State(
+    signal: AbortSignal,
+    context: Plugin.Shared.SharedUIContext,
+): Promise<EVM_Web3State> {
     const Provider_ = new Provider(context)
     const Settings_ = new Settings(context)
     const Transaction_ = new Transaction(context, {
