@@ -7,13 +7,5 @@
     "lib": ["WebWorker", "ES2022"]
   },
   "include": ["./main", "./main/**/*.json"],
-  "references": [
-    { "path": "../base" },
-    { "path": "../shared-base" },
-    { "path": "../encryption" },
-    { "path": "../plugin-infra" },
-    { "path": "../typed-message/base" },
-    { "path": "../typed-message/react" },
-    { "path": "../web3-shared/base" }
-  ]
+  "references": [{ "path": "../base" }, { "path": "../shared-base" }, { "path": "../plugin-infra" }]
 }

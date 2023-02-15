@@ -1,4 +1,3 @@
-import '../plugin-host/register.js'
 import '../plugin-host/enable.js'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { createInjectHooksRenderer } from '@masknet/plugin-infra/dom'
@@ -10,6 +9,7 @@ const Decrypted = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useAnyMode,
     (x) => x.DecryptedInspector,
 )
+
 export default function PluginRender(props: { message: TypedMessage }) {
     return (
         <NetworkContextProvider value={NetworkPluginID.PLUGIN_EVM}>

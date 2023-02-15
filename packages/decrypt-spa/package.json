@@ -22,6 +22,7 @@
         "@masknet/web3-shared-base": "workspace:^",
         "@masknet/web3-shared-evm": "workspace:^",
         "@servie/events": "^3.0.0",
+        "async-call-rpc": "^6.1.5",
         "crypto-browserify": "^3.12.0",
         "idb": "^7.1.1",
         "safari-14-idb-fix": "^3.0.0",

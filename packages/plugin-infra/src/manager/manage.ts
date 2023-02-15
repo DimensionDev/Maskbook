@@ -3,6 +3,7 @@ import { ObservableSet, PluginID } from '@masknet/shared-base'
 import { Emitter } from '@servie/events'
 import { BooleanPreference, Plugin } from '../types.js'
 import { getPluginDefine, onNewPluginRegistered, registeredPlugins } from './store.js'
+import { timeout } from '@masknet/kit'
 
 // Plugin state machine
 // not-loaded => loaded
@@ -97,8 +98,10 @@ export function createManager<
 
         async function checkRequirementAndStartOrStop() {
             for (const [id] of registeredPlugins.getCurrentValue()) {
+                console.log('checkRequirementAndStartOrStop', registeredPlugins.getCurrentValue())
                 if (await meetRequirement(id)) await activatePlugin(id).catch(console.error)
                 else stopPlugin(id)
+                console.log('checkRequirementAndStartOrStop', id)
             }
         }
 
@@ -138,7 +141,12 @@ export function createManager<
             context: _host.createContext(id, abort.signal),
         }
         activated.set(id, activatedPlugin)
-        await definition.init(activatedPlugin.controller.signal, activatedPlugin.context)
+        // Note: do not await this.
+        // TODO: we should have an extra state to indicate startup failed.
+        timeout(
+            Promise.resolve(definition.init(activatedPlugin.controller.signal, activatedPlugin.context)),
+            1000,
+        ).catch(console.error)
         events.emit('activateChanged', id, true)
     }
 

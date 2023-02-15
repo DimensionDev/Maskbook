@@ -1,108 +1,126 @@
+import './register.js'
 import { Emitter } from '@servie/events'
 import { BooleanPreference, CurrentSNSNetwork, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import {
     createConstantSubscription,
     createI18NBundle,
-    createIndexedDB_KVStorageBackend,
-    createInMemoryKVStorageBackend,
     createKVStorageHost,
     i18NextInstance,
-    KVStorageBackend,
+    ValueRefWithReady,
 } from '@masknet/shared-base'
-import { noop } from 'lodash-es'
 import { ChainId } from '@masknet/web3-shared-evm'
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import { ThemeMode, FontSize } from '@masknet/web3-shared-base'
-import { None } from 'ts-results-es'
+import { addListener } from '../message.js'
+import { worker } from '../rpc.js'
+import { noop } from 'lodash-es'
 
 // #region Setup storage
-const memory: KVStorageBackend = {
-    beforeAutoSync: Promise.resolve(),
-    async getValue(...args) {
-        return None
+const inMemoryStorage = createKVStorageHost(
+    {
+        beforeAutoSync: Promise.resolve(),
+        getValue: worker.memroyRead,
+        setValue: worker.memoryWrite,
     },
-    async setValue(...args) {},
-}
-const indexedDB: KVStorageBackend = {
-    beforeAutoSync: Promise.resolve(),
-    async getValue(...args) {
-        return None
+    {
+        on: (callback) => addListener('inMemoryStorage', callback),
     },
-    async setValue(...args) {},
-}
-const inMemoryStorage = createKVStorageHost(createInMemoryKVStorageBackend(noop), {
-    on: () => noop,
-})
-const indexedDBStorage = createKVStorageHost(createIndexedDB_KVStorageBackend('mask-plugin', noop), {
-    on: () => noop,
-})
+)
+const indexedDBStorage = createKVStorageHost(
+    {
+        beforeAutoSync: Promise.resolve(),
+        getValue: worker.indexedDBRead,
+        setValue: worker.indexedDBWrite,
+    },
+    {
+        on: (callback) => addListener('indexedDBStorage', callback),
+    },
+)
 // #endregion
 
 async function reject(): Promise<never> {
     throw new Error('Not implemented')
 }
 
-const reg: UnboundedRegistry<any> = {}
-
-export async function startPluginHost() {
-    startPluginSNSAdaptor(CurrentSNSNetwork.Unknown, {
-        minimalMode: {
-            events: new Emitter(),
-            isEnabled: () => BooleanPreference.True,
-        },
-        addI18NResource(plugin, resource) {
-            createI18NBundle(plugin, resource)(i18NextInstance)
-        },
-        createContext(id, signal) {
-            return {
-                createKVStorage(type, defaultValues) {
-                    if (type === 'memory') return inMemoryStorage(id, defaultValues, signal)
-                    else return indexedDBStorage(id, defaultValues, signal)
-                },
-                account: createConstantSubscription(''),
-                chainId: createConstantSubscription(ChainId.Mainnet),
-                currentPersona: createConstantSubscription(undefined),
-                wallets: createConstantSubscription([]),
-                addWallet: reject,
-                closePopupWindow: reject,
-                closeWalletConnectDialog: reject,
-                confirmRequest: reject,
-                connectPersona: reject,
-                createLogger: reject,
-                createPersona: reject,
-                currentPersonaIdentifier: reg,
-                currentVisitingProfile: createConstantSubscription(undefined),
-                getNextIDPlatform: () => undefined,
-                getPersonaAvatar: reject,
-                getSocialIdentity: reject,
-                getThemeSettings: () => ({ color: '', mode: ThemeMode.Light, size: FontSize.Normal }),
-                getWallets: reject,
-                hasNativeAPI: false,
-                hasPaymentPassword: reject,
-                lastRecognizedProfile: createConstantSubscription(undefined),
-                openDashboard: reject,
-                openPopupConnectWindow: reject,
-                openPopupWindow: reject,
-                openWalletConnectDialog: reject,
-                ownPersonaChanged: reg,
-                ownProofChanged: reg,
-                queryPersonaByProfile: reject,
-                recordConnectedSites: reject,
-                rejectRequest: reject,
-                removeWallet: reject,
-                selectAccount: reject,
-                setMinimalMode: reject,
-                signWithPersona: reject,
-                signWithWallet: reject,
-                updateWallet: reject,
-                send: reject,
-                NFTAvatarTimelineUpdated: reg,
-                themeSettings: createConstantSubscription(undefined),
-            }
-        },
-        permission: {
-            hasPermission: async () => false,
-            events: new Emitter(),
-        },
-    })
+const emptyEventRegistry: UnboundedRegistry<any> = {
+    send: noop,
+    off: noop,
+    on: () => noop,
+    sendByBroadcast: noop,
+    sendToAll: noop,
+    sendToBackgroundPage: noop,
+    pause: () => async () => {},
+    sendToContentScripts: noop,
+    sendToFocusedPage: noop,
+    sendToLocal: noop,
+    sendToVisiblePages: noop,
+    bind: () => ({
+        off: noop,
+        on: () => noop,
+        pause: () => async () => {},
+        send: noop,
+    }),
+    async *[Symbol.asyncIterator]() {},
 }
+const emptyValueRef = new ValueRefWithReady<any>()
+
+startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
+    minimalMode: {
+        events: new Emitter(),
+        isEnabled: () => BooleanPreference.True,
+    },
+    addI18NResource(plugin, resource) {
+        createI18NBundle(plugin, resource)(i18NextInstance)
+    },
+    createContext(id, signal) {
+        return {
+            createKVStorage(type, defaultValues) {
+                if (type === 'memory') return inMemoryStorage(id, defaultValues, signal)
+                else return indexedDBStorage(id, defaultValues, signal)
+            },
+            account: createConstantSubscription(''),
+            chainId: createConstantSubscription(ChainId.Mainnet),
+            currentPersona: createConstantSubscription(undefined),
+            wallets: createConstantSubscription([]),
+            addWallet: reject,
+            closePopupWindow: reject,
+            closeWalletConnectDialog: reject,
+            confirmRequest: reject,
+            connectPersona: reject,
+            createLogger: () => undefined,
+            createPersona: reject,
+            currentPersonaIdentifier: emptyValueRef,
+            currentVisitingProfile: createConstantSubscription(undefined),
+            getNextIDPlatform: () => undefined,
+            getPersonaAvatar: reject,
+            getSocialIdentity: reject,
+            getThemeSettings: () => ({ color: '', mode: ThemeMode.Light, size: FontSize.Normal }),
+            getWallets: reject,
+            hasNativeAPI: false,
+            hasPaymentPassword: reject,
+            lastRecognizedProfile: createConstantSubscription(undefined),
+            openDashboard: reject,
+            openPopupConnectWindow: reject,
+            openPopupWindow: reject,
+            openWalletConnectDialog: reject,
+            ownPersonaChanged: emptyEventRegistry,
+            ownProofChanged: emptyEventRegistry,
+            queryPersonaByProfile: reject,
+            recordConnectedSites: reject,
+            rejectRequest: reject,
+            removeWallet: reject,
+            selectAccount: reject,
+            setMinimalMode: reject,
+            signWithPersona: reject,
+            signWithWallet: reject,
+            updateWallet: reject,
+            send: reject,
+            NFTAvatarTimelineUpdated: emptyEventRegistry,
+            themeSettings: createConstantSubscription(undefined),
+        }
+    },
+    permission: {
+        hasPermission: async () => false,
+        events: new Emitter(),
+    },
+})

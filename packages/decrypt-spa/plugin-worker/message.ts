@@ -1,5 +1,18 @@
-export type PortAwareHandler = (message: unknown, port: MessagePort | null) => void
+import * as Service from './service.js'
+import { AsyncCall, type CallbackBasedChannel } from 'async-call-rpc'
+import { serializer } from '@masknet/shared-base'
 
+const livingPorts = new Set<MessagePort>()
+const messageHandlers = new Map<string, Set<(message: any, fromPort: MessagePort | null) => void>>()
+const channel: CallbackBasedChannel = {
+    setup(jsonRPCHandlerCallback) {
+        addListener('rpc', (message, port) => {
+            jsonRPCHandlerCallback(message).then((x) => x && port?.postMessage(x))
+        })
+    },
+}
+AsyncCall(Service, { channel, log: true, serializer })
+export type PortAwareHandler = (message: unknown, port: MessagePort | null) => void
 export function addListener(type: string, handler: PortAwareHandler) {
     if (!messageHandlers.has(type)) messageHandlers.set(type, new Set())
     const store = messageHandlers.get(type)!
@@ -14,9 +27,6 @@ export function broadcastMessage(type: string, message: unknown) {
         postMessage([type, message])
     }
 }
-
-const livingPorts = new Set<MessagePort>()
-const messageHandlers = new Map<string, Set<(message: any, fromPort: MessagePort | null) => void>>()
 
 // shared worker
 globalThis.addEventListener('connect', (event) => {

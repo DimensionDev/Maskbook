@@ -1221,6 +1221,8 @@ export enum CurrentSNSNetwork {
     Twitter = 2,
     Instagram = 3,
     Minds = 4,
+
+    __SPA__ = 99,
 }
 
 export interface IdentityResolved {
