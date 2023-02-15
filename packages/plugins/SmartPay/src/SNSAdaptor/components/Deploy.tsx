@@ -8,7 +8,7 @@ import { formatPersonaFingerprint, NetworkPluginID } from '@masknet/shared-base'
 import { explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Typography, alpha, Box } from '@mui/material'
 import { useChainContext, useNetworkDescriptor, useProviderDescriptor } from '@masknet/web3-hooks-base'
-import { SmartPayAccount } from '@masknet/web3-providers'
+import { SmartPayOwner } from '@masknet/web3-providers'
 import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 import { useI18N } from '../../locales/index.js'
@@ -146,8 +146,8 @@ export function Deploy({ open }: { open: boolean }) {
     const { value, loading: queryContractLoading } = useAsync(async () => {
         if (!manager?.address || !open || !chainId) return
 
-        const accounts = await SmartPayAccount.getAccountsByOwners(chainId, [manager?.address], false)
-        const nonce = accounts.filter((x) => x.funded).length
+        const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [manager?.address], false)
+        const nonce = accounts.filter((x) => x.deployed).length
 
         return {
             account: accounts[nonce],

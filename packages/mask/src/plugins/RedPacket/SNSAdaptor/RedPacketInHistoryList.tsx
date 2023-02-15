@@ -336,16 +336,24 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                             </Typography>
                             <Typography variant="body1" className={classes.footerInfo}>
                                 <Translate.history_total_claimed_amount
+                                    shouldUnescape
                                     components={{
                                         strong: <strong className={classes.strong} />,
                                         span: <span className={classes.span} />,
                                     }}
                                     values={{
-                                        amount: formatBalance(patchedHistory.total, historyToken?.decimals, 6, true),
+                                        amount: formatBalance(
+                                            patchedHistory.total,
+                                            historyToken?.decimals,
+                                            6,
+                                            historyToken?.decimals,
+                                            true,
+                                        ),
                                         claimedAmount: formatBalance(
                                             minus(patchedHistory.total, total_remaining ?? 0),
                                             historyToken?.decimals,
                                             6,
+                                            historyToken?.decimals,
                                             true,
                                         ),
                                         symbol: historyToken?.symbol,

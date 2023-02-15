@@ -78,6 +78,7 @@ export const DSearchHandlers = [
                     balance: 9909,
                     verified: false,
                     source: 'NFTScan',
+                    rank: 1,
                     collection: {
                         address: '0x4e1f41613c9084fdb9e34e11fae9412427480e56',
                         name: 'Terraforms',

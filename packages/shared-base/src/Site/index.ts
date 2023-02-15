@@ -42,12 +42,28 @@ export function getSiteType(url?: string) {
     return getEnhanceableSiteType(url) ?? getExtensionSiteType(url)
 }
 
+export function getAgentType() {
+    if (isEdge()) return 'edge'
+    if (isOpera()) return 'opera'
+    if (isFirefox()) return 'firefox'
+    if (isChromium()) return 'chromium'
+    return 'unknown'
+}
+
 export function isEnhanceableSiteType() {
     return !!getEnhanceableSiteType()
 }
 
 export function isExtensionSiteType() {
     return !!getExtensionSiteType()
+}
+
+export function isChromium() {
+    return process.env.engine === 'chromium'
+}
+
+export function isEdge() {
+    return globalThis.navigator.userAgent.includes('Edg')
 }
 
 export function isFirefox() {

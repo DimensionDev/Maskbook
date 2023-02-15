@@ -23,7 +23,7 @@ export interface IconProps {
     AvatarProps?: Partial<AvatarProps>
 }
 
-export const Icon = memo<IconProps>((props) => {
+export const Icon = memo<IconProps>(function Icon(props) {
     const { logoURL, AvatarProps, size, name, label, className } = props
     const [failed, setFailed] = useState(false)
 
@@ -52,3 +52,5 @@ export const Icon = memo<IconProps>((props) => {
         </Avatar>
     )
 })
+
+Icon.displayName = 'Icon'

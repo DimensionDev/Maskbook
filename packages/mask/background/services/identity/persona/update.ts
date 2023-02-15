@@ -106,10 +106,8 @@ export async function renamePersona(identifier: PersonaIdentifier, nickname: str
 }
 
 export async function queryPersonaByMnemonic(mnemonic: string, password: ''): Promise<PersonaIdentifier | null> {
-    const verify = validateMnemonic(mnemonic)
-    if (!verify) {
-        throw new Error('Verify error')
-    }
+    const verified = await validateMnemonic(mnemonic)
+    if (!verified) throw new Error('Verify error')
 
     const { key } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonic, password)
     const identifier = await ECKeyIdentifierFromJsonWebKey(key.privateKey)

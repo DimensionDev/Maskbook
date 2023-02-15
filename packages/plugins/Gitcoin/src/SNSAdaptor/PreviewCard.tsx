@@ -202,6 +202,7 @@ export function PreviewCard(props: PreviewCardProps) {
                     <div className={classes.metas}>
                         <Typography color={theme.palette.maskColor.second} fontSize={14}>
                             <Translate.total_raised
+                                shouldUnescape
                                 values={{
                                     amount: `$${new BigNumber(grant.amount_received).toFixed(2)}`,
                                 }}
@@ -243,7 +244,7 @@ export function PreviewCard(props: PreviewCardProps) {
                 </Stack>
             </div>
             <Card variant="outlined" className={classes.main} elevation={0}>
-                <div className={classes.article}>
+                <Typography className={classes.article} component="div">
                     <div className={classes.banner}>
                         <img src={grant.logo_url} />
                     </div>
@@ -258,7 +259,7 @@ export function PreviewCard(props: PreviewCardProps) {
                             </Typography>
                         </div>
                     </div>
-                </div>
+                </Typography>
             </Card>
             <Box sx={{ display: 'flex', width: '100%', gap: 1, mt: 1 }}>
                 <Box sx={{ flex: 1 }}>

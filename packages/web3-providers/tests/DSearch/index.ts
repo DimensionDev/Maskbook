@@ -1,5 +1,10 @@
 import { describe, expect, it, test } from 'vitest'
-import { NonFungibleCollectionResult, NonFungibleTokenResult, DomainResult } from '@masknet/web3-shared-base'
+import {
+    DomainResult,
+    NonFungibleCollectionResult,
+    NonFungibleTokenResult,
+    SearchResultType,
+} from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { DSearchAPI } from '../../src/DSearch/index.js'
 
@@ -16,6 +21,7 @@ describe('DSearch test', () => {
             rank: undefined,
             type: 'FungibleToken',
             pluginID: 'com.mask.evm',
+            alias: undefined,
         })
     })
 
@@ -31,6 +37,7 @@ describe('DSearch test', () => {
             type: 'FungibleToken',
             keyword: 'eth1',
             pluginID: 'com.mask.evm',
+            alias: undefined,
         })
     })
     it('should return by fuzzy search', async () => {
@@ -62,7 +69,7 @@ describe('DSearch test', () => {
 
     it('should return collection by twitter handle', async () => {
         const DSearch = new DSearchAPI()
-        const result = (await DSearch.search('mathcastles')) as Array<
+        const result = (await DSearch.search('mathcastles', SearchResultType.CollectionListByTwitterHandler)) as Array<
             NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
         >
 

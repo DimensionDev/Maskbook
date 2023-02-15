@@ -8,8 +8,8 @@ import {
     useNonFungibleAssetsByCollection,
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
-import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
-import { createFungibleToken, TokenType } from '@masknet/web3-shared-base'
+import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
+import { createFungibleToken, SocialIdentity, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTList, PluginCardFrameMini } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
@@ -36,12 +36,12 @@ import { ContentTabs } from '../../types/index.js'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
-    isNFTProjectPopper: boolean
+    isCollectionProjectPopper: boolean
     currentTab: ContentTabs
 }>()((theme, props) => {
     return {
         root:
-            props.isTokenTagPopper || props.isNFTProjectPopper
+            props.isTokenTagPopper || props.isCollectionProjectPopper
                 ? {
                       width: 598,
                       borderRadius: theme.spacing(2),
@@ -59,10 +59,14 @@ const useStyles = makeStyles<{
         tabListRoot: {
             flexGrow: 0,
         },
-        body: props.isNFTProjectPopper
+        body: props.isCollectionProjectPopper
             ? {
                   minHeight: 374,
-                  maxHeight: props.isNFTProjectPopper ? (props.currentTab === ContentTabs.Price ? 450 : 374) : 'unset',
+                  maxHeight: props.isCollectionProjectPopper
+                      ? props.currentTab === ContentTabs.Price
+                          ? 450
+                          : 374
+                      : 'unset',
                   overflow: 'hidden',
                   display: 'flex',
                   flexDirection: 'column',
@@ -93,7 +97,7 @@ const useStyles = makeStyles<{
             marginBottom: '-36px',
         },
         nftItems: {
-            height: props.isNFTProjectPopper ? 360 : 530,
+            height: props.isCollectionProjectPopper ? 360 : 530,
             padding: theme.spacing(2),
             boxSizing: 'border-box',
             overflow: 'auto',
@@ -113,19 +117,21 @@ const useStyles = makeStyles<{
 
 export interface TrendingViewProps {
     resultList: Web3Helper.TokenResultAll[]
+    identity?: SocialIdentity
+    setActive?: (x: boolean) => void
     address?: string
     onUpdate?: () => void
 }
 
 export function TrendingView(props: TrendingViewProps) {
-    const { resultList } = props
+    const { resultList, identity, setActive } = props
     const [result, setResult] = useState(resultList[0])
-    const { isTokenTagPopper, isNFTProjectPopper, isProfilePage } = useContext(TrendingViewContext)
+    const { isTokenTagPopper, isCollectionProjectPopper, isProfilePage } = useContext(TrendingViewContext)
     const { t } = useI18N()
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
     const isWeb3ProfileMinimalMode = useIsMinimalMode(PluginID.Web3Profile)
-    const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
 
     const site = getSiteType()
@@ -149,7 +155,6 @@ export function TrendingView(props: TrendingViewProps) {
         days,
     })
     // #endregion
-
     const isNFT = trending?.coin.type === TokenType.NonFungible
 
     // #region expected chainId
@@ -220,7 +225,7 @@ export function TrendingView(props: TrendingViewProps) {
     }, [t, isSwappable, isNFT])
     // #endregion
 
-    const { classes, cx } = useStyles({ isTokenTagPopper, isNFTProjectPopper, currentTab })
+    const { classes, cx } = useStyles({ isTokenTagPopper, isCollectionProjectPopper, currentTab })
 
     // #region api ready callback
     useEffect(() => {
@@ -265,6 +270,8 @@ export function TrendingView(props: TrendingViewProps) {
             }}
             currentTab={currentTab}
             stats={stats}
+            identity={identity}
+            setActive={setActive}
             setResult={setResult}
             resultList={resultList}
             result={result}
@@ -308,7 +315,7 @@ export function TrendingView(props: TrendingViewProps) {
                     <Box p={2}>
                         {isNFT ? (
                             <NonFungibleTickersTable
-                                isNFTProjectPopper={isNFTProjectPopper}
+                                isCollectionProjectPopper={isCollectionProjectPopper}
                                 id={
                                     (result.pluginID === NetworkPluginID.PLUGIN_SOLANA ? result.name : coin.address) ??
                                     ''
@@ -322,7 +329,13 @@ export function TrendingView(props: TrendingViewProps) {
                     </Box>
                 ) : null}
                 {currentTab === ContentTabs.Swap && isSwappable ? (
-                    <Web3ContextProvider value={{ pluginID: context.pluginID, chainId: swapExpectedContract.chainId }}>
+                    <Web3ContextProvider
+                        value={{
+                            pluginID: context.pluginID,
+                            chainId: isNativeTokenSymbol(trending.coin.symbol)
+                                ? trending.coin.chainId
+                                : swapExpectedContract.chainId,
+                        }}>
                         <TradeView
                             classes={{ root: classes.tradeViewRoot }}
                             TraderProps={{
@@ -338,11 +351,13 @@ export function TrendingView(props: TrendingViewProps) {
                                     : undefined,
                                 defaultOutputCoin: trending.coin
                                     ? createFungibleToken(
-                                          swapExpectedContract.chainId ?? chainId,
-                                          isNativeTokenAddress(swapExpectedContract.address)
+                                          trending.coin.chainId ?? swapExpectedContract.chainId ?? chainId,
+                                          isNativeTokenAddress(
+                                              trending.coin.contract_address ?? swapExpectedContract.address,
+                                          )
                                               ? SchemaType.Native
                                               : SchemaType.ERC20,
-                                          swapExpectedContract.address,
+                                          trending.coin.contract_address ?? swapExpectedContract.address,
                                           '',
                                           '',
                                           trending.coin.decimals ?? 0,

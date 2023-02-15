@@ -1,7 +1,13 @@
 import { compact, uniq, uniqBy } from 'lodash-es'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { attemptUntil, TokenType, SourceType } from '@masknet/web3-shared-base'
-import { ChainId, getCoinGeckoConstants } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    chainResolver,
+    getCoinGeckoConstants,
+    getTokenConstant,
+    isNativeTokenSymbol,
+} from '@masknet/web3-shared-evm'
 import { COINGECKO_CHAIN_ID_LIST, COINGECKO_URL_BASE } from '../constants.js'
 import { getCommunityLink, isMirroredKeyword } from '../../Trending/helpers.js'
 import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../../Trending/constants.js'
@@ -116,6 +122,7 @@ export class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.Cha
             currency,
             coin: {
                 id,
+                chainId: isNativeTokenSymbol(info.symbol) ? chainResolver.chainId(info.name) : undefined,
                 name: info.name,
                 symbol: info.symbol.toUpperCase(),
                 type: TokenType.Fungible,
@@ -149,7 +156,10 @@ export class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.Cha
                 facebook_url,
                 twitter_url,
                 telegram_url,
-                contract_address: info.contract_address,
+                contract_address:
+                    chainResolver.chainId(info.name) && isNativeTokenSymbol(info.symbol)
+                        ? getTokenConstant(chainResolver.chainId(info.name)!, 'NATIVE_TOKEN_ADDRESS')
+                        : info.contract_address,
             },
             market: (() => {
                 const entries = Object.entries(info.market_data).map(([key, value]) => {

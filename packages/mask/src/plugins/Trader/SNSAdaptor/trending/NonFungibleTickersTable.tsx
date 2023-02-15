@@ -24,9 +24,9 @@ import { resolveActivityTypeBackgroundColor } from '@masknet/web3-providers/help
 import { useNonFungibleTokenActivities } from '../../trending/useTrending.js'
 import { useI18N } from '../../../../utils/index.js'
 
-const useStyles = makeStyles<{ isNFTProjectPopper: boolean }>()((theme, { isNFTProjectPopper }) => ({
+const useStyles = makeStyles<{ isCollectionProjectPopper: boolean }>()((theme, { isCollectionProjectPopper }) => ({
     container: {
-        maxHeight: isNFTProjectPopper ? 320 : 266,
+        maxHeight: isCollectionProjectPopper ? 320 : 266,
         scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
@@ -104,7 +104,7 @@ export interface NonFungibleTickersTableProps {
     id: string
     chainId: Web3Helper.ChainIdAll
     result: Web3Helper.TokenResultAll
-    isNFTProjectPopper?: boolean
+    isCollectionProjectPopper?: boolean
 }
 
 type Cells = 'nft' | 'method' | 'value' | 'from' | 'to' | 'time'
@@ -113,10 +113,10 @@ export function NonFungibleTickersTable({
     id,
     chainId,
     result,
-    isNFTProjectPopper = false,
+    isCollectionProjectPopper = false,
 }: NonFungibleTickersTableProps) {
     const { t } = useI18N()
-    const { classes } = useStyles({ isNFTProjectPopper })
+    const { classes } = useStyles({ isCollectionProjectPopper })
     const { Others } = useWeb3State(result.pluginID)
     const containerRef = useRef(null)
     const { activities, fetchMore, loadingNonFungibleTokenActivities } = useNonFungibleTokenActivities(
@@ -263,7 +263,7 @@ interface TransactionValueProps {
 }
 
 function TransactionValue({ result, chainId, activity }: TransactionValueProps) {
-    const { classes } = useStyles({ isNFTProjectPopper: false })
+    const { classes } = useStyles({ isCollectionProjectPopper: false })
     const chain = useNetworkDescriptor(result.pluginID, chainId)
     const { value: token } = useFungibleToken(result.pluginID, activity.trade_token?.address, activity.trade_token, {
         chainId: result.chainId,

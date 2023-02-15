@@ -22,6 +22,7 @@ import { ProfileCardTitle } from './ProfileCardTitle.js'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
     identity: SocialIdentity
+    badgeBounding?: DOMRect
 }
 
 const useStyles = makeStyles()((theme) => {
@@ -103,7 +104,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
+export const ProfileCard: FC<Props> = ({ identity, badgeBounding, ...rest }) => {
     const { classes, cx } = useStyles(undefined, { props: { classes: rest.classes } })
 
     const { t } = useI18N()
@@ -181,6 +182,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
                         address={activeAddress}
                         onAddressChange={setSelectedAddress}
                         identity={identity}
+                        badgeBounding={badgeBounding}
                     />
                     {tabs.length > 0 && currentTab && (
                         <div className={classes.tabs}>

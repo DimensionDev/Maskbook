@@ -1,7 +1,14 @@
 import getUnixTime from 'date-fns/getUnixTime'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { TokenType, SourceType } from '@masknet/web3-shared-base'
-import { ChainId, isValidAddress, isValidChainId } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    chainResolver,
+    getTokenConstant,
+    isNativeTokenSymbol,
+    isValidAddress,
+    isValidChainId,
+} from '@masknet/web3-shared-evm'
 import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from '../constants.js'
 import { resolveCoinMarketCapChainId } from '../helpers.js'
 import type { Coin, Pair, ResultData, Status, QuotesInfo, CoinInfo } from '../types.js'
@@ -160,7 +167,12 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
             }))
             .filter((x) => isValidChainId(x.chainId as ChainId))
 
-        function getPlatform(contracts: TrendingAPI.Contract[], contract_address?: string) {
+        function getPlatform(coinInfo: CoinInfo, contracts: TrendingAPI.Contract[], contract_address?: string) {
+            if (isNativeTokenSymbol(coinInfo.symbol) && chainResolver.chainId(coinInfo.name))
+                return {
+                    chainId: chainResolver.chainId(coinInfo.name),
+                    address: getTokenConstant(chainResolver.chainId(coinInfo.name)!, 'NATIVE_TOKEN_ADDRESS'),
+                }
             const _contracts = contracts.filter(
                 (x) =>
                     contract_address === x.address && isValidChainId(x.chainId as ChainId) && isValidAddress(x.address),
@@ -176,7 +188,7 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
             contracts,
             coin: {
                 id,
-                chainId: getPlatform(contracts, coinInfo.platform?.token_address)?.chainId,
+                chainId: getPlatform(coinInfo, contracts, coinInfo.platform?.token_address)?.chainId,
                 name: coinInfo.name,
                 symbol: coinInfo.symbol,
                 type: TokenType.Fungible,
@@ -205,7 +217,7 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
                 market_cap_rank: quotesInfo?.[id]?.cmc_rank,
                 description: coinInfo.description,
                 contract_address:
-                    getPlatform(contracts, coinInfo.platform?.token_address)?.address ??
+                    getPlatform(coinInfo, contracts, coinInfo.platform?.token_address)?.address ??
                     coinInfo.platform?.token_address,
             },
             currency,

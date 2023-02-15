@@ -11,7 +11,7 @@ import {
     SignType,
     CrossIsolationMessages,
 } from '@masknet/shared-base'
-import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
+import { SmartPayOwner, SmartPayBundler } from '@masknet/web3-providers'
 import { isSameAddress, Wallet as WalletItem } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, ProviderType, Transaction } from '@masknet/web3-shared-evm'
 
@@ -49,7 +49,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
 
             const chainId = await SmartPayBundler.getSupportedChainId()
 
-            const accounts = await SmartPayAccount.getAccountsByOwners(chainId, [
+            const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
                 ...wallets.map((x) => x.address),
                 ...compact(allPersonas.map((x) => x.address)),
             ])
@@ -59,7 +59,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
             const result = [
                 ...wallets,
                 ...accounts
-                    .filter((x) => x.funded || x.deployed)
+                    .filter((x) => x.deployed)
                     .map((x) => ({
                         id: x.address,
                         name: 'Smart Pay',

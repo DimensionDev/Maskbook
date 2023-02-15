@@ -1,9 +1,9 @@
+import urlcat from 'urlcat'
+import { memo, useCallback, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, Checkbox, FormControlLabel, FormGroup } from '@mui/material'
-import { memo, useCallback, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import urlcat from 'urlcat'
 import { Services } from '../../API.js'
 import { FooterLine } from '../../components/FooterLine/index.js'
 import { HeaderLine } from '../../components/HeaderLine/index.js'
@@ -78,7 +78,7 @@ export default memo(function Welcome() {
 
     const handleAgree = useCallback(async () => {
         if (allowedToCollect) {
-            await Services.Settings.setLogEnable(true)
+            await Services.Settings.setLog(true)
         }
         setAgreed(true)
         const from = params.get('from')
@@ -86,12 +86,16 @@ export default memo(function Welcome() {
             const search = params.get('search')
             navigate(urlcat(from, search ? new URLSearchParams(search).entries() : {}))
         }
+
         const url = await Services.SocialNetwork.setupSite('twitter.com', false)
-        if (url) {
+        if (!url) return
+        if (from && from !== DashboardRoutes.Personas) {
             browser.tabs.create({
                 active: true,
                 url,
             })
+        } else {
+            location.assign(url)
         }
     }, [params, allowedToCollect])
 
