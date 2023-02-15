@@ -19,10 +19,11 @@ export async function attemptUntil<T>(
             }
             return result ?? fallback
         } catch (error) {
-            if (error instanceof Error) errors.push(error)
+            errors.push(error as Error)
             continue
         }
     }
+
     if (errors.length) throw new AggregateError(errors, 'At least one of the attempts fails.')
     return fallback
 }

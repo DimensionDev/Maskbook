@@ -45,8 +45,8 @@ describe('utils attemptUntil function test', function () {
     })
 
     it('should throw error when all the promise rejected', async () => {
-        const p1 = () => Promise.reject()
-        const p2 = () => Promise.reject()
+        const p1 = () => Promise.reject(new Error('p1'))
+        const p2 = () => Promise.reject(new Error('p2'))
 
         await expect(attemptUntil([p1, p2], undefined)).rejects.toThrowError('At least one of the attempts fails.')
     })
