@@ -6,6 +6,6 @@
     "tsBuildInfoFile": "./dist/plugin-worker.tsbuildinfo",
     "lib": ["WebWorker", "ES2022"]
   },
-  "include": ["./main", "./main/**/*.json"],
+  "include": ["./plugin-worker"],
   "references": [{ "path": "../base" }, { "path": "../shared-base" }, { "path": "../plugin-infra" }]
 }

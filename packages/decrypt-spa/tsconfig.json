@@ -5,7 +5,7 @@
     "outDir": "./dist/main",
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": ["./main", "./main/**/*.json"],
+  "include": ["./main"],
   "references": [
     { "path": "./tsconfig.worker.json" },
     { "path": "../base" },
