@@ -9,7 +9,8 @@ export async function attemptUntil<T>(
     fallback: T,
     predicator: (result: Awaited<T> | undefined) => boolean = isUndefined,
 ) {
-    let hasError = false
+    const errors: Error[] = []
+
     for (const func of funcs) {
         try {
             const result = await func()
@@ -18,10 +19,10 @@ export async function attemptUntil<T>(
             }
             return result ?? fallback
         } catch (error) {
-            hasError = true
+            if (error instanceof Error) errors.push(error)
             continue
         }
     }
-    if (hasError) throw new Error('At least one of the attempts fails.')
+    if (errors.length) throw new AggregateError(errors, 'At least one of the attempts fails.')
     return fallback
 }
