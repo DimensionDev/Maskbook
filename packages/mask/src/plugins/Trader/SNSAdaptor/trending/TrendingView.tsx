@@ -334,7 +334,7 @@ export function TrendingView(props: TrendingViewProps) {
                             pluginID: context.pluginID,
                             chainId: isNativeTokenSymbol(trending.coin.symbol)
                                 ? trending.coin.chainId
-                                : swapExpectedContract.chainId,
+                                : swapExpectedContract?.chainId,
                         }}>
                         <TradeView
                             classes={{ root: classes.tradeViewRoot }}
@@ -351,13 +351,13 @@ export function TrendingView(props: TrendingViewProps) {
                                     : undefined,
                                 defaultOutputCoin: trending.coin
                                     ? createFungibleToken(
-                                          trending.coin.chainId ?? swapExpectedContract.chainId ?? chainId,
+                                          trending.coin.chainId ?? swapExpectedContract?.chainId ?? chainId,
                                           isNativeTokenAddress(
-                                              trending.coin.contract_address ?? swapExpectedContract.address,
+                                              trending.coin.contract_address ?? swapExpectedContract?.address,
                                           )
                                               ? SchemaType.Native
                                               : SchemaType.ERC20,
-                                          trending.coin.contract_address ?? swapExpectedContract.address,
+                                          trending.coin.contract_address ?? swapExpectedContract?.address ?? '',
                                           '',
                                           '',
                                           trending.coin.decimals ?? 0,
