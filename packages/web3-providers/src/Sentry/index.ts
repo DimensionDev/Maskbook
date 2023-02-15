@@ -22,6 +22,12 @@ export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
             environment: process.env.NODE_ENV,
             tracesSampleRate: 1.0,
         })
+
+        // set global tags
+        Sentry.setTag('agent', getAgentType())
+        Sentry.setTag('site', getSiteType())
+        Sentry.setTag('version', process.env.VERSION)
+        Sentry.setTag('ua', navigator.userAgent)
     }
 
     // The sentry needs to be opened at the runtime.
@@ -103,10 +109,6 @@ export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
                 network_id: options.network?.networkID,
                 network: options.network?.networkType,
                 provider: options.network?.providerType,
-                agent: getAgentType(),
-                site: getSiteType(),
-                ua: navigator.userAgent,
-                version: process.env.VERSION,
             },
             exception: {},
             breadcrumbs: [],
