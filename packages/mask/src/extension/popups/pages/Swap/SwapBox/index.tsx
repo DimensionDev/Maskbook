@@ -13,6 +13,7 @@ export function SwapBox() {
     const name = params.get('name')
     const symbol = params.get('symbol')
     const decimals = params.get('decimals')
+
     const { value: coin } = useFungibleToken(
         NetworkPluginID.PLUGIN_EVM,
         address ?? '',
