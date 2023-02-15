@@ -1,14 +1,12 @@
-import React, { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react'
+import React, { createContext, ReactNode, useCallback, useContext, useState } from 'react'
 import { isUndefined, omitBy } from 'lodash-es'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import { compose, CrossIsolationMessages, MaskEvents, NetworkPluginID } from '@masknet/shared-base'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { compose, MaskEvents, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
 import { useNetworkType } from './useNetworkType.js'
 import { useProviderType } from './useProviderType.js'
-import { useWeb3State } from './useWeb3State.js'
 
 interface EnvironmentContext<T extends NetworkPluginID = NetworkPluginID> {
     pluginID: T
@@ -61,7 +59,6 @@ export function NetworkContextProvider({ value, children }: React.ProviderProps<
 
 export function ChainContextProvider({ value, children }: React.ProviderProps<ChainContextGetter>) {
     const { pluginID } = useNetworkContext()
-    const { Wallet, Connection, Provider } = useWeb3State()
 
     const globalAccount = useAccount(pluginID)
     const globalChainId = useChainId(pluginID)
@@ -87,16 +84,6 @@ export function ChainContextProvider({ value, children }: React.ProviderProps<Ch
             setAccountMap((map) => ({ ...map, [accountKey]: account }))
         },
         [accountKey],
-    )
-
-    useEffect(
-        () =>
-            CrossIsolationMessages.events.ownerDeletionEvent.on(({ owner }) => {
-                const account = Provider?.account?.getCurrentValue()
-                const targets = Wallet?.wallets?.getCurrentValue().filter((x) => isSameAddress(x.owner, owner))
-                if (targets?.some((x) => isSameAddress(x.address, account))) Connection?.getConnection?.().disconnect()
-            }),
-        [Wallet, Connection, Provider],
     )
 
     return (
