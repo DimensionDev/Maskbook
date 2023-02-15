@@ -210,6 +210,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             account_promote: t.account_promote({
                 context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
             }),
+            interpolation: { escapeValue: false },
         } as const
         if (availability?.isClaimed) {
             return t.nft_share_claimed_message(options)
