@@ -443,6 +443,10 @@ export function resolveArweaveURL(url: string | undefined) {
     return urlcat('https://arweave.net/:str', { str: url })
 }
 
+/**
+ * Please do not use to resolve an image or an video resource, because that's
+ * not allowed by the cors agent server
+ */
 export function resolveCrossOriginURL(url: string | undefined) {
     if (!url) return
     if (isLocaleResource(url)) return url

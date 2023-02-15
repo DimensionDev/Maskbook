@@ -21,6 +21,7 @@
                 "https://gateway.ipfscdn.io/ipfs/*",
                 "https://logo.nftscan.com/*",
                 "https://imagedelivery.net/*",
+                "https://assets.coingecko.com/*",
                 "https://raw.githubusercontent.com/dimensiondev/*"
             ],
             "matches": ["<all_urls>"],

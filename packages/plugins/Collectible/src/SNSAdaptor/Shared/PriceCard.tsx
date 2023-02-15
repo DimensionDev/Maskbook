@@ -77,7 +77,7 @@ export function PriceCard(props: PriceCardProps) {
                 <div className={classes.priceZone}>
                     <div className={classes.offerBox}>
                         <Typography textAlign="center" fontSize={12} fontWeight={700}>
-                            {t.plugin_collectible_nft_offers_empty()}
+                            {t.plugin_collectible_nft_offers_switch_source()}
                         </Typography>
                     </div>
                     <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} />
