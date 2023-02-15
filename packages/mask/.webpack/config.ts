@@ -178,7 +178,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
                 shadowRootMode: flags.devtools || flags.channel === 'beta' ? 'open' : 'closed',
                 NODE_DEBUG: false,
                 WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC ?? '',
-                MASK_SENTRY_DSN: process.env.MASK_SENTRY_DSN ?? '',
+                MASK_SENTRY_DSN: process.env.MASK_SENTRY_DSN || flags.sentry_dsn || '',
             }),
             new DefinePlugin({
                 'process.browser': 'true',

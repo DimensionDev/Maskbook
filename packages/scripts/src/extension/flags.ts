@@ -26,6 +26,7 @@ export interface BuildFlags {
     /** @default true */
     devtools?: boolean
     sourceMapPreference?: boolean | string
+    sentry_dsn?: string
 }
 
 export interface BuildFlagsExtended extends BuildFlags {

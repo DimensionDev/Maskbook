@@ -22,6 +22,7 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         devtools = mode === 'development' || channel !== 'stable',
         sourceMapPreference = mode === 'development',
         outputPath = join(__dirname, '../../../', mode === 'development' ? 'dist' : 'build'),
+        sentry_dsn = '',
     } = flags
     if (!isAbsolute(outputPath)) outputPath = join(__dirname, '../../../', outputPath)
 
@@ -54,6 +55,7 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         profiling,
         readonlyCache,
         reproducibleBuild,
+        sentry_dsn,
     }
 }
 

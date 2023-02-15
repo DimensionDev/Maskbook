@@ -20,4 +20,5 @@ export function applyDotEnv(flags: BuildFlags) {
     }
     if (parsed.hmr === 'false' && flags.hmr === undefined) flags.hmr = false
     if (parsed.devtools === 'false' && flags.devtools === undefined) flags.devtools = false
+    if (parsed.sentry_dsn) flags.sentry_dsn = parsed.sentry_dsn
 }
