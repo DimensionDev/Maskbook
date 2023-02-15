@@ -1,11 +1,11 @@
-import { memo, Suspense, useMemo, useState } from 'react'
-import { Grid, styled, Theme, useMediaQuery } from '@mui/material'
-import { MaskColorVar } from '@masknet/theme'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
+import { MaskColorVar } from '@masknet/theme'
+import { Grid, styled, Theme, useMediaQuery } from '@mui/material'
+import { memo, Suspense, useMemo, useState } from 'react'
 import { FollowUs } from '../FollowUs/index.js'
+import { NavigationVersionFooter } from '../NavigationVersionFooter/index.js'
 import { DashboardContext } from './context.js'
 import { Navigation } from './Navigation.js'
-import { NavigationVersionFooter } from '../NavigationVersionFooter/index.js'
 
 const Root = styled(Grid)(({ theme }) => ({
     backgroundColor: MaskColorVar.primaryBackground,
@@ -61,3 +61,5 @@ export const DashboardFrame = memo((props: DashboardFrameProps) => {
         </DashboardContext.Provider>
     )
 })
+
+DashboardFrame.displayName = 'DashboardFrame'

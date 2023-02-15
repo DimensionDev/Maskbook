@@ -1,11 +1,11 @@
 import { first, isUndefined, omitBy } from 'lodash-es'
 import Web3 from 'web3'
-import { AbiItem, checkAddressChecksum, hexToNumber, hexToNumberString, toHex } from 'web3-utils'
+import { AbiItem, hexToNumber, hexToNumberString, toHex } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
 import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json'
 import { ChainId, EthereumMethodType, Transaction, TransactionOptions, UserOperation } from '../types/index.js'
-import { createJsonRpcPayload } from '../helpers/index.js'
+import { createJsonRpcPayload, formatEthereumAddress } from '../helpers/index.js'
 import { ZERO_ADDRESS, getSmartPayConstant } from '../index.js'
 
 type Options = Pick<TransactionOptions, 'account' | 'chainId'>
@@ -171,7 +171,7 @@ export class PayloadEditor {
         return omitBy(
             {
                 ...this.config,
-                from: this.config.from ? checkAddressChecksum(this.config.from) : '',
+                from: this.config.from ? formatEthereumAddress(this.config.from) : '',
                 value: parseHexNumberString(this.config.value),
                 gas: parseHexNumberString(this.config.gas),
                 gasPrice: parseHexNumberString(this.config.gasPrice),

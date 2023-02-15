@@ -4,11 +4,15 @@ import { CARD_HEIGHT, CARD_WIDTH } from './constants.js'
 
 interface Result {
     active: boolean
+    setActive: (x: boolean) => void
     style: CSSProperties
 }
 
 const LEAVE_DURATION = 500
-export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Result {
+export function useControlProfileCard(
+    holderRef: RefObject<HTMLDivElement>,
+    setOpenFromTrendingCard: (x: boolean) => void,
+): Result {
     const hoverRef = useRef(false)
     const closeTimerRef = useRef<NodeJS.Timeout>()
 
@@ -18,6 +22,7 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Res
     const hideProfileCard = useCallback(() => {
         if (hoverRef.current) return
         setActive(false)
+        setOpenFromTrendingCard(false)
     }, [])
 
     const showProfileCard = useCallback((patchStyle: CSSProperties) => {
@@ -100,5 +105,5 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Res
         }
     }, [hideProfileCard])
 
-    return { style, active }
+    return { style, active, setActive }
 }

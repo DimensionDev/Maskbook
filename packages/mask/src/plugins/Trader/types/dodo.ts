@@ -17,6 +17,7 @@ export interface SwapRouteSuccessResponse {
     code: number
     status: 200
     data: SwapRouteData
+    value: string
 }
 
 export interface SwapRouteErrorResponse {

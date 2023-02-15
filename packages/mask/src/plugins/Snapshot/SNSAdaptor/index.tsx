@@ -13,7 +13,7 @@ const useStyles = makeStyles()((theme) => {
     return {
         skeleton: {
             margin: theme.spacing(2),
-            '&:first-child': {
+            '&:first-of-type': {
                 marginTop: theme.spacing(3),
             },
         },

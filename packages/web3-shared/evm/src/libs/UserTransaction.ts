@@ -39,12 +39,14 @@ const USER_OP_TYPE = {
     },
 }
 
+const POSTOP = 35000
+
 const DEFAULT_USER_OPERATION: Required<UserOperation> = {
     sender: getZeroAddress(),
     nonce: 0,
     initCode: '0x',
     callData: '0x',
-    callGas: '21000',
+    callGas: '35000',
     // default verification gas. will add create2 cost (3200 + 200 * length) if initCode exists
     verificationGas: '100000',
     // should also cover calldata cost.
@@ -195,8 +197,8 @@ export class UserTransaction {
             this.userOperation.callGas = callGas ?? DEFAULT_USER_OPERATION.callGas
         }
 
-        // 1.5x scale up callGas
-        this.userOperation.callGas = toHex(toFixed(multipliedBy(this.userOperation.callGas ?? '0', 1.5)))
+        // 2x scale up callGas and add margin for postop
+        this.userOperation.callGas = toHex(toFixed(multipliedBy(this.userOperation.callGas ?? '0', 2).plus(POSTOP), 0))
 
         // recover to the original callGas when extra gas could be provided
         if (isGreaterThan(callGas ?? '0', this.userOperation.callGas)) {
@@ -274,8 +276,8 @@ export class UserTransaction {
             this.userOperation.callGas = callGas ?? DEFAULT_USER_OPERATION.callGas
         }
 
-        // 1.5x scale up callGas
-        this.userOperation.callGas = toHex(toFixed(multipliedBy(this.userOperation.callGas ?? '0', 1.5)))
+        // 2x scale up callGas and add margin for postop
+        this.userOperation.callGas = toHex(toFixed(multipliedBy(this.userOperation.callGas ?? '0', 2).plus(POSTOP), 0))
 
         // recover to the original callGas when extra gas could be provided
         if (isGreaterThan(callGas ?? '0', this.userOperation.callGas)) {

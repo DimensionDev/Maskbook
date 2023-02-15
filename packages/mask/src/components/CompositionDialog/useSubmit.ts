@@ -1,19 +1,27 @@
-import { useCallback } from 'react'
 import { socialNetworkEncoder } from '@masknet/encryption'
-import { PluginID, ProfileIdentifier } from '@masknet/shared-base'
 import { SOCIAL_MEDIA_NAME } from '@masknet/shared'
+import { PluginID, ProfileIdentifier } from '@masknet/shared-base'
 import type { Meta } from '@masknet/typed-message'
+import { useCallback } from 'react'
 import Services from '../../extension/service.js'
-import { activatedSocialNetworkUI, globalUIState } from '../../social-network/index.js'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
+import { activatedSocialNetworkUI, globalUIState } from '../../social-network/index.js'
 import { I18NFunction, useI18N } from '../../utils/index.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
-import { SteganographyPayload } from './SteganographyPayload.js'
 import type { SubmitComposition } from './CompositionUI.js'
+import { SteganographyPayload } from './SteganographyPayload.js'
 
 export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'reply') {
-    const { t } = useI18N()
+    const { t: originalTran } = useI18N()
+    const t: typeof originalTran = useCallback(
+        (key, options = {}) => {
+            if (typeof options === 'string') return t(key, options)
+            return originalTran(key, { interpolation: { escapeValue: false }, ...options })
+        },
+        [originalTran],
+    )
+
     const lastRecognizedIdentity = useLastRecognizedIdentity()
 
     return useCallback(

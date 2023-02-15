@@ -2,9 +2,7 @@
 import './register.js'
 import type { BooleanPreference, Plugin } from '@masknet/plugin-infra'
 import { Emitter } from '@servie/events'
-import { LogHub } from '@masknet/web3-providers'
 import { createI18NBundle, createSubscriptionFromValueRef, i18NextInstance } from '@masknet/shared-base'
-import { LogHubBaseAPI } from '@masknet/web3-providers/types'
 import { MaskMessages } from '../../shared/messages.js'
 import { InMemoryStorages, PersistentStorages } from '../../shared/index.js'
 import { nativeAPI, hasNativeAPI } from '../../shared/native-rpc/index.js'
@@ -12,13 +10,12 @@ import {
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
 } from '../legacy-settings/wallet-settings.js'
-import { logSettings } from '../legacy-settings/settings.js'
 
 export type PartialSharedUIContext = Pick<
     Plugin.Shared.SharedUIContext,
-    'nativeType' | 'hasNativeAPI' | 'account' | 'chainId' | 'createKVStorage' | 'createLogger'
+    'nativeType' | 'hasNativeAPI' | 'account' | 'chainId' | 'createKVStorage'
 >
-let sharedUIContextSingleton: Omit<PartialSharedUIContext, 'createKVStorage' | 'createLogger'>
+let sharedUIContextSingleton: Omit<PartialSharedUIContext, 'createKVStorage'>
 export const createPartialSharedUIContext = (id: string, signal: AbortSignal): PartialSharedUIContext => {
     sharedUIContextSingleton ??= {
         nativeType: nativeAPI?.type,
@@ -35,10 +32,6 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
         createKVStorage<T extends object>(type: 'memory' | 'persistent', defaultValues: T) {
             if (type === 'memory') return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
             else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
-        },
-        createLogger() {
-            if (!logSettings.value) return
-            return LogHub.createLogger(LogHubBaseAPI.Platform.Plugin, pluginID)
         },
     }
 }

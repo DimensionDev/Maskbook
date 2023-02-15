@@ -2,9 +2,7 @@ import { FC, memo, MouseEventHandler, useCallback, useEffect, useMemo, useRef, u
 import { useIntersectionObserver } from '@react-hookz/web'
 import { fill } from 'lodash-es'
 import { TokenIcon } from '@masknet/shared'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress, NonFungibleCollection } from '@masknet/web3-shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -154,15 +152,11 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
         } = useNftAvailabilityComputed(account, patchedHistory)
 
         const collection = collections.find((x) => isSameAddress(x.address, patchedHistory.token_address))
-        const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
-            WalletMessages.events.ApplicationDialogUpdated,
-        )
 
         const handleSend = useCallback(() => {
             if (!(canSend && collection && isPasswordValid)) return
             onSend(patchedHistory, collection)
-            closeApplicationBoardDialog()
-        }, [onSend, closeApplicationBoardDialog, canSend, patchedHistory, collection, isPasswordValid])
+        }, [onSend, canSend, patchedHistory, collection, isPasswordValid])
 
         const { value: redpacketStatus } = useAvailabilityNftRedPacket(patchedHistory.rpid, account)
         const bitStatusList = redpacketStatus

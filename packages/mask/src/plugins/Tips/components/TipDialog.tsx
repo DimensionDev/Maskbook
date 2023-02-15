@@ -12,7 +12,7 @@ import { useBoolean } from 'react-use'
 import { pluginIDSettings } from '../../../../shared/legacy-settings/settings.js'
 import { useCreateTipsTransaction, useTip } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
-import { TipsType } from '../types/index.js'
+import { TokenType } from '@masknet/web3-shared-base'
 import { AddDialog } from './AddDialog.js'
 import { NetworkSection } from './NetworkSection/index.js'
 import { NFTSection } from './NFTSection/index.js'
@@ -83,7 +83,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const { pluginID } = useNetworkContext()
     const { chainId } = useChainContext()
 
-    const isTokenTip = tipType === TipsType.Tokens
+    const isTokenTip = tipType === TokenType.Fungible
     const shareText = useMemo(() => {
         const promote = t.tip_mask_promote()
         const message = isTokenTip
@@ -103,8 +103,8 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         return message
     }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientSnsId, t])
 
-    const currentTab = isTokenTip ? TipsType.Tokens : TipsType.Collectibles
-    const onTabChange = useCallback((_: unknown, value: TipsType) => {
+    const currentTab = isTokenTip ? TokenType.Fungible : TokenType.NonFungible
+    const onTabChange = useCallback((_: unknown, value: TokenType) => {
         setTipType(value)
     }, [])
 
@@ -123,7 +123,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         await createTipsTx({
             shareText,
             amount,
-            tipType,
+            tokenType: tipType,
             token,
             nonFungibleTokenAddress,
             nonFungibleTokenId,
@@ -147,17 +147,17 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 title={t.tips()}
                 titleTabs={
                     <MaskTabList variant="base" onChange={onTabChange} aria-label="Tips">
-                        <Tab label={t.tips_tab_tokens()} value={TipsType.Tokens} />
-                        <Tab label={t.tips_tab_collectibles()} value={TipsType.Collectibles} />
+                        <Tab label={t.tips_tab_tokens()} value={TokenType.Fungible} />
+                        <Tab label={t.tips_tab_collectibles()} value={TokenType.NonFungible} />
                     </MaskTabList>
                 }>
                 <DialogContent className={classes.content}>
                     <NetworkSection />
                     <RecipientSection className={classes.recipient} />
-                    <TabPanel value={TipsType.Tokens} className={classes.tabPanel}>
+                    <TabPanel value={TokenType.Fungible} className={classes.tabPanel}>
                         <TokenSection className={classes.section} />
                     </TabPanel>
-                    <TabPanel value={TipsType.Collectibles} className={classes.tabPanel} style={{ padding: 0 }}>
+                    <TabPanel value={TokenType.NonFungible} className={classes.tabPanel} style={{ padding: 0 }}>
                         <NFTSection className={classes.section} />
                     </TabPanel>
                     <PluginWalletStatusBar

@@ -2,14 +2,14 @@ import { Icons } from '@masknet/icons'
 import { ChainBoundary, SocialIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { alpha, Box, Button, Card, Link, Stack, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
+import { intersection } from 'lodash-es'
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html'
 import { useMemo } from 'react'
 import urlcat from 'urlcat'
-import { SUPPORTED_CHAIN_IDS, SUPPORTED_TENANTS, TenantToChainIconMap } from '../constants.js'
+import { SUPPORTED_TENANTS, TenantToChainIconMap } from '../constants.js'
 import { Translate, useI18N } from '../locales/i18n_generated.js'
 import { useDonate } from './contexts/index.js'
 import { grantDetailStyle } from './gitcoin-grant-detail-style.js'
@@ -50,13 +50,23 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
     },
     main: {
-        padding: theme.spacing(2),
+        padding: theme.spacing(2, 2, 0),
         boxSizing: 'border-box',
         marginTop: theme.spacing(2.5),
         borderRadius: 12,
+        minHeight: 366,
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    article: {
+        borderRadius: '12px 12px 0 0',
+        height: '100%',
+        boxSizing: 'border-box',
         overflow: 'auto',
         overscrollBehavior: 'contain',
-        minHeight: 366,
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     network: {
         marginRight: theme.spacing(1.5),
@@ -91,9 +101,6 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'pre-wrap',
         wordBreak: 'break-word',
         tabSize: 4,
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
         img: {
             maxWidth: '100%',
         },
@@ -124,7 +131,6 @@ export function PreviewCard(props: PreviewCardProps) {
     const { classes, cx, theme } = useStyles()
     const { value: grant, error, loading, retry } = useGrant(props.grantId)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { pluginID } = useNetworkContext()
 
     // #region the donation dialog
     const openDonate = useDonate()
@@ -164,11 +170,7 @@ export function PreviewCard(props: PreviewCardProps) {
     if (!grant) return null
 
     const tenant = grant.tenants[0]
-
-    const isSupportedRuntime =
-        pluginID === NetworkPluginID.PLUGIN_EVM &&
-        SUPPORTED_CHAIN_IDS.includes(chainId) &&
-        SUPPORTED_TENANTS.includes(tenant)
+    const isSupportedTenant = intersection(grant.tenants, SUPPORTED_TENANTS).length > 0
 
     // Use handle_1 as Gitcoin does
     const twitterProfile = grant.twitter_handle_1 ? `https://twitter.com/${grant.twitter_handle_1}` : null
@@ -200,6 +202,7 @@ export function PreviewCard(props: PreviewCardProps) {
                     <div className={classes.metas}>
                         <Typography color={theme.palette.maskColor.second} fontSize={14}>
                             <Translate.total_raised
+                                shouldUnescape
                                 values={{
                                     amount: `$${new BigNumber(grant.amount_received).toFixed(2)}`,
                                 }}
@@ -241,20 +244,22 @@ export function PreviewCard(props: PreviewCardProps) {
                 </Stack>
             </div>
             <Card variant="outlined" className={classes.main} elevation={0}>
-                <div className={classes.banner}>
-                    <img src={grant.logo_url} />
-                </div>
-                <div
-                    className={cx(classes.description, 'grant-detail')}
-                    dangerouslySetInnerHTML={{ __html: description }}
-                />
-                <div className={classes.data}>
-                    <div className={classes.meta}>
-                        <Typography variant="body2" color="textSecondary">
-                            {t.last_updated()} {grant.last_update_natural}
-                        </Typography>
+                <Typography className={classes.article} component="div">
+                    <div className={classes.banner}>
+                        <img src={grant.logo_url} />
                     </div>
-                </div>
+                    <div
+                        className={cx(classes.description, 'grant-detail')}
+                        dangerouslySetInnerHTML={{ __html: description }}
+                    />
+                    <div className={classes.data}>
+                        <div className={classes.meta}>
+                            <Typography variant="body2" color="textSecondary">
+                                {t.last_updated()} {grant.last_update_natural}
+                            </Typography>
+                        </div>
+                    </div>
+                </Typography>
             </Card>
             <Box sx={{ display: 'flex', width: '100%', gap: 1, mt: 1 }}>
                 <Box sx={{ flex: 1 }}>
@@ -269,15 +274,12 @@ export function PreviewCard(props: PreviewCardProps) {
                         {t.view_on()}
                     </Button>
                 </Box>
-                {grant.active && isSupportedRuntime ? (
+                {grant.active && isSupportedTenant ? (
                     <Box sx={{ flex: 1 }}>
                         <ChainBoundary
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                            expectedChainId={ChainId.Mainnet}
-                            predicate={(pluginID, chainId) =>
-                                pluginID === NetworkPluginID.PLUGIN_EVM &&
-                                [ChainId.Mainnet, ChainId.Matic].includes(chainId)
-                            }
+                            expectedChainId={chainId}
+                            predicate={(pluginID) => pluginID === NetworkPluginID.PLUGIN_EVM}
                             ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                             <Button
                                 fullWidth

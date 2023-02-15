@@ -4,9 +4,9 @@ import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
+import { TokenType } from '@masknet/web3-shared-base'
 import { createContract, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { useTip } from '../../contexts/index.js'
-import { TipsType } from '../../types/index.js'
 
 const MIN_GAS_LIMIT = 21000
 
@@ -18,7 +18,7 @@ export function useGasLimit(fallback = 50000) {
 
     return useAsync(async () => {
         const isNativeToken = isNativeTokenAddress(token?.address)
-        const isTippingToken = tipType === TipsType.Tokens
+        const isTippingToken = tipType === TokenType.Fungible
         if (isNativeToken || !isTippingToken) {
             return MIN_GAS_LIMIT
         }

@@ -2,38 +2,38 @@ import urlcat from 'urlcat'
 import { compact, uniqWith } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
+    attemptUntil,
+    DomainResult,
+    EOAResult,
+    FungibleTokenResult,
+    isSameAddress,
+    NonFungibleCollectionResult,
+    NonFungibleTokenResult,
     SearchResult,
     SearchResultType,
-    DomainResult,
-    FungibleTokenResult,
-    NonFungibleTokenResult,
     SourceType,
-    NonFungibleCollectionResult,
-    EOAResult,
-    attemptUntil,
-    isSameAddress,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import {
     ChainId as ChainIdEVM,
     isValidAddress as isValidAddressEVM,
-    isZeroAddress as isZeroAddressEVM,
     isValidDomain as isValidDomainEVM,
+    isZeroAddress as isZeroAddressEVM,
 } from '@masknet/web3-shared-evm'
 import {
     isValidAddress as isValidAddressFlow,
-    isZeroAddress as isZeroAddressFlow,
     isValidDomain as isValidDomainFlow,
+    isZeroAddress as isZeroAddressFlow,
 } from '@masknet/web3-shared-flow'
 import {
     isValidAddress as isValidAddressSolana,
-    isZeroAddress as isZeroAddressSolana,
     isValidDomain as isValidDomainSolana,
+    isZeroAddress as isZeroAddressSolana,
 } from '@masknet/web3-shared-solana'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import { CoinGeckoSearchAPI } from '../CoinGecko/apis/DSearchAPI.js'
 import { CoinMarketCapSearchAPI } from '../CoinMarketCap/apis/DSearchAPI.js'
-import { NFTScanSearchAPI, NFTScanCollectionSearchAPI } from '../NFTScan/index.js'
+import { NFTScanCollectionSearchAPI, NFTScanSearchAPI } from '../NFTScan/index.js'
 import type { DSearchBaseAPI } from '../types/DSearch.js'
 import { getHandlers } from './rules.js'
 import { DSEARCH_BASE_URL } from './constants.js'
@@ -55,10 +55,8 @@ const isValidDomain = (domain?: string): boolean => {
     return isValidDomainEVM(domain) || isValidDomainFlow(domain) || isValidDomainSolana(domain)
 }
 
-const isValidHandle = (handler: string): boolean => {
-    const suffix = handler.split('.').pop()
-    if (!suffix) return false
-    return [
+const handleRe = new RegExp(
+    `\\.(${[
         'avax',
         'csb',
         'bit',
@@ -74,7 +72,12 @@ const isValidHandle = (handler: string): boolean => {
         '888',
         'zil',
         'blockchain',
-    ].includes(suffix.toLowerCase())
+    ].join('|')})$`,
+    'i',
+)
+
+const isValidHandle = (handle: string): boolean => {
+    return handleRe.test(handle)
 }
 
 export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.SchemaTypeAll>
@@ -231,7 +234,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                 specificTokens.map((x) =>
                     x.type === SearchResultType.FungibleToken ||
                     x.type === SearchResultType.NonFungibleToken ||
-                    x.type === SearchResultType.NonFungibleCollection
+                    x.type === SearchResultType.CollectionListByTwitterHandler
                         ? x
                         : undefined,
                 ),
@@ -244,7 +247,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                 normalTokens.map((x) =>
                     x.type === SearchResultType.FungibleToken ||
                     x.type === SearchResultType.NonFungibleToken ||
-                    x.type === SearchResultType.NonFungibleCollection
+                    x.type === SearchResultType.CollectionListByTwitterHandler
                         ? x
                         : undefined,
                 ),
@@ -261,7 +264,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                     isSameAddress(address, x.address) &&
                     (x.type === SearchResultType.FungibleToken ||
                         x.type === SearchResultType.NonFungibleToken ||
-                        x.type === SearchResultType.NonFungibleCollection),
+                        x.type === SearchResultType.CollectionListByTwitterHandler),
             )
             .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
 
@@ -271,7 +274,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                     isSameAddress(address, x.address) &&
                     (x.type === SearchResultType.FungibleToken ||
                         x.type === SearchResultType.NonFungibleToken ||
-                        x.type === SearchResultType.NonFungibleCollection),
+                        x.type === SearchResultType.CollectionListByTwitterHandler),
             )
             .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
 
@@ -361,8 +364,11 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
     private async searchTokenByName(name: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {
         const { specificTokens, normalTokens } = await this.searchTokens()
 
-        const specificResult_ = await this.searchTokenByHandler(specificTokens, name)
-        const normalResult = await this.searchTokenByHandler(normalTokens, name)
+        const specificResult_ = await this.searchTokenByHandler(
+            specificTokens.map((x) => ({ ...x, alias: x.alias?.filter((x) => !x.isPin) })),
+            name,
+        )
+        const normalResult = await this.searchTokenByHandler([...specificTokens, ...normalTokens], name)
 
         const specificResult: Array<
             | FungibleTokenResult<ChainId, SchemaType>
@@ -376,22 +382,29 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         return uniqWith(specificResult.concat(normalResult), (a, b) => a.id === b.id)
     }
 
-    private async searchNonFungibleTokenByTwitterHandler(
+    private async searchCollectionListByTwitterHandler(
         twitterHandler: string,
     ): Promise<Array<SearchResult<ChainId, SchemaType>>> {
-        const collections = (await this.NFTScanCollectionClient.get())
-            .filter(
-                (x) =>
-                    x.collection?.socialLinks?.twitter &&
+        const collections = (await Promise.allSettled([this.CoinGeckoClient.get(), this.NFTScanCollectionClient.get()]))
+            .map((v) => (v.status === 'fulfilled' && v.value ? v.value : []))
+            .flat()
+            .filter((x) => {
+                const resultTwitterHandler =
+                    (x as NonFungibleCollectionResult<ChainId, SchemaType>).collection?.socialLinks?.twitter ||
+                    (x as FungibleTokenResult<ChainId, SchemaType>).socialLinks?.twitter
+                return (
+                    resultTwitterHandler &&
                     [twitterHandler.toLowerCase(), `https://twitter.com/${twitterHandler.toLowerCase()}`].includes(
-                        x.collection?.socialLinks?.twitter?.toLowerCase(),
-                    ),
-            )
+                        resultTwitterHandler.toLowerCase(),
+                    ) &&
+                    ((x.rank && x.rank <= 200) || x.id === 'mask-network')
+                )
+            })
             .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
 
         if (!collections[0]) return EMPTY_LIST
 
-        return collections
+        return uniqWith(collections, (a, b) => a.id === b.id)
     }
 
     /**
@@ -403,13 +416,12 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         keyword: string,
         type?: SearchResultType,
     ): Promise<T[]> {
-        // #MASK or $MASK
-        const [_, name = ''] = keyword.match(/[#$](\w+)/) ?? []
-        if (name) return this.searchTokenByName(name) as Promise<T[]>
+        // #MASK or $MASK or MASK
+        const [_, name = ''] = keyword.match(/(\w+)/) ?? []
 
         // BoredApeYC or CryptoPunks nft twitter project
-        if (type === SearchResultType.NonFungibleCollection)
-            return this.searchNonFungibleTokenByTwitterHandler(keyword) as Promise<T[]>
+        if (type === SearchResultType.CollectionListByTwitterHandler)
+            return this.searchCollectionListByTwitterHandler(keyword) as Promise<T[]>
 
         // token:MASK
         const { word, field } = this.parseKeyword(keyword)
@@ -438,6 +450,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             // TODO: query fungible token by coingecko
         }
 
+        if (name) return this.searchTokenByName(name) as Promise<T[]>
         return EMPTY_LIST
     }
 }

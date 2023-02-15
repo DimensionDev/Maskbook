@@ -9,8 +9,9 @@ import {
     ValueRef,
     createSubscriptionFromValueRef,
     SignType,
+    CrossIsolationMessages,
 } from '@masknet/shared-base'
-import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
+import { SmartPayOwner, SmartPayBundler } from '@masknet/web3-providers'
 import { isSameAddress, Wallet as WalletItem } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, ProviderType, Transaction } from '@masknet/web3-shared-evm'
 
@@ -47,17 +48,18 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
             const allPersonas = this.context.allPersonas?.getCurrentValue() ?? []
 
             const chainId = await SmartPayBundler.getSupportedChainId()
-            const accounts = await SmartPayAccount.getAccountsByOwners(chainId, [
+
+            const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
                 ...wallets.map((x) => x.address),
                 ...compact(allPersonas.map((x) => x.address)),
             ])
 
             const now = new Date()
 
-            this.ref.value = [
+            const result = [
                 ...wallets,
                 ...accounts
-                    .filter((x) => x.funded || x.deployed)
+                    .filter((x) => x.deployed)
                     .map((x) => ({
                         id: x.address,
                         name: 'Smart Pay',
@@ -77,6 +79,8 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
                     this.storage.value[ProviderType.MaskWallet]?.find((item) => isSameAddress(item.address, x.address))
                         ?.name ?? x.name,
             }))
+
+            this.ref.value = result
         }
 
         update()
@@ -96,6 +100,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
     override async removeWallet(address: string, password?: string | undefined): Promise<void> {
         if (this.providerType === ProviderType.MaskWallet) {
             await this.context.removeWallet(address, password)
+            CrossIsolationMessages.events.ownerDeletionEvent.sendToAll({ owner: address })
         } else {
             await super.removeWallet(address, password)
         }

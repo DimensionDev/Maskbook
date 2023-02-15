@@ -23,12 +23,12 @@ export function useERC20TokenApproveCallback(
     amount: string,
     spender: string,
     callback?: () => void,
-    _chainId?: ChainId,
+    tokenChainId?: ChainId,
 ) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
-        chainId: _chainId,
+        chainId: tokenChainId,
     })
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: _chainId })
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: tokenChainId })
     const erc20Contract = useERC20TokenContract(chainId, address)
 
     // read the approved information from the chain

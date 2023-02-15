@@ -76,12 +76,13 @@ export const TokenSwapCard: FC<TokenSwapCardProps> = ({ feed, ...rest }) => {
         <CardFrame type={CardType.TokenSwap} feed={feed} {...rest}>
             <Typography className={classes.summary}>
                 <Translate.token_swap
+                    shouldUnescape
                     values={{
                         user,
                         from_value: formatValue(metadata?.from),
-                        from_symbol: metadata?.from.symbol ?? '-',
+                        from_symbol: metadata?.from.symbol ?? 'Unknown Token',
                         to_value: formatValue(metadata?.to),
-                        to_symbol: metadata?.to.symbol ?? '-',
+                        to_symbol: metadata?.to.symbol ?? 'Unknown Token',
                         platform: feed.platform!,
                         context: verbose ? 'verbose' : 'normal',
                     }}

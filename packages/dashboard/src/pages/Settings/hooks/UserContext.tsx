@@ -44,6 +44,8 @@ export type ConfirmPasswordOption = {
     tipContent?: string
     confirmTitle?: string
     force?: boolean
+    hasSmartPay?: boolean
+    hasPaymentPassword?: boolean
 }
 
 export function UserProvider({ children }: PropsWithChildren<{}>) {
@@ -77,7 +79,8 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
 
     const confirmPassword = (f: ConfirmPasswordCallback, option?: ConfirmPasswordOption) => {
         const { force = true } = option ?? {}
-        if (!force && !user.backupPassword) {
+
+        if (!force && !user.backupPassword && !option?.hasSmartPay) {
             f()
         } else {
             setConfirmCallback([f])

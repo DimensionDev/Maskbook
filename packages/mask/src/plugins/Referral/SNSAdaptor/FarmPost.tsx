@@ -187,7 +187,10 @@ export function FarmPost(props: FarmPostProps) {
                     expectedChainId={SWAP_CHAIN_ID}
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
-                    <WalletConnectedBoundary offChain ActionButtonProps={{ variant: 'roundedDark' }}>
+                    <WalletConnectedBoundary
+                        offChain
+                        ActionButtonProps={{ variant: 'roundedDark' }}
+                        expectedChainId={SWAP_CHAIN_ID}>
                         <Grid item xs={6} display="flex" textAlign="center">
                             <Button size="medium" onClick={onClickBuyToFarm} variant="roundedDark">
                                 {t.buy_to_farm()}

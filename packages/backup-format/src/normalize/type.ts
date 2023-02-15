@@ -39,6 +39,7 @@ export namespace NormalizedBackup {
         nickname: Option<string>
         createdAt: Option<Date>
         updatedAt: Option<Date>
+        address?: string
     }
     export interface Mnemonic {
         words: string

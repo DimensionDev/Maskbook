@@ -40,6 +40,7 @@ import {
     isLessThan,
     leftShift,
     pow10,
+    toFixed,
     TransactionDescriptorType,
     ZERO,
 } from '@masknet/web3-shared-base'
@@ -51,7 +52,6 @@ import { PopupContext } from '../../../hook/usePopupContext.js'
 import { Icons } from '@masknet/icons'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { StyledRadio } from '../../../components/StyledRadio/index.js'
-import { SmartPayAccount } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -160,8 +160,9 @@ const ContractInteraction = memo(() => {
     const location = useLocation()
     const navigate = useNavigate()
     const wallet = useWallet()
+
     const { smartPayChainId } = useContainer(PopupContext)
-    const { Others, TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { Others, TransactionFormatter, Connection } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [transferError, setTransferError] = useState(false)
     const [gasCurrency, setGasCurrency] = useState<string>()
@@ -238,9 +239,9 @@ const ContractInteraction = memo(() => {
             // Gwei to wei
             return {
                 maxPriorityFeePerGas: toHex(
-                    formatGweiToWei(gasOptions?.normal.suggestedMaxPriorityFeePerGas ?? 0).toFixed(0),
+                    toFixed(formatGweiToWei(gasOptions?.normal.suggestedMaxPriorityFeePerGas ?? 0), 0),
                 ),
-                maxFeePerGas: toHex(formatGweiToWei(gasOptions?.normal.suggestedMaxFeePerGas ?? 0).toFixed(0)),
+                maxFeePerGas: toHex(toFixed(formatGweiToWei(gasOptions?.normal.suggestedMaxFeePerGas ?? 0), 0)),
             }
         } else if (!gasPrice) {
             return {
@@ -259,13 +260,13 @@ const ContractInteraction = memo(() => {
                 })
 
                 if (!signableConfig) return
-                const gas = await SmartPayAccount.estimateTransaction(
-                    request.owner && smartPayChainId ? smartPayChainId : chainId,
-                    signableConfig,
-                    {
-                        paymentToken: address,
-                    },
-                )
+                const connection = Connection?.getConnection?.()
+
+                const gas = await connection?.estimateTransaction?.(signableConfig, undefined, {
+                    paymentToken: address,
+                })
+
+                if (!gas) return
 
                 const config = request.payload.params!.map((param) =>
                     param === 'latest'
@@ -350,7 +351,7 @@ const ContractInteraction = memo(() => {
 
         if (!gasCurrency || isNativeTokenAddress(gasCurrency)) return result
         if (!currencyRatio) return ZERO
-        return result.dividedBy(currencyRatio)
+        return new BigNumber(toFixed(result.multipliedBy(currencyRatio), 0))
     }, [
         gas,
         isSupport1559,
@@ -360,6 +361,7 @@ const ContractInteraction = memo(() => {
         gasCurrency,
         currencyRatio,
     ])
+
     // token decimals
     const tokenAmount = (amount ?? 0) as number
     const tokenDecimals = token?.decimals

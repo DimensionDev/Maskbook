@@ -5,6 +5,7 @@ import type {
     Web3ProfileDialogEvent,
     CheckSecurityDialogEvent,
     ApplicationDialogEvent,
+    HideSearchResultInspectorEvent,
     SwapDialogEvent,
     ProfileCardEvent,
     SettingsDialogEvent,
@@ -13,6 +14,7 @@ import type {
     OpenPageConfirmEvent,
     PersonaSelectPanelDialogEvent,
     AvatarSettingDialogEvent,
+    OwnerDeletionEvent,
 } from './Mask.js'
 
 /**
@@ -32,12 +34,13 @@ export const CrossIsolationMessages = new WebExtensionMessage<CrossIsolationEven
 export interface CrossIsolationEvents {
     compositionDialogEvent: CompositionDialogEvent
     web3ProfileDialogEvent: Web3ProfileDialogEvent
+    hideSearchResultInspectorEvent: HideSearchResultInspectorEvent
     checkSecurityDialogEvent: CheckSecurityDialogEvent
     checkSecurityConfirmationDialogEvent: CheckSecurityConfirmationDialogEvent
     applicationDialogEvent: ApplicationDialogEvent
     swapDialogEvent: SwapDialogEvent
     settingsDialogEvent: SettingsDialogEvent
-
+    ownerDeletionEvent: OwnerDeletionEvent
     profileCardEvent: ProfileCardEvent
     nonFungibleTokenDialogEvent: NonFungibleTokenDialogEvent
     walletSettingsDialogEvent: WalletSettingsDialogEvent

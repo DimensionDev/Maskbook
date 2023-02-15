@@ -1,6 +1,6 @@
+import { ReactNode, useEffect, useState } from 'react'
 import { MaskColorVar, makeStyles } from '@masknet/theme'
 import { Card, Typography } from '@mui/material'
-import { ReactNode, useEffect, useState } from 'react'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()({

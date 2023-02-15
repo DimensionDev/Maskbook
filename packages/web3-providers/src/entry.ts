@@ -53,12 +53,13 @@ import { LensAPI } from './Lens/index.js'
 import { Web3SignerAPI } from './EVM/apis/Web3SignerAPI.js'
 import { FlowWeb3API } from './Flow/apis/Web3API.js'
 import { SolanaWeb3API } from './Solana/apis/Web3API.js'
-import { LogHubAPI } from './Sentry/index.js'
+import { SentryAPI } from './Sentry/index.js'
 import { TheGraphDomainAPI } from './TheGraph/index.js'
 import { ENS_API } from './ENS/index.js'
 import { SpaceID_API } from './SpaceID/index.js'
 import { BonfidaAPI } from './Bonfida/index.js'
 import { RedPacketAPI } from './RedPacket/index.js'
+import { SmartPayOwnerAPI } from './SmartPay/apis/OwnerAPI.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
@@ -88,7 +89,7 @@ export const Mirror = new MirrorAPI()
 export const CryptoScamDB = new CryptoScamDB_API()
 export const Multicall = new MulticallAPI()
 export const Lens = new LensAPI()
-export const LogHub = new LogHubAPI()
+export const Sentry = new SentryAPI()
 export const TheGraphDomain = new TheGraphDomainAPI()
 export const RedPacket = new RedPacketAPI()
 
@@ -166,4 +167,5 @@ export const FuseTrending = new FuseTrendingAPI()
 // Smart Pay
 export const SmartPayBundler = new SmartPayBundlerAPI()
 export const SmartPayFunder = new SmartPayFunderAPI()
+export const SmartPayOwner = new SmartPayOwnerAPI()
 export const SmartPayAccount = new SmartPayAccountAPI()

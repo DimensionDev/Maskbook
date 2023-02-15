@@ -56,8 +56,6 @@ export const Flags = {
     v37PayloadDefaultEnabled: false, // new Date() > new Date('2022-07-01'),
     i18nTranslationHotUpdate: true,
     sandboxedPluginRuntime: insiderOnly,
-
-    log_enabled: process.env.NODE_ENV !== 'production',
 } as const
 
 if (process.env.NODE_ENV === 'development') {

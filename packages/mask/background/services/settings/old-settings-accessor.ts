@@ -1,5 +1,6 @@
-import { ECKeyIdentifier, PersonaIdentifier, ValueRefWithReady } from '@masknet/shared-base'
 import { head } from 'lodash-es'
+import { ECKeyIdentifier, PersonaIdentifier, ValueRefWithReady } from '@masknet/shared-base'
+import { BooleanPreference } from '@masknet/plugin-infra'
 import {
     appearanceSettings,
     currentPersonaIdentifier,
@@ -11,10 +12,7 @@ import {
 } from '../../../shared/legacy-settings/settings.js'
 import { MaskMessages } from '../../../shared/messages.js'
 import { queryPersonasDB } from '../../../background/database/persona/db.js'
-import { BooleanPreference } from '@masknet/plugin-infra'
-import { v4 as uuid } from 'uuid'
 import { __deprecated__getStorage } from '../../utils/deprecated-storage.js'
-import { Flags } from '../../../shared/flags.js'
 
 function create<T>(settings: ValueRefWithReady<T>) {
     async function get() {
@@ -27,19 +25,9 @@ function create<T>(settings: ValueRefWithReady<T>) {
     }
     return [get, set] as const
 }
+export const [getLog, setLog] = create(logSettings)
 export const [getTheme, setTheme] = create(appearanceSettings)
-export const [getLogSettings] = create(logSettings)
 export const [getLanguage, setLanguage] = create(languageSettings)
-
-export async function setLogEnable(enable: boolean) {
-    if (enable) {
-        const newLoggerId = uuid()
-        await logSettings.readyPromise
-        logSettings.value = newLoggerId
-    } else {
-        logSettings.value = ''
-    }
-}
 
 export async function getCurrentPersonaIdentifier(): Promise<PersonaIdentifier | undefined> {
     await currentPersonaIdentifier.readyPromise
@@ -69,11 +57,3 @@ export async function setPluginMinimalModeEnabled(id: string, enabled: boolean) 
 export const [getDecentralizedSearchSettings, setDecentralizedSearchSettings] = create(decentralizedSearchSettings)
 
 export { __deprecated__getStorage as getLegacySettingsInitialValue }
-
-// should remove this flag after new log privacy policy release
-if (Flags.log_enabled) {
-    getLogSettings().then((current) => {
-        if (current && typeof current === 'string') return
-        setLogEnable(true)
-    })
-}

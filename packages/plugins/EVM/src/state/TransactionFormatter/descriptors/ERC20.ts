@@ -22,7 +22,7 @@ export class ERC20Descriptor implements TransactionDescriptor {
                 case 'approve':
                     if (parameters?.spender === undefined || parameters?.value === undefined) break
                     const token = await hub?.getFungibleToken?.(context.to ?? '', { chainId: context.chainId })
-                    if (isZero(parameters?.value)) {
+                    if (isZero(parameters.value)) {
                         return {
                             chainId: context.chainId,
                             tokenInAddress: token?.address,

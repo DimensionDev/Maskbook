@@ -71,12 +71,12 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect })
             }}
             className={isDisabled ? classes.disabled : ''}>
             <NFTCardStyledAssetPlayer
-                contractAddress={token.address}
-                chainId={token.chainId}
-                tokenId={token.tokenId}
                 classes={{
                     fallbackImage: classes.fallbackImage,
                 }}
+                chainId={token.chainId}
+                tokenId={token.tokenId}
+                contractAddress={token.address}
             />
             {NFTNameBar}
             <Box className={classes.checkbox}>

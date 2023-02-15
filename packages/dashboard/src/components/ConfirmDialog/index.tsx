@@ -1,5 +1,5 @@
-import { MaskDialog } from '@masknet/theme'
 import type { PropsWithChildren, ReactNode } from 'react'
+import { MaskDialog } from '@masknet/theme'
 import { DialogContent, DialogActions, Button, styled, buttonClasses } from '@mui/material'
 import { useDashboardI18N } from '../../locales/index.js'
 

@@ -207,7 +207,9 @@ export function SwapDialog(props: SwapDialogProps) {
                         const swapAmount = tokenAmount.multipliedBy(ratio).dp(0)
                         setTokenAmount(tokenAmount.dp(0))
                         setSwapAmount(swapAmount)
-                        setInputAmountForUI(formatBalance(swapAmount, swapToken.decimals, swapToken.decimals, true))
+                        setInputAmountForUI(
+                            formatBalance(swapAmount, swapToken.decimals, swapToken.decimals, swapToken.decimals, true),
+                        )
                     }}
                 />
                 <Typography variant="body1" className={classes.swapLimitText}>
@@ -242,7 +244,7 @@ export function SwapDialog(props: SwapDialogProps) {
                 {t('plugin_ito_swap_only_once_remind')}
             </Typography>
             <section className={classes.swapButtonWrapper}>
-                <WalletConnectedBoundary>
+                <WalletConnectedBoundary expectedChainId={payload.chain_id}>
                     <EthereumERC20TokenApprovedBoundary
                         onlyInfiniteUnlock
                         amount={swapAmount.toFixed()}

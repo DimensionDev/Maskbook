@@ -9,6 +9,7 @@ import {
     getProfileTabContent,
 } from '@masknet/plugin-infra/content-script'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
+import { Link, MenuItem, Divider, Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import {
     AccountIcon,
     AddressItem,
@@ -17,16 +18,21 @@ import {
     PluginCardFrameMini,
     useCurrentPersonaConnectStatus,
     useSocialAccountsBySettings,
+    TokenMenuList,
 } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useTabs } from '@masknet/theme'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { isSameAddress, SourceType } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
-import { Button, Link, MenuItem, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, addressSorter, useI18N, useLocationChange } from '../../utils/index.js'
-import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
+import {
+    useCurrentVisitingIdentity,
+    useLastRecognizedIdentity,
+    useSocialIdentity,
+    useSocialIdentityByUserId,
+} from '../DataSource/useActivatedUI.js'
 import { useCollectionByTwitterHandler } from '../../plugins/Trader/trending/useTrending.js'
 import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry.js'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
@@ -65,6 +71,24 @@ const useStyles = makeStyles()((theme) => ({
         maxHeight: MENU_ITEM_HEIGHT * 9 + MENU_LIST_PADDING * 2,
         minWidth: 320,
         backgroundColor: theme.palette.maskColor.bottom,
+    },
+    groupName: {
+        height: 18,
+        marginTop: 5,
+        fontWeight: 700,
+        fontSize: 14,
+        padding: '0 12px',
+    },
+    group: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
+    divider: {
+        margin: theme.spacing(1, 0),
+        width: 376,
+        position: 'relative',
+        left: 12,
     },
     menuItem: {
         height: MENU_ITEM_HEIGHT,
@@ -141,7 +165,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const translate = usePluginI18NField()
 
     const [hidden, setHidden] = useState(true)
-    const [selectedAddress, setSelectedAddress] = useState<string | undefined>()
     const [menuOpen, setMenuOpen] = useState(false)
     const allPersonas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
@@ -161,6 +184,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     )
 
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
+    const { value: currentSocialIdentity } = useSocialIdentity(currentVisitingSocialIdentity)
 
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
     const isOwnerIdentity = currentVisitingSocialIdentity?.isOwner
@@ -170,21 +194,16 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         loading: loadingSocialAccounts,
         error: loadSocialAccounts,
         retry: retrySocialAccounts,
-    } = useSocialAccountsBySettings(currentVisitingSocialIdentity, undefined, addressSorter)
+    } = useSocialAccountsBySettings(currentSocialIdentity, undefined, addressSorter)
+    const [selectedAddress = first(socialAccounts)?.address, setSelectedAddress] = useState<string | undefined>()
 
-    const selectedSocialAccount = useMemo(() => {
-        return socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
-    }, [socialAccounts, selectedAddress])
+    const selectedSocialAccount = socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
             retrySocialAccounts()
         })
     }, [retrySocialAccounts])
-
-    useEffect(() => {
-        setSelectedAddress(first(socialAccounts)?.address)
-    }, [socialAccounts])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
     const displayPlugins = getAvailablePlugins(activatedPlugins, (plugins) => {
@@ -264,6 +283,14 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         })
     }, [currentVisitingUserId])
 
+    const [isHideInspector, hideInspector] = useState(false)
+
+    useEffect(() => {
+        return CrossIsolationMessages.events.hideSearchResultInspectorEvent.on((ev) => {
+            hideInspector(ev.hide)
+        })
+    }, [])
+
     useEffect(() => {
         return MaskMessages.events.profileTabUpdated.on((data) => {
             setHidden(!data.show)
@@ -292,14 +319,21 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const { value: collectionList } = useCollectionByTwitterHandler(currentVisitingUserId)
 
+    const { value: identity } = useSocialIdentityByUserId(currentVisitingUserId)
+
     if (hidden) return null
+    const trendingResult = collectionList?.[0]
+    const keyword = trendingResult?.address || trendingResult?.name
 
-    const keyword = collectionList?.[0]?.address || collectionList?.[0]?.name
-
-    if (keyword)
+    if (keyword && !isHideInspector)
         return (
             <div className={classes.root}>
-                <SearchResultInspector keyword={keyword} isProfilePage collectionList={collectionList} />
+                <SearchResultInspector
+                    keyword={keyword}
+                    isProfilePage
+                    collectionList={collectionList}
+                    identity={identity}
+                />
             </div>
         )
 
@@ -427,26 +461,48 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                 }}
                                 aria-labelledby="wallets"
                                 onClose={() => setMenuOpen(false)}>
-                                {socialAccounts.map((x) => {
-                                    return (
-                                        <MenuItem
-                                            className={classes.menuItem}
-                                            key={x.address}
-                                            value={x.address}
-                                            onClick={() => onSelect(x.address)}>
-                                            <div className={classes.addressItem}>
-                                                <AddressItem
-                                                    socialAccount={x}
-                                                    linkIconClassName={classes.secondLinkIcon}
-                                                />
-                                                <AccountIcon socialAccount={x} />
-                                            </div>
-                                            {isSameAddress(selectedAddress, x.address) && (
-                                                <Icons.CheckCircle size={20} className={classes.selectedIcon} />
-                                            )}
-                                        </MenuItem>
-                                    )
-                                })}
+                                {trendingResult ? (
+                                    <div key="trending" className={classes.group}>
+                                        <Typography className={classes.groupName}>
+                                            {trendingResult.source === SourceType.NFTScan
+                                                ? t('plugin_trader_table_nft')
+                                                : t('decentralized_search_feature_token_name')}
+                                        </Typography>
+                                        <Divider className={classes.divider} />
+                                        <TokenMenuList
+                                            options={[trendingResult]}
+                                            onSelect={() => {
+                                                hideInspector(false)
+                                                setMenuOpen(false)
+                                            }}
+                                            fromSocialCard
+                                        />
+                                    </div>
+                                ) : null}
+                                <div key="social" className={classes.group}>
+                                    <Typography className={classes.groupName}>{t('address')}</Typography>
+                                    <Divider className={classes.divider} />
+                                    {socialAccounts.map((x) => {
+                                        return (
+                                            <MenuItem
+                                                className={classes.menuItem}
+                                                key={x.address}
+                                                value={x.address}
+                                                onClick={() => onSelect(x.address)}>
+                                                <div className={classes.addressItem}>
+                                                    <AddressItem
+                                                        socialAccount={x}
+                                                        linkIconClassName={classes.secondLinkIcon}
+                                                    />
+                                                    <AccountIcon socialAccount={x} />
+                                                </div>
+                                                {isSameAddress(selectedAddress, x.address) && (
+                                                    <Icons.CheckCircle size={20} className={classes.selectedIcon} />
+                                                )}
+                                            </MenuItem>
+                                        )
+                                    })}
+                                </div>
                             </ShadowRootMenu>
                         </div>
                         <div className={classes.settingItem}>

@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
-import { isGreaterThan, isLessThanOrEqualTo, rightShift } from '@masknet/web3-shared-base'
+import { isGreaterThan, isLessThanOrEqualTo, rightShift, TokenType } from '@masknet/web3-shared-base'
 import { useI18N } from '../../locales/index.js'
-import { TipsType, ValidationTuple } from '../../types/index.js'
+import type { ValidationTuple } from '../../types/index.js'
 import type { TipContextOptions } from './TipContext.js'
 
 type TipValidateOptions = Pick<
@@ -24,7 +24,7 @@ export function useTipValidate({
     const t = useI18N()
 
     const result: ValidationTuple = useMemo(() => {
-        if (tipType === TipsType.Tokens) {
+        if (tipType === TokenType.Fungible) {
             if (!amount || isLessThanOrEqualTo(amount, 0)) return [false]
             if (isGreaterThan(rightShift(amount, token?.decimals), balance))
                 return [false, t.token_insufficient_balance()]

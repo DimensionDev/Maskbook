@@ -1,16 +1,16 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
+import { useAsync, useAsyncFn } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { delay } from '@masknet/kit'
 import { useCustomSnackbar } from '@masknet/theme'
-import { DashboardRoutes, ECKeyIdentifier, PopupRoutes } from '@masknet/shared-base'
+import { SmartPayOwner, SmartPayBundler } from '@masknet/web3-providers'
+import { DashboardRoutes, ECKeyIdentifier, EC_Public_JsonWebKey } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { SignUpRoutePath } from '../routePath.js'
 import { Messages, PluginServices, Services } from '../../../API.js'
 import { PersonaNameUI } from './PersonaNameUI.js'
 import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
-import { delay } from '@masknet/kit'
-import { useAsync } from 'react-use'
-import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
 
 export const PersonaRecovery = () => {
     const t = useDashboardI18N()
@@ -33,10 +33,44 @@ export const PersonaRecovery = () => {
         navigate(DashboardRoutes.SignUp, { replace: true })
     }, [state.mnemonic, state.privateKey])
 
-    const onNext = useCallback(
+    const [{ loading: submitLoading }, onNext] = useAsyncFn(
         async (personaName: string) => {
             setError('')
             try {
+                let result:
+                    | {
+                          address: string
+                          identifier: ECKeyIdentifier
+                          publicKey: EC_Public_JsonWebKey
+                      }
+                    | undefined
+                if (state.mnemonic) {
+                    result = await Services.Identity.queryPersonaEOAByMnemonic(state?.mnemonic.join(' '), '')
+                } else if (state.privateKey) {
+                    result = await Services.Identity.queryPersonaEOAByPrivateKey(state.privateKey)
+                } else {
+                    setError('no available identifier')
+                    return
+                }
+
+                const chainId = await SmartPayBundler.getSupportedChainId()
+                if (result?.address) {
+                    const smartPayAccounts = await SmartPayOwner.getAccountsByOwners(chainId, [result.address])
+                    const hasPaymentPassword = await PluginServices.Wallet.hasPassword()
+                    if (smartPayAccounts.filter((x) => x.deployed || x.funded).length && !hasPaymentPassword) {
+                        await Services.Backup.addUnconfirmedPersonaRestore({
+                            mnemonic: state?.mnemonic?.join(' '),
+                            privateKeyString: state.privateKey,
+                            personaName,
+                        })
+                        Messages.events.restoreSuccess.on(() => {
+                            navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`)
+                            changeCurrentPersona(result?.identifier)
+                        })
+                        return
+                    }
+                }
+
                 let identifier: ECKeyIdentifier
                 if (state.mnemonic) {
                     identifier = await createPersona(state?.mnemonic.join(' '), personaName)
@@ -45,47 +79,6 @@ export const PersonaRecovery = () => {
                 } else {
                     setError('no available identifier')
                     return
-                }
-
-                const hasPaymentPassword = await PluginServices.Wallet.hasPassword()
-                if (!hasPaymentPassword) {
-                    const persona = await Services.Identity.queryPersonaDB(identifier)
-                    const chainId = await SmartPayBundler.getSupportedChainId()
-                    if (persona?.address) {
-                        const smartPayAccounts = await SmartPayAccount.getAccountsByOwners(chainId, [persona?.address])
-
-                        if (smartPayAccounts.filter((x) => x.deployed || x.funded).length) {
-                            const backupInfo = await Services.Backup.addUnconfirmedBackup(
-                                JSON.stringify({
-                                    _meta_: {
-                                        maskbookVersion: '',
-                                        createdAt: null,
-                                        type: 'maskbook-backup',
-                                        version: 2,
-                                    },
-                                    personas: [
-                                        {
-                                            ...persona,
-                                            linkedProfiles: [],
-                                        },
-                                    ],
-                                    posts: [],
-                                    profiles: [],
-                                    relations: [],
-                                    wallets: [],
-                                    userGroups: [],
-                                    grantedHostPermissions: [],
-                                    plugin: [],
-                                }),
-                            )
-
-                            if (backupInfo.ok) {
-                                return Services.Helper.openPopupWindow(PopupRoutes.WalletRecovered, {
-                                    backupId: backupInfo.val.id,
-                                })
-                            }
-                        }
-                    }
                 }
 
                 await changeCurrentPersona(identifier)
@@ -101,5 +94,5 @@ export const PersonaRecovery = () => {
         [state?.mnemonic, state?.privateKey],
     )
 
-    return <PersonaNameUI onNext={onNext} error={error} />
+    return <PersonaNameUI onNext={onNext} loading={submitLoading} error={error} />
 }
