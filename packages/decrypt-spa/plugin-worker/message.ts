@@ -30,7 +30,7 @@ export function broadcastMessage(type: string, message: unknown) {
 
 // shared worker
 globalThis.addEventListener('connect', (event) => {
-    const port: MessagePort = event.ports[0]
+    const port: MessagePort = (event as any).ports[0]
     // message send through port is a tuple [type, data]
     port.addEventListener('message', (e) => {
         const [type, data] = e.data

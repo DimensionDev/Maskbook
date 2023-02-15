@@ -23,9 +23,6 @@ startPluginWorker({
                 if (type === 'memory') return inMemoryStorage(pluginID, defaultValues, signal)
                 else return indexedDBStorage(pluginID, defaultValues, signal)
             },
-            createLogger() {
-                return undefined
-            },
             getDatabaseStorage() {
                 return storage || (storage = createPluginDatabase(pluginID, signal))
             },
