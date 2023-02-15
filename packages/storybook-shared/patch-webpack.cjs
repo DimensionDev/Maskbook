@@ -57,9 +57,6 @@ module.exports = async function (config) {
             // Polyfill for Node global "Buffer" variable
             Buffer: ['buffer', 'Buffer'],
         }),
-        new EnvironmentPlugin({
-            shadowRootMode: 'open',
-        }),
     )
 
     return config
