@@ -5,6 +5,7 @@ export function formatBalance(
     rawValue: BigNumber.Value = '0',
     decimals = 0,
     significant = decimals,
+    places = decimals,
     isPrecise = false,
 ) {
     let balance = new BigNumber(rawValue)
@@ -29,7 +30,7 @@ export function formatBalance(
 
     // add leading zeros
     while (fraction.length < decimals) fraction = `0${fraction}`
-    fraction = fraction.slice(0, significant + 1)
+    if (places) fraction = fraction.slice(0, places)
 
     // match significant digits
     const matchSignificantDigits = new RegExp(`^0*[1-9]\\d{0,${significant > 0 ? significant - 1 : 0}}`)
