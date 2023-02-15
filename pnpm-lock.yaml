@@ -9513,13 +9513,13 @@ packages:
     resolution: {integrity: sha512-UvKfpx6+BUdV+rGAXqDBznagfz44Ut+x2h/i0OZPNCEpXaH9KAQOlv06I66861aXiucWFRb1lAMrN4+cE9aJIg==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/core': 7.37.2_2qoyzwmpaczaj2mabgmoz6ccpy
+      '@sentry/core': 7.37.2_rklncqa6modgoos6z6mwlg3pli
       '@sentry/replay': 7.37.2
       '@sentry/types': 7.37.2
       '@sentry/utils': 7.37.2
       tslib: 1.14.1
 
-  /@sentry/core/7.37.2_2qoyzwmpaczaj2mabgmoz6ccpy:
+  /@sentry/core/7.37.2_rklncqa6modgoos6z6mwlg3pli:
     resolution: {integrity: sha512-LjofMDSTyVeBErl9N7TTqlyEVuW1g6U4iuJtdZ75JohnvVxzWdpZfWfddwQ6h7nGWfe9dNg0fGs1wxKtMhY+MA==}
     engines: {node: '>=8'}
     dependencies:
@@ -9532,7 +9532,7 @@ packages:
     resolution: {integrity: sha512-y8Gfc7EGfGU4eVae5HAtch2YgkiTzNPi16dcqPX9jtIHDwiurGqWcaOgs5HoGJm45eMfl6LvcE7MPbwqcDkPIA==}
     engines: {node: '>=12'}
     dependencies:
-      '@sentry/core': 7.37.2_2qoyzwmpaczaj2mabgmoz6ccpy
+      '@sentry/core': 7.37.2_rklncqa6modgoos6z6mwlg3pli
       '@sentry/types': 7.37.2
       '@sentry/utils': 7.37.2
 

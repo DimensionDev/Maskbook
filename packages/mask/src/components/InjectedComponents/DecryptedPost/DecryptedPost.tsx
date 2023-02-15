@@ -220,7 +220,6 @@ async function makeProgress(
             if (progress.event === DecryptIntermediateProgressKind.TryDecryptByE2E) reportProgress('e2e', '')
             else safeUnreachable(progress.event)
         } else if (progress.type === DecryptProgressKind.Error) {
-            console.log(progress.message)
         } else safeUnreachable(progress)
     }
 }
