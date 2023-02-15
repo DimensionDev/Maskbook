@@ -47,7 +47,8 @@ export function usePortalShadowRoot<T>(renderer: (container: HTMLElement | undef
         }
 
         const container = shadow.appendChild(document.createElement('main'))
-        sheet.addContainer(shadow)
+
+        sheet?.addContainer(shadow)
 
         // This is important to make the portal orders correct.
         Object.defineProperty(container, 'appendChild', {
