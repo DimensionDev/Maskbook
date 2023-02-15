@@ -1,14 +1,12 @@
-import { useUpdateEffect } from 'react-use'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
-import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { createERC20Token, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Trader } from '../../../../../plugins/Trader/SNSAdaptor/trader/Trader.js'
 
 export function SwapBox() {
     const location = useLocation()
-    const navigate = useNavigate()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const params = new URLSearchParams(location.search)
     const address = params.get('contract_address')
@@ -27,10 +25,6 @@ export function SwapBox() {
         ),
         { chainId },
     )
-
-    useUpdateEffect(() => {
-        navigate(PopupRoutes.Swap, { replace: true })
-    }, [chainId])
 
     return (
         <Trader
