@@ -1,7 +1,7 @@
 {
   "name": "@masknet/sentry-wrapper",
   "dependencies": {
-    "@sentry/browser": "7.3.0"
+    "@sentry/browser": "7.37.2"
   },
   "private": true,
   "type": "module",

@@ -6,7 +6,7 @@ Sentry.BrowserClient.__proto__.prototype.setupIntegrations.call({
         return true
     },
     _options: {
-        integrations: Sentry.defaultIntegrations,
+        integrations: [],
     },
 })
 

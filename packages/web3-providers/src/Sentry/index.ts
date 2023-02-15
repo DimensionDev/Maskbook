@@ -1,4 +1,4 @@
-import type { Event } from '@sentry/browser'
+import { Breadcrumbs, Event, GlobalHandlers } from '@sentry/browser'
 import { getSiteType, getAgentType } from '@masknet/shared-base'
 import { LoggerAPI } from '../types/Logger.js'
 
@@ -7,10 +7,27 @@ export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
         Sentry.init({
             dsn: process.env.MASK_SENTRY_DSN,
             defaultIntegrations: false,
-            integrations: [],
+            integrations: [
+                // global error and unhandledrejection event
+                new GlobalHandlers(),
+                // global fetch error
+                new Breadcrumbs({
+                    console: false,
+                    dom: false,
+                    xhr: false,
+                    fetch: true,
+                    history: false,
+                }),
+            ],
             environment: process.env.NODE_ENV,
             tracesSampleRate: 1.0,
         })
+
+        // set global tags
+        Sentry.setTag('agent', getAgentType())
+        Sentry.setTag('site', getSiteType())
+        Sentry.setTag('version', process.env.VERSION)
+        Sentry.setTag('ua', navigator.userAgent)
     }
 
     // The sentry needs to be opened at the runtime.
@@ -92,10 +109,6 @@ export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
                 network_id: options.network?.networkID,
                 network: options.network?.networkType,
                 provider: options.network?.providerType,
-                agent: getAgentType(),
-                site: getSiteType(),
-                ua: navigator.userAgent,
-                version: process.env.VERSION,
             },
             exception: {},
             breadcrumbs: [],

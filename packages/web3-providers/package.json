@@ -71,7 +71,8 @@
     "web3-utils": "1.8.0"
   },
   "devDependencies": {
-    "@sentry/browser": "7.3.0",
+    "@sentry/browser": "7.37.2",
+    "@sentry/types": "^7.37.2",
     "@types/json-stable-stringify": "^1.0.34"
   }
 }
