@@ -266,6 +266,7 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
                         [classes.center]: !verbose && !metadata.description,
                     })}>
                     <Image
+                        optimistic
                         classes={{ container: classes.image }}
                         src={metadata.image}
                         height={imageSize}
