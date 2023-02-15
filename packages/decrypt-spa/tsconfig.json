@@ -7,7 +7,7 @@
   },
   "include": ["./main", "./main/**/*.json"],
   "references": [
-    { "path": "./plugin-worker" },
+    { "path": "./tsconfig.worker.json" },
     { "path": "../base" },
     { "path": "../shared-base" },
     { "path": "../encryption" },

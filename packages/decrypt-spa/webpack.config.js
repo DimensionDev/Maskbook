@@ -67,7 +67,7 @@ function Configuration(a, b) {
             new webpack.DefinePlugin({
                 'process.env.NODE_DEBUG': 'undefined',
                 'process.env.engine': `(${(ua) =>
-                    ua.includes('Chrom')
+                    ua.includes('Chrome') || ua.includes('Chromium')
                         ? 'chromium'
                         : ua.includes('Firefox')
                         ? 'firefox'

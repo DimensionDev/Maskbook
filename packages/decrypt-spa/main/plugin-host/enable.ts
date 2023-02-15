@@ -19,7 +19,7 @@ import { noop } from 'lodash-es'
 const inMemoryStorage = createKVStorageHost(
     {
         beforeAutoSync: Promise.resolve(),
-        getValue: worker.memroyRead,
+        getValue: worker.memoryRead,
         setValue: worker.memoryWrite,
     },
     {
