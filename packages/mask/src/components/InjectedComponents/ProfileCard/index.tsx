@@ -122,7 +122,8 @@ export const ProfileCard: FC<Props> = ({ identity, badgeBounding, currentAddress
 
     const [selectedAddress, setSelectedAddress] = useState<string | undefined>(currentAddress)
     const firstAddress = first(socialAccounts)?.address
-    const activeAddress = selectedAddress ?? firstAddress
+    const activeAddress = selectedAddress || firstAddress
+
     const selectedSocialAccount = useMemo(
         () => socialAccounts.find((x) => isSameAddress(x.address, activeAddress)),
         [activeAddress, socialAccounts],
