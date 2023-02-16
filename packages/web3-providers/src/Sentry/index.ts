@@ -1,8 +1,8 @@
 import { Breadcrumbs, Event, GlobalHandlers } from '@sentry/browser'
 import { getSiteType, getAgentType } from '@masknet/shared-base'
-import { LoggerAPI } from '../types/Logger.js'
+import { TelemetryAPI } from '../types/Logger.js'
 
-export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
+export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
     constructor() {
         Sentry.init({
             dsn: process.env.MASK_SENTRY_DSN,
@@ -32,9 +32,9 @@ export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
 
     // The sentry needs to be opened at the runtime.
     private status = 'off'
-    private userOptions?: LoggerAPI.UserOptions
-    private deviceOptions?: LoggerAPI.DeviceOptions
-    private networkOptions?: LoggerAPI.NetworkOptions
+    private userOptions?: TelemetryAPI.UserOptions
+    private deviceOptions?: TelemetryAPI.DeviceOptions
+    private networkOptions?: TelemetryAPI.NetworkOptions
 
     get user() {
         return {
@@ -42,7 +42,7 @@ export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
         }
     }
 
-    set user(options: LoggerAPI.UserOptions) {
+    set user(options: TelemetryAPI.UserOptions) {
         this.userOptions = {
             ...this.userOptions,
             ...options,
@@ -55,7 +55,7 @@ export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
         }
     }
 
-    set device(options: LoggerAPI.DeviceOptions) {
+    set device(options: TelemetryAPI.DeviceOptions) {
         this.deviceOptions = {
             ...this.deviceOptions,
             ...options,
@@ -68,14 +68,14 @@ export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
         }
     }
 
-    set network(options: LoggerAPI.NetworkOptions) {
+    set network(options: TelemetryAPI.NetworkOptions) {
         this.networkOptions = {
             ...this.networkOptions,
             ...options,
         }
     }
 
-    private getOptions(initial?: LoggerAPI.CommonOptions): LoggerAPI.CommonOptions {
+    private getOptions(initial?: TelemetryAPI.CommonOptions): TelemetryAPI.CommonOptions {
         return {
             user: {
                 ...this.userOptions,
@@ -92,18 +92,18 @@ export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
         }
     }
 
-    private createCommonEvent(type: LoggerAPI.TypeID, message: string, initial: LoggerAPI.CommonOptions): Event {
+    private createCommonEvent(type: TelemetryAPI.TypeID, message: string, initial: TelemetryAPI.CommonOptions): Event {
         const options = this.getOptions(initial)
         return {
             message,
-            level: type === LoggerAPI.TypeID.Event ? 'info' : 'error',
+            level: type === TelemetryAPI.TypeID.Event ? 'info' : 'error',
             user: options.user?.account
                 ? {
                       username: options.user.account,
                   }
                 : undefined,
             tags: {
-                type: LoggerAPI.TypeID.Event,
+                type: TelemetryAPI.TypeID.Event,
                 chain_id: options.network?.chainId,
                 plugin_id: options.network?.pluginID,
                 network_id: options.network?.networkID,
@@ -115,12 +115,12 @@ export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
         }
     }
 
-    private createEvent(options: LoggerAPI.EventOptions): Event {
-        return this.createCommonEvent(LoggerAPI.TypeID.Event, options.eventID, options)
+    private createEvent(options: TelemetryAPI.EventOptions): Event {
+        return this.createCommonEvent(TelemetryAPI.TypeID.Event, options.eventID, options)
     }
 
-    private createException(options: LoggerAPI.ExceptionOptions): Event {
-        return this.createCommonEvent(LoggerAPI.TypeID.Exception, options.exceptionID, options)
+    private createException(options: TelemetryAPI.ExceptionOptions): Event {
+        return this.createCommonEvent(TelemetryAPI.TypeID.Exception, options.exceptionID, options)
     }
 
     enable() {
@@ -131,12 +131,12 @@ export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
         this.status = 'off'
     }
 
-    captureEvent(options: LoggerAPI.EventOptions) {
+    captureEvent(options: TelemetryAPI.EventOptions) {
         if (this.status === 'off') return
         Sentry.captureEvent(this.createEvent(options))
     }
 
-    captureException(options: LoggerAPI.ExceptionOptions) {
+    captureException(options: TelemetryAPI.ExceptionOptions) {
         if (this.status === 'off') return
         Sentry.captureException(options.error, this.createException(options))
     }

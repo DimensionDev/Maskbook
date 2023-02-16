@@ -6,7 +6,7 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { LogContextProvider } from '@masknet/web3-logs/hooks'
+import { TelemetryProvider } from '@masknet/web3-telemetry/hooks'
 import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
 import { languageSettings } from '../../../shared/legacy-settings/settings.js'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
@@ -48,7 +48,7 @@ export default function Popups() {
         usePopupTheme,
         <PopupSnackbarProvider>
             <Web3ContextProvider value={Web3ContextType}>
-                <LogContextProvider>
+                <TelemetryProvider>
                     <PopupContext.Provider>
                         <PageTitleContext.Provider value={titleContext}>
                             <HashRouter>
@@ -72,7 +72,7 @@ export default function Popups() {
                             </HashRouter>
                         </PageTitleContext.Provider>
                     </PopupContext.Provider>
-                </LogContextProvider>
+                </TelemetryProvider>
             </Web3ContextProvider>
         </PopupSnackbarProvider>,
         frame(<LoadingPlaceholder />),

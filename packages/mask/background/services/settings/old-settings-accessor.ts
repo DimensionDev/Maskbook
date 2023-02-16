@@ -7,7 +7,7 @@ import {
     languageSettings,
     getCurrentPluginMinimalMode,
     setCurrentPluginMinimalMode,
-    logSettings,
+    telemetrySettings,
     decentralizedSearchSettings,
 } from '../../../shared/legacy-settings/settings.js'
 import { MaskMessages } from '../../../shared/messages.js'
@@ -25,7 +25,7 @@ function create<T>(settings: ValueRefWithReady<T>) {
     }
     return [get, set] as const
 }
-export const [getLog, setLog] = create(logSettings)
+export const [isTelemetryEnabled, setTelemetryEnabled] = create(telemetrySettings)
 export const [getTheme, setTheme] = create(appearanceSettings)
 export const [getLanguage, setLanguage] = create(languageSettings)
 

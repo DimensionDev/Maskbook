@@ -1,5 +1,5 @@
 {
-  "name": "@masknet/web3-logs",
+  "name": "@masknet/web3-telemetry",
   "type": "module",
   "private": true,
   "exports": {
