@@ -4,11 +4,11 @@ import { Icons } from '@masknet/icons'
 import { openWindow } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { useSocialAccountsBySettings, FormattedAddress, AccountIcon, TokenMenuList } from '@masknet/shared'
+import { FormattedAddress, AccountIcon, TokenMenuList } from '@masknet/shared'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../../utils/index.js'
-import { EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
-import { SearchResultType, SocialIdentity, SocialAddressType } from '@masknet/web3-shared-base'
+import { CrossIsolationMessages } from '@masknet/shared-base'
+import { SearchResultType, SocialIdentity, SocialAddressType, SocialAccount } from '@masknet/web3-shared-base'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { Divider, MenuItem, Stack, Typography } from '@mui/material'
 import { TrendingViewContext } from './context.js'
@@ -69,6 +69,7 @@ export interface SocialMenuProps {
     isFromPopup: boolean
     optionList: Web3Helper.TokenResultAll[]
     identity?: SocialIdentity
+    socialAccount: SocialAccount<Web3Helper.ChainIdAll>
     result: Web3Helper.TokenResultAll
     setActive?: (x: boolean) => void
     onChange?: (a: Web3Helper.TokenResultAll) => void
@@ -89,6 +90,7 @@ export const SocialMenu: FC<PropsWithChildren<SocialMenuProps>> = ({
     identity,
     setActive,
     anchorEl,
+    socialAccount,
     onChange,
     onClose,
 }) => {
@@ -102,8 +104,6 @@ export const SocialMenu: FC<PropsWithChildren<SocialMenuProps>> = ({
         },
         [onChange, onClose],
     )
-    const { value: allSocialAccounts = EMPTY_LIST } = useSocialAccountsBySettings(identity)
-    const socialAccount = allSocialAccounts[0]
     const { Others } = useWeb3State()
 
     const openRss3Profile = useCallback(() => {

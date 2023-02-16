@@ -1,8 +1,14 @@
 import { Icons } from '@masknet/icons'
 import { useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { PluginTransakMessages, useTransakAllowanceCoin } from '@masknet/plugin-transak'
-import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
-import { NetworkPluginID, PluginID, EnhanceableSite } from '@masknet/shared-base'
+import {
+    FormattedCurrency,
+    Linking,
+    TokenSecurityBar,
+    useTokenSecurity,
+    useSocialAccountsBySettings,
+} from '@masknet/shared'
+import { NetworkPluginID, PluginID, EMPTY_LIST, EnhanceableSite } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { MaskColors, MaskDarkTheme, MaskLightTheme, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -204,7 +210,11 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         [result, ...resultList],
         (x) => `${x.address?.toLowerCase()}_${x.chainId}_${x.type}_${x.name?.toLowerCase()}`,
     )
+
     const rss3Key = SNS_RSS3_FIELD_KEY_MAP[identity?.identifier?.network as EnhanceableSite]
+    const { value: allSocialAccounts = EMPTY_LIST } = useSocialAccountsBySettings(identity)
+    const socialAccount = allSocialAccounts[0]
+
     return (
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.cardHeader}>
@@ -246,7 +256,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         {t('plugin_trader_rank', { rank: result.rank ?? coin.market_cap_rank })}
                                     </Typography>
                                 ) : null}
-                                {(displayResultList.length > 1 || rss3Key) && !isPreciseSearch ? (
+                                {(displayResultList.length > 1 || (socialAccount && rss3Key)) && !isPreciseSearch ? (
                                     <>
                                         <IconButton
                                             sx={{ padding: 0 }}
@@ -262,6 +272,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                 anchorEl={titleRef.current}
                                                 optionList={displayResultList}
                                                 setActive={setActive}
+                                                socialAccount={socialAccount}
                                                 identity={identity}
                                                 result={result}
                                                 onChange={setResult}
