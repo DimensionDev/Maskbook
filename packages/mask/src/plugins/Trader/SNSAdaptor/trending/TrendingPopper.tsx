@@ -8,11 +8,13 @@ import { PluginTraderMessages } from '../../messages.js'
 import { WalletMessages } from '../../../Wallet/messages.js'
 import { PluginTransakMessages } from '@masknet/plugin-transak'
 import type { PopperUnstyledOwnProps } from '@mui/base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export interface TrendingPopperProps extends Omit<PopperProps, 'children' | 'open'> {
     children?: (
         name?: string,
         type?: TrendingAPI.TagType,
+        currentResult?: Web3Helper.TokenResultAll,
         setActive?: (x: boolean) => void,
         badgeBounding?: DOMRect,
         identity?: SocialIdentity,
@@ -34,6 +36,7 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
     const [identity, setIdentity] = useState<SocialIdentity | undefined>()
     const [badgeBounding, setBadgeBounding] = useState<DOMRect | undefined>()
     const [address, setAddress] = useState('')
+    const [currentResult, setCurrentResult] = useState<Web3Helper.TokenResultAll>()
     const [type, setType] = useState<TrendingAPI.TagType | undefined>()
     const [anchorEl, setAnchorEl] = useState<PopperUnstyledOwnProps['anchorEl']>(null)
     const popper = useRef<HTMLDivElement | null>(null)
@@ -50,6 +53,7 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
     useEffect(() => {
         return PluginTraderMessages.trendingAnchorObserved.on((ev) => {
             setName(ev.name)
+            setCurrentResult(ev.currentResult)
             setType(ev.type)
             setBadgeBounding(ev.badgeBounding)
             setAddress(ev.address ?? '')
@@ -111,6 +115,7 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
                             {children?.(
                                 name,
                                 type,
+                                currentResult,
                                 setActive,
                                 badgeBounding,
                                 identity,
