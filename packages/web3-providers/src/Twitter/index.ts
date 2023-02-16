@@ -12,6 +12,7 @@ import {
     getUserNFTAvatar,
     getUserNFTContainer,
     staleUserViaIdentity,
+    getComputedUserSettings,
 } from './apis/index.js'
 import type { TwitterBaseAPI } from '../entry-types.js'
 import { fetchJSON } from '../entry-helpers.js'
@@ -32,14 +33,21 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
 
     async getUserSettings() {
         const defaults = getDefaultUserSettings()
+        const computed = getComputedUserSettings()
+
         try {
             const userSettings = await timeout(getUserSettings(), 5000)
+
             return {
                 ...defaults,
+                ...computed,
                 ...userSettings,
             }
         } catch {
-            return defaults
+            return {
+                ...defaults,
+                ...computed,
+            }
         }
     }
 

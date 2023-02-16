@@ -233,7 +233,12 @@ function createEvent(chainId: ChainId, event: OpenSeaAssetEvent): NonFungibleTok
     }
 }
 
-function createOrder(chainId: ChainId, event: OpenSeaAssetEvent): NonFungibleTokenOrder<ChainId, SchemaType> {
+function createOrder(
+    chainId: ChainId,
+    event: OpenSeaAssetEvent,
+    side: OrderSide,
+): NonFungibleTokenOrder<ChainId, SchemaType> {
+    const amount = side === OrderSide.Buy ? event.ending_price : event.ending_price
     return {
         id: `${event.asset.permalink}_${event.created_date}`,
         chainId,
@@ -245,7 +250,7 @@ function createOrder(chainId: ChainId, event: OpenSeaAssetEvent): NonFungibleTok
         taker: createAccount(event.to_account ?? event.winner_account),
         createdAt: event.created_date ? getUnixTime(new Date(event.created_date)) : undefined,
         price: {
-            [CurrencyType.USD]: new BigNumber(event.bid_amount ?? 0)
+            [CurrencyType.USD]: new BigNumber(amount ?? 0)
                 .dividedBy(scale10(1, event.payment_token?.decimals ?? 0))
                 .dividedBy(event.quantity)
                 .multipliedBy(event.payment_token?.usd_price ?? 1)
@@ -253,7 +258,7 @@ function createOrder(chainId: ChainId, event: OpenSeaAssetEvent): NonFungibleTok
         },
         priceInToken: event.payment_token
             ? {
-                  amount: event.bid_amount ?? '0',
+                  amount: amount ?? '0',
                   token: createERC20Token(
                       chainId,
                       event.payment_token.address,
@@ -377,16 +382,13 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 token_id: tokenId,
                 cursor: indicator?.id,
                 limit: size,
-                event_type: side === OrderSide.Buy ? 'offer_entered' : undefined,
+                event_type: side === OrderSide.Buy ? 'created' : undefined,
             }),
             chainId,
         )
         if (side === OrderSide.Sell) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
-        const offers =
-            response?.asset_events
-                ?.filter((x) => x.event_type === 'offer_entered')
-                .map((x) => createOrder(chainId, x)) ?? EMPTY_LIST
+        const offers = response?.asset_events?.map((x) => createOrder(chainId, x, side)) ?? EMPTY_LIST
 
         return createPageable(
             offers,
