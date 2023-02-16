@@ -78,7 +78,7 @@ export default memo(function Welcome() {
 
     const handleAgree = useCallback(async () => {
         if (allowedToCollect) {
-            await Services.Settings.setLog(true)
+            await Services.Settings.setTelemetryEnabled(true)
         }
         setAgreed(true)
         const from = params.get('from')

@@ -1,7 +1,7 @@
 import { Suspense, useMemo } from 'react'
 import type { Theme } from '@mui/material'
 import { EnvironmentContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { LogContextProvider } from '@masknet/web3-logs/hooks'
+import { TelemetryProvider } from '@masknet/web3-telemetry/hooks'
 import { I18NextProviderHMR, SharedContextProvider, SubscriptionProvider } from '@masknet/shared'
 import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
 import { ErrorBoundary, BuildInfo, useValueRef } from '@masknet/shared-base-ui'
@@ -44,11 +44,11 @@ function MaskUIRoot({ children }: React.PropsWithChildren<{}>) {
         <DialogStackingProvider hasGlobalBackdrop={false}>
             <EnvironmentContextProvider value={context}>
                 <Web3ContextProvider value={context}>
-                    <LogContextProvider>
+                    <TelemetryProvider>
                         <SubscriptionProvider>
                             <I18NextProviderHMR i18n={i18NextInstance}>{children}</I18NextProviderHMR>
                         </SubscriptionProvider>
-                    </LogContextProvider>
+                    </TelemetryProvider>
                 </Web3ContextProvider>
             </EnvironmentContextProvider>
         </DialogStackingProvider>

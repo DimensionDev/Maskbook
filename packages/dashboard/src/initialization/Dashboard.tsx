@@ -12,7 +12,7 @@ import {
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { LogContextProvider } from '@masknet/web3-logs/hooks'
+import { TelemetryProvider } from '@masknet/web3-telemetry/hooks'
 import { EnvironmentContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { i18NextInstance, NetworkPluginID, queryRemoteI18NBundle } from '@masknet/shared-base'
 
@@ -44,7 +44,7 @@ export default function DashboardRoot() {
     return (
         <EnvironmentContextProvider value={Web3ContextType}>
             <Web3ContextProvider value={Web3ContextType}>
-                <LogContextProvider>
+                <TelemetryProvider>
                     <I18NextProviderHMR i18n={i18NextInstance}>
                         <StyledEngineProvider injectFirst>
                             <ThemeProvider theme={theme}>
@@ -66,7 +66,7 @@ export default function DashboardRoot() {
                             </ThemeProvider>
                         </StyledEngineProvider>
                     </I18NextProviderHMR>
-                </LogContextProvider>
+                </TelemetryProvider>
             </Web3ContextProvider>
         </EnvironmentContextProvider>
     )
