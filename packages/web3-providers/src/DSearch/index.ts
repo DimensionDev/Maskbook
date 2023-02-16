@@ -352,7 +352,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         return result.sort((a, b) => {
             if (
                 a.rank &&
-                a.rank < 200 &&
+                a.rank <= 200 &&
                 a.type === SearchResultType.FungibleToken &&
                 b.type !== SearchResultType.FungibleToken
             )
