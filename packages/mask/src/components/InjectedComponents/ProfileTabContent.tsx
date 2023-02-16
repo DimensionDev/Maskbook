@@ -17,7 +17,7 @@ import {
     PluginCardFrameMini,
     useCurrentPersonaConnectStatus,
     useSocialAccountsBySettings,
-    TokenWithSocialGroup,
+    TokenWithSocialGroupMenu,
 } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
@@ -413,7 +413,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                             </Button>
 
                             {trendingResult && collectionList?.length ? (
-                                <TokenWithSocialGroup
+                                <TokenWithSocialGroupMenu
                                     walletMenuOpen={menuOpen}
                                     setWalletMenuOpen={setMenuOpen}
                                     containerRef={buttonRef}

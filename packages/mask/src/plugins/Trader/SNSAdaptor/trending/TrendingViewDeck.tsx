@@ -7,7 +7,7 @@ import {
     TokenSecurityBar,
     useTokenSecurity,
     useSocialAccountsBySettings,
-    TokenWithSocialGroup,
+    TokenWithSocialGroupMenu,
 } from '@masknet/shared'
 import { NetworkPluginID, PluginID, EMPTY_LIST, EnhanceableSite, CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -289,7 +289,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         </IconButton>
                                         <ThemeProvider
                                             theme={theme.palette.mode === 'light' ? MaskLightTheme : MaskDarkTheme}>
-                                            <TokenWithSocialGroup
+                                            <TokenWithSocialGroupMenu
                                                 disablePortal={false}
                                                 disableScrollLock={false}
                                                 walletMenuOpen={walletMenuOpen}

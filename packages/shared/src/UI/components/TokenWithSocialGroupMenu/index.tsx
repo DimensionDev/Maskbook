@@ -83,7 +83,7 @@ const menuGroupNameMap: Record<'FungibleToken' | 'NonFungibleToken' | 'NonFungib
     NonFungibleCollection: 'NFT',
 }
 
-export const TokenWithSocialGroup: FC<PropsWithChildren<TokenWithSocialGroupProps>> = ({
+export const TokenWithSocialGroupMenu: FC<PropsWithChildren<TokenWithSocialGroupProps>> = ({
     currentCollection,
     collectionList,
     disablePortal = true,

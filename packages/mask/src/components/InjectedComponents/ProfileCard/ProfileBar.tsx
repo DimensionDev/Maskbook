@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid'
 import { Icons } from '@masknet/icons'
 import { Box, Link, Typography } from '@mui/material'
 import { useWeb3State, useChainContext } from '@masknet/web3-hooks-base'
-import { AddressItem, Image, useSnackbarCallback, TokenWithSocialGroup } from '@masknet/shared'
+import { AddressItem, Image, useSnackbarCallback, TokenWithSocialGroupMenu } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -194,7 +194,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                     ) : null}
                 </Box>
 
-                <TokenWithSocialGroup
+                <TokenWithSocialGroupMenu
                     walletMenuOpen={walletMenuOpen}
                     setWalletMenuOpen={setWalletMenuOpen}
                     containerRef={containerRef}
