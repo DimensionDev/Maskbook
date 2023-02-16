@@ -341,7 +341,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 <Paper className={classes.body} elevation={0}>
                     {children}
                 </Paper>
-                {isCollectionProjectPopper || (isTokenTagPopper && currentTab !== ContentTabs.Swap) ? (
+                {(isCollectionProjectPopper || isTokenTagPopper) && currentTab !== ContentTabs.Swap ? (
                     <section className={classes.pluginDescriptorWrapper}>
                         <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
                     </section>

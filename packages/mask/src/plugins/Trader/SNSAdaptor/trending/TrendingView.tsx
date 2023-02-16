@@ -65,6 +65,8 @@ const useStyles = makeStyles<{
                   maxHeight: props.isCollectionProjectPopper
                       ? props.currentTab === ContentTabs.Price
                           ? 450
+                          : props.currentTab === ContentTabs.Swap
+                          ? 'unset'
                           : 374
                       : 'unset',
                   overflow: 'hidden',
