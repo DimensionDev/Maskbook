@@ -1,5 +1,6 @@
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import {
+    ChainBoundary,
     EthereumERC20TokenApprovedBoundary,
     FungibleTokenInput,
     InjectedDialog,
@@ -242,24 +243,29 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
             </DialogContent>
             <DialogActions className={classes.actions}>
                 <PluginWalletStatusBar>
-                    <WalletConnectedBoundary expectedChainId={chainId}>
-                        <EthereumERC20TokenApprovedBoundary
-                            classes={{ button: classes.button }}
-                            amount={total.toFixed(0)}
-                            spender={BULK_CHECKOUT_ADDRESS}
-                            token={token.schema === SchemaType.ERC20 ? token : undefined}>
-                            <ActionButton
-                                className={classes.button}
-                                loading={loading}
-                                fullWidth
-                                size="large"
-                                startIcon={<Icons.ConnectWallet size={18} />}
-                                disabled={!!validationMessage || loading}
-                                onClick={donate}>
-                                {validationMessage || t.donate()}
-                            </ActionButton>
-                        </EthereumERC20TokenApprovedBoundary>
-                    </WalletConnectedBoundary>
+                    <ChainBoundary
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        switchChainWithoutPopup
+                        expectedChainId={chainId}>
+                        <WalletConnectedBoundary expectedChainId={chainId}>
+                            <EthereumERC20TokenApprovedBoundary
+                                classes={{ button: classes.button }}
+                                amount={total.toFixed(0)}
+                                spender={BULK_CHECKOUT_ADDRESS}
+                                token={token.schema === SchemaType.ERC20 ? token : undefined}>
+                                <ActionButton
+                                    className={classes.button}
+                                    loading={loading}
+                                    fullWidth
+                                    size="large"
+                                    startIcon={<Icons.ConnectWallet size={18} />}
+                                    disabled={!!validationMessage || loading}
+                                    onClick={donate}>
+                                    {validationMessage || t.donate()}
+                                </ActionButton>
+                            </EthereumERC20TokenApprovedBoundary>
+                        </WalletConnectedBoundary>
+                    </ChainBoundary>
                 </PluginWalletStatusBar>
             </DialogActions>
         </InjectedDialog>
