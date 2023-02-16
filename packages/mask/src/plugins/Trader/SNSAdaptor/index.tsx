@@ -64,6 +64,7 @@ const sns: Plugin.SNSAdaptor.Definition<
                 return [
                     SearchResultType.FungibleToken,
                     SearchResultType.NonFungibleToken,
+                    SearchResultType.NonFungibleCollection,
                     SearchResultType.CollectionListByTwitterHandler,
                 ].includes(result.type)
             },
