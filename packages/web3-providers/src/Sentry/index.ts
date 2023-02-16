@@ -1,4 +1,4 @@
-import type { Event } from '@sentry/browser'
+import { Breadcrumbs, Event, GlobalHandlers } from '@sentry/browser'
 import { getSiteType, getAgentType } from '@masknet/shared-base'
 import { LoggerAPI } from '../types/Logger.js'
 
@@ -7,24 +7,34 @@ export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
         Sentry.init({
             dsn: process.env.MASK_SENTRY_DSN,
             defaultIntegrations: false,
-            integrations: [],
+            integrations: [
+                // global error and unhandledrejection event
+                new GlobalHandlers(),
+                // global fetch error
+                new Breadcrumbs({
+                    console: false,
+                    dom: false,
+                    xhr: false,
+                    fetch: true,
+                    history: false,
+                }),
+            ],
             environment: process.env.NODE_ENV,
             tracesSampleRate: 1.0,
         })
+
+        // set global tags
+        Sentry.setTag('agent', getAgentType())
+        Sentry.setTag('site', getSiteType())
+        Sentry.setTag('version', process.env.VERSION)
+        Sentry.setTag('ua', navigator.userAgent)
     }
 
+    // The sentry needs to be opened at the runtime.
     private status = 'off'
     private userOptions?: LoggerAPI.UserOptions
     private deviceOptions?: LoggerAPI.DeviceOptions
     private networkOptions?: LoggerAPI.NetworkOptions
-
-    get enable() {
-        return this.status === 'on'
-    }
-
-    set enable(on: boolean) {
-        this.status = on ? 'on' : 'off'
-    }
 
     get user() {
         return {
@@ -87,40 +97,47 @@ export class SentryAPI implements LoggerAPI.Provider<Event, Event> {
         return {
             message,
             level: type === LoggerAPI.TypeID.Event ? 'info' : 'error',
-            user: options.user
+            user: options.user?.account
                 ? {
-                      username: options.user?.userID ?? options.user.account,
+                      username: options.user.account,
                   }
                 : undefined,
             tags: {
                 type: LoggerAPI.TypeID.Event,
                 chain_id: options.network?.chainId,
                 plugin_id: options.network?.pluginID,
-                agent: getAgentType(),
-                site: getSiteType(),
-                ua: navigator.userAgent,
-                version: process.env.VERSION,
+                network_id: options.network?.networkID,
+                network: options.network?.networkType,
+                provider: options.network?.providerType,
             },
             exception: {},
             breadcrumbs: [],
         }
     }
 
-    createEvent(options: LoggerAPI.EventOptions): Event {
+    private createEvent(options: LoggerAPI.EventOptions): Event {
         return this.createCommonEvent(LoggerAPI.TypeID.Event, options.eventID, options)
     }
 
-    createException(options: LoggerAPI.ExceptionOptions): Event {
+    private createException(options: LoggerAPI.ExceptionOptions): Event {
         return this.createCommonEvent(LoggerAPI.TypeID.Exception, options.exceptionID, options)
     }
 
+    enable() {
+        this.status = 'on'
+    }
+
+    disable() {
+        this.status = 'off'
+    }
+
     captureEvent(options: LoggerAPI.EventOptions) {
-        if (!this.enable) return
+        if (this.status === 'off') return
         Sentry.captureEvent(this.createEvent(options))
     }
 
     captureException(options: LoggerAPI.ExceptionOptions) {
-        if (!this.enable) return
+        if (this.status === 'off') return
         Sentry.captureException(options.error, this.createException(options))
     }
 }

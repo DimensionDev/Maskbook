@@ -4,6 +4,7 @@ import { CARD_HEIGHT, CARD_WIDTH } from './constants.js'
 
 interface Result {
     active: boolean
+    setActive: (x: boolean) => void
     style: CSSProperties
 }
 
@@ -104,5 +105,5 @@ export function useControlProfileCard(
         }
     }, [hideProfileCard])
 
-    return { style, active }
+    return { style, active, setActive }
 }

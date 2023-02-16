@@ -97,14 +97,18 @@ export const TokenSwapCard: FC<TokenSwapCardProps> = ({ feed, ...rest }) => {
                 <div className={cx(classes.token, verbose ? classes.verboseToken : null)}>
                     <div className={classes.iconStack}>
                         <Image
+                            optimistic
                             classes={{ container: classes.tokenIcon }}
                             src={metadata.from.image}
+                            fallback={<img src={metadata.from.image} className={classes.tokenIcon} />}
                             height={32}
                             width={32}
                         />
                         <Image
+                            optimistic
                             classes={{ container: classes.tokenIcon }}
                             src={metadata.to.image}
+                            fallback={<img src={metadata.to.image} className={classes.tokenIcon} />}
                             height={32}
                             width={32}
                         />

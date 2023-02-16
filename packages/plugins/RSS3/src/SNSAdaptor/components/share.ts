@@ -81,7 +81,7 @@ const platformIconMap: Record<Lowercase<RSS3BaseAPI.Network | RSS3BaseAPI.Platfo
     // Networks
     ethereum: Icons.ETH,
     binance_smart_chain: Icons.BSC,
-    polygon: Icons.PolygonScan,
+    polygon: Icons.Polygon,
     xdai: Icons.Gnosis,
     arbitrum: Icons.Arbitrum,
     optimism: Icons.Optimism,

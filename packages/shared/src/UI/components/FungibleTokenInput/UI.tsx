@@ -6,9 +6,9 @@ import {
     Chip,
     lighten,
     inputBaseClasses,
-    alpha,
     chipClasses,
     InputBaseProps,
+    alpha,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -80,14 +80,17 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     maxChip: {
-        backgroundColor: alpha(theme.palette.maskColor.primary, 0.1),
+        background: 'inherit',
         color: theme.palette.maskColor.primary,
         borderRadius: 4,
         fontSize: 14,
+        fontWeight: 700,
         lineHeight: '18px',
-        padding: '3px 12px',
+        padding: '3px 4px',
         cursor: 'pointer',
-
+        '&:hover': {
+            background: alpha(theme.palette.maskColor.white, 0.2),
+        },
         [`& > .${chipClasses.label}`]: {
             padding: 0,
         },
@@ -143,35 +146,32 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                 startAdornment={<Typography className={cx(classes.label, classes.title)}>{label}</Typography>}
                 endAdornment={
                     <Box className={classes.control} justifyContent={disableBalance ? 'flex-end' : undefined}>
-                        {!disableBalance ? (
-                            <Typography className={classes.label} display="flex" alignItems="center">
-                                {isNative ? t.available_balance() : t.balance()}:
-                                <Typography className={classes.balance} component="span">
-                                    {token && !loadingBalance ? (
-                                        <FormattedBalance
-                                            value={balance}
-                                            decimals={token?.decimals}
-                                            significant={maxAmountSignificant}
-                                            formatter={formatBalance}
-                                        />
-                                    ) : (
-                                        '--'
-                                    )}
-                                </Typography>
-                            </Typography>
-                        ) : null}
+                        <Typography className={classes.label} display="flex" alignItems="center">
+                            {!disableBalance ? (
+                                <>
+                                    {isNative ? t.available_balance() : t.balance()}:
+                                    <Typography className={classes.balance} component="span">
+                                        {token && !loadingBalance ? (
+                                            <FormattedBalance
+                                                value={balance}
+                                                decimals={token?.decimals}
+                                                significant={maxAmountSignificant}
+                                                formatter={formatBalance}
+                                            />
+                                        ) : (
+                                            '--'
+                                        )}
+                                    </Typography>
+                                </>
+                            ) : null}
+                            {!disableMax ? (
+                                <Chip className={classes.maxChip} label="MAX" size="small" onClick={onMaxClick} />
+                            ) : null}
+                        </Typography>
                         {!disableToken ? (
                             <Box display="flex" alignItems="center" columnGap="12px">
                                 {token ? (
                                     <>
-                                        {!disableMax ? (
-                                            <Chip
-                                                className={classes.maxChip}
-                                                label="MAX"
-                                                size="small"
-                                                onClick={onMaxClick}
-                                            />
-                                        ) : null}
                                         <Chip
                                             size="small"
                                             onClick={onSelectToken}

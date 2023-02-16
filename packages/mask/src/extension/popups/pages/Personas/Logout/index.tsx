@@ -24,6 +24,7 @@ import { Trans } from 'react-i18next'
 import { first } from 'lodash-es'
 import { useContainer } from 'unstated-next'
 import { PopupContext } from '../../../hook/usePopupContext.js'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -139,6 +140,7 @@ const Logout = memo(() => {
             manageWallets={manageWallets}
             selectedPersona={selectedPersona}
             backupPassword={backupPassword ?? ''}
+            verifyPaymentPassword={WalletRPC.verifyPassword}
             loading={loading}
             onLogout={onLogout}
             onCancel={() => navigate(-1)}
@@ -149,6 +151,7 @@ const Logout = memo(() => {
 export interface LogoutUIProps {
     manageWallets: Wallet[]
     selectedPersona?: PersonaInformation
+    verifyPaymentPassword: (password: string) => Promise<boolean>
     backupPassword: string
     loading: boolean
     onCancel: () => void
@@ -156,18 +159,27 @@ export interface LogoutUIProps {
 }
 
 export const LogoutUI = memo<LogoutUIProps>(
-    ({ backupPassword, loading, onLogout, onCancel, selectedPersona, manageWallets }) => {
+    ({ backupPassword, loading, onLogout, onCancel, selectedPersona, manageWallets, verifyPaymentPassword }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
         const [password, setPassword] = useState('')
+        const [paymentPassword, setPaymentPassword] = useState('')
         const [error, setError] = useState(false)
+        const [paymentPasswordError, setPaymentPasswordError] = useState('')
 
         useTitle(t('popups_log_out'))
 
-        const onConfirm = useCallback(() => {
+        const onConfirm = useCallback(async () => {
+            if (manageWallets.length && paymentPassword) {
+                const verified = await verifyPaymentPassword(paymentPassword)
+                if (!verified) {
+                    setPaymentPasswordError(t('popups_wallet_unlock_error_password'))
+                    return
+                }
+            }
             if (!backupPassword || backupPassword === password) onLogout()
             else setError(true)
-        }, [onLogout, backupPassword, password])
+        }, [onLogout, backupPassword, password, paymentPassword, manageWallets.length])
 
         return (
             <>
@@ -223,6 +235,21 @@ export const LogoutUI = memo<LogoutUIProps>(
                             onChange={(e) => setPassword(e.target.value)}
                             error={error}
                             helperText={error ? t('popups_password_do_not_match') : ''}
+                        />
+                    </div>
+                ) : null}
+
+                {manageWallets.length ? (
+                    <div className={classes.password}>
+                        <PasswordField
+                            placeholder={t('popups_wallet_backup_input_password')}
+                            value={paymentPassword}
+                            error={!!paymentPasswordError}
+                            helperText={paymentPasswordError}
+                            onChange={(e) => {
+                                if (paymentPasswordError) setPaymentPasswordError('')
+                                setPaymentPassword(e.target.value)
+                            }}
                         />
                     </div>
                 ) : null}

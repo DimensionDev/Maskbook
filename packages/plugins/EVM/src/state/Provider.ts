@@ -32,7 +32,7 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
         })
     }
 
-    override setupSubscriptions() {
+    protected override setupSubscriptions() {
         this.providerType = mapSubscription(this.storage.providerType.subscription, (provider) => provider)
 
         this.chainId = mapSubscription(

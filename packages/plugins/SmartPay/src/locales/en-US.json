@@ -49,7 +49,7 @@
     "setup_smart_pay_two": "Free gas experience in Mask Network’s dApps like Lukcy Drop, ITO and Tips.",
     "setup_smart_pay_three": "Your private key and Json file can only be used in Smart Pay.",
     "scan_address_to_payment": "Scan address to receive payment",
-    "remain_mask_tips": "Remaining authorization {{balance}} {{symbol}} as gas feee",
+    "remain_mask_tips": "Remaining authorization {{- balance}} {{symbol}} as gas feee",
     "remain_times_tips_one": "Remaining {{count}} time to create SmartPay wallet for the above account.",
     "remain_times_tips_other": "Remaining {{count}} times to create SmartPay wallet for the above account.",
     "personas": "Personas",

@@ -184,6 +184,9 @@ export interface OpenPageConfirmEvent {
     position?: 'center' | 'top-right'
 }
 
+export interface HideSearchResultInspectorEvent {
+    hide: boolean
+}
 export interface NFTAvatarEvent {
     userId: string
     avatarId: string

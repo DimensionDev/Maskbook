@@ -610,6 +610,7 @@ export function ITO(props: ITO_Props) {
                                             .integerValue(),
                                         exchangeToken.decimals,
                                         exchangeToken.decimals,
+                                        exchangeToken.decimals,
                                         true,
                                     )}
                                     token={token}

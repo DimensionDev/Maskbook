@@ -144,8 +144,8 @@ export function useTrendingById(
                           type: trending?.coin.type ?? TokenType.Fungible,
                           decimals: trending?.coin.decimals || detailedToken?.decimals || 0,
                           contract_address:
-                              trending?.contracts?.[0]?.address ?? trending?.coin.contract_address ?? address,
-                          chainId: trending?.contracts?.[0]?.chainId ?? trending?.coin.chainId ?? chainId,
+                              trending?.coin.contract_address ?? trending?.contracts?.[0]?.address ?? address,
+                          chainId: trending?.coin.chainId ?? trending?.contracts?.[0]?.chainId ?? chainId,
                       },
                   }
                 : null,

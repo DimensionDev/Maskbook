@@ -1,18 +1,16 @@
 import { FC, PropsWithChildren, useCallback, useMemo, useContext } from 'react'
-import { groupBy, toPairs, isEqual } from 'lodash-es'
+import { groupBy, toPairs } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { openWindow } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { TokenIcon, useSocialAccountsBySettings, FormattedAddress, AccountIcon } from '@masknet/shared'
+import { useSocialAccountsBySettings, FormattedAddress, AccountIcon, TokenMenuList } from '@masknet/shared'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../../utils/index.js'
 import { EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
 import { SearchResultType, SocialIdentity, SocialAddressType } from '@masknet/web3-shared-base'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
-import { RadioButtonUnchecked as RadioButtonUncheckedIcon } from '@mui/icons-material'
 import { Divider, MenuItem, Stack, Typography } from '@mui/material'
-import { useTheme } from '@mui/system'
 import { TrendingViewContext } from './context.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -48,22 +46,10 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         justifyContent: 'center',
     },
-    itemText: {
-        flexDirection: 'row',
-        flexGrow: 1,
-        justifyContent: 'space-around',
-        gap: theme.spacing(1),
-        alignItems: 'center',
-        overflow: 'hidden',
-    },
     addressItem: {
         flexDirection: 'row',
         alignItems: 'center',
         overflow: 'hidden',
-    },
-    itemCheckout: {
-        display: 'flex',
-        alignItems: 'center',
     },
     divider: {
         margin: theme.spacing(1, 0),
@@ -71,95 +57,16 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
         left: 12,
     },
-    rank: {
-        marginRight: 4,
-    },
-    name: {
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-    },
-    symbol: {
-        marginLeft: theme.spacing(0.5),
-    },
-    coinIcon: {
-        marginRight: 4,
-    },
-    checkedIcon: {
-        filter: 'drop-shadow(0px 4px 10px rgba(28, 104, 243, 0.2))',
-        color: theme.palette.maskColor.primary,
-    },
     addressIcon: {
         marginLeft: 4,
         color: theme.palette.maskColor.secondaryDark,
     },
 }))
 
-interface TokenMenuListProps {
-    options: Web3Helper.TokenResultAll[]
-    result: Web3Helper.TokenResultAll
-    onSelect(value: Web3Helper.TokenResultAll): void
-}
-
-const TokenMenuList: FC<TokenMenuListProps> = ({ options, result, onSelect }) => {
-    const { classes } = useStyles()
-    const theme = useTheme()
-    return (
-        <>
-            {options.map((x, i) => {
-                const selected = isEqual(x, result)
-                return (
-                    <MenuItem className={classes.menuItem} key={i} onClick={() => onSelect(x)}>
-                        <TokenIcon
-                            className={classes.coinIcon}
-                            logoURL={x.logoURL}
-                            address={x.address || ''}
-                            symbol={x.symbol}
-                            size={20}
-                        />
-
-                        <Stack className={classes.itemText}>
-                            <Typography
-                                fontSize={14}
-                                fontWeight={700}
-                                flexGrow={1}
-                                overflow="hidden"
-                                textOverflow="ellipsis">
-                                <span className={classes.name}>{x.name}</span>
-                                {x.symbol ? <span className={classes.symbol}>({x.symbol})</span> : null}
-                            </Typography>
-                            <div className={classes.itemCheckout}>
-                                {x.rank ? (
-                                    <Typography
-                                        fontSize={14}
-                                        fontWeight={700}
-                                        flexGrow={1}
-                                        overflow="hidden"
-                                        className={classes.rank}
-                                        textOverflow="ellipsis">
-                                        #{x.rank}
-                                    </Typography>
-                                ) : null}
-                                {selected ? (
-                                    <Icons.CheckCircle size={20} className={classes.checkedIcon} />
-                                ) : (
-                                    <RadioButtonUncheckedIcon
-                                        style={{ fontSize: 20, color: theme.palette.maskColor.secondaryLine }}
-                                    />
-                                )}
-                            </div>
-                        </Stack>
-                    </MenuItem>
-                )
-            })}
-        </>
-    )
-}
-
 export interface SocialMenuProps {
     open: boolean
     anchorEl: HTMLElement | null
     isFromPopup: boolean
-    hideInspector?: (x: boolean) => void
     optionList: Web3Helper.TokenResultAll[]
     identity?: SocialIdentity
     result: Web3Helper.TokenResultAll
@@ -179,7 +86,6 @@ export const SocialMenu: FC<PropsWithChildren<SocialMenuProps>> = ({
     result,
     optionList,
     isFromPopup = false,
-    hideInspector,
     identity,
     setActive,
     anchorEl,
@@ -202,8 +108,7 @@ export const SocialMenu: FC<PropsWithChildren<SocialMenuProps>> = ({
 
     const openRss3Profile = useCallback(() => {
         if (!isFromPopup) {
-            hideInspector?.(true)
-            return
+            return CrossIsolationMessages.events.hideSearchResultInspectorEvent.sendToLocal({ hide: true })
         }
 
         if (!identity?.identifier?.userId || !badgeBounding) return
@@ -216,7 +121,7 @@ export const SocialMenu: FC<PropsWithChildren<SocialMenuProps>> = ({
         })
         onClose?.()
         setActive?.(false)
-    }, [JSON.stringify(identity), isFromPopup])
+    }, [JSON.stringify(identity), isFromPopup, badgeBounding])
 
     const menuItems = useMemo(() => {
         const groups: Array<

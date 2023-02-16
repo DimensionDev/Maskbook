@@ -90,6 +90,11 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const isBalanceInsufficient = new BigNumber(transactionValue).isLessThanOrEqualTo(0)
     const total = isNativeToken ? (isBalanceInsufficient ? '0' : transactionValue) : (settings?.total as string)
     const formatTotal = formatBalance(total, settings?.token?.decimals ?? 18, isNativeToken ? 3 : 0)
+    const formatAvg = formatBalance(
+        new BigNumber(total).div(settings?.shares ?? 1),
+        settings?.token?.decimals ?? 18,
+        isNativeToken ? 3 : 0,
+    )
     const [{ loading: isCreating }, createCallback] = useCreateCallback(
         { ...settings!, total },
         contract_version,
@@ -249,10 +254,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                         </Grid>
                         <Grid item xs={6}>
                             <Typography variant="body1" color="textPrimary" align="right">
-                                {isBalanceInsufficient
-                                    ? '0'
-                                    : new BigNumber(formatTotal).div(settings?.shares ?? 1).toFixed(6)}{' '}
-                                {settings?.token?.symbol}
+                                {isBalanceInsufficient ? '0' : formatAvg} {settings?.token?.symbol}
                             </Typography>
                         </Grid>
                     </>

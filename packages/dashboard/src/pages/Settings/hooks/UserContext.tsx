@@ -79,7 +79,8 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
 
     const confirmPassword = (f: ConfirmPasswordCallback, option?: ConfirmPasswordOption) => {
         const { force = true } = option ?? {}
-        if (!force && !user.backupPassword) {
+
+        if (!force && !user.backupPassword && !option?.hasSmartPay) {
             f()
         } else {
             setConfirmCallback([f])
