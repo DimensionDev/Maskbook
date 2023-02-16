@@ -25,7 +25,11 @@ export class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId
             }),
         )
 
-        const trustTokenAssets = await this.contractFungibleToken.getAssets(address, trustedFungibleTokens, options)
+        const trustTokenAssets = await this.contractFungibleToken.getTrustedAssets(
+            address,
+            trustedFungibleTokens,
+            options,
+        )
 
         return createPageable(
             unionWith(

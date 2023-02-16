@@ -52,7 +52,7 @@ export class ContractFungibleTokenAPI implements FungibleTokenAPI.Provider<Chain
         }
     }
 
-    async getAssets(
+    async getTrustedAssets(
         address: string,
         trustedFungibleTokens?: Array<FungibleToken<ChainId, SchemaType>>,
         options?: HubOptions<ChainId>,
