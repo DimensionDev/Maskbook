@@ -42,9 +42,6 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
 import Services from '../../extension/service.js'
 
-const MENU_ITEM_HEIGHT = 40
-const MENU_LIST_PADDING = 8
-
 const useStyles = makeStyles()((theme) => ({
     root: {
         width: isFacebook(activatedSocialNetworkUI) ? 876 : 'auto',

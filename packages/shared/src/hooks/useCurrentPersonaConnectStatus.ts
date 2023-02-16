@@ -105,10 +105,7 @@ export function useCurrentPersonaConnectStatus(
 
         // handle had persona and connected current sns, then check the nextID
         try {
-            const nextIDInfo = await NextIDProof.queryExistedBindingByPersona(
-                currentPersona.identifier.publicKeyAsHex,
-                false,
-            )
+            const nextIDInfo = await NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
             const verifiedProfile = nextIDInfo?.proofs.find(
                 (x) =>
                     isSameProfile(resolveNextIDIdentityToProfile(x.identity, x.platform), currentProfile?.identifier) &&

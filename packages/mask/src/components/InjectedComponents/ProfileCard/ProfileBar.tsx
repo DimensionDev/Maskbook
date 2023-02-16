@@ -16,8 +16,6 @@ import { TrendingAPI } from '@masknet/web3-providers/types'
 import { useCollectionByTwitterHandler } from '../../../plugins/Trader/trending/useTrending.js'
 import { PluginTraderMessages } from '../../../plugins/Trader/messages.js'
 
-const MENU_ITEM_HEIGHT = 40
-const MENU_LIST_PADDING = 8
 const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
     root: {
         display: 'flex',

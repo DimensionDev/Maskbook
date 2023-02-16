@@ -94,7 +94,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         await staleNextIDCached(cacheKeyOfQueryPlatform)
     }
 
-    async queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean) {
+    async queryExistedBindingByPersona(personaPublicKey: string) {
         const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
         const { ids } = await fetchJSON<NextIDBindings>(url)
         // Will have only one item when query by personaPublicKey
@@ -121,10 +121,12 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     async queryLatestBindingByPlatform(
         platform: NextIDPlatform,
         identity: string,
+        publicKey?: string,
     ): Promise<NextIDPersonaBindings | null> {
         if (!platform && !identity) return null
 
         const result = await this.queryExistedBindingByPlatform(platform, identity, 1)
+        if (publicKey) return result.find((x) => x.persona === publicKey) ?? null
         return first(result) ?? null
     }
 
@@ -156,7 +158,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return []
     }
 
-    async queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string, enableCache?: boolean) {
+    async queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string) {
         try {
             if (!platform && !identity) return false
 
