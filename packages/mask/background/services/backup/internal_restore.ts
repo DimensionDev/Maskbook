@@ -145,7 +145,7 @@ function restorePosts(backup: Iterable<NormalizedBackup.PostBackup>) {
             const rec: PostRecord = {
                 identifier: post.identifier,
                 foundAt: post.foundAt,
-                postBy: post.postBy,
+                postBy: post.postBy.unwrapOr(undefined),
                 recipients: 'everyone',
             }
             if (post.encryptBy.some) rec.encryptBy = post.encryptBy.val
