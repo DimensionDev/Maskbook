@@ -274,8 +274,12 @@ export const ProfileBar = memo<ProfileBarProps>(
                         </div>
                     ) : null}
                     <div key="rss3" className={classes.group}>
-                        <Typography className={classes.groupName}>{t('address')}</Typography>
-                        <Divider className={classes.divider} />
+                        {trendingResult ? (
+                            <>
+                                <Typography className={classes.groupName}>{t('address')}</Typography>
+                                <Divider className={classes.divider} />
+                            </>
+                        ) : null}
                         {socialAccounts.map((x) => {
                             return (
                                 <MenuItem
