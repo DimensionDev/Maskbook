@@ -20,7 +20,6 @@
     "@masknet/web3-constants": "workspace:^",
     "@masknet/web3-contracts": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
-    "@walletconnect/client": "1.7.8",
     "bignumber.js": "9.1.0",
     "ethereum-blockies": "^0.1.1",
     "fortmatic": "^2.2.1",
