@@ -37,11 +37,10 @@ const sns: Plugin.SNSAdaptor.Definition<
     SearchResultInspector: {
         ID: PluginID.Trader,
         UI: {
-            Content({ result: _resultList, isProfilePage, identity }) {
+            Content({ currentResult, resultList, isProfilePage, identity }) {
                 const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-                const resultList = _resultList as Web3Helper.TokenResultAll[]
-                if (!resultList.length) return null
-                const { chainId, keyword, pluginID } = resultList[0]
+                if (!resultList.length || !currentResult) return null
+                const { chainId, keyword, pluginID } = currentResult
                 return (
                     <Web3ContextProvider
                         value={{
@@ -53,7 +52,11 @@ const sns: Plugin.SNSAdaptor.Definition<
                             isProfilePage={Boolean(isProfilePage)}
                             isTokenTagPopper={false}
                             isPreciseSearch={Boolean(Others?.isValidAddress(keyword))}>
-                            <TrendingView resultList={resultList} identity={identity} />
+                            <TrendingView
+                                resultList={resultList as Web3Helper.TokenResultAll[]}
+                                identity={identity}
+                                currentResult={currentResult as Web3Helper.TokenResultAll}
+                            />
                         </TrendingViewProvider>
                     </Web3ContextProvider>
                 )
@@ -64,6 +67,7 @@ const sns: Plugin.SNSAdaptor.Definition<
                 return [
                     SearchResultType.FungibleToken,
                     SearchResultType.NonFungibleToken,
+                    SearchResultType.NonFungibleCollection,
                     SearchResultType.CollectionListByTwitterHandler,
                 ].includes(result.type)
             },

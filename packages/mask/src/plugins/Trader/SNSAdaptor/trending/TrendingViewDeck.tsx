@@ -1,8 +1,15 @@
 import { Icons } from '@masknet/icons'
 import { useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { PluginTransakMessages, useTransakAllowanceCoin } from '@masknet/plugin-transak'
-import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
-import { NetworkPluginID, PluginID, EnhanceableSite } from '@masknet/shared-base'
+import {
+    FormattedCurrency,
+    Linking,
+    TokenSecurityBar,
+    useTokenSecurity,
+    useSocialAccountsBySettings,
+    TokenWithSocialGroupMenu,
+} from '@masknet/shared'
+import { NetworkPluginID, PluginID, EMPTY_LIST, EnhanceableSite, CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { MaskColors, MaskDarkTheme, MaskLightTheme, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -25,7 +32,6 @@ import { first, last, uniqBy } from 'lodash-es'
 import { useCallback, useContext, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { ContentTabs, Currency, Stat } from '../../types/index.js'
-import { SocialMenu } from './SocialMenu.js'
 import { PriceChanged } from './PriceChanged.js'
 import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
 import { TrendingViewDescriptor } from './TrendingViewDescriptor.js'
@@ -161,7 +167,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     } = props
 
     const { coin, market } = trending
-    const { isCollectionProjectPopper, isTokenTagPopper, isPreciseSearch } = useContext(TrendingViewContext)
+    const [walletMenuOpen, setWalletMenuOpen] = useState(false)
+    const { isCollectionProjectPopper, isTokenTagPopper, isPreciseSearch, badgeBounding } =
+        useContext(TrendingViewContext)
 
     const { t } = useI18N()
     const theme = useTheme()
@@ -196,15 +204,39 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     // #endregion
 
     const titleRef = useRef<HTMLElement>(null)
-    const [socialMenuOpen, setSocialMenuOpen] = useState(false)
+
     const coinAddress = coin.address || coin.contract_address
     const coinName = result.name || coin.name
 
     const displayResultList = uniqBy(
         [result, ...resultList],
-        (x) => `${x.address?.toLowerCase()}_${x.chainId}_${x.type}_${x.name?.toLowerCase()}`,
+        (x) => `${x.address?.toLowerCase()}_${x.chainId}_${x.type}_${x.name?.toLowerCase()}_${x.source}`,
     )
+
     const rss3Key = SNS_RSS3_FIELD_KEY_MAP[identity?.identifier?.network as EnhanceableSite]
+    const { value: socialAccounts = EMPTY_LIST } = useSocialAccountsBySettings(identity)
+
+    const openRss3Profile = useCallback(
+        (address: string) => {
+            if (!isCollectionProjectPopper) {
+                return CrossIsolationMessages.events.hideSearchResultInspectorEvent.sendToLocal({ hide: true })
+            }
+
+            if (!identity?.identifier?.userId || !badgeBounding) return
+
+            CrossIsolationMessages.events.profileCardEvent.sendToLocal({
+                open: true,
+                userId: identity?.identifier?.userId,
+                badgeBounding,
+                address,
+                openFromTrendingCard: true,
+            })
+
+            setActive?.(false)
+        },
+        [JSON.stringify(identity), isCollectionProjectPopper, badgeBounding],
+    )
+
     return (
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.cardHeader}>
@@ -246,26 +278,29 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         {t('plugin_trader_rank', { rank: result.rank ?? coin.market_cap_rank })}
                                     </Typography>
                                 ) : null}
-                                {(displayResultList.length > 1 || rss3Key) && !isPreciseSearch ? (
+                                {(displayResultList.length > 1 || (socialAccounts.length && rss3Key)) &&
+                                !isPreciseSearch ? (
                                     <>
                                         <IconButton
                                             sx={{ padding: 0 }}
                                             size="small"
-                                            onClick={() => setSocialMenuOpen((v) => !v)}>
+                                            onClick={() => setWalletMenuOpen((v) => !v)}>
                                             <Icons.ArrowDrop size={24} className={classes.icon} />
                                         </IconButton>
                                         <ThemeProvider
                                             theme={theme.palette.mode === 'light' ? MaskLightTheme : MaskDarkTheme}>
-                                            <SocialMenu
-                                                isFromPopup={isCollectionProjectPopper}
-                                                open={socialMenuOpen}
-                                                anchorEl={titleRef.current}
-                                                optionList={displayResultList}
-                                                setActive={setActive}
-                                                identity={identity}
-                                                result={result}
-                                                onChange={setResult}
-                                                onClose={() => setSocialMenuOpen(false)}
+                                            <TokenWithSocialGroupMenu
+                                                disablePortal={false}
+                                                disableScrollLock={false}
+                                                walletMenuOpen={walletMenuOpen}
+                                                setWalletMenuOpen={setWalletMenuOpen}
+                                                containerRef={titleRef}
+                                                onAddressChange={openRss3Profile}
+                                                collectionList={displayResultList}
+                                                socialAccounts={socialAccounts}
+                                                currentCollection={result}
+                                                onTokenChange={setResult}
+                                                fromSocialCard
                                             />
                                         </ThemeProvider>
                                     </>
@@ -341,7 +376,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 <Paper className={classes.body} elevation={0}>
                     {children}
                 </Paper>
-                {isCollectionProjectPopper || (isTokenTagPopper && currentTab !== ContentTabs.Swap) ? (
+                {(isCollectionProjectPopper || isTokenTagPopper) && currentTab !== ContentTabs.Swap ? (
                     <section className={classes.pluginDescriptorWrapper}>
                         <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
                     </section>

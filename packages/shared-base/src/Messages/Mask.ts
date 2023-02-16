@@ -126,6 +126,7 @@ export type ProfileCardEvent =
     | {
           open: true
           userId: string
+          address?: string
           badgeBounding: DOMRect
           openFromTrendingCard?: boolean
       }
