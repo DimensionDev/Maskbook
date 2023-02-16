@@ -1,3 +1,4 @@
+import { hexToRgb, rgbToHex } from '@mui/material'
 import { getStore } from './getDatabase.js'
 import { TwitterBaseAPI } from '../../entry-types.js'
 
@@ -31,5 +32,53 @@ export function getDefaultUserSettings(): TwitterBaseAPI.UserSettings {
         scale: TwitterBaseAPI.Scale.Normal,
         themeBackground: TwitterBaseAPI.ThemeMode.Light,
         themeColor: TwitterBaseAPI.ThemeColor.Blue,
+    }
+}
+
+export function getComputedUserSettings(): TwitterBaseAPI.UserSettings {
+    const getThemeBackground = () => {
+        const { backgroundColor } = getComputedStyle(document.body)
+        const rgb = backgroundColor.startsWith('#') ? hexToRgb(backgroundColor) : backgroundColor
+
+        switch (rgb.toLowerCase()) {
+            case 'rgb(255, 255, 255)':
+                return TwitterBaseAPI.ThemeMode.Light
+            case 'rgb(21, 32, 43)':
+                return TwitterBaseAPI.ThemeMode.Dim
+            case 'rgb(0, 0, 0)':
+                return TwitterBaseAPI.ThemeMode.Dark
+            default:
+                return
+        }
+    }
+
+    const getThemeColor = () => {
+        const tweetButton = document.querySelector('a[href="/compose/tweet"][data-testid="SideNav_NewTweet_Button"]')
+        if (!tweetButton) return
+
+        const { backgroundColor } = getComputedStyle(tweetButton)
+        const rgb = backgroundColor.startsWith('#') ? hexToRgb(backgroundColor) : backgroundColor
+
+        switch (rgb.toLowerCase()) {
+            case 'rgb(29, 155, 240)':
+                return TwitterBaseAPI.ThemeColor.Blue
+            case 'rgb(255, 212, 0)':
+                return TwitterBaseAPI.ThemeColor.Yellow
+            case 'rgb(120, 86, 255)':
+                return TwitterBaseAPI.ThemeColor.Purple
+            case 'rgb(249, 24, 128)':
+                return TwitterBaseAPI.ThemeColor.Magenta
+            case 'rgb(255, 122, 0)':
+                return TwitterBaseAPI.ThemeColor.Orange
+            case 'rgb(0, 186, 124)':
+                return TwitterBaseAPI.ThemeColor.Green
+            default:
+                return
+        }
+    }
+
+    return {
+        themeBackground: getThemeBackground(),
+        themeColor: getThemeColor(),
     }
 }
