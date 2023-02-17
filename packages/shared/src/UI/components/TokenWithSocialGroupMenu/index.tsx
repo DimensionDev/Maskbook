@@ -71,7 +71,7 @@ export interface TokenWithSocialGroupProps {
     disableScrollLock?: boolean
     setWalletMenuOpen: (a: boolean) => void
     containerRef: RefObject<HTMLElement>
-    onTokenChange?: (a: Web3Helper.TokenResultAll) => void
+    onTokenChange?: (a: Web3Helper.TokenResultAll, index: number) => void
     onClose?: () => void
     onAddressChange?: (address: string) => void
     fromSocialCard?: boolean
@@ -102,8 +102,8 @@ export const TokenWithSocialGroupMenu: FC<PropsWithChildren<TokenWithSocialGroup
     const t = useSharedI18N()
 
     const onSelect = useCallback(
-        (value: Web3Helper.TokenResultAll) => {
-            onTokenChange?.(value)
+        (value: Web3Helper.TokenResultAll, index: number) => {
+            onTokenChange?.(value, index)
             onClose?.()
         },
         [onTokenChange, onClose],

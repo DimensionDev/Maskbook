@@ -275,7 +275,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }
 
     const { value: collectionList } = useCollectionByTwitterHandler(currentVisitingUserId)
-    const [trendingResult, setTrendingResult] = useState(first(collectionList))
+    const [currentTrendingIndex, setCurrentTrendingIndex] = useState(0)
+    const trendingResult = collectionList?.[currentTrendingIndex]
 
     const { value: identity } = useSocialIdentityByUserId(currentVisitingUserId)
 
@@ -422,8 +423,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                     collectionList={collectionList}
                                     socialAccounts={socialAccounts}
                                     currentCollection={trendingResult}
-                                    onTokenChange={(currentResult) => {
-                                        setTrendingResult(currentResult)
+                                    onTokenChange={(currentResult, i) => {
+                                        setCurrentTrendingIndex(i)
                                         hideInspector(false)
                                         setMenuOpen(false)
                                     }}
