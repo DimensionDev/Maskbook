@@ -38,7 +38,7 @@ export function TradeView(props: TradeViewProps) {
         pluginID,
         TraderProps.defaultOutputCoin?.address ?? '',
         TraderProps.defaultOutputCoin,
-        { chainId },
+        { chainId: TraderProps.defaultOutputCoin?.chainId ?? chainId },
     )
 
     const { classes } = useStyles(undefined, { props })

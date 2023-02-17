@@ -3,13 +3,7 @@ import { useRef, useState, useEffect } from 'react'
 import { useAsync, useAsyncRetry, useAsyncFn } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { DSearch } from '@masknet/web3-providers'
-import {
-    TokenType,
-    NonFungibleTokenActivity,
-    SearchResultType,
-    NonFungibleCollectionResult,
-    FungibleTokenResult,
-} from '@masknet/web3-shared-base'
+import { TokenType, NonFungibleTokenActivity, SearchResultType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -32,10 +26,10 @@ export function useTrendingOverview(
 export function useCollectionByTwitterHandler(twitterHandler?: string) {
     return useAsync(async () => {
         if (!twitterHandler) return
-        return DSearch.search<
-            | NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-            | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        >(twitterHandler, SearchResultType.CollectionListByTwitterHandler)
+        return DSearch.search<Web3Helper.TokenResultAll>(
+            twitterHandler,
+            SearchResultType.CollectionListByTwitterHandler,
+        )
     }, [twitterHandler])
 }
 

@@ -5,7 +5,7 @@ export namespace ScamWarningAPI {
         path?: string
         category?: string
         subcategory?: string
-        description: string
+        description?: string
     }
 
     export interface Provider {

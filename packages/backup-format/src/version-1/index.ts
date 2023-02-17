@@ -60,6 +60,7 @@ export async function normalizeBackupVersion1(file: BackupJSONFileVersion1): Pro
                 mnemonic: None,
                 createdAt: None,
                 updatedAt: None,
+                address: None,
             }
             profile.linkedPersona = Some(personaID)
 

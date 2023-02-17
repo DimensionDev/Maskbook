@@ -11,8 +11,8 @@ export const appearanceSettings = createGlobalSettings<Appearance>('appearance',
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__)
 languageSettings.addListener(updateLanguage)
 
-export const logSettings = createGlobalSettings<boolean>('log', false)
-logSettings.addListener((x) => (x ? Sentry.enable() : Sentry.disable()))
+export const telemetrySettings = createGlobalSettings<boolean>('log', false)
+telemetrySettings.addListener((x) => (x ? Sentry.enable() : Sentry.disable()))
 
 export const pluginIDSettings = createGlobalSettings<Record<EnhanceableSite | ExtensionSite, NetworkPluginID>>(
     'PluginIdBySite',

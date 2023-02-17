@@ -39,7 +39,7 @@ export namespace NormalizedBackup {
         nickname: Option<string>
         createdAt: Option<Date>
         updatedAt: Option<Date>
-        address?: string
+        address: Option<string>
     }
     export interface Mnemonic {
         words: string
@@ -61,7 +61,7 @@ export namespace NormalizedBackup {
     }
     export interface PostBackup {
         identifier: PostIVIdentifier
-        postBy?: ProfileIdentifier
+        postBy: Option<ProfileIdentifier>
         postCryptoKey: Option<AESJsonWebKey>
         recipients: Option<PostReceiverPublic | PostReceiverE2E>
         foundAt: Date

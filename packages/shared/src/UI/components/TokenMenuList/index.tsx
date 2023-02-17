@@ -49,18 +49,18 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface TokenMenuListProps {
     options: Web3Helper.TokenResultAll[]
-    result?: Web3Helper.TokenResultAll
+    currentOption?: Web3Helper.TokenResultAll
     onSelect(value: Web3Helper.TokenResultAll): void
     fromSocialCard?: boolean
 }
 
-export const TokenMenuList: FC<TokenMenuListProps> = ({ options, result, onSelect, fromSocialCard = false }) => {
+export const TokenMenuList: FC<TokenMenuListProps> = ({ options, currentOption, onSelect, fromSocialCard = false }) => {
     const { classes } = useStyles()
     const theme = useTheme()
     return (
         <>
             {options.map((x, i) => {
-                const selected = isEqual(x, result)
+                const selected = isEqual(x, currentOption)
                 return (
                     <MenuItem className={classes.menuItem} key={i} onClick={() => onSelect(x)}>
                         <TokenIcon

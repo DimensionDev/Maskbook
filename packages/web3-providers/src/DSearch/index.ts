@@ -352,7 +352,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         return result.sort((a, b) => {
             if (
                 a.rank &&
-                a.rank < 200 &&
+                a.rank <= 200 &&
                 a.type === SearchResultType.FungibleToken &&
                 b.type !== SearchResultType.FungibleToken
             )
@@ -385,7 +385,13 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
     private async searchCollectionListByTwitterHandler(
         twitterHandler: string,
     ): Promise<Array<SearchResult<ChainId, SchemaType>>> {
-        const collections = (await Promise.allSettled([this.CoinGeckoClient.get(), this.NFTScanCollectionClient.get()]))
+        const collections = (
+            await Promise.allSettled([
+                this.CoinGeckoClient.get(),
+                this.CoinMarketCapClient.get(),
+                this.NFTScanCollectionClient.get(),
+            ])
+        )
             .map((v) => (v.status === 'fulfilled' && v.value ? v.value : []))
             .flat()
             .filter((x) => {

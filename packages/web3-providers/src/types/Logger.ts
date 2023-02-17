@@ -1,7 +1,7 @@
 import type { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
-export namespace LoggerAPI {
+export namespace TelemetryAPI {
     export enum TypeID {
         Event = 'event',
         Exception = 'exception',

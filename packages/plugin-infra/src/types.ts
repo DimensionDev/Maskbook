@@ -635,7 +635,8 @@ export namespace Plugin.SNSAdaptor {
         UI?: {
             /** The brief content above detailed tabs. */
             Content?: InjectUI<{
-                result: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+                resultList: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+                currentResult: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
                 isProfilePage?: boolean
                 identity?: SocialIdentity
             }>

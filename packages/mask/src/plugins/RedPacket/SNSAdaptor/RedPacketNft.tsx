@@ -1,8 +1,8 @@
 import { makeStyles, ActionButton, LoadingBase, parseColor } from '@masknet/theme'
-import { networkResolver } from '@masknet/web3-shared-evm'
+import { networkResolver, ChainId } from '@masknet/web3-shared-evm'
 import { Card, Typography, Button, Box } from '@mui/material'
 import { useTransactionConfirmDialog } from './context/TokenTransactionConfirmDialogContext.js'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState, MouseEventHandler } from 'react'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { useI18N } from '../locales/index.js'
 import { WalletConnectedBoundary, NFTCardStyledAssetPlayer, ChainBoundary } from '@masknet/shared'
@@ -210,6 +210,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             account_promote: t.account_promote({
                 context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
             }),
+            interpolation: { escapeValue: false },
         } as const
         if (availability?.isClaimed) {
             return t.nft_share_claimed_message(options)
@@ -321,45 +322,76 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 ) : null}
             </Card>
             {outdated ? null : (
-                <Box className={classes.buttonWrapper}>
-                    <Box sx={{ flex: 1, padding: 1.5 }}>
-                        <Button
-                            variant="roundedDark"
-                            startIcon={<Icons.Shared size={18} />}
-                            className={classes.button}
-                            fullWidth
-                            onClick={onShare}>
-                            {i18n('share')}
-                        </Button>
-                    </Box>
-                    {availability.isClaimed ? null : (
-                        <Box sx={{ flex: 1, padding: 1.5 }}>
-                            <ChainBoundary
-                                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                ActionButtonPromiseProps={{ variant: 'roundedDark' }}
-                                expectedChainId={payload.chainId}>
-                                <WalletConnectedBoundary
-                                    expectedChainId={payload.chainId}
-                                    startIcon={<Icons.ConnectWallet size={18} />}
-                                    classes={{
-                                        connectWallet: classes.button,
-                                    }}
-                                    ActionButtonProps={{ variant: 'roundedDark' }}>
-                                    <ActionButton
-                                        variant="roundedDark"
-                                        loading={isClaiming}
-                                        disabled={isClaiming}
-                                        onClick={claim}
-                                        className={classes.button}
-                                        fullWidth>
-                                        {isClaiming ? t.claiming() : t.claim()}
-                                    </ActionButton>
-                                </WalletConnectedBoundary>
-                            </ChainBoundary>
-                        </Box>
-                    )}
-                </Box>
+                <OperationFooter
+                    chainId={payload.chainId}
+                    isClaiming={isClaiming}
+                    claimed={availability.isClaimed}
+                    onShare={onShare}
+                    claim={claim}
+                />
             )}
         </div>
+    )
+}
+
+interface OperationFooterProps {
+    claimed: boolean
+    isClaiming: boolean
+    onShare(): void
+    claim(): Promise<void>
+    chainId: ChainId
+}
+
+function OperationFooter({ claimed, onShare, chainId, claim, isClaiming }: OperationFooterProps) {
+    const { classes } = useStyles({ claimed, outdated: false })
+    const { t: i18n } = useBaseI18N()
+    const t = useI18N()
+
+    const ObtainButton = (props: { onClick?: MouseEventHandler<HTMLButtonElement> | undefined }) => {
+        return (
+            <WalletConnectedBoundary
+                expectedChainId={chainId}
+                startIcon={<Icons.ConnectWallet size={18} />}
+                classes={{
+                    connectWallet: classes.button,
+                }}
+                ActionButtonProps={{ variant: 'roundedDark' }}>
+                <ActionButton
+                    variant="roundedDark"
+                    loading={isClaiming}
+                    disabled={isClaiming}
+                    onClick={props.onClick}
+                    className={classes.button}
+                    fullWidth>
+                    {isClaiming ? t.claiming() : t.claim()}
+                </ActionButton>
+            </WalletConnectedBoundary>
+        )
+    }
+
+    return (
+        <Box className={classes.buttonWrapper}>
+            <Box sx={{ flex: 1, padding: 1.5 }}>
+                <Button
+                    variant="roundedDark"
+                    startIcon={<Icons.Shared size={18} />}
+                    className={classes.button}
+                    fullWidth
+                    onClick={onShare}>
+                    {i18n('share')}
+                </Button>
+            </Box>
+            {claimed ? null : (
+                <Box sx={{ flex: 1, padding: 1.5 }}>
+                    <ChainBoundary
+                        switchChainWithoutPopup
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        ActionButtonPromiseProps={{ variant: 'roundedDark' }}
+                        expectedChainId={chainId}>
+                        <ObtainButton onClick={claim} />
+                    </ChainBoundary>
+                </Box>
+            )}
+        </Box>
     )
 }
