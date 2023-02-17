@@ -34,7 +34,6 @@ export const usePersonaAvatar = createHook(
     },
 )
 export const useLanguage = createHook(Services.Settings.getLanguage, Messages.events.languageSettings.on)
-export const useLog = createHook(Services.Settings.getLog, Messages.events.logSettings.on)
 
 // Do not move or export this function.
 // This function should not be encouraged to use everywhere

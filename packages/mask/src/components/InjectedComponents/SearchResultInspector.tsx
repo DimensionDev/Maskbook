@@ -39,6 +39,7 @@ export interface SearchResultInspectorProps {
     identity?: SocialIdentity
     isProfilePage?: boolean
     collectionList?: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    currentCollection?: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 }
 
 export function SearchResultInspector(props: SearchResultInspectorProps) {
@@ -56,27 +57,36 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         return props.collectionList ?? DSearch.search(keyword)
     }, [keyword, JSON.stringify(props.collectionList)])
 
+    const currentCollection = props.currentCollection ?? resultList.value?.[0]
+
     const contentComponent = useMemo(() => {
-        if (!resultList.value?.length) return null
-        const Component = getSearchResultContent(resultList.value[0])
-        return <Component result={resultList.value} isProfilePage={props.isProfilePage} identity={props.identity} />
+        if (!currentCollection || !resultList.value?.length) return null
+        const Component = getSearchResultContent(currentCollection)
+        return (
+            <Component
+                resultList={resultList.value}
+                currentResult={currentCollection}
+                isProfilePage={props.isProfilePage}
+                identity={props.identity}
+            />
+        )
     }, [resultList.value, props.isProfilePage, props.identity])
 
     const tabs = useMemo(() => {
-        if (!resultList.value?.length) return EMPTY_LIST
-        return getSearchResultTabs(activatedPlugins, resultList.value[0], translate)
+        if (!currentCollection) return EMPTY_LIST
+        return getSearchResultTabs(activatedPlugins, currentCollection, translate)
     }, [activatedPlugins, resultList.value, translate])
 
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
     const tabContentComponent = useMemo(() => {
-        if (!resultList.value?.length) return null
+        if (!currentCollection) return null
         const Component = getSearchResultTabContent(currentTab)
-        return <Component result={resultList.value[0]} />
+        return <Component result={currentCollection} />
     }, [currentTab, resultList.value])
 
     if (!dSearchEnabled) return null
-    if (!keyword && !resultList.value?.length) return null
+    if (!keyword && !currentCollection) return null
     if (!contentComponent) return null
 
     return (

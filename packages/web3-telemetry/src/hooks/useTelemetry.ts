@@ -1,20 +1,20 @@
 import { useMemo } from 'react'
 import { Sentry } from '@masknet/web3-providers'
-import type { LoggerAPI } from '@masknet/web3-providers/types'
-import { useLogContext } from './useContext.js'
+import type { TelemetryAPI } from '@masknet/web3-providers/types'
+import { useTelemetryContext } from './context.js'
 
-export function useLog() {
-    const options = useLogContext()
+export function useTelemetry() {
+    const options = useTelemetryContext()
 
     return useMemo(() => {
         return {
-            captureEvent(eventID: LoggerAPI.EventID) {
+            captureEvent(eventID: TelemetryAPI.EventID) {
                 Sentry.captureEvent({
                     ...options,
                     eventID,
                 })
             },
-            captureException(exceptionID: LoggerAPI.ExceptionID, error: Error) {
+            captureException(exceptionID: TelemetryAPI.ExceptionID, error: Error) {
                 Sentry.captureException({
                     ...options,
                     exceptionID,

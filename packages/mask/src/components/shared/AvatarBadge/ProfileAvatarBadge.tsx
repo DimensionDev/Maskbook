@@ -35,17 +35,7 @@ export const ProfileAvatarBadge: FC<Props> = ({ userId, className, ...rest }) =>
                 })
             }, 200)
         }
-        const leave = () => {
-            clearTimeout(openTimer)
-            clearTimeout(closeTimer)
-            closeTimer = setTimeout(() => {
-                CrossIsolationMessages.events.profileCardEvent.sendToLocal({
-                    open: false,
-                })
-            }, 2000)
-        }
         button.addEventListener('mouseenter', enter)
-        button.addEventListener('mouseleave', leave)
         // Other badges might want to open the profile card
         const unsubscribe = CrossIsolationMessages.events.profileCardEvent.on((event) => {
             if (!event.open) return
@@ -55,7 +45,6 @@ export const ProfileAvatarBadge: FC<Props> = ({ userId, className, ...rest }) =>
             clearTimeout(closeTimer)
             clearTimeout(openTimer)
             button.removeEventListener('mouseenter', enter)
-            button.removeEventListener('mouseleave', leave)
             unsubscribe()
         }
     }, [userId])

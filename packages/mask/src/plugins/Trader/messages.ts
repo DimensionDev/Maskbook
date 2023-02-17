@@ -3,6 +3,7 @@ import type { GasConfig } from '@masknet/web3-shared-evm'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
 import { PLUGIN_ID } from './constants/index.js'
 import type { TagType } from './types/index.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 interface TrendingAnchorEvent {
     name: string
@@ -11,6 +12,7 @@ interface TrendingAnchorEvent {
     address?: string
     isCollectionProjectPopper?: boolean
     identity?: SocialIdentity
+    currentResult?: Web3Helper.TokenResultAll
 }
 
 interface SwapSettingsEvent {
