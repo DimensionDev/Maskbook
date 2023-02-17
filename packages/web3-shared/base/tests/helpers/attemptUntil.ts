@@ -1,5 +1,5 @@
-import { attemptUntil } from '../src/utils/function.js'
 import { expect, describe, it } from 'vitest'
+import { attemptUntil } from '../../src/helpers/attemptUntil.js'
 
 describe('utils attemptUntil function test', function () {
     it('should return first promise result which is success', async () => {

@@ -9,7 +9,7 @@ import {
 
 const { TaskManagerContext, TaskManagerProvider: SelectFungibleTokenProvider } = createUITaskManager<
     SelectFungibleTokenDialogProps,
-    Web3Helper.FungibleTokenScope<'all'> | null
+    Web3Helper.FungibleTokenAll | null
 >(SelectFungibleTokenDialog)
 
 export function useSelectFungibleToken<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>() {

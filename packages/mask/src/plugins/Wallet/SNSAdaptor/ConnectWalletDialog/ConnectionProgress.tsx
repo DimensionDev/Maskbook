@@ -1,9 +1,9 @@
 import { Trans } from 'react-i18next'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { Icons } from '@masknet/icons'
 import { WalletIcon } from '@masknet/shared'
 import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { Box, Card, Typography, Paper, Link } from '@mui/material'
 import { makeStyles, MaskColorVar, ActionButton, LoadingBase } from '@masknet/theme'
 import { useProviderDescriptor, useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
@@ -61,8 +61,8 @@ const useStyles = makeStyles<{
 
 export interface ConnectionProgressProps {
     pluginID: NetworkPluginID
-    providerType: Web3Helper.Definition[NetworkPluginID]['ProviderType']
-    networkType: Web3Helper.Definition[NetworkPluginID]['NetworkType']
+    providerType: Web3Helper.ProviderTypeAll
+    networkType: Web3Helper.NetworkTypeAll
     connection: AsyncStateRetry<true>
 }
 

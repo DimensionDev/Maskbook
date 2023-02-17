@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import type { JsonRpcPayload } from 'web3-core-helpers'
 import { useAsync } from 'react-use'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 import { Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'

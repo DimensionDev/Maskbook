@@ -10,7 +10,7 @@ import type { TipNFTKeyPair } from '../../types/index.js'
 
 interface Props {
     selectedPairs: TipNFTKeyPair[]
-    tokens: Array<Web3Helper.NonFungibleAssetScope<'all'>>
+    tokens: Web3Helper.NonFungibleAssetAll[]
     onChange?: (id: string | null, contractAddress?: string) => void
     limit?: number
     className: string

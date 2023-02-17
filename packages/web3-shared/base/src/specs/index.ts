@@ -17,7 +17,7 @@ import type {
     ReturnExplorerResolver,
     ReturnNetworkResolver,
     ReturnProviderResolver,
-} from '../utils/index.js'
+} from '../helpers/index.js'
 
 export interface Pageable<Item, Indicator = unknown> {
     /** the indicator of the current page */

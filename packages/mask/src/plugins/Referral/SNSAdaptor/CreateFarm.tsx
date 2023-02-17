@@ -94,7 +94,7 @@ export function CreateFarm(props: PageInterface) {
     const { value: linkedPersona } = useCurrentLinkedPersona()
     const { showSnackbar } = useCustomSnackbar()
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
+        WalletMessages.events.applicationDialogUpdated,
     )
 
     const [tab, setTab] = useState(TabsCreateFarm.NEW)

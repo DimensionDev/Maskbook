@@ -1,5 +1,5 @@
 import { describe, test, it, expect } from 'vitest'
-import { formatBalance } from '../src/index.js'
+import { formatBalance } from '../../src/helpers/formatBalance.js'
 
 describe('formatBalance util test', () => {
     test.each([

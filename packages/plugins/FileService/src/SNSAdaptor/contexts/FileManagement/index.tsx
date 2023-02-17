@@ -151,7 +151,7 @@ export const FileManagementProvider: FC<Props> = memo(({ children, compositionTy
     )
 
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
+        WalletMessages.events.applicationDialogUpdated,
     )
     const attachToPost = useCallback(
         (fileInfo: FileInfo | FileInfo[]) => {

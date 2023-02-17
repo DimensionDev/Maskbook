@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { formatSupply } from '../src/utils/supply.js'
+import { formatSupply } from '../../src/helpers/formatSupply.js'
 
 describe('Supply format util test', () => {
     test.each([
