@@ -1,4 +1,4 @@
-import { attemptUntil } from '../src/utils/function.js'
+import { attemptUntil } from '../src/utils/attemptUntil.js'
 import { expect, describe, it } from 'vitest'
 
 describe('utils attemptUntil function test', function () {
