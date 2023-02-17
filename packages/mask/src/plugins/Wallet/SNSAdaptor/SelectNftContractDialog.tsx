@@ -8,10 +8,10 @@ import { InjectedDialog } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
-import { WalletMessages } from '../messages.js'
+import { useChainContext, useNonFungibleCollections } from '@masknet/web3-hooks-base'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { useI18N } from '../../../utils/index.js'
 import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput.js'
-import { useChainContext, useNonFungibleCollections } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     search: {

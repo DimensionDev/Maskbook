@@ -7,8 +7,8 @@ import { getMaskColor, makeStyles, useCustomSnackbar, ActionButton } from '@mask
 import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { useWeb3State } from '@masknet/web3-hooks-base'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { useI18N, useMatchXS } from '../../../../utils/index.js'
-import { WalletMessages } from '../../messages.js'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox/index.js'
 
 const useStyles = makeStyles()((theme) => ({

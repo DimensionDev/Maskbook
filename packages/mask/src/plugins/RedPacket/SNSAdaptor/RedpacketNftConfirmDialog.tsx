@@ -25,7 +25,7 @@ import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCall
 import { useCurrentIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import { RedPacketNftMetaKey } from '../constants.js'
 import { RedPacketRPC } from '../messages.js'
-import { WalletMessages } from '../../Wallet/messages.js'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { openComposition } from './openComposition.js'
 import Services from '../../../extension/service.js'

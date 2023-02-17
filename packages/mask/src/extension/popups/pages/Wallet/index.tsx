@@ -10,12 +10,12 @@ import { WalletStartUp } from './components/StartUp/index.js'
 import { WalletAssets } from './components/WalletAssets/index.js'
 import { WalletContext } from './hooks/useWalletContext.js'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
-import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages.js'
+import { WalletRPC } from '../../../../plugins/Wallet/messages.js'
 import SelectWallet from './SelectWallet/index.js'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus.js'
 import { WalletHeader } from './components/WalletHeader/index.js'
 import { PopupContext } from '../../hook/usePopupContext.js'
-
+import { WalletMessages } from '@masknet/plugin-wallet'
 const ImportWallet = lazy(() => import('./ImportWallet/index.js'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet/index.js'))
 const WalletSettings = lazy(() => import('./WalletSettings/index.js'))

@@ -1,3 +1,10 @@
+import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { useUpdateEffect } from 'react-use'
+import { isEmpty, noop } from 'lodash-es'
+import { toWei } from 'web3-utils'
+import { z as zod } from 'zod'
+import { BigNumber } from 'bignumber.js'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
     formatWeiToEther,
@@ -7,14 +14,6 @@ import {
     formatGweiToEther,
 } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { BigNumber } from 'bignumber.js'
-import { isEmpty, noop } from 'lodash-es'
-import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { useUpdateEffect } from 'react-use'
-import { toWei } from 'web3-utils'
-import { z as zod } from 'zod'
-// import { StyledInput } from '../../../../extension/popups/components/StyledInput'
 import { useI18N } from '../../../../utils/index.js'
 import type { GasSettingProps } from './types.js'
 import { GasOptionType, pow10 } from '@masknet/web3-shared-base'

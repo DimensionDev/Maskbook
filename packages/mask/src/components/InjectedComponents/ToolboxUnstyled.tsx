@@ -26,7 +26,7 @@ import {
 import { useCallback } from 'react'
 import { WalletIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { WalletMessages } from '../../plugins/Wallet/messages.js'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { useI18N } from '../../utils/index.js'
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc/index.js'
 import GuideStep from '../GuideStep/index.js'

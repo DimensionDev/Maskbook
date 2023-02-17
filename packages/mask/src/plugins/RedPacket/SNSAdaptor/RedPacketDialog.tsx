@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
 import { compact } from 'lodash-es'
+import Web3Utils from 'web3-utils'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import {
     useChainContext,
@@ -14,13 +15,12 @@ import { ChainId, GasConfig, GasEditor } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { DialogContent, Tab } from '@mui/material'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import Web3Utils from 'web3-utils'
 import {
     useCurrentIdentity,
     useCurrentLinkedPersona,
     useLastRecognizedIdentity,
 } from '../../../components/DataSource/useActivatedUI.js'
-import { WalletMessages } from '../../Wallet/messages.js'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'

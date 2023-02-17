@@ -9,7 +9,7 @@ import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
 import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationBoard } from './ApplicationBoard.js'
-import { WalletMessages } from '../../plugins/Wallet/messages.js'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { useI18N } from '../../utils/index.js'
 import { PersonaSelectPanelDialog } from './PersonaSelectPanel/PersonaSelectPanelDialog.js'
 
