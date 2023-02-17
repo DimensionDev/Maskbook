@@ -137,7 +137,6 @@ export const DonationCard: FC<DonationCardProps> = ({ feed, actionIndex, classNa
                 {...rest}>
                 <Typography className={classes.summary}>
                     <Translate.donation_donate_verbose
-                        shouldUnescape
                         values={{
                             user,
                             cost_value: formatValue(metadata?.token),
@@ -167,7 +166,6 @@ export const DonationCard: FC<DonationCardProps> = ({ feed, actionIndex, classNa
             {...rest}>
             <Typography className={classes.summary}>
                 <Translate.donation_donate
-                    shouldUnescape
                     values={{
                         user,
                         cost_value: formatValue(metadata?.token),

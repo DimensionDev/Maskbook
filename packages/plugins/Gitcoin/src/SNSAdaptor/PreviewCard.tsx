@@ -202,7 +202,6 @@ export function PreviewCard(props: PreviewCardProps) {
                     <div className={classes.metas}>
                         <Typography color={theme.palette.maskColor.second} fontSize={14}>
                             <Translate.total_raised
-                                shouldUnescape
                                 values={{
                                     amount: `$${new BigNumber(grant.amount_received).toFixed(2)}`,
                                 }}
@@ -296,7 +295,8 @@ export function PreviewCard(props: PreviewCardProps) {
     )
 }
 
-// Note: the extra component is used to make sure the useStyles call happends under the ShadowRootIsolation context.
+// Note: this extra component is used to make sure the useStyles call happens
+// under the ShadowRootIsolation context.
 function PreviewCardRender({ __html }: { __html: string | TrustedHTML }) {
     const { classes, cx } = useStyles()
     return <div className={cx(classes.description, 'grant-detail')} dangerouslySetInnerHTML={{ __html }} />
