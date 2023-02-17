@@ -15,12 +15,12 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { getAllCoins, getCoinInfo, getPriceStats as getStats, getThumbCoins } from './base.js'
 import type { Platform } from '../types.js'
 import { resolveCoinGeckoChainId } from '../helpers.js'
-import { FuseTrendingAPI } from '../../Fuse/index.js'
+import { FuseCoinAPI } from '../../Fuse/index.js'
 import { fetchJSON } from '../../entry-helpers.js'
 import type { TrendingAPI } from '../../entry-types.js'
 
 export class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.ChainIdAll> {
-    private fuse = new FuseTrendingAPI()
+    private fuse = new FuseCoinAPI()
     private coins: Map<string, TrendingAPI.Coin> = new Map()
 
     private async createCoins() {
@@ -43,15 +43,15 @@ export class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.Cha
     async getCoinsByKeyword(chainId: Web3Helper.ChainIdAll, keyword: string): Promise<TrendingAPI.Coin[]> {
         try {
             await this.createCoins()
-            const coinThumbs = await getThumbCoins(keyword)
+            const thumbCoins = await getThumbCoins(keyword)
             return compact(
-                coinThumbs
+                thumbCoins
                     .filter((x) => x?.market_cap_rank && x.market_cap_rank < VALID_TOP_RANK)
                     .map((y) => this.coins.get(y.id)),
             ).slice(0, COIN_RECOMMENDATION_SIZE)
         } catch {
-            const coins = await this.fuse.getSearchableItems(this.getAllCoins)
-            return coins
+            return this.fuse
+                .create(await this.getAllCoins())
                 .search(keyword)
                 .map((x) => x.item)
                 .slice(0, COIN_RECOMMENDATION_SIZE)

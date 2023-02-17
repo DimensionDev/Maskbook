@@ -12,7 +12,7 @@ import {
 import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from '../constants.js'
 import { resolveCoinMarketCapChainId } from '../helpers.js'
 import type { Coin, Pair, ResultData, Status, QuotesInfo, CoinInfo } from '../types.js'
-import { FuseTrendingAPI } from '../../Fuse/index.js'
+import { FuseCoinAPI } from '../../Fuse/index.js'
 import { getCommunityLink, isMirroredKeyword } from '../../Trending/helpers.js'
 import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../../Trending/constants.js'
 import { fetchJSON } from '../../entry-helpers.js'
@@ -94,7 +94,7 @@ export async function getLatestMarketPairs(id: string, currency: string) {
 // #endregion
 
 export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
-    private fuse = new FuseTrendingAPI()
+    private fuse = new FuseCoinAPI()
 
     private async getHistorical(
         id: string,
@@ -138,8 +138,8 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
-        const coins = await this.fuse.getSearchableItems(this.getAllCoins)
-        return coins
+        return this.fuse
+            .create(await this.getAllCoins())
             .search(keyword)
             .map((x) => x.item)
             .filter((y) => y.market_cap_rank && y.market_cap_rank < VALID_TOP_RANK)

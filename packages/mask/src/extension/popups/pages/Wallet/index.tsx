@@ -5,6 +5,7 @@ import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
 import { NetworkPluginID, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { useChainContext, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
 import { TransactionDescriptorType } from '@masknet/web3-shared-base'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { EthereumMethodType, PayloadEditor } from '@masknet/web3-shared-evm'
 import { WalletStartUp } from './components/StartUp/index.js'
 import { WalletAssets } from './components/WalletAssets/index.js'
@@ -15,7 +16,7 @@ import SelectWallet from './SelectWallet/index.js'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus.js'
 import { WalletHeader } from './components/WalletHeader/index.js'
 import { PopupContext } from '../../hook/usePopupContext.js'
-import { WalletMessages } from '@masknet/plugin-wallet'
+
 const ImportWallet = lazy(() => import('./ImportWallet/index.js'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet/index.js'))
 const WalletSettings = lazy(() => import('./WalletSettings/index.js'))
