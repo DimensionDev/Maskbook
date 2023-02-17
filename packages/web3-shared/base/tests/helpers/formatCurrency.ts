@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { formatCurrency } from '../src/index.js'
+import { formatCurrency } from '../../src/helpers/formatCurrency.js'
 
 describe('USD Currency price format util test', () => {
     test.each([

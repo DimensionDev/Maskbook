@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { leftShift, toFixed } from '../src/index.js'
+import { leftShift, toFixed } from '../../src/helpers/number.js'
 
 describe('leftShift util test', () => {
     test.each([
