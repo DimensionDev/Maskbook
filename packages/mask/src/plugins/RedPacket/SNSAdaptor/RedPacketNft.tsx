@@ -1,8 +1,8 @@
-import { makeStyles, ActionButton, LoadingBase, parseColor } from '@masknet/theme'
+import { makeStyles, ActionButton, LoadingBase, parseColor, ShadowRootTooltip } from '@masknet/theme'
 import { networkResolver, ChainId } from '@masknet/web3-shared-evm'
 import { Card, Typography, Button, Box } from '@mui/material'
 import { useTransactionConfirmDialog } from './context/TokenTransactionConfirmDialogContext.js'
-import { useCallback, useEffect, useMemo, useState, MouseEventHandler } from 'react'
+import { useCallback, useEffect, useMemo, useState, MouseEventHandler, useRef, useLayoutEffect } from 'react'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { useI18N } from '../locales/index.js'
 import { WalletConnectedBoundary, NFTCardStyledAssetPlayer, ChainBoundary } from '@masknet/shared'
@@ -15,7 +15,7 @@ import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
 import { useChainContext, useWeb3, useNetworkContext } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { Stack } from '@mui/system'
 
@@ -68,16 +68,18 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         marginTop: 0,
         display: 'flex',
     },
-    tokenWrapper: {
+    claimedTokenWrapper: {
         position: 'absolute',
         top: 80,
         right: 50,
+        cursor: 'pointer',
+    },
+    tokenImageWrapper: {
         display: 'flex',
         overflow: 'hidden',
         alignItems: 'center',
         height: 126,
         width: 126,
-        boxShadow: `0 0 0 3px ${theme.palette.maskColor.publicBg}`,
         borderRadius: 8,
         '& > div': {
             display: 'flex',
@@ -112,6 +114,26 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
     fallbackImage: {
         height: 160,
         width: 120,
+    },
+    description: {
+        background: theme.palette.maskColor.primary,
+        alignSelf: 'stretch',
+        borderRadius: '0 0 8px 8px',
+        transform: 'translateY(-12px)',
+    },
+    name: {
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        width: 126,
+        fontSize: 13,
+        color: theme.palette.common.white,
+        lineHeight: '36px',
+        minHeight: '1em',
+        textIndent: '8px',
+    },
+    hidden: {
+        visibility: 'hidden',
     },
     tokenLabel: {
         width: 48,
@@ -179,6 +201,8 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     )
 
     const [isClaimed, setIsClaimed] = useState(false)
+    const [showTooltip, setShowTooltip] = useState(false)
+    const textRef = useRef<HTMLDivElement>(null)
     useEffect(() => {
         setIsClaimed(false)
     }, [account])
@@ -235,6 +259,23 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         })
     }, [isClaimed, openTransactionConfirmDialog, availability?.claimed_id, availability?.token_address])
 
+    useLayoutEffect(() => {
+        if (textRef.current) {
+            setShowTooltip(textRef.current.offsetWidth !== textRef.current.scrollWidth)
+        }
+    }, [textRef.current])
+
+    const openNFTDialog = useCallback(() => {
+        if (!payload.chainId || !pluginID || !availability?.claimed_id || !availability?.token_address) return
+        CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
+            open: true,
+            chainId: payload.chainId,
+            pluginID,
+            tokenId: availability.claimed_id,
+            tokenAddress: availability.token_address,
+        })
+    }, [pluginID, payload.chainId, availability?.claimed_id, availability?.token_address])
+
     if (availabilityError)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" sx={{ padding: 1.5 }}>
@@ -275,22 +316,36 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                         {payload.message}
                     </Typography>
                 </div>
+                <ShadowRootTooltip
+                    title={showTooltip ? `${payload.contractName} #${availability.claimed_id}` : undefined}
+                    placement="top"
+                    disableInteractive
+                    arrow
+                    PopperProps={{
+                        disablePortal: true,
+                    }}>
+                    <Box className={cx(classes.claimedTokenWrapper, !availability.isClaimed ? classes.hidden : '')}>
+                        <Box className={classes.tokenImageWrapper} onClick={openNFTDialog}>
+                            <NFTCardStyledAssetPlayer
+                                chainId={payload.chainId}
+                                contractAddress={payload.contractAddress}
+                                tokenId={availability.claimed_id}
+                                classes={{
+                                    imgWrapper: classes.imgWrapper,
+                                    fallbackImage: classes.fallbackImage,
+                                }}
+                                objectFit="cover"
+                                fallbackImage={new URL('./assets/fallback.png', import.meta.url)}
+                            />
+                        </Box>
 
-                {availability.isClaimed ? (
-                    <Box className={classes.tokenWrapper}>
-                        <NFTCardStyledAssetPlayer
-                            chainId={payload.chainId}
-                            hideLoadingIcon
-                            contractAddress={payload.contractAddress}
-                            tokenId={availability.claimed_id}
-                            classes={{
-                                imgWrapper: classes.imgWrapper,
-                                fallbackImage: classes.fallbackImage,
-                            }}
-                            objectFit="cover"
-                        />
+                        <div className={classes.description}>
+                            <Typography className={classes.name} color="textPrimary" variant="body2" ref={textRef}>
+                                {`${payload.contractName} #${availability.claimed_id}`}
+                            </Typography>
+                        </div>
                     </Box>
-                ) : null}
+                </ShadowRootTooltip>
 
                 <div className={classes.footer}>
                     {availability.isClaimed ? (
