@@ -28,8 +28,8 @@ export function ConnectWalletDialog() {
     const { classes } = useStyles()
     const { t } = useI18N()
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
-    const [providerType, setProviderType] = useState<Web3Helper.Definition[NetworkPluginID]['ProviderType']>()
-    const [networkType, setNetworkType] = useState<Web3Helper.Definition[NetworkPluginID]['NetworkType']>()
+    const [providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
+    const [networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
     const [walletConnectedCallback, setWalletConnectedCallback] = useState<(() => void) | undefined>()
 
     // #region remote controlled dialog

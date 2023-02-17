@@ -3,10 +3,10 @@ import { Box, Button, TableCell, TableRow, Tooltip, Typography } from '@mui/mate
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { FormattedCurrency, TokenIcon, WalletIcon } from '@masknet/shared'
 import { useChainContext, useNetworkDescriptors, useNetworkContext } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { CurrencyType, formatBalance, formatCurrency, FungibleAsset } from '@masknet/web3-shared-base'
+import { CurrencyType, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { ChangeNetworkTip } from './ChangeNetworkTip.js'
 import { getTokenUSDValue } from '../../utils/getTokenUSDValue.js'
@@ -59,10 +59,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface TokenTableRowProps {
-    asset: FungibleAsset<
-        Web3Helper.Definition[NetworkPluginID]['ChainId'],
-        Web3Helper.Definition[NetworkPluginID]['SchemaType']
-    >
+    asset: Web3Helper.FungibleAssetAll
     onSwap(): void
     onSend(): void
 }

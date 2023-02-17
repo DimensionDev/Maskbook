@@ -5,7 +5,7 @@ import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import type { NonFungibleAsset, SourceType, Wallet } from '@masknet/web3-shared-base'
+import type { SourceType, Wallet } from '@masknet/web3-shared-base'
 import { ActionsBarNFT } from '../ActionsBarNFT.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -49,7 +49,7 @@ export interface CollectibleCardProps {
     className?: string
     provider: SourceType
     wallet?: Wallet
-    asset: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    asset: Web3Helper.NonFungibleAssetAll
     link?: string
     readonly?: boolean
     pluginID?: NetworkPluginID

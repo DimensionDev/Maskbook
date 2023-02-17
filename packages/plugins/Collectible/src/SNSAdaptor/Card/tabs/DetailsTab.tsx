@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface DetailsTabProps {
-    asset: AsyncState<Web3Helper.NonFungibleAssetScope<'all'>>
+    asset: AsyncState<Web3Helper.NonFungibleAssetAll>
 }
 
 export function DetailsTab(props: DetailsTabProps) {

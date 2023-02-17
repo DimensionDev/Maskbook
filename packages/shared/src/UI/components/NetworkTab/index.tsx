@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { useNetworkDescriptors, useChainContext, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -7,10 +8,9 @@ import { TabContext } from '@mui/lab'
 import { Stack, Tab, Typography } from '@mui/material'
 import { WalletIcon } from '../WalletIcon/index.js'
 import { SmartPayBundler } from '@masknet/web3-providers'
-import { useMemo } from 'react'
 
 interface NetworkTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
-    chains: Array<Web3Helper.Definition[NetworkPluginID]['ChainId']>
+    chains: Web3Helper.ChainIdAll[]
     hideArrowButton?: boolean
     pluginID: NetworkPluginID
 }
