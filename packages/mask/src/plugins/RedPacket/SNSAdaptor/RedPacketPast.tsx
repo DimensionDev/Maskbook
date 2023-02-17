@@ -31,7 +31,7 @@ export function RedPacketPast({ onSelect, onClose, tabs }: Props) {
 
     const { value: linkedPersona } = useCurrentLinkedPersona()
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
+        WalletMessages.events.applicationDialogUpdated,
     )
 
     const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'

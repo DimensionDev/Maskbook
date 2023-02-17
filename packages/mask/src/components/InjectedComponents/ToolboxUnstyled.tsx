@@ -73,7 +73,7 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
     } = props
     const { classes } = useStyles()
     const { t } = useI18N()
-    const { openDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
+    const { openDialog } = useRemoteControlledDialog(WalletMessages.events.applicationDialogUpdated)
     return (
         <GuideStep step={1} total={4} tip={t('user_guide_tip_1')}>
             <Container>

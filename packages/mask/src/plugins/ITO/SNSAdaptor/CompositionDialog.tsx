@@ -176,7 +176,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     // #endregion
 
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
+        WalletMessages.events.applicationDialogUpdated,
     )
 
     // #region tabs

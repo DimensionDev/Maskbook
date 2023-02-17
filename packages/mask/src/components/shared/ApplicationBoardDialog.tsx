@@ -49,7 +49,7 @@ export function ApplicationBoardDialog() {
     const [quickMode, setQuickMode] = useState(false)
 
     const { open, closeDialog: closeBoard } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
+        WalletMessages.events.applicationDialogUpdated,
         (evt) => {
             if (!evt.open || !evt.settings?.switchTab) return
             setOpenSettings(true)
