@@ -1,9 +1,10 @@
 import { memo, useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
-import { useFungibleTokenPrice, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useFungibleTokenPrice, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { InputTokenPanelUI } from './components/InputTokenPanelUI.js'
 import type { SelectTokenChipProps } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { isZero, ZERO } from '@masknet/web3-shared-base'
 
 export interface InputTokenPanelProps extends withClasses<'root'> {
     balance: string
@@ -18,6 +19,7 @@ export interface InputTokenPanelProps extends withClasses<'root'> {
 export const InputTokenPanel = memo<InputTokenPanelProps>(
     ({ chainId, token, balance, onAmountChange, amount, SelectTokenChip: SelectTokenChipProps, maxAmount }) => {
         const { pluginID } = useNetworkContext()
+        const { Others } = useWeb3State()
         const { value: tokenPrice = 0 } = useFungibleTokenPrice(pluginID, token?.address.toLowerCase())
 
         const tokenValueUSD = useMemo(
@@ -27,7 +29,7 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
 
         return (
             <InputTokenPanelUI
-                balance={balance}
+                balance={isZero(maxAmount) && Others?.isNativeTokenAddress(token?.address) ? ZERO.toString() : balance}
                 token={token}
                 amount={amount}
                 chainId={chainId}
