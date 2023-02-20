@@ -63,7 +63,11 @@ async function getWalletAddressesFromNextID({ identifier, publicKey }: SocialIde
     const platform = getNextIDPlatform()
     if (!platform) return EMPTY_LIST
 
-    const latestActivatedBinding = await NextIDProof.queryLatestBindingByPlatform(platform, identifier.userId)
+    const latestActivatedBinding = await NextIDProof.queryLatestBindingByPlatform(
+        platform,
+        identifier.userId,
+        publicKey,
+    )
     if (!latestActivatedBinding) return EMPTY_LIST
     return latestActivatedBinding.proofs.filter(
         (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),

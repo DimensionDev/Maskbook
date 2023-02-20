@@ -1,7 +1,7 @@
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { BindingProof, EMPTY_LIST, MaskEvents } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useAsyncFn } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 
@@ -9,25 +9,24 @@ export function usePersonaProofs(
     publicKey?: string,
     message?: WebExtensionMessage<MaskEvents>,
 ): AsyncStateRetry<BindingProof[]> {
-    const [state, fn] = useAsyncFn(
-        async (enableCache = true) => {
-            try {
-                if (!publicKey) return EMPTY_LIST
+    const [state, queryBinding] = useAsyncFn(async (publicKey?: string) => {
+        try {
+            if (!publicKey) return EMPTY_LIST
 
-                const binding = await NextIDProof.queryExistedBindingByPersona(publicKey, enableCache)
-                return binding?.proofs ?? EMPTY_LIST
-            } catch {
-                return EMPTY_LIST
-            }
-        },
-        [publicKey],
-    )
+            const binding = await NextIDProof.queryExistedBindingByPersona(publicKey)
+            return binding?.proofs ?? EMPTY_LIST
+        } catch {
+            return EMPTY_LIST
+        }
+    }, [])
 
     useEffect(() => {
-        fn(true)
+        queryBinding(publicKey)
     }, [publicKey])
 
-    const retry = () => fn(false)
+    const retry = useCallback(() => {
+        queryBinding(publicKey)
+    }, [publicKey])
 
     useEffect(() => message?.events.ownProofChanged.on(retry), [retry])
 
