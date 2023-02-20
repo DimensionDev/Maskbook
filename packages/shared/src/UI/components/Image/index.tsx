@@ -1,7 +1,6 @@
 import { HTMLProps, ImgHTMLAttributes, useState } from 'react'
-import { LoadingBase, makeStyles } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { useTheme } from '@mui/material'
-import { useImageURL } from '../../../hooks/useImageURL.js'
 
 const useStyles = makeStyles<Pick<ImageProps, 'size' | 'rounded'>, 'center'>()((theme, { size, rounded }, refs) => ({
     optimistic: {
@@ -38,6 +37,9 @@ const useStyles = makeStyles<Pick<ImageProps, 'size' | 'rounded'>, 'center'>()((
     },
 }))
 
+const MASK_DARK_FALLBACK = new URL('./mask-dark.png', import.meta.url).toString()
+const MASK_LIGHT_FALLBACK = new URL('./mask-light.png', import.meta.url).toString()
+
 export interface ImageProps
     extends ImgHTMLAttributes<HTMLImageElement>,
         withClasses<'container' | 'fallbackImage' | 'imageLoading'> {
@@ -64,10 +66,8 @@ export function Image({
     const { classes, cx } = useStyles({ size, rounded }, { props: { classes: extraClasses } })
     const theme = useTheme()
     const [failed, setFailed] = useState(false)
-    const [optimismFailed, setOptimismFailed] = useState(false)
 
-    const { value: imageURL, loading: loadingImageURL } = useImageURL(rest.src)
-    if (optimistic && rest.src && !optimismFailed) {
+    if (rest.src && !failed) {
         return (
             <div {...containerProps} className={cx(classes.container, classes.optimistic, containerProps?.className)}>
                 <img
@@ -76,36 +76,12 @@ export function Image({
                     height={size}
                     {...rest}
                     src={rest.src}
-                    onError={() => setOptimismFailed(true)}
-                />
-            </div>
-        )
-    }
-
-    if (loadingImageURL && !disableSpinner) {
-        return (
-            <div {...containerProps} className={cx(classes.container, classes.center, containerProps?.className)}>
-                <LoadingBase className={classes.imageLoading} />
-            </div>
-        )
-    }
-
-    if (imageURL && !failed) {
-        return (
-            <div {...containerProps} className={cx(classes.container, containerProps?.className)}>
-                <img
-                    className={classes.image}
-                    loading="lazy"
-                    decoding="async"
-                    width={size}
-                    height={size}
-                    {...rest}
-                    src={imageURL}
                     onError={() => setFailed(true)}
                 />
             </div>
         )
     }
+
     if (fallback && !(fallback instanceof URL) && typeof fallback !== 'string') {
         return (
             <div
@@ -117,10 +93,7 @@ export function Image({
     }
 
     const fallbackImageURL =
-        fallback?.toString() ??
-        (theme.palette.mode === 'dark'
-            ? new URL('./mask-dark.png', import.meta.url).toString()
-            : new URL('./mask-light.png', import.meta.url).toString())
+        fallback?.toString() ?? (theme.palette.mode === 'dark' ? MASK_DARK_FALLBACK : MASK_LIGHT_FALLBACK)
 
     return (
         <div
