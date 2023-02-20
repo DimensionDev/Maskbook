@@ -1210,7 +1210,6 @@ export interface HubOptions<ChainId, Indicator = HubIndicator> {
     size?: number
     /** The page index. */
     indicator?: Indicator
-    fungibleTokenAddressed?: string[]
 }
 
 export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
