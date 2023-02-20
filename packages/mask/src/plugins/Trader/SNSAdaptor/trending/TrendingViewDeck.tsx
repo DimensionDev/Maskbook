@@ -300,7 +300,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                 socialAccounts={socialAccounts}
                                                 currentCollection={result}
                                                 onTokenChange={setResult}
-                                                fromSocialCard
                                             />
                                         </ThemeProvider>
                                     </>
