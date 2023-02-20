@@ -1,13 +1,18 @@
 import { Icons } from '@masknet/icons'
-import { useCurrentPersonaInformation, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import {
+    useAllPersonas,
+    useCurrentPersonaInformation,
+    useLastRecognizedIdentity,
+} from '@masknet/plugin-infra/content-script'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { useWallets } from '@masknet/web3-hooks-base'
-import { SmartPayFunder } from '@masknet/web3-providers'
+import { SmartPayBundler, SmartPayFunder, SmartPayOwner } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { DialogContent, CircularProgress } from '@mui/material'
 import { Box } from '@mui/system'
+import { compact } from 'lodash-es'
 import { useCallback, useMemo, useState } from 'react'
 import { matchPath, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { useAsync, useUpdateEffect } from 'react-use'
@@ -41,6 +46,7 @@ export function RouterDialog() {
     const { classes } = useStyles()
     const { pathname, state } = useLocation()
     const navigate = useNavigate()
+    const personas = useAllPersonas()
     const wallets = useWallets()
     const currentPersona = useCurrentPersonaInformation()
     const [hasAccounts, setHasAccounts] = useState(false)
@@ -67,8 +73,17 @@ export function RouterDialog() {
     // #region query white list
     const { value: isVerified, loading: queryVerifyLoading } = useAsync(async () => {
         if (!lastRecognizedIdentity?.identifier?.userId) return false
-        return SmartPayFunder.verify(lastRecognizedIdentity.identifier.userId)
-    }, [open, lastRecognizedIdentity])
+        const chainId = await SmartPayBundler.getSupportedChainId()
+        const accounts = await SmartPayOwner.getAccountsByOwners(
+            chainId,
+            [...wallets.filter((x) => !x.owner).map((x) => x.address), ...compact(personas.map((x) => x.address))],
+            false,
+        )
+        const verified = await SmartPayFunder.verify(lastRecognizedIdentity.identifier.userId)
+
+        // There are remaining times, or has wallets to be deployed
+        return verified || !!accounts.filter((x) => x.funded && !x.deployed).length
+    }, [open, lastRecognizedIdentity, personas, wallets])
     // #endregion
 
     const title = useMemo(() => {
