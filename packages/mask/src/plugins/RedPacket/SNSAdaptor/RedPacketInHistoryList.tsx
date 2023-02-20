@@ -336,7 +336,6 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                             </Typography>
                             <Typography variant="body1" className={classes.footerInfo}>
                                 <Translate.history_total_claimed_amount
-                                    shouldUnescape
                                     components={{
                                         strong: <strong className={classes.strong} />,
                                         span: <span className={classes.span} />,

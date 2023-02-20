@@ -91,7 +91,6 @@ export const TokenOperationCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) =>
             <Typography className={classes.summary}>
                 {verbose ? (
                     <Translate.token_operation_verbose
-                        shouldUnescape
                         values={{
                             from,
                             to,
@@ -107,7 +106,6 @@ export const TokenOperationCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) =>
                     />
                 ) : (
                     <Translate.token_operation
-                        shouldUnescape
                         values={{
                             from,
                             to,
