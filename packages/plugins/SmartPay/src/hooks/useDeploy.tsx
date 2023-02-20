@@ -135,7 +135,7 @@ export function useDeploy(
             )
             if (!hash) throw new Error('Deploy Failed')
 
-            const result = timeout(
+            const result = await timeout(
                 new Promise((resolve) => {
                     return TransactionWatcher?.emitter.on('progress', async (_, txHash, status) => {
                         if (txHash !== hash || !signAccount.address || status !== TransactionStatusType.SUCCEED) return
