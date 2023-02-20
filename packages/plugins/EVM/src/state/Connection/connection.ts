@@ -89,6 +89,7 @@ class Connection implements EVM_Connection {
                                                       identifier: options.identifier,
                                                   }
                                                 : undefined,
+                                            options.silent,
                                         ),
                                     )
                                     break
