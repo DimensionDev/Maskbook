@@ -308,7 +308,7 @@ export const SmartPayContent = memo(() => {
             owner: wallet?.owner,
             identifier: wallet?.identifier,
             providerType: ProviderType.MaskWallet,
-            slient: true,
+            silent: true,
         })
     }, [account, wallet, connection, chainId])
     const [{ loading: openLuckDropLoading }, handleLuckDropClick] = useAsyncFn(async () => {

@@ -172,12 +172,12 @@ export class ProviderState<
             account: string
             identifier?: ECKeyIdentifier
         },
-        slient?: boolean,
+        silent?: boolean,
     ) {
         const provider = this.providers[providerType]
 
         // compose the connection result
-        const result = await provider.connect(chainId, address, owner, slient)
+        const result = await provider.connect(chainId, address, owner, silent)
 
         // failed to connect provider
         if (!result.account) throw new Error('Failed to connect provider.')
