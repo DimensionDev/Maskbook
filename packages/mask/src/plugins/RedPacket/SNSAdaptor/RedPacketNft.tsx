@@ -5,7 +5,7 @@ import { useTransactionConfirmDialog } from './context/TokenTransactionConfirmDi
 import { useCallback, useEffect, useMemo, useState, MouseEventHandler, useRef, useLayoutEffect } from 'react'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { useI18N } from '../locales/index.js'
-import { WalletConnectedBoundary, NFTCardStyledAssetPlayer, ChainBoundary } from '@masknet/shared'
+import { WalletConnectedBoundary, ChainBoundary, AssetPreviewer, NFTFallbackImage } from '@masknet/shared'
 import type { RedPacketNftJSONPayload } from '../types.js'
 import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
@@ -13,7 +13,7 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
-import { useChainContext, useWeb3, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3, useNetworkContext, useNonFungibleAsset } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
 import { NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
@@ -72,6 +72,8 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         position: 'absolute',
         top: 80,
         right: 50,
+        background: theme.palette.common.white,
+        borderRadius: 9,
         cursor: 'pointer',
     },
     tokenImageWrapper: {
@@ -119,7 +121,6 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         background: theme.palette.maskColor.primary,
         alignSelf: 'stretch',
         borderRadius: '0 0 8px 8px',
-        transform: 'translateY(-12px)',
     },
     name: {
         whiteSpace: 'nowrap',
@@ -171,6 +172,10 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
             right: 12,
             bottom: 8,
         },
+    },
+    NFTFallbackImageWrapper: {
+        width: '100%',
+        background: theme.palette.common.white,
     },
 }))
 export interface RedPacketNftProps {
@@ -276,6 +281,15 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         })
     }, [pluginID, payload.chainId, availability?.claimed_id, availability?.token_address])
 
+    const { value: NFTDetailed } = useNonFungibleAsset<'all'>(
+        NetworkPluginID.PLUGIN_EVM,
+        payload.contractAddress,
+        availability?.claimed_id,
+        {
+            chainId: payload.chainId,
+        },
+    )
+
     if (availabilityError)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" sx={{ padding: 1.5 }}>
@@ -326,16 +340,15 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     }}>
                     <Box className={cx(classes.claimedTokenWrapper, !availability.isClaimed ? classes.hidden : '')}>
                         <Box className={classes.tokenImageWrapper} onClick={openNFTDialog}>
-                            <NFTCardStyledAssetPlayer
-                                chainId={payload.chainId}
-                                contractAddress={payload.contractAddress}
-                                tokenId={availability.claimed_id}
+                            <AssetPreviewer
+                                url={NFTDetailed?.metadata?.imageURL || NFTDetailed?.metadata?.mediaURL}
                                 classes={{
-                                    imgWrapper: classes.imgWrapper,
+                                    root: classes.imgWrapper,
                                     fallbackImage: classes.fallbackImage,
                                 }}
-                                objectFit="cover"
-                                fallbackImage={new URL('./assets/fallback.png', import.meta.url)}
+                                fallbackImage={
+                                    <div className={classes.NFTFallbackImageWrapper}>{NFTFallbackImage}</div>
+                                }
                             />
                         </Box>
 
