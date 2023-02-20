@@ -47,11 +47,11 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
             return hub.getTrustedFungibleAssets(account, trustedTokens, { indicator, size: 50 })
         })
         const assets = await asyncIteratorToArray(iterator)
-        const truestedAssets = await asyncIteratorToArray(trustedAssetsIterator)
+        const trustedAssets = await asyncIteratorToArray(trustedAssetsIterator)
 
         const _assets = unionWith(
             assets,
-            truestedAssets,
+            trustedAssets,
             (a, z) => isSameAddress(a.address, z.address) && a.chainId === z.chainId,
         )
 
