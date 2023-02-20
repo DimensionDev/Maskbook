@@ -3,7 +3,7 @@
   "references": [
     // Only list top-level projects here
     { "path": "./packages/polyfills/" },
-    { "path": "./packages/decrypt-spa/" },
+    { "path": "./packages/app/" },
     { "path": "./packages/mask/" },
     { "path": "./packages/injected-script/main" },
     { "path": "./packages/mask-sdk/main" },
@@ -67,6 +67,7 @@
       // This will bring another problem: now we can reference a project without installing it as a monorepo dependency,
       // which is unwanted. We need to take care of this.
 
+      "@masknet/app": ["./packages/app/src"],
       "@masknet/backup-format": ["./packages/backup-format/src"],
       "@masknet/configuration": ["./packages/configuration/src"],
       "@masknet/dashboard": ["./packages/dashboard/src"],
@@ -106,8 +107,7 @@
       "@masknet/sandboxed-plugin-runtime/extension-page": ["./packages/sandboxed-plugin-runtime/src/extension-page"],
       "@masknet/base": ["./packages/base/src"],
       "@masknet/config": ["./packages/config/src"],
-      "@masknet/decrypt-spa": ["./packages/decrypt-spa/src"],
-      // @masknet/scripts: insert-here 2
+      // @masknet/scripts: inserpackages/app/src
 
       // Plugins
       "@masknet/plugin-debugger": ["./packages/plugins/Debugger/src"],
