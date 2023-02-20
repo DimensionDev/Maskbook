@@ -63,6 +63,16 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
         })
     }, [position.y])
 
+    useEffect(() => {
+        const onResize = () => setActive(false)
+
+        window.addEventListener('resize', onResize)
+
+        return () => {
+            window.removeEventListener('resize', onResize)
+        }
+    }, [])
+
     // close popper if location was changed
     const location = useLocation()
     useEffect(() => setActive(false), [location.state?.key, location.href])
