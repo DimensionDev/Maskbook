@@ -14,7 +14,7 @@ import {
     formatGweiToEther,
 } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { useI18N } from '../../../../utils/index.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 import type { GasSettingProps } from './types.js'
 import { GasOptionType, pow10 } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -86,7 +86,7 @@ const useStyles = makeStyles()((theme) => ({
 export const Prior1559GasSetting: FC<GasSettingProps> = memo(
     ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }) => {
         const { classes } = useStyles()
-        const { t } = useI18N()
+        const t = useI18N()
         const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const [selectedGasOption, setGasOptionType] = useState<GasOptionType | null>(gasOptionType)
 
@@ -99,17 +99,17 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                 gasOptions
                     ? [
                           {
-                              title: t('popups_wallet_gas_fee_settings_low'),
+                              title: t.popups_wallet_gas_fee_settings_low(),
                               gasOption: GasOptionType.SLOW,
                               gasPrice: gasOptions[GasOptionType.SLOW].suggestedMaxFeePerGas ?? '0',
                           },
                           {
-                              title: t('popups_wallet_gas_fee_settings_medium'),
+                              title: t.popups_wallet_gas_fee_settings_medium(),
                               gasOption: GasOptionType.NORMAL,
                               gasPrice: gasOptions[GasOptionType.NORMAL].suggestedMaxFeePerGas ?? '0',
                           },
                           {
-                              title: t('popups_wallet_gas_fee_settings_high'),
+                              title: t.popups_wallet_gas_fee_settings_high(),
                               gasOption: GasOptionType.FAST,
                               gasPrice: gasOptions[GasOptionType.FAST].suggestedMaxFeePerGas ?? 0,
                           },
@@ -123,12 +123,12 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
             return zod.object({
                 gasLimit: zod
                     .string()
-                    .min(1, t('wallet_transfer_error_gas_limit_absence'))
+                    .min(1, t.wallet_transfer_error_gas_limit_absence())
                     .refine(
                         (gasLimit) => new BigNumber(gasLimit).gte(minGasLimit),
-                        t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimit }),
+                        t.popups_wallet_gas_fee_settings_min_gas_limit_tips(, { limit: minGasLimit }),
                     ),
-                gasPrice: zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
+                gasPrice: zod.string().min(1, t.wallet_transfer_error_gas_price_absence()),
             })
         }, [minGasLimit])
 
@@ -228,7 +228,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                         name="gasLimit"
                     />
                     <Typography className={classes.label}>
-                        {t('popups_wallet_gas_price')}
+                        {t.popups_wallet_gas_price()}
                         <Typography component="span" className={classes.price}>
                             {t('popups_wallet_gas_fee_settings_usd', {
                                 usd: formatGweiToEther(gasPrice ?? 0)
@@ -266,7 +266,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                     className={classes.button}
                     disabled={!isEmpty(errors)}
                     onClick={onSubmit}>
-                    {t('confirm')}
+                    {t.confirm()}
                 </ActionButton>
             </>
         )

@@ -10,7 +10,7 @@ import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { useChainContext, useNonFungibleCollections } from '@masknet/web3-hooks-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { FuseNonFungibleCollection } from '@masknet/web3-providers'
-import { useI18N } from '../../../../utils/index.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 import { SearchInput } from '../../../../extension/options-page/DashboardComponents/SearchInput.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -91,7 +91,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface SelectNftContractDialogProps {}
 
 export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
 
     const [keyword, setKeyword] = useState('')
@@ -139,11 +139,11 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
 
     // #endregion
     return (
-        <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_a_nft_contract')}>
+        <InjectedDialog open={open} onClose={onClose} title={t.plugin_wallet_select_a_nft_contract()}>
             <DialogContent className={classes.dialogContent}>
                 <div className={classes.search}>
                     <SearchInput
-                        label={t('add_nft_contract_search_hint')}
+                        label={t.add_nft_contract_search_hint()}
                         onChange={(keyword) => {
                             setKeyword(keyword)
                         }}
@@ -180,13 +180,13 @@ export interface SearchResultBoxProps {
 
 export function SearchResultBox(props: SearchResultBoxProps) {
     const { keyword, searchedTokenList, onSubmit, contractList } = props
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     return (
         <div className={classes.searchBox}>
             {(keyword !== '' && searchedTokenList.length === 0) || (keyword === '' && contractList.length === 0) ? (
                 <Box className={classes.noResultBox}>
-                    <Typography>{t('wallet_search_contract_no_result')}</Typography>
+                    <Typography>{t.wallet_search_contract_no_result()}</Typography>
                 </Box>
             ) : (
                 <List>

@@ -4,7 +4,7 @@ import urlcat from 'urlcat'
 import { ImageList, ImageListItem, SvgIconProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { openWindow } from '@masknet/shared-base-ui'
-import { useI18N } from '../../../../utils/index.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 import { Provider } from '../Provider.js'
 import { IMTokenIcon, MetaMaskIcon, RainbowIcon, TrustIcon } from './Icons.js'
 
@@ -28,14 +28,14 @@ const providers: WalletProvider[] = [
 export const SafariPlatform: React.FC<{
     uri: string
 }> = ({ uri }) => {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const makeConnect = (link: string) => () => openWindow(urlcat(link, { uri }))
     const descriptionMapping: Record<string, string> = {
-        MetaMask: t('plugin_wallet_connect_safari_metamask'),
-        Rainbow: t('plugin_wallet_connect_safari_rainbow'),
-        Trust: t('plugin_wallet_connect_safari_trust'),
-        imToken: t('plugin_wallet_connect_safari_im_token'),
+        MetaMask: t.plugin_wallet_connect_safari_metamask(),
+        Rainbow: t.plugin_wallet_connect_safari_rainbow(),
+        Trust: t.plugin_wallet_connect_safari_trust(),
+        imToken: t.plugin_wallet_connect_safari_im_token(),
     }
     return (
         <ImageList className={classes.grid} gap={16} rowHeight={183}>

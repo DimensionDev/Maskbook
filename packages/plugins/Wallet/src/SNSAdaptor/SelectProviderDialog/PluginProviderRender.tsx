@@ -8,7 +8,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NetworkIconClickBaitProps, ProviderIconClickBaitProps } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, List, ListItem, Typography } from '@mui/material'
-import { useI18N } from '../../../../utils/index.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 import { ProviderIcon } from './ProviderIcon.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -147,7 +147,7 @@ export function PluginProviderRender({
     onProviderIconClicked,
 }: PluginProviderRenderProps) {
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const t = useI18N()
 
     const selectedNetwork = useMemo(() => {
         return networks.find((x) => x.ID === undeterminedNetworkID) ?? first(networks)!
@@ -157,7 +157,7 @@ export function PluginProviderRender({
         <>
             <Box className={classes.root}>
                 <section className={classes.section}>
-                    <Typography className={classes.title}>{t('plugin_wallet_choose_network')}</Typography>
+                    <Typography className={classes.title}>{t.plugin_wallet_choose_network()}</Typography>
                     <List className={classes.list}>
                         {networks
                             ?.filter((x) => x.isMainnet)
@@ -176,7 +176,7 @@ export function PluginProviderRender({
                     </List>
                 </section>
                 <section className={classes.section}>
-                    <Typography className={classes.title}>{t('plugin_wallet_choose_wallet')}</Typography>
+                    <Typography className={classes.title}>{t.plugin_wallet_choose_wallet()}</Typography>
                     <List className={classes.wallets}>
                         {providers
                             .filter((x) => x.providerAdaptorPluginID === undeterminedPluginID)

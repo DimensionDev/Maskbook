@@ -8,8 +8,8 @@ import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { useI18N, useMatchXS } from '../../../../utils/index.js'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox/index.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -49,7 +49,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function WalletRiskWarningDialog() {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes, cx } = useStyles()
     const { showSnackbar } = useCustomSnackbar()
     const isMobile = useMatchXS()
@@ -74,7 +74,7 @@ export function WalletRiskWarningDialog() {
 
     const onConfirm = useCallback(async () => {
         if (!account) {
-            showSnackbar(t('wallet_risk_warning_no_select_wallet'), {
+            showSnackbar(t.wallet_risk_warning_no_select_wallet(), {
                 variant: 'error',
                 preventDuplicate: true,
             })
@@ -86,7 +86,7 @@ export function WalletRiskWarningDialog() {
 
     return (
         <InjectedDialog
-            title={isMobile ? undefined : t('wallet_risk_warning_dialog_title')}
+            title={isMobile ? undefined : t.wallet_risk_warning_dialog_title()}
             open={open}
             onClose={onClose}>
             <DialogContent className={classes.paper}>
@@ -97,12 +97,12 @@ export function WalletRiskWarningDialog() {
                     className={classes.title}
                     align="center"
                     variant="h4"
-                    children={t('wallet_risk_warning_dialog_title')}
+                    children={t.wallet_risk_warning_dialog_title()}
                 />
                 <Typography
                     className={classes.article}
                     variant="body2"
-                    children={<Trans i18nKey="multiline">{t('wallet_risk_warning_content')}</Trans>}
+                    children={<Trans i18nKey="multiline">{t.wallet_risk_warning_content()}</Trans>}
                 />
                 <WalletStatusBox disableChange withinRiskWarningDialog />
             </DialogContent>
@@ -113,20 +113,20 @@ export function WalletRiskWarningDialog() {
                     variant="outlined"
                     color="secondary"
                     onClick={onClose}>
-                    {t('cancel')}
+                    {t.cancel()}
                 </ActionButton>
                 <ActionButtonPromise
                     className={classes.button}
                     fullWidth
                     disabled={!account}
-                    init={t('confirm')}
-                    waiting={t('wallet_risk_confirm_confirming')}
-                    failed={t('wallet_risk_confirm_failed')}
+                    init={t.confirm()}
+                    waiting={t.wallet_risk_confirm_confirming()}
+                    failed={t.wallet_risk_confirm_failed()}
                     executor={onConfirm}
                     completeIcon={null}
                     failIcon={null}
                     failedOnClick="use executor"
-                    complete={t('done')}
+                    complete={t.done()}
                 />
             </DialogActions>
         </InjectedDialog>

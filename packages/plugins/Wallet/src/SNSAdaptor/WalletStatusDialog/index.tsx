@@ -6,7 +6,7 @@ import { InjectedDialog } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox/index.js'
-import { useI18N } from '../../../../utils/index.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 export interface WalletStatusDialogProps {}
 export function WalletStatusDialog(props: WalletStatusDialogProps) {
-    const { t } = useI18N()
+    const t = useI18N()
 
     const { classes } = useStyles()
     const [isHidden, setIsHidden] = useState(false)
@@ -48,7 +48,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
 
     return (
         <InjectedDialog
-            title={t('plugin_wallet_dialog_title')}
+            title={t.plugin_wallet_dialog_title()}
             open={open}
             onClose={closeDialog}
             maxWidth="sm"

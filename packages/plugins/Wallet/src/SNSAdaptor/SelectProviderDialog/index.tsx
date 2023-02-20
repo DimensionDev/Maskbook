@@ -9,10 +9,10 @@ import { getRegisteredWeb3Networks, getRegisteredWeb3Providers } from '@masknet/
 import { useNetworkDescriptor, useWeb3State, useWeb3UI } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc/index.js'
 import { PluginProviderRender } from './PluginProviderRender.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -27,7 +27,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface SelectProviderDialogProps {}
 
 export function SelectProviderDialog(props: SelectProviderDialogProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const [walletConnectedCallback, setWalletConnectedCallback] = useState<(() => void) | undefined>()
     const [supportedNetworkList, setSupportedNetworkList] = useState<
@@ -108,7 +108,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     if (hasNativeAPI) return null
 
     return (
-        <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
+        <InjectedDialog title={t.plugin_wallet_select_provider_dialog_title()} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
                 <PluginProviderRender
                     networks={selectedNetworks}

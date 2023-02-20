@@ -9,7 +9,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { ConnectionProgress } from './ConnectionProgress.js'
-import { useI18N } from '../../../../utils/index.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function ConnectWalletDialog() {
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const t = useI18N()
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const [providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
     const [networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
@@ -84,7 +84,7 @@ export function ConnectWalletDialog() {
 
     return (
         <InjectedDialog
-            title={t('plugin_wallet_dialog_title')}
+            title={t.plugin_wallet_dialog_title()}
             open={open}
             onClose={() => setConnectWalletDialog({ open: false })}
             maxWidth="sm"

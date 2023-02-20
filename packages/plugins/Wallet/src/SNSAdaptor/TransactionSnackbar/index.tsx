@@ -8,7 +8,7 @@ import { TransactionStatusType, RecognizableError } from '@masknet/web3-shared-b
 import { useWeb3State, useChainContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
-import { useI18N } from '../../../../utils/index.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()({
     link: {
@@ -21,7 +21,7 @@ export interface TransactionSnackbarProps<T extends NetworkPluginID> {
 }
 export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: TransactionSnackbarProps<T>) {
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const t = useI18N()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
     const snackbarKeyRef = useRef<SnackbarKey>()
 
@@ -79,17 +79,17 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
             [TransactionStatusType.NOT_DEPEND]: {
                 processing: true,
                 variant: 'default',
-                message: t('plugin_wallet_snackbar_wait_for_confirming'),
+                message: t.plugin_wallet_snackbar_wait_for_confirming(),
             },
             [TransactionStatusType.SUCCEED]: {
                 processing: false,
                 variant: 'success',
-                message: t('plugin_wallet_snackbar_confirmed'),
+                message: t.plugin_wallet_snackbar_confirmed(),
             },
             [TransactionStatusType.FAILED]: {
                 processing: false,
                 variant: 'error',
-                message: t('plugin_wallet_snackbar_failed'),
+                message: t.plugin_wallet_snackbar_failed(),
             },
         },
         {},

@@ -1,7 +1,7 @@
 import { Grid, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { QRCode } from '@masknet/shared'
-import { useI18N } from '../../../../utils/index.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
 export const QRCodeModal: React.FC<{
     uri: string
 }> = ({ uri }) => {
-    const { t } = useI18N()
+    const t = useI18N()
 
     const { classes } = useStyles()
     const style: React.CSSProperties = {
@@ -32,7 +32,7 @@ export const QRCodeModal: React.FC<{
         <Grid className={classes.container}>
             <QRCode text={uri} canvasProps={{ style }} />
             <Typography className={classes.tip} color="textSecondary">
-                {t('plugin_wallet_qr_code_with_wallet_connect')}
+                {t.plugin_wallet_qr_code_with_wallet_connect()}
             </Typography>
         </Grid>
     )

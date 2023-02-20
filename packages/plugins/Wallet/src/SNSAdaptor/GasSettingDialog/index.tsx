@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { GasOptionType } from '@masknet/web3-shared-base'
 import { InjectedDialog } from '@masknet/shared'
-import { useI18N } from '../../../../utils/index.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 import { GasSetting } from './GasSetting.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const GasSettingDialog: FC = () => {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const [gasOptionType, setGasOptionType] = useState<GasOptionType>(GasOptionType.NORMAL)
     const [gasLimit, setGasLimit] = useState(0)
@@ -31,7 +31,7 @@ export const GasSettingDialog: FC = () => {
     )
 
     return (
-        <InjectedDialog title={t('popups_wallet_gas_fee_settings')} open={open} onClose={closeDialog}>
+        <InjectedDialog title={t.popups_wallet_gas_fee_settings()} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
                 <GasSetting
                     gasLimit={gasLimit}
