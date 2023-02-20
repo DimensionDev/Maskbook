@@ -850,7 +850,7 @@
     "popups_wallet_gas_fee_settings_low": "Low",
     "popups_wallet_gas_fee_settings_medium": "Medium",
     "popups_wallet_gas_fee_settings_high": "High",
-    "popups_wallet_gas_fee_settings_usd": " ≈ {{usd}}",
+    "popups_wallet_gas_fee_settings_usd": " ≈ <span>{{usd}}</span>",
     "popups_wallet_gas_fee_settings_gas_limit": "Gas Limit",
     "popups_wallet_gas_fee_settings_max_priority_fee": "Max priority fee",
     "popups_wallet_gas_fee_settings_max_fee": "Max fee",

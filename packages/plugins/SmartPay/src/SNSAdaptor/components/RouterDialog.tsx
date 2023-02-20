@@ -71,8 +71,8 @@ export function RouterDialog() {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
 
     // #region query white list
-    const { value: isVerified, loading: queryVerifyLoading } = useAsync(async () => {
-        if (!lastRecognizedIdentity?.identifier?.userId) return false
+    const { loading: queryVerifyLoading } = useAsync(async () => {
+        if (!lastRecognizedIdentity?.identifier?.userId) return
         const chainId = await SmartPayBundler.getSupportedChainId()
         const accounts = await SmartPayOwner.getAccountsByOwners(
             chainId,
@@ -81,8 +81,11 @@ export function RouterDialog() {
         )
         const verified = await SmartPayFunder.verify(lastRecognizedIdentity.identifier.userId)
 
-        // There are remaining times, or has wallets to be deployed
-        return verified || !!accounts.filter((x) => x.funded && !x.deployed).length
+        if (accounts.filter((x) => x.deployed).length) return navigate(RoutePaths.Main)
+
+        if (verified || accounts.filter((x) => !x.deployed && x.funded)) return navigate(RoutePaths.Deploy)
+
+        return navigate(RoutePaths.InEligibility)
     }, [open, lastRecognizedIdentity, personas, wallets])
     // #endregion
 
@@ -96,16 +99,6 @@ export function RouterDialog() {
         if (state?.canBack) return navigate(-1)
         closeDialog()
     }, [state])
-
-    useUpdateEffect(() => {
-        if (isVerified) {
-            if (wallets.filter((x) => x.owner).length || hasAccounts) {
-                return navigate(RoutePaths.Main)
-            }
-            return navigate(RoutePaths.Deploy)
-        }
-        return navigate(RoutePaths.InEligibility)
-    }, [isVerified, wallets, hasAccounts])
 
     useUpdateEffect(() => {
         if (

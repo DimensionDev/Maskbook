@@ -24,6 +24,7 @@ import { useI18N } from '../../../../../utils/index.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
+import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -258,15 +259,20 @@ export const Prior1559GasSetting = memo(() => {
                                 {formatWeiToGwei(gasPrice ?? 0).toString()} Gwei
                             </Typography>
                             <Typography className={classes.gasUSD}>
-                                {t('popups_wallet_gas_fee_settings_usd', {
-                                    usd: formatCurrency(
-                                        formatWeiToEther(gasPrice)
-                                            .times(nativeTokenPrice)
-                                            .times(minGasLimit || 21000),
-                                        'USD',
-                                        { boundaries: { min: 0.01 } },
-                                    ),
-                                })}
+                                <Trans
+                                    i18nKey="popups_wallet_gas_fee_settings_usd"
+                                    values={{
+                                        usd: formatCurrency(
+                                            formatWeiToEther(gasPrice)
+                                                .times(nativeTokenPrice)
+                                                .times(minGasLimit || 21000),
+                                            'USD',
+                                            { boundaries: { min: 0.01 } },
+                                        ),
+                                    }}
+                                    components={{ span: <span /> }}
+                                    shouldUnescape
+                                />
                             </Typography>
                         </div>
                     ))}

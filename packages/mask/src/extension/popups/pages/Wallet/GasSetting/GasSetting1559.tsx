@@ -29,6 +29,7 @@ import {
     TransactionDescriptorType,
 } from '@masknet/web3-shared-base'
 import { useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/web3-hooks-base'
+import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -352,15 +353,20 @@ export const GasSetting1559 = memo(() => {
                             </Typography>
                         </Typography>
                         <Typography className={classes.gasUSD}>
-                            {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: formatCurrency(
-                                    formatWeiToEther(content?.suggestedMaxFeePerGas ?? 0)
-                                        .times(nativeTokenPrice)
-                                        .times(gasLimit ?? 21000),
-                                    'USD',
-                                    { boundaries: { min: 0.01 } },
-                                ),
-                            })}
+                            <Trans
+                                i18nKey="popups_wallet_gas_fee_settings_usd"
+                                values={{
+                                    usd: formatCurrency(
+                                        formatWeiToEther(content?.suggestedMaxFeePerGas ?? 0)
+                                            .times(nativeTokenPrice)
+                                            .times(gasLimit ?? 21000),
+                                        'USD',
+                                        { boundaries: { min: 0.01 } },
+                                    ),
+                                }}
+                                components={{ span: <span /> }}
+                                shouldUnescape
+                            />
                         </Typography>
                     </div>
                 ))}
@@ -393,15 +399,20 @@ export const GasSetting1559 = memo(() => {
                         ({t('wallet_transfer_gwei')})
                     </Typography>
                     <Typography component="span" className={classes.price}>
-                        {t('popups_wallet_gas_fee_settings_usd', {
-                            usd: formatCurrency(
-                                formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
-                                    .times(nativeTokenPrice)
-                                    .times(gasLimit),
-                                'USD',
-                                { boundaries: { min: 0.01 } },
-                            ),
-                        })}
+                        <Trans
+                            i18nKey="popups_wallet_gas_fee_settings_usd"
+                            values={{
+                                usd: formatCurrency(
+                                    formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
+                                        .times(nativeTokenPrice)
+                                        .times(gasLimit),
+                                    'USD',
+                                    { boundaries: { min: 0.01 } },
+                                ),
+                            }}
+                            components={{ span: <span /> }}
+                            shouldUnescape
+                        />
                     </Typography>
                 </Typography>
                 <Controller
@@ -428,15 +439,20 @@ export const GasSetting1559 = memo(() => {
                         ({t('wallet_transfer_gwei')})
                     </Typography>
                     <Typography component="span" className={classes.price}>
-                        {t('popups_wallet_gas_fee_settings_usd', {
-                            usd: formatCurrency(
-                                formatGweiToEther(Number(maxFeePerGas) ?? 0)
-                                    .times(nativeTokenPrice)
-                                    .times(gasLimit),
-                                'USD',
-                                { boundaries: { min: 0.01 } },
-                            ),
-                        })}
+                        <Trans
+                            i18nKey="popups_wallet_gas_fee_settings_usd"
+                            values={{
+                                usd: formatCurrency(
+                                    formatGweiToEther(Number(maxFeePerGas) ?? 0)
+                                        .times(nativeTokenPrice)
+                                        .times(gasLimit),
+                                    'USD',
+                                    { boundaries: { min: 0.01 } },
+                                ),
+                            }}
+                            components={{ span: <span /> }}
+                            shouldUnescape
+                        />
                     </Typography>
                 </Typography>
                 <Controller
