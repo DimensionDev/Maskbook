@@ -111,7 +111,6 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
     },
     imgWrapper: {
         maxWidth: 180,
-        marginBottom: 10,
     },
     fallbackImage: {
         height: 160,
@@ -175,6 +174,7 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
     },
     NFTFallbackImageWrapper: {
         width: '100%',
+        height: 126,
         background: theme.palette.common.white,
     },
 }))
