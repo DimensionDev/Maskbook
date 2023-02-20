@@ -121,7 +121,6 @@ export const LiquidityCard: FC<TokenFeedCardProps> = ({ feed, className, ...rest
                                         <div key={token.contract_address} className={classes.token}>
                                             <Image
                                                 classes={{ container: classes.tokenIcon }}
-                                                optimistic
                                                 src={token.image}
                                                 height={40}
                                                 width={40}

@@ -48,8 +48,6 @@ export interface ImageProps
     fallback?: URL | string | JSX.Element
     disableSpinner?: boolean
     containerProps?: HTMLProps<HTMLDivElement>
-    /** If optimistic is true, means that the resource is loadable */
-    optimistic?: boolean
 }
 
 export function Image({
@@ -60,7 +58,6 @@ export function Image({
     classes: extraClasses,
     onClick,
     containerProps,
-    optimistic,
     ...rest
 }: ImageProps) {
     const { classes, cx } = useStyles({ size, rounded }, { props: { classes: extraClasses } })
@@ -92,9 +89,6 @@ export function Image({
         )
     }
 
-    const fallbackImageURL =
-        fallback?.toString() ?? (theme.palette.mode === 'dark' ? MASK_DARK_FALLBACK : MASK_LIGHT_FALLBACK)
-
     return (
         <div
             {...containerProps}
@@ -105,7 +99,7 @@ export function Image({
                 width={size}
                 height={size}
                 {...rest}
-                src={fallbackImageURL}
+                src={fallback?.toString() ?? (theme.palette.mode === 'dark' ? MASK_DARK_FALLBACK : MASK_LIGHT_FALLBACK)}
                 className={cx(classes.image, classes.failImage, classes.fallbackImage)}
             />
         </div>
