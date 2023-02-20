@@ -177,6 +177,7 @@ export const SmartPayContent = memo(() => {
     // #region Remote Dialog Controller
     const { setDialog: setReceiveDialog } = useRemoteControlledDialog(PluginSmartPayMessages.receiveDialogEvent)
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(CrossIsolationMessages.events.swapDialogEvent)
+    const { closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
     // #endregion
 
     // #region web3 state
@@ -307,6 +308,7 @@ export const SmartPayContent = memo(() => {
             owner: wallet?.owner,
             identifier: wallet?.identifier,
             providerType: ProviderType.MaskWallet,
+            slient: true,
         })
     }, [account, wallet, connection, chainId])
     const [{ loading: openLuckDropLoading }, handleLuckDropClick] = useAsyncFn(async () => {
@@ -318,6 +320,7 @@ export const SmartPayContent = memo(() => {
                 startupPlugin: PluginID.RedPacket,
             },
         })
+        closeDialog()
     }, [connectToCurrent])
 
     const [{ loading: openSwapLoading }, handleSwapClick] = useAsyncFn(async () => {

@@ -955,6 +955,7 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
             account: string
             identifier?: ECKeyIdentifier
         },
+        slient?: boolean,
     ): Promise<Account<ChainId>>
     /** Dismiss the connection. */
     disconnect(): Promise<void>
@@ -982,6 +983,8 @@ export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
     providerType?: ProviderType
     /** Gas payment token. */
     paymentToken?: string
+    /** Only Support Mask Wallet, slient switch wallet */
+    slient?: boolean
     /** Fragments to merge into the transaction. */
     overrides?: Partial<Transaction>
 }
@@ -1619,6 +1622,7 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
             account: string
             identifier?: ECKeyIdentifier
         },
+        slient?: boolean,
     ) => Promise<Account<ChainId>>
     /** Disconnect with the provider. */
     disconnect: (providerType: ProviderType) => Promise<void>

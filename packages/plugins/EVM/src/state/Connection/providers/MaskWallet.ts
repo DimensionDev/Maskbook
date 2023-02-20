@@ -40,9 +40,10 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
             account: string
             identifier?: ECKeyIdentifier
         },
+        slient?: boolean,
     ) {
         const siteType = getSiteType()
-        if (siteType === ExtensionSite.Popup) {
+        if (siteType === ExtensionSite.Popup || slient) {
             if (isValidAddress(address)) {
                 await this.switchAccount(address, owner)
                 await this.switchChain(chainId)
