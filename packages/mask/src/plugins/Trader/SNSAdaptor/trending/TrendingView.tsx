@@ -61,7 +61,7 @@ const useStyles = makeStyles<{
         },
         body: props.isCollectionProjectPopper
             ? {
-                  minHeight: 374,
+                  minHeight: props.currentTab === ContentTabs.Market ? 352 : 374,
                   maxHeight: props.isCollectionProjectPopper
                       ? props.currentTab === ContentTabs.Price
                           ? 450
