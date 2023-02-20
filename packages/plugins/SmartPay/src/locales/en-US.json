@@ -54,6 +54,7 @@
     "remain_times_tips_other": "Remaining {{count}} times to create SmartPay wallet for the above account.",
     "personas": "Personas",
     "receive": "Receive",
+    "timeout": "Timeout",
     "transaction_submitted": "Transaction submitted.",
     "transaction_rejected": "Transaction rejected.",
     "user_cancelled_the_transaction": "User cancelled the process.",

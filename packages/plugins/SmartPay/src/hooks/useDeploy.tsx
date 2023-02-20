@@ -171,6 +171,9 @@ export function useDeploy(
                     case 'Persona Rejected':
                         message = t.user_cancelled_the_transaction()
                         break
+                    case 'Timeout':
+                        message = t.timeout()
+                        break
                     default:
                         message = t.network_error()
                 }
