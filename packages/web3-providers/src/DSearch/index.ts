@@ -393,8 +393,12 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                     this.NFTScanCollectionClient.get(),
                 ])
             )
-                .map((v) => (v.status === 'fulfilled' && v.value ? v.value : []))
-                .flat()
+                .flatMap(
+                    (v) =>
+                        (v.status === 'fulfilled' && v.value ? v.value : []) as Array<
+                            FungibleTokenResult<ChainId, SchemaType> | NonFungibleCollectionResult<ChainId, SchemaType>
+                        >,
+                )
                 .filter((x) => {
                     const resultTwitterHandler =
                         (x as NonFungibleCollectionResult<ChainId, SchemaType>).collection?.socialLinks?.twitter ||
