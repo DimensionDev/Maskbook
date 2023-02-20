@@ -18,8 +18,8 @@ export const TypedMessageImageRender = memo(function TypedMessageImageRender(pro
         }
     }, [image])
 
-    const finalSrc = blobSrc || image
     const meta = useMetadataRender(props)
+    const finalSrc = blobSrc || image
     if (typeof finalSrc !== 'string') return null
 
     return (
