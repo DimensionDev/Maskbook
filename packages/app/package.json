@@ -1,5 +1,5 @@
 {
-    "name": "@masknet/decrypt-spa",
+    "name": "@masknet/app",
     "private": true,
     "type": "module",
     "exports": {
