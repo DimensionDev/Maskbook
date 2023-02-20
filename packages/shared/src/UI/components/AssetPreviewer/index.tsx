@@ -25,9 +25,6 @@ export interface AssetPreviewerProps extends withClasses<'root' | 'fallbackImage
     icon?: React.ReactNode
 }
 
-const ASSET_PLAYER_FALLBACK_DARK = new URL('../Image/mask-dark.png', import.meta.url)
-const ASSET_PLAYER_FALLBACK_LIGHT = new URL('../Image/mask-light.png', import.meta.url)
-
 export function AssetPreviewer(props: AssetPreviewerProps) {
     const { fallbackImage, url, icon } = props
 
@@ -45,10 +42,7 @@ export function AssetPreviewer(props: AssetPreviewerProps) {
                 height="100%"
                 style={{ objectFit: 'cover' }}
                 src={url}
-                fallback={
-                    fallbackImage ??
-                    (theme.palette.mode === 'dark' ? ASSET_PLAYER_FALLBACK_DARK : ASSET_PLAYER_FALLBACK_LIGHT)
-                }
+                fallback={fallbackImage}
             />
             <div className={classes.icon}>{icon}</div>
         </div>
