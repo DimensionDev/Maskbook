@@ -57,6 +57,7 @@ import { TransferAddressError } from '../type.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
 import Services from '../../../../service.js'
+import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()({
     container: {
@@ -389,7 +390,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     )
 
     const maxAmount = useMemo(() => {
-        const gasFee = formatGweiToWei(maxFeePerGas ?? 0).multipliedBy(minGasLimit ?? MIN_GAS_LIMIT)
+        const gasFee = formatGweiToWei(maxFeePerGas || 0).multipliedBy(minGasLimit ?? MIN_GAS_LIMIT)
         let amount_ = new BigNumber(tokenBalance ?? 0)
         amount_ = selectedAsset?.schema === SchemaType.Native ? amount_.minus(gasFee) : amount_
         return formatBalance(BigNumber.max(0, amount_).toFixed(), selectedAsset?.decimals)
@@ -752,15 +753,20 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                             ({t('wallet_transfer_gwei')})
                         </Typography>
                         <Typography component="span" className={classes.price}>
-                            {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: formatCurrency(
-                                    formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
-                                        .times(etherPrice)
-                                        .times(gasLimit),
-                                    'USD',
-                                    { boundaries: { min: 0.01 } },
-                                ),
-                            })}
+                            <Trans
+                                i18nKey="popups_wallet_gas_fee_settings_usd"
+                                values={{
+                                    usd: formatCurrency(
+                                        formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
+                                            .times(etherPrice)
+                                            .times(gasLimit),
+                                        'USD',
+                                        { boundaries: { min: 0.01 } },
+                                    ),
+                                }}
+                                components={{ span: <span /> }}
+                                shouldUnescape
+                            />
                         </Typography>
                     </Typography>
                     <Controller
@@ -782,15 +788,20 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                             ({t('wallet_transfer_gwei')})
                         </Typography>
                         <Typography component="span" className={classes.price}>
-                            {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: formatCurrency(
-                                    formatGweiToEther(Number(maxFeePerGas) ?? 0)
-                                        .times(etherPrice)
-                                        .times(gasLimit),
-                                    'USD',
-                                    { boundaries: { min: 0.01 } },
-                                ),
-                            })}
+                            <Trans
+                                i18nKey="popups_wallet_gas_fee_settings_usd"
+                                components={{ span: <span /> }}
+                                shouldUnescape
+                                values={{
+                                    usd: formatCurrency(
+                                        formatGweiToEther(Number(maxFeePerGas) ?? 0)
+                                            .times(etherPrice)
+                                            .times(gasLimit),
+                                        'USD',
+                                        { boundaries: { min: 0.01 } },
+                                    ),
+                                }}
+                            />
                         </Typography>
                     </Typography>
                     <Controller
