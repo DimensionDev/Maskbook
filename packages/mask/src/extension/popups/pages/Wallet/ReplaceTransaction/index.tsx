@@ -27,6 +27,7 @@ import { ReplaceType } from '../type.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { WalletContext } from '../hooks/useWalletContext.js'
 import { useTitle } from '../../../hook/useTitle.js'
+import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()({
     label: {
@@ -198,11 +199,16 @@ const ReplaceTransaction = memo(() => {
                         {formatGweiToEther(gasFee ?? 0).toString()} {nativeToken?.symbol}
                     </Typography>
                     <Typography>
-                        {t('popups_wallet_gas_fee_settings_usd', {
-                            usd: formatGweiToEther(gasFee)
-                                .times(nativeTokenPrice ?? 0)
-                                .toPrecision(3),
-                        })}
+                        <Trans
+                            i18nKey="popups_wallet_gas_fee_settings_usd"
+                            values={{
+                                usd: formatGweiToEther(gasFee)
+                                    .times(nativeTokenPrice ?? 0)
+                                    .toPrecision(3),
+                            }}
+                            components={{ span: <span /> }}
+                            shouldUnescape
+                        />
                     </Typography>
                 </Box>
                 {is1559 ? (

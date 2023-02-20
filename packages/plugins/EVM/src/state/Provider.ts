@@ -56,6 +56,7 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             account: string
             identifier?: ECKeyIdentifier
         },
+        silent?: boolean,
     ): Promise<Account<ChainId>> {
         // Disconnect WalletConnect, prevents its session lasting too long.
         if (providerType !== ProviderType.WalletConnect && this.providers[ProviderType.WalletConnect].connected) {
@@ -66,6 +67,6 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             }
         }
 
-        return super.connect(providerType, chainId, address, owner)
+        return super.connect(providerType, chainId, address, owner, silent)
     }
 }

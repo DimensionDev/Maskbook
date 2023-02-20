@@ -1,10 +1,12 @@
 import { Icons } from '@masknet/icons'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
+import { toFixed } from '@masknet/web3-shared-base'
 import { useSmartPayConstants } from '@masknet/web3-shared-evm'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, InputBase, Typography } from '@mui/material'
+import { BigNumber } from 'bignumber.js'
 import { noop } from 'lodash-es'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useSharedI18N } from '../../index.js'
@@ -44,15 +46,16 @@ export const ApproveMaskDialog = memo<ApproveMaskDialogProps>(({ open, handleClo
     const { classes } = useStyles()
     const { Others } = useWeb3State()
     const [amount, setAmount] = useState('')
-
+    const { pluginID } = useNetworkContext()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const maskAddress = Others?.getMaskTokenAddress(chainId)
+    const { value: maskToken } = useFungibleToken(pluginID, maskAddress)
     const { PAYMASTER_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
 
     const [{ type: approveStateType }, transactionState, approveCallback] = useERC20TokenApproveCallback(
         maskAddress ?? '',
-        amount,
+        maskToken ? toFixed(new BigNumber(amount).shiftedBy(maskToken.decimals ?? 0).integerValue()) : '',
         PAYMASTER_CONTRACT_ADDRESS ?? '',
         noop,
         chainId,

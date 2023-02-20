@@ -7,11 +7,11 @@ import { z as zod } from 'zod'
 import { BigNumber } from 'bignumber.js'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
-    formatWeiToEther,
     formatWeiToGwei,
     ChainIdOptionalRecord,
     ChainId,
     formatGweiToEther,
+    formatWeiToEther,
 } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../../../utils/index.js'
@@ -20,6 +20,7 @@ import { GasOptionType, pow10 } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useGasOptions, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { ActionButton, makeStyles, MaskColorVar } from '@masknet/theme'
+import { Trans } from 'react-i18next'
 
 const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
     [ChainId.BSC]: pow10(9).multipliedBy(5),
@@ -188,12 +189,17 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                                 <Typography className={classes.optionsTitle}>{title}</Typography>
                                 <Typography>{formatWeiToGwei(gasPrice ?? 0).toString()} Gwei</Typography>
                                 <Typography className={classes.gasUSD}>
-                                    {t('popups_wallet_gas_fee_settings_usd', {
-                                        usd: formatWeiToEther(gasPrice)
-                                            .times(nativeTokenPrice)
-                                            .times(inputGasLimit || '1')
-                                            .toPrecision(3),
-                                    })}
+                                    <Trans
+                                        i18nKey="popups_wallet_gas_fee_settings_usd"
+                                        values={{
+                                            usd: formatWeiToEther(gasPrice)
+                                                .times(nativeTokenPrice)
+                                                .times(inputGasLimit || '1')
+                                                .toPrecision(3),
+                                        }}
+                                        components={{ span: <span /> }}
+                                        shouldUnescape
+                                    />
                                 </Typography>
                             </div>
                         ))}
