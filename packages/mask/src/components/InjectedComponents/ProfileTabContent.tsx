@@ -410,24 +410,22 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                 <Icons.ArrowDrop className={classes.arrowDropIcon} />
                             </Button>
 
-                            {trendingResult && collectionList?.length ? (
-                                <TokenWithSocialGroupMenu
-                                    walletMenuOpen={menuOpen}
-                                    setWalletMenuOpen={setMenuOpen}
-                                    containerRef={buttonRef}
-                                    onAddressChange={onSelect}
-                                    currentAddress={selectedAddress}
-                                    collectionList={collectionList}
-                                    socialAccounts={socialAccounts}
-                                    currentCollection={trendingResult}
-                                    onTokenChange={(currentResult, i) => {
-                                        setCurrentTrendingIndex(i)
-                                        hideInspector(false)
-                                        setMenuOpen(false)
-                                    }}
-                                    fromSocialCard
-                                />
-                            ) : null}
+                            <TokenWithSocialGroupMenu
+                                walletMenuOpen={menuOpen}
+                                setWalletMenuOpen={setMenuOpen}
+                                containerRef={buttonRef}
+                                onAddressChange={onSelect}
+                                currentAddress={selectedAddress}
+                                collectionList={collectionList}
+                                socialAccounts={socialAccounts}
+                                currentCollection={trendingResult}
+                                onTokenChange={(currentResult, i) => {
+                                    setCurrentTrendingIndex(i)
+                                    hideInspector(false)
+                                    setMenuOpen(false)
+                                }}
+                                fromSocialCard
+                            />
                         </div>
                         <div className={classes.settingItem}>
                             <Typography
