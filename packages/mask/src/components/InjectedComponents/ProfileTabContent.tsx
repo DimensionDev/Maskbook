@@ -271,7 +271,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         })
     }
 
-    const { value: collectionList } = useCollectionByTwitterHandler(currentVisitingUserId)
+    const { value: collectionList = EMPTY_LIST } = useCollectionByTwitterHandler(currentVisitingUserId)
     const [currentTrendingIndex, setCurrentTrendingIndex] = useState(0)
     const trendingResult = collectionList?.[currentTrendingIndex]
 
