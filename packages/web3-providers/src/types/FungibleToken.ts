@@ -19,7 +19,6 @@ export namespace FungibleTokenAPI {
         /** Get fungible assets. */
         getAssets?: (
             address: string,
-            trustedFungibleTokens?: Array<FungibleToken<ChainId, SchemaType>>,
             options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>, Indicator>>
         /** Get trusted fungible assets. */

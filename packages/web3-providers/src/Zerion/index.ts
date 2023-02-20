@@ -15,7 +15,6 @@ import {
     scale10,
     GasOptionType,
     toFixed,
-    FungibleToken,
 } from '@masknet/web3-shared-base'
 import { ChainId, createNativeToken, GasOption, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import type { ZerionNonFungibleTokenItem, ZerionNonFungibleCollection, ZerionCoin } from './types.js'
@@ -39,11 +38,7 @@ const filterAssetType = ['compound', 'trash', 'uniswap', 'uniswap-v2', 'nft']
 export class ZerionAPI
     implements FungibleTokenAPI.Provider<ChainId, SchemaType>, HistoryAPI.Provider<ChainId, SchemaType>
 {
-    async getAssets(
-        address: string,
-        trustedFungibleTokens?: Array<FungibleToken<ChainId, SchemaType>>,
-        options?: HubOptions<ChainId>,
-    ) {
+    async getAssets(address: string, options?: HubOptions<ChainId>) {
         const { meta, payload } = await getAssetsList(address, 'positions')
         if (meta.status !== 'ok') return createPageable(EMPTY_LIST, createIndicator(options?.indicator))
 

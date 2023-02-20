@@ -16,6 +16,7 @@ import { useWeb3Hub } from './useWeb3Hub.js'
 import { useWeb3State } from './useWeb3State.js'
 import { useTrustedFungibleTokens } from './useTrustedFungibleTokens.js'
 import { useBlockedFungibleTokens } from './useBlockedFungibleTokens.js'
+import { unionWith } from 'lodash-es'
 
 export function useFungibleAssets<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
@@ -35,14 +36,26 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
         const isBlockedToken = currySameAddress(blockedTokens.map((x) => x.address))
         const iterator = pageableToIterator(async (indicator?: HubIndicator) => {
             if (!hub.getFungibleAssets) return
-            return hub.getFungibleAssets(account, trustedTokens, {
+            return hub.getFungibleAssets(account, {
                 indicator,
                 size: 50,
             })
         })
-        const assets = await asyncIteratorToArray(iterator)
 
-        const filteredAssets = assets.length && schemaType ? assets.filter((x) => x.schema === schemaType) : assets
+        const trustedAssetsIterator = pageableToIterator(async (indicator?: HubIndicator) => {
+            if (!hub.getTrustedFungibleAssets) return
+            return hub.getTrustedFungibleAssets(account, trustedTokens, { indicator, size: 50 })
+        })
+        const assets = await asyncIteratorToArray(iterator)
+        const truestedAssets = await asyncIteratorToArray(trustedAssetsIterator)
+
+        const _assets = unionWith(
+            assets,
+            truestedAssets,
+            (a, z) => isSameAddress(a.address, z.address) && a.chainId === z.chainId,
+        )
+
+        const filteredAssets = _assets.length && schemaType ? _assets.filter((x) => x.schema === schemaType) : _assets
 
         return filteredAssets
             .filter((x) => !isBlockedToken(x))

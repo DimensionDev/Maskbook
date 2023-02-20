@@ -27,7 +27,7 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
         const options = this.getOptions(initial)
 
         // only the first page is available
-        if ((options.indicator ?? 0) > 0) return []
+        if ((options.indicator?.index ?? 0) > 0) return []
 
         return this.getPredicateProviders<FungibleTokenAPI.Provider<ChainId, SchemaType> | PriceAPI.Provider<ChainId>>(
             {
