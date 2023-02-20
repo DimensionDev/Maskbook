@@ -12,6 +12,8 @@ import { ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } 
 import type { ManagerAccount } from '../type.js'
 import { useI18N } from '../locales/index.js'
 import { timeout } from '@masknet/kit'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { PluginSmartPayMessages } from '../message.js'
 
 export function useDeploy(
     signPersona?: PersonaInformation,
@@ -47,6 +49,8 @@ export function useDeploy(
         chainId,
     })
 
+    const { closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
+
     return useAsyncFn(async () => {
         try {
             if (
@@ -62,14 +66,14 @@ export function useDeploy(
             if (!hasPassword) return openPopupWindow(PopupRoutes.CreatePassword)
 
             if (contractAccount.funded && !contractAccount.deployed) {
-                const result = await connection?.deploy?.(signAccount.address, signAccount.identifier, {
+                const hash = await connection?.deploy?.(signAccount.address, signAccount.identifier, {
                     chainId,
                 })
 
-                return timeout(
+                const result = await timeout(
                     new Promise((resolve) => {
                         return TransactionWatcher?.emitter.on('progress', async (_, txHash, status) => {
-                            if (txHash !== result || status !== TransactionStatusType.SUCCEED) return
+                            if (txHash !== hash || status !== TransactionStatusType.SUCCEED) return
                             await Wallet?.addWallet({
                                 name: 'Smart Pay',
                                 owner: signAccount.address,
@@ -81,12 +85,14 @@ export function useDeploy(
                                 updatedAt: new Date(),
                             })
                             onSuccess?.()
-                            resolve(result)
+                            resolve(hash)
                         })
                     }),
                     120 * 1000,
                     'Timeout',
                 )
+
+                return result
             }
             const payload = JSON.stringify({
                 twitterHandler: lastRecognizedIdentity.identifier.userId,
@@ -129,17 +135,17 @@ export function useDeploy(
             )
             if (!hash) throw new Error('Deploy Failed')
 
-            return timeout(
+            const result = timeout(
                 new Promise((resolve) => {
                     return TransactionWatcher?.emitter.on('progress', async (_, txHash, status) => {
                         if (txHash !== hash || !signAccount.address || status !== TransactionStatusType.SUCCEED) return
 
-                        const result = await connection?.deploy?.(signAccount.address, signAccount.identifier, {
+                        const deployResult = await connection?.deploy?.(signAccount.address, signAccount.identifier, {
                             chainId,
                         })
 
                         TransactionWatcher?.emitter.on('progress', async (_, deployHash, deployStatus) => {
-                            if (deployHash !== result || deployStatus !== TransactionStatusType.SUCCEED) return
+                            if (deployHash !== deployResult || deployStatus !== TransactionStatusType.SUCCEED) return
 
                             await Wallet?.addWallet({
                                 name: 'Smart Pay',
@@ -154,13 +160,15 @@ export function useDeploy(
 
                             onSuccess?.()
 
-                            resolve(result)
+                            resolve(deployResult)
                         })
                     })
                 }),
                 120 * 1000,
                 'Timeout',
             )
+
+            return result
         } catch (error) {
             if (error instanceof Error) {
                 let message = ''
@@ -183,6 +191,10 @@ export function useDeploy(
                     variant: 'error',
                     message: <Typography>{message}</Typography>,
                 })
+
+                if (error.message === 'Timeout') {
+                    closeDialog()
+                }
             }
         }
     }, [
