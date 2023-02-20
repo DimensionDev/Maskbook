@@ -1,4 +1,3 @@
-import { useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Image } from '../Image/index.js'
 
@@ -21,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface AssetPreviewerProps extends withClasses<'root' | 'fallbackImage' | 'container'> {
     url?: string
-    fallbackImage?: URL
+    fallbackImage?: URL | JSX.Element
     icon?: React.ReactNode
 }
 
@@ -29,7 +28,6 @@ export function AssetPreviewer(props: AssetPreviewerProps) {
     const { fallbackImage, url, icon } = props
 
     const { classes } = useStyles(undefined, { props })
-    const theme = useTheme()
 
     return (
         <div className={classes.root}>
