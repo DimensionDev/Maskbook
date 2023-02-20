@@ -3,10 +3,10 @@ import { DialogContent } from '@mui/material'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { GasOptionType } from '@masknet/web3-shared-base'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../../utils/index.js'
 import { GasSetting } from './GasSetting.js'
-import { GasOptionType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

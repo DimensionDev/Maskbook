@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef } from 'react'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { NonFungibleAsset, SourceType } from '@masknet/web3-shared-base'
+import { SourceType } from '@masknet/web3-shared-base'
 import { Box, Button, Tooltip, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils/index.js'
@@ -49,7 +49,7 @@ export interface CollectibleListProps
         CollectibleGridProps,
         Omit<SelectableProps, 'value' | 'checked' | 'onChange'> {
     pluginID?: NetworkPluginID
-    collectibles: Array<NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    collectibles: Web3Helper.NonFungibleAssetAll[]
     error?: string
     loading: boolean
     retry(): void
@@ -62,7 +62,7 @@ export interface CollectibleListProps
     onChange?(value: string | string[] | null): void
 }
 
-const getCollectibleKey = (collectible: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) => {
+const getCollectibleKey = (collectible: Web3Helper.NonFungibleAssetAll) => {
     return `${collectible.address}_${collectible.tokenId}`
 }
 

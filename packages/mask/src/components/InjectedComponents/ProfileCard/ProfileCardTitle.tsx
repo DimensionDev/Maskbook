@@ -56,7 +56,7 @@ export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
 }) => {
     const me = useLastRecognizedIdentity()
     const { classes, cx } = useStyles()
-    const { setDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
+    const { setDialog } = useRemoteControlledDialog(WalletMessages.events.applicationDialogUpdated)
     const handleOpenDialog = () => {
         setDialog({
             open: true,

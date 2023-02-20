@@ -26,7 +26,7 @@ import { ConfirmDialog } from './ConfirmDialog.js'
 import { useSortedTrades } from './hooks/useSortedTrades.js'
 import { useUpdateBalance } from './hooks/useUpdateBalance.js'
 import { TradeForm } from './TradeForm.js'
-import { WalletMessages } from '../../../Wallet/messages.js'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { TraderStateBar } from './TraderStateBar.js'
 

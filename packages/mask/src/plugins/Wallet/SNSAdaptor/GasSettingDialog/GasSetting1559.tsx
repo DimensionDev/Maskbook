@@ -1,17 +1,16 @@
 import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { Controller, useForm } from 'react-hook-form'
 import { z as zod } from 'zod'
+import { BigNumber } from 'bignumber.js'
+import { isEmpty, noop } from 'lodash-es'
+import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionButton, makeStyles, MaskColorVar } from '@masknet/theme'
 import { formatGweiToWei, formatWeiToEther, formatWeiToGwei, useTokenConstants } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { BigNumber } from 'bignumber.js'
-import { isEmpty, noop } from 'lodash-es'
-// import { StyledInput } from '../../../../extension/popups/components/StyledInput'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../../../utils/index.js'
 import type { GasSettingProps } from './types.js'
-import { NetworkPluginID } from '@masknet/shared-base'
 import {
     formatCurrency,
     GasOptionType,

@@ -23,6 +23,7 @@ import type {
     TokenResult,
     FungibleTokenResult,
     NonFungibleTokenResult,
+    NonFungibleCollection,
 } from '@masknet/web3-shared-base'
 import type * as EVM from '@masknet/web3-shared-evm'
 import type * as Flow from '@masknet/web3-shared-flow'
@@ -199,7 +200,23 @@ export declare namespace Web3Helper {
         Definition[NetworkPluginID]['ChainId'],
         Definition[NetworkPluginID]['SchemaType']
     >
+
     export type NonFungibleTokenAll = NonFungibleToken<
+        Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['SchemaType']
+    >
+
+    export type FungibleAssetAll = FungibleAsset<
+        Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['SchemaType']
+    >
+
+    export type NonFungibleAssetAll = NonFungibleAsset<
+        Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['SchemaType']
+    >
+
+    export type NonFungibleCollectionAll = NonFungibleCollection<
         Definition[NetworkPluginID]['ChainId'],
         Definition[NetworkPluginID]['SchemaType']
     >

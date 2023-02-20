@@ -4,7 +4,7 @@ import { uniqBy } from 'lodash-es'
 import { Box, Button, Stack } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { DashboardRoutes, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { isSameAddress, NonFungibleAsset, NonFungibleToken } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
 import { EmptyPlaceholder } from '../EmptyPlaceholder/index.js'
 import { CollectibleCard } from '../CollectibleCard/index.js'
@@ -69,12 +69,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedChain }) =>
 
     const { pluginID: currentPluginId } = useNetworkContext()
     const onSend = useCallback(
-        (
-            detail: NonFungibleToken<
-                Web3Helper.Definition[NetworkPluginID]['ChainId'],
-                Web3Helper.Definition[NetworkPluginID]['SchemaType']
-            >,
-        ) => {
+        (detail: Web3Helper.NonFungibleTokenAll) => {
             // Sending NFT is only available on EVM currently.
             if (currentPluginId !== NetworkPluginID.PLUGIN_EVM) return
             navigate(DashboardRoutes.WalletsTransfer, {
@@ -106,18 +101,8 @@ export interface CollectibleListUIProps {
     isDone: boolean
     isEmpty: boolean
     chainId?: Web3Helper.ChainIdAll
-    dataSource: Array<
-        NonFungibleAsset<
-            Web3Helper.Definition[NetworkPluginID]['ChainId'],
-            Web3Helper.Definition[NetworkPluginID]['SchemaType']
-        >
-    >
-    onSend(
-        detail: NonFungibleAsset<
-            Web3Helper.Definition[NetworkPluginID]['ChainId'],
-            Web3Helper.Definition[NetworkPluginID]['SchemaType']
-        >,
-    ): void
+    dataSource: Web3Helper.NonFungibleAssetAll[]
+    onSend(detail: Web3Helper.NonFungibleAssetAll): void
     onRetry?: () => void
 }
 

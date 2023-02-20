@@ -127,18 +127,10 @@ export interface PluginProviderRenderProps {
         provider: Web3Helper.ProviderDescriptorAll,
     ) => void
     NetworkIconClickBait?: React.ComponentType<
-        NetworkIconClickBaitProps<
-            Web3Helper.Definition[NetworkPluginID]['ChainId'],
-            Web3Helper.Definition[NetworkPluginID]['ProviderType'],
-            Web3Helper.Definition[NetworkPluginID]['NetworkType']
-        >
+        NetworkIconClickBaitProps<Web3Helper.ChainIdAll, Web3Helper.ProviderTypeAll, Web3Helper.NetworkTypeAll>
     >
     ProviderIconClickBait?: React.ComponentType<
-        ProviderIconClickBaitProps<
-            Web3Helper.Definition[NetworkPluginID]['ChainId'],
-            Web3Helper.Definition[NetworkPluginID]['ProviderType'],
-            Web3Helper.Definition[NetworkPluginID]['NetworkType']
-        >
+        ProviderIconClickBaitProps<Web3Helper.ChainIdAll, Web3Helper.ProviderTypeAll, Web3Helper.NetworkTypeAll>
     >
     supportedNetworkList?: Array<Web3Helper.NetworkDescriptorAll['type']>
 }

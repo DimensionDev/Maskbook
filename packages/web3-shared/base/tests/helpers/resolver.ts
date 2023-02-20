@@ -6,7 +6,7 @@ import {
     resolveCrossOriginURL,
     resolveIPFS_CID,
     resolveIPFS_URL,
-} from '../src/utils/resolver.js'
+} from '../../src/helpers/resolver.js'
 
 const MASK_URL = 'https://mask.io'
 const CHROME_EXTENSION_URL = 'chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/logo.png'
