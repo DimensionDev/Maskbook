@@ -31,7 +31,7 @@ export * from './types/TokenList.js'
 export * from './types/Trending.js'
 export * from './types/Twitter.js'
 export * from './types/Web3.js'
-export * from './types/Logger.js'
+export * from './types/Telemetry.js'
 export * from './types/RedPacket.js'
 export * from './types/NameService.js'
 
