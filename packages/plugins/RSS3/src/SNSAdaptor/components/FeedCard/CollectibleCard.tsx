@@ -132,7 +132,6 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
                     metadata,
                     summary: (
                         <Translate.collectible_mint
-                            shouldUnescape
                             values={{
                                 user,
                                 collectible: verbose ? metadata!.name : 'an NFT',

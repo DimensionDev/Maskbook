@@ -76,7 +76,6 @@ export const TokenSwapCard: FC<TokenSwapCardProps> = ({ feed, ...rest }) => {
         <CardFrame type={CardType.TokenSwap} feed={feed} {...rest}>
             <Typography className={classes.summary}>
                 <Translate.token_swap
-                    shouldUnescape
                     values={{
                         user,
                         from_value: formatValue(metadata?.from),

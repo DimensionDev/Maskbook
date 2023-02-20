@@ -11,7 +11,8 @@
                 "hooks": "useMaskI18N",
                 "namespace": "mask",
                 "trans": "MaskTrans",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -23,7 +24,8 @@
                 "hooks": "useDO_NOT_USE",
                 "namespace": "DO_NOT_USE",
                 "trans": "DO_NOT_USE_TRANSLATOR",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -35,7 +37,8 @@
                 "hooks": "useSharedI18N",
                 "namespace": "shared",
                 "trans": "SharedTrans",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -47,7 +50,8 @@
                 "hooks": "useSharedBaseI18N",
                 "namespace": "shareBase",
                 "trans": "SharedBaseTrans",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -59,7 +63,8 @@
                 "hooks": "useDashboardI18N",
                 "namespace": "dashboard",
                 "trans": "DashboardTrans",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -71,7 +76,8 @@
                 "hooks": "useI18N",
                 "namespace": "io.mask.example",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -83,7 +89,8 @@
                 "hooks": "useI18N",
                 "namespace": "io.mask.debugger",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -95,7 +102,8 @@
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.wallet",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -107,7 +115,8 @@
                 "hooks": "useI18N",
                 "namespace": "com.mask.flow",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -119,7 +128,8 @@
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.fileservice",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -131,7 +141,8 @@
                 "hooks": "useI18N",
                 "namespace": "io.scamsniffer.mask-plugin",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -143,7 +154,8 @@
                 "hooks": "useI18N",
                 "namespace": "me.cyberconnect.app",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -155,7 +167,8 @@
                 "hooks": "useI18N",
                 "namespace": "bio.rss3",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -167,7 +180,8 @@
                 "hooks": "useI18N",
                 "namespace": "com.mask.evm",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -179,7 +193,8 @@
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.solana",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -191,7 +206,8 @@
                 "hooks": "useI18N",
                 "namespace": "com.mask.next_id",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -203,7 +219,8 @@
                 "hooks": "useI18N",
                 "namespace": "__template__",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -215,7 +232,8 @@
                 "hooks": "useI18N",
                 "namespace": "io.gopluslabs.security",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -227,7 +245,8 @@
                 "hooks": "useI18N",
                 "namespace": "io.mask.cross-chain-bridge",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -239,7 +258,8 @@
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.red_packet",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -251,7 +271,8 @@
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.tip",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -263,7 +284,8 @@
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.avatar",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -275,7 +297,8 @@
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.trader",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -287,7 +310,8 @@
                 "hooks": "useI18N",
                 "namespace": "co.gitcoin",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -299,7 +323,8 @@
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.referral",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -311,7 +336,8 @@
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.box",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -323,7 +349,8 @@
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.game",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -335,7 +362,8 @@
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.pets",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -347,7 +375,8 @@
                 "hooks": "useI18N",
                 "namespace": "io.mask.web3-profile",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -359,7 +388,8 @@
                 "hooks": "useI18N",
                 "namespace": "io.mask.web3-profile-card",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -371,7 +401,8 @@
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.handle",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -383,7 +414,8 @@
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.approval",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -395,7 +427,8 @@
                 "hooks": "useI18N",
                 "namespace": "com.mask.scam-warning",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -407,7 +440,8 @@
                 "hooks": "useI18N",
                 "namespace": "com.mask.smart-pay",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -419,7 +453,8 @@
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.tweet",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -431,7 +466,8 @@
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.transak",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         },
         {
@@ -443,7 +479,8 @@
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.collectibles",
                 "trans": "Translate",
-                "emitTS": true
+                "emitTS": true,
+                "shouldUnescape": true
             }
         }
     ]
