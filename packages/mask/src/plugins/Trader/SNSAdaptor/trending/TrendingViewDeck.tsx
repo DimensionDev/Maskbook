@@ -2,7 +2,6 @@ import { Icons } from '@masknet/icons'
 import { useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { PluginTransakMessages, useTransakAllowanceCoin } from '@masknet/plugin-transak'
 import {
-    FormattedCurrency,
     Linking,
     TokenSecurityBar,
     useTokenSecurity,
@@ -15,7 +14,7 @@ import { MaskColors, MaskDarkTheme, MaskLightTheme, makeStyles } from '@masknet/
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { SourceType, TokenType, formatCurrency, SocialIdentity } from '@masknet/web3-shared-base'
+import { SourceType, TokenType, formatCurrency, SocialIdentity, scale10 } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import {
     Avatar,
@@ -236,7 +235,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         },
         [JSON.stringify(identity), isCollectionProjectPopper, badgeBounding],
     )
-
     return (
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.cardHeader}>
@@ -338,15 +336,14 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             lineHeight="24px"
                                             color={theme.palette.maskColor.dark}>
                                             {isNFT ? `${t('plugin_trader_floor_price')}: ` : null}
-                                            <FormattedCurrency
-                                                value={
-                                                    (trending.dataProvider === SourceType.CoinMarketCap
-                                                        ? last(stats)?.[1] ?? market.current_price
-                                                        : market.current_price) ?? 0
-                                                }
-                                                sign={isNFT ? market.price_symbol : 'USD'}
-                                                formatter={formatCurrency}
-                                            />
+                                            {formatCurrency(
+                                                (trending.dataProvider === SourceType.CoinMarketCap
+                                                    ? last(stats)?.[1] ?? market.current_price
+                                                    : market.current_price) ?? 0,
+                                                isNFT ? market.price_symbol : 'USD',
+
+                                                { boundaries: { min: scale10(-12) } },
+                                            )}
                                         </Typography>
                                     ) : (
                                         <Typography fontSize={14} fontWeight={500} lineHeight="24px">
