@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface SourceSwitcherProps extends withClasses<'source' | 'selectedOption'> {
+export interface SourceSwitcherProps extends withClasses<'source' | 'selectedOption' | 'arrowDropIcon'> {
     result: Web3Helper.TokenResultAll
     resultList: Web3Helper.TokenResultAll[]
     setResult: (a: Web3Helper.TokenResultAll) => void
@@ -57,7 +57,7 @@ export function SourceSwitcher(props: SourceSwitcherProps) {
                     }))}
                     selectedIndex={typeof result.source !== 'undefined' ? sourceTypes.indexOf(result.source) : -1}
                     onChange={setResult}
-                    classes={{ title: classes.selectedOption }}
+                    classes={{ title: classes.selectedOption, icon: classes.arrowDropIcon }}
                 />
             </Stack>
         </Box>

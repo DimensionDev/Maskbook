@@ -30,7 +30,7 @@ export interface FootnoteMenuOption {
     disabled?: boolean
 }
 
-export interface FootnoteMenuProps extends withClasses<'title'> {
+export interface FootnoteMenuProps extends withClasses<'title' | 'icon'> {
     options: FootnoteMenuOption[]
     selectedIndex?: number
     children?: React.ReactNode

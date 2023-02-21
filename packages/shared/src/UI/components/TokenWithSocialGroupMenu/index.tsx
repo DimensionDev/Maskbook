@@ -36,7 +36,9 @@ const useStyles = makeStyles()((theme) => ({
 
     divider: {
         margin: theme.spacing(1, 0),
-        width: 376,
+        width: 'calc(100% - 24px)',
+        color: theme.palette.maskColor.line,
+        borderColor: theme.palette.maskColor.line,
         position: 'relative',
         left: 12,
     },
