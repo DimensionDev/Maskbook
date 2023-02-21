@@ -247,6 +247,9 @@ export class SolanaWeb3API
     callTransaction(chainId: ChainId, transaction: Transaction): Promise<string> {
         throw new Error('Method not implemented.')
     }
+    confirmTransaction(chainId: ChainId, hash: string): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
     estimateTransaction(chainId: ChainId, transaction: Transaction, fallback?: number | undefined): Promise<string> {
         throw new Error('Method not implemented.')
     }

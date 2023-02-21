@@ -772,7 +772,8 @@ class Connection implements EVM_Connection {
     }
 
     confirmTransaction(hash: string, initial?: EVM_ConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
+        const options = this.getOptions(initial)
+        return Web3.confirmTransaction(options.chainId, hash)
     }
 
     replaceTransaction(hash: string, transaction: Transaction, initial?: EVM_ConnectionOptions) {

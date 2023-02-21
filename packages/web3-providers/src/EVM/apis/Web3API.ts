@@ -82,6 +82,37 @@ export class Web3API
             Web3
         >
 {
+    getWeb3(chainId: ChainId) {
+        return createWeb3SDK(ProviderURL.from(chainId))
+    }
+
+    getWeb3Provider(chainId: ChainId) {
+        const web3 = this.getWeb3(chainId)
+        const provider = web3.currentProvider as HttpProvider
+        return createWeb3Provider(createWeb3Request(provider.send.bind(provider)))
+    }
+
+    private getWeb3Contract<T extends BaseContract>(chainId: ChainId, address: string, ABI: AbiItem[]) {
+        const web3 = this.getWeb3(chainId)
+        return createContract<T>(web3, address, ABI)
+    }
+
+    private getERC20Contract(chainId: ChainId, address: string) {
+        return this.getWeb3Contract<ERC20>(chainId, address, ERC20ABI as AbiItem[])
+    }
+
+    private getERC721Contract(chainId: ChainId, address: string) {
+        return this.getWeb3Contract<ERC721>(chainId, address, ERC721ABI as AbiItem[])
+    }
+
+    private getERC1155Contract(chainId: ChainId, address: string) {
+        return this.getWeb3Contract<ERC1155>(chainId, address, ERC1155ABI as AbiItem[])
+    }
+
+    private getERC165Contract(chainId: ChainId, address: string) {
+        return this.getWeb3Contract<ERC165>(chainId, address, ERC165ABI as AbiItem[])
+    }
+
     async getFungibleTokensBalance(
         chainId: ChainId,
         listOfAddress: string[],
@@ -117,6 +148,7 @@ export class Web3API
         }
         return Object.fromEntries(entities)
     }
+
     async getNonFungibleTokensBalance(
         chainId: ChainId,
         listOfAddress: string[],
@@ -138,37 +170,6 @@ export class Web3API
 
         if (result?.length !== listOfAddress.length) return {}
         return Object.fromEntries(listOfAddress.map<[string, string]>((x, i) => [x, result[i]]))
-    }
-
-    getWeb3(chainId: ChainId) {
-        return createWeb3SDK(ProviderURL.from(chainId))
-    }
-
-    getWeb3Provider(chainId: ChainId) {
-        const web3 = this.getWeb3(chainId)
-        const provider = web3.currentProvider as HttpProvider
-        return createWeb3Provider(createWeb3Request(provider.send.bind(provider)))
-    }
-
-    private getWeb3Contract<T extends BaseContract>(chainId: ChainId, address: string, ABI: AbiItem[]) {
-        const web3 = this.getWeb3(chainId)
-        return createContract<T>(web3, address, ABI)
-    }
-
-    private getERC20Contract(chainId: ChainId, address: string) {
-        return this.getWeb3Contract<ERC20>(chainId, address, ERC20ABI as AbiItem[])
-    }
-
-    private getERC721Contract(chainId: ChainId, address: string) {
-        return this.getWeb3Contract<ERC721>(chainId, address, ERC721ABI as AbiItem[])
-    }
-
-    private getERC1155Contract(chainId: ChainId, address: string) {
-        return this.getWeb3Contract<ERC1155>(chainId, address, ERC1155ABI as AbiItem[])
-    }
-
-    private getERC165Contract(chainId: ChainId, address: string) {
-        return this.getWeb3Contract<ERC165>(chainId, address, ERC165ABI as AbiItem[])
     }
 
     getBalance(chainId: ChainId, address: string): Promise<string> {
@@ -332,6 +333,9 @@ export class Web3API
             method: EthereumMethodType.ETH_CALL,
             params: [new AccountTransaction(transaction).fill(overrides), 'latest'],
         })
+    }
+    confirmTransaction(chainId: ChainId, hash: string): Promise<void> {
+        throw new Error('Method not implemented.')
     }
     replaceTransaction(chainId: ChainId, hash: string, transaction: Transaction): Promise<void> {
         const provider = this.getWeb3Provider(chainId)

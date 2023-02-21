@@ -209,13 +209,13 @@ export class TransactionWatcherState<ChainId, Transaction>
         // resume watcher if chain id changed
         if (this.subscriptions.chainId) {
             this.subscriptions.chainId.subscribe(() => resume())
-            getSubscriptionCurrentValue(() => this.subscriptions.chainId).then(resume)
+            getSubscriptionCurrentValue(() => this.subscriptions.chainId).then(() => resume())
         }
 
         // add external transactions at startup
         if (this.subscriptions.transactions) {
             this.subscriptions.transactions.subscribe(() => resume())
-            getSubscriptionCurrentValue(() => this.subscriptions.transactions).then(resume)
+            getSubscriptionCurrentValue(() => this.subscriptions.transactions).then(() => resume())
         }
     }
 

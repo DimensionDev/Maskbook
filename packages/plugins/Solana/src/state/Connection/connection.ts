@@ -1,7 +1,6 @@
 import { SolanaWeb3 } from '@masknet/web3-providers'
 import type {
     Account,
-    ConnectionOptions,
     FungibleToken,
     NonFungibleToken,
     NonFungibleCollection,

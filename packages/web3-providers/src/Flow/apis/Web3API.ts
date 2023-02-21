@@ -212,9 +212,13 @@ export class FlowWeb3API
     ): Promise<NonFungibleCollection<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
+
     callTransaction(chainId: ChainId, transaction: TransactionQuery): Promise<string> {
         const web3 = this.getWeb3(chainId)
         return web3.query(transaction)
+    }
+    confirmTransaction(chainId: ChainId, hash: string): Promise<void> {
+        throw new Error('Method not implemented.')
     }
     estimateTransaction(chainId: ChainId, transaction: Transaction, fallback?: number | undefined): Promise<string> {
         throw new Error('Method not implemented.')
