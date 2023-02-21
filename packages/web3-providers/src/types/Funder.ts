@@ -2,7 +2,7 @@ import type { Proof } from '@masknet/shared-base'
 
 export namespace FunderAPI {
     export interface Payload {
-        twitterHandler: string
+        twitterHandle: string
         nonce: number
         publicKey: string
         // timestamp will expire after 1 hour
