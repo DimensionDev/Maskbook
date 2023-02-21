@@ -2,6 +2,7 @@ import { memoize } from 'lodash-es'
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
 import { AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
+import { delay } from '@masknet/kit'
 import {
     AddressType,
     SchemaType,
@@ -27,6 +28,7 @@ import {
     getEthereumConstant,
     TransactionSignature,
     ProviderURL,
+    getAverageBlockDelay,
 } from '@masknet/web3-shared-evm'
 import {
     FungibleToken,
@@ -326,7 +328,6 @@ export class Web3API
             return toHex(fallback)
         }
     }
-
     callTransaction(chainId: ChainId, transaction: Transaction, overrides?: Transaction): Promise<string> {
         const provider = this.getWeb3Provider(chainId)
         return provider.request<string>({
@@ -334,8 +335,27 @@ export class Web3API
             params: [new AccountTransaction(transaction).fill(overrides), 'latest'],
         })
     }
-    confirmTransaction(chainId: ChainId, hash: string): Promise<void> {
-        throw new Error('Method not implemented.')
+    async confirmTransaction(chainId: ChainId, hash: string, signal?: AbortSignal): Promise<void> {
+        const times = 100
+        const interval = getAverageBlockDelay(chainId)
+
+        for (let i = 0; i < times; i += 1) {
+            if (signal?.aborted) throw new Error('Aborted')
+
+            try {
+                const receipt = await this.getTransactionReceipt(chainId, hash)
+                if (!receipt) throw new Error('Not confirm yet.')
+
+                // the transaction has been confirmed
+                break
+            } catch {
+                await delay(interval)
+                continue
+            }
+        }
+
+        // insufficient try times
+        throw new Error('Not confirm yet')
     }
     replaceTransaction(chainId: ChainId, hash: string, transaction: Transaction): Promise<void> {
         const provider = this.getWeb3Provider(chainId)

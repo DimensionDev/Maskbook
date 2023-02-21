@@ -5,7 +5,7 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from './useWeb3State.js'
 import { useChainContext } from './useContext.js'
 
-const DEFAULT_SINGLE_BLOCK_DELAY = 15 * 1000
+const DEFAULT_SINGLE_BLOCK_DELAY = 10 * 1000 // 10 seconds
 const DEFAULT_DOUBLE_BLOCK_DELAY = DEFAULT_SINGLE_BLOCK_DELAY * 2
 
 export function useBeat(delay = 1000) {
