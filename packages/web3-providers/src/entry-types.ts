@@ -1,5 +1,4 @@
 // Providers
-export * from './types/AbortController.js'
 export * from './types/AbstractAccount.js'
 export * from './types/Authorization.js'
 export * from './types/Bundler.js'
