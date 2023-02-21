@@ -14,10 +14,10 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { PartialRequired, toHex } from '@masknet/shared-base'
 import { FlowWeb3 } from '@masknet/web3-providers'
 import { Providers } from './provider.js'
-import type { FlowWeb3Connection as BaseConnection, FlowConnectionOptions } from './types.js'
+import type { FlowConnection, FlowConnectionOptions } from './types.js'
 import { Web3StateSettings } from '../../settings/index.js'
 
-class Connection implements BaseConnection {
+class Connection implements FlowConnection {
     constructor(
         private chainId: ChainId,
         private account: string,
