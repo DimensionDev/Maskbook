@@ -41,6 +41,7 @@ import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
 import Services from '../../extension/service.js'
+import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -113,6 +114,14 @@ const useStyles = makeStyles()((theme) => ({
 export interface ProfileTabContentProps extends withClasses<'text' | 'button' | 'root'> {}
 
 export function ProfileTabContent(props: ProfileTabContentProps) {
+    return (
+        <ScopedDomainsContainer.Provider>
+            <Content {...props} />
+        </ScopedDomainsContainer.Provider>
+    )
+}
+
+function Content(props: ProfileTabContentProps) {
     const { classes } = useStyles(undefined, { props })
 
     const { t } = useI18N()
@@ -152,6 +161,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const [selectedAddress = first(socialAccounts)?.address, setSelectedAddress] = useState<string | undefined>()
 
     const selectedSocialAccount = socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
+    const { setPair } = ScopedDomainsContainer.useContainer()
+    useEffect(() => {
+        if (selectedSocialAccount?.address && selectedSocialAccount?.label) {
+            setPair(selectedSocialAccount.address, selectedSocialAccount.label)
+        }
+    }, [selectedSocialAccount?.address, selectedSocialAccount?.label])
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
