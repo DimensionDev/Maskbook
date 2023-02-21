@@ -83,7 +83,7 @@ export function RouterDialog() {
 
         if (accounts.filter((x) => x.deployed).length) return navigate(RoutePaths.Main)
 
-        if (verified || accounts.filter((x) => !x.deployed && x.funded)) return navigate(RoutePaths.Deploy)
+        if (verified || accounts.filter((x) => !x.deployed && x.funded).length) return navigate(RoutePaths.Deploy)
 
         return navigate(RoutePaths.InEligibility)
     }, [open, lastRecognizedIdentity, personas, wallets])

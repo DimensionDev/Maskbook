@@ -95,7 +95,7 @@ export function useDeploy(
                 return result
             }
             const payload = JSON.stringify({
-                twitterHandler: lastRecognizedIdentity.identifier.userId,
+                twitterHandle: lastRecognizedIdentity.identifier.userId,
                 ts: getUnixTime(new Date()),
                 ownerAddress: signAccount.address,
                 nonce,
