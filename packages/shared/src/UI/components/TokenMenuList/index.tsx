@@ -97,7 +97,11 @@ export const TokenMenuList: FC<TokenMenuListProps> = ({ options, currentOption, 
                                     <Icons.CheckCircle size={20} className={classes.checkedIcon} />
                                 ) : (
                                     <RadioButtonUncheckedIcon
-                                        style={{ fontSize: 20, color: theme.palette.maskColor.secondaryLine }}
+                                        style={{
+                                            fontSize: 20,
+                                            color: theme.palette.maskColor.secondaryLine,
+                                            visibility: 'hidden',
+                                        }}
                                     />
                                 )}
                             </div>

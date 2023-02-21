@@ -417,14 +417,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
         if (!collections[0]) return EMPTY_LIST
 
-        // Filter same CoinMarketCap token when it exists in Coingecko Collections.
-        const coingeckoCollectionsOfName = collections
-            .filter((x) => x.source === SourceType.CoinGecko)
-            .map((x) => x.name)
-
-        return collections.filter(
-            (x) => !(x.source === SourceType.CoinMarketCap && coingeckoCollectionsOfName.includes(x.name)),
-        )
+        return collections
     }
 
     /**

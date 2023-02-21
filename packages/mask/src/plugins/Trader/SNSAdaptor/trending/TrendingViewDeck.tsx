@@ -7,6 +7,7 @@ import {
     useTokenSecurity,
     useSocialAccountsBySettings,
     TokenWithSocialGroupMenu,
+    useTokenMenuCollectionList,
 } from '@masknet/shared'
 import { NetworkPluginID, PluginID, EMPTY_LIST, EnhanceableSite, CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -27,7 +28,7 @@ import {
     Typography,
     useTheme,
 } from '@mui/material'
-import { first, last, uniqBy } from 'lodash-es'
+import { first, last } from 'lodash-es'
 import { useCallback, useContext, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { ContentTabs, Currency, Stat } from '../../types/index.js'
@@ -207,10 +208,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const coinAddress = coin.address || coin.contract_address
     const coinName = result.name || coin.name
 
-    const displayResultList = uniqBy(
-        [result, ...resultList],
-        (x) => `${x.address?.toLowerCase()}_${x.chainId}_${x.type}_${x.name?.toLowerCase()}_${x.source}`,
-    )
+    const collectionList = useTokenMenuCollectionList([result, ...resultList])
 
     const rss3Key = SNS_RSS3_FIELD_KEY_MAP[identity?.identifier?.network as EnhanceableSite]
     const { value: socialAccounts = EMPTY_LIST } = useSocialAccountsBySettings(identity)
@@ -276,7 +274,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         {t('plugin_trader_rank', { rank: result.rank ?? coin.market_cap_rank })}
                                     </Typography>
                                 ) : null}
-                                {(displayResultList.length > 1 || (socialAccounts.length && rss3Key)) &&
+                                {(collectionList.length > 1 || (socialAccounts.length && rss3Key)) &&
                                 !isPreciseSearch ? (
                                     <>
                                         <IconButton
@@ -294,7 +292,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                 setWalletMenuOpen={setWalletMenuOpen}
                                                 containerRef={titleRef}
                                                 onAddressChange={openRss3Profile}
-                                                collectionList={displayResultList}
+                                                collectionList={collectionList}
                                                 socialAccounts={socialAccounts}
                                                 currentCollection={result}
                                                 onTokenChange={setResult}

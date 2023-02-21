@@ -281,7 +281,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         })
     }, [pluginID, payload.chainId, availability?.claimed_id, availability?.token_address])
 
-    const { value: NFTDetailed } = useNonFungibleAsset<'all'>(
+    const { value: NFTDetailed, loading: loadingNFTDetailed } = useNonFungibleAsset<'all'>(
         NetworkPluginID.PLUGIN_EVM,
         payload.contractAddress,
         availability?.claimed_id,
@@ -340,16 +340,18 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     }}>
                     <Box className={cx(classes.claimedTokenWrapper, !availability.isClaimed ? classes.hidden : '')}>
                         <Box className={classes.tokenImageWrapper} onClick={openNFTDialog}>
-                            <AssetPreviewer
-                                url={NFTDetailed?.metadata?.imageURL || NFTDetailed?.metadata?.mediaURL}
-                                classes={{
-                                    root: classes.imgWrapper,
-                                    fallbackImage: classes.fallbackImage,
-                                }}
-                                fallbackImage={
-                                    <div className={classes.NFTFallbackImageWrapper}>{NFTFallbackImage}</div>
-                                }
-                            />
+                            {loadingNFTDetailed ? null : (
+                                <AssetPreviewer
+                                    url={NFTDetailed?.metadata?.imageURL || NFTDetailed?.metadata?.mediaURL}
+                                    classes={{
+                                        root: classes.imgWrapper,
+                                        fallbackImage: classes.fallbackImage,
+                                    }}
+                                    fallbackImage={
+                                        <div className={classes.NFTFallbackImageWrapper}>{NFTFallbackImage}</div>
+                                    }
+                                />
+                            )}
                         </Box>
 
                         <div className={classes.description}>
