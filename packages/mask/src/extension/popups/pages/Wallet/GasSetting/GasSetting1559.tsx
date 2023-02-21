@@ -275,6 +275,9 @@ export const GasSetting1559 = memo(() => {
 
             await WalletRPC.updateUnconfirmedRequest({
                 ...value.payload,
+                owner: value.owner,
+                identifier: value.identifier?.toText(),
+                paymentToken: value.paymentToken,
                 params: config,
             })
             navigate(-1)
@@ -334,7 +337,7 @@ export const GasSetting1559 = memo(() => {
 
     // #region If the estimate gas be 0, Set error
     useUpdateEffect(() => {
-        if (!getGasLimitError) setError('gasLimit', { message: 'Cant not get estimate gas from contract' })
+        if (getGasLimitError) setError('gasLimit', { message: 'Cant not get estimate gas from contract' })
     }, [getGasLimitError])
 
     return (
