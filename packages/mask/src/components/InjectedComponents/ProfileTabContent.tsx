@@ -174,6 +174,11 @@ function Content(props: ProfileTabContentProps) {
         })
     }, [retrySocialAccounts])
 
+    useEffect(() => {
+        // <ClickAwayListener /> not work, when it is out of shadow root.
+        return window.addEventListener('click', () => setMenuOpen(false))
+    }, [])
+
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
     const displayPlugins = getAvailablePlugins(activatedPlugins, (plugins) => {
         return plugins
