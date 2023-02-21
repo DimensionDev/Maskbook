@@ -15,7 +15,7 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     }
 
     private async getWhiteList(handler: string) {
-        return fetchJSON<FunderAPI.WhiteList>(urlcat(FUNDER_PROD, '/whitelist', { twitterHandler: handler }))
+        return fetchJSON<FunderAPI.WhiteList>(urlcat(FUNDER_PROD, '/whitelist', { twitterHandle: handler }))
     }
 
     async getRemainFrequency(handler: string) {
