@@ -2,7 +2,7 @@ import { FC, PropsWithChildren, useCallback, RefObject } from 'react'
 import { groupBy, toPairs } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
-import { TokenMenuList, AccountIcon, AddressItem } from '@masknet/shared'
+import { TokenMenuList, AccountIcon, AddressItem, useTokenMenuCollectionList } from '@masknet/shared'
 import type { SearchResultType } from '@masknet/web3-shared-base'
 import { isSameAddress, SocialAccount } from '@masknet/web3-shared-base'
 import { useSharedI18N } from '../../../locales/index.js'
@@ -85,7 +85,7 @@ const menuGroupNameMap: Record<'FungibleToken' | 'NonFungibleToken' | 'NonFungib
 
 export const TokenWithSocialGroupMenu: FC<PropsWithChildren<TokenWithSocialGroupProps>> = ({
     currentCollection,
-    collectionList,
+    collectionList: collectionList_,
     disablePortal = true,
     disableScrollLock = true,
     socialAccounts,
@@ -108,6 +108,8 @@ export const TokenWithSocialGroupMenu: FC<PropsWithChildren<TokenWithSocialGroup
         },
         [onTokenChange, onClose],
     )
+
+    const collectionList = useTokenMenuCollectionList(collectionList_)
 
     const groups: Array<
         [

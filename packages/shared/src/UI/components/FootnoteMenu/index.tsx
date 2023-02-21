@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 10,
     },
     icon: {
-        color: theme.palette.maskColor.dark,
+        color: theme.palette.maskColor.main,
     },
 }))
 
