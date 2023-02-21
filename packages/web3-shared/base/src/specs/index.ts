@@ -1187,6 +1187,8 @@ export interface Connection<
     connect(initial?: Web3ConnectionOptions): Promise<Account<ChainId>>
     /** Break connection */
     disconnect(initial?: Web3ConnectionOptions): Promise<void>
+    /** Confirm transaction */
+    confirmTransaction(hash: string, initial?: Web3ConnectionOptions): Promise<void>
     /** Replace transaction */
     replaceTransaction(hash: string, config: Transaction, initial?: Web3ConnectionOptions): Promise<void>
     /** Cancel transaction */

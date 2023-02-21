@@ -203,10 +203,7 @@ class Connection implements BaseConnection {
     getGasPrice(initial?: SolanaWeb3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getAddressType(
-        address: string,
-        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
-    ): Promise<AddressType | undefined> {
+    getAddressType(address: string, initial?: SolanaWeb3ConnectionOptions): Promise<AddressType | undefined> {
         return Promise.resolve(AddressType.Default)
     }
     getSchemaType(address: string, initial?: SolanaWeb3ConnectionOptions): Promise<SchemaType> {
@@ -416,18 +413,13 @@ class Connection implements BaseConnection {
     ): Promise<NonFungibleTokenMetadata<ChainId>> {
         throw new Error('Method not implemented.')
     }
-    replaceTransaction(
-        hash: string,
-        config: Transaction,
-        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
-    ): Promise<void> {
+    confirmTransaction(hash: string, initial?: SolanaWeb3ConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
-    cancelTransaction(
-        hash: string,
-        config: Transaction,
-        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
-    ): Promise<void> {
+    replaceTransaction(hash: string, config: Transaction, options?: SolanaWeb3ConnectionOptions): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+    cancelTransaction(hash: string, config: Transaction, options?: SolanaWeb3ConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 }

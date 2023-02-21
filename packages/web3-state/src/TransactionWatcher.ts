@@ -85,10 +85,20 @@ class Watcher<ChainId, Transaction> {
         return storage ? [...Object.entries(storage)].sort(([, a], [, z]) => z.at - a.at) : []
     }
 
+    /**
+     * Get all watched transactions.
+     * @param chainId
+     * @returns
+     */
     private getWatched(chainId: ChainId) {
         return this.getAllTransactions(chainId).slice(0, Watcher.MAX_ITEM_SIZE)
     }
 
+    /**
+     * Get all unwatched transactions.
+     * @param chainId
+     * @returns
+     */
     private getUnwatched(chainId: ChainId) {
         return this.getAllTransactions(chainId).slice(Watcher.MAX_ITEM_SIZE)
     }
@@ -104,7 +114,7 @@ class Watcher<ChainId, Transaction> {
 
         // check if all transactions were sealed
         const watchedTransactions = this.getWatched(chainId).filter(
-            ([, x]) => x.status === TransactionStatusType.NOT_DEPEND,
+            ([, { status }]) => status === TransactionStatusType.NOT_DEPEND,
         )
         if (!watchedTransactions.length) return
 
@@ -199,21 +209,13 @@ export class TransactionWatcherState<ChainId, Transaction>
         // resume watcher if chain id changed
         if (this.subscriptions.chainId) {
             this.subscriptions.chainId.subscribe(() => resume())
-
-            getSubscriptionCurrentValue(() => {
-                return this.subscriptions.chainId
-            }).then(() => {
-                resume()
-            })
+            getSubscriptionCurrentValue(() => this.subscriptions.chainId).then(resume)
         }
 
         // add external transactions at startup
         if (this.subscriptions.transactions) {
-            getSubscriptionCurrentValue(() => {
-                return this.subscriptions.transactions
-            }).then(() => {
-                resume()
-            })
+            this.subscriptions.transactions.subscribe(() => resume())
+            getSubscriptionCurrentValue(() => this.subscriptions.transactions).then(resume)
         }
     }
 

@@ -738,6 +738,7 @@ class Connection implements EVM_Connection {
     }
     async sendTransaction(transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
+
         // send a transaction which will add into the internal transaction list and start to watch it for confirmation
         const hash = await this.hijackedRequest<string>(
             {
@@ -757,7 +758,8 @@ class Connection implements EVM_Connection {
                 transaction?: Transaction,
             ) => {
                 if (status === TransactionStatusType.NOT_DEPEND) return
-                const transactions = await this.Transaction?.getTransactions?.(chainId, transaction?.from!)
+                if (!transaction?.from) return
+                const transactions = await this.Transaction?.getTransactions?.(chainId, transaction.from)
                 const currentTransaction = transactions?.find((x) => {
                     const hashes = Object.keys(x.candidates)
                     return hashes.includes(hash) && hashes.includes(id)
@@ -771,6 +773,10 @@ class Connection implements EVM_Connection {
     sendSignedTransaction(signature: string, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         return Web3.sendSignedTransaction(options.chainId, signature)
+    }
+
+    confirmTransaction(hash: string, initial?: EVM_Web3ConnectionOptions): Promise<void> {
+        throw new Error('Method not implemented.')
     }
 
     replaceTransaction(hash: string, transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {

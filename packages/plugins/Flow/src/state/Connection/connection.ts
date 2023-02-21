@@ -293,6 +293,9 @@ class Connection implements BaseConnection {
     sendSignedTransaction(signature: never, initial?: FlowConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
+    confirmTransaction(hash: string, initial?: FlowConnectionOptions): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
     replaceTransaction(hash: string, config: MutateOptions, initial?: FlowConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
