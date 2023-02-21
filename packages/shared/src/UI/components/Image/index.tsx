@@ -3,6 +3,11 @@ import { makeStyles } from '@masknet/theme'
 import { useTheme } from '@mui/material'
 
 const useStyles = makeStyles<Pick<ImageProps, 'size' | 'rounded'>, 'center'>()((theme, { size, rounded }, refs) => ({
+    optimistic: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     container: {
         width: size ?? '100%',
         height: size ?? '100%',
