@@ -1232,6 +1232,12 @@ export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = Hu
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
+    /** Get fungible assets owned by the give trusted fungible token. */
+    getTrustedFungibleAssets?: (
+        account: string,
+        trustedFungibleTokens?: Array<FungibleToken<ChainId, SchemaType>>,
+        initial?: Web3HubOptions,
+    ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
     /** Get balance of a fungible token owned by the given account. */
     getFungibleTokenBalance?: (address: string, initial?: Web3HubOptions) => Promise<number>
     /** Get stats data of a fungible token */

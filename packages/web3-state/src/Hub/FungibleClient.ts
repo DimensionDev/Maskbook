@@ -129,6 +129,19 @@ export class HubStateFungibleClient<ChainId, SchemaType> extends HubStateBaseCli
         )
     }
 
+    async getTrustedFungibleAssets(
+        account: string,
+        trustedFungibleTokens?: Array<FungibleToken<ChainId, SchemaType>>,
+        initial?: HubOptions<ChainId>,
+    ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
+        const options = this.getOptions(initial, { account })
+        const providers = this.getProviders(initial)
+        return attemptUntil(
+            providers.map((x) => () => x.getTrustedAssets?.(options.account, trustedFungibleTokens, options)),
+            createPageable(EMPTY_LIST, createIndicator(options.indicator)),
+        )
+    }
+
     async getFungibleToken(
         address: string,
         initial?: HubOptions<ChainId, HubIndicator> | undefined,
