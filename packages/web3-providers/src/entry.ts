@@ -61,6 +61,7 @@ import { SpaceID_API } from './SpaceID/index.js'
 import { BonfidaAPI } from './Bonfida/index.js'
 import { RedPacketAPI } from './RedPacket/index.js'
 import { SmartPayOwnerAPI } from './SmartPay/apis/OwnerAPI.js'
+import { TimeoutControllerAPI } from './AbortController/TimeoutController.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
@@ -93,6 +94,9 @@ export const Lens = new LensAPI()
 export const Sentry = new SentryAPI()
 export const TheGraphDomain = new TheGraphDomainAPI()
 export const RedPacket = new RedPacketAPI()
+
+// Abort Controller
+export const TimeoutController = new TimeoutControllerAPI()
 
 // Etherscan
 export const EtherscanExplorer = new EtherscanExplorerAPI()
