@@ -56,8 +56,8 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transac
         return undefined
     }
     getAverageBlockDelay(chainId: ChainId, scale = 1): number {
-        const descriptor = this.options.networkDescriptors.find((x) => x.chainId === chainId)
-        return (descriptor?.averageBlockDelay ?? 15) * scale * 1000
+        const delay = this.options.networkDescriptors.find((x) => x.chainId === chainId)?.averageBlockDelay ?? 10
+        return delay * scale * 1000
     }
     getTransactionSignature(chainId?: ChainId, transaction?: Transaction | undefined): string | undefined {
         return

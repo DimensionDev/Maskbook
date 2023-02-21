@@ -987,6 +987,8 @@ export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
     silent?: boolean
     /** Fragments to merge into the transaction. */
     overrides?: Partial<Transaction>
+    /** Termination signal */
+    signal?: AbortSignal
 }
 export interface Connection<
     ChainId,
@@ -1187,6 +1189,8 @@ export interface Connection<
     connect(initial?: Web3ConnectionOptions): Promise<Account<ChainId>>
     /** Break connection */
     disconnect(initial?: Web3ConnectionOptions): Promise<void>
+    /** Confirm transaction */
+    confirmTransaction(hash: string, initial?: Web3ConnectionOptions): Promise<TransactionReceipt>
     /** Replace transaction */
     replaceTransaction(hash: string, config: Transaction, initial?: Web3ConnectionOptions): Promise<void>
     /** Cancel transaction */

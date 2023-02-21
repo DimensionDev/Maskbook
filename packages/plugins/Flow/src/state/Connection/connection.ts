@@ -1,6 +1,6 @@
 import { first } from 'lodash-es'
 import type { BlockObject, MutateOptions, QueryOptions } from '@blocto/fcl'
-import { AddressType, ChainId, ProviderType, SchemaType } from '@masknet/web3-shared-flow'
+import { AddressType, ChainId, ProviderType, SchemaType, TransactionReceipt } from '@masknet/web3-shared-flow'
 import type {
     Account,
     FungibleToken,
@@ -14,10 +14,10 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { PartialRequired, toHex } from '@masknet/shared-base'
 import { FlowWeb3 } from '@masknet/web3-providers'
 import { Providers } from './provider.js'
-import type { FlowWeb3Connection as BaseConnection, FlowConnectionOptions } from './types.js'
+import type { FlowConnection, FlowConnectionOptions } from './types.js'
 import { Web3StateSettings } from '../../settings/index.js'
 
-class Connection implements BaseConnection {
+class Connection implements FlowConnection {
     constructor(
         private chainId: ChainId,
         private account: string,
@@ -232,7 +232,7 @@ class Connection implements BaseConnection {
         const options = this.getOptions(initial)
         return FlowWeb3.getTransaction(options.chainId, id)
     }
-    async getTransactionReceipt(id: string, initial?: FlowConnectionOptions) {
+    async getTransactionReceipt(id: string, initial?: FlowConnectionOptions): Promise<TransactionReceipt | null> {
         const options = this.getOptions(initial)
         return FlowWeb3.getTransactionReceipt(options.chainId, id)
     }
@@ -291,6 +291,9 @@ class Connection implements BaseConnection {
         throw new Error('Method not implemented.')
     }
     sendSignedTransaction(signature: never, initial?: FlowConnectionOptions): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+    confirmTransaction(hash: string, initial?: FlowConnectionOptions): Promise<TransactionReceipt> {
         throw new Error('Method not implemented.')
     }
     replaceTransaction(hash: string, config: MutateOptions, initial?: FlowConnectionOptions): Promise<void> {

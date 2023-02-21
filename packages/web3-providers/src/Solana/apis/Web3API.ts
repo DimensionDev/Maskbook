@@ -155,7 +155,7 @@ export class SolanaWeb3API
     getTransaction(chainId: ChainId, hash: string): Promise<TransactionResponse | null> {
         return this.getWeb3Connection(chainId).getTransaction(hash)
     }
-    async getTransactionReceipt(chainId: ChainId, hash: string): Promise<null> {
+    async getTransactionReceipt(chainId: ChainId, hash: string): Promise<TransactionReceipt | null> {
         return null
     }
     async getTransactionStatus(chainId: ChainId, hash: string): Promise<TransactionStatusType> {
@@ -245,6 +245,9 @@ export class SolanaWeb3API
         throw new Error('Method not implemented.')
     }
     callTransaction(chainId: ChainId, transaction: Transaction): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+    confirmTransaction(chainId: ChainId, hash: string, signal?: AbortSignal): Promise<TransactionReceipt> {
         throw new Error('Method not implemented.')
     }
     estimateTransaction(chainId: ChainId, transaction: Transaction, fallback?: number | undefined): Promise<string> {

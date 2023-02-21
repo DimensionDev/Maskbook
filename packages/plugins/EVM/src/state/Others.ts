@@ -27,6 +27,7 @@ import {
     getZeroAddress,
     getMaskTokenAddress,
     getNativeTokenAddress,
+    getAverageBlockDelay,
     formatSchemaType,
     createNativeToken,
     isValidChainId,
@@ -59,6 +60,7 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override getMaskTokenAddress = getMaskTokenAddress
     override getNativeTokenAddress = getNativeTokenAddress
     override getTransactionSignature = getTransactionSignature
+    override getAverageBlockDelay = getAverageBlockDelay
 
     override formatAddress = formatEthereumAddress
     override formatTokenId = formatTokenId
