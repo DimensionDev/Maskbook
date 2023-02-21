@@ -2,16 +2,22 @@ import { useCallback, useRef } from 'react'
 import { useAsyncFn } from 'react-use'
 import getUnixTime from 'date-fns/getUnixTime'
 import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { NetworkPluginID, PersonaInformation, PopupRoutes, ProofType, SignType } from '@masknet/shared-base'
+import {
+    NetworkPluginID,
+    PersonaInformation,
+    PopupRoutes,
+    ProofType,
+    SignType,
+    TimeoutController,
+} from '@masknet/shared-base'
 import { useChainContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import type { OwnerAPI } from '@masknet/web3-providers/types'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { TransactionStatusType, Wallet } from '@masknet/web3-shared-base'
+import type { Wallet } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import { ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import type { ManagerAccount } from '../type.js'
 import { useI18N } from '../locales/index.js'
-import { timeout } from '@masknet/kit'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginSmartPayMessages } from '../message.js'
 
@@ -70,29 +76,27 @@ export function useDeploy(
                     chainId,
                 })
 
-                const result = await timeout(
-                    new Promise((resolve) => {
-                        return TransactionWatcher?.emitter.on('progress', async (_, txHash, status) => {
-                            if (txHash !== hash || status !== TransactionStatusType.SUCCEED) return
-                            await Wallet?.addWallet({
-                                name: 'Smart Pay',
-                                owner: signAccount.address,
-                                address: contractAccount.address,
-                                hasDerivationPath: false,
-                                hasStoredKeyInfo: false,
-                                id: contractAccount.address,
-                                createdAt: new Date(),
-                                updatedAt: new Date(),
-                            })
-                            onSuccess?.()
-                            resolve(hash)
-                        })
-                    }),
-                    120 * 1000,
-                    'Timeout',
-                )
+                if (!hash) return
 
-                return result
+                const result = await connection?.confirmTransaction(hash, {
+                    signal: new TimeoutController(5 * 60 * 1000).signal,
+                })
+
+                if (!result?.status) return
+
+                await Wallet?.addWallet({
+                    name: 'Smart Pay',
+                    owner: signAccount.address,
+                    address: contractAccount.address,
+                    hasDerivationPath: false,
+                    hasStoredKeyInfo: false,
+                    id: contractAccount.address,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                })
+                onSuccess?.()
+
+                return result?.transactionHash
             }
             const payload = JSON.stringify({
                 twitterHandle: lastRecognizedIdentity.identifier.userId,
@@ -135,40 +139,38 @@ export function useDeploy(
             )
             if (!hash) throw new Error('Deploy Failed')
 
-            const result = await timeout(
-                new Promise((resolve) => {
-                    return TransactionWatcher?.emitter.on('progress', async (_, txHash, status) => {
-                        if (txHash !== hash || !signAccount.address || status !== TransactionStatusType.SUCCEED) return
+            const result = await connection?.confirmTransaction(hash, {
+                signal: new TimeoutController(5 * 60 * 1000).signal,
+            })
 
-                        const deployResult = await connection?.deploy?.(signAccount.address, signAccount.identifier, {
-                            chainId,
-                        })
+            if (!result?.status) return
 
-                        TransactionWatcher?.emitter.on('progress', async (_, deployHash, deployStatus) => {
-                            if (deployHash !== deployResult || deployStatus !== TransactionStatusType.SUCCEED) return
+            const deployHash = await connection?.deploy?.(signAccount.address, signAccount.identifier, {
+                chainId,
+            })
 
-                            await Wallet?.addWallet({
-                                name: 'Smart Pay',
-                                owner: signAccount.address,
-                                address: contractAccount.address,
-                                hasDerivationPath: false,
-                                hasStoredKeyInfo: false,
-                                id: contractAccount.address,
-                                createdAt: new Date(),
-                                updatedAt: new Date(),
-                            })
+            if (!deployHash) return
 
-                            onSuccess?.()
+            const deployResult = await connection?.confirmTransaction(deployHash, {
+                signal: new TimeoutController(5 * 60 * 1000).signal,
+            })
 
-                            resolve(deployResult)
-                        })
-                    })
-                }),
-                120 * 1000,
-                'Timeout',
-            )
+            if (!deployResult?.status) return
 
-            return result
+            await Wallet?.addWallet({
+                name: 'Smart Pay',
+                owner: signAccount.address,
+                address: contractAccount.address,
+                hasDerivationPath: false,
+                hasStoredKeyInfo: false,
+                id: contractAccount.address,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            })
+
+            onSuccess?.()
+
+            return deployResult.transactionHash
         } catch (error) {
             if (error instanceof Error) {
                 let message = ''
