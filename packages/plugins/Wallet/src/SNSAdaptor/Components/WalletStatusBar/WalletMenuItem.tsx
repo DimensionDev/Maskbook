@@ -1,7 +1,6 @@
 import { memo } from 'react'
 import { Button, ListItemIcon, MenuItem } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useSharedI18N } from '../../../locales/index.js'
 import { resolveNextID_NetworkPluginID } from '@masknet/web3-shared-base'
 import type { NetworkPluginID, NextIDPlatform } from '@masknet/shared-base'
 import { useWalletName } from './hooks/useWalletName.js'
@@ -15,6 +14,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { WalletDescription, WalletDescriptionProps } from './WalletDescription.js'
+import { useI18N } from '../../../locales/i18n_generated.js'
 
 interface WalletMenuItemProps {
     onSelect?: (value: WalletDescriptionProps, chainId: Web3Helper.ChainIdAll, pluginID: NetworkPluginID) => void
@@ -27,7 +27,7 @@ interface WalletMenuItemProps {
 
 export const WalletMenuItem = memo<WalletMenuItemProps>(
     ({ address, selected, onChangeWallet, platform, onSelect, verified }) => {
-        const t = useSharedI18N()
+        const t = useI18N()
 
         const { pluginID } = useNetworkContext(platform ? resolveNextID_NetworkPluginID(platform) : undefined)
         const defaultChainId = useDefaultChainId(pluginID)

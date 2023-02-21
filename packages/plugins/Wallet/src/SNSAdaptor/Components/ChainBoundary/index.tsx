@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, {
     memo,
     useCallback,
@@ -25,13 +26,12 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@masknet/kit'
-import { WalletIcon } from '../WalletIcon/index.js'
-import { ActionButtonPromise, ActionButtonPromiseProps } from '../ActionButton/index.js'
-import { Icons } from '@masknet/icons'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { useSharedI18N } from '../../../locales/index.js'
-import { WalletMessages } from '@masknet/plugin-wallet'
+import { WalletMessages } from '../../../messages.js'
+import { Icons } from '@masknet/icons'
+import { ActionButtonPromiseProps, WalletIcon, ActionButtonPromise } from '@masknet/shared'
+import { useI18N } from '../../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     tooltip: {
@@ -79,7 +79,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
             actualPluginID === expectedPluginID && actualChainId === expectedChainId,
     } = props
 
-    const t = useSharedI18N()
+    const t = useI18N()
     const { classes } = useStyles(undefined, { props })
 
     const { pluginID: actualPluginID } = useNetworkContext(actualNetworkPluginID)
@@ -305,8 +305,10 @@ function CopyDeepElementWithEventHandler(
     children: React.ReactNode,
     injectHandler: () => Promise<boolean>,
     loading: boolean,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Array<DetailedReactHTMLElement<any, any>> {
     return (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         Children.map(children, (child: any) => {
             const isValid = !isValidElement(child.props?.children)
             return cloneElement(child, {

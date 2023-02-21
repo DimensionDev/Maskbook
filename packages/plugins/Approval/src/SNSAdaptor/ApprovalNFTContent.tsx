@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useAsync } from 'react-use'
 import { ListItem, List, Typography, Link } from '@mui/material'
-import { TokenIcon, ChainBoundary } from '@masknet/shared'
+import { TokenIcon } from '@masknet/shared'
 import { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import { ActionButton, makeStyles, parseColor } from '@masknet/theme'
@@ -18,6 +18,7 @@ import { NetworkDescriptor, TokenType, NonFungibleContractSpender } from '@maskn
 import { useI18N } from '../locales/index.js'
 import { ApprovalLoadingContent } from './ApprovalLoadingContent.js'
 import { ApprovalEmptyContent } from './ApprovalEmptyContent.js'
+import { ChainBoundary } from '@masknet/plugin-wallet'
 
 export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
     (theme, props) => ({

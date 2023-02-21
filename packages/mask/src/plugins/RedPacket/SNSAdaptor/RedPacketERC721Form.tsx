@@ -1,26 +1,25 @@
-import { useState, useCallback, useEffect, useMemo } from 'react'
-import { Box, Typography, List, ListItem } from '@mui/material'
-import { makeStyles, ActionButton } from '@masknet/theme'
-import { Check as CheckIcon, Close as CloseIcon, AddCircleOutline as AddCircleOutlineIcon } from '@mui/icons-material'
-import { useI18N } from '../locales/index.js'
 import {
-    WalletConnectedBoundary,
-    NFTCardStyledAssetPlayer,
-    PluginWalletStatusBar,
-    ERC721ContractSelectPanel,
     ChainBoundary,
-    EthereumERC721TokenApprovedBoundary,
-} from '@masknet/shared'
-import { useNonFungibleOwnerTokens } from '@masknet/web3-hooks-evm'
-import { ChainId, SchemaType, useNftRedPacketConstants, formatTokenId } from '@masknet/web3-shared-evm'
-import { RedpacketMessagePanel } from './RedpacketMessagePanel.js'
-import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog.js'
-import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog.js'
-import { NFTSelectOption } from '../types.js'
-import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
+    ERC721ContractSelectPanel,
+    PluginWalletStatusBar,
+    WalletConnectedBoundary,
+} from '@masknet/plugin-wallet'
+import { EthereumERC721TokenApprovedBoundary, NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
-import type { NonFungibleToken, NonFungibleCollection } from '@masknet/web3-shared-base'
+import { useNonFungibleOwnerTokens } from '@masknet/web3-hooks-evm'
+import type { NonFungibleCollection, NonFungibleToken } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType, formatTokenId, useNftRedPacketConstants } from '@masknet/web3-shared-evm'
+import { AddCircleOutline as AddCircleOutlineIcon, Check as CheckIcon, Close as CloseIcon } from '@mui/icons-material'
+import { Box, List, ListItem, Typography } from '@mui/material'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
+import { useI18N } from '../locales/index.js'
+import { NFTSelectOption } from '../types.js'
+import { RedpacketMessagePanel } from './RedpacketMessagePanel.js'
+import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog.js'
+import { OrderedERC721Token, SelectNftTokenDialog } from './SelectNftTokenDialog.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

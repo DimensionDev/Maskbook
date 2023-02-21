@@ -22,6 +22,7 @@ import type {
     SignType,
     NFTAvatarEvent,
     ValueRefWithReady,
+    ValueRef,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -41,6 +42,8 @@ import type {
 import type { ChainId as ChainIdEVM, TransactionOptions } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { CompositionType } from './entry-content-script.js'
+import type { AsyncVersionOf } from 'async-call-rpc'
+import type { iOSNativeAPIs, AndroidNativeAPIs } from '@masknet/public-api'
 
 export declare namespace Plugin {
     /**
@@ -392,6 +395,18 @@ export namespace Plugin.SNSAdaptor {
         queryPersonaByProfile: (id: ProfileIdentifier) => Promise<PersonaInformation | undefined>
         connectPersona: () => Promise<void>
         createPersona: () => void
+        pluginIDSettings: ValueRef<Record<EnhanceableSite | ExtensionSite, NetworkPluginID>>
+        hasNativeAPI: boolean
+        nativeAPI:
+            | {
+                  type: 'iOS'
+                  api: AsyncVersionOf<iOSNativeAPIs>
+              }
+            | {
+                  type: 'Android'
+                  api: AsyncVersionOf<AndroidNativeAPIs>
+              }
+            | undefined
     }
 
     export type SelectProviderDialogEvent =

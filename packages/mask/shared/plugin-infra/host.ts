@@ -5,7 +5,7 @@ import { Emitter } from '@servie/events'
 import { createI18NBundle, createSubscriptionFromValueRef, i18NextInstance } from '@masknet/shared-base'
 import { MaskMessages } from '../../shared/messages.js'
 import { InMemoryStorages, PersistentStorages } from '../../shared/index.js'
-import { nativeAPI, hasNativeAPI } from '../../shared/native-rpc/index.js'
+import { nativeAPI, hasNativeAPI } from '../native-rpc/index.js'
 import {
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,

@@ -5,6 +5,8 @@ import { NextIdPage } from '../components/NextIdPage.js'
 import { PLUGIN_ID } from '../constants.js'
 import { SharedContextSettings } from '../settings.js'
 import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { ApplicationBoardDialog } from '../../../components/shared/ApplicationBoardDialog.js'
+import { LeavePageConfirmDialog } from '../../../components/shared/LeavePageConfirmDialog.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -12,7 +14,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
         SharedContextSettings.value = context
     },
     GlobalInjection() {
-        return <PersonaSelectPanelDialog />
+        return (
+            <>
+                <ApplicationBoardDialog />
+                <PersonaSelectPanelDialog />
+                <LeavePageConfirmDialog />
+            </>
+        )
     },
     ProfileTabs: [
         {

@@ -1,18 +1,14 @@
-import { makeStyles, ActionButton } from '@masknet/theme'
+import { WalletConnectedBoundary } from '@masknet/plugin-wallet'
+import { EthereumERC20TokenApprovedBoundary, FungibleTokenInput, useSelectFungibleToken } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { formatBalance, FungibleToken, isGreaterThan, rightShift } from '@masknet/web3-shared-base'
-import { useCallback, useState } from 'react'
-import { SchemaType, formatEthereumAddress, explorerResolver, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
-import { Link, Typography } from '@mui/material'
-import { Trans } from 'react-i18next'
-import {
-    useSelectFungibleToken,
-    FungibleTokenInput,
-    WalletConnectedBoundary,
-    EthereumERC20TokenApprovedBoundary,
-} from '@masknet/shared'
-import { useI18N } from '../../../utils/index.js'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import { FungibleToken, formatBalance, isGreaterThan, rightShift } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType, explorerResolver, formatEthereumAddress, useITOConstants } from '@masknet/web3-shared-evm'
+import { Link, Typography } from '@mui/material'
+import { useCallback, useState } from 'react'
+import { Trans } from 'react-i18next'
+import { useI18N } from '../../../utils/index.js'
 
 function isMoreThanMillion(allowance: string, decimals: number) {
     return isGreaterThan(allowance, `100000000000e${decimals}`) // 100 billion

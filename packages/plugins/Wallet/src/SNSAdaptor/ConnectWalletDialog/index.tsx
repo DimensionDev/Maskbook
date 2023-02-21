@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { DialogContent, dialogClasses } from '@mui/material'
-import { InjectedDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useWeb3State } from '@masknet/web3-hooks-base'
@@ -10,7 +9,8 @@ import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { ConnectionProgress } from './ConnectionProgress.js'
 import { useI18N } from '../../locales/i18n_generated.js'
-import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
+import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { InjectedDialog } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -31,6 +31,7 @@ export function ConnectWalletDialog() {
     const [providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
     const [networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
     const [walletConnectedCallback, setWalletConnectedCallback] = useState<(() => void) | undefined>()
+    const { pluginIDSettings } = useSNSAdaptorContext()
 
     // #region remote controlled dialog
     const { open, setDialog: setConnectWalletDialog } = useRemoteControlledDialog(

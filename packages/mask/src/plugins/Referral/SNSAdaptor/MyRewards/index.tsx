@@ -1,16 +1,13 @@
-import { useAsync } from 'react-use'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Grid, Typography } from '@mui/material'
-
-import { useI18N } from '../../locales/index.js'
+import { useAsync } from 'react-use'
 import { getRequiredChainId } from '../../helpers/index.js'
-import type { PageInterface } from '../../types.js'
+import { useI18N } from '../../locales/index.js'
 import { ReferralRPC } from '../../messages.js'
-
-import { WalletConnectedBoundary, ChainBoundary } from '@masknet/shared'
+import type { PageInterface } from '../../types.js'
+import { ChainBoundary, WalletConnectedBoundary } from '@masknet/plugin-wallet'
 import { Rewards } from './Rewards.js'
-
 import { LoadingBase, makeStyles } from '@masknet/theme'
 
 export const useStyles = makeStyles()((theme) => ({

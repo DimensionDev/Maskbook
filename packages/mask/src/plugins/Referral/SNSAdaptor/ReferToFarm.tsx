@@ -1,36 +1,33 @@
-import { useCallback, useState, MouseEventHandler } from 'react'
-import { useAsync } from 'react-use'
-import type { Web3 } from '@masknet/web3-shared-evm'
-import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
-import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { v4 as uuid } from 'uuid'
-import { Typography, Box, Tab, Tabs, Grid, Divider } from '@mui/material'
-import { TabContext, TabPanel } from '@mui/lab'
+import { ChainBoundary, WalletConnectedBoundary, WalletMessages } from '@masknet/plugin-wallet'
 import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { makeTypedMessageText } from '@masknet/typed-message'
-
-import { useI18N } from '../locales/index.js'
-import { META_KEY } from '../constants.js'
+import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
+import type { Web3 } from '@masknet/web3-shared-evm'
+import { TabContext, TabPanel } from '@mui/lab'
+import { Box, Divider, Grid, Tab, Tabs, Typography } from '@mui/material'
+import { MouseEventHandler, useCallback, useState } from 'react'
+import { useAsync } from 'react-use'
+import { v4 as uuid } from 'uuid'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
-import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages.js'
+import { META_KEY } from '../constants.js'
 import { getRequiredChainId } from '../helpers/index.js'
-import { singAndPostProofOfRecommendationOrigin } from './utils/proofOfRecommendation.js'
+import { useI18N } from '../locales/index.js'
+import { PluginReferralMessages, ReferralRPC, SelectTokenUpdated } from '../messages.js'
 import {
+    FungibleTokenDetailed,
+    PageInterface,
+    PagesType,
     ReferralMetaData,
     TabsReferAndBuy,
     TransactionStatus,
-    PageInterface,
-    PagesType,
-    FungibleTokenDetailed,
 } from '../types.js'
-
+import { singAndPostProofOfRecommendationOrigin } from './utils/proofOfRecommendation.js'
 import { MyRewards } from './MyRewards/index.js'
-import { TokenSelectField } from './shared-ui/TokenSelectField.js'
 import { RewardDataWidget } from './shared-ui/RewardDataWidget.js'
+import { TokenSelectField } from './shared-ui/TokenSelectField.js'
 import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm.js'
-import { WalletConnectedBoundary, ChainBoundary } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

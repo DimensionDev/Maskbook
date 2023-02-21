@@ -1,13 +1,11 @@
-import { useCallback, MouseEventHandler } from 'react'
-import { makeStyles, ActionButton } from '@masknet/theme'
-import { Grid, Typography } from '@mui/material'
+import { ChainBoundary, WalletConnectedBoundary } from '@masknet/plugin-wallet'
 import { NetworkPluginID } from '@masknet/shared-base'
-
+import { ActionButton, makeStyles } from '@masknet/theme'
+import { Grid, Typography } from '@mui/material'
+import { MouseEventHandler, useCallback } from 'react'
+import { roundValue } from '../helpers/index.js'
 import { useI18N } from '../locales/index.js'
 import type { DepositDialogInterface } from '../types.js'
-import { roundValue } from '../helpers/index.js'
-
-import { WalletConnectedBoundary, ChainBoundary } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

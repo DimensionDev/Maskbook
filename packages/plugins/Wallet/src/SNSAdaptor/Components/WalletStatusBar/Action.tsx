@@ -1,6 +1,6 @@
 import { memo, PropsWithChildren, useLayoutEffect, useRef, useState } from 'react'
 import { Box, Button } from '@mui/material'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useI18N } from '../../../locales/i18n_generated.js'
 
 interface ActionProps extends PropsWithChildren<{}> {
     openSelectWalletDialog: () => void
@@ -8,7 +8,7 @@ interface ActionProps extends PropsWithChildren<{}> {
 
 export const Action = memo<ActionProps>(({ children, openSelectWalletDialog }) => {
     const ref = useRef<HTMLDivElement>()
-    const t = useSharedI18N()
+    const t = useI18N()
     const [emptyChildren, setEmptyChildren] = useState(false)
 
     useLayoutEffect(() => {

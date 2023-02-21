@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { ChainBoundary, NetworkTab, PluginVerifiedWalletStatusBar } from '@masknet/shared'
+import { NetworkTab } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -20,6 +20,7 @@ import { AllChainsNonFungibleToken, PFP_TYPE } from '../types.js'
 import { toPNG } from '../utils/index.js'
 import { NFTListPage } from './NFTListPage.js'
 import { RoutePaths } from './Routes.js'
+import { ChainBoundary, PluginVerifiedWalletStatusBar } from '@masknet/plugin-wallet'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {

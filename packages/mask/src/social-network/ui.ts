@@ -17,7 +17,11 @@ import {
 import type { ThemeSettings } from '@masknet/web3-shared-base'
 import { Flags } from '../../shared/index.js'
 import { SetupGuideContext, SetupGuideStep } from '../../shared/legacy-settings/types.js'
-import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../shared/legacy-settings/settings.js'
+import {
+    currentPersonaIdentifier,
+    currentSetupGuideStatus,
+    pluginIDSettings,
+} from '../../shared/legacy-settings/settings.js'
 import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
 import Services from '../extension/service.js'
 import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils.js'
@@ -26,6 +30,7 @@ import '../utils/debug/general.js'
 import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
 import { definedSocialNetworkUIs } from './define.js'
 import stringify from 'json-stable-stringify'
+import { hasNativeAPI, nativeAPI } from '../../shared/native-rpc/index.js'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -189,6 +194,9 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     connectPersona,
                     ownPersonaChanged: MaskMessages.events.ownPersonaChanged,
                     currentPersonaIdentifier,
+                    pluginIDSettings,
+                    hasNativeAPI,
+                    nativeAPI,
                 }
             },
             Services.Settings.getPluginMinimalModeEnabled,

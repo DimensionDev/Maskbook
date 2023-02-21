@@ -1,34 +1,29 @@
-import { useMemo, useCallback, useState } from 'react'
-import { useAsync } from 'react-use'
-import { makeStyles, ActionButton } from '@masknet/theme'
+import { ChainBoundary, PluginWalletStatusBar, WalletConnectedBoundary, WalletMessages } from '@masknet/plugin-wallet'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ActionButton, makeStyles } from '@masknet/theme'
+import { useChainContext, useWallet, useWeb3 } from '@masknet/web3-hooks-base'
+import type { NonFungibleCollection, NonFungibleToken } from '@masknet/web3-shared-base'
 import {
-    formatEthereumAddress,
-    explorerResolver,
     ChainId,
     SchemaType,
-    isNativeTokenAddress,
+    explorerResolver,
+    formatEthereumAddress,
     formatTokenId,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import {
-    NFTCardStyledAssetPlayer,
-    PluginWalletStatusBar,
-    ChainBoundary,
-    WalletConnectedBoundary,
-} from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useWallet, useWeb3 } from '@masknet/web3-hooks-base'
-import type { NonFungibleToken, NonFungibleCollection } from '@masknet/web3-shared-base'
-import { Grid, Link, Typography, List, DialogContent, ListItem, Box } from '@mui/material'
 import { Launch as LaunchIcon } from '@mui/icons-material'
-import { useI18N } from '../locales/index.js'
-import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback.js'
+import { Box, DialogContent, Grid, Link, List, ListItem, Typography } from '@mui/material'
+import { useCallback, useMemo, useState } from 'react'
+import { useAsync } from 'react-use'
 import { useCurrentIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import { RedPacketNftMetaKey } from '../constants.js'
+import { useI18N } from '../locales/index.js'
 import { RedPacketRPC } from '../messages.js'
-import { WalletMessages } from '@masknet/plugin-wallet'
+import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback.js'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { openComposition } from './openComposition.js'
 import Services from '../../../extension/service.js'
+import { openComposition } from './openComposition.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

@@ -126,7 +126,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                     .min(1, t.wallet_transfer_error_gas_limit_absence())
                     .refine(
                         (gasLimit) => new BigNumber(gasLimit).gte(minGasLimit),
-                        t.popups_wallet_gas_fee_settings_min_gas_limit_tips(, { limit: minGasLimit }),
+                        t.popups_wallet_gas_fee_settings_min_gas_limit_tips({ limit: minGasLimit.toFixed() }),
                     ),
                 gasPrice: zod.string().min(1, t.wallet_transfer_error_gas_price_absence()),
             })
@@ -188,7 +188,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                                 <Typography className={classes.optionsTitle}>{title}</Typography>
                                 <Typography>{formatWeiToGwei(gasPrice ?? 0).toString()} Gwei</Typography>
                                 <Typography className={classes.gasUSD}>
-                                    {t('popups_wallet_gas_fee_settings_usd', {
+                                    {t.popups_wallet_gas_fee_settings_usd({
                                         usd: formatWeiToEther(gasPrice)
                                             .times(nativeTokenPrice)
                                             .times(inputGasLimit || '1')
@@ -201,7 +201,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                 ) : null}
                 <form onSubmit={onSubmit}>
                     <Typography className={classes.label}>
-                        {t('popups_wallet_gas_fee_settings_gas_limit')}
+                        {t.popups_wallet_gas_fee_settings_gas_limit()}
                         <Typography component="span" className={classes.price}>
                             {gasLimit?.toString()}
                         </Typography>
@@ -230,7 +230,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                     <Typography className={classes.label}>
                         {t.popups_wallet_gas_price()}
                         <Typography component="span" className={classes.price}>
-                            {t('popups_wallet_gas_fee_settings_usd', {
+                            {t.popups_wallet_gas_fee_settings_usd({
                                 usd: formatGweiToEther(gasPrice ?? 0)
                                     .times(nativeTokenPrice)
                                     .times(inputGasLimit || 1)

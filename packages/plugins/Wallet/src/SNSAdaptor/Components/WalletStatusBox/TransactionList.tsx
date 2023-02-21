@@ -9,7 +9,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress, RecentTransactionComputed, TransactionStatusType, Transaction } from '@masknet/web3-shared-base'
 import { getContractOwnerDomain } from '@masknet/web3-shared-evm'
 import { Grid, GridProps, Link, List, ListItem, ListProps, Stack, Typography } from '@mui/material'
-import { useI18N } from '../../../utils/index.js'
+import { useI18N } from '../../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -77,13 +77,13 @@ interface TransactionProps extends GridProps {
     onClear?(tx: RecentTransactionComputed<Web3Helper.ChainIdAll, Web3Helper.TransactionAll>): void
 }
 const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear = noop, ...rest }) => {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes, theme } = useStyles()
 
     const statusTextMap: Record<TransactionStatusType, string> = {
-        [TransactionStatusType.NOT_DEPEND]: t('recent_transaction_pending'),
-        [TransactionStatusType.SUCCEED]: t('recent_transaction_success'),
-        [TransactionStatusType.FAILED]: t('recent_transaction_failed'),
+        [TransactionStatusType.NOT_DEPEND]: t.recent_transaction_pending(),
+        [TransactionStatusType.SUCCEED]: t.recent_transaction_success(),
+        [TransactionStatusType.FAILED]: t.recent_transaction_failed(),
     }
 
     const { Others, TransactionFormatter, TransactionWatcher } = useWeb3State()
@@ -151,7 +151,7 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
             <Grid item className={classes.cell} md={2} justifyContent="right">
                 {txStatus === TransactionStatusType.NOT_DEPEND ? (
                     <Typography fontWeight={300} className={classes.clear} onClick={handleClear}>
-                        {t('wallet_status_pending_clear')}
+                        {t.wallet_status_pending_clear()}
                     </Typography>
                 ) : null}
             </Grid>

@@ -7,8 +7,8 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import { useState } from 'react'
-import { useI18N } from '../../../utils/index.js'
 import { TransactionList } from './TransactionList.js'
+import { useI18N } from '../../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     summaryWrapper: {
@@ -36,7 +36,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function usePendingTransactions() {
     const { classes, cx } = useStyles()
-    const { t } = useI18N()
+    const t = useI18N()
 
     // #region recent pending transactions
     const pendingTransactions = useRecentTransactions(undefined, TransactionStatusType.NOT_DEPEND)
@@ -55,13 +55,13 @@ export function usePendingTransactions() {
             <div className={cx(pendingTransactions.length ? '' : classes.hide)}>
                 {pendingTransactions.length ? (
                     <Typography className={classes.pendingSummary} variant="body2" mr={1} fontWeight={700}>
-                        {t('wallet_status_pending', { count: pendingTransactions.length })}
+                        {t.wallet_status_pending({ count: pendingTransactions.length })}
                     </Typography>
                 ) : null}
             </div>
             {pendingTransactions.length ? (
                 <Typography className={classes.clearAll} onClick={clearRecentTxes} fontWeight={700}>
-                    {t('wallet_status_pending_clear_all')}
+                    {t.wallet_status_pending_clear_all()}
                 </Typography>
             ) : null}
         </section>
@@ -78,7 +78,7 @@ export function usePendingTransactions() {
             />
         ) : (
             <Typography className={classes.noPendingTransactions}>
-                {t('wallet_status_no_pending_transactions')}
+                {t.wallet_status_no_pending_transactions()}
             </Typography>
         )
 

@@ -1,33 +1,30 @@
+import { useCompositionContext } from '@masknet/plugin-infra/content-script'
+import { ChainBoundary, WalletConnectedBoundary, WalletMessages } from '@masknet/plugin-wallet'
+import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeTypedMessageText } from '@masknet/typed-message'
+import { useChainContext, useFungibleTokenBalance, useWeb3, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { formatBalance } from '@masknet/web3-shared-base'
+import { TabContext, TabPanel } from '@mui/lab'
+import { Box, Chip, Divider, Grid, InputAdornment, Tab, Tabs, TextField, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { formatBalance } from '@masknet/web3-shared-base'
-import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useWeb3, useFungibleTokenBalance, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { makeTypedMessageText } from '@masknet/typed-message'
-import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
-import { useCompositionContext } from '@masknet/plugin-infra/content-script'
-import { Typography, Box, Tab, Tabs, Grid, TextField, Chip, InputAdornment, Divider } from '@mui/material'
-import { TabContext, TabPanel } from '@mui/lab'
-
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
+import { ATTRACE_FEE_PERCENT, META_KEY, NATIVE_TOKEN } from '../constants.js'
+import { getRequiredChainId, roundValue } from '../helpers/index.js'
 import { useI18N } from '../locales/index.js'
+import { PluginReferralMessages, SelectTokenUpdated } from '../messages.js'
 import {
-    TabsCreateFarm,
-    TokenType,
-    TransactionStatus,
+    FungibleTokenDetailed,
     PageInterface,
     PagesType,
     ReferralMetaData,
-    FungibleTokenDetailed,
+    TabsCreateFarm,
+    TokenType,
+    TransactionStatus,
 } from '../types.js'
-import { ATTRACE_FEE_PERCENT, NATIVE_TOKEN, META_KEY } from '../constants.js'
-import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
-import { PluginReferralMessages, SelectTokenUpdated } from '../messages.js'
-import { roundValue, getRequiredChainId } from '../helpers/index.js'
 import { runCreateERC20PairFarm } from './utils/referralFarm.js'
-
-import { WalletConnectedBoundary, ChainBoundary } from '@masknet/shared'
 import { CreatedFarms } from './CreatedFarms.js'
 import { TokenSelectField } from './shared-ui/TokenSelectField.js'
 

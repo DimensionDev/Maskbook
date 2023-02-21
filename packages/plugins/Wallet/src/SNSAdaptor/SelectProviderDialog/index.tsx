@@ -9,10 +9,11 @@ import { getRegisteredWeb3Networks, getRegisteredWeb3Providers } from '@masknet/
 import { useNetworkDescriptor, useWeb3State, useWeb3UI } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc/index.js'
+
 import { PluginProviderRender } from './PluginProviderRender.js'
-import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
+
 import { useI18N } from '../../locales/i18n_generated.js'
+import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -34,6 +35,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
         Array<Web3Helper.NetworkDescriptorAll['type']> | undefined
     >()
     const network = useNetworkDescriptor()
+    const { pluginIDSettings, hasNativeAPI, nativeAPI } = useSNSAdaptorContext()
     const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID)
     // #region remote controlled dialog logic
     const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated, (ev) => {

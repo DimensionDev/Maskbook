@@ -3,7 +3,7 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Avatar, Box, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
 import { SchemaType, explorerResolver, ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, SearchInput } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
@@ -11,7 +11,6 @@ import { useChainContext, useNonFungibleCollections } from '@masknet/web3-hooks-
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { FuseNonFungibleCollection } from '@masknet/web3-providers'
 import { useI18N } from '../../locales/i18n_generated.js'
-import { SearchInput } from '../../../../extension/options-page/DashboardComponents/SearchInput.js'
 
 const useStyles = makeStyles()((theme) => ({
     search: {

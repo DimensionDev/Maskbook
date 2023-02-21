@@ -9,20 +9,21 @@ import { ConnectWalletDialog } from './ConnectWalletDialog/index.js'
 import { WalletRiskWarningDialog } from './RiskWarningDialog/index.js'
 import { GasSettingDialog } from './GasSettingDialog/index.js'
 import { TransactionSnackbar } from './TransactionSnackbar/index.js'
-import { ApplicationBoardDialog } from '../../../components/shared/ApplicationBoardDialog.js'
 import { WalletConnectQRCodeDialog } from './WalletConnectQRCodeDialog/index.js'
-import { LeavePageConfirmDialog } from '../../../components/shared/LeavePageConfirmDialog.js'
+import { SharedContextSettings } from '../settings.js'
+import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal) {},
+    init(signal, context) {
+        SharedContextSettings.value = context
+    },
     GlobalInjection() {
         return (
-            <>
+            <SNSAdaptorContext.Provider value={SharedContextSettings.value}>
                 <SelectProviderDialog />
                 <SelectNftContractDialog />
                 <WalletStatusDialog />
-                <ApplicationBoardDialog />
                 <ConnectWalletDialog />
                 <WalletRiskWarningDialog />
                 <GasSettingDialog />
@@ -30,10 +31,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     <TransactionSnackbar key={key} pluginID={pluginID} />
                 ))}
                 <WalletConnectQRCodeDialog />
-                <LeavePageConfirmDialog />
-            </>
+            </SNSAdaptorContext.Provider>
         )
     },
 }
 
 export default sns
+
+export * from './Components/index.js'

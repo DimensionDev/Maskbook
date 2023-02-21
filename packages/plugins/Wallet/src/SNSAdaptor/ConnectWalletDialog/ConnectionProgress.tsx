@@ -1,7 +1,7 @@
+/* eslint-disable no-nested-ternary */
 import { Trans } from 'react-i18next'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { Icons } from '@masknet/icons'
-import { WalletIcon } from '@masknet/shared'
 import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Card, Typography, Paper, Link } from '@mui/material'
@@ -9,6 +9,7 @@ import { makeStyles, MaskColorVar, ActionButton, LoadingBase } from '@masknet/th
 import { useProviderDescriptor, useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useI18N } from '../../locales/i18n_generated.js'
+import { WalletIcon } from '@masknet/shared'
 
 const useStyles = makeStyles<{
     contentBackground?: string

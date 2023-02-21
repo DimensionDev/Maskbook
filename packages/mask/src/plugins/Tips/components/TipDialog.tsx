@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { useBoolean } from 'react-use'
-import { ChainBoundary, InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
+import { InjectedDialog } from '@masknet/shared'
+import { ChainBoundary, PluginWalletStatusBar } from '@masknet/plugin-wallet'
 import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, MaskTabList } from '@masknet/theme'

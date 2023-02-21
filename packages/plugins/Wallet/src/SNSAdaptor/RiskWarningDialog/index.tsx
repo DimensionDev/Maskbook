@@ -1,14 +1,14 @@
 import { useCallback, useState } from 'react'
 import { Trans } from 'react-i18next'
-import { InjectedDialog, ActionButtonPromise } from '@masknet/shared'
+import { InjectedDialog, ActionButtonPromise, useMatchXS } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { getMaskColor, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { useWeb3State } from '@masknet/web3-hooks-base'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox/index.js'
+import { WalletStatusBox } from '../Components/index.js'
+import { WalletMessages } from '../../messages.js'
 import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -102,7 +102,14 @@ export function WalletRiskWarningDialog() {
                 <Typography
                     className={classes.article}
                     variant="body2"
-                    children={<Trans i18nKey="multiline">{t.wallet_risk_warning_content()}</Trans>}
+                    children={
+                        <Trans
+                            i18nKey="wallet_risk_warning_content"
+                            components={{
+                                br: <br />,
+                            }}
+                        />
+                    }
                 />
                 <WalletStatusBox disableChange withinRiskWarningDialog />
             </DialogContent>

@@ -11,7 +11,7 @@ import { useFetchProject } from '../hooks/useProject.js'
 import { ActionBar } from './ActionBar.js'
 import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes/index.js'
 import { ArtBlocksLogoUrl } from '../constants.js'
-import { ChainBoundary } from '@masknet/shared'
+import { ChainBoundary } from '@masknet/plugin-wallet'
 
 const useStyles = makeStyles()((theme) => {
     return {

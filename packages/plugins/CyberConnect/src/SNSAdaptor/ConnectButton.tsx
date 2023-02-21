@@ -7,7 +7,7 @@ import { useChainContext, useWeb3, useNetworkContext } from '@masknet/web3-hooks
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
 import { PluginCyberConnectRPC } from '../messages.js'
 import { useI18N } from '../locales/i18n_generated.js'
-import { WalletConnectedBoundary } from '@masknet/shared'
+import { WalletConnectedBoundary } from '@masknet/plugin-wallet'
 
 const useStyles = makeStyles()((theme) => ({
     button: {

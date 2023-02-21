@@ -7,7 +7,7 @@ import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material'
 import { SelectNftContractDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useI18N } from '../../../locales/i18n_generated.js'
 
 interface StyleProps {
     hasIcon: boolean
@@ -68,7 +68,7 @@ export interface ERC721TokenSelectPanelProps {
 }
 export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const { onContractChange, collection, label, chainId = ChainId.Mainnet, balance } = props
-    const t = useSharedI18N()
+    const t = useI18N()
     const { classes, cx } = useStyles({ hasIcon: Boolean(collection?.iconURL) })
     const { Others } = useWeb3State()
 

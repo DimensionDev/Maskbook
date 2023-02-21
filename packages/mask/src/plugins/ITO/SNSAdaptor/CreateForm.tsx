@@ -1,35 +1,29 @@
+import { ChainBoundary, PluginWalletStatusBar, WalletConnectedBoundary } from '@masknet/plugin-wallet'
+import { DateTimePanel, EthereumERC20TokenApprovedBoundary, TokenIcon } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ActionButton, LoadingBase, makeStyles } from '@masknet/theme'
+import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import { FungibleToken, isGreaterThan, isZero, leftShift } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType, formatAmount, useITOConstants } from '@masknet/web3-shared-evm'
+import { Check as CheckIcon, Close as UnCheckIcon } from '@mui/icons-material'
+import { Box, InputBase, Stack, Typography, inputBaseClasses } from '@mui/material'
+import formatDateTime from 'date-fns/format'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
-import formatDateTime from 'date-fns/format'
-import { SchemaType, formatAmount, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
-import { isGreaterThan, isZero, FungibleToken, leftShift } from '@masknet/web3-shared-base'
-import {
-    TokenIcon,
-    PluginWalletStatusBar,
-    ChainBoundary,
-    WalletConnectedBoundary,
-    DateTimePanel,
-    EthereumERC20TokenApprovedBoundary,
-} from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { Box, Stack, Typography, InputBase, inputBaseClasses } from '@mui/material'
-import { makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
-import { Check as CheckIcon, Close as UnCheckIcon } from '@mui/icons-material'
 import {
     useCurrentIdentity,
     useCurrentLinkedPersona,
     useLastRecognizedIdentity,
 } from '../../../components/DataSource/useActivatedUI.js'
 import { sliceTextByUILength, useI18N } from '../../../utils/index.js'
+import { AdvanceSetting, AdvanceSettingData } from './AdvanceSetting.js'
+import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup.js'
+import { RegionSelect } from './RegionSelect.js'
 import type { ExchangeTokenAndAmountState } from './hooks/useExchangeTokenAmountstate.js'
 import type { PoolSettings } from './hooks/useFill.js'
 import { useQualificationVerify } from './hooks/useQualificationVerify.js'
 import { decodeRegionCode, encodeRegionCode, regionCodes, useRegionSelect } from './hooks/useRegion.js'
-import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting.js'
-import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup.js'
-import { RegionSelect } from './RegionSelect.js'
-import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`

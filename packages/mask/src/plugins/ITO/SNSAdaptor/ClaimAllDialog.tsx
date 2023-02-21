@@ -1,26 +1,19 @@
-import { useState, useLayoutEffect, useRef, useCallback, MouseEventHandler } from 'react'
-import { flatten, uniq } from 'lodash-es'
-import formatDateTime from 'date-fns/format'
-import { useChainContext, useFungibleToken, useFungibleTokens } from '@masknet/web3-hooks-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { SnackbarProvider, makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
-import {
-    InjectedDialog,
-    FormattedBalance,
-    useOpenShareTxDialog,
-    PluginWalletStatusBar,
-    ChainBoundary,
-    NetworkTab,
-    WalletConnectedBoundary,
-} from '@masknet/shared'
-import { DialogContent, Typography, List, ListItem, useTheme, DialogActions } from '@mui/material'
-import { PluginID, NetworkPluginID } from '@masknet/shared-base'
-import { formatBalance, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
-import { useITOConstants, ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainBoundary, PluginWalletStatusBar, WalletConnectedBoundary } from '@masknet/plugin-wallet'
+import { FormattedBalance, InjectedDialog, NetworkTab, useOpenShareTxDialog } from '@masknet/shared'
+import { NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { ActionButton, LoadingBase, SnackbarProvider, makeStyles } from '@masknet/theme'
+import { useChainContext, useFungibleToken, useFungibleTokens } from '@masknet/web3-hooks-base'
+import { FungibleToken, formatBalance, isSameAddress } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType, useITOConstants } from '@masknet/web3-shared-evm'
+import { DialogActions, DialogContent, List, ListItem, Typography, useTheme } from '@mui/material'
+import formatDateTime from 'date-fns/format'
+import { flatten, uniq } from 'lodash-es'
+import { MouseEventHandler, useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { useI18N } from '../../../utils/index.js'
+import type { SwappedTokenType } from '../types.js'
 import { useClaimAll } from './hooks/useClaimAll.js'
 import { useClaimCallback } from './hooks/useClaimCallback.js'
-import type { SwappedTokenType } from '../types.js'
 
 interface StyleProps {
     shortITOwrapper: boolean

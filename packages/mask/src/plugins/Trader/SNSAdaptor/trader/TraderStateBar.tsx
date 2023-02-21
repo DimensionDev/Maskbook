@@ -5,13 +5,8 @@ import { Box } from '@mui/material'
 import { TokenSecurityBoundary } from '@masknet/plugin-go-plus-security'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
-import {
-    PluginWalletStatusBar,
-    ChainBoundary,
-    WalletConnectedBoundary,
-    EthereumERC20TokenApprovedBoundary,
-    useTokenSecurity,
-} from '@masknet/shared'
+import { EthereumERC20TokenApprovedBoundary, useTokenSecurity } from '@masknet/shared'
+import { PluginWalletStatusBar, ChainBoundary, WalletConnectedBoundary } from '@masknet/plugin-wallet'
 import { isPopupPage, NetworkPluginID, PluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'

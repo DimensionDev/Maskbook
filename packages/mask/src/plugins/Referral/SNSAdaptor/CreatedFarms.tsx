@@ -1,16 +1,14 @@
-import { useAsync } from 'react-use'
-import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
-import { getMaskColor, LoadingBase, makeStyles } from '@masknet/theme'
-import { Grid, Typography, Box, Button } from '@mui/material'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-
-import { useI18N } from '../locales/index.js'
-import { PageInterface, PagesType, FarmDetailed } from '../types.js'
+import { LoadingBase, getMaskColor, makeStyles } from '@masknet/theme'
+import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { Box, Button, Grid, Typography } from '@mui/material'
+import { useAsync } from 'react-use'
 import { getRequiredChainId } from '../helpers/index.js'
+import { useI18N } from '../locales/index.js'
 import { ReferralRPC } from '../messages.js'
-
+import { FarmDetailed, PageInterface, PagesType } from '../types.js'
+import { ChainBoundary, WalletConnectedBoundary } from '@masknet/plugin-wallet'
 import { AccordionFarm } from './shared-ui/AccordionFarm.js'
-import { WalletConnectedBoundary, ChainBoundary } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     buttonWithdraw: {

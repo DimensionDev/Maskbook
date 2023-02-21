@@ -3,7 +3,7 @@ import { useAsync, useBoolean, useCopyToClipboard } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
-import { ImageIcon, PersonaAction, useSnackbarCallback, WalletDescription } from '@masknet/shared'
+import { ImageIcon, PersonaAction, useSnackbarCallback } from '@masknet/shared'
 import { formatPersonaFingerprint, NetworkPluginID } from '@masknet/shared-base'
 import { explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Typography, alpha, Box } from '@mui/material'
@@ -22,6 +22,7 @@ import { RoutePaths } from '../../constants.js'
 import { useDeploy } from '../../hooks/useDeploy.js'
 import { useManagers } from '../../hooks/useManagers.js'
 import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
+import { WalletDescription } from '@masknet/plugin-wallet'
 
 const useStyles = makeStyles()((theme) => ({
     walletDescription: {

@@ -1,12 +1,12 @@
-import { ReactNode, useState } from 'react'
-import { TabContext, TabPanel } from '@mui/lab'
 import { makeStyles } from '@masknet/theme'
-import { Button, Box, Tab, Tabs, Grid, Typography } from '@mui/material'
+import { TabContext, TabPanel } from '@mui/lab'
+import { Box, Button, Grid, Tab, Tabs, Typography } from '@mui/material'
+import { ReactNode, useState } from 'react'
 
 import { useI18N } from '../locales/index.js'
 import { PageInterface, PagesType, TabsReferralFarms } from '../types.js'
 
-import { ReferToFarmIcon, CreateFarmIcon, BuyToFarmIcon } from './shared-ui/icons/index.js'
+import { BuyToFarmIcon, CreateFarmIcon, ReferToFarmIcon } from './shared-ui/icons/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

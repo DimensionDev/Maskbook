@@ -19,10 +19,10 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
-import { useSharedI18N } from '../../../locales/index.js'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { WalletDescription } from './WalletDescription.js'
 import { Action } from './Action.js'
+import { useI18N } from '../../../locales/i18n_generated.js'
 
 const isDashboard = isDashboardPage()
 
@@ -60,7 +60,7 @@ export interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWi
 
 const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPluginID>>(
     ({ className, onClick, expectedPluginID, expectedChainId, children }) => {
-        const t = useSharedI18N()
+        const t = useI18N()
         const { classes, cx } = useStyles()
 
         const { pluginID } = useNetworkContext()

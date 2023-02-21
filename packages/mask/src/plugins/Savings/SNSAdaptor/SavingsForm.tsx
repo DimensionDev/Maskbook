@@ -26,12 +26,10 @@ import {
     InjectedDialog,
     TokenIcon,
     useOpenShareTxDialog,
-    PluginWalletStatusBar,
     ActionButtonPromise,
-    ChainBoundary,
-    WalletConnectedBoundary,
     EthereumERC20TokenApprovedBoundary,
 } from '@masknet/shared'
+import { PluginWalletStatusBar, ChainBoundary, WalletConnectedBoundary } from '@masknet/plugin-wallet'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
 import { useI18N } from '../../../utils/index.js'
@@ -318,7 +316,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                             ) : (
                                 <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
                                     &asymp; <FormattedCurrency value={tokenValueUSD} formatter={formatCurrency} />
-                                    {estimatedGas > 0 ? (
+                                    {new BigNumber(estimatedGas).isGreaterThan(0) ? (
                                         <span className={classes.gasFee}>+ {formatBalance(estimatedGas, 18)} ETH</span>
                                     ) : (
                                         <span />

@@ -5,8 +5,8 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox/index.js'
 import { useI18N } from '../../locales/i18n_generated.js'
+import { WalletStatusBox } from '../Components/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

@@ -1,7 +1,6 @@
 import { makeStyles, ActionButton, ActionButtonProps } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { useSharedI18N } from '../../../locales/index.js'
 import { isZero } from '@masknet/web3-shared-base'
 import {
     useChainContext,
@@ -10,6 +9,7 @@ import {
     useRiskWarningApproved,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { useI18N } from '../../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()({
     button: {
@@ -29,7 +29,7 @@ export interface WalletConnectedBoundaryProps extends withClasses<'connectWallet
 export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
     const { children = null, offChain = false, hideRiskWarningConfirmed = false, expectedChainId } = props
 
-    const t = useSharedI18N()
+    const t = useI18N()
     const { classes, cx } = useStyles(undefined, { props })
 
     const { pluginID } = useNetworkContext()

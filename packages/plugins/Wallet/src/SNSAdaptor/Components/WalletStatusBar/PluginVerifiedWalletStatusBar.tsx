@@ -4,7 +4,6 @@ import { first, omit } from 'lodash-es'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { alpha, Box, Button, Divider, ListItemIcon, MenuItem, Typography } from '@mui/material'
-import { useSharedI18N } from '../../../locales/index.js'
 import { Action } from './Action.js'
 import { BindingProof, NetworkPluginID, isDashboardPage } from '@masknet/shared-base'
 import {
@@ -26,6 +25,7 @@ import { isSameAddress, resolveNextID_NetworkPluginID, TransactionStatusType } f
 import { WalletMenuItem } from './WalletMenuItem.js'
 import { useMenu } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { useI18N } from '../../../locales/i18n_generated.js'
 
 const isDashboard = isDashboardPage()
 
@@ -63,7 +63,7 @@ interface PluginVerifiedWalletStatusBarProps extends PropsWithChildren<{}> {
 
 export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarProps>(
     ({ className, children, verifiedWallets, onChange, expectedAddress, openPopupWindow }) => {
-        const t = useSharedI18N()
+        const t = useI18N()
         const { classes, cx } = useStyles()
 
         const { account, chainId } = useChainContext()

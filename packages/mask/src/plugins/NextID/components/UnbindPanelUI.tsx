@@ -1,7 +1,7 @@
 import { memo, useState } from 'react'
 import { Box, DialogContent, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { WalletStatusBox } from '../../../components/shared/WalletStatusBox/index.js'
+import { WalletStatusBox } from '../../../../../plugins/Wallet/src/SNSAdaptor/Components/WalletStatusBox/index.js'
 import { LoadingButton } from '@mui/lab'
 import { Done as DoneIcon } from '@mui/icons-material'
 import { useI18N } from '../locales/index.js'

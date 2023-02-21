@@ -1,34 +1,28 @@
-import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { BigNumber } from 'bignumber.js'
-import { omit } from 'lodash-es'
-import { makeStyles, ActionButton } from '@masknet/theme'
+import { ChainBoundary, PluginWalletStatusBar, WalletConnectedBoundary } from '@masknet/plugin-wallet'
+import { EthereumERC20TokenApprovedBoundary, FungibleTokenInput, useSelectFungibleToken } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ActionButton, makeStyles } from '@masknet/theme'
+import { useChainContext, useFungibleToken, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import { SmartPayBundler } from '@masknet/web3-providers'
 import {
     FungibleToken,
+    formatBalance,
     isGreaterThan,
     isZero,
     multipliedBy,
     rightShift,
-    formatBalance,
 } from '@masknet/web3-shared-base'
 import { ChainId, GasConfig, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
-import { MenuItem, Select, Box, InputBase, Typography } from '@mui/material'
-import { NetworkPluginID } from '@masknet/shared-base'
-import {
-    useSelectFungibleToken,
-    FungibleTokenInput,
-    PluginWalletStatusBar,
-    ChainBoundary,
-    WalletConnectedBoundary,
-    EthereumERC20TokenApprovedBoundary,
-} from '@masknet/shared'
-import { useFungibleToken, useFungibleTokenBalance, useChainContext } from '@masknet/web3-hooks-base'
+import { Box, InputBase, MenuItem, Select, Typography } from '@mui/material'
+import { BigNumber } from 'bignumber.js'
+import { omit } from 'lodash-es'
+import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useAsync } from 'react-use'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
-import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18n } from '../../../utils/index.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
+import { useI18N } from '../locales/index.js'
 import type { RedPacketSettings } from './hooks/useCreateCallback.js'
-import { useAsync } from 'react-use'
-import { SmartPayBundler } from '@masknet/web3-providers'
 
 // seconds of 1 day
 const duration = 60 * 60 * 24

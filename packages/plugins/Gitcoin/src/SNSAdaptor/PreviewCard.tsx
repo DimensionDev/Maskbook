@@ -1,5 +1,6 @@
 import { Icons } from '@masknet/icons'
-import { ChainBoundary, SocialIcon } from '@masknet/shared'
+import { SocialIcon } from '@masknet/shared'
+import { ChainBoundary } from '@masknet/plugin-wallet'
 import { NetworkPluginID, purify } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, ShadowRootIsolation } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'

@@ -1,30 +1,30 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { BigNumber } from 'bignumber.js'
-import { openWindow } from '@masknet/shared-base-ui'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { WalletConnectedBoundary } from '@masknet/plugin-wallet'
 import {
-    useSelectFungibleToken,
-    useOpenShareTxDialog,
-    FungibleTokenInput,
-    WalletConnectedBoundary,
     EthereumERC20TokenApprovedBoundary,
+    FungibleTokenInput,
+    useOpenShareTxDialog,
+    useSelectFungibleToken,
 } from '@masknet/shared'
-import { makeStyles, ActionButton } from '@masknet/theme'
-import { leftShift, rightShift, ZERO, FungibleToken, currySameAddress, formatBalance } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { openWindow } from '@masknet/shared-base-ui'
+import { ActionButton, makeStyles } from '@masknet/theme'
+import { useChainContext, useFungibleToken, useFungibleTokenBalance, useWeb3State } from '@masknet/web3-hooks-base'
+import { FungibleToken, ZERO, currySameAddress, formatBalance, leftShift, rightShift } from '@masknet/web3-shared-base'
 import {
     ChainId,
     SchemaType,
+    explorerResolver,
     isNativeTokenAddress,
     useTokenConstants,
-    explorerResolver,
 } from '@masknet/web3-shared-evm'
 import { Slider, Typography } from '@mui/material'
+import { BigNumber } from 'bignumber.js'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../utils/index.js'
 import type { JSON_PayloadInMask } from '../types.js'
+import { SwapStatus } from './SwapGuide.js'
 import { useQualificationVerify } from './hooks/useQualificationVerify.js'
 import { useSwapCallback } from './hooks/useSwapCallback.js'
-import { SwapStatus } from './SwapGuide.js'
-import { useChainContext, useFungibleToken, useFungibleTokenBalance, useWeb3State } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     button: {},

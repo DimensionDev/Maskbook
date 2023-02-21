@@ -1,17 +1,16 @@
-import { useCallback, useMemo, useState } from 'react'
-import { Trans } from 'react-i18next'
+import { WalletConnectedBoundary } from '@masknet/plugin-wallet'
 import {
-    InjectedDialog,
+    EthereumERC20TokenApprovedBoundary,
     FungibleTokenInput,
+    InjectedDialog,
     useOpenShareTxDialog,
     useShowConfirm,
-    WalletConnectedBoundary,
-    EthereumERC20TokenApprovedBoundary,
 } from '@masknet/shared'
-import { makeStyles, ActionButton } from '@masknet/theme'
-import { FungibleToken, leftShift } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { SchemaType, useArtBlocksConstants, ChainId } from '@masknet/web3-shared-evm'
+import { ActionButton, makeStyles } from '@masknet/theme'
+import { useFungibleTokenWatched } from '@masknet/web3-hooks-base'
+import { FungibleToken, leftShift } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType, useArtBlocksConstants } from '@masknet/web3-shared-evm'
 import {
     Card,
     CardActions,
@@ -22,11 +21,12 @@ import {
     Link,
     Typography,
 } from '@mui/material'
-import { useFungibleTokenWatched } from '@masknet/web3-hooks-base'
+import { useCallback, useMemo, useState } from 'react'
+import { Trans } from 'react-i18next'
 import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { useI18N } from '../../../utils/index.js'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
 import type { Project } from '../types.js'

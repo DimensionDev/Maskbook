@@ -8,10 +8,11 @@ import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
 import { useChainContext, useWeb3State, useNetworkDescriptor, useWeb3Hub } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { NetworkDescriptor, isGreaterThan, FungibleTokenSpender } from '@masknet/web3-shared-base'
-import { ChainBoundary, TokenIcon } from '@masknet/shared'
+import { TokenIcon } from '@masknet/shared'
 import { useI18N } from '../locales/index.js'
 import { ApprovalLoadingContent } from './ApprovalLoadingContent.js'
 import { ApprovalEmptyContent } from './ApprovalEmptyContent.js'
+import { ChainBoundary } from '@masknet/plugin-wallet'
 
 export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
     (theme, props) => ({

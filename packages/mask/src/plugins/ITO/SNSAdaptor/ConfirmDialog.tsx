@@ -1,4 +1,4 @@
-import { FormattedAddress, FormattedBalance, PluginWalletStatusBar } from '@masknet/shared'
+import { FormattedAddress, FormattedBalance } from '@masknet/shared'
 import {
     formatEthereumAddress,
     isNativeTokenAddress,
@@ -7,6 +7,7 @@ import {
     SchemaType,
     ChainId,
 } from '@masknet/web3-shared-evm'
+import { PluginWalletStatusBar } from '@masknet/plugin-wallet'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { formatBalance, FungibleToken, leftShift, ONE } from '@masknet/web3-shared-base'
 import { Grid, IconButton, Link, Paper, Typography, Box } from '@mui/material'

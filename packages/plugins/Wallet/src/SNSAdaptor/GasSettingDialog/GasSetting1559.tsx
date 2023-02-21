@@ -138,7 +138,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                         .min(1, t.wallet_transfer_error_gas_limit_absence())
                         .refine(
                             (gasLimit) => isGreaterThanOrEqualTo(gasLimit, minGasLimit),
-                            t.popups_wallet_gas_fee_settings_min_gas_limit_tips({ limit: minGasLimit }),
+                            t.popups_wallet_gas_fee_settings_min_gas_limit_tips({ limit: minGasLimit.toString() }),
                         ),
                     maxPriorityFeePerGas: zod
                         .string()
@@ -265,7 +265,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                                 <Typography variant="inherit">Gwei</Typography>
                             </Typography>
                             <Typography className={classes.gasUSD}>
-                                {t('popups_wallet_gas_fee_settings_usd', {
+                                {t.popups_wallet_gas_fee_settings_usd({
                                     usd: formatCurrency(
                                         formatWeiToEther(content?.suggestedMaxFeePerGas ?? 0)
                                             .times(nativeTokenPrice)
@@ -280,7 +280,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                 </div>
                 <form onSubmit={onSubmit}>
                     <Typography className={classes.label}>
-                        {t('popups_wallet_gas_fee_settings_gas_limit')}
+                        {t.popups_wallet_gas_fee_settings_gas_limit()}
                         <Typography component="span" className={classes.price}>
                             {gasLimit?.toString()}
                         </Typography>
@@ -312,7 +312,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                             ({t.wallet_transfer_gwei()})
                         </Typography>
                         <Typography component="span" className={classes.price}>
-                            {t('popups_wallet_gas_fee_settings_usd', {
+                            {t.popups_wallet_gas_fee_settings_usd({
                                 usd: formatWeiToEther(Number(maxPriorityFeePerGas) ?? 0)
                                     .times(nativeTokenPrice)
                                     .times(inputGasLimit || 1)
@@ -347,7 +347,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                             ({t.wallet_transfer_gwei()})
                         </Typography>
                         <Typography component="span" className={classes.price}>
-                            {t('popups_wallet_gas_fee_settings_usd', {
+                            {t.popups_wallet_gas_fee_settings_usd({
                                 usd: formatWeiToEther(Number(maxFeePerGas) ?? 0)
                                     .times(nativeTokenPrice)
                                     .times(inputGasLimit || 1)

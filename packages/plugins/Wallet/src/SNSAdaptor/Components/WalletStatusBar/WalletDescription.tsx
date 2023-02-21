@@ -4,7 +4,7 @@ import { alpha, Box, Link, Typography } from '@mui/material'
 import { WalletIcon, useSnackbarCallback } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useI18N } from '../../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -80,7 +80,7 @@ export const WalletDescription = memo<WalletDescriptionProps>(
         verified,
     }) => {
         const { classes } = useStyles()
-        const t = useSharedI18N()
+        const t = useI18N()
 
         const [, copyToClipboard] = useCopyToClipboard()
 

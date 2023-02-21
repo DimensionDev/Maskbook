@@ -25,3 +25,5 @@ registerPlugin({
 
 export * from './messages.js'
 export * from './constants.js'
+export * from './SNSAdaptor/index.js'
+export * from './base.js'

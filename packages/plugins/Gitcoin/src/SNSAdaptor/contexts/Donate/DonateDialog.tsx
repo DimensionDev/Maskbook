@@ -1,16 +1,14 @@
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import {
-    ChainBoundary,
     EthereumERC20TokenApprovedBoundary,
     FungibleTokenInput,
     InjectedDialog,
     InjectedDialogProps,
     NetworkTab,
-    PluginWalletStatusBar,
     TokenIcon,
     useSelectFungibleToken,
-    WalletConnectedBoundary,
 } from '@masknet/shared'
+import { ChainBoundary, PluginWalletStatusBar, WalletConnectedBoundary } from '@masknet/plugin-wallet'
 import { EMPTY_LIST, isTwitter, NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useChainContext, useFungibleTokenBalance, useWeb3Connection } from '@masknet/web3-hooks-base'
