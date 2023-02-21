@@ -1,9 +1,9 @@
-import { useAsyncRetry } from 'react-use'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import type { Transaction } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
+import { useMemo } from 'react'
+import { pageableToIterator } from '@masknet/web3-shared-base'
 
 export function useTransactions<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: NetworkPluginID,
@@ -12,10 +12,13 @@ export function useTransactions<S extends 'all' | void = void, T extends Network
     const { account, chainId } = useChainContext()
     const hub = useWeb3Hub(pluginID, options)
 
-    return useAsyncRetry<
-        Array<Transaction<Web3Helper.ChainIdScope<S, T>, Web3Helper.SchemaTypeScope<S, T>>> | undefined
-    >(async () => {
-        const response = await hub?.getTransactions(options?.chainId ?? chainId, options?.account ?? account)
-        return response?.data
-    }, [account, chainId, hub])
+    return useMemo(() => {
+        return pageableToIterator(async (indicator) => {
+            const data = await hub?.getTransactions(options?.chainId ?? chainId, options?.account ?? account, {
+                indicator,
+            })
+            console.log('data', data)
+            return data
+        })
+    }, [hub, account, chainId, options])
 }

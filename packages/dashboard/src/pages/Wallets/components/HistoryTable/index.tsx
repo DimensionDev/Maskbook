@@ -1,16 +1,14 @@
-import { noop } from 'lodash-es'
 import { Dispatch, memo, SetStateAction, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import { LoadingBase, makeStyles, MaskColorVar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useTransactions, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Transaction } from '@masknet/web3-shared-base'
-import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
-import { EmptyPlaceholder } from '../EmptyPlaceholder/index.js'
 import { HistoryTableRow } from '../HistoryTableRow/index.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
+import { ElementAnchor, useIterator } from '@masknet/shared'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -18,17 +16,16 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         height: '100%',
     },
+    loading: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     header: {
         color: MaskColorVar.normalText,
         fontWeight: theme.typography.fontWeightRegular as any,
         padding: '12px 0 12px',
         border: 'none',
         backgroundColor: MaskColorVar.primaryBackground,
-    },
-    footer: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
     },
 }))
 
@@ -40,8 +37,17 @@ export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
     const [page, setPage] = useState(0)
     const { pluginID } = useNetworkContext()
     const { account } = useChainContext()
-    const { value = EMPTY_LIST, loading } = useTransactions(pluginID, { chainId: selectedChainId })
+    const iterator = useTransactions(pluginID, { chainId: selectedChainId })
+    const {
+        value = EMPTY_LIST,
+        next,
+        done,
+        error,
+        retry,
+        loading,
+    } = useIterator<Transaction<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>(iterator)
 
+    console.log('done', done)
     useUpdateEffect(() => {
         setPage(0)
     }, [account, selectedChainId])
@@ -54,19 +60,21 @@ export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
         <HistoryTableUI
             page={page}
             onPageChange={setPage}
-            hasNextPage={false}
+            done={done}
             isLoading={loading}
             isEmpty={!dataSource.length}
             dataSource={dataSource}
             selectedChainId={selectedChainId}
+            next={next}
         />
     )
 })
 
 export interface HistoryTableUIProps {
     page: number
+    next?: () => void
     onPageChange: Dispatch<SetStateAction<number>>
-    hasNextPage: boolean
+    done: boolean
     isLoading: boolean
     isEmpty: boolean
     dataSource: Array<Transaction<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
@@ -74,20 +82,13 @@ export interface HistoryTableUIProps {
 }
 
 export const HistoryTableUI = memo<HistoryTableUIProps>(
-    ({ isLoading, isEmpty, dataSource, page, onPageChange, hasNextPage, selectedChainId }) => {
+    ({ isLoading, isEmpty, dataSource, next, page, onPageChange, done, selectedChainId }) => {
         const t = useDashboardI18N()
-        const { classes } = useStyles()
+        const { classes, cx } = useStyles()
         return (
             <>
-                <TableContainer className={classes.container}>
-                    {isLoading || isEmpty ? (
-                        <Box flex={1}>
-                            {isLoading ? <LoadingPlaceholder /> : null}
-                            {isEmpty && !isLoading ? (
-                                <EmptyPlaceholder children={t.wallets_empty_history_tips()} />
-                            ) : null}
-                        </Box>
-                    ) : (
+                {dataSource.length ? (
+                    <TableContainer className={classes.container}>
                         <Table stickyHeader sx={{ padding: '0 44px' }}>
                             <TableHead>
                                 <TableRow>
@@ -103,45 +104,25 @@ export const HistoryTableUI = memo<HistoryTableUIProps>(
                                 </TableRow>
                             </TableHead>
 
-                            {dataSource.length ? (
-                                <TableBody>
-                                    {dataSource.map((transaction, index) => (
-                                        <HistoryTableRow
-                                            key={index}
-                                            transaction={transaction}
-                                            selectedChainId={selectedChainId}
-                                        />
-                                    ))}
-                                </TableBody>
-                            ) : null}
+                            <TableBody>
+                                {dataSource.map((transaction, index) => (
+                                    <HistoryTableRow
+                                        key={index}
+                                        transaction={transaction}
+                                        selectedChainId={selectedChainId}
+                                    />
+                                ))}
+                            </TableBody>
                         </Table>
-                    )}
-                </TableContainer>
-
-                {!(page === 0 && !hasNextPage) && !isLoading ? (
-                    <Box className={classes.footer}>
-                        <TablePagination
-                            count={-1}
-                            component="div"
-                            onPageChange={noop}
-                            page={page}
-                            rowsPerPage={30}
-                            rowsPerPageOptions={[30]}
-                            labelDisplayedRows={() => null}
-                            backIconButtonProps={{
-                                onClick: () => onPageChange((prev) => prev - 1),
-                                size: 'small',
-                                disabled: page === 0,
-                            }}
-                            nextIconButtonProps={{
-                                onClick: () => onPageChange((prev) => prev + 1),
-                                disabled: !hasNextPage,
-                                size: 'small',
-                            }}
-                            sx={{ overflow: 'hidden' }}
-                        />
+                    </TableContainer>
+                ) : (
+                    <Box className={cx(classes.container, classes.loading)}>
+                        <LoadingBase />
                     </Box>
-                ) : null}
+                )}
+                <ElementAnchor callback={() => next?.()}>
+                    {!done && dataSource?.length && <LoadingBase />}
+                </ElementAnchor>
             </>
         )
     },
