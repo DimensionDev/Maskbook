@@ -340,7 +340,7 @@ export class Web3API
         const interval = getAverageBlockDelay(chainId)
 
         for (let i = 0; i < times; i += 1) {
-            if (signal?.aborted) throw new Error('Aborted')
+            if (signal?.aborted) throw new Error(signal.reason)
 
             try {
                 const receipt = await this.getTransactionReceipt(chainId, hash)
