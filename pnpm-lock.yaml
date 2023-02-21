@@ -1066,6 +1066,9 @@ importers:
       react-refresh:
         specifier: ^0.14.0
         version: 0.14.0
+      rimraf:
+        specifier: ^3.0.2
+        version: 3.0.2
       source-map-loader:
         specifier: ^4.0.1
         version: 4.0.1_webpack@5.75.0
