@@ -1,10 +1,9 @@
 import { useAsyncRetry } from 'react-use'
 import { compact, first } from 'lodash-es'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useWeb3Hub } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
-import { useImageURL } from '../../../hooks/useImageURL.js'
 import { Icon, IconProps } from '../Icon/index.js'
 
 export interface TokenIconProps extends IconProps {
@@ -32,11 +31,8 @@ export function TokenIcon(props: TokenIconProps) {
             urls: compact([logoURL, ...(logoURLs ?? [])]),
         }
     }, [chainId, address, isNFT, logoURL, hub?.getNonFungibleTokenIconURLs, hub?.getFungibleTokenIconURLs])
-    const { urls = EMPTY_LIST, key } = value ?? {}
-    const originalUrl = first(urls)
-    const { value: accessibleUrl } = useImageURL(originalUrl)
+    const originalUrl = first(value?.urls)
 
-    if (!accessibleUrl && originalUrl && disableDefaultIcon) return null
-
-    return <Icon key={key} {...rest} logoURL={isNFT ? logoURL : accessibleUrl || originalUrl} name={symbol ?? name} />
+    if (originalUrl && disableDefaultIcon) return null
+    return <Icon key={value?.key} {...rest} logoURL={isNFT ? logoURL : originalUrl} name={symbol ?? name} />
 }
