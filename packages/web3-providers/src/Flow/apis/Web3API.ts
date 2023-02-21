@@ -217,7 +217,7 @@ export class FlowWeb3API
         const web3 = this.getWeb3(chainId)
         return web3.query(transaction)
     }
-    confirmTransaction(chainId: ChainId, hash: string): Promise<void> {
+    confirmTransaction(chainId: ChainId, hash: string, signal?: AbortSignal): Promise<TransactionReceipt> {
         throw new Error('Method not implemented.')
     }
     estimateTransaction(chainId: ChainId, transaction: Transaction, fallback?: number | undefined): Promise<string> {

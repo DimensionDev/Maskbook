@@ -27,6 +27,7 @@ import {
     ContractTransaction,
     AccountTransaction,
     PayloadEditor,
+    TransactionReceipt,
 } from '@masknet/web3-shared-evm'
 import {
     Account,
@@ -771,9 +772,9 @@ class Connection implements EVM_Connection {
         return Web3.sendSignedTransaction(options.chainId, signature)
     }
 
-    confirmTransaction(hash: string, initial?: EVM_ConnectionOptions): Promise<void> {
+    confirmTransaction(hash: string, initial?: EVM_ConnectionOptions): Promise<TransactionReceipt> {
         const options = this.getOptions(initial)
-        return Web3.confirmTransaction(options.chainId, hash)
+        return Web3.confirmTransaction(options.chainId, hash, options.signal)
     }
 
     replaceTransaction(hash: string, transaction: Transaction, initial?: EVM_ConnectionOptions) {

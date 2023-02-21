@@ -1,6 +1,6 @@
 import { first } from 'lodash-es'
 import type { BlockObject, MutateOptions, QueryOptions } from '@blocto/fcl'
-import { AddressType, ChainId, ProviderType, SchemaType } from '@masknet/web3-shared-flow'
+import { AddressType, ChainId, ProviderType, SchemaType, TransactionReceipt } from '@masknet/web3-shared-flow'
 import type {
     Account,
     FungibleToken,
@@ -232,7 +232,7 @@ class Connection implements FlowConnection {
         const options = this.getOptions(initial)
         return FlowWeb3.getTransaction(options.chainId, id)
     }
-    async getTransactionReceipt(id: string, initial?: FlowConnectionOptions) {
+    async getTransactionReceipt(id: string, initial?: FlowConnectionOptions): Promise<TransactionReceipt | null> {
         const options = this.getOptions(initial)
         return FlowWeb3.getTransactionReceipt(options.chainId, id)
     }
@@ -293,7 +293,7 @@ class Connection implements FlowConnection {
     sendSignedTransaction(signature: never, initial?: FlowConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    confirmTransaction(hash: string, initial?: FlowConnectionOptions): Promise<void> {
+    confirmTransaction(hash: string, initial?: FlowConnectionOptions): Promise<TransactionReceipt> {
         throw new Error('Method not implemented.')
     }
     replaceTransaction(hash: string, config: MutateOptions, initial?: FlowConnectionOptions): Promise<void> {

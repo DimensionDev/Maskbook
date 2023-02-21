@@ -335,8 +335,8 @@ export class Web3API
             params: [new AccountTransaction(transaction).fill(overrides), 'latest'],
         })
     }
-    async confirmTransaction(chainId: ChainId, hash: string, signal?: AbortSignal): Promise<void> {
-        const times = 100
+    async confirmTransaction(chainId: ChainId, hash: string, signal?: AbortSignal): Promise<TransactionReceipt> {
+        const times = 49
         const interval = getAverageBlockDelay(chainId)
 
         for (let i = 0; i < times; i += 1) {
@@ -347,7 +347,7 @@ export class Web3API
                 if (!receipt) throw new Error('Not confirm yet.')
 
                 // the transaction has been confirmed
-                break
+                return receipt
             } catch {
                 await delay(interval)
                 continue

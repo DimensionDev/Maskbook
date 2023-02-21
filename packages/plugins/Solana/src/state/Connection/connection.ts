@@ -15,6 +15,7 @@ import {
     isNativeTokenAddress,
     ProviderType,
     SchemaType,
+    TransactionReceipt,
     TransactionSignature,
 } from '@masknet/web3-shared-solana'
 import {
@@ -314,7 +315,7 @@ class Connection implements SolanaConnection {
         return SolanaWeb3.getTransaction(options.chainId, id)
     }
 
-    async getTransactionReceipt(id: string, initial?: SolanaConnectionOptions) {
+    async getTransactionReceipt(id: string, initial?: SolanaConnectionOptions): Promise<TransactionReceipt | null> {
         const options = this.getOptions(initial)
         return SolanaWeb3.getTransactionReceipt(options.chainId, id)
     }
@@ -412,7 +413,7 @@ class Connection implements SolanaConnection {
     ): Promise<NonFungibleTokenMetadata<ChainId>> {
         throw new Error('Method not implemented.')
     }
-    confirmTransaction(hash: string, initial?: SolanaConnectionOptions): Promise<void> {
+    confirmTransaction(hash: string, initial?: SolanaConnectionOptions): Promise<TransactionReceipt> {
         throw new Error('Method not implemented.')
     }
     replaceTransaction(hash: string, config: Transaction, options?: SolanaConnectionOptions): Promise<void> {
