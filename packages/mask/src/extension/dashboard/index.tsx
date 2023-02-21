@@ -10,6 +10,7 @@ import { createPluginHost, createPartialSharedUIContext } from '../../../shared/
 import { createNormalReactRoot } from '../../utils/createNormalReactRoot.js'
 import { status } from '../../setup.ui.js'
 import { RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
+import { pluginIDSettings } from '../../../shared/legacy-settings/settings.js'
 
 setService(Services)
 setMessages(MaskMessages)
@@ -31,6 +32,7 @@ startPluginDashboard(
                 [],
                 MaskMessages.events.currentPersonaIdentifier.on,
             ),
+            pluginIDSettings,
         }),
         Services.Settings.getPluginMinimalModeEnabled,
         Services.Helper.hasHostPermission,

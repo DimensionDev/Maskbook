@@ -43,7 +43,7 @@ import type { ChainId as ChainIdEVM, TransactionOptions } from '@masknet/web3-sh
 import type { Emitter } from '@servie/events'
 import type { CompositionType } from './entry-content-script.js'
 import type { AsyncVersionOf } from 'async-call-rpc'
-import type { iOSNativeAPIs, AndroidNativeAPIs } from '@masknet/public-api'
+import type { AndroidNativeAPIs, iOSNativeAPIs } from '@masknet/public-api'
 
 export declare namespace Plugin {
     /**
@@ -179,6 +179,18 @@ export namespace Plugin.Shared {
         nativeType?: 'Android' | 'iOS'
         /** Native API supported */
         hasNativeAPI: boolean
+        nativeAPI?:
+            | {
+                  type: 'iOS'
+                  api: AsyncVersionOf<iOSNativeAPIs>
+              }
+            | {
+                  type: 'Android'
+                  api: AsyncVersionOf<AndroidNativeAPIs>
+              }
+            | undefined
+
+        pluginIDSettings?: ValueRef<Record<EnhanceableSite | ExtensionSite, NetworkPluginID>>
 
         /** Open Dashboard with a new window */
         openDashboard(route?: DashboardRoutes, search?: string): Promise<any>
@@ -395,18 +407,6 @@ export namespace Plugin.SNSAdaptor {
         queryPersonaByProfile: (id: ProfileIdentifier) => Promise<PersonaInformation | undefined>
         connectPersona: () => Promise<void>
         createPersona: () => void
-        pluginIDSettings: ValueRef<Record<EnhanceableSite | ExtensionSite, NetworkPluginID>>
-        hasNativeAPI: boolean
-        nativeAPI:
-            | {
-                  type: 'iOS'
-                  api: AsyncVersionOf<iOSNativeAPIs>
-              }
-            | {
-                  type: 'Android'
-                  api: AsyncVersionOf<AndroidNativeAPIs>
-              }
-            | undefined
     }
 
     export type SelectProviderDialogEvent =

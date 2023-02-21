@@ -5,12 +5,12 @@ import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
+import { EnhanceableSite, ExtensionSite, getSiteType, NetworkPluginID, ValueRef } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { ConnectionProgress } from './ConnectionProgress.js'
 import { useI18N } from '../../locales/i18n_generated.js'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog } from '@masknet/shared'
+import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -24,14 +24,16 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function ConnectWalletDialog() {
+export function ConnectWalletDialog(props: {
+    pluginIDSettings?: ValueRef<Record<EnhanceableSite | ExtensionSite, NetworkPluginID>>
+}) {
     const { classes } = useStyles()
     const t = useI18N()
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const [providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
     const [networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
     const [walletConnectedCallback, setWalletConnectedCallback] = useState<(() => void) | undefined>()
-    const { pluginIDSettings } = useSNSAdaptorContext()
+    const { pluginIDSettings } = useSNSAdaptorContext() ?? props.pluginIDSettings
 
     // #region remote controlled dialog
     const { open, setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
@@ -65,7 +67,7 @@ export function ConnectWalletDialog() {
         await connection.connect()
 
         const site = getSiteType()
-        if (pluginID && site) {
+        if (pluginID && site && pluginIDSettings) {
             pluginIDSettings.value = {
                 ...pluginIDSettings.value,
                 [site]: pluginID,
