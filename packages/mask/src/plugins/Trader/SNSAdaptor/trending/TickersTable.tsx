@@ -33,11 +33,13 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         fontWeight: 700,
         whiteSpace: 'nowrap',
-        backgroundColor: theme.palette.maskColor.bottom,
         border: 'none',
         '&:not(:first-child)': {
             textAlign: 'center',
         },
+    },
+    headerCell: {
+        background: theme.palette.mode === 'light' ? theme.palette.maskColor.bottom : 'unset',
     },
     logo: {
         width: 18,
@@ -68,7 +70,7 @@ type Cells = 'exchange' | 'pair' | 'price' | 'volume' | 'updated'
 
 export function TickersTable({ dataProvider, tickers }: TickersTableProps) {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     const headCellMap: Record<Cells, string> = {
         volume: t('plugin_trader_table_volume'),
@@ -142,11 +144,11 @@ export function TickersTable({ dataProvider, tickers }: TickersTableProps) {
 
     return (
         <TableContainer className={classes.container}>
-            <Table size="small" stickyHeader>
+            <Table size="small">
                 <TableHead>
                     <TableRow>
                         {headCells.map((x) => (
-                            <TableCell className={classes.cell} key={x}>
+                            <TableCell className={cx(classes.cell, classes.headerCell)} key={x}>
                                 {x}
                             </TableCell>
                         ))}

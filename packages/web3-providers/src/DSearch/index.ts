@@ -351,12 +351,16 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         }
         return result.sort((a, b) => {
             if (
-                a.rank &&
-                a.rank <= 200 &&
-                a.type === SearchResultType.FungibleToken &&
-                b.type !== SearchResultType.FungibleToken
+                (a.rank &&
+                    a.rank <= 200 &&
+                    a.type === SearchResultType.FungibleToken &&
+                    b.type !== SearchResultType.FungibleToken) ||
+                (a.source === SourceType.CoinGecko && b.source === SourceType.CoinMarketCap)
             )
                 return -1
+
+            if (a.source === SourceType.CoinMarketCap && b.source === SourceType.CoinGecko) return 1
+
             return (a.rank ?? 0) - (b.rank ?? 0)
         })
     }
@@ -411,7 +415,12 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                         ((x.rank && x.rank <= 200) || x.id === 'mask-network')
                     )
                 })
-                .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0)),
+                .sort((a, b) => {
+                    if (a.source === SourceType.CoinGecko && b.source === SourceType.CoinMarketCap) return -1
+                    if (a.source === SourceType.CoinMarketCap && b.source === SourceType.CoinGecko) return 1
+
+                    return (a.rank ?? 0) - (b.rank ?? 0)
+                }),
             (a, b) => a.id === b.id,
         )
 

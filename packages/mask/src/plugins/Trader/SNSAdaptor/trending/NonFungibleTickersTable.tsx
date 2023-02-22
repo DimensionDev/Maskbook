@@ -38,7 +38,6 @@ const useStyles = makeStyles<{ isCollectionProjectPopper: boolean }>()((theme, {
         fontSize: 12,
         fontWeight: 700,
         whiteSpace: 'nowrap',
-        backgroundColor: theme.palette.maskColor.bottom,
         border: 'none',
         '&:not(:first-child)': {
             textAlign: 'center',
@@ -46,6 +45,9 @@ const useStyles = makeStyles<{ isCollectionProjectPopper: boolean }>()((theme, {
         '&:last-child': {
             textAlign: 'right',
         },
+    },
+    headerCell: {
+        background: theme.palette.mode === 'light' ? theme.palette.maskColor.bottom : 'unset',
     },
     nftImage: {
         height: 20,
@@ -116,7 +118,7 @@ export function NonFungibleTickersTable({
     isCollectionProjectPopper = false,
 }: NonFungibleTickersTableProps) {
     const { t } = useI18N()
-    const { classes } = useStyles({ isCollectionProjectPopper })
+    const { classes, cx } = useStyles({ isCollectionProjectPopper })
     const { Others } = useWeb3State(result.pluginID)
     const containerRef = useRef(null)
     const { activities, fetchMore, loadingNonFungibleTokenActivities } = useNonFungibleTokenActivities(
@@ -224,11 +226,11 @@ export function NonFungibleTickersTable({
                     </Typography>
                 </Stack>
             ) : (
-                <Table size="small" stickyHeader>
+                <Table size="small">
                     <TableHead>
                         <TableRow>
                             {headCells.map((x) => (
-                                <TableCell className={classes.cell} key={x}>
+                                <TableCell className={cx(classes.cell, classes.headerCell)} key={x}>
                                     {x}
                                 </TableCell>
                             ))}
