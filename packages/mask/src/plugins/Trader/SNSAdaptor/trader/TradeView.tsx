@@ -49,8 +49,8 @@ export function TradeView(props: TradeViewProps) {
                     {...TraderProps}
                     defaultOutputCoin={isNativeTokenAddress(outputToken?.address) ? undefined : outputToken}
                     defaultInputCoin={inputToken}
+                    chainId={chainId}
                     classes={{ root: classes.trade }}
-                    settings
                 />
             </AllProviderTradeContext.Provider>
         </div>
