@@ -31,6 +31,18 @@ export type Initialized = ContractEventLog<{
     version: string
     0: string
 }>
+export type OwnerChanged = ContractEventLog<{
+    oldOwner: string
+    newOwner: string
+    0: string
+    1: string
+}>
+export type PaymasterChanged = ContractEventLog<{
+    oldPaymaster: string
+    newPaymaster: string
+    0: string
+    1: string
+}>
 
 export interface Wallet extends BaseContract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions): Wallet
@@ -43,6 +55,8 @@ export interface Wallet extends BaseContract {
         addDeposit(): PayableTransactionObject<void>
 
         changeOwner(newOwner: string): NonPayableTransactionObject<void>
+
+        changePaymaster(newPaymaster: string): NonPayableTransactionObject<void>
 
         entryPoint(): NonPayableTransactionObject<string>
 
@@ -59,12 +73,15 @@ export interface Wallet extends BaseContract {
         getDeposit(): NonPayableTransactionObject<string>
 
         initialize(
-            anEntryPoint: string,
-            anOwner: string,
-            gasToken: string,
-            paymaster: string,
-            amount: number | string | BN,
+            _entryPointAddress: string,
+            _owner: string,
+            _gasToken: string,
+            _approveFor: string,
+            _amount: number | string | BN,
+            _nativeTokenPaymaster: string,
         ): NonPayableTransactionObject<void>
+
+        nativeTokenPaymaster(): NonPayableTransactionObject<string>
 
         nonce(): NonPayableTransactionObject<string>
 
@@ -136,6 +153,12 @@ export interface Wallet extends BaseContract {
         Initialized(cb?: Callback<Initialized>): EventEmitter
         Initialized(options?: EventOptions, cb?: Callback<Initialized>): EventEmitter
 
+        OwnerChanged(cb?: Callback<OwnerChanged>): EventEmitter
+        OwnerChanged(options?: EventOptions, cb?: Callback<OwnerChanged>): EventEmitter
+
+        PaymasterChanged(cb?: Callback<PaymasterChanged>): EventEmitter
+        PaymasterChanged(options?: EventOptions, cb?: Callback<PaymasterChanged>): EventEmitter
+
         allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
 
@@ -144,4 +167,10 @@ export interface Wallet extends BaseContract {
 
     once(event: 'Initialized', cb: Callback<Initialized>): void
     once(event: 'Initialized', options: EventOptions, cb: Callback<Initialized>): void
+
+    once(event: 'OwnerChanged', cb: Callback<OwnerChanged>): void
+    once(event: 'OwnerChanged', options: EventOptions, cb: Callback<OwnerChanged>): void
+
+    once(event: 'PaymasterChanged', cb: Callback<PaymasterChanged>): void
+    once(event: 'PaymasterChanged', options: EventOptions, cb: Callback<PaymasterChanged>): void
 }

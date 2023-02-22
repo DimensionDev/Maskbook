@@ -16,10 +16,14 @@ export class DepositPaymaster {
     constructor(private chainId: ChainId) {}
 
     private get contract() {
-        const { PAYMASTER_CONTRACT_ADDRESS } = getSmartPayConstants(this.chainId)
-        if (!PAYMASTER_CONTRACT_ADDRESS) return
+        const { PAYMASTER_MASK_CONTRACT_ADDRESS } = getSmartPayConstants(this.chainId)
+        if (!PAYMASTER_MASK_CONTRACT_ADDRESS) return
         const web3 = new Web3(ProviderURL.from(this.chainId))
-        return createContract<DepositPaymasterType>(web3, PAYMASTER_CONTRACT_ADDRESS, DepositPaymasterABI as AbiItem[])
+        return createContract<DepositPaymasterType>(
+            web3,
+            PAYMASTER_MASK_CONTRACT_ADDRESS,
+            DepositPaymasterABI as AbiItem[],
+        )
     }
 
     async getRatio() {

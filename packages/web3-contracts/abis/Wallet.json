@@ -15,6 +15,24 @@
         "type": "event"
     },
     {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "oldOwner", "type": "address" },
+            { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
+        ],
+        "name": "OwnerChanged",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "oldPaymaster", "type": "address" },
+            { "indexed": true, "internalType": "address", "name": "newPaymaster", "type": "address" }
+        ],
+        "name": "PaymasterChanged",
+        "type": "event"
+    },
+    {
         "inputs": [],
         "name": "NAME",
         "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
@@ -32,6 +50,13 @@
     {
         "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
         "name": "changeOwner",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "newPaymaster", "type": "address" }],
+        "name": "changePaymaster",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -84,15 +109,23 @@
     },
     {
         "inputs": [
-            { "internalType": "contract EntryPoint", "name": "anEntryPoint", "type": "address" },
-            { "internalType": "address", "name": "anOwner", "type": "address" },
-            { "internalType": "address", "name": "gasToken", "type": "address" },
-            { "internalType": "address", "name": "paymaster", "type": "address" },
-            { "internalType": "uint256", "name": "amount", "type": "uint256" }
+            { "internalType": "contract EntryPoint", "name": "_entryPointAddress", "type": "address" },
+            { "internalType": "address", "name": "_owner", "type": "address" },
+            { "internalType": "address", "name": "_gasToken", "type": "address" },
+            { "internalType": "address", "name": "_approveFor", "type": "address" },
+            { "internalType": "uint256", "name": "_amount", "type": "uint256" },
+            { "internalType": "address", "name": "_nativeTokenPaymaster", "type": "address" }
         ],
         "name": "initialize",
         "outputs": [],
         "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "nativeTokenPaymaster",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
         "type": "function"
     },
     {
