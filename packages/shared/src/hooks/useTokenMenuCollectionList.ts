@@ -6,14 +6,10 @@ export function useTokenMenuCollectionList(
     collectionList_: Web3Helper.TokenResultAll[],
     currentCollection?: Web3Helper.TokenResultAll,
 ) {
-    if (collectionList_.length === 0) return collectionList_
-
-    const collectionList = uniqBy(
+    return uniqBy(
         collectionList_,
         (x) => `${x.address?.toLowerCase()}_${x.chainId}_${x.type}_${x.name?.toLowerCase()}_${x.source}`,
-    )
-
-    return collectionList.filter(
+    ).filter(
         (x) =>
             !(
                 x.source !== currentCollection?.source &&
