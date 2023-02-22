@@ -29,6 +29,16 @@ export class SmartPayDescriptor {
                             failedDescription: '',
                         },
                     }
+                case 'changeOwner':
+                    return {
+                        chainId: context.chainId,
+                        title: 'Change Owner',
+                        description: 'Transaction submitted.',
+                        snackbar: {
+                            successfulDescription: 'Change owner Successfully.',
+                            failedDescription: '',
+                        },
+                    }
                 default:
                     continue
             }

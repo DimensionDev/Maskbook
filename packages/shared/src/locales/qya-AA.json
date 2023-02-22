@@ -1,9 +1,13 @@
 {
     "approve": "crwdns18766:0crwdne18766:0",
+    "approve_mask": "crwdns19467:0crwdne19467:0",
+    "approve_mask_description": "crwdns19469:0crwdne19469:0",
+    "approve_mask_question": "crwdns19471:0crwdne19471:0",
     "authorization_descriptions": "crwdns18768:0crwdne18768:0",
     "create_persona_hint": "crwdns19305:0crwdne19305:0",
     "create_persona_title": "crwdns19307:0crwdne19307:0",
     "create_persona_action": "crwdns19309:0crwdne19309:0",
+    "congratulations": "crwdns19851:0crwdne19851:0",
     "domain_request": "crwdns18770:0crwdne18770:0",
     "available_balance": "crwdns18772:0crwdne18772:0",
     "snackbar_done": "crwdns1977:0crwdne1977:0",
@@ -13,6 +17,7 @@
     "wallet_balance": "crwdns18906:0crwdne18906:0",
     "balance": "crwdns8023:0crwdne8023:0",
     "decentralized_search_name": "crwdns19373:0crwdne19373:0",
+    "web3_profile_card_name": "crwdns19449:0crwdne19449:0",
     "profile_card_name": "crwdns19379:0crwdne19379:0",
     "select_token": "crwdns8025:0crwdne8025:0",
     "select_a_token": "crwdns18774:0crwdne18774:0",
@@ -92,7 +97,7 @@
     "gas_settings_gas_option_type_normal": "crwdns17584:0crwdne17584:0",
     "gas_settings_gas_option_type_fast": "crwdns17586:0crwdne17586:0",
     "gas_settings_gas_option_estimate_distance": "crwdns18000:0{{distance}}crwdne18000:0",
-    "gas_settings_gas_option_amount_in_gwei": "crwdns17590:0{{amount}}crwdne17590:0",
+    "gas_settings_gas_option_amount_in_gwei": "crwdns17590:0{{- amount}}crwdne17590:0",
     "gas_settings_section_title_gas_price": "crwdns17592:0crwdne17592:0",
     "gas_settings_section_title_slippage_tolerance": "crwdns17594:0crwdne17594:0",
     "gas_settings_custom": "crwdns17596:0crwdne17596:0",
@@ -174,5 +179,11 @@
     "account_icon_tooltips$next_id": "crwdns18896:0crwdne18896:0",
     "account_icon_tooltips_only$next_id": "crwdns18898:0crwdne18898:0",
     "wallet_status_button_copy_address": "crwdns19327:0crwdne19327:0",
-    "copy_success_of_wallet_addr": "crwdns19329:0crwdne19329:0"
+    "copy_success_of_wallet_addr": "crwdns19329:0crwdne19329:0",
+    "persona_boundary_create_persona": "crwdns19745:0crwdne19745:0",
+    "persona_boundary_connect_persona": "crwdns19747:0crwdne19747:0",
+    "persona_boundary_verify_persona": "crwdns19749:0crwdne19749:0",
+    "applications_create_persona_title": "crwdns19751:0crwdne19751:0",
+    "applications_create_persona_hint": "crwdns19753:0crwdne19753:0",
+    "applications_create_persona_action": "crwdns19755:0crwdne19755:0"
 }

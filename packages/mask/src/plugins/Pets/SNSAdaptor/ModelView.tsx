@@ -1,5 +1,5 @@
 import type { FC, HTMLProps } from 'react'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { AssetPreviewer } from '@masknet/shared'
 
 interface ModelViewProps extends HTMLProps<HTMLDivElement> {
     source: string
@@ -10,7 +10,7 @@ const ModelView: FC<ModelViewProps> = ({ source, ...rest }) => {
 
     return (
         <div {...rest}>
-            <NFTCardStyledAssetPlayer url={source} />
+            <AssetPreviewer url={source} />
         </div>
     )
 }
