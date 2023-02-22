@@ -38,7 +38,6 @@ const useStyles = makeStyles<{ isCollectionProjectPopper: boolean }>()((theme, {
         fontSize: 12,
         fontWeight: 700,
         whiteSpace: 'nowrap',
-        backgroundColor: theme.palette.maskColor.bottom,
         border: 'none',
         '&:not(:first-child)': {
             textAlign: 'center',
@@ -116,7 +115,7 @@ export function NonFungibleTickersTable({
     isCollectionProjectPopper = false,
 }: NonFungibleTickersTableProps) {
     const { t } = useI18N()
-    const { classes } = useStyles({ isCollectionProjectPopper })
+    const { classes, cx } = useStyles({ isCollectionProjectPopper })
     const { Others } = useWeb3State(result.pluginID)
     const containerRef = useRef(null)
     const { activities, fetchMore, loadingNonFungibleTokenActivities } = useNonFungibleTokenActivities(

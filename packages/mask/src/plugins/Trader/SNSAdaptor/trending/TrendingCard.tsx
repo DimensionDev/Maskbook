@@ -5,6 +5,7 @@ const useStyles = makeStyles()((theme) => {
     return {
         root: {
             overflow: 'auto',
+            backgroundColor: 'transparent',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },

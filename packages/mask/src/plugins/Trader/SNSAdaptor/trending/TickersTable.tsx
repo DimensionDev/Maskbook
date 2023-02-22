@@ -33,7 +33,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         fontWeight: 700,
         whiteSpace: 'nowrap',
-        backgroundColor: theme.palette.maskColor.bottom,
         border: 'none',
         '&:not(:first-child)': {
             textAlign: 'center',

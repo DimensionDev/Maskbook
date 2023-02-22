@@ -15,7 +15,7 @@ export function CoinMarketPanel(props: CoinMarketPanelProps) {
     const { dataProvider, trending, result } = props
 
     return (
-        <Stack p={2} gap={1} style={{ minHeight: 374 }}>
+        <Stack p={2} gap={1}>
             <CoinMarketTable dataProvider={dataProvider} trending={trending} result={result} />
             <CoinMetadataTable dataProvider={dataProvider} trending={trending} />
         </Stack>
