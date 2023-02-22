@@ -67,6 +67,7 @@ const useStyles = makeStyles()((theme) => ({
             backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
             backgroundClip: 'padding-box',
         },
+        height: 460,
     },
     dialogActions: {
         padding: '12px 12px 20px !important',
