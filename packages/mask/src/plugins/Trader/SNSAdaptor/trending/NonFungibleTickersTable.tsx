@@ -46,6 +46,9 @@ const useStyles = makeStyles<{ isCollectionProjectPopper: boolean }>()((theme, {
             textAlign: 'right',
         },
     },
+    headerCell: {
+        background: theme.palette.mode === 'light' ? theme.palette.maskColor.bottom : 'unset',
+    },
     nftImage: {
         height: 20,
         width: 20,
@@ -223,11 +226,11 @@ export function NonFungibleTickersTable({
                     </Typography>
                 </Stack>
             ) : (
-                <Table size="small" stickyHeader>
+                <Table size="small">
                     <TableHead>
                         <TableRow>
                             {headCells.map((x) => (
-                                <TableCell className={classes.cell} key={x}>
+                                <TableCell className={cx(classes.cell, classes.headerCell)} key={x}>
                                     {x}
                                 </TableCell>
                             ))}
