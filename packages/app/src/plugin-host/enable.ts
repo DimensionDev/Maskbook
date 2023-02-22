@@ -13,8 +13,8 @@ import {
 import { ChainId } from '@masknet/web3-shared-evm'
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import { ThemeMode, FontSize } from '@masknet/web3-shared-base'
-import { addListener } from '../message.js'
-import { worker } from '../rpc.js'
+import { addListener } from './message.js'
+import { worker } from './rpc.js'
 
 // #region Setup storage
 const inMemoryStorage = createKVStorageHost(

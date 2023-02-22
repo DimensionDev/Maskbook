@@ -7,8 +7,8 @@
     },
     "scripts": {
         "start": "npx webpack serve",
-        "build:css": "cross-env TAILWIND_MODE=build NODE_ENV=production postcss main/decrypt/styles/tailwind.css -o main/decrypt/styles/index.css",
-        "watch:css": "cross-env TAILWIND_MODE=watch NODE_ENV=development postcss main/decrypt/styles/tailwind.css -o main/decrypt/styles/index.css --watch"
+        "build:css": "cross-env TAILWIND_MODE=build NODE_ENV=production postcss src/styles/tailwind.css -o src/styles/index.css",
+        "watch:css": "cross-env TAILWIND_MODE=watch NODE_ENV=development postcss src/styles/tailwind.css -o src/styles/index.css --watch"
     },
     "browserslist": {
         "production": [
