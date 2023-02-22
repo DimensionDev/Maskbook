@@ -103,9 +103,6 @@ const useStyles = makeStyles<{ isCollectionProjectPopper: boolean }>()((theme, {
     tableWrapper: {
         height: 233,
         overflow: 'scroll',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
     },
 }))
 
