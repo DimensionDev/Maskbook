@@ -9,7 +9,7 @@ export function useTokenMenuCollectionList(collectionList_: Web3Helper.TokenResu
         (x) => `${x.address?.toLowerCase()}_${x.chainId}_${x.type}_${x.name?.toLowerCase()}_${x.source}`,
     )
 
-    if (collectionList?.[0].source === SourceType.CoinMarketCap) return collectionList
+    if (collectionList?.[0]?.source === SourceType.CoinMarketCap) return collectionList
 
     const coingeckoCollectionsOfName = collectionList
         .filter((x) => x.source === SourceType.CoinGecko)
