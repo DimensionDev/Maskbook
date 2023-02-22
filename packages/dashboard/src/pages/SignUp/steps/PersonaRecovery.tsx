@@ -85,7 +85,10 @@ export const PersonaRecovery = () => {
                 showSnackbar(t.create_account_persona_successfully(), { variant: 'success' })
 
                 await delay(300)
-                Messages.events.restoreSuccess.sendToAll({ wallets: [] })
+                const persona = await Services.Identity.queryPersona(identifier)
+                Messages.events.restoreSuccess.sendToAll({
+                    wallets: persona?.address ? [persona.address] : [],
+                })
                 navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`)
             } catch (error) {
                 setError((error as Error).message)

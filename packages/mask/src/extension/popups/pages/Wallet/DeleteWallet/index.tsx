@@ -180,21 +180,27 @@ const DeleteWallet = memo(() => {
                         </div>
                     )
                 })}
-                <Typography className={classes.tip}>
-                    {manageWallets.length ? (
-                        <Trans
-                            i18nKey="popups_smart_pay_delete_tip"
-                            values={{
-                                addresses: manageWallets.map((x) => formatEthereumAddress(x.address, 4)).join(','),
-                            }}
-                            components={{
-                                span: <Typography component="span" sx={{ wordBreak: 'break-all', fontSize: 12 }} />,
-                            }}
-                        />
-                    ) : (
-                        t('popups_wallet_delete_tip')
-                    )}
-                </Typography>
+                {manageWallets.length && wallet?.address ? (
+                    <>
+                        <Typography className={classes.tip}>
+                            <Trans
+                                i18nKey="popups_smart_pay_delete_tip"
+                                values={{
+                                    management: formatEthereumAddress(wallet?.address, 4),
+                                    addresses: manageWallets.map((x) => formatEthereumAddress(x.address, 4)).join(','),
+                                }}
+                                components={{
+                                    span: <Typography component="span" sx={{ wordBreak: 'break-all', fontSize: 12 }} />,
+                                }}
+                            />
+                        </Typography>
+                        <Typography className={classes.tip} style={{ marginTop: 0 }}>
+                            {t('popups_smart_pay_delete_tip_confirm')}
+                        </Typography>
+                    </>
+                ) : (
+                    <Typography className="tip">{t('popups_wallet_delete_tip')}</Typography>
+                )}
 
                 <Typography className={classes.label}>{t('popups_wallet_confirm_payment_password')}</Typography>
                 <PasswordField
