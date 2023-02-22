@@ -76,6 +76,7 @@ const useStyles = makeStyles<{
               }
             : {
                   background: 'transparent',
+                  maxHeight: props.currentTab === ContentTabs.Market ? 374 : 'unset',
               },
         footerSkeleton: props.isTokenTagPopper
             ? {}
@@ -292,7 +293,11 @@ export function TrendingView(props: TrendingViewProps) {
                     </MaskTabList>
                 </Stack>
             </TabContext>
-            <Stack sx={{ backgroundColor: theme.palette.maskColor.bottom }}>
+            <Stack
+                sx={{
+                    backgroundColor:
+                        isTokenTagPopper || isCollectionProjectPopper ? theme.palette.maskColor.bottom : 'transparent',
+                }}>
                 {currentTab === ContentTabs.Market && trending.dataProvider ? (
                     <CoinMarketPanel dataProvider={trending.dataProvider} trending={trending} result={result} />
                 ) : null}
