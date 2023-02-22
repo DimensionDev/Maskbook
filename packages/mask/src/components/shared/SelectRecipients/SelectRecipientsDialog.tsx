@@ -1,3 +1,5 @@
+import { startTransition, useDeferredValue, useMemo, useState } from 'react'
+import { compact } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { InjectedDialog } from '@masknet/shared'
 import type {
@@ -7,10 +9,8 @@ import type {
 } from '@masknet/shared-base'
 import { Boundary, LoadingBase, makeStyles } from '@masknet/theme'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
+import { Fuse } from '@masknet/web3-providers'
 import { Button, DialogActions, DialogContent, InputAdornment, InputBase, Typography } from '@mui/material'
-import Fuse from 'fuse.js'
-import { compact } from 'lodash-es'
-import { startTransition, useDeferredValue, useMemo, useState } from 'react'
 import { useI18N } from '../../../utils/index.js'
 import { ProfileInList } from './ProfileInList.js'
 
@@ -105,8 +105,10 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
 
     const keyword = registeredAddress || searchInput
 
-    const fuse = useMemo(() => {
-        return new Fuse(items, {
+    const results = useMemo(() => {
+        if (!keyword) return items
+
+        return Fuse.create(items, {
             keys: [
                 'identifier.userId',
                 'nickname',
@@ -119,11 +121,9 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
             ignoreLocation: true,
             threshold: 0,
         })
-    }, [items])
-
-    const results = useMemo(() => {
-        return keyword === '' ? items : fuse.search(keyword).map((item) => item.item)
-    }, [fuse, keyword, items])
+            .search(keyword)
+            .map((item) => item.item)
+    }, [keyword, items])
 
     const handleClose = () => {
         props.onClose()

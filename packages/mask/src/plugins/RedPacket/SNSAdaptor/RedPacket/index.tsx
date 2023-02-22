@@ -178,6 +178,7 @@ export function RedPacket(props: RedPacketProps) {
             payload: postLink.toString(),
             network: networkResolver.networkName(networkType) ?? 'Mainnet',
             account: isTwitter(activatedSocialNetworkUI) ? tr('twitter_account') : tr('facebook_account'),
+            interpolation: { escapeValue: false },
         }
         if (listOfStatus.includes(RedPacketStatus.claimed) || claimTxHash) {
             return isOnTwitter || isOnFacebook

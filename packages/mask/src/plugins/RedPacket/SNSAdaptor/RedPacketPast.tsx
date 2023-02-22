@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { WalletMessages } from '../../Wallet/messages.js'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { RedPacketHistoryList } from './RedPacketHistoryList.js'
 import { NftRedPacketHistoryList } from './NftRedPacketHistoryList.js'
 import type { RedPacketJSONPayload, NftRedPacketJSONPayload } from '../types.js'
@@ -31,7 +31,7 @@ export function RedPacketPast({ onSelect, onClose, tabs }: Props) {
 
     const { value: linkedPersona } = useCurrentLinkedPersona()
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
+        WalletMessages.events.applicationDialogUpdated,
     )
 
     const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'

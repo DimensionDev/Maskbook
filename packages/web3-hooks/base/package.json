@@ -11,8 +11,8 @@
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@masknet/shared-base": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
+    "@masknet/shared-base": "workspace:^",
     "@masknet/web3-helpers": "workspace:^",
     "@masknet/web3-providers": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
@@ -25,6 +25,7 @@
     "ethereum-blockies": "^0.1.1",
     "lru-cache": "^7.10.1",
     "react-use": "^17.4.0",
+    "unstated-next": "^1.1.0",
     "use-subscription": "^1.8.0",
     "web3": "1.8.0"
   }

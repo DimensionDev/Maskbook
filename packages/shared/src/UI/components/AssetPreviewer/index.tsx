@@ -1,4 +1,3 @@
-import { useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Image } from '../Image/index.js'
 
@@ -21,18 +20,14 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface AssetPreviewerProps extends withClasses<'root' | 'fallbackImage' | 'container'> {
     url?: string
-    fallbackImage?: URL
+    fallbackImage?: URL | JSX.Element
     icon?: React.ReactNode
 }
-
-const ASSET_PLAYER_FALLBACK_DARK = new URL('../Image/mask-dark.png', import.meta.url)
-const ASSET_PLAYER_FALLBACK_LIGHT = new URL('../Image/mask-light.png', import.meta.url)
 
 export function AssetPreviewer(props: AssetPreviewerProps) {
     const { fallbackImage, url, icon } = props
 
     const { classes } = useStyles(undefined, { props })
-    const theme = useTheme()
 
     return (
         <div className={classes.root}>
@@ -45,10 +40,7 @@ export function AssetPreviewer(props: AssetPreviewerProps) {
                 height="100%"
                 style={{ objectFit: 'cover' }}
                 src={url}
-                fallback={
-                    fallbackImage ??
-                    (theme.palette.mode === 'dark' ? ASSET_PLAYER_FALLBACK_DARK : ASSET_PLAYER_FALLBACK_LIGHT)
-                }
+                fallback={fallbackImage}
             />
             <div className={classes.icon}>{icon}</div>
         </div>

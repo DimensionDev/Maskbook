@@ -1,18 +1,17 @@
 import { memo, useMemo } from 'react'
 import { noop } from 'lodash-es'
+import { BigNumber } from 'bignumber.js'
+import { useContainer } from 'unstated-next'
 import { Icons } from '@masknet/icons'
 import { FormattedCurrency, MiniNetworkSelector } from '@masknet/shared'
-import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskColorVar } from '@masknet/theme'
-import { formatCurrency, NetworkDescriptor } from '@masknet/web3-shared-base'
+import { formatCurrency, getTokenUSDValue } from '@masknet/web3-shared-base'
 import { Box, Button, buttonClasses, styled, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { useIsMatched } from '../../hooks/index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useContainer } from 'unstated-next'
 import { Context } from '../../hooks/useContext.js'
-import { getTokenUSDValue } from '../../utils/getTokenUSDValue.js'
-import { BigNumber } from 'bignumber.js'
 
 const BalanceContainer = styled('div')(
     ({ theme }) => `
@@ -77,23 +76,10 @@ export interface BalanceCardProps {
     onBuy(): void
     onSwap(): void
     onReceive(): void
-    networks: Array<
-        NetworkDescriptor<
-            Web3Helper.Definition[NetworkPluginID]['ChainId'],
-            Web3Helper.Definition[NetworkPluginID]['NetworkType']
-        >
-    >
-    selectedNetwork: NetworkDescriptor<
-        Web3Helper.Definition[NetworkPluginID]['ChainId'],
-        Web3Helper.Definition[NetworkPluginID]['NetworkType']
-    > | null
+    networks: Web3Helper.NetworkDescriptorAll[]
+    selectedNetwork: Web3Helper.NetworkDescriptorAll | null
     showOperations: boolean
-    onSelectNetwork(
-        network: NetworkDescriptor<
-            Web3Helper.Definition[NetworkPluginID]['ChainId'],
-            Web3Helper.Definition[NetworkPluginID]['NetworkType']
-        > | null,
-    ): void
+    onSelectNetwork(network: Web3Helper.NetworkDescriptorAll | null): void
 }
 
 export const Balance = memo<BalanceCardProps>(
@@ -135,12 +121,9 @@ export const Balance = memo<BalanceCardProps>(
                             disabledNonCurrentNetwork={isDisabledNonCurrentChainSelect}
                             selectedNetwork={selectedNetwork}
                             networks={networks}
-                            onSelect={(
-                                network: NetworkDescriptor<
-                                    Web3Helper.Definition[NetworkPluginID]['ChainId'],
-                                    Web3Helper.Definition[NetworkPluginID]['NetworkType']
-                                > | null,
-                            ) => (networks.length <= 1 ? noop : onSelectNetwork(network))}
+                            onSelect={(network: Web3Helper.NetworkDescriptorAll | null) =>
+                                networks.length <= 1 ? noop : onSelectNetwork(network)
+                            }
                         />
                     </BalanceDisplayContainer>
                 </Box>

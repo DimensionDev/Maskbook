@@ -1,11 +1,12 @@
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { Card, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { useWeb3State, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkPluginID } from '@masknet/shared-base'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import type { NonFungibleAsset, SourceType, Wallet } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { AssetPreviewer, ImageIcon } from '@masknet/shared'
+import { NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
+import type { SourceType, Wallet } from '@masknet/web3-shared-base'
 import { ActionsBarNFT } from '../ActionsBarNFT.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -43,13 +44,18 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
         display: 'block',
     },
+    networkIcon: {
+        position: 'absolute',
+        top: 6,
+        left: 6,
+    },
 }))
 
 export interface CollectibleCardProps {
     className?: string
     provider: SourceType
     wallet?: Wallet
-    asset: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    asset: Web3Helper.NonFungibleAssetAll
     link?: string
     readonly?: boolean
     pluginID?: NetworkPluginID
@@ -70,6 +76,15 @@ export const CollectibleCard = memo(function CollectibleCard({
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State()
 
+    const networkDescriptor = useNetworkDescriptor(pluginID)
+
+    const networkIcon = useMemo(() => {
+        if (pluginID === NetworkPluginID.PLUGIN_EVM) {
+            return NETWORK_DESCRIPTORS.find((network) => network?.chainId === asset.chainId)?.icon
+        }
+        return networkDescriptor?.icon
+    }, [asset.chainId, pluginID])
+
     const content = (
         <>
             <div className={classes.blocker} />
@@ -77,19 +92,18 @@ export const CollectibleCard = memo(function CollectibleCard({
                 {readonly || !wallet ? null : (
                     <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} asset={asset} />
                 )}
-                <NFTCardStyledAssetPlayer
-                    contractAddress={asset.address}
-                    chainId={asset.chainId}
-                    isImageOnly
-                    url={asset.metadata?.mediaURL || asset.metadata?.imageURL}
-                    tokenId={asset.tokenId}
-                    pluginID={pluginID}
-                    classes={{
-                        fallbackImage: classes.fallbackImage,
-                        imgWrapper: classes.wrapper,
-                    }}
-                    showNetwork={showNetworkIcon}
-                />
+                <div>
+                    <AssetPreviewer
+                        url={asset.metadata?.mediaURL || asset.metadata?.imageURL}
+                        classes={{
+                            fallbackImage: classes.fallbackImage,
+                            root: classes.wrapper,
+                        }}
+                    />
+                    {networkIcon ? (
+                        <ImageIcon icon={networkIcon} size={24} classes={{ icon: classes.networkIcon }} />
+                    ) : null}
+                </div>
             </Card>
         </>
     )

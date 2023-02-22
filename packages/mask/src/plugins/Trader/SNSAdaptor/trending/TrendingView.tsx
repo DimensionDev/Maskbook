@@ -61,10 +61,12 @@ const useStyles = makeStyles<{
         },
         body: props.isCollectionProjectPopper
             ? {
-                  minHeight: 374,
+                  minHeight: props.currentTab === ContentTabs.Market ? 352 : 374,
                   maxHeight: props.isCollectionProjectPopper
                       ? props.currentTab === ContentTabs.Price
                           ? 450
+                          : props.currentTab === ContentTabs.Swap
+                          ? 'unset'
                           : 374
                       : 'unset',
                   overflow: 'hidden',
@@ -117,6 +119,7 @@ const useStyles = makeStyles<{
 
 export interface TrendingViewProps {
     resultList: Web3Helper.TokenResultAll[]
+    currentResult?: Web3Helper.TokenResultAll
     identity?: SocialIdentity
     setActive?: (x: boolean) => void
     address?: string
@@ -124,8 +127,8 @@ export interface TrendingViewProps {
 }
 
 export function TrendingView(props: TrendingViewProps) {
-    const { resultList, identity, setActive } = props
-    const [result, setResult] = useState(resultList[0])
+    const { resultList, identity, setActive, currentResult } = props
+    const [result, setResult] = useState(currentResult ?? resultList[0])
     const { isTokenTagPopper, isCollectionProjectPopper, isProfilePage } = useContext(TrendingViewContext)
     const { t } = useI18N()
     const theme = useTheme()
@@ -183,7 +186,7 @@ export function TrendingView(props: TrendingViewProps) {
         !isNFT &&
         !!trending?.coin.contract_address &&
         chainIdValid &&
-        swapExpectedContract?.pluginID === NetworkPluginID.PLUGIN_EVM
+        (!swapExpectedContract?.pluginID || swapExpectedContract?.pluginID === NetworkPluginID.PLUGIN_EVM)
     // #endregion
 
     // #region tabs
@@ -334,7 +337,7 @@ export function TrendingView(props: TrendingViewProps) {
                             pluginID: context.pluginID,
                             chainId: isNativeTokenSymbol(trending.coin.symbol)
                                 ? trending.coin.chainId
-                                : swapExpectedContract.chainId,
+                                : swapExpectedContract?.chainId,
                         }}>
                         <TradeView
                             classes={{ root: classes.tradeViewRoot }}
@@ -351,13 +354,13 @@ export function TrendingView(props: TrendingViewProps) {
                                     : undefined,
                                 defaultOutputCoin: trending.coin
                                     ? createFungibleToken(
-                                          trending.coin.chainId ?? swapExpectedContract.chainId ?? chainId,
+                                          trending.coin.chainId ?? swapExpectedContract?.chainId ?? chainId,
                                           isNativeTokenAddress(
-                                              trending.coin.contract_address ?? swapExpectedContract.address,
+                                              trending.coin.contract_address ?? swapExpectedContract?.address,
                                           )
                                               ? SchemaType.Native
                                               : SchemaType.ERC20,
-                                          trending.coin.contract_address ?? swapExpectedContract.address,
+                                          trending.coin.contract_address ?? swapExpectedContract?.address ?? '',
                                           '',
                                           '',
                                           trending.coin.decimals ?? 0,

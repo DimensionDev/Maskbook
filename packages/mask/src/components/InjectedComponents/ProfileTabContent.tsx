@@ -9,20 +9,19 @@ import {
     getProfileTabContent,
 } from '@masknet/plugin-infra/content-script'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
-import { Link, MenuItem, Divider, Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
+import { Link, Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import {
-    AccountIcon,
     AddressItem,
     ConnectPersonaBoundary,
     GrantPermissions,
     PluginCardFrameMini,
     useCurrentPersonaConnectStatus,
     useSocialAccountsBySettings,
-    TokenMenuList,
+    TokenWithSocialGroupMenu,
 } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID } from '@masknet/shared-base'
-import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useTabs } from '@masknet/theme'
-import { isSameAddress, SourceType } from '@masknet/web3-shared-base'
+import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
@@ -42,9 +41,7 @@ import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
 import Services from '../../extension/service.js'
-
-const MENU_ITEM_HEIGHT = 40
-const MENU_LIST_PADDING = 8
+import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -66,42 +63,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         fontSize: 18,
         fontWeight: 700,
-    },
-    addressMenu: {
-        maxHeight: MENU_ITEM_HEIGHT * 9 + MENU_LIST_PADDING * 2,
-        minWidth: 320,
-        backgroundColor: theme.palette.maskColor.bottom,
-    },
-    groupName: {
-        height: 18,
-        marginTop: 5,
-        fontWeight: 700,
-        fontSize: 14,
-        padding: '0 12px',
-    },
-    group: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-    },
-    divider: {
-        margin: theme.spacing(1, 0),
-        width: 376,
-        position: 'relative',
-        left: 12,
-    },
-    menuItem: {
-        height: MENU_ITEM_HEIGHT,
-        boxSizing: 'border-box',
-        display: 'flex',
-        alignItems: 'center',
-        flexGrow: 1,
-        justifyContent: 'space-between',
-    },
-    addressItem: {
-        display: 'flex',
-        alignItems: 'center',
-        marginRight: theme.spacing(2),
     },
     settingLink: {
         cursor: 'pointer',
@@ -134,9 +95,6 @@ const useStyles = makeStyles()((theme) => ({
     arrowDropIcon: {
         color: theme.palette.maskColor.dark,
     },
-    selectedIcon: {
-        color: theme.palette.maskColor.primary,
-    },
     gearIcon: {
         color: theme.palette.maskColor.dark,
     },
@@ -147,9 +105,6 @@ const useStyles = makeStyles()((theme) => ({
         margin: '0px 2px',
         color: theme.palette.maskColor.secondaryDark,
     },
-    secondLinkIcon: {
-        color: theme.palette.maskColor.second,
-    },
     reload: {
         borderRadius: 20,
         minWidth: 254,
@@ -159,6 +114,14 @@ const useStyles = makeStyles()((theme) => ({
 export interface ProfileTabContentProps extends withClasses<'text' | 'button' | 'root'> {}
 
 export function ProfileTabContent(props: ProfileTabContentProps) {
+    return (
+        <ScopedDomainsContainer.Provider>
+            <Content {...props} />
+        </ScopedDomainsContainer.Provider>
+    )
+}
+
+function Content(props: ProfileTabContentProps) {
     const { classes } = useStyles(undefined, { props })
 
     const { t } = useI18N()
@@ -198,6 +161,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const [selectedAddress = first(socialAccounts)?.address, setSelectedAddress] = useState<string | undefined>()
 
     const selectedSocialAccount = socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
+    const { setPair } = ScopedDomainsContainer.useContainer()
+    useEffect(() => {
+        if (selectedSocialAccount?.address && selectedSocialAccount?.label) {
+            setPair(selectedSocialAccount.address, selectedSocialAccount.label)
+        }
+    }, [selectedSocialAccount?.address, selectedSocialAccount?.label])
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
@@ -300,9 +269,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     useEffect(() => {
         const listener = () => setMenuOpen(false)
         window.addEventListener('scroll', listener, false)
+        // <ClickAwayListener /> not work, when it is out of shadow root.
+        window.addEventListener('click', listener, false)
 
         return () => {
             window.removeEventListener('scroll', listener, false)
+            window.removeEventListener('click', listener, false)
         }
     }, [])
 
@@ -317,12 +289,14 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         })
     }
 
-    const { value: collectionList } = useCollectionByTwitterHandler(currentVisitingUserId)
+    const { value: collectionList = EMPTY_LIST } = useCollectionByTwitterHandler(currentVisitingUserId)
+    const [currentTrendingIndex, setCurrentTrendingIndex] = useState(0)
+    const trendingResult = collectionList?.[currentTrendingIndex]
 
     const { value: identity } = useSocialIdentityByUserId(currentVisitingUserId)
 
     if (hidden) return null
-    const trendingResult = collectionList?.[0]
+
     const keyword = trendingResult?.address || trendingResult?.name
 
     if (keyword && !isHideInspector)
@@ -331,6 +305,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                 <SearchResultInspector
                     keyword={keyword}
                     isProfilePage
+                    currentCollection={trendingResult}
                     collectionList={collectionList}
                     identity={identity}
                 />
@@ -452,58 +427,23 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                 />
                                 <Icons.ArrowDrop className={classes.arrowDropIcon} />
                             </Button>
-                            <ShadowRootMenu
-                                anchorEl={buttonRef.current}
-                                open={menuOpen}
-                                disableScrollLock
-                                PaperProps={{
-                                    className: classes.addressMenu,
+
+                            <TokenWithSocialGroupMenu
+                                walletMenuOpen={menuOpen}
+                                setWalletMenuOpen={setMenuOpen}
+                                containerRef={buttonRef}
+                                onAddressChange={onSelect}
+                                currentAddress={selectedAddress}
+                                collectionList={collectionList}
+                                socialAccounts={socialAccounts}
+                                currentCollection={trendingResult}
+                                onTokenChange={(currentResult, i) => {
+                                    setCurrentTrendingIndex(i)
+                                    hideInspector(false)
+                                    setMenuOpen(false)
                                 }}
-                                aria-labelledby="wallets"
-                                onClose={() => setMenuOpen(false)}>
-                                {trendingResult ? (
-                                    <div key="trending" className={classes.group}>
-                                        <Typography className={classes.groupName}>
-                                            {trendingResult.source === SourceType.NFTScan
-                                                ? t('plugin_trader_table_nft')
-                                                : t('decentralized_search_feature_token_name')}
-                                        </Typography>
-                                        <Divider className={classes.divider} />
-                                        <TokenMenuList
-                                            options={[trendingResult]}
-                                            onSelect={() => {
-                                                hideInspector(false)
-                                                setMenuOpen(false)
-                                            }}
-                                            fromSocialCard
-                                        />
-                                    </div>
-                                ) : null}
-                                <div key="social" className={classes.group}>
-                                    <Typography className={classes.groupName}>{t('address')}</Typography>
-                                    <Divider className={classes.divider} />
-                                    {socialAccounts.map((x) => {
-                                        return (
-                                            <MenuItem
-                                                className={classes.menuItem}
-                                                key={x.address}
-                                                value={x.address}
-                                                onClick={() => onSelect(x.address)}>
-                                                <div className={classes.addressItem}>
-                                                    <AddressItem
-                                                        socialAccount={x}
-                                                        linkIconClassName={classes.secondLinkIcon}
-                                                    />
-                                                    <AccountIcon socialAccount={x} />
-                                                </div>
-                                                {isSameAddress(selectedAddress, x.address) && (
-                                                    <Icons.CheckCircle size={20} className={classes.selectedIcon} />
-                                                )}
-                                            </MenuItem>
-                                        )
-                                    })}
-                                </div>
-                            </ShadowRootMenu>
+                                fromSocialCard
+                            />
                         </div>
                         <div className={classes.settingItem}>
                             <Typography

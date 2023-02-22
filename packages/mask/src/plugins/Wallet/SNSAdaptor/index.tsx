@@ -1,6 +1,8 @@
+import { getEnumAsArray } from '@masknet/kit'
+import { NetworkPluginID } from '@masknet/shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '@masknet/plugin-wallet'
-import { SelectNftContractDialog } from './SelectNftContractDialog.js'
+import { SelectNftContractDialog } from './SelectNftContractDialog/index.js'
 import { SelectProviderDialog } from './SelectProviderDialog/index.js'
 import { WalletStatusDialog } from './WalletStatusDialog/index.js'
 import { ConnectWalletDialog } from './ConnectWalletDialog/index.js'
@@ -9,8 +11,6 @@ import { GasSettingDialog } from './GasSettingDialog/index.js'
 import { TransactionSnackbar } from './TransactionSnackbar/index.js'
 import { ApplicationBoardDialog } from '../../../components/shared/ApplicationBoardDialog.js'
 import { WalletConnectQRCodeDialog } from './WalletConnectQRCodeDialog/index.js'
-import { getEnumAsArray } from '@masknet/kit'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { LeavePageConfirmDialog } from '../../../components/shared/LeavePageConfirmDialog.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {

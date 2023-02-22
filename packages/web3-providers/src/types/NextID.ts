@@ -49,7 +49,7 @@ export namespace NextIDBaseAPI {
             },
         ): Promise<void>
 
-        queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean): Promise<any>
+        queryExistedBindingByPersona(personaPublicKey: string): Promise<any>
 
         queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page?: number): Promise<any>
 
@@ -57,12 +57,7 @@ export namespace NextIDBaseAPI {
 
         queryLatestBindingByPlatform(platform: NextIDPlatform, identity: string): Promise<NextIDPersonaBindings | null>
 
-        queryIsBound(
-            personaPublicKey: string,
-            platform: NextIDPlatform,
-            identity: string,
-            enableCache?: boolean,
-        ): Promise<boolean>
+        queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string): Promise<boolean>
 
         createPersonaPayload(
             personaPublicKey: string,

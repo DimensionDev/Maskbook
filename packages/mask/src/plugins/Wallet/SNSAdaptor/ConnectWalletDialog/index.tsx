@@ -7,7 +7,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
-import { WalletMessages } from '../../messages.js'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { ConnectionProgress } from './ConnectionProgress.js'
 import { useI18N } from '../../../../utils/index.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
@@ -28,8 +28,8 @@ export function ConnectWalletDialog() {
     const { classes } = useStyles()
     const { t } = useI18N()
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
-    const [providerType, setProviderType] = useState<Web3Helper.Definition[NetworkPluginID]['ProviderType']>()
-    const [networkType, setNetworkType] = useState<Web3Helper.Definition[NetworkPluginID]['NetworkType']>()
+    const [providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
+    const [networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
     const [walletConnectedCallback, setWalletConnectedCallback] = useState<(() => void) | undefined>()
 
     // #region remote controlled dialog

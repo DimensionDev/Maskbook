@@ -1,11 +1,11 @@
-import { makeStyles, ActionButton, LoadingBase, parseColor } from '@masknet/theme'
-import { networkResolver } from '@masknet/web3-shared-evm'
+import { makeStyles, ActionButton, LoadingBase, parseColor, ShadowRootTooltip } from '@masknet/theme'
+import { networkResolver, ChainId } from '@masknet/web3-shared-evm'
 import { Card, Typography, Button, Box } from '@mui/material'
 import { useTransactionConfirmDialog } from './context/TokenTransactionConfirmDialogContext.js'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState, MouseEventHandler, useRef, useLayoutEffect } from 'react'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { useI18N } from '../locales/index.js'
-import { WalletConnectedBoundary, NFTCardStyledAssetPlayer, ChainBoundary } from '@masknet/shared'
+import { WalletConnectedBoundary, ChainBoundary, AssetPreviewer, NFTFallbackImage } from '@masknet/shared'
 import type { RedPacketNftJSONPayload } from '../types.js'
 import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
@@ -13,9 +13,9 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
-import { useChainContext, useWeb3, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3, useNetworkContext, useNonFungibleAsset } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { Stack } from '@mui/system'
 
@@ -68,16 +68,20 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         marginTop: 0,
         display: 'flex',
     },
-    tokenWrapper: {
+    claimedTokenWrapper: {
         position: 'absolute',
         top: 80,
         right: 50,
+        background: theme.palette.common.white,
+        borderRadius: 9,
+        cursor: 'pointer',
+    },
+    tokenImageWrapper: {
         display: 'flex',
         overflow: 'hidden',
         alignItems: 'center',
         height: 126,
         width: 126,
-        boxShadow: `0 0 0 3px ${theme.palette.maskColor.publicBg}`,
         borderRadius: 8,
         '& > div': {
             display: 'flex',
@@ -107,11 +111,29 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
     },
     imgWrapper: {
         maxWidth: 180,
-        marginBottom: 10,
     },
     fallbackImage: {
         height: 160,
         width: 120,
+    },
+    description: {
+        background: theme.palette.maskColor.primary,
+        alignSelf: 'stretch',
+        borderRadius: '0 0 8px 8px',
+    },
+    name: {
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        width: 126,
+        fontSize: 13,
+        color: theme.palette.common.white,
+        lineHeight: '36px',
+        minHeight: '1em',
+        textIndent: '8px',
+    },
+    hidden: {
+        visibility: 'hidden',
     },
     tokenLabel: {
         width: 48,
@@ -150,6 +172,11 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
             bottom: 8,
         },
     },
+    NFTFallbackImageWrapper: {
+        width: '100%',
+        height: 126,
+        background: theme.palette.common.white,
+    },
 }))
 export interface RedPacketNftProps {
     payload: RedPacketNftJSONPayload
@@ -179,6 +206,8 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     )
 
     const [isClaimed, setIsClaimed] = useState(false)
+    const [showTooltip, setShowTooltip] = useState(false)
+    const textRef = useRef<HTMLDivElement>(null)
     useEffect(() => {
         setIsClaimed(false)
     }, [account])
@@ -210,6 +239,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             account_promote: t.account_promote({
                 context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
             }),
+            interpolation: { escapeValue: false },
         } as const
         if (availability?.isClaimed) {
             return t.nft_share_claimed_message(options)
@@ -233,6 +263,32 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             tokenType: TokenType.NonFungible,
         })
     }, [isClaimed, openTransactionConfirmDialog, availability?.claimed_id, availability?.token_address])
+
+    useLayoutEffect(() => {
+        if (textRef.current) {
+            setShowTooltip(textRef.current.offsetWidth !== textRef.current.scrollWidth)
+        }
+    }, [textRef.current])
+
+    const openNFTDialog = useCallback(() => {
+        if (!payload.chainId || !pluginID || !availability?.claimed_id || !availability?.token_address) return
+        CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
+            open: true,
+            chainId: payload.chainId,
+            pluginID,
+            tokenId: availability.claimed_id,
+            tokenAddress: availability.token_address,
+        })
+    }, [pluginID, payload.chainId, availability?.claimed_id, availability?.token_address])
+
+    const { value: NFTDetailed, loading: loadingNFTDetailed } = useNonFungibleAsset<'all'>(
+        NetworkPluginID.PLUGIN_EVM,
+        payload.contractAddress,
+        availability?.claimed_id,
+        {
+            chainId: payload.chainId,
+        },
+    )
 
     if (availabilityError)
         return (
@@ -274,22 +330,37 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                         {payload.message}
                     </Typography>
                 </div>
+                <ShadowRootTooltip
+                    title={showTooltip ? `${payload.contractName} #${availability.claimed_id}` : undefined}
+                    placement="top"
+                    disableInteractive
+                    arrow
+                    PopperProps={{
+                        disablePortal: true,
+                    }}>
+                    <Box className={cx(classes.claimedTokenWrapper, !availability.isClaimed ? classes.hidden : '')}>
+                        <Box className={classes.tokenImageWrapper} onClick={openNFTDialog}>
+                            {loadingNFTDetailed ? null : (
+                                <AssetPreviewer
+                                    url={NFTDetailed?.metadata?.imageURL || NFTDetailed?.metadata?.mediaURL}
+                                    classes={{
+                                        root: classes.imgWrapper,
+                                        fallbackImage: classes.fallbackImage,
+                                    }}
+                                    fallbackImage={
+                                        <div className={classes.NFTFallbackImageWrapper}>{NFTFallbackImage}</div>
+                                    }
+                                />
+                            )}
+                        </Box>
 
-                {availability.isClaimed ? (
-                    <Box className={classes.tokenWrapper}>
-                        <NFTCardStyledAssetPlayer
-                            chainId={payload.chainId}
-                            hideLoadingIcon
-                            contractAddress={payload.contractAddress}
-                            tokenId={availability.claimed_id}
-                            classes={{
-                                imgWrapper: classes.imgWrapper,
-                                fallbackImage: classes.fallbackImage,
-                            }}
-                            objectFit="cover"
-                        />
+                        <div className={classes.description}>
+                            <Typography className={classes.name} color="textPrimary" variant="body2" ref={textRef}>
+                                {`${payload.contractName} #${availability.claimed_id}`}
+                            </Typography>
+                        </div>
                     </Box>
-                ) : null}
+                </ShadowRootTooltip>
 
                 <div className={classes.footer}>
                     {availability.isClaimed ? (
@@ -321,45 +392,76 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 ) : null}
             </Card>
             {outdated ? null : (
-                <Box className={classes.buttonWrapper}>
-                    <Box sx={{ flex: 1, padding: 1.5 }}>
-                        <Button
-                            variant="roundedDark"
-                            startIcon={<Icons.Shared size={18} />}
-                            className={classes.button}
-                            fullWidth
-                            onClick={onShare}>
-                            {i18n('share')}
-                        </Button>
-                    </Box>
-                    {availability.isClaimed ? null : (
-                        <Box sx={{ flex: 1, padding: 1.5 }}>
-                            <ChainBoundary
-                                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                ActionButtonPromiseProps={{ variant: 'roundedDark' }}
-                                expectedChainId={payload.chainId}>
-                                <WalletConnectedBoundary
-                                    expectedChainId={payload.chainId}
-                                    startIcon={<Icons.ConnectWallet size={18} />}
-                                    classes={{
-                                        connectWallet: classes.button,
-                                    }}
-                                    ActionButtonProps={{ variant: 'roundedDark' }}>
-                                    <ActionButton
-                                        variant="roundedDark"
-                                        loading={isClaiming}
-                                        disabled={isClaiming}
-                                        onClick={claim}
-                                        className={classes.button}
-                                        fullWidth>
-                                        {isClaiming ? t.claiming() : t.claim()}
-                                    </ActionButton>
-                                </WalletConnectedBoundary>
-                            </ChainBoundary>
-                        </Box>
-                    )}
-                </Box>
+                <OperationFooter
+                    chainId={payload.chainId}
+                    isClaiming={isClaiming}
+                    claimed={availability.isClaimed}
+                    onShare={onShare}
+                    claim={claim}
+                />
             )}
         </div>
+    )
+}
+
+interface OperationFooterProps {
+    claimed: boolean
+    isClaiming: boolean
+    onShare(): void
+    claim(): Promise<void>
+    chainId: ChainId
+}
+
+function OperationFooter({ claimed, onShare, chainId, claim, isClaiming }: OperationFooterProps) {
+    const { classes } = useStyles({ claimed, outdated: false })
+    const { t: i18n } = useBaseI18N()
+    const t = useI18N()
+
+    const ObtainButton = (props: { onClick?: MouseEventHandler<HTMLButtonElement> | undefined }) => {
+        return (
+            <WalletConnectedBoundary
+                expectedChainId={chainId}
+                startIcon={<Icons.ConnectWallet size={18} />}
+                classes={{
+                    connectWallet: classes.button,
+                }}
+                ActionButtonProps={{ variant: 'roundedDark' }}>
+                <ActionButton
+                    variant="roundedDark"
+                    loading={isClaiming}
+                    disabled={isClaiming}
+                    onClick={props.onClick}
+                    className={classes.button}
+                    fullWidth>
+                    {isClaiming ? t.claiming() : t.claim()}
+                </ActionButton>
+            </WalletConnectedBoundary>
+        )
+    }
+
+    return (
+        <Box className={classes.buttonWrapper}>
+            <Box sx={{ flex: 1, padding: 1.5 }}>
+                <Button
+                    variant="roundedDark"
+                    startIcon={<Icons.Shared size={18} />}
+                    className={classes.button}
+                    fullWidth
+                    onClick={onShare}>
+                    {i18n('share')}
+                </Button>
+            </Box>
+            {claimed ? null : (
+                <Box sx={{ flex: 1, padding: 1.5 }}>
+                    <ChainBoundary
+                        switchChainWithoutPopup
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        ActionButtonPromiseProps={{ variant: 'roundedDark' }}
+                        expectedChainId={chainId}>
+                        <ObtainButton onClick={claim} />
+                    </ChainBoundary>
+                </Box>
+            )}
+        </Box>
     )
 }

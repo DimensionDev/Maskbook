@@ -132,7 +132,6 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
                     metadata,
                     summary: (
                         <Translate.collectible_mint
-                            shouldUnescape
                             values={{
                                 user,
                                 collectible: verbose ? metadata!.name : 'an NFT',
@@ -266,7 +265,6 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
                         [classes.center]: !verbose && !metadata.description,
                     })}>
                     <Image
-                        optimistic
                         classes={{ container: classes.image }}
                         src={metadata.image}
                         height={imageSize}

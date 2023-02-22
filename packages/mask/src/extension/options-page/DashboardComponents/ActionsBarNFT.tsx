@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface ActionsBarNFT_Props extends withClasses<'more'> {
     wallet: Wallet
-    asset: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    asset: Web3Helper.NonFungibleAssetAll
 }
 
 export function ActionsBarNFT(props: ActionsBarNFT_Props) {

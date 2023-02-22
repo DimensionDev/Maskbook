@@ -5,6 +5,7 @@ import { FunderAPI } from '../../types/Funder.js'
 import { Web3API } from '../../EVM/index.js'
 import { fetchJSON } from '../../entry-helpers.js'
 import { FUNDER_PROD } from '../constants.js'
+import { BigNumber } from 'bignumber.js'
 
 export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     private web3 = new Web3API()
@@ -14,14 +15,14 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     }
 
     private async getWhiteList(handler: string) {
-        return fetchJSON<FunderAPI.WhiteList>(urlcat(FUNDER_PROD, '/whitelist', { twitterHandler: handler }))
+        return fetchJSON<FunderAPI.WhiteList>(urlcat(FUNDER_PROD, '/whitelist', { twitterHandle: handler }))
     }
 
     async getRemainFrequency(handler: string) {
         try {
             const result = await this.getWhiteList(handler)
             if (!result.totalCount || result.twitterHandler !== handler) return 0
-            return result.totalCount - result.usedCount
+            return BigNumber.max(result.totalCount - result.usedCount, 0).toNumber()
         } catch {
             return 0
         }

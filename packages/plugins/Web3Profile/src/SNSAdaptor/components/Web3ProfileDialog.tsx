@@ -15,7 +15,7 @@ import {
 } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { LoggerAPI } from '@masknet/web3-providers/types'
+import { TelemetryAPI } from '@masknet/web3-providers/types'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Sentry } from '@masknet/web3-providers'
 import { SceneMap, Scene } from '../../constants.js'
@@ -59,7 +59,7 @@ export function Web3ProfileDialog() {
         return CrossIsolationMessages.events.web3ProfileDialogEvent.on(({ open }) => {
             if (open)
                 Sentry?.captureEvent({
-                    eventID: LoggerAPI.EventID.Web3ProfileDialogAccess,
+                    eventID: TelemetryAPI.EventID.Web3ProfileDialogAccess,
                 })
             setOpen(open)
         })

@@ -17,7 +17,7 @@ export function useNonFungibleAsset<S extends 'all' | void = void, T extends Net
     })
 
     return useAsyncRetry<Web3Helper.NonFungibleAssetScope<S, T> | undefined>(async () => {
-        if (!hub || !address) return
+        if (!hub || !address || !id) return
         return hub.getNonFungibleAsset?.(address ?? '', id ?? '', options)
     }, [address, id, hub, JSON.stringify(options)])
 }

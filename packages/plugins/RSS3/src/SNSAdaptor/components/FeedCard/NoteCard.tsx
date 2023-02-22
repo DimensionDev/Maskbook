@@ -148,7 +148,6 @@ export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
                 {metadata?.media?.[0].mime_type.startsWith('image/') ? (
                     <Image
                         classes={{ container: classes.image }}
-                        optimistic
                         src={metadata.media[0].address}
                         height={imageSize}
                         width={imageSize}

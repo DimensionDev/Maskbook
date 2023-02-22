@@ -1,7 +1,6 @@
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NonFungibleAsset } from '@masknet/web3-shared-base'
 import { Box, Button, Typography } from '@mui/material'
 import type { CollectibleGridProps } from '../../types.js'
 import { CollectibleItem } from './CollectibleItem.js'
@@ -42,7 +41,7 @@ export const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 
 
 export interface CollectibleListProps extends withClasses<'empty' | 'button'>, CollectibleGridProps {
     pluginID: NetworkPluginID
-    collectibles: Array<NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    collectibles: Web3Helper.NonFungibleAssetAll[]
     error?: string
     loading: boolean
     retry(): void

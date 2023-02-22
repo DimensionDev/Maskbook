@@ -4,12 +4,12 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
-import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { Checkbox, List, ListItem, Radio, Stack, Typography } from '@mui/material'
 
 interface NFTItemProps {
-    token: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    token: Web3Helper.NonFungibleTokenAll
     pluginID: NetworkPluginID
 }
 

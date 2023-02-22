@@ -1,7 +1,9 @@
 import { compact } from 'lodash-es'
-import Fuse from 'fuse.js'
 import { isSameAddress, SearchResult, SearchResultType } from '@masknet/web3-shared-base'
 import type { Handler } from './type.js'
+import { FuseAPI } from '../Fuse/index.js'
+
+const Fuse = new FuseAPI()
 
 export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, SchemaType>> => [
     {
@@ -51,7 +53,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                             }),
                     )
 
-                    const fuse = new Fuse(data, {
+                    return Fuse.create(data, {
                         keys: [{ name: '__alias', weight: 0.5 }],
                         isCaseSensitive: false,
                         ignoreLocation: true,
@@ -59,8 +61,8 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                         threshold: 0,
                         minMatchCharLength: 5,
                     })
-
-                    return fuse.search(keyword).map((x) => data[x.refIndex])
+                        .search(keyword)
+                        .map((x) => data[x.refIndex])
                 },
             },
             {
@@ -81,7 +83,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                         }),
                     )
 
-                    const fuse = new Fuse(data, {
+                    return Fuse.create(data, {
                         keys: [
                             { name: 'symbol', weight: 0.5 },
                             { name: '__symbol', weight: 0.4 },
@@ -94,8 +96,8 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                         threshold: 0,
                         minMatchCharLength: 5,
                     })
-
-                    return fuse.search(keyword).map((x) => all[x.refIndex])
+                        .search(keyword)
+                        .map((x) => all[x.refIndex])
                 },
             },
         ],
@@ -148,7 +150,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                             }),
                     )
 
-                    const fuse = new Fuse(data, {
+                    return Fuse.create(data, {
                         keys: [
                             { name: '__alias', weight: 0.5 },
                             { name: '__name', weight: 0.3 },
@@ -160,8 +162,8 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                         threshold: 0,
                         minMatchCharLength: 5,
                     })
-
-                    return fuse.search(keyword).map((x) => data[x.refIndex])
+                        .search(keyword)
+                        .map((x) => data[x.refIndex])
                 },
             },
             {
@@ -181,7 +183,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                         }),
                     )
 
-                    const fuse = new Fuse(data, {
+                    return Fuse.create(data, {
                         keys: [
                             { name: 'name', weight: 0.6 },
                             { name: '__name', weight: 0.4 },
@@ -192,8 +194,8 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                         threshold: 0,
                         minMatchCharLength: 5,
                     })
-
-                    return fuse.search(keyword).map((x) => all[x.refIndex])
+                        .search(keyword)
+                        .map((x) => all[x.refIndex])
                 },
             },
         ],

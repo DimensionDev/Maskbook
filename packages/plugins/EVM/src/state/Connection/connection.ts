@@ -27,6 +27,7 @@ import {
     ContractTransaction,
     AccountTransaction,
     PayloadEditor,
+    TransactionReceipt,
 } from '@masknet/web3-shared-evm'
 import {
     Account,
@@ -42,7 +43,7 @@ import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
 import { dispatch } from './composer.js'
 import { createContext } from './context.js'
 import { Providers } from './provider.js'
-import type { EVM_Connection, EVM_Web3ConnectionOptions } from './types.js'
+import type { EVM_Connection, EVM_ConnectionOptions } from './types.js'
 import { Web3StateSettings } from '../../settings/index.js'
 
 class Connection implements EVM_Connection {
@@ -67,7 +68,7 @@ class Connection implements EVM_Connection {
 
     // Hijack RPC requests and process them with koa like middleware
     private get hijackedRequest() {
-        return <T extends unknown>(requestArguments: RequestArguments, initial?: EVM_Web3ConnectionOptions) => {
+        return <T extends unknown>(requestArguments: RequestArguments, initial?: EVM_ConnectionOptions) => {
             return new Promise<T>(async (resolve, reject) => {
                 const options = this.getOptions(initial)
                 const context = createContext(this, requestArguments, options)
@@ -89,6 +90,7 @@ class Connection implements EVM_Connection {
                                                       identifier: options.identifier,
                                                   }
                                                 : undefined,
+                                            options.silent,
                                         ),
                                     )
                                     break
@@ -139,9 +141,9 @@ class Connection implements EVM_Connection {
     }
 
     private getOptions(
-        initial?: EVM_Web3ConnectionOptions,
-        overrides?: Partial<EVM_Web3ConnectionOptions>,
-    ): PartialRequired<EVM_Web3ConnectionOptions, 'account' | 'chainId' | 'providerType'> {
+        initial?: EVM_ConnectionOptions,
+        overrides?: Partial<EVM_ConnectionOptions>,
+    ): PartialRequired<EVM_ConnectionOptions, 'account' | 'chainId' | 'providerType'> {
         return {
             account: this.account,
             chainId: this.chainId,
@@ -156,37 +158,33 @@ class Connection implements EVM_Connection {
         }
     }
 
-    private getWeb3Contract<T extends BaseContract>(
-        address: string,
-        ABI: AbiItem[],
-        initial?: EVM_Web3ConnectionOptions,
-    ) {
+    private getWeb3Contract<T extends BaseContract>(address: string, ABI: AbiItem[], initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         const web3 = this.getWeb3(options)
         return createContract<T>(web3, address, ABI)
     }
 
-    private getERC20Contract(address: string, initial?: EVM_Web3ConnectionOptions) {
+    private getERC20Contract(address: string, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.getWeb3Contract<ERC20>(address, ERC20ABI as AbiItem[], options)
     }
 
-    private getERC721Contract(address: string, initial?: EVM_Web3ConnectionOptions) {
+    private getERC721Contract(address: string, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.getWeb3Contract<ERC721>(address, ERC721ABI as AbiItem[], options)
     }
 
-    private getERC1155Contract(address: string, initial?: EVM_Web3ConnectionOptions) {
+    private getERC1155Contract(address: string, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.getWeb3Contract<ERC1155>(address, ERC1155ABI as AbiItem[], options)
     }
 
-    private getWalletContract(address: string, initial?: EVM_Web3ConnectionOptions) {
+    private getWalletContract(address: string, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.getWeb3Contract<WalletContract>(address, WalletContractABI as AbiItem[], options)
     }
 
-    getWeb3(initial?: EVM_Web3ConnectionOptions) {
+    getWeb3(initial?: EVM_ConnectionOptions) {
         return createWeb3(
             createWeb3Provider((requestArguments: RequestArguments) =>
                 this.hijackedRequest(requestArguments, this.getOptions(initial)),
@@ -194,13 +192,13 @@ class Connection implements EVM_Connection {
         )
     }
 
-    getWeb3Provider(initial?: EVM_Web3ConnectionOptions) {
+    getWeb3Provider(initial?: EVM_ConnectionOptions) {
         return createWeb3Provider((requestArguments: RequestArguments) =>
             this.hijackedRequest(requestArguments, this.getOptions(initial)),
         )
     }
 
-    async connect(initial?: EVM_Web3ConnectionOptions): Promise<Account<ChainId>> {
+    async connect(initial?: EVM_ConnectionOptions): Promise<Account<ChainId>> {
         return this.hijackedRequest<Account<ChainId>>(
             {
                 method: EthereumMethodType.MASK_LOGIN,
@@ -209,7 +207,7 @@ class Connection implements EVM_Connection {
             this.getOptions(initial),
         )
     }
-    async disconnect(initial?: EVM_Web3ConnectionOptions): Promise<void> {
+    async disconnect(initial?: EVM_ConnectionOptions): Promise<void> {
         await this.hijackedRequest<void>(
             {
                 method: EthereumMethodType.MASK_LOGOUT,
@@ -222,7 +220,7 @@ class Connection implements EVM_Connection {
         address: string,
         recipient: string,
         amount: string,
-        initial?: EVM_Web3ConnectionOptions,
+        initial?: EVM_ConnectionOptions,
     ): Promise<string> {
         const options = this.getOptions(initial)
 
@@ -240,7 +238,7 @@ class Connection implements EVM_Connection {
         recipient: string,
         tokenId: string,
         schema: SchemaType,
-        initial?: EVM_Web3ConnectionOptions,
+        initial?: EVM_ConnectionOptions,
     ): Promise<string> {
         // Do not use `approve()`, since it is buggy.
         // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol
@@ -251,7 +249,7 @@ class Connection implements EVM_Connection {
         recipient: string,
         approved: boolean,
         schema?: SchemaType,
-        initial?: EVM_Web3ConnectionOptions,
+        initial?: EVM_ConnectionOptions,
     ): Promise<string> {
         const options = this.getOptions(initial)
 
@@ -269,7 +267,7 @@ class Connection implements EVM_Connection {
         recipient: string,
         amount: string,
         memo?: string,
-        initial?: EVM_Web3ConnectionOptions,
+        initial?: EVM_ConnectionOptions,
     ): Promise<string> {
         const options = this.getOptions(initial)
 
@@ -302,7 +300,7 @@ class Connection implements EVM_Connection {
         recipient: string,
         amount?: string,
         schema?: SchemaType,
-        initial?: EVM_Web3ConnectionOptions,
+        initial?: EVM_ConnectionOptions,
     ): Promise<string> {
         const options = this.getOptions(initial)
         const actualSchema = schema ?? (await this.getSchemaType(address, options))
@@ -322,15 +320,15 @@ class Connection implements EVM_Connection {
         )
     }
 
-    async getGasPrice(initial?: EVM_Web3ConnectionOptions): Promise<string> {
+    async getGasPrice(initial?: EVM_ConnectionOptions): Promise<string> {
         const options = this.getOptions(initial)
         return Web3.getGasPrice(options.chainId)
     }
-    async getAddressType(address: string, initial?: EVM_Web3ConnectionOptions): Promise<AddressType | undefined> {
+    async getAddressType(address: string, initial?: EVM_ConnectionOptions): Promise<AddressType | undefined> {
         const options = this.getOptions(initial)
         return Web3.getAddressType(options.chainId, address)
     }
-    async getSchemaType(address: string, initial?: EVM_Web3ConnectionOptions): Promise<SchemaType | undefined> {
+    async getSchemaType(address: string, initial?: EVM_ConnectionOptions): Promise<SchemaType | undefined> {
         const options = this.getOptions(initial)
         return Web3.getSchemaType(options.chainId, address)
     }
@@ -338,7 +336,7 @@ class Connection implements EVM_Connection {
         address: string,
         tokenId: string,
         schema?: SchemaType,
-        initial?: EVM_Web3ConnectionOptions,
+        initial?: EVM_ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
         const options = this.getOptions(initial)
         return Web3.getNonFungibleToken(options.chainId, address, tokenId, schema)
@@ -348,7 +346,7 @@ class Connection implements EVM_Connection {
         address: string,
         tokenId: string,
         schema?: SchemaType,
-        initial?: EVM_Web3ConnectionOptions,
+        initial?: EVM_ConnectionOptions,
     ) {
         const options = this.getOptions(initial)
         return Web3.getNonFungibleTokenOwner(options.chainId, address, tokenId, schema)
@@ -359,7 +357,7 @@ class Connection implements EVM_Connection {
         tokenId: string,
         owner: string,
         schema?: SchemaType,
-        initial?: EVM_Web3ConnectionOptions,
+        initial?: EVM_ConnectionOptions,
     ) {
         const options = this.getOptions(initial)
         return Web3.getNonFungibleTokenOwnership(options.chainId, address, tokenId, owner, schema)
@@ -368,7 +366,7 @@ class Connection implements EVM_Connection {
         address: string,
         tokenId: string | undefined,
         schema?: SchemaType,
-        initial?: EVM_Web3ConnectionOptions,
+        initial?: EVM_ConnectionOptions,
     ) {
         const options = this.getOptions(initial)
         return Web3.getNonFungibleTokenMetadata(options.chainId, address, tokenId, schema)
@@ -376,7 +374,7 @@ class Connection implements EVM_Connection {
     async getNonFungibleTokenContract(
         address: string,
         schema?: SchemaType,
-        initial?: EVM_Web3ConnectionOptions,
+        initial?: EVM_ConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
         const options = this.getOptions(initial)
         return Web3.getNonFungibleTokenContract(options.chainId, address, schema)
@@ -384,23 +382,23 @@ class Connection implements EVM_Connection {
     async getNonFungibleTokenCollection(
         address: string,
         schema?: SchemaType,
-        initial?: EVM_Web3ConnectionOptions,
+        initial?: EVM_ConnectionOptions,
     ): Promise<NonFungibleCollection<ChainId, SchemaType>> {
         const options = this.getOptions(initial)
         return Web3.getNonFungibleTokenCollection(options.chainId, address, schema)
     }
-    async switchChain(chainId: ChainId, initial?: EVM_Web3ConnectionOptions): Promise<void> {
+    async switchChain(chainId: ChainId, initial?: EVM_ConnectionOptions): Promise<void> {
         const options = this.getOptions(initial)
         await Providers[options.providerType].switchChain(chainId)
     }
-    async getNativeTokenBalance(initial?: EVM_Web3ConnectionOptions): Promise<string> {
+    async getNativeTokenBalance(initial?: EVM_ConnectionOptions): Promise<string> {
         const options = this.getOptions(initial)
         return Web3.getNativeTokenBalance(options.chainId, options.account)
     }
     async getFungibleTokenBalance(
         address: string,
         schema?: SchemaType,
-        initial?: EVM_Web3ConnectionOptions,
+        initial?: EVM_ConnectionOptions,
     ): Promise<string> {
         const options = this.getOptions(initial)
         return Web3.getFungibleTokenBalance(options.chainId, address, options.account, schema)
@@ -409,14 +407,14 @@ class Connection implements EVM_Connection {
         address: string,
         tokenId: string | undefined,
         schema?: SchemaType,
-        initial?: EVM_Web3ConnectionOptions,
+        initial?: EVM_ConnectionOptions,
     ): Promise<string> {
         const options = this.getOptions(initial)
         return Web3.getNonFungibleTokenBalance(options.chainId, address, tokenId, options.account, schema)
     }
     async getFungibleTokensBalance(
         listOfAddress: string[],
-        initial?: EVM_Web3ConnectionOptions,
+        initial?: EVM_ConnectionOptions,
     ): Promise<Record<string, string>> {
         const options = this.getOptions(initial)
         return Web3.getFungibleTokensBalance(options.chainId, listOfAddress, options.account)
@@ -424,26 +422,26 @@ class Connection implements EVM_Connection {
 
     async getNonFungibleTokensBalance(
         listOfAddress: string[],
-        initial?: EVM_Web3ConnectionOptions,
+        initial?: EVM_ConnectionOptions,
     ): Promise<Record<string, string>> {
         const options = this.getOptions(initial)
         return Web3.getNonFungibleTokensBalance(options.chainId, listOfAddress, options.account)
     }
 
-    getNativeToken(initial?: EVM_Web3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
+    getNativeToken(initial?: EVM_ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.getOptions(initial)
         return Web3.getNativeToken(options.chainId)
     }
 
     async getFungibleToken(
         address: string,
-        initial?: EVM_Web3ConnectionOptions,
+        initial?: EVM_ConnectionOptions,
     ): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.getOptions(initial)
         return Web3.getFungibleToken(options.chainId, address)
     }
 
-    async getAccount(initial?: EVM_Web3ConnectionOptions) {
+    async getAccount(initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         const accounts = await this.hijackedRequest<string[]>(
             {
@@ -454,7 +452,7 @@ class Connection implements EVM_Connection {
         return first(accounts) ?? ''
     }
 
-    async getChainId(initial?: EVM_Web3ConnectionOptions) {
+    async getChainId(initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         const chainId = await this.hijackedRequest<string>(
             {
@@ -465,37 +463,37 @@ class Connection implements EVM_Connection {
         return Number.parseInt(chainId, 16)
     }
 
-    getBlock(noOrId: number | string, initial?: EVM_Web3ConnectionOptions) {
+    getBlock(noOrId: number | string, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return Web3.getBlock(options.chainId, noOrId)
     }
 
-    getBlockNumber(initial?: EVM_Web3ConnectionOptions) {
+    getBlockNumber(initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return Web3.getBlockNumber(options.chainId)
     }
 
-    async getBlockTimestamp(initial?: EVM_Web3ConnectionOptions): Promise<number> {
+    async getBlockTimestamp(initial?: EVM_ConnectionOptions): Promise<number> {
         const options = this.getOptions(initial)
         return Web3.getBlockTimestamp(options.chainId)
     }
 
-    getBalance(address: string, initial?: EVM_Web3ConnectionOptions) {
+    getBalance(address: string, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return Web3.getBalance(options.chainId, address)
     }
 
-    getCode(address: string, initial?: EVM_Web3ConnectionOptions) {
+    getCode(address: string, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return Web3.getCode(options.chainId, address)
     }
 
-    async getTransaction(hash: string, initial?: EVM_Web3ConnectionOptions) {
+    async getTransaction(hash: string, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return Web3.getTransaction(options.chainId, hash)
     }
 
-    async estimateTransaction(transaction: Transaction, fallback = 21000, initial?: EVM_Web3ConnectionOptions) {
+    async estimateTransaction(transaction: Transaction, fallback = 21000, initial?: EVM_ConnectionOptions) {
         try {
             const options = this.getOptions(initial)
             return this.hijackedRequest<string>(
@@ -515,17 +513,17 @@ class Connection implements EVM_Connection {
         }
     }
 
-    getTransactionReceipt(hash: string, initial?: EVM_Web3ConnectionOptions) {
+    getTransactionReceipt(hash: string, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return Web3.getTransactionReceipt(options.chainId, hash)
     }
 
-    async getTransactionStatus(hash: string, initial?: EVM_Web3ConnectionOptions): Promise<TransactionStatusType> {
+    async getTransactionStatus(hash: string, initial?: EVM_ConnectionOptions): Promise<TransactionStatusType> {
         const options = this.getOptions(initial)
         return Web3.getTransactionStatus(options.chainId, hash)
     }
 
-    async getTransactionNonce(address: string, initial?: EVM_Web3ConnectionOptions) {
+    async getTransactionNonce(address: string, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return Web3.getTransactionNonce(options.chainId, address)
     }
@@ -533,7 +531,7 @@ class Connection implements EVM_Connection {
     signMessage(
         type: 'message' | 'typedData' | Omit<string, 'message' | 'typedData'>,
         message: string,
-        initial?: EVM_Web3ConnectionOptions,
+        initial?: EVM_ConnectionOptions,
     ) {
         const options = this.getOptions(initial)
         if (!options.account) throw new Error('Unknown account.')
@@ -572,7 +570,7 @@ class Connection implements EVM_Connection {
         return dataToSign === message
     }
 
-    async signTransaction(transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {
+    async signTransaction(transaction: Transaction, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<string>(
             {
@@ -583,7 +581,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    signTransactions(transactions: Transaction[], initial?: EVM_Web3ConnectionOptions) {
+    signTransactions(transactions: Transaction[], initial?: EVM_ConnectionOptions) {
         return Promise.all(transactions.map((x) => this.signTransaction(x, initial)))
     }
 
@@ -731,12 +729,13 @@ class Connection implements EVM_Connection {
         )
     }
 
-    callTransaction(transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {
+    callTransaction(transaction: Transaction, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return Web3.callTransaction(options.chainId, transaction, options.overrides)
     }
-    async sendTransaction(transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {
+    async sendTransaction(transaction: Transaction, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
+
         // send a transaction which will add into the internal transaction list and start to watch it for confirmation
         const hash = await this.hijackedRequest<string>(
             {
@@ -756,7 +755,8 @@ class Connection implements EVM_Connection {
                 transaction?: Transaction,
             ) => {
                 if (status === TransactionStatusType.NOT_DEPEND) return
-                const transactions = await this.Transaction?.getTransactions?.(chainId, transaction?.from!)
+                if (!transaction?.from) return
+                const transactions = await this.Transaction?.getTransactions?.(chainId, transaction.from)
                 const currentTransaction = transactions?.find((x) => {
                     const hashes = Object.keys(x.candidates)
                     return hashes.includes(hash) && hashes.includes(id)
@@ -767,12 +767,17 @@ class Connection implements EVM_Connection {
         })
     }
 
-    sendSignedTransaction(signature: string, initial?: EVM_Web3ConnectionOptions) {
+    sendSignedTransaction(signature: string, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return Web3.sendSignedTransaction(options.chainId, signature)
     }
 
-    replaceTransaction(hash: string, transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {
+    confirmTransaction(hash: string, initial?: EVM_ConnectionOptions): Promise<TransactionReceipt> {
+        const options = this.getOptions(initial)
+        return Web3.confirmTransaction(options.chainId, hash, options.signal)
+    }
+
+    replaceTransaction(hash: string, transaction: Transaction, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<void>(
             {
@@ -783,7 +788,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    cancelTransaction(hash: string, transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {
+    cancelTransaction(hash: string, transaction: Transaction, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<void>(
             {

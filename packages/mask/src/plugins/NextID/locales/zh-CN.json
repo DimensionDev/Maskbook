@@ -11,7 +11,6 @@
     "verify_Twitter_ID": "您可以通过 Next.ID 验证您的 Twitter ID，以提高您的 Web3 体验。",
     "verify_other_Twitter_ID_intro": "此用户尚未连接钱包。",
     "verify_Twitter_ID_button": "验证您的Twitter ID",
-    "enable_plugin": "开启插件",
     "verify_wallet_button": "验证您的钱包",
     "add_wallet_button": "添加钱包",
     "verify_wallet_dialog_title": "验证您的钱包",
@@ -54,5 +53,6 @@
     "web3_profile": "Web3个人资料",
     "create_persona_intro": "请创建您的身份以使用 Web3 个人资料。",
     "add_wallet_intro": "在 Web3 中，您可以展示接收打赏的地址，NFT 收藏品，捐赠记录和其他链上信息给已安装Mask Network的好友。",
-    "others_lack_wallet": "用户尚未设置此项。"
+    "others_lack_wallet": "用户尚未设置此项。",
+    "enable_plugin": "开启插件"
 }

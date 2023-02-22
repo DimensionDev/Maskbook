@@ -2,23 +2,22 @@ import { memo, useCallback } from 'react'
 import { useAsync } from 'react-use'
 import { ArrowDownCircle, ArrowUpCircle } from 'react-feather'
 import { useNavigate } from 'react-router-dom'
+import { compact, intersectionWith } from 'lodash-es'
+import urlcat from 'urlcat'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext.js'
 import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
-import { getTokenUSDValue } from '../../../../../plugins/Wallet/helpers.js'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../../../utils/index.js'
 import { PluginTransakMessages } from '@masknet/plugin-transak'
 import Services from '../../../../service.js'
-import { compact, intersectionWith } from 'lodash-es'
-import urlcat from 'urlcat'
 import { ActivityList } from '../components/ActivityList/index.js'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useTitle } from '../../../hook/useTitle.js'
-import { formatBalance, formatCurrency, isSameAddress } from '@masknet/web3-shared-base'
+import { formatBalance, formatCurrency, getTokenUSDValue, isSameAddress } from '@masknet/web3-shared-base'
 import { useNativeToken, useWallet } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()({
@@ -135,7 +134,7 @@ const TokenDetail = memo(() => {
                     />
                 </Typography>
                 <Typography className={classes.text}>
-                    <FormattedCurrency value={getTokenUSDValue(currentToken)} formatter={formatCurrency} />
+                    <FormattedCurrency value={getTokenUSDValue(currentToken.value)} formatter={formatCurrency} />
                 </Typography>
                 <div className={classes.controller}>
                     <div onClick={openBuyDialog}>

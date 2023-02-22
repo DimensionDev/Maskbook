@@ -8,7 +8,7 @@ import { useWeb3State } from './useWeb3State.js'
 export function useTransferFungibleToken<T extends NetworkPluginID>(
     pluginId: T,
     recipient: string,
-    token: Web3Helper.FungibleTokenScope<'all'> | null,
+    token: Web3Helper.FungibleTokenAll | null,
     amount: string,
     options?: Web3Helper.Web3ConnectionOptions<T>,
 ) {

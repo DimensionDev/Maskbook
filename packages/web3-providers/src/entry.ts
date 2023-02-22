@@ -43,7 +43,8 @@ import { FlowFungibleAPI } from './Flow/index.js'
 import { CloudflareAPI } from './Cloudflare/index.js'
 import { MirrorAPI } from './Mirror/index.js'
 import { MindsAPI } from './Minds/index.js'
-import { FuseTrendingAPI } from './Fuse/index.js'
+import { FuseAPI, FuseCoinAPI } from './Fuse/index.js'
+import { FuseNonFungibleCollectionAPI } from './Fuse/apis/NonFungibleCollection.js'
 import { CryptoScamDB_API } from './CryptoScamDB/index.js'
 import { SmartPayAccountAPI, SmartPayBundlerAPI, SmartPayFunderAPI } from './SmartPay/index.js'
 import { NomicsAPI } from './Nomics/index.js'
@@ -162,7 +163,9 @@ export const ZerionTrending = new ZerionTrendingAPI()
 export const ZerionGas = new ZerionGasAPI()
 
 // Fuse
-export const FuseTrending = new FuseTrendingAPI()
+export const Fuse = new FuseAPI()
+export const FuseCoin = new FuseCoinAPI()
+export const FuseNonFungibleCollection = new FuseNonFungibleCollectionAPI()
 
 // Smart Pay
 export const SmartPayBundler = new SmartPayBundlerAPI()

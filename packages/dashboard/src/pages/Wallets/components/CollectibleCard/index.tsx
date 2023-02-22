@@ -75,7 +75,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface CollectibleCardProps {
-    asset: Web3Helper.NonFungibleAssetScope<'all'>
+    asset: Web3Helper.NonFungibleAssetAll
     onSend(): void
 }
 
