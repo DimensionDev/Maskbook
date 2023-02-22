@@ -1,10 +1,11 @@
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { Card, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { useWeb3State, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkPluginID } from '@masknet/shared-base'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { AssetPreviewer, ImageIcon } from '@masknet/shared'
+import { NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
 import type { SourceType, Wallet } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -18,6 +19,11 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.mode === 'light' ? '#F7F9FA' : '#2F3336',
         width: '100%',
         height: '100%',
+    },
+    networkIcon: {
+        position: 'absolute',
+        top: 6,
+        left: 6,
     },
     fallbackImage: {
         minHeight: '0 !important',
@@ -62,23 +68,29 @@ export const CollectibleCard = memo(function CollectibleCard({
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State()
 
+    const networkDescriptor = useNetworkDescriptor(pluginID)
+
+    const networkIcon = useMemo(() => {
+        if (pluginID === NetworkPluginID.PLUGIN_EVM) {
+            return NETWORK_DESCRIPTORS.find((network) => network?.chainId === asset.chainId)?.icon
+        }
+        return networkDescriptor?.icon
+    }, [asset.chainId, pluginID])
+
     const content = (
         <>
             <div className={classes.blocker} />
             <Card className={classes.root}>
-                <NFTCardStyledAssetPlayer
-                    contractAddress={asset.address}
-                    chainId={asset.chainId}
-                    isImageOnly
+                <AssetPreviewer
                     url={asset.metadata?.mediaURL || asset.metadata?.imageURL}
-                    tokenId={asset.tokenId}
-                    pluginID={pluginID}
                     classes={{
                         fallbackImage: classes.fallbackImage,
-                        imgWrapper: classes.wrapper,
+                        root: classes.wrapper,
                     }}
-                    showNetwork={showNetworkIcon}
                 />
+                {networkIcon ? (
+                    <ImageIcon icon={networkIcon} size={24} classes={{ icon: classes.networkIcon }} />
+                ) : null}
             </Card>
         </>
     )
