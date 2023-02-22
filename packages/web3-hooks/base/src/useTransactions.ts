@@ -14,11 +14,9 @@ export function useTransactions<S extends 'all' | void = void, T extends Network
 
     return useMemo(() => {
         return pageableToIterator(async (indicator) => {
-            const data = await hub?.getTransactions(options?.chainId ?? chainId, options?.account ?? account, {
+            return hub?.getTransactions(options?.chainId ?? chainId, options?.account ?? account, {
                 indicator,
             })
-            console.log('data', data)
-            return data
         })
     }, [hub, account, chainId, options])
 }

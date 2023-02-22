@@ -1,26 +1,23 @@
 import type { HubIndicator, Pageable } from '../specs/index.js'
 
-export function createIndicator(indicator?: HubIndicator, id?: string, queryParam?: string): HubIndicator {
+export function createIndicator(indicator?: HubIndicator, id?: string): HubIndicator {
     const index = indicator?.index ?? 0
     return {
         id: id ?? indicator?.id ?? index.toString(),
         index,
-        queryParam,
     }
 }
 
-export function createNextIndicator(indicator?: HubIndicator, id?: string, queryParam?: string): HubIndicator {
+export function createNextIndicator(indicator?: HubIndicator, id?: string): HubIndicator {
     const index = (indicator?.index ?? 0) + 1
     return typeof id === 'string'
         ? {
               id,
               index,
-              queryParam,
           }
         : {
               id: index.toString(),
               index,
-              queryParam,
           }
 }
 

@@ -30,15 +30,15 @@ export class DeBankHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType
                 id: address.toLowerCase(),
                 chain_id: resolveDeBankAssetIdReversed(CHAIN_ID),
                 page_count: 20,
-                start_time: indicator?.queryParam,
+                start_time: indicator?.id,
             }),
         )
         const transactions = formatTransactions(chainId, result)
         const timeStamp = last(transactions)?.timestamp
         return createPageable(
             transactions,
-            createIndicator(indicator, undefined, timeStamp?.toString()),
-            transactions.length > 0 ? createNextIndicator(indicator, undefined, timeStamp?.toString()) : undefined,
+            createIndicator(indicator),
+            transactions.length > 0 ? createNextIndicator(indicator, timeStamp.toString()) : undefined,
         )
     }
 }

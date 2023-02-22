@@ -1198,8 +1198,6 @@ export interface HubIndicator {
     id: string
     /** The index number of the page. */
     index: number
-    /** next query param */
-    queryParam?: string
 }
 
 export interface HubOptions<ChainId, Indicator = HubIndicator> {

@@ -81,49 +81,45 @@ export interface HistoryTableUIProps {
     selectedChainId: Web3Helper.ChainIdAll
 }
 
-export const HistoryTableUI = memo<HistoryTableUIProps>(
-    ({ isLoading, isEmpty, dataSource, next, page, onPageChange, done, selectedChainId }) => {
-        const t = useDashboardI18N()
-        const { classes, cx } = useStyles()
-        return (
-            <>
-                {dataSource.length ? (
-                    <TableContainer className={classes.container}>
-                        <Table stickyHeader sx={{ padding: '0 44px' }}>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell key="Types" align="center" variant="head" className={classes.header}>
-                                        {t.wallets_history_types()}
-                                    </TableCell>
-                                    <TableCell key="Value" align="center" variant="head" className={classes.header}>
-                                        {t.wallets_history_value()}
-                                    </TableCell>
-                                    <TableCell key="Receiver" align="center" variant="head" className={classes.header}>
-                                        {t.wallets_history_receiver()}
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
+export const HistoryTableUI = memo<HistoryTableUIProps>(({ dataSource, next, done, selectedChainId }) => {
+    const t = useDashboardI18N()
+    const { classes, cx } = useStyles()
+    return (
+        <>
+            {dataSource.length ? (
+                <TableContainer className={classes.container}>
+                    <Table stickyHeader sx={{ padding: '0 44px' }}>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell key="Types" align="center" variant="head" className={classes.header}>
+                                    {t.wallets_history_types()}
+                                </TableCell>
+                                <TableCell key="Value" align="center" variant="head" className={classes.header}>
+                                    {t.wallets_history_value()}
+                                </TableCell>
+                                <TableCell key="Receiver" align="center" variant="head" className={classes.header}>
+                                    {t.wallets_history_receiver()}
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
 
-                            <TableBody>
-                                {dataSource.map((transaction, index) => (
-                                    <HistoryTableRow
-                                        key={index}
-                                        transaction={transaction}
-                                        selectedChainId={selectedChainId}
-                                    />
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                ) : (
-                    <Box className={cx(classes.container, classes.loading)}>
-                        <LoadingBase />
-                    </Box>
-                )}
-                <ElementAnchor callback={() => next?.()}>
-                    {!done && dataSource?.length && <LoadingBase />}
-                </ElementAnchor>
-            </>
-        )
-    },
-)
+                        <TableBody>
+                            {dataSource.map((transaction, index) => (
+                                <HistoryTableRow
+                                    key={index}
+                                    transaction={transaction}
+                                    selectedChainId={selectedChainId}
+                                />
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            ) : (
+                <Box className={cx(classes.container, classes.loading)}>
+                    <LoadingBase />
+                </Box>
+            )}
+            <ElementAnchor callback={() => next?.()}>{!done && dataSource?.length && <LoadingBase />}</ElementAnchor>
+        </>
+    )
+})
