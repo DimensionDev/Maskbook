@@ -1,4 +1,5 @@
 import '../plugin-host/enable.js'
+
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { createInjectHooksRenderer } from '@masknet/plugin-infra/dom'
 import { NetworkPluginID } from '@masknet/shared-base'

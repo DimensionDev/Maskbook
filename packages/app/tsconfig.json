@@ -1,11 +1,11 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": "./main/",
-    "outDir": "./dist/main",
+    "rootDir": "./src/",
+    "outDir": "./dist/src",
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": ["./main"],
+  "include": ["./src"],
   "references": [
     { "path": "./tsconfig.worker.json" },
     { "path": "../base" },

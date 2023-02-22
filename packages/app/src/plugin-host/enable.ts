@@ -1,4 +1,6 @@
 import './register.js'
+
+import { noop } from 'lodash-es'
 import { Emitter } from '@servie/events'
 import { BooleanPreference, CurrentSNSNetwork, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import {
@@ -11,9 +13,8 @@ import {
 import { ChainId } from '@masknet/web3-shared-evm'
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import { ThemeMode, FontSize } from '@masknet/web3-shared-base'
-import { addListener } from '../message.js'
-import { worker } from '../rpc.js'
-import { noop } from 'lodash-es'
+import { addListener } from './message.js'
+import { worker } from './rpc.js'
 
 // #region Setup storage
 const inMemoryStorage = createKVStorageHost(
