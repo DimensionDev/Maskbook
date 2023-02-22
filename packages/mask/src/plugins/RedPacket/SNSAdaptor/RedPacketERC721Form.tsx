@@ -5,7 +5,7 @@ import { Check as CheckIcon, Close as CloseIcon, AddCircleOutline as AddCircleOu
 import { useI18N } from '../locales/index.js'
 import {
     WalletConnectedBoundary,
-    NFTCardStyledAssetPlayer,
+    AssetPreviewer,
     PluginWalletStatusBar,
     ERC721ContractSelectPanel,
     ChainBoundary,
@@ -422,16 +422,12 @@ function NFTCard(props: NFTCardProps) {
     const { classes, cx } = useStyles()
     return (
         <ListItem className={cx(classes.tokenSelectorWrapper)}>
-            <NFTCardStyledAssetPlayer
-                contractAddress={token.collection?.address}
-                chainId={token.chainId}
+            <AssetPreviewer
                 url={token.metadata?.mediaURL || token.metadata?.imageURL}
-                tokenId={token.tokenId}
                 classes={{
                     fallbackImage: classes.fallbackImage,
-                    imgWrapper: classes.assetImgWrapper,
+                    root: classes.assetImgWrapper,
                 }}
-                disableQueryNonFungibleAsset
             />
             <div className={classes.nftNameWrapper}>
                 <Typography className={classes.nftName} color="textSecondary">

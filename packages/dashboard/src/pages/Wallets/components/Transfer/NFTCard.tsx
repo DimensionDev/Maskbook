@@ -2,7 +2,9 @@ import { memo, useMemo, useState } from 'react'
 import { Checkbox, ImageListItem, ImageListItemBar, Box } from '@mui/material'
 import { getMaskColor, makeStyles, MaskColorVar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { AssetPreviewer } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useNonFungibleAsset } from '@masknet/web3-hooks-base'
 import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
@@ -43,6 +45,15 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect })
         [selectedTokenId, token.tokenId],
     )
 
+    const { value: NFTDetailed } = useNonFungibleAsset<'all'>(
+        NetworkPluginID.PLUGIN_EVM,
+        token.address,
+        token.tokenId,
+        {
+            chainId: token.chainId,
+        },
+    )
+
     const NFTNameBar = useMemo(() => {
         return (
             <ImageListItemBar
@@ -70,13 +81,11 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect })
                 background: (theme) => (theme.palette.mode === 'dark' ? getMaskColor(theme).white : '#F9F9FA'),
             }}
             className={isDisabled ? classes.disabled : ''}>
-            <NFTCardStyledAssetPlayer
+            <AssetPreviewer
                 classes={{
                     fallbackImage: classes.fallbackImage,
                 }}
-                chainId={token.chainId}
-                tokenId={token.tokenId}
-                contractAddress={token.address}
+                url={NFTDetailed?.metadata?.imageURL || NFTDetailed?.metadata?.mediaURL}
             />
             {NFTNameBar}
             <Box className={classes.checkbox}>
