@@ -111,7 +111,7 @@ export const TokenWithSocialGroupMenu: FC<PropsWithChildren<TokenWithSocialGroup
         [onTokenChange, onClose],
     )
 
-    const collectionList = useTokenMenuCollectionList(collectionList_)
+    const collectionList = useTokenMenuCollectionList(collectionList_, currentCollection)
 
     const groups: Array<
         [

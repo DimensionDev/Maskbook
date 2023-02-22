@@ -208,7 +208,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const coinAddress = coin.address || coin.contract_address
     const coinName = result.name || coin.name
 
-    const collectionList = useTokenMenuCollectionList([result, ...resultList])
+    const collectionList = useTokenMenuCollectionList(resultList, result)
 
     const rss3Key = SNS_RSS3_FIELD_KEY_MAP[identity?.identifier?.network as EnhanceableSite]
     const { value: socialAccounts = EMPTY_LIST } = useSocialAccountsBySettings(identity)
