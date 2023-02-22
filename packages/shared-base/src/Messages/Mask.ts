@@ -167,6 +167,10 @@ export interface RestoreSuccessEvent {
     }>
 }
 
+export interface redpacketDialogEvent {
+    open: boolean
+}
+
 export interface OwnerDeletionEvent {
     owner: string
 }

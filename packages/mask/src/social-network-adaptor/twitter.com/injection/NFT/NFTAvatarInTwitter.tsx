@@ -20,9 +20,9 @@ import {
     useSaveNFTAvatar,
 } from '@masknet/plugin-avatar'
 import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Hub } from '@masknet/web3-hooks-base'
 import { Box, Typography } from '@mui/material'
-import { NFTCardStyledAssetPlayer, useShowConfirm } from '@masknet/shared'
+import { AssetPreviewer, useShowConfirm } from '@masknet/shared'
 import type { AvatarMetaDB } from '@masknet/plugin-avatar'
 import { NetworkPluginID, EnhanceableSite, NFTAvatarEvent, CrossIsolationMessages } from '@masknet/shared-base'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
@@ -111,12 +111,12 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
     const openConfirmDialog = useShowConfirm()
     const saveNFTAvatar = useSaveNFTAvatar()
+    const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
 
     // After the avatar is set, it cannot be saved immediately,
     // and must wait until the avatar of twitter gets updated
     useAsync(async () => {
-        if (!account || !nftAvatar) return
-        if (!identity.identifier) return
+        if (!account || !nftAvatar || !hub?.getNonFungibleAsset || !identity.identifier) return
 
         if (!NFTEvent?.address || !NFTEvent?.tokenId) {
             MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll({
@@ -149,11 +149,16 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
             window.alert('Sorry, failed to save NFT Avatar. Please set again.')
             return
         }
+
+        const NFTDetailed = await hub.getNonFungibleAsset(avatar.address ?? '', avatar.tokenId, {
+            chainId: ChainId.Mainnet,
+        })
+
         openConfirmDialog({
             title: t('plugin_avatar_setup_share_title'),
             content: (
                 <Box display="flex" flexDirection="column" alignItems="center">
-                    <NFTCardStyledAssetPlayer contractAddress={avatar.address} tokenId={avatar.tokenId} />
+                    <AssetPreviewer url={NFTDetailed?.metadata?.imageURL || NFTDetailed?.metadata?.mediaURL} />
                     <Typography mt={3} fontSize="18px">
                         {t('plugin_avatar_setup_success')}
                     </Typography>
@@ -178,7 +183,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         )
 
         setNFTEvent(undefined)
-    }, [identity.avatar, openConfirmDialog, t, saveNFTAvatar])
+    }, [identity.avatar, openConfirmDialog, t, saveNFTAvatar, hub?.getNonFungibleAsset])
 
     useEffect(() => {
         return MaskMessages.events.NFTAvatarUpdated.on((data) => setNFTEvent(data))
