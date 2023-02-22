@@ -407,7 +407,8 @@
         "xyumi",
         "yumi",
         "yumiswap",
-        "zkscan"
+        "zkscan",
+        "Changeds"
     ],
     "ignoreRegExpList": ["/@servie/", "/[A-Za-z0-9]{46}/"],
     "overrides": [

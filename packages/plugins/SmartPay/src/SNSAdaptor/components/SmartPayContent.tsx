@@ -8,7 +8,7 @@ import {
     ApproveMaskDialog,
     FormattedCurrency,
 } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, PluginID, PopupRoutes } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import {
@@ -328,13 +328,8 @@ export const SmartPayContent = memo(() => {
     }, [account, wallet, connection, chainId])
     const [{ loading: openLuckDropLoading }, handleLuckDropClick] = useAsyncFn(async () => {
         await connectToCurrent()
-        CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
-            reason: 'timeline',
-            open: true,
-            options: {
-                startupPlugin: PluginID.RedPacket,
-            },
-        })
+        CrossIsolationMessages.events.redpacketDialogEvent.sendToLocal({ open: true })
+
         closeDialog()
     }, [connectToCurrent])
 
