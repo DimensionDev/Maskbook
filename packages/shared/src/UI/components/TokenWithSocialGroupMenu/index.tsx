@@ -31,6 +31,10 @@ const useStyles = makeStyles()((theme) => ({
         maxHeight: MENU_ITEM_HEIGHT * 9 + MENU_LIST_PADDING * 2,
         minWidth: 320,
         backgroundColor: theme.palette.maskColor.bottom,
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
+                : '0px 4px 30px rgba(0, 0, 0, 0.1)',
         borderRadius: 16,
     },
 
