@@ -51,12 +51,12 @@ export const ApproveMaskDialog = memo<ApproveMaskDialogProps>(({ open, handleClo
 
     const maskAddress = Others?.getMaskTokenAddress(chainId)
     const { value: maskToken } = useFungibleToken(pluginID, maskAddress)
-    const { PAYMASTER_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
+    const { PAYMASTER_MASK_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
 
     const [{ type: approveStateType }, transactionState, approveCallback] = useERC20TokenApproveCallback(
         maskAddress ?? '',
         maskToken ? toFixed(new BigNumber(amount).shiftedBy(maskToken.decimals ?? 0).integerValue()) : '',
-        PAYMASTER_CONTRACT_ADDRESS ?? '',
+        PAYMASTER_MASK_CONTRACT_ADDRESS ?? '',
         noop,
         chainId,
     )
