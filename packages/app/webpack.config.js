@@ -11,15 +11,20 @@ import { createRequire } from 'module'
 const require = createRequire(import.meta.url)
 
 /**
- *
- * @param {*} a
- * @param {*} b
+ * @param {*} env
+ * @param {*} argv
  * @returns {Configuration}
  */
-function Configuration(a, b) {
+function Configuration(env, argv) {
+    const mode = env.WEBPACK_SERVE ? 'development' : 'production'
     return {
-        mode: 'development',
+        mode,
         entry: './src/index.tsx',
+        output: {
+            path: fileURLToPath(new URL('../netlify/sites/app', import.meta.url)),
+            publicPath: 'auto',
+            clean: true,
+        },
         experiments: { asyncWebAssembly: true, topLevelAwait: true },
         resolve: {
             extensionAlias: {
@@ -35,6 +40,7 @@ function Configuration(a, b) {
                 stream: require.resolve('stream-browserify'),
             },
         },
+        devtool: mode === 'development' ? /** default option */ undefined : 'source-map',
         module: {
             rules: [
                 {
