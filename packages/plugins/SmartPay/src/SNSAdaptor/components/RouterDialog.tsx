@@ -13,7 +13,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { DialogContent, CircularProgress } from '@mui/material'
 import { Box } from '@mui/system'
 import { compact } from 'lodash-es'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { matchPath, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { RoutePaths } from '../../constants.js'
@@ -49,7 +49,6 @@ export function RouterDialog() {
     const personas = useAllPersonas()
     const wallets = useWallets()
     const currentPersona = useCurrentPersonaInformation()
-    const [hasAccounts, setHasAccounts] = useState(false)
 
     const { signer, setSigner } = SmartPayContext.useContainer()
 
@@ -58,10 +57,9 @@ export function RouterDialog() {
     const { open, closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent, (ev) => {
         // reset state when dialog has been closed
         if (!ev.open) {
-            setHasAccounts(false)
             setSigner(undefined)
         }
-        setHasAccounts(!!ev.hasAccounts)
+
         setSigner({
             signWallet: ev.signWallet,
             signPersona: ev.signPersona,
@@ -74,11 +72,10 @@ export function RouterDialog() {
     const { loading: queryVerifyLoading } = useAsync(async () => {
         if (!lastRecognizedIdentity?.identifier?.userId) return
         const chainId = await SmartPayBundler.getSupportedChainId()
-        const accounts = await SmartPayOwner.getAccountsByOwners(
-            chainId,
-            [...wallets.filter((x) => !x.owner).map((x) => x.address), ...compact(personas.map((x) => x.address))],
-            false,
-        )
+        const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
+            ...wallets.filter((x) => !x.owner).map((x) => x.address),
+            ...compact(personas.map((x) => x.address)),
+        ])
         const verified = await SmartPayFunder.verify(lastRecognizedIdentity.identifier.userId)
 
         if (accounts.filter((x) => x.deployed).length) return navigate(RoutePaths.Main)
