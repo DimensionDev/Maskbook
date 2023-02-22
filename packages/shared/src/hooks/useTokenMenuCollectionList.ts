@@ -2,7 +2,6 @@ import { uniqBy } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { SourceType } from '@masknet/web3-shared-base'
 
-// Filter same CoinMarketCap token when it exists in Coingecko Collections.
 export function useTokenMenuCollectionList(
     collectionList_: Web3Helper.TokenResultAll[],
     currentCollection?: Web3Helper.TokenResultAll,
@@ -14,19 +13,11 @@ export function useTokenMenuCollectionList(
         (x) => `${x.address?.toLowerCase()}_${x.chainId}_${x.type}_${x.name?.toLowerCase()}_${x.source}`,
     )
 
-    const currentSourceCollectionsOfName = collectionList
-        .filter((x) => x.source === currentCollection?.source)
-        .map((x) => x.name.toLowerCase())
-
     return collectionList.filter(
         (x) =>
             !(
-                x.source === getTheOtherFungibleTokenSource(currentCollection?.source) &&
-                currentSourceCollectionsOfName.includes(x.name.toLowerCase())
+                x.source !== currentCollection?.source &&
+                [SourceType.CoinMarketCap, SourceType.CoinGecko].includes(x.source)
             ),
     )
-}
-
-function getTheOtherFungibleTokenSource(source?: SourceType) {
-    return source === SourceType.CoinGecko ? SourceType.CoinMarketCap : SourceType.CoinGecko
 }
