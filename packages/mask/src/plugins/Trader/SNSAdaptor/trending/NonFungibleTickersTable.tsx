@@ -100,10 +100,6 @@ const useStyles = makeStyles<{ isCollectionProjectPopper: boolean }>()((theme, {
         paddingBottom: theme.spacing(10),
         borderStyle: 'none',
     },
-    tableWrapper: {
-        height: 233,
-        overflow: 'scroll',
-    },
 }))
 
 export interface NonFungibleTickersTableProps {
@@ -230,42 +226,33 @@ export function NonFungibleTickersTable({
                     </Typography>
                 </Stack>
             ) : (
-                <>
-                    <Table size="small" stickyHeader>
-                        <TableHead>
+                <Table size="small">
+                    <TableHead>
+                        <TableRow>
+                            {headCells.map((x) => (
+                                <TableCell className={cx(classes.cell, classes.headerCell)} key={x}>
+                                    {x}
+                                </TableCell>
+                            ))}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {tickerRows.length ? (
+                            tickerRows
+                        ) : (
                             <TableRow>
-                                {headCells.map((x) => (
-                                    <TableCell className={cx(classes.cell, classes.headerCell)} key={x}>
-                                        {x}
-                                    </TableCell>
-                                ))}
+                                <TableCell
+                                    className={classes.cell}
+                                    colSpan={headCells.length}
+                                    style={{ borderStyle: 'none' }}>
+                                    <Typography className={classes.placeholder} align="center" color="textSecondary">
+                                        {t('plugin_trader_no_data')}
+                                    </Typography>
+                                </TableCell>
                             </TableRow>
-                        </TableHead>
-                    </Table>
-                    <div className={classes.tableWrapper}>
-                        <Table size="small">
-                            <TableBody>
-                                {tickerRows.length ? (
-                                    tickerRows
-                                ) : (
-                                    <TableRow>
-                                        <TableCell
-                                            className={classes.cell}
-                                            colSpan={headCells.length}
-                                            style={{ borderStyle: 'none' }}>
-                                            <Typography
-                                                className={classes.placeholder}
-                                                align="center"
-                                                color="textSecondary">
-                                                {t('plugin_trader_no_data')}
-                                            </Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </div>
-                </>
+                        )}
+                    </TableBody>
+                </Table>
             )}
         </TableContainer>
     )
