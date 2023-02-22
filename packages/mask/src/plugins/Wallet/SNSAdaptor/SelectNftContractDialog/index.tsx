@@ -1,5 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
-import Fuse from 'fuse.js'
+import { useCallback, useState } from 'react'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Avatar, Box, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
 import { SchemaType, explorerResolver, ChainId } from '@masknet/web3-shared-evm'
@@ -8,10 +7,11 @@ import { InjectedDialog } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
-import { WalletMessages } from '../messages.js'
-import { useI18N } from '../../../utils/index.js'
-import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput.js'
 import { useChainContext, useNonFungibleCollections } from '@masknet/web3-hooks-base'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { FuseNonFungibleCollection } from '@masknet/web3-providers'
+import { useI18N } from '../../../../utils/index.js'
+import { SearchInput } from '../../../../extension/options-page/DashboardComponents/SearchInput.js'
 
 const useStyles = makeStyles()((theme) => ({
     search: {
@@ -131,22 +131,12 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     const collectionsFiltered = collections.filter((x) => x.schema === SchemaType.ERC721)
 
     // #region fuse
-    const fuse = useMemo(
-        () =>
-            new Fuse(collectionsFiltered, {
-                shouldSort: true,
-                threshold: 0.45,
-                minMatchCharLength: 3,
-                keys: [
-                    { name: 'name', weight: 0.5 },
-                    { name: 'symbol', weight: 0.8 },
-                    { name: 'address', weight: 1 },
-                ],
-            }),
-        [collectionsFiltered],
+    const searchedTokenList = FuseNonFungibleCollection.create(
+        collections.filter((x) => x.schema === SchemaType.ERC721),
     )
+        .search(keyword)
+        .map((x) => x.item)
 
-    const searchedTokenList = fuse.search(keyword).map((x) => x.item)
     // #endregion
     return (
         <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_a_nft_contract')}>

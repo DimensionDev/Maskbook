@@ -199,8 +199,8 @@ importers:
         specifier: 0.0.2-20220516081411-2649814
         version: 0.0.2-20220516081411-2649814_eslint@8.28.0
       '@magic-works/i18n-codegen':
-        specifier: ^0.4.1
-        version: 0.4.1_twk4ge2fldxk2qjgakp4iwkpb4
+        specifier: ^0.5.0
+        version: 0.5.0_twk4ge2fldxk2qjgakp4iwkpb4
       '@masknet/cli':
         specifier: workspace:^
         version: link:packages/scripts
@@ -1211,6 +1211,9 @@ importers:
       react-refresh:
         specifier: ^0.14.0
         version: 0.14.0
+      rimraf:
+        specifier: ^3.0.2
+        version: 3.0.2
       source-map-loader:
         specifier: ^4.0.1
         version: 4.0.1_webpack@5.75.0
@@ -3259,6 +3262,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0
+      unstated-next:
+        specifier: ^1.1.0
+        version: 1.1.0
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0
@@ -8464,8 +8470,8 @@ packages:
     resolution: {integrity: sha512-+wPlUCaGJ/9rzRSugOi1FpoV5uwFKgkpmFFgKCdEhf6C6YQD234dvlYPZ1U+sCBUBFU84eaUEgxrC3UnHEsu/A==}
     dev: false
 
-  /@magic-works/i18n-codegen/0.4.1_twk4ge2fldxk2qjgakp4iwkpb4:
-    resolution: {integrity: sha512-iNwPjg8B+M3ZB3qIcsLJAhMk+RjwL6Y9SD1OVZTxmfhl5UGKJc4I8TgMJdXW/Jjn+H0FzcZBuztaw6SGx+s2wg==}
+  /@magic-works/i18n-codegen/0.5.0_twk4ge2fldxk2qjgakp4iwkpb4:
+    resolution: {integrity: sha512-AeJG2cAYXn848PXIiXTpPJofus4hGxvhkaZ/+/yOHzFkD90YqL0TX44GcgxQeMp0Hwvt1YkFm/YJmpiHN7laSg==}
     hasBin: true
     peerDependencies:
       typescript: ^4.8 || ^5
@@ -8476,7 +8482,7 @@ packages:
       chokidar: 3.5.3
       i18next-translation-parser: 1.0.1
       typescript: 5.0.0-dev.20221202
-      yargs: 17.6.2
+      yargs: 17.7.0
     dev: true
 
   /@manypkg/find-root/1.1.0:
@@ -32271,7 +32277,7 @@ packages:
       smartwrap: 2.0.2
       strip-ansi: 6.0.1
       wcwidth: 1.0.1
-      yargs: 17.6.2
+      yargs: 17.7.0
     dev: true
 
   /tunnel-agent/0.6.0:
@@ -34891,6 +34897,19 @@ packages:
       string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 21.1.1
+
+  /yargs/17.7.0:
+    resolution: {integrity: sha512-dwqOPg5trmrre9+v8SUo2q/hAwyKoVfu8OC1xPHKJGNdxAvPl4sKxL4vBnh3bQz/ZvvGAFeA5H3ou2kcOY8sQQ==}
+    engines: {node: '>=12'}
+    dependencies:
+      cliui: 8.0.1
+      escalade: 3.1.1
+      get-caller-file: 2.0.5
+      require-directory: 2.1.1
+      string-width: 4.2.3
+      y18n: 5.0.8
+      yargs-parser: 21.1.1
+    dev: true
 
   /yargs/3.10.0:
     resolution: {integrity: sha512-QFzUah88GAGy9lyDKGBqZdkYApt63rCXYBGYnEP4xDJPXNqXXnBDACnbrXnViV6jRSqAePwrATi2i8mfYm4L1A==}

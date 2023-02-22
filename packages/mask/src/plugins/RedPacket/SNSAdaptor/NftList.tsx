@@ -2,7 +2,7 @@ import type { FC, HTMLProps } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { ChainId, formatTokenId, SchemaType } from '@masknet/web3-shared-evm'
 import { List, ListItem, ListProps, Typography } from '@mui/material'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { AssetPreviewer } from '@masknet/shared'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { useI18N } from '../locales/index.js'
 
@@ -92,15 +92,11 @@ export const NftItem: FC<NftItemProps> = ({ collection, tokenId, className, clai
 
     return (
         <div className={cx(className, classes.nft)} {...rest}>
-            <NFTCardStyledAssetPlayer
+            <AssetPreviewer
                 classes={{
                     fallbackImage: classes.fallbackImage,
                 }}
                 url={asset?.metadata?.imageURL || asset?.metadata?.mediaURL}
-                tokenId={tokenId}
-                contractAddress={collection?.address ?? ''}
-                chainId={collection?.chainId}
-                disableQueryNonFungibleAsset
             />
             <Typography className={classes.name}>{formatTokenId(tokenId, 2)}</Typography>
             {claimed && <Typography className={classes.claimedBadge}>{t.claimed({ amount: '' })}</Typography>}

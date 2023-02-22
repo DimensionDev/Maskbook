@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { formatCurrency } from '../src/index.js'
+import { formatCurrency } from '../../src/helpers/formatCurrency.js'
 
 describe('USD Currency price format util test', () => {
     test.each([
@@ -23,17 +23,20 @@ describe('USD Currency price format util test', () => {
         { give: 0.000001, expected: '$0.000001' },
         { give: 0.00000101, expected: '$0.000001' },
         { give: 0.000002, expected: '$0.000002' },
-        { give: 1e-15, expected: '< $0.000001' },
+        { give: 1e-9, options: { boundaries: { min: 0.000001, expand: 6 } }, expected: '$0.000000001' },
+        { give: 1e-13, options: { boundaries: { min: 0.000001, expand: 6 } }, expected: '< $0.000000000001' },
         { give: 0.9993631112, expected: '$0.999363' },
         { give: 1.999363, expected: '$2.00' },
-    ])('.format($give)', ({ give, expected }) => {
-        expect(formatCurrency(give)).toBe(expected)
+    ])('.formatCurrency($give)', ({ give, options, expected }) => {
+        expect(formatCurrency(give, undefined, options)).toBe(expected)
     })
 })
 
 describe('USD Currency value format util test', () => {
     test.each([{ give: 0.001, expected: '< 0.01' }])('.format($give)', ({ give, expected }) => {
-        expect(formatCurrency(give, 'USD', { boundaries: { min: 0.01 }, symbols: { $: '' } })).toBe(expected)
+        expect(
+            formatCurrency(give, 'USD', { boundaries: { min: 0.01, minExp: 2, expandExp: 0 }, symbols: { $: '' } }),
+        ).toBe(expected)
     })
 })
 
@@ -59,7 +62,7 @@ describe('EUR Currency format util test', () => {
         { give: 0.000001, expected: '\u20AC0.000001' },
         { give: 0.00000101, expected: '\u20AC0.000001' },
         { give: 0.000002, expected: '\u20AC0.000002' },
-        { give: 1e-15, expected: '< \u20AC0.000001' },
+        { give: 1e-15, expected: '< \u20AC0.000000000001' },
     ])('.format($give)', ({ give, expected }) => {
         expect(formatCurrency(give, 'EUR')).toBe(expected)
     })

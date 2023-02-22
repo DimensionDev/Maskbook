@@ -1,12 +1,12 @@
+import { createElement } from 'react'
+import { map } from 'lodash-es'
+import urlcat from 'urlcat'
 import { ImageList, ImageListItem, SvgIconProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { map } from 'lodash-es'
-import { createElement } from 'react'
+import { openWindow } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../../utils/index.js'
 import { Provider } from '../Provider.js'
 import { IMTokenIcon, MetaMaskIcon, RainbowIcon, TrustIcon } from './Icons.js'
-import urlcat from 'urlcat'
-import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()({
     grid: { width: '100%' },

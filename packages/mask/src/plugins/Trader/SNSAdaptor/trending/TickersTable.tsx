@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react'
+import { pick } from 'lodash-es'
 import {
     Box,
     Link,
@@ -13,12 +15,9 @@ import {
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { FormattedCurrency } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { formatCurrency, SourceType } from '@masknet/web3-shared-base'
+import { formatCurrency, formatElapsed, SourceType } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils/index.js'
 import type { Ticker } from '../../types/index.js'
-import { formatElapsed } from '../../../Wallet/formatter.js'
-import type { ReactNode } from 'react'
-import { pick } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

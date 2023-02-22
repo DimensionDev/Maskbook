@@ -6,8 +6,9 @@ import {
     FormattedBalance,
     useMenuConfig,
     ApproveMaskDialog,
+    FormattedCurrency,
 } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, PluginID, PopupRoutes } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import {
@@ -35,8 +36,15 @@ import {
 } from '@mui/material'
 import { useAsyncFn, useCopyToClipboard } from 'react-use'
 import { memo, useCallback, useMemo, useState } from 'react'
-import { formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-base'
-import { compact, isNaN } from 'lodash-es'
+import {
+    formatBalance,
+    formatCurrency,
+    getTokenUSDValue,
+    isLessThan,
+    isSameAddress,
+    toFixed,
+} from '@masknet/web3-shared-base'
+import { compact, isNaN, sum } from 'lodash-es'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
@@ -177,6 +185,7 @@ export const SmartPayContent = memo(() => {
     // #region Remote Dialog Controller
     const { setDialog: setReceiveDialog } = useRemoteControlledDialog(PluginSmartPayMessages.receiveDialogEvent)
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(CrossIsolationMessages.events.swapDialogEvent)
+    const { closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
     // #endregion
 
     // #region web3 state
@@ -199,8 +208,8 @@ export const SmartPayContent = memo(() => {
 
     const { value: maskToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, maskAddress, undefined, { chainId })
 
-    const { PAYMASTER_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
-    const { value: allowance = '0' } = useERC20TokenAllowance(maskAddress, PAYMASTER_CONTRACT_ADDRESS, {
+    const { PAYMASTER_MASK_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
+    const { value: allowance = '0' } = useERC20TokenAllowance(maskAddress, PAYMASTER_MASK_CONTRACT_ADDRESS, {
         chainId,
     })
 
@@ -222,6 +231,13 @@ export const SmartPayContent = memo(() => {
             : undefined
         return compact([...target, maskAsset])
     }, [assets, maskToken, maskBalance, chainId])
+
+    const balance = useMemo(() => {
+        if (!allAssets.length) return 0
+        const values = allAssets.map((x) => getTokenUSDValue(x.value))
+
+        return sum(values)
+    }, [allAssets])
 
     // #endregion
 
@@ -307,17 +323,14 @@ export const SmartPayContent = memo(() => {
             owner: wallet?.owner,
             identifier: wallet?.identifier,
             providerType: ProviderType.MaskWallet,
+            silent: true,
         })
     }, [account, wallet, connection, chainId])
     const [{ loading: openLuckDropLoading }, handleLuckDropClick] = useAsyncFn(async () => {
         await connectToCurrent()
-        CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
-            reason: 'timeline',
-            open: true,
-            options: {
-                startupPlugin: PluginID.RedPacket,
-            },
-        })
+        CrossIsolationMessages.events.redpacketDialogEvent.sendToLocal({ open: true })
+
+        closeDialog()
     }, [connectToCurrent])
 
     const [{ loading: openSwapLoading }, handleSwapClick] = useAsyncFn(async () => {
@@ -339,7 +352,6 @@ export const SmartPayContent = memo(() => {
     }, [account, wallet])
 
     // #endregion
-
     return (
         <>
             <DialogContent className={classes.dialogContent}>
@@ -375,7 +387,7 @@ export const SmartPayContent = memo(() => {
                     </Box>
 
                     <Typography mt="14px" fontSize={36} fontWeight={700} lineHeight={1.2}>
-                        $233.00
+                        <FormattedCurrency value={toFixed(balance, 2)} formatter={formatCurrency} />
                     </Typography>
                     <Box display="flex" columnGap={1} position="absolute" top={16} right={16}>
                         <Icons.KeySquare onClick={(event) => setManageAnchorEl(event.currentTarget)} size={24} />

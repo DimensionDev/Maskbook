@@ -302,9 +302,9 @@ const ContractInteraction = memo(() => {
     const maskAddress = useMaskTokenAddress()
     const { value: maskToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, maskAddress)
 
-    const { PAYMASTER_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
+    const { PAYMASTER_MASK_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
 
-    const { value: allowance = '0' } = useERC20TokenAllowance(maskAddress, PAYMASTER_CONTRACT_ADDRESS, {
+    const { value: allowance = '0' } = useERC20TokenAllowance(maskAddress, PAYMASTER_MASK_CONTRACT_ADDRESS, {
         chainId: smartPayChainId,
     })
 

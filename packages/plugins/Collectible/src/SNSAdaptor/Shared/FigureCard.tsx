@@ -1,4 +1,4 @@
-import { AssetPreviewer } from '@masknet/shared'
+import { AssetPreviewer, NFTFallbackImage } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { VerifiedUser as VerifiedUserIcon } from '@mui/icons-material'
@@ -77,7 +77,7 @@ export function FigureCard(props: FigureCardProps) {
                             fallbackImage: classes.fallbackImage,
                         }}
                         url={asset.metadata?.imageURL}
-                        fallbackImage={new URL('../../assets/FallbackImage.svg', import.meta.url)}
+                        fallbackImage={NFTFallbackImage}
                     />
                 </div>
             </div>

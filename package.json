@@ -59,7 +59,7 @@
     "@commitlint/cli": "^17.3.0",
     "@commitlint/config-conventional": "^17.3.0",
     "@dimensiondev/eslint-plugin": "0.0.2-20220516081411-2649814",
-    "@magic-works/i18n-codegen": "^0.4.1",
+    "@magic-works/i18n-codegen": "^0.5.0",
     "@masknet/cli": "workspace:^",
     "@masknet/config": "workspace:^",
     "@masknet/serializer": "workspace:^",

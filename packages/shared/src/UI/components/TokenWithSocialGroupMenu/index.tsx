@@ -2,7 +2,7 @@ import { FC, PropsWithChildren, useCallback, RefObject } from 'react'
 import { groupBy, toPairs } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
-import { TokenMenuList, AccountIcon, AddressItem } from '@masknet/shared'
+import { TokenMenuList, AccountIcon, AddressItem, useTokenMenuCollectionList } from '@masknet/shared'
 import type { SearchResultType } from '@masknet/web3-shared-base'
 import { isSameAddress, SocialAccount } from '@masknet/web3-shared-base'
 import { useSharedI18N } from '../../../locales/index.js'
@@ -36,7 +36,9 @@ const useStyles = makeStyles()((theme) => ({
 
     divider: {
         margin: theme.spacing(1, 0),
-        width: 376,
+        width: 'calc(100% - 24px)',
+        color: theme.palette.maskColor.line,
+        borderColor: theme.palette.maskColor.line,
         position: 'relative',
         left: 12,
     },
@@ -71,7 +73,7 @@ export interface TokenWithSocialGroupProps {
     disableScrollLock?: boolean
     setWalletMenuOpen: (a: boolean) => void
     containerRef: RefObject<HTMLElement>
-    onTokenChange?: (a: Web3Helper.TokenResultAll) => void
+    onTokenChange?: (a: Web3Helper.TokenResultAll, index: number) => void
     onClose?: () => void
     onAddressChange?: (address: string) => void
     fromSocialCard?: boolean
@@ -85,7 +87,7 @@ const menuGroupNameMap: Record<'FungibleToken' | 'NonFungibleToken' | 'NonFungib
 
 export const TokenWithSocialGroupMenu: FC<PropsWithChildren<TokenWithSocialGroupProps>> = ({
     currentCollection,
-    collectionList,
+    collectionList: collectionList_,
     disablePortal = true,
     disableScrollLock = true,
     socialAccounts,
@@ -102,12 +104,14 @@ export const TokenWithSocialGroupMenu: FC<PropsWithChildren<TokenWithSocialGroup
     const t = useSharedI18N()
 
     const onSelect = useCallback(
-        (value: Web3Helper.TokenResultAll) => {
-            onTokenChange?.(value)
+        (value: Web3Helper.TokenResultAll, index: number) => {
+            onTokenChange?.(value, index)
             onClose?.()
         },
         [onTokenChange, onClose],
     )
+
+    const collectionList = useTokenMenuCollectionList(collectionList_)
 
     const groups: Array<
         [
@@ -143,7 +147,7 @@ export const TokenWithSocialGroupMenu: FC<PropsWithChildren<TokenWithSocialGroup
             ))}
 
             <div key="rss3" className={classes.group}>
-                {currentCollection ? (
+                {currentCollection && socialAccounts?.length ? (
                     <>
                         <Typography className={classes.groupName}>{t.address_viewer_address_name_address()}</Typography>
                         <Divider className={classes.divider} />

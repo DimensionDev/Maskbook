@@ -9,12 +9,7 @@ import {
     isNativeTokenAddress,
     formatTokenId,
 } from '@masknet/web3-shared-evm'
-import {
-    NFTCardStyledAssetPlayer,
-    PluginWalletStatusBar,
-    ChainBoundary,
-    WalletConnectedBoundary,
-} from '@masknet/shared'
+import { AssetPreviewer, PluginWalletStatusBar, ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useWallet, useWeb3 } from '@masknet/web3-hooks-base'
 import type { NonFungibleToken, NonFungibleCollection } from '@masknet/web3-shared-base'
@@ -25,7 +20,7 @@ import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCall
 import { useCurrentIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import { RedPacketNftMetaKey } from '../constants.js'
 import { RedPacketRPC } from '../messages.js'
-import { WalletMessages } from '../../Wallet/messages.js'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { openComposition } from './openComposition.js'
 import Services from '../../../extension/service.js'
@@ -154,7 +149,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
 
     const lastRecognized = useLastRecognizedIdentity()
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
+        WalletMessages.events.applicationDialogUpdated,
     )
     const senderName =
         lastRecognized.identifier?.userId ??
@@ -324,16 +319,12 @@ function NFTCard(props: NFTCardProps) {
     const { classes, cx } = useStyles()
     return (
         <ListItem className={cx(classes.tokenSelectorWrapper)}>
-            <NFTCardStyledAssetPlayer
-                contractAddress={token.contract?.address}
-                chainId={token.contract?.chainId}
+            <AssetPreviewer
                 url={token.metadata?.mediaURL || token.metadata?.imageURL}
-                tokenId={token.tokenId}
                 classes={{
                     fallbackImage: classes.fallbackImage,
-                    imgWrapper: classes.assetImgWrapper,
+                    root: classes.assetImgWrapper,
                 }}
-                disableQueryNonFungibleAsset
             />
             <div className={classes.nftNameWrapper}>
                 <Typography className={classes.nftName} color="textSecondary">

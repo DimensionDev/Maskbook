@@ -17,5 +17,5 @@
     "drop_hint_2": "이 파일 즉시 업로드되겠습니다. 취소가 불가능합니다.",
     "drop_here": "여기서 파일을 끌어들여 업로드하기",
     "on_change_file": "다른 파일로 바꾸기",
-    "file_key": "파일 키"
+    "file_key": "파일 키: <key>{{key}}</key>"
 }

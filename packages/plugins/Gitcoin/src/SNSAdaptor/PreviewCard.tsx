@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { ChainBoundary, SocialIcon } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { LoadingBase, makeStyles } from '@masknet/theme'
+import { NetworkPluginID, purify } from '@masknet/shared-base'
+import { LoadingBase, makeStyles, ShadowRootIsolation } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { alpha, Box, Button, Card, Link, Stack, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
@@ -128,19 +128,19 @@ export interface PreviewCardProps {
 
 export function PreviewCard(props: PreviewCardProps) {
     const t = useI18N()
-    const { classes, cx, theme } = useStyles()
+    const { classes, theme } = useStyles()
     const { value: grant, error, loading, retry } = useGrant(props.grantId)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     // #region the donation dialog
     const openDonate = useDonate()
 
-    const description = useMemo(() => {
-        if (!grant?.description_rich) return grant?.description
+    const [style, description] = useMemo((): [string, string | TrustedHTML] => {
+        if (!grant?.description_rich) return ['', grant?.description || '']
         const ops = JSON.parse(grant.description_rich).ops as object[]
         const converter = new QuillDeltaToHtmlConverter(ops)
-        const html = converter.convert()
-        return `<style type='text/css'>${grantDetailStyle}</style>${html}`
+        const html = purify(converter.convert())
+        return [grantDetailStyle, html]
     }, [grant?.description_rich, grant?.description])
 
     if (loading)
@@ -202,7 +202,6 @@ export function PreviewCard(props: PreviewCardProps) {
                     <div className={classes.metas}>
                         <Typography color={theme.palette.maskColor.second} fontSize={14}>
                             <Translate.total_raised
-                                shouldUnescape
                                 values={{
                                     amount: `$${new BigNumber(grant.amount_received).toFixed(2)}`,
                                 }}
@@ -248,10 +247,10 @@ export function PreviewCard(props: PreviewCardProps) {
                     <div className={classes.banner}>
                         <img src={grant.logo_url} />
                     </div>
-                    <div
-                        className={cx(classes.description, 'grant-detail')}
-                        dangerouslySetInnerHTML={{ __html: description }}
-                    />
+                    <ShadowRootIsolation>
+                        <style>{style}</style>
+                        <PreviewCardRender __html={description} />
+                    </ShadowRootIsolation>
                     <div className={classes.data}>
                         <div className={classes.meta}>
                             <Typography variant="body2" color="textSecondary">
@@ -294,4 +293,11 @@ export function PreviewCard(props: PreviewCardProps) {
             </Box>
         </article>
     )
+}
+
+// Note: this extra component is used to make sure the useStyles call happens
+// under the ShadowRootIsolation context.
+function PreviewCardRender({ __html }: { __html: string | TrustedHTML }) {
+    const { classes, cx } = useStyles()
+    return <div className={cx(classes.description, 'grant-detail')} dangerouslySetInnerHTML={{ __html }} />
 }

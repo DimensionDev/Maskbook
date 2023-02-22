@@ -117,7 +117,6 @@ export const ProfileLinkCard: FC<CollectibleCardProps> = ({ feed, className, ...
                             classes={{
                                 container: classes.image,
                             }}
-                            optimistic
                             height={32}
                             width={32}
                             src={`https://cdn.stamp.fyi/avatar/${feed.owner}`}
@@ -131,7 +130,6 @@ export const ProfileLinkCard: FC<CollectibleCardProps> = ({ feed, className, ...
                             classes={{
                                 container: classes.image,
                             }}
-                            optimistic
                             src={`https://cdn.stamp.fyi/avatar/${metadata.address}`}
                             height={32}
                             width={32}

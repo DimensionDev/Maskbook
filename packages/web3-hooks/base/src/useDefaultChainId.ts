@@ -5,7 +5,7 @@ import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext } from './useContext.js'
 
-const DEFAULT_CHAIN_ID: Record<NetworkPluginID, Web3Helper.Definition[NetworkPluginID]['ChainId']> = {
+const DEFAULT_CHAIN_ID: Record<NetworkPluginID, Web3Helper.ChainIdAll> = {
     [NetworkPluginID.PLUGIN_EVM]: EVM_ChainId.Mainnet,
     [NetworkPluginID.PLUGIN_FLOW]: FlowChainId.Mainnet,
     [NetworkPluginID.PLUGIN_SOLANA]: SolanaChainId.Mainnet,

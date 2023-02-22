@@ -18,6 +18,7 @@ import {
     isZeroAddress,
     formatEthereumAddress,
     isValidAddress,
+    isNativeTokenAddress,
 } from '../helpers/index.js'
 import { getSmartPayConstants } from '../constants/index.js'
 import type { Signer } from './Signer.js'
@@ -168,63 +169,6 @@ export class UserTransaction {
         return contract
     }
 
-    async fillTransaction(web3: Web3) {
-        const { sender, nonce, callData, callGas, maxFeePerGas, maxPriorityFeePerGas } = this.userOperation
-
-        // fill nonce
-        if (isValidAddress(sender) && !nonce) {
-            try {
-                const nonce = await this.createWalletContract(web3, sender).methods.nonce().call()
-                this.userOperation.nonce = toNumber(nonce)
-            } catch (error) {
-                this.userOperation.nonce = 0
-            }
-        }
-
-        if (!isEmptyHex(callData)) {
-            try {
-                const transaction = UserTransaction.toTransaction(this.chainId, this.userOperation)
-                if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
-                const estimatedGas = await this.createWalletContract(web3, sender)
-                    ?.methods.exec(transaction.to, transaction.value ?? '0', transaction.data ?? '0x')
-                    .estimateGas()
-
-                this.userOperation.callGas = toHex(estimatedGas)
-            } catch (error) {
-                this.userOperation.callGas = callGas ?? DEFAULT_USER_OPERATION.callGas
-            }
-        } else {
-            this.userOperation.callGas = callGas ?? DEFAULT_USER_OPERATION.callGas
-        }
-
-        // 2x scale up callGas and add margin for postop
-        this.userOperation.callGas = toHex(toFixed(multipliedBy(this.userOperation.callGas ?? '0', 2).plus(POSTOP), 0))
-
-        // recover to the original callGas when extra gas could be provided
-        if (isGreaterThan(callGas ?? '0', this.userOperation.callGas)) {
-            this.userOperation.callGas = callGas
-        }
-
-        if (isZeroString(maxFeePerGas)) {
-            try {
-                const block = await web3.eth.getBlock('latest')
-                this.userOperation.maxFeePerGas = toFixed(
-                    new BigNumber(block.baseFeePerGas ?? 0).plus(
-                        maxPriorityFeePerGas ?? DEFAULT_USER_OPERATION.maxPriorityFeePerGas,
-                    ),
-                )
-            } catch (error) {
-                this.userOperation.maxFeePerGas = DEFAULT_USER_OPERATION.maxPriorityFeePerGas
-            }
-        }
-
-        if (isZeroString(maxPriorityFeePerGas)) {
-            this.userOperation.maxPriorityFeePerGas = DEFAULT_USER_OPERATION.maxPriorityFeePerGas
-        }
-
-        return this
-    }
-
     async fillUserOperation(web3: Web3, overrides?: Required<Pick<UserOperation, 'initCode' | 'nonce'>>) {
         // from overrides
         if (overrides) {
@@ -320,20 +264,21 @@ export class UserTransaction {
             )
         }
         if (!paymaster || isZeroAddress(paymaster)) {
-            const { PAYMASTER_CONTRACT_ADDRESS } = getSmartPayConstants(this.chainId)
-            if (!PAYMASTER_CONTRACT_ADDRESS) throw new Error('No paymaster address.')
-            if (!this.paymentToken) throw new Error('No payment token address.')
+            const { PAYMASTER_MASK_CONTRACT_ADDRESS, PAYMASTER_NATIVE_CONTRACT_ADDRESS } = getSmartPayConstants(
+                this.chainId,
+            )
+            if (!PAYMASTER_MASK_CONTRACT_ADDRESS && !PAYMASTER_NATIVE_CONTRACT_ADDRESS)
+                throw new Error('No paymaster address.')
 
-            this.userOperation.paymaster = PAYMASTER_CONTRACT_ADDRESS
-            this.userOperation.paymasterData = padLeft(this.paymentToken, 64)
+            if (!this.paymentToken || isNativeTokenAddress(this.paymentToken)) {
+                this.userOperation.paymaster = PAYMASTER_NATIVE_CONTRACT_ADDRESS
+            } else {
+                this.userOperation.paymaster = PAYMASTER_MASK_CONTRACT_ADDRESS
+                this.userOperation.paymasterData = padLeft(this.paymentToken, 64)
+            }
         }
 
         return this
-    }
-
-    estimateTransaction() {
-        const { callGas = DEFAULT_USER_OPERATION.callGas } = this.userOperation
-        return toHex(callGas)
     }
 
     estimateUserOperation() {
@@ -399,11 +344,11 @@ export class UserTransaction {
     }
 
     static fillUserOperation(chainId: ChainId, userOperation: UserOperation) {
-        const { PAYMASTER_CONTRACT_ADDRESS, PAYMENT_TOKEN_ADDRESS } = getSmartPayConstants(chainId)
+        const { PAYMASTER_MASK_CONTRACT_ADDRESS, PAYMENT_TOKEN_ADDRESS } = getSmartPayConstants(chainId)
 
         return {
             ...DEFAULT_USER_OPERATION,
-            paymaster: PAYMASTER_CONTRACT_ADDRESS || DEFAULT_USER_OPERATION.paymaster,
+            paymaster: PAYMASTER_MASK_CONTRACT_ADDRESS || DEFAULT_USER_OPERATION.paymaster,
             paymasterData: PAYMENT_TOKEN_ADDRESS
                 ? padLeft(PAYMENT_TOKEN_ADDRESS, 64)
                 : DEFAULT_USER_OPERATION.paymasterData,

@@ -120,7 +120,6 @@ export const ProfileCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => {
                     ) : metadata.profile_uri ? (
                         <Image
                             classes={{ container: classes.image }}
-                            optimistic
                             src={metadata.profile_uri[0]}
                             height={imageSize}
                             width={imageSize}

@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { compact, first, unionBy } from 'lodash-es'
+import { compact, first, unionBy, unionWith } from 'lodash-es'
 import { AbiItem, padLeft, toHex } from 'web3-utils'
 import {
     ChainId,
@@ -13,7 +13,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
-import { LOG_ROOT, MAX_ACCOUNT_LENGTH } from '../constants.js'
+import { LOG_ROOT, MAX_ACCOUNT_LENGTH, THE_GRAPH_PROD } from '../constants.js'
 import { SmartPayBundlerAPI } from './BundlerAPI.js'
 import { SmartPayFunderAPI } from './FunderAPI.js'
 import { MulticallAPI } from '../../Multicall/index.js'
@@ -101,6 +101,36 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
         )
     }
 
+    private async getAccountsFromTheGraph(chainId: ChainId, owner: string) {
+        const response = await fetchJSON<{
+            data: {
+                ownerChangeds: Array<{
+                    address: string
+                    oldOwner: string
+                    newOwner: string
+                }>
+            }
+        }>(THE_GRAPH_PROD, {
+            method: 'POST',
+            body: JSON.stringify({
+                query: `{
+                    ownerChangeds(where: { newOwner: "${owner}" }) {
+                        address
+                        oldOwner
+                        newOwner
+                        
+                    }
+                }`,
+            }),
+        })
+
+        if (!response.data.ownerChangeds.length) return []
+
+        const data = unionWith(response.data.ownerChangeds, (a, b) => isSameAddress(a.address, b.address))
+
+        return compact(data.map((x) => this.createContractAccount(chainId, x.address, owner, '', true, true)))
+    }
+
     /**
      * Query the on-chain changeOwner event from chainbase.
      * @param chainId
@@ -165,14 +195,16 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
                 owner,
                 create2Factory.deriveUntil(contractWallet.initCode, MAX_ACCOUNT_LENGTH),
             ),
-            // this.getAccountsFromChainbase(chainId, owner),
+            this.getAccountsFromTheGraph(chainId, owner),
         ])
 
         const result = allSettled
             .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
             .map((y) => ({
                 ...y,
-                funded: operations.some((operation) => isSameAddress(operation.walletAddress, y.address)),
+                funded: y.creator
+                    ? operations.some((operation) => isSameAddress(operation.walletAddress, y.address))
+                    : y.funded,
             }))
 
         return result.filter((x) => (exact ? isSameAddress(x.owner, owner) : true))
@@ -184,6 +216,15 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
         exact = true,
     ): Promise<Array<OwnerAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>>> {
         const allSettled = await Promise.allSettled(owners.map((x) => this.getAccountsByOwner(chainId, x, exact)))
-        return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
+        const result = allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
+
+        /**
+         * There may be a transfer of ownership between different owners with the same address,
+         * giving priority to the result obtained by multicall
+         */
+        return unionWith(result, (a, b) => {
+            if (!isSameAddress(a.address, b.address)) return false
+            return !a.creator && !!b.creator
+        })
     }
 }

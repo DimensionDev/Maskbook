@@ -1,14 +1,19 @@
 import { Icons } from '@masknet/icons'
-import { useCurrentPersonaInformation, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import {
+    useAllPersonas,
+    useCurrentPersonaInformation,
+    useLastRecognizedIdentity,
+} from '@masknet/plugin-infra/content-script'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { useWallets } from '@masknet/web3-hooks-base'
-import { SmartPayFunder } from '@masknet/web3-providers'
+import { SmartPayBundler, SmartPayFunder, SmartPayOwner } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { DialogContent, CircularProgress } from '@mui/material'
 import { Box } from '@mui/system'
-import { useCallback, useMemo, useState } from 'react'
+import { compact } from 'lodash-es'
+import { useCallback, useMemo } from 'react'
 import { matchPath, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { RoutePaths } from '../../constants.js'
@@ -41,9 +46,9 @@ export function RouterDialog() {
     const { classes } = useStyles()
     const { pathname, state } = useLocation()
     const navigate = useNavigate()
+    const personas = useAllPersonas()
     const wallets = useWallets()
     const currentPersona = useCurrentPersonaInformation()
-    const [hasAccounts, setHasAccounts] = useState(false)
 
     const { signer, setSigner } = SmartPayContext.useContainer()
 
@@ -52,10 +57,9 @@ export function RouterDialog() {
     const { open, closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent, (ev) => {
         // reset state when dialog has been closed
         if (!ev.open) {
-            setHasAccounts(false)
             setSigner(undefined)
         }
-        setHasAccounts(!!ev.hasAccounts)
+
         setSigner({
             signWallet: ev.signWallet,
             signPersona: ev.signPersona,
@@ -65,10 +69,21 @@ export function RouterDialog() {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
 
     // #region query white list
-    const { value: isVerified, loading: queryVerifyLoading } = useAsync(async () => {
-        if (!lastRecognizedIdentity?.identifier?.userId) return false
-        return SmartPayFunder.verify(lastRecognizedIdentity.identifier.userId)
-    }, [open, lastRecognizedIdentity])
+    const { loading: queryVerifyLoading } = useAsync(async () => {
+        if (!lastRecognizedIdentity?.identifier?.userId) return
+        const chainId = await SmartPayBundler.getSupportedChainId()
+        const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
+            ...wallets.filter((x) => !x.owner).map((x) => x.address),
+            ...compact(personas.map((x) => x.address)),
+        ])
+        const verified = await SmartPayFunder.verify(lastRecognizedIdentity.identifier.userId)
+
+        if (accounts.filter((x) => x.deployed).length) return navigate(RoutePaths.Main)
+
+        if (verified || accounts.filter((x) => !x.deployed && x.funded).length) return navigate(RoutePaths.Deploy)
+
+        return navigate(RoutePaths.InEligibility)
+    }, [open, lastRecognizedIdentity, personas, wallets])
     // #endregion
 
     const title = useMemo(() => {
@@ -81,16 +96,6 @@ export function RouterDialog() {
         if (state?.canBack) return navigate(-1)
         closeDialog()
     }, [state])
-
-    useUpdateEffect(() => {
-        if (isVerified) {
-            if (wallets.filter((x) => x.owner).length || hasAccounts) {
-                return navigate(RoutePaths.Main)
-            }
-            return navigate(RoutePaths.Deploy)
-        }
-        return navigate(RoutePaths.InEligibility)
-    }, [isVerified, wallets, hasAccounts])
 
     useUpdateEffect(() => {
         if (

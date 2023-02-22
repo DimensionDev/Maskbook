@@ -76,7 +76,6 @@ export const TokenSwapCard: FC<TokenSwapCardProps> = ({ feed, ...rest }) => {
         <CardFrame type={CardType.TokenSwap} feed={feed} {...rest}>
             <Typography className={classes.summary}>
                 <Translate.token_swap
-                    shouldUnescape
                     values={{
                         user,
                         from_value: formatValue(metadata?.from),
@@ -97,7 +96,6 @@ export const TokenSwapCard: FC<TokenSwapCardProps> = ({ feed, ...rest }) => {
                 <div className={cx(classes.token, verbose ? classes.verboseToken : null)}>
                     <div className={classes.iconStack}>
                         <Image
-                            optimistic
                             classes={{ container: classes.tokenIcon }}
                             src={metadata.from.image}
                             fallback={<img src={metadata.from.image} className={classes.tokenIcon} />}
@@ -105,7 +103,6 @@ export const TokenSwapCard: FC<TokenSwapCardProps> = ({ feed, ...rest }) => {
                             width={32}
                         />
                         <Image
-                            optimistic
                             classes={{ container: classes.tokenIcon }}
                             src={metadata.to.image}
                             fallback={<img src={metadata.to.image} className={classes.tokenIcon} />}

@@ -1,15 +1,25 @@
 import urlcat from 'urlcat'
 import { unionWith } from 'lodash-es'
-import { createPageable, HubOptions, createIndicator, isSameAddress } from '@masknet/web3-shared-base'
+import {
+    createPageable,
+    HubOptions,
+    createIndicator,
+    isSameAddress,
+    FungibleToken,
+    HubIndicator,
+} from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { formatAssets, resolveDeBankAssetId } from '../helpers.js'
 import type { WalletTokenRecord } from '../types.js'
 import { fetchJSON, getNativeAssets } from '../../entry-helpers.js'
 import type { FungibleTokenAPI } from '../../entry-types.js'
+import { ContractFungibleTokenAPI } from '../../Contracts/index.js'
 
 const DEBANK_OPEN_API = 'https://debank-proxy.r2d2.to'
 
 export class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, SchemaType> {
+    private contractFungibleToken = new ContractFungibleTokenAPI()
+
     async getAssets(address: string, options?: HubOptions<ChainId>) {
         const result = await fetchJSON<WalletTokenRecord[] | undefined>(
             urlcat(DEBANK_OPEN_API, '/v1/user/all_token_list', {
@@ -17,6 +27,7 @@ export class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId
                 is_all: false,
             }),
         )
+
         return createPageable(
             unionWith(
                 formatAssets(
@@ -34,6 +45,26 @@ export class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId
                                 : x.logo_url,
                     })),
                 ),
+                getNativeAssets(),
+                (a, z) => isSameAddress(a.address, z.address) && a.chainId === z.chainId,
+            ),
+            createIndicator(options?.indicator),
+        )
+    }
+
+    async getTrustedAssets(
+        address: string,
+        trustedFungibleTokens?: Array<FungibleToken<ChainId, SchemaType>>,
+        options?: HubOptions<ChainId, HubIndicator>,
+    ) {
+        const trustTokenAssets = await this.contractFungibleToken.getTrustedAssets(
+            address,
+            trustedFungibleTokens,
+            options,
+        )
+        return createPageable(
+            unionWith(
+                trustTokenAssets.data,
                 getNativeAssets(),
                 (a, z) => isSameAddress(a.address, z.address) && a.chainId === z.chainId,
             ),

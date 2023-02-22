@@ -13,11 +13,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
     SearchResultInspector: {
         ID: PluginID.Handle,
         UI: {
-            Content: ({ result }) => (
+            Content: ({ resultList }) => (
                 <SearchResultInspector
-                    keyword={result[0].keyword}
-                    keywordType={result[0].type}
-                    result={result[0] as DomainResult<ChainId>}
+                    keyword={resultList[0].keyword}
+                    keywordType={resultList[0].type}
+                    result={resultList[0] as DomainResult<ChainId>}
                 />
             ),
         },

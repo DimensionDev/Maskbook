@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Box, Tooltip } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Image, Icon } from '@masknet/shared'
-import { isSameAddress, NonFungibleCollection } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 const useStyles = makeStyles()((theme) => ({
@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface CollectionIconProps {
     selectedCollection?: string
-    collection?: NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    collection?: Web3Helper.NonFungibleCollectionAll
     onClick?(): void
 }
 

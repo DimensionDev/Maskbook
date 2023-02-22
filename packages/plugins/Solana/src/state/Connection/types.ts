@@ -6,8 +6,6 @@ import type { WalletProvider } from '@masknet/web3-shared-base'
 
 export interface SolanaWeb3State extends Web3Helper.Web3State<NetworkPluginID.PLUGIN_SOLANA> {}
 
-export interface SolanaWeb3ConnectionOptions extends Web3Helper.Web3ConnectionOptions<NetworkPluginID.PLUGIN_SOLANA> {}
-
 export interface SolanaProvider extends WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     /** Sign message. */
     signMessage(message: string): Promise<string>
@@ -20,3 +18,5 @@ export interface SolanaProvider extends WalletProvider<ChainId, ProviderType, We
 export interface SolanaConnection extends Web3Helper.Web3Connection<NetworkPluginID.PLUGIN_SOLANA> {
     getAccountInfo(account: string): Promise<AccountInfo<Buffer> | null>
 }
+
+export interface SolanaConnectionOptions extends Web3Helper.Web3ConnectionOptions<NetworkPluginID.PLUGIN_SOLANA> {}

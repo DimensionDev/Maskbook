@@ -1,9 +1,5 @@
-import { Emitter } from '@servie/events'
-
-export const emitter = new Emitter<{
-    open: []
-}>()
+import { CrossIsolationMessages } from '@masknet/shared-base'
 
 export function openDialog() {
-    emitter.emit('open')
+    CrossIsolationMessages.events.redpacketDialogEvent.sendToLocal({ open: true })
 }

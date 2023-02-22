@@ -50,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface TokenMenuListProps {
     options: Web3Helper.TokenResultAll[]
     currentOption?: Web3Helper.TokenResultAll
-    onSelect(value: Web3Helper.TokenResultAll): void
+    onSelect(value: Web3Helper.TokenResultAll, index: number): void
     fromSocialCard?: boolean
 }
 
@@ -62,7 +62,7 @@ export const TokenMenuList: FC<TokenMenuListProps> = ({ options, currentOption, 
             {options.map((x, i) => {
                 const selected = isEqual(x, currentOption)
                 return (
-                    <MenuItem className={classes.menuItem} key={i} onClick={() => onSelect(x)}>
+                    <MenuItem className={classes.menuItem} key={i} onClick={() => onSelect(x, i)}>
                         <TokenIcon
                             className={classes.coinIcon}
                             logoURL={x.logoURL}
@@ -97,7 +97,11 @@ export const TokenMenuList: FC<TokenMenuListProps> = ({ options, currentOption, 
                                     <Icons.CheckCircle size={20} className={classes.checkedIcon} />
                                 ) : (
                                     <RadioButtonUncheckedIcon
-                                        style={{ fontSize: 20, color: theme.palette.maskColor.secondaryLine }}
+                                        style={{
+                                            fontSize: 20,
+                                            color: theme.palette.maskColor.secondaryLine,
+                                            visibility: 'hidden',
+                                        }}
                                     />
                                 )}
                             </div>

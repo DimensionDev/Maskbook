@@ -71,7 +71,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     const { value: personas = EMPTY_LIST, loading, error, retry } = useConnectedPersonas()
 
     const { closeDialog: closeApplicationBoard } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
+        WalletMessages.events.applicationDialogUpdated,
     )
 
     useEffect(() => {

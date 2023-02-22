@@ -18,11 +18,11 @@ import { formatBalance } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Button, Link, Typography, useTheme } from '@mui/material'
+import { delay } from '@masknet/kit'
 import { Icons } from '@masknet/icons'
-import { WalletMessages } from '../../../plugins/Wallet/messages.js'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { useI18N } from '../../../utils/index.js'
 import { usePendingTransactions } from './usePendingTransactions.js'
-import { delay } from '@masknet/kit'
 
 const useStyles = makeStyles<{
     contentBackground?: string

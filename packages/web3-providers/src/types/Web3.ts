@@ -131,6 +131,8 @@ export namespace Web3BaseAPI {
         ): Promise<NonFungibleCollection<ChainId, SchemaType>>
         /** Query a transaction */
         callTransaction(chainId: ChainId, transaction: Transaction): Promise<string>
+        /** Confirm a transaction */
+        confirmTransaction(chainId: ChainId, hash: string, signal?: AbortSignal): Promise<TransactionReceipt>
         /** Estimate a transaction  */
         estimateTransaction(chainId: ChainId, transaction: Transaction, fallback?: number): Promise<string>
         /** Send a signed transaction */

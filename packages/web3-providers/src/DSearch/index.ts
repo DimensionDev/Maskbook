@@ -385,32 +385,39 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
     private async searchCollectionListByTwitterHandler(
         twitterHandler: string,
     ): Promise<Array<SearchResult<ChainId, SchemaType>>> {
-        const collections = (
-            await Promise.allSettled([
-                this.CoinGeckoClient.get(),
-                this.CoinMarketCapClient.get(),
-                this.NFTScanCollectionClient.get(),
-            ])
-        )
-            .map((v) => (v.status === 'fulfilled' && v.value ? v.value : []))
-            .flat()
-            .filter((x) => {
-                const resultTwitterHandler =
-                    (x as NonFungibleCollectionResult<ChainId, SchemaType>).collection?.socialLinks?.twitter ||
-                    (x as FungibleTokenResult<ChainId, SchemaType>).socialLinks?.twitter
-                return (
-                    resultTwitterHandler &&
-                    [twitterHandler.toLowerCase(), `https://twitter.com/${twitterHandler.toLowerCase()}`].includes(
-                        resultTwitterHandler.toLowerCase(),
-                    ) &&
-                    ((x.rank && x.rank <= 200) || x.id === 'mask-network')
+        const collections = uniqWith(
+            (
+                await Promise.allSettled([
+                    this.CoinGeckoClient.get(),
+                    this.CoinMarketCapClient.get(),
+                    this.NFTScanCollectionClient.get(),
+                ])
+            )
+                .flatMap(
+                    (v) =>
+                        (v.status === 'fulfilled' && v.value ? v.value : []) as Array<
+                            FungibleTokenResult<ChainId, SchemaType> | NonFungibleCollectionResult<ChainId, SchemaType>
+                        >,
                 )
-            })
-            .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
+                .filter((x) => {
+                    const resultTwitterHandler =
+                        (x as NonFungibleCollectionResult<ChainId, SchemaType>).collection?.socialLinks?.twitter ||
+                        (x as FungibleTokenResult<ChainId, SchemaType>).socialLinks?.twitter
+                    return (
+                        resultTwitterHandler &&
+                        [twitterHandler.toLowerCase(), `https://twitter.com/${twitterHandler.toLowerCase()}`].includes(
+                            resultTwitterHandler.toLowerCase(),
+                        ) &&
+                        ((x.rank && x.rank <= 200) || x.id === 'mask-network')
+                    )
+                })
+                .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0)),
+            (a, b) => a.id === b.id,
+        )
 
         if (!collections[0]) return EMPTY_LIST
 
-        return uniqWith(collections, (a, b) => a.id === b.id)
+        return collections
     }
 
     /**

@@ -120,7 +120,6 @@ export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
                 {commentTarget?.media?.[0].mime_type?.startsWith('image/') ? (
                     <Image
                         classes={{ container: classes.image }}
-                        optimistic
                         src={commentTarget.media[0].address}
                         height={imageSize}
                         width={imageSize}

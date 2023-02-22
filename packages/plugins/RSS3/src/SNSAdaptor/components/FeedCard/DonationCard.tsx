@@ -98,7 +98,7 @@ const CardBody: FC<CardBodyProps> = memo(({ metadata, className, ...rest }) => {
     const { classes, cx } = useStyles()
     return (
         <div className={cx(classes.body, className)} {...rest}>
-            <Image classes={{ container: classes.image }} optimistic src={metadata.logo} height={64} width={64} />
+            <Image classes={{ container: classes.image }} src={metadata.logo} height={64} width={64} />
             <div className={classes.info}>
                 <Typography className={classes.title}>{metadata.title}</Typography>
                 <Typography className={classes.subtitle}>{metadata.description}</Typography>
@@ -137,7 +137,6 @@ export const DonationCard: FC<DonationCardProps> = ({ feed, actionIndex, classNa
                 {...rest}>
                 <Typography className={classes.summary}>
                     <Translate.donation_donate_verbose
-                        shouldUnescape
                         values={{
                             user,
                             cost_value: formatValue(metadata?.token),
@@ -149,7 +148,7 @@ export const DonationCard: FC<DonationCardProps> = ({ feed, actionIndex, classNa
                         }}
                     />
                 </Typography>
-                <Image classes={{ container: classes.image }} optimistic src={metadata!.logo} width="100%" />
+                <Image classes={{ container: classes.image }} src={metadata!.logo} width="100%" />
                 <Markdown className={mdClasses.markdown} defaultStyle={false}>
                     {metadata!.description}
                 </Markdown>
@@ -167,7 +166,6 @@ export const DonationCard: FC<DonationCardProps> = ({ feed, actionIndex, classNa
             {...rest}>
             <Typography className={classes.summary}>
                 <Translate.donation_donate
-                    shouldUnescape
                     values={{
                         user,
                         cost_value: formatValue(metadata?.token),

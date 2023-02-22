@@ -1,5 +1,5 @@
 import { CrossIsolationMessages, DashboardRoutes } from '@masknet/shared-base'
-import { memo, useCallback, useEffect } from 'react'
+import { memo, useCallback } from 'react'
 import { ApplicationEntry, useSharedI18N } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { PLUGIN_ID } from '../../constants.js'
@@ -31,12 +31,6 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
     )
 
     const { setDialog: setSmartPayDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
-
-    useEffect(() => {
-        return CrossIsolationMessages.events.applicationDialogEvent.on(({ open, pluginID }) => {
-            if (pluginID !== PLUGIN_ID) return
-        })
-    }, [])
 
     const { value, loading } = useQueryQualifications()
 

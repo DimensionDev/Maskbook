@@ -1,23 +1,24 @@
-import { useMemo } from 'react'
-import { useAsyncRetry } from 'react-use'
-import { first } from 'lodash-es'
-import { Tab } from '@mui/material'
-import { TabContext } from '@mui/lab'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import type { SearchResult, SocialIdentity } from '@masknet/web3-shared-base'
-import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
-import { DSearch } from '@masknet/web3-providers'
-import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import {
     getSearchResultContent,
     getSearchResultTabContent,
     getSearchResultTabs,
-    usePluginI18NField,
     useActivatedPluginsSNSAdaptor,
+    usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
-import { useSearchedKeyword } from '../DataSource/useSearchedKeyword.js'
+import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
+import { DSearch } from '@masknet/web3-providers'
+import type { SearchResult, SocialIdentity } from '@masknet/web3-shared-base'
+import { TabContext } from '@mui/lab'
+import { Tab } from '@mui/material'
+import { first } from 'lodash-es'
+import { useMemo } from 'react'
+import { useAsyncRetry } from 'react-use'
 import { decentralizedSearchSettings } from '../../../shared/legacy-settings/settings.js'
+import { useSearchedKeyword } from '../DataSource/useSearchedKeyword.js'
 
 const useStyles = makeStyles()(() => ({
     contentWrapper: {
@@ -91,21 +92,23 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
 
     return (
         <div className={classes.root}>
-            <div className={classes.contentWrapper}>
-                <div className={classes.content}>{contentComponent}</div>
-                {tabs.length ? (
-                    <div className={classes.tabs}>
-                        <TabContext value={currentTab}>
-                            <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
-                                {tabs.map((tab) => (
-                                    <Tab key={tab.id} label={tab.label} value={tab.id} />
-                                ))}
-                            </MaskTabList>
-                        </TabContext>
-                    </div>
-                ) : null}
-            </div>
-            {tabContentComponent ? <div className={classes.tabContent}>{tabContentComponent}</div> : null}
+            <ScopedDomainsContainer.Provider>
+                <div className={classes.contentWrapper}>
+                    <div className={classes.content}>{contentComponent}</div>
+                    {tabs.length ? (
+                        <div className={classes.tabs}>
+                            <TabContext value={currentTab}>
+                                <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
+                                    {tabs.map((tab) => (
+                                        <Tab key={tab.id} label={tab.label} value={tab.id} />
+                                    ))}
+                                </MaskTabList>
+                            </TabContext>
+                        </div>
+                    ) : null}
+                </div>
+                {tabContentComponent ? <div className={classes.tabContent}>{tabContentComponent}</div> : null}
+            </ScopedDomainsContainer.Provider>
         </div>
     )
 }

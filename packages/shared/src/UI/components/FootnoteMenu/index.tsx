@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 10,
     },
     icon: {
-        color: theme.palette.maskColor.dark,
+        color: theme.palette.maskColor.main,
     },
 }))
 
@@ -30,7 +30,7 @@ export interface FootnoteMenuOption {
     disabled?: boolean
 }
 
-export interface FootnoteMenuProps extends withClasses<'title'> {
+export interface FootnoteMenuProps extends withClasses<'title' | 'icon'> {
     options: FootnoteMenuOption[]
     selectedIndex?: number
     children?: React.ReactNode

@@ -1,8 +1,8 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useCopyToClipboard } from 'react-use'
 import { resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { ScopedDomainsContainer, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useSnackbarCallback } from '@masknet/shared'
 import { Box, Typography, Link, alpha } from '@mui/material'
@@ -116,6 +116,13 @@ export function SearchResultInspectorContent() {
     const isShowSocialAccountList = nextIdBindings.length > 3
     const suffix = domain.split('.').pop()!
     const ChainIcon = SuffixToChainIconMap[suffix] ?? Icons.ETH
+
+    const { setPair } = ScopedDomainsContainer.useContainer()
+    useEffect(() => {
+        if (!reversedAddress) return
+        setPair(reversedAddress, domain)
+    }, [reversedAddress, domain])
+
     return (
         <>
             <PluginHeader />
