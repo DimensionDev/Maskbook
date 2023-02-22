@@ -1,7 +1,6 @@
 import { fetch, Headers, Request, Response } from 'cross-fetch'
 import { afterAll, afterEach, beforeAll } from 'vitest'
 import { setupServer } from 'msw/node'
-import { AccountHandlers } from './handlers/SmartPayAccount.js'
 import { BundlerHandlers } from './handlers/SmartPayBundler.js'
 import { DSearchHandlers } from './handlers/DSearch.js'
 
@@ -25,7 +24,7 @@ globalThis.screen = {
     height: 0,
 }
 
-const server = setupServer(...AccountHandlers, ...BundlerHandlers, ...DSearchHandlers)
+const server = setupServer(...BundlerHandlers, ...DSearchHandlers)
 
 // Start server before all tests
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))

@@ -49,7 +49,7 @@ export default function ConnectButton({ address }: { address: string }) {
     const { classes, cx } = useStyles()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const { pluginID } = useNetworkContext()
-    const { account } = useChainContext()
+    const { account, chainId } = useChainContext()
     const [isFollowing, setFollowing] = useState(false)
     const [isLoading, setLoading] = useState(false)
 
@@ -92,6 +92,7 @@ export default function ConnectButton({ address }: { address: string }) {
         return (
             <WalletConnectedBoundary
                 offChain
+                expectedChainId={chainId}
                 hideRiskWarningConfirmed
                 ActionButtonProps={{ variant: 'roundedDark' }}
                 classes={{ button: classes.wallet }}>

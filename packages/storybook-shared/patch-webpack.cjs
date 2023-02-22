@@ -1,4 +1,4 @@
-const { ProvidePlugin } = require('webpack')
+const { ProvidePlugin, EnvironmentPlugin } = require('webpack')
 module.exports = async function (config) {
     const transpile = config.module.rules.find((x) => x.test.toString().includes('tsx')).use
     transpile.push({

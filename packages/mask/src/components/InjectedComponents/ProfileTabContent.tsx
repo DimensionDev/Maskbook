@@ -9,24 +9,29 @@ import {
     getProfileTabContent,
 } from '@masknet/plugin-infra/content-script'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
+import { Link, Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import {
-    AccountIcon,
     AddressItem,
     ConnectPersonaBoundary,
     GrantPermissions,
     PluginCardFrameMini,
     useCurrentPersonaConnectStatus,
     useSocialAccountsBySettings,
+    TokenWithSocialGroupMenu,
 } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID } from '@masknet/shared-base'
-import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useTabs } from '@masknet/theme'
+import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
-import { Button, Link, MenuItem, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, addressSorter, useI18N, useLocationChange } from '../../utils/index.js'
-import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
+import {
+    useCurrentVisitingIdentity,
+    useLastRecognizedIdentity,
+    useSocialIdentity,
+    useSocialIdentityByUserId,
+} from '../DataSource/useActivatedUI.js'
 import { useCollectionByTwitterHandler } from '../../plugins/Trader/trending/useTrending.js'
 import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry.js'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
@@ -36,9 +41,7 @@ import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
 import Services from '../../extension/service.js'
-
-const MENU_ITEM_HEIGHT = 40
-const MENU_LIST_PADDING = 8
+import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -60,24 +63,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         fontSize: 18,
         fontWeight: 700,
-    },
-    addressMenu: {
-        maxHeight: MENU_ITEM_HEIGHT * 9 + MENU_LIST_PADDING * 2,
-        minWidth: 320,
-        backgroundColor: theme.palette.maskColor.bottom,
-    },
-    menuItem: {
-        height: MENU_ITEM_HEIGHT,
-        boxSizing: 'border-box',
-        display: 'flex',
-        alignItems: 'center',
-        flexGrow: 1,
-        justifyContent: 'space-between',
-    },
-    addressItem: {
-        display: 'flex',
-        alignItems: 'center',
-        marginRight: theme.spacing(2),
     },
     settingLink: {
         cursor: 'pointer',
@@ -110,9 +95,6 @@ const useStyles = makeStyles()((theme) => ({
     arrowDropIcon: {
         color: theme.palette.maskColor.dark,
     },
-    selectedIcon: {
-        color: theme.palette.maskColor.primary,
-    },
     gearIcon: {
         color: theme.palette.maskColor.dark,
     },
@@ -123,9 +105,6 @@ const useStyles = makeStyles()((theme) => ({
         margin: '0px 2px',
         color: theme.palette.maskColor.secondaryDark,
     },
-    secondLinkIcon: {
-        color: theme.palette.maskColor.second,
-    },
     reload: {
         borderRadius: 20,
         minWidth: 254,
@@ -135,13 +114,20 @@ const useStyles = makeStyles()((theme) => ({
 export interface ProfileTabContentProps extends withClasses<'text' | 'button' | 'root'> {}
 
 export function ProfileTabContent(props: ProfileTabContentProps) {
+    return (
+        <ScopedDomainsContainer.Provider>
+            <Content {...props} />
+        </ScopedDomainsContainer.Provider>
+    )
+}
+
+function Content(props: ProfileTabContentProps) {
     const { classes } = useStyles(undefined, { props })
 
     const { t } = useI18N()
     const translate = usePluginI18NField()
 
     const [hidden, setHidden] = useState(true)
-    const [selectedAddress, setSelectedAddress] = useState<string | undefined>()
     const [menuOpen, setMenuOpen] = useState(false)
     const allPersonas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
@@ -161,6 +147,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     )
 
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
+    const { value: currentSocialIdentity } = useSocialIdentity(currentVisitingSocialIdentity)
 
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
     const isOwnerIdentity = currentVisitingSocialIdentity?.isOwner
@@ -170,21 +157,22 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         loading: loadingSocialAccounts,
         error: loadSocialAccounts,
         retry: retrySocialAccounts,
-    } = useSocialAccountsBySettings(currentVisitingSocialIdentity, undefined, addressSorter)
+    } = useSocialAccountsBySettings(currentSocialIdentity, undefined, addressSorter)
+    const [selectedAddress = first(socialAccounts)?.address, setSelectedAddress] = useState<string | undefined>()
 
-    const selectedSocialAccount = useMemo(() => {
-        return socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
-    }, [socialAccounts, selectedAddress])
+    const selectedSocialAccount = socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
+    const { setPair } = ScopedDomainsContainer.useContainer()
+    useEffect(() => {
+        if (selectedSocialAccount?.address && selectedSocialAccount?.label) {
+            setPair(selectedSocialAccount.address, selectedSocialAccount.label)
+        }
+    }, [selectedSocialAccount?.address, selectedSocialAccount?.label])
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
             retrySocialAccounts()
         })
     }, [retrySocialAccounts])
-
-    useEffect(() => {
-        setSelectedAddress(first(socialAccounts)?.address)
-    }, [socialAccounts])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
     const displayPlugins = getAvailablePlugins(activatedPlugins, (plugins) => {
@@ -242,7 +230,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         if (!Component) return null
 
         return <Component identity={currentVisitingSocialIdentity} socialAccount={selectedSocialAccount} />
-    }, [componentTabId, selectedSocialAccount])
+    }, [componentTabId, selectedSocialAccount, currentVisitingSocialIdentity])
 
     const lackHostPermission = usePluginHostPermissionCheck(activatedPlugins.filter((x) => x.ProfileCardTabs?.length))
 
@@ -264,6 +252,14 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         })
     }, [currentVisitingUserId])
 
+    const [isHideInspector, hideInspector] = useState(false)
+
+    useEffect(() => {
+        return CrossIsolationMessages.events.hideSearchResultInspectorEvent.on((ev) => {
+            hideInspector(ev.hide)
+        })
+    }, [])
+
     useEffect(() => {
         return MaskMessages.events.profileTabUpdated.on((data) => {
             setHidden(!data.show)
@@ -273,9 +269,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     useEffect(() => {
         const listener = () => setMenuOpen(false)
         window.addEventListener('scroll', listener, false)
+        // <ClickAwayListener /> not work, when it is out of shadow root.
+        window.addEventListener('click', listener, false)
 
         return () => {
             window.removeEventListener('scroll', listener, false)
+            window.removeEventListener('click', listener, false)
         }
     }, [])
 
@@ -290,16 +289,26 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         })
     }
 
-    const { value: collectionList } = useCollectionByTwitterHandler(currentVisitingUserId)
+    const { value: collectionList = EMPTY_LIST } = useCollectionByTwitterHandler(currentVisitingUserId)
+    const [currentTrendingIndex, setCurrentTrendingIndex] = useState(0)
+    const trendingResult = collectionList?.[currentTrendingIndex]
+
+    const { value: identity } = useSocialIdentityByUserId(currentVisitingUserId)
 
     if (hidden) return null
 
-    const keyword = collectionList?.[0]?.address || collectionList?.[0]?.name
+    const keyword = trendingResult?.address || trendingResult?.name
 
-    if (keyword)
+    if (keyword && !isHideInspector)
         return (
             <div className={classes.root}>
-                <SearchResultInspector keyword={keyword} isProfilePage collectionList={collectionList} />
+                <SearchResultInspector
+                    keyword={keyword}
+                    isProfilePage
+                    currentCollection={trendingResult}
+                    collectionList={collectionList}
+                    identity={identity}
+                />
             </div>
         )
 
@@ -418,36 +427,23 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                 />
                                 <Icons.ArrowDrop className={classes.arrowDropIcon} />
                             </Button>
-                            <ShadowRootMenu
-                                anchorEl={buttonRef.current}
-                                open={menuOpen}
-                                disableScrollLock
-                                PaperProps={{
-                                    className: classes.addressMenu,
+
+                            <TokenWithSocialGroupMenu
+                                walletMenuOpen={menuOpen}
+                                setWalletMenuOpen={setMenuOpen}
+                                containerRef={buttonRef}
+                                onAddressChange={onSelect}
+                                currentAddress={selectedAddress}
+                                collectionList={collectionList}
+                                socialAccounts={socialAccounts}
+                                currentCollection={trendingResult}
+                                onTokenChange={(currentResult, i) => {
+                                    setCurrentTrendingIndex(i)
+                                    hideInspector(false)
+                                    setMenuOpen(false)
                                 }}
-                                aria-labelledby="wallets"
-                                onClose={() => setMenuOpen(false)}>
-                                {socialAccounts.map((x) => {
-                                    return (
-                                        <MenuItem
-                                            className={classes.menuItem}
-                                            key={x.address}
-                                            value={x.address}
-                                            onClick={() => onSelect(x.address)}>
-                                            <div className={classes.addressItem}>
-                                                <AddressItem
-                                                    socialAccount={x}
-                                                    linkIconClassName={classes.secondLinkIcon}
-                                                />
-                                                <AccountIcon socialAccount={x} />
-                                            </div>
-                                            {isSameAddress(selectedAddress, x.address) && (
-                                                <Icons.CheckCircle size={20} className={classes.selectedIcon} />
-                                            )}
-                                        </MenuItem>
-                                    )
-                                })}
-                            </ShadowRootMenu>
+                                fromSocialCard
+                            />
                         </div>
                         <div className={classes.settingItem}>
                             <Typography

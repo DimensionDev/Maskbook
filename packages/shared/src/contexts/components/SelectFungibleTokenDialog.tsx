@@ -52,7 +52,7 @@ export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = Netw
     disableSearchBar?: boolean
     disableNativeToken?: boolean
     selectedTokens?: string[]
-    onSubmit?(token: Web3Helper.FungibleTokenScope<'all'> | null): void
+    onSubmit?(token: Web3Helper.FungibleTokenAll | null): void
     onClose?(): void
 }
 

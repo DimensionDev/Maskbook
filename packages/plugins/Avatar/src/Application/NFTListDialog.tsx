@@ -11,6 +11,7 @@ import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@m
 import { first, uniqBy } from 'lodash-es'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useUpdateEffect } from 'react-use'
 import { SUPPORTED_CHAIN_IDS, supportPluginIds } from '../constants.js'
 import { useAvatarManagement } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
@@ -111,16 +112,14 @@ const useStyles = makeStyles()((theme) => ({
 export const NFTListDialog: FC = () => {
     const t = useI18N()
     const { classes } = useStyles()
-    const { pfpType, proofs, tokenInfo, targetAccount, setTargetAccount, setSelectedTokenInfo } = useAvatarManagement()
+    const { pfpType, proofs, tokenInfo, targetAccount, setTargetAccount, setSelectedTokenInfo, proof } =
+        useAvatarManagement()
     const navigate = useNavigate()
 
     const { pluginID } = useNetworkContext()
     const { account, chainId, setChainId } = useChainContext()
-
     const [selectedPluginId, setSelectedPluginId] = useState(pluginID ?? NetworkPluginID.PLUGIN_EVM)
-
     const [addDialogOpen, setAddDialogOpen] = useState(false)
-
     const [selectedToken, setSelectedToken] = useState<Web3Helper.NonFungibleTokenAll | undefined>(tokenInfo)
     const [disabled, setDisabled] = useState(false)
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
@@ -183,7 +182,7 @@ export const NFTListDialog: FC = () => {
         } finally {
             setDisabled(false)
         }
-    }, [selectedToken, targetAccount, selectedPluginId, navigate])
+    }, [selectedToken, targetAccount, selectedPluginId, navigate, proof, proofs])
 
     const openAddDialog = useCallback(() => {
         if (!account && !proofs.length) {
@@ -241,6 +240,10 @@ export const NFTListDialog: FC = () => {
     const walletItems = proofs.sort((a, z) => {
         return isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1
     })
+
+    useUpdateEffect(() => {
+        setTargetAccount(account)
+    }, [account])
 
     return (
         <>

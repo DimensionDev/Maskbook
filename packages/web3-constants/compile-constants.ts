@@ -1,11 +1,11 @@
 import { promises as fs } from 'fs'
-import path from 'path'
+import { resolve, join } from 'path'
 import { run } from '@masknet/web3-contracts/utils'
 
 async function compileConstants(folderPath: string, names: string[]) {
     // fix constants
     for (const file of await fs.readdir(folderPath)) {
-        const filePath = path.resolve(folderPath, file)
+        const filePath = resolve(folderPath, file)
         const data = await fs.readFile(filePath, 'utf-8')
         const constants: Record<string, Record<string, unknown>> = JSON.parse(data)
         for (const name of Object.keys(constants)) {
@@ -39,7 +39,7 @@ function getDefaultValue(value: unknown) {
     return null
 }
 
-compileConstants(path.join(__dirname, 'evm'), [
+compileConstants(join(__dirname, 'evm'), [
     'Mainnet',
     'Ropsten',
     'Rinkeby',
@@ -67,6 +67,6 @@ compileConstants(path.join(__dirname, 'evm'), [
     'Astar',
 ])
 
-compileConstants(path.join(__dirname, 'solana'), ['Mainnet', 'Testnet', 'Devnet'])
+compileConstants(join(__dirname, 'solana'), ['Mainnet', 'Testnet', 'Devnet'])
 
-compileConstants(path.join(__dirname, 'flow'), ['Mainnet', 'Testnet'])
+compileConstants(join(__dirname, 'flow'), ['Mainnet', 'Testnet'])

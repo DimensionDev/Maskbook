@@ -1,2 +1,2 @@
-export * from './apis/CoinMarketCapSearchAPI.js'
-export * from './apis/CoinMarketCapTrendingAPI.js'
+export * from './apis/DSearchAPI.js'
+export * from './apis/TrendingAPI.js'

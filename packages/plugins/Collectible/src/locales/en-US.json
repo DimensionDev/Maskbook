@@ -36,6 +36,7 @@
     "plugin_collectible_properties": "Properties",
     "plugin_collectible_about": "About",
     "plugin_collectible_nft_offers_empty": "This NFT didn't have any offers.",
+    "plugin_collectible_nft_offers_switch_source": "No offers records. Try switching to another marketplace.",
     "plugin_collectible_nft_activity_empty": "This NFT didn't have any activities.",
     "plugin_collectible_chain_info": "Chain Info",
     "plugin_collectible_creator_earning": "Creator Royalties",
@@ -112,5 +113,6 @@
     "contract": "Contract",
     "token_standard": "Token Standard",
     "price": "Price",
-    "no_NFTs_found": "No NFTs found."
+    "no_NFTs_found": "No NFTs found.",
+    "load_more": "Load More"
 }

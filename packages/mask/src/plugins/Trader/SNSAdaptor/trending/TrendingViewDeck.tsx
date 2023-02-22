@@ -1,14 +1,21 @@
 import { Icons } from '@masknet/icons'
 import { useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { PluginTransakMessages, useTransakAllowanceCoin } from '@masknet/plugin-transak'
-import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
-import { NetworkPluginID, PluginID } from '@masknet/shared-base'
+import {
+    Linking,
+    TokenSecurityBar,
+    useTokenSecurity,
+    useSocialAccountsBySettings,
+    TokenWithSocialGroupMenu,
+    useTokenMenuCollectionList,
+} from '@masknet/shared'
+import { NetworkPluginID, PluginID, EMPTY_LIST, EnhanceableSite, CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { MaskColors, MaskDarkTheme, MaskLightTheme, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { SourceType, TokenType, formatCurrency } from '@masknet/web3-shared-base'
+import { SourceType, TokenType, formatCurrency, SocialIdentity, scale10 } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import {
     Avatar,
@@ -21,20 +28,20 @@ import {
     Typography,
     useTheme,
 } from '@mui/material'
-import { first, last, uniqBy } from 'lodash-es'
+import { first, last } from 'lodash-es'
 import { useCallback, useContext, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { ContentTabs, Currency, Stat } from '../../types/index.js'
-import { CoinMenu } from './CoinMenu.js'
 import { PriceChanged } from './PriceChanged.js'
 import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
 import { TrendingViewDescriptor } from './TrendingViewDescriptor.js'
 import { CoinIcon } from './components/index.js'
 import { TrendingViewContext } from './context.js'
+import { SNS_RSS3_FIELD_KEY_MAP } from '../../../ProfileCard/constants.js'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
-    isNFTProjectPopper: boolean
+    isCollectionProjectPopper: boolean
 }>()((theme, props) => {
     return {
         content: {
@@ -51,7 +58,7 @@ const useStyles = makeStyles<{
                 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
         },
         headline: {
-            marginTop: props.isNFTProjectPopper || props.isTokenTagPopper ? 0 : 16,
+            marginTop: props.isCollectionProjectPopper || props.isTokenTagPopper ? 0 : 16,
             alignItems: 'center',
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -136,6 +143,8 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     currency: Currency
     currentTab: ContentTabs
     trending: TrendingAPI.Trending
+    identity?: SocialIdentity
+    setActive?: (x: boolean) => void
     setResult: (a: Web3Helper.TokenResultAll) => void
     result: Web3Helper.TokenResultAll
     resultList?: Web3Helper.TokenResultAll[]
@@ -144,14 +153,27 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
 }
 
 export function TrendingViewDeck(props: TrendingViewDeckProps) {
-    const { trending, stats, children, TrendingCardProps, resultList = [], result, setResult, currentTab } = props
+    const {
+        trending,
+        stats,
+        children,
+        TrendingCardProps,
+        resultList = [],
+        result,
+        setResult,
+        setActive,
+        currentTab,
+        identity,
+    } = props
 
     const { coin, market } = trending
-    const { isNFTProjectPopper, isTokenTagPopper, isPreciseSearch } = useContext(TrendingViewContext)
+    const [walletMenuOpen, setWalletMenuOpen] = useState(false)
+    const { isCollectionProjectPopper, isTokenTagPopper, isPreciseSearch, badgeBounding } =
+        useContext(TrendingViewContext)
 
     const { t } = useI18N()
     const theme = useTheme()
-    const { classes } = useStyles({ isTokenTagPopper, isNFTProjectPopper }, { props })
+    const { classes } = useStyles({ isTokenTagPopper, isCollectionProjectPopper }, { props })
     const isNFT = coin.type === TokenType.NonFungible
 
     // #region buy
@@ -182,19 +204,39 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     // #endregion
 
     const titleRef = useRef<HTMLElement>(null)
-    const [coinMenuOpen, setCoinMenuOpen] = useState(false)
+
     const coinAddress = coin.address || coin.contract_address
     const coinName = result.name || coin.name
 
-    const displayResultList = uniqBy(
-        [result, ...resultList],
-        (x) => `${x.address?.toLowerCase()}_${x.chainId}_${x.type}_${x.name?.toLowerCase()}`,
-    )
+    const collectionList = useTokenMenuCollectionList([result, ...resultList])
 
+    const rss3Key = SNS_RSS3_FIELD_KEY_MAP[identity?.identifier?.network as EnhanceableSite]
+    const { value: socialAccounts = EMPTY_LIST } = useSocialAccountsBySettings(identity)
+
+    const openRss3Profile = useCallback(
+        (address: string) => {
+            if (!isCollectionProjectPopper) {
+                return CrossIsolationMessages.events.hideSearchResultInspectorEvent.sendToLocal({ hide: true })
+            }
+
+            if (!identity?.identifier?.userId || !badgeBounding) return
+
+            CrossIsolationMessages.events.profileCardEvent.sendToLocal({
+                open: true,
+                userId: identity?.identifier?.userId,
+                badgeBounding,
+                address,
+                openFromTrendingCard: true,
+            })
+
+            setActive?.(false)
+        },
+        [JSON.stringify(identity), isCollectionProjectPopper, badgeBounding],
+    )
     return (
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.cardHeader}>
-                {isNFTProjectPopper || isTokenTagPopper ? null : (
+                {isCollectionProjectPopper || isTokenTagPopper ? null : (
                     <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
                 )}
                 <Stack className={classes.headline}>
@@ -218,8 +260,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                 <Typography className={classes.title} variant="h6">
                                     <Linking
                                         href={first(coin.home_urls)}
-                                        LinkProps={{ className: classes.name, title: coinName.toUpperCase() }}>
-                                        {coinName.toUpperCase()}
+                                        LinkProps={{ className: classes.name, title: coinName }}>
+                                        {coinName}
                                     </Linking>
                                     {coin.symbol ? (
                                         <Typography component="span" className={classes.symbol}>
@@ -232,23 +274,28 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         {t('plugin_trader_rank', { rank: result.rank ?? coin.market_cap_rank })}
                                     </Typography>
                                 ) : null}
-                                {displayResultList.length > 1 && !isPreciseSearch && result.rank ? (
+                                {(collectionList.length > 1 || (socialAccounts.length && rss3Key)) &&
+                                !isPreciseSearch ? (
                                     <>
                                         <IconButton
                                             sx={{ padding: 0 }}
                                             size="small"
-                                            onClick={() => setCoinMenuOpen((v) => !v)}>
+                                            onClick={() => setWalletMenuOpen((v) => !v)}>
                                             <Icons.ArrowDrop size={24} className={classes.icon} />
                                         </IconButton>
                                         <ThemeProvider
                                             theme={theme.palette.mode === 'light' ? MaskLightTheme : MaskDarkTheme}>
-                                            <CoinMenu
-                                                open={coinMenuOpen}
-                                                anchorEl={titleRef.current}
-                                                optionList={displayResultList}
-                                                result={result}
-                                                onChange={setResult}
-                                                onClose={() => setCoinMenuOpen(false)}
+                                            <TokenWithSocialGroupMenu
+                                                disablePortal={false}
+                                                disableScrollLock={false}
+                                                walletMenuOpen={walletMenuOpen}
+                                                setWalletMenuOpen={setWalletMenuOpen}
+                                                containerRef={titleRef}
+                                                onAddressChange={openRss3Profile}
+                                                collectionList={collectionList}
+                                                socialAccounts={socialAccounts}
+                                                currentCollection={result}
+                                                onTokenChange={setResult}
                                             />
                                         </ThemeProvider>
                                     </>
@@ -287,15 +334,14 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             lineHeight="24px"
                                             color={theme.palette.maskColor.dark}>
                                             {isNFT ? `${t('plugin_trader_floor_price')}: ` : null}
-                                            <FormattedCurrency
-                                                value={
-                                                    (trending.dataProvider === SourceType.CoinMarketCap
-                                                        ? last(stats)?.[1] ?? market.current_price
-                                                        : market.current_price) ?? 0
-                                                }
-                                                sign={isNFT ? market.price_symbol : 'USD'}
-                                                formatter={formatCurrency}
-                                            />
+                                            {formatCurrency(
+                                                (trending.dataProvider === SourceType.CoinMarketCap
+                                                    ? last(stats)?.[1] ?? market.current_price
+                                                    : market.current_price) ?? 0,
+                                                isNFT ? market.price_symbol : 'USD',
+
+                                                { boundaries: { min: scale10(-12) } },
+                                            )}
                                         </Typography>
                                     ) : (
                                         <Typography fontSize={14} fontWeight={500} lineHeight="24px">
@@ -324,12 +370,11 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 <Paper className={classes.body} elevation={0}>
                     {children}
                 </Paper>
-                {isNFTProjectPopper ||
-                    (isTokenTagPopper && currentTab !== ContentTabs.Swap && (
-                        <section className={classes.pluginDescriptorWrapper}>
-                            <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
-                        </section>
-                    ))}
+                {(isCollectionProjectPopper || isTokenTagPopper) && currentTab !== ContentTabs.Swap ? (
+                    <section className={classes.pluginDescriptorWrapper}>
+                        <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
+                    </section>
+                ) : null}
             </CardContent>
         </TrendingCard>
     )

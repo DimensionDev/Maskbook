@@ -13,6 +13,7 @@ export function setupDatabase(_: typeof Database) {
 
 let migrationDone = false
 async function migrationV1() {
+    if (!Database) return
     if (migrationDone) return
     for await (const x of Database.iterate_mutate('arweave')) {
         for (const file of migrateFileInfoV1(x.value)) {

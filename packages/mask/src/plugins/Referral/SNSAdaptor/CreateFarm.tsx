@@ -94,7 +94,7 @@ export function CreateFarm(props: PageInterface) {
     const { value: linkedPersona } = useCurrentLinkedPersona()
     const { showSnackbar } = useCustomSnackbar()
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
+        WalletMessages.events.applicationDialogUpdated,
     )
 
     const [tab, setTab] = useState(TabsCreateFarm.NEW)
@@ -404,7 +404,7 @@ export function CreateFarm(props: PageInterface) {
                         </Grid>
                     </Grid>
                     <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
-                        <WalletConnectedBoundary>
+                        <WalletConnectedBoundary expectedChainId={requiredChainId}>
                             <ActionButton
                                 fullWidth
                                 size="medium"

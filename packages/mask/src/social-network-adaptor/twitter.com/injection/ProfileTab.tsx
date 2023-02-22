@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed, startWatch, untilElementAvailable, MaskMessages } from '../../../utils/index.js'
+import type { NonFungibleCollectionResult, FungibleTokenResult } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     searchAppBarBackSelector,
     searchNewTweetButtonSelector,
@@ -177,6 +179,10 @@ export function ProfileTabAtTwitter() {
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
     const { value: collectionList, loading } = useCollectionByTwitterHandler(currentVisitingUserId)
     const collectionResult = collectionList?.[0]
+    const twitterHandler =
+        (collectionResult as NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>)?.collection
+            ?.socialLinks?.twitter ||
+        (collectionResult as FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>)?.socialLinks?.twitter
 
     useEffect(() => {
         return MaskMessages.events.profileTabHidden.on((data) => {
@@ -187,10 +193,7 @@ export function ProfileTabAtTwitter() {
     return hidden || loading ? null : (
         <ProfileTab
             title={
-                currentVisitingUserId &&
-                collectionResult?.collection?.socialLinks?.twitter
-                    ?.toLowerCase()
-                    .endsWith(currentVisitingUserId.toLowerCase())
+                currentVisitingUserId && twitterHandler?.toLowerCase().endsWith(currentVisitingUserId.toLowerCase())
                     ? 'More'
                     : 'Web3'
             }

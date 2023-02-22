@@ -1,19 +1,21 @@
 import { HTMLProps, memo, useEffect, useRef, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { v4 as uuid } from 'uuid'
 import { Icons } from '@masknet/icons'
-import { Box, Link, MenuItem, Typography } from '@mui/material'
+import { Box, Link, Typography } from '@mui/material'
 import { useWeb3State, useChainContext } from '@masknet/web3-hooks-base'
-import { AccountIcon, AddressItem, Image, useSnackbarCallback } from '@masknet/shared'
-import { makeStyles, ShadowRootMenu } from '@masknet/theme'
+import { AddressItem, Image, useSnackbarCallback, TokenWithSocialGroupMenu } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
 import { isSameAddress, SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useI18N } from '../../../utils/index.js'
 import { AvatarDecoration } from './AvatarDecoration.js'
+import { TrendingAPI } from '@masknet/web3-providers/types'
+import { useCollectionByTwitterHandler } from '../../../plugins/Trader/trending/useTrending.js'
+import { PluginTraderMessages } from '../../../plugins/Trader/messages.js'
 
-const MENU_ITEM_HEIGHT = 40
-const MENU_LIST_PADDING = 8
 const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
     root: {
         display: 'flex',
@@ -89,36 +91,13 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
         cursor: 'pointer',
         flexShrink: 0,
     },
-    addressMenu: {
-        maxHeight: MENU_ITEM_HEIGHT * 10 + MENU_LIST_PADDING * 2,
-        minWidth: 248,
-        backgroundColor: theme.palette.maskColor.bottom,
-    },
-    menuItem: {
-        height: MENU_ITEM_HEIGHT,
-        boxSizing: 'border-box',
-        display: 'flex',
-        alignItems: 'center',
-        flexGrow: 1,
-        justifyContent: 'space-between',
-    },
-    addressItem: {
-        display: 'flex',
-        alignItems: 'center',
-    },
-    secondLinkIcon: {
-        color: theme.palette.maskColor.secondaryDark,
-    },
-    selectedIcon: {
-        color: theme.palette.maskColor.primary,
-        marginLeft: theme.spacing(2),
-    },
 }))
 
 export interface ProfileBarProps extends HTMLProps<HTMLDivElement> {
     identity: SocialIdentity
     socialAccounts: Array<SocialAccount<Web3Helper.ChainIdAll>>
     address?: string
+    badgeBounding?: DOMRect
     onAddressChange?: (address: string) => void
 }
 
@@ -128,11 +107,13 @@ export interface ProfileBarProps extends HTMLProps<HTMLDivElement> {
  * - Wallets
  */
 export const ProfileBar = memo<ProfileBarProps>(
-    ({ socialAccounts, address, identity, onAddressChange, className, children, ...rest }) => {
+    ({ socialAccounts, address, identity, onAddressChange, className, children, badgeBounding, ...rest }) => {
         const { classes, theme, cx } = useStyles()
         const { t } = useI18N()
         const containerRef = useRef<HTMLDivElement>(null)
         const { current: avatarClipPathId } = useRef<string>(uuid())
+
+        const { value: collectionList = [] } = useCollectionByTwitterHandler(identity.identifier?.userId)
 
         const [, copyToClipboard] = useCopyToClipboard()
 
@@ -203,41 +184,39 @@ export const ProfileBar = memo<ProfileBarProps>(
                             <Icons.ArrowDrop
                                 size={14}
                                 color={theme.palette.text.primary}
-                                onClick={() => setWalletMenuOpen((v) => !v)}
+                                onClick={() => {
+                                    setWalletMenuOpen((v) => !v)
+                                }}
                             />
                         </div>
                     ) : null}
                 </Box>
-                <ShadowRootMenu
-                    anchorEl={containerRef.current}
-                    open={walletMenuOpen}
-                    disablePortal
-                    disableScrollLock
-                    PaperProps={{
-                        className: classes.addressMenu,
+
+                <TokenWithSocialGroupMenu
+                    walletMenuOpen={walletMenuOpen}
+                    setWalletMenuOpen={setWalletMenuOpen}
+                    containerRef={containerRef}
+                    fromSocialCard
+                    onAddressChange={onAddressChange}
+                    currentAddress={address}
+                    socialAccounts={socialAccounts}
+                    collectionList={collectionList}
+                    onTokenChange={(currentResult) => {
+                        setWalletMenuOpen(false)
+                        if (!badgeBounding) return
+                        PluginTraderMessages.trendingAnchorObserved.sendToLocal({
+                            name: identity.identifier?.userId || '',
+                            identity,
+                            address,
+                            badgeBounding,
+                            type: TrendingAPI.TagType.HASH,
+                            isCollectionProjectPopper: true,
+                            currentResult,
+                        })
+
+                        CrossIsolationMessages.events.profileCardEvent.sendToLocal({ open: false })
                     }}
-                    onClose={() => setWalletMenuOpen(false)}>
-                    {socialAccounts.map((x) => {
-                        return (
-                            <MenuItem
-                                className={classes.menuItem}
-                                key={x.address}
-                                value={x.address}
-                                onClick={() => {
-                                    setWalletMenuOpen(false)
-                                    onAddressChange?.(x.address)
-                                }}>
-                                <div className={classes.addressItem}>
-                                    <AddressItem socialAccount={x} linkIconClassName={classes.secondLinkIcon} />
-                                    <AccountIcon socialAccount={x} />
-                                </div>
-                                {isSameAddress(address, x.address) && (
-                                    <Icons.CheckCircle size={20} className={classes.selectedIcon} />
-                                )}
-                            </MenuItem>
-                        )
-                    })}
-                </ShadowRootMenu>
+                />
                 {children}
             </Box>
         )

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, MouseEventHandler } from 'react'
 import { useAsync } from 'react-use'
 import type { Web3 } from '@masknet/web3-shared-evm'
 import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
@@ -56,7 +56,7 @@ export function ReferToFarm(props: PageInterface) {
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const requiredChainId = getRequiredChainId(currentChainId)
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
+        WalletMessages.events.applicationDialogUpdated,
     )
     const currentIdentity = useCurrentIdentity()
     const { value: linkedPersona } = useCurrentLinkedPersona()
@@ -159,6 +159,16 @@ export function ReferToFarm(props: PageInterface) {
         },
     ]
 
+    const ReferButton = (props: { onClick?: MouseEventHandler<HTMLButtonElement> | undefined }) => {
+        return (
+            <WalletConnectedBoundary offChain expectedChainId={requiredChainId}>
+                <ActionButton fullWidth size="medium" disabled={!token} onClick={props.onClick}>
+                    {t.refer_to_farm()}
+                </ActionButton>
+            </WalletConnectedBoundary>
+        )
+    }
+
     return (
         <Box className={classes.container}>
             <TabContext value={String(tab)}>
@@ -218,11 +228,7 @@ export function ReferToFarm(props: PageInterface) {
                         ))}
                     </Grid>
                     <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
-                        <WalletConnectedBoundary offChain>
-                            <ActionButton fullWidth size="medium" disabled={!token} onClick={onClickReferFarm}>
-                                {t.refer_to_farm()}
-                            </ActionButton>
-                        </WalletConnectedBoundary>
+                        <ReferButton onClick={onClickReferFarm} />
                     </ChainBoundary>
                 </TabPanel>
                 <TabPanel value={TabsReferAndBuy.MY_REWARDS} className={classes.tab}>

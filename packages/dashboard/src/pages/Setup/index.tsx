@@ -43,7 +43,7 @@ const Setup = () => {
                     <ActionCard
                         title={t.setup_page_create_restore_title()}
                         subtitle={t.setup_page_create_restore_subtitle()}
-                        icon={<Icons.Restore />}
+                        icon={<Icons.RestoreColorful />}
                         action={{
                             type: 'secondary',
                             text: t.setup_page_create_restore_button(),

@@ -1,6 +1,6 @@
+import { memo } from 'react'
 import { MaskColorVar } from '@masknet/theme'
 import { styled } from '@mui/system'
-import { memo } from 'react'
 import { useDashboardI18N } from '../../locales/index.js'
 
 const VersionContainer = styled('div')(() => ({

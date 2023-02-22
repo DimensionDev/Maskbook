@@ -4,6 +4,7 @@ import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/
 import { makeStyles } from '@masknet/theme'
 import { useWeb3Connection, useChainContext, useNetworkContext, useWeb3 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { useTelemetry } from '@masknet/web3-telemetry/hooks'
 import { NetworkPluginID, ProofType } from '@masknet/shared-base'
 import {
     Web3,
@@ -16,6 +17,7 @@ import { ChainId as SolanaChainId, ProviderType as SolanaProviderType } from '@m
 import { ChainId as FlowChainId, ProviderType as FlowProviderType } from '@masknet/web3-shared-flow'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
+import { TelemetryAPI } from '@masknet/web3-providers/types'
 
 export interface ConnectionContentProps {
     onClose?: () => void
@@ -33,6 +35,15 @@ export function ConnectionContent(props: ConnectionContentProps) {
     const { account, chainId } = useChainContext()
     const web3 = useWeb3()
     const connection = useWeb3Connection()
+    const telemetry = useTelemetry()
+
+    const onCaptureEvent = useCallback(async () => {
+        telemetry.captureEvent(TelemetryAPI.EventID.Debug)
+    }, [telemetry])
+
+    const onCaptureException = useCallback(async () => {
+        telemetry.captureException(TelemetryAPI.ExceptionID.Debug, new Error('A debug error.'))
+    }, [telemetry])
 
     const onEstimateCallback = useCallback(async () => {
         const contract = createContract<ERC20>(
@@ -77,9 +88,9 @@ export function ConnectionContent(props: ConnectionContentProps) {
     }, [connection])
 
     const onDeployCallback = useCallback(() => {
-        return connection?.deploy?.('0x96ec3286a049b42133c3ddd26777051612bdf61f', undefined, {
+        return connection?.deploy?.('0x790116d0685eB197B886DAcAD9C247f785987A4a', undefined, {
             chainId: ChainId.Matic,
-            account: '0x96ec3286a049b42133c3ddd26777051612bdf61f',
+            account: '0x790116d0685eB197B886DAcAD9C247f785987A4a',
             providerType: EVM_ProviderType.MaskWallet,
         })
     }, [connection])
@@ -232,6 +243,30 @@ export function ConnectionContent(props: ConnectionContentProps) {
         <section className={classes.container}>
             <Table size="small">
                 <TableBody>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Capture Event
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button size="small" onClick={() => onCaptureEvent()}>
+                                Capture Event
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Capture Exception
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button size="small" onClick={() => onCaptureException()}>
+                                Capture Exception
+                            </Button>
+                        </TableCell>
+                    </TableRow>
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">

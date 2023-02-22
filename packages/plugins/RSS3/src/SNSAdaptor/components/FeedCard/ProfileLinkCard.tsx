@@ -130,9 +130,9 @@ export const ProfileLinkCard: FC<CollectibleCardProps> = ({ feed, className, ...
                             classes={{
                                 container: classes.image,
                             }}
+                            src={`https://cdn.stamp.fyi/avatar/${metadata.address}`}
                             height={32}
                             width={32}
-                            src={`https://cdn.stamp.fyi/avatar/${metadata.address}`}
                         />
                         <Typography className={classes.name}>{other}</Typography>
                     </div>

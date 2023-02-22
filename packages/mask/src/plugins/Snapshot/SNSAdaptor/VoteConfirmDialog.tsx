@@ -91,7 +91,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                 </InfoField>
             </DialogContent>
             <DialogActions style={{ padding: 0 }}>
-                <WalletConnectedBoundary offChain classes={{ button: classes.button }}>
+                <WalletConnectedBoundary offChain classes={{ button: classes.button }} expectedChainId={chainId}>
                     <PluginWalletStatusBar>
                         <ActionButton
                             color="primary"

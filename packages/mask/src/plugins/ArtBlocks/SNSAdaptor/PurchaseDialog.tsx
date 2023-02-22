@@ -170,7 +170,7 @@ export function PurchaseDialog(props: ActionBarProps) {
                         />
                     </CardContent>
                     <CardActions>
-                        <WalletConnectedBoundary>
+                        <WalletConnectedBoundary expectedChainId={chainId}>
                             {token.value?.schema === SchemaType.Native ? actionButton : null}
                             {token.value?.schema === SchemaType.ERC20 ? (
                                 <EthereumERC20TokenApprovedBoundary

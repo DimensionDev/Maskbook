@@ -79,7 +79,7 @@ export const WalletStartUp = memo(() => {
         await browser.tabs.create({
             active: true,
             url: browser.runtime.getURL(
-                urlcat('/dashboard.html#/create-mask-wallet', { chainId: params.get('chainId') }),
+                urlcat('/dashboard.html#/create-mask-wallet/form', { chainId: params.get('chainId') }),
             ),
         })
         if (process.env.engine === 'firefox') {

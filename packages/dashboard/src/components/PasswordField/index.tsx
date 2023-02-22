@@ -1,6 +1,6 @@
+import { ForwardedRef, useState, forwardRef } from 'react'
 import { MaskTextField, MaskTextFieldProps } from '@masknet/theme'
 import { IconButton, InputAdornment } from '@mui/material'
-import { ForwardedRef, useState, forwardRef } from 'react'
 import { Icons } from '@masknet/icons'
 
 export type PasswordFieldProps = Exclude<MaskTextFieldProps, 'type'>

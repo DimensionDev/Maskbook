@@ -1,3 +1,4 @@
+import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Transaction as Web3Transaction } from 'web3-core'
 
 export namespace ExplorerAPI {
@@ -6,12 +7,11 @@ export namespace ExplorerAPI {
         confirmations: number
     }
 
-    export interface PageInfo {
+    export interface Options {
         offset?: number
-        apikey?: string
     }
 
     export interface Provider {
-        getLatestTransactions(account: string, url: string, pageInfo?: PageInfo): Promise<Transaction[]>
+        getLatestTransactions(chainId: ChainId, account: string, options?: Options): Promise<Transaction[]>
     }
 }

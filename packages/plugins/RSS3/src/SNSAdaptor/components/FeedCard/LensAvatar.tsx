@@ -76,3 +76,5 @@ export const LensAvatar = memo<Props>(({ handle, size, className }) => {
         </svg>
     )
 })
+
+LensAvatar.displayName = 'LensAvatar'

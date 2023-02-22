@@ -71,6 +71,7 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
                       })
                     : None,
                 linkedProfiles: persona.linkedProfiles,
+                address: persona.address ? Some(persona.address) : None,
             })
         }
     }
@@ -94,7 +95,7 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
                 identifier: post.identifier,
                 foundAt: post.foundAt,
                 interestedMeta: post.interestedMeta || new Map(),
-                postBy: post.postBy,
+                postBy: post.postBy ? Some(post.postBy) : None,
                 encryptBy: post.encryptBy ? Some(post.encryptBy) : None,
                 postCryptoKey: post.postCryptoKey ? Some(post.postCryptoKey) : None,
                 summary: post.summary ? Some(post.summary) : None,

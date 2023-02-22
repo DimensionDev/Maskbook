@@ -141,14 +141,14 @@ export const getUnlistedConfig = async (publicKey: string): Promise<UnlistedConf
     if (!publicKey) return
 
     const res = await NextIDStorage.get<PersonaKV>(publicKey)
-    if (!res.ok) return
+    if (!res.proofs) return
 
     const wallets: UnlistedConfig['wallets'] = {}
     const collections: UnlistedConfig['collections'] = {}
 
-    res.val.proofs
-        ?.filter((x) => x.platform === NextIDPlatform.Twitter)
-        ?.forEach((y) => {
+    res.proofs
+        .filter((x) => x.platform === NextIDPlatform.Twitter)
+        .forEach((y) => {
             wallets[y.identity] = y.content?.[PLUGIN_ID]?.hiddenAddresses!
             collections[y.identity] = y.content?.[PLUGIN_ID]?.unListedCollections!
         })

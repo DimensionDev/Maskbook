@@ -2,28 +2,23 @@ import { lazy, useEffect, useState, useMemo } from 'react'
 import { Navigate, Route, Routes, HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { NetworkPluginID, PopupRoutes, queryRemoteI18NBundle } from '@masknet/shared-base'
-import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
-import '../../social-network-adaptor/browser-action/index.js'
-import { PopupContext } from './hook/usePopupContext.js'
-import { PopupFrame } from './components/PopupFrame/index.js'
-import { MaskUIRootPage } from '../../UIRoot-page.js'
-import { PageTitleContext } from './context.js'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { logSettings, languageSettings } from '../../../shared/legacy-settings/settings.js'
 import { PopupSnackbarProvider } from '@masknet/theme'
-import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
-import Services from '../service.js'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { LogHubBaseAPI } from '@masknet/web3-providers/types'
-import { LoggerContextProvider } from '@masknet/shared'
+import { TelemetryProvider } from '@masknet/web3-telemetry/hooks'
+import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
+import { languageSettings } from '../../../shared/legacy-settings/settings.js'
+import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
+import '../../social-network-adaptor/browser-action/index.js'
+import { PopupFrame } from './components/PopupFrame/index.js'
+import { PopupContext } from './hook/usePopupContext.js'
+import { MaskUIRootPage } from '../../UIRoot-page.js'
+import { PageTitleContext } from './context.js'
+import Services from '../service.js'
 
 function usePopupTheme() {
     return usePopupFullPageTheme(useValueRef(languageSettings))
-}
-
-function useLogSettings() {
-    return useValueRef(logSettings)
 }
 
 const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))
@@ -42,20 +37,19 @@ function PluginRenderDelayed() {
     return <PluginRender />
 }
 
-const web3ContextType = { pluginID: NetworkPluginID.PLUGIN_EVM, providerType: ProviderType.MaskWallet }
+const Web3ContextType = { pluginID: NetworkPluginID.PLUGIN_EVM, providerType: ProviderType.MaskWallet }
+
 export default function Popups() {
     const [title, setTitle] = useState('')
     useEffect(queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
-    const loggerId = useLogSettings()
-    const loggerContext = useMemo(() => ({ platform: LogHubBaseAPI.Platform.Popup, loggerId }), [loggerId])
     const titleContext = useMemo(() => ({ title, setTitle }), [title])
 
     return MaskUIRootPage(
         usePopupTheme,
         <PopupSnackbarProvider>
-            <Web3ContextProvider value={web3ContextType}>
-                <PopupContext.Provider>
-                    <LoggerContextProvider value={loggerContext}>
+            <Web3ContextProvider value={Web3ContextType}>
+                <TelemetryProvider>
+                    <PopupContext.Provider>
                         <PageTitleContext.Provider value={titleContext}>
                             <HashRouter>
                                 <Routes>
@@ -77,8 +71,8 @@ export default function Popups() {
                                 <PluginRenderDelayed />
                             </HashRouter>
                         </PageTitleContext.Provider>
-                    </LoggerContextProvider>
-                </PopupContext.Provider>
+                    </PopupContext.Provider>
+                </TelemetryProvider>
             </Web3ContextProvider>
         </PopupSnackbarProvider>,
         frame(<LoadingPlaceholder />),

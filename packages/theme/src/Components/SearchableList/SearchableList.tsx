@@ -66,26 +66,20 @@ export function SearchableList<T extends {}>({
     const { height = 300, itemSize, ...rest } = FixedSizeListProps
     const { InputProps, ...textFieldPropsRest } = SearchFieldProps ?? {}
 
-    // #region fuse
-    const fuse = useMemo(
-        () =>
-            new Fuse(data, {
-                shouldSort: true,
-                isCaseSensitive: false,
-                threshold: 0.45,
-                minMatchCharLength: 1,
-                keys: searchKey ?? Object.keys(data.length > 0 ? data[0] : []),
-            }),
-        [data, searchKey],
-    )
-    // #endregion
-
     // #region create searched data
     const readyToRenderData = useMemo(() => {
         if (!keyword) return data
+
+        const fuse = new Fuse(data, {
+            shouldSort: true,
+            isCaseSensitive: false,
+            threshold: 0.45,
+            minMatchCharLength: 1,
+            keys: searchKey ?? Object.keys(data.length > 0 ? data[0] : []),
+        })
         const filtered = fuse.search(keyword).map((x: any) => x.item)
         return itemKey ? uniqBy(filtered, (x) => x[itemKey]) : filtered
-    }, [keyword, fuse, JSON.stringify(data)])
+    }, [keyword, JSON.stringify(data)])
     // #endregion
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

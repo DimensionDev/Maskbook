@@ -610,6 +610,7 @@ export function ITO(props: ITO_Props) {
                                             .integerValue(),
                                         exchangeToken.decimals,
                                         exchangeToken.decimals,
+                                        exchangeToken.decimals,
                                         true,
                                     )}
                                     token={token}
@@ -708,6 +709,7 @@ export function ITO(props: ITO_Props) {
                                         expectedChainId={payload.chain_id}
                                         ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                                         <WalletConnectedBoundary
+                                            expectedChainId={payload.chain_id}
                                             hideRiskWarningConfirmed
                                             startIcon={<Icons.ConnectWallet size={18} />}
                                             ActionButtonProps={{ variant: 'roundedDark' }}

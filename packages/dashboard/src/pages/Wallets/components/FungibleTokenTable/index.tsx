@@ -1,5 +1,6 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useContainer } from 'unstated-next'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
@@ -8,19 +9,10 @@ import { EmptyPlaceholder } from '../EmptyPlaceholder/index.js'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
 import { FungibleTokenTableRow } from '../FungibleTokenTableRow/index.js'
 import { NetworkPluginID, DashboardRoutes, EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
-import {
-    CurrencyType,
-    FungibleAsset,
-    isGreaterThanOrEqualTo,
-    isLessThan,
-    leftShift,
-    minus,
-    toZero,
-} from '@masknet/web3-shared-base'
+import { CurrencyType, isGreaterThanOrEqualTo, isLessThan, leftShift, minus, toZero } from '@masknet/web3-shared-base'
 import { useNetworkContext, useNativeToken } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { useContainer } from 'unstated-next'
 import { Context } from '../../hooks/useContext.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -73,35 +65,22 @@ export const FungibleTokenTable = memo<FungibleTokenTableProps>(({ selectedChain
     })
     const { fungibleAssets } = useContainer(Context)
 
-    const onSwap = useCallback(
-        (
-            token: FungibleAsset<
-                Web3Helper.Definition[NetworkPluginID]['ChainId'],
-                Web3Helper.Definition[NetworkPluginID]['SchemaType']
-            >,
-        ) => {
-            return CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
-                open: true,
-                traderProps: {
-                    defaultInputCoin: {
-                        name: token.name || '',
-                        symbol: token.symbol || '',
-                        address: token.address,
-                        decimals: token.decimals,
-                    },
+    const onSwap = useCallback((token: Web3Helper.FungibleAssetAll) => {
+        return CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
+            open: true,
+            traderProps: {
+                defaultInputCoin: {
+                    name: token.name || '',
+                    symbol: token.symbol || '',
+                    address: token.address,
+                    decimals: token.decimals,
                 },
-            })
-        },
-        [],
-    )
+            },
+        })
+    }, [])
 
     const onSend = useCallback(
-        (
-            token: FungibleAsset<
-                Web3Helper.Definition[NetworkPluginID]['ChainId'],
-                Web3Helper.Definition[NetworkPluginID]['SchemaType']
-            >,
-        ) => navigate(DashboardRoutes.WalletsTransfer, { state: { token } }),
+        (token: Web3Helper.FungibleAssetAll) => navigate(DashboardRoutes.WalletsTransfer, { state: { token } }),
         [],
     )
 
@@ -157,12 +136,7 @@ export interface MoreBarUIProps {
     isEmpty: boolean
     isExpand: boolean
     isLoading: boolean
-    dataSource: Array<
-        FungibleAsset<
-            Web3Helper.Definition[NetworkPluginID]['ChainId'],
-            Web3Helper.Definition[NetworkPluginID]['SchemaType']
-        >
-    >
+    dataSource: Web3Helper.FungibleAssetAll[]
     onSwitch: () => void
 }
 
@@ -205,24 +179,9 @@ export interface TokenTableUIProps {
     isEmpty: boolean
     isExpand: boolean
     isLoading: boolean
-    dataSource: Array<
-        FungibleAsset<
-            Web3Helper.Definition[NetworkPluginID]['ChainId'],
-            Web3Helper.Definition[NetworkPluginID]['SchemaType']
-        >
-    >
-    onSwap(
-        token: FungibleAsset<
-            Web3Helper.Definition[NetworkPluginID]['ChainId'],
-            Web3Helper.Definition[NetworkPluginID]['SchemaType']
-        >,
-    ): void
-    onSend(
-        token: FungibleAsset<
-            Web3Helper.Definition[NetworkPluginID]['ChainId'],
-            Web3Helper.Definition[NetworkPluginID]['SchemaType']
-        >,
-    ): void
+    dataSource: Web3Helper.FungibleAssetAll[]
+    onSwap(token: Web3Helper.FungibleAssetAll): void
+    onSend(token: Web3Helper.FungibleAssetAll): void
 }
 
 export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading, isExpand, isEmpty, dataSource }) => {

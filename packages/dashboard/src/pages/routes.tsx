@@ -1,13 +1,13 @@
+import { compact } from 'lodash-es'
 import React, { lazy, Suspense, useCallback, useEffect } from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom'
+import { useCustomSnackbar } from '@masknet/theme'
+import { SmartPayOwner, SmartPayBundler } from '@masknet/web3-providers'
 import { DashboardFrame } from '../components/DashboardFrame/index.js'
 import { DashboardRoutes, RestoreSuccessEvent } from '@masknet/shared-base'
-import NoPersonaGuardRoute from './GuardRoute.js'
 import { Messages, Services } from '../API.js'
-import { SmartPayAccount, SmartPayBundler } from '@masknet/web3-providers'
-import { compact } from 'lodash-es'
-import { useCustomSnackbar } from '@masknet/theme'
 import { useDashboardI18N } from '../locales/index.js'
+import { TermsGuard } from './TermsGuard.js'
 
 const Wallets = lazy(() => import(/* webpackPrefetch: true */ './Wallets/index.js'))
 const Setup = lazy(() => import('./Setup/index.js'))
@@ -25,14 +25,14 @@ export function Pages() {
     const restoreCallback = useCallback(async ({ wallets }: RestoreSuccessEvent) => {
         const chainId = await SmartPayBundler.getSupportedChainId()
         const personas = await Services.Identity.queryOwnedPersonaInformation(true)
-        const accounts = await SmartPayAccount.getAccountsByOwners(chainId, [
+        const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
             ...(wallets ? wallets.map((x) => x.address) : []),
             ...compact(personas.map((x) => x.address)),
         ])
         showSnackbar(t.recovery_smart_pay_wallet_title(), {
             variant: 'success',
             message: t.recovery_smart_pay_wallet_description({
-                count: accounts.filter((x) => x.funded || x.deployed).length,
+                count: accounts.filter((x) => x.deployed).length,
             }),
         })
     }, [])
@@ -40,27 +40,23 @@ export function Pages() {
     useEffect(() => {
         return Messages.events.restoreSuccess.on(restoreCallback)
     }, [restoreCallback])
+
     return (
         <Suspense fallback={null}>
-            <Routes>
-                <Route
-                    path={DashboardRoutes.Welcome}
-                    element={
-                        <NoPersonaGuardRoute redirectTo={DashboardRoutes.Personas}>
-                            <Welcome />
-                        </NoPersonaGuardRoute>
-                    }
-                />
-                <Route path={DashboardRoutes.Setup} element={<Setup />} />
-                <Route path={`${DashboardRoutes.SignUp}/*`} element={<SignUp />} />
-                <Route path={DashboardRoutes.SignIn} element={<SignIn />} />
-                <Route path={DashboardRoutes.PrivacyPolicy} element={<PrivacyPolicy />} />
-                <Route path={DashboardRoutes.Personas} element={frame(<Personas />)} />
-                <Route path={`${DashboardRoutes.Wallets}/*`} element={frame(<Wallets />)} />
-                <Route path={DashboardRoutes.Settings} element={frame(<Settings />)} />
-                <Route path={`${DashboardRoutes.CreateMaskWallet}/*`} element={<CreateWallet />} />
-                <Route path="*" element={<Navigate to={DashboardRoutes.Personas} />} />
-            </Routes>
+            <TermsGuard>
+                <Routes>
+                    <Route path={DashboardRoutes.Welcome} element={<Welcome />} />
+                    <Route path={DashboardRoutes.Setup} element={<Setup />} />
+                    <Route path={`${DashboardRoutes.SignUp}/*`} element={<SignUp />} />
+                    <Route path={DashboardRoutes.SignIn} element={<SignIn />} />
+                    <Route path={DashboardRoutes.PrivacyPolicy} element={<PrivacyPolicy />} />
+                    <Route path={DashboardRoutes.Personas} element={frame(<Personas />)} />
+                    <Route path={`${DashboardRoutes.Wallets}/*`} element={frame(<Wallets />)} />
+                    <Route path={DashboardRoutes.Settings} element={frame(<Settings />)} />
+                    <Route path={`${DashboardRoutes.CreateMaskWallet}/*`} element={<CreateWallet />} />
+                    <Route path="*" element={<Navigate to={DashboardRoutes.Personas} />} />
+                </Routes>
+            </TermsGuard>
         </Suspense>
     )
 }

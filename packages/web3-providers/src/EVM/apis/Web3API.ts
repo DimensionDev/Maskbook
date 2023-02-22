@@ -1,7 +1,8 @@
-import { nth, memoize } from 'lodash-es'
+import { memoize } from 'lodash-es'
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
-import { AbiItem, hexToNumber, numberToHex, sha3, toHex, toNumber } from 'web3-utils'
+import { AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
+import { delay } from '@masknet/kit'
 import {
     AddressType,
     SchemaType,
@@ -9,7 +10,6 @@ import {
     createContract,
     createWeb3Provider,
     createWeb3Request,
-    getRPCConstants,
     isValidAddress,
     Web3Provider,
     Transaction,
@@ -27,6 +27,8 @@ import {
     getTokenConstant,
     getEthereumConstant,
     TransactionSignature,
+    ProviderURL,
+    getAverageBlockDelay,
 } from '@masknet/web3-shared-evm'
 import {
     FungibleToken,
@@ -61,9 +63,6 @@ import { fetchJSON } from '../../entry-helpers.js'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
-const FOOTPRINT = sha3([navigator.userAgent, navigator.language, screen.width, screen.height].join())
-const SEED = FOOTPRINT ? hexToNumber(FOOTPRINT.slice(0, 10)) : 0
-console.log(`The EVM RPC selection seed is ${SEED}.`)
 
 const createWeb3SDK = memoize(
     (url: string) => new Web3(url),
@@ -85,6 +84,37 @@ export class Web3API
             Web3
         >
 {
+    getWeb3(chainId: ChainId) {
+        return createWeb3SDK(ProviderURL.from(chainId))
+    }
+
+    getWeb3Provider(chainId: ChainId) {
+        const web3 = this.getWeb3(chainId)
+        const provider = web3.currentProvider as HttpProvider
+        return createWeb3Provider(createWeb3Request(provider.send.bind(provider)))
+    }
+
+    private getWeb3Contract<T extends BaseContract>(chainId: ChainId, address: string, ABI: AbiItem[]) {
+        const web3 = this.getWeb3(chainId)
+        return createContract<T>(web3, address, ABI)
+    }
+
+    private getERC20Contract(chainId: ChainId, address: string) {
+        return this.getWeb3Contract<ERC20>(chainId, address, ERC20ABI as AbiItem[])
+    }
+
+    private getERC721Contract(chainId: ChainId, address: string) {
+        return this.getWeb3Contract<ERC721>(chainId, address, ERC721ABI as AbiItem[])
+    }
+
+    private getERC1155Contract(chainId: ChainId, address: string) {
+        return this.getWeb3Contract<ERC1155>(chainId, address, ERC1155ABI as AbiItem[])
+    }
+
+    private getERC165Contract(chainId: ChainId, address: string) {
+        return this.getWeb3Contract<ERC165>(chainId, address, ERC165ABI as AbiItem[])
+    }
+
     async getFungibleTokensBalance(
         chainId: ChainId,
         listOfAddress: string[],
@@ -120,6 +150,7 @@ export class Web3API
         }
         return Object.fromEntries(entities)
     }
+
     async getNonFungibleTokensBalance(
         chainId: ChainId,
         listOfAddress: string[],
@@ -141,43 +172,6 @@ export class Web3API
 
         if (result?.length !== listOfAddress.length) return {}
         return Object.fromEntries(listOfAddress.map<[string, string]>((x, i) => [x, result[i]]))
-    }
-
-    getWeb3(chainId: ChainId) {
-        const { RPC_URLS = [] } = getRPCConstants(chainId)
-        if (!RPC_URLS.length) throw new Error('No RPC preset.')
-
-        const RPC_URL = nth(RPC_URLS, SEED % RPC_URLS.length)
-        if (!RPC_URL) throw new Error('Failed to create web3 provider.')
-
-        return createWeb3SDK(RPC_URL)
-    }
-
-    getWeb3Provider(chainId: ChainId) {
-        const web3 = this.getWeb3(chainId)
-        const provider = web3.currentProvider as HttpProvider
-        return createWeb3Provider(createWeb3Request(provider.send.bind(provider)))
-    }
-
-    private getWeb3Contract<T extends BaseContract>(chainId: ChainId, address: string, ABI: AbiItem[]) {
-        const web3 = this.getWeb3(chainId)
-        return createContract<T>(web3, address, ABI)
-    }
-
-    private getERC20Contract(chainId: ChainId, address: string) {
-        return this.getWeb3Contract<ERC20>(chainId, address, ERC20ABI as AbiItem[])
-    }
-
-    private getERC721Contract(chainId: ChainId, address: string) {
-        return this.getWeb3Contract<ERC721>(chainId, address, ERC721ABI as AbiItem[])
-    }
-
-    private getERC1155Contract(chainId: ChainId, address: string) {
-        return this.getWeb3Contract<ERC1155>(chainId, address, ERC1155ABI as AbiItem[])
-    }
-
-    private getERC165Contract(chainId: ChainId, address: string) {
-        return this.getWeb3Contract<ERC165>(chainId, address, ERC165ABI as AbiItem[])
     }
 
     getBalance(chainId: ChainId, address: string): Promise<string> {
@@ -334,13 +328,34 @@ export class Web3API
             return toHex(fallback)
         }
     }
-
     callTransaction(chainId: ChainId, transaction: Transaction, overrides?: Transaction): Promise<string> {
         const provider = this.getWeb3Provider(chainId)
         return provider.request<string>({
             method: EthereumMethodType.ETH_CALL,
             params: [new AccountTransaction(transaction).fill(overrides), 'latest'],
         })
+    }
+    async confirmTransaction(chainId: ChainId, hash: string, signal?: AbortSignal): Promise<TransactionReceipt> {
+        const times = 49
+        const interval = getAverageBlockDelay(chainId)
+
+        for (let i = 0; i < times; i += 1) {
+            if (signal?.aborted) throw new Error(signal.reason)
+
+            try {
+                const receipt = await this.getTransactionReceipt(chainId, hash)
+                if (!receipt) throw new Error('Not confirm yet.')
+
+                // the transaction has been confirmed
+                return receipt
+            } catch {
+                await delay(interval)
+                continue
+            }
+        }
+
+        // insufficient try times
+        throw new Error('Not confirm yet')
     }
     replaceTransaction(chainId: ChainId, hash: string, transaction: Transaction): Promise<void> {
         const provider = this.getWeb3Provider(chainId)

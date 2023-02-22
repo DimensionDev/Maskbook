@@ -14,7 +14,7 @@ export type PersonaSelectPanelDialogEvent = {
 
 export interface MaskSettingsEvents {
     appearanceSettings: Appearance
-    logSettings: string
+    telemetrySettings: boolean
     pluginIDSettings: Record<EnhanceableSite | ExtensionSite, NetworkPluginID>
     languageSettings: LanguageOptions
     currentPersonaIdentifier: string
@@ -126,7 +126,9 @@ export type ProfileCardEvent =
     | {
           open: true
           userId: string
+          address?: string
           badgeBounding: DOMRect
+          openFromTrendingCard?: boolean
       }
 
 export type NonFungibleTokenDialogEvent =
@@ -165,6 +167,10 @@ export interface RestoreSuccessEvent {
     }>
 }
 
+export interface OwnerDeletionEvent {
+    owner: string
+}
+
 export interface ProfileNFTsPageEvent {
     show: boolean
 }
@@ -179,6 +185,9 @@ export interface OpenPageConfirmEvent {
     position?: 'center' | 'top-right'
 }
 
+export interface HideSearchResultInspectorEvent {
+    hide: boolean
+}
 export interface NFTAvatarEvent {
     userId: string
     avatarId: string

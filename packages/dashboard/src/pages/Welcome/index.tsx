@@ -1,9 +1,13 @@
+import urlcat from 'urlcat'
+import { memo, useCallback, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, Checkbox, FormControlLabel, FormGroup } from '@mui/material'
-import { memo, useCallback, useState } from 'react'
 import { Services } from '../../API.js'
 import { FooterLine } from '../../components/FooterLine/index.js'
 import { HeaderLine } from '../../components/HeaderLine/index.js'
+import { TermsAgreedContext } from '../../hooks/useTermsAgreed.js'
 import { DashboardTrans, useDashboardI18N } from '../../locales/index.js'
 import { Article } from './Article.js'
 
@@ -66,16 +70,34 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export default memo(function Welcome() {
-    const [read, setRead] = useState(false)
+    const [agreed, setAgreed] = TermsAgreedContext.useContainer()
+    const [read, setRead] = useState(agreed)
     const [allowedToCollect, setAllowedToCollect] = useState(false)
+    const [params] = useSearchParams()
+    const navigate = useNavigate()
 
     const handleAgree = useCallback(async () => {
-        const url = await Services.SocialNetwork.setupSite('twitter.com', false)
-        if (url) location.assign(url)
         if (allowedToCollect) {
-            Services.Settings.setLogEnable(true)
+            await Services.Settings.setTelemetryEnabled(true)
         }
-    }, [allowedToCollect])
+        setAgreed(true)
+        const from = params.get('from')
+        if (from && from !== DashboardRoutes.Personas) {
+            const search = params.get('search')
+            navigate(urlcat(from, search ? new URLSearchParams(search).entries() : {}))
+        }
+
+        const url = await Services.SocialNetwork.setupSite('twitter.com', false)
+        if (!url) return
+        if (from && from !== DashboardRoutes.Personas) {
+            browser.tabs.create({
+                active: true,
+                url,
+            })
+        } else {
+            location.assign(url)
+        }
+    }, [params, allowedToCollect])
 
     const t = useDashboardI18N()
     const { classes } = useStyles()

@@ -45,6 +45,7 @@ export async function normalizeBackupVersion0(file: BackupJSONFileVersion0): Pro
         nickname: None,
         createdAt: None,
         updatedAt: None,
+        address: None,
     }
     backup.personas.set(persona.identifier, persona)
 

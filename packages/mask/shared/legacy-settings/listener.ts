@@ -1,6 +1,6 @@
 import {
     appearanceSettings,
-    logSettings,
+    telemetrySettings,
     pluginIDSettings,
     languageSettings,
     currentPersonaIdentifier,
@@ -12,7 +12,7 @@ type ToBeListedSettings = {
 }
 export function ToBeListened(): ToBeListedSettings {
     return {
-        logSettings,
+        telemetrySettings,
         appearanceSettings,
         pluginIDSettings,
         languageSettings,

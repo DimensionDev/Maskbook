@@ -1,13 +1,12 @@
+import { memo, useState, HTMLProps } from 'react'
 import { styled, Breadcrumbs, Dialog, IconButton, Link, Typography } from '@mui/material'
-import { useHref, useNavigate } from 'react-router-dom'
+import { Close } from '@mui/icons-material'
+import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales/index.js'
-import { HTMLProps, memo, useState } from 'react'
 import { About } from './About.js'
-import { Close } from '@mui/icons-material'
 import { Version } from './Version.js'
 import links from './links.json'
-import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     navRoot: {
@@ -63,28 +62,6 @@ function FooterLinkExternal(props: FooterLinkAnchorProps) {
     )
 }
 
-type FooterLinkLinkProps = FooterLinkBaseProps & {
-    to: string
-}
-function FooterLinkTo(props: FooterLinkLinkProps) {
-    const { classes } = useStyles()
-    const href = useHref(props.to)
-    const navigate = useNavigate()
-
-    return (
-        <Link
-            underline="none"
-            onClick={() => navigate(href)}
-            href={href}
-            color="textPrimary"
-            className={classes.footerLink}>
-            <Typography variant="body2" component="span">
-                {props.children}
-            </Typography>
-        </Link>
-    )
-}
-
 type FooterLinkAnchorButtonProps = FooterLinkBaseProps & {
     onClick(e: React.MouseEvent<HTMLAnchorElement>): void
 }
@@ -132,7 +109,6 @@ export const FooterLine = memo((props: Props) => {
                 <FooterLinkButton onClick={openVersionLink} title={process.env.VERSION}>
                     <Version />
                 </FooterLinkButton>
-                <FooterLinkExternal href={links.MOBILE_DOWNLOAD_LINK}>{t.dashboard_mobile_test()}</FooterLinkExternal>
                 <FooterLinkExternal href={links.MASK_GITHUB}>{t.dashboard_source_code()}</FooterLinkExternal>
                 <FooterLinkExternal href={links.BOUNTY_LIST}>{t.footer_bounty_list()}</FooterLinkExternal>
                 <FooterLinkExternal href={links.MASK_PRIVACY_POLICY}>{t.privacy_policy()}</FooterLinkExternal>

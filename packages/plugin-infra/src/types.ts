@@ -25,7 +25,6 @@ import type {
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { LogHubBaseAPI } from '@masknet/web3-providers/types'
 import type {
     ChainDescriptor,
     NetworkDescriptor,
@@ -160,10 +159,6 @@ export namespace Plugin.Shared {
          * A lightweight K/V storage used to store some simple data.
          */
         createKVStorage<T extends object>(type: 'memory' | 'persistent', defaultValues: T): ScopedStorage<T>
-        /**
-         * A Logger.
-         */
-        createLogger(): LogHubBaseAPI.Logger | undefined
     }
 
     export interface SharedUIContext extends SharedContext {
@@ -640,8 +635,10 @@ export namespace Plugin.SNSAdaptor {
         UI?: {
             /** The brief content above detailed tabs. */
             Content?: InjectUI<{
-                result: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+                resultList: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+                currentResult: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
                 isProfilePage?: boolean
+                identity?: SocialIdentity
             }>
         }
         Utils?: {

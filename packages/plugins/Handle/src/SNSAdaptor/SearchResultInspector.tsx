@@ -1,8 +1,8 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useCopyToClipboard } from 'react-use'
 import { resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { ScopedDomainsContainer, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useSnackbarCallback } from '@masknet/shared'
 import { Box, Typography, Link, alpha } from '@mui/material'
@@ -14,6 +14,7 @@ import { Icons } from '@masknet/icons'
 import { useI18N } from '../locales/index.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
 import { PluginHeader } from './PluginHeader.js'
+import { SuffixToChainIconMap } from '../constants.js'
 
 interface StyleProps {
     isMenuScroll?: boolean
@@ -60,7 +61,6 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
             fontWeight: 400,
             marginLeft: 4,
             fontSize: 14,
-            whiteSpace: 'nowrap',
         },
         rightSpace: {
             marginRight: 6,
@@ -106,7 +106,7 @@ export function SearchResultInspectorContent() {
     const t = useI18N()
     const { classes, cx } = useStyles({})
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const { reversedAddress, nextIdBindings, firstNextIdBinding, domain } = useContext(ENSContext)
+    const { reversedAddress, nextIdBindings, domain } = useContext(ENSContext)
     const [, copyToClipboard] = useCopyToClipboard()
     const copyWalletAddress = useSnackbarCallback({
         executor: async (address: string) => copyToClipboard(address),
@@ -114,12 +114,21 @@ export function SearchResultInspectorContent() {
         successText: t.wallets_address_copied(),
     })
     const isShowSocialAccountList = nextIdBindings.length > 3
+    const suffix = domain.split('.').pop()!
+    const ChainIcon = SuffixToChainIconMap[suffix] ?? Icons.ETH
+
+    const { setPair } = ScopedDomainsContainer.useContainer()
+    useEffect(() => {
+        if (!reversedAddress) return
+        setPair(reversedAddress, domain)
+    }, [reversedAddress, domain])
+
     return (
         <>
             <PluginHeader />
             <Box className={classes.root}>
                 <section className={classes.ensInfo}>
-                    <Icons.ETH size={30} className={classes.ensIcon} />
+                    <ChainIcon size={30} className={classes.ensIcon} />
                     <div>
                         <Typography className={classes.domain}>{domain}</Typography>
                         {reversedAddress ? (
@@ -143,7 +152,7 @@ export function SearchResultInspectorContent() {
                         ) : null}
                     </div>
                 </section>
-                {firstNextIdBinding?.identity ? (
+                {nextIdBindings?.[0]?.identity ? (
                     <div className={classes.nextIdVerified}>
                         <section className={classes.bindingsWrapper}>
                             {nextIdBindings.map((x, i) => (

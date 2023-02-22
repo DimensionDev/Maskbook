@@ -1,6 +1,7 @@
 import React, { createContext, ReactNode, useCallback, useContext, useState } from 'react'
 import { isUndefined, omitBy } from 'lodash-es'
-import { compose, NetworkPluginID } from '@masknet/shared-base'
+import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import { compose, MaskEvents, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
@@ -58,6 +59,7 @@ export function NetworkContextProvider({ value, children }: React.ProviderProps<
 
 export function ChainContextProvider({ value, children }: React.ProviderProps<ChainContextGetter>) {
     const { pluginID } = useNetworkContext()
+
     const globalAccount = useAccount(pluginID)
     const globalChainId = useChainId(pluginID)
     const globalNetworkType = useNetworkType(pluginID)
@@ -96,9 +98,9 @@ export function ChainContextProvider({ value, children }: React.ProviderProps<Ch
                 setChainId,
                 setNetworkType,
                 setProviderType,
-            }}
-            children={children}
-        />
+            }}>
+            {children}
+        </ChainContext.Provider>
     )
 }
 
@@ -108,11 +110,12 @@ export function Web3ContextProvider({
 }: React.ProviderProps<
     {
         pluginID: NetworkPluginID
+        messages?: WebExtensionMessage<MaskEvents>
     } & ChainContextGetter
 >) {
     const { pluginID, ...rest } = value
     return compose(
-        (children) => NetworkContextProvider({ value: pluginID, children }),
+        (children) => <NetworkContextProvider value={pluginID} children={children} />,
         (children) => <ChainContextProvider value={rest} children={children} />,
         <>{children}</>,
     )
@@ -137,14 +140,6 @@ export function ActualChainContextProvider({ children }: { children: ReactNode |
         providerType: useProviderType(),
     }
     return <ChainContext.Provider value={value} children={children} />
-}
-
-export function ActualWeb3ContextProvider({ children }: Omit<React.ProviderProps<never>, 'value'>) {
-    return compose(
-        (children) => ActualNetworkContextProvider({ children }),
-        (children) => ActualChainContextProvider({ children }),
-        <>{children}</>,
-    )
 }
 
 export function useEnvironmentContext(defaults?: EnvironmentContext) {

@@ -9,7 +9,7 @@ import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
 import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationBoard } from './ApplicationBoard.js'
-import { WalletMessages } from '../../plugins/Wallet/messages.js'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { useI18N } from '../../utils/index.js'
 import { PersonaSelectPanelDialog } from './PersonaSelectPanel/PersonaSelectPanelDialog.js'
 
@@ -49,7 +49,7 @@ export function ApplicationBoardDialog() {
     const [quickMode, setQuickMode] = useState(false)
 
     const { open, closeDialog: closeBoard } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
+        WalletMessages.events.applicationDialogUpdated,
         (evt) => {
             if (!evt.open || !evt.settings?.switchTab) return
             setOpenSettings(true)

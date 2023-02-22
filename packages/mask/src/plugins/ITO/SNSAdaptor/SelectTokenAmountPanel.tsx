@@ -9,10 +9,10 @@ interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'> {
     targetChainId?: Web3Helper.ChainIdAll
     whitelist?: string[]
     blacklist?: string[]
-    tokens?: Array<Web3Helper.FungibleTokenScope<'all'>>
+    tokens?: Web3Helper.FungibleTokenAll[]
     selectedTokens?: string[]
     disableSearch?: boolean
-    onSelect?(token: Web3Helper.FungibleTokenScope<'all'> | null): void
+    onSelect?(token: Web3Helper.FungibleTokenAll | null): void
     FixedSizeListProps?: Partial<MaskFixedSizeListProps>
     SearchTextFieldProps?: MaskTextFieldProps
 }
@@ -20,11 +20,11 @@ interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'> {
 export interface SelectTokenAmountPanelProps {
     amount: string
     balance: string
-    token?: Web3Helper.FungibleTokenScope<'all'>
+    token?: Web3Helper.FungibleTokenAll
     disableNativeToken?: boolean
     disableSearchBar?: boolean
     onAmountChange: (amount: string) => void
-    onTokenChange: (token: Web3Helper.FungibleTokenScope<'all'>) => void
+    onTokenChange: (token: Web3Helper.FungibleTokenAll) => void
     FungibleTokenListProps?: Partial<ERC20TokenListProps>
     FungibleTokenInputProps?: Partial<FungibleTokenInputProps>
 }

@@ -79,9 +79,9 @@ export const TokenSwapCard: FC<TokenSwapCardProps> = ({ feed, ...rest }) => {
                     values={{
                         user,
                         from_value: formatValue(metadata?.from),
-                        from_symbol: metadata?.from.symbol ?? '-',
+                        from_symbol: metadata?.from.symbol ?? 'Unknown Token',
                         to_value: formatValue(metadata?.to),
-                        to_symbol: metadata?.to.symbol ?? '-',
+                        to_symbol: metadata?.to.symbol ?? 'Unknown Token',
                         platform: feed.platform!,
                         context: verbose ? 'verbose' : 'normal',
                     }}
@@ -98,12 +98,14 @@ export const TokenSwapCard: FC<TokenSwapCardProps> = ({ feed, ...rest }) => {
                         <Image
                             classes={{ container: classes.tokenIcon }}
                             src={metadata.from.image}
+                            fallback={<img src={metadata.from.image} className={classes.tokenIcon} />}
                             height={32}
                             width={32}
                         />
                         <Image
                             classes={{ container: classes.tokenIcon }}
                             src={metadata.to.image}
+                            fallback={<img src={metadata.to.image} className={classes.tokenIcon} />}
                             height={32}
                             width={32}
                         />

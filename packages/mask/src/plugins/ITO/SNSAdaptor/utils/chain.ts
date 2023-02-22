@@ -1,11 +1,10 @@
 import urlcat from 'urlcat'
-import { first } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import isAfter from 'date-fns/isAfter'
 import isEqual from 'date-fns/isEqual'
 import { isSameAddress, FungibleToken, TokenType } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId, getExplorerConstants, getITOConstants, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, EtherscanURL, getITOConstants, SchemaType } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
 import ITO_ABI from '@masknet/web3-contracts/abis/ITO2.json'
 import type { PoolFromNetwork, JSON_PayloadFromChain, SwappedTokenType } from '../../types.js'
@@ -30,17 +29,15 @@ export async function getAllPoolsAsSeller(
     sellerAddress: string,
     connection: Web3Helper.Web3Connection<NetworkPluginID.PLUGIN_EVM>,
 ) {
-    const { EXPLORER_API, API_KEYS = [] } = getExplorerConstants(chainId)
     const { ITO2_CONTRACT_ADDRESS } = getITOConstants(chainId)
 
-    if (!EXPLORER_API || !ITO2_CONTRACT_ADDRESS || !startBlock) return []
+    if (!ITO2_CONTRACT_ADDRESS || !startBlock) return []
 
     // #region
     // 1. Filter out `Fill_Pool` transactions,
     // 2. Retrieve payload major data from its decoded input param.
     const response = await fetch(
-        urlcat(EXPLORER_API, {
-            apikey: first(API_KEYS),
+        urlcat(EtherscanURL.from(chainId), {
             action: 'txlist',
             module: 'account',
             sort: 'desc',
@@ -175,16 +172,14 @@ export async function getClaimAllPools(
     swapperAddress: string,
     connection: Web3Helper.Web3Connection<NetworkPluginID.PLUGIN_EVM>,
 ) {
-    const { EXPLORER_API, API_KEYS = [] } = getExplorerConstants(chainId)
     const { ITO2_CONTRACT_ADDRESS, ITO2_CONTRACT_CREATION_BLOCK_HEIGHT: startBlock } = getITOConstants(chainId)
 
-    if (!EXPLORER_API || !ITO2_CONTRACT_ADDRESS || !startBlock || !connection) return []
+    if (!ITO2_CONTRACT_ADDRESS || !startBlock || !connection) return []
     // #region
     // 1. Filter out `swap` transactions,
     // 2. Retrieve payload major data from its decoded input param.
     const response = await fetch(
-        urlcat(EXPLORER_API, {
-            apikey: first(API_KEYS),
+        urlcat(EtherscanURL.from(chainId), {
             action: 'txlist',
             module: 'account',
             sort: 'desc',

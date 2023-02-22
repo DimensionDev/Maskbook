@@ -2,25 +2,33 @@ import { useCallback, useRef } from 'react'
 import { useAsyncFn } from 'react-use'
 import getUnixTime from 'date-fns/getUnixTime'
 import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { NetworkPluginID, PersonaInformation, PopupRoutes, ProofType, SignType } from '@masknet/shared-base'
+import {
+    NetworkPluginID,
+    PersonaInformation,
+    PopupRoutes,
+    ProofType,
+    SignType,
+    TimeoutController,
+} from '@masknet/shared-base'
 import { useChainContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
-import type { AbstractAccountAPI } from '@masknet/web3-providers/types'
+import type { OwnerAPI } from '@masknet/web3-providers/types'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { TransactionStatusType, Wallet } from '@masknet/web3-shared-base'
-import { Typography, useTheme } from '@mui/material'
+import type { Wallet } from '@masknet/web3-shared-base'
+import { Typography } from '@mui/material'
 import { ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import type { ManagerAccount } from '../type.js'
 import { useI18N } from '../locales/index.js'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { PluginSmartPayMessages } from '../message.js'
 
 export function useDeploy(
     signPersona?: PersonaInformation,
     signWallet?: Wallet,
     signAccount?: ManagerAccount,
-    contractAccount?: AbstractAccountAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>,
+    contractAccount?: OwnerAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>,
     nonce?: number,
     onSuccess?: () => void,
 ) {
-    const theme = useTheme()
     const snackbarKeyRef = useRef<SnackbarKey>()
     const t = useI18N()
 
@@ -43,8 +51,11 @@ export function useDeploy(
     )
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, {
         providerType: ProviderType.MaskWallet,
+        account: undefined,
         chainId,
     })
+
+    const { closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
 
     return useAsyncFn(async () => {
         try {
@@ -60,8 +71,35 @@ export function useDeploy(
             const hasPassword = await hasPaymentPassword()
             if (!hasPassword) return openPopupWindow(PopupRoutes.CreatePassword)
 
+            if (contractAccount.funded && !contractAccount.deployed) {
+                const hash = await connection?.deploy?.(signAccount.address, signAccount.identifier, {
+                    chainId,
+                })
+
+                if (!hash) return
+
+                const result = await connection?.confirmTransaction(hash, {
+                    signal: new TimeoutController(5 * 60 * 1000).signal,
+                })
+
+                if (!result?.status) return
+
+                await Wallet?.addWallet({
+                    name: 'Smart Pay',
+                    owner: signAccount.address,
+                    address: contractAccount.address,
+                    hasDerivationPath: false,
+                    hasStoredKeyInfo: false,
+                    id: contractAccount.address,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                })
+                onSuccess?.()
+
+                return result?.transactionHash
+            }
             const payload = JSON.stringify({
-                twitterHandler: lastRecognizedIdentity.identifier.userId,
+                twitterHandle: lastRecognizedIdentity.identifier.userId,
                 ts: getUnixTime(new Date()),
                 ownerAddress: signAccount.address,
                 nonce,
@@ -78,7 +116,7 @@ export function useDeploy(
             if (signPersona) {
                 signature = await signWithPersona(SignType.Message, payload, signPersona.identifier)
             } else if (signWallet) {
-                signature = await connection?.signMessage(payload, 'personalSign', {
+                signature = await connection?.signMessage('message', payload, {
                     account: signWallet.address,
                     providerType: ProviderType.MaskWallet,
                 })
@@ -101,30 +139,38 @@ export function useDeploy(
             )
             if (!hash) throw new Error('Deploy Failed')
 
-            return TransactionWatcher?.emitter.on('progress', async (_, txHash, status) => {
-                try {
-                    if (txHash !== hash || !signAccount.address || status !== TransactionStatusType.SUCCEED) return
-
-                    const result = await connection?.deploy?.(signAccount.address, signPersona?.identifier, {
-                        chainId,
-                    })
-
-                    Wallet?.addWallet({
-                        name: 'Smart Pay',
-                        owner: signAccount.address,
-                        address: contractAccount.address,
-                        hasDerivationPath: false,
-                        hasStoredKeyInfo: false,
-                        id: contractAccount.address,
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                    }).then(() => {
-                        onSuccess?.()
-                    })
-                } catch (error) {
-                    console.log(error)
-                }
+            const result = await connection?.confirmTransaction(hash, {
+                signal: new TimeoutController(5 * 60 * 1000).signal,
             })
+
+            if (!result?.status) return
+
+            const deployHash = await connection?.deploy?.(signAccount.address, signAccount.identifier, {
+                chainId,
+            })
+
+            if (!deployHash) return
+
+            const deployResult = await connection?.confirmTransaction(deployHash, {
+                signal: new TimeoutController(5 * 60 * 1000).signal,
+            })
+
+            if (!deployResult?.status) return
+
+            await Wallet?.addWallet({
+                name: 'Smart Pay',
+                owner: signAccount.address,
+                address: contractAccount.address,
+                hasDerivationPath: false,
+                hasStoredKeyInfo: false,
+                id: contractAccount.address,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            })
+
+            onSuccess?.()
+
+            return deployResult.transactionHash
         } catch (error) {
             if (error instanceof Error) {
                 let message = ''
@@ -135,6 +181,9 @@ export function useDeploy(
                     case 'Persona Rejected':
                         message = t.user_cancelled_the_transaction()
                         break
+                    case 'Timeout':
+                        message = t.timeout()
+                        break
                     default:
                         message = t.network_error()
                 }
@@ -144,6 +193,10 @@ export function useDeploy(
                     variant: 'error',
                     message: <Typography>{message}</Typography>,
                 })
+
+                if (error.message === 'Timeout') {
+                    closeDialog()
+                }
             }
         }
     }, [

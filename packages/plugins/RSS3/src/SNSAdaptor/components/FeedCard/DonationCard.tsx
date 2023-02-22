@@ -140,8 +140,8 @@ export const DonationCard: FC<DonationCardProps> = ({ feed, actionIndex, classNa
                         values={{
                             user,
                             cost_value: formatValue(metadata?.token),
-                            cost_symbol: metadata?.token?.symbol ?? '',
-                            project: action.metadata?.title ?? '',
+                            cost_symbol: metadata?.token?.symbol ?? 'Unknown Token',
+                            project: action.metadata?.title ?? 'Unknown Project',
                         }}
                         components={{
                             bold: <Label />,
@@ -169,7 +169,7 @@ export const DonationCard: FC<DonationCardProps> = ({ feed, actionIndex, classNa
                     values={{
                         user,
                         cost_value: formatValue(metadata?.token),
-                        cost_symbol: metadata?.token?.symbol ?? '',
+                        cost_symbol: metadata?.token?.symbol ?? 'Unknown Token',
                     }}
                     components={{
                         bold: <Label />,

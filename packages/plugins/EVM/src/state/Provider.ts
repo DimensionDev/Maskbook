@@ -32,7 +32,7 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
         })
     }
 
-    override setupSubscriptions() {
+    protected override setupSubscriptions() {
         this.providerType = mapSubscription(this.storage.providerType.subscription, (provider) => provider)
 
         this.chainId = mapSubscription(
@@ -56,9 +56,10 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             account: string
             identifier?: ECKeyIdentifier
         },
+        silent?: boolean,
     ): Promise<Account<ChainId>> {
         // Disconnect WalletConnect, prevents its session lasting too long.
-        if (this.providers[ProviderType.WalletConnect].connected) {
+        if (providerType !== ProviderType.WalletConnect && this.providers[ProviderType.WalletConnect].connected) {
             try {
                 await super.disconnect(ProviderType.WalletConnect)
             } catch {
@@ -66,6 +67,6 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             }
         }
 
-        return super.connect(providerType, chainId, address, owner)
+        return super.connect(providerType, chainId, address, owner, silent)
     }
 }

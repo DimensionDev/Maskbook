@@ -15,7 +15,7 @@ import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shar
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NFTProjectAvatarBadge } from '../../../components/shared/AvatarBadge/NFTProjectAvatarBadge.js'
+import { CollectionProjectAvatarBadge } from '../../../components/shared/AvatarBadge/CollectionProjectAvatarBadge.js'
 import { useCollectionByTwitterHandler } from '../../../plugins/Trader/trending/useTrending.js'
 
 const sns: Plugin.SNSAdaptor.Definition<
@@ -37,11 +37,10 @@ const sns: Plugin.SNSAdaptor.Definition<
     SearchResultInspector: {
         ID: PluginID.Trader,
         UI: {
-            Content({ result: _resultList, isProfilePage }) {
+            Content({ currentResult, resultList, isProfilePage, identity }) {
                 const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-                const resultList = _resultList as Web3Helper.TokenResultAll[]
-                if (!resultList.length) return null
-                const { chainId, keyword, address, pluginID } = resultList[0]
+                if (!resultList.length || !currentResult) return null
+                const { chainId, keyword, pluginID } = currentResult
                 return (
                     <Web3ContextProvider
                         value={{
@@ -49,11 +48,15 @@ const sns: Plugin.SNSAdaptor.Definition<
                             chainId,
                         }}>
                         <TrendingViewProvider
-                            isNFTProjectPopper={false}
+                            isCollectionProjectPopper={false}
                             isProfilePage={Boolean(isProfilePage)}
                             isTokenTagPopper={false}
                             isPreciseSearch={Boolean(Others?.isValidAddress(keyword))}>
-                            <TrendingView resultList={resultList} />
+                            <TrendingView
+                                resultList={resultList as Web3Helper.TokenResultAll[]}
+                                identity={identity}
+                                currentResult={currentResult as Web3Helper.TokenResultAll}
+                            />
                         </TrendingViewProvider>
                     </Web3ContextProvider>
                 )
@@ -65,6 +68,7 @@ const sns: Plugin.SNSAdaptor.Definition<
                     SearchResultType.FungibleToken,
                     SearchResultType.NonFungibleToken,
                     SearchResultType.NonFungibleCollection,
+                    SearchResultType.CollectionListByTwitterHandler,
                 ].includes(result.type)
             },
         },
@@ -127,14 +131,18 @@ const sns: Plugin.SNSAdaptor.Definition<
         label: 'Web3 Profile Card',
         priority: 99999,
         UI: {
-            Decorator({ userId }) {
+            Decorator({ userId, identity }) {
                 const { value: collectionList } = useCollectionByTwitterHandler(userId)
                 const isMinimalMode = useIsMinimalMode(PluginID.Web3ProfileCard)
                 if (!userId || !collectionList?.[0] || isMinimalMode) return null
 
                 return (
                     <Box display="flex" alignItems="top" justifyContent="center">
-                        <NFTProjectAvatarBadge userId={userId} address={collectionList?.[0].address} />
+                        <CollectionProjectAvatarBadge
+                            userId={userId}
+                            address={collectionList?.[0].address ?? ''}
+                            identity={identity}
+                        />
                     </Box>
                 )
             },

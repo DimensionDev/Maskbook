@@ -21,6 +21,7 @@ import { currentPersonaIdentifier } from '../../../../../../shared/legacy-settin
 import { useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { first } from 'lodash-es'
+import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -141,6 +142,7 @@ const WalletRecovery = memo(() => {
         await Services.Helper.removePopupWindow()
     }, [onSubmit, hasPassword, currentPersona, backupId, web3State])
 
+    useTitle(t('popups_recovery_wallet'))
     return loading || getHasPasswordLoading ? (
         <LoadingPlaceholder />
     ) : (

@@ -3,12 +3,7 @@ import { useRef, useState, useEffect } from 'react'
 import { useAsync, useAsyncRetry, useAsyncFn } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { DSearch } from '@masknet/web3-providers'
-import {
-    TokenType,
-    NonFungibleTokenActivity,
-    SearchResultType,
-    NonFungibleCollectionResult,
-} from '@masknet/web3-shared-base'
+import { TokenType, NonFungibleTokenActivity, SearchResultType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -31,9 +26,9 @@ export function useTrendingOverview(
 export function useCollectionByTwitterHandler(twitterHandler?: string) {
     return useAsync(async () => {
         if (!twitterHandler) return
-        return DSearch.search<NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>(
+        return DSearch.search<Web3Helper.TokenResultAll>(
             twitterHandler,
-            SearchResultType.NonFungibleCollection,
+            SearchResultType.CollectionListByTwitterHandler,
         )
     }, [twitterHandler])
 }
@@ -143,8 +138,8 @@ export function useTrendingById(
                           type: trending?.coin.type ?? TokenType.Fungible,
                           decimals: trending?.coin.decimals || detailedToken?.decimals || 0,
                           contract_address:
-                              trending?.contracts?.[0]?.address ?? trending?.coin.contract_address ?? address,
-                          chainId: trending?.contracts?.[0]?.chainId ?? trending?.coin.chainId ?? chainId,
+                              trending?.coin.contract_address ?? trending?.contracts?.[0]?.address ?? address,
+                          chainId: trending?.coin.chainId ?? trending?.contracts?.[0]?.chainId ?? chainId,
                       },
                   }
                 : null,

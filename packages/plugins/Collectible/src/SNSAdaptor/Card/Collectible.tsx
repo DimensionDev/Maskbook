@@ -2,11 +2,11 @@ import formatDateTime from 'date-fns/format'
 import isAfter from 'date-fns/isAfter'
 import isValidDate from 'date-fns/isValid'
 import { Icons } from '@masknet/icons'
-import { Markdown } from '@masknet/shared'
-import { LoadingBase, makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
+import { Markdown, RetryHint } from '@masknet/shared'
+import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
-import { Box, Button, CardContent, CardHeader, Paper, Tab, Typography } from '@mui/material'
+import { Box, CardContent, CardHeader, Paper, Tab, Typography } from '@mui/material'
 import { SUPPORTED_PROVIDERS } from '../../constants.js'
 import { CollectiblePaper } from './CollectiblePaper.js'
 import { LinkingAvatar } from '../Shared/LinkingAvatar.js'
@@ -17,6 +17,7 @@ import { OffersTab } from './tabs/OffersTab.js'
 import { Context } from '../Context/index.js'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { useSwitcher } from '../hooks/useSwitcher.js'
+import { useLayoutEffect, useRef, useState } from 'react'
 
 const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) => {
     return {
@@ -97,6 +98,7 @@ const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) =
             },
         },
         cardTitle: {
+            display: 'inline-flex',
             fontSize: 16,
             lineHeight: '20px',
             fontWeight: 700,
@@ -116,6 +118,20 @@ export function Collectible(props: CollectibleProps) {
     const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activities')
     const { classes } = useStyles({ currentTab })
     const { asset, events, orders, sourceType, setSourceType } = Context.useContainer()
+    const titleRef = useRef<HTMLDivElement>(null)
+    const [outVerified, setOutVerified] = useState(false)
+
+    useLayoutEffect(() => {
+        if (!titleRef) return
+        const offsetWidth = titleRef.current?.offsetWidth
+        const scrollWidth = titleRef.current?.scrollWidth
+
+        if (!offsetWidth || !scrollWidth) {
+            setOutVerified(false)
+        } else {
+            setOutVerified(scrollWidth > offsetWidth)
+        }
+    }, [])
 
     // #region provider switcher
     const CollectibleProviderSwitcher = useSwitcher(
@@ -141,22 +157,17 @@ export function Collectible(props: CollectibleProps) {
                 <Typography>{t.loading()}</Typography>
             </Box>
         )
-    if (!asset.value)
+
+    if (!asset.value) {
         return (
-            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-                <Typography color={MaskColorVar.textPluginColor} sx={{ marginTop: 8, marginBottom: 8 }}>
-                    {t.plugin_collectible_failed_load({ source: resolveSourceTypeName(sourceType) })}
-                </Typography>
-                <Box alignItems="center" sx={{ padding: 1, display: 'flex', flexDirection: 'row', width: '100%' }}>
-                    <Box sx={{ flex: 1, padding: 1 }}> {CollectibleProviderSwitcher}</Box>
-                    <Box sx={{ flex: 1, padding: 1 }}>
-                        <Button fullWidth onClick={() => asset.retry()} variant="roundedDark">
-                            {t.plugin_collectible_refresh()}
-                        </Button>
-                    </Box>
-                </Box>
+            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" pb={2} pt={4}>
+                <RetryHint
+                    ButtonProps={{ startIcon: <Icons.Restore color="white" size={18} />, sx: { width: 256 } }}
+                    retry={() => asset.retry()}
+                />
             </Box>
         )
+    }
 
     const _asset = asset.value
     const endDate = _asset.auction?.endAt
@@ -194,8 +205,13 @@ export function Collectible(props: CollectibleProps) {
                     }
                     title={
                         <Typography component="div" style={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography className={classes.cardTitle}>{_asset.metadata?.name || '-'}</Typography>
-                            {_asset.collection?.verified ? (
+                            <Typography className={classes.cardTitle} ref={titleRef}>
+                                {_asset.metadata?.name || '-'}
+                                {_asset.collection?.verified && !outVerified ? (
+                                    <Icons.VerifiedCollection size={20} sx={{ marginLeft: 0.5 }} />
+                                ) : null}
+                            </Typography>
+                            {_asset.collection?.verified && outVerified ? (
                                 <Icons.VerifiedCollection size={20} sx={{ marginLeft: 0.5 }} />
                             ) : null}
                         </Typography>

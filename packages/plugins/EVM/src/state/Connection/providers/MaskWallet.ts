@@ -40,9 +40,10 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
             account: string
             identifier?: ECKeyIdentifier
         },
+        silent?: boolean,
     ) {
         const siteType = getSiteType()
-        if (siteType === ExtensionSite.Popup) {
+        if (siteType === ExtensionSite.Popup || silent) {
             if (isValidAddress(address)) {
                 await this.switchAccount(address, owner)
                 await this.switchChain(chainId)
@@ -67,6 +68,7 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
         )
 
         const account = first(await SharedContextSettings.value.selectAccount())
+
         if (!account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}`)
 
         // switch account

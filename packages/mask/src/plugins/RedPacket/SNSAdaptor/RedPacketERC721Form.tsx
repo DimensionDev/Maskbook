@@ -180,9 +180,6 @@ const useStyles = makeStyles()((theme) => {
             opacity: 0.5,
             pointerEvents: 'none',
         },
-        iframe: {
-            minHeight: 147,
-        },
         assetImgWrapper: {
             maxHeight: 155,
             overflow: 'hidden',
@@ -366,7 +363,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         <List className={classes.tokenSelector}>
                             {tokenDetailedList.map((value, i) => (
                                 <div key={i}>
-                                    <NFTCard token={value} removeToken={removeToken} renderOrder={i} />
+                                    <NFTCard token={value} removeToken={removeToken} />
                                 </div>
                             ))}
                             <ListItem
@@ -390,7 +387,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         expectedChainId={chainId}
                         forceShowingWrongNetworkButton>
-                        <WalletConnectedBoundary>
+                        <WalletConnectedBoundary expectedChainId={chainId}>
                             <EthereumERC721TokenApprovedBoundary
                                 validationMessage={validationMessage}
                                 owner={account}
@@ -418,13 +415,11 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
 interface NFTCardProps {
     token: OrderedERC721Token
     removeToken: (token: NonFungibleToken<ChainId, SchemaType.ERC721>) => void
-    renderOrder: number
 }
 
 function NFTCard(props: NFTCardProps) {
-    const { token, removeToken, renderOrder } = props
+    const { token, removeToken } = props
     const { classes, cx } = useStyles()
-    const [name, setName] = useState(formatTokenId(token.tokenId, 2))
     return (
         <ListItem className={cx(classes.tokenSelectorWrapper)}>
             <NFTCardStyledAssetPlayer
@@ -432,18 +427,15 @@ function NFTCard(props: NFTCardProps) {
                 chainId={token.chainId}
                 url={token.metadata?.mediaURL || token.metadata?.imageURL}
                 tokenId={token.tokenId}
-                renderOrder={renderOrder}
-                setERC721TokenName={setName}
                 classes={{
                     fallbackImage: classes.fallbackImage,
-                    iframe: classes.iframe,
                     imgWrapper: classes.assetImgWrapper,
                 }}
                 disableQueryNonFungibleAsset
             />
             <div className={classes.nftNameWrapper}>
                 <Typography className={classes.nftName} color="textSecondary">
-                    {name}
+                    {formatTokenId(token.tokenId, 2)}
                 </Typography>
             </div>
             <div className={classes.closeIconWrapperBack} onClick={() => removeToken(token)}>

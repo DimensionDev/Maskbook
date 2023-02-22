@@ -34,7 +34,7 @@ const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<Web3Helper.ChainId
 }
 
 export interface AboutTabProps {
-    asset: AsyncState<Web3Helper.NonFungibleAssetScope<'all'>>
+    asset: AsyncState<Web3Helper.NonFungibleAssetAll>
 }
 
 export function AboutTab(props: AboutTabProps) {
@@ -42,7 +42,7 @@ export function AboutTab(props: AboutTabProps) {
     const { orders } = Context.useContainer()
     const { classes } = useStyles()
 
-    const topOffer = resolveTopOffer(orders.value?.data)
+    const topOffer = resolveTopOffer(orders?.value)
 
     if (asset.loading || !asset.value)
         return (

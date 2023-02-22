@@ -7,13 +7,7 @@ import { ElementAnchor, RetryHint, useWeb3ProfileHiddenSettings } from '@masknet
 import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { CollectionType } from '@masknet/web3-providers/types'
-import {
-    isSameAddress,
-    NonFungibleAsset,
-    NonFungibleCollection,
-    SocialAccount,
-    SocialIdentity,
-} from '@masknet/web3-shared-base'
+import { isSameAddress, SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 import { Box, Button, Stack, Typography, styled } from '@mui/material'
 import { useI18N } from '../../../../utils/index.js'
 import { CollectibleList } from './CollectibleList.js'
@@ -93,18 +87,14 @@ export interface CollectionListProps {
 export function CollectionList({ socialAccount, persona, profile, gridProps = EMPTY_OBJECT }: CollectionListProps) {
     const { t } = useI18N()
     const { classes } = useStyles(gridProps)
-    const [selectedCollection, setSelectedCollection] = useState<
-        NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | undefined
-    >()
+    const [selectedCollection, setSelectedCollection] = useState<Web3Helper.NonFungibleCollectionAll | undefined>()
     const { address: account } = socialAccount
 
     useEffect(() => {
         setSelectedCollection(undefined)
     }, [account])
 
-    const trustedNonFungibleTokens = useTrustedNonFungibleTokens() as Array<
-        NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    >
+    const trustedNonFungibleTokens = useTrustedNonFungibleTokens() as Web3Helper.NonFungibleAssetAll[]
 
     const {
         value: collectibles = EMPTY_LIST,
@@ -152,7 +142,7 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
         const collections = uniqBy(allCollectibles, (x) => x?.contract?.address.toLowerCase())
             .map((x) => x?.collection)
             .filter((x) => x?.name?.length)
-        return collections as Array<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+        return collections as Web3Helper.NonFungibleCollectionAll[]
     }, [allCollectibles.length])
 
     if (!allCollectibles.length && !done && !error && account)

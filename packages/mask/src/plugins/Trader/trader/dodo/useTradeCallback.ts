@@ -6,6 +6,7 @@ import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { GasConfig, Transaction } from '@masknet/web3-shared-evm'
 import type { SwapRouteSuccessResponse, TradeComputed } from '../../types/index.js'
+import { toHex } from 'web3-utils'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapRouteSuccessResponse> | null, gasConfig?: GasConfig) {
     const { account, chainId } = useChainContext()
@@ -17,7 +18,8 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapRouteSuccessRe
         if (!account || !tradeComputed?.trade_) return null
         return {
             from: account,
-            ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
+            value: tradeComputed.trade_.value ? toHex(tradeComputed.trade_.value) : undefined,
+            ...pick(tradeComputed.trade_, ['to', 'data']),
         } as Transaction
     }, [account, tradeComputed])
 

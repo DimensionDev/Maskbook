@@ -5,14 +5,14 @@ import { AssetPreviewer } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { NonFungibleCollection, NonFungibleToken } from '@masknet/web3-shared-base'
 import { SchemaType, formatTokenId, ChainId } from '@masknet/web3-shared-evm'
-import { useI18N as useBaseI18N } from '../../../utils/index.js'
-import { Translate, useI18N } from '../locales/index.js'
 import { DialogContent, Box, InputBase, Button, Typography, ListItem, useTheme } from '@mui/material'
 import { QuestionMark as QuestionMarkIcon, Check as CheckIcon } from '@mui/icons-material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
+import { useI18N as useBaseI18N } from '../../../utils/index.js'
+import { Translate, useI18N } from '../locales/index.js'
 
 interface StyleProps {
     isSelectSharesExceed: boolean
@@ -389,7 +389,6 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 <div key={i}>
                                     <NFTCard
                                         findToken={findToken}
-                                        renderOrder={i}
                                         token={token}
                                         selectToken={selectToken}
                                         isSelectSharesExceed={isSelectSharesExceed}
@@ -496,7 +495,6 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                     <div key={i}>
                                         <NFTCard
                                             findToken={findToken}
-                                            renderOrder={i}
                                             token={token}
                                             selectToken={selectToken}
                                             isSelectSharesExceed={isSelectSharesExceed}
@@ -547,7 +545,6 @@ interface NFTCardProps {
     findToken: OrderedERC721Token | undefined
     token: OrderedERC721Token
     isSelectSharesExceed: boolean
-    renderOrder: number
     selectToken: (
         token: OrderedERC721Token,
         findToken: OrderedERC721Token | undefined,
@@ -557,7 +554,7 @@ interface NFTCardProps {
 }
 
 function NFTCard(props: NFTCardProps) {
-    const { findToken, token, isSelectSharesExceed, renderOrder, selectToken } = props
+    const { findToken, token, isSelectSharesExceed, selectToken } = props
     const { classes, cx } = useStyles({ isSelectSharesExceed })
     return (
         <ListItem className={classes.selectWrapper}>

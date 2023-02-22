@@ -51,7 +51,11 @@ export const CURRENCIES_MAP: Record<SourceType, undefined | TrendingAPI.Currency
     [SourceType.RaritySniper]: undefined,
     [SourceType.TraitSniper]: undefined,
     [SourceType.CF]: undefined,
-    [SourceType.NFTLuckyDrop]: undefined,
+    [SourceType.OKX]: undefined,
+    [SourceType.Uniswap]: undefined,
+    [SourceType.NFTX]: undefined,
+    [SourceType.Etherscan]: undefined,
+    [SourceType.CryptoPunks]: undefined,
 }
 
 /**

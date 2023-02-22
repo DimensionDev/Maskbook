@@ -1,4 +1,4 @@
-// Learn more https://integrate.transak.com/Query-Parameters-9ec523df3b874ec58cef4fa3a906f238
+// Learn more https://docs.transak.com/docs/query-parameters
 export interface TransakConfig {
     apiKey: string
     environment: 'STAGING' | 'PRODUCTION'
@@ -16,4 +16,5 @@ export interface TransakConfig {
     widgetWidth?: string
     hideMenu?: boolean
     exchangeScreenTitle?: string
+    excludeFiatCurrencies?: string
 }

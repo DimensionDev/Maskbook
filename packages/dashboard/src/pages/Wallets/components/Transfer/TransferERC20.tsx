@@ -272,6 +272,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                                 onClick: async () => {
                                     const pickedToken = await selectFungibleToken({
                                         disableNativeToken: false,
+                                        chainId,
                                     })
                                     if (pickedToken) setSelectedToken(pickedToken)
                                 },

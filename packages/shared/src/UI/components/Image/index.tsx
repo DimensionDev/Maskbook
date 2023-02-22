@@ -1,9 +1,13 @@
 import { HTMLProps, ImgHTMLAttributes, useState } from 'react'
-import { LoadingBase, makeStyles } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { useTheme } from '@mui/material'
-import { useImageURL } from '../../../hooks/useImageURL.js'
 
 const useStyles = makeStyles<Pick<ImageProps, 'size' | 'rounded'>, 'center'>()((theme, { size, rounded }, refs) => ({
+    optimistic: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     container: {
         width: size ?? '100%',
         height: size ?? '100%',
@@ -33,6 +37,9 @@ const useStyles = makeStyles<Pick<ImageProps, 'size' | 'rounded'>, 'center'>()((
     },
 }))
 
+const MASK_DARK_FALLBACK = new URL('./mask-dark.png', import.meta.url).toString()
+const MASK_LIGHT_FALLBACK = new URL('./mask-light.png', import.meta.url).toString()
+
 export interface ImageProps
     extends ImgHTMLAttributes<HTMLImageElement>,
         withClasses<'container' | 'fallbackImage' | 'imageLoading'> {
@@ -57,32 +64,21 @@ export function Image({
     const theme = useTheme()
     const [failed, setFailed] = useState(false)
 
-    const { value: imageURL, loading: loadingImageURL } = useImageURL(rest.src)
-
-    if (loadingImageURL && !disableSpinner) {
+    if (rest.src && !failed) {
         return (
-            <div {...containerProps} className={cx(classes.container, classes.center, containerProps?.className)}>
-                <LoadingBase className={classes.imageLoading} />
-            </div>
-        )
-    }
-
-    if (imageURL && !failed) {
-        return (
-            <div {...containerProps} className={cx(classes.container, containerProps?.className)}>
+            <div {...containerProps} className={cx(classes.container, classes.optimistic, containerProps?.className)}>
                 <img
                     className={classes.image}
-                    loading="lazy"
-                    decoding="async"
                     width={size}
                     height={size}
                     {...rest}
-                    src={imageURL}
+                    src={rest.src}
                     onError={() => setFailed(true)}
                 />
             </div>
         )
     }
+
     if (fallback && !(fallback instanceof URL) && typeof fallback !== 'string') {
         return (
             <div
@@ -92,12 +88,6 @@ export function Image({
             </div>
         )
     }
-
-    const fallbackImageURL =
-        fallback?.toString() ??
-        (theme.palette.mode === 'dark'
-            ? new URL('./mask-dark.png', import.meta.url).toString()
-            : new URL('./mask-light.png', import.meta.url).toString())
 
     return (
         <div
@@ -109,7 +99,7 @@ export function Image({
                 width={size}
                 height={size}
                 {...rest}
-                src={fallbackImageURL}
+                src={fallback?.toString() ?? (theme.palette.mode === 'dark' ? MASK_DARK_FALLBACK : MASK_LIGHT_FALLBACK)}
                 className={cx(classes.image, classes.failImage, classes.fallbackImage)}
             />
         </div>

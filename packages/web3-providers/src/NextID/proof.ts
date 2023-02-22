@@ -94,7 +94,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         await staleNextIDCached(cacheKeyOfQueryPlatform)
     }
 
-    async queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean) {
+    async queryExistedBindingByPersona(personaPublicKey: string) {
         const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
         const { ids } = await fetchJSON<NextIDBindings>(url)
         // Will have only one item when query by personaPublicKey
@@ -121,10 +121,12 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     async queryLatestBindingByPlatform(
         platform: NextIDPlatform,
         identity: string,
+        publicKey?: string,
     ): Promise<NextIDPersonaBindings | null> {
         if (!platform && !identity) return null
 
         const result = await this.queryExistedBindingByPlatform(platform, identity, 1)
+        if (publicKey) return result.find((x) => x.persona === publicKey) ?? null
         return first(result) ?? null
     }
 
@@ -156,7 +158,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return []
     }
 
-    async queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string, enableCache?: boolean) {
+    async queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string) {
         try {
             if (!platform && !identity) return false
 
@@ -168,36 +170,40 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         }
     }
 
-    async queryProfilesByRelationService(identity: string) {
+    async queryProfilesByRelationService(domain: string) {
         const response = await fetchJSON<{
             data: {
-                identity: {
-                    neighborWithTraversal: Array<{
-                        source: NextIDPlatform
-                        to: { platform: NextIDPlatform; displayName: string }
-                        from: { platform: NextIDPlatform; displayName: string }
-                    }>
+                domain: {
+                    owner: {
+                        neighborWithTraversal: Array<{
+                            source: NextIDPlatform
+                            to: { platform: NextIDPlatform; displayName: string }
+                            from: { platform: NextIDPlatform; displayName: string }
+                        }>
+                    }
                 }
             }
         }>(RELATION_SERVICE_URL, {
             method: 'POST',
             mode: 'cors',
             body: JSON.stringify({
-                operationName: 'GET_PROFILES_QUERY',
-                variables: { identity: identity.toLowerCase(), platform: 'ethereum' },
+                operationName: 'GET_PROFILES_DOMAIN',
+                variables: { domain: domain.toLowerCase(), platform: 'ENS' },
                 query: `
-                    query GET_PROFILES_QUERY($platform: String, $identity: String) {
-                        identity(platform: $platform, identity: $identity) {                     
-                            neighborWithTraversal(depth: 7) {
-                                source
-                                to {
-                                    platform
-                                    displayName                                                                                                        
-                                }        
-                                from {
-                                    platform
-                                    displayName                                                                                                        
-                                }                                                                                          
+                    query GET_PROFILES_DOMAIN($platform: String, $domain: String) {                    
+                        domain(domainSystem: $platform, name: $domain) {  
+                            owner {                    
+                                neighborWithTraversal(depth: 5) {
+                                    source
+                                    to {
+                                        platform
+                                        displayName                                                                                                        
+                                    }        
+                                    from {
+                                        platform
+                                        displayName                                                                                                        
+                                    }                                                                                          
+                                }
                             }
                         }
                     }
@@ -205,16 +211,16 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             }),
         })
 
-        const rawData = response.data.identity.neighborWithTraversal
+        const rawData = response.data.domain.owner.neighborWithTraversal
             .map((x) => createBindingProofFromProfileQuery(x.to.platform, x.source, x.to.displayName))
             .concat(
-                response.data.identity.neighborWithTraversal.map((x) =>
+                response.data.domain.owner.neighborWithTraversal.map((x) =>
                     createBindingProofFromProfileQuery(x.from.platform, x.source, x.from.displayName),
                 ),
             )
 
         return uniqWith(rawData, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
-            (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform),
+            (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
         )
     }
 

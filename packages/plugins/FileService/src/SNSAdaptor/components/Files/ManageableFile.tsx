@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { formatFileSize } from '@masknet/shared-base'
+import { formatFileSize } from '@masknet/kit'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { MenuItem, Typography } from '@mui/material'
 import { FC, memo, useRef, useState } from 'react'
@@ -117,7 +117,7 @@ export const ManageableFile: FC<ManageableFileProps> = memo(
                         </ShadowRootMenu>
                     </div>
                 }>
-                <Typography className={classes.desc}>{formatFileSize(file.size)}</Typography>
+                <Typography className={classes.desc}>{formatFileSize(file.size, true)}</Typography>
                 {file.key ? (
                     <Typography className={classes.meta}>
                         <Translate.file_key

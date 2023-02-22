@@ -24,11 +24,12 @@ async function fetchFromX2Y2<T>(pathname: string) {
         | {
               success: boolean
               next?: string
-              data?: T
+              data?: T | null
           }
         | undefined
     >(urlcat(X2Y2_API_URL, pathname))
-    return response?.success ? ([response.data, response.next] as const) : EMPTY_LIST
+    // The `undefined` can be given a default value when deconstructed, but `null` can't.
+    return response?.success ? ([response.data ?? undefined, response.next] as const) : EMPTY_LIST
 }
 
 export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {

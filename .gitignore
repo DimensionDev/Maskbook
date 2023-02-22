@@ -33,7 +33,6 @@ compilation-stats.json
 /contracts
 
 # Following content is copied from https://github.com/github/gitignore/blob/master/Node.gitignore
-# Logs
 logs
 *.log
 npm-debug.log*

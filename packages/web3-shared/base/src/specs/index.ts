@@ -2,14 +2,13 @@ import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Emitter } from '@servie/events'
 import type {
+    ECKeyIdentifier,
     EnhanceableSite,
     ExtensionSite,
-    ProfileIdentifier,
-    ECKeyIdentifier,
+    NetworkPluginID,
     NextIDPersonaBindings,
     NextIDPlatform,
-    NameServiceID,
-    NetworkPluginID,
+    ProfileIdentifier,
     Proof,
 } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
@@ -18,7 +17,7 @@ import type {
     ReturnExplorerResolver,
     ReturnNetworkResolver,
     ReturnProviderResolver,
-} from '../utils/index.js'
+} from '../helpers/index.js'
 
 export interface Pageable<Item, Indicator = unknown> {
     /** the indicator of the current page */
@@ -87,6 +86,11 @@ export enum SourceType {
     Element = 'Element',
     Solsea = 'Solsea',
     Solanart = 'Solanart',
+    OKX = 'OKX',
+    Uniswap = 'Uniswap',
+    NFTX = 'NFTX',
+    Etherscan = 'Etherscan',
+    CryptoPunks = 'CryptoPunks',
 
     // Rarity
     RaritySniper = 'RaritySniper',
@@ -94,9 +98,6 @@ export enum SourceType {
 
     // Token List
     R2D2 = 'R2D2',
-
-    // NFT Lucky drop
-    NFTLuckyDrop = 'NFTLuckyDrop',
 }
 
 export enum SearchResultType {
@@ -108,7 +109,10 @@ export enum SearchResultType {
     FungibleToken = 'FungibleToken',
     // e.g., #APE
     NonFungibleToken = 'NonFungibleToken',
+    // e.g., #punks
     NonFungibleCollection = 'NonFungibleCollection',
+    // e.g., realMaskNetwork
+    CollectionListByTwitterHandler = 'CollectionListByTwitterHandler',
 }
 
 export enum ActivityType {
@@ -389,6 +393,17 @@ export interface NonFungibleTokenMetadata<ChainId> {
     source?: SourceType
 }
 
+export interface SocialLinks {
+    website?: string
+    email?: string
+    twitter?: string
+    discord?: string
+    telegram?: string
+    github?: string
+    instagram?: string
+    medium?: string
+}
+
 export interface NonFungibleCollection<ChainId, SchemaType> {
     chainId: ChainId
     name: string
@@ -409,16 +424,7 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     /** source type */
     source?: SourceType
     assets?: Array<NonFungibleAsset<ChainId, SchemaType>>
-    socialLinks?: {
-        website?: string
-        email?: string
-        twitter?: string
-        discord?: string
-        telegram?: string
-        github?: string
-        instagram?: string
-        medium?: string
-    }
+    socialLinks?: SocialLinks
 }
 
 export interface NonFungibleCollectionOverview {
@@ -682,6 +688,7 @@ export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId
     symbol: string
     source: SourceType
     token?: FungibleToken<ChainId, SchemaType>
+    socialLinks?: SocialLinks
 }
 
 export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
@@ -700,9 +707,10 @@ export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<Chai
 export type TokenResult<ChainId, SchemaType> =
     | FungibleTokenResult<ChainId, SchemaType>
     | NonFungibleTokenResult<ChainId, SchemaType>
+    | NonFungibleCollectionResult<ChainId, SchemaType>
 
 export interface NonFungibleCollectionResult<ChainId, SchemaType> extends Result<ChainId> {
-    type: SearchResultType.NonFungibleCollection
+    type: SearchResultType.CollectionListByTwitterHandler
     address: string
     id?: string
     rank?: number
@@ -850,6 +858,10 @@ export interface Transaction<ChainId, SchemaType> {
     >
     /** estimated tx fee */
     fee?: Price
+    input?: string
+    hash?: string
+    methodId?: string
+    blockNumber?: number
 }
 
 export interface RecentTransaction<ChainId, Transaction> {
@@ -943,6 +955,7 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
             account: string
             identifier?: ECKeyIdentifier
         },
+        silent?: boolean,
     ): Promise<Account<ChainId>>
     /** Dismiss the connection. */
     disconnect(): Promise<void>
@@ -970,8 +983,12 @@ export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
     providerType?: ProviderType
     /** Gas payment token. */
     paymentToken?: string
+    /** Only Support Mask Wallet, silent switch wallet */
+    silent?: boolean
     /** Fragments to merge into the transaction. */
     overrides?: Partial<Transaction>
+    /** Termination signal */
+    signal?: AbortSignal
 }
 export interface Connection<
     ChainId,
@@ -1172,6 +1189,8 @@ export interface Connection<
     connect(initial?: Web3ConnectionOptions): Promise<Account<ChainId>>
     /** Break connection */
     disconnect(initial?: Web3ConnectionOptions): Promise<void>
+    /** Confirm transaction */
+    confirmTransaction(hash: string, initial?: Web3ConnectionOptions): Promise<TransactionReceipt>
     /** Replace transaction */
     replaceTransaction(hash: string, config: Transaction, initial?: Web3ConnectionOptions): Promise<void>
     /** Cancel transaction */
@@ -1215,6 +1234,12 @@ export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = Hu
     /** Get fungible assets owned by the given account. */
     getFungibleAssets?: (
         account: string,
+        initial?: Web3HubOptions,
+    ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
+    /** Get fungible assets owned by the give trusted fungible token. */
+    getTrustedFungibleAssets?: (
+        account: string,
+        trustedFungibleTokens?: Array<FungibleToken<ChainId, SchemaType>>,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
     /** Get balance of a fungible token owned by the given account. */
@@ -1463,25 +1488,16 @@ export interface IdentityServiceState<ChainId> {
     lookup(identity: SocialIdentity): Promise<Array<SocialAddress<ChainId>>>
 }
 
-export interface NameServiceResolver {
-    get id(): NameServiceID
-    /** get address of domain name */
-    lookup?: (domain: string) => Promise<string | undefined>
-    /** get domain name of address */
-    reverse?: (address: string) => Promise<string | undefined>
-}
-
 export interface NameServiceState<ChainId> {
     ready: boolean
     readyPromise: Promise<void>
 
-    /** create name resolver */
-    createResolvers: (chainId: ChainId) => NameServiceResolver[]
     /** get address of domain name */
     lookup?: (chainId: ChainId, domain: string) => Promise<string | undefined>
     /** get domain name of address */
     reverse?: (chainId: ChainId, address: string) => Promise<string | undefined>
 }
+
 export interface TokenState<ChainId, SchemaType> {
     ready: boolean
     readyPromise: Promise<void>
@@ -1616,6 +1632,7 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
             account: string
             identifier?: ECKeyIdentifier
         },
+        silent?: boolean,
     ) => Promise<Account<ChainId>>
     /** Disconnect with the provider. */
     disconnect: (providerType: ProviderType) => Promise<void>

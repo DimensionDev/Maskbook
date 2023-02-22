@@ -18,66 +18,78 @@ patchedDependencies:
   cross-fetch@3.1.5:
     hash: fffro4yjhjxi2jqwpqmojnjbce
     path: patches/cross-fetch@3.1.5.patch
-  urlcat@2.0.4:
-    hash: fggwetex7eobhq3hztj4obsulu
-    path: patches/urlcat@2.0.4.patch
-  gulp@4.0.2:
-    hash: 2y5kpiugqogdejwrac5fzdim7y
-    path: patches/gulp@4.0.2.patch
-  '@ethersphere/bee-js@5.0.0':
-    hash: g3xomw7pzn5koufm6j4gkm6n5m
-    path: patches/@ethersphere__bee-js@5.0.0.patch
-  '@ceramicnetwork/rpc-transport@0.3.1':
-    hash: subw5upjv36ceix3wmw66isn6u
-    path: patches/@ceramicnetwork__rpc-transport@0.3.1.patch
-  ipfs-http-client@57.0.3:
-    hash: 7oiabyd5hzeabolk22o64jpd4i
-    path: patches/ipfs-http-client@57.0.3.patch
-  '@emotion/use-insertion-effect-with-fallbacks@1.0.0':
-    hash: ewwh6qko3asynoh7f6o5yjipdy
-    path: patches/@emotion__use-insertion-effect-with-fallbacks@1.0.0.patch
-  '@mui/base@5.0.0-alpha.100':
-    hash: cc7k56pam6cgsdxwjuynldgftq
-    path: patches/@mui__base@5.0.0-alpha.100.patch
-  '@emotion/react@11.10.4':
-    hash: obcydjbogyjam4qag626nceajy
-    path: patches/@emotion__react@11.10.4.patch
   '@uniswap/v3-sdk@3.9.0':
     hash: i674dmxu47nk67u5bur7yueebu
     path: patches/@uniswap__v3-sdk@3.9.0.patch
-  micromark@3.1.0:
-    hash: w5le45vl373yc24qnd4o3e4hz4
-    path: patches/micromark@3.1.0.patch
+  arweave@1.11.4:
+    hash: lwxdtt2msovfmigiutpkaty3lq
+    path: patches/arweave@1.11.4.patch
+  '@snapshot-labs/snapshot.js@0.4.12':
+    hash: p7agjh5ebmj425gqxjxh7jozii
+    path: patches/@snapshot-labs__snapshot.js@0.4.12.patch
+  '@ceramicnetwork/rpc-transport@0.3.1':
+    hash: subw5upjv36ceix3wmw66isn6u
+    path: patches/@ceramicnetwork__rpc-transport@0.3.1.patch
+  gulp@4.0.2:
+    hash: 2y5kpiugqogdejwrac5fzdim7y
+    path: patches/gulp@4.0.2.patch
+  urlcat@2.0.4:
+    hash: fggwetex7eobhq3hztj4obsulu
+    path: patches/urlcat@2.0.4.patch
+  ipfs-http-client@57.0.3:
+    hash: 7oiabyd5hzeabolk22o64jpd4i
+    path: patches/ipfs-http-client@57.0.3.patch
+  '@ethersphere/bee-js@5.0.0':
+    hash: g3xomw7pzn5koufm6j4gkm6n5m
+    path: patches/@ethersphere__bee-js@5.0.0.patch
+  '@emotion/use-insertion-effect-with-fallbacks@1.0.0':
+    hash: ewwh6qko3asynoh7f6o5yjipdy
+    path: patches/@emotion__use-insertion-effect-with-fallbacks@1.0.0.patch
   '@emotion/cache@11.10.3':
     hash: anquw7u43yedhv6g6kmhzkdhze
     path: patches/@emotion__cache@11.10.3.patch
+  '@emotion/react@11.10.4':
+    hash: obcydjbogyjam4qag626nceajy
+    path: patches/@emotion__react@11.10.4.patch
+  '@mui/base@5.0.0-alpha.100':
+    hash: cc7k56pam6cgsdxwjuynldgftq
+    path: patches/@mui__base@5.0.0-alpha.100.patch
+  react-devtools-inline@4.26.1:
+    hash: fpee2mntbhrd2bberabvpkyh5q
+    path: patches/react-devtools-inline@4.26.1.patch
+  micromark@3.1.0:
+    hash: w5le45vl373yc24qnd4o3e4hz4
+    path: patches/micromark@3.1.0.patch
   micromark-util-symbol@1.0.1:
     hash: jkhnsgx77ffpyllfnod5pyn4ue
     path: patches/micromark-util-symbol@1.0.1.patch
   '@hookform/resolvers@2.9.10':
     hash: dqqyd5a3hlw75qwefcjrgni3fy
     path: patches/@hookform__resolvers@2.9.10.patch
-  react-devtools-inline@4.26.1:
-    hash: fpee2mntbhrd2bberabvpkyh5q
-    path: patches/react-devtools-inline@4.26.1.patch
   '@types/react-avatar-editor@13.0.0':
     hash: 6wzwgbn4gsisp2tjbg76iifhqq
     path: patches/@types__react-avatar-editor@13.0.0.patch
   web3@1.8.0:
     hash: dcxxuqxbti2wcxbar42oow5yze
     path: patches/web3@1.8.0.patch
-  rss3-next@0.6.17:
-    hash: db27yqpr4wdtpwfyvaxcqd4jpi
-    path: patches/rss3-next@0.6.17.patch
   fuse.js@6.6.2:
     hash: b2o4qvyfvxmpo7347sqko6h22a
     path: patches/fuse.js@6.6.2.patch
-  '@types/react-highlight-words@0.16.4':
-    hash: cu6glh5cl4qvdid3ys3m6a2f7e
-    path: patches/@types__react-highlight-words@0.16.4.patch
+  rss3-next@0.6.17:
+    hash: db27yqpr4wdtpwfyvaxcqd4jpi
+    path: patches/rss3-next@0.6.17.patch
   '@project-serum/sol-wallet-adapter@0.2.6':
     hash: dl5wqnnaxjm7biesxtvdpr7gpe
     path: patches/@project-serum__sol-wallet-adapter@0.2.6.patch
+  '@types/react-highlight-words@0.16.4':
+    hash: cu6glh5cl4qvdid3ys3m6a2f7e
+    path: patches/@types__react-highlight-words@0.16.4.patch
+  immer@9.0.16:
+    hash: 5xmqd5oohffxunmhptcxd5g33e
+    path: patches/immer@9.0.16.patch
+  '@cyberlab/cyberconnect@4.2.2':
+    hash: 7wgc4b53ygfwefhtjbh3dydjgy
+    path: patches/@cyberlab__cyberconnect@4.2.2.patch
   fortmatic@2.2.1:
     hash: tb3oevqnvhntsyfyhi2z6spuea
     path: patches/fortmatic@2.2.1.patch
@@ -87,24 +99,15 @@ patchedDependencies:
   reflect-metadata@0.1.13:
     hash: pnra5xi77mqlyipflqvcm4z6ga
     path: patches/reflect-metadata@0.1.13.patch
-  bloom-filters@3.0.0:
-    hash: 2etetjrjxbcye2oktxqpij75ey
-    path: patches/bloom-filters@3.0.0.patch
-  '@cyberlab/cyberconnect@4.2.2':
-    hash: 7wgc4b53ygfwefhtjbh3dydjgy
-    path: patches/@cyberlab__cyberconnect@4.2.2.patch
   ses@0.17.0:
     hash: bgxlirdvz233rozklsyry5sxxa
     path: patches/ses@0.17.0.patch
-  arweave@1.11.4:
-    hash: lwxdtt2msovfmigiutpkaty3lq
-    path: patches/arweave@1.11.4.patch
-  '@snapshot-labs/snapshot.js@0.4.12':
-    hash: p7agjh5ebmj425gqxjxh7jozii
-    path: patches/@snapshot-labs__snapshot.js@0.4.12.patch
-  immer@9.0.16:
-    hash: 5xmqd5oohffxunmhptcxd5g33e
-    path: patches/immer@9.0.16.patch
+  bloom-filters@3.0.0:
+    hash: 2etetjrjxbcye2oktxqpij75ey
+    path: patches/bloom-filters@3.0.0.patch
+  '@sentry/core@7.37.2':
+    hash: rklncqa6modgoos6z6mwlg3pli
+    path: patches/@sentry__core@7.37.2.patch
 
 importers:
 
@@ -196,8 +199,8 @@ importers:
         specifier: 0.0.2-20220516081411-2649814
         version: 0.0.2-20220516081411-2649814_eslint@8.28.0
       '@magic-works/i18n-codegen':
-        specifier: ^0.4.1
-        version: 0.4.1_twk4ge2fldxk2qjgakp4iwkpb4
+        specifier: ^0.5.0
+        version: 0.5.0_twk4ge2fldxk2qjgakp4iwkpb4
       '@masknet/cli':
         specifier: workspace:^
         version: link:packages/scripts
@@ -411,6 +414,9 @@ importers:
       '@masknet/web3-state':
         specifier: workspace:^
         version: link:../web3-state
+      '@masknet/web3-telemetry':
+        specifier: workspace:^
+        version: link:../web3-telemetry
       '@msgpack/msgpack':
         specifier: ^2.8.0
         version: 2.8.0
@@ -768,6 +774,9 @@ importers:
       '@masknet/web3-state':
         specifier: workspace:^
         version: link:../web3-state
+      '@masknet/web3-telemetry':
+        specifier: workspace:^
+        version: link:../web3-telemetry
       '@metamask/eth-sig-util':
         specifier: ^4.0.0
         version: 4.0.0
@@ -1057,6 +1066,9 @@ importers:
       react-refresh:
         specifier: ^0.14.0
         version: 0.14.0
+      rimraf:
+        specifier: ^3.0.2
+        version: 3.0.2
       source-map-loader:
         specifier: ^4.0.1
         version: 4.0.1_webpack@5.75.0
@@ -1493,6 +1505,9 @@ importers:
       '@masknet/web3-shared-solana':
         specifier: workspace:^
         version: link:../../web3-shared/solana
+      '@masknet/web3-telemetry':
+        specifier: workspace:^
+        version: link:../../web3-telemetry
       bignumber.js:
         specifier: 9.1.0
         version: 9.1.0
@@ -2601,8 +2616,8 @@ importers:
   packages/sentry:
     dependencies:
       '@sentry/browser':
-        specifier: 7.3.0
-        version: 7.3.0
+        specifier: 7.37.2
+        version: 7.37.2
     devDependencies:
       '@rollup/plugin-node-resolve':
         specifier: ^13.3.0
@@ -3069,6 +3084,9 @@ importers:
       '@masknet/web3-helpers':
         specifier: workspace:^
         version: link:../../web3-helpers
+      '@masknet/web3-providers':
+        specifier: workspace:^
+        version: link:../../web3-providers
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../../web3-shared/base
@@ -3099,6 +3117,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0
+      unstated-next:
+        specifier: ^1.1.0
+        version: 1.1.0
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0
@@ -3156,12 +3177,12 @@ importers:
 
   packages/web3-providers:
     dependencies:
+      '@bonfida/spl-name-service':
+        specifier: ^0.1.50
+        version: 0.1.50_dfloxz3bdvmtzsgvgqvkdrku54
       '@dimensiondev/mask-wallet-core':
         specifier: 0.1.0-20211013082857-eb62e5f
         version: 0.1.0-20211013082857-eb62e5f
-      '@ensdomains/eth-ens-namehash':
-        specifier: ^2.0.15
-        version: 2.0.15
       '@masknet/icons':
         specifier: workspace:^
         version: link:../icons
@@ -3228,9 +3249,6 @@ importers:
       date-fns:
         specifier: ^2.29.3
         version: 2.29.3
-      ethjs-ens:
-        specifier: ^2.0.1
-        version: 2.0.1
       fuse.js:
         specifier: 6.6.2
         version: 6.6.2_b2o4qvyfvxmpo7347sqko6h22a
@@ -3274,6 +3292,12 @@ importers:
         specifier: 1.8.0
         version: 1.8.0
     devDependencies:
+      '@sentry/browser':
+        specifier: 7.37.2
+        version: 7.37.2
+      '@sentry/types':
+        specifier: ^7.37.2
+        version: 7.37.2
       '@types/json-stable-stringify':
         specifier: ^1.0.34
         version: 1.0.34
@@ -3344,9 +3368,6 @@ importers:
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../base
-      '@walletconnect/client':
-        specifier: 1.7.8
-        version: 1.7.8_2krbsxzv524dzcdemy7vploqza
       bignumber.js:
         specifier: 9.1.0
         version: 9.1.0
@@ -3511,6 +3532,24 @@ importers:
       mock-socket:
         specifier: ^9.1.5
         version: 9.1.5
+
+  packages/web3-telemetry:
+    dependencies:
+      '@masknet/shared-base':
+        specifier: workspace:^
+        version: link:../shared-base
+      '@masknet/web3-helpers':
+        specifier: workspace:^
+        version: link:../web3-helpers
+      '@masknet/web3-hooks-base':
+        specifier: workspace:^
+        version: link:../web3-hooks/base
+      '@masknet/web3-providers':
+        specifier: workspace:^
+        version: link:../web3-providers
+      react-use:
+        specifier: ^17.4.0
+        version: 17.4.0
 
 packages:
 
@@ -5847,6 +5886,26 @@ packages:
       '@solana/web3.js': 1.44.2
       bn.js: 5.2.0
       borsh: 0.6.0
+    transitivePeerDependencies:
+      - bufferutil
+      - encoding
+      - utf-8-validate
+    dev: false
+
+  /@bonfida/spl-name-service/0.1.50_dfloxz3bdvmtzsgvgqvkdrku54:
+    resolution: {integrity: sha512-StwKh4DPuLm/zSpf2Dk6pFr7gYrV7T+XTSafgoGI+2STXrzipPDtUtwXeF56HGKZ/IkUtZh4SRUd42q6U/MyrA==}
+    peerDependencies:
+      '@solana/buffer-layout': ^4.0.0
+      '@solana/spl-token': 0.2.0
+      '@solana/web3.js': ^1.37.1
+      bn.js: ^5.1.3
+      borsh: ^0.7.0
+    dependencies:
+      '@bonfida/name-offers': 0.0.1_lkrc4hmmz5vh6i5esgpeenjqca
+      '@ethersproject/sha2': 5.7.0
+      '@solana/buffer-layout': 4.0.0
+      '@solana/spl-token': 0.1.8
+      '@solana/web3.js': 1.44.2
     transitivePeerDependencies:
       - bufferutil
       - encoding
@@ -8242,8 +8301,8 @@ packages:
     resolution: {integrity: sha512-+wPlUCaGJ/9rzRSugOi1FpoV5uwFKgkpmFFgKCdEhf6C6YQD234dvlYPZ1U+sCBUBFU84eaUEgxrC3UnHEsu/A==}
     dev: false
 
-  /@magic-works/i18n-codegen/0.4.1_twk4ge2fldxk2qjgakp4iwkpb4:
-    resolution: {integrity: sha512-iNwPjg8B+M3ZB3qIcsLJAhMk+RjwL6Y9SD1OVZTxmfhl5UGKJc4I8TgMJdXW/Jjn+H0FzcZBuztaw6SGx+s2wg==}
+  /@magic-works/i18n-codegen/0.5.0_twk4ge2fldxk2qjgakp4iwkpb4:
+    resolution: {integrity: sha512-AeJG2cAYXn848PXIiXTpPJofus4hGxvhkaZ/+/yOHzFkD90YqL0TX44GcgxQeMp0Hwvt1YkFm/YJmpiHN7laSg==}
     hasBin: true
     peerDependencies:
       typescript: ^4.8 || ^5
@@ -8254,7 +8313,7 @@ packages:
       chokidar: 3.5.3
       i18next-translation-parser: 1.0.1
       typescript: 5.0.0-dev.20221202
-      yargs: 17.6.2
+      yargs: 17.7.0
     dev: true
 
   /@manypkg/find-root/1.1.0:
@@ -9457,47 +9516,43 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@sentry/browser/7.3.0:
-    resolution: {integrity: sha512-UJMTDbajKNRGrs4ZQNelrPDaATvSZ9uELpPOtPSG6JUvB1BCwGgsgzz55RS0Uqs7B8KhMnDQ0kIn3FMewM4FMg==}
+  /@sentry/browser/7.37.2:
+    resolution: {integrity: sha512-UvKfpx6+BUdV+rGAXqDBznagfz44Ut+x2h/i0OZPNCEpXaH9KAQOlv06I66861aXiucWFRb1lAMrN4+cE9aJIg==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/core': 7.3.0
-      '@sentry/types': 7.3.0
-      '@sentry/utils': 7.3.0
+      '@sentry/core': 7.37.2_rklncqa6modgoos6z6mwlg3pli
+      '@sentry/replay': 7.37.2
+      '@sentry/types': 7.37.2
+      '@sentry/utils': 7.37.2
       tslib: 1.14.1
-    dev: false
 
-  /@sentry/core/7.3.0:
-    resolution: {integrity: sha512-EvuWVlYm0F0+BtIEmQiCL31Fw0cfKSwUTmxc99wvouaabpHBr2zCJHRxaXOWzxS705bYBJEQiFDTIHfoOQZMzA==}
+  /@sentry/core/7.37.2_rklncqa6modgoos6z6mwlg3pli:
+    resolution: {integrity: sha512-LjofMDSTyVeBErl9N7TTqlyEVuW1g6U4iuJtdZ75JohnvVxzWdpZfWfddwQ6h7nGWfe9dNg0fGs1wxKtMhY+MA==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/hub': 7.3.0
-      '@sentry/types': 7.3.0
-      '@sentry/utils': 7.3.0
+      '@sentry/types': 7.37.2
+      '@sentry/utils': 7.37.2
       tslib: 1.14.1
-    dev: false
+    patched: true
 
-  /@sentry/hub/7.3.0:
-    resolution: {integrity: sha512-0GtTaWf/hoAMoIFY7Ke6eozIbG3FdIPM364sER4SxUQVSklp6AORrV6p82IgWPROK6aj83cPk9Bszgi6RiF/BA==}
+  /@sentry/replay/7.37.2:
+    resolution: {integrity: sha512-y8Gfc7EGfGU4eVae5HAtch2YgkiTzNPi16dcqPX9jtIHDwiurGqWcaOgs5HoGJm45eMfl6LvcE7MPbwqcDkPIA==}
+    engines: {node: '>=12'}
+    dependencies:
+      '@sentry/core': 7.37.2_rklncqa6modgoos6z6mwlg3pli
+      '@sentry/types': 7.37.2
+      '@sentry/utils': 7.37.2
+
+  /@sentry/types/7.37.2:
+    resolution: {integrity: sha512-SxKQOCX94ZaQM4C2ysNjHdJsjYapu/NYZCz1cnPyCdDvYfhwiVge1uq6ZHiQ/ARfxAAOmc3R4Mh3VvEz7WUOdw==}
+    engines: {node: '>=8'}
+
+  /@sentry/utils/7.37.2:
+    resolution: {integrity: sha512-5irN1nN/mtdOoWwsJiwBK0gPgNMkciUubEMbCaaXqJaGyGz8+yfDvXj7L+xGYiU57z+7+QkkSKxKEZ/IcBpjVQ==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/types': 7.3.0
-      '@sentry/utils': 7.3.0
+      '@sentry/types': 7.37.2
       tslib: 1.14.1
-    dev: false
-
-  /@sentry/types/7.3.0:
-    resolution: {integrity: sha512-cGkHdh9+uvbFTj65TjWcXuhe6vQiMY+U+N2GE5xCfmZT9hwuouCASViNsbJMpZqvCg+Yi0fasQLZ71rujiRNOA==}
-    engines: {node: '>=8'}
-    dev: false
-
-  /@sentry/utils/7.3.0:
-    resolution: {integrity: sha512-xUP8TBf2p/c6CN8eFQ7Y+xk0IFrJXsph5ScozqNl/2l/Xs8hd2EiYETqgUklphoYD4J2RxvPwMyqBL15QN6wNg==}
-    engines: {node: '>=8'}
-    dependencies:
-      '@sentry/types': 7.3.0
-      tslib: 1.14.1
-    dev: false
 
   /@servie/events/3.0.0:
     resolution: {integrity: sha512-Zd79bWhTuG8NvPgSiOcivorJIDg+goMw76TIqYTIR5ua5HOEkS29fmIh2VVSeDeabNF6z8ceTwzB0pSh/BhXyw==}
@@ -19575,13 +19630,6 @@ packages:
       - supports-color
     dev: false
 
-  /eth-ens-namehash/1.0.2:
-    resolution: {integrity: sha512-UCAyRNC3WIhEdGhnczqntMSjbRk8JsusBd5CfHkfctwqXI3ArwAJyTVqYQ/Y+w2IRojiq7dMUROqOQePF/2I2w==}
-    dependencies:
-      idna-uts46: 1.1.0
-      js-sha3: 0.5.7
-    dev: false
-
   /eth-ens-namehash/2.0.8:
     resolution: {integrity: sha1-IprEbsqG1S4MmR58sq74P/D2i88=}
     dependencies:
@@ -19668,10 +19716,6 @@ packages:
       scrypt-js: 3.0.1
       secp256k1: 4.0.2
       setimmediate: 1.0.5
-
-  /ethereum-ens-network-map/1.0.2:
-    resolution: {integrity: sha512-5qwJ5n3YhjSpE6O/WEBXCAb2nagUgyagJ6C0lGUBWC4LjKp/rRzD+pwtDJ6KCiITFEAoX4eIrWOjRy0Sylq5Hg==}
-    dev: false
 
   /ethereumjs-abi/0.6.8:
     resolution: {integrity: sha512-Tx0r/iXI6r+lRsdvkFDlut0N08jWMnKRZ6Gkq+Nmw75lZe4e6o3EkSnkaBP5NF6+m5PTGAr9JP43N3LyeoglsA==}
@@ -19899,82 +19943,12 @@ packages:
       - utf-8-validate
     dev: false
 
-  /ethjs-abi/0.2.0:
-    resolution: {integrity: sha512-ELExSTNV7rm9WA22pA3kxNmaQz1o/peM8X1pZdWypEhuNzFjOR+hIV09Mcfw69Q0kbdd7JNGAFb5dyoL/bnItA==}
-    engines: {node: '>=6.5.0', npm: '>=3'}
-    dependencies:
-      bn.js: 4.11.6
-      js-sha3: 0.5.5
-      number-to-bn: 1.7.0
-    dev: false
-
-  /ethjs-contract/0.1.9:
-    resolution: {integrity: sha512-0+5p2jZoVYA1rp+pDfhxGBdvHHw8jtyxsryM1CC05sT+vPYWAkDnlahBDBwF3wTtMq2Tslf/rGOJfCh7lEE6fQ==}
-    engines: {node: '>=6.5.0', npm: '>=3'}
-    dependencies:
-      ethjs-abi: 0.2.0
-      ethjs-filter: 0.1.5
-      ethjs-util: 0.1.3
-      js-sha3: 0.5.5
-    dev: false
-
-  /ethjs-ens/2.0.1:
-    resolution: {integrity: sha512-rQ8hbjGr5Nqitc3wFGsmR/RbZ3iKVWNiPQQuEdKsXEndUVPLaWA8rD+/gl49fzIJ8M0JiZUmAY6umWVT8vMAyw==}
-    dependencies:
-      eth-ens-namehash: 1.0.2
-      ethereum-ens-network-map: 1.0.2
-      ethjs-contract: 0.1.9
-      ethjs-query: 0.2.9
-    dev: false
-
-  /ethjs-filter/0.1.5:
-    resolution: {integrity: sha512-ii+Av0Kv0mOzQSP2aBSWTeamTntWDXgHN0Sj1UnTpzYH+gQdJCvirsc0BO07MWcsk0kuLogITDOPVFFd7qcUMQ==}
-    engines: {node: '>=6.5.0', npm: '>=3'}
-    dev: false
-
-  /ethjs-format/0.2.2:
-    resolution: {integrity: sha512-+iLG5SkJReHkdti/rtHXWNXX9f7S3snouBjs8IOwOUT5uZnkcVuzRDClAamZ+27DVDuPxU1UL/nkXpHl8KO5DQ==}
-    engines: {node: '>=6.5.0', npm: '>=3'}
-    dependencies:
-      bn.js: 4.11.6
-      ethjs-schema: 0.1.5
-      ethjs-util: 0.1.3
-      is-hex-prefixed: 1.0.0
-      number-to-bn: 1.7.0
-      strip-hex-prefix: 1.0.0
-    dev: false
-
-  /ethjs-query/0.2.9:
-    resolution: {integrity: sha512-ZTaV0zze6/OQWwaZQmTzg+RoF5V8s/IZ4Up2GAj8+EzLQ+SnInlyeOYhJLSo93bnv1gdvCK/hJXh8zqzeYWD/Q==}
-    engines: {node: '>=6.5.0', npm: '>=3'}
-    dependencies:
-      ethjs-format: 0.2.2
-      ethjs-rpc: 0.1.5
-    dev: false
-
-  /ethjs-rpc/0.1.5:
-    resolution: {integrity: sha512-RSqGrUjkA1UHl0d/FteGHFCv3spO/sA+lQHiIYIczYKE1nkM1Q2fKjiqssq+6LnYc+g3NWOBr4AIKQzXc8RQ1g==}
-    engines: {node: '>=6.5.0', npm: '>=3'}
-    dev: false
-
-  /ethjs-schema/0.1.5:
-    resolution: {integrity: sha512-QH+Gu7yVYEIXDcLbdDfYxn1CAT0vkH97ZQfaG2wHy6BthuHoUjM0RUgqWaDMM8S8BUKsHq/nAMPPszaROELlbg==}
-    dev: false
-
   /ethjs-unit/0.1.6:
     resolution: {integrity: sha1-xmWSHkduh7ziqdWIpv4EBbLEFpk=}
     engines: {node: '>=6.5.0', npm: '>=3'}
     dependencies:
       bn.js: 4.11.6
       number-to-bn: 1.7.0
-
-  /ethjs-util/0.1.3:
-    resolution: {integrity: sha512-QqpX2dsEG2geSMG9dTMJVhfP1kGRdGMNjiHPiTjkju+X5cB0PQIwUzRr5k21pFkgF5zuLccqe83p7Gh5fFM5tQ==}
-    engines: {node: '>=6.5.0', npm: '>=3'}
-    dependencies:
-      is-hex-prefixed: 1.0.0
-      strip-hex-prefix: 1.0.0
-    dev: false
 
   /ethjs-util/0.1.6:
     resolution: {integrity: sha512-CUnVOQq7gSpDHZVVrQW8ExxUETWrnrvXYvYz55wOU8Uj4VCgw56XC2B/fVqQN+f7gmrnRHSLVnFAwsCuNwji8w==}
@@ -22395,13 +22369,6 @@ packages:
       punycode: 2.1.0
     dev: false
 
-  /idna-uts46/1.1.0:
-    resolution: {integrity: sha512-edsPih0TrHpA+8yUtGK7+fBBBCJfajYcFbKVPs3d4ls0O1sGnrvF1tl8jl9/nJssMOnyu0HGH89yHfe7syxyHA==}
-    engines: {node: '>=4.0.0'}
-    dependencies:
-      punycode: 2.1.1
-    dev: false
-
   /ieee754/1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
 
@@ -23675,10 +23642,6 @@ packages:
 
   /js-sha256/0.9.0:
     resolution: {integrity: sha512-sga3MHh9sgQN2+pJ9VYZ+1LPwXOxuBJBA5nrR5/ofPfuiJBE2hnjsaN8se8JznOmGLN2p49Pe5U/ttafcs/apA==}
-    dev: false
-
-  /js-sha3/0.5.5:
-    resolution: {integrity: sha512-yLLwn44IVeunwjpDVTDZmQeVbB0h+dZpY2eO68B/Zik8hu6dH+rKeLxwua79GGIvW6xr8NBAcrtiUbYrTjEFTA==}
     dev: false
 
   /js-sha3/0.5.7:
@@ -31533,7 +31496,7 @@ packages:
       smartwrap: 2.0.2
       strip-ansi: 6.0.1
       wcwidth: 1.0.1
-      yargs: 17.6.2
+      yargs: 17.7.0
     dev: true
 
   /tunnel-agent/0.6.0:
@@ -34154,6 +34117,19 @@ packages:
       string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 21.1.1
+
+  /yargs/17.7.0:
+    resolution: {integrity: sha512-dwqOPg5trmrre9+v8SUo2q/hAwyKoVfu8OC1xPHKJGNdxAvPl4sKxL4vBnh3bQz/ZvvGAFeA5H3ou2kcOY8sQQ==}
+    engines: {node: '>=12'}
+    dependencies:
+      cliui: 8.0.1
+      escalade: 3.1.1
+      get-caller-file: 2.0.5
+      require-directory: 2.1.1
+      string-width: 4.2.3
+      y18n: 5.0.8
+      yargs-parser: 21.1.1
+    dev: true
 
   /yargs/3.10.0:
     resolution: {integrity: sha512-QFzUah88GAGy9lyDKGBqZdkYApt63rCXYBGYnEP4xDJPXNqXXnBDACnbrXnViV6jRSqAePwrATi2i8mfYm4L1A==}

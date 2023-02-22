@@ -49,6 +49,7 @@ export async function normalizeBackupVersion2(item: BackupJSONFileVersion2): Pro
             updatedAt: Some(new Date(persona.updatedAt)),
             nickname: persona.nickname ? Some(persona.nickname) : None,
             mnemonic: None,
+            address: persona.address ? Some(persona.address) : None,
         }
         for (const [profile] of persona.linkedProfiles) {
             const id = ProfileIdentifier.from(profile)
@@ -97,7 +98,7 @@ export async function normalizeBackupVersion2(item: BackupJSONFileVersion2): Pro
         const normalizedPost: NormalizedBackup.PostBackup = {
             identifier: identifier.val,
             foundAt: new Date(post.foundAt),
-            postBy: postBy.unwrapOr(undefined),
+            postBy,
             interestedMeta,
             encryptBy,
             summary: post.summary ? Some(post.summary) : None,
@@ -232,7 +233,7 @@ export function generateBackupVersion2(item: NormalizedBackup.Data): BackupJSONF
         const item: BackupJSONFileVersion2['posts'][0] = {
             identifier: id.toText(),
             foundAt: Number(data.foundAt),
-            postBy: data.postBy?.toText() || 'person:localhost/$unknown',
+            postBy: data.postBy.some ? data.postBy.val.toText() : 'person:localhost/$unknown',
             interestedMeta: MetaToJson(data.interestedMeta),
             encryptBy: data.encryptBy.unwrapOr(undefined)?.toText(),
             summary: data.summary.unwrapOr(undefined),
@@ -326,6 +327,7 @@ interface BackupJSONFileVersion2 {
         linkedProfiles: Array<[/** ProfileIdentifier.toText() */ string, LinkedProfileDetails]>
         createdAt: number // Unix timestamp
         updatedAt: number // Unix timestamp
+        address?: string
     }>
     profiles: Array<{
         identifier: string // ProfileIdentifier.toText()

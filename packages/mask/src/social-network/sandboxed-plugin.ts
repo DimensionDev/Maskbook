@@ -34,7 +34,7 @@ if (Flags.sandboxedPluginRuntime) {
             // TODO: implement this
             dropCompositionMetadata(plugin, id) {},
             closeApplicationBoardDialog() {
-                WalletMessages.events.ApplicationDialogUpdated.sendToLocal({ open: false })
+                WalletMessages.events.applicationDialogUpdated.sendToLocal({ open: false })
             },
         },
         process.env.NODE_ENV === 'development',

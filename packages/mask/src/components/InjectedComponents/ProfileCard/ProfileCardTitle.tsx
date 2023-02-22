@@ -40,6 +40,7 @@ const useStyles = makeStyles()((theme) => {
 
 export interface ProfileCardTitleProps extends HTMLProps<HTMLDivElement> {
     identity: SocialIdentity
+    badgeBounding?: DOMRect
     socialAccounts: Array<SocialAccount<Web3Helper.ChainIdAll>>
     address?: string
     onAddressChange?(address: string): void
@@ -50,11 +51,12 @@ export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
     address,
     identity,
     onAddressChange,
+    badgeBounding,
     ...rest
 }) => {
     const me = useLastRecognizedIdentity()
     const { classes, cx } = useStyles()
-    const { setDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
+    const { setDialog } = useRemoteControlledDialog(WalletMessages.events.applicationDialogUpdated)
     const handleOpenDialog = () => {
         setDialog({
             open: true,
@@ -72,6 +74,7 @@ export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
             <ProfileBar
                 className={classes.profileBar}
                 identity={identity}
+                badgeBounding={badgeBounding}
                 socialAccounts={socialAccounts}
                 address={address}
                 onAddressChange={onAddressChange}>

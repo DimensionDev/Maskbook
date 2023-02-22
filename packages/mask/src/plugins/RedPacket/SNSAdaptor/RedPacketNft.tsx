@@ -1,11 +1,11 @@
-import { makeStyles, ActionButton } from '@masknet/theme'
-import { explorerResolver, networkResolver } from '@masknet/web3-shared-evm'
-import { Launch as LaunchIcon } from '@mui/icons-material'
-import { Card, CardHeader, Typography, Link, CardMedia, CardContent, Button, Box, Skeleton } from '@mui/material'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { makeStyles, ActionButton, LoadingBase, parseColor, ShadowRootTooltip } from '@masknet/theme'
+import { networkResolver, ChainId } from '@masknet/web3-shared-evm'
+import { Card, Typography, Button, Box } from '@mui/material'
+import { useTransactionConfirmDialog } from './context/TokenTransactionConfirmDialogContext.js'
+import { useCallback, useEffect, useMemo, useState, MouseEventHandler, useRef, useLayoutEffect } from 'react'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { useI18N } from '../locales/index.js'
-import { WalletConnectedBoundary, NFTCardStyledAssetPlayer, ChainBoundary } from '@masknet/shared'
+import { WalletConnectedBoundary, ChainBoundary, AssetPreviewer, NFTFallbackImage } from '@masknet/shared'
 import type { RedPacketNftJSONPayload } from '../types.js'
 import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
@@ -13,12 +13,13 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
-import { openWindow } from '@masknet/shared-base-ui'
-import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useWeb3, useNetworkContext, useNonFungibleAsset } from '@masknet/web3-hooks-base'
+import { TokenType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
+import { Stack } from '@mui/system'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, { claimed, outdated }) => ({
     root: {
         position: 'relative',
         width: '100%',
@@ -26,37 +27,31 @@ const useStyles = makeStyles()((theme) => ({
     card: {
         display: 'flex',
         flexDirection: 'column',
-        borderRadius: theme.spacing(1),
+        borderRadius: theme.spacing(2),
         padding: theme.spacing(1),
-        background: '#DB0632',
+        background: 'transparent',
+        justifyContent: 'space-between',
         position: 'relative',
         color: theme.palette.common.white,
         boxSizing: 'border-box',
-        backgroundImage: `url(${new URL('./assets/background.png', import.meta.url)})`,
+        backgroundImage: claimed
+            ? `url(${new URL('./assets/nftClaimedCover.png', import.meta.url)})`
+            : `url(${new URL('./assets/cover.png', import.meta.url)})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
-    },
-    title: {
-        textAlign: 'left',
-    },
-    image: {
-        display: 'flex',
-        alignItems: 'center',
-        width: '100%',
-        height: 160,
-        backgroundSize: 'contain',
-        textAlign: 'center',
-        justifyContent: 'center',
+        width: 'calc(100% - 32px)',
+        margin: 'auto',
+        marginBottom: outdated ? '12px' : 'auto',
+        height: 335,
     },
     remain: {
-        marginLeft: 28,
-        paddingTop: 40,
-        color: '#FAD85A',
-        width: '100%',
+        fontSize: 12,
+        fontWeight: 600,
+        color: theme.palette.common.white,
     },
     button: {
         backgroundColor: theme.palette.maskColor.dark,
-        color: 'white',
+        color: theme.palette.common.white,
         '&:hover': {
             backgroundColor: theme.palette.maskColor.dark,
         },
@@ -69,33 +64,25 @@ const useStyles = makeStyles()((theme) => ({
         paddingRight: theme.spacing(2),
         paddingBottom: theme.spacing(1),
     },
-    link: {
-        display: 'flex',
-        cursor: 'pointer',
-        '&>:first-child': {
-            marginRight: theme.spacing(1),
-        },
-    },
     buttonWrapper: {
         marginTop: 0,
         display: 'flex',
     },
-    loadingBox: {
-        borderRadius: theme.spacing(1),
-        padding: theme.spacing(2),
-        background: '#DB0632',
-        position: 'relative',
-        display: 'flex',
-        color: theme.palette.common.white,
-        flexDirection: 'column',
-        height: 360,
-        boxSizing: 'border-box',
+    claimedTokenWrapper: {
+        position: 'absolute',
+        top: 80,
+        right: 50,
+        background: theme.palette.common.white,
+        borderRadius: 9,
+        cursor: 'pointer',
     },
-    tokenWrapper: {
+    tokenImageWrapper: {
         display: 'flex',
-        flexDirection: 'column',
+        overflow: 'hidden',
         alignItems: 'center',
-        maxHeight: 180,
+        height: 126,
+        width: 126,
+        borderRadius: 8,
         '& > div': {
             display: 'flex',
             justifyContent: 'center',
@@ -103,83 +90,92 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     claimedText: {
-        fontSize: 18,
-        fontWeight: 500,
-    },
-    coverCard: {
-        position: 'absolute',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        top: 0,
-        borderRadius: 6,
-        width: '100%',
-        height: '100%',
-    },
-    hide: {
-        opacity: 0,
-    },
-    dim: {
-        opacity: 0.5,
-    },
-    whiteText: {
-        color: 'white',
-    },
-    dimWhiteText: {
-        color: '#e3e3e3',
+        fontSize: 12,
+        fontWeight: 600,
     },
     badge: {
         width: 76,
         height: 27,
         display: 'flex',
+        color: theme.palette.common.white,
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
-        top: 20,
-        right: 20,
-        backgroundColor: 'rgba(21, 24, 27, 0.5)',
-        borderRadius: 6,
+        top: 12,
+        right: 12,
+        backgroundColor: parseColor(theme.palette.common.black).setAlpha(0.5).toString(),
+        borderRadius: 8,
     },
     badgeText: {
         fontSize: 12,
     },
-    errorCard: {
-        height: 360,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    errImage: {
-        width: 220,
-    },
-    errorButton: {
-        background: theme.palette.common.black,
-        minHeight: 30,
-        width: 100,
-        marginTop: 16,
-        whiteSpace: 'nowrap',
-        '&:hover': {
-            background: theme.palette.common.black,
-        },
-    },
-    ellipsis: {
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-        maxWidth: 400,
-        fontSize: '1.5rem',
-    },
-    assetPlayerIframe: {
-        marginBottom: 16,
-        height: '160px !important',
-    },
     imgWrapper: {
         maxWidth: 180,
-        marginBottom: 10,
-    },
-    assetPlayerVideoIframe: {
-        minWidth: 'fit-content',
     },
     fallbackImage: {
         height: 160,
         width: 120,
+    },
+    description: {
+        background: theme.palette.maskColor.primary,
+        alignSelf: 'stretch',
+        borderRadius: '0 0 8px 8px',
+    },
+    name: {
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        width: 126,
+        fontSize: 13,
+        color: theme.palette.common.white,
+        lineHeight: '36px',
+        minHeight: '1em',
+        textIndent: '8px',
+    },
+    hidden: {
+        visibility: 'hidden',
+    },
+    tokenLabel: {
+        width: 48,
+        height: 48,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+    },
+    messageBox: {
+        width: '100%',
+    },
+    words: {
+        display: '-webkit-box',
+        WebkitLineClamp: 2,
+        WebkitBoxOrient: 'vertical',
+        color: theme.palette.common.white,
+        wordBreak: 'break-all',
+        fontSize: 24,
+        fontWeight: 700,
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        width: '60%',
+        minWidth: 300,
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            fontSize: 14,
+        },
+    },
+    from: {
+        fontSize: '14px',
+        color: theme.palette.common.white,
+        alignSelf: 'end',
+        fontWeight: 500,
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            fontSize: 14,
+            right: 12,
+            bottom: 8,
+        },
+    },
+    NFTFallbackImageWrapper: {
+        width: '100%',
+        height: 126,
+        background: theme.palette.common.white,
     },
 }))
 export interface RedPacketNftProps {
@@ -189,9 +185,12 @@ export interface RedPacketNftProps {
 export function RedPacketNft({ payload }: RedPacketNftProps) {
     const { t: i18n } = useBaseI18N()
     const t = useI18N()
-    const { classes, cx } = useStyles()
+
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { pluginID } = useNetworkContext()
+    const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>(
+        pluginID === NetworkPluginID.PLUGIN_EVM ? {} : { account: '' },
+    )
 
     const {
         value: availability,
@@ -199,30 +198,35 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         retry: retryAvailability,
         error: availabilityError,
     } = useAvailabilityNftRedPacket(payload.id, account, payload.chainId)
+
     const [{ loading: isClaiming }, claimCallback] = useClaimNftRedpacketCallback(
         payload.id,
         availability?.totalAmount,
         web3?.eth.accounts.sign(account, payload.privateKey).signature ?? '',
     )
 
+    const [isClaimed, setIsClaimed] = useState(false)
+    const [showTooltip, setShowTooltip] = useState(false)
+    const textRef = useRef<HTMLDivElement>(null)
+    useEffect(() => {
+        setIsClaimed(false)
+    }, [account])
     const claim = useCallback(async () => {
         const hash = await claimCallback()
         if (typeof hash === 'string') {
+            setIsClaimed(true)
             retryAvailability()
         }
     }, [claimCallback, retryAvailability])
 
-    const openAddressLinkOnExplorer = useCallback(() => {
-        openWindow(explorerResolver.addressLink(payload.chainId, payload.contractAddress))
-    }, [payload])
-
-    const [sourceType, setSourceType] = useState('')
+    const openTransactionConfirmDialog = useTransactionConfirmDialog()
 
     useEffect(() => {
         retryAvailability()
     }, [account])
 
-    const rpNftImg = new URL('./assets/redpacket.nft.png', import.meta.url).toString()
+    const outdated = Boolean(availability?.isClaimedAll || availability?.isCompleted || availability?.expired)
+    const { classes, cx } = useStyles({ claimed: Boolean(availability?.isClaimed), outdated })
     // #region on share
     const postLink = usePostLink()
     const shareText = useMemo(() => {
@@ -235,6 +239,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             account_promote: t.account_promote({
                 context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
             }),
+            interpolation: { escapeValue: false },
         } as const
         if (availability?.isClaimed) {
             return t.nft_share_claimed_message(options)
@@ -247,149 +252,216 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     }, [shareText])
     // #endregion
 
+    useEffect(() => {
+        if (!isClaimed || !availability || availability?.claimed_id === '0' || !availability?.token_address) return
+
+        openTransactionConfirmDialog({
+            shareText,
+            amount: '1',
+            nonFungibleTokenId: availability?.claimed_id,
+            nonFungibleTokenAddress: availability?.token_address,
+            tokenType: TokenType.NonFungible,
+        })
+    }, [isClaimed, openTransactionConfirmDialog, availability?.claimed_id, availability?.token_address])
+
+    useLayoutEffect(() => {
+        if (textRef.current) {
+            setShowTooltip(textRef.current.offsetWidth !== textRef.current.scrollWidth)
+        }
+    }, [textRef.current])
+
+    const openNFTDialog = useCallback(() => {
+        if (!payload.chainId || !pluginID || !availability?.claimed_id || !availability?.token_address) return
+        CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
+            open: true,
+            chainId: payload.chainId,
+            pluginID,
+            tokenId: availability.claimed_id,
+            tokenAddress: availability.token_address,
+        })
+    }, [pluginID, payload.chainId, availability?.claimed_id, availability?.token_address])
+
+    const { value: NFTDetailed, loading: loadingNFTDetailed } = useNonFungibleAsset<'all'>(
+        NetworkPluginID.PLUGIN_EVM,
+        payload.contractAddress,
+        availability?.claimed_id,
+        {
+            chainId: payload.chainId,
+        },
+    )
+
     if (availabilityError)
         return (
-            <div className={classes.root}>
-                <Card className={cx(classes.card, classes.errorCard)} component="article" elevation={0}>
-                    <img className={classes.errImage} src={rpNftImg} />
-                    <Typography className={classes.whiteText} variant="h5">
-                        {i18n('loading_failed')}
-                    </Typography>
-                    <Button
-                        onClick={retryAvailability}
-                        className={cx(classes.errorButton, classes.whiteText)}
-                        variant="outlined">
-                        {i18n('try_again')}
-                    </Button>
-                </Card>
-            </div>
+            <Box display="flex" flexDirection="column" alignItems="center" sx={{ padding: 1.5 }}>
+                <Typography color="textPrimary">{i18n('go_wrong')}</Typography>
+                <Button variant="roundedDark" onClick={retryAvailability}>
+                    {i18n('retry')}
+                </Button>
+            </Box>
         )
+
     if (!availability || loading)
         return (
-            <Card className={classes.loadingBox} component="article" elevation={0}>
-                <Skeleton animation="wave" variant="rectangular" width="30%" height={18} style={{ marginTop: 16 }} />
-                <Skeleton animation="wave" variant="rectangular" width="40%" height={18} style={{ marginTop: 24 }} />
-                <Skeleton animation="wave" variant="rectangular" width="70%" height={18} style={{ marginTop: 24 }} />
-            </Card>
+            <Box
+                flex={1}
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                gap={1}
+                padding={1}
+                minHeight={148}>
+                <LoadingBase />
+                <Typography>{i18n('loading')}</Typography>
+            </Box>
         )
 
     return (
         <div className={classes.root}>
             <Card className={classes.card} component="article" elevation={0}>
-                <CardHeader
-                    className={cx(classes.title, availability.isEnd ? classes.hide : '', classes.whiteText)}
-                    title={<Typography className={classes.ellipsis}>{payload.message}</Typography>}
-                    subheader={
-                        <span className={cx(classes.link, classes.whiteText)} onClick={openAddressLinkOnExplorer}>
-                            <Typography variant="body2">{payload.contractName}</Typography>
-                            <LaunchIcon fontSize="small" className={classes.dimWhiteText} />
-                        </span>
-                    }
+                <img
+                    src={new URL('./assets/nftLabel.png', import.meta.url).toString()}
+                    className={classes.tokenLabel}
                 />
+                <Stack />
+
+                <div className={classes.messageBox}>
+                    <Typography className={classes.words} variant="h6">
+                        {payload.message}
+                    </Typography>
+                </div>
+                <ShadowRootTooltip
+                    title={showTooltip ? `${payload.contractName} #${availability.claimed_id}` : undefined}
+                    placement="top"
+                    disableInteractive
+                    arrow
+                    PopperProps={{
+                        disablePortal: true,
+                    }}>
+                    <Box className={cx(classes.claimedTokenWrapper, !availability.isClaimed ? classes.hidden : '')}>
+                        <Box className={classes.tokenImageWrapper} onClick={openNFTDialog}>
+                            {loadingNFTDetailed ? null : (
+                                <AssetPreviewer
+                                    url={NFTDetailed?.metadata?.imageURL || NFTDetailed?.metadata?.mediaURL}
+                                    classes={{
+                                        root: classes.imgWrapper,
+                                        fallbackImage: classes.fallbackImage,
+                                    }}
+                                    fallbackImage={
+                                        <div className={classes.NFTFallbackImageWrapper}>{NFTFallbackImage}</div>
+                                    }
+                                />
+                            )}
+                        </Box>
+
+                        <div className={classes.description}>
+                            <Typography className={classes.name} color="textPrimary" variant="body2" ref={textRef}>
+                                {`${payload.contractName} #${availability.claimed_id}`}
+                            </Typography>
+                        </div>
+                    </Box>
+                </ShadowRootTooltip>
+
+                <div className={classes.footer}>
+                    {availability.isClaimed ? (
+                        <Typography className={classes.claimedText}>
+                            {t.got_nft({ name: payload.contractName || 'NFT' })}
+                        </Typography>
+                    ) : (
+                        <Typography className={classes.remain}>
+                            {t.claimed({ amount: `${availability.claimedAmount}/${availability.totalAmount}` })}
+                        </Typography>
+                    )}
+                    <Typography variant="body1" className={classes.from}>
+                        {t.from({ name: payload.senderName || '-' })}
+                    </Typography>
+                </div>
 
                 {availability.isClaimed ? (
-                    <Box className={classes.tokenWrapper}>
-                        <NFTCardStyledAssetPlayer
-                            chainId={payload.chainId}
-                            contractAddress={payload.contractAddress}
-                            tokenId={availability.claimed_id}
-                            setSourceType={setSourceType}
-                            classes={{
-                                iframe: cx(
-                                    classes.assetPlayerIframe,
-                                    sourceType === 'video' ? classes.assetPlayerVideoIframe : '',
-                                ),
-                                imgWrapper: classes.imgWrapper,
-                                fallbackImage: classes.fallbackImage,
-                            }}
-                            fallbackImage={new URL('./assets/nft-preview.png', import.meta.url)}
-                        />
-
-                        <Typography className={classes.claimedText}>You got 1 {payload.contractName}</Typography>
-                    </Box>
-                ) : (
-                    <CardMedia className={classes.image} component="div" image={rpNftImg}>
-                        <Typography className={classes.remain}>
-                            {availability.claimedAmount}/{availability.totalAmount} {i18n('collectibles_name')}
+                    <div className={classes.badge}>
+                        <Typography variant="body2" className={classes.badgeText}>
+                            {t.claimed({ amount: '' })}
                         </Typography>
-                    </CardMedia>
-                )}
-
-                <CardContent>
-                    <Typography variant="body1" className={classes.whiteText}>
-                        {t.nft_tip()}
-                    </Typography>
-                </CardContent>
-                <div className={classes.footer}>
-                    <Link
-                        href="https://mask.io/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={classes.whiteText}>
-                        <Typography variant="body1">Mask.io</Typography>
-                    </Link>
-                    <Typography variant="body1">From: @{payload.senderName}</Typography>
-                </div>
-            </Card>
-            {availability.isEnd ? (
-                <Card className={classes.coverCard}>
-                    <CardHeader
-                        className={cx(classes.title, classes.dim, classes.dimWhiteText)}
-                        title={<Typography className={classes.ellipsis}>{payload.message}</Typography>}
-                        subheader={
-                            <span
-                                className={cx(classes.link, classes.dimWhiteText)}
-                                onClick={openAddressLinkOnExplorer}>
-                                <Typography variant="body2">{payload.contractName}</Typography>
-                                <LaunchIcon fontSize="small" className={classes.dimWhiteText} />
-                            </span>
-                        }
-                    />
-                    <div className={cx(classes.badge, classes.whiteText)}>
+                    </div>
+                ) : availability.isEnd ? (
+                    <div className={classes.badge}>
                         <Typography variant="body2" className={classes.badgeText}>
                             {availability.expired ? t.expired() : t.completed()}
                         </Typography>
                     </div>
-                </Card>
-            ) : availability.isClaimedAll || availability.isCompleted ? null : (
-                <Box className={classes.buttonWrapper}>
-                    <Box sx={{ flex: 1, padding: 1.5 }}>
-                        <Button
-                            variant="roundedDark"
-                            startIcon={<Icons.Shared size={18} />}
-                            className={classes.button}
-                            fullWidth
-                            onClick={onShare}>
-                            {i18n('share')}
-                        </Button>
-                    </Box>
-                    {availability.isClaimed ? null : (
-                        <Box sx={{ flex: 1, padding: 1.5 }}>
-                            <ChainBoundary
-                                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                ActionButtonPromiseProps={{ variant: 'roundedDark' }}
-                                expectedChainId={payload.chainId}>
-                                <WalletConnectedBoundary
-                                    startIcon={<Icons.ConnectWallet size={18} />}
-                                    classes={{
-                                        connectWallet: classes.button,
-                                    }}
-                                    ActionButtonProps={{ variant: 'roundedDark' }}>
-                                    <ActionButton
-                                        variant="roundedDark"
-                                        loading={isClaiming}
-                                        disabled={isClaiming}
-                                        onClick={claim}
-                                        className={classes.button}
-                                        fullWidth>
-                                        {isClaiming ? t.claiming() : t.claim()}
-                                    </ActionButton>
-                                </WalletConnectedBoundary>
-                            </ChainBoundary>
-                        </Box>
-                    )}
-                </Box>
+                ) : null}
+            </Card>
+            {outdated ? null : (
+                <OperationFooter
+                    chainId={payload.chainId}
+                    isClaiming={isClaiming}
+                    claimed={availability.isClaimed}
+                    onShare={onShare}
+                    claim={claim}
+                />
             )}
         </div>
+    )
+}
+
+interface OperationFooterProps {
+    claimed: boolean
+    isClaiming: boolean
+    onShare(): void
+    claim(): Promise<void>
+    chainId: ChainId
+}
+
+function OperationFooter({ claimed, onShare, chainId, claim, isClaiming }: OperationFooterProps) {
+    const { classes } = useStyles({ claimed, outdated: false })
+    const { t: i18n } = useBaseI18N()
+    const t = useI18N()
+
+    const ObtainButton = (props: { onClick?: MouseEventHandler<HTMLButtonElement> | undefined }) => {
+        return (
+            <WalletConnectedBoundary
+                expectedChainId={chainId}
+                startIcon={<Icons.ConnectWallet size={18} />}
+                classes={{
+                    connectWallet: classes.button,
+                }}
+                ActionButtonProps={{ variant: 'roundedDark' }}>
+                <ActionButton
+                    variant="roundedDark"
+                    loading={isClaiming}
+                    disabled={isClaiming}
+                    onClick={props.onClick}
+                    className={classes.button}
+                    fullWidth>
+                    {isClaiming ? t.claiming() : t.claim()}
+                </ActionButton>
+            </WalletConnectedBoundary>
+        )
+    }
+
+    return (
+        <Box className={classes.buttonWrapper}>
+            <Box sx={{ flex: 1, padding: 1.5 }}>
+                <Button
+                    variant="roundedDark"
+                    startIcon={<Icons.Shared size={18} />}
+                    className={classes.button}
+                    fullWidth
+                    onClick={onShare}>
+                    {i18n('share')}
+                </Button>
+            </Box>
+            {claimed ? null : (
+                <Box sx={{ flex: 1, padding: 1.5 }}>
+                    <ChainBoundary
+                        switchChainWithoutPopup
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        ActionButtonPromiseProps={{ variant: 'roundedDark' }}
+                        expectedChainId={chainId}>
+                        <ObtainButton onClick={claim} />
+                    </ChainBoundary>
+                </Box>
+            )}
+        </Box>
     )
 }

@@ -1,14 +1,16 @@
 import { useCallback } from 'react'
 import { TabPanel } from '@mui/lab'
 import { makeStyles } from '@masknet/theme'
-import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { RedPacketHistoryList } from './RedPacketHistoryList.js'
 import { NftRedPacketHistoryList } from './NftRedPacketHistoryList.js'
 import type { RedPacketJSONPayload, NftRedPacketJSONPayload } from '../types.js'
 import { RedPacketNftMetaKey } from '../constants.js'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
+import { openComposition } from './openComposition.js'
 
 const useStyles = makeStyles()((theme) => ({
     tabWrapper: {
@@ -28,13 +30,15 @@ export function RedPacketPast({ onSelect, onClose, tabs }: Props) {
     const currentIdentity = useCurrentIdentity()
 
     const { value: linkedPersona } = useCurrentLinkedPersona()
+    const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
+        WalletMessages.events.applicationDialogUpdated,
+    )
 
     const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
-    const { attachMetadata } = useCompositionContext()
     const handleSendNftRedpacket = useCallback(
         (history: NftRedPacketJSONPayload, collection: NonFungibleCollection<ChainId, SchemaType>) => {
             const { rpid, txid, duration, sender, password, chainId } = history
-            attachMetadata(RedPacketNftMetaKey, {
+            openComposition(RedPacketNftMetaKey, {
                 id: rpid,
                 txid,
                 duration,
@@ -46,9 +50,10 @@ export function RedPacketPast({ onSelect, onClose, tabs }: Props) {
                 privateKey: password,
                 chainId,
             })
+            closeApplicationBoardDialog()
             onClose?.()
         },
-        [senderName, onClose],
+        [senderName],
     )
 
     return (

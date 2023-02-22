@@ -1,7 +1,8 @@
-import { Suspense } from 'react'
+import { Suspense, useMemo } from 'react'
 import type { Theme } from '@mui/material'
 import { EnvironmentContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
+import { TelemetryProvider } from '@masknet/web3-telemetry/hooks'
+import { I18NextProviderHMR, SharedContextProvider, SubscriptionProvider } from '@masknet/shared'
 import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
 import { ErrorBoundary, BuildInfo, useValueRef } from '@masknet/shared-base-ui'
 import { compose, getSiteType, i18NextInstance, NetworkPluginID } from '@masknet/shared-base'
@@ -35,13 +36,22 @@ function MaskUIRoot({ children }: React.PropsWithChildren<{}>) {
     const site = getSiteType()
     const pluginIDs = useValueRef(pluginIDSettings)
 
-    const context = { pluginID: site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM }
-    return compose(
-        (children) => DialogStackingProvider({ children, hasGlobalBackdrop: false }),
-        (children) => EnvironmentContextProvider({ value: context, children }),
-        (children) => Web3ContextProvider({ value: context, children }),
-        (children) => I18NextProviderHMR({ i18n: i18NextInstance, children }),
-        <>{children}</>,
+    const context = useMemo(() => {
+        return { pluginID: site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM }
+    }, [site, pluginIDs])
+
+    return (
+        <DialogStackingProvider hasGlobalBackdrop={false}>
+            <EnvironmentContextProvider value={context}>
+                <Web3ContextProvider value={context}>
+                    <TelemetryProvider>
+                        <SubscriptionProvider>
+                            <I18NextProviderHMR i18n={i18NextInstance}>{children}</I18NextProviderHMR>
+                        </SubscriptionProvider>
+                    </TelemetryProvider>
+                </Web3ContextProvider>
+            </EnvironmentContextProvider>
+        </DialogStackingProvider>
     )
 }
 

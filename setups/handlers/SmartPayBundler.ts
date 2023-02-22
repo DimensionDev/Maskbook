@@ -29,7 +29,7 @@ export const BundlerHandlers = [
             context.json({
                 tokenTransferTx: '0xfc6e7a01101e17994538dd014628602a44b03a00980a66afbd1697c8095b18f4',
                 createdAt: 1669970510248,
-                twitterHandler: 'test',
+                twitterHandle: 'test',
                 nonce: 1,
                 id: '29fdf280-721d-11ed-a079-6f6f72e92e8a',
                 walletAddress: '0x7171C1fD1694bdfe79B6c38A8696CF7E8A96D9BE',

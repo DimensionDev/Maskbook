@@ -7,7 +7,7 @@
     "yarn": ">=999.0.0",
     "npm": ">=999.0.0"
   },
-  "version": "2.17.4",
+  "version": "2.17.7",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
@@ -59,7 +59,7 @@
     "@commitlint/cli": "^17.3.0",
     "@commitlint/config-conventional": "^17.3.0",
     "@dimensiondev/eslint-plugin": "0.0.2-20220516081411-2649814",
-    "@magic-works/i18n-codegen": "^0.4.1",
+    "@magic-works/i18n-codegen": "^0.5.0",
     "@masknet/cli": "workspace:^",
     "@masknet/config": "workspace:^",
     "@masknet/serializer": "workspace:^",
@@ -157,7 +157,8 @@
       "@walletconnect/client@1.7.8": "patches/@walletconnect__client@1.7.8.patch",
       "reflect-metadata@0.1.13": "patches/reflect-metadata@0.1.13.patch",
       "ses@0.17.0": "patches/ses@0.17.0.patch",
-      "bloom-filters@3.0.0": "patches/bloom-filters@3.0.0.patch"
+      "bloom-filters@3.0.0": "patches/bloom-filters@3.0.0.patch",
+      "@sentry/core@7.37.2": "patches/@sentry__core@7.37.2.patch"
     }
   }
 }

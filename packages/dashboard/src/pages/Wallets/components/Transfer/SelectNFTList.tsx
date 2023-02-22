@@ -1,10 +1,10 @@
 import { memo, useMemo } from 'react'
 import { Box, ImageList, Typography, ImageListItem, Stack } from '@mui/material'
-import { NFTCard } from './NFTCard.js'
 import { MaskColorVar, LoadingBase } from '@masknet/theme'
-import { useDashboardI18N } from '../../../../locales/index.js'
 import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { NFTCard } from './NFTCard.js'
 
 interface SelectNFTListProps {
     list: Array<NonFungibleToken<ChainId, SchemaType>>
@@ -59,14 +59,8 @@ export const SelectNFTList = memo<SelectNFTListProps>(({ list, onSelect, selecte
                 gap={12}
                 rowHeight={186}
                 sx={{ width: '100%', height: 'auto', maxHeight: '400px', p: 2, pb: 0.5 }}>
-                {list.map((token, index) => (
-                    <NFTCard
-                        key={token.tokenId}
-                        token={token}
-                        selectedTokenId={selectedTokenId}
-                        onSelect={onSelect}
-                        renderOrder={index}
-                    />
+                {list.map((token) => (
+                    <NFTCard key={token.tokenId} token={token} selectedTokenId={selectedTokenId} onSelect={onSelect} />
                 ))}
                 {renderStatus}
             </ImageList>

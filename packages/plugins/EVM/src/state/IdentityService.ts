@@ -1,7 +1,7 @@
 import { compact, uniqBy } from 'lodash-es'
 import type { Plugin } from '@masknet/plugin-infra'
 import { IdentityServiceState } from '@masknet/web3-state'
-import { SocialIdentity, SocialAddress, SocialAddressType, attemptUntil } from '@masknet/web3-shared-base'
+import { SocialIdentity, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import {
     NetworkPluginID,
     EMPTY_LIST,
@@ -14,11 +14,8 @@ import {
 } from '@masknet/shared-base'
 import { KVStorage } from '@masknet/shared'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
-import { Lens, MaskX, NextIDProof, NextIDStorage, RSS3, Twitter } from '@masknet/web3-providers'
+import { ENS, Lens, MaskX, NextIDProof, NextIDStorage, RSS3, SpaceID, Twitter } from '@masknet/web3-providers'
 import { MaskX_BaseAPI } from '@masknet/web3-providers/types'
-import { ENS_Resolver } from './NameService/ENS.js'
-import { ChainbaseResolver } from './NameService/Chainbase.js'
-import { SpaceID_Resolver } from './NameService/SpaceID.js'
 import { Web3StateSettings } from '../settings/index.js'
 
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
@@ -66,7 +63,11 @@ async function getWalletAddressesFromNextID({ identifier, publicKey }: SocialIde
     const platform = getNextIDPlatform()
     if (!platform) return EMPTY_LIST
 
-    const latestActivatedBinding = await NextIDProof.queryLatestBindingByPlatform(platform, identifier.userId)
+    const latestActivatedBinding = await NextIDProof.queryLatestBindingByPlatform(
+        platform,
+        identifier.userId,
+        publicKey,
+    )
     if (!latestActivatedBinding) return EMPTY_LIST
     return latestActivatedBinding.proofs.filter(
         (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
@@ -175,12 +176,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
 
         const allSettled = await Promise.allSettled(
             names.map(async (name) => {
-                const address = await attemptUntil(
-                    [new ENS_Resolver(), new ChainbaseResolver()].map((resolver) => {
-                        return async () => resolver.lookup(name)
-                    }),
-                    undefined,
-                )
+                const address = await ENS.lookup(name)
                 if (!address) return
                 return this.createSocialAddress(SocialAddressType.ENS, address, name)
             }),
@@ -194,11 +190,9 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         const names = getSIDNames(identifier?.userId ?? '', nickname, bio)
         if (!names.length) return
 
-        const resolver = new SpaceID_Resolver()
-
         const allSettled = await Promise.allSettled(
             names.map(async (name) => {
-                const address = await resolver.lookup(name)
+                const address = await SpaceID.lookup(name)
                 if (!address) return
                 return this.createSocialAddress(SocialAddressType.SPACE_ID, address, name, ChainId.BSC)
             }),
@@ -266,13 +260,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         const allSettled = await Promise.allSettled(
             results.map(async (y) => {
                 try {
-                    const name = await attemptUntil(
-                        [new ENS_Resolver(), new ChainbaseResolver()].map((resolver) => {
-                            return async () => resolver.reverse(y.web3_addr)
-                        }),
-                        undefined,
-                        () => false,
-                    )
+                    const name = await ENS.reverse(y.web3_addr)
 
                     return this.createSocialAddress(
                         resolveMaskXAddressType(y.source),
