@@ -1,4 +1,6 @@
 {
+    "promote": "🧧🧧🧧 尝试给你的好友发送代币或 NFT 红包，分享此时的喜悦吧！ 安装 Mask.io 发送你的第一个红包。",
+    "promote_short": "🧧🧧🧧试着用Mask.io发送红包给你的朋友。",
     "nft_shift_select_tip": "您也可以长按 <text>{{text}}</text> 来选择多个NFT。",
     "badge": "来自{{sender}} 的一个 {{balance}} {{tokenName}} 红包",
     "collections": "收藏品",
@@ -12,6 +14,8 @@
     "nft_max_shares_tip": "NFT红包合约最多支持 {{amount, number}} 个NFT投放。",
     "nft_non_existed_tip": "Token ID <tokenIdList></tokenIdList> 不存在或不属于您。",
     "nft_select_collection": "选择您的收藏品系列",
+    "nft_select_amount_one": "<span>{{count}}</span> NFT",
+    "nft_select_amount_other": "<span>{{count}}</span> NFTs",
     "completed": "已完成",
     "expired": "已过期",
     "nft_tip": "这是一个 NFT 红包。",
@@ -36,6 +40,7 @@
     "attached_message": "附加信息",
     "indivisible": "每个份额的最小金额为 {{amount}} {{symbol}}",
     "name": "红包",
+    "description": "给任意用户发送Token或者NFT，先到先得",
     "next": "下一步",
     "nft_approve_all_tip": "注意：在选择批准所有NFT时，合约中的所有NFT都将被授权默认销售，包括随后转移的NFT。",
     "nft_select_partially_option": "选择部分",
@@ -83,5 +88,11 @@
     "description_broken": "此红包已被损坏。",
     "description_empty": "此红包是空的。",
     "description_failover": "{{shares}} 份额 / {{total}} {{symbol}} 总数额",
-    "recommend_feature_description": "发送一个惊喜的加密货币红包。支持多个链上的代币和 NFT。"
+    "recommend_feature_description": "发送一个惊喜的加密货币红包。支持多个链上的代币和 NFT。",
+    "claim_token_successful": "你领取了{{- amount}} {{name}}。",
+    "claim_nft_successful": "成功领取了 1 {{name}}。",
+    "lucky_drop": "红包",
+    "share": "分享",
+    "ok": "确定",
+    "got_nft": "你得到了 {{name}}"
 }
