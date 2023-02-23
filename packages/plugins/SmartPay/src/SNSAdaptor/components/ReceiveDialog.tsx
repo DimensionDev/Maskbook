@@ -12,7 +12,7 @@ import { PluginSmartPayMessages } from '../../message.js'
 const useStyles = makeStyles()((theme) => ({
     paper: {
         margin: 0,
-        maxWidth: 400,
+        maxWidth: 420,
         backgroundColor: theme.palette.maskColor.bottom,
         backgroundImage: 'unset',
     },

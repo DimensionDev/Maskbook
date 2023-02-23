@@ -4,13 +4,15 @@ import { useAsyncRetry } from 'react-use'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { PayloadEditor } from '@masknet/web3-shared-evm'
-import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useNativeTokenAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import { ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 
 export const useUnconfirmedRequest = () => {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const nativeTokenAddress = useNativeTokenAddress()
+
     const result = useAsyncRetry(async () => {
         const payload = await WalletRPC.topUnconfirmedRequest()
         if (!payload) return
@@ -21,13 +23,13 @@ export const useUnconfirmedRequest = () => {
         return {
             owner: payload.owner,
             identifier: payload.identifier ? ECKeyIdentifier.from(payload.identifier).unwrap() : undefined,
-            paymentToken: payload.paymentToken,
+            paymentToken: payload.paymentToken ?? nativeTokenAddress,
             payload: omit(payload, 'owner', 'identifier', 'paymentToken') as JsonRpcPayload,
             computedPayload,
             formatterTransaction,
             transactionContext,
         }
-    }, [chainId, TransactionFormatter])
+    }, [chainId, TransactionFormatter, nativeTokenAddress])
 
     useEffect(() => {
         return WalletMessages.events.requestsUpdated.on(result.retry)

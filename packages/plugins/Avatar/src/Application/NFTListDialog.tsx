@@ -1,11 +1,11 @@
 import { Icons } from '@masknet/icons'
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { ChainBoundary, NetworkTab, PluginVerifiedWalletStatusBar } from '@masknet/shared'
+import { ChainBoundary, NetworkTab, PluginVerifiedWalletStatusBar, useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useNetworkContext, useNonFungibleAssets } from '@masknet/web3-hooks-base'
-import { isGreaterThan } from '@masknet/web3-shared-base'
+import { useChainContext, useNetworkContext, useNonFungibleAssets, useWallets } from '@masknet/web3-hooks-base'
+import { isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { first, uniqBy } from 'lodash-es'
@@ -111,19 +111,24 @@ const useStyles = makeStyles()((theme) => ({
 
 export const NFTListDialog: FC = () => {
     const t = useI18N()
+    const sharedI18N = useSharedI18N()
     const { classes } = useStyles()
     const { pfpType, proofs, tokenInfo, targetAccount, setTargetAccount, setSelectedTokenInfo, proof } =
         useAvatarManagement()
+
     const navigate = useNavigate()
 
     const { pluginID } = useNetworkContext()
     const { account, chainId, setChainId } = useChainContext()
+    const wallets = useWallets(pluginID)
     const [selectedPluginId, setSelectedPluginId] = useState(pluginID ?? NetworkPluginID.PLUGIN_EVM)
     const [addDialogOpen, setAddDialogOpen] = useState(false)
     const [selectedToken, setSelectedToken] = useState<Web3Helper.NonFungibleTokenAll | undefined>(tokenInfo)
     const [disabled, setDisabled] = useState(false)
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
     const { openPopupWindow } = useSNSAdaptorContext()
+
+    const targetWallet = wallets.find((x) => isSameAddress(targetAccount, x.address))
 
     // Set eth to the default chain
     const actualChainId = useMemo(() => {
@@ -344,8 +349,13 @@ export const NFTListDialog: FC = () => {
                         expectedPluginID={
                             !supportPluginIds.includes(selectedPluginId) ? NetworkPluginID.PLUGIN_EVM : selectedPluginId
                         }>
-                        <Button onClick={onSave} disabled={disabled || !selectedToken} fullWidth>
-                            {t.set_up_title({ context: pfpType === PFP_TYPE.PFP ? 'pfp' : 'background' })}
+                        <Button
+                            onClick={onSave}
+                            disabled={disabled || !selectedToken || !!targetWallet?.owner}
+                            fullWidth>
+                            {targetWallet?.owner
+                                ? sharedI18N.coming_soon()
+                                : t.set_up_title({ context: pfpType === PFP_TYPE.PFP ? 'pfp' : 'background' })}
                         </Button>
                     </ChainBoundary>
                 </PluginVerifiedWalletStatusBar>
