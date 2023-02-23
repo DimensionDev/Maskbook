@@ -69,12 +69,13 @@ export const AvatarManagementProvider: FC<Props> = memo(({ children, socialIdent
     const [proofs, setProofs] = useState<BindingProof[]>(EMPTY_LIST)
     const [tokenInfo, setTokenInfo] = useState<Web3Helper.NonFungibleTokenAll>()
     const { account } = useChainContext()
-    const [selectedAccount, setSelectedAccount] = useState(nextIDWallets[0]?.identity || account)
+    const [selectedAccount, setSelectedAccount] = useState('')
     const [selectedTokenInfo, setSelectedTokenInfo] = useState<SelectTokenInfo>()
 
     const contextValue: AvatarManagementContextOptions = useMemo(() => {
         setProof(first(nextIDPersonas))
         setProofs(nextIDWallets)
+        setSelectedAccount(first(nextIDWallets)?.identity || account || '')
         return {
             pfpType: PFP_TYPE.PFP,
             targetAccount: selectedAccount,
@@ -88,7 +89,7 @@ export const AvatarManagementProvider: FC<Props> = memo(({ children, socialIdent
             selectedTokenInfo,
             setSelectedTokenInfo,
         }
-    }, [selectedAccount, proof, proofs, tokenInfo, selectedTokenInfo, nextIDPersonas, nextIDWallets])
+    }, [selectedAccount, proof, proofs, tokenInfo, selectedTokenInfo, nextIDPersonas, nextIDWallets, account])
 
     return <AvatarManagementContext.Provider value={contextValue}>{children}</AvatarManagementContext.Provider>
 })

@@ -92,9 +92,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         position: 'relative',
     },
-    arrowDropIcon: {
-        color: theme.palette.maskColor.dark,
-    },
     gearIcon: {
         color: theme.palette.maskColor.dark,
     },
@@ -411,13 +408,13 @@ function Content(props: ProfileTabContentProps) {
                                 variant="text"
                                 size="small"
                                 ref={buttonRef}
-                                onClick={(event) => {
-                                    event.preventDefault()
-                                    event.stopPropagation()
-                                    setMenuOpen(true)
-                                }}
                                 className={classes.walletButton}>
                                 <AddressItem
+                                    onClick={(event) => {
+                                        event.preventDefault()
+                                        event.stopPropagation()
+                                        setMenuOpen(true)
+                                    }}
                                     linkIconClassName={classes.mainLinkIcon}
                                     TypographyProps={{
                                         fontSize: '18px',
@@ -426,7 +423,6 @@ function Content(props: ProfileTabContentProps) {
                                     }}
                                     socialAccount={selectedSocialAccount}
                                 />
-                                <Icons.ArrowDrop className={classes.arrowDropIcon} />
                             </Button>
                             <ThemeProvider theme={theme.palette.mode === 'light' ? MaskLightTheme : MaskDarkTheme}>
                                 <TokenWithSocialGroupMenu

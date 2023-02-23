@@ -87,8 +87,12 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
     const expectedPlugin = useActivatedPlugin(expectedPluginID, 'any')
 
     const { Others: actualOthers } = useWeb3State(actualPluginID)
-    const { account, chainId: actualChainId, providerType: actualProviderType } = useChainContext()
 
+    const {
+        account,
+        chainId: actualChainId,
+        providerType: actualProviderType,
+    } = useChainContext({ account: expectedAccount })
     const actualProviderDescriptor = useProviderDescriptor(actualPluginID)
     const actualChainName = actualOthers?.chainResolver.chainName(actualChainId)
 
