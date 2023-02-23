@@ -16,7 +16,7 @@ import { isSameAddress, SocialIdentity } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { ScopedDomainsContainer, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { MaskMessages, addressSorter, useI18N, useLocationChange } from '../../../utils/index.js'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
 
@@ -203,7 +203,9 @@ export const ProfileCard: FC<Props> = ({ identity, badgeBounding, currentAddress
                         </div>
                     )}
                 </div>
-                <div className={classes.content}>{component}</div>
+                <div className={classes.content}>
+                    <ScopedDomainsContainer.Provider>{component}</ScopedDomainsContainer.Provider>
+                </div>
                 <div className={classes.footer}>
                     <Icons.Web3ProfileCard className={classes.cardIcon} size={24} />
                     <Typography className={classes.cardName}>{t('web3_profile_card_name')}</Typography>
