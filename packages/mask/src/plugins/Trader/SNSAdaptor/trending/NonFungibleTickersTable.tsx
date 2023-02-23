@@ -15,6 +15,7 @@ import {
 } from '@mui/material'
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
+import { useSNSThemeMode } from '@masknet/plugin-infra/content-script'
 import { TokenIcon, FormattedAddress, Image, WalletIcon } from '@masknet/shared'
 import { useScrollBottomEvent } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -24,7 +25,6 @@ import { formatCurrency } from '@masknet/web3-shared-base'
 import { resolveActivityTypeBackgroundColor } from '@masknet/web3-providers/helpers'
 import { useNonFungibleTokenActivities } from '../../trending/useTrending.js'
 import { useI18N } from '../../../../utils/index.js'
-import { useMaskIconPalette } from '../../../../UIRoot-sns.js'
 
 const useStyles = makeStyles<{ isCollectionProjectPopper: boolean; snsThemeMode?: string }>()(
     (theme, { isCollectionProjectPopper, snsThemeMode }) => ({
@@ -121,7 +121,7 @@ export function NonFungibleTickersTable({
 }: NonFungibleTickersTableProps) {
     const { t } = useI18N()
     const theme = useTheme()
-    const snsThemeMode = useMaskIconPalette(theme)
+    const snsThemeMode = useSNSThemeMode(theme)
     const { classes } = useStyles({ isCollectionProjectPopper, snsThemeMode })
     const { Others } = useWeb3State(result.pluginID)
     const containerRef = useRef(null)

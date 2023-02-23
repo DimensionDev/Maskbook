@@ -13,13 +13,13 @@ import {
     Typography,
     useTheme,
 } from '@mui/material'
+import { useSNSThemeMode } from '@masknet/plugin-infra/content-script'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { FormattedCurrency } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { formatCurrency, formatElapsed } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils/index.js'
 import type { Ticker } from '../../types/index.js'
-import { useMaskIconPalette } from '../../../../UIRoot-sns.js'
 
 const useStyles = makeStyles<{ snsThemeMode?: string }>()((theme, { snsThemeMode }) => ({
     container: {
@@ -70,7 +70,7 @@ type Cells = 'exchange' | 'pair' | 'price' | 'volume' | 'updated'
 export function TickersTable({ tickers }: TickersTableProps) {
     const { t } = useI18N()
     const theme = useTheme()
-    const snsThemeMode = useMaskIconPalette(theme)
+    const snsThemeMode = useSNSThemeMode(theme)
     const { classes } = useStyles({ snsThemeMode })
 
     const headCellMap: Record<Cells, string> = {
