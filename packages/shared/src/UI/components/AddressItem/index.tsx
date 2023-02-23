@@ -1,7 +1,7 @@
 import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { Link, Typography, TypographyProps } from '@mui/material'
+import { Box, Link, Typography, TypographyProps } from '@mui/material'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { SocialAccount } from '@masknet/web3-shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -17,6 +17,9 @@ const useStyles = makeStyles()((theme) => ({
         },
         lineHeight: 0,
     },
+    arrowDropIcon: {
+        color: theme.palette.maskColor.dark,
+    },
 }))
 
 export interface AddressItemProps {
@@ -24,6 +27,7 @@ export interface AddressItemProps {
     TypographyProps?: TypographyProps
     linkIconClassName?: string
     disableLinkIcon?: boolean
+    onClick?: (ev: React.MouseEvent) => void
 }
 
 export function AddressItem({
@@ -31,6 +35,7 @@ export function AddressItem({
     TypographyProps = { fontSize: '14px', fontWeight: 700 },
     linkIconClassName,
     disableLinkIcon,
+    onClick,
 }: AddressItemProps) {
     const { classes } = useStyles()
     const { Others } = useWeb3State(socialAccount?.pluginID)
@@ -39,17 +44,19 @@ export function AddressItem({
 
     return (
         <>
-            {!socialAccount.label || isSameAddress(socialAccount.label, socialAccount.address) ? (
-                <ReversedAddress
-                    {...TypographyProps}
-                    address={socialAccount.address}
-                    pluginID={socialAccount.pluginID}
-                />
-            ) : (
-                <Typography fontSize="14px" fontWeight={700} {...TypographyProps}>
-                    {socialAccount.label}
-                </Typography>
-            )}
+            <Box onClick={(ev: React.MouseEvent) => onClick?.(ev)}>
+                {!socialAccount.label || isSameAddress(socialAccount.label, socialAccount.address) ? (
+                    <ReversedAddress
+                        {...TypographyProps}
+                        address={socialAccount.address}
+                        pluginID={socialAccount.pluginID}
+                    />
+                ) : (
+                    <Typography fontSize="14px" fontWeight={700} {...TypographyProps}>
+                        {socialAccount.label}
+                    </Typography>
+                )}
+            </Box>
             {disableLinkIcon ? null : (
                 <Link
                     className={classes.link}
@@ -62,6 +69,7 @@ export function AddressItem({
                     <Icons.LinkOut size={20} className={linkIconClassName} />
                 </Link>
             )}
+            <Icons.ArrowDrop className={classes.arrowDropIcon} onClick={(ev: React.MouseEvent) => onClick?.(ev)} />
         </>
     )
 }
