@@ -1,1 +1,9 @@
-{}
+{
+    "__plugin_name": "Referral Farms",
+    "powered_by": "Powered by",
+    "create_by": "Created by",
+    "tab_new": "新建",
+    "tab_created": "创建",
+    "tab_my_rewards": "我的奖励",
+    "placeholder_loading": "加载中"
+}
