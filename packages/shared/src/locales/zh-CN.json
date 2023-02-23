@@ -63,7 +63,7 @@
     "gas_settings_gas_option_type_slow": "中等",
     "gas_settings_gas_option_type_normal": "高速",
     "gas_settings_gas_option_type_fast": "即时",
-    "gas_settings_gas_option_amount_in_gwei": "最多 {{- amount}} Gwei",
+    "gas_settings_gas_option_amount_in_gwei": "最多 {{amount}} Gwei",
     "gas_settings_section_title_slippage_tolerance": "滑点容许值",
     "gas_settings_custom": "自定义",
     "gas_settings_tab_basic": "基础",
