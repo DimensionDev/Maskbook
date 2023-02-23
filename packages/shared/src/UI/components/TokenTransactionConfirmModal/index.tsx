@@ -1,4 +1,4 @@
-import type { FC, PropsWithChildren } from 'react'
+import { FC, PropsWithChildren } from 'react'
 import { Icons } from '@masknet/icons'
 import { InjectedDialog, InjectedDialogProps, AssetPreviewer, TokenIcon } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -93,6 +93,7 @@ export const TokenTransactionConfirmModal: FC<TokenTransactionConfirmModalProps>
     token,
     nonFungibleTokenAddress,
     nonFungibleTokenId,
+    onClose,
     ...rest
 }) => {
     const { Others } = useWeb3State()
@@ -116,6 +117,8 @@ export const TokenTransactionConfirmModal: FC<TokenTransactionConfirmModalProps>
                     opacity: 0,
                 },
             }}
+            titleBarIconStyle="close"
+            onClose={onClose}
             {...rest}>
             <DialogContent className={classes.content}>
                 {isTokenTip ? (
