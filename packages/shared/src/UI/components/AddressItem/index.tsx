@@ -27,7 +27,7 @@ export interface AddressItemProps {
     TypographyProps?: TypographyProps
     linkIconClassName?: string
     disableLinkIcon?: boolean
-    onClick?: (event: any) => void
+    onClick?: (ev: React.MouseEvent) => void
 }
 
 export function AddressItem({
@@ -44,7 +44,7 @@ export function AddressItem({
 
     return (
         <>
-            <Box onClick={(event) => onClick?.(event)}>
+            <Box onClick={(ev: React.MouseEvent) => onClick?.(ev)}>
                 {!socialAccount.label || isSameAddress(socialAccount.label, socialAccount.address) ? (
                     <ReversedAddress
                         {...TypographyProps}
@@ -69,7 +69,7 @@ export function AddressItem({
                     <Icons.LinkOut size={20} className={linkIconClassName} />
                 </Link>
             )}
-            <Icons.ArrowDrop className={classes.arrowDropIcon} onClick={(event) => onClick?.(event)} />
+            <Icons.ArrowDrop className={classes.arrowDropIcon} onClick={(ev: React.MouseEvent) => onClick?.(ev)} />
         </>
     )
 }
