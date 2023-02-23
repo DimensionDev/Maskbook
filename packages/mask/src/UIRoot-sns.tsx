@@ -14,7 +14,7 @@ import { useMaskSiteAdaptorMixedTheme } from './utils/theme/useMaskSiteAdaptorMi
 import { getBackgroundColor } from './utils/theme/color-tools.js'
 import { isFacebook } from './social-network-adaptor/facebook.com/base.js'
 
-function useMaskIconPalette(theme: Theme) {
+export function useMaskIconPalette(theme: Theme) {
     const backgroundColor = getBackgroundColor(document.body)
     const isDark = theme.palette.mode === 'dark'
     const isDarker = backgroundColor === 'rgb(0,0,0)'
