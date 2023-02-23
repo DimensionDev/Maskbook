@@ -145,7 +145,7 @@ export function TickersTable({ tickers }: TickersTableProps) {
 
     return (
         <TableContainer className={classes.container}>
-            <Table size="small">
+            <Table size="small" stickyHeader>
                 <TableHead>
                     <TableRow>
                         {headCells.map((x) => (
