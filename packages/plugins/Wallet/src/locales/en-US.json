@@ -106,7 +106,6 @@
     "connect_your_wallet": "Connect your wallet",
     "connected_wallet_settings": "Connected wallet settings",
     "copy_wallet_address_success": "Copy wallet address successfully!",
-    "recent_transaction_pending": "Pending",
     "copy_success_of_wallet_addr": "Copy wallet address successfully!",
     "wallet_status_button_copy_address": "Copy Address",
     "wallet_status_pending_one": "{{count}} Pending",
