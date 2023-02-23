@@ -1,11 +1,11 @@
-import { FC, PropsWithChildren } from 'react'
 import { Icons } from '@masknet/icons'
-import { InjectedDialog, InjectedDialogProps, AssetPreviewer, TokenIcon } from '@masknet/shared'
-import type { Web3Helper } from '@masknet/web3-helpers'
+import { AssetPreviewer, InjectedDialog, InjectedDialogProps, TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNonFungibleAsset, useWeb3State } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
+import type { FC, PropsWithChildren } from 'react'
 import { useSharedI18N } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
