@@ -38,7 +38,7 @@ export class DeBankHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType
         return createPageable(
             transactions,
             createIndicator(indicator),
-            transactions.length > 0 ? createNextIndicator(indicator, timeStamp.toString()) : undefined,
+            transactions.length > 0 ? createNextIndicator(indicator, timeStamp?.toString()) : undefined,
         )
     }
 }

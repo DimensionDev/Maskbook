@@ -1,5 +1,4 @@
 import { Dispatch, memo, SetStateAction, useMemo, useState } from 'react'
-import { useUpdateEffect } from 'react-use'
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import { LoadingBase, makeStyles, MaskColorVar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -46,11 +45,6 @@ export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
         retry,
         loading,
     } = useIterator<Transaction<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>(iterator)
-
-    console.log('done', done)
-    useUpdateEffect(() => {
-        setPage(0)
-    }, [account, selectedChainId])
 
     const dataSource = useMemo(() => {
         return value.filter((x) => x.chainId === selectedChainId)
