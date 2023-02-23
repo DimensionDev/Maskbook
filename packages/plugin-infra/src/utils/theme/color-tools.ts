@@ -3,16 +3,12 @@ import { clamp } from 'lodash-es'
 type RGB = [number, number, number]
 type RGBA = [number, number, number, number]
 
-export function isDark([r, g, b]: RGB) {
-    return r < 68 && g < 68 && b < 68
-}
-
-export function toRGB(channels: RGB | undefined) {
+function toRGB(channels: RGB | undefined) {
     if (!channels) return ''
     return `rgb(${channels.join()})`
 }
 
-export function fromRGB(rgb: string): RGB | undefined {
+function fromRGB(rgb: string): RGB | undefined {
     const matched = rgb.match(/rgb\(\s*(\d+?)\s*,\s*(\d+?)\s*,\s*(\d+?)\s*\)/)
     if (matched) {
         const [_, r, g, b] = matched
@@ -53,25 +49,4 @@ export function getBackgroundColor(element: HTMLElement | HTMLBodyElement | unde
         return fromRGBAtoRGB(color)
     }
     return color ? toRGB(fromRGB(color)) : ''
-}
-
-export function getForegroundColor(element: HTMLElement | HTMLBodyElement | undefined) {
-    if (!element) return ''
-    const color = getComputedStyle(element).color
-    if (isRGBA(color)) {
-        return fromRGBAtoRGB(color)
-    }
-    return color ? toRGB(fromRGB(color)) : ''
-}
-
-export function isDarkTheme(element: HTMLElement = document.body) {
-    const color = getComputedStyle(element).backgroundColor
-    let rgb: RGB | undefined
-    if (isRGBA(color)) {
-        rgb = fromRGB(fromRGBAtoRGB(color)!)
-    } else {
-        rgb = fromRGB(color)
-    }
-    if (!rgb) return true
-    return isDark(rgb)
 }
