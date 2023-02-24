@@ -3,7 +3,6 @@ import React from 'react'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material'
 import { applyMaskColorVars, CustomSnackbarProvider, DashboardDarkTheme } from '@masknet/theme'
 import { addSharedI18N, I18NextProviderHMR } from '@masknet/shared'
-// import { withMatrix } from 'storybook-addon-matrix'
 import { addDashboardI18N } from '../src/locales/languages'
 import { i18NextInstance } from '@masknet/shared-base'
 import { DisableShadowRootContext } from '@masknet/theme'
@@ -15,17 +14,16 @@ export const parameters = {
     actions: { argTypesRegex: '^on[A-Z].*' },
 }
 export const decorators = [
-    // withMatrix,
     (Story) => (
         <React.Suspense fallback="">
             <StyledEngineProvider injectFirst>
                 <ThemeProvider theme={DashboardDarkTheme}>
                     <I18NextProviderHMR i18n={i18NextInstance}>
-                        <CustomSnackbarProvider>
-                            <DisableShadowRootContext.Provider value>
+                        <DisableShadowRootContext.Provider value>
+                            <CustomSnackbarProvider>
                                 <Story />
-                            </DisableShadowRootContext.Provider>
-                        </CustomSnackbarProvider>
+                            </CustomSnackbarProvider>
+                        </DisableShadowRootContext.Provider>
                     </I18NextProviderHMR>
                 </ThemeProvider>
             </StyledEngineProvider>
