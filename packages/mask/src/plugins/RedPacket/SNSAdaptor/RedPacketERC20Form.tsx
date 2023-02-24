@@ -141,7 +141,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     }, [token])
 
     // balance
-    const { isAvailableBalance, balance, isAvailableGasBalane } = useAvailableBalance(token?.address, gasOption, {
+    const { isAvailableBalance, balance, isAvailableGasBalance } = useAvailableBalance(token?.address, gasOption, {
         chainId,
     })
     // #endregion
@@ -154,7 +154,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         if (isZero(amount)) return 'Enter an amount'
         if (isGreaterThan(totalAmount, balance))
             return tr('plugin_gitcoin_insufficient_balance', { symbol: token.symbol })
-        if (!isAvailableGasBalane) {
+        if (!isAvailableGasBalance) {
             return tr('no_enough_gas_fees')
         }
         if (!isDivisible)

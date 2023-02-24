@@ -50,7 +50,7 @@ export function useAvailableBalance(
         [address, gasOption?.gasCurrency],
     )
 
-    const isAvailableGasBalane = useMemo(() => {
+    const isAvailableGasBalance = useMemo(() => {
         if (!gasOption?.gasCurrency || isNativeTokenAddress(gasOption.gasCurrency))
             return isGreaterThan(nativeTokenBalance, gasFee)
 
@@ -59,7 +59,7 @@ export function useAvailableBalance(
 
     return {
         isAvailableBalance,
-        isAvailableGasBalane,
+        isAvailableGasBalance,
         balance: isAvailableBalance ? new BigNumber(tokenBalance).minus(gasFee).toString() : tokenBalance,
     }
 }

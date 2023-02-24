@@ -37,6 +37,7 @@ import {
     formatBalance,
     formatCurrency,
     isGreaterThan,
+    isLessThan,
     leftShift,
     pow10,
     toFixed,
