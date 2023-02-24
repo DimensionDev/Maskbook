@@ -12,7 +12,9 @@ export function useTokenMenuCollectionList(
     ).filter(
         (x) =>
             !(
-                x.source !== currentCollection?.source &&
+                currentCollection &&
+                x.source !== currentCollection.source &&
+                [SourceType.CoinMarketCap, SourceType.CoinGecko].includes(currentCollection.source) &&
                 [SourceType.CoinMarketCap, SourceType.CoinGecko].includes(x.source)
             ),
     )
