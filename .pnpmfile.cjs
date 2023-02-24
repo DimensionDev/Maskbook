@@ -28,6 +28,9 @@ approvedList.set('wyvern-schemas', 'git+https://github.com/ProjectOpenSea/wyvern
 // openseajs -> wyvern-schemas -> web3-provider-engine -> eth-block-tracker
 approvedList.set('async-eventemitter', 'github:ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c')
 
+// https://github.com/storybookjs/storybook/issues/19055
+approvedList.set('@storybook/react-docgen-typescript-plugin', 'npm:react-docgen-typescript-plugin@1.0.2')
+
 // pnpm -r why web3@0.20.7
 approvedList.set('bignumber.js', [
     'git+https://github.com/frozeman/bignumber.js-nolookahead.git',

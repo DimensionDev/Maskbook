@@ -13,6 +13,7 @@ overrides:
   '@protobufjs/inquire': 1.1.0
   '@ethersproject/providers': 5.7.2
   reflect-metadata: 0.1.13
+  '@storybook/react-docgen-typescript-plugin': npm:react-docgen-typescript-plugin@1.0.2
 
 patchedDependencies:
   cross-fetch@3.1.5:
@@ -10580,7 +10581,7 @@ packages:
       '@storybook/docs-tools': 7.0.0-beta.53
       '@storybook/node-logger': 7.0.0-beta.53
       '@storybook/react': 7.0.0-beta.53
-      '@storybook/react-docgen-typescript-plugin': 1.0.2-canary.6.9d540b91e815f8fc2f8829189deb00553559ff63.0
+      '@storybook/react-docgen-typescript-plugin': /react-docgen-typescript-plugin/1.0.2
       '@types/node': 18.11.9
       '@types/semver': 7.3.13
       babel-plugin-add-react-displayname: 0.0.5
@@ -10625,7 +10626,7 @@ packages:
       '@storybook/docs-tools': 7.0.0-beta.53
       '@storybook/node-logger': 7.0.0-beta.53
       '@storybook/react': 7.0.0-beta.53
-      '@storybook/react-docgen-typescript-plugin': 1.0.2-canary.6.9d540b91e815f8fc2f8829189deb00553559ff63.0_webpack@5.75.0
+      '@storybook/react-docgen-typescript-plugin': /react-docgen-typescript-plugin/1.0.2_webpack@5.75.0
       '@types/node': 18.11.9
       '@types/semver': 7.3.13
       babel-plugin-add-react-displayname: 0.0.5
@@ -10670,7 +10671,7 @@ packages:
       '@storybook/docs-tools': 7.0.0-beta.53
       '@storybook/node-logger': 7.0.0-beta.53
       '@storybook/react': 7.0.0-beta.53
-      '@storybook/react-docgen-typescript-plugin': 1.0.2-canary.6.9d540b91e815f8fc2f8829189deb00553559ff63.0_webpack@5.75.0
+      '@storybook/react-docgen-typescript-plugin': /react-docgen-typescript-plugin/1.0.2_webpack@5.75.0
       '@types/node': 18.11.9
       '@types/semver': 7.3.13
       babel-plugin-add-react-displayname: 0.0.5
@@ -10712,47 +10713,6 @@ packages:
 
   /@storybook/preview/7.0.0-beta.53:
     resolution: {integrity: sha512-u/VwzBY6bRw8z40wKsGJBdKn5Tb7i5yGADXZgJLjLkRskVa/0gJT6WgTrKyIJLS7I1Ikr+yCqETBfCagvMuUQg==}
-    dev: true
-
-  /@storybook/react-docgen-typescript-plugin/1.0.2-canary.6.9d540b91e815f8fc2f8829189deb00553559ff63.0:
-    resolution: {integrity: sha512-eVg3BxlOm2P+chijHBTByr90IZVUtgRW56qEOLX7xlww2NBuKrcavBlcmn+HH7GIUktquWkMPtvy6e0W0NgA5w==}
-    peerDependencies:
-      typescript: '>= 3.x'
-      webpack: '>= 4'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      debug: 4.3.4
-      endent: 2.1.0
-      find-cache-dir: 3.3.2
-      flat-cache: 3.0.4
-      micromatch: 4.0.5
-      react-docgen-typescript: 2.2.2
-      tslib: 2.4.1
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
-  /@storybook/react-docgen-typescript-plugin/1.0.2-canary.6.9d540b91e815f8fc2f8829189deb00553559ff63.0_webpack@5.75.0:
-    resolution: {integrity: sha512-eVg3BxlOm2P+chijHBTByr90IZVUtgRW56qEOLX7xlww2NBuKrcavBlcmn+HH7GIUktquWkMPtvy6e0W0NgA5w==}
-    peerDependencies:
-      typescript: '>= 3.x'
-      webpack: '>= 4'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      debug: 4.3.4
-      endent: 2.1.0
-      find-cache-dir: 3.3.2
-      flat-cache: 3.0.4
-      micromatch: 4.0.5
-      react-docgen-typescript: 2.2.2
-      tslib: 2.4.1
-      webpack: 5.75.0
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /@storybook/react-webpack5/7.0.0-beta.53_@babel+core@7.21.0:
@@ -26549,6 +26509,49 @@ packages:
       hoist-non-react-statics: 3.3.2
     dev: false
 
+  /react-docgen-typescript-plugin/1.0.2:
+    resolution: {integrity: sha512-/8OKrPRDTAGDnOkumGvDWixfrNPrRWhEMGLZnJr1NiJtRwdvNRGqGA2J/SeSvWerawqSPxNyXK+EfERCir6mMw==}
+    peerDependencies:
+      typescript: '>= 4.x'
+      webpack: '>= 4'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      debug: 4.3.4
+      endent: 2.1.0
+      find-cache-dir: 3.3.2
+      flat-cache: 3.0.4
+      micromatch: 4.0.5
+      react-docgen-typescript: 2.2.2
+      tslib: 2.4.1
+      webpack-sources: 2.3.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /react-docgen-typescript-plugin/1.0.2_webpack@5.75.0:
+    resolution: {integrity: sha512-/8OKrPRDTAGDnOkumGvDWixfrNPrRWhEMGLZnJr1NiJtRwdvNRGqGA2J/SeSvWerawqSPxNyXK+EfERCir6mMw==}
+    peerDependencies:
+      typescript: '>= 4.x'
+      webpack: '>= 4'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      debug: 4.3.4
+      endent: 2.1.0
+      find-cache-dir: 3.3.2
+      flat-cache: 3.0.4
+      micromatch: 4.0.5
+      react-docgen-typescript: 2.2.2
+      tslib: 2.4.1
+      webpack: 5.75.0
+      webpack-sources: 2.3.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
   /react-docgen-typescript/2.2.2:
     resolution: {integrity: sha512-tvg2ZtOpOi6QDwsb3GZhOjDkkX0h8Z2gipvTg6OVMUyoYoURhEiRNePT8NZItTVCDh39JJHnLdfCOkzoLbFnTg==}
     peerDependencies:
@@ -31718,6 +31721,14 @@ packages:
     dependencies:
       source-list-map: 2.0.1
       source-map: 0.6.1
+
+  /webpack-sources/2.3.1:
+    resolution: {integrity: sha512-y9EI9AO42JjEcrTJFOYmVywVZdKVUfOvDUPsJea5GIr1JOEGFVqwlY2K098fFoIjOkDzHn2AjRvM8dsBZu+gCA==}
+    engines: {node: '>=10.13.0'}
+    dependencies:
+      source-list-map: 2.0.1
+      source-map: 0.6.1
+    dev: true
 
   /webpack-sources/3.2.3:
     resolution: {integrity: sha512-/DyMEOrDgLKKIG0fmvtz+4dUX/3Ghozwgm6iPp8KRhvn+eQf9+Q7GWxVNMk3+uCPWfdXYC4ExGBckIXdFEfH1w==}

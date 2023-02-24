@@ -103,11 +103,12 @@
       "@mui/base": "5.0.0-alpha.100",
       "@protobufjs/inquire": "1.1.0",
       "@ethersproject/providers": "5.7.2",
-      "reflect-metadata": "0.1.13"
+      "reflect-metadata": "0.1.13",
+      "@storybook/react-docgen-typescript-plugin": "npm:react-docgen-typescript-plugin@1.0.2"
     },
     "override comments": {
-      "ipfs-utils": "see https://github.com/ipfs/js-ipfs-utils/issues/158",
-      "i18next-translation-parser": "see https://github.com/i18next/i18next-translation-parser/issues/11 we manually pin the commit",
+      "ipfs-utils": "https://github.com/ipfs/js-ipfs-utils/issues/158",
+      "i18next-translation-parser": "https://github.com/i18next/i18next-translation-parser/issues/11",
       "@ethersproject/providers": "@balancer-labs/sor is pinning a lower version which breaks the type check"
     },
     "onlyBuiltDependencies": [],
