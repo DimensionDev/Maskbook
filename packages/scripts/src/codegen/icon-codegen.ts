@@ -101,7 +101,10 @@ async function generateIcons() {
             currentLine += `${identifier}_url: string`
             asURL.dts.push(currentLine)
 
-            const source = parsedPath.ext.toLowerCase() === '.svg' ? await readFile(path, 'utf8').then(svg2jsx) : null
+            const source =
+                parsedPath.ext.toLowerCase() === '.svg'
+                    ? await readFile(new URL(path, ROOT_PATH), 'utf8').then(svg2jsx)
+                    : null
             variants[base].push({
                 args: [currentVariant, url, source, !!source?.match(currentColorRe)],
                 assetPath: importPath,
