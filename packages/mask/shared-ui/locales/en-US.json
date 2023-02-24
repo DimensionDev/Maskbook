@@ -23,6 +23,7 @@
     "approve": "Approve",
     "address": "Address",
     "amount": "Amount",
+    "available_balance": "Available Balance",
     "operation": "Operation",
     "gas_limit": "Gas Limit",
     "gas_price": "Gas Price",
