@@ -139,6 +139,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const pluginIDs = useValueRef(pluginIDSettings)
 
     const pluginId = site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM
+
     return (
         <TabContext value={currentTab}>
             <InjectedDialog

@@ -37,6 +37,7 @@ import {
     formatBalance,
     formatCurrency,
     isGreaterThan,
+    isLessThan,
     leftShift,
     pow10,
     toFixed,
@@ -307,6 +308,8 @@ const ContractInteraction = memo(() => {
         chainId: smartPayChainId,
     })
 
+    const availableBalanceTooLow = isLessThan(formatBalance(allowance, maskToken?.decimals), 0.1)
+
     const { value: currencyRatio } = useAsync(async () => {
         if (!smartPayChainId) return
         const depositPaymaster = new DepositPaymaster(smartPayChainId)
@@ -387,7 +390,7 @@ const ContractInteraction = memo(() => {
         if (!maskToken || !maskTokenPrice) return '0'
 
         return new BigNumber(formatBalance(gasFee, maskToken.decimals)).times(maskTokenPrice)
-    }, [gasFee, nativeTokenPrice])
+    }, [gasFee, nativeTokenPrice, maskTokenPrice])
 
     const totalUSD = new BigNumber(gasFeeUSD).plus(tokenValueUSD).toString()
 
@@ -473,7 +476,9 @@ const ContractInteraction = memo(() => {
                                 }
                                 formatter={formatBalance}
                             />
-                            {request?.owner ? <Icons.ArrowDrop onClick={openCurrencyMenu} /> : null}
+                            {request?.owner && !availableBalanceTooLow ? (
+                                <Icons.ArrowDrop onClick={openCurrencyMenu} />
+                            ) : null}
                             <Link
                                 component="button"
                                 onClick={() => navigate(PopupRoutes.GasSetting)}
@@ -481,7 +486,7 @@ const ContractInteraction = memo(() => {
                                 {t('popups_wallet_contract_interaction_edit')}
                             </Link>
                         </Typography>
-                        {request?.owner ? currencyMenu : null}
+                        {request?.owner && !availableBalanceTooLow ? currencyMenu : null}
                     </div>
 
                     {!isGreaterThan(totalUSD, pow10(9)) ? (

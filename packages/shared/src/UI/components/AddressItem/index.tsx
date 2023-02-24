@@ -28,6 +28,7 @@ export interface AddressItemProps {
     linkIconClassName?: string
     disableLinkIcon?: boolean
     onClick?: (ev: React.MouseEvent) => void
+    isMenu?: boolean
 }
 
 export function AddressItem({
@@ -36,6 +37,7 @@ export function AddressItem({
     linkIconClassName,
     disableLinkIcon,
     onClick,
+    isMenu = false,
 }: AddressItemProps) {
     const { classes } = useStyles()
     const { Others } = useWeb3State(socialAccount?.pluginID)
@@ -69,7 +71,9 @@ export function AddressItem({
                     <Icons.LinkOut size={20} className={linkIconClassName} />
                 </Link>
             )}
-            <Icons.ArrowDrop className={classes.arrowDropIcon} onClick={(ev: React.MouseEvent) => onClick?.(ev)} />
+            {isMenu ? (
+                <Icons.ArrowDrop className={classes.arrowDropIcon} onClick={(ev: React.MouseEvent) => onClick?.(ev)} />
+            ) : null}
         </>
     )
 }

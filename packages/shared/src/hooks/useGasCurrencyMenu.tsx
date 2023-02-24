@@ -1,11 +1,13 @@
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useFungibleToken, useMaskTokenAddress, useNativeToken } from '@masknet/web3-hooks-base'
-import { isSameAddress } from '@masknet/web3-shared-base'
-import { MenuItem, Radio as MuiRadio, RadioProps, Typography } from '@mui/material'
-import { compact } from 'lodash-es'
+import { useChainContext, useFungibleToken, useMaskTokenAddress, useNativeToken } from '@masknet/web3-hooks-base'
+import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
+import { formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-base'
+import { useSmartPayConstants } from '@masknet/web3-shared-evm'
+import { Button, MenuItem, Radio as MuiRadio, RadioProps, Typography } from '@mui/material'
+import { compact, noop } from 'lodash-es'
 import { useCallback, useState } from 'react'
-import { TokenIcon } from '../index.js'
+import { TokenIcon, useSharedI18N } from '../index.js'
 import { useMenuConfig } from './useMenu.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -34,12 +36,19 @@ export function useGasCurrencyMenu(
     selectedAddress?: string,
     // TODO: remove this after override popups theme
     Radio: React.ComponentType<RadioProps> = MuiRadio,
+    handleUnlock?: () => void,
 ) {
+    const sharedI18N = useSharedI18N()
     const { classes } = useStyles()
+    const { chainId } = useChainContext()
     const [current, setCurrent] = useState('')
     const { value: nativeToken } = useNativeToken(pluginId)
     const maskAddress = useMaskTokenAddress(pluginId)
     const { value: maskToken } = useFungibleToken(pluginId, maskAddress)
+
+    const { PAYMASTER_MASK_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
+    const { value: allowance = '0' } = useERC20TokenAllowance(maskAddress, PAYMASTER_MASK_CONTRACT_ADDRESS)
+    const availableBalanceTooLow = isLessThan(formatBalance(allowance, maskToken?.decimals), 0.1)
 
     const handleChange = useCallback(
         (address: string) => {
@@ -63,12 +72,20 @@ export function useGasCurrencyMenu(
                 </MenuItem>
             ) : null,
             maskToken ? (
-                <MenuItem className={classes.item} onClick={() => handleChange(maskToken.address)}>
+                <MenuItem
+                    className={classes.item}
+                    onClick={!availableBalanceTooLow ? () => handleChange(maskToken.address) : noop}>
                     <Typography className={classes.token}>
                         <TokenIcon {...maskToken} size={30} />
                         {maskToken.symbol}
                     </Typography>
-                    <Radio checked={isSameAddress(selected, maskAddress)} />
+                    {availableBalanceTooLow ? (
+                        <Button variant="roundedContained" onClick={handleUnlock} size="small">
+                            {sharedI18N.unlock()}
+                        </Button>
+                    ) : (
+                        <Radio checked={isSameAddress(selected, maskAddress)} />
+                    )}
                 </MenuItem>
             ) : null,
         ]),
