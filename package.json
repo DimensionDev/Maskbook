@@ -157,7 +157,8 @@
       "reflect-metadata@0.1.13": "patches/reflect-metadata@0.1.13.patch",
       "ses@0.17.0": "patches/ses@0.17.0.patch",
       "bloom-filters@3.0.0": "patches/bloom-filters@3.0.0.patch",
-      "@sentry/core@7.37.2": "patches/@sentry__core@7.37.2.patch"
+      "@sentry/core@7.37.2": "patches/@sentry__core@7.37.2.patch",
+      "urlcat@3.1.0": "patches/urlcat@3.1.0.patch"
     }
   }
 }
