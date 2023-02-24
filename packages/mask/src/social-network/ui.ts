@@ -30,7 +30,7 @@ import '../utils/debug/general.js'
 import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
 import { definedSocialNetworkUIs } from './define.js'
 import stringify from 'json-stable-stringify'
-import { hasNativeAPI, nativeAPI } from '../../shared/native-rpc/index.js'
+import { hasNativeAPI } from '../../shared/native-rpc/index.js'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -196,7 +196,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     currentPersonaIdentifier,
                     pluginIDSettings,
                     hasNativeAPI,
-                    nativeAPI,
                 }
             },
             Services.Settings.getPluginMinimalModeEnabled,

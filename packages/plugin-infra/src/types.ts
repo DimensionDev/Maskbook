@@ -42,8 +42,6 @@ import type {
 import type { ChainId as ChainIdEVM, TransactionOptions } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { CompositionType } from './entry-content-script.js'
-import type { AsyncVersionOf } from 'async-call-rpc'
-import type { AndroidNativeAPIs, iOSNativeAPIs } from '@masknet/public-api'
 
 export declare namespace Plugin {
     /**
@@ -179,16 +177,6 @@ export namespace Plugin.Shared {
         nativeType?: 'Android' | 'iOS'
         /** Native API supported */
         hasNativeAPI: boolean
-        nativeAPI?:
-            | {
-                  type: 'iOS'
-                  api: AsyncVersionOf<iOSNativeAPIs>
-              }
-            | {
-                  type: 'Android'
-                  api: AsyncVersionOf<AndroidNativeAPIs>
-              }
-            | undefined
 
         pluginIDSettings?: ValueRef<Record<EnhanceableSite | ExtensionSite, NetworkPluginID>>
 

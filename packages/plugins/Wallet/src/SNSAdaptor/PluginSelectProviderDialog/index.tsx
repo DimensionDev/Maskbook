@@ -6,15 +6,9 @@ import { useState } from 'react'
 
 export function PluginSelectProviderDialog() {
     const site = getSiteType()
-    const { pluginIDSettings, hasNativeAPI, nativeAPI } = useSNSAdaptorContext()
+    const { pluginIDSettings, hasNativeAPI } = useSNSAdaptorContext()
     const pluginIDs = useValueRef(pluginIDSettings!)
     const [undeterminedPluginID, setUndeterminedPluginID] = useState(site ? pluginIDs[site] : undefined)
 
-    return (
-        <SelectProviderDialog
-            pluginIDs={pluginIDs}
-            hasNativeAPI={hasNativeAPI}
-            misc_openCreateWalletView={nativeAPI?.api.misc_openCreateWalletView}
-        />
-    )
+    return <SelectProviderDialog pluginIDs={pluginIDs} hasNativeAPI={hasNativeAPI} />
 }

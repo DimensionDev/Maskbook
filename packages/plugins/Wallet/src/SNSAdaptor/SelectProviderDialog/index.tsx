@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { delay } from '@masknet/kit'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
@@ -27,7 +27,6 @@ const useStyles = makeStyles()((theme) => ({
 export interface SelectProviderDialogProps {
     pluginIDs: Record<EnhanceableSite | ExtensionSite, NetworkPluginID>
     hasNativeAPI: boolean
-    misc_openCreateWalletView?: () => Promise<void>
 }
 
 export function SelectProviderDialog(props: SelectProviderDialogProps) {
@@ -38,7 +37,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
         Array<Web3Helper.NetworkDescriptorAll['type']> | undefined
     >()
     const network = useNetworkDescriptor()
-    const { pluginIDs, hasNativeAPI, misc_openCreateWalletView } = props
+    const { pluginIDs, hasNativeAPI } = props
 
     const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID)
     // #region remote controlled dialog logic
@@ -56,12 +55,6 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     )
     // #endregion
 
-    // #region native app
-    useEffect(() => {
-        if (!open) return
-        if (hasNativeAPI) misc_openCreateWalletView?.()
-    }, [open, misc_openCreateWalletView])
-    // #endregion
     const site = getSiteType()
     const networks = getRegisteredWeb3Networks()
     const providers = getRegisteredWeb3Providers()
