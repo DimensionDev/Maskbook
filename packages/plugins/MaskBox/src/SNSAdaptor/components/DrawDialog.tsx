@@ -6,7 +6,6 @@ import { Add, Remove } from '@mui/icons-material'
 import { useChainContext, useProviderDescriptor } from '@masknet/web3-hooks-base'
 import {
     FormattedAddress,
-    FormattedBalance,
     ImageIcon,
     InjectedDialog,
     PluginWalletStatusBar,
@@ -17,7 +16,7 @@ import {
 } from '@masknet/shared'
 import { Box, Button, DialogActions, DialogContent, TextField, Typography } from '@mui/material'
 import { formatEthereumAddress, SchemaType, useMaskBoxConstants } from '@masknet/web3-shared-evm'
-import { formatBalance, multipliedBy } from '@masknet/web3-shared-base'
+import { formatBalance, formatPrice, multipliedBy } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { BoxInfo } from '../../type.js'
 import { Context } from '../../hooks/useContext.js'
@@ -129,12 +128,7 @@ export function DrawDialog(props: DrawDialogProps) {
                     <Box className={classes.caption}>
                         <Typography color="textPrimary">
                             <span className={classes.value}>
-                                <FormattedBalance
-                                    value={multipliedBy(paymentTokenPrice, paymentCount)}
-                                    decimals={paymentTokenDetailed?.decimals ?? 0}
-                                    formatter={formatBalance}
-                                    significant={6}
-                                />
+                                {formatPrice(multipliedBy(paymentTokenPrice, paymentCount), 6)}
                             </span>
                             <span>{paymentTokenDetailed?.symbol}</span>
                         </Typography>
@@ -143,7 +137,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                 <span>&asymp;</span>
                                 <TokenPrice
                                     chainId={chainId}
-                                    amount={formatBalance(paymentTokenPrice, paymentTokenDetailed.decimals)}
+                                    amount={formatPrice(paymentTokenPrice, 6)}
                                     contractAddress={paymentTokenDetailed.address}
                                 />
                             </Typography>

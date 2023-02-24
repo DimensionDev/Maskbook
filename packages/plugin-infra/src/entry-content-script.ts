@@ -40,6 +40,7 @@ export {
     useSNSAdaptorContext,
     useSocialIdentity,
     useThemeColor,
+    useSNSThemeMode,
     useThemeMode,
     useThemeSettings,
     useThemeSize,

@@ -4,7 +4,7 @@ import { useSharedI18N } from '@masknet/shared'
 import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { formatBalance, GasOptionType, scale10, isZero, plus } from '@masknet/web3-shared-base'
+import { GasOptionType, isZero, plus, formatPrice } from '@masknet/web3-shared-base'
 import { ChainId, formatGweiToWei, formatWeiToGwei, Transaction } from '@masknet/web3-shared-evm'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { GasOptionSelector } from './GasOptionSelector.js'
@@ -71,18 +71,15 @@ export function GasSection(props: GasSectionProps) {
         : ((transaction as Transaction)?.maxPriorityFeePerGas as string)
 
     const gasPrice = (transactionOptions as Transaction | undefined)?.gasPrice
-    const customPrice = formatBalance(
-        scale10(
-            activeTab === GasSettingsType.Basic
-                ? formatWeiToGwei(suggestedMaxFeePerGas ?? 0)
-                : formatWeiToGwei(
-                      isEIP1559
-                          ? plus(baseFeePerGas, priorityFee ?? suggestedMaxPriorityFeePerGas ?? 0)
-                          : gasPrice ?? suggestedMaxFeePerGas ?? 0,
-                  ),
-            2,
-        ),
-        2,
+
+    const customPrice = formatPrice(
+        activeTab === GasSettingsType.Basic
+            ? formatWeiToGwei(suggestedMaxFeePerGas ?? 0)
+            : formatWeiToGwei(
+                  isEIP1559
+                      ? plus(baseFeePerGas, priorityFee ?? suggestedMaxPriorityFeePerGas ?? 0)
+                      : gasPrice ?? suggestedMaxFeePerGas ?? 0,
+              ),
         2,
     )
 

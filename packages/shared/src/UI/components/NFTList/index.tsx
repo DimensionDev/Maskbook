@@ -45,7 +45,7 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             gridTemplateColumns: `repeat(${columns}, 1fr)`,
         },
         nftContainer: {
-            background: theme.palette.background.default,
+            background: theme.palette.maskColor.bg,
             borderRadius: 8,
             width: 126,
             height: 154,
@@ -91,6 +91,7 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             height: 30,
         },
         image: {
+            background: 'transparent !important',
             width: 126,
             height: 126,
         },
