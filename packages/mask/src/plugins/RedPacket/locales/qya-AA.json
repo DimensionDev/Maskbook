@@ -74,7 +74,7 @@
     "token_no_history": "crwdns18264:0crwdne18264:0",
     "history_claimed": "crwdns16860:0{{claimedShares}}crwdnd16860:0{{shares}}crwdne16860:0",
     "send": "crwdns16862:0crwdne16862:0",
-    "history_duration": "crwdns16864:0{{startTime}}crwdnd16864:0{{endTime}}crwdne16864:0",
+    "history_duration": "crwdns16864:0{{- startTime}}crwdnd16864:0{{- endTime}}crwdne16864:0",
     "best_wishes": "crwdns16866:0crwdne16866:0",
     "nft_data_broken": "crwdns16868:0crwdne16868:0",
     "from": "crwdns16870:0{{name}}crwdne16870:0",
