@@ -14,7 +14,7 @@ import {
     recoverWalletFromPrivateKey,
 } from '../services/index.js'
 import { INTERNAL_getPasswordRequired } from '../services/wallet/password.js'
-import { base } from '@masknet/plugin-wallet'
+import { base } from '../base.js'
 
 const worker: Plugin.Worker.Definition = {
     ...base,

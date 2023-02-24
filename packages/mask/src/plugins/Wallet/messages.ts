@@ -1,6 +1,7 @@
 import type { AsyncVersionOf } from 'async-call-rpc'
 import { createPluginRPC } from '@masknet/plugin-infra'
-import { PLUGIN_ID, WalletMessages } from '@masknet/plugin-wallet'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { PLUGIN_ID } from './contants.js'
 
 export const WalletRPC: AsyncVersionOf<typeof import('./services/index.js')> = createPluginRPC(
     PLUGIN_ID,
