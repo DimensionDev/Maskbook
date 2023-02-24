@@ -17,11 +17,5 @@ const themeSB = createBuildStorybook6(
     'theme',
 )
 
-const [buildStorybookShared] = fromNPMTask(
-    new URL('storybook-shared/', PKG_PATH),
-    'build-storybook-shared',
-    'Build shared files in Storybook',
-)
-
-export const buildNetlify: TaskFunction = series(codegen, buildStorybookShared, dashboardSB, themeSB)
+export const buildNetlify: TaskFunction = series(codegen, dashboardSB, themeSB)
 task(buildNetlify, 'build-ci-netlify', 'Build for Netlify')

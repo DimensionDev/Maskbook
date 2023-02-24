@@ -6,7 +6,6 @@ gun.js
 e2e
 package.json
 packages/contracts
-packages/storybook-shared
 packages/netlify/storybook-static
 packages/netlify/sites
 public/
