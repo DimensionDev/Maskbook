@@ -17,7 +17,7 @@ function fromRGB(rgb: string): RGB | undefined {
     return
 }
 
-export function shade(channels: RGB, percentage: number): RGB {
+function shade(channels: RGB, percentage: number): RGB {
     return channels.map((c) => clamp(Math.floor((c * (100 + percentage)) / 100), 0, 255)) as RGB
 }
 
