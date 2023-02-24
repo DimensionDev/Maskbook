@@ -1,6 +1,7 @@
 export * from './attemptUntil.js'
 export * from './constant.js'
 export * from './fetch.js'
+export * from './formatPrice.js'
 export * from './formatBalance.js'
 export * from './formatCurrency.js'
 export * from './formatElapsed.js'
