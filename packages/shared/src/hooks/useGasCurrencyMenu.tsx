@@ -48,7 +48,7 @@ export function useGasCurrencyMenu(
 
     const { PAYMASTER_MASK_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
     const { value: allowance = '0' } = useERC20TokenAllowance(maskAddress, PAYMASTER_MASK_CONTRACT_ADDRESS)
-    const availableBalanceTooLow = !isLessThan(formatBalance(allowance, maskToken?.decimals), 0.1)
+    const availableBalanceTooLow = isLessThan(formatBalance(allowance, maskToken?.decimals), 0.1)
 
     const handleChange = useCallback(
         (address: string) => {
