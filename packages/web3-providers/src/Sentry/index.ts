@@ -4,6 +4,7 @@ import { TelemetryAPI } from '../types/Telemetry.js'
 
 export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
     constructor() {
+        if (typeof Sentry === 'undefined') return
         Sentry.init({
             dsn: process.env.MASK_SENTRY_DSN,
             defaultIntegrations: false,
@@ -133,11 +134,13 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
 
     captureEvent(options: TelemetryAPI.EventOptions) {
         if (this.status === 'off') return
+        if (typeof Sentry === 'undefined') return
         Sentry.captureEvent(this.createEvent(options))
     }
 
     captureException(options: TelemetryAPI.ExceptionOptions) {
         if (this.status === 'off') return
+        if (typeof Sentry === 'undefined') return
         Sentry.captureException(options.error, this.createException(options))
     }
 }
