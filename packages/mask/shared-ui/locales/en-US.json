@@ -154,6 +154,7 @@
     "download": "Download",
     "failed": "Failed",
     "buy_now": "Buy Now",
+    "no_enough_gas_fees": "No Enough Gas Fees",
     "open": "Open",
     "settings": "Settings",
     "setup_guide_login": "Please sign up or log in to connect Mask network.",

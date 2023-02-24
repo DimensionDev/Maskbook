@@ -111,19 +111,6 @@ export function useTrendingById(
         }
     }
 
-    if (loading) {
-        return {
-            loading: true,
-        }
-    }
-
-    if (error) {
-        return {
-            loading: false,
-            error,
-        }
-    }
-
     return {
         value: {
             currency,

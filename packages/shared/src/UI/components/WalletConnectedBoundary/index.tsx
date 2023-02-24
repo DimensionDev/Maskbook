@@ -24,16 +24,18 @@ export interface WalletConnectedBoundaryProps extends withClasses<'connectWallet
     hideRiskWarningConfirmed?: boolean
     ActionButtonProps?: ActionButtonProps
     startIcon?: React.ReactNode
+    isSmartPay?: boolean
 }
 
 export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
-    const { children = null, offChain = false, hideRiskWarningConfirmed = false, expectedChainId } = props
+    const { children = null, offChain = false, hideRiskWarningConfirmed = false, expectedChainId, isSmartPay } = props
 
     const t = useSharedI18N()
     const { classes, cx } = useStyles(undefined, { props })
 
     const { pluginID } = useNetworkContext()
     const { account, chainId: chainIdValid } = useChainContext({ chainId: expectedChainId })
+
     const nativeTokenBalance = useNativeTokenBalance(undefined, {
         chainId: chainIdValid,
     })
@@ -78,7 +80,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
             </ActionButton>
         )
 
-    if (isZero(nativeTokenBalance.value ?? '0') && !offChain)
+    if (!isSmartPay && isZero(nativeTokenBalance.value ?? '0') && !offChain)
         return (
             <ActionButton
                 className={buttonClass}

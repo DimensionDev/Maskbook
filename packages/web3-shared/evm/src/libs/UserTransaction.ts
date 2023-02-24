@@ -206,16 +206,12 @@ export class UserTransaction {
         }
 
         if (!isEmptyHex(callData)) {
-            try {
-                const estimatedGas = await web3.eth.estimateGas({
-                    from: this.entryPoint,
-                    to: this.userOperation.sender,
-                    data: callData,
-                })
-                this.userOperation.callGas = toHex(estimatedGas)
-            } catch (error) {
-                this.userOperation.callGas = callGas ?? DEFAULT_USER_OPERATION.callGas
-            }
+            const estimatedGas = await web3.eth.estimateGas({
+                from: this.entryPoint,
+                to: this.userOperation.sender,
+                data: callData,
+            })
+            this.userOperation.callGas = toHex(estimatedGas)
         } else {
             this.userOperation.callGas = callGas ?? DEFAULT_USER_OPERATION.callGas
         }

@@ -1,9 +1,23 @@
 import { useEffect, useState, useMemo, useCallback } from 'react'
 import { useAsync } from 'react-use'
 import { BigNumber } from 'bignumber.js'
-import { useMenuConfig, FormattedBalance, useSharedI18N, useSelectAdvancedSettings } from '@masknet/shared'
+import {
+    useMenuConfig,
+    FormattedBalance,
+    useSharedI18N,
+    useSelectAdvancedSettings,
+    ApproveMaskDialog,
+} from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { GasOptionType, isZero, formatBalance, formatCurrency, isSameAddress } from '@masknet/web3-shared-base'
+import {
+    GasOptionType,
+    isZero,
+    formatBalance,
+    formatCurrency,
+    isSameAddress,
+    ZERO,
+    toFixed,
+} from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
     ChainId,
@@ -126,6 +140,7 @@ export function SelectGasSettingsToolbarUI({
     const t = useSharedI18N()
     const { classes, cx, theme } = useStyles()
     const { gasOptions, GAS_OPTION_NAMES } = SettingsContext.useContainer()
+    const [approveDialogOpen, setApproveDialogOpen] = useState(false)
     const [isCustomGas, setIsCustomGas] = useState(false)
     const [currentGasOptionType, setCurrentGasOptionType] = useState<GasOptionType>(GasOptionType.NORMAL)
     const [currentGasCurrency, setCurrentGasCurrency] = useState(gasOption?.gasCurrency)
@@ -143,13 +158,15 @@ export function SelectGasSettingsToolbarUI({
                           maxFeePerGas,
                           maxPriorityFeePerGas,
                           gasCurrency: currentGasCurrency,
+                          gas: new BigNumber(gasLimit).toString(),
                       }
                     : {
                           gasPrice: new BigNumber(maxFeePerGas).gt(0) ? maxFeePerGas : gasPrice,
                           gasCurrency: currentGasCurrency,
+                          gas: new BigNumber(gasLimit).toString(),
                       },
             ),
-        [isSupportEIP1559, chainId, onChange, currentGasCurrency],
+        [isSupportEIP1559, chainId, onChange, currentGasCurrency, gasLimit],
     )
 
     const openCustomGasSettingsDialog = useCallback(async () => {
@@ -231,24 +248,26 @@ export function SelectGasSettingsToolbarUI({
         NetworkPluginID.PLUGIN_EVM,
         (address) => setCurrentGasCurrency(address),
         currentGasCurrency,
+        undefined,
+        () => setApproveDialogOpen(true),
     )
 
     const { value: currencyToken } = useFungibleToken(undefined, currentGasCurrency, nativeToken, { chainId })
     const { value: currencyTokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, currentGasCurrency)
 
     const gasFee = useMemo(() => {
-        if (!gasOption || !gasLimit) return new BigNumber(0)
+        if (!gasOption || !gasLimit) return ZERO
         const result = GasEditor.fromConfig(chainId as ChainId, gasOption).getGasFee(gasLimit)
-        if (isSameAddress(nativeToken.address, currentGasCurrency)) {
+        if (!currentGasCurrency || isSameAddress(nativeToken?.address, currentGasCurrency)) {
             return result
         }
-        if (!currencyRatio) return new BigNumber(0)
-        return result.dividedBy(currencyRatio)
+        if (!currencyRatio) return ZERO
+        return new BigNumber(toFixed(result.multipliedBy(currencyRatio), 0))
     }, [gasLimit, gasOption, currencyRatio, currentGasCurrency, nativeToken])
 
     const gasFeeUSD = useMemo(() => {
-        if (!gasFee || gasFee.isZero()) return '0'
-        if (isSameAddress(nativeToken.address, currentGasCurrency)) {
+        if (!gasFee || gasFee.isZero()) return '$0'
+        if (!currentGasCurrency || isSameAddress(nativeToken?.address, currentGasCurrency)) {
             return formatCurrency(formatWeiToEther(gasFee).times(nativeTokenPrice), 'USD', {
                 boundaries: {
                     min: 0.01,
@@ -256,10 +275,10 @@ export function SelectGasSettingsToolbarUI({
             })
         }
 
-        if (!currencyToken || !currencyTokenPrice) return '0'
+        if (!currencyToken || !currencyTokenPrice) return '$0'
 
         return formatCurrency(
-            new BigNumber(gasFee).shiftedBy(-currencyToken?.decimals).times(currencyTokenPrice),
+            new BigNumber(formatBalance(gasFee, currencyToken?.decimals)).times(currencyTokenPrice),
             'USD',
             {
                 boundaries: {
@@ -267,7 +286,14 @@ export function SelectGasSettingsToolbarUI({
                 },
             },
         )
-    }, [gasFee, nativeTokenPrice, currencyTokenPrice, nativeToken.address, currentGasCurrency, currencyToken?.decimals])
+    }, [
+        gasFee,
+        nativeTokenPrice,
+        currencyTokenPrice,
+        nativeToken?.address,
+        currentGasCurrency,
+        currencyToken?.decimals,
+    ])
 
     return gasOptions && !isZero(gasFee) ? (
         <Box className={classes.section}>
@@ -291,6 +317,7 @@ export function SelectGasSettingsToolbarUI({
                 {menu}
                 {supportMultiCurrency ? currencyMenu : null}
             </Typography>
+            <ApproveMaskDialog open={approveDialogOpen} handleClose={() => setApproveDialogOpen(false)} />
         </Box>
     ) : null
 }
