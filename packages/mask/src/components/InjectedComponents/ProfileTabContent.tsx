@@ -410,6 +410,7 @@ function Content(props: ProfileTabContentProps) {
                                 ref={buttonRef}
                                 className={classes.walletButton}>
                                 <AddressItem
+                                    isMenu
                                     onClick={(event) => {
                                         event.preventDefault()
                                         event.stopPropagation()
