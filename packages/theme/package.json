@@ -24,8 +24,8 @@
     }
   },
   "scripts": {
-    "build-storybook": "build -- build-storybook",
-    "start": "dev -- start-storybook -p 6006"
+    "build-storybook": "build -- storybook build",
+    "start": "dev -- storybook dev -p 6006"
   },
   "dependencies": {
     "@masknet/icons": "workspace:^",
@@ -43,14 +43,15 @@
     "use-subscription": "^1.8.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.2",
-    "@storybook/addon-actions": "^6.5.13",
-    "@storybook/addon-essentials": "^6.5.13",
-    "@storybook/addon-links": "^6.5.13",
-    "@storybook/builder-webpack5": "^6.5.13",
-    "@storybook/manager-webpack5": "^6.5.13",
-    "@storybook/react": "^6.5.13",
+    "@babel/core": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
+    "@storybook/addon-actions": "^7.0.0-beta.53",
+    "@storybook/addon-essentials": "^7.0.0-beta.53",
+    "@storybook/addon-links": "^7.0.0-beta.53",
+    "@storybook/react": "^7.0.0-beta.53",
+    "@storybook/react-webpack5": "^7.0.0-beta.53",
     "@types/react-window": "^1.8.4",
-    "babel-loader": "^9.1.0"
+    "babel-loader": "^9.1.0",
+    "storybook": "^7.0.0-beta.53"
   }
 }

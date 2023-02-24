@@ -1,0 +1,11 @@
+{
+    "name": "global",
+    "exports": {
+        ".": {
+            "import": "./storybook.js",
+            "require": "./original.cjs"
+        },
+        "./document": "./document.cjs",
+        "./window": "./window.cjs"
+    }
+}

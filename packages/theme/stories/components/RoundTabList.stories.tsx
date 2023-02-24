@@ -1,4 +1,4 @@
-import { story } from '../utils/index.js'
+import type { Meta } from '@storybook/react'
 import TabContext from '@mui/lab/TabContext'
 import TabPanel from '@mui/lab/TabPanel'
 import { Stack, Tab } from '@mui/material'
@@ -6,7 +6,8 @@ import { useState } from 'react'
 import { MaskTabList, MaskTabListProps } from '../../src/index.js'
 
 const defaultTabs = ['One', 'Two', 'Three']
-const { meta, of } = story(function ({
+
+function Component({
     tabs,
     ...rest
 }: {
@@ -29,13 +30,10 @@ const { meta, of } = story(function ({
             </TabContext>
         </Stack>
     )
-})
+}
 
-export default meta({
+export default {
+    component: Component,
     title: 'Components/Tab List/Round',
-    argTypes: {},
-})
-
-export const RoundTabsList = of({
     args: { tabs: defaultTabs, disabled: false, fullWidth: false },
-})
+} as Meta<typeof Component>

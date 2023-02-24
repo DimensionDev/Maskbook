@@ -1,7 +1,7 @@
+import type { Meta } from '@storybook/react'
 import { Switch as MuiSwitch, FormControlLabel, SwitchProps } from '@mui/material'
-import { story } from '../utils/index.js'
 
-function C(props: SwitchProps) {
+function component(props: SwitchProps) {
     return (
         <>
             <FormControlLabel control={<MuiSwitch {...props} />} label="Switch" />
@@ -10,14 +10,11 @@ function C(props: SwitchProps) {
         </>
     )
 }
-const { meta, of } = story(C)
-export default meta({
-    title: 'Atoms/Switch',
-    parameters: {},
-})
 
-export const Switch = of({
+export default {
+    component,
+    title: 'Atoms/Switch',
     args: {
         checked: false,
     },
-})
+} as Meta<typeof component>

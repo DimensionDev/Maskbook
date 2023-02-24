@@ -1,7 +1,7 @@
+import type { Meta } from '@storybook/react'
 import { FormControlLabel, FormControlLabelProps, Checkbox as MuiCheckbox } from '@mui/material'
-import { story } from '../utils/index.js'
 
-function C(props: FormControlLabelProps) {
+function component(props: FormControlLabelProps) {
     return (
         <>
             <FormControlLabel {...props} control={<MuiCheckbox />} label="Checkbox" />
@@ -10,12 +10,5 @@ function C(props: FormControlLabelProps) {
         </>
     )
 }
-const { meta, of } = story(C)
-export default meta({
-    title: 'Atoms/Checkbox',
-    parameters: {},
-})
 
-export const Checkbox = of({
-    args: {},
-})
+export default { component, title: 'Atoms/Checkbox' } as Meta<typeof component>

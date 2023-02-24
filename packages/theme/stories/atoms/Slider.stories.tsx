@@ -1,15 +1,10 @@
-import { story } from '../utils/index.js'
-import { Slider as MuiSlider } from '@mui/material'
+import type { Meta } from '@storybook/react'
+import { Slider as component } from '@mui/material'
 
-const { meta, of } = story(MuiSlider)
-
-export default meta({
+export default {
+    component,
     title: 'Atoms/Slider',
-    argTypes: {},
-})
-
-export const Slider = of({
     args: {
         defaultValue: 50,
     },
-})
+} as Meta<typeof component>

@@ -1,9 +1,10 @@
+import type { Meta } from '@storybook/react'
 import type { TextFieldProps } from '@mui/material'
-import { story, MuiArgs, matrix } from '../utils/index.js'
-import { MaskTextField as TextField } from '../../src/Components/TextField/index.js'
+import { MuiArgs, matrix } from '../utils/index.js'
+import { MaskTextField as component } from '../../src/Components/TextField/index.js'
 
-const { meta, of } = story(TextField)
-export default meta({
+export default {
+    component,
     title: 'Components/MaskTextField',
     argTypes: MuiArgs.textField,
     parameters: {
@@ -11,8 +12,5 @@ export default meta({
             error: [true, false],
         }),
     },
-})
-
-export const MaskTextField = of({
     args: { label: 'Label', helperText: 'Helper message', placeholder: 'Please input message' },
-})
+} as Meta<typeof component>

@@ -1,14 +1,8 @@
-import { LinearProgress as MuiLinearProgress } from '@mui/material'
-import { story } from '../utils/index.js'
-
-const { meta, of } = story(MuiLinearProgress)
-
-export default meta({
+import type { Meta } from '@storybook/react'
+import { LinearProgress as component } from '@mui/material'
+export default {
+    component,
     title: 'Atoms/Determinate LinearProgress',
-    argTypes: {},
-})
-
-export const DeterminateLinearProgress = of({
     args: {
         variant: 'determinate',
         value: 50,
@@ -16,4 +10,4 @@ export const DeterminateLinearProgress = of({
             width: 200,
         },
     },
-})
+} as Meta<typeof component>

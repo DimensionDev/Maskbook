@@ -1,18 +1,15 @@
-import { Alert as MuiAlert } from '@mui/material'
+import type { Meta } from '@storybook/react'
+import { Alert as component } from '@mui/material'
 import { noop } from 'lodash-es'
-import { MuiArgs, story } from '../utils/index.js'
+import { MuiArgs } from '../utils/index.js'
 
-const { meta, of } = story(MuiAlert)
-
-export default meta({
+export default {
+    component,
     title: 'Atoms/Alert',
     argTypes: MuiArgs.alert,
-})
-
-export const Alert = of({
     args: {
         severity: 'error',
         children: 'Info message',
         onClose: noop,
     },
-})
+} as Meta<typeof component>

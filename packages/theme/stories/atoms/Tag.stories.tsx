@@ -1,14 +1,9 @@
-import { Tag as MaskTag } from '../../src/Components/index.js'
-import { story } from '../utils/index.js'
-
-const { meta, of } = story(MaskTag)
-
-export default meta({
+import type { Meta } from '@storybook/react'
+import { Tag as component } from '../../src/Components/index.js'
+export default {
+    component,
     title: 'Atoms/Tags',
-})
-
-export const Tags = of({
     args: {
         children: 'Info Tag',
     },
-})
+} as Meta<typeof component>

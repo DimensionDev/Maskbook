@@ -1,12 +1,7 @@
-import { DialogExample } from './DialogExample.js'
-import { story } from '../utils/index.js'
-
-const { meta, of } = story(DialogExample)
-export default meta({
+import type { Meta } from '@storybook/react'
+import { DialogExample as component } from './DialogExample.js'
+export default {
+    component,
     title: 'Atoms/Dialog',
-    parameters: {},
-})
-
-export const Dialog = of({
     args: { withBack: true, withExit: true, withLeftAction: false },
-})
+} as Meta<typeof component>

@@ -1,7 +1,7 @@
-import { Radio as MuiRadio, RadioGroup, FormControlLabel, FormControlLabelProps } from '@mui/material'
-import { story } from '../utils/index.js'
+import type { Meta } from '@storybook/react'
+import { Radio as MuiRadio, RadioGroup, FormControlLabel } from '@mui/material'
 
-const C = (props: FormControlLabelProps) => {
+function component() {
     return (
         <RadioGroup name="choose">
             <FormControlLabel value="1" control={<MuiRadio />} label="Item 1" />
@@ -11,12 +11,5 @@ const C = (props: FormControlLabelProps) => {
         </RadioGroup>
     )
 }
-const { meta, of } = story(C)
-export default meta({
-    title: 'Atoms/Radio',
-    parameters: {},
-})
 
-export const Radio = of({
-    args: {},
-})
+export default { component, title: 'Atoms/Radio' } as Meta<typeof component>

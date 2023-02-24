@@ -1,8 +1,9 @@
-import { MuiArgs, story } from '../utils/index.js'
+import type { Meta } from '@storybook/react'
+import { MuiArgs } from '../utils/index.js'
 import { Button } from '@mui/material'
 import { useCustomSnackbar, ShowSnackbarOptions } from '../../src/index.js'
 
-const { meta, of } = story((props: ShowSnackbarOptions) => {
+function Component(props: ShowSnackbarOptions) {
     const { showSnackbar } = useCustomSnackbar()
     return (
         <Button
@@ -12,17 +13,15 @@ const { meta, of } = story((props: ShowSnackbarOptions) => {
             Click me
         </Button>
     )
-})
+}
 
-export default meta({
+export default {
+    component: Component,
     title: 'Atoms/Snackbar',
     argTypes: MuiArgs.snackbar,
-})
-
-export const Snackbar = of({
     args: {
         variant: 'default',
         title: 'Test',
         message: 'Test Message',
     },
-})
+} as Meta<typeof Component>

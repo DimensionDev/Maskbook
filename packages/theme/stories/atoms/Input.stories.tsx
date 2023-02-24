@@ -1,8 +1,9 @@
-import { InputBase as MuiInput, TextFieldProps } from '@mui/material'
-import { story, MuiArgs, matrix } from '../utils/index.js'
+import type { Meta } from '@storybook/react'
+import { InputBase as component, TextFieldProps } from '@mui/material'
+import { MuiArgs, matrix } from '../utils/index.js'
 
-const { meta, of } = story(MuiInput)
-export default meta({
+export default {
+    component,
     title: 'Atoms/InputBase',
     argTypes: MuiArgs.textField,
     parameters: {
@@ -10,11 +11,8 @@ export default meta({
             error: [true, false],
         }),
     },
-})
-
-export const Input = of({
     args: {
         placeholder: 'Hello World',
         error: false,
     },
-})
+} as Meta<typeof component>

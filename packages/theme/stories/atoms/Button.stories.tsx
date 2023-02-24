@@ -1,11 +1,10 @@
-import { Button as MuiButton, ButtonProps } from '@mui/material'
-import { story, MuiArgs, matrix } from '../utils/index.js'
+import type { Meta } from '@storybook/react'
+import { Button as component, ButtonProps } from '@mui/material'
+import { MuiArgs, matrix } from '../utils/index.js'
 
-const { meta, of } = story(MuiButton)
-
-export default meta({
+export default {
+    component,
     title: 'Atoms/Button',
-    component: MuiButton,
     argTypes: MuiArgs.button,
     parameters: {
         ...matrix<ButtonProps>({
@@ -13,10 +12,7 @@ export default meta({
             color: ['inherit', 'primary', 'secondary', 'error' as any],
         }),
     },
-})
-
-export const Button: unknown = of({
     args: {
         children: 'A button?',
     },
-})
+} as Meta<typeof component>

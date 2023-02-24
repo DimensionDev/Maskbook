@@ -1,10 +1,4 @@
-import { story } from '../utils/index.js'
-import { PhoneNumberFieldExample } from './PhoneNumberFieldExample.js'
+import type { Meta } from '@storybook/react'
+import { PhoneNumberFieldExample as component } from './PhoneNumberFieldExample.js'
 
-const { meta, of } = story(PhoneNumberFieldExample)
-export default meta({
-    title: 'Components/PhoneNumberField',
-    parameters: {},
-})
-
-export const MaskPhoneNumberField = of({})
+export default { component, title: 'Components/PhoneNumberField' } as Meta<typeof component>

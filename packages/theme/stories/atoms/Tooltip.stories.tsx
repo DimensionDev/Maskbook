@@ -1,25 +1,24 @@
-import { MuiArgs, story } from '../utils/index.js'
+import type { Meta } from '@storybook/react'
+import { MuiArgs } from '../utils/index.js'
 import { TooltipProps, Tooltip as MuiTooltip, Button } from '@mui/material'
 import { useState } from 'react'
 
-const { meta, of } = story((props: TooltipProps) => {
+function Component(props: TooltipProps) {
     const [open, setOpen] = useState(false)
     return (
         <MuiTooltip {...props} open={open}>
             <Button onClick={() => setOpen(!open)}>Trigger</Button>
         </MuiTooltip>
     )
-})
+}
 
-export default meta({
+export default {
+    component: Component,
     title: 'Atoms/Tooltip',
     argTypes: MuiArgs.tooltip,
-})
-
-export const Tooltip = of({
     args: {
         title: 'You must give the lucky drop smart contracts permission to use your DAI. You only have to do this once per token.',
         arrow: true,
         placement: 'top',
     },
-})
+} as Meta<typeof Component>

@@ -12,8 +12,8 @@
   },
   "types": "./dist/src/entry.d.ts",
   "scripts": {
-    "build-storybook": "build -- build-storybook",
-    "storybook": "dev -- start-storybook -p 6006"
+    "build-storybook": "build -- storybook build",
+    "storybook": "storybook dev -p 6006"
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.10",
@@ -60,7 +60,7 @@
     "react-to-print": "^2.14.7",
     "react-use": "^17.4.0",
     "unstated-next": "^1.1.0",
-    "urlcat": "^2.0.4",
+    "urlcat": "^3.1.0",
     "use-subscription": "^1.8.0",
     "uuid": "^9.0.0",
     "wallet.ts": "^1.0.1",
@@ -69,16 +69,17 @@
     "zod": "^3.16.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.2",
-    "@storybook/addon-actions": "^6.5.13",
-    "@storybook/addon-essentials": "^6.5.13",
-    "@storybook/addon-links": "^6.5.13",
-    "@storybook/builder-webpack5": "^6.5.13",
-    "@storybook/manager-webpack5": "^6.5.13",
-    "@storybook/react": "^6.5.13",
+    "@babel/core": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
+    "@storybook/addon-actions": "^7.0.0-beta.53",
+    "@storybook/addon-essentials": "^7.0.0-beta.53",
+    "@storybook/addon-links": "^7.0.0-beta.53",
+    "@storybook/react": "^7.0.0-beta.53",
+    "@storybook/react-webpack5": "^7.0.0-beta.53",
     "@types/use-subscription": "^1.0.0",
     "@types/uuid": "^8.3.4",
     "babel-loader": "^9.1.0",
+    "storybook": "^7.0.0-beta.53",
     "webpack": "^5.75.0"
   }
 }

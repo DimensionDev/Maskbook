@@ -1,10 +1,3 @@
-import { story } from '../utils/index.js'
-import { SendingCodeFieldExample } from './SendingCodeFieldExample.js'
-
-const { meta, of } = story(SendingCodeFieldExample)
-export default meta({
-    title: 'Components/SendingCodeField',
-    parameters: {},
-})
-
-export const SendingCodeField = of({})
+import { Meta } from '@storybook/react'
+import { SendingCodeFieldExample as component } from './SendingCodeFieldExample.js'
+export default { component, title: 'Components/SendingCodeField' } as Meta<typeof component>

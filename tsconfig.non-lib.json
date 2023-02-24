@@ -1,0 +1,10 @@
+{
+  // only for projects that not intended to be used as a library.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "declaration": false,
+    "declarationMap": false,
+    "composite": false
+  }
+}

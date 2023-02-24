@@ -82,7 +82,6 @@
       "@masknet/shared": ["./packages/shared/src"],
       "@masknet/shared-base": ["./packages/shared-base/src"],
       "@masknet/shared-base-ui": ["./packages/shared-base-ui/src"],
-      "@masknet/storybook-shared": ["./packages/storybook-shared/src"],
       "@masknet/theme": ["./packages/theme/src"],
       // @masknet/web3-constants is not listed. It is not a TS project (only contains JSON files).
       // @masknet/web3-contracts is not listed. It is not a TS project (only contains generated JSON and .d.ts files).
