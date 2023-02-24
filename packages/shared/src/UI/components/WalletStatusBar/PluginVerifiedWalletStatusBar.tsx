@@ -194,7 +194,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                 )),
                 <MenuItem key="Wallet Setting" onClick={openPopupWindow}>
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <Icons.WalletSetting size={30} sx={{ marginRight: 2 }} />
+                        <Icons.WalletSetting size={30} sx={{ marginRight: 1, transform: 'translate(0px, 2px)' }} />
                         <Typography fontSize={14} fontWeight={700}>
                             {t.connected_wallet_settings()}
                         </Typography>
