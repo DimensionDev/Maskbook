@@ -19,7 +19,7 @@
 ## ESM-CJS compatibility
 
 - gulp: cannot be used with ts-node/esm mode.
-- urlcat: <https://github.com/balazsbotond/urlcat/issues/171>
+- urlcat: <https://github.com/balazsbotond/urlcat/issues/248>
 - ipfs-http-client: already fixed in the upstream. wait for their new version release.
 - @ethersphere/bee-js: <https://github.com/ethersphere/bee-js/issues/751>
 - @hookform/resolvers: <https://github.com/react-hook-form/resolvers/issues/460>
