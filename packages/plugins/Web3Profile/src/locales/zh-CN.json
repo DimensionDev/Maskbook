@@ -45,6 +45,8 @@
     "wallets_add_collectible": "添加收藏品",
     "add_collectible": "添加收藏品",
     "nft_add_dialog_title": "添加收藏品",
+    "no_collection$empty": "未找到 {{collection}} 。",
+    "no_collection$hidden": "所有 {{collection}} 已隐藏。",
     "no_unlisted_collection": " 点击后可在 Web3 个人资料上显示您的 {{collection}}。",
     "wallet_setting_hint": "点击开关按钮来显示或隐藏钱包。",
     "no_authenticated_wallet": "尚未得到认证。",
