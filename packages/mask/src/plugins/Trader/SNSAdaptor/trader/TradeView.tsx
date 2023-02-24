@@ -51,6 +51,7 @@ export function TradeView(props: TradeViewProps) {
                     defaultInputCoin={inputToken}
                     chainId={chainId}
                     classes={{ root: classes.trade }}
+                    settings
                 />
             </AllProviderTradeContext.Provider>
         </div>

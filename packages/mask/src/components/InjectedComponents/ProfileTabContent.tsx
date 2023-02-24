@@ -9,7 +9,7 @@ import {
     getProfileTabContent,
 } from '@masknet/plugin-infra/content-script'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
-import { Link, Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
+import { Link, Button, Stack, Tab, ThemeProvider, Typography, useTheme } from '@mui/material'
 import {
     AddressItem,
     ConnectPersonaBoundary,
@@ -20,7 +20,7 @@ import {
     TokenWithSocialGroupMenu,
 } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID } from '@masknet/shared-base'
-import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
+import { makeStyles, MaskLightTheme, MaskDarkTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
@@ -122,6 +122,7 @@ function Content(props: ProfileTabContentProps) {
     const { classes } = useStyles(undefined, { props })
 
     const { t } = useI18N()
+    const theme = useTheme()
     const translate = usePluginI18NField()
 
     const [hidden, setHidden] = useState(true)
@@ -423,23 +424,24 @@ function Content(props: ProfileTabContentProps) {
                                     socialAccount={selectedSocialAccount}
                                 />
                             </Button>
-
-                            <TokenWithSocialGroupMenu
-                                walletMenuOpen={menuOpen}
-                                setWalletMenuOpen={setMenuOpen}
-                                containerRef={buttonRef}
-                                onAddressChange={onSelect}
-                                currentAddress={selectedAddress}
-                                collectionList={collectionList}
-                                socialAccounts={socialAccounts}
-                                currentCollection={trendingResult}
-                                onTokenChange={(currentResult, i) => {
-                                    setCurrentTrendingIndex(i)
-                                    hideInspector(false)
-                                    setMenuOpen(false)
-                                }}
-                                fromSocialCard
-                            />
+                            <ThemeProvider theme={theme.palette.mode === 'light' ? MaskLightTheme : MaskDarkTheme}>
+                                <TokenWithSocialGroupMenu
+                                    walletMenuOpen={menuOpen}
+                                    setWalletMenuOpen={setMenuOpen}
+                                    containerRef={buttonRef}
+                                    onAddressChange={onSelect}
+                                    currentAddress={selectedAddress}
+                                    collectionList={collectionList}
+                                    socialAccounts={socialAccounts}
+                                    currentCollection={trendingResult}
+                                    onTokenChange={(currentResult, i) => {
+                                        setCurrentTrendingIndex(i)
+                                        hideInspector(false)
+                                        setMenuOpen(false)
+                                    }}
+                                    fromSocialCard
+                                />
+                            </ThemeProvider>
                         </div>
                         <div className={classes.settingItem}>
                             <Typography

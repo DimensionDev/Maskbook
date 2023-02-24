@@ -151,7 +151,7 @@ export const TokenWithSocialGroupMenu: FC<PropsWithChildren<TokenWithSocialGroup
             ))}
 
             <div key="rss3" className={classes.group}>
-                {currentCollection && socialAccounts?.length ? (
+                {collectionList?.length > 0 && socialAccounts?.length ? (
                     <>
                         <Typography className={classes.groupName}>{t.address_viewer_address_name_address()}</Typography>
                         <Divider className={classes.divider} />

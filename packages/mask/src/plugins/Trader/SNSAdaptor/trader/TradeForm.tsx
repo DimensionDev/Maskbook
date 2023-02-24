@@ -316,6 +316,9 @@ export const TradeForm = memo<AllTradeFormProps>(
         // #region gas settings
         const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
         const openSwapSettingDialog = useCallback(async () => {
+            PluginTraderMessages.swapSettingsUpdated.sendToAll({
+                open: true,
+            })
             const { slippageTolerance, transaction } = await selectAdvancedSettings({
                 chainId,
                 disableGasLimit: true,

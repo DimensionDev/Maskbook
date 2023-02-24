@@ -11,9 +11,11 @@ import {
     Typography,
     Link,
     Stack,
+    useTheme,
 } from '@mui/material'
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
+import { useSNSThemeMode } from '@masknet/plugin-infra/content-script'
 import { TokenIcon, FormattedAddress, Image, WalletIcon } from '@masknet/shared'
 import { useScrollBottomEvent } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -24,83 +26,83 @@ import { resolveActivityTypeBackgroundColor } from '@masknet/web3-providers/help
 import { useNonFungibleTokenActivities } from '../../trending/useTrending.js'
 import { useI18N } from '../../../../utils/index.js'
 
-const useStyles = makeStyles<{ isCollectionProjectPopper: boolean }>()((theme, { isCollectionProjectPopper }) => ({
-    container: {
-        maxHeight: isCollectionProjectPopper ? 320 : 266,
-        scrollbarWidth: 'none',
-        '&::-webkit-scrollbar': {
-            display: 'none',
+const useStyles = makeStyles<{ isCollectionProjectPopper: boolean; snsThemeMode?: string }>()(
+    (theme, { isCollectionProjectPopper, snsThemeMode }) => ({
+        container: {
+            maxHeight: isCollectionProjectPopper ? 320 : 266,
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
-    },
-    cell: {
-        paddingLeft: theme.spacing(0.5),
-        paddingRight: theme.spacing(0.5),
-        fontSize: 12,
-        fontWeight: 700,
-        whiteSpace: 'nowrap',
-        border: 'none',
-        '&:not(:first-child)': {
-            textAlign: 'center',
+        cell: {
+            paddingLeft: theme.spacing(0.5),
+            paddingRight: theme.spacing(0.5),
+            background: snsThemeMode === 'dim' ? '#15202b' : theme.palette.maskColor.bottom,
+            fontSize: 12,
+            fontWeight: 700,
+            whiteSpace: 'nowrap',
+            border: 'none',
+            '&:not(:first-child)': {
+                textAlign: 'center',
+            },
+            '&:last-child': {
+                textAlign: 'right',
+            },
         },
-        '&:last-child': {
-            textAlign: 'right',
+        nftImage: {
+            height: 20,
+            width: 20,
+            marginRight: 4,
+            borderRadius: 4,
         },
-    },
-    headerCell: {
-        background: theme.palette.mode === 'light' ? theme.palette.maskColor.bottom : 'unset',
-    },
-    nftImage: {
-        height: 20,
-        width: 20,
-        marginRight: 4,
-        borderRadius: 4,
-    },
-    nftCell: {
-        display: 'flex',
-        alignItems: 'center',
-    },
-    cellWrapper: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    methodCellWrapper: {
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-    },
-    methodCell: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: 24,
-        width: 62,
-        borderRadius: 500,
-        fontWeight: 400,
-    },
-    tokenIcon: {
-        width: 16,
-        height: 16,
-        marginRight: 4,
-    },
-    imageLoading: {
-        color: theme.palette.maskColor.main,
-        height: '15px !important',
-        width: '15px !important',
-    },
-    linkIcon: {
-        color: theme.palette.text.primary,
-    },
-    transactionLink: {
-        height: 16,
-        marginLeft: 4,
-    },
-    placeholder: {
-        paddingTop: theme.spacing(10),
-        paddingBottom: theme.spacing(10),
-        borderStyle: 'none',
-    },
-}))
+        nftCell: {
+            display: 'flex',
+            alignItems: 'center',
+        },
+        cellWrapper: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        methodCellWrapper: {
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+        },
+        methodCell: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: 24,
+            width: 62,
+            borderRadius: 500,
+            fontWeight: 400,
+        },
+        tokenIcon: {
+            width: 16,
+            height: 16,
+            marginRight: 4,
+        },
+        imageLoading: {
+            color: theme.palette.maskColor.main,
+            height: '15px !important',
+            width: '15px !important',
+        },
+        linkIcon: {
+            color: theme.palette.text.primary,
+        },
+        transactionLink: {
+            height: 16,
+            marginLeft: 4,
+        },
+        placeholder: {
+            paddingTop: theme.spacing(10),
+            paddingBottom: theme.spacing(10),
+            borderStyle: 'none',
+        },
+    }),
+)
 
 export interface NonFungibleTickersTableProps {
     id: string
@@ -118,7 +120,9 @@ export function NonFungibleTickersTable({
     isCollectionProjectPopper = false,
 }: NonFungibleTickersTableProps) {
     const { t } = useI18N()
-    const { classes, cx } = useStyles({ isCollectionProjectPopper })
+    const theme = useTheme()
+    const snsThemeMode = useSNSThemeMode(theme)
+    const { classes } = useStyles({ isCollectionProjectPopper, snsThemeMode })
     const { Others } = useWeb3State(result.pluginID)
     const containerRef = useRef(null)
     const { activities, fetchMore, loadingNonFungibleTokenActivities } = useNonFungibleTokenActivities(
@@ -226,11 +230,11 @@ export function NonFungibleTickersTable({
                     </Typography>
                 </Stack>
             ) : (
-                <Table size="small">
+                <Table size="small" stickyHeader>
                     <TableHead>
                         <TableRow>
                             {headCells.map((x) => (
-                                <TableCell className={cx(classes.cell, classes.headerCell)} key={x}>
+                                <TableCell className={classes.cell} key={x}>
                                     {x}
                                 </TableCell>
                             ))}

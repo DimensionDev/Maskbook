@@ -332,7 +332,7 @@ export function TrendingView(props: TrendingViewProps) {
                                 result={result}
                             />
                         ) : (
-                            <TickersTable tickers={tickers} dataProvider={trending.dataProvider} />
+                            <TickersTable tickers={tickers} />
                         )}
                     </Box>
                 ) : null}

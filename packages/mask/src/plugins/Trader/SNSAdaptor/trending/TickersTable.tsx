@@ -11,15 +11,17 @@ import {
     TableHead,
     TableRow,
     Typography,
+    useTheme,
 } from '@mui/material'
+import { useSNSThemeMode } from '@masknet/plugin-infra/content-script'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { FormattedCurrency } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { formatCurrency, formatElapsed, SourceType } from '@masknet/web3-shared-base'
+import { formatCurrency, formatElapsed } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils/index.js'
 import type { Ticker } from '../../types/index.js'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ snsThemeMode?: string }>()((theme, { snsThemeMode }) => ({
     container: {
         maxHeight: 266,
         scrollbarWidth: 'none',
@@ -30,6 +32,7 @@ const useStyles = makeStyles()((theme) => ({
     cell: {
         paddingLeft: theme.spacing(0.5),
         paddingRight: theme.spacing(0.5),
+        background: snsThemeMode === 'dim' ? '#15202b' : theme.palette.maskColor.bottom,
         fontSize: 12,
         fontWeight: 700,
         whiteSpace: 'nowrap',
@@ -37,9 +40,6 @@ const useStyles = makeStyles()((theme) => ({
         '&:not(:first-child)': {
             textAlign: 'center',
         },
-    },
-    headerCell: {
-        background: theme.palette.mode === 'light' ? theme.palette.maskColor.bottom : 'unset',
     },
     logo: {
         width: 18,
@@ -62,15 +62,16 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface TickersTableProps {
-    dataProvider: SourceType
     tickers: Ticker[]
 }
 
 type Cells = 'exchange' | 'pair' | 'price' | 'volume' | 'updated'
 
-export function TickersTable({ dataProvider, tickers }: TickersTableProps) {
+export function TickersTable({ tickers }: TickersTableProps) {
     const { t } = useI18N()
-    const { classes, cx } = useStyles()
+    const theme = useTheme()
+    const snsThemeMode = useSNSThemeMode(theme)
+    const { classes } = useStyles({ snsThemeMode })
 
     const headCellMap: Record<Cells, string> = {
         volume: t('plugin_trader_table_volume'),
@@ -144,11 +145,11 @@ export function TickersTable({ dataProvider, tickers }: TickersTableProps) {
 
     return (
         <TableContainer className={classes.container}>
-            <Table size="small">
+            <Table size="small" stickyHeader>
                 <TableHead>
                     <TableRow>
                         {headCells.map((x) => (
-                            <TableCell className={cx(classes.cell, classes.headerCell)} key={x}>
+                            <TableCell className={classes.cell} key={x}>
                                 {x}
                             </TableCell>
                         ))}

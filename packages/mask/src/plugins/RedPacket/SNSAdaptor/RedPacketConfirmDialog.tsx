@@ -272,7 +272,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                 </Grid>
                 <Grid item xs={12}>
                     <Paper className={classes.hit}>
-                        <Typography variant="body1" align="center" style={{ lineHeight: '20px' }}>
+                        <Typography variant="body1" align="left" style={{ lineHeight: '20px' }}>
                             {t.hint()}
                         </Typography>
                     </Paper>
