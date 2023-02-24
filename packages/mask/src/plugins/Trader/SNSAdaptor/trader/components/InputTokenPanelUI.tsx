@@ -6,6 +6,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatBalance, formatCurrency } from '@masknet/web3-shared-base'
 import { FormattedBalance, FormattedCurrency, SelectTokenChip, SelectTokenChipProps } from '@masknet/shared'
 import { useI18N } from '../../../../../utils/index.js'
+import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 
 // TODO: remove isDashboard after remove Dashboard page
 const useStyles = makeStyles<{
@@ -192,7 +193,7 @@ export const InputTokenPanelUI = memo<InputTokenPanelUIProps>(
                     <>
                         <Box className={classes.action}>
                             <Typography className={classes.balance}>
-                                {t('plugin_ito_list_table_got')}:
+                                {isNativeTokenAddress(token?.address) ? t('available_balance') : t('wallet_balance')}:
                                 <Typography component="span" className={classes.amount} color="primary">
                                     <FormattedBalance
                                         value={balance}

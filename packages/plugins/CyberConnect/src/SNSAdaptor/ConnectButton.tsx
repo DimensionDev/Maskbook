@@ -3,11 +3,11 @@ import { useAsync } from 'react-use'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useWeb3, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
 import { PluginCyberConnectRPC } from '../messages.js'
 import { useI18N } from '../locales/i18n_generated.js'
-import { WalletConnectedBoundary } from '@masknet/shared'
+import { useSharedI18N, WalletConnectedBoundary } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -46,10 +46,12 @@ const useStyles = makeStyles()((theme) => ({
 
 export default function ConnectButton({ address }: { address: string }) {
     const t = useI18N()
+    const sharedI18N = useSharedI18N()
     const { classes, cx } = useStyles()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext()
+    const wallet = useWallet()
     const [isFollowing, setFollowing] = useState(false)
     const [isLoading, setLoading] = useState(false)
 
@@ -88,6 +90,11 @@ export default function ConnectButton({ address }: { address: string }) {
         }
     }, [ccInstance, address, isFollowing])
 
+    const buttonText = useMemo(() => {
+        if (wallet?.owner) sharedI18N.coming_soon()
+        return !isFollowing ? t.follow_now() : t.unfollow()
+    }, [wallet?.owner, isFollowing])
+
     if (!isSameAddress(account, address)) {
         return (
             <WalletConnectedBoundary
@@ -100,8 +107,9 @@ export default function ConnectButton({ address }: { address: string }) {
                     loading={isLoading}
                     className={cx(classes.button, { [classes.isFollowing]: isFollowing })}
                     onClick={handleClick}
-                    variant="roundedContained">
-                    {!isFollowing ? t.follow_now() : t.unfollow()}
+                    variant="roundedContained"
+                    disabled={!!wallet?.owner}>
+                    {buttonText}
                 </ActionButton>
             </WalletConnectedBoundary>
         )

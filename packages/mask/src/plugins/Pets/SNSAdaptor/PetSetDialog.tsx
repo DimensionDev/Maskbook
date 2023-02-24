@@ -21,11 +21,11 @@ import { initMeta, initCollection, GLB3DIcon, PetsPluginID } from '../constants.
 import { PreviewBox } from './PreviewBox.js'
 import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../types.js'
 import { useUser, useNFTs } from '../hooks/index.js'
-import { PluginWalletStatusBar } from '@masknet/shared'
+import { PluginWalletStatusBar, useSharedI18N } from '@masknet/shared'
 import { useI18N } from '../locales/index.js'
 import { ImageLoader } from './ImageLoader.js'
 import { petShowSettings } from '../settings.js'
-import { useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
+import { useWallet, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
@@ -105,6 +105,7 @@ interface PetSetDialogProps {
 
 export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const t = useI18N()
+    const sharedI18N = useSharedI18N()
     const { classes } = useStyles()
     const theme = useTheme()
     const { showSnackbar } = useCustomSnackbar()
@@ -113,6 +114,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const [isReady, cancel] = useTimeout(2000)
 
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { Storage } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const user = useUser()
     const { nfts, state } = useNFTs(user)
@@ -363,8 +365,8 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     fullWidth
                     className={classes.btn}
                     onClick={saveHandle}
-                    disabled={!collection.name || !metaData.image}>
-                    {t.pets_dialog_btn()}
+                    disabled={!collection.name || !metaData.image || !!wallet?.owner}>
+                    {wallet?.owner ? sharedI18N.coming_soon() : t.pets_dialog_btn()}
                 </ActionButton>
             </PluginWalletStatusBar>
 
