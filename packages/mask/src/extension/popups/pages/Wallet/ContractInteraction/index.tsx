@@ -37,7 +37,6 @@ import {
     formatBalance,
     formatCurrency,
     isGreaterThan,
-    isLessThan,
     leftShift,
     pow10,
     toFixed,
@@ -307,8 +306,6 @@ const ContractInteraction = memo(() => {
     const { value: allowance = '0' } = useERC20TokenAllowance(maskAddress, PAYMASTER_MASK_CONTRACT_ADDRESS, {
         chainId: smartPayChainId,
     })
-
-    const availableBalanceTooLow = !wallet?.deployed || !isLessThan(formatBalance(allowance, maskToken?.decimals), 0.1)
 
     const { value: currencyRatio } = useAsync(async () => {
         if (!smartPayChainId) return

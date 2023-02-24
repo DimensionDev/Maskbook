@@ -438,6 +438,12 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         keyword: string,
         type?: SearchResultType,
     ): Promise<T[]> {
+        // filter out 'domain/xxx' or string ends with punctuation marks like 'eth.'
+        if (
+            keyword.replace(/([#$])?([\s\w+.])+/, '').length > 0 ||
+            !new RegExp(/(\w)+/).test(keyword[keyword.length - 1])
+        )
+            return EMPTY_LIST
         // #MASK or $MASK or MASK
         const [_, name = ''] = keyword.match(/(\w+)/) ?? []
 

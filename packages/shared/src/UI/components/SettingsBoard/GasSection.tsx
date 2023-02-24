@@ -1,11 +1,10 @@
 import { useState } from 'react'
-import { BigNumber } from 'bignumber.js'
 import { makeStyles, MaskTabList } from '@masknet/theme'
 import { useSharedI18N } from '@masknet/shared'
 import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { GasOptionType, isZero, plus } from '@masknet/web3-shared-base'
+import { GasOptionType, isZero, plus, formatPrice } from '@masknet/web3-shared-base'
 import { ChainId, formatGweiToWei, formatWeiToGwei, Transaction } from '@masknet/web3-shared-evm'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { GasOptionSelector } from './GasOptionSelector.js'
@@ -73,7 +72,7 @@ export function GasSection(props: GasSectionProps) {
 
     const gasPrice = (transactionOptions as Transaction | undefined)?.gasPrice
 
-    const customPrice = new BigNumber(
+    const customPrice = formatPrice(
         activeTab === GasSettingsType.Basic
             ? formatWeiToGwei(suggestedMaxFeePerGas ?? 0)
             : formatWeiToGwei(
@@ -81,7 +80,8 @@ export function GasSection(props: GasSectionProps) {
                       ? plus(baseFeePerGas, priorityFee ?? suggestedMaxPriorityFeePerGas ?? 0)
                       : gasPrice ?? suggestedMaxFeePerGas ?? 0,
               ),
-    ).toFixed(2)
+        2,
+    )
 
     return (
         <div className={classes.root}>
