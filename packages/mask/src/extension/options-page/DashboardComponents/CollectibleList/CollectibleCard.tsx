@@ -97,7 +97,6 @@ export const CollectibleCard = memo(function CollectibleCard({
                         url={asset.metadata?.mediaURL || asset.metadata?.imageURL}
                         classes={{
                             fallbackImage: classes.fallbackImage,
-                            root: classes.wrapper,
                         }}
                     />
                     {networkIcon ? (

@@ -211,11 +211,7 @@ export function NonFungibleTickersTable({
                     {cell}
                 </TableCell>
             ))
-            return (
-                <TableRow key={index} className={classes.tableContent}>
-                    {cells}
-                </TableRow>
-            )
+            return <TableRow key={index}>{cells}</TableRow>
         }) ?? []
 
     const headCells = Object.values(headCellMap)
