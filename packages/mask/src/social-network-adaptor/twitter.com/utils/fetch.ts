@@ -1,5 +1,5 @@
 import { regexMatch } from '../../../utils/utils.js'
-import { defaultTo, flattenDeep } from 'lodash-es'
+import { flattenDeep } from 'lodash-es'
 import { canonifyImgUrl } from './url.js'
 import {
     makeTypedMessageText,
@@ -17,14 +17,19 @@ const parseId = (t: string) => {
     return regexMatch(t, /status\/(\d+)/, 1)!
 }
 
-export const postIdParser = (node: HTMLElement) => {
-    const idNode = defaultTo(
-        node.children[1]?.querySelector<HTMLAnchorElement>('a[href*="status"]'),
-        defaultTo(
-            node.parentElement!.querySelector<HTMLAnchorElement>('a[href*="status"]'),
-            node.closest('article > div')?.querySelector<HTMLAnchorElement>('a[href*="status"]'),
-        ),
-    )
+/**
+ * Get post id from dom, including normal tweet, quoted tweet and retweet one
+ */
+export const getPostId = (node: HTMLElement) => {
+    let idNode: HTMLAnchorElement | undefined | null = null
+    const timeNode = node.querySelector('a[href*="/status/"] time')
+    if (timeNode) {
+        idNode = timeNode.parentElement as HTMLAnchorElement
+    } else {
+        // Quoted tweet has no `a[href*="/status/"] time` but only `time`
+        const quotedTweetTimeNode = node.querySelector('time')
+        idNode = quotedTweetTimeNode?.closest('[role=link]')?.querySelector<HTMLAnchorElement>('a[href*="/status/"]')
+    }
     const isRetweet = !!node.querySelector('[data-testid=socialContext]')
     const pid = idNode ? parseId(idNode.href) : parseId(location.href)
     // You can't retweet a tweet or a retweet, but only cancel retweeting
@@ -131,8 +136,7 @@ export const postParser = (node: HTMLElement) => {
         ...postNameParser(node),
         avatar: postAvatarParser(node),
 
-        // FIXME: we get wrong pid for nested tweet
-        pid: postIdParser(node),
+        pid: getPostId(node),
 
         messages: postContentMessageParser(node).filter((x) => !isTypedMessageEmpty(x)),
     }
