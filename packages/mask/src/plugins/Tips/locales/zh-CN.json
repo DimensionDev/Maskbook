@@ -16,6 +16,7 @@
     "save_failed": "保存失败",
     "send_tip": "发送",
     "sending_tip": "发送中...",
+    "no_enough_gas_fees": "没有足够的 Gas 费",
     "nft_not_belong_to_you": "此收藏品不存在或不属于您。",
     "send_tip_successfully": "小费发送成功。",
     "send_specific_tip_successfully": "已成功发送 {{amount}} {{name}} 小费。",
