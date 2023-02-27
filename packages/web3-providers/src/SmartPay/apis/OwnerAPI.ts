@@ -21,7 +21,7 @@ import { Web3API } from '../../EVM/index.js'
 import type { OwnerAPI } from '../../entry-types.js'
 import { fetchJSON } from '../../entry-helpers.js'
 
-type OwenrChangedRecord = {
+type OwnerChangedRecord = {
     address: string
     oldOwner: string
     newOwner: string
@@ -112,7 +112,7 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
         const allSettled = await Promise.allSettled([
             fetchJSON<{
                 data: {
-                    ownerChangeds: OwenrChangedRecord[]
+                    ownerChangeds: OwnerChangedRecord[]
                 }
             }>(THE_GRAPH_PROD, {
                 method: 'POST',
@@ -129,7 +129,7 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
             }),
             fetchJSON<{
                 data: {
-                    ownerChangeds: OwenrChangedRecord[]
+                    ownerChangeds: OwnerChangedRecord[]
                 }
             }>(THE_GRAPH_PROD, {
                 method: 'POST',
