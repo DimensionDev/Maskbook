@@ -22,6 +22,8 @@ import { RedPacketRPC } from '../messages.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { openComposition } from './openComposition.js'
+import { SmartPayBundler } from '@masknet/web3-providers'
+import { useAsync } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -133,6 +135,8 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+
+    const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     const t = useI18N()
     const { address: publicKey, privateKey } = useMemo(
@@ -278,6 +282,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 <PluginWalletStatusBar>
                     <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
                         <WalletConnectedBoundary
+                            isSmartPay={!!wallet?.owner && chainId === smartPayChainId}
                             expectedChainId={chainId}
                             classes={{
                                 connectWallet: cx(classes.button, classes.sendButton),

@@ -3,6 +3,7 @@ import { Box, Typography, List, ListItem } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Check as CheckIcon, Close as CloseIcon, AddCircleOutline as AddCircleOutlineIcon } from '@mui/icons-material'
 import { useI18N } from '../locales/index.js'
+import { useI18N as useBaseI18n } from '../../../utils/index.js'
 import {
     WalletConnectedBoundary,
     AssetPreviewer,
@@ -11,6 +12,7 @@ import {
     ChainBoundary,
     EthereumERC721TokenApprovedBoundary,
     SelectGasSettingsToolbar,
+    useAvailableBalance,
 } from '@masknet/shared'
 import { useNonFungibleOwnerTokens } from '@masknet/web3-hooks-evm'
 import { ChainId, SchemaType, useNftRedPacketConstants, formatTokenId, GasConfig } from '@masknet/web3-shared-evm'
@@ -208,6 +210,7 @@ interface RedPacketERC721FormProps {
     onGasOptionChange?: (config: GasConfig) => void
 }
 export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
+    const { t: tr } = useBaseI18n()
     const t = useI18N()
     const {
         onClose,
@@ -253,6 +256,8 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         collection?.address ?? '',
         tokenDetailedList.map((value) => value.tokenId),
     )
+
+    const { isAvailableGasBalance } = useAvailableBalance('', gasOption, { chainId })
 
     const { value: _tokenDetailedOwnerList = EMPTY_LIST } = useNonFungibleOwnerTokens(
         !collection || collection.assets?.length ? '' : collection?.address ?? '',
@@ -312,8 +317,15 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const validationMessage = useMemo(() => {
         if (!balance) return t.erc721_insufficient_balance()
         if (tokenDetailedList.length === 0) return t.select_a_token()
+    }, [tokenDetailedList.length, balance, t, isAvailableGasBalance, tr])
+
+    const gasValidationMessage = useMemo(() => {
+        if (!isAvailableGasBalance) {
+            return tr('no_enough_gas_fees')
+        }
+
         return ''
-    }, [tokenDetailedList.length, balance, t])
+    }, [isAvailableGasBalance, tr])
 
     setIsNFTRedPacketLoaded?.(balance > 0)
 
@@ -450,10 +462,10 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                 <ActionButton
                                     style={{ height: 40, padding: 0, margin: 0 }}
                                     size="large"
-                                    disabled={!!validationMessage}
+                                    disabled={!!validationMessage || !!gasValidationMessage}
                                     fullWidth
                                     onClick={() => setOpenNFTConfirmDialog(true)}>
-                                    {t.next()}
+                                    {gasValidationMessage || t.next()}
                                 </ActionButton>
                             </EthereumERC721TokenApprovedBoundary>
                         </WalletConnectedBoundary>
