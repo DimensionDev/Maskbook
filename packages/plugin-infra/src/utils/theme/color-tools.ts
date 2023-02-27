@@ -3,12 +3,16 @@ import { clamp } from 'lodash-es'
 type RGB = [number, number, number]
 type RGBA = [number, number, number, number]
 
-function toRGB(channels: RGB | undefined) {
+export function isDark([r, g, b]: RGB) {
+    return r < 68 && g < 68 && b < 68
+}
+
+export function toRGB(channels: RGB | undefined) {
     if (!channels) return ''
     return `rgb(${channels.join()})`
 }
 
-function fromRGB(rgb: string): RGB | undefined {
+export function fromRGB(rgb: string): RGB | undefined {
     const matched = rgb.match(/rgb\(\s*(\d+?)\s*,\s*(\d+?)\s*,\s*(\d+?)\s*\)/)
     if (matched) {
         const [_, r, g, b] = matched
@@ -17,7 +21,7 @@ function fromRGB(rgb: string): RGB | undefined {
     return
 }
 
-function shade(channels: RGB, percentage: number): RGB {
+export function shade(channels: RGB, percentage: number): RGB {
     return channels.map((c) => clamp(Math.floor((c * (100 + percentage)) / 100), 0, 255)) as RGB
 }
 
