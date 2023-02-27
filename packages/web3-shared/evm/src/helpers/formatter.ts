@@ -75,6 +75,10 @@ export function formatEtherToGwei(value: BigNumber.Value) {
     return new BigNumber(value).shiftedBy(9).integerValue()
 }
 
+export function formatEtherToWei(value: BigNumber.Value) {
+    return new BigNumber(value).shiftedBy(18).integerValue()
+}
+
 export function formatGweiToEther(value: BigNumber.Value) {
     return new BigNumber(value).shiftedBy(-9)
 }
