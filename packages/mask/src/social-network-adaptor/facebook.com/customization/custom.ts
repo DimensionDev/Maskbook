@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import produce, { setAutoFreeze } from 'immer'
 import { Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
-import { fromRGB, shade, toRGB } from '../../../utils/theme/index.js'
+import { fromRGB, shade, toRGB } from '@masknet/plugin-infra/content-script'
 import { useThemeSettings } from '../../../components/DataSource/useActivatedUI.js'
 
 export function useThemeFacebookVariant(baseTheme: Theme) {
