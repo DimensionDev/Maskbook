@@ -25,9 +25,6 @@ export function getInjectNodeInfo(ele: HTMLElement) {
     }
 
     const { offsetWidth: width, offsetHeight: height } = nftDom
-
-    const dom = imgEle.parentNode?.firstChild as HTMLElement
-    if (dom) dom.style.borderRadius = '100%'
     const avatarId = Twitter.getAvatarId(imgEle.src)
     if (!avatarId) return
 
