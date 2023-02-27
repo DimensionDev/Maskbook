@@ -1,10 +1,13 @@
 import { BigNumber } from 'bignumber.js'
-import { useBalance, useChainContext } from '@masknet/web3-hooks-base'
+import { useBalance, useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useGasConfig } from './useGasConfig.js'
 
-export function useTransactionValue(originalValue: BigNumber.Value | undefined, gas: string | undefined) {
-    const { value: balance = '0' } = useBalance(NetworkPluginID.PLUGIN_EVM)
+export function useTransactionValue(originalValue?: BigNumber.Value, gas?: string, gasCurrency?: string) {
+    const { value: nativeTokenBalance = '0' } = useBalance(NetworkPluginID.PLUGIN_EVM)
+    const { value: gasCurrencyBalance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, gasCurrency)
+
+    const balance = gasCurrency ? gasCurrencyBalance : nativeTokenBalance
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     // #region amount minus estimate gas fee

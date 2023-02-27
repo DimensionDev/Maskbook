@@ -14,6 +14,7 @@ export class Popups implements Middleware<ConnectionContext> {
                         owner: context.owner,
                         identifier: context.identifier,
                         popupsWindow: getSiteType() === ExtensionSite.Dashboard || isEnhanceableSiteType(),
+                        paymentToken: context.paymentToken,
                     },
                     isUndefined,
                 ),
