@@ -64,6 +64,16 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
         return new Create2Factory(CREATE2_FACTORY_CONTRACT_ADDRESS)
     }
 
+    private filterAccounts(accounts: Array<OwnerAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>>) {
+        return compact(
+            accounts.map((x, index, array) => {
+                const allElement = array.filter((y) => isSameAddress(y.address, x.address))
+                if (allElement.length === 1) return x
+                return x.creator ? x : null
+            }),
+        )
+    }
+
     private createContractAccount(
         chainId: ChainId,
         address: string,
@@ -235,7 +245,7 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
                     : y.funded,
             }))
 
-        return result.filter((x) => (exact ? isSameAddress(x.owner, owner) : true))
+        return this.filterAccounts(result).filter((x) => (exact ? isSameAddress(x.owner, owner) : true))
     }
 
     async getAccountsByOwners(
@@ -250,6 +260,6 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
          * There may be a transfer of ownership between different owners with the same address,
          * giving priority to the result obtained by multicall
          */
-        return result.filter((x) => (exact ? owners.some((y) => isSameAddress(y, x.owner)) : true))
+        return this.filterAccounts(result).filter((x) => (exact ? owners.some((y) => isSameAddress(y, x.owner)) : true))
     }
 }

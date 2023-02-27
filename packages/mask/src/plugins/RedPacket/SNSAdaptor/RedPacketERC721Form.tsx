@@ -317,6 +317,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const validationMessage = useMemo(() => {
         if (!balance) return t.erc721_insufficient_balance()
         if (tokenDetailedList.length === 0) return t.select_a_token()
+        return ''
     }, [tokenDetailedList.length, balance, t, isAvailableGasBalance, tr])
 
     const gasValidationMessage = useMemo(() => {
