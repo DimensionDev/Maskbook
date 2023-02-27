@@ -4,7 +4,7 @@ import { useFungibleTokenPrice, useNetworkContext, useWeb3State } from '@masknet
 import { InputTokenPanelUI } from './components/InputTokenPanelUI.js'
 import type { SelectTokenChipProps } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { isZero, ZERO } from '@masknet/web3-shared-base'
+import { formatEtherToWei } from '@masknet/web3-shared-evm'
 
 export interface InputTokenPanelProps extends withClasses<'root'> {
     balance: string
@@ -29,7 +29,9 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
 
         return (
             <InputTokenPanelUI
-                balance={isZero(maxAmount) && Others?.isNativeTokenAddress(token?.address) ? ZERO.toString() : balance}
+                balance={
+                    Others?.isNativeTokenAddress(token?.address) ? formatEtherToWei(maxAmount).toString() : balance
+                }
                 token={token}
                 amount={amount}
                 chainId={chainId}
