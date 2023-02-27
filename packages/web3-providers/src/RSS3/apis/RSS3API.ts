@@ -116,10 +116,12 @@ export class RSS3API implements RSS3BaseAPI.Provider {
             limit: size,
             cursor: indicator?.id ?? '',
         })
-        const { result, cursor } = await fetchJSON<{
+        const res = await fetchJSON<{
             result: RSS3BaseAPI.Web3Feed[]
             cursor?: string
         }>(url)
+        if (!res.result) Sentry.captureException(new Error(`No feeds response from ${url}`))
+        const { result = [], cursor } = res
         result.forEach(normalizedFeed)
         // createNextIndicator() return a fallback indicator as `{ id: 1, index: 1 }`
         // which will fail the API, so we pass undefined if cursor is undefined
