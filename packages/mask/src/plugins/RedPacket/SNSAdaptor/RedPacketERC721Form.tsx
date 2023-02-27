@@ -10,17 +10,23 @@ import {
     ERC721ContractSelectPanel,
     ChainBoundary,
     EthereumERC721TokenApprovedBoundary,
+    SelectGasSettingsToolbar,
 } from '@masknet/shared'
 import { useNonFungibleOwnerTokens } from '@masknet/web3-hooks-evm'
-import { ChainId, SchemaType, useNftRedPacketConstants, formatTokenId } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, useNftRedPacketConstants, formatTokenId, GasConfig } from '@masknet/web3-shared-evm'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel.js'
 import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog.js'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog.js'
 import { NFTSelectOption } from '../types.js'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useNativeToken, useNativeTokenPrice, useWallet } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import type { NonFungibleToken, NonFungibleCollection } from '@masknet/web3-shared-base'
+import { SmartPayBundler } from '@masknet/web3-providers'
+import { useAsync } from 'react-use'
+import { useCreateNFTRedpacketGas } from './hooks/useCreateNftRedpacketGas.js'
+import { useCurrentIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
+import Services from '../../../extension/service.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -28,7 +34,7 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             alignItems: 'stretch',
             flexDirection: 'column',
-            padding: '0 16px',
+            padding: '0 16px 72px',
         },
         line: {
             display: 'flex',
@@ -198,6 +204,8 @@ interface RedPacketERC721FormProps {
     setOpenSelectNFTDialog: (x: boolean) => void
     setOpenNFTConfirmDialog: (x: boolean) => void
     setIsNFTRedPacketLoaded?: (x: boolean) => void
+    gasOption?: GasConfig
+    onGasOptionChange?: (config: GasConfig) => void
 }
 export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const t = useI18N()
@@ -208,6 +216,8 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         setOpenNFTConfirmDialog,
         openSelectNFTDialog,
         setOpenSelectNFTDialog,
+        gasOption,
+        onGasOptionChange,
     } = props
     const { classes, cx } = useStyles()
     const [selectOption, setSelectOption] = useState<NFTSelectOption | undefined>(undefined)
@@ -218,6 +228,31 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const tokenDetailedList =
         selectOption === NFTSelectOption.Partial ? manualSelectedTokenDetailedList : onceAllSelectedTokenDetailedList
     const [message, setMessage] = useState('Best Wishes!')
+    const wallet = useWallet()
+    const { value: nativeTokenDetailed } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
+    const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
+    const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
+
+    const currentIdentity = useCurrentIdentity()
+    const { value: linkedPersona } = useAsync(async () => {
+        if (!currentIdentity?.linkedPersona) return
+        return Services.Identity.queryPersona(currentIdentity.linkedPersona)
+    }, [currentIdentity?.linkedPersona])
+
+    const lastRecognized = useLastRecognizedIdentity()
+
+    const senderName =
+        lastRecognized.identifier?.userId ??
+        currentIdentity?.identifier.userId ??
+        linkedPersona?.nickname ??
+        'Unknown User'
+
+    const { value: gasLimit = '0' } = useCreateNFTRedpacketGas(
+        message,
+        senderName,
+        collection?.address ?? '',
+        tokenDetailedList.map((value) => value.tokenId),
+    )
 
     const { value: _tokenDetailedOwnerList = EMPTY_LIST } = useNonFungibleOwnerTokens(
         !collection || collection.assets?.length ? '' : collection?.address ?? '',
@@ -302,6 +337,8 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                 tokenList={tokenDetailedList}
                 onBack={() => setOpenNFTConfirmDialog(false)}
                 onClose={onClose}
+                senderName={senderName}
+                gasOption={gasOption}
             />
         )
     }
@@ -380,14 +417,29 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                 {collection && balance ? (
                     <Typography className={classes.approveAllTip}>{t.nft_approve_all_tip()}</Typography>
                 ) : null}
+                {nativeTokenDetailed && nativeTokenPrice ? (
+                    <Box margin={2}>
+                        <SelectGasSettingsToolbar
+                            nativeToken={nativeTokenDetailed}
+                            nativeTokenPrice={nativeTokenPrice}
+                            supportMultiCurrency={!!wallet?.owner && chainId === smartPayChainId}
+                            gasConfig={gasOption}
+                            gasLimit={Number.parseInt(gasLimit, 10)}
+                            onChange={onGasOptionChange}
+                        />
+                    </Box>
+                ) : null}
             </Box>
+
             <Box style={{ position: 'absolute', bottom: 0, width: '100%' }}>
                 <PluginWalletStatusBar>
                     <ChainBoundary
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         expectedChainId={chainId}
                         forceShowingWrongNetworkButton>
-                        <WalletConnectedBoundary expectedChainId={chainId}>
+                        <WalletConnectedBoundary
+                            isSmartPay={!!wallet?.owner && chainId === smartPayChainId}
+                            expectedChainId={chainId}>
                             <EthereumERC721TokenApprovedBoundary
                                 validationMessage={validationMessage}
                                 owner={account}
