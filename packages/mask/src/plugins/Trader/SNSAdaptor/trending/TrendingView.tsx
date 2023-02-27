@@ -104,6 +104,9 @@ const useStyles = makeStyles<{
             padding: theme.spacing(2),
             boxSizing: 'border-box',
             overflow: 'auto',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         priceChartWrapper: {
             padding: theme.spacing(4, 2, props.isTokenTagPopper ? 8 : 4, 2),
@@ -297,6 +300,7 @@ export function TrendingView(props: TrendingViewProps) {
                 sx={{
                     backgroundColor:
                         isTokenTagPopper || isCollectionProjectPopper ? theme.palette.maskColor.bottom : 'transparent',
+                    flexGrow: 1,
                 }}>
                 {currentTab === ContentTabs.Market && trending.dataProvider ? (
                     <CoinMarketPanel dataProvider={trending.dataProvider} trending={trending} result={result} />
