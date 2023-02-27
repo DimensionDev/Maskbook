@@ -292,6 +292,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                 onBack={onBack}
                                 onCreated={handleCreated}
                                 settings={settings}
+                                gasOption={gasOption}
                             />
                         ) : null}
                     </DialogContent>
