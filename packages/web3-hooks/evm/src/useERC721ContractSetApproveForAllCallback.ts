@@ -1,5 +1,5 @@
 import { useAsyncFn } from 'react-use'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, TimeoutController } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useERC721TokenContract } from './useERC721TokenContract.js'
@@ -28,7 +28,10 @@ export function useERC721ContractSetApproveForAllCallback(
         }
 
         const hash = await connection?.approveAllNonFungibleTokens(contractAddress, operator, approved)
-        const receipt = await connection.getTransactionReceipt(hash)
+        const receipt = await connection.confirmTransaction(hash, {
+            signal: new TimeoutController(5 * 60 * 1000).signal,
+        })
+
         if (receipt) {
             callback?.()
         }

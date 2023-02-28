@@ -16,7 +16,7 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
             return
         }
 
-        const transaction = await nftRedPacketContract.methods.claim(id, signedMsg, account)
+        const transaction = nftRedPacketContract.methods.claim(id, signedMsg, account)
         const tx = await new ContractTransaction(nftRedPacketContract).fillAll(transaction, {
             from: account,
             gas: toFixed((await transaction.estimateGas({ from: account })) + EXTRA_GAS_PER_NFT * totalAmount),
