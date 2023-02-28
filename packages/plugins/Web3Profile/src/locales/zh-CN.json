@@ -1,5 +1,7 @@
 {
+    "persona_public_key_copy": "persona_public_key_copy",
     "current": "当前",
+    "plugin_wallet_view_on_explorer": "plugin_wallet_view_on_explorer",
     "wallets": "钱包",
     "donations": "捐赠",
     "footprints": "足迹",
