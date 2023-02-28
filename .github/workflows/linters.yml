@@ -68,7 +68,7 @@ jobs:
       - run: pnpm install
       - run: npx gulp codegen
       - run: npx gulp polyfill
-      - run: pnpm run test --coverage
+      - run: pnpm run test
   eslint:
     runs-on: ubuntu-20.04
     steps:
