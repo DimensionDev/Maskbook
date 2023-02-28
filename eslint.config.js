@@ -167,6 +167,7 @@ export default [
             '**/build',
             '**/dist',
             '**/package.json',
+            '**/i18n_generated.ts',
             '**/.storybook',
             'packages/contracts',
             'storybook-static',
@@ -179,6 +180,7 @@ export default [
     {
         files: ['**/*.ts', '**/*.tsx'],
         languageOptions: {
+            // Note: --cache is not supported yet if parser is an object https://github.com/eslint/eslint/issues/16875
             parser: TypescriptParser,
             parserOptions: {
                 ecmaVersion: 'latest',
