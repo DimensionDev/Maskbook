@@ -25,6 +25,7 @@ describe('formatBalance util test', () => {
         { give: 123456789, decimals: 15, significant: 19, expected: '0.00000012' },
         { give: 123456789, decimals: 20, significant: 20, expected: '<0.000001' },
         { give: 352476637275640, decimals: 18, significant: 2, expected: '0.00035' },
+        { give: 133555, decimals: 12, significant: 20, expected: '0.00000013' },
         { give: 1, decimals: 6, significant: 20, expected: '0.000001' },
         { give: 1, decimals: 7, significant: 20, expected: '0.0000001' },
         { give: 10, decimals: 7, significant: 20, expected: '0.000001' },
