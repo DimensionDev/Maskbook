@@ -759,9 +759,9 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                     usd: formatCurrency(
                                         formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
                                             .times(etherPrice)
-                                            .times(gasLimit)
-                                            .decimalPlaces(2),
+                                            .times(gasLimit),
                                         'USD',
+                                        { isGasFeeUSD: true },
                                     ),
                                 }}
                                 components={{ span: <span /> }}
@@ -796,9 +796,9 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                     usd: formatCurrency(
                                         formatGweiToEther(Number(maxFeePerGas) ?? 0)
                                             .times(etherPrice)
-                                            .times(gasLimit)
-                                            .decimalPlaces(2),
+                                            .times(gasLimit),
                                         'USD',
+                                        { isGasFeeUSD: true },
                                     ),
                                 }}
                             />

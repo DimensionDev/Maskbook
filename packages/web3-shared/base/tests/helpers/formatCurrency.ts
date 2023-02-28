@@ -27,11 +27,11 @@ describe('USD Currency price format util test', () => {
         { give: 1e-13, expected: '< $0.000001' },
         { give: 0.9993631112, expected: '$0.999363' },
         { give: 0.000000002636, expected: '$0.000000002636' },
-        { give: 0.000000002636, expected: '< $0.01', isGasFeeUSD: true },
-        { give: 0.032112, expected: '$0.03', isGasFeeUSD: true },
+        { give: 0.000000002636, expected: '< $0.01', options: { isGasFeeUSD: true } },
+        { give: 0.032112, expected: '$0.03', options: { isGasFeeUSD: true } },
         { give: 1.999363, expected: '$2.00' },
-    ])('.formatCurrency($give)', ({ give, expected, isGasFeeUSD }) => {
-        expect(formatCurrency(give, undefined, isGasFeeUSD)).toBe(expected)
+    ])('.formatCurrency($give)', ({ give, expected, options }) => {
+        expect(formatCurrency(give, undefined, options)).toBe(expected)
     })
 })
 

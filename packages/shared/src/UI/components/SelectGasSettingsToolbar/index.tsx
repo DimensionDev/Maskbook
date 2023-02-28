@@ -269,14 +269,15 @@ export function SelectGasSettingsToolbarUI({
     const gasFeeUSD = useMemo(() => {
         if (!gasFee || gasFee.isZero()) return '$0'
         if (!currentGasCurrency || isSameAddress(nativeToken?.address, currentGasCurrency)) {
-            return formatCurrency(formatWeiToEther(gasFee).times(nativeTokenPrice).decimalPlaces(2), 'USD')
+            return formatCurrency(formatWeiToEther(gasFee).times(nativeTokenPrice), 'USD', { isGasFeeUSD: true })
         }
 
         if (!currencyToken || !currencyTokenPrice) return '$0'
 
         return formatCurrency(
-            new BigNumber(formatBalance(gasFee, currencyToken?.decimals)).times(currencyTokenPrice).decimalPlaces(2),
+            new BigNumber(formatBalance(gasFee, currencyToken?.decimals)).times(currencyTokenPrice),
             'USD',
+            { isGasFeeUSD: true },
         )
     }, [
         gasFee,

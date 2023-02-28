@@ -362,9 +362,9 @@ export const GasSetting1559 = memo(() => {
                                     usd: formatCurrency(
                                         formatWeiToEther(content?.suggestedMaxFeePerGas ?? 0)
                                             .times(nativeTokenPrice)
-                                            .times(gasLimit ?? 21000)
-                                            .decimalPlaces(2),
+                                            .times(gasLimit ?? 21000),
                                         'USD',
+                                        { isGasFeeUSD: true },
                                     ),
                                 }}
                                 components={{ span: <span /> }}
@@ -408,9 +408,9 @@ export const GasSetting1559 = memo(() => {
                                 usd: formatCurrency(
                                     formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
                                         .times(nativeTokenPrice)
-                                        .times(gasLimit)
-                                        .decimalPlaces(2),
+                                        .times(gasLimit),
                                     'USD',
+                                    { isGasFeeUSD: true },
                                 ),
                             }}
                             components={{ span: <span /> }}
@@ -448,9 +448,9 @@ export const GasSetting1559 = memo(() => {
                                 usd: formatCurrency(
                                     formatGweiToEther(Number(maxFeePerGas) ?? 0)
                                         .times(nativeTokenPrice)
-                                        .times(gasLimit)
-                                        .decimalPlaces(2),
+                                        .times(gasLimit),
                                     'USD',
+                                    { isGasFeeUSD: true },
                                 ),
                             }}
                             components={{ span: <span /> }}
