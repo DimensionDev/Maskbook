@@ -6,7 +6,14 @@ import { OPENOCEAN_BASE_URL } from '../../constants/openocean.js'
 import { fetchJSON } from '@masknet/web3-providers/helpers'
 
 export async function swapOO(request: SwapOORequest): Promise<SwapOOData> {
-    const payload = await fetchJSON<any>(
+    const payload = await fetchJSON<{
+        data: string
+        outAmount: string
+        minOutAmount: number
+        to: string
+        value: string
+        estimatedGas: string
+    }>(
         urlcat(OPENOCEAN_BASE_URL, `/${request.chainId}/swap`, {
             inTokenSymbol: request.toToken?.symbol,
             inTokenAddress: request.fromToken?.address,
@@ -20,7 +27,6 @@ export async function swapOO(request: SwapOORequest): Promise<SwapOOData> {
             referrer: getOpenOceanConstants(request.chainId).REFERRER_ADDRESS?.toLowerCase(),
         }),
     )
-
     const { data, outAmount, minOutAmount, to, value, estimatedGas } = payload
     const _resAmount = leftShift(outAmount, request.toToken.decimals).toNumber()
     const _fromAmount = leftShift(request.fromAmount, request.fromToken.decimals).toNumber()

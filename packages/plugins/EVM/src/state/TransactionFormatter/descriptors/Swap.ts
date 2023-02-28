@@ -214,7 +214,7 @@ export class SwapDescriptor implements TransactionDescriptor {
                         successfulDescription: `Swap ${getTokenAmountDescription(
                             _parameters[1].amount,
                             tokenIn,
-                        )} for ${getTokenAmountDescription(parameters!.minReturnAmount, tokenOut)} successfully.`,
+                        )} for ${getTokenAmountDescription(_parameters?.[1]?.minReturnAmount, tokenOut)} successfully.`,
                         failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                     },
                 }
