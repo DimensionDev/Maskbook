@@ -30,10 +30,12 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapOOSuccessRespo
             return
         }
 
+        const gas = await connection.estimateTransaction?.(config)
+
         const hash = await connection.sendTransaction(
             {
                 ...config,
-                gas: await connection.estimateTransaction?.(config),
+                gas,
             },
             { chainId, overrides: { ...gasConfig } },
         )

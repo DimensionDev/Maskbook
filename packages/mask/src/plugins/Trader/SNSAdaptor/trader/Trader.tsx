@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState, useMemo } from 'react'
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useState, useMemo, useRef } from 'react'
 import { useUnmount, useUpdateEffect } from 'react-use'
 import { delay } from '@masknet/kit'
 import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
@@ -29,6 +29,7 @@ import { TradeForm } from './TradeForm.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { TraderStateBar } from './TraderStateBar.js'
+import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
 
 export interface TraderProps extends withClasses<'root'> {
     defaultInputCoin?: Web3Helper.FungibleTokenAll
@@ -44,6 +45,7 @@ export interface TraderRef {
 }
 
 export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, ref) => {
+    const snackbarKeyRef = useRef<SnackbarKey>()
     const { defaultOutputCoin, chainId: targetChainId, defaultInputCoin, settings = false } = props
     const t = useI18N()
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
@@ -57,6 +59,19 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
     const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
+    )
+
+    const { showSnackbar, closeSnackbar } = useCustomSnackbar()
+
+    const showSingletonSnackbar = useCallback(
+        (title: SnackbarMessage, options: ShowSnackbarOptions) => {
+            if (snackbarKeyRef.current !== undefined) closeSnackbar(snackbarKeyRef.current)
+            snackbarKeyRef.current = showSnackbar(title, options)
+            return () => {
+                closeSnackbar(snackbarKeyRef.current)
+            }
+        },
+        [showSnackbar, closeSnackbar],
     )
 
     // #region trade state
@@ -186,11 +201,16 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     // #endregion
 
     // #region blocking (swap)
-    const [{ loading: isTrading }, tradeCallback] = useTradeCallback(
+    const [{ loading: isTrading, error: tradeCallbackError }, tradeCallback] = useTradeCallback(
         focusedTrade?.provider,
         focusedTrade?.value,
         gasConfig,
     )
+
+    useUpdateEffect(() => {
+        if (tradeCallbackError) showSingletonSnackbar(t.swap_failed(), { processing: false, variant: 'error' })
+    }, [tradeCallbackError, showSingletonSnackbar])
+
     useEffect(() => {
         setIsSwapping(isTrading)
     }, [isTrading])

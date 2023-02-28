@@ -1,6 +1,6 @@
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { ChainId, ProviderURL, isNativeTokenAddress, useTraderConstants } from '@masknet/web3-shared-evm'
-import { useChainContext, useDoubleBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useCustomBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
 import { isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -23,7 +23,7 @@ export function useTrade(
     const { pluginID } = useNetworkContext()
     const { OPENOCEAN_ETH_ADDRESS } = useTraderConstants(chainId as ChainId)
 
-    return useDoubleBlockBeatRetry(
+    return useCustomBlockBeatRetry(
         NetworkPluginID.PLUGIN_EVM,
         async () => {
             if (pluginID !== NetworkPluginID.PLUGIN_EVM || !OPENOCEAN_SUPPORTED_CHAINS.includes(chainId as ChainId))
@@ -58,5 +58,6 @@ export function useTrade(
             chainId,
             pluginID,
         ],
+        chainId === ChainId.BSC ? 6 : 3,
     )
 }

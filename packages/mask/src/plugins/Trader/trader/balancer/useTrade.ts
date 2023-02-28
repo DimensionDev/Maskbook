@@ -1,4 +1,4 @@
-import { useChainContext, useDoubleBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useCustomBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, useTokenConstants } from '@masknet/web3-shared-evm'
 import { BALANCER_SWAP_TYPE } from '../../constants/index.js'
 import { PluginTraderRPC } from '../../messages.js'
@@ -19,7 +19,7 @@ export function useTrade(
     const { pluginID } = useNetworkContext()
     const { WNATIVE_ADDRESS } = useTokenConstants(targetChainId)
 
-    return useDoubleBlockBeatRetry(
+    return useCustomBlockBeatRetry(
         NetworkPluginID.PLUGIN_EVM,
         async () => {
             if (!WNATIVE_ADDRESS || pluginID !== NetworkPluginID.PLUGIN_EVM) return null
@@ -51,5 +51,6 @@ export function useTrade(
             outputToken?.address,
             pluginID,
         ],
+        targetChainId === ChainId.BSC ? 6 : 3,
     )
 }
