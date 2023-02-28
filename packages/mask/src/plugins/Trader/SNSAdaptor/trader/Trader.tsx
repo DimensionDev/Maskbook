@@ -3,7 +3,7 @@ import { useUnmount, useUpdateEffect } from 'react-use'
 import { delay } from '@masknet/kit'
 import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
 import { formatBalance } from '@masknet/web3-shared-base'
-import type { GasConfig } from '@masknet/web3-shared-evm'
+import { ChainId, GasConfig } from '@masknet/web3-shared-evm'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
@@ -49,7 +49,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const { defaultOutputCoin, chainId: targetChainId, defaultInputCoin, settings = false } = props
     const t = useI18N()
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
-    const { chainId, account } = useChainContext({
+    const { chainId, account, setChainId } = useChainContext({
         chainId: targetChainId,
     })
 
@@ -98,6 +98,10 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
         }),
         [allTradeComputed, focusedTrade, gasConfig],
     )
+
+    useUpdateEffect(() => {
+        if (!chainIdValid) setChainId(ChainId.Mainnet)
+    }, [chainIdValid])
 
     // #region if chain id be changed, update input token be native token
     useEffect(() => {

@@ -36,14 +36,7 @@ import {
 } from '@mui/material'
 import { useAsyncFn, useCopyToClipboard } from 'react-use'
 import { memo, useCallback, useMemo, useState } from 'react'
-import {
-    formatBalance,
-    formatCurrency,
-    getTokenUSDValue,
-    isLessThan,
-    isSameAddress,
-    toFixed,
-} from '@masknet/web3-shared-base'
+import { formatBalance, formatCurrency, getTokenUSDValue, isSameAddress, toFixed } from '@masknet/web3-shared-base'
 import { compact, isNaN, sum } from 'lodash-es'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
@@ -214,7 +207,7 @@ export const SmartPayContent = memo(() => {
         chainId,
     })
 
-    const availableBalanceTooLow = isLessThan(formatBalance(allowance, maskToken?.decimals), 0.1)
+    const availableBalanceTooLow = true
 
     const { value: maskBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, maskAddress)
 
