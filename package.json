@@ -1,5 +1,6 @@
 {
   "name": "mask-network",
+  "type": "module",
   "packageManager": "pnpm@7.13.2",
   "engines": {
     "node": ">=18.7.0",
@@ -19,8 +20,8 @@
     "build": "build",
     "build-ios": "build --preset iOS",
     "build:mv3": "build --mv3",
-    "lint": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx,.js --cache --fix --cache-strategy content",
-    "lint:ci": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx,.js --cache --cache-strategy content",
+    "lint": "   eslint packages --cache --cache-strategy content --fix",
+    "lint:ci": "eslint packages --cache --cache-strategy content",
     "lint:ci-report": "pnpm run lint:ci --format=junit --output-file=reports/junit/eslint-results.xml --max-warnings=0",
     "postinstall": "gulp fix-lockfile",
     "prepare": "husky install",
@@ -67,7 +68,6 @@
     "@swc/core": "1.3.36",
     "@types/lodash-es": "^4.17.6",
     "@typescript-eslint/eslint-plugin": "^5.53.0",
-    "@typescript-eslint/experimental-utils": "^5.53.0",
     "@typescript-eslint/parser": "^5.53.0",
     "@vitest/coverage-c8": "^0.25.3",
     "@vitest/ui": "^0.25.3",

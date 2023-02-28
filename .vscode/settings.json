@@ -1,4 +1,5 @@
 {
+    "eslint.experimental.useFlatConfig": true,
     "typescript.tsdk": "node_modules/typescript/lib",
     "typescript.preferences.importModuleSpecifierEnding": "js",
     "editor.formatOnSave": true,

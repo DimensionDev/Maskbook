@@ -219,9 +219,6 @@ importers:
       '@typescript-eslint/eslint-plugin':
         specifier: ^5.53.0
         version: 5.53.0_4s7zdxhhbp3yjhi4swdnwoy4wy
-      '@typescript-eslint/experimental-utils':
-        specifier: ^5.53.0
-        version: 5.53.0_rotoaemfmxfawwbzmsoxvocrie
       '@typescript-eslint/parser':
         specifier: ^5.53.0
         version: 5.53.0_rotoaemfmxfawwbzmsoxvocrie
@@ -12860,19 +12857,6 @@ packages:
       typescript: 5.0.0-dev.20221202
     transitivePeerDependencies:
       - supports-color
-    dev: true
-
-  /@typescript-eslint/experimental-utils/5.53.0_rotoaemfmxfawwbzmsoxvocrie:
-    resolution: {integrity: sha512-4SklZEwRn0jqkhtW+pPZpbKFXprwGneBndRM0TGzJu/LWdb9QV2hBgFIVU9AREo02BzqFvyG/ypd+xAW5YGhXw==}
-    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-    peerDependencies:
-      eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
-    dependencies:
-      '@typescript-eslint/utils': 5.53.0_rotoaemfmxfawwbzmsoxvocrie
-      eslint: 8.35.0
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
     dev: true
 
   /@typescript-eslint/parser/5.53.0_rotoaemfmxfawwbzmsoxvocrie:
