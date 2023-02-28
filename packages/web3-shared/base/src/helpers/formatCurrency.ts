@@ -2,6 +2,7 @@ import { BigNumber } from 'bignumber.js'
 import { scale10 } from './number.js'
 
 const BOUNDARIES = {
+    twoDecimalBoundary: scale10(1, -2),
     sixDecimalBoundary: scale10(1, -6),
     eightDecimalBoundary: scale10(1, -8),
     twelveDecimalBoundary: scale10(1, -12),
@@ -33,14 +34,21 @@ const formatCurrencySymbol = (symbol: string, isLead: boolean) => {
 }
 
 // https://mask.atlassian.net/wiki/spaces/MASK/pages/122916438/Token
-export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string {
-    const bn = new BigNumber(value)
+export function formatCurrency(value: BigNumber.Value, currency = 'USD', isGasFeeUSD?: boolean): string {
+    const bn_ = new BigNumber(value)
+    const bn = isGasFeeUSD ? bn_.decimalPlaces(2) : bn_
     const integerValue = bn.integerValue(1)
     const decimalValue = bn.plus(integerValue.negated())
     const isMoreThanOrEqualToOne = bn.isGreaterThanOrEqualTo(1)
 
-    const { sixDecimalBoundary, twelveDecimalBoundary, eightDecimalBoundary, sixDecimalExp, twelveDecimalExp } =
-        BOUNDARIES
+    const {
+        sixDecimalBoundary,
+        twoDecimalBoundary,
+        twelveDecimalBoundary,
+        eightDecimalBoundary,
+        sixDecimalExp,
+        twelveDecimalExp,
+    } = BOUNDARIES
 
     const symbol = currency ? DIGITAL_CURRENCY_SYMBOLS[currency] : ''
 
@@ -71,7 +79,8 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string
         isDigitalCurrency,
     )
 
-    if (bn.lt(sixDecimalBoundary) || bn.isZero()) {
+    if (bn.lt(isGasFeeUSD ? twoDecimalBoundary : sixDecimalBoundary) || bn.isZero()) {
+        const isLessThanTwoDecimalBoundary = bn.lt(twoDecimalBoundary)
         const isLessThanTwelveDecimalBoundary = bn.lt(twelveDecimalBoundary)
         const isGreatThanEightDecimalBoundary = bn.gte(eightDecimalBoundary)
         const value = digitalCurrencyModifierValues
@@ -82,6 +91,8 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string
                     case 'fraction':
                         return bn.isZero()
                             ? '0.00'
+                            : isGasFeeUSD
+                            ? '0.01'
                             : isLessThanTwelveDecimalBoundary
                             ? sixDecimalBoundary.toFixed()
                             : isGreatThanEightDecimalBoundary
@@ -93,7 +104,11 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string
             })
             .join('')
 
-        return `${isLessThanTwelveDecimalBoundary && !bn.isZero() ? '< ' : ''}${value}`
+        return `${
+            (isLessThanTwelveDecimalBoundary || (isGasFeeUSD && isLessThanTwoDecimalBoundary)) && !bn.isZero()
+                ? '< '
+                : ''
+        }${value}`
     }
 
     if (isMoreThanOrEqualToOne) {
