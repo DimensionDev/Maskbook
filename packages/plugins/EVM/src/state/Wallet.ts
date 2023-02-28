@@ -1,4 +1,4 @@
-import { compact } from 'lodash-es'
+import { compact, uniqWith } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
 import { WalletState } from '@masknet/web3-state'
@@ -46,6 +46,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
 
             const wallets = this.context.wallets.getCurrentValue()
             const allPersonas = this.context.allPersonas?.getCurrentValue() ?? []
+            const localWallets = this.storage.value[ProviderType.MaskWallet]
 
             const chainId = await SmartPayBundler.getSupportedChainId()
 
@@ -56,8 +57,9 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
 
             const now = new Date()
 
-            const result = [
+            const result: WalletItem[] = [
                 ...wallets,
+                ...(localWallets ?? []),
                 ...accounts
                     .filter((x) => x.deployed)
                     .map((x) => ({
@@ -75,12 +77,10 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
                     })),
             ].map((x) => ({
                 ...x,
-                name:
-                    this.storage.value[ProviderType.MaskWallet]?.find((item) => isSameAddress(item.address, x.address))
-                        ?.name ?? x.name,
+                name: x.name ?? localWallets?.find((item) => isSameAddress(item.address, x.address))?.name,
             }))
 
-            this.ref.value = result
+            this.ref.value = uniqWith(result, (a, b) => isSameAddress(a.address, b.address))
         }
 
         update()

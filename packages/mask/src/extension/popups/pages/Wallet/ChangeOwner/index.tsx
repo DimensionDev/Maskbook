@@ -1,8 +1,14 @@
 import { Icons } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
-import { DashboardRoutes, formatPersonaFingerprint, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import {
+    DashboardRoutes,
+    formatPersonaFingerprint,
+    NetworkPluginID,
+    PopupRoutes,
+    TimeoutController,
+} from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useChainContext, useWallet, useWallets, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Link, Popover, Typography, Button } from '@mui/material'
@@ -141,6 +147,7 @@ export default function ChangeOwner() {
 
     const { smartPayChainId } = useContainer(PopupContext)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const { Wallet } = useWeb3State()
     const wallets = useWallets()
     const wallet = useWallet()
 
@@ -157,12 +164,30 @@ export default function ChangeOwner() {
         if (!manageAccount?.address || !contractAccount) return
         if (!isSameAddress(wallet?.address, contractAccount.address))
             await connection?.connect({ account: contractAccount?.address, chainId: smartPayChainId })
-        return connection?.changeOwner?.(manageAccount.address, {
+        const hash = await connection?.changeOwner?.(manageAccount.address, {
             chainId: smartPayChainId,
             account: contractAccount?.address,
             providerType: ProviderType.MaskWallet,
             owner: contractAccount?.owner,
             identifier: contractAccount?.identifier,
+        })
+
+        if (!hash) return
+
+        const result = await connection?.confirmTransaction(hash, {
+            signal: new TimeoutController(5 * 60 * 1000).signal,
+        })
+
+        if (!result?.status) return
+        await Wallet?.updateOrAddWallet({
+            name: 'Smart Pay',
+            owner: manageAccount.address,
+            address: contractAccount.address,
+            hasDerivationPath: false,
+            hasStoredKeyInfo: false,
+            id: contractAccount.address,
+            createdAt: new Date(),
+            updatedAt: new Date(),
         })
     }, [manageAccount?.address, smartPayChainId, contractAccount, wallet])
 
