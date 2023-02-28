@@ -182,7 +182,7 @@ export function TraderStateBar({
                 actualPluginID={actualPluginID}
                 onClick={isPopup ? openSelectWalletPopup : undefined}>
                 <WalletConnectedBoundary offChain expectedChainId={chainId}>
-                    <ChainBoundary expectedChainId={chainId} expectedPluginID={pluginID}>
+                    <ChainBoundary expectedChainId={chainId} expectedPluginID={pluginID} switchChainWithoutPopup>
                         <EthereumERC20TokenApprovedBoundary
                             onlyInfiniteUnlock
                             spender={approveAddress}
