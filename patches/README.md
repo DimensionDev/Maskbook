@@ -39,7 +39,6 @@
 - emotion-js: SSR rendering does not work on browser. <https://github.com/emotion-js/emotion/issues/2691>
 - react-devtools-inline: <https://github.com/facebook/react/pull/25510> and <https://github.com/facebook/react/pull/25518>
 - web3: <https://github.com/web3/web3.js/pull/5274> introduce a bug that crashes
-- @typescript-eslint/typescript-estree: performance problem <https://github.com/typescript-eslint/typescript-eslint/issues/6544>
 
 ## CSP
 

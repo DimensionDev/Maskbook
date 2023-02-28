@@ -186,6 +186,7 @@ export default [
                 ecmaVersion: 'latest',
                 project: './tsconfig.eslint.json',
                 warnOnUnsupportedTypeScriptVersion: false,
+                allowAutomaticSingleRunInference: true,
             },
         },
         plugins: {
