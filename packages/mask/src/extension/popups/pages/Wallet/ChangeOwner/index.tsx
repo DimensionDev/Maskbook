@@ -179,7 +179,7 @@ export default function ChangeOwner() {
         })
 
         if (!result?.status) return
-        Wallet?.updateOrAddWallet({
+        await Wallet?.updateOrAddWallet({
             name: 'Smart Pay',
             owner: manageAccount.address,
             address: contractAccount.address,
