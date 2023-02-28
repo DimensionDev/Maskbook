@@ -218,7 +218,6 @@ export const SmartPayContent = memo(() => {
 
     const { value: maskBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, maskAddress)
 
-    console.log(assets)
     const allAssets = useMemo(() => {
         if (!assets) return EMPTY_LIST
 
