@@ -339,8 +339,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                     ? last(stats)?.[1] ?? market.current_price
                                                     : market.current_price) ?? 0,
                                                 isNFT ? market.price_symbol : 'USD',
-
-                                                { boundaries: { expandExp: 6 } },
                                             )}
                                         </Typography>
                                     ) : (

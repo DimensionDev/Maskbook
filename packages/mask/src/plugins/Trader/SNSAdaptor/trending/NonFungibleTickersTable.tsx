@@ -289,9 +289,7 @@ function TransactionValue({ result, chainId, activity }: TransactionValueProps) 
             )}
 
             <Typography fontSize={12}>
-                {formatCurrency((activity.trade_price ?? activity.fee ?? 0).toFixed(4), '', {
-                    boundaries: { min: 0.00001 },
-                })}
+                {formatCurrency((activity.trade_price ?? activity.fee ?? 0).toFixed(4), '')}
             </Typography>
         </div>
     )

@@ -364,7 +364,7 @@ export const GasSetting1559 = memo(() => {
                                             .times(nativeTokenPrice)
                                             .times(gasLimit ?? 21000),
                                         'USD',
-                                        { boundaries: { min: 0.01 } },
+                                        { onlyRemainTwoDecimal: true },
                                     ),
                                 }}
                                 components={{ span: <span /> }}
@@ -410,7 +410,7 @@ export const GasSetting1559 = memo(() => {
                                         .times(nativeTokenPrice)
                                         .times(gasLimit),
                                     'USD',
-                                    { boundaries: { min: 0.01 } },
+                                    { onlyRemainTwoDecimal: true },
                                 ),
                             }}
                             components={{ span: <span /> }}
@@ -450,7 +450,7 @@ export const GasSetting1559 = memo(() => {
                                         .times(nativeTokenPrice)
                                         .times(gasLimit),
                                     'USD',
-                                    { boundaries: { min: 0.01 } },
+                                    { onlyRemainTwoDecimal: true },
                                 ),
                             }}
                             components={{ span: <span /> }}
