@@ -149,6 +149,10 @@ export function TrendingView(props: TrendingViewProps) {
     const { value: { trending } = {}, loading: loadingTrending } = useTrendingById(result, result.address)
     // #endregion
 
+    useEffect(() => {
+        if (currentResult) setResult(currentResult)
+    }, [currentResult])
+
     // #region stats
     const [days, setDays] = useState(TrendingAPI.Days.ONE_WEEK)
     const {
