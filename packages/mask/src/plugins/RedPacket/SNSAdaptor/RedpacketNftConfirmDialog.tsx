@@ -282,7 +282,6 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 <PluginWalletStatusBar>
                     <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
                         <WalletConnectedBoundary
-                            isSmartPay={!!wallet?.owner && chainId === smartPayChainId}
                             expectedChainId={chainId}
                             classes={{
                                 connectWallet: cx(classes.button, classes.sendButton),

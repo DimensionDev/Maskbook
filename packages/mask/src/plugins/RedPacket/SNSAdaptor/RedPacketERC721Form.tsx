@@ -450,9 +450,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         expectedChainId={chainId}
                         forceShowingWrongNetworkButton>
-                        <WalletConnectedBoundary
-                            isSmartPay={!!wallet?.owner && chainId === smartPayChainId}
-                            expectedChainId={chainId}>
+                        <WalletConnectedBoundary expectedChainId={chainId}>
                             <EthereumERC721TokenApprovedBoundary
                                 validationMessage={validationMessage}
                                 owner={account}
