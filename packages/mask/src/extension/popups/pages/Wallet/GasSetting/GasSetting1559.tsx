@@ -362,7 +362,8 @@ export const GasSetting1559 = memo(() => {
                                     usd: formatCurrency(
                                         formatWeiToEther(content?.suggestedMaxFeePerGas ?? 0)
                                             .times(nativeTokenPrice)
-                                            .times(gasLimit ?? 21000),
+                                            .times(gasLimit ?? 21000)
+                                            .decimalPlaces(2),
                                         'USD',
                                     ),
                                 }}
@@ -407,7 +408,8 @@ export const GasSetting1559 = memo(() => {
                                 usd: formatCurrency(
                                     formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
                                         .times(nativeTokenPrice)
-                                        .times(gasLimit),
+                                        .times(gasLimit)
+                                        .decimalPlaces(2),
                                     'USD',
                                 ),
                             }}
@@ -446,7 +448,8 @@ export const GasSetting1559 = memo(() => {
                                 usd: formatCurrency(
                                     formatGweiToEther(Number(maxFeePerGas) ?? 0)
                                         .times(nativeTokenPrice)
-                                        .times(gasLimit),
+                                        .times(gasLimit)
+                                        .decimalPlaces(2),
                                     'USD',
                                 ),
                             }}

@@ -50,7 +50,7 @@ export const TokenValue: FC<Props> = ({ className, ...rest }) => {
 
     const priceUSD = useMemo(() => {
         if (!tokenPrice || !amount) return
-        return formatCurrency(new BigNumber(amount).times(tokenPrice), 'USD')
+        return formatCurrency(new BigNumber(amount).times(tokenPrice).decimalPlaces(2), 'USD')
     }, [amount, tokenPrice])
 
     return amount && token ? (

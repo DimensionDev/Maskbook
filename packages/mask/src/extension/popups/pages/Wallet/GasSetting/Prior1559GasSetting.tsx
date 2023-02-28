@@ -265,7 +265,8 @@ export const Prior1559GasSetting = memo(() => {
                                         usd: formatCurrency(
                                             formatWeiToEther(gasPrice)
                                                 .times(nativeTokenPrice)
-                                                .times(minGasLimit || 21000),
+                                                .times(minGasLimit || 21000)
+                                                .decimalPlaces(2),
                                             'USD',
                                         ),
                                     }}

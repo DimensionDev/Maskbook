@@ -72,7 +72,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const lostToken = formatBalance(lostTokenValue, trade.inputToken?.decimals ?? 0, 6)
 
     const lostValue = formatCurrency(
-        multipliedBy(inputTokenPrice ?? 0, leftShift(lostTokenValue, trade.inputToken?.decimals ?? 0)),
+        multipliedBy(inputTokenPrice ?? 0, leftShift(lostTokenValue, trade.inputToken?.decimals ?? 0)).decimalPlaces(2),
         '',
     )
 
