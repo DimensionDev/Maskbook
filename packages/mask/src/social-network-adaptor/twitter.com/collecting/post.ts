@@ -160,7 +160,9 @@ export function collectVerificationPost(keyword: string) {
     const postNodes = timelinePostContentSelector().evaluate()
 
     for (const postNode of postNodes) {
-        const postId = getPostId(postNode)
+        const tweetNode = postNode.closest<HTMLElement>('[data-testid=tweet]')
+        if (!tweetNode) continue
+        const postId = getPostId(tweetNode)
         const postContent = postContentMessageParser(postNode)
         const content = postContent
             .map((x) => {
