@@ -42,8 +42,10 @@ jobs:
           path: |
             packages/dashboard/node_modules/.cache/
             packages/theme/node_modules/.cache/
-          key: netlify-${{ steps.get-date.outputs.date }}
-          restore-keys: netlify-
+          key: netlify-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
+          restore-keys: |
+            netlify-${{ hashFiles('pnpm-lock.yaml') }}
+            netlify-
       - run: pnpm install
       - run: npx gulp build-ci-netlify
       - name: Deploy to Netlify

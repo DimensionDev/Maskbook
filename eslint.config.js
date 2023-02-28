@@ -25,51 +25,30 @@ Object.keys(DimensionDevPlugin.rules)
         DimensionDevPlugin.rules[key.replace('/', '-')] = DimensionDevPlugin.rules[key]
     })
 
-const basicRules = {
-    'constructor-super': 'error',
-    'dot-notation': 'error',
+const avoidMistakeRules = {}
+const avoidMistakeRules_ts = {}
+const codeStyleRules = {}
+const codeStyleRules_ts = {}
+const reactRules = {}
+const reactRules_ts = {}
+const moduleSystemRules = {}
+const moduleSystemRules_ts = {}
+
+const rules = {
+    'dot-notation': 'warn',
     eqeqeq: 'error',
     'object-shorthand': 'warn',
     'no-var': 'error',
     'no-bitwise': 'error',
-    'no-debugger': 'error',
+    'no-debugger': 'warn',
     'no-eval': 'error',
     'no-extra-bind': 'error',
-    'no-fallthrough': 'error',
     'no-new-wrappers': 'error',
     'no-plusplus': 'error',
-    'valid-typeof': 'error',
     'no-loss-of-precision': 'error',
-    'no-unsafe-optional-chaining': 'error',
-    'no-unsafe-negation': 'error',
     'no-unsafe-finally': 'error',
     'no-irregular-whitespace': 'error',
     'no-restricted-globals': ['error', 'event', 'name', 'length', 'closed'],
-    'no-restricted-imports': [
-        'error',
-        {
-            paths: [
-                { name: 'lodash', message: 'Please use lodash-es instead.' },
-                { name: 'date-fns', message: 'Please use date-fns/{submodule} instead.' },
-                { name: 'date-fns/esm', message: 'Please use date-fns/{submodule} instead.' },
-                { name: '@masknet/typed-message/base', message: 'Please use @masknet/typed-message instead.' },
-                {
-                    name: '@dimensiondev/holoflows-kit/es',
-                    message: 'Please use @dimensiondev/holoflows-kit instead.',
-                },
-            ],
-        },
-    ],
-    'no-return-await': 'error',
-    'no-sparse-arrays': 'error',
-    'no-template-curly-in-string': 'error',
-    'prefer-const': 'warn',
-    'use-isnan': 'error',
-    'unused-imports/no-unused-imports-ts': 'error',
-    'tss-unused-classes/unused-classes': 'error',
-}
-
-const advancedRules = {
     'no-restricted-imports': [
         'error',
         {
@@ -91,9 +70,15 @@ const advancedRules = {
             ],
         },
     ],
+    'no-return-await': 'error',
+    'no-sparse-arrays': 'error',
+    'no-template-curly-in-string': 'error',
+    'prefer-const': 'warn',
+    'use-isnan': 'error',
+    'unused-imports/no-unused-imports-ts': 'error',
+    'tss-unused-classes/unused-classes': 'error',
     yoda: 'error',
     radix: 'error',
-    eqeqeq: ['error', 'always'],
     'spaced-comment': ['error', 'always', { line: { markers: ['/'] } }],
     'no-cond-assign': 'error',
     'no-constant-condition': 'error',
@@ -105,16 +90,7 @@ const advancedRules = {
     'no-useless-concat': 'error',
     'no-useless-rename': 'error',
     'no-useless-catch': 'error',
-    'no-loss-of-precision': 'error',
     'prefer-regex-literals': 'error',
-    'react/jsx-boolean-value': 'error',
-    'react/jsx-curly-brace-presence': ['warn', { props: 'never', children: 'never' }],
-    'react/jsx-key': 'error',
-    'react/no-invalid-html-attribute': 'error',
-    'react/no-unknown-property': 'error',
-    'react/self-closing-comp': ['warn', { component: true, html: true }],
-    'react-hooks/exhaustive-deps': 'off',
-    'react-hooks/rules-of-hooks': 'error',
     'import/no-deprecated': 'off',
     'import/no-duplicates': 'error',
     'unicorn/better-regex': 'error',
@@ -157,15 +133,32 @@ const advancedRules = {
     '@typescript-eslint/prefer-for-of': 'error',
     '@typescript-eslint/prefer-includes': 'error',
     '@typescript-eslint/prefer-literal-enum-member': 'error',
-    // '@typescript-eslint/prefer-nullish-coalescing': 'error',
     '@typescript-eslint/prefer-optional-chain': 'error',
     '@typescript-eslint/prefer-reduce-type-parameter': 'error',
     '@typescript-eslint/prefer-regexp-exec': 'off',
     '@typescript-eslint/prefer-string-starts-ends-with': 'error',
     '@typescript-eslint/restrict-plus-operands': 'off',
     '@typescript-eslint/restrict-template-expressions': 'off',
+    'react/jsx-boolean-value': 'error',
+    'react/jsx-curly-brace-presence': ['warn', { props: 'never', children: 'never' }],
+    'react/jsx-key': 'error',
+    'react/no-invalid-html-attribute': 'error',
+    'react/no-unknown-property': 'error',
+    'react/self-closing-comp': ['warn', { component: true, html: true }],
+    'react-hooks/exhaustive-deps': 'off',
+    'react-hooks/rules-of-hooks': 'error',
 }
 
+const plugins = {
+    'tss-unused-classes': UnusedClassesPlugin,
+    react: ReactPlugin,
+    import: ImportPlugin,
+    unicorn: UnicornPlugin,
+    '@typescript-eslint': TypeScriptPlugin,
+    '@dimensiondev': DimensionDevPlugin,
+    'unused-imports': UnusedImportsPlugin,
+    'react-hooks': ReactHooksPlugin,
+}
 export default [
     {
         ignores: [
@@ -173,7 +166,6 @@ export default [
             '**/public',
             '**/build',
             '**/dist',
-            '**/package.json',
             '**/i18n_generated.ts',
             '**/.storybook',
             'packages/contracts',
@@ -181,11 +173,10 @@ export default [
             'packages/scripts',
             'packages/netlify/sites',
             'packages/mask/.webpack',
-            'setup',
         ],
     },
     {
-        files: ['**/*.ts', '**/*.tsx'],
+        files: ['packages/**/*.ts', 'packages/**/*.tsx'],
         languageOptions: {
             // Note: --cache is not supported yet if parser is an object https://github.com/eslint/eslint/issues/16875
             parser: TypescriptParser,
@@ -196,22 +187,13 @@ export default [
                 allowAutomaticSingleRunInference: true,
             },
         },
-        plugins: {
-            'tss-unused-classes': UnusedClassesPlugin,
-            react: ReactPlugin,
-            import: ImportPlugin,
-            unicorn: UnicornPlugin,
-            '@typescript-eslint': TypeScriptPlugin,
-            '@dimensiondev': DimensionDevPlugin,
-            'unused-imports': UnusedImportsPlugin,
-            'react-hooks': ReactHooksPlugin,
-        },
+        plugins,
         linterOptions: {
             reportUnusedDisableDirectives: true,
         },
         rules: {
-            ...basicRules,
-            ...advancedRules,
+            ...rules,
+            ...reactRules,
         },
     },
 ]

@@ -12,10 +12,7 @@ permissions:
   pull-requests: read
   packages: read
 
-# Cancels all previous workflow runs for pull requests that have not completed.
 concurrency:
-  # The concurrency group contains the workflow name and the branch name for
-  # pull requests or the commit hash for any other events.
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
   cancel-in-progress: true
 
@@ -45,8 +42,10 @@ jobs:
         uses: actions/cache@v3
         with:
           path: packages/mask/node_modules/.cache/
-          key: extension-${{ steps.get-date.outputs.date }}
-          restore-keys: extension-
+          key: extension-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
+          restore-keys: |
+              extension-${{ hashFiles('pnpm-lock.yaml') }}
+              extension-
       - run: pnpm install
       - run: npx gulp build-ci
       - name: Upload `MaskNetwork.chromium.zip`
