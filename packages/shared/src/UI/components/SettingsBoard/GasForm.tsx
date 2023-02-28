@@ -8,7 +8,7 @@ import { Icons } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, formatGweiToWei, formatWeiToGwei, GasOption, Transaction } from '@masknet/web3-shared-evm'
-import { formatBalance, GasOptionType, isPositive, isZero, scale10 } from '@masknet/web3-shared-base'
+import { formatCurrency, GasOptionType, isPositive, isZero } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useGasSchema } from './hooks/index.js'
@@ -176,7 +176,7 @@ export function GasForm(props: GasFormProps) {
                     }}
                     icon={<Icons.Info />}>
                     {t.gas_settings_info_gas_fee({
-                        fee: formatBalance(scale10(formatWeiToGwei(baseFeePerGas), 2), 2, 2),
+                        fee: formatCurrency(formatWeiToGwei(baseFeePerGas), ''),
                     })}
                 </MaskAlert>
             ) : null}

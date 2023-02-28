@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import formatDistanceStrict from 'date-fns/formatDistanceStrict'
 import addSeconds from 'date-fns/addSeconds'
 import { makeStyles } from '@masknet/theme'
-import { GasOptionType, getLocale, formatPrice } from '@masknet/web3-shared-base'
+import { GasOptionType, getLocale, formatCurrency } from '@masknet/web3-shared-base'
 import { useSharedI18N } from '@masknet/shared'
 import { Typography, useTheme } from '@mui/material'
 import { CheckCircle, RadioButtonUnchecked } from '@mui/icons-material'
@@ -77,7 +77,7 @@ export function GasOption(props: GasOptionProps) {
             </Typography>
             <Typography className={classes.amount}>
                 {t.gas_settings_gas_option_amount_in_gwei({
-                    amount: formatPrice(formatWeiToGwei(option.suggestedMaxFeePerGas), 2),
+                    amount: formatCurrency(formatWeiToGwei(option.suggestedMaxFeePerGas), ''),
                 })}
             </Typography>
         </div>
