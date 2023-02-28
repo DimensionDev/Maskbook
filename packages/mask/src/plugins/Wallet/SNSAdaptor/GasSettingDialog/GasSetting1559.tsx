@@ -274,7 +274,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                                                 .times(nativeTokenPrice)
                                                 .times(gasLimit ?? 21000),
                                             'USD',
-                                            { isGasFeeInUSD: true },
+                                            { onlyRemainTwoDecimal: true },
                                         ),
                                     }}
                                     components={{ span: <span /> }}

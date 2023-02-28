@@ -764,7 +764,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                             .times(etherPrice)
                                             .times(gasLimit),
                                         'USD',
-                                        { isGasFeeInUSD: true },
+                                        { onlyRemainTwoDecimal: true },
                                     ),
                                 }}
                                 components={{ span: <span /> }}
@@ -801,7 +801,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                             .times(etherPrice)
                                             .times(gasLimit),
                                         'USD',
-                                        { isGasFeeInUSD: true },
+                                        { onlyRemainTwoDecimal: true },
                                     ),
                                 }}
                             />

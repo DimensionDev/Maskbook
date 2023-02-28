@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js'
 import { scale10 } from './number.js'
 
 export interface FormatterCurrencyOptions {
-    isGasFeeInUSD?: boolean
+    onlyRemainTwoDecimal?: boolean
 }
 
 const BOUNDARIES = {
@@ -41,7 +41,7 @@ const formatCurrencySymbol = (symbol: string, isLead: boolean) => {
 // https://mask.atlassian.net/wiki/spaces/MASK/pages/122916438/Token
 export function formatCurrency(value: BigNumber.Value, currency = 'USD', options?: FormatterCurrencyOptions): string {
     const bn = new BigNumber(value)
-    const { isGasFeeInUSD = false } = options ?? {}
+    const { onlyRemainTwoDecimal = false } = options ?? {}
     const integerValue = bn.integerValue(1)
     const decimalValue = bn.plus(integerValue.negated())
     const isMoreThanOrEqualToOne = bn.isGreaterThanOrEqualTo(1)
@@ -85,7 +85,7 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD', options
         isDigitalCurrency,
     )
 
-    if (bn.lt(isGasFeeInUSD ? twoDecimalBoundary : sixDecimalBoundary) || bn.isZero()) {
+    if (bn.lt(onlyRemainTwoDecimal ? twoDecimalBoundary : sixDecimalBoundary) || bn.isZero()) {
         const isLessThanTwoDecimalBoundary = bn.lt(twoDecimalBoundary)
         const isLessThanTwelveDecimalBoundary = bn.lt(twelveDecimalBoundary)
         const isGreatThanEightDecimalBoundary = bn.gte(eightDecimalBoundary)
@@ -97,7 +97,7 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD', options
                     case 'fraction':
                         return bn.isZero()
                             ? '0.00'
-                            : isGasFeeInUSD
+                            : onlyRemainTwoDecimal
                             ? '0.01'
                             : isLessThanTwelveDecimalBoundary
                             ? sixDecimalBoundary.toFixed()
@@ -111,7 +111,7 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD', options
             .join('')
 
         return `${
-            (isLessThanTwelveDecimalBoundary || (isGasFeeInUSD && isLessThanTwoDecimalBoundary)) && !bn.isZero()
+            (isLessThanTwelveDecimalBoundary || (onlyRemainTwoDecimal && isLessThanTwoDecimalBoundary)) && !bn.isZero()
                 ? '< '
                 : ''
         }${value}`
@@ -139,7 +139,7 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD', options
                     return formatCurrencySymbol(symbol ?? value, i === 0)
                 case 'fraction':
                     return decimalValue
-                        .toFormat(isGasFeeInUSD ? twoDecimalExp : sixDecimalExp)
+                        .toFormat(onlyRemainTwoDecimal ? twoDecimalExp : sixDecimalExp)
                         .replace('0.', '')
                         .replace(/(0+)$/, '')
                 case 'integer':

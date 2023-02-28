@@ -74,7 +74,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const lostValue = formatCurrency(
         multipliedBy(inputTokenPrice ?? 0, leftShift(lostTokenValue, trade.inputToken?.decimals ?? 0)),
         '',
-        { isGasFeeInUSD: true },
+        { onlyRemainTwoDecimal: true },
     )
 
     const handleOpenPriceImpactDialog = useCallback(() => {
