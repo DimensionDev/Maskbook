@@ -3,6 +3,7 @@ import { Box, Typography, List, ListItem } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Check as CheckIcon, Close as CloseIcon, AddCircleOutline as AddCircleOutlineIcon } from '@mui/icons-material'
 import { useI18N } from '../locales/index.js'
+import { useI18N as useBaseI18n } from '../../../utils/index.js'
 import {
     WalletConnectedBoundary,
     AssetPreviewer,
@@ -10,17 +11,24 @@ import {
     ERC721ContractSelectPanel,
     ChainBoundary,
     EthereumERC721TokenApprovedBoundary,
+    SelectGasSettingsToolbar,
+    useAvailableBalance,
 } from '@masknet/shared'
 import { useNonFungibleOwnerTokens } from '@masknet/web3-hooks-evm'
-import { ChainId, SchemaType, useNftRedPacketConstants, formatTokenId } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, useNftRedPacketConstants, formatTokenId, GasConfig } from '@masknet/web3-shared-evm'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel.js'
 import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog.js'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog.js'
 import { NFTSelectOption } from '../types.js'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useNativeToken, useNativeTokenPrice, useWallet } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import type { NonFungibleToken, NonFungibleCollection } from '@masknet/web3-shared-base'
+import { SmartPayBundler } from '@masknet/web3-providers'
+import { useAsync } from 'react-use'
+import { useCreateNFTRedpacketGas } from './hooks/useCreateNftRedpacketGas.js'
+import { useCurrentIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
+import Services from '../../../extension/service.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -28,7 +36,7 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             alignItems: 'stretch',
             flexDirection: 'column',
-            padding: '0 16px',
+            padding: '0 16px 72px',
         },
         line: {
             display: 'flex',
@@ -198,8 +206,11 @@ interface RedPacketERC721FormProps {
     setOpenSelectNFTDialog: (x: boolean) => void
     setOpenNFTConfirmDialog: (x: boolean) => void
     setIsNFTRedPacketLoaded?: (x: boolean) => void
+    gasOption?: GasConfig
+    onGasOptionChange?: (config: GasConfig) => void
 }
 export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
+    const { t: tr } = useBaseI18n()
     const t = useI18N()
     const {
         onClose,
@@ -208,6 +219,8 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         setOpenNFTConfirmDialog,
         openSelectNFTDialog,
         setOpenSelectNFTDialog,
+        gasOption,
+        onGasOptionChange,
     } = props
     const { classes, cx } = useStyles()
     const [selectOption, setSelectOption] = useState<NFTSelectOption | undefined>(undefined)
@@ -218,6 +231,33 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const tokenDetailedList =
         selectOption === NFTSelectOption.Partial ? manualSelectedTokenDetailedList : onceAllSelectedTokenDetailedList
     const [message, setMessage] = useState('Best Wishes!')
+    const wallet = useWallet()
+    const { value: nativeTokenDetailed } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
+    const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
+    const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
+
+    const currentIdentity = useCurrentIdentity()
+    const { value: linkedPersona } = useAsync(async () => {
+        if (!currentIdentity?.linkedPersona) return
+        return Services.Identity.queryPersona(currentIdentity.linkedPersona)
+    }, [currentIdentity?.linkedPersona])
+
+    const lastRecognized = useLastRecognizedIdentity()
+
+    const senderName =
+        lastRecognized.identifier?.userId ??
+        currentIdentity?.identifier.userId ??
+        linkedPersona?.nickname ??
+        'Unknown User'
+
+    const { value: gasLimit = '0' } = useCreateNFTRedpacketGas(
+        message,
+        senderName,
+        collection?.address ?? '',
+        tokenDetailedList.map((value) => value.tokenId),
+    )
+
+    const { isAvailableGasBalance } = useAvailableBalance('', gasOption, { chainId })
 
     const { value: _tokenDetailedOwnerList = EMPTY_LIST } = useNonFungibleOwnerTokens(
         !collection || collection.assets?.length ? '' : collection?.address ?? '',
@@ -278,7 +318,15 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         if (!balance) return t.erc721_insufficient_balance()
         if (tokenDetailedList.length === 0) return t.select_a_token()
         return ''
-    }, [tokenDetailedList.length, balance, t])
+    }, [tokenDetailedList.length, balance, t, isAvailableGasBalance, tr])
+
+    const gasValidationMessage = useMemo(() => {
+        if (!isAvailableGasBalance) {
+            return tr('no_enough_gas_fees')
+        }
+
+        return ''
+    }, [isAvailableGasBalance, tr])
 
     setIsNFTRedPacketLoaded?.(balance > 0)
 
@@ -302,6 +350,8 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                 tokenList={tokenDetailedList}
                 onBack={() => setOpenNFTConfirmDialog(false)}
                 onClose={onClose}
+                senderName={senderName}
+                gasOption={gasOption}
             />
         )
     }
@@ -380,7 +430,20 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                 {collection && balance ? (
                     <Typography className={classes.approveAllTip}>{t.nft_approve_all_tip()}</Typography>
                 ) : null}
+                {nativeTokenDetailed && nativeTokenPrice ? (
+                    <Box margin={2}>
+                        <SelectGasSettingsToolbar
+                            nativeToken={nativeTokenDetailed}
+                            nativeTokenPrice={nativeTokenPrice}
+                            supportMultiCurrency={!!wallet?.owner && chainId === smartPayChainId}
+                            gasConfig={gasOption}
+                            gasLimit={Number.parseInt(gasLimit, 10)}
+                            onChange={onGasOptionChange}
+                        />
+                    </Box>
+                ) : null}
             </Box>
+
             <Box style={{ position: 'absolute', bottom: 0, width: '100%' }}>
                 <PluginWalletStatusBar>
                     <ChainBoundary
@@ -398,10 +461,10 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                 <ActionButton
                                     style={{ height: 40, padding: 0, margin: 0 }}
                                     size="large"
-                                    disabled={!!validationMessage}
+                                    disabled={!!validationMessage || !!gasValidationMessage}
                                     fullWidth
                                     onClick={() => setOpenNFTConfirmDialog(true)}>
-                                    {t.next()}
+                                    {gasValidationMessage || t.next()}
                                 </ActionButton>
                             </EthereumERC721TokenApprovedBoundary>
                         </WalletConnectedBoundary>

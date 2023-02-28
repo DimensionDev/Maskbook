@@ -149,6 +149,10 @@ export function TrendingView(props: TrendingViewProps) {
     const { value: { trending } = {}, loading: loadingTrending } = useTrendingById(result, result.address)
     // #endregion
 
+    useEffect(() => {
+        if (currentResult) setResult(currentResult)
+    }, [currentResult])
+
     // #region stats
     const [days, setDays] = useState(TrendingAPI.Days.ONE_WEEK)
     const {
@@ -362,18 +366,23 @@ export function TrendingView(props: TrendingViewProps) {
                                       )
                                     : undefined,
                                 defaultOutputCoin: trending.coin
-                                    ? createFungibleToken(
-                                          trending.coin.chainId ?? swapExpectedContract?.chainId ?? chainId,
-                                          isNativeTokenAddress(
-                                              trending.coin.contract_address ?? swapExpectedContract?.address,
+                                    ? isNativeTokenAddress(trending.coin.contract_address)
+                                        ? createFungibleToken(
+                                              trending.coin.chainId as ChainId,
+                                              SchemaType.Native,
+                                              trending.coin.contract_address,
+                                              '',
+                                              '',
+                                              trending.coin.decimals ?? 0,
                                           )
-                                              ? SchemaType.Native
-                                              : SchemaType.ERC20,
-                                          trending.coin.contract_address ?? swapExpectedContract?.address ?? '',
-                                          '',
-                                          '',
-                                          trending.coin.decimals ?? 0,
-                                      )
+                                        : createFungibleToken(
+                                              swapExpectedContract?.chainId as ChainId,
+                                              SchemaType.ERC20,
+                                              swapExpectedContract?.address || '',
+                                              '',
+                                              '',
+                                              trending.coin.decimals ?? 0,
+                                          )
                                     : undefined,
                             }}
                         />

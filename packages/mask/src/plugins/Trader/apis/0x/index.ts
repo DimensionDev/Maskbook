@@ -10,6 +10,7 @@ import type {
 } from '../../types/index.js'
 import type { NetworkType } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
+import { fetchJSON } from '@masknet/web3-providers/helpers'
 
 export async function swapQuote(request: SwapQuoteRequest, networkType: NetworkType) {
     const params: Record<string, string | number> = {}
@@ -21,8 +22,9 @@ export async function swapQuote(request: SwapQuoteRequest, networkType: NetworkT
     if (request.buyTokenPercentageFee)
         params.buyTokenPercentageFee = new BigNumber(request.buyTokenPercentageFee).dividedBy(100).toFixed()
 
-    const response = await fetch(urlcat(ZRX_BASE_URL[networkType], 'swap/v1/quote', params))
-    const response_ = (await response.json()) as SwapQuoteResponse | SwapErrorResponse
+    const response_ = await fetchJSON<SwapQuoteResponse | SwapErrorResponse>(
+        urlcat(ZRX_BASE_URL[networkType], 'swap/v1/quote', params),
+    )
 
     const validationErrorResponse = response_ as SwapValidationErrorResponse
     if (validationErrorResponse.code)

@@ -81,7 +81,7 @@ export function formatTransactions(
                         symbol: token_dict[token_id]?.optimized_symbol,
                         address: token_id,
                         direction: DebankTransactionDirection.SEND,
-                        amount: amount.toString(),
+                        amount: amount?.toString(),
                         logoURI: token_dict[token_id].logo_url,
                     })),
                     ...transaction.receives.map(({ amount, token_id }) => ({
@@ -93,12 +93,12 @@ export function formatTransactions(
                         symbol: token_dict[token_id]?.optimized_symbol,
                         address: token_id,
                         direction: DebankTransactionDirection.RECEIVE,
-                        amount: amount.toString(),
+                        amount: amount?.toString(),
                         logoURI: token_dict[token_id]?.logo_url,
                     })),
                 ],
                 fee: transaction.tx
-                    ? { eth: transaction.tx.eth_gas_fee.toString(), usd: transaction.tx.usd_gas_fee.toString() }
+                    ? { eth: transaction.tx.eth_gas_fee?.toString(), usd: transaction.tx.usd_gas_fee?.toString() }
                     : undefined,
             }
         })

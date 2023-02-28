@@ -166,6 +166,7 @@
     "setup_guide_verify_checking": "正在检查",
     "setup_guide_verify_post_not_found": "未找到任何验证贴文",
     "setup_guide_connected_title": "连接并验证成功。",
+    "setup_guide_connected_description": "尝试探索社交媒体上的 Web3 dApps 功能。",
     "setup_guide_verifying": "正在验证",
     "setup_guide_verifying_failed": "重新验证",
     "user_guide_tip_connected": "您已成功连接到此帐户。",

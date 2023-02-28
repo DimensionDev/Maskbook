@@ -90,12 +90,12 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     if (!contentComponent) return null
 
     return (
-        <div className={classes.root}>
+        <div>
             <ScopedDomainsContainer.Provider>
                 <div className={classes.contentWrapper}>
-                    <div className={classes.content}>{contentComponent}</div>
+                    <div>{contentComponent}</div>
                     {tabs.length ? (
-                        <div className={classes.tabs}>
+                        <div>
                             <TabContext value={currentTab}>
                                 <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
                                     {tabs.map((tab) => (

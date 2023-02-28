@@ -4,6 +4,7 @@
     "select_a_token": "选择代币",
     "grant_not_available": "授权不可用",
     "enter_an_amount": "输入数额",
+    "insufficient_balance": "{{symbol}} 余额不足",
     "gitcoin_readme": "通过使用此服务，您将同时向 <fund>Gitcoin grants development fund</fund> 捐赠您5%捐款。",
     "donate": "捐赠",
     "share": "分享",
