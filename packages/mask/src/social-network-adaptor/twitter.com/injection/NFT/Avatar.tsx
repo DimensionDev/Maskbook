@@ -11,7 +11,7 @@ function getTwitterId(ele: HTMLElement) {
     )
     for (const node of twitterIdNodes) {
         const id = node.innerText
-        if (id && id[0] === '@') return id.replace('@', '')
+        if (id?.startsWith('@')) return id.replace('@', '')
     }
 
     return

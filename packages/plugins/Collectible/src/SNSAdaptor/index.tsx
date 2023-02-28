@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { Box } from '@mui/material'

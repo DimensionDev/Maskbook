@@ -16,4 +16,5 @@ export const CompositionContext = createContext<CompositionContext>({
 })
 CompositionContext.displayName = 'CompositionContext'
 export const useCompositionContext = () => useContext(CompositionContext)
+// eslint-disable-next-line @typescript-eslint/prefer-optional-chain
 import.meta.webpackHot && import.meta.webpackHot.accept()

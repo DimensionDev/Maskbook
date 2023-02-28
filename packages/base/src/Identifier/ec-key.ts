@@ -61,5 +61,4 @@ Object.freeze(ECKeyIdentifier.prototype)
 Object.freeze(ECKeyIdentifier)
 
 export type PersonaIdentifier = ECKeyIdentifier
-// eslint-disable-next-line no-redeclare
 export const PersonaIdentifier = [ECKeyIdentifier]

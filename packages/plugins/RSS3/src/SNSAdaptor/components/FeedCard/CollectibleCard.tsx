@@ -215,7 +215,6 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
                                 user,
                                 collectible: verbose ? metadata!.name : 'an NFT',
                                 other: formatEthereumAddress(otherAddress ?? '', 4),
-                                /* eslint-disable no-nested-ternary */
                                 context: isSending ? 'send' : costMetadata ? 'claim_cost' : 'claim',
                                 cost_value: formatValue(costMetadata),
                                 cost_symbol: costMetadata?.symbol!,

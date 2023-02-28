@@ -16,6 +16,7 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
             return
         }
 
+        // eslint-disable-next-line @typescript-eslint/await-thenable
         const transaction = await nftRedPacketContract.methods.claim(id, signedMsg, account)
         const tx = await new ContractTransaction(nftRedPacketContract).fillAll(transaction, {
             from: account,

@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import { useCallback } from 'react'
 import { openWindow, useValueRef } from '@masknet/shared-base-ui'
 import { Button, Typography } from '@mui/material'
