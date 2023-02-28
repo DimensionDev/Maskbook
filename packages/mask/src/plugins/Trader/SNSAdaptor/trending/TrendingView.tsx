@@ -188,12 +188,12 @@ export function TrendingView(props: TrendingViewProps) {
     }, [trending, chainId])
     // #endregion
 
+    console.log(swapExpectedContract)
     // #region if the coin is a native token or contract address exists
     const isSwappable =
         !isMinimalMode &&
         !isNFT &&
         !!trending?.coin.contract_address &&
-        chainIdValid &&
         (!swapExpectedContract?.pluginID || swapExpectedContract?.pluginID === NetworkPluginID.PLUGIN_EVM)
     // #endregion
 
