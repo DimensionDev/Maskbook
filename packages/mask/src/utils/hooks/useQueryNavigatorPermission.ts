@@ -5,9 +5,9 @@ import { Flags } from '../../../shared/index.js'
 
 const q = ['query', 'request', 'revoke'] as const
 
-function checkPermissionApiUsability(type?: typeof q[number]) {
+function checkPermissionApiUsability(type?: (typeof q)[number]) {
     const r: Partial<{
-        [T in typeof q[number]]: boolean
+        [T in (typeof q)[number]]: boolean
     }> = {}
     for (const v of q) {
         r[v] = hasIn(navigator, `permissions.${v}`)

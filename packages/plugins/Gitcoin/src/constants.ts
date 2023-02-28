@@ -20,7 +20,7 @@ export const TENANTS = [
     'ZIL',
 ] as const
 export const SUPPORTED_TENANTS = ['ETH']
-export type TenantTypes = typeof TENANTS[number]
+export type TenantTypes = (typeof TENANTS)[number]
 
 export const TenantToChainIconMap: Record<TenantTypes, GeneratedIcon> = {
     ALGORAND: Icons.Algorand,

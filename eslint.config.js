@@ -14,6 +14,7 @@ import DimensionDevPlugin from '@dimensiondev/eslint-plugin'
 import { pathToFileURL } from 'url'
 // this is a patch to https://github.com/typescript-eslint/typescript-eslint/issues/3811
 if (pathToFileURL(process.argv[1]).toString().includes('eslint/bin/eslint.js')) {
+    // cspell: disable-next-line
     process.env.TSESTREE_SINGLE_RUN = 'true'
 }
 
