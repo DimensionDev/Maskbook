@@ -1,5 +1,5 @@
 import type { MouseEventHandler } from 'react'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -11,6 +11,8 @@ import { useI18N as useBaseI18n } from '../../../../utils/index.js'
 import { useI18N } from '../../locales/index.js'
 import { ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { useAsync } from 'react-use'
+import { SmartPayBundler } from '@masknet/web3-providers'
 
 export const useStyles = makeStyles()((theme) => {
     const spinningAnimationKeyFrames = keyframes`
@@ -57,6 +59,10 @@ export function OperationFooter({
     const t = useI18N()
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId })
     const theme = useTheme()
+
+    const wallet = useWallet()
+
+    const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     // #region remote controlled select provider dialog
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
@@ -123,6 +129,7 @@ export function OperationFooter({
                         ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                         <WalletConnectedBoundary
                             hideRiskWarningConfirmed
+                            isSmartPay={!!wallet?.owner && chainId === smartPayChainId}
                             expectedChainId={chainId ?? ChainId.Mainnet}
                             startIcon={<Icons.ConnectWallet size={18} />}
                             ActionButtonProps={{ variant: 'roundedDark' }}>

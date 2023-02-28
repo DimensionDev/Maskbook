@@ -140,6 +140,7 @@ export function SelectGasSettingsToolbarUI({
     const t = useSharedI18N()
     const { classes, cx, theme } = useStyles()
     const { gasOptions, GAS_OPTION_NAMES } = SettingsContext.useContainer()
+
     const [approveDialogOpen, setApproveDialogOpen] = useState(false)
     const [isCustomGas, setIsCustomGas] = useState(false)
     const [currentGasOptionType, setCurrentGasOptionType] = useState<GasOptionType>(GasOptionType.NORMAL)

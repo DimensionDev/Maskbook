@@ -48,7 +48,6 @@ export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
     const personas = await queryOwnedPersonaInformation(true)
     MaskMessages.events.restoreSuccess.sendToAll({
         wallets: compact([...wallets.map((x) => x.address), ...personas.map((x) => x.address)]),
-        // wallets: [...wallets, ...personas.map((x) => ({ address: x.address, name: x.nickname }))],
     })
 }
 
