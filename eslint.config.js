@@ -11,6 +11,12 @@ import ReactHooksPlugin from 'eslint-plugin-react-hooks'
 // @ts-expect-error
 import DimensionDevPlugin from '@dimensiondev/eslint-plugin'
 
+import { pathToFileURL } from 'url'
+// this is a patch to https://github.com/typescript-eslint/typescript-eslint/issues/3811
+if (pathToFileURL(process.argv[1]).toString().includes('eslint/bin/eslint.js')) {
+    process.env.TSESTREE_SINGLE_RUN = 'true'
+}
+
 // Note: update our plugin
 Object.keys(DimensionDevPlugin.rules)
     .filter((x) => x.includes('/'))
