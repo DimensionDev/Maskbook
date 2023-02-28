@@ -3,7 +3,6 @@ import { useAsyncRetry } from 'react-use'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { SearchResultType, SocialIdentity } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
 import { DSearch } from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -43,7 +42,7 @@ export function TagInspector(props: TagInspectorProps) {
         [],
     )
     return (
-        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
             <TrendingPopper>{createTrendingView}</TrendingPopper>
         </Web3ContextProvider>
     )
