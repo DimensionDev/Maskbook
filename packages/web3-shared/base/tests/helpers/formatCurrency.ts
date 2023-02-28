@@ -32,14 +32,6 @@ describe('USD Currency price format util test', () => {
     })
 })
 
-describe('USD Currency value format util test', () => {
-    test.each([{ give: 0.001, expected: '< 0.01' }])('.format($give)', ({ give, expected }) => {
-        expect(
-            formatCurrency(give, 'USD', { boundaries: { min: 0.01, minExp: 2, expandExp: 0 }, symbols: { $: '' } }),
-        ).toBe(expected)
-    })
-})
-
 describe('EUR Currency format util test', () => {
     test.each([
         { give: 0, expected: '\u20AC0.00' },
@@ -74,7 +66,7 @@ describe('Digital currency format util test', () => {
         { give: 1.55, currency: 'ETH', expected: '1.55 \u039E' },
         { give: 1.55, currency: 'BTC', expected: '1.55 \u20BF' },
         { give: 0, currency: 'MATIC', expected: '0.00 MATIC' },
-        { give: 0.00000001, currency: 'MATIC', expected: '< 0.000001 MATIC' },
+        { give: 0.000000001, currency: 'MATIC', expected: '0.000000001 MATIC' },
         { give: 1.55, currency: 'MATIC', expected: '1.55 MATIC' },
     ])('.format($give)', ({ give, currency, expected }) => {
         const result = formatCurrency(give, currency)
@@ -85,9 +77,9 @@ describe('Digital currency format util test', () => {
 
 describe('None currency format util test', () => {
     test.each([
-        { give: 0, currency: '', expected: '0.00 ' },
-        { give: 1.55, currency: '', expected: '1.55 ' },
-        { give: 0.00000001, currency: '', expected: '< 0.000001 ' },
+        { give: 0, currency: '', expected: '0.00' },
+        { give: 1.55, currency: '', expected: '1.55' },
+        { give: 0.00000001, currency: '', expected: '0.00000001' },
     ])('.format($give)', ({ give, currency, expected }) => {
         const result = formatCurrency(give, currency)
         expect(result).toBe(expected)

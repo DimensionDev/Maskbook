@@ -17,7 +17,7 @@ const DEFAULT_BOUNDARIES = {
     expandExp: 6,
 }
 
-const DEFAULT_CRYPTO_CURRENCY_SYMBOLS: Record<string, string> = {
+const DEFAULT_CURRENCY_SYMBOLS: Record<string, string> = {
     BTC: '\u20BF',
     ETH: '\u039E',
     SOL: '\u25CE',
@@ -28,34 +28,22 @@ const DEFAULT_CRYPTO_CURRENCY_SYMBOLS: Record<string, string> = {
     MATIC: 'MATIC',
 }
 
-const digitalCurrencyModifier = (parts: Intl.NumberFormatPart[], symbols: Record<string, string>) => {
-    const [currencyPart, literalPart, ...rest] = parts
-    const symbol = symbols[currencyPart.value]
-    if (symbol) return [...rest, literalPart, { ...currencyPart, value: symbol }]
+const digitalCurrencyModifier = (parts: Intl.NumberFormatPart[], symbol: string, isDigitalCurrency: boolean) => {
+    if (!isDigitalCurrency) return parts
+    const [currencyPart, ...rest] = parts
+    if (symbol) return [...rest, { ...currencyPart, value: symbol }]
     return parts
 }
 
-/**
- * format token currency
- *
- * 1. price > 1: two decimal places are reserved.
- * 2. 0.000001 <= price < 1
- *      6 decimal places are displayed. The maximum number of digits for USDT Decimals is 6. If the actual number of valid digits after the decimal point is within 6 digits, the valid digits are displayed. Examples are as follows.
- *          0.130000 Display 0.13
- *          0.21100000 shows 0.211
- *
- *      If the actual number of valid digits after the decimal point is more than 6, the first 6 digits will be rounded off. If other token has 18 bits of precision reading, only the first 6 bits are displayed. 0.1234567895548, displayed as 0.123457
- *
- * 3. price < 0.000001, indicating that the price is less than six decimal places
- *
- * @returns format result
- * @param value
- * @param currency
- */
+const formatCurrencySymbol = (symbol: string, isLead: boolean) => {
+    return isLead || symbol.length === 0 ? symbol : ` ${symbol}`
+}
+
+// https://mask.atlassian.net/wiki/spaces/MASK/pages/122916438/Token
 export function formatCurrency(
     value: BigNumber.Value,
     currency = 'USD',
-    { boundaries = {}, symbols = {} }: FormatterCurrencyOptions = {},
+    { boundaries = {} }: FormatterCurrencyOptions = {},
 ): string {
     const bn = new BigNumber(value)
     const integerValue = bn.integerValue(1)
@@ -63,31 +51,46 @@ export function formatCurrency(
     const isMoreThanOrEqualToOne = bn.isGreaterThanOrEqualTo(1)
 
     const { min, minExp, expandExp } = defaults({}, boundaries, DEFAULT_BOUNDARIES)
-    const resolvedSymbols = defaults({}, symbols, DEFAULT_CRYPTO_CURRENCY_SYMBOLS)
 
-    const symbol = currency ? DEFAULT_CRYPTO_CURRENCY_SYMBOLS[currency] : ''
+    const symbol = currency ? DEFAULT_CURRENCY_SYMBOLS[currency] : ''
 
-    const formatter = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: symbol || symbol === '' ? 'USD' : currency,
-        currencyDisplay: 'narrowSymbol',
-    })
+    let formatter: Intl.NumberFormat
+    let isIntlCurrencyValid = !DEFAULT_CURRENCY_SYMBOLS[currency]
 
-    if (bn.isZero()) {
-        return symbol !== undefined ? `0.00 ${symbol}` : formatter.format(0)
+    try {
+        formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: isIntlCurrencyValid ? currency : 'USD',
+            currencyDisplay: 'narrowSymbol',
+        })
+    } catch {
+        isIntlCurrencyValid = false
+        formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            currencyDisplay: 'narrowSymbol',
+        })
     }
 
-    if (bn.lt(min)) {
-        if (symbol !== undefined) return `< ${min} ${symbol}`
+    const isDigitalCurrency = Boolean(!isIntlCurrencyValid && symbol)
+    const digitalCurrencyModifierValues = digitalCurrencyModifier(
+        formatter.formatToParts(bn.isZero() ? 0 : bn.lt(min) ? min : bn.toNumber()),
+        symbol,
+        isDigitalCurrency,
+    )
+
+    if (bn.lt(min) || bn.isZero()) {
         const expandBoundary = scale10(1, -minExp - expandExp)
         const isLessThanExpanded = bn.lt(expandBoundary)
-        const value = digitalCurrencyModifier(formatter.formatToParts(min), resolvedSymbols)
-            .map(({ type, value }) => {
+        const value = digitalCurrencyModifierValues
+            .map(({ type, value }, i) => {
                 switch (type) {
                     case 'currency':
-                        return resolvedSymbols[value] ?? value
+                        return formatCurrencySymbol(symbol ?? value, i === 0)
                     case 'fraction':
-                        return isLessThanExpanded
+                        return bn.isZero()
+                            ? '0.00'
+                            : isLessThanExpanded
                             ? expandBoundary.toFixed()
                             : bn.toFixed(minExp + expandExp).replace(/0+$/, '')
                     default:
@@ -95,22 +98,18 @@ export function formatCurrency(
                 }
             })
             .join('')
-        return `${isLessThanExpanded ? '< ' : ''}${value}`
+
+        return `${isLessThanExpanded && !bn.isZero() ? '< ' : ''}${value}`
     }
-
-    if (symbol !== undefined) return `${bn.toNumber()} ${symbol}`
-
-    const digitalCurrencyModifierValues = digitalCurrencyModifier(
-        formatter.formatToParts(bn.toNumber()),
-        resolvedSymbols,
-    )
 
     if (isMoreThanOrEqualToOne) {
         return digitalCurrencyModifierValues
-            .map(({ type, value }) => {
+            .map(({ type, value }, i) => {
                 switch (type) {
                     case 'currency':
-                        return resolvedSymbols[value] ?? value
+                        return formatCurrencySymbol(symbol ?? value, i === 0)
+                    case 'literal':
+                        return ''
                     default:
                         return value
                 }
@@ -119,15 +118,16 @@ export function formatCurrency(
     }
 
     return digitalCurrencyModifierValues
-        .map(({ type, value }) => {
+        .map(({ type, value }, i) => {
             switch (type) {
                 case 'currency':
-                    return resolvedSymbols[value] ?? value
+                    return formatCurrencySymbol(symbol ?? value, i === 0)
                 case 'fraction':
-                    const unFormatString = decimalValue.toFormat(isMoreThanOrEqualToOne ? 2 : 6).replace('0.', '')
-                    return bn.gte(1) || isMoreThanOrEqualToOne ? unFormatString : unFormatString.replace(/(0+)$/, '')
+                    return decimalValue.toFormat(6).replace('0.', '').replace(/(0+)$/, '')
                 case 'integer':
                     return '0'
+                case 'literal':
+                    return ''
                 default:
                     return value
             }

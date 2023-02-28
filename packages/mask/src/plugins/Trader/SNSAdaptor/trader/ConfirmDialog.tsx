@@ -73,14 +73,10 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
     const lostValue = formatCurrency(
         multipliedBy(inputTokenPrice ?? 0, leftShift(lostTokenValue, trade.inputToken?.decimals ?? 0)),
-        'USD',
+        '',
         {
             boundaries: {
                 min: 0.01,
-            },
-            symbols: {
-                // hide USD symbol
-                $: '',
             },
         },
     )
