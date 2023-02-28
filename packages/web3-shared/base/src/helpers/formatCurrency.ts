@@ -1,23 +1,17 @@
 import { BigNumber } from 'bignumber.js'
-import { defaults } from 'lodash-es'
 import { scale10 } from './number.js'
 
-export interface FormatterCurrencyOptions {
-    symbols?: Record<string, string>
-    boundaries?: {
-        min?: BigNumber.Value
-        minExp?: number
-        expandExp?: number
-    }
+const BOUNDARIES = {
+    twoDecimalBoundary: scale10(1, -2),
+    sixDecimalBoundary: scale10(1, -6),
+    eightDecimalBoundary: scale10(1, -8),
+    twelveDecimalBoundary: scale10(1, -12),
+    sixDecimalExp: 6,
+    eightDecimalExp: 8,
+    twelveDecimalExp: 12,
 }
 
-const DEFAULT_BOUNDARIES = {
-    min: 0.000001,
-    minExp: 6,
-    expandExp: 6,
-}
-
-const DEFAULT_CURRENCY_SYMBOLS: Record<string, string> = {
+const DIGITAL_CURRENCY_SYMBOLS: Record<string, string> = {
     BTC: '\u20BF',
     ETH: '\u039E',
     SOL: '\u25CE',
@@ -40,22 +34,25 @@ const formatCurrencySymbol = (symbol: string, isLead: boolean) => {
 }
 
 // https://mask.atlassian.net/wiki/spaces/MASK/pages/122916438/Token
-export function formatCurrency(
-    value: BigNumber.Value,
-    currency = 'USD',
-    { boundaries = {} }: FormatterCurrencyOptions = {},
-): string {
+export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string {
     const bn = new BigNumber(value)
     const integerValue = bn.integerValue(1)
     const decimalValue = bn.plus(integerValue.negated())
     const isMoreThanOrEqualToOne = bn.isGreaterThanOrEqualTo(1)
 
-    const { min, minExp, expandExp } = defaults({}, boundaries, DEFAULT_BOUNDARIES)
+    const {
+        sixDecimalBoundary,
+        twoDecimalBoundary,
+        twelveDecimalBoundary,
+        eightDecimalBoundary,
+        sixDecimalExp,
+        twelveDecimalExp,
+    } = BOUNDARIES
 
-    const symbol = currency ? DEFAULT_CURRENCY_SYMBOLS[currency] : ''
+    const symbol = currency ? DIGITAL_CURRENCY_SYMBOLS[currency] : ''
 
     let formatter: Intl.NumberFormat
-    let isIntlCurrencyValid = !DEFAULT_CURRENCY_SYMBOLS[currency]
+    let isIntlCurrencyValid = !DIGITAL_CURRENCY_SYMBOLS[currency]
 
     try {
         formatter = new Intl.NumberFormat('en-US', {
@@ -74,14 +71,17 @@ export function formatCurrency(
 
     const isDigitalCurrency = Boolean(!isIntlCurrencyValid && symbol)
     const digitalCurrencyModifierValues = digitalCurrencyModifier(
-        formatter.formatToParts(bn.isZero() ? 0 : bn.lt(min) ? min : bn.toNumber()),
+        formatter.formatToParts(
+            bn.isZero() ? 0 : bn.lt(sixDecimalBoundary) ? sixDecimalBoundary.toNumber() : bn.toNumber(),
+        ),
         symbol,
         isDigitalCurrency,
     )
 
-    if (bn.lt(min) || bn.isZero()) {
-        const expandBoundary = scale10(1, -minExp - expandExp)
-        const isLessThanExpanded = bn.lt(expandBoundary)
+    if (bn.lt(sixDecimalBoundary) || bn.isZero()) {
+        const isLessThanTwoDecimalBoundary = bn.lt(twoDecimalBoundary)
+        const isLessThanTwelveDecimalBoundary = bn.lt(twelveDecimalBoundary)
+        const isGreatThanEightDecimalBoundary = bn.gte(eightDecimalBoundary)
         const value = digitalCurrencyModifierValues
             .map(({ type, value }, i) => {
                 switch (type) {
@@ -90,16 +90,18 @@ export function formatCurrency(
                     case 'fraction':
                         return bn.isZero()
                             ? '0.00'
-                            : isLessThanExpanded
-                            ? expandBoundary.toFixed()
-                            : bn.toFixed(minExp + expandExp).replace(/0+$/, '')
+                            : isLessThanTwelveDecimalBoundary
+                            ? sixDecimalBoundary.toFixed()
+                            : isGreatThanEightDecimalBoundary
+                            ? bn.decimalPlaces(10).toFixed(twelveDecimalExp).replace(/0+$/, '')
+                            : bn.toFixed(twelveDecimalExp).replace(/0+$/, '')
                     default:
                         return ''
                 }
             })
             .join('')
 
-        return `${isLessThanExpanded && !bn.isZero() ? '< ' : ''}${value}`
+        return `${isLessThanTwelveDecimalBoundary && !bn.isZero() ? '< ' : ''}${value}`
     }
 
     if (isMoreThanOrEqualToOne) {
@@ -123,7 +125,7 @@ export function formatCurrency(
                 case 'currency':
                     return formatCurrencySymbol(symbol ?? value, i === 0)
                 case 'fraction':
-                    return decimalValue.toFormat(6).replace('0.', '').replace(/(0+)$/, '')
+                    return decimalValue.toFormat(sixDecimalExp).replace('0.', '').replace(/(0+)$/, '')
                 case 'integer':
                     return '0'
                 case 'literal':

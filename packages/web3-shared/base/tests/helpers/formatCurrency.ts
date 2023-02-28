@@ -23,12 +23,12 @@ describe('USD Currency price format util test', () => {
         { give: 0.000001, expected: '$0.000001' },
         { give: 0.00000101, expected: '$0.000001' },
         { give: 0.000002, expected: '$0.000002' },
-        { give: 1e-9, options: { boundaries: { min: 0.000001, expand: 6 } }, expected: '$0.000000001' },
-        { give: 1e-13, options: { boundaries: { min: 0.000001, expand: 6 } }, expected: '< $0.000000000001' },
+        { give: 1e-9, expected: '$0.000000001' },
+        { give: 1e-13, expected: '< $0.000001' },
         { give: 0.9993631112, expected: '$0.999363' },
         { give: 1.999363, expected: '$2.00' },
-    ])('.formatCurrency($give)', ({ give, options, expected }) => {
-        expect(formatCurrency(give, undefined, options)).toBe(expected)
+    ])('.formatCurrency($give)', ({ give, expected }) => {
+        expect(formatCurrency(give, undefined)).toBe(expected)
     })
 })
 
@@ -54,7 +54,8 @@ describe('EUR Currency format util test', () => {
         { give: 0.000001, expected: '\u20AC0.000001' },
         { give: 0.00000101, expected: '\u20AC0.000001' },
         { give: 0.000002, expected: '\u20AC0.000002' },
-        { give: 1e-15, expected: '< \u20AC0.000000000001' },
+        { give: 0.000000135554455, expected: '\u20AC0.0000001356' },
+        { give: 1e-15, expected: '< \u20AC0.000001' },
     ])('.format($give)', ({ give, expected }) => {
         expect(formatCurrency(give, 'EUR')).toBe(expected)
     })
@@ -68,6 +69,11 @@ describe('Digital currency format util test', () => {
         { give: 0, currency: 'MATIC', expected: '0.00 MATIC' },
         { give: 0.000000001, currency: 'MATIC', expected: '0.000000001 MATIC' },
         { give: 1.55, currency: 'MATIC', expected: '1.55 MATIC' },
+        { give: 1.5545555, currency: 'MATIC', expected: '1.55 MATIC' },
+        { give: 2.00000001, currency: 'MATIC', expected: '2.00 MATIC' },
+        { give: 0.12550025, currency: 'MATIC', expected: '0.1255 MATIC' },
+        { give: 0.000000135554455, currency: 'MATIC', expected: '0.0000001356 MATIC' },
+        { give: 0.000000000000111135, currency: 'MATIC', expected: '< 0.000001 MATIC' },
     ])('.format($give)', ({ give, currency, expected }) => {
         const result = formatCurrency(give, currency)
 
@@ -80,6 +86,12 @@ describe('None currency format util test', () => {
         { give: 0, currency: '', expected: '0.00' },
         { give: 1.55, currency: '', expected: '1.55' },
         { give: 0.00000001, currency: '', expected: '0.00000001' },
+        { give: 2.00000001, currency: '', expected: '2.00' },
+        { give: 0.12550025, currency: '', expected: '0.1255' },
+        { give: 0.3355899, currency: '', expected: '0.33559' },
+        { give: 0.000000135554455, currency: '', expected: '0.0000001356' },
+        { give: 0.000000000000111135, currency: '', expected: '< 0.000001' },
+        { give: 56.1351212, currency: '', expected: '56.14' },
     ])('.format($give)', ({ give, currency, expected }) => {
         const result = formatCurrency(give, currency)
         expect(result).toBe(expected)
