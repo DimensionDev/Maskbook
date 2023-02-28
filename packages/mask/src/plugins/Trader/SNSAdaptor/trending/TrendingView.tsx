@@ -193,7 +193,6 @@ export function TrendingView(props: TrendingViewProps) {
         !isMinimalMode &&
         !isNFT &&
         !!trending?.coin.contract_address &&
-        chainIdValid &&
         (!swapExpectedContract?.pluginID || swapExpectedContract?.pluginID === NetworkPluginID.PLUGIN_EVM)
     // #endregion
 
