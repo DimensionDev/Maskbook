@@ -2,7 +2,6 @@ import { BigNumber } from 'bignumber.js'
 import { scale10 } from './number.js'
 
 const BOUNDARIES = {
-    twoDecimalBoundary: scale10(1, -2),
     sixDecimalBoundary: scale10(1, -6),
     eightDecimalBoundary: scale10(1, -8),
     twelveDecimalBoundary: scale10(1, -12),
@@ -40,14 +39,8 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string
     const decimalValue = bn.plus(integerValue.negated())
     const isMoreThanOrEqualToOne = bn.isGreaterThanOrEqualTo(1)
 
-    const {
-        sixDecimalBoundary,
-        twoDecimalBoundary,
-        twelveDecimalBoundary,
-        eightDecimalBoundary,
-        sixDecimalExp,
-        twelveDecimalExp,
-    } = BOUNDARIES
+    const { sixDecimalBoundary, twelveDecimalBoundary, eightDecimalBoundary, sixDecimalExp, twelveDecimalExp } =
+        BOUNDARIES
 
     const symbol = currency ? DIGITAL_CURRENCY_SYMBOLS[currency] : ''
 
@@ -79,7 +72,6 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string
     )
 
     if (bn.lt(sixDecimalBoundary) || bn.isZero()) {
-        const isLessThanTwoDecimalBoundary = bn.lt(twoDecimalBoundary)
         const isLessThanTwelveDecimalBoundary = bn.lt(twelveDecimalBoundary)
         const isGreatThanEightDecimalBoundary = bn.gte(eightDecimalBoundary)
         const value = digitalCurrencyModifierValues
