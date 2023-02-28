@@ -346,7 +346,7 @@ export function TrendingView(props: TrendingViewProps) {
                             pluginID: context.pluginID,
                             chainId: isNativeTokenSymbol(trending.coin.symbol)
                                 ? trending.coin.chainId
-                                : swapExpectedContract?.chainId,
+                                : trending.coin.chainId || swapExpectedContract?.chainId,
                         }}>
                         <TradeView
                             classes={{ root: classes.tradeViewRoot }}
