@@ -167,8 +167,7 @@ export function createNonFungibleAsset(
             // If collectionContext.logo_url is null, we will directly render a fallback logo instead.
             // So do not fallback to the constructed NFTScan logo url
             iconURL: collection ? collection.logo_url : `${urlcat(NFTSCAN_LOGO_BASE, asset.contract_address)}.png`,
-            // TODO fetch via `collections` API
-            verified: false,
+            verified: collection?.verified || collection?.opensea_verified,
             createdAt: asset.mint_timestamp,
         },
         source: SourceType.NFTScan,
