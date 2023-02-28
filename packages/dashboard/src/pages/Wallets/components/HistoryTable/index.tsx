@@ -2,7 +2,7 @@ import { Dispatch, memo, SetStateAction, useMemo, useState } from 'react'
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import { LoadingBase, makeStyles, MaskColorVar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useTransactions, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useTransactions, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Transaction } from '@masknet/web3-shared-base'
 import { HistoryTableRow } from '../HistoryTableRow/index.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
@@ -35,7 +35,6 @@ interface HistoryTableProps {
 export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
     const [page, setPage] = useState(0)
     const { pluginID } = useNetworkContext()
-    const { account } = useChainContext()
     const iterator = useTransactions(pluginID, { chainId: selectedChainId })
     const {
         value = EMPTY_LIST,
@@ -113,7 +112,9 @@ export const HistoryTableUI = memo<HistoryTableUIProps>(({ dataSource, next, don
                     <LoadingBase />
                 </Box>
             )}
-            <ElementAnchor callback={() => next?.()}>{!done && dataSource?.length && <LoadingBase />}</ElementAnchor>
+            <ElementAnchor callback={() => next?.()}>
+                {!done && dataSource?.length ? <LoadingBase /> : null}
+            </ElementAnchor>
         </>
     )
 })
