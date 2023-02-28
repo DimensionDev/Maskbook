@@ -139,5 +139,11 @@ export function useCurrentPersonaConnectStatus(
 
     useEffect(() => message?.events.ownPersonaChanged.on(retry), [retry, message])
 
+    useEffect(() => {
+        return message?.events.ownProofChanged.on(() => {
+            retry()
+        })
+    }, [message, retry])
+
     return { value, loading, retry, error }
 }
