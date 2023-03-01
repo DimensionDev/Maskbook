@@ -19,11 +19,12 @@ export async function fetch(input: RequestInfo | URL, init?: RequestInit, fetche
         throw error
     } finally {
         if (hasError) {
-            const url = new URL(new Request(input, init).url)
+            const request = new Request(input, init)
 
-            Sentry.captureException(new Error(`Failed to fetch: ${url}`), {
+            Sentry.captureException(new Error(`Failed to fetch: ${request.url}`), {
                 tags: {
-                    source: url.host,
+                    source: new URL(request.url).host,
+                    url: request.url,
                 },
             })
         }
