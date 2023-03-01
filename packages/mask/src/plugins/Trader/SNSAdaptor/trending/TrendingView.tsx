@@ -2,12 +2,7 @@ import { useEffect, useMemo, useState, useContext, useCallback } from 'react'
 import { compact, first } from 'lodash-es'
 import { TrendingViewContext } from './context.js'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import {
-    useChainContext,
-    useChainIdValid,
-    useNonFungibleAssetsByCollection,
-    Web3ContextProvider,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useNonFungibleAssetsByCollection, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
 import { createFungibleToken, SocialIdentity, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -115,8 +110,15 @@ const useStyles = makeStyles<{
             gap: 12,
         },
         hidden: {
+            padding: 0,
             visibility: 'hidden',
             height: 0,
+        },
+        divider: {
+            width: '100%',
+            height: 1,
+            background: theme.palette.divider,
+            margin: '8px 0',
         },
     }
 })
@@ -133,13 +135,12 @@ export interface TrendingViewProps {
 export function TrendingView(props: TrendingViewProps) {
     const { resultList, identity, setActive, currentResult } = props
     const [result, setResult] = useState(currentResult ?? resultList[0])
-    const { isTokenTagPopper, isCollectionProjectPopper, isProfilePage } = useContext(TrendingViewContext)
+    const { isTokenTagPopper, isCollectionProjectPopper, isProfilePage, isDSearch } = useContext(TrendingViewContext)
     const { t } = useI18N()
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
     const isWeb3ProfileMinimalMode = useIsMinimalMode(PluginID.Web3Profile)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
 
     const site = getSiteType()
     const pluginIDs = useValueRef(pluginIDSettings)
@@ -416,6 +417,7 @@ export function TrendingView(props: TrendingViewProps) {
                     </Box>
                 )}
             </Stack>
+            {isDSearch && <div className={classes.divider} />}
         </TrendingViewDeck>
     )
 
