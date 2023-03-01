@@ -147,6 +147,8 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
                 await handleVerifyNextID(selectedPersona.persona, currentProfileIdentify.identifier?.userId)
             }
 
+            if (isVerified) CrossIsolationMessages.events.personaBindFinished.sendToAll({ pluginID: 'NFT' })
+
             if (finishTarget) {
                 CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
                     open: true,
