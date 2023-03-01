@@ -6,16 +6,23 @@ export function useTokenMenuCollectionList(
     collectionList_: Web3Helper.TokenResultAll[],
     currentCollection?: Web3Helper.TokenResultAll,
 ) {
-    return uniqBy(
+    const collectionList = uniqBy(
         collectionList_,
         (x) => `${x.address?.toLowerCase()}_${x.chainId}_${x.type}_${x.name?.toLowerCase()}_${x.source}`,
-    ).filter(
+    )
+
+    const SourceTypeList = collectionList.map((x) => x.source)
+
+    return collectionList.filter(
         (x) =>
             !(
                 currentCollection &&
                 x.source !== currentCollection.source &&
-                [SourceType.CoinMarketCap, SourceType.CoinGecko].includes(currentCollection.source) &&
-                [SourceType.CoinMarketCap, SourceType.CoinGecko].includes(x.source)
+                (([SourceType.CoinMarketCap, SourceType.CoinGecko].includes(currentCollection.source) &&
+                    [SourceType.CoinMarketCap, SourceType.CoinGecko].includes(x.source)) ||
+                    (currentCollection.source === SourceType.NFTScan &&
+                        SourceTypeList.includes(SourceType.CoinGecko) &&
+                        x.source === SourceType.CoinMarketCap))
             ),
     )
 }
