@@ -302,7 +302,6 @@ export function TrendingView(props: TrendingViewProps) {
                 cardHeader: classes.cardHeader,
             }}
             currentTab={currentTab}
-            currentPriceChange={currentPriceChange ?? trending?.market?.price_change_percentage_7d_in_currency}
             stats={stats}
             identity={identity}
             setActive={setActive}
