@@ -1,6 +1,7 @@
 import { Breadcrumbs, Event, GlobalHandlers } from '@sentry/browser'
 import { getSiteType, getAgentType } from '@masknet/shared-base'
 import { TelemetryAPI } from '../types/Telemetry.js'
+import { formatMask } from '@masknet/web3-shared-base'
 
 export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
     constructor() {
@@ -21,17 +22,15 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
             ],
             environment: process.env.NODE_ENV,
             tracesSampleRate: 1.0,
-            ignoreErrors: ['At least one of the attempts fails.'],
+            ignoreErrors: ['At least one of the attempts fails.', 'Extension context invalidated.', '[object Promise]'],
             beforeSend(event) {
                 if (event.exception?.values?.length) {
                     event.exception?.values?.forEach((error) => {
-                        error.value = error.value
-                            ?.replaceAll(/\b0x[\da-f]{40}\b/gi, '[ethereum address]')
-                            .replaceAll(/\b0x[\da-f]{16}\b/gi, '[flow address]')
-                            .replaceAll(/\b0x[\da-f]{32,}\b/gi, '[key]')
-                            .replaceAll(/\b[\da-f]{32,}\b/gi, '[key]')
-                            .replaceAll(/\b[1-9A-HJ-NP-Za-km-z]{32,44}\b/g, '[solana address]')
+                        error.value = formatMask(error.value)
                     })
+                }
+                if (event.message) {
+                    event.message = formatMask(event.message)
                 }
                 return event
             },
