@@ -309,7 +309,11 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         > = []
 
         if (name.length < 6) {
-            result = tokens.filter((t) => t.symbol?.toLowerCase() === name.toLowerCase())
+            result = tokens.filter(
+                (t) =>
+                    t.symbol?.toLowerCase() === name.toLowerCase() ||
+                    (name.length > 3 && t.name?.toLowerCase().startsWith(name.toLowerCase()) && t.rank && t.rank <= 20),
+            )
         }
 
         if (!result.length) {
