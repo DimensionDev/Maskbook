@@ -42,12 +42,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
     }, [telemetry])
 
     const onCaptureException = useCallback(async () => {
-        telemetry.captureException(
-            TelemetryAPI.ExceptionID.Debug,
-            new Error(
-                'An error message with address: 0x66b57885E8E9D84742faBda0cE6E3496055b012d 0x7bb1e28c69407925 2Qig5xnzmQwqurLSyaUpyuRZmjuna5MDT9hn66nFZd4T f39cc8734e294fba9c3938486df2b1bc',
-            ),
-        )
+        telemetry.captureException(TelemetryAPI.ExceptionID.Debug, new Error('An error message.'))
     }, [telemetry])
 
     const onEstimateCallback = useCallback(async () => {

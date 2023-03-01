@@ -3,7 +3,7 @@ import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD } from '../NextID/constants.js'
 
 const { fetch: originalFetch } = globalThis
 
-const DB = new Map<
+const CACHE = new Map<
     string,
     {
         timestamp: number
@@ -67,13 +67,13 @@ export async function fetchSquashed(
     const rule = RULES.find((x) => url.includes(x))
     if (!rule) return next(request, init)
 
-    const hit = DB.get(url)
+    const hit = CACHE.get(url)
     if (hit && hit.timestamp + 600 > Date.now()) return hit.response.then((x) => x.clone())
 
     const responsePromise = next(request, init)
 
     // setup cache for merging subsequent requests
-    DB.set(url, {
+    CACHE.set(url, {
         timestamp: Date.now(),
         response: responsePromise,
     })

@@ -26,17 +26,13 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
                 if (event.exception?.values?.length) {
                     event.exception?.values?.forEach((error) => {
                         error.value = error.value
-                            ?.replaceAll(/\b0x[a-f0-9]{40}\b/gi, '[ethereum address]')
-                            .replaceAll(/\b0x[a-f0-9]{16}\b/gi, '[flow address]')
-                            .replaceAll(/\b0x[a-f0-9]{32,}\b/gi, '[key]')
-                            .replaceAll(/\b[a-f0-9]{32,}\b/gi, '[key]')
-                            .replaceAll(/\b[1-9A-HJ-NP-Za-km-z]{32,44}\b/gi, '[solana address]')
+                            ?.replaceAll(/\b0x[\da-f]{40}\b/gi, '[ethereum address]')
+                            .replaceAll(/\b0x[\da-f]{16}\b/gi, '[flow address]')
+                            .replaceAll(/\b0x[\da-f]{32,}\b/gi, '[key]')
+                            .replaceAll(/\b[\da-f]{32,}\b/gi, '[key]')
+                            .replaceAll(/\b[1-9A-HJ-NP-Za-km-z]{32,44}\b/g, '[solana address]')
                     })
                 }
-
-                console.log('DEBUG: before send')
-                console.log(event)
-
                 return event
             },
         })
