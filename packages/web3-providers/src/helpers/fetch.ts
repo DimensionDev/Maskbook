@@ -27,6 +27,7 @@ export async function fetch(input: RequestInfo | URL, init?: RequestInit, fetche
                     source: new URL(request.url).host,
                     method: request.method.toUpperCase(),
                     url: request.url,
+                    response_type: response?.type,
                     status_code: response?.status,
                     status_text: response?.statusText,
                 },
