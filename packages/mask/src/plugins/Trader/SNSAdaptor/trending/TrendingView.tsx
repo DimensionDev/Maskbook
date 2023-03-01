@@ -346,7 +346,6 @@ export function TrendingView(props: TrendingViewProps) {
                     <Box p={2}>
                         {isNFT ? (
                             <NonFungibleTickersTable
-                                isCollectionProjectPopper={isCollectionProjectPopper}
                                 id={
                                     (result.pluginID === NetworkPluginID.PLUGIN_SOLANA ? result.name : coin.address) ??
                                     ''
