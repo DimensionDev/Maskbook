@@ -83,6 +83,7 @@ function TrendingViewWrapper({
 
     return (
         <TrendingViewProvider
+            isDSearch={false}
             isCollectionProjectPopper={Boolean(isCollectionProjectPopper)}
             badgeBounding={badgeBounding}
             isProfilePage={false}
