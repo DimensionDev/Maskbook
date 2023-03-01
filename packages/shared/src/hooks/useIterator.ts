@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { useUpdateEffect } from 'react-use'
 
 export function useIterator<T>(
     iterator: AsyncGenerator<T | Error, void, undefined> | undefined,

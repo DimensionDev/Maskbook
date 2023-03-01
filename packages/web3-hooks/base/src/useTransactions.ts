@@ -1,10 +1,9 @@
+import { useMemo } from 'react'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
 import { pageableToIterator } from '@masknet/web3-shared-base'
-import { useMemo } from 'react'
-const MaxPage = 99999
 
 export function useTransactions<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: NetworkPluginID,
@@ -19,7 +18,7 @@ export function useTransactions<S extends 'all' | void = void, T extends Network
                     indicator,
                 })
             },
-            { maxSize: MaxPage },
+            { maxSize: 99 },
         )
     }, [account, chainId, hub, options?.chainId, options?.account])
 }
