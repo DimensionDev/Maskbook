@@ -46,7 +46,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
 
             const wallets = this.context.wallets.getCurrentValue()
             const allPersonas = this.context.allPersonas?.getCurrentValue() ?? []
-            const localWallets = this.storage.value[ProviderType.MaskWallet]
+            const localWallets = this.storage.initialized ? this.storage.value[ProviderType.MaskWallet] : []
 
             const chainId = await SmartPayBundler.getSupportedChainId()
 

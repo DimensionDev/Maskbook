@@ -55,7 +55,7 @@ import { Web3SignerAPI } from './EVM/apis/Web3SignerAPI.js'
 import { FlowWeb3API } from './Flow/apis/Web3API.js'
 import { SolanaWeb3API } from './Solana/apis/Web3API.js'
 import { SentryAPI } from './Sentry/index.js'
-import { TheGraphDomainAPI } from './TheGraph/index.js'
+import { TheGraphDomainAPI, TheGraphRedPacketAPI } from './TheGraph/index.js'
 import { ENS_API } from './ENS/index.js'
 import { SpaceID_API } from './SpaceID/index.js'
 import { BonfidaAPI } from './Bonfida/index.js'
@@ -93,6 +93,7 @@ export const Lens = new LensAPI()
 export const Sentry = new SentryAPI()
 export const TheGraphDomain = new TheGraphDomainAPI()
 export const RedPacket = new RedPacketAPI()
+export const TheGraphRedPacket = new TheGraphRedPacketAPI()
 
 // Etherscan
 export const EtherscanExplorer = new EtherscanExplorerAPI()
