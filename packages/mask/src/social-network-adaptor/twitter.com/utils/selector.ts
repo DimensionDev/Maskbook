@@ -209,6 +209,8 @@ export const postsContentSelector = () =>
 
 export const postAvatarsContentSelector = () => querySelectorAll('[data-testid="tweet"] > div > div  > :nth-child(2)')
 
+export const postAvatarSelector = () => querySelectorAll('[data-testid^=UserAvatar-Container-]')
+
 const base = querySelector<HTMLScriptElement>('#react-root ~ script')
 const handle = /"screen_name":"(.*?)"/
 const name = /"name":"(.*?)"/
