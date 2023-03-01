@@ -159,18 +159,26 @@ export function TrendingView(props: TrendingViewProps) {
     const [currentPriceChange, setCurrentPriceChange] = useState(
         trending?.market?.price_change_percentage_7d_in_currency,
     )
-    const onPriceDaysControlChange = useCallback((days: number) => {
-        setDays(days)
-        if (days === TrendingAPI.Days.ONE_DAY)
-            setCurrentPriceChange(trending?.market?.price_change_percentage_24h_in_currency)
-        if (days === TrendingAPI.Days.ONE_MONTH)
-            setCurrentPriceChange(trending?.market?.price_change_percentage_30d_in_currency)
-        if (days === TrendingAPI.Days.ONE_WEEK)
-            setCurrentPriceChange(trending?.market?.price_change_percentage_7d_in_currency)
-        if (days === TrendingAPI.Days.ONE_YEAR)
-            setCurrentPriceChange(trending?.market?.price_change_percentage_1y_in_currency)
-        if (days === TrendingAPI.Days.MAX) setCurrentPriceChange(trending?.market?.atl_change_percentage)
-    }, [])
+    const onPriceDaysControlChange = useCallback(
+        (days: number) => {
+            setDays(days)
+            if (days === TrendingAPI.Days.ONE_DAY)
+                setCurrentPriceChange(trending?.market?.price_change_percentage_24h_in_currency)
+            if (days === TrendingAPI.Days.ONE_MONTH)
+                setCurrentPriceChange(trending?.market?.price_change_percentage_30d_in_currency)
+            if (days === TrendingAPI.Days.ONE_WEEK)
+                setCurrentPriceChange(trending?.market?.price_change_percentage_7d_in_currency)
+            if (days === TrendingAPI.Days.ONE_YEAR)
+                setCurrentPriceChange(trending?.market?.price_change_percentage_1y_in_currency)
+            if (days === TrendingAPI.Days.MAX) setCurrentPriceChange(trending?.market?.atl_change_percentage)
+        },
+        [JSON.stringify(trending?.market)],
+    )
+
+    useEffect(() => {
+        onPriceDaysControlChange(TrendingAPI.Days.ONE_WEEK)
+    }, [JSON.stringify(trending?.market)])
+
     const {
         value: stats = EMPTY_LIST,
         loading: loadingStats,

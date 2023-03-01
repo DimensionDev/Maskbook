@@ -7,7 +7,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel.js'
 import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
 import { ChainId, GasConfig, GasEditor, Transaction } from '@masknet/web3-shared-evm'
-import { rightShift, multipliedBy, leftShift, isZero, ZERO, scale10, isLessThan } from '@masknet/web3-shared-base'
+import { rightShift, multipliedBy, isZero, ZERO, formatBalance } from '@masknet/web3-shared-base'
 import { Tune as TuneIcon } from '@mui/icons-material'
 import { TokenPanelType, TradeInfo } from '../../types/index.js'
 import { Icons } from '@masknet/icons'
@@ -235,10 +235,8 @@ export const TradeForm = memo<AllTradeFormProps>(
                 0,
                 Others?.isNativeTokenSchemaType(inputToken?.schema) ? amount_.minus(gasFee) : amount_,
             )
-            const isMiniValue = isLessThan(amount_, scale10(inputToken?.decimals ?? 0))
 
-            const result = leftShift(amount_, inputToken?.decimals).toFixed(isMiniValue ? 9 : 5, 1)
-            return isZero(result) ? ZERO.toString() : result
+            return isZero(amount_) ? ZERO.toString() : formatBalance(amount_, inputToken?.decimals, undefined, true)
         }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken, Others?.isNativeTokenSchemaType])
 
         const handleAmountChange = useCallback(
