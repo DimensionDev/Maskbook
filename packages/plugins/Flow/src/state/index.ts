@@ -24,6 +24,9 @@ export async function createWeb3State(
     await Provider_.storage.providerType.initializedPromise
     await Wallet_.storage.initializedPromise
 
+    Provider_.setup()
+    Wallet_.setup()
+
     return {
         AddressBook: new AddressBook(context, {
             chainId: Provider_.chainId,
