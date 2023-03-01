@@ -21,8 +21,8 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
             ],
             environment: process.env.NODE_ENV,
             tracesSampleRate: 1.0,
-            ignoreErrors: [],
-            beforeSend(event, hint) {
+            ignoreErrors: ['AggregateError'],
+            beforeSend(event) {
                 if (event.exception?.values?.length) {
                     event.exception?.values?.forEach((error) => {
                         error.value = error.value
