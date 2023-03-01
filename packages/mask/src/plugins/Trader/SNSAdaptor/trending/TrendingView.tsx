@@ -285,7 +285,6 @@ export function TrendingView(props: TrendingViewProps) {
     // #endregion
 
     const { coin, tickers, market } = trending
-    console.log({ currentPriceChange, market })
     const component = (
         <TrendingViewDeck
             classes={{
