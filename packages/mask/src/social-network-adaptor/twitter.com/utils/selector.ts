@@ -207,8 +207,7 @@ export const postsContentSelector = () =>
         ].join(),
     )
 
-export const postAvatarsContentSelector = () =>
-    querySelectorAll('[data-testid="tweet"] > div > div > div > :nth-child(2)')
+export const postAvatarsContentSelector = () => querySelectorAll('[data-testid="tweet"] > div > div  > :nth-child(2)')
 
 const base = querySelector<HTMLScriptElement>('#react-root ~ script')
 const handle = /"screen_name":"(.*?)"/
