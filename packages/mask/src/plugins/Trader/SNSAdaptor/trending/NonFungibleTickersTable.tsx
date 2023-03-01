@@ -38,7 +38,8 @@ const useStyles = makeStyles<{ isCollectionProjectPopper: boolean; snsThemeMode?
         cell: {
             paddingLeft: theme.spacing(0.5),
             paddingRight: theme.spacing(0.5),
-            background: snsThemeMode === 'dim' ? '#15202b' : theme.palette.maskColor.bottom,
+            background:
+                snsThemeMode === 'dim' && !isCollectionProjectPopper ? '#15202b' : theme.palette.maskColor.bottom,
             fontSize: 12,
             fontWeight: 700,
             whiteSpace: 'nowrap',

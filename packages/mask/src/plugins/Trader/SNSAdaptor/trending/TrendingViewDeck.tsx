@@ -367,6 +367,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
             <CardContent className={classes.content}>
                 <Paper className={classes.body} elevation={0}>
                     {children}
+                    {(isCollectionProjectPopper || isTokenTagPopper) && currentTab === ContentTabs.Market ? (
+                        <Stack style={{ height: 48, width: '100%' }} />
+                    ) : null}
                 </Paper>
                 {(isCollectionProjectPopper || isTokenTagPopper) && currentTab !== ContentTabs.Swap ? (
                     <section className={classes.pluginDescriptorWrapper}>
