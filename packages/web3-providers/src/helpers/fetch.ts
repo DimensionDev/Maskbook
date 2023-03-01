@@ -25,6 +25,7 @@ export async function fetch(input: RequestInfo | URL, init?: RequestInit, fetche
             Sentry.captureException(new Error(`Failed to fetch: ${request.url}`), {
                 tags: {
                     source: new URL(request.url).host,
+                    method: request.method.toUpperCase(),
                     url: request.url,
                     status_code: response?.status,
                     status_text: response?.statusText,
