@@ -21,6 +21,20 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
             ],
             environment: process.env.NODE_ENV,
             tracesSampleRate: 1.0,
+            ignoreErrors: ['AggregateError'],
+            beforeSend(event) {
+                if (event.exception?.values?.length) {
+                    event.exception?.values?.forEach((error) => {
+                        error.value = error.value
+                            ?.replaceAll(/\b0x[\da-f]{40}\b/gi, '[ethereum address]')
+                            .replaceAll(/\b0x[\da-f]{16}\b/gi, '[flow address]')
+                            .replaceAll(/\b0x[\da-f]{32,}\b/gi, '[key]')
+                            .replaceAll(/\b[\da-f]{32,}\b/gi, '[key]')
+                            .replaceAll(/\b[1-9A-HJ-NP-Za-km-z]{32,44}\b/g, '[solana address]')
+                    })
+                }
+                return event
+            },
         })
 
         // set global tags
@@ -97,11 +111,7 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         return {
             message,
             level: type === TelemetryAPI.TypeID.Event ? 'info' : 'error',
-            user: options.user?.account
-                ? {
-                      username: options.user.account,
-                  }
-                : undefined,
+            user: {},
             tags: {
                 type: TelemetryAPI.TypeID.Event,
                 chain_id: options.network?.chainId,
