@@ -9,9 +9,10 @@ export async function fetch(input: RequestInfo | URL, init?: RequestInit, fetche
 
     // capture exception if bad response or any error occurs
     let hasError = false
+    let response: Response | undefined
 
     try {
-        const response = await fetcher(input, init)
+        response = await fetcher(input, init)
         if (!response.ok) hasError = true
         return response
     } catch (error) {
@@ -24,7 +25,10 @@ export async function fetch(input: RequestInfo | URL, init?: RequestInit, fetche
             Sentry.captureException(new Error(`Failed to fetch: ${request.url}`), {
                 tags: {
                     source: new URL(request.url).host,
+                    method: request.method.toUpperCase(),
                     url: request.url,
+                    status_code: response?.status,
+                    status_text: response?.statusText,
                 },
             })
         }
