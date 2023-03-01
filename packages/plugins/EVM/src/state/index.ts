@@ -49,6 +49,9 @@ export async function createWeb3State(
     await TransactionWatcher_.storage.initializedPromise
     await Wallet_.storage.initializedPromise
 
+    Provider_.setup()
+    Wallet_.setup()
+
     return {
         Settings: Settings_,
         Provider: Provider_,

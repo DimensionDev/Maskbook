@@ -54,6 +54,8 @@ export class WalletState<ProviderType extends string, Transaction> implements We
         return this.storage.initializedPromise
     }
 
+    setup() {}
+
     async addWallet(wallet: Wallet) {
         const now = new Date()
         const address = this.options.formatAddress(wallet.address)
