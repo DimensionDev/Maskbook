@@ -22,7 +22,12 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
             ],
             environment: process.env.NODE_ENV,
             tracesSampleRate: 1.0,
-            ignoreErrors: ['At least one of the attempts fails.', 'Extension context invalidated.', '[object Promise]'],
+            ignoreErrors: [
+                'At least one of the attempts fails.',
+                'Extension context invalidated.',
+                '[object Promise]',
+                'ResizeObserver loop limit exceeded',
+            ],
             beforeSend(event) {
                 if (event.exception?.values?.length) {
                     event.exception?.values?.forEach((error) => {
