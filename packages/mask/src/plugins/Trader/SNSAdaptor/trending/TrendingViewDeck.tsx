@@ -145,7 +145,6 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     trending: TrendingAPI.Trending
     identity?: SocialIdentity
     setActive?: (x: boolean) => void
-    currentPriceChange?: number
     setResult: (a: Web3Helper.TokenResultAll) => void
     result: Web3Helper.TokenResultAll
     resultList?: Web3Helper.TokenResultAll[]
@@ -164,7 +163,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         setResult,
         setActive,
         currentTab,
-        currentPriceChange,
         identity,
     } = props
 
@@ -348,7 +346,15 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             {t('plugin_trader_no_data')}
                                         </Typography>
                                     )}
-                                    {isNFT ? null : <PriceChanged amount={currentPriceChange ?? 0} />}
+                                    {isNFT ? null : (
+                                        <PriceChanged
+                                            amount={
+                                                market?.price_change_percentage_1h_in_currency ??
+                                                market?.price_change_24h ??
+                                                0
+                                            }
+                                        />
+                                    )}
                                 </Stack>
                                 {isTokenSecurityEnable && tokenSecurityInfo && !error && !isNFT && (
                                     <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
