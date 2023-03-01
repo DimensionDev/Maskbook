@@ -72,7 +72,7 @@ export function PriceChart(props: PriceChartProps) {
         })),
         dimension,
         'x-trader-price-line-chart',
-        { sign: props.currency.name ?? 'USD', color: colors.success },
+        { sign: props.currency.name ?? 'USD', color: props.amount < 0 ? colors.danger : colors.success },
     )
 
     return (

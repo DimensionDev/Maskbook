@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useContext } from 'react'
+import { useEffect, useMemo, useState, useContext, useCallback } from 'react'
 import { compact, first } from 'lodash-es'
 import { TrendingViewContext } from './context.js'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
@@ -155,6 +155,21 @@ export function TrendingView(props: TrendingViewProps) {
 
     // #region stats
     const [days, setDays] = useState(TrendingAPI.Days.ONE_WEEK)
+    const [currentPriceChange, setCurrentPriceChange] = useState(
+        trending?.market?.price_change_percentage_7d_in_currency,
+    )
+    const onPriceDaysControlChange = useCallback((days: number) => {
+        setDays(days)
+        if (days === TrendingAPI.Days.ONE_DAY)
+            setCurrentPriceChange(trending?.market?.price_change_percentage_24h_in_currency)
+        if (days === TrendingAPI.Days.ONE_MONTH)
+            setCurrentPriceChange(trending?.market?.price_change_percentage_30d_in_currency)
+        if (days === TrendingAPI.Days.ONE_WEEK)
+            setCurrentPriceChange(trending?.market?.price_change_percentage_7d_in_currency)
+        if (days === TrendingAPI.Days.ONE_YEAR)
+            setCurrentPriceChange(trending?.market?.price_change_percentage_1y_in_currency)
+        if (days === TrendingAPI.Days.MAX) setCurrentPriceChange(trending?.market?.atl_change_percentage)
+    }, [])
     const {
         value: stats = EMPTY_LIST,
         loading: loadingStats,
@@ -270,7 +285,7 @@ export function TrendingView(props: TrendingViewProps) {
     // #endregion
 
     const { coin, tickers, market } = trending
-
+    console.log({ currentPriceChange, market })
     const component = (
         <TrendingViewDeck
             classes={{
@@ -279,6 +294,7 @@ export function TrendingView(props: TrendingViewProps) {
                 cardHeader: classes.cardHeader,
             }}
             currentTab={currentTab}
+            currentPriceChange={currentPriceChange ?? trending?.market?.price_change_percentage_7d_in_currency}
             stats={stats}
             identity={identity}
             setActive={setActive}
@@ -313,7 +329,7 @@ export function TrendingView(props: TrendingViewProps) {
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}
-                            amount={market?.price_change_percentage_1h ?? market?.price_change_24h ?? 0}
+                            amount={currentPriceChange ?? trending?.market?.price_change_percentage_7d_in_currency ?? 0}
                             currency={trending.currency}
                             stats={stats}
                             retry={retryStats}
@@ -321,7 +337,7 @@ export function TrendingView(props: TrendingViewProps) {
                             <PriceChartDaysControl
                                 rangeOptions={DEFAULT_RANGE_OPTIONS}
                                 days={days}
-                                onDaysChange={setDays}
+                                onDaysChange={onPriceDaysControlChange}
                             />
                         </PriceChart>
                     </Box>
