@@ -119,7 +119,7 @@ export const NFTListDialog: FC = () => {
     const navigate = useNavigate()
 
     const { pluginID } = useNetworkContext()
-    const { account, chainId, setChainId } = useChainContext()
+    const { account, chainId, setChainId, setAccount } = useChainContext()
     const wallets = useWallets(pluginID)
     const [selectedPluginId, setSelectedPluginId] = useState(pluginID ?? NetworkPluginID.PLUGIN_EVM)
     const [addDialogOpen, setAddDialogOpen] = useState(false)
@@ -158,6 +158,7 @@ export const NFTListDialog: FC = () => {
 
     const { showSnackbar } = useCustomSnackbar()
     const onChangeWallet = (address: string, pluginID: NetworkPluginID, chainId: Web3Helper.ChainIdAll) => {
+        setAccount(address)
         setTargetAccount(address)
         setSelectedAccount(address)
         setSelectedPluginId(pluginID)

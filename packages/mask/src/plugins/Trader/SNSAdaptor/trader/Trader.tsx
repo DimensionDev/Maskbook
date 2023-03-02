@@ -104,7 +104,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     )
 
     useUpdateEffect(() => {
-        if (!chainIdValid && !chainIdList.includes(chainId)) setChainId(ChainId.Mainnet)
+        if (!chainIdValid || !chainIdList.includes(chainId)) setChainId(ChainId.Mainnet)
     }, [chainIdValid, chainIdList, chainId])
 
     // #region if chain id be changed, update input token be native token

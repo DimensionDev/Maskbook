@@ -1,6 +1,6 @@
 import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import { fetchJSON } from '../../entry-helpers.js'
-import { PAY_GAS_API_URL, NFT_REDPACKET_API_URL } from '../constants.js'
+import { REDPACKET_API_URL, NFT_REDPACKET_API_URL } from '../constants.js'
 
 type CreateSuccessRecord = {
     creator: string
@@ -43,7 +43,7 @@ export class TheGraphRedPacketAPI {
             data: {
                 creationSuccesses: CreateSuccessRecord[]
             }
-        }>(PAY_GAS_API_URL, {
+        }>(REDPACKET_API_URL, {
             method: 'POST',
             body: JSON.stringify({
                 query: `{
