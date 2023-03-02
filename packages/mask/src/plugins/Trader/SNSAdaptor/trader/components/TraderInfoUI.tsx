@@ -155,9 +155,8 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
                                         />
                                     </Typography>
                                     <Typography fontSize={14} lineHeight="20px" component="span">
-                                        {gasFeeValueUSD === '< $0.01'
-                                            ? t('plugin_trader_tx_cost_very_small', { usd: gasFeeValueUSD })
-                                            : t('plugin_trader_tx_cost_usd_new', { usd: gasFeeValueUSD })}
+                                        {gasFeeValueUSD.includes('<') ? '' : '\u2248'}
+                                        {gasFeeValueUSD}
                                     </Typography>
                                 </Typography>
                             ) : null}

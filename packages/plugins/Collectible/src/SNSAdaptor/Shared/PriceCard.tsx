@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { Skeleton, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NonFungibleTokenOrder, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
+import { NonFungibleTokenOrder, formatBalance, formatCurrency, isZero } from '@masknet/web3-shared-base'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { SourceProviderSwitcher } from '@masknet/shared'
 import { Context } from '../Context/index.js'
@@ -86,6 +86,8 @@ export function PriceCard(props: PriceCardProps) {
             </div>
         )
 
+    const priceUSD = formatCurrency(topOffer?.price?.usd ?? 0, 'USD', { onlyRemainTwoDecimal: true })
+
     return (
         <div className={classes.wrapper}>
             <div className={classes.priceZone}>
@@ -114,7 +116,8 @@ export function PriceCard(props: PriceCardProps) {
                         </Typography>
                         {topOffer?.price?.usd && (
                             <Typography className={classes.textBase}>
-                                ({formatCurrency(topOffer.price.usd) || '-'})
+                                ({priceUSD.includes('<') || isZero(topOffer?.price?.usd) ? '' : '\u2248'}
+                                {priceUSD})
                             </Typography>
                         )}
                     </div>
