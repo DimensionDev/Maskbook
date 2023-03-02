@@ -106,7 +106,7 @@ export type ApplicationDialogEvent = {
 }
 
 export type PersonaBindFinishEvent = {
-    pluginID: string
+    pluginID?: string
 }
 
 export type AvatarSettingDialogEvent = {
