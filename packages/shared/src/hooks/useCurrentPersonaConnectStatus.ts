@@ -7,6 +7,7 @@ import {
     DashboardRoutes,
     MaskEvents,
     PersonaInformation,
+    PluginID,
     isSamePersona,
     isSameProfile,
     resolveNextIDIdentityToProfile,
@@ -31,6 +32,7 @@ export function useCurrentPersonaConnectStatus(
     openDashboard: (route?: DashboardRoutes, search?: string) => Promise<any>,
     identity?: IdentityResolved,
     message?: WebExtensionMessage<MaskEvents>,
+    directTo?: PluginID,
 ) {
     const t = useSharedI18N()
 
