@@ -1,5 +1,5 @@
 import { Breadcrumbs, Event, GlobalHandlers } from '@sentry/browser'
-import { getSiteType, getAgentType } from '@masknet/shared-base'
+import { getSiteType, getAgentType, getExtensionId } from '@masknet/shared-base'
 import { formatMask } from '@masknet/web3-shared-base'
 import { TelemetryAPI } from '../types/Telemetry.js'
 
@@ -51,6 +51,7 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         // set global tags
         Sentry.setTag('agent', getAgentType())
         Sentry.setTag('site', getSiteType())
+        Sentry.setTag('extension_id', getExtensionId())
         Sentry.setTag('version', process.env.VERSION)
         Sentry.setTag('ua', navigator.userAgent)
     }
@@ -100,19 +101,19 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         }
     }
 
-    private getOptions(initial?: TelemetryAPI.CommonOptions): TelemetryAPI.CommonOptions {
+    private getOptions(initials?: TelemetryAPI.CommonOptions): TelemetryAPI.CommonOptions {
         return {
             user: {
                 ...this.userOptions,
-                ...initial?.user,
+                ...initials?.user,
             },
             device: {
                 ...this.deviceOptions,
-                ...initial?.device,
+                ...initials?.device,
             },
             network: {
                 ...this.networkOptions,
-                ...initial?.network,
+                ...initials?.network,
             },
         }
     }
@@ -121,9 +122,9 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         groupID: TelemetryAPI.GroupID,
         type: TelemetryAPI.EventType | TelemetryAPI.ExceptionType,
         ID: TelemetryAPI.EventID | TelemetryAPI.ExceptionID,
-        initial: TelemetryAPI.CommonOptions,
+        initials: TelemetryAPI.CommonOptions,
     ): Event {
-        const options = this.getOptions(initial)
+        const options = this.getOptions(initials)
         return {
             level: groupID === TelemetryAPI.GroupID.Event ? 'info' : 'error',
             message: ID,
