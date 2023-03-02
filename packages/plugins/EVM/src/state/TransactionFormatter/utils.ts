@@ -1,4 +1,3 @@
-import { BigNumber } from 'bignumber.js'
 import type { AbiItem } from 'web3-utils'
 import { Web3 } from '@masknet/web3-providers'
 import { FungibleToken, scale10, formatBalance } from '@masknet/web3-shared-base'
@@ -8,12 +7,9 @@ import { Web3StateSettings } from '../../settings/index.js'
 
 export function getTokenAmountDescription(amount = '0', token?: FungibleToken<ChainId, SchemaType>) {
     const value = scale10(1, 9 + (token?.decimals ?? 18)).isGreaterThanOrEqualTo(amount)
-        ? formatBalance(amount, token?.decimals ?? 0, 4)
+        ? formatBalance(amount, token?.decimals)
         : 'infinite'
 
-    if (value !== 'infinite' && new BigNumber(value).isLessThan(new BigNumber('0.000001'))) {
-        return `<0.000001 ${token?.symbol?.trim()}`
-    }
     return `${value} ${token?.symbol?.trim()}`
 }
 
