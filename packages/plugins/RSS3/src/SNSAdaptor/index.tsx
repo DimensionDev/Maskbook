@@ -2,7 +2,8 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Box } from '@mui/material'
-import { RSS3BaseAPI } from '@masknet/web3-providers/types'
+import { useAccess } from '@masknet/web3-telemetry'
+import { RSS3BaseAPI, TelemetryAPI } from '@masknet/web3-providers/types'
 import { SocialAddressType, SearchResultType } from '@masknet/web3-shared-base'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
@@ -23,6 +24,15 @@ const createProfileTabConfig = (label: string, props: FeedPageProps, priority = 
         UI: {
             TabContent: ({ socialAccount }) => {
                 const key = [socialAccount?.address ?? '-', props.tag ?? '-'].join('_')
+
+                useAccess(
+                    props.tag === RSS3BaseAPI.Tag.Donation
+                        ? TelemetryAPI.EventID.AccessWeb3ProfileDialogDonationTab
+                        : props.tag === RSS3BaseAPI.Tag.Social
+                        ? TelemetryAPI.EventID.AccessWeb3ProfileDialogSocialTab
+                        : TelemetryAPI.EventID.AccessWeb3ProfileDialogActivitiesTab,
+                )
+
                 return (
                     <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
                         <FeedsPage key={key} address={socialAccount?.address} {...props} />
@@ -54,6 +64,15 @@ const createSearchTabConfig = (
                     supportedAddressTypes: [SocialAddressType.ENS],
                 }
                 const key = [socialAccount?.address ?? '-', props.tag ?? '-'].join('_')
+
+                useAccess(
+                    props.tag === RSS3BaseAPI.Tag.Donation
+                        ? TelemetryAPI.EventID.AccessWeb3TabDonationTab
+                        : props.tag === RSS3BaseAPI.Tag.Social
+                        ? TelemetryAPI.EventID.AccessWeb3TabSocialTab
+                        : TelemetryAPI.EventID.AccessWeb3TabActivitiesTab,
+                )
+
                 return (
                     <Box style={{ minHeight: 300 }}>
                         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>

@@ -8,9 +8,10 @@ export namespace TelemetryAPI {
     }
 
     export enum EventType {
-        Access = 'Access',
-        Exit = 'Exit',
-        Interact = 'Interact',
+        Debug = 'debug',
+        Access = 'access',
+        Exit = 'exit',
+        Interact = 'interact',
     }
 
     export enum ExceptionType {
@@ -18,10 +19,35 @@ export namespace TelemetryAPI {
     }
 
     export enum EventID {
-        AccessApplicationBoard = 'access_application_board',
-        AccessDashboard = 'access_dashboard',
-        AccessPopup = 'access_popup',
+        // Open the Web3 tabs but no persona detected
+        AccessWeb3TabCreatePersonaTab = 'AccessWeb3TabCreatePersonaTab',
+        // Open the Web3 tabs the NFTs tab presents
+        AccessWeb3TabNFTsTab = 'AccessWeb3TabNFTsTab',
+        // Open the Web3 tabs the Activities tab presents
+        AccessWeb3TabActivitiesTab = 'AccessWeb3TabActivitiesTab',
+        // Open the Web3 tabs the Donation tab presents
+        AccessWeb3TabDonationTab = 'AccessWeb3TabDonationTab',
+        // Open the Web3 tabs the Social tab presents
+        AccessWeb3TabSocialTab = 'AccessWeb3TabSocialTab',
+        // Open the web3 profile dialog
         AccessWeb3ProfileDialog = 'access_web3_profile_dialog',
+        // Open the Web3 profile dialog the NFTs tab presents
+        AccessWeb3ProfileDialogNFTsTab = 'AccessWeb3ProfileDialogNFTsTab',
+        // Open the Web3 profile dialog the Activities tab presents
+        AccessWeb3ProfileDialogActivitiesTab = 'AccessWeb3ProfileDialogActivitiesTab',
+        // Open the Web3 profile dialog the Donation tab presents
+        AccessWeb3ProfileDialogDonationTab = 'AccessWeb3ProfileDialogDonationTab',
+        // Open the Web3 profile dialog the Social tab presents
+        AccessWeb3ProfileDialogSocialTab = 'AccessWeb3ProfileDialogSocialTab',
+        // The toolbar has successfully injected
+        AccessToolbox = 'access_toolbox',
+        // Open the application board dialog
+        AccessApplicationBoard = 'access_application_board',
+        // Open the dashboard page
+        AccessDashboard = 'access_dashboard',
+        // Open the popups page
+        AccessPopup = 'access_popup',
+        // For debug only
         Debug = 'debug',
     }
 
