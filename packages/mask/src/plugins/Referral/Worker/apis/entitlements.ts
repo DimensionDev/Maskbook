@@ -7,9 +7,9 @@ import type { Entitlement } from '../../types.js'
 import { getOracle, rpcCall, RpcMethod, RpcRoute } from './oracle.js'
 import { supportedOracleChainId } from '../../constants.js'
 
-const Entitlement = 'Entitlement'
+const _Entitlement = 'Entitlement'
 const eventsEntitlement = new Interface([
-    `event ${Entitlement}(bytes32 indexed farmHash, address indexed entitlee, uint128 confirmation, uint128 rewardValue, bytes32[] proof)`,
+    `event ${_Entitlement}(bytes32 indexed farmHash, address indexed entitlee, uint128 confirmation, uint128 rewardValue, bytes32[] proof)`,
 ])
 const eventIdsEntitlement: {
     [eventName: string]: string
