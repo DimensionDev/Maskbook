@@ -26,7 +26,7 @@ const withErrorMiddleware =
     async (res: Response) => {
         const result = await handler(res)
         if (!res.ok) {
-            // eslint-disable-next-line no-throw-literal
+             
             throw { status: res.status, ...result }
         }
         return result
