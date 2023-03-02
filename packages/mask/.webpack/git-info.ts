@@ -20,7 +20,7 @@ export function emitGitInfo(reproducible: boolean) {
 
 /** Get git info */
 export function getGitInfo(reproducible: boolean): GitInfoReport {
-    const VERSION = require('../package.json').version
+    const VERSION = require('../src/manifest.json').version
     const report: GitInfoReport = {
         BUILD_DATE: new Date(0).toISOString(),
         VERSION: VERSION + '-reproducible',
