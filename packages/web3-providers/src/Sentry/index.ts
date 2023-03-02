@@ -1,7 +1,14 @@
 import { Breadcrumbs, Event, GlobalHandlers } from '@sentry/browser'
 import { getSiteType, getAgentType } from '@masknet/shared-base'
-import { TelemetryAPI } from '../types/Telemetry.js'
 import { formatMask } from '@masknet/web3-shared-base'
+import { TelemetryAPI } from '../types/Telemetry.js'
+
+const IGNORE_ERRORS = [
+    'At least one of the attempts fails.',
+    'Extension context invalidated.',
+    '[object Promise]',
+    'ResizeObserver loop limit exceeded',
+]
 
 export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
     constructor() {
@@ -22,21 +29,21 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
             ],
             environment: process.env.NODE_ENV,
             tracesSampleRate: 1.0,
-            ignoreErrors: [
-                'At least one of the attempts fails.',
-                'Extension context invalidated.',
-                '[object Promise]',
-                'ResizeObserver loop limit exceeded',
-            ],
             beforeSend(event) {
-                if (event.exception?.values?.length) {
-                    event.exception?.values?.forEach((error) => {
-                        error.value = formatMask(error.value)
-                    })
+                if (event.exception?.values?.some((x) => IGNORE_ERRORS.some((y) => x.value?.includes(y)))) return null
+
+                if (event.message) {
+                    if (IGNORE_ERRORS.some((x) => event.message?.includes(x))) return null
                 }
+
+                event.exception?.values?.forEach((error) => {
+                    error.value = formatMask(error.value)
+                })
+
                 if (event.message) {
                     event.message = formatMask(event.message)
                 }
+
                 return event
             },
         })
