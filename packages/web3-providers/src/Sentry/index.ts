@@ -167,17 +167,19 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
 
     captureEvent(options: TelemetryAPI.EventOptions) {
         if (this.status === 'off') return
-        Sentry.captureEvent(this.createEvent(options))
         if (process.env.NODE_ENV === 'development') {
             console.log(`[LOG EVENT]: ${JSON.stringify(this.createEvent(options))}`)
+        } else {
+            Sentry.captureEvent(this.createEvent(options))
         }
     }
 
     captureException(options: TelemetryAPI.ExceptionOptions) {
         if (this.status === 'off') return
-        Sentry.captureException(options.error, this.createException(options))
         if (process.env.NODE_ENV === 'development') {
-            console.log(`[LOG EXCEPTIONS]: ${JSON.stringify(this.createException(options))}`)
+            console.log(`[LOG EXCEPTION]: ${JSON.stringify(this.createException(options))}`)
+        } else {
+            Sentry.captureException(options.error, this.createException(options))
         }
     }
 }
