@@ -51,7 +51,7 @@ export default class FortmaticProvider extends BaseProvider implements EVM_Provi
 
     private get chainId(): ChainIdFortmatic {
         const chainId = this.chainId_
-        if (!chainId) throw new Error('No connection.')
+        if (!chainId) throw new Error('No fortmatic connection.')
         if (!isFortmaticSupported(chainId)) throw new Error(`The chain id ${chainId} is not supported.`)
         return chainId
     }

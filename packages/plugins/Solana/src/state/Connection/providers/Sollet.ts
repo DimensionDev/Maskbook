@@ -9,7 +9,7 @@ export class SolletProvider extends BaseProvider implements SolanaProvider {
     private wallet: Wallet | null = null
 
     private get solanaProvider() {
-        if (!this.wallet) throw new Error('No connection.')
+        if (!this.wallet) throw new Error('No sollet connection.')
         return this.wallet
     }
 

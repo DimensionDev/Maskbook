@@ -189,7 +189,7 @@ export class ProviderState<
             await Promise.race([
                 (async () => {
                     await delay(30 /* seconds */ * 1000 /* milliseconds */)
-                    throw new Error('Timeout!')
+                    throw new Error(`Timeout of switching chain to ${chainId}.`)
                 })(),
                 provider.switchChain(chainId),
             ])

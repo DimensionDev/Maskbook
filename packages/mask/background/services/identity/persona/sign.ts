@@ -33,7 +33,7 @@ export async function signWithPersona<T>(
                     })
                 }),
                 60 * 1000,
-                'Timeout',
+                'Timeout of signing with persona.',
             )
         }
         return identifier
