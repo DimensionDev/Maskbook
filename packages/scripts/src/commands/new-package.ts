@@ -134,7 +134,7 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
         )
         await awaitChildProcess(shell.cwd(ROOT_PATH)`pnpm install --prefer-offline -C packages/mask ${npmName}`)
         await changeFile(new URL('packages/mask/package.json', ROOT_PATH), (content) =>
-            content.replaceAll(/workspace:\^undefined/g, 'workspace:*'),
+            content.replaceAll(/workspace:\^undefined/g, 'workspace:^'),
         )
         await changeFile(new URL('tsconfig.json', ROOT_PATH), (content) =>
             content.replace(INSERT_HERE + ' 3', `"${npmName}": ["./${path}/src"],\n      ${INSERT_HERE} 3`),

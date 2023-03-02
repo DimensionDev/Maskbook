@@ -42,7 +42,7 @@ const ErrorMessage = {
 }
 
 function send<I extends keyof Request, O extends keyof Response>(input: I, output: O) {
-    if (process.env.manifest === '3') {
+    if (typeof browser === 'object' && browser.runtime && process.env.manifest === '3') {
         return async (value: Request[I]): Promise<Response[O]> => {
             const { request } = await import('@dimensiondev/mask-wallet-core/bundle')
             const { api } = await import('@dimensiondev/mask-wallet-core/proto')
