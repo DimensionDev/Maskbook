@@ -32,6 +32,9 @@ import { TraderStateBar } from './TraderStateBar.js'
 import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { useMountReport, useTelemetry } from '@masknet/web3-telemetry/hooks'
+import { TelemetryAPI } from '@masknet/web3-providers/types'
+import { Typography } from '@mui/material'
 
 export interface TraderProps extends withClasses<'root'> {
     defaultInputCoin?: Web3Helper.FungibleTokenAll
@@ -48,6 +51,8 @@ export interface TraderRef {
 
 export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, ref) => {
     const snackbarKeyRef = useRef<SnackbarKey>()
+    const telemetry = useTelemetry()
+
     const { defaultOutputCoin, chainId: targetChainId, defaultInputCoin, settings = false } = props
     const t = useI18N()
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
@@ -216,7 +221,12 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     )
 
     useUpdateEffect(() => {
-        if (tradeCallbackError) showSingletonSnackbar(t.swap_failed(), { processing: false, variant: 'error' })
+        if (tradeCallbackError)
+            showSingletonSnackbar(t.swap_failed(), {
+                processing: false,
+                variant: 'error',
+                message: <Typography>{t.swap_failed_description()}</Typography>,
+            })
     }, [tradeCallbackError, showSingletonSnackbar])
 
     useEffect(() => {
@@ -257,11 +267,12 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                 activatedSocialNetworkUI.utils.share?.(shareText)
             },
         })
+        telemetry.captureEvent(TelemetryAPI.EventType.Interact, TelemetryAPI.EventID.SendTraderTransactionSuccessfully)
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
             amount: '',
         })
-    }, [tradeCallback, shareText, openShareTxDialog])
+    }, [tradeCallback, shareText, openShareTxDialog, telemetry])
 
     const onConfirmDialogClose = useCallback(() => {
         setOpenConfirmDialog(false)
@@ -333,6 +344,8 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             token: undefined,
         })
     })
+
+    useMountReport(TelemetryAPI.EventID.AccessTradePlugin)
 
     // #region if trade has been changed, update the focused trade
     useUpdateEffect(() => {
