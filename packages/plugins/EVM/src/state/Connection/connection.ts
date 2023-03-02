@@ -1,4 +1,4 @@
-import { first } from 'lodash-es'
+import { first, identity, pickBy } from 'lodash-es'
 import { AbiItem, toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
 import { delay } from '@masknet/kit'
@@ -148,12 +148,12 @@ class Connection implements EVM_Connection {
             account: this.account,
             chainId: this.chainId,
             providerType: this.providerType,
-            ...initial,
+            ...pickBy(initial, identity),
             overrides: {
                 from: initial?.account ?? this.account,
                 chainId: initial?.chainId ?? this.chainId,
-                ...initial?.overrides,
-                ...overrides?.overrides,
+                ...pickBy(initial?.overrides, identity),
+                ...pickBy(overrides?.overrides, identity),
             },
         }
     }

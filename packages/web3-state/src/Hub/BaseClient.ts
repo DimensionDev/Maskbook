@@ -1,5 +1,6 @@
 import type { PartialRequired } from '@masknet/shared-base'
 import { HubOptions, SourceType, CurrencyType, createPredicate } from '@masknet/web3-shared-base'
+import { identity, pickBy } from 'lodash-es'
 
 export class HubStateBaseClient<ChainId> {
     constructor(
@@ -18,8 +19,8 @@ export class HubStateBaseClient<ChainId> {
             account: this.account,
             sourceType: this.sourceType,
             currencyType: this.currencyType,
-            ...initial,
-            ...overrides,
+            ...pickBy(initial, identity),
+            ...pickBy(initial, identity),
         }
     }
 

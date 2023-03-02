@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
     },
     tips: {
-        '& > *': {
+        '& > p': {
             color: theme.palette.maskColor.publicMain,
             fontSize: 16,
             fontWeight: 700,

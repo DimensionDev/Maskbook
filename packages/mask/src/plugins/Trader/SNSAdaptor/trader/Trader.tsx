@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState, useMemo, useRef } from 'react'
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useState, useMemo } from 'react'
 import { useUnmount, useUpdateEffect } from 'react-use'
 import { delay } from '@masknet/kit'
 import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
@@ -29,10 +29,10 @@ import { TradeForm } from './TradeForm.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { TraderStateBar } from './TraderStateBar.js'
-import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
-import { Typography } from '@mui/material'
+import { useMountReport, useTelemetry } from '@masknet/web3-telemetry/hooks'
+import { TelemetryAPI } from '@masknet/web3-providers/types'
 
 export interface TraderProps extends withClasses<'root'> {
     defaultInputCoin?: Web3Helper.FungibleTokenAll
@@ -48,7 +48,6 @@ export interface TraderRef {
 }
 
 export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, ref) => {
-    const snackbarKeyRef = useRef<SnackbarKey>()
     const telemetry = useTelemetry()
 
     const { defaultOutputCoin, chainId: targetChainId, defaultInputCoin, settings = false } = props
@@ -66,19 +65,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
     const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
-    )
-
-    const { showSnackbar, closeSnackbar } = useCustomSnackbar()
-
-    const showSingletonSnackbar = useCallback(
-        (title: SnackbarMessage, options: ShowSnackbarOptions) => {
-            if (snackbarKeyRef.current !== undefined) closeSnackbar(snackbarKeyRef.current)
-            snackbarKeyRef.current = showSnackbar(title, options)
-            return () => {
-                closeSnackbar(snackbarKeyRef.current)
-            }
-        },
-        [showSnackbar, closeSnackbar],
     )
 
     // #region trade state
@@ -212,20 +198,11 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     // #endregion
 
     // #region blocking (swap)
-    const [{ loading: isTrading, error: tradeCallbackError }, tradeCallback] = useTradeCallback(
+    const [{ loading: isTrading }, tradeCallback] = useTradeCallback(
         focusedTrade?.provider,
         focusedTrade?.value,
         gasConfig,
     )
-
-    useUpdateEffect(() => {
-        if (tradeCallbackError && !tradeCallbackError.message.includes('Transaction was rejected'))
-            showSingletonSnackbar(t.swap_failed(), {
-                processing: false,
-                variant: 'error',
-                message: <Typography>{t.swap_failed_description()}</Typography>,
-            })
-    }, [tradeCallbackError, showSingletonSnackbar])
 
     useEffect(() => {
         setIsSwapping(isTrading)
