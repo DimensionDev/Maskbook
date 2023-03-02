@@ -32,8 +32,6 @@ import { TraderStateBar } from './TraderStateBar.js'
 import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
-import { useMountReport, useTelemetry } from '@masknet/web3-telemetry/hooks'
-import { TelemetryAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
 
 export interface TraderProps extends withClasses<'root'> {
@@ -221,7 +219,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     )
 
     useUpdateEffect(() => {
-        if (tradeCallbackError)
+        if (tradeCallbackError && !tradeCallbackError.message.includes('Transaction was rejected'))
             showSingletonSnackbar(t.swap_failed(), {
                 processing: false,
                 variant: 'error',

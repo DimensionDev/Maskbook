@@ -6,6 +6,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types/index.js'
 import { useTradeAmount } from './useTradeAmount.js'
+import { toHex } from 'web3-utils'
 
 export function useTradeCallback(
     trade: TradeComputed<SwapResponse> | null,
@@ -85,7 +86,7 @@ export function useTradeCallback(
                   ),
             {
                 from: account,
-                value: transactionValue,
+                value: toHex(transactionValue),
                 ...gasConfig,
             },
         )
