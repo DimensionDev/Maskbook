@@ -7,7 +7,6 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { SwapQuoteResponse, TradeComputed } from '../../types/index.js'
 import { SUPPORTED_CHAIN_ID_LIST } from './constants.js'
-import { toHex } from 'web3-utils'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null, gasConfig?: GasConfig) {
     const connection = useWeb3Connection()
@@ -39,8 +38,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
                 ...config,
                 gas: await connection.estimateTransaction?.({
                     from: account,
-                    value: toHex(tradeComputed.trade_.value),
-                    ...pick(tradeComputed.trade_, ['to', 'data']),
+                    ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
                 }),
                 ...gasConfig,
             },

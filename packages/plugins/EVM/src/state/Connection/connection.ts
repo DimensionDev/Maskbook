@@ -500,10 +500,10 @@ class Connection implements EVM_Connection {
                 {
                     method: EthereumMethodType.ETH_ESTIMATE_GAS,
                     params: [
-                        {
+                        new AccountTransaction({
                             from: options.account,
                             ...transaction,
-                        },
+                        }).fill(options.overrides),
                     ],
                 },
                 options,
