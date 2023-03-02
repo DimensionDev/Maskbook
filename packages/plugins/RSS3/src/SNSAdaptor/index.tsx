@@ -25,13 +25,16 @@ const createProfileTabConfig = (label: string, props: FeedPageProps, priority = 
             TabContent: ({ socialAccount }) => {
                 const key = [socialAccount?.address ?? '-', props.tag ?? '-'].join('_')
 
-                useMountReport(
-                    props.tag === RSS3BaseAPI.Tag.Donation
-                        ? TelemetryAPI.EventID.AccessWeb3ProfileDialogDonationTab
-                        : props.tag === RSS3BaseAPI.Tag.Social
-                        ? TelemetryAPI.EventID.AccessWeb3ProfileDialogSocialTab
-                        : TelemetryAPI.EventID.AccessWeb3ProfileDialogActivitiesTab,
-                )
+                useMountReport(() => {
+                    switch (props.tag) {
+                        case RSS3BaseAPI.Tag.Donation:
+                            return TelemetryAPI.EventID.AccessWeb3ProfileDialogDonationTab
+                        case RSS3BaseAPI.Tag.Social:
+                            return TelemetryAPI.EventID.AccessWeb3ProfileDialogSocialTab
+                        default:
+                            return TelemetryAPI.EventID.AccessWeb3ProfileDialogActivitiesTab
+                    }
+                })
 
                 return (
                     <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
@@ -65,13 +68,16 @@ const createSearchTabConfig = (
                 }
                 const key = [socialAccount?.address ?? '-', props.tag ?? '-'].join('_')
 
-                useMountReport(
-                    props.tag === RSS3BaseAPI.Tag.Donation
-                        ? TelemetryAPI.EventID.AccessWeb3TabDonationTab
-                        : props.tag === RSS3BaseAPI.Tag.Social
-                        ? TelemetryAPI.EventID.AccessWeb3TabSocialTab
-                        : TelemetryAPI.EventID.AccessWeb3TabActivitiesTab,
-                )
+                useMountReport(() => {
+                    switch (props.tag) {
+                        case RSS3BaseAPI.Tag.Donation:
+                            return TelemetryAPI.EventID.AccessWeb3TabDonationTab
+                        case RSS3BaseAPI.Tag.Social:
+                            return TelemetryAPI.EventID.AccessWeb3TabSocialTab
+                        default:
+                            return TelemetryAPI.EventID.AccessWeb3TabActivitiesTab
+                    }
+                })
 
                 return (
                     <Box style={{ minHeight: 300 }}>
