@@ -3,7 +3,7 @@ import { useAsync } from 'react-use'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ImageType } from '../types.js'
-import type { User, type ShowMeta, type EssayRSSNode } from '../types.js'
+import type { User, ShowMeta, EssayRSSNode } from '../types.js'
 import { Punk3D, DEFAULT_SET_WORD, MASK_TWITTER, DEFAULT_PUNK_MASK_WORD, PunkIcon } from '../constants.js'
 import { useUser } from './useUser.js'
 
