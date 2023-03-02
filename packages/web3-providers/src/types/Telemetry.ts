@@ -30,7 +30,7 @@ export namespace TelemetryAPI {
         // Open the Web3 tabs the Social tab presents
         AccessWeb3TabSocialTab = 'AccessWeb3TabSocialTab',
         // Open the web3 profile dialog
-        AccessWeb3ProfileDialog = 'access_web3_profile_dialog',
+        AccessWeb3ProfileDialog = 'AccessWeb3ProfileDialog',
         // Open the Web3 profile dialog the NFTs tab presents
         AccessWeb3ProfileDialogNFTsTab = 'AccessWeb3ProfileDialogNFTsTab',
         // Open the Web3 profile dialog the Activities tab presents
@@ -40,15 +40,15 @@ export namespace TelemetryAPI {
         // Open the Web3 profile dialog the Social tab presents
         AccessWeb3ProfileDialogSocialTab = 'AccessWeb3ProfileDialogSocialTab',
         // The toolbar has successfully injected
-        AccessToolbox = 'access_toolbox',
+        AccessToolbox = 'AccessToolbox',
         // Open the application board dialog
-        AccessApplicationBoard = 'access_application_board',
+        AccessApplicationBoard = 'AccessApplicationBoard',
         // Open the dashboard page
-        AccessDashboard = 'access_dashboard',
+        AccessDashboard = 'AccessDashboard',
         // Open the popups page
-        AccessPopups = 'access_popups',
+        AccessPopups = 'AccessPopups',
         // For debug only
-        Debug = 'debug',
+        Debug = 'Debug',
     }
 
     export enum ExceptionID {
