@@ -46,7 +46,7 @@ export namespace TelemetryAPI {
         // Open the dashboard page
         AccessDashboard = 'access_dashboard',
         // Open the popups page
-        AccessPopup = 'access_popup',
+        AccessPopups = 'access_popups',
         // For debug only
         Debug = 'debug',
     }
