@@ -58,8 +58,9 @@ export function Web3ProfileDialog() {
     useEffect(() => {
         return CrossIsolationMessages.events.web3ProfileDialogEvent.on(({ open }) => {
             if (open)
-                Sentry?.captureEvent({
-                    eventID: TelemetryAPI.EventID.Web3ProfileDialogAccess,
+                Sentry.captureEvent({
+                    eventType: TelemetryAPI.EventType.Access,
+                    eventID: TelemetryAPI.EventID.AccessWeb3ProfileDialog,
                 })
             setOpen(open)
         })
