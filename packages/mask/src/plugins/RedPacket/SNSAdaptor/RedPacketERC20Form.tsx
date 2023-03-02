@@ -81,8 +81,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     // #region select token
-    const { value: nativeTokenDetailed } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
-    const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
+    const { value: nativeTokenDetailed } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const [token = nativeTokenDetailed, setToken] = useState<FungibleToken<ChainId, SchemaType> | undefined>(
         origin?.token,
     )

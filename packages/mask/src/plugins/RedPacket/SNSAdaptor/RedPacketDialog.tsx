@@ -227,7 +227,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         ) : null
                     }
                     networkTabs={
-                        step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog ? (
+                        step === CreateRedPacketPageStep.NewRedPacketPage &&
+                        !openNFTConfirmDialog &&
+                        !openSelectNFTDialog ? (
                             <div className={classes.abstractTabWrapper}>
                                 <NetworkTab
                                     classes={{
