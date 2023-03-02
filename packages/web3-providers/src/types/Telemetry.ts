@@ -2,16 +2,26 @@ import type { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 export namespace TelemetryAPI {
-    export enum TypeID {
+    export enum GroupID {
         Event = 'event',
         Exception = 'exception',
     }
 
+    export enum EventType {
+        Access = 'Access',
+        Exit = 'Exit',
+        Interact = 'Interact',
+    }
+
+    export enum ExceptionType {
+        Error = 'Error',
+    }
+
     export enum EventID {
-        ApplicationBoardAccess = 'application-board-access',
-        DashboardAccess = 'dashboard-access',
-        PopupAccess = 'popup-access',
-        Web3ProfileDialogAccess = 'web3-profile-dialog-access',
+        AccessApplicationBoard = 'access_application_board',
+        AccessDashboard = 'access_dashboard',
+        AccessPopup = 'access_popup',
+        AccessWeb3ProfileDialog = 'access_web3_profile_dialog',
         Debug = 'debug',
     }
 
@@ -42,11 +52,13 @@ export namespace TelemetryAPI {
     }
 
     export interface EventOptions extends CommonOptions {
+        eventType: EventType
         eventID: EventID
         message?: string
     }
 
     export interface ExceptionOptions extends CommonOptions {
+        exceptionType: ExceptionType
         exceptionID: ExceptionID
         error: Error
     }

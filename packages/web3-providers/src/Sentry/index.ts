@@ -117,14 +117,22 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         }
     }
 
-    private createCommonEvent(type: TelemetryAPI.TypeID, message: string, initial: TelemetryAPI.CommonOptions): Event {
+    private createCommonEvent(
+        groupID: TelemetryAPI.GroupID,
+        type: TelemetryAPI.EventType | TelemetryAPI.ExceptionType,
+        ID: TelemetryAPI.EventID | TelemetryAPI.ExceptionID,
+        initial: TelemetryAPI.CommonOptions,
+    ): Event {
         const options = this.getOptions(initial)
         return {
-            message,
-            level: type === TelemetryAPI.TypeID.Event ? 'info' : 'error',
-            user: {},
+            level: groupID === TelemetryAPI.GroupID.Event ? 'info' : 'error',
+            message: ID,
             tags: {
-                type: TelemetryAPI.TypeID.Event,
+                type: TelemetryAPI.GroupID.Event,
+                event_type: groupID === TelemetryAPI.GroupID.Event ? type : undefined,
+                exception_type: groupID === TelemetryAPI.GroupID.Event ? undefined : type,
+                event_id: groupID === TelemetryAPI.GroupID.Event ? ID : undefined,
+                exception_id: groupID === TelemetryAPI.GroupID.Event ? undefined : ID,
                 chain_id: options.network?.chainId,
                 plugin_id: options.network?.pluginID,
                 network_id: options.network?.networkID,
@@ -137,11 +145,16 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
     }
 
     private createEvent(options: TelemetryAPI.EventOptions): Event {
-        return this.createCommonEvent(TelemetryAPI.TypeID.Event, options.eventID, options)
+        return this.createCommonEvent(TelemetryAPI.GroupID.Event, options.eventType, options.eventID, options)
     }
 
     private createException(options: TelemetryAPI.ExceptionOptions): Event {
-        return this.createCommonEvent(TelemetryAPI.TypeID.Exception, options.exceptionID, options)
+        return this.createCommonEvent(
+            TelemetryAPI.GroupID.Exception,
+            options.exceptionType,
+            options.exceptionID,
+            options,
+        )
     }
 
     enable() {

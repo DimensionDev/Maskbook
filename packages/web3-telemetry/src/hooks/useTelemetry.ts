@@ -8,15 +8,21 @@ export function useTelemetry() {
 
     return useMemo(() => {
         return {
-            captureEvent(eventID: TelemetryAPI.EventID) {
+            captureEvent(eventType: TelemetryAPI.EventType, eventID: TelemetryAPI.EventID) {
                 Sentry.captureEvent({
                     ...options,
+                    eventType,
                     eventID,
                 })
             },
-            captureException(exceptionID: TelemetryAPI.ExceptionID, error: Error) {
+            captureException(
+                exceptionType: TelemetryAPI.ExceptionType,
+                exceptionID: TelemetryAPI.ExceptionID,
+                error: Error,
+            ) {
                 Sentry.captureException({
                     ...options,
+                    exceptionType,
                     exceptionID,
                     error,
                 })
