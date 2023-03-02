@@ -7,7 +7,7 @@ import { DashboardRoutes, RestoreSuccessEvent } from '@masknet/shared-base'
 import { Messages } from '../API.js'
 import { useDashboardI18N } from '../locales/index.js'
 import { TermsGuard } from './TermsGuard.js'
-import { useAccess } from '@masknet/web3-telemetry/hooks'
+import { useMountReport } from '@masknet/web3-telemetry/hooks'
 import { TelemetryAPI } from '@masknet/web3-providers/types'
 
 const Wallets = lazy(() => import(/* webpackPrefetch: true */ './Wallets/index.js'))
@@ -41,7 +41,7 @@ export function Pages() {
         return Messages.events.restoreSuccess.on(restoreCallback)
     }, [restoreCallback])
 
-    useAccess(TelemetryAPI.EventID.AccessDashboard)
+    useMountReport(TelemetryAPI.EventID.AccessDashboard)
 
     return (
         <Suspense fallback={null}>

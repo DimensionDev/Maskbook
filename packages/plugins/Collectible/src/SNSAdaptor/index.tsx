@@ -3,7 +3,7 @@ import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { Box } from '@mui/material'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { useAccess } from '@masknet/web3-telemetry/hooks'
+import { useMountReport } from '@masknet/web3-telemetry/hooks'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { SocialAddressType, SearchResultType } from '@masknet/web3-shared-base'
 import { NetworkPluginID, parseURLs } from '@masknet/shared-base'
@@ -90,7 +90,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             priority: 1,
             UI: {
                 TabContent({ socialAccount, identity }) {
-                    useAccess(TelemetryAPI.EventID.AccessWeb3TabNFTsTab)
+                    useMountReport(TelemetryAPI.EventID.AccessWeb3TabNFTsTab)
 
                     if (!socialAccount) return null
 

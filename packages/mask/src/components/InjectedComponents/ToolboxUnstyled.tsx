@@ -30,7 +30,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { FiberManualRecord as FiberManualRecordIcon } from '@mui/icons-material'
-import { useAccess } from '@masknet/web3-telemetry/hooks'
+import { useMountReport } from '@masknet/web3-telemetry/hooks'
 import { TelemetryAPI } from '@masknet/web3-providers/types'
 import { useI18N } from '../../utils/index.js'
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc/index.js'
@@ -76,7 +76,7 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const { openDialog } = useRemoteControlledDialog(WalletMessages.events.applicationDialogUpdated)
-    useAccess(TelemetryAPI.EventID.AccessToolbox)
+    useMountReport(TelemetryAPI.EventID.AccessToolbox)
     return (
         <GuideStep step={1} total={4} tip={t('user_guide_tip_1')}>
             <Container>

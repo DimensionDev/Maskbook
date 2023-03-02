@@ -19,7 +19,7 @@ import { useCurrentPersonaConnectStatus } from '@masknet/shared'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
 import Services from '../../extension/service.js'
-import { useAccess } from '@masknet/web3-telemetry/hooks'
+import { useMountReport } from '@masknet/web3-telemetry/hooks'
 import { TelemetryAPI } from '@masknet/web3-providers/types'
 
 const useStyles = makeStyles<{
@@ -93,10 +93,6 @@ export function ApplicationBoard(props: Props) {
 }
 
 function ApplicationBoardContent(props: Props) {
-    // #region log
-    useAccess(TelemetryAPI.EventID.AccessApplicationBoard)
-    // #endregion
-
     const { t } = useI18N()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const { pluginID: currentWeb3Network } = useNetworkContext()
@@ -142,6 +138,8 @@ function ApplicationBoardContent(props: Props) {
         shouldScroll: listedAppList.length > 12,
         isCarouselReady: Boolean(isCarouselReady()),
     })
+
+    useMountReport(TelemetryAPI.EventID.AccessApplicationBoard)
 
     return (
         <>

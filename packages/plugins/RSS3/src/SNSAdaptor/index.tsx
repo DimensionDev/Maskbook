@@ -2,7 +2,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Box } from '@mui/material'
-import { useAccess } from '@masknet/web3-telemetry/hooks'
+import { useMountReport } from '@masknet/web3-telemetry/hooks'
 import { RSS3BaseAPI, TelemetryAPI } from '@masknet/web3-providers/types'
 import { SocialAddressType, SearchResultType } from '@masknet/web3-shared-base'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
@@ -25,7 +25,7 @@ const createProfileTabConfig = (label: string, props: FeedPageProps, priority = 
             TabContent: ({ socialAccount }) => {
                 const key = [socialAccount?.address ?? '-', props.tag ?? '-'].join('_')
 
-                useAccess(
+                useMountReport(
                     props.tag === RSS3BaseAPI.Tag.Donation
                         ? TelemetryAPI.EventID.AccessWeb3ProfileDialogDonationTab
                         : props.tag === RSS3BaseAPI.Tag.Social
@@ -65,7 +65,7 @@ const createSearchTabConfig = (
                 }
                 const key = [socialAccount?.address ?? '-', props.tag ?? '-'].join('_')
 
-                useAccess(
+                useMountReport(
                     props.tag === RSS3BaseAPI.Tag.Donation
                         ? TelemetryAPI.EventID.AccessWeb3TabDonationTab
                         : props.tag === RSS3BaseAPI.Tag.Social

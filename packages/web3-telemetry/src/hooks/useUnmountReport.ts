@@ -5,7 +5,7 @@ import { useTelemetry } from './useTelemetry.js'
 /**
  * Log an exit event
  */
-export function useExit(eventID: TelemetryAPI.EventID) {
+export function useUnmountReport(eventID: TelemetryAPI.EventID) {
     const telemetry = useTelemetry()
 
     useUnmount(() => {

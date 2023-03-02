@@ -5,7 +5,7 @@ import { useTelemetry } from './useTelemetry.js'
 /**
  * Log an access event
  */
-export function useAccess(eventID: TelemetryAPI.EventID) {
+export function useMountReport(eventID: TelemetryAPI.EventID) {
     const telemetry = useTelemetry()
 
     useMount(() => {

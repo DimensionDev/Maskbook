@@ -6,7 +6,7 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { TelemetryProvider, useAccess } from '@masknet/web3-telemetry/hooks'
+import { TelemetryProvider, useMountReport } from '@masknet/web3-telemetry/hooks'
 import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
 import { languageSettings } from '../../../shared/legacy-settings/settings.js'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
@@ -44,7 +44,7 @@ export default function Popups() {
     const [title, setTitle] = useState('')
     const titleContext = useMemo(() => ({ title, setTitle }), [title])
     useEffect(queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
-    useAccess(TelemetryAPI.EventID.AccessPopups)
+    useMountReport(TelemetryAPI.EventID.AccessPopups)
 
     return MaskUIRootPage(
         usePopupTheme,
