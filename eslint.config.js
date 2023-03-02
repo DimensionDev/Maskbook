@@ -1,3 +1,4 @@
+// cSpell:disable
 import TypescriptParser from '@typescript-eslint/parser'
 
 import UnicornPlugin from 'eslint-plugin-unicorn'
