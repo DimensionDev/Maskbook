@@ -25,6 +25,9 @@ approvedList.set('wyvern-js', [
 // by opensea-js https://github.com/ProjectOpenSea/opensea-js/issues/407
 approvedList.set('wyvern-schemas', 'git+https://github.com/ProjectOpenSea/wyvern-schemas.git#v0.13.1')
 
+// https://github.com/storybookjs/storybook/issues/19055
+approvedList.set('@storybook/react-docgen-typescript-plugin', 'npm:react-docgen-typescript-plugin@1.0.2')
+
 // openseajs -> wyvern-schemas -> web3-provider-engine -> eth-block-tracker
 approvedList.set('async-eventemitter', 'github:ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c')
 
