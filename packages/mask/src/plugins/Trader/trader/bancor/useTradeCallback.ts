@@ -8,7 +8,6 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../../messages.js'
 import type { SwapBancorRequest, TradeComputed } from '../../types/index.js'
-import { toHex } from 'web3-utils'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest> | null, gasConfig?: GasConfig) {
     const { account, chainId } = useChainContext()
@@ -33,14 +32,11 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
         // Note that if approval is required, the API will also return the necessary approval transaction.
         const tradeTransaction = data.length === 1 ? data[0] : data[1]
 
-        const config = pick(tradeTransaction.transaction, ['to', 'data', 'from'])
+        const config = pick(tradeTransaction.transaction, ['to', 'data', 'from', 'value'])
+        const gas = await connection.estimateTransaction?.(config)
         const config_ = {
             ...config,
-            gas:
-                (await connection.estimateTransaction?.({
-                    ...config,
-                    value: toHex(tradeTransaction.transaction.value),
-                })) ?? ZERO.toString(),
+            gas: gas ?? ZERO.toString(),
             ...gasConfig,
         }
 
