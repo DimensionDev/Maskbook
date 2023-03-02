@@ -1,0 +1,77 @@
+{
+    "name": "@masknet/app",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": null
+    },
+    "scripts": {
+        "start": "npx webpack serve",
+        "build": "npx webpack",
+        "build:css": "cross-env TAILWIND_MODE=build NODE_ENV=production postcss src/styles/tailwind.css -o src/styles/index.css",
+        "watch:css": "cross-env TAILWIND_MODE=watch NODE_ENV=development postcss src/styles/tailwind.css -o src/styles/index.css --watch"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "dependencies": {
+        "@headlessui/react": "^1.7.11",
+        "@heroicons/react": "^2.0.16",
+        "@masknet/base": "workspace:^",
+        "@masknet/encryption": "workspace:^",
+        "@masknet/plugin-evm": "workspace:^",
+        "@masknet/plugin-gitcoin": "workspace:^",
+        "@masknet/plugin-infra": "workspace:^",
+        "@masknet/plugin-wallet": "workspace:^",
+        "@masknet/shared-base": "workspace:^",
+        "@masknet/typed-message": "workspace:^",
+        "@masknet/typed-message-react": "workspace:^",
+        "@masknet/web3-constants": "workspace:^",
+        "@masknet/web3-contracts": "workspace:^",
+        "@masknet/web3-helpers": "workspace:^",
+        "@masknet/web3-hooks-base": "workspace:^",
+        "@masknet/web3-providers": "workspace:^",
+        "@masknet/web3-shared-base": "workspace:^",
+        "@masknet/web3-shared-evm": "workspace:^",
+        "@masknet/web3-shared-flow": "workspace:^",
+        "@masknet/web3-shared-solana": "workspace:^",
+        "@servie/events": "^3.0.0",
+        "@tailwindcss/aspect-ratio": "^0.4.2",
+        "@tailwindcss/container-queries": "^0.1.0",
+        "@tailwindcss/forms": "^0.5.3",
+        "@tailwindcss/line-clamp": "^0.4.2",
+        "@tailwindcss/typography": "^0.5.9",
+        "async-call-rpc": "^6.1.5",
+        "autoprefixer": "^10.4.13",
+        "cross-env": "^7.0.3",
+        "crypto-browserify": "^3.12.0",
+        "cssnano": "^5.1.15",
+        "idb": "^7.1.1",
+        "postcss": "^8.4.21",
+        "postcss-cli": "^10.1.0",
+        "purgecss": "^5.0.0",
+        "safari-14-idb-fix": "^3.0.0",
+        "stream-browserify": "^3.0.0",
+        "tailwindcss": "^3.2.7"
+    },
+    "devDependencies": {
+        "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
+        "copy-webpack-plugin": "^11.0.0",
+        "html-webpack-plugin": "^5.5.0",
+        "react-refresh": "^0.14.0",
+        "source-map-loader": "^4.0.1",
+        "swc-loader": "^0.2.3",
+        "webpack": "^5.75.0",
+        "webpack-cli": "^5.0.1",
+        "webpack-dev-server": "^4.11.1"
+    }
+}

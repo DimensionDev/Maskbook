@@ -162,10 +162,8 @@ async function backupAll() {
             'build-date': process.env.BUILD_DATE,
             'commit-hash': process.env.COMMIT_HASH,
             'commit-date': process.env.COMMIT_DATE,
-            'remote-url': process.env.REMOTE_URL,
             'branch-name': process.env.BRANCH_NAME,
             dirty: process.env.DIRTY,
-            'tag-dirty': process.env.TAG_DIRTY,
         },
         instances,
     }

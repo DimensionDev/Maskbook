@@ -17,7 +17,7 @@
     "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.0.1",
-    "@types/node": "18.14.2",
+    "@types/node": "18.14.4",
     "core-js-builder": "3.29.0",
     "regenerator-runtime": "^0.13.11",
     "rollup": "^3.17.3",

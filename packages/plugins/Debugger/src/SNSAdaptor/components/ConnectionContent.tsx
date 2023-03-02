@@ -38,11 +38,15 @@ export function ConnectionContent(props: ConnectionContentProps) {
     const telemetry = useTelemetry()
 
     const onCaptureEvent = useCallback(async () => {
-        telemetry.captureEvent(TelemetryAPI.EventID.Debug)
+        telemetry.captureEvent(TelemetryAPI.EventType.Debug, TelemetryAPI.EventID.Debug)
     }, [telemetry])
 
     const onCaptureException = useCallback(async () => {
-        telemetry.captureException(TelemetryAPI.ExceptionID.Debug, new Error('An error message.'))
+        telemetry.captureException(
+            TelemetryAPI.ExceptionType.Error,
+            TelemetryAPI.ExceptionID.Debug,
+            new Error('An error message.'),
+        )
     }, [telemetry])
 
     const onEstimateCallback = useCallback(async () => {

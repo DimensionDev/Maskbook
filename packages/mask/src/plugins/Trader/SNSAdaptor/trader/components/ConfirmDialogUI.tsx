@@ -1,19 +1,12 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import type { BigNumber } from 'bignumber.js'
-import { FormattedBalance, FormattedCurrency, InjectedDialog, TokenIcon, PluginWalletStatusBar } from '@masknet/shared'
+import { FormattedBalance, InjectedDialog, TokenIcon, PluginWalletStatusBar } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
 import { useI18N } from '../../../../../utils/index.js'
 import type { TradeComputed } from '../../../types/index.js'
-import {
-    formatBalance,
-    formatCurrency,
-    multipliedBy,
-    formatPercentage,
-    isZero,
-    leftShift,
-} from '@masknet/web3-shared-base'
+import { formatBalance, formatCurrency, formatPercentage, isZero } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Alert, alpha, Box, Button, DialogActions, DialogContent, dialogTitleClasses, Typography } from '@mui/material'
 import { ArrowDownward } from '@mui/icons-material'
@@ -288,7 +281,9 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
         if (!cacheTrade) return null
 
         const { inputAmount, outputAmount } = cacheTrade
-
+        const swapUsdPrice = formatCurrency(inputAmount.shiftedBy(-inputToken.decimals).times(inputTokenPrice), 'USD', {
+            onlyRemainTwoDecimal: true,
+        })
         return (
             <InjectedDialog
                 open={open}
@@ -300,14 +295,8 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                         <Box>
                             <Typography className={classes.label}>{t('plugin_trader_swap_from')}</Typography>
                             <Typography className={classes.label}>
-                                ~
-                                <FormattedCurrency
-                                    value={multipliedBy(
-                                        formatBalance(inputAmount.toFixed(), inputToken.decimals),
-                                        inputTokenPrice,
-                                    ).toFixed(2)}
-                                    formatter={formatCurrency}
-                                />
+                                {swapUsdPrice.includes('<') ? '' : '\u2248'}
+                                {swapUsdPrice}
                             </Typography>
                         </Box>
                         <Box>
@@ -340,13 +329,8 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                         <Box>
                             <Typography className={classes.label}>{t('plugin_trader_swap_receive')}</Typography>
                             <Typography className={classes.label}>
-                                ~
-                                <FormattedCurrency
-                                    value={leftShift(outputAmount.toFixed(), outputToken.decimals)
-                                        .multipliedBy(outputTokenPrice)
-                                        .toFixed(2)}
-                                    formatter={formatCurrency}
-                                />
+                                {swapUsdPrice.includes('<') ? '' : '\u2248'}
+                                {swapUsdPrice}
                             </Typography>
                         </Box>
                         <Box>
@@ -466,9 +450,8 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                                     formatter={formatBalance}
                                 />
                                 <span>
-                                    {gasFeeUSD === '<$0.01'
-                                        ? t('plugin_trader_tx_cost_very_small', { usd: gasFeeUSD })
-                                        : t('plugin_trader_confirm_tx_cost', { usd: gasFeeUSD })}
+                                    ({gasFeeUSD.includes('<') ? '' : '\u2248'}
+                                    {gasFeeUSD})
                                 </span>
                             </Typography>
                         </Box>

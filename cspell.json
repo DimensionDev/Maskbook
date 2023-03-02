@@ -10,6 +10,9 @@
     ],
     "ignorePaths": [
         "./packages/web3-contracts/types/**",
+        "./packages/app/src/styles/index.css",
+        "./packages/app/tailwind.config.cjs",
+        "./packages/app/postcss.config.cjs",
         ".github",
         ".gitignore",
         ".prettierignore",

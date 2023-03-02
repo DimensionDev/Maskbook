@@ -256,11 +256,12 @@ export function RedPacket(props: RedPacketProps) {
         if (listOfStatus.includes(RedPacketStatus.expired)) return t.description_expired()
         if (listOfStatus.includes(RedPacketStatus.empty)) return t.description_empty()
         if (!payload.password) return t.description_broken()
-        return t.description_failover({
+        const i18nParams = {
             total: formatBalance(payload.total, token.decimals, 2),
             symbol: token.symbol ?? '-',
-            shares: payload.shares.toString() ?? '-',
-        })
+            count: payload.shares.toString() ?? '-',
+        }
+        return payload.shares > 1 ? t.description_failover_other(i18nParams) : t.description_failover_one(i18nParams)
     }, [availability, canRefund, token, t, payload, listOfStatus])
 
     const handleShare = useCallback(() => {

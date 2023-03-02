@@ -236,7 +236,9 @@ export const TradeForm = memo<AllTradeFormProps>(
                 Others?.isNativeTokenSchemaType(inputToken?.schema) ? amount_.minus(gasFee) : amount_,
             )
 
-            return isZero(amount_) ? ZERO.toString() : formatBalance(amount_, inputToken?.decimals, undefined, true)
+            return isZero(amount_)
+                ? ZERO.toString()
+                : formatBalance(amount_.integerValue(), inputToken?.decimals, undefined, true)
         }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken, Others?.isNativeTokenSchemaType])
 
         const handleAmountChange = useCallback(

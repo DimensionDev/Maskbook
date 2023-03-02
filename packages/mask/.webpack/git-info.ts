@@ -6,10 +6,8 @@ interface GitInfoReport {
     VERSION: string
     COMMIT_HASH: string
     COMMIT_DATE: string
-    REMOTE_URL: string
     BRANCH_NAME: string
     DIRTY: boolean
-    TAG_DIRTY: boolean
 }
 
 export function emitGitInfo(reproducible: boolean) {
@@ -22,26 +20,24 @@ export function emitGitInfo(reproducible: boolean) {
 
 /** Get git info */
 export function getGitInfo(reproducible: boolean): GitInfoReport {
+    const VERSION = require('../src/manifest.json').version
     const report: GitInfoReport = {
         BUILD_DATE: new Date(0).toISOString(),
-        VERSION: require('../package.json').version + '-reproducible',
+        VERSION: VERSION + '-reproducible',
         COMMIT_HASH: 'N/A',
         COMMIT_DATE: 'N/A',
-        REMOTE_URL: 'N/A',
         BRANCH_NAME: 'N/A',
         DIRTY: false,
-        TAG_DIRTY: false,
     }
     try {
         if (reproducible && !git.isRepository()) return report
+        const DIRTY = git.isDirty()
         report.BUILD_DATE = new Date().toISOString()
-        report.VERSION = git.describe('--dirty')
+        report.VERSION = VERSION + (DIRTY ? '*' : '')
         report.COMMIT_HASH = git.commitHash(true)
         report.COMMIT_DATE = git.commitDate().toISOString()
-        report.REMOTE_URL = git.remoteURL()
         report.BRANCH_NAME = git.branchName()
-        report.DIRTY = git.isDirty()
-        report.TAG_DIRTY = git.isTagDirty()
+        report.DIRTY = DIRTY
     } catch {
         // ignore
     }
