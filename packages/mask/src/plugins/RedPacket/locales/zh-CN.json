@@ -87,7 +87,6 @@
     "description_expired": "此红包已过期。",
     "description_broken": "此红包已被损坏。",
     "description_empty": "此红包是空的。",
-    "description_failover": "{{shares}} 份额 / {{total}} {{symbol}} 总数额",
     "recommend_feature_description": "发送一个惊喜的加密货币红包。支持多个链上的代币和 NFT。",
     "claim_token_successful": "你领取了{{- amount}} {{name}}。",
     "claim_nft_successful": "成功领取了 1 {{name}}。",
