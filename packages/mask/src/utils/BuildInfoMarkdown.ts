@@ -7,7 +7,6 @@ export const buildInfoMarkdown = `## Build info
 - BUILD_DATE: ${process.env.BUILD_DATE}
 - VERSION: ${process.env.VERSION}
 
-## Git (${process.env.TAG_DIRTY ? '*' : ''}):
+## Git (${process.env.DIRTY ? '*' : ''}):
 
-${process.env.COMMIT_HASH} (${process.env.BRANCH_NAME})
-${process.env.REMOTE_URL?.toLowerCase()?.includes('DimensionDev') ? '' : process.env.REMOTE_URL}`
+${process.env.COMMIT_HASH} (${process.env.BRANCH_NAME})`
