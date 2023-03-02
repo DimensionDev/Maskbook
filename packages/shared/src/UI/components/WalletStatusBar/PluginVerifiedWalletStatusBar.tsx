@@ -115,7 +115,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const defaultChainId = useDefaultChainId(defaultPluginId)
 
         const providerDescriptor = useProviderDescriptor(defaultPluginId)
-        const networkDescriptor = useNetworkDescriptor(defaultPluginId)
+        const networkDescriptor = useNetworkDescriptor(defaultPluginId, chainId)
 
         const pendingTransactions = useRecentTransactions(currentPluginID, TransactionStatusType.NOT_DEPEND)
 

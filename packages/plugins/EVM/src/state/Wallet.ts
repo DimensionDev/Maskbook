@@ -44,9 +44,14 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
             if (this.providerType !== ProviderType.MaskWallet) return
 
             const wallets = this.context.wallets.getCurrentValue()
-            const allPersonas = this.context.allPersonas?.getCurrentValue() ?? []
+
             const localWallets = this.storage.initialized ? this.storage.value[ProviderType.MaskWallet] : []
 
+            this.ref.value = uniqWith([...wallets, ...(localWallets ?? [])], (a, b) =>
+                isSameAddress(a.address, b.address),
+            )
+
+            const allPersonas = this.context.allPersonas?.getCurrentValue() ?? []
             const chainId = await SmartPayBundler.getSupportedChainId()
             const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
                 ...wallets.map((x) => x.address),
@@ -55,30 +60,28 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
 
             const now = new Date()
 
-            const result: WalletItem[] = [
-                ...wallets,
-                ...(localWallets ?? []),
-                ...accounts
-                    .filter((x) => x.deployed)
-                    .map((x) => ({
-                        id: x.address,
-                        name: 'Smart Pay',
-                        address: x.address,
-                        hasDerivationPath: false,
-                        hasStoredKeyInfo: false,
-                        configurable: true,
-                        createdAt: now,
-                        updatedAt: now,
-                        owner: x.owner,
-                        deployed: x.deployed,
-                        identifier: allPersonas.find((persona) => isSameAddress(x.owner, persona.address))?.identifier,
-                    })),
-            ].map((x) => ({
-                ...x,
-                name: x.name ?? localWallets?.find((item) => isSameAddress(item.address, x.address))?.name,
-            }))
+            const smartPayWallets = accounts
+                .filter((x) => x.deployed)
+                .map((x) => ({
+                    id: x.address,
+                    name: localWallets?.find((item) => isSameAddress(item.address, x.address))?.name ?? 'Smart Pay',
+                    address: x.address,
+                    hasDerivationPath: false,
+                    hasStoredKeyInfo: false,
+                    configurable: true,
+                    createdAt: now,
+                    updatedAt: now,
+                    owner: x.owner,
+                    deployed: x.deployed,
+                    identifier: allPersonas.find((persona) => isSameAddress(x.owner, persona.address))?.identifier,
+                }))
 
-            this.ref.value = uniqWith(result, (a, b) => isSameAddress(a.address, b.address))
+            const result = uniqWith([...wallets, ...(localWallets ?? []), ...smartPayWallets], (a, b) =>
+                isSameAddress(a.address, b.address),
+            )
+
+            this.updateWallets(result)
+            this.ref.value = result
         }
 
         update()

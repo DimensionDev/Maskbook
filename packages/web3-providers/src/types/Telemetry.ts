@@ -39,6 +39,10 @@ export namespace TelemetryAPI {
         AccessWeb3ProfileDialogDonationTab = 'AccessWeb3ProfileDialogDonationTab',
         // Open the Web3 profile dialog the Social tab presents
         AccessWeb3ProfileDialogSocialTab = 'AccessWeb3ProfileDialogSocialTab',
+        // Open the trader plugin
+        AccessTradePlugin = 'AccessTradePlugin',
+        // Send the trader transaction successfully
+        SendTraderTransactionSuccessfully = 'SendTraderTransactionSuccessfully',
         // The toolbar has successfully injected
         AccessToolbox = 'access_toolbox',
         // Open the application board dialog
