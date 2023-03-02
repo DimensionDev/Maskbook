@@ -171,36 +171,35 @@ const codeStyleRules = {
     'no-debugger': 'warn',
     'no-extra-bind': 'warn', // unused bind on a function that does not uses this
     'no-extra-boolean-cast': 'warn', // if (!!expr)
-    // 'no-empty-pattern': 'warn', // const { a: {} } = expr
+    'no-empty-pattern': 'warn', // const { a: {} } = expr
     'no-extra-label': 'warn', // break/continue is ok without label
     'no-unneeded-ternary': 'warn', // expr ? true : false
     'no-useless-backreference': 'error', // RegEx
     'no-useless-call': 'warn', // expr.call(undefined, ...)
     'no-useless-catch': 'warn', // catch (e) { throw e }
     'no-useless-concat': 'warn', // "a" + "b"
-    // 'no-useless-escape': 'warn', // "hol\a"
+    'no-useless-escape': 'warn', // "hol\a"
     // 'no-lone-blocks': 'warn', // no block that not introducing a new scope
     // 'react/jsx-no-useless-fragment': 'warn', // <><TheOnlyChild /></>
-    // 'unicorn/no-console-spaces': 'warn', // console.log('id: ', id)
-    // 'unicorn/no-empty-file': 'warn',
-    // 'unicorn/no-useless-fallback-in-spread': 'warn', // {...(foo || {})}
+    'unicorn/no-console-spaces': 'warn', // console.log('id: ', id)
+    'unicorn/no-empty-file': 'warn',
+    'unicorn/no-useless-fallback-in-spread': 'warn', // {...(foo || {})}
     'unicorn/no-useless-length-check': 'warn', // array.length === 0 || array.every(...)
     'unicorn/no-useless-promise-resolve-reject': 'warn', // return Promise.resolve(value) in async function
     // 'unicorn/no-useless-spread': 'warn', // new Set([...iterable])
     // 'unicorn/no-useless-switch-case': 'warn', // case 1: default:
-    // 'unicorn/no-useless-undefined': 'warn', // let x = undefined
-    // 'unicorn/no-zero-fractions': 'warn', // 1.0
-    // 'unicorn/prefer-export-from': 'warn', // prefer export { } from than import-and-export
+    'unicorn/no-zero-fractions': 'warn', // 1.0
+    'unicorn/prefer-export-from': 'warn', // prefer export { } from than import-and-export
     // 'unicorn/prefer-native-coercion-functions': 'warn', // no coercion wrapper v => Boolean(v)
     '@typescript-eslint/await-thenable': 'warn', // await 1
     // '@typescript-eslint/no-empty-interface': 'warn', // interface T extends Q {}
     '@typescript-eslint/no-extra-non-null-assertion': 'warn', // foo!!!.bar
     // '@typescript-eslint/no-inferrable-types': 'warn', // let x: number = 1
     // '@typescript-eslint/no-meaningless-void-operator': 'warn', // void a_void_call()
-    // '@typescript-eslint/no-non-null-asserted-nullish-coalescing': 'warn', // foo! ?? bar
+    '@typescript-eslint/no-non-null-asserted-nullish-coalescing': 'warn', // foo! ?? bar
     // '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'warn', // no if (nullable_bool === true)
     // '@typescript-eslint/no-unnecessary-condition': 'warn', // no if (some_object)
-    // '@typescript-eslint/no-unnecessary-qualifier': 'warn', // no extra qualifier in enum/namespace
+    '@typescript-eslint/no-unnecessary-qualifier': 'warn', // no extra qualifier in enum/namespace
     // '@typescript-eslint/no-unnecessary-type-arguments': 'warn', // provided type argument equals the default
     // '@typescript-eslint/no-unnecessary-type-assertion': 'warn', // non_nullable!
     // '@typescript-eslint/no-unnecessary-type-constraint': 'warn', // T extends any
@@ -213,11 +212,11 @@ const codeStyleRules = {
 
     // Prefer modern things
     'prefer-const': 'warn',
-    // 'prefer-exponentiation-operator': 'warn', // **
+    'prefer-exponentiation-operator': 'warn', // **
     // 'prefer-named-capture-group': 'warn', // RegEx
     'prefer-object-has-own': 'warn',
-    // 'prefer-object-spread': 'warn', // { ... } than Object.assign
-    // 'prefer-rest-params': 'warn',
+    'prefer-object-spread': 'warn', // { ... } than Object.assign
+    'prefer-rest-params': 'warn',
     'unicorn/no-document-cookie': 'error', // even if you have to do so, use CookieJar
     'unicorn/prefer-keyboard-event-key': 'warn',
     'unicorn/prefer-add-event-listener': 'warn',
@@ -249,7 +248,6 @@ const codeStyleRules = {
     '@typescript-eslint/no-this-alias': 'warn',
     '@dimensiondev/jsx-no-class-component': 'error',
     // '@dimensiondev/type-no-number-constructor': 'warn',
-    // '@dimensiondev/array-prefer-from': 'warn',
     '@typescript-eslint/prefer-string-starts-ends-with': 'warn',
     '@typescript-eslint/prefer-for-of': 'warn',
     '@typescript-eslint/prefer-includes': 'warn',
@@ -287,17 +285,16 @@ const codeStyleRules = {
     'prefer-regex-literals': 'warn', // RegEx
     'spaced-comment': ['warn', 'always', { line: { markers: ['/'] } }],
     // 'unicorn/no-array-reduce': 'warn',
-    // 'unicorn/no-array-push-push': 'warn',
     // 'unicorn/no-lonely-if': 'warn', // else if (a) { if (b) expr }
     // 'unicorn/no-negated-condition': 'warn', // if (!a) else
     // 'unicorn/no-nested-ternary': 'warn', // a ? b : c ? d : e
-    // 'unicorn/no-typeof-undefined': 'warn', // typeof expr !== 'undefined'
+    'unicorn/no-typeof-undefined': 'warn', // typeof expr !== 'undefined'
     // 'unicorn/no-unreadable-array-destructuring': 'warn', // [,, foo] = parts
     'unicorn/no-unreadable-iife': 'warn', // (bar => (bar ? bar.baz : baz))(getBar())
     // 'unicorn/prefer-negative-index': 'warn',
     'unicorn/throw-new-error': 'warn',
     // 'unicorn/prefer-logical-operator-over-ternary': 'warn', // prefer ?? and ||
-    // 'unicorn/prefer-optional-catch-binding': 'warn', // prefer to omit catch binding
+    'unicorn/prefer-optional-catch-binding': 'warn', // prefer to omit catch binding
     // 'react/function-component-definition': [
     //     'warn',
     //     {
@@ -305,10 +302,9 @@ const codeStyleRules = {
     //         unnamedComponents: 'function-expression',
     //     },
     // ],
-    'react/jsx-boolean-value': ['error', 'never'],
-    // 'react/jsx-boolean-value': ['error', 'never', { always: ['value'] }],
-    // 'react/jsx-curly-brace-presence': ['warn', { props: 'never', children: 'never' }],
-    // 'react/jsx-fragments': ['warn', 'syntax'],
+    'react/jsx-boolean-value': ['error', 'never', { always: ['value'] }],
+    'react/jsx-curly-brace-presence': ['warn', { props: 'never', children: 'never' }],
+    'react/jsx-fragments': ['warn', 'syntax'],
     // 'react/no-children-prop': 'warn',
     'react/self-closing-comp': 'warn',
     '@typescript-eslint/prefer-as-const': 'warn',
@@ -319,13 +315,13 @@ const codeStyleRules = {
     'unicorn/better-regex': 'error', // RegEx
     'unicorn/escape-case': 'warn', // correct casing of escape '\xA9'
     'unicorn/no-hex-escape': 'warn', // correct casing of escape '\u001B'
-    // 'unicorn/numeric-separators-style': 'warn', // correct using of 1_234_567
-    // 'unicorn/number-literal-case': 'warn', // correct casing of 0xFF
+    'unicorn/numeric-separators-style': 'warn', // correct using of 1_234_567
+    'unicorn/number-literal-case': 'warn', // correct casing of 0xFF
     'unicorn/prefer-prototype-methods': 'warn', // prefer Array.prototype.slice than [].slice
     'unicorn/relative-url-style': ['warn', 'always'], // prefer relative url starts with ./
     // 'unicorn/text-encoding-identifier-case': 'warn', // prefer 'utf-8' than 'UTF-8'
     '@typescript-eslint/array-type': ['warn', { default: 'array-simple' }], // prefer T[] than Array<T>
-    // '@typescript-eslint/consistent-generic-constructors': 'warn', // prefer const map = new Map<string, number>() than generics on the left
+    '@typescript-eslint/consistent-generic-constructors': 'warn', // prefer const map = new Map<string, number>() than generics on the left
     '@typescript-eslint/consistent-type-assertions': [
         'warn',
         { assertionStyle: 'as' /* objectLiteralTypeAssertions: 'never' */ },
@@ -333,12 +329,12 @@ const codeStyleRules = {
     // '@typescript-eslint/consistent-type-definitions': 'warn', // prefer interface, also has better performance when type checking
     '@typescript-eslint/dot-notation': 'warn', // prefer a.b than a['b']
     '@typescript-eslint/no-array-constructor': 'warn',
-    // '@typescript-eslint/non-nullable-type-assertion-style': 'warn', // prefer a! than a as T
-    // '@typescript-eslint/prefer-function-type': 'warn',
+    '@typescript-eslint/non-nullable-type-assertion-style': 'warn', // prefer a! than a as T
+    '@typescript-eslint/prefer-function-type': 'warn',
     '@typescript-eslint/prefer-reduce-type-parameter': 'warn',
     // '@typescript-eslint/sort-type-constituents': 'warn',
     '@typescript-eslint/triple-slash-reference': ['error', { lib: 'never', path: 'never', types: 'always' }],
-    // '@typescript-eslint/unified-signatures': 'warn', // prefer merging overload
+    '@typescript-eslint/unified-signatures': 'warn', // prefer merging overload
     '@dimensiondev/prefer-early-return': 'warn',
     // '@dimensiondev/no-redundant-variable': 'warn',
     // '@dimensiondev/no-single-return': 'warn',

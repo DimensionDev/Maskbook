@@ -135,7 +135,7 @@ export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, {
     return {
         root: {
             zIndex: 9999,
-            transform: typeof offsetY !== 'undefined' ? `translateY(${offsetY}px)` : 'none',
+            transform: offsetY !== undefined ? `translateY(${offsetY}px)` : 'none',
             color: MaskColorVar.textLight,
             pointerEvents: 'inherit',
         },

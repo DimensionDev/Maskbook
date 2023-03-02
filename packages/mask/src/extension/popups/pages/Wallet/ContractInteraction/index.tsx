@@ -330,7 +330,7 @@ const ContractInteraction = memo(() => {
                 paymentToken: gasCurrency,
             })
             navigate(-1)
-        } catch (error_) {
+        } catch {
             setTransferError(true)
         }
     }, [request, location.search, history, chainId, smartPayChainId, gasCurrency])

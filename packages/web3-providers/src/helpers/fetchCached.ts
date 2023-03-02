@@ -2,9 +2,9 @@
 const { fetch: originalFetch } = globalThis
 
 enum Duration {
-    SHORT = 60000, // 1 min
-    MEDIUM = 1800000, // 30 mins
-    LONG = 43200000, // 12 hours
+    SHORT = 60_000, // 1 min
+    MEDIUM = 1_800_000, // 30 mins
+    LONG = 43_200_000, // 12 hours
 }
 
 const RULES = {

@@ -36,7 +36,7 @@ function encodeMeta(tm: TypedMessage) {
     const record: Record<string, any> = { __proto__: null }
     for (const [key, val] of tm.meta) {
         if (typeof key !== 'string') continue
-        if (typeof val === 'undefined') continue
+        if (val === undefined) continue
         try {
             record[key] = collectValue(val)
         } catch (err) {

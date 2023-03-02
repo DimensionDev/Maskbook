@@ -206,7 +206,7 @@ async function GUN_SEA_work(data: Uint8Array | string, salt: Uint8Array | string
     if (typeof data === 'string') data = new TextEncoder().encode(data)
     if (typeof salt === 'string') salt = new TextEncoder().encode(salt)
     const key = await crypto.subtle.importKey('raw', data, { name: 'PBKDF2' }, false, ['deriveBits'])
-    const params: Pbkdf2Params = { name: 'PBKDF2', iterations: 100000, salt, hash: { name: 'SHA-256' } }
+    const params: Pbkdf2Params = { name: 'PBKDF2', iterations: 100_000, salt, hash: { name: 'SHA-256' } }
     const derived = await crypto.subtle.deriveBits(params, key, 512)
     return btoa(String.fromCharCode(...new Uint8Array(derived)))
 }

@@ -24,7 +24,7 @@ export class Base implements Translator<ConnectionContext> {
                 config.gas = toHex(
                     BigNumber.max(
                         toHex(addGasMargin(config.gas as string).toFixed()),
-                        context.chainId === ChainId.Optimism ? 25000 : 21000,
+                        context.chainId === ChainId.Optimism ? 25_000 : 21_000,
                     ).toFixed(),
                 )
             }

@@ -34,7 +34,7 @@ import { createTransferInstruction, getOrCreateAssociatedTokenAccount } from './
 import type { SolanaConnection, SolanaConnectionOptions } from './types.js'
 
 class Connection implements SolanaConnection {
-    private connections: Map<ChainId, SolConnection> = new Map()
+    private connections = new Map<ChainId, SolConnection>()
 
     constructor(
         private chainId: ChainId,

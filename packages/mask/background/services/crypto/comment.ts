@@ -28,7 +28,7 @@ async function getCommentKey(postIV: Uint8Array, postContent: string) {
         'deriveKey',
     ])
     return (await crypto.subtle.deriveKey(
-        { name: 'PBKDF2', salt: postIV, iterations: 100000, hash: 'SHA-256' },
+        { name: 'PBKDF2', salt: postIV, iterations: 100_000, hash: 'SHA-256' },
         pbkdf,
         { name: 'AES-GCM', length: 256 },
         true,

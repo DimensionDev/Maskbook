@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="./blocto-fcl.d.ts" />
 /// <reference types="@masknet/global-types/webpack" />
 

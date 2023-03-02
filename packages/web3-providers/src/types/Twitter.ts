@@ -13,7 +13,7 @@ export namespace TwitterBaseAPI {
         data: {
             // If user doesn't exist, instead of 404 response, user field will miss
             user?: {
-                result: TwitterBaseAPI.UserNFTAvatar
+                result: UserNFTAvatar
             }
         }
     }

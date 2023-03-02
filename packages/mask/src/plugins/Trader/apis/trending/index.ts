@@ -47,7 +47,7 @@ export async function getPriceStats(
                 chainId as ChainIdEVM,
                 id,
                 currency,
-                days === TrendingAPI.Days.MAX ? 11430 : days,
+                days === TrendingAPI.Days.MAX ? 11_430 : days,
             )
         case SourceType.CoinMarketCap:
             return CoinMarketCap.getCoinPriceStats(chainId as ChainIdEVM, id, currency, days)

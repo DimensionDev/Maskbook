@@ -185,7 +185,7 @@ export class AlchemyEVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM,
         const response = await fetchJSON<AlchemyResponse_EVM>(
             urlcat(`${chainInfo.baseURL}/getNFTs/`, {
                 owner: from,
-                pageKey: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,
+                pageKey: indicator?.index !== undefined && indicator.index !== 0 ? indicator.id : undefined,
             }),
         )
 

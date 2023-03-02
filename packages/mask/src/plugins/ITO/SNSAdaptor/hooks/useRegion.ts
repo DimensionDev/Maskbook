@@ -270,9 +270,7 @@ type Region = {
     name: string
 }
 
-interface RegionResolver {
-    (): Promise<Region>
-}
+type RegionResolver = () => Promise<Region>
 
 function createRegionResolver(api: string, field: string): RegionResolver {
     return async () => {

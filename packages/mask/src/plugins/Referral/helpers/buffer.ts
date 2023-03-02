@@ -47,7 +47,7 @@ export function writeUInt32BE(buf: Uint8Array, value: number, offset?: number) {
         throw new RangeError(`value must be >= 0 and <= ${Number.MAX_SAFE_INTEGER - 1}. Received ${value}`)
     }
     // eslint-disable-next-line no-bitwise
-    buf.set([value >>> 24, value >>> 16, value >>> 8, value & 0xff], offset)
+    buf.set([value >>> 24, value >>> 16, value >>> 8, value & 0xFF], offset)
 
     return buf
 }

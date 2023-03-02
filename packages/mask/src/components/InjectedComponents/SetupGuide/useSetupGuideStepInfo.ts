@@ -3,7 +3,6 @@ import { useAsyncRetry } from 'react-use'
 import {
     EnhanceableSite,
     isSameProfile,
-    type NextIDPlatform,
     type PersonaIdentifier,
     ProfileIdentifier,
     resolveNextIDIdentityToProfile,
@@ -20,7 +19,7 @@ import { usePersonaProofs } from '@masknet/shared'
 
 export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
     const ui = activatedSocialNetworkUI
-    const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
+    const platform = ui.configuration.nextIDConfig?.platform!
 
     // #region parse setup status
     const lastPinExtensionSetting = useValueRef(userPinExtension)

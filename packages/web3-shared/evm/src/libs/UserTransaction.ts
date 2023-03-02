@@ -40,7 +40,7 @@ const USER_OP_TYPE = {
     },
 }
 
-const POSTOP = 35000
+const POSTOP = 35_000
 
 const DEFAULT_USER_OPERATION: Required<UserOperation> = {
     sender: getZeroAddress(),
@@ -196,11 +196,11 @@ export class UserTransaction {
         }
 
         // fill nonce
-        if (isValidAddress(this.userOperation.sender) && typeof overrides === 'undefined' && nonce === 0) {
+        if (isValidAddress(this.userOperation.sender) && overrides === undefined && nonce === 0) {
             try {
                 const nonce_ = await this.createWalletContract(web3, sender).methods.nonce().call()
                 this.userOperation.nonce = toNumber(nonce_)
-            } catch (error) {
+            } catch {
                 this.userOperation.nonce = 0
             }
         }
@@ -232,7 +232,7 @@ export class UserTransaction {
                         maxPriorityFeePerGas ?? DEFAULT_USER_OPERATION.maxPriorityFeePerGas,
                     ),
                 )
-            } catch (error) {
+            } catch {
                 this.userOperation.maxFeePerGas = DEFAULT_USER_OPERATION.maxPriorityFeePerGas
             }
         }
@@ -244,7 +244,7 @@ export class UserTransaction {
         // add more verification gas according to the size of initCode
         if (!isEmptyHex(initCode)) {
             this.userOperation.verificationGas = toFixed(
-                new BigNumber(DEFAULT_USER_OPERATION.verificationGas).plus(32000 + (200 * initCode.length) / 2),
+                new BigNumber(DEFAULT_USER_OPERATION.verificationGas).plus(32_000 + (200 * initCode.length) / 2),
             )
         } else {
             this.userOperation.verificationGas = DEFAULT_USER_OPERATION.verificationGas

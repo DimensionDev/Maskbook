@@ -36,7 +36,7 @@ export function FileViewer({ files }: { files: FileInfo[] }) {
                     variant: 'success',
                     message: t.save_file_message({ context: 'success', name: file.name }),
                 })
-            } catch (err) {
+            } catch {
                 showSnackbar(t.save_file_title({ context: 'failed' }), {
                     variant: 'error',
                     message: t.save_file_message({ context: 'failed', name: file.name }),

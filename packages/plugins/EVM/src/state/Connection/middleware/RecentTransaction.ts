@@ -33,7 +33,7 @@ export class RecentTransaction implements Middleware<ConnectionContext> {
                     await TransactionWatcher?.watchTransaction(context.chainId, context.result, transaction)
                     break
                 case EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT:
-                    const isSquashed = typeof context.result !== 'undefined'
+                    const isSquashed = context.result !== undefined
                     if (isSquashed) return
 
                     const receipt = context.result as TransactionReceipt | null

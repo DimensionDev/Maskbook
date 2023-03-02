@@ -17,7 +17,7 @@ export function useTransactionCallback<T extends unknown>(
             if (!gasExpectedConfig.gas && estimatedGas) {
                 gasExpectedConfig.gas = estimatedGas
             }
-        } catch (error) {
+        } catch {
             await method.call(config)
         }
 

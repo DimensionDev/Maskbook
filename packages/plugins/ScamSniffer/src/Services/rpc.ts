@@ -24,7 +24,7 @@ export async function isAutoReportEnabled(): Promise<boolean> {
     try {
         const state = await storage.get(reportKey)
         if (state === 1) return true
-    } catch (error) {}
+    } catch {}
     return false
 }
 

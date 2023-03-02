@@ -362,7 +362,7 @@ export const GasSetting1559 = memo(() => {
                                     usd: formatCurrency(
                                         formatWeiToEther(content?.suggestedMaxFeePerGas ?? 0)
                                             .times(nativeTokenPrice)
-                                            .times(gasLimit ?? 21000),
+                                            .times(gasLimit ?? 21_000),
                                         'USD',
                                         { onlyRemainTwoDecimal: true },
                                     ),

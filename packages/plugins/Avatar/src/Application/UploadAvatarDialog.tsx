@@ -51,7 +51,7 @@ async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | un
         }
         const avatarId = Twitter.getAvatarId(data?.imageUrl ?? '')
         return { ...data, avatarId }
-    } catch (err) {
+    } catch {
         return
     }
 }

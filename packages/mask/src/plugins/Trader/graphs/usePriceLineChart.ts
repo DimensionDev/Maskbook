@@ -41,8 +41,8 @@ export function usePriceLineChart(
             .range([0, contentWidth])
 
         // create Y axis
-        const min = d3.min(data, (d) => d.value) as number
-        const max = d3.max(data, (d) => d.value) as number
+        const min = d3.min(data, (d) => d.value)!
+        const max = d3.max(data, (d) => d.value)!
         const dist = Math.abs(max - min)
         const y = d3
             .scaleLinear()

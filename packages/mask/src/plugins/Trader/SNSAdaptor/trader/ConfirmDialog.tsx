@@ -34,7 +34,7 @@ export interface ConfirmDialogProps {
     gasConfig?: GasConfig
     onConfirm: () => void
 }
-const PERCENT_DENOMINATOR = 10000
+const PERCENT_DENOMINATOR = 10_000
 
 export function ConfirmDialog(props: ConfirmDialogProps) {
     const { inputToken, outputToken, gas = MIN_GAS_LIMIT, gasPrice, trade, onConfirm, gasConfig } = props
@@ -102,7 +102,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
             slippageTolerance: currentSlippageSettings.value / 100,
             transaction: {
                 gas,
-                ...(gasConfig ?? {}),
+                ...gasConfig,
             },
         })
 

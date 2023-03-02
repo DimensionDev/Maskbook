@@ -13,7 +13,7 @@ import { TradeStrategy } from '../../types/index.js'
 import { fetchJSON } from '@masknet/web3-providers/helpers'
 
 const roundDecimal = (value: number | string | undefined, decimals: number) => {
-    return Math.round(Number(value || 0) * Math.pow(10, decimals)) / Math.pow(10, decimals)
+    return Math.round(Number(value || 0) * 10**decimals) / 10**decimals
 }
 
 const getTargetAmount = async (

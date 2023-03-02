@@ -1,4 +1,4 @@
-/// <reference path="./extended.d.ts" />
+/// <reference types="./extended.d.ts" />
 import { Menu, Popper, Tooltip } from '@mui/material'
 import { createShadowRootForwardedComponent, createShadowRootForwardedPopperComponent } from './ShadowRoot/Portal.js'
 

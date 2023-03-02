@@ -203,7 +203,7 @@ function collectPostInfo(
 
     // decode steganographic image
     // don't add await on this
-    const images = untilElementAvailable(postsImageSelector(tweetNode), 10000)
+    const images = untilElementAvailable(postsImageSelector(tweetNode), 10_000)
         .then(() => postImagesParser(tweetNode))
         .then((urls) => {
             for (const url of urls) info.postMetadataImages.add(url)

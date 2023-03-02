@@ -21,7 +21,7 @@ export function useTradeComputed(
 ): TradeComputed<Trade> | null {
     const slippageSetting = useSlippageTolerance()
     const breakdown = useTradeBreakdown(trade)
-    const slippage = temporarySlippage ? toUniswapPercent(temporarySlippage, 10000) : slippageSetting
+    const slippage = temporarySlippage ? toUniswapPercent(temporarySlippage, 10_000) : slippageSetting
     if (!trade) return null
 
     return {

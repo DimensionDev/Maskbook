@@ -5,7 +5,7 @@ import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { inpageAvatarSelector } from '../../utils/selector.js'
 
 function getTwitterId(ele: HTMLElement) {
-    const profileLink = ele.querySelector('a[role="link"]') as HTMLAnchorElement
+    const profileLink = ele.querySelector('a[role="link"]')!
     if (!profileLink) return
     return profileLink.getAttribute('href')?.slice(1)
 }

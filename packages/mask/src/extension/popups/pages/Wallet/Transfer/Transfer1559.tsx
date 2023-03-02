@@ -173,7 +173,7 @@ const useStyles = makeStyles()({
         width: '100%',
     },
 })
-const MIN_GAS_LIMIT = 21000
+const MIN_GAS_LIMIT = 21_000
 export interface Transfer1559Props {
     selectedAsset?: FungibleAsset<ChainId, SchemaType>
     otherWallets: Array<{

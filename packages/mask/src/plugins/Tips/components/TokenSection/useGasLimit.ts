@@ -8,10 +8,10 @@ import { TokenType } from '@masknet/web3-shared-base'
 import { createContract, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { useTip } from '../../contexts/index.js'
 
-const MIN_GAS_LIMIT = 21000
+const MIN_GAS_LIMIT = 21_000
 
 // We only care about fungible tokens
-export function useGasLimit(fallback = 50000) {
+export function useGasLimit(fallback = 50_000) {
     const { Connection } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { tipType, token, amount, recipientAddress } = useTip()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

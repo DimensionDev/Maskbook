@@ -22,7 +22,7 @@ export class EtherscanExplorerAPI implements ExplorerAPI.Provider {
                 action: 'txlist',
                 address: account.toLowerCase(),
                 startBlock: 0,
-                endblock: 999999999999,
+                endblock: 999_999_999_999,
                 page: 1,
                 offset,
                 sort: 'desc',

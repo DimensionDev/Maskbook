@@ -99,7 +99,7 @@ export const postContentMessageParser = (node: HTMLElement) => {
             const image = node
             const src = image.getAttribute('src')
             const alt = image.getAttribute('alt')
-            const matched = src?.match(/emoji\/v2\/svg\/([\w\-]+)\.svg/)
+            const matched = src?.match(/emoji\/v2\/svg\/([\w-]+)\.svg/)
             if (matched) {
                 const points = matched[1].split('-').map((point) => Number.parseInt(point, 16))
                 return makeTypedMessageText(collectTwitterEmoji(points))

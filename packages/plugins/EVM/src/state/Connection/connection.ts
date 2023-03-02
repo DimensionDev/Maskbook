@@ -282,7 +282,7 @@ class Connection implements EVM_Connection {
             return this.sendTransaction(
                 {
                     ...tx,
-                    gas: await this.estimateTransaction(tx, 50000, options),
+                    gas: await this.estimateTransaction(tx, 50_000, options),
                 },
                 options,
             )
@@ -493,7 +493,7 @@ class Connection implements EVM_Connection {
         return Web3.getTransaction(options.chainId, hash)
     }
 
-    async estimateTransaction(transaction: Transaction, fallback = 21000, initial?: EVM_ConnectionOptions) {
+    async estimateTransaction(transaction: Transaction, fallback = 21_000, initial?: EVM_ConnectionOptions) {
         try {
             const options = this.getOptions(initial)
             return this.hijackedRequest<string>(
@@ -541,7 +541,7 @@ class Connection implements EVM_Connection {
                 return this.hijackedRequest<string>(
                     {
                         method: EthereumMethodType.PERSONAL_SIGN,
-                        params: [message, options.account, ''].filter((x) => typeof x !== 'undefined'),
+                        params: [message, options.account, ''].filter((x) => x !== undefined),
                     },
                     options,
                 )
@@ -670,7 +670,7 @@ class Connection implements EVM_Connection {
                 params: [
                     {
                         ...tx,
-                        gas: await this.estimateTransaction(tx, 50000, options),
+                        gas: await this.estimateTransaction(tx, 50_000, options),
                     },
                 ],
             },
@@ -695,7 +695,7 @@ class Connection implements EVM_Connection {
                 params: [
                     {
                         ...tx,
-                        gas: await this.estimateTransaction(tx, 50000, options),
+                        gas: await this.estimateTransaction(tx, 50_000, options),
                     },
                 ],
             },

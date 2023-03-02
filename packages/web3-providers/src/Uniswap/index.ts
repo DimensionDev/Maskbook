@@ -60,7 +60,7 @@ export class UniswapAPI implements TrendingAPI.Provider<ChainId> {
         const startTime = new Date()
         startTime.setDate(endTime.getDate() - days)
         const uniswap_interval = (() => {
-            if (days === 0 || days > 365) return 86400 // max
+            if (days === 0 || days > 365) return 86_400 // max
             if (days > 90) return 7200 // 1y
             if (days > 30) return 3600 // 3m
             if (days > 7) return 900 // 1w

@@ -127,7 +127,7 @@ export class AlchemyFlowAPI implements NonFungibleTokenAPI.Provider<ChainId, Sch
         const res = await fetchJSON<AlchemyResponse_FLOW>(
             urlcat(`${chainInfo?.baseURL}/getNFTs/`, {
                 owner: from,
-                pageKey: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,
+                pageKey: indicator?.index !== undefined && indicator.index !== 0 ? indicator.id : undefined,
             }),
         )
         const assets = res?.nfts?.map((nft) =>

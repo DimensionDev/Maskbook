@@ -1,4 +1,4 @@
-import { type FC, Fragment } from 'react'
+import { type FC } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { isZero, isLessThan } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
@@ -29,10 +29,10 @@ export const FormattedBalance: FC<FormattedBalanceProps> = (props) => {
 
     if (symbol)
         return (
-            <Fragment>
+            <>
                 <span className={classes.balance}>{String(formatted)}</span>
                 <span className={classes?.symbol}>{symbol}</span>
-            </Fragment>
+            </>
         )
-    return <Fragment>{String(formatted)}</Fragment>
+    return <>{String(formatted)}</>
 }

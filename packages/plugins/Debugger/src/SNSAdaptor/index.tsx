@@ -130,7 +130,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             ID: `${PLUGIN_ID}_resultTab1`,
             label: 'Tab 1',
-            priority: 99999,
+            priority: 99_999,
             Utils: {
                 shouldDisplay: (result) => false,
             },
@@ -143,7 +143,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             ID: `${PLUGIN_ID}_resultTab2`,
             label: 'Tab 2',
-            priority: 99999,
+            priority: 99_999,
             Utils: {
                 shouldDisplay: (result) => false,
             },
@@ -158,7 +158,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             ID: `${PLUGIN_ID}_profileTabContent`,
             label: 'Debugger',
-            priority: 99999,
+            priority: 99_999,
             UI: {
                 TabContent,
             },
@@ -175,7 +175,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     AvatarRealm: {
         ID: `${PLUGIN_ID}_avatar`,
         label: 'Debugger',
-        priority: 99999,
+        priority: 99_999,
         UI: {
             Decorator: AvatarDecorator,
         },

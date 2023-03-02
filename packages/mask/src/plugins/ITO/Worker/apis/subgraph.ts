@@ -60,7 +60,7 @@ async function fetchFromMarketSubgraph<T>(chainId: ChainId, query: string) {
             data: T
         }
         return data
-    } catch (error) {
+    } catch {
         return null
     }
 }

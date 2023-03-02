@@ -312,7 +312,7 @@ export class Web3API
         const contract = this.getERC721Contract(chainId, address)
         return isSameAddress(await contract?.methods.ownerOf(tokenId).call(), owner)
     }
-    async estimateTransaction(chainId: ChainId, transaction: Transaction, fallback = 21000): Promise<string> {
+    async estimateTransaction(chainId: ChainId, transaction: Transaction, fallback = 21_000): Promise<string> {
         try {
             const provider = this.getWeb3Provider(chainId)
             return provider.request<string>({

@@ -6,7 +6,7 @@ import { SelectTokenChip, TokenSecurityBar, useSelectAdvancedSettings, useTokenS
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel.js'
 import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
-import { type ChainId, type GasConfig, GasEditor, type Transaction } from '@masknet/web3-shared-evm'
+import { type ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
 import { rightShift, multipliedBy, isZero, ZERO, formatBalance } from '@masknet/web3-shared-base'
 import { Tune as TuneIcon } from '@mui/icons-material'
 import { TokenPanelType, type TradeInfo } from '../../types/index.js'
@@ -326,7 +326,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                 slippageTolerance: currentSlippageSettings.value / 100,
                 transaction: {
                     gas: focusedTrade?.gas.value ?? MIN_GAS_LIMIT,
-                    ...(gasConfig ?? {}),
+                    ...gasConfig,
                 },
             })
 
@@ -334,7 +334,7 @@ export const TradeForm = memo<AllTradeFormProps>(
 
             PluginTraderMessages.swapSettingsUpdated.sendToAll({
                 open: false,
-                gasConfig: GasEditor.fromTransaction(chainId as ChainId, transaction as Transaction).getGasConfig(),
+                gasConfig: GasEditor.fromTransaction(chainId as ChainId, transaction!).getGasConfig(),
             })
         }, [chainId, focusedTrade?.gas.value, selectAdvancedSettings, gasConfig])
         // #endregion

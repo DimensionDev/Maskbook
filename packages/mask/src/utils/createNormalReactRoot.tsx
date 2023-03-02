@@ -19,7 +19,7 @@ function getContainer(container?: HTMLElement) {
 function Root(jsx: JSX.Element) {
     return (
         <StrictMode>
-            <DisableShadowRootContext.Provider value>{jsx}</DisableShadowRootContext.Provider>
+            <DisableShadowRootContext.Provider value={true}>{jsx}</DisableShadowRootContext.Provider>
         </StrictMode>
     )
 }

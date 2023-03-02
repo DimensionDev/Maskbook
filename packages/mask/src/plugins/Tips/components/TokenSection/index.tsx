@@ -19,7 +19,7 @@ const useStyles = makeStyles()({
 
 interface Props extends HTMLProps<HTMLDivElement> {}
 
-const ETH_GAS_LIMIT = 21000
+const ETH_GAS_LIMIT = 21_000
 
 export const TokenSection: FC<Props> = ({ className, ...rest }) => {
     const { classes, cx } = useStyles()

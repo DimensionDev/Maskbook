@@ -182,7 +182,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                     </div>
                                 ) : (
                                     results.map((item) => {
-                                        const pubkey = item.linkedPersona?.publicKeyAsHex as string
+                                        const pubkey = item.linkedPersona?.publicKeyAsHex!
                                         const selected = selectedPubkeyList.includes(pubkey)
                                         return (
                                             <ProfileInList

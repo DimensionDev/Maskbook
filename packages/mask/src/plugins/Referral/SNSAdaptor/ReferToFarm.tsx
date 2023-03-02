@@ -1,6 +1,5 @@
 import { useCallback, useState, type MouseEventHandler } from 'react'
 import { useAsync } from 'react-use'
-import type { Web3 } from '@masknet/web3-shared-evm'
 import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
 import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -130,7 +129,7 @@ export function ReferToFarm(props: PageInterface) {
         try {
             onConfirmReferFarm()
 
-            await singAndPostProofOfRecommendationOrigin(web3 as Web3, account, token.address)
+            await singAndPostProofOfRecommendationOrigin(web3!, account, token.address)
 
             const metadata = new Map<string, ReferralMetaData>()
             metadata.set(META_KEY, {

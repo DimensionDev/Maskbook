@@ -25,28 +25,28 @@ export enum ChainId {
 
     // Matic
     Matic = 137,
-    Mumbai = 80001,
+    Mumbai = 80_001,
 
     // Arbitrum
-    Arbitrum = 42161,
-    Arbitrum_Rinkeby = 421611,
+    Arbitrum = 42_161,
+    Arbitrum_Rinkeby = 421_611,
 
     // xDai
     xDai = 100,
 
     // Avalanche
-    Avalanche = 43114,
-    Avalanche_Fuji = 43113,
+    Avalanche = 43_114,
+    Avalanche_Fuji = 43_113,
 
     // Celo
-    Celo = 42220,
+    Celo = 42_220,
 
     // Fantom
     Fantom = 250,
 
     // Aurora
-    Aurora = 1313161554,
-    Aurora_Testnet = 1313161555,
+    Aurora = 1_313_161_554,
+    Aurora_Testnet = 1_313_161_555,
 
     // Fuse
     Fuse = 122,
@@ -63,8 +63,8 @@ export enum ChainId {
     Optimism_Goerli = 420,
 
     // Harmony
-    Harmony = 1666600000,
-    Harmony_Test = 1666700000,
+    Harmony = 1_666_600_000,
+    Harmony_Test = 1_666_700_000,
 
     // Conflux
     Conflux = 1030,

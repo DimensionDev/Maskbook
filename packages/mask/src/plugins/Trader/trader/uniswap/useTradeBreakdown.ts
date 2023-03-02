@@ -3,8 +3,8 @@ import { Trade as V2Trade } from '@uniswap/v2-sdk'
 import { Percent, Fraction, CurrencyAmount, type Currency } from '@uniswap/sdk-core'
 import type { Trade } from '../../types/index.js'
 
-const BASE_FEE = new Percent(30, 10000)
-const ONE_HUNDRED_PERCENT = new Percent(10000, 10000)
+const BASE_FEE = new Percent(30, 10_000)
+const ONE_HUNDRED_PERCENT = new Percent(10_000, 10_000)
 const INPUT_FRACTION_AFTER_FEE = ONE_HUNDRED_PERCENT.subtract(BASE_FEE)
 
 // computes realized lp fee as a percent
@@ -23,7 +23,7 @@ function computeRealizedLPFeePercent(trade: Trade): Percent {
         const percent = ONE_HUNDRED_PERCENT.subtract(
             trade.route.pools.reduce<Percent>(
                 (currentFee: Percent, pool): Percent =>
-                    currentFee.multiply(ONE_HUNDRED_PERCENT.subtract(new Fraction(pool.fee, 1000000))),
+                    currentFee.multiply(ONE_HUNDRED_PERCENT.subtract(new Fraction(pool.fee, 1_000_000))),
                 ONE_HUNDRED_PERCENT,
             ),
         )

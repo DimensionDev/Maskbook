@@ -3,8 +3,8 @@ import type { Option } from 'ts-results-es'
 export function collectTwitterEmoji(points: readonly number[]) {
     if (points.length === 0) return ''
     if (points[0] < 0x23 || points[0] > 0x39) return String.fromCodePoint(...points)
-    if (points.includes(0xfe0f)) return String.fromCodePoint(...points)
-    return String.fromCodePoint(points[0], 0xfe0f, ...points.slice(1))
+    if (points.includes(0xfe_0f)) return String.fromCodePoint(...points)
+    return String.fromCodePoint(points[0], 0xfe_0f, ...points.slice(1))
 }
 
 export interface CollectNodeTextOptions {
@@ -26,7 +26,7 @@ export function collectNodeText(node: HTMLElement | null | undefined, options: C
             if (each instanceof HTMLImageElement) {
                 const src = each.getAttribute('src')
                 const alt = each.getAttribute('alt') ?? ''
-                const matched = src?.match(/emoji\/v2\/svg\/([\w\-]+)\.svg/)?.[1]
+                const matched = src?.match(/emoji\/v2\/svg\/([\w-]+)\.svg/)?.[1]
                 if (matched) return collectTwitterEmoji(matched.split('-').map((x) => Number.parseInt(x, 16))) || alt
                 return alt
             }

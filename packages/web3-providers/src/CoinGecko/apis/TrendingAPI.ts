@@ -21,7 +21,7 @@ import type { TrendingAPI } from '../../entry-types.js'
 
 export class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.ChainIdAll> {
     private fuse = new FuseCoinAPI()
-    private coins: Map<string, TrendingAPI.Coin> = new Map()
+    private coins = new Map<string, TrendingAPI.Coin>()
 
     private async createCoins() {
         if (this.coins.size) return

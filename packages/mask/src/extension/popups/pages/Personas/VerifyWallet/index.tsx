@@ -131,7 +131,7 @@ const VerifyWallet = memo(() => {
             showSnackbar(t('popups_verify_wallet_sign_success'), { variant: 'success' })
             setSigned(true)
             return true
-        } catch (error) {
+        } catch {
             showSnackbar(t('popups_verify_wallet_sign_failed'), { variant: 'error' })
             return false
         }

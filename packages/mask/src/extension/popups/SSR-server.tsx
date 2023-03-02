@@ -52,7 +52,7 @@ function PopupSSR(props: PopupSSR_Props) {
     }
     return (
         // MaskUIRoot
-        <DisableShadowRootContext.Provider value>
+        <DisableShadowRootContext.Provider value={true}>
             <Suspense fallback={null}>
                 <Suspense fallback={null}>
                     <StaticRouter location={PopupRoutes.Personas}>

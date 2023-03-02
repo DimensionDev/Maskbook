@@ -58,7 +58,7 @@ class Hub extends HubStateBaseClient<ChainId> implements EVM_Hub {
             if (isEIP1559 && chainId !== ChainId.Astar) return await MetaSwap.getGasOptions(options.chainId)
             if (chainId === ChainId.Astar) return await AstarGas.getGasOptions(options.chainId)
             return await DeBankGasOption.getGasOptions(options.chainId)
-        } catch (error) {
+        } catch {
             return Web3GasOption.getGasOptions(options.chainId)
         }
     }

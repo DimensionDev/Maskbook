@@ -1,4 +1,4 @@
-/// <reference path="./global.d.ts" />
+/// <reference types="./global.d.ts" />
 import { create } from 'ef.js'
 import { useContext, useEffect, useState } from 'react'
 import './DOMImpl.js'

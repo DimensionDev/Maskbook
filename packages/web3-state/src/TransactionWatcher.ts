@@ -127,7 +127,7 @@ class Watcher<ChainId, Transaction> {
                         this.options.onNotify(chainId, id, transaction, status)
                         break
                     }
-                } catch (error) {
+                } catch {
                     console.warn('Failed to check transaction status.')
                 }
             }
@@ -168,10 +168,10 @@ class Watcher<ChainId, Transaction> {
 export class TransactionWatcherState<ChainId, Transaction>
     implements Web3TransactionWatcherState<ChainId, Transaction>
 {
-    private watchers: Map<ChainId, Watcher<ChainId, Transaction>> = new Map()
+    private watchers = new Map<ChainId, Watcher<ChainId, Transaction>>()
 
     public storage: StorageItem<TransactionWatcher<ChainId, Transaction>> = null!
-    public emitter: Emitter<WatchEvents<ChainId, Transaction>> = new Emitter()
+    public emitter = new Emitter<WatchEvents<ChainId, Transaction>>()
 
     constructor(
         protected context: Plugin.Shared.SharedContext,

@@ -17,7 +17,7 @@ const HelloWorld = t`
 `
 
 const ins = new HelloWorld()
-console.log('ins = ', ((globalThis as any).ins = ins))
+console.log('ins =', ((globalThis as any).ins = ins))
 ins.$mount({ target: document.body })
 // will be set by Mask
 ins.$data.payload = {

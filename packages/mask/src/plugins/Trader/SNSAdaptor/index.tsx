@@ -130,7 +130,7 @@ const sns: Plugin.SNSAdaptor.Definition<
     AvatarRealm: {
         ID: `${base.ID}_nft_project_card`,
         label: 'Web3 Profile Card',
-        priority: 99999,
+        priority: 99_999,
         UI: {
             Decorator({ userId, identity }) {
                 const { value: collectionList } = useCollectionByTwitterHandler(userId)

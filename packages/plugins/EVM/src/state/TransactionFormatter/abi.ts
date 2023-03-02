@@ -26,7 +26,7 @@ import Create2Factory from '@masknet/web3-contracts/abis/Create2Factory.json'
 
 class ABI {
     private coder = ABICoder as unknown as ABICoder.AbiCoder
-    private abis: Map<string, TransactionMethodABI[]> = new Map()
+    private abis = new Map<string, TransactionMethodABI[]>()
 
     constructor() {
         this.construct(BulkCheckout as AbiItem[]) // donate gitcoin grants
@@ -79,7 +79,7 @@ class ABI {
                     (x) => `${x.name}_${x.parameters.map((y) => `${y.type}_${y.name}`)}`,
                 )
                 this.abis.set(signature, all)
-            } catch (error) {
+            } catch {
                 console.log('Failed to encode function signature from below ABI:')
                 console.log(x)
             }

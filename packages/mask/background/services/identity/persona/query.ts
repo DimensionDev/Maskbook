@@ -28,7 +28,7 @@ import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from './utils.js'
 import { bufferToHex, privateToPublic, publicToAddress } from 'ethereumjs-util'
 import { decode } from '@msgpack/msgpack'
 import { decodeArrayBuffer } from '@masknet/kit'
-export { queryPersonaDB }
+
 
 export async function mobile_queryPersonaRecordsFromIndexedDB() {
     if (process.env.architecture !== 'app') throw new Error('This function is only available in app')
@@ -146,3 +146,5 @@ export async function querySocialIdentity(
         binding: first(personaBindings),
     }
 }
+
+export {queryPersonaDB} from '../../../database/persona/db.js'

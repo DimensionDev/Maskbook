@@ -12,7 +12,7 @@ function deriveAES(key: CryptoKey, iv: ArrayBuffer) {
         {
             name: 'PBKDF2',
             salt: iv,
-            iterations: 100000,
+            iterations: 100_000,
             hash: 'SHA-256',
         },
         key,

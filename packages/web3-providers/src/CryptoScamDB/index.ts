@@ -14,7 +14,7 @@ export class CryptoScamDB_API implements ScamWarningAPI.Provider {
 
         const { ScalableBloomFilter } = await import('bloom-filters')
         this.bloomFilter = ScalableBloomFilter.fromJSON(filter)
-        return this.bloomFilter as ScalableBloomFilter
+        return this.bloomFilter!
     }
 
     async getScamWarning(link: string): Promise<ScamWarningAPI.Info | undefined> {

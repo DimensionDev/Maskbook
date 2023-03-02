@@ -8,7 +8,7 @@ export function css_var<T extends Record<string, unknown>>(
     function createVar(name: string) {
         const val = '--' + unique_name + '-' + name
         function use(defaultValue?: string): string {
-            return `var(${val}${typeof defaultValue === 'undefined' ? '' : ', ' + defaultValue})`
+            return `var(${val}${defaultValue === undefined ? '' : ', ' + defaultValue})`
         }
         use.toString = () => val
         return use

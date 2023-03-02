@@ -22,6 +22,7 @@ export function defineFunctionOnContentObject<T extends object>(
         const rawFunction = rawObject[key]
         exportFunction!(
             function (this: any) {
+                // eslint-disable-next-line prefer-rest-params
                 return apply(rawFunction, this, arguments)
             },
             rawObject,

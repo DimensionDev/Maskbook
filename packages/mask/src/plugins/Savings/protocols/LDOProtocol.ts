@@ -56,7 +56,7 @@ export class LidoProtocol implements SavingsProtocol {
                 LidoABI as AbiItem[],
             )
             this._balance = new BigNumber((await contract?.methods.balanceOf(account).call()) ?? '0')
-        } catch (error) {
+        } catch {
             this._balance = ZERO
         }
     }

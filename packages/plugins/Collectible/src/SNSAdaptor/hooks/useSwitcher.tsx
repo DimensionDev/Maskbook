@@ -10,7 +10,7 @@ export function useSwitcher<T extends string | number>(
 ) {
     const nextOption = useMemo(() => {
         if (options.length === 0) return
-        if (typeof currentOption === 'undefined') return options[0]
+        if (currentOption === undefined) return options[0]
         const indexOf = options.indexOf(currentOption)
         if (indexOf === -1) return
         return indexOf === options.length - 1 ? options[0] : options[indexOf + 1]
@@ -18,7 +18,7 @@ export function useSwitcher<T extends string | number>(
 
     if (options.length <= 1) return null
 
-    if (typeof nextOption === 'undefined') return null
+    if (nextOption === undefined) return null
 
     return (
         <ActionButton fullWidth={fullWidth} onClick={() => onSwitch(nextOption)} variant="roundedDark">

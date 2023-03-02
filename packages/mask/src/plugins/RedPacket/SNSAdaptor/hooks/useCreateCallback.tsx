@@ -148,7 +148,7 @@ export function useCreateCallback(
 
         try {
             checkParams(paramsObj)
-        } catch (error) {
+        } catch {
             return
         }
 
@@ -159,7 +159,7 @@ export function useCreateCallback(
                 from: account,
                 value: toFixed(token.schema === SchemaType.Native ? paramsObj.total : 0),
                 gas,
-                ...(gasOption ?? {}),
+                ...gasOption,
             },
         )
 

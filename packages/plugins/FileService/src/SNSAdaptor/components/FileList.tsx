@@ -85,7 +85,7 @@ export const FileList: FC<FileListProps> = ({ files, onLoadMore, className, onDo
                         variant: 'success',
                         message: t.delete_file_message({ context: 'success', name: file.name }),
                     })
-                } catch (err) {
+                } catch {
                     showSnackbar(t.delete_file_title({ context: 'failed' }), {
                         variant: 'error',
                         message: t.delete_file_message({ context: 'failed', name: file.name }),

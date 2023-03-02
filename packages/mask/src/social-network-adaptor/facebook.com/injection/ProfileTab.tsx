@@ -14,8 +14,8 @@ import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js
 function getStyleProps() {
     const EMPTY_STYLE = {} as CSSStyleDeclaration
     const divEle = profileTabUnselectedSelector().evaluate()?.querySelector('div') as Element
-    const spanEle = profileTabUnselectedSelector().evaluate()?.querySelector('div span') as Element
-    const selectedSpanEle = profileTabSelectedSelector().evaluate()?.querySelector('div span') as Element
+    const spanEle = profileTabUnselectedSelector().evaluate()?.querySelector('div span')!
+    const selectedSpanEle = profileTabSelectedSelector().evaluate()?.querySelector('div span')!
     const divStyle = divEle ? window.getComputedStyle(divEle) : EMPTY_STYLE
     const spanStyle = spanEle ? window.getComputedStyle(spanEle) : EMPTY_STYLE
     const selectedSpanStyle = selectedSpanEle ? window.getComputedStyle(selectedSpanEle) : EMPTY_STYLE
@@ -91,7 +91,7 @@ export function ProfileTabAtFacebook() {
         if (!ele) return
 
         const textEle = ele.querySelector('span')
-        const borderEle = ele.querySelector('span ~ div:last-child') as HTMLDivElement
+        const borderEle = ele.querySelector('span ~ div:last-child')!
         if (!textEle || !borderEle) return
         textEle.style.color = textColor
         borderEle.style.backgroundColor = borderColor

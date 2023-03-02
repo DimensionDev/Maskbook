@@ -92,7 +92,7 @@ function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider
                     new LiveSelector([activityNode]).querySelectorAll<HTMLImageElement>(
                         '.m-activityContent__media--image img',
                     ),
-                    10000,
+                    10_000,
                 )
                     .then(() => getMetadataImages(activityNode))
                     .then((urls) => {

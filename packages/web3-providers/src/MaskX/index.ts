@@ -36,7 +36,7 @@ export class MaskX_API implements MaskX_BaseAPI.Provider {
                 ...identity,
                 sns_handle: nameInfo.rnsName,
             }
-        } catch (error) {
+        } catch {
             return {
                 ...identity,
                 sns_handle: identity.web3_addr,

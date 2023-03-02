@@ -20,7 +20,7 @@ export async function swapOO(request: SwapOORequest): Promise<SwapOOData> {
             outTokenSymbol: request.toToken?.symbol,
             outTokenAddress: request.toToken?.address,
             amount: request.fromAmount,
-            gasPrice: 5000000000,
+            gasPrice: 5_000_000_000,
             slippage: request.slippage,
             disabledDexIds: '',
             account: request.userAddr,

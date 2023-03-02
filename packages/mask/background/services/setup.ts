@@ -1,7 +1,7 @@
 // Notice, this module itself is not HMR ready.
 // If you change this file to add a new service, you need to reload.
 // This file should not rely on any other in-project files unless it is HMR ready.
-/// <reference path="../env.d.ts" />
+/// <reference types="../env.d.ts" />
 
 import { AsyncCall, AsyncGeneratorCall } from 'async-call-rpc/full'
 import { assertEnvironment, Environment, MessageTarget, WebExtensionMessage } from '@dimensiondev/holoflows-kit'

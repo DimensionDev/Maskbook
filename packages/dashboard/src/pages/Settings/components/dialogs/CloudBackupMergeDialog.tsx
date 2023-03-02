@@ -67,7 +67,7 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
                 restoreCallback()
                 setBackupPassword('')
             }
-        } catch (error) {
+        } catch {
             setIncorrectBackupPassword(true)
         }
     }, [backupPassword, account, info])

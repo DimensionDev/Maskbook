@@ -139,7 +139,7 @@ const SignRequest = memo(() => {
                     identifier: wallet?.identifier,
                 })
                 navigate(-1)
-            } catch (error_) {
+            } catch {
                 setTransferError(true)
             }
         }

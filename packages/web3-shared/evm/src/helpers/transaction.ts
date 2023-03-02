@@ -14,7 +14,7 @@ export function createContract<T extends BaseContract>(web3: Web3 | null, addres
 export function getTransactionSignature(chainId?: ChainId, transaction?: Partial<Transaction>) {
     if (!chainId || !transaction) return
     const { from, to, data, value } = transaction
-    return sha3([chainId, from, to, data || '0x0', toHex((value as string) || '0x0') || '0x0'].join('_')) ?? undefined
+    return sha3([chainId, from, to, data || '0x0', toHex((value!) || '0x0') || '0x0'].join('_')) ?? undefined
 }
 
 export function getTransactionStatusType(receipt: TransactionReceipt) {

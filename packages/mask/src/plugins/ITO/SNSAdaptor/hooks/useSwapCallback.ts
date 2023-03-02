@@ -114,7 +114,7 @@ export function useSwapCallback(
         const config = {
             from: account,
             gas: isQualificationHasLucky
-                ? 200000
+                ? 200_000
                 : await (version === 1
                       ? (ITO_Contract as ITO).methods.swap(...swapParamsV1)
                       : (ITO_Contract as ITO2).methods.swap(...swapParamsV2)

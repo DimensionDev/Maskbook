@@ -5,7 +5,7 @@ export const MIN_GAS_LIMIT = '150000'
 export const MIN_SLIPPAGE = 50 // 0.5%
 export const MAX_SLIPPAGE = 500 // 5%
 
-export const BIPS_BASE = new BigNumber(10000)
+export const BIPS_BASE = new BigNumber(10_000)
 export const ONE_BIPS = ONE.dividedBy(BIPS_BASE)
 
 export const SLIPPAGE_MIN = 10 // bips

@@ -65,7 +65,7 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
     )
     const TypedMessage = useMemo(() => {
         if (typeof message === 'string') return makeTypedMessageText(message)
-        if (typeof message === 'undefined') return makeTypedMessageText('')
+        if (message === undefined) return makeTypedMessageText('')
         return message
     }, [message])
     return (

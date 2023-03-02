@@ -56,7 +56,7 @@ export function useTradeGasLimit(trade: TradeComputed<Trade> | null, tradeProvid
                         call: x,
                         gasEstimate: gas ?? '0',
                     }
-                } catch (error) {
+                } catch {
                     return connection
                         .callTransaction(config)
                         .then(() => {

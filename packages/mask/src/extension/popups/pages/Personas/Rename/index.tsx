@@ -50,7 +50,7 @@ const PersonaRename = memo(() => {
 
         try {
             await Services.Identity.renamePersona(selectedPersona.identifier, name)
-        } catch (error) {
+        } catch {
             setError(t('popups_persona_persona_name_exists'))
             return
         }

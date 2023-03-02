@@ -38,7 +38,7 @@ export async function getERC721TokenAssetFromChain(
             // for some NFT tokens return JSON
             promise = Promise.resolve(JSON.parse(tokenURI) as NonFungibleTokenMetadata<ChainId>)
         }
-    } catch (error) {
+    } catch {
         void 0
     }
 
@@ -58,7 +58,7 @@ export async function getERC721TokenAssetFromChain(
             )
             assetCache[tokenURI] = await (promise as Promise<NonFungibleTokenMetadata<ChainId>>)
             return assetCache[tokenURI]
-        } catch (err) {
+        } catch {
             return
         }
     }

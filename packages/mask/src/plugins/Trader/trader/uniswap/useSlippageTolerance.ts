@@ -7,5 +7,5 @@ import { currentSlippageSettings } from '../../settings.js'
 export function useSlippageTolerance() {
     const slippage_ = useValueRef(currentSlippageSettings)
     const slippage = clamp(slippage_, SLIPPAGE_MIN, SLIPPAGE_MAX)
-    return toUniswapPercent(slippage, 10000)
+    return toUniswapPercent(slippage, 10_000)
 }

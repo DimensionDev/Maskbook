@@ -43,7 +43,7 @@ export interface TransferERC20Props {
     token: FungibleToken<ChainId, SchemaType>
 }
 
-const GAS_LIMIT = 21000
+const GAS_LIMIT = 21_000
 
 export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const t = useDashboardI18N()

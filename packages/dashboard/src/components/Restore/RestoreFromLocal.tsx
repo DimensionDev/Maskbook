@@ -79,7 +79,7 @@ export const RestoreFromLocal = memo(() => {
         try {
             const decrypted = await decryptBackup(encode(password), await file.arrayBuffer())
             setBackupValue(JSON.stringify(decode(decrypted)))
-        } catch (error_) {
+        } catch {
             setError(t.sign_in_account_cloud_backup_decrypt_failed())
         }
     }, [file, password])

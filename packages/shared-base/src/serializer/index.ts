@@ -1,4 +1,4 @@
-/// <reference path="./typeson.d.ts" />
+/// <reference types="./typeson.d.ts" />
 import { Typeson, TypesonPromise } from 'typeson'
 import type { Serialization } from 'async-call-rpc'
 import { Err, None, Ok, Some } from 'ts-results-es'
@@ -112,7 +112,7 @@ function addClass(name: string, constructor: any) {
             (x) => x instanceof constructor,
             (x: unknown) => {
                 return new TypesonPromise((resolve) => {
-                    const cloned = Object.assign({}, x)
+                    const cloned = { ...(x as any) }
                     Object.getOwnPropertySymbols(cloned).forEach((x) => Reflect.deleteProperty(cloned, x))
                     Promise.resolve(typeson!.encapsulate(cloned)).then(resolve)
                 })

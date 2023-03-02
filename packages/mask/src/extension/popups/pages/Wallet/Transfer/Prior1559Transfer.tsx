@@ -285,7 +285,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
     const maxAmount = useMemo(() => {
         let amount_ = new BigNumber(tokenBalance || '0')
-        amount_ = selectedAsset?.schema === SchemaType.Native ? amount_.minus(multipliedBy(30000, gasPrice)) : amount_
+        amount_ = selectedAsset?.schema === SchemaType.Native ? amount_.minus(multipliedBy(30_000, gasPrice)) : amount_
 
         return BigNumber.max(0, amount_).toFixed()
     }, [selectedAsset?.balance, gasPrice, selectedAsset?.type, tokenBalance])

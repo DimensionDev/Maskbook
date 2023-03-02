@@ -32,5 +32,5 @@ export function getAssetInfoFromURL(url?: string) {
 }
 
 export function buildTokenId(projectId: number, invocation: number) {
-    return projectId * 1000000 + invocation
+    return projectId * 1_000_000 + invocation
 }

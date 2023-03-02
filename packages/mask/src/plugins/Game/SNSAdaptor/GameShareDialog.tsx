@@ -9,7 +9,7 @@ import { Share_Twitter } from '../constants.js'
 const useStyles = makeStyles()((theme) => ({
     root: {
         margin: theme.spacing(0, 2.5),
-        zIndex: 99999,
+        zIndex: 99_999,
     },
     shareNotice: {
         color: theme.palette.maskColor.main,

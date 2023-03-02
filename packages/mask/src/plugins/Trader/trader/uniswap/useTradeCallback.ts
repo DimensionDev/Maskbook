@@ -69,7 +69,7 @@ export function useTradeCallback(
                         call: x,
                         gasEstimate: new BigNumber(gas ?? 0),
                     }
-                } catch (error) {
+                } catch {
                     return connection
                         .callTransaction(config)
                         .then(() => {

@@ -169,10 +169,10 @@ export class PayloadEditor {
         if (!this.config) return
 
         const parseHexNumberString = (hex: string | number | undefined) =>
-            typeof hex !== 'undefined' ? hexToNumberString(hex ?? '0x0') : undefined
+            hex !== undefined ? hexToNumberString(hex ?? '0x0') : undefined
 
         const parseHexNumber = (hex: string | number | undefined) =>
-            typeof hex !== 'undefined' ? hexToNumber(hex) : undefined
+            hex !== undefined ? hexToNumber(hex) : undefined
 
         return omitBy(
             {

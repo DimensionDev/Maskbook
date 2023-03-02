@@ -141,7 +141,7 @@ export class AAVEProtocol implements SavingsProtocol {
             const contract = createContract<ERC20>(web3, aTokenId || ZERO_ADDRESS, ERC20ABI as AbiItem[])
             this._balance = new BigNumber((await contract?.methods.balanceOf(account).call()) ?? '0')
         } catch (error) {
-            console.error('AAVE BALANCE ERROR: ', error)
+            console.error('AAVE BALANCE ERROR:', error)
             this._balance = ZERO
         }
     }
@@ -155,7 +155,7 @@ export class AAVEProtocol implements SavingsProtocol {
 
             return new BigNumber(gasEstimate || 0)
         } catch (error) {
-            console.error('AAVE deposit estimate ERROR: ', error)
+            console.error('AAVE deposit estimate ERROR:', error)
             return ZERO
         }
     }
@@ -219,7 +219,7 @@ export class AAVEProtocol implements SavingsProtocol {
                     from: account,
                 })
             return new BigNumber(gasEstimate || 0)
-        } catch (error) {
+        } catch {
             return ZERO
         }
     }

@@ -48,8 +48,8 @@ export function useLineChart(
             .range([0, contentWidth])
 
         // create Y axis
-        const min = d3.min(data, (d) => d.value) as number
-        const max = d3.max(data, (d) => d.value) as number
+        const min = d3.min(data, (d) => d.value)!
+        const max = d3.max(data, (d) => d.value)!
         const dist = Math.abs(max - min)
         const y = d3
             .scaleLinear()
@@ -57,12 +57,12 @@ export function useLineChart(
             .range([contentHeight, 0])
 
         const minPosition = {
-            x: (x(data.find((x) => x.value === min)?.date as Date) ?? 0) - 30,
+            x: (x(data.find((x) => x.value === min)?.date!) ?? 0) - 30,
             y: (y(min) ?? 0) + 24,
         }
 
         const maxPosition = {
-            x: (x(data.find((x) => x.value === max)?.date as Date) ?? 0) - 10,
+            x: (x(data.find((x) => x.value === max)?.date!) ?? 0) - 10,
             y: (y(max) ?? 0) - 16,
         }
 

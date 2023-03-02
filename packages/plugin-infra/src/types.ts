@@ -296,7 +296,7 @@ export namespace Plugin.Shared {
      * This part is shared between Dashboard, SNSAdaptor and Worker part
      * which you should include the information above in those three parts.
      */
-    export interface DefinitionDeferred<Context extends Shared.SharedContext = Shared.SharedContext>
+    export interface DefinitionDeferred<Context extends SharedContext = SharedContext>
         extends Definition,
             Utilities {
         /**
@@ -1246,7 +1246,7 @@ export namespace Plugin.__Host {
          */
         minimalMode: EnabledStatusReporter
 
-        addI18NResource(pluginID: string, resources: Plugin.Shared.I18NResource): void
+        addI18NResource(pluginID: string, resources: Shared.I18NResource): void
 
         createContext(id: string, signal: AbortSignal): Context
 

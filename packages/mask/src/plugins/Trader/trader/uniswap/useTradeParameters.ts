@@ -13,7 +13,7 @@ import { useTransactionDeadline } from './useTransactionDeadline.js'
 import { useGetTradeContext } from '../useGetTradeContext.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
-const UNISWAP_BIPS_BASE = 10000
+const UNISWAP_BIPS_BASE = 10_000
 
 // Pangolin and TraderJoe have modified uniswap contracts
 type SwapParams = Parameters<typeof Router.swapCallParameters>

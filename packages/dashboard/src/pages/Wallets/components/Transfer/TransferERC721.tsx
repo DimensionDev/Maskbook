@@ -57,7 +57,7 @@ type FormInputs = {
     tokenId: string
 }
 
-const GAS_LIMIT = 30000
+const GAS_LIMIT = 30_000
 
 export const TransferERC721 = memo(() => {
     const t = useDashboardI18N()

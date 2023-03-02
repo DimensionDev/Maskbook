@@ -4,7 +4,6 @@ import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID } from '@masknet/sh
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useWeb3, useChainContext } from '@masknet/web3-hooks-base'
-import type { Web3 } from '@masknet/web3-shared-evm'
 import { TokenIcon, ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
 import { Button, Card, Grid, Typography, Box } from '@mui/material'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
@@ -131,7 +130,7 @@ export function FarmPost(props: FarmPostProps) {
         try {
             const tokenAddress = payload.referral_token
             const referrer = payload?.promoter_address ?? MASK_REFERRER
-            await singAndPostProofOfRecommendationWithReferrer(web3 as Web3, account, tokenAddress, referrer)
+            await singAndPostProofOfRecommendationWithReferrer(web3!, account, tokenAddress, referrer)
             swapToken()
         } catch (error: any) {
             onError(error?.message)

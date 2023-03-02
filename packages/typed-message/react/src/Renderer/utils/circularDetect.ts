@@ -3,7 +3,7 @@ export function hasCircular(message: object) {
     try {
         JSON.stringify(message)
         return false
-    } catch (err) {
+    } catch {
         console.warn(
             '[@masknet/typed-message] TypedMessage',
             message,

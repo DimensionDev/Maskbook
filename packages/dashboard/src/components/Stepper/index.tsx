@@ -7,7 +7,7 @@ import { makeStyles } from '@masknet/theme'
 const useStyles = makeStyles()({
     hidden: {
         position: 'absolute',
-        left: 10000,
+        left: 10_000,
     },
 })
 

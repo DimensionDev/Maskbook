@@ -68,7 +68,7 @@ export async function filterRewardsByAccountTokenPeriodOffset(
 async function resolveReferralFarmsV1Address(onError: (error?: string) => void) {
     try {
         return await ReferralRPC.getReferralFarmsV1Address()
-    } catch (error) {
+    } catch {
         onError('Referral farms address cannot be retrieved at the moment. Please try later.')
         return undefined
     }

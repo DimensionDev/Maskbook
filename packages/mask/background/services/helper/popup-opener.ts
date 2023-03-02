@@ -30,7 +30,7 @@ async function openWindow(url: string): Promise<void> {
             // Position window in top right corner of lastFocused window.
             top = lastFocused.top ?? 0
             left = (lastFocused.left ?? 0) + (lastFocused.width ?? 0) - 350
-        } catch (error_) {
+        } catch {
             // The following properties are more than likely 0, due to being
             // opened from the background chrome process for the extension that
             // has no physical dimensions

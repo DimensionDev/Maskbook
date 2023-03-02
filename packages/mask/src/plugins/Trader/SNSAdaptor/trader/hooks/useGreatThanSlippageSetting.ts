@@ -14,7 +14,7 @@ export const useGreatThanSlippageSetting = (priceImpact?: BigNumber.Value) => {
     return useMemo(
         () =>
             isGreaterThan(
-                multipliedBy(priceImpact ?? 0, 10000)
+                multipliedBy(priceImpact ?? 0, 10_000)
                     .toFixed(0)
                     .replace(/\.?0+$/, ''),
                 slippage,

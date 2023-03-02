@@ -20,11 +20,11 @@ type Call = [string, number, string]
 type Result = [boolean, string, string]
 
 // conservative, hard-coded estimate of the current block gas limit
-const CONSERVATIVE_BLOCK_GAS_LIMIT = 10000000
+const CONSERVATIVE_BLOCK_GAS_LIMIT = 10_000_000
 
 // the default value for calls that don't specify gasRequired
-const DEFAULT_GAS_REQUIRED = 200000
-const DEFAULT_GAS_LIMIT = 1000000
+const DEFAULT_GAS_REQUIRED = 200_000
+const DEFAULT_GAS_LIMIT = 1_000_000
 // #endregion
 
 // #region cached results
@@ -250,7 +250,7 @@ export function useSingleContractMultipleData<T extends BaseContract, K extends 
     }, [contract?.options.address, names.join(), callDatas.flatMap((x) => x).join()])
     const [state, callback] = useMulticallCallback(chainId, blockNumber)
     const results = useMulticallStateDecoded(
-        Array.from({ length: calls.length }, () => contract as T),
+        Array.from({ length: calls.length }, () => contract!),
         names,
         state,
         chainId,

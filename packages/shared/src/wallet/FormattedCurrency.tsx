@@ -1,4 +1,4 @@
-import { type FC, Fragment } from 'react'
+import { type FC } from 'react'
 import type { BigNumber } from 'bignumber.js'
 
 export interface FormattedCurrencyProps {
@@ -12,5 +12,5 @@ export const FormattedCurrency: FC<FormattedCurrencyProps> = ({
     sign,
     formatter = (value, sign) => `${sign} ${value}`.trim(),
 }) => {
-    return <Fragment>{formatter(value, sign)}</Fragment>
+    return <>{formatter(value, sign)}</>
 }

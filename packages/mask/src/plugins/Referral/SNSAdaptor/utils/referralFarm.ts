@@ -16,7 +16,7 @@ import type { FungibleTokenDetailed } from '../../types.js'
 async function resolveReferralFarmsV1Address() {
     try {
         return await ReferralRPC.getReferralFarmsV1Address()
-    } catch (error) {
+    } catch {
         throw new Error('Referral farms address cannot be retrieved at the moment. Please try later.')
     }
 }

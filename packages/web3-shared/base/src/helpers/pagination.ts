@@ -27,7 +27,7 @@ export function createPageable<Item, Indicator = HubIndicator>(
     nextIndicator?: Indicator,
 ) {
     // with next page
-    if (typeof nextIndicator !== 'undefined') {
+    if (nextIndicator !== undefined) {
         return {
             data,
             indicator,

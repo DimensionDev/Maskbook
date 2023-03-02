@@ -8,8 +8,8 @@ import { useTip } from '../../contexts/index.js'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { useAsync } from 'react-use'
 
-const ETH_GAS_LIMIT = 21000
-const ERC20_GAS_LIMIT = 50000
+const ETH_GAS_LIMIT = 21_000
+const ERC20_GAS_LIMIT = 50_000
 
 export function GasSettingsBar() {
     const wallet = useWallet()
