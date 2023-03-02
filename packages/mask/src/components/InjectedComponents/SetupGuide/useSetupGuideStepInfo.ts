@@ -3,8 +3,8 @@ import { useAsyncRetry } from 'react-use'
 import {
     EnhanceableSite,
     isSameProfile,
-    NextIDPlatform,
-    PersonaIdentifier,
+    type NextIDPlatform,
+    type PersonaIdentifier,
     ProfileIdentifier,
     resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
@@ -12,7 +12,7 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { currentSetupGuideStatus, userPinExtension } from '../../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { SetupGuideContext, SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
+import { type SetupGuideContext, SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
 import Services from '../../../extension/service.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { MaskMessages } from '../../../../shared/index.js'

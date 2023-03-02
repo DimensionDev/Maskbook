@@ -1,9 +1,9 @@
-import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
+import { type FC, type HTMLProps, type MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
-import { ProfileIdentifier, NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
-import { SocialAccount, SocialAddressType } from '@masknet/web3-shared-base'
+import { type ProfileIdentifier, NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
+import { type SocialAccount, SocialAddressType } from '@masknet/web3-shared-base'
 import {
     useCurrentVisitingIdentity,
     useSocialIdentityByUserId,

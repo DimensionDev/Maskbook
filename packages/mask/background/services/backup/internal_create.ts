@@ -1,4 +1,4 @@
-import { createEmptyNormalizedBackup, NormalizedBackup } from '@masknet/backup-format'
+import { createEmptyNormalizedBackup, type NormalizedBackup } from '@masknet/backup-format'
 import type { PersonaIdentifier } from '@masknet/shared-base'
 import { None, Some } from 'ts-results-es'
 import { queryPersonasDB, queryProfilesDB, queryRelations } from '../../database/persona/db.js'

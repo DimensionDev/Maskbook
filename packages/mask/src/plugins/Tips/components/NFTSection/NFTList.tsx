@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react'
+import { type FC, useCallback } from 'react'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'

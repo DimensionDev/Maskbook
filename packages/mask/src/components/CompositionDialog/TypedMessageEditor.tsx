@@ -2,8 +2,8 @@ import {
     isTypedMessageEqual,
     isTypedMessageText,
     makeTypedMessageText,
-    TypedMessage,
-    SerializableTypedMessages,
+    type TypedMessage,
+    type SerializableTypedMessages,
 } from '@masknet/typed-message'
 import { editTypedMessageMeta } from '@masknet/typed-message-react'
 import { makeStyles } from '@masknet/theme'

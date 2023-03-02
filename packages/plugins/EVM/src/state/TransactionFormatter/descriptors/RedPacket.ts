@@ -1,9 +1,14 @@
 import type { AbiItem } from 'web3-utils'
 import { i18NextInstance } from '@masknet/shared-base'
-import { ChainId, getNftRedPacketConstant, getRedPacketConstants, TransactionParameter } from '@masknet/web3-shared-evm'
+import {
+    type ChainId,
+    getNftRedPacketConstant,
+    getRedPacketConstants,
+    type TransactionParameter,
+} from '@masknet/web3-shared-evm'
 import HappyRedPacketV4ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import NftRedPacketABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
-import { isSameAddress, TransactionContext } from '@masknet/web3-shared-base'
+import { isSameAddress, type TransactionContext } from '@masknet/web3-shared-base'
 import type { TransactionDescriptor } from '../types.js'
 import { Web3StateSettings } from '../../../settings/index.js'
 import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } from '../utils.js'

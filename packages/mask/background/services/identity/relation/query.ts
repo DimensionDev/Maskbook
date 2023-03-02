@@ -1,5 +1,5 @@
 import type { PersonaIdentifier } from '@masknet/shared-base'
-import { queryRelationsPagedDB, RelationRecord } from '../../../database/persona/db.js'
+import { queryRelationsPagedDB, type RelationRecord } from '../../../database/persona/db.js'
 import { queryRelations as queryRelationsFromIndexedDB } from '../../../database/persona/web.js'
 
 export async function mobile_queryRelationsRecordFromIndexedDB(): Promise<RelationRecord[]> {

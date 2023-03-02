@@ -1,6 +1,6 @@
 import { isNil } from 'lodash-es'
 import {
-    ChainId,
+    type ChainId,
     chainResolver,
     createNativeToken,
     formatEthereumAddress,
@@ -9,15 +9,15 @@ import {
 } from '@masknet/web3-shared-evm'
 import {
     CurrencyType,
-    FungibleAsset,
+    type FungibleAsset,
     multipliedBy,
     rightShift,
     toFixed,
     TokenType,
-    Transaction,
+    type Transaction,
 } from '@masknet/web3-shared-base'
 import DeBank from '@masknet/web3-constants/evm/debank.json'
-import { DebankTransactionDirection, HistoryResponse, WalletTokenRecord } from './types.js'
+import { DebankTransactionDirection, type HistoryResponse, type WalletTokenRecord } from './types.js'
 
 export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<ChainId, SchemaType>> {
     const supportedChains = Object.values({ ...DeBank.CHAIN_ID, BSC: 'bnb' }).filter(Boolean)

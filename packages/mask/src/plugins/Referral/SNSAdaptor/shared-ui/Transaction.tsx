@@ -6,7 +6,7 @@ import { Done as DoneIcon } from '@mui/icons-material'
 import type { NetworkPluginID } from '@masknet/shared-base'
 
 import { useI18N } from '../../locales/index.js'
-import { TransactionStatus, ChainId } from '../../types.js'
+import { TransactionStatus, type ChainId } from '../../types.js'
 
 const useStyles = makeStyles()(() => ({
     confirmation: {

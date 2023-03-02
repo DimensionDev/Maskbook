@@ -1,7 +1,7 @@
-import { forwardRef, HTMLProps, useRef, useLayoutEffect, useState } from 'react'
+import { forwardRef, type HTMLProps, useRef, useLayoutEffect, useState } from 'react'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Skeleton, Typography } from '@mui/material'
-import { CollectibleCard, CollectibleCardProps } from './CollectibleCard.js'
+import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {

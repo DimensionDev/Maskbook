@@ -1,12 +1,12 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import {
     CHAIN_DESCRIPTORS,
-    ChainId,
+    type ChainId,
     NETWORK_DESCRIPTORS,
-    NetworkType,
+    type NetworkType,
     PROVIDER_DESCRIPTORS,
-    ProviderType,
-    SchemaType,
+    type ProviderType,
+    type SchemaType,
 } from '@masknet/web3-shared-solana'
 import { languages } from './locales/languages.js'
 import { PLUGIN_DESCRIPTION, PLUGIN_ID, PLUGIN_NAME } from './constants.js'

@@ -1,8 +1,8 @@
 import { omit, uniqWith } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
-import { EMPTY_LIST, mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
-import { isSameAddress, Wallet, WalletState as Web3WalletState } from '@masknet/web3-shared-base'
+import { EMPTY_LIST, mapSubscription, mergeSubscription, type StorageItem } from '@masknet/shared-base'
+import { isSameAddress, type Wallet, type WalletState as Web3WalletState } from '@masknet/web3-shared-base'
 
 type WalletStorage<ProviderType extends string> = Partial<Record<ProviderType, Wallet[]>>
 

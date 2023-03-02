@@ -1,5 +1,5 @@
 import { PluginRuntime } from '../runtime/runtime.js'
-import { BasicHostHooks, BasicHostInstance, PluginRunner } from '../runtime/runner.js'
+import { type BasicHostHooks, type BasicHostInstance, PluginRunner } from '../runtime/runner.js'
 import { getURL } from '../utils/url.js'
 import { addPeerDependencies } from '../peer-dependencies/index.js'
 import { addPeerDependenciesDOM, createI18nHooksAndTranslate } from '../peer-dependencies-dom/index.js'

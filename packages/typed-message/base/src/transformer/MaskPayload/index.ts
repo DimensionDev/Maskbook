@@ -1,6 +1,11 @@
 import { FlattenTypedMessage } from '../Flatten.js'
 import type { TypedMessage } from '../../base.js'
-import { isTypedMessageImage, isTypedMessageText, isTypedMessageTuple, TypedMessageImage } from '../../core/index.js'
+import {
+    isTypedMessageImage,
+    isTypedMessageText,
+    isTypedMessageTuple,
+    type TypedMessageImage,
+} from '../../core/index.js'
 import { isTypedMessageAnchor, isTypedMessageMaskPayload } from '../../extension/index.js'
 import { visitEachTypedMessageChild } from '../../visitor/index.js'
 import type { TransformationContext } from '../context.js'

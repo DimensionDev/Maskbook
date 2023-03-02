@@ -1,7 +1,7 @@
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
-import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
+import { type EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { Box } from '@mui/material'
 import { base } from '../base.js'
 import { PLUGIN_ID, SNS_RSS3_FIELD_KEY_MAP } from '../constants.js'

@@ -1,5 +1,5 @@
-import { ForwardedRef, useState, forwardRef } from 'react'
-import { MaskTextField, MaskTextFieldProps } from '@masknet/theme'
+import { type ForwardedRef, useState, forwardRef } from 'react'
+import { MaskTextField, type MaskTextFieldProps } from '@masknet/theme'
 import { IconButton, InputAdornment } from '@mui/material'
 import { Icons } from '@masknet/icons'
 

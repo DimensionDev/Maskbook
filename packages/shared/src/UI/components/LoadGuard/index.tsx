@@ -1,4 +1,4 @@
-import { memo, PropsWithChildren } from 'react'
+import { memo, type PropsWithChildren } from 'react'
 import { RetryHint } from '../LoadRetry/index.js'
 import { Stack, Typography } from '@mui/material'
 import { LoadingBase } from '@masknet/theme'

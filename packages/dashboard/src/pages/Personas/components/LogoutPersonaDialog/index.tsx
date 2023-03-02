@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { CrossIsolationMessages, DashboardRoutes, PersonaIdentifier } from '@masknet/shared-base'
+import { CrossIsolationMessages, DashboardRoutes, type PersonaIdentifier } from '@masknet/shared-base'
 import { MaskDialog } from '@masknet/theme'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'

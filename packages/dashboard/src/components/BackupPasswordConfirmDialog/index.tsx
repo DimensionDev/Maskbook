@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext, useMemo, useState } from 'react'
 import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
-import { ConfirmPasswordOption, UserContext } from '../../pages/Settings/hooks/UserContext.js'
+import { type ConfirmPasswordOption, UserContext } from '../../pages/Settings/hooks/UserContext.js'
 import { MaskDialog } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales/index.js'
 import { useNavigate } from 'react-router-dom'

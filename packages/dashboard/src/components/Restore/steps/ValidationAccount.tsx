@@ -8,7 +8,7 @@ import { Button, Typography } from '@mui/material'
 import { ButtonContainer } from '../../RegisterFrame/ButtonContainer.js'
 import type { StepCommonProps } from '../../Stepper/index.js'
 import { ValidationCodeStep } from './common.js'
-import { AccountType, BackupFileInfo, Locale, Scenario } from '../../../pages/Settings/type.js'
+import { type AccountType, type BackupFileInfo, Locale, Scenario } from '../../../pages/Settings/type.js'
 
 interface ValidationAccountProps extends StepCommonProps {
     account: string

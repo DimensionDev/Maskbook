@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import { uniqBy } from 'lodash-es'
-import { MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
+import { type MaskFixedSizeListProps, type MaskTextFieldProps, SearchableList } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '@masknet/shared'
 import {
@@ -13,8 +13,8 @@ import {
     useWeb3State,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { CurrencyType, currySameAddress, FungibleToken, isSameAddress } from '@masknet/web3-shared-base'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { CurrencyType, currySameAddress, type FungibleToken, isSameAddress } from '@masknet/web3-shared-base'
+import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import { getFungibleTokenItem } from './FungibleTokenItem.js'
 import type { ChainAddress } from '../../../types.js'
 import { useI18N } from '../../../locales/index.js'

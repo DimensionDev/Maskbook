@@ -1,7 +1,7 @@
 import { createElement } from 'react'
 import { map } from 'lodash-es'
 import urlcat from 'urlcat'
-import { ImageList, ImageListItem, SvgIconProps } from '@mui/material'
+import { ImageList, ImageListItem, type SvgIconProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../../utils/index.js'

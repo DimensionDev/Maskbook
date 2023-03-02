@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Avatar, Box, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
-import { SchemaType, explorerResolver, ChainId } from '@masknet/web3-shared-evm'
+import { SchemaType, explorerResolver, type ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'

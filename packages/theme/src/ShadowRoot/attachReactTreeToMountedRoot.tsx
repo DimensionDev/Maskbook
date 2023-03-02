@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom'
 import { noop } from 'lodash-es'
 import { ShadowRootStyleProvider } from './ShadowRootStyleProvider.js'
-import { shadowEnvironmentMountingRoots, WrapJSX } from './ShadowRootSetup.js'
+import { shadowEnvironmentMountingRoots, type WrapJSX } from './ShadowRootSetup.js'
 
 export interface AttachInShadowRootOptions {
     /** Root tag. @default "main" */

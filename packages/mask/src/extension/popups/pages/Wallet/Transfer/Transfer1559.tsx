@@ -1,4 +1,4 @@
-import { memo, ReactElement, SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
+import { memo, type ReactElement, type SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ChevronDown } from 'react-feather'
@@ -18,7 +18,7 @@ import {
 import {
     formatBalance,
     formatCurrency,
-    FungibleAsset,
+    type FungibleAsset,
     isGreaterThan,
     isGreaterThanOrEqualTo,
     isLessThan,

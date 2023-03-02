@@ -3,7 +3,7 @@ import { Interface } from '@ethersproject/abi'
 import { keccak256 } from 'web3-utils'
 
 import { expandEvmAddressToBytes32 } from '../../helpers/index.js'
-import type { Entitlement } from '../../types.js'
+import { Entitlement } from '../../types.js'
 import { getOracle, rpcCall, RpcMethod, RpcRoute } from './oracle.js'
 import { supportedOracleChainId } from '../../constants.js'
 

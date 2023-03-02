@@ -1,5 +1,5 @@
-import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
-import { FC, useLayoutEffect } from 'react'
+import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
+import { type FC, useLayoutEffect } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import { useI18N } from '../locales/index.js'
 import { RoutePaths } from './Routes.js'

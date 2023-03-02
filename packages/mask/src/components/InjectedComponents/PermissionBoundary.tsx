@@ -5,8 +5,8 @@ import { Typography, useTheme } from '@mui/material'
 import {
     forwardRef,
     memo,
-    PropsWithChildren,
-    ReactElement,
+    type PropsWithChildren,
+    type ReactElement,
     useImperativeHandle,
     useMemo,
     useRef,

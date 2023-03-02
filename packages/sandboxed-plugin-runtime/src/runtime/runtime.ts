@@ -4,7 +4,7 @@ import {
     imports,
     type Module,
     Evaluators,
-    VirtualModuleRecord,
+    type VirtualModuleRecord,
     type ExportAllBinding,
     type ExportBinding,
 } from '@masknet/compartment'

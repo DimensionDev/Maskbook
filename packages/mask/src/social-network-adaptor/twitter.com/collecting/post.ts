@@ -1,6 +1,6 @@
 import { memoize, noop } from 'lodash-es'
 import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
-import { IntervalWatcher, DOMProxy, DOMProxyEvents } from '@dimensiondev/holoflows-kit'
+import { IntervalWatcher, DOMProxy, type DOMProxyEvents } from '@dimensiondev/holoflows-kit'
 import type { EventListener } from '@servie/events'
 import type { SocialNetworkUI as Next } from '@masknet/types'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'

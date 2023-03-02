@@ -1,7 +1,7 @@
 import type { AbiItem } from 'web3-utils'
 import MaskITO_ABI from '@masknet/web3-contracts/abis/MaskITO.json'
 import type { MaskITO } from '@masknet/web3-contracts/types/MaskITO.js'
-import { ChainId, useITOConstants } from '@masknet/web3-shared-evm'
+import { type ChainId, useITOConstants } from '@masknet/web3-shared-evm'
 import { useContract } from '@masknet/web3-hooks-evm'
 
 export function useMaskITO_Contract(chainId?: ChainId) {

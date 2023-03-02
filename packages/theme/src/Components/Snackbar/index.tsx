@@ -2,14 +2,14 @@ import { forwardRef, useRef, memo, useCallback } from 'react'
 import { keyframes } from 'tss-react'
 import {
     SnackbarProvider,
-    SnackbarProviderProps,
-    SnackbarKey,
+    type SnackbarProviderProps,
+    type SnackbarKey,
     useSnackbar,
-    VariantType,
-    SnackbarMessage,
+    type VariantType,
+    type SnackbarMessage,
     SnackbarContent,
-    SnackbarAction,
-    OptionsObject,
+    type SnackbarAction,
+    type OptionsObject,
 } from 'notistack'
 import { Typography, IconButton, alpha } from '@mui/material'
 import { Close as CloseIcon, Warning as WarningIcon, Info as InfoIcon } from '@mui/icons-material'

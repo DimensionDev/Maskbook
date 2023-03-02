@@ -1,7 +1,7 @@
-import { ChangeEvent, memo, useCallback, useMemo } from 'react'
+import { type ChangeEvent, memo, useCallback, useMemo } from 'react'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { formatBalance } from '@masknet/web3-shared-base'
-import { FungibleTokenInputUI, FungibleTokenInputUIProps } from './UI.js'
+import { FungibleTokenInputUI, type FungibleTokenInputUIProps } from './UI.js'
 import { BigNumber } from 'bignumber.js'
 
 const MIN_AMOUNT_LENGTH = 1

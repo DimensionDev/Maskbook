@@ -7,8 +7,8 @@ import {
     EMPTY_LIST,
     isSamePersona,
     isSameProfile,
-    PersonaIdentifier,
-    ProfileIdentifier,
+    type PersonaIdentifier,
+    type ProfileIdentifier,
     resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'

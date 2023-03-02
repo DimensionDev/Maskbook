@@ -1,5 +1,10 @@
 import { Icons } from '@masknet/icons'
-import { Plugin, SNSAdaptorContext, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import {
+    type Plugin,
+    SNSAdaptorContext,
+    usePluginWrapper,
+    usePostInfoDetails,
+} from '@masknet/plugin-infra/content-script'
 import { parseURLs, PluginID } from '@masknet/shared-base'
 import { MaskLightTheme } from '@masknet/theme'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'

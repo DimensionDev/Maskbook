@@ -1,5 +1,5 @@
 import { forwardRef, memo, useState } from 'react'
-import { IconButton, InputAdornment, TextFieldProps } from '@mui/material'
+import { IconButton, InputAdornment, type TextFieldProps } from '@mui/material'
 import { StyledInput } from '../StyledInput/index.js'
 import { Icons } from '@masknet/icons'
 

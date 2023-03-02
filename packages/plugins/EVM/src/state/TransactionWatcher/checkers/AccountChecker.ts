@@ -1,7 +1,7 @@
 import { sha3, toHex } from 'web3-utils'
 import { EtherscanExplorer } from '@masknet/web3-providers'
 import type { ExplorerAPI } from '@masknet/web3-providers/types'
-import { TransactionChecker, TransactionStatusType } from '@masknet/web3-shared-base'
+import { type TransactionChecker, TransactionStatusType } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
 
 class TTL<T> {

@@ -15,7 +15,7 @@ import { useI18N } from '../../locales/index.js'
 import { ManagePopover } from './ManagePopover.js'
 import { SmartPayBanner } from './SmartPayBanner.js'
 import { ActionButton, LoadingBase, makeStyles } from '@masknet/theme'
-import { ManagerAccount, ManagerAccountType } from '../../type.js'
+import { type ManagerAccount, ManagerAccountType } from '../../type.js'
 
 import { CreateSuccessDialog } from './CreateSuccessDialog.js'
 import { RoutePaths } from '../../constants.js'

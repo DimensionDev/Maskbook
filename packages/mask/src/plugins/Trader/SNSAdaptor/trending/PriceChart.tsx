@@ -4,7 +4,7 @@ import { Stack, Typography, useTheme } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils/index.js'
 import type { Coin, Currency, Stat } from '../../types/index.js'
-import { useDimension, Dimension } from '../../../hooks/useDimension.js'
+import { useDimension, type Dimension } from '../../../hooks/useDimension.js'
 import { usePriceLineChart } from '../../../hooks/usePriceLineChart.js'
 import { openWindow } from '@masknet/shared-base-ui'
 

@@ -1,8 +1,8 @@
 import {
-    Dispatch,
-    FC,
+    type Dispatch,
+    type FC,
     memo,
-    SetStateAction,
+    type SetStateAction,
     useCallback,
     useContext,
     useEffect,
@@ -12,13 +12,13 @@ import {
 } from 'react'
 import { useSubscription } from 'use-subscription'
 import { useFungibleToken, useNonFungibleTokenContract, useChainContext } from '@masknet/web3-hooks-base'
-import { isSameAddress, SocialAccount, TokenType } from '@masknet/web3-shared-base'
+import { isSameAddress, type SocialAccount, TokenType } from '@masknet/web3-shared-base'
 import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { getStorage } from '../../storage/index.js'
 import type { TipTask } from '../../types/index.js'
-import { TipContextOptions, TipContext } from './TipContext.js'
+import { type TipContextOptions, TipContext } from './TipContext.js'
 import { useTipAccountsCompletion } from './useTipAccountsCompletion.js'
 import { useNftTip } from './useNftTip.js'
 import { useTokenTip } from './useTokenTip.js'

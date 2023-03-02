@@ -1,13 +1,13 @@
-import { emptyTransformationContext, TransformationContext } from '@masknet/typed-message'
+import { emptyTransformationContext, type TransformationContext } from '@masknet/typed-message'
 import {
     RenderFragmentsContext,
     type RenderFragmentsContextType,
-    MetadataRenderProps,
+    type MetadataRenderProps,
     RegistryContext,
     TransformerProvider,
     TransformationContextProvider,
     TextResizeContext,
-    TextResizer,
+    type TextResizer,
 } from '@masknet/typed-message-react'
 import { TypedMessageRenderRegistry } from './registry.js'
 import { useSubscription } from 'use-subscription'

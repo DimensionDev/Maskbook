@@ -1,7 +1,7 @@
 import { compact } from 'lodash-es'
 import { useITOConstants } from '@masknet/web3-shared-evm'
 import isAfter from 'date-fns/isAfter'
-import { JSON_PayloadInMask, JSON_PayloadFromChain, ITO_Status } from '../../types.js'
+import { type JSON_PayloadInMask, type JSON_PayloadFromChain, ITO_Status } from '../../types.js'
 import { useAvailability } from './useAvailability.js'
 import { useQualification } from './useQualification.js'
 import { ITO_CONTRACT_BASE_TIMESTAMP } from '../../constants.js'

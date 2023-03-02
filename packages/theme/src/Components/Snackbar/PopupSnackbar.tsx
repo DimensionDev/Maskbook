@@ -2,11 +2,11 @@ import { memo, useRef, forwardRef, useCallback } from 'react'
 import { Typography, collapseClasses } from '@mui/material'
 import {
     SnackbarProvider,
-    SnackbarProviderProps,
-    SnackbarMessage,
+    type SnackbarProviderProps,
+    type SnackbarMessage,
     SnackbarContent,
-    VariantType,
-    SnackbarKey,
+    type VariantType,
+    type SnackbarKey,
     useSnackbar,
 } from 'notistack'
 import { makeStyles } from '../../UIHelper/index.js'

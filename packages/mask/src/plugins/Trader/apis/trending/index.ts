@@ -1,4 +1,4 @@
-import { SourceType, NonFungibleCollectionOverview } from '@masknet/web3-shared-base'
+import { SourceType, type NonFungibleCollectionOverview } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { CoinGeckoTrending, CoinMarketCap, NFTScanTrending_EVM, NFTScanTrending_Solana } from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'

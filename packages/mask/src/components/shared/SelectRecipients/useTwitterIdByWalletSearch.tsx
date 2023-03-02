@@ -1,7 +1,7 @@
 import {
     ECKeyIdentifier,
     EMPTY_LIST,
-    NextIDPersonaBindings,
+    type NextIDPersonaBindings,
     NextIDPlatform,
     ProfileIdentifier,
 } from '@masknet/shared-base'

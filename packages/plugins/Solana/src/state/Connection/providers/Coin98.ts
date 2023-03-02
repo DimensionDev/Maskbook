@@ -2,7 +2,7 @@ import { first } from 'lodash-es'
 import type { PublicKey, Transaction } from '@solana/web3.js'
 import { injectedCoin98SolanaProvider } from '@masknet/injected-script'
 import type { Account } from '@masknet/web3-shared-base'
-import { ChainId, Coin98MethodType, ProviderType } from '@masknet/web3-shared-solana'
+import { type ChainId, Coin98MethodType, ProviderType } from '@masknet/web3-shared-solana'
 import type { SolanaProvider } from '../types.js'
 import { BaseInjectedProvider } from './BaseInjected.js'
 

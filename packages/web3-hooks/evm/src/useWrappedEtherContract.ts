@@ -1,7 +1,7 @@
 import type { AbiItem } from 'web3-utils'
 import WETH_ABI from '@masknet/web3-contracts/abis/WETH.json'
 import type { WETH } from '@masknet/web3-contracts/types/WETH.js'
-import { ChainId, useTokenConstants } from '@masknet/web3-shared-evm'
+import { type ChainId, useTokenConstants } from '@masknet/web3-shared-evm'
 import { useContract } from './useContract.js'
 
 export function useNativeTokenWrapperContract(chainId?: ChainId) {

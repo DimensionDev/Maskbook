@@ -1,5 +1,5 @@
 import type { BigNumber } from 'bignumber.js'
-import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
+import { createPluginMessage, type PluginMessageEmitter } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import type { GasOptionType, NonFungibleCollection } from '@masknet/web3-shared-base'

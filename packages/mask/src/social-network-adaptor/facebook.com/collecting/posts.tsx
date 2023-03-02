@@ -3,13 +3,13 @@ import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/h
 import { creator } from '../../../social-network/utils.js'
 import { isMobileFacebook } from '../utils/isMobile.js'
 import { getProfileIdentifierAtFacebook } from '../utils/getProfileIdentifier.js'
-import { TypedMessage, makeTypedMessageText, makeTypedMessageTuple } from '@masknet/typed-message'
+import { type TypedMessage, makeTypedMessageText, makeTypedMessageTuple } from '@masknet/typed-message'
 import { clickSeeMore } from '../injection/PostInspector.js'
 import { startWatch } from '../../../utils/watcher.js'
 import { facebookShared } from '../shared.js'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context.js'
 import { collectNodeText } from '../../../utils/index.js'
-import { None, Some, Option } from 'ts-results-es'
+import { None, Some, type Option } from 'ts-results-es'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobileFacebook ? '.story_body_container > div' : '[role=article]  [id]  span[dir="auto"]',

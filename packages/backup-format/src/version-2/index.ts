@@ -7,7 +7,7 @@ import {
     isEC_Public_JsonWebKey,
     PostIVIdentifier,
     ProfileIdentifier,
-    RelationFavor,
+    type RelationFavor,
 } from '@masknet/shared-base'
 import __ from 'elliptic'
 import { Convert } from 'pvtsutils'

@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { formatWeiToEther, ChainId, GasConfig, GasEditor, Transaction } from '@masknet/web3-shared-evm'
+import { formatWeiToEther, type ChainId, type GasConfig, GasEditor, type Transaction } from '@masknet/web3-shared-evm'
 import { formatBalance, formatCurrency, leftShift, multipliedBy } from '@masknet/web3-shared-base'
 import type { TradeComputed } from '../../types/index.js'
 import {

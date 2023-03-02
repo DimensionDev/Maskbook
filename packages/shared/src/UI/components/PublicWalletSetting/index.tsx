@@ -6,9 +6,9 @@ import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Typography, Box } from '@mui/material'
 import {
     PluginID,
-    BindingProof,
+    type BindingProof,
     CrossIsolationMessages,
-    ECKeyIdentifier,
+    type ECKeyIdentifier,
     EMPTY_LIST,
     NextIDPlatform,
     PopupRoutes,

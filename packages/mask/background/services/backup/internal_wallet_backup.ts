@@ -6,7 +6,7 @@ import type { NormalizedBackup } from '@masknet/backup-format'
 import type { LegacyWalletRecord, WalletRecord } from '../../../shared/definitions/wallet.js'
 import { ec as EC } from 'elliptic'
 import { EthereumAddress } from 'wallet.ts'
-import { toBase64URL, EC_Public_JsonWebKey, EC_Private_JsonWebKey } from '@masknet/shared-base'
+import { toBase64URL, type EC_Public_JsonWebKey, type EC_Private_JsonWebKey } from '@masknet/shared-base'
 
 export async function internal_wallet_backup() {
     const wallet = await Promise.all([backupAllWallets(), backupAllLegacyWallets()])

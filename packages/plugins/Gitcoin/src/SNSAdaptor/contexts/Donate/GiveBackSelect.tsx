@@ -1,5 +1,5 @@
-import { FC, memo } from 'react'
-import { MenuItem, Select, SelectProps } from '@mui/material'
+import { type FC, memo } from 'react'
+import { MenuItem, Select, type SelectProps } from '@mui/material'
 
 interface Props extends SelectProps<number> {}
 

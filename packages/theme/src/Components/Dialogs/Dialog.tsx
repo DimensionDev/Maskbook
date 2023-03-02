@@ -1,7 +1,7 @@
-import { Dialog, DialogActions, DialogContent, DialogProps } from '@mui/material'
-import { memo, ReactNode, useCallback, useState } from 'react'
+import { Dialog, DialogActions, DialogContent, type DialogProps } from '@mui/material'
+import { memo, type ReactNode, useCallback, useState } from 'react'
 import { usePortalShadowRoot } from '../../ShadowRoot/index.js'
-import { MaskDialogTitle, MaskDialogTitleProps } from './DialogTitle.js'
+import { MaskDialogTitle, type MaskDialogTitleProps } from './DialogTitle.js'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useDialogStackActor } from './DialogStack.js'
 export interface MaskDialogProps

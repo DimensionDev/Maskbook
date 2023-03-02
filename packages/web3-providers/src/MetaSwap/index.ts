@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { GasOptionType } from '@masknet/web3-shared-base'
-import { ChainId, formatGweiToWei, GasOption, isValidChainId } from '@masknet/web3-shared-evm'
+import { type ChainId, formatGweiToWei, type GasOption, isValidChainId } from '@masknet/web3-shared-evm'
 import type { EstimateSuggestResponse } from './types.js'
 import type { GasOptionAPI } from '../entry-types.js'
 import { fetchJSON } from '../entry-helpers.js'

@@ -1,4 +1,4 @@
-import { ChainId, ConnectionContext } from '@masknet/web3-shared-evm'
+import { ChainId, type ConnectionContext } from '@masknet/web3-shared-evm'
 import { Base } from './Base.js'
 
 export class Astar extends Base {

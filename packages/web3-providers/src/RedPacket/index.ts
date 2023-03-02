@@ -1,8 +1,16 @@
 import urlcat from 'urlcat'
 import { mapKeys } from 'lodash-es'
-import { Transaction, attemptUntil, createIndicator, createPageable } from '@masknet/web3-shared-base'
+import {
+    type Transaction,
+    attemptUntil,
+    createIndicator,
+    createPageable,
+    type HubIndicator,
+    type HubOptions,
+    type NonFungibleCollection,
+    type Pageable,
+} from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import type { HubIndicator, HubOptions, NonFungibleCollection, Pageable } from '@masknet/web3-shared-base'
 import { DSEARCH_BASE_URL } from '../DSearch/constants.js'
 import { ChainbaseRedPacketAPI } from '../Chainbase/index.js'
 import { EtherscanRedPacketAPI } from '../Etherscan/index.js'

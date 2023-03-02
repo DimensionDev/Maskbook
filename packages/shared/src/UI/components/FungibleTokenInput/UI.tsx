@@ -7,7 +7,7 @@ import {
     lighten,
     inputBaseClasses,
     chipClasses,
-    InputBaseProps,
+    type InputBaseProps,
     alpha,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'

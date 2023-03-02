@@ -1,6 +1,6 @@
 import { noop } from 'lodash-es'
 import type { TransactionReceipt } from 'web3-core'
-import { NonFungibleTokenMetadata, TransactionStatusType } from '@masknet/web3-shared-base'
+import { type NonFungibleTokenMetadata, TransactionStatusType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
 export function getReceiptStatus(receipt: TransactionReceipt | null) {

@@ -1,4 +1,4 @@
-import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
+import { createPluginMessage, type PluginMessageEmitter } from '@masknet/plugin-infra'
 import type { PersonaInformation } from '@masknet/shared-base'
 import type { Wallet } from '@masknet/web3-shared-base'
 import { PLUGIN_ID } from './constants.js'

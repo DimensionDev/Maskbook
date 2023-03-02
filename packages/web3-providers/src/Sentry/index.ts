@@ -1,4 +1,4 @@
-import { Breadcrumbs, Event, GlobalHandlers } from '@sentry/browser'
+import { Breadcrumbs, type Event, GlobalHandlers } from '@sentry/browser'
 import { getSiteType, getAgentType, getExtensionId } from '@masknet/shared-base'
 import { formatMask } from '@masknet/web3-shared-base'
 import { TelemetryAPI } from '../types/Telemetry.js'

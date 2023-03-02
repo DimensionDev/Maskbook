@@ -1,6 +1,6 @@
 import type { AbiItem } from 'web3-utils'
 import { useContract } from '@masknet/web3-hooks-evm'
-import { ChainId, useArtBlocksConstants } from '@masknet/web3-shared-evm'
+import { type ChainId, useArtBlocksConstants } from '@masknet/web3-shared-evm'
 import ArtBlocksCoreContractABI from '@masknet/web3-contracts/abis/ArtBlocksMinterContract.json'
 
 import type { ArtBlocksMinterContract } from '@masknet/web3-contracts/types/ArtBlocksMinterContract.js'

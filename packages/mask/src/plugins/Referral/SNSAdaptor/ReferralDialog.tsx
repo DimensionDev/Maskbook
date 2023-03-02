@@ -3,7 +3,7 @@ import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useTheme } from '@mui/material/styles'
 
-import { PageHistory, PagesType, DialogInterface } from '../types.js'
+import { type PageHistory, PagesType, type DialogInterface } from '../types.js'
 import { useI18N } from '../locales/index.js'
 
 import { InjectedDialog } from '@masknet/shared'

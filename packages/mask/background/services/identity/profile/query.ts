@@ -2,7 +2,7 @@ import type { MobileProfile } from '@masknet/public-api'
 import type { ProfileIdentifier, ProfileInformation } from '@masknet/shared-base'
 import {
     createPersonaDBReadonlyAccess,
-    ProfileRecord,
+    type ProfileRecord,
     queryPersonasDB,
     queryProfilesDB,
 } from '../../../database/persona/db.js'

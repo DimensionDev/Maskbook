@@ -1,4 +1,4 @@
-import { ReactElement, useCallback, useEffect, useState } from 'react'
+import { type ReactElement, useCallback, useEffect, useState } from 'react'
 import { useMount } from 'react-use'
 import { Typography } from '@mui/material'
 import { MaskMessages, useMatchXS, useLocationChange } from '../../utils/index.js'

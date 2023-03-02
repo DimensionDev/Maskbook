@@ -1,4 +1,4 @@
-import { Component, PropsWithChildren } from 'react'
+import { Component, type PropsWithChildren } from 'react'
 import { SnapshotCard } from './SnapshotCard.js'
 import { Typography, Button, Box } from '@mui/material'
 import { Trans } from 'react-i18next'

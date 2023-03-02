@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-import { useEffect, RefObject } from 'react'
+import { useEffect, type RefObject } from 'react'
 
 export interface Dimension {
     width: number

@@ -1,19 +1,19 @@
-import { BindingProof, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { type BindingProof, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { first, noop } from 'lodash-es'
 import {
     createContext,
-    Dispatch,
-    FC,
+    type Dispatch,
+    type FC,
     memo,
-    PropsWithChildren,
-    SetStateAction,
+    type PropsWithChildren,
+    type SetStateAction,
     useContext,
     useMemo,
     useState,
 } from 'react'
-import { PFP_TYPE, SelectTokenInfo } from '../../types.js'
+import { PFP_TYPE, type SelectTokenInfo } from '../../types.js'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
 

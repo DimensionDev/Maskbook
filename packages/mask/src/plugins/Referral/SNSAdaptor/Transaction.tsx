@@ -5,7 +5,7 @@ import { Grid, Typography, Link } from '@mui/material'
 import { Done as DoneIcon } from '@mui/icons-material'
 import type { NetworkPluginID } from '@masknet/shared-base'
 
-import { TransactionStatus, TransactionDialogInterface, ChainId } from '../types.js'
+import { TransactionStatus, type TransactionDialogInterface, type ChainId } from '../types.js'
 import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({

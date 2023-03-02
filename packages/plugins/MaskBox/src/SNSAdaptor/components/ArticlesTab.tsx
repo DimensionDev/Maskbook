@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { BoxInfo, BoxMetadata, MediaType } from '../../type.js'
+import { type BoxInfo, type BoxMetadata, MediaType } from '../../type.js'
 import { Box } from '@mui/material'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { Video } from '@masknet/shared'

@@ -1,4 +1,4 @@
-import { Asset, WyvernSchemaName } from 'opensea-js/lib/types.js'
+import { type Asset, WyvernSchemaName } from 'opensea-js/lib/types.js'
 import type { CollectibleToken } from '../types.js'
 
 export * from './url.js'

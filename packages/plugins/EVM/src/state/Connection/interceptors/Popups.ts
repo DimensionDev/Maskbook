@@ -1,5 +1,5 @@
 import { isUndefined, omitBy } from 'lodash-es'
-import { ErrorEditor, Middleware, ConnectionContext } from '@masknet/web3-shared-evm'
+import { ErrorEditor, type Middleware, type ConnectionContext } from '@masknet/web3-shared-evm'
 import { ExtensionSite, getSiteType, isEnhanceableSiteType } from '@masknet/shared-base'
 import { SharedContextSettings } from '../../../settings/index.js'
 

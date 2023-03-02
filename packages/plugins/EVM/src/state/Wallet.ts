@@ -12,8 +12,8 @@ import {
     CrossIsolationMessages,
 } from '@masknet/shared-base'
 import { SmartPayOwner, SmartPayBundler } from '@masknet/web3-providers'
-import { isSameAddress, Wallet as WalletItem } from '@masknet/web3-shared-base'
-import { formatEthereumAddress, ProviderType, Transaction } from '@masknet/web3-shared-evm'
+import { isSameAddress, type Wallet as WalletItem } from '@masknet/web3-shared-base'
+import { formatEthereumAddress, ProviderType, type Transaction } from '@masknet/web3-shared-evm'
 
 export class Wallet extends WalletState<ProviderType, Transaction> {
     private ref = new ValueRef(this.context.wallets.getCurrentValue())

@@ -1,5 +1,5 @@
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import { serializer, MaskEvents } from '@masknet/shared-base'
+import { serializer, type MaskEvents } from '@masknet/shared-base'
 
 export const MaskMessages = new WebExtensionMessage<MaskEvents>({ domain: 'mask' })
 MaskMessages.serialization = serializer

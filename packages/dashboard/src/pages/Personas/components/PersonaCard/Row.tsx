@@ -4,9 +4,9 @@ import { Icons } from '@masknet/icons'
 import { Box, IconButton, MenuItem, Stack, Typography } from '@mui/material'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine/index.js'
 import {
-    PersonaIdentifier,
-    ProfileIdentifier,
-    ProfileInformation,
+    type PersonaIdentifier,
+    type ProfileIdentifier,
+    type ProfileInformation,
     DashboardRoutes,
     NextIDAction,
 } from '@masknet/shared-base'

@@ -4,7 +4,7 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useWeb3Hub } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
-import { Icon, IconProps } from '../Icon/index.js'
+import { Icon, type IconProps } from '../Icon/index.js'
 
 export interface TokenIconProps extends IconProps {
     pluginID?: NetworkPluginID

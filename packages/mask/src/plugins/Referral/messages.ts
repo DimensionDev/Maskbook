@@ -1,4 +1,4 @@
-import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
+import { createPluginMessage, type PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
 import type { FungibleTokenDetailed } from './types.js'
 import type { AsyncVersionOf } from 'async-call-rpc/full'
 

@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
-import { memo, PropsWithChildren } from 'react'
+import { memo, type PropsWithChildren } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     card: {

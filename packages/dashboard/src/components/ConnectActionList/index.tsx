@@ -1,5 +1,5 @@
 import type { StyledComponent } from '@emotion/styled'
-import { styled, listItemClasses, Theme } from '@mui/material'
+import { styled, listItemClasses, type Theme } from '@mui/material'
 import type { MUIStyledCommonProps } from '@mui/system'
 import type { DetailedHTMLProps, HTMLAttributes } from 'react'
 

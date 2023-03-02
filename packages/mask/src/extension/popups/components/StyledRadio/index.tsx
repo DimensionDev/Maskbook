@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { Radio, radioClasses, RadioProps } from '@mui/material'
+import { Radio, radioClasses, type RadioProps } from '@mui/material'
 import { forwardRef, memo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({

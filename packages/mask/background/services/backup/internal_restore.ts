@@ -1,19 +1,19 @@
 import { delay } from '@masknet/kit'
 import type { NormalizedBackup } from '@masknet/backup-format'
 import { activatedPluginsWorker, registeredPlugins } from '@masknet/plugin-infra/background-worker'
-import { PluginID, ProfileIdentifier, RelationFavor } from '@masknet/shared-base'
+import { type PluginID, type ProfileIdentifier, RelationFavor } from '@masknet/shared-base'
 import { MaskMessages } from '../../../shared/messages.js'
 import {
     consistentPersonaDBWriteAccess,
     createOrUpdatePersonaDB,
     createOrUpdateProfileDB,
     createOrUpdateRelationDB,
-    LinkedProfileDetails,
+    type LinkedProfileDetails,
 } from '../../database/persona/db.js'
 import {
     withPostDBTransaction,
     createPostDB,
-    PostRecord,
+    type PostRecord,
     queryPostDB,
     updatePostDB,
 } from '../../database/post/index.js'

@@ -1,4 +1,4 @@
-import { useCallback, CSSProperties } from 'react'
+import { useCallback, type CSSProperties } from 'react'
 import { TextField, InputAdornment } from '@mui/material'
 import { ChevronDown } from 'react-feather'
 import { makeStyles } from '@masknet/theme'

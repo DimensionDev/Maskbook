@@ -1,4 +1,10 @@
-import { queryAvatarDB, isAvatarOutdatedDB, storeAvatarDB, IdentifierWithAvatar, createAvatarDBAccess } from './db.js'
+import {
+    queryAvatarDB,
+    isAvatarOutdatedDB,
+    storeAvatarDB,
+    type IdentifierWithAvatar,
+    createAvatarDBAccess,
+} from './db.js'
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc/index.js'
 import { blobToDataURL, memoizePromise } from '@masknet/kit'
 import { createTransaction } from '../utils/openDB.js'

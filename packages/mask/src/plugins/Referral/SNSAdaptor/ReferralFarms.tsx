@@ -1,10 +1,10 @@
-import { ReactNode, useState } from 'react'
+import { type ReactNode, useState } from 'react'
 import { TabContext, TabPanel } from '@mui/lab'
 import { makeStyles } from '@masknet/theme'
 import { Button, Box, Tab, Tabs, Grid, Typography } from '@mui/material'
 
 import { useI18N } from '../locales/index.js'
-import { PageInterface, PagesType, TabsReferralFarms } from '../types.js'
+import { type PageInterface, PagesType, TabsReferralFarms } from '../types.js'
 
 import { ReferToFarmIcon, CreateFarmIcon, BuyToFarmIcon } from './shared-ui/icons/index.js'
 

@@ -1,11 +1,11 @@
 import { useCallback, useMemo } from 'react'
-import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
+import { type ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { isCompactPayload } from './helpers.js'
 import { usePoolPayload } from './hooks/usePoolPayload.js'
 import type { JSON_PayloadInMask } from '../types.js'
 import { ITO, ITO_Error, ITO_Loading } from './ITO.js'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { FungibleToken, TokenType } from '@masknet/web3-shared-base'
+import { type FungibleToken, TokenType } from '@masknet/web3-shared-base'
 import { useChainContext, useFungibleToken, useFungibleTokens } from '@masknet/web3-hooks-base'
 
 export interface PostInspectorProps {

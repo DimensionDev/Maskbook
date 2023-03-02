@@ -1,6 +1,6 @@
 import type { AbiItem } from 'web3-utils'
 import { Web3 } from '@masknet/web3-providers'
-import { FungibleToken, scale10, formatBalance } from '@masknet/web3-shared-base'
+import { type FungibleToken, scale10, formatBalance } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { decodeEvents, createContract } from '@masknet/web3-shared-evm'
 import { Web3StateSettings } from '../../settings/index.js'

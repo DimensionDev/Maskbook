@@ -1,8 +1,8 @@
 import {
-    AESCryptoKey,
-    AESJsonWebKey,
+    type AESCryptoKey,
+    type AESJsonWebKey,
     ECKeyIdentifier,
-    PersonaIdentifier,
+    type PersonaIdentifier,
     PostIdentifier,
     PostIVIdentifier,
     ProfileIdentifier,

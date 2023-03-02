@@ -1,4 +1,4 @@
-import { FC, useCallback, useRef } from 'react'
+import { type FC, useCallback, useRef } from 'react'
 import { noop } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'

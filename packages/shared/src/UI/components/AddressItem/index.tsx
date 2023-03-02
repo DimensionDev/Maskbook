@@ -1,7 +1,7 @@
 import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { Box, Link, Typography, TypographyProps } from '@mui/material'
+import { Box, Link, Typography, type TypographyProps } from '@mui/material'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { SocialAccount } from '@masknet/web3-shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'

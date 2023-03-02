@@ -1,16 +1,16 @@
 import { cloneElement, useCallback, useReducer } from 'react'
 import { cloneDeep, merge } from 'lodash-es'
 import {
-    DialogProps,
+    type DialogProps,
     Dialog,
     IconButton,
     DialogContent,
     Typography,
-    SvgIconProps,
-    IconButtonProps,
+    type SvgIconProps,
+    type IconButtonProps,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Theme, ThemeOptions, ThemeProvider } from '@mui/material/styles'
+import { type Theme, type ThemeOptions, ThemeProvider } from '@mui/material/styles'
 import { Close as CloseIcon } from '@mui/icons-material'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useMatchXS } from '../../../utils/index.js'

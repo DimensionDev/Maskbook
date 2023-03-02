@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { BlockieOptions, create } from 'ethereum-blockies'
+import { type BlockieOptions, create } from 'ethereum-blockies'
 
 export function useBlockie(address: string, options?: BlockieOptions) {
     return useMemo(() => {

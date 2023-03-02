@@ -1,4 +1,10 @@
-import { createIndicator, createNextIndicator, createPageable, HubIndicator, Pageable } from '@masknet/web3-shared-base'
+import {
+    createIndicator,
+    createNextIndicator,
+    createPageable,
+    type HubIndicator,
+    type Pageable,
+} from '@masknet/web3-shared-base'
 import { PageSize, ProfileTab } from '../../constants.js'
 
 export interface IQuery {

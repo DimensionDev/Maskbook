@@ -1,7 +1,7 @@
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { NonFungibleTokenOrder, formatBalance, formatCurrency, isValidTimestamp } from '@masknet/web3-shared-base'
+import { type NonFungibleTokenOrder, formatBalance, formatCurrency, isValidTimestamp } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'

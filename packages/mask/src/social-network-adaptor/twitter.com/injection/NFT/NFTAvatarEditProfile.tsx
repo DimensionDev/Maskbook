@@ -5,7 +5,7 @@ import { startWatch, createReactRootShadowed, MaskMessages } from '../../../../u
 import { searchEditProfileSelector } from '../../utils/selector.js'
 import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog } from './NFTAvatarEditProfileDialog.js'
-import { ButtonStyle, ButtonProps } from '../../constant.js'
+import { ButtonStyle, type ButtonProps } from '../../constant.js'
 import { useLastRecognizedIdentity, useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
 import { usePersonasFromDB } from '../../../../components/DataSource/usePersonasFromDB.js'
 import { ConnectPersonaBoundary } from '@masknet/shared'

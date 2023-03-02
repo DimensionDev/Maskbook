@@ -1,6 +1,6 @@
 import { i18NextInstance } from '@masknet/shared-base'
-import { TransactionContext, formatBalance } from '@masknet/web3-shared-base'
-import { ChainId, getGitcoinConstant, getNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { type TransactionContext, formatBalance } from '@masknet/web3-shared-base'
+import { type ChainId, getGitcoinConstant, getNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { BigNumber } from 'bignumber.js'
 import { Web3StateSettings } from '../../../settings/index.js'
 import type { TransactionDescriptor } from '../types.js'

@@ -2,10 +2,10 @@ import urlcat from 'urlcat'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, createNativeToken, SchemaType } from '@masknet/web3-shared-solana'
 import {
-    NonFungibleAsset,
-    NonFungibleCollection,
-    NonFungibleTokenContract,
-    NonFungibleTokenEvent,
+    type NonFungibleAsset,
+    type NonFungibleCollection,
+    type NonFungibleTokenContract,
+    type NonFungibleTokenEvent,
     resolveCrossOriginURL,
     resolveIPFS_URL,
     scale10,

@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { Alert, AlertProps, alpha } from '@mui/material'
+import { Alert, type AlertProps, alpha } from '@mui/material'
 import { makeStyles } from '../../UIHelper/makeStyles.js'
 
 const useStyles = makeStyles()((theme) => ({

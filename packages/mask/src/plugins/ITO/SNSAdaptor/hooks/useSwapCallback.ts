@@ -6,8 +6,15 @@ import type { ITO2 } from '@masknet/web3-contracts/types/ITO2.js'
 import type { Qualification } from '@masknet/web3-contracts/types/Qualification.js'
 import type { Qualification2 } from '@masknet/web3-contracts/types/Qualification2.js'
 import type { PayableTx } from '@masknet/web3-contracts/types/types.js'
-import { ChainId, SchemaType, TransactionEventType, useITOConstants } from '@masknet/web3-shared-evm'
-import { isSameAddress, isPositive, isZero, toFixed, FungibleToken, currySameAddress } from '@masknet/web3-shared-base'
+import { type ChainId, SchemaType, TransactionEventType, useITOConstants } from '@masknet/web3-shared-evm'
+import {
+    isSameAddress,
+    isPositive,
+    isZero,
+    toFixed,
+    type FungibleToken,
+    currySameAddress,
+} from '@masknet/web3-shared-base'
 import { fromHex, toHex, NetworkPluginID } from '@masknet/shared-base'
 import { useITO_Contract } from './useITO_Contract.js'
 import { useQualificationContract } from './useQualificationContract.js'

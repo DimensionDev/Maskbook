@@ -1,4 +1,4 @@
-import { Dispatch, memo, SetStateAction, useMemo, useState } from 'react'
+import { type Dispatch, memo, type SetStateAction, useMemo, useState } from 'react'
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import { LoadingBase, makeStyles, MaskColorVar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'

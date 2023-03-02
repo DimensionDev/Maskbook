@@ -4,7 +4,7 @@ import { useChainContext, useFungibleToken, useMaskTokenAddress, useNativeToken 
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-base'
 import { useSmartPayConstants } from '@masknet/web3-shared-evm'
-import { Button, MenuItem, Radio as MuiRadio, RadioProps, Typography } from '@mui/material'
+import { Button, MenuItem, Radio as MuiRadio, type RadioProps, Typography } from '@mui/material'
 import { compact, noop } from 'lodash-es'
 import { useCallback, useState } from 'react'
 import { TokenIcon, useSharedI18N } from '../index.js'

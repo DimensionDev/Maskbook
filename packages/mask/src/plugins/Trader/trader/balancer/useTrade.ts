@@ -2,7 +2,7 @@ import { useChainContext, useCustomBlockBeatRetry, useNetworkContext } from '@ma
 import { ChainId, isNativeTokenAddress, useTokenConstants } from '@masknet/web3-shared-evm'
 import { BALANCER_SWAP_TYPE } from '../../constants/index.js'
 import { PluginTraderRPC } from '../../messages.js'
-import { SwapResponse, TradeStrategy } from '../../types/index.js'
+import { type SwapResponse, TradeStrategy } from '../../types/index.js'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'

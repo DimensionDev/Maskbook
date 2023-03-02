@@ -5,7 +5,7 @@ import { ArrowDownward as ArrowDownwardIcon } from '@mui/icons-material'
 import { useI18N } from '../../../utils/index.js'
 import { ITO_EXCHANGE_RATION_MAX } from '../constants.js'
 import {
-    ExchangeTokenAndAmountState,
+    type ExchangeTokenAndAmountState,
     ExchangeTokenAndAmountActionType,
     useExchangeTokenAndAmount,
 } from './hooks/useExchangeTokenAmountstate.js'

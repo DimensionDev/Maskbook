@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { Button, Checkbox, CheckboxProps } from '@mui/material'
+import { Button, Checkbox, type CheckboxProps } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => {
     return {

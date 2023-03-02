@@ -1,5 +1,5 @@
 import type { KVStorageBackend } from './types.js'
-import { IDBPDatabase, openDB } from 'idb/with-async-ittr'
+import { type IDBPDatabase, openDB } from 'idb/with-async-ittr'
 import { None, Some } from 'ts-results-es'
 
 /**

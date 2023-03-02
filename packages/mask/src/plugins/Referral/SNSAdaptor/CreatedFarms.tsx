@@ -5,7 +5,7 @@ import { Grid, Typography, Box, Button } from '@mui/material'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 
 import { useI18N } from '../locales/index.js'
-import { PageInterface, PagesType, FarmDetailed } from '../types.js'
+import { type PageInterface, PagesType, type FarmDetailed } from '../types.js'
 import { getRequiredChainId } from '../helpers/index.js'
 import { ReferralRPC } from '../messages.js'
 

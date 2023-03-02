@@ -12,7 +12,7 @@ import {
 import {
     EnhanceableSite,
     NetworkPluginID,
-    NextIDPersonaBindings,
+    type NextIDPersonaBindings,
     NextIDPlatform,
     getSiteType,
 } from '@masknet/shared-base'

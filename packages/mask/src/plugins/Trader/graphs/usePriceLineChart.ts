@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-import { useEffect, RefObject } from 'react'
+import { useEffect, type RefObject } from 'react'
 import stringify from 'json-stable-stringify'
 import type { Dimension } from './useDimension.js'
 

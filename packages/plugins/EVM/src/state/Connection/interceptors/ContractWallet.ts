@@ -1,16 +1,16 @@
 import type { AbiItem } from 'web3-utils'
 import type { BundlerAPI, AbstractAccountAPI, FunderAPI } from '@masknet/web3-providers/types'
-import { ECKeyIdentifier, NetworkPluginID, SignType } from '@masknet/shared-base'
+import { type ECKeyIdentifier, type NetworkPluginID, SignType } from '@masknet/shared-base'
 import {
-    ChainId,
-    ConnectionContext,
+    type ChainId,
+    type ConnectionContext,
     createContract,
     EthereumMethodType,
     isValidAddress,
-    Middleware,
-    ProviderType,
+    type Middleware,
+    type ProviderType,
     Signer,
-    Transaction,
+    type Transaction,
 } from '@masknet/web3-shared-evm'
 import { Web3 } from '@masknet/web3-providers'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'

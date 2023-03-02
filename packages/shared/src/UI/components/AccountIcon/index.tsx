@@ -1,8 +1,8 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { resolveSocialAddressLink, SocialAccount, SocialAddressType } from '@masknet/web3-shared-base'
-import { TooltipProps, Typography } from '@mui/material'
+import { resolveSocialAddressLink, type SocialAccount, SocialAddressType } from '@masknet/web3-shared-base'
+import { type TooltipProps, Typography } from '@mui/material'
 import { Linking } from '../../../index.js'
 import { useSharedI18N } from '../../../locales/index.js'
 

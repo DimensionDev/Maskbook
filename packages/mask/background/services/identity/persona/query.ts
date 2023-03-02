@@ -2,20 +2,20 @@ import { first, omit, orderBy } from 'lodash-es'
 import type { MobilePersona } from '@masknet/public-api'
 import {
     ECKeyIdentifierFromJsonWebKey,
-    EC_Public_JsonWebKey,
+    type EC_Public_JsonWebKey,
     fromBase64URL,
     isEC_Private_JsonWebKey,
-    NextIDPlatform,
-    PersonaIdentifier,
-    PersonaInformation,
-    ProfileIdentifier,
+    type NextIDPlatform,
+    type PersonaIdentifier,
+    type PersonaInformation,
+    type ProfileIdentifier,
 } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
 import {
     createPersonaDBReadonlyAccess,
-    PersonaRecord,
+    type PersonaRecord,
     queryPersonaDB,
     queryPersonasDB,
     queryProfileDB,

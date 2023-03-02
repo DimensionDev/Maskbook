@@ -1,7 +1,7 @@
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { ImageIcon, ImageIconProps } from '../ImageIcon/index.js'
+import { ImageIcon, type ImageIconProps } from '../ImageIcon/index.js'
 
 export interface NetworkIconProps {
     pluginID: NetworkPluginID

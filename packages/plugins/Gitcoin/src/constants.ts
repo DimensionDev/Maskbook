@@ -1,4 +1,4 @@
-import { GeneratedIcon, Icons } from '@masknet/icons'
+import { type GeneratedIcon, Icons } from '@masknet/icons'
 import { PluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 

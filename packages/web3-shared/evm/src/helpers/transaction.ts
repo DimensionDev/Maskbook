@@ -1,5 +1,5 @@
 import type Web3 from 'web3'
-import { AbiItem, sha3, toHex } from 'web3-utils'
+import { type AbiItem, sha3, toHex } from 'web3-utils'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
 import { isValidAddress } from './address.js'

@@ -5,7 +5,7 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DialogContent, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 
 import { useI18N } from '../locales/index.js'

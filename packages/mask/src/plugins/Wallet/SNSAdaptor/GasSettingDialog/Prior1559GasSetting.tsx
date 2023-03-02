@@ -1,4 +1,4 @@
-import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { type FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useUpdateEffect } from 'react-use'
 import { isEmpty, noop } from 'lodash-es'
@@ -8,7 +8,7 @@ import { BigNumber } from 'bignumber.js'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
     formatWeiToGwei,
-    ChainIdOptionalRecord,
+    type ChainIdOptionalRecord,
     ChainId,
     formatGweiToEther,
     formatWeiToEther,

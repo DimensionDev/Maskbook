@@ -8,6 +8,7 @@ import ko_KR from './ko-KR.json'
 import qya_AA from './qya-AA.json'
 import zh_CN from './zh-CN.json'
 import zh_TW from './zh-TW.json'
+import { createI18NBundle } from '@masknet/shared-base'
 export const languages = {
     en: en_US,
     ja: ja_JP,
@@ -16,7 +17,6 @@ export const languages = {
     'zh-CN': zh_CN,
     zh: zh_TW,
 }
-import { createI18NBundle } from '@masknet/shared-base'
 export const add__template__I18N = createI18NBundle('__template__', languages)
 // @ts-ignore
 if (import.meta.webpackHot) {

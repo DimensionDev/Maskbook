@@ -1,5 +1,5 @@
 import { PluginID } from '@masknet/shared-base'
-import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
+import { createPluginMessage, type PluginMessageEmitter } from '@masknet/plugin-infra'
 import type { TipTask } from './types/index.js'
 
 export interface TipMessage {

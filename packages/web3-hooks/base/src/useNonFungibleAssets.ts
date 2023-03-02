@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { flattenAsyncIterator, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { flattenAsyncIterator, EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import { pageableToIterator } from '@masknet/web3-shared-base'
 import { useChainContext } from './useContext.js'
 import { useNetworkDescriptors } from './useNetworkDescriptors.js'

@@ -10,7 +10,7 @@ import {
     EthereumMethodType,
     isValidAddress,
     PayloadEditor,
-    TransactionOptions,
+    type TransactionOptions,
     Signer,
 } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../messages.js'

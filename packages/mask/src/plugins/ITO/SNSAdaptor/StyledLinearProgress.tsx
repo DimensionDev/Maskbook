@@ -1,4 +1,4 @@
-import { LinearProgress, LinearProgressProps, alpha } from '@mui/material'
+import { LinearProgress, type LinearProgressProps, alpha } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((_theme) => ({

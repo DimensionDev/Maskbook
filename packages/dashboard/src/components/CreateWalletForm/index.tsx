@@ -7,7 +7,7 @@ import {
     styled,
     Typography,
     FilledInput,
-    SelectChangeEvent,
+    type SelectChangeEvent,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales/index.js'

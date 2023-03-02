@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { useCustomSnackbar, makeStyles } from '@masknet/theme'
 import { alpha, Button, Typography } from '@mui/material'
 import { isNil } from 'lodash-es'
-import { HTMLProps, memo, useRef } from 'react'
+import { type HTMLProps, memo, useRef } from 'react'
 import { useDropArea } from 'react-use'
 import { useI18N } from '../../locales/i18n_generated.js'
 

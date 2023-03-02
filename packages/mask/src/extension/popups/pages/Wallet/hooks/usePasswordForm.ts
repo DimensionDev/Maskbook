@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { z as zod } from 'zod'
-import { useI18N, I18NFunction } from '../../../../../utils/index.js'
-import { useForm, UseFormReturn } from 'react-hook-form'
+import { useI18N, type I18NFunction } from '../../../../../utils/index.js'
+import { useForm, type UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 function defineSchema(refine: boolean, t: I18NFunction) {

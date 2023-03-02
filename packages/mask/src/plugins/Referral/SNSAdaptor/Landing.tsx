@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { Typography, Button, Grid, Box } from '@mui/material'
 
 import { useI18N, Translate } from '../locales/index.js'
-import { PageInterface, PagesType } from '../types.js'
+import { type PageInterface, PagesType } from '../types.js'
 
 import {
     ReferralFarmsIcon,

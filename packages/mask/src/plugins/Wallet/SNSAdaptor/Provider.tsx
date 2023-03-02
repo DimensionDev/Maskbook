@@ -1,4 +1,4 @@
-import { Typography, Card, ButtonBase, ButtonBaseProps } from '@mui/material'
+import { Typography, Card, ButtonBase, type ButtonBaseProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({

@@ -1,5 +1,4 @@
 /// <reference types="@masknet/global-types/dom" />
-import type {} from 'react/next'
 import { markdownTransformIpfsURL, purify } from '@masknet/shared-base'
 import { memo, use } from 'react'
 import type { Options } from 'react-markdown'

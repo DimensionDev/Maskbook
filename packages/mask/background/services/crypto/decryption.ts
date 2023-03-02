@@ -4,23 +4,23 @@ import {
     parsePayload,
     DecryptProgressKind,
     EC_KeyCurveEnum,
-    DecryptProgress,
-    SocialNetworkEnum,
+    type DecryptProgress,
+    type SocialNetworkEnum,
     SocialNetworkEnumToProfileDomain,
-    EC_Key,
+    type EC_Key,
     socialNetworkDecoder,
     steganographyDecodeImage,
     DecryptError,
     DecryptErrorReasons,
-    DecryptReportedInfo,
+    type DecryptReportedInfo,
 } from '@masknet/encryption'
 import {
-    AESCryptoKey,
+    type AESCryptoKey,
     ECKeyIdentifierFromJsonWebKey,
-    EC_JsonWebKey,
-    EC_Public_JsonWebKey,
+    type EC_JsonWebKey,
+    type EC_Public_JsonWebKey,
     PostIVIdentifier,
-    ProfileIdentifier,
+    type ProfileIdentifier,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import { noop } from 'lodash-es'

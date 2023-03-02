@@ -5,10 +5,10 @@ import {
     makeTypedMessageText,
     makeTypedMessageAnchor,
     makeTypedMessageEmpty,
-    TypedMessage,
+    type TypedMessage,
     isTypedMessageEmpty,
     isTypedMessageText,
-    TypedMessageText,
+    type TypedMessageText,
     makeTypedMessageImage,
 } from '@masknet/typed-message'
 import { collectNodeText, collectTwitterEmoji } from '../../../utils/index.js'

@@ -1,5 +1,5 @@
 import { noop } from 'lodash-es'
-import { Chip, ChipProps } from '@mui/material'
+import { Chip, type ChipProps } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { ExpandMore as ExpandMoreIcon, Error as ErrorIcon } from '@mui/icons-material'
 import { useSharedI18N } from '../../../locales/index.js'

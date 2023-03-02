@@ -2,9 +2,9 @@ import { Icons } from '@masknet/icons'
 import { ImageIcon, useIsImageURL } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { Box, Skeleton, TooltipProps } from '@mui/material'
-import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
-import { ChainId, NETWORK_DESCRIPTORS, SchemaType } from '@masknet/web3-shared-evm'
+import { Box, Skeleton, type TooltipProps } from '@mui/material'
+import { isSameAddress, type NonFungibleToken } from '@masknet/web3-shared-base'
+import { type ChainId, NETWORK_DESCRIPTORS, type SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, props) => ({
     itemRoot: {

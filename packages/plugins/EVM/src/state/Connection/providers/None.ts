@@ -1,6 +1,6 @@
 import type { RequestArguments } from 'web3-core'
 import type { ProviderOptions } from '@masknet/web3-shared-base'
-import { ChainId, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
+import { type ChainId, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base.js'
 import type { EVM_Provider } from '../types.js'
 

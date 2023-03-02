@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import Draggable, { DraggableProps } from 'react-draggable'
+import Draggable, { type DraggableProps } from 'react-draggable'
 import { makeStyles } from '@masknet/theme'
 const useStyle = makeStyles()((theme) => ({
     root: {

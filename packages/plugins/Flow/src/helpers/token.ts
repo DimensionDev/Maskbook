@@ -1,12 +1,12 @@
 import {
     CurrencyType,
     TokenType,
-    FungibleAsset,
-    FungibleToken,
+    type FungibleAsset,
+    type FungibleToken,
     leftShift,
     multipliedBy,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-flow'
+import { type ChainId, SchemaType } from '@masknet/web3-shared-flow'
 
 export function createFungibleToken(
     chainId: ChainId,

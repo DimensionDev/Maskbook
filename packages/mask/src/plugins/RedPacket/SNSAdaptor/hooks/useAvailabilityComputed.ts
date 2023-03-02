@@ -1,7 +1,7 @@
 import { compact } from 'lodash-es'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
-import { RedPacketJSONPayload, RedPacketStatus } from '../../types.js'
+import { ChainId, networkResolver, type NetworkType } from '@masknet/web3-shared-evm'
+import { type RedPacketJSONPayload, RedPacketStatus } from '../../types.js'
 import { useAvailability } from './useAvailability.js'
 
 /**

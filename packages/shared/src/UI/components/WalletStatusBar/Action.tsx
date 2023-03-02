@@ -1,4 +1,4 @@
-import { memo, PropsWithChildren, useLayoutEffect, useRef, useState } from 'react'
+import { memo, type PropsWithChildren, useLayoutEffect, useRef, useState } from 'react'
 import { Box, Button } from '@mui/material'
 import { useSharedI18N } from '../../../locales/index.js'
 

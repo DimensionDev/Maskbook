@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { TokenIcon, TokenIconProps } from '@masknet/shared'
+import { TokenIcon, type TokenIconProps } from '@masknet/shared'
 import type { TokenType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 

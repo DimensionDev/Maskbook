@@ -1,9 +1,9 @@
 import {
     CircularProgress,
-    ListItemButtonProps,
-    ListItemIconProps,
-    ListItemTextProps,
-    TypographyProps,
+    type ListItemButtonProps,
+    type ListItemIconProps,
+    type ListItemTextProps,
+    type TypographyProps,
     Typography as MuiTypography,
     ListItemButton as MuiListItemButton,
     ListItemIcon as MuiListItemIcon,

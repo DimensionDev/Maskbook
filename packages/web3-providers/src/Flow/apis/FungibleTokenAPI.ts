@@ -5,17 +5,17 @@ import {
     createFungibleAsset,
     createFungibleToken,
     getTokenConstants,
-    SchemaType,
+    type SchemaType,
     isValidChainId,
 } from '@masknet/web3-shared-flow'
 import {
-    FungibleAsset,
+    type FungibleAsset,
     CurrencyType,
-    Pageable,
+    type Pageable,
     rightShift,
     createPageable,
-    HubOptions,
-    HubIndicator,
+    type HubOptions,
+    type HubIndicator,
     createIndicator,
 } from '@masknet/web3-shared-base'
 import { CoinGeckoPriceAPI_EVM } from '../../CoinGecko/index.js'

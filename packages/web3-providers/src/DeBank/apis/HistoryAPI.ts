@@ -1,13 +1,13 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
 import {
-    Transaction,
+    type Transaction,
     createPageable,
-    HubOptions,
+    type HubOptions,
     createIndicator,
-    Pageable,
+    type Pageable,
     createNextIndicator,
 } from '@masknet/web3-shared-base'
-import { ChainId, getDeBankConstants, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, getDeBankConstants, type SchemaType } from '@masknet/web3-shared-evm'
 import { formatTransactions, resolveDeBankAssetIdReversed } from '../helpers.js'
 import type { HistoryRecord } from '../types.js'
 import { fetchJSON } from '../../entry-helpers.js'

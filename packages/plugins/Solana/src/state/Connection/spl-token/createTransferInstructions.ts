@@ -1,5 +1,5 @@
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
-import { AccountMeta, PublicKey, Signer, TransactionInstruction } from '@solana/web3.js'
+import { type AccountMeta, type PublicKey, type Signer, TransactionInstruction } from '@solana/web3.js'
 import * as BufferLayout from '@solana/buffer-layout'
 import BN from 'bn.js'
 

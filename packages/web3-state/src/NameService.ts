@@ -1,9 +1,9 @@
 import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import { StorageItem, NameServiceID } from '@masknet/shared-base'
+import { type StorageItem, NameServiceID } from '@masknet/shared-base'
 import type { NameServiceAPI } from '@masknet/web3-providers/types'
-import { attemptUntil, NameServiceState as Web3NameServiceState } from '@masknet/web3-shared-base'
+import { attemptUntil, type NameServiceState as Web3NameServiceState } from '@masknet/web3-shared-base'
 
 export class NameServiceState<
     ChainId extends number,

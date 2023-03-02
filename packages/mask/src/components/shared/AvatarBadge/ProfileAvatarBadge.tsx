@@ -1,8 +1,8 @@
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { IconButton, IconButtonProps } from '@mui/material'
-import { FC, useEffect, useRef } from 'react'
+import { IconButton, type IconButtonProps } from '@mui/material'
+import { type FC, useEffect, useRef } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     badge: {

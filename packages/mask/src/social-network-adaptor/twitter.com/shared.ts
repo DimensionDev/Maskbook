@@ -1,4 +1,4 @@
-import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import { type PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import type { SocialNetwork } from '@masknet/types'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context.js'

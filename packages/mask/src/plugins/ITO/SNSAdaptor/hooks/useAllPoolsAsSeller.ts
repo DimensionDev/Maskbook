@@ -1,7 +1,7 @@
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
-import { ChainId, getITOConstants } from '@masknet/web3-shared-evm'
+import { type ChainId, getITOConstants } from '@masknet/web3-shared-evm'
 import { useRef, useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { PoolFromNetwork } from '../../types.js'

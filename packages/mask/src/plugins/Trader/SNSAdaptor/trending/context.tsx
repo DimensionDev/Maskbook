@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren } from 'react'
+import { createContext, type PropsWithChildren } from 'react'
 
 interface TrendingViewContextProps {
     isTokenTagPopper: boolean

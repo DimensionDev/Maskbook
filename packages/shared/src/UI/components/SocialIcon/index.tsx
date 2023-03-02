@@ -1,5 +1,5 @@
 import type { ComponentType, FC, HTMLProps } from 'react'
-import { GeneratedIconProps, Icons } from '@masknet/icons'
+import { type GeneratedIconProps, Icons } from '@masknet/icons'
 
 const socialIconMap = {
     'twitter.com': Icons.Twitter,

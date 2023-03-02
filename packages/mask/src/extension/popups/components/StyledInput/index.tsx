@@ -1,5 +1,5 @@
 import { forwardRef, memo } from 'react'
-import { TextFieldProps, TextField } from '@mui/material'
+import { type TextFieldProps, TextField } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()(({ palette }) => ({

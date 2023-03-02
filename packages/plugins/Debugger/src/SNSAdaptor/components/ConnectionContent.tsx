@@ -7,7 +7,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useTelemetry } from '@masknet/web3-telemetry/hooks'
 import { NetworkPluginID, ProofType } from '@masknet/shared-base'
 import {
-    Web3,
+    type Web3,
     ChainId,
     ChainId as EVM_ChainId,
     ProviderType as EVM_ProviderType,

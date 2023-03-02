@@ -1,6 +1,6 @@
 import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeText } from '@masknet/kit'
-import { create, IPFSHTTPClient } from 'ipfs-http-client'
+import { create, type IPFSHTTPClient } from 'ipfs-http-client'
 import { isEmpty } from 'lodash-es'
 import { LANDING_PAGE } from '../constants.js'
 import urlcat from 'urlcat'

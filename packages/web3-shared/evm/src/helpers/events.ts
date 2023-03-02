@@ -1,5 +1,5 @@
 import type { EventLog } from 'web3-core'
-import { AbiItem, keccak256 } from 'web3-utils'
+import { type AbiItem, keccak256 } from 'web3-utils'
 import type { TransactionReceipt, Web3 } from '../types/index.js'
 
 export function decodeEvents(web3: Web3, abis: AbiItem[], receipt: TransactionReceipt) {

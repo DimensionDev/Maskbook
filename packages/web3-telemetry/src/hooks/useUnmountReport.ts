@@ -1,6 +1,6 @@
 import { useUnmount } from 'react-use'
 import { TelemetryAPI } from '@masknet/web3-providers/types'
-import { Unresolved, resolve } from '@masknet/shared-base'
+import { type Unresolved, resolve } from '@masknet/shared-base'
 import { useTelemetry } from './useTelemetry.js'
 
 /**

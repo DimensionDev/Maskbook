@@ -1,5 +1,5 @@
 import { first } from 'lodash-es'
-import { AbiItem, toHex } from 'web3-utils'
+import { type AbiItem, toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
@@ -17,25 +17,25 @@ import {
     EthereumMethodType,
     ProviderType,
     SchemaType,
-    Transaction,
+    type Transaction,
     createContract,
     createWeb3,
     createWeb3Provider,
     isNativeTokenAddress,
-    UserOperation,
-    AddressType,
+    type UserOperation,
+    type AddressType,
     ContractTransaction,
     AccountTransaction,
     PayloadEditor,
-    TransactionReceipt,
+    type TransactionReceipt,
 } from '@masknet/web3-shared-evm'
 import {
-    Account,
-    ConnectionOptions,
-    FungibleToken,
-    NonFungibleToken,
-    NonFungibleCollection,
-    NonFungibleTokenContract,
+    type Account,
+    type ConnectionOptions,
+    type FungibleToken,
+    type NonFungibleToken,
+    type NonFungibleCollection,
+    type NonFungibleTokenContract,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import { Web3 } from '@masknet/web3-providers'

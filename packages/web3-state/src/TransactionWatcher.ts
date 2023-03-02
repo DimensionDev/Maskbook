@@ -2,14 +2,14 @@ import { omit } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import { Emitter } from '@servie/events'
 import type { JsonRpcPayload } from 'web3-core-helpers'
-import { getSubscriptionCurrentValue, StorageItem } from '@masknet/shared-base'
+import { getSubscriptionCurrentValue, type StorageItem } from '@masknet/shared-base'
 import {
-    TransactionChecker,
+    type TransactionChecker,
     TransactionStatusType,
-    WatchEvents,
-    TransactionWatcherState as Web3TransactionWatcherState,
-    RecentTransaction,
-    RecognizableError,
+    type WatchEvents,
+    type TransactionWatcherState as Web3TransactionWatcherState,
+    type RecentTransaction,
+    type RecognizableError,
 } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 

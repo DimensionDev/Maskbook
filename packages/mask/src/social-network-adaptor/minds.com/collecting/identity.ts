@@ -1,7 +1,7 @@
 import { ProfileIdentifier } from '@masknet/shared-base'
 import type { SocialNetworkUI as Next } from '@masknet/types'
 import { Minds } from '@masknet/web3-providers'
-import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { creator } from '../../../social-network/index.js'
 import { mindsBase } from '../base.js'
 import { handleSelector, selfInfoSelectors } from '../utils/selector.js'

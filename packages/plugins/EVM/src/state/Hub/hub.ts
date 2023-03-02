@@ -35,16 +35,16 @@ import type {
 } from '@masknet/web3-providers/types'
 import {
     SourceType,
-    HubOptions,
-    Pageable,
-    CurrencyType,
-    Transaction,
-    HubIndicator,
+    type HubOptions,
+    type Pageable,
+    type CurrencyType,
+    type Transaction,
+    type HubIndicator,
     attemptUntil,
     createPageable,
     createIndicator,
 } from '@masknet/web3-shared-base'
-import { ChainId, chainResolver, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver, type SchemaType } from '@masknet/web3-shared-evm'
 import { Web3StateSettings } from '../../settings/index.js'
 import type { EVM_Hub } from './types.js'
 
