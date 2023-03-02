@@ -31,6 +31,10 @@ const useStyles = makeStyles()((theme) => ({
         maxHeight: MENU_ITEM_HEIGHT * 9 + MENU_LIST_PADDING * 2,
         minWidth: 320,
         backgroundColor: theme.palette.maskColor.bottom,
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
+                : '0px 4px 30px rgba(0, 0, 0, 0.1)',
         borderRadius: 16,
     },
 
@@ -111,7 +115,7 @@ export const TokenWithSocialGroupMenu: FC<PropsWithChildren<TokenWithSocialGroup
         [onTokenChange, onClose],
     )
 
-    const collectionList = useTokenMenuCollectionList(collectionList_)
+    const collectionList = useTokenMenuCollectionList(collectionList_, currentCollection)
 
     const groups: Array<
         [
@@ -147,7 +151,7 @@ export const TokenWithSocialGroupMenu: FC<PropsWithChildren<TokenWithSocialGroup
             ))}
 
             <div key="rss3" className={classes.group}>
-                {currentCollection && socialAccounts?.length ? (
+                {collectionList?.length > 0 && socialAccounts?.length ? (
                     <>
                         <Typography className={classes.groupName}>{t.address_viewer_address_name_address()}</Typography>
                         <Divider className={classes.divider} />

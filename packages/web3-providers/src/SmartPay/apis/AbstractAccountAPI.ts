@@ -57,7 +57,13 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         const getOverrides = async () => {
             if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
                 const accounts = await this.owner.getAccountsByOwner(chainId, owner, false)
+                const target = accounts.find((x) => isSameAddress(x.address, userTransaction.operation.sender))
                 const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
+
+                // If the wallet to which the transaction is sent is obtained by changing the owner
+                if (!target?.creator) {
+                    return
+                }
 
                 if (!accountsDeployed.length) {
                     return {

@@ -54,6 +54,8 @@ export class WalletState<ProviderType extends string, Transaction> implements We
         return this.storage.initializedPromise
     }
 
+    setup() {}
+
     async addWallet(wallet: Wallet) {
         const now = new Date()
         const address = this.options.formatAddress(wallet.address)
@@ -98,6 +100,17 @@ export class WalletState<ProviderType extends string, Transaction> implements We
                     : x,
             ),
         })
+    }
+
+    async updateOrAddWallet(wallet: Wallet) {
+        const target = this.all.find((x) => isSameAddress(x.address, wallet.address))
+        if (target) {
+            return this.updateWallet(
+                target.address,
+                omit(wallet, ['id', 'address', 'createdAt', 'updatedAt', 'storedKeyInfo']),
+            )
+        }
+        this.addWallet(wallet)
     }
 
     async renameWallet(address: string, name: string) {

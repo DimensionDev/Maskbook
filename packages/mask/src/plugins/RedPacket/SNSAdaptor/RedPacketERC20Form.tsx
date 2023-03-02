@@ -20,13 +20,15 @@ import {
     ChainBoundary,
     WalletConnectedBoundary,
     EthereumERC20TokenApprovedBoundary,
+    SelectGasSettingsToolbar,
+    useAvailableBalance,
 } from '@masknet/shared'
-import { useFungibleToken, useFungibleTokenBalance, useChainContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3, useWallet, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18n } from '../../../utils/index.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
-import type { RedPacketSettings } from './hooks/useCreateCallback.js'
+import { RedPacketSettings, useCreateParams } from './hooks/useCreateCallback.js'
 import { useAsync } from 'react-use'
 import { SmartPayBundler } from '@masknet/web3-providers'
 
@@ -73,14 +75,14 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const { classes } = useStyles()
     const { onChange, onNext, origin, gasOption, onGasOptionChange } = props
     // context
+    const wallet = useWallet()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
     const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     // #region select token
-    const { value: nativeTokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, undefined, undefined, {
-        chainId,
-    })
+    const { value: nativeTokenDetailed } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
+    const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
     const [token = nativeTokenDetailed, setToken] = useState<FungibleToken<ChainId, SchemaType> | undefined>(
         origin?.token,
     )
@@ -139,11 +141,9 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     }, [token])
 
     // balance
-    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
-        NetworkPluginID.PLUGIN_EVM,
-        token?.address ?? '',
-        { chainId },
-    )
+    const { isAvailableBalance, balance, isAvailableGasBalance } = useAvailableBalance(token?.address, gasOption, {
+        chainId,
+    })
     // #endregion
 
     const validationMessage = useMemo(() => {
@@ -152,15 +152,25 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         if (isZero(shares || '0')) return 'Enter shares'
         if (isGreaterThan(shares || '0', 255)) return 'At most 255 recipients'
         if (isZero(amount)) return 'Enter an amount'
-        if (isGreaterThan(totalAmount, tokenBalance))
-            return tr('plugin_gitcoin_insufficient_balance', { symbol: token.symbol })
+
         if (!isDivisible)
             return t.indivisible({
                 symbol: token.symbol!,
                 amount: formatBalance(1, token.decimals),
             })
         return ''
-    }, [account, amount, totalAmount, shares, token, tokenBalance, t, tr])
+    }, [account, amount, totalAmount, shares, token, balance, t, tr])
+
+    const gasValidationMessage = useMemo(() => {
+        if (!token) return ''
+        if (isGreaterThan(totalAmount, balance))
+            return tr('plugin_gitcoin_insufficient_balance', { symbol: token?.symbol })
+        if (!isAvailableGasBalance) {
+            return tr('no_enough_gas_fees')
+        }
+
+        return ''
+    }, [isAvailableBalance, totalAmount, balance, token?.symbol])
 
     const creatingParams = useMemo(
         () => ({
@@ -181,6 +191,13 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         onChange(creatingParams)
         onNext()
     }, [creatingParams, onChange, onNext])
+
+    // #region gas
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const { address: publicKey } = useMemo(() => web3?.eth.accounts.create() ?? { address: '', privateKey: '' }, [web3])
+    const contract_version = 4
+    const { value: params } = useCreateParams(creatingParams, contract_version, publicKey)
+    // #endregion
 
     const selectRef = useRef(null)
 
@@ -238,7 +255,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     onSelectToken={onSelectTokenChipClick}
                     onAmountChange={setRawAmount}
                     amount={rawAmount}
-                    balance={tokenBalance}
+                    isAvailableBalance={isAvailableBalance}
+                    balance={balance}
                     maxAmountShares={isRandom || shares === '' ? 1 : shares}
                 />
             </div>
@@ -251,6 +269,20 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     value={message}
                 />
             </Box>
+
+            {nativeTokenDetailed && nativeTokenPrice ? (
+                <Box margin={2}>
+                    <SelectGasSettingsToolbar
+                        nativeToken={nativeTokenDetailed}
+                        nativeTokenPrice={nativeTokenPrice}
+                        supportMultiCurrency={!!wallet?.owner && chainId === smartPayChainId}
+                        gasConfig={gasOption}
+                        gasLimit={Number.parseInt(params?.gas ?? '0', 10)}
+                        onChange={onGasOptionChange}
+                    />
+                </Box>
+            ) : null}
+
             <Box style={{ width: '100%' }}>
                 <PluginWalletStatusBar>
                     <ChainBoundary
@@ -275,9 +307,9 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                                     size="large"
                                     className={classes.button}
                                     fullWidth
-                                    disabled={!!validationMessage}
+                                    disabled={!!validationMessage || !!gasValidationMessage}
                                     onClick={onClick}>
-                                    {validationMessage || t.next()}
+                                    {validationMessage || gasValidationMessage || t.next()}
                                 </ActionButton>
                             </EthereumERC20TokenApprovedBoundary>
                         </WalletConnectedBoundary>

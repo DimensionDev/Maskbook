@@ -54,24 +54,3 @@ export function getBackgroundColor(element: HTMLElement | HTMLBodyElement | unde
     }
     return color ? toRGB(fromRGB(color)) : ''
 }
-
-export function getForegroundColor(element: HTMLElement | HTMLBodyElement | undefined) {
-    if (!element) return ''
-    const color = getComputedStyle(element).color
-    if (isRGBA(color)) {
-        return fromRGBAtoRGB(color)
-    }
-    return color ? toRGB(fromRGB(color)) : ''
-}
-
-export function isDarkTheme(element: HTMLElement = document.body) {
-    const color = getComputedStyle(element).backgroundColor
-    let rgb: RGB | undefined
-    if (isRGBA(color)) {
-        rgb = fromRGB(fromRGBAtoRGB(color)!)
-    } else {
-        rgb = fromRGB(color)
-    }
-    if (!rgb) return true
-    return isDark(rgb)
-}

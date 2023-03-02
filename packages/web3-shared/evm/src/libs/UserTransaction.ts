@@ -206,16 +206,12 @@ export class UserTransaction {
         }
 
         if (!isEmptyHex(callData)) {
-            try {
-                const estimatedGas = await web3.eth.estimateGas({
-                    from: this.entryPoint,
-                    to: this.userOperation.sender,
-                    data: callData,
-                })
-                this.userOperation.callGas = toHex(estimatedGas)
-            } catch (error) {
-                this.userOperation.callGas = callGas ?? DEFAULT_USER_OPERATION.callGas
-            }
+            const estimatedGas = await web3.eth.estimateGas({
+                from: this.entryPoint,
+                to: this.userOperation.sender,
+                data: callData,
+            })
+            this.userOperation.callGas = toHex(estimatedGas)
         } else {
             this.userOperation.callGas = callGas ?? DEFAULT_USER_OPERATION.callGas
         }
@@ -263,7 +259,7 @@ export class UserTransaction {
                 ),
             )
         }
-        if (!paymaster || isZeroAddress(paymaster)) {
+        if (!this.paymentToken || isZeroAddress(this.paymentToken)) {
             const { PAYMASTER_MASK_CONTRACT_ADDRESS, PAYMASTER_NATIVE_CONTRACT_ADDRESS } = getSmartPayConstants(
                 this.chainId,
             )

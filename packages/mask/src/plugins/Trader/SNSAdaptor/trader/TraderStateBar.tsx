@@ -1,4 +1,4 @@
-import { useCallback, useMemo, MouseEventHandler } from 'react'
+import { useCallback, useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { alpha } from '@mui/system'
 import { Box } from '@mui/material'
@@ -7,10 +7,10 @@ import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-scr
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
 import {
     PluginWalletStatusBar,
-    ChainBoundary,
     WalletConnectedBoundary,
     EthereumERC20TokenApprovedBoundary,
     useTokenSecurity,
+    ChainBoundary,
 } from '@masknet/shared'
 import { isPopupPage, NetworkPluginID, PluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
@@ -176,72 +176,13 @@ export function TraderStateBar({
     }, [focusedTrade, outputToken])
     // #endregion
 
-    const SwapButton = (props: { onClick?: MouseEventHandler<HTMLButtonElement> | undefined }) => {
-        return (
-            <WalletConnectedBoundary offChain expectedChainId={chainId}>
-                <EthereumERC20TokenApprovedBoundary
-                    onlyInfiniteUnlock
-                    spender={approveAddress}
-                    amount={approveAmount.toFixed()}
-                    classes={{ container: classes.unlockContainer }}
-                    contractName={focusedTrade?.provider ? resolveTradeProviderName(focusedTrade.provider) : ''}
-                    infiniteUnlockContent={t('plugin_trader_unlock_symbol', {
-                        symbol: approveToken?.symbol,
-                    })}
-                    token={
-                        !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
-                        approveToken?.schema === SchemaType.ERC20 &&
-                        !!approveAmount.toNumber()
-                            ? approveToken
-                            : undefined
-                    }
-                    ActionButtonProps={{
-                        color: 'primary',
-                        style: { borderRadius: 8 },
-                        size: 'medium',
-                    }}>
-                    <TokenSecurityBoundary
-                        tokenInfo={{
-                            name: tokenSecurityInfo?.token_name ?? '--',
-                            chainId: tokenSecurityInfo?.chainId ?? ChainId.Mainnet,
-                            contract: tokenSecurityInfo?.contract ?? ZERO_ADDRESS,
-                        }}
-                        disabled={focusedTrade?.loading || !focusedTrade?.value || !!validationMessage || isSwapping}
-                        onSwap={onSwap}
-                        showTokenSecurity={isTokenSecurityEnable && isRisky}>
-                        <ActionButton
-                            fullWidth
-                            loading={isSwapping}
-                            variant="contained"
-                            disabled={
-                                focusedTrade?.loading || !focusedTrade?.value || !!validationMessage || isSwapping
-                            }
-                            classes={{ root: classes.button, disabled: classes.disabledButton }}
-                            color="primary"
-                            onClick={props.onClick}>
-                            {validationMessage || nativeWrapMessage}
-                        </ActionButton>
-                    </TokenSecurityBoundary>
-                </EthereumERC20TokenApprovedBoundary>
-            </WalletConnectedBoundary>
-        )
-    }
-
     return (
         <Box className={classes.stateBar}>
             <PluginWalletStatusBar
                 actualPluginID={actualPluginID}
                 onClick={isPopup ? openSelectWalletPopup : undefined}>
-                {/* TODO: remove the chain boundary after sol network dex be added */}
-                {settings || actualPluginID !== NetworkPluginID.PLUGIN_EVM ? (
-                    <ChainBoundary
-                        actualNetworkPluginID={actualPluginID}
-                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                        expectedChainId={chainId as ChainId}>
-                        <SwapButton onClick={onSwap} />
-                    </ChainBoundary>
-                ) : (
-                    <WalletConnectedBoundary offChain expectedChainId={chainId}>
+                <WalletConnectedBoundary offChain expectedChainId={chainId}>
+                    <ChainBoundary expectedChainId={chainId} expectedPluginID={pluginID} switchChainWithoutPopup>
                         <EthereumERC20TokenApprovedBoundary
                             onlyInfiniteUnlock
                             spender={approveAddress}
@@ -291,8 +232,8 @@ export function TraderStateBar({
                                 </ActionButton>
                             </TokenSecurityBoundary>
                         </EthereumERC20TokenApprovedBoundary>
-                    </WalletConnectedBoundary>
-                )}
+                    </ChainBoundary>
+                </WalletConnectedBoundary>
             </PluginWalletStatusBar>
         </Box>
     )

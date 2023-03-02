@@ -10,7 +10,7 @@ export const HistoryTable = of({
     args: {
         page: 1,
         onPageChange: action('onPageChange'),
-        hasNextPage: false,
+        done: false,
         isLoading: false,
         isEmpty: true,
         dataSource: [],

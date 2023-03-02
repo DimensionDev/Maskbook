@@ -208,7 +208,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const coinAddress = coin.address || coin.contract_address
     const coinName = result.name || coin.name
 
-    const collectionList = useTokenMenuCollectionList([result, ...resultList])
+    const collectionList = useTokenMenuCollectionList(resultList, result)
 
     const rss3Key = SNS_RSS3_FIELD_KEY_MAP[identity?.identifier?.network as EnhanceableSite]
     const { value: socialAccounts = EMPTY_LIST } = useSocialAccountsBySettings(identity)
@@ -339,8 +339,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                     ? last(stats)?.[1] ?? market.current_price
                                                     : market.current_price) ?? 0,
                                                 isNFT ? market.price_symbol : 'USD',
-
-                                                { boundaries: { expandExp: 6 } },
                                             )}
                                         </Typography>
                                     ) : (
@@ -369,6 +367,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
             <CardContent className={classes.content}>
                 <Paper className={classes.body} elevation={0}>
                     {children}
+                    {(isCollectionProjectPopper || isTokenTagPopper) && currentTab === ContentTabs.Market ? (
+                        <Stack style={{ height: 48, width: '100%' }} />
+                    ) : null}
                 </Paper>
                 {(isCollectionProjectPopper || isTokenTagPopper) && currentTab !== ContentTabs.Swap ? (
                     <section className={classes.pluginDescriptorWrapper}>

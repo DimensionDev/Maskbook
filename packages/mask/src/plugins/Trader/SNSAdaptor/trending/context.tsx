@@ -6,6 +6,7 @@ interface TrendingViewContextProps {
     badgeBounding?: DOMRect
     isProfilePage: boolean
     isPreciseSearch: boolean
+    isDSearch: boolean
 }
 
 export const TrendingViewContext = createContext<TrendingViewContextProps>({
@@ -14,6 +15,7 @@ export const TrendingViewContext = createContext<TrendingViewContextProps>({
     badgeBounding: undefined,
     isProfilePage: false,
     isPreciseSearch: false,
+    isDSearch: false,
 })
 
 export function TrendingViewProvider({
@@ -28,6 +30,7 @@ export function TrendingViewProvider({
         <TrendingViewContext.Provider
             value={{
                 isTokenTagPopper,
+                isDSearch: !isTokenTagPopper && !isCollectionProjectPopper && !isProfilePage,
                 isCollectionProjectPopper,
                 badgeBounding,
                 isProfilePage,

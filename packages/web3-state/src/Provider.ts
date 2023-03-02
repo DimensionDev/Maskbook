@@ -48,9 +48,6 @@ export class ProviderState<
             providerType: options.getDefaultProviderType(),
         })
         this.storage = storage
-
-        this.setupSubscriptions()
-        this.setupProviders()
     }
 
     get ready() {
@@ -62,6 +59,11 @@ export class ProviderState<
             this.storage.account.initializedPromise,
             this.storage.providerType.initializedPromise,
         ]).then(() => {})
+    }
+
+    setup() {
+        this.setupSubscriptions()
+        this.setupProviders()
     }
 
     protected setupSubscriptions() {

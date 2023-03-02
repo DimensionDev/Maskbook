@@ -8,9 +8,10 @@ import type {
 import { DODO_BASE_URL } from '../../constants/dodo.js'
 import urlcat from 'urlcat'
 import { leftShift } from '@masknet/web3-shared-base'
+import { fetchJSON } from '@masknet/web3-providers/helpers'
 
 export async function swapRoute(request: SwapRouteRequest) {
-    const response = await fetch(
+    const payload = await fetchJSON<SwapRouteResponse>(
         // cspell:disable-next-line
         urlcat(DODO_BASE_URL, '/dodoapi/getdodoroute', {
             chainId: request.chainId,
@@ -24,7 +25,6 @@ export async function swapRoute(request: SwapRouteRequest) {
             rpc: request.rpc,
         }),
     )
-    const payload: SwapRouteResponse = await response.json()
 
     if (payload.status !== 200) {
         throw new Error((payload as SwapRouteErrorResponse).data ?? 'Unknown Error')

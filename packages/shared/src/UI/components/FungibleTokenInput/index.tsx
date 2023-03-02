@@ -14,6 +14,7 @@ export interface FungibleTokenInputProps extends Omit<FungibleTokenInputUIProps,
     disabled?: boolean
     placeholder?: string
     onAmountChange: (amount: string) => void
+    isAvailableBalance?: boolean
 }
 
 export const FungibleTokenInput = memo<FungibleTokenInputProps>(
@@ -30,14 +31,14 @@ export const FungibleTokenInput = memo<FungibleTokenInputProps>(
         amount,
         maxAmount,
         balance,
-        maxAmountSignificant,
+        isAvailableBalance,
         placeholder = '0.0',
         maxAmountShares = 1,
         className,
     }) => {
         const { Others } = useWeb3State()
 
-        const isNative = Others?.isNativeTokenAddress(token?.address)
+        const isNative = isAvailableBalance ?? Others?.isNativeTokenAddress(token?.address)
 
         // #region update amount by self
         const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
@@ -84,9 +85,7 @@ export const FungibleTokenInput = memo<FungibleTokenInputProps>(
                 onMaxClick={() => {
                     if (!token) return
                     const amount = new BigNumber(maxAmount ?? balance).dividedBy(maxAmountShares).decimalPlaces(0, 1)
-                    onAmountChange(
-                        formatBalance(amount, token.decimals, maxAmountSignificant, token.decimals, true) ?? '0',
-                    )
+                    onAmountChange(formatBalance(amount, token.decimals, token.decimals, true) ?? '0')
                 }}
                 balance={balance}
                 required

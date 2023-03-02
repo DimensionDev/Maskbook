@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { first, last } from 'lodash-es'
 import { Stack, Typography, useTheme } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils/index.js'
@@ -64,6 +65,10 @@ export function PriceChart(props: PriceChartProps) {
     }
 
     useDimension(svgRef, dimension)
+
+    const firstPrice = first(props.stats)?.[1] ?? 0
+    const lastPrice = last(props.stats)?.[1] ?? 0
+
     usePriceLineChart(
         svgRef,
         props.stats.map(([date, price]) => ({
@@ -72,7 +77,7 @@ export function PriceChart(props: PriceChartProps) {
         })),
         dimension,
         'x-trader-price-line-chart',
-        { sign: props.currency.name ?? 'USD', color: colors.success },
+        { sign: props.currency.name ?? 'USD', color: lastPrice - firstPrice < 0 ? colors.danger : colors.success },
     )
 
     return (

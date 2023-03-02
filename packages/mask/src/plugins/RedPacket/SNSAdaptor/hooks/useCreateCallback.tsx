@@ -163,7 +163,7 @@ export function useCreateCallback(
             },
         )
 
-        const hash = await connection.sendTransaction(tx)
+        const hash = await connection.sendTransaction(tx, { paymentToken: gasOption?.gasCurrency })
         const receipt = await connection.getTransactionReceipt(hash)
         if (receipt) {
             const events = decodeEvents(web3, redPacketContract.options.jsonInterface, receipt)

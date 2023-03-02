@@ -25,25 +25,39 @@ export async function createWeb3State(
     context: Plugin.Shared.SharedUIContext,
 ): Promise<EVM_Web3State> {
     const Provider_ = new Provider(context)
+    const AddressBook_ = new AddressBook(context, {
+        chainId: Provider_.chainId,
+    })
     const Settings_ = new Settings(context)
     const Transaction_ = new Transaction(context, {
         chainId: Provider_.chainId,
         account: Provider_.account,
     })
+    const TransactionWatcher_ = new TransactionWatcher(context, {
+        chainId: Provider_.chainId,
+        transactions: Transaction_.transactions,
+    })
+    const Wallet_ = new Wallet(context, {
+        providerType: createConstantSubscription(ProviderType.MaskWallet),
+    })
 
     await Provider_.storage.account.initializedPromise
     await Provider_.storage.providerType.initializedPromise
+    await AddressBook_.storage.initializedPromise
     await Settings_.storage.currencyType.initializedPromise
     await Transaction_.storage.initializedPromise
+    await TransactionWatcher_.storage.initializedPromise
+    await Wallet_.storage.initializedPromise
+
+    Provider_.setup()
+    Wallet_.setup()
 
     return {
         Settings: Settings_,
         Provider: Provider_,
         BalanceNotifier: new BalanceNotifier(),
         BlockNumberNotifier: new BlockNumberNotifier(),
-        AddressBook: new AddressBook(context, {
-            chainId: Provider_.chainId,
-        }),
+        AddressBook: AddressBook_,
         Hub: new Hub(context, {
             chainId: Provider_.chainId,
             account: Provider_.account,
@@ -60,18 +74,13 @@ export async function createWeb3State(
         }),
         Transaction: Transaction_,
         TransactionFormatter: new TransactionFormatter(context),
-        TransactionWatcher: new TransactionWatcher(context, {
-            chainId: Provider_.chainId,
-            transactions: Transaction_.transactions,
-        }),
+        TransactionWatcher: TransactionWatcher_,
         Connection: new Connection(context, {
             chainId: Provider_.chainId,
             account: Provider_.account,
             providerType: Provider_.providerType,
         }),
-        Wallet: new Wallet(context, {
-            providerType: createConstantSubscription(ProviderType.MaskWallet),
-        }),
+        Wallet: Wallet_,
         Others: new Others(context),
         Storage: new Storage(),
     }

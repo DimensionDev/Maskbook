@@ -3,7 +3,7 @@ import { useUpdateEffect } from 'react-use'
 import { first, omit } from 'lodash-es'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { alpha, Box, Button, Divider, ListItemIcon, MenuItem, Typography } from '@mui/material'
+import { alpha, Box, Button, Divider, MenuItem, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales/index.js'
 import { Action } from './Action.js'
 import { BindingProof, NetworkPluginID, isDashboardPage } from '@masknet/shared-base'
@@ -24,8 +24,8 @@ import { useWalletName } from './hooks/useWalletName.js'
 import { WalletDescription } from './WalletDescription.js'
 import { isSameAddress, resolveNextID_NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
 import { WalletMenuItem } from './WalletMenuItem.js'
-import { useMenu } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { useMenuConfig } from '../../../index.js'
 
 const isDashboard = isDashboardPage()
 
@@ -50,6 +50,13 @@ const useStyles = makeStyles()((theme) => ({
         width: 18,
         height: 18,
         marginRight: 8,
+    },
+    menu: {
+        background: theme.palette.maskColor.bottom,
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
+                : '0px 4px 30px rgba(0, 0, 0, 0.1)',
     },
 }))
 
@@ -153,46 +160,50 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
             [setDescriptionProps, onChange],
         )
 
-        const [menu, openMenu] = useMenu(
-            account ? (
-                <WalletMenuItem
-                    address={account}
-                    verified={isVerifiedAccount}
-                    onChangeWallet={openSelectProviderDialog}
-                    selected={isSameAddress(descriptionProps.address, account)}
-                    onSelect={onSelect}
-                />
-            ) : (
-                <MenuItem key="connect">
-                    <Button
-                        variant="roundedContained"
-                        fullWidth
-                        onClick={openSelectProviderDialog}
-                        sx={{ minWidth: 311 }}>
-                        {t.connect_your_wallet()}
-                    </Button>
-                </MenuItem>
-            ),
-            <Divider key="divider" />,
-            ...wallets.map((x) => (
-                <WalletMenuItem
-                    key={x.identity}
-                    address={x.identity}
-                    verified
-                    platform={x.platform}
-                    selected={isSameAddress(descriptionProps.address, x.identity)}
-                    onSelect={onSelect}
-                />
-            )),
-            <MenuItem key="Wallet Setting" onClick={openPopupWindow}>
-                <ListItemIcon />
-                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <Icons.WalletSetting size={30} sx={{ marginRight: 2 }} />
-                    <Typography fontSize={14} fontWeight={700}>
-                        {t.connected_wallet_settings()}
-                    </Typography>
-                </Box>
-            </MenuItem>,
+        const [menu, openMenu] = useMenuConfig(
+            [
+                account ? (
+                    <WalletMenuItem
+                        address={account}
+                        verified={isVerifiedAccount}
+                        onChangeWallet={openSelectProviderDialog}
+                        selected={isSameAddress(descriptionProps.address, account)}
+                        onSelect={onSelect}
+                    />
+                ) : (
+                    <MenuItem key="connect">
+                        <Button
+                            variant="roundedContained"
+                            fullWidth
+                            onClick={openSelectProviderDialog}
+                            sx={{ minWidth: 311 }}>
+                            {t.connect_your_wallet()}
+                        </Button>
+                    </MenuItem>
+                ),
+                <Divider key="divider" style={{ marginLeft: 8, marginRight: 8 }} />,
+                ...wallets.map((x) => (
+                    <WalletMenuItem
+                        key={x.identity}
+                        address={x.identity}
+                        verified
+                        platform={x.platform}
+                        selected={isSameAddress(descriptionProps.address, x.identity)}
+                        onSelect={onSelect}
+                    />
+                )),
+                <MenuItem key="Wallet Setting" onClick={openPopupWindow}>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <Icons.WalletSetting size={30} sx={{ marginRight: 1, transform: 'translate(0px, 2px)' }} />
+                        <Typography fontSize={14} fontWeight={700}>
+                            {t.connected_wallet_settings()}
+                        </Typography>
+                    </Box>
+                </MenuItem>,
+            ],
+            {
+                classes: { paper: classes.menu },
+            },
         )
 
         useUpdateEffect(() => {

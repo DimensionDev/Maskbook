@@ -8,7 +8,7 @@ import type { TipContextOptions } from './TipContext.js'
 
 type TipValidateOptions = Pick<
     TipContextOptions,
-    'tipType' | 'amount' | 'token' | 'nonFungibleTokenId' | 'nonFungibleTokenAddress'
+    'tipType' | 'amount' | 'token' | 'nonFungibleTokenId' | 'nonFungibleTokenAddress' | 'isAvailableGasBalance'
 >
 
 export function useTipValidate({
@@ -17,6 +17,7 @@ export function useTipValidate({
     token,
     nonFungibleTokenId: tokenId,
     nonFungibleTokenAddress: tokenAddress,
+    isAvailableGasBalance,
 }: TipValidateOptions): ValidationTuple {
     const { account, chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
@@ -25,6 +26,9 @@ export function useTipValidate({
 
     const result: ValidationTuple = useMemo(() => {
         if (tipType === TokenType.Fungible) {
+            if (!isAvailableGasBalance) {
+                return [false, t.no_enough_gas_fees()]
+            }
             if (!amount || isLessThanOrEqualTo(amount, 0)) return [false]
             if (isGreaterThan(rightShift(amount, token?.decimals), balance))
                 return [false, t.token_insufficient_balance()]
@@ -34,7 +38,7 @@ export function useTipValidate({
             return [false]
         }
         return [true]
-    }, [tipType, amount, token?.decimals, balance, pluginID, tokenId, tokenAddress, t])
+    }, [tipType, amount, token?.decimals, balance, pluginID, tokenId, tokenAddress, t, isAvailableGasBalance])
 
     return result
 }

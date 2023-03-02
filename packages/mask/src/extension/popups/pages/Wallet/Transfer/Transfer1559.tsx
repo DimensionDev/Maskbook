@@ -541,6 +541,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 handleConfirm={methods.handleSubmit(onSubmit)}
                 confirmLoading={loading}
                 popoverContent={popoverContent}
+                disableConfirm={!amount || isZero(amount)}
             />
             {otherWallets.length ? menu : null}
         </FormProvider>
@@ -558,6 +559,7 @@ export interface Transfer1559UIProps {
     handleConfirm: () => void
     confirmLoading: boolean
     popoverContent?: ReactElement
+    disableConfirm?: boolean
 }
 
 type TransferFormData = {
@@ -580,6 +582,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
         handleConfirm,
         confirmLoading,
         popoverContent,
+        disableConfirm,
     }) => {
         const anchorEl = useRef<HTMLDivElement | null>(null)
         const { t } = useI18N()
@@ -761,7 +764,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                             .times(etherPrice)
                                             .times(gasLimit),
                                         'USD',
-                                        { boundaries: { min: 0.01 } },
+                                        { onlyRemainTwoDecimal: true },
                                     ),
                                 }}
                                 components={{ span: <span /> }}
@@ -798,7 +801,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                             .times(etherPrice)
                                             .times(gasLimit),
                                         'USD',
-                                        { boundaries: { min: 0.01 } },
+                                        { onlyRemainTwoDecimal: true },
                                     ),
                                 }}
                             />
@@ -830,6 +833,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                         loading={confirmLoading}
                         variant="contained"
                         className={classes.button}
+                        disabled={disableConfirm}
                         onClick={handleConfirm}>
                         {t('confirm')}
                     </LoadingButton>

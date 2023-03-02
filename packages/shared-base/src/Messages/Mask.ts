@@ -105,6 +105,10 @@ export type ApplicationDialogEvent = {
     pluginID: string
 }
 
+export type PersonaBindFinishEvent = {
+    pluginID?: string
+}
+
 export type AvatarSettingDialogEvent = {
     open: boolean
     startPicking?: boolean
@@ -161,10 +165,7 @@ export interface SettingsUpdateEvent {
 }
 
 export interface RestoreSuccessEvent {
-    wallets?: Array<{
-        address: string
-        name: string
-    }>
+    wallets: string[]
 }
 
 export interface redpacketDialogEvent {

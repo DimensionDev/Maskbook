@@ -16,6 +16,7 @@
     "save_failed": "Save failed",
     "send_tip": "Send",
     "sending_tip": "Sending...",
+    "no_enough_gas_fees": "No Enough Gas Fees",
     "nft_not_belong_to_you": "The collectible doesn't exist or belong to you.",
     "send_tip_successfully": "Sent tip successfully.",
     "send_specific_tip_successfully": "Sent {{- amount}} {{name}} tip successfully.",

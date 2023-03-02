@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
@@ -37,7 +38,6 @@ export function useIterator<T>(
             }
             setDone(true)
         }
-
         setData((pred) => [...pred, ...batchFollowers])
         setLoading(false)
     }, [iterator, done])
@@ -47,6 +47,13 @@ export function useIterator<T>(
         setData(EMPTY_LIST)
         setDone(false)
     }, [])
+
+    useUpdateEffect(() => {
+        if (!iterator) return
+        setData([])
+        setDone(false)
+        setLoading(false)
+    }, [iterator])
 
     if (loading) {
         return {

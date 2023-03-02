@@ -12,7 +12,7 @@ import { DetailsTab } from './DetailsTab.js'
 import { DrawDialog } from './DrawDialog.js'
 import { DrawResultDialog } from './DrawResultDialog.js'
 import { useTransactionCallback } from '@masknet/web3-hooks-evm'
-import { formatBalance } from '@masknet/web3-shared-base'
+import { formatCurrency } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../locales/index.js'
 import { TabContext, TabPanel } from '@mui/lab'
@@ -372,10 +372,7 @@ export function PreviewCard(props: PreviewCardProps) {
                                     return boxState === BoxState.READY && paymentTokenAddress
                                         ? t.action_title({
                                               title: boxStateMessage,
-                                              price: formatBalance(
-                                                  paymentTokenPrice,
-                                                  paymentTokenDetailed?.decimals ?? 0,
-                                              ),
+                                              price: formatCurrency(paymentTokenPrice, ''),
                                               symbol: paymentTokenDetailed?.symbol ?? '',
                                           })
                                         : boxStateMessage

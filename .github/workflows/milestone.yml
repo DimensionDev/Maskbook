@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check Milestone
-        if: github.event.pull_request.milestone == null
+        if: "github.event.pull_request.milestone == null && github.event.pull_request.milestone.title != 'docs(i18n): sync i18n files from Crowdin'"
         run: |
           echo "Please set a milestone."
           exit 1
@@ -36,7 +36,7 @@ jobs:
             echo "Don't patch on the develop branch."
             exit 1
           fi
-          
+
       - name: Check target branch of release/*
         if: ${{ startsWith(github.base_ref, 'release/') }} # merge to release/*
         run: |

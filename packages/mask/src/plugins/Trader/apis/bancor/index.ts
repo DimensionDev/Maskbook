@@ -10,6 +10,7 @@ import { BANCOR_API_BASE_URL } from '../../constants/index.js'
 import { calculateMinimumReturn } from './calculateMinimumReturn.js'
 import { toChecksumAddress } from 'web3-utils'
 import { TradeStrategy } from '../../types/index.js'
+import { fetchJSON } from '@masknet/web3-providers/helpers'
 
 const roundDecimal = (value: number | string | undefined, decimals: number) => {
     return Math.round(Number(value || 0) * Math.pow(10, decimals)) / Math.pow(10, decimals)
@@ -26,9 +27,7 @@ const getTargetAmount = async (
         target_dlt_id: request.toToken?.address,
         amount: roundDecimal(request.fromAmount, request.fromToken.decimals),
     })
-    const response = await fetch(url)
-    const data = await response.json()
-    return data
+    return fetchJSON(url)
 }
 
 const getSourceAmount = async (
@@ -42,9 +41,7 @@ const getSourceAmount = async (
         target_dlt_id: request.toToken?.address,
         amount: roundDecimal(request.toAmount, request.toToken.decimals),
     })
-    const response = await fetch(url)
-    const data = await response.json()
-    return data
+    return fetchJSON(url)
 }
 
 export const swapTransactionBancor = async (

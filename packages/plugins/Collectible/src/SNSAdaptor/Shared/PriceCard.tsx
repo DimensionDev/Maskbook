@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { Skeleton, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NonFungibleTokenOrder, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
+import { NonFungibleTokenOrder, formatBalance, formatCurrency, isZero } from '@masknet/web3-shared-base'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { SourceProviderSwitcher } from '@masknet/shared'
 import { Context } from '../Context/index.js'
@@ -10,6 +10,7 @@ import { Stack } from '@mui/system'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
+        color: theme.palette.maskColor.publicMain,
         width: '100%',
         background:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(45, 41, 253, 0.2) 100%), #FFFFFF',
@@ -76,7 +77,7 @@ export function PriceCard(props: PriceCardProps) {
             <div className={classes.wrapper}>
                 <div className={classes.priceZone}>
                     <div className={classes.offerBox}>
-                        <Typography textAlign="center" fontSize={12} fontWeight={700}>
+                        <Typography textAlign="left" fontSize={12} fontWeight={700}>
                             {t.plugin_collectible_nft_offers_switch_source()}
                         </Typography>
                     </div>
@@ -84,6 +85,8 @@ export function PriceCard(props: PriceCardProps) {
                 </div>
             </div>
         )
+
+    const priceUSD = formatCurrency(topOffer?.price?.usd ?? 0, 'USD', { onlyRemainTwoDecimal: true })
 
     return (
         <div className={classes.wrapper}>
@@ -93,7 +96,7 @@ export function PriceCard(props: PriceCardProps) {
                 ) : (
                     <div className={classes.offerBox}>
                         {(topOffer?.priceInToken?.token.logoURL && (
-                            <img width={18} height={18} src={topOffer.priceInToken?.token.logoURL} alt="" />
+                            <img width={18} height={18} src={topOffer.priceInToken.token.logoURL} alt="" />
                         )) ||
                             (topOffer?.priceInToken?.token.symbol.toUpperCase() === 'WETH' ? (
                                 <Icons.WETH size={18} />
@@ -113,7 +116,8 @@ export function PriceCard(props: PriceCardProps) {
                         </Typography>
                         {topOffer?.price?.usd && (
                             <Typography className={classes.textBase}>
-                                ({formatCurrency(topOffer.price?.usd) || '-'})
+                                ({priceUSD.includes('<') || isZero(topOffer?.price?.usd) ? '' : '\u2248'}
+                                {priceUSD})
                             </Typography>
                         )}
                     </div>

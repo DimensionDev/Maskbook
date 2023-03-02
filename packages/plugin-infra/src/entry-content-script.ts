@@ -40,7 +40,10 @@ export {
     useSNSAdaptorContext,
     useSocialIdentity,
     useThemeColor,
+    useSNSThemeMode,
     useThemeMode,
     useThemeSettings,
     useThemeSize,
 } from './sns-adaptor/index.js'
+
+export { getBackgroundColor, isDark, toRGB, fromRGB, shade } from './utils/theme/color-tools.js'

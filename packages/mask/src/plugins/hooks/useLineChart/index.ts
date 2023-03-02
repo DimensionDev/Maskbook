@@ -57,7 +57,7 @@ export function useLineChart(
             .range([contentHeight, 0])
 
         const minPosition = {
-            x: (x(data.find((x) => x.value === min)?.date as Date) ?? 0) - 10,
+            x: (x(data.find((x) => x.value === min)?.date as Date) ?? 0) - 30,
             y: (y(min) ?? 0) + 24,
         }
 

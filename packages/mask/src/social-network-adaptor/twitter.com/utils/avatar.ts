@@ -1,10 +1,10 @@
 import { Twitter } from '@masknet/web3-providers'
 
 export function getInjectNodeInfo(ele: HTMLElement) {
-    const imgEle = ele.firstElementChild?.querySelector('img')
+    const imgEle = ele.querySelector('img')
     if (!imgEle) return
 
-    const nftDom = imgEle.parentElement?.parentElement?.parentElement?.parentElement?.parentElement
+    const nftDom = imgEle.closest<HTMLElement>('a[href][role=link]')
     if (!nftDom) return
 
     nftDom.style.overflow = 'unset'
@@ -25,9 +25,6 @@ export function getInjectNodeInfo(ele: HTMLElement) {
     }
 
     const { offsetWidth: width, offsetHeight: height } = nftDom
-
-    const dom = imgEle.parentNode?.firstChild as HTMLElement
-    if (dom) dom.style.borderRadius = '100%'
     const avatarId = Twitter.getAvatarId(imgEle.src)
     if (!avatarId) return
 

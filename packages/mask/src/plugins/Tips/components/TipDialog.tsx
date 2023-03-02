@@ -128,6 +128,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
             nonFungibleTokenAddress,
             nonFungibleTokenId,
         })
+        onClose?.()
     }, [sendTip, createTipsTx, shareText, amount, tipType, token, nonFungibleTokenAddress, nonFungibleTokenId])
 
     const expectedPluginID = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginID)
@@ -138,6 +139,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const pluginIDs = useValueRef(pluginIDSettings)
 
     const pluginId = site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM
+
     return (
         <TabContext value={currentTab}>
             <InjectedDialog

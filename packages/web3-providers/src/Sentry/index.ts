@@ -1,6 +1,14 @@
 import { Breadcrumbs, Event, GlobalHandlers } from '@sentry/browser'
-import { getSiteType, getAgentType } from '@masknet/shared-base'
+import { getSiteType, getAgentType, getExtensionId } from '@masknet/shared-base'
+import { formatMask } from '@masknet/web3-shared-base'
 import { TelemetryAPI } from '../types/Telemetry.js'
+
+const IGNORE_ERRORS = [
+    'At least one of the attempts fails.',
+    'Extension context invalidated.',
+    '[object Promise]',
+    'ResizeObserver loop limit exceeded',
+]
 
 export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
     constructor() {
@@ -21,11 +29,29 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
             ],
             environment: process.env.NODE_ENV,
             tracesSampleRate: 1.0,
+            beforeSend(event) {
+                if (event.exception?.values?.some((x) => IGNORE_ERRORS.some((y) => x.value?.includes(y)))) return null
+
+                if (event.message) {
+                    if (IGNORE_ERRORS.some((x) => event.message?.includes(x))) return null
+                }
+
+                event.exception?.values?.forEach((error) => {
+                    error.value = formatMask(error.value)
+                })
+
+                if (event.message) {
+                    event.message = formatMask(event.message)
+                }
+
+                return event
+            },
         })
 
         // set global tags
         Sentry.setTag('agent', getAgentType())
         Sentry.setTag('site', getSiteType())
+        Sentry.setTag('extension_id', getExtensionId())
         Sentry.setTag('version', process.env.VERSION)
         Sentry.setTag('ua', navigator.userAgent)
     }
@@ -75,35 +101,39 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         }
     }
 
-    private getOptions(initial?: TelemetryAPI.CommonOptions): TelemetryAPI.CommonOptions {
+    private getOptions(initials?: TelemetryAPI.CommonOptions): TelemetryAPI.CommonOptions {
         return {
             user: {
                 ...this.userOptions,
-                ...initial?.user,
+                ...initials?.user,
             },
             device: {
                 ...this.deviceOptions,
-                ...initial?.device,
+                ...initials?.device,
             },
             network: {
                 ...this.networkOptions,
-                ...initial?.network,
+                ...initials?.network,
             },
         }
     }
 
-    private createCommonEvent(type: TelemetryAPI.TypeID, message: string, initial: TelemetryAPI.CommonOptions): Event {
-        const options = this.getOptions(initial)
+    private createCommonEvent(
+        groupID: TelemetryAPI.GroupID,
+        type: TelemetryAPI.EventType | TelemetryAPI.ExceptionType,
+        ID: TelemetryAPI.EventID | TelemetryAPI.ExceptionID,
+        initials: TelemetryAPI.CommonOptions,
+    ): Event {
+        const options = this.getOptions(initials)
         return {
-            message,
-            level: type === TelemetryAPI.TypeID.Event ? 'info' : 'error',
-            user: options.user?.account
-                ? {
-                      username: options.user.account,
-                  }
-                : undefined,
+            level: groupID === TelemetryAPI.GroupID.Event ? 'info' : 'error',
+            message: ID,
             tags: {
-                type: TelemetryAPI.TypeID.Event,
+                type: TelemetryAPI.GroupID.Event,
+                event_type: groupID === TelemetryAPI.GroupID.Event ? type : undefined,
+                exception_type: groupID === TelemetryAPI.GroupID.Event ? undefined : type,
+                event_id: groupID === TelemetryAPI.GroupID.Event ? ID : undefined,
+                exception_id: groupID === TelemetryAPI.GroupID.Event ? undefined : ID,
                 chain_id: options.network?.chainId,
                 plugin_id: options.network?.pluginID,
                 network_id: options.network?.networkID,
@@ -116,11 +146,16 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
     }
 
     private createEvent(options: TelemetryAPI.EventOptions): Event {
-        return this.createCommonEvent(TelemetryAPI.TypeID.Event, options.eventID, options)
+        return this.createCommonEvent(TelemetryAPI.GroupID.Event, options.eventType, options.eventID, options)
     }
 
     private createException(options: TelemetryAPI.ExceptionOptions): Event {
-        return this.createCommonEvent(TelemetryAPI.TypeID.Exception, options.exceptionID, options)
+        return this.createCommonEvent(
+            TelemetryAPI.GroupID.Exception,
+            options.exceptionType,
+            options.exceptionID,
+            options,
+        )
     }
 
     enable() {
@@ -133,11 +168,19 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
 
     captureEvent(options: TelemetryAPI.EventOptions) {
         if (this.status === 'off') return
-        Sentry.captureEvent(this.createEvent(options))
+        if (process.env.NODE_ENV === 'development') {
+            console.log(`[LOG EVENT]: ${JSON.stringify(this.createEvent(options))}`)
+        } else {
+            Sentry.captureEvent(this.createEvent(options))
+        }
     }
 
     captureException(options: TelemetryAPI.ExceptionOptions) {
         if (this.status === 'off') return
-        Sentry.captureException(options.error, this.createException(options))
+        if (process.env.NODE_ENV === 'development') {
+            console.log(`[LOG EXCEPTION]: ${JSON.stringify(this.createException(options))}`)
+        } else {
+            Sentry.captureException(options.error, this.createException(options))
+        }
     }
 }

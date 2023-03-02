@@ -51,6 +51,8 @@ export namespace EVM {
     export interface AssetsGroup {
         contract_address: string
         contract_name: string
+        verified?: boolean
+        opensea_verified?: boolean
         logo_url?: string
         owns_total: number
         items_total: number

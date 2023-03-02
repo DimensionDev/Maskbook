@@ -1688,6 +1688,7 @@ export interface WalletState<Transaction> {
         address: string,
         updates: Partial<Omit<Wallet, 'id' | 'address' | 'createdAt' | 'createdAt'>>,
     ): Promise<void>
+    updateOrAddWallet(wallet: Wallet): Promise<void>
     renameWallet(address: string, name: string): Promise<void>
     removeWallet(address: string, password?: string): Promise<void>
 

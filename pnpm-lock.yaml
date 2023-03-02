@@ -1515,6 +1515,9 @@ importers:
       '@masknet/web3-shared-solana':
         specifier: workspace:^
         version: link:../../web3-shared/solana
+      '@masknet/web3-telemetry':
+        specifier: workspace:*
+        version: link:../../web3-telemetry
       bignumber.js:
         specifier: 9.1.0
         version: 9.1.0
@@ -2190,6 +2193,9 @@ importers:
       '@masknet/web3-shared-evm':
         specifier: workspace:^
         version: link:../../web3-shared/evm
+      '@masknet/web3-telemetry':
+        specifier: workspace:^
+        version: link:../../web3-telemetry
       '@types/use-subscription':
         specifier: ^1.0.0
         version: 1.0.0

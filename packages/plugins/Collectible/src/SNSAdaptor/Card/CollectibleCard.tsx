@@ -8,6 +8,9 @@ const useStyles = makeStyles()((theme) => {
             height: '100%',
             borderRadius: 0,
             overflow: 'auto',
+            '::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         overContent: {
             backgroundColor: theme.palette.maskColor.white,

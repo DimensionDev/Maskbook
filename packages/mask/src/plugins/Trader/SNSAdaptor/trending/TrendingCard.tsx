@@ -5,10 +5,10 @@ const useStyles = makeStyles()((theme) => {
     return {
         root: {
             overflow: 'auto',
+            backgroundColor: 'transparent',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
-            borderBottom: `1px solid ${theme.palette.divider}`,
             marginBottom: theme.spacing(1.5),
         },
     }

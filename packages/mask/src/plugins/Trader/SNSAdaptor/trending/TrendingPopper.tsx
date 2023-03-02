@@ -44,6 +44,7 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
     useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.walletRiskWarningDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated, onFreezed)
+    useRemoteControlledDialog(WalletMessages.events.gasSettingDialogUpdated, onFreezed)
     useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated, onFreezed)
     useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated, onFreezed)
     // #endregion

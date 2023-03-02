@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useContext } from 'react'
 import formatDateTime from 'date-fns/format'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import {
@@ -11,9 +11,11 @@ import {
     Typography,
     Link,
     Stack,
+    useTheme,
 } from '@mui/material'
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
+import { useSNSThemeMode } from '@masknet/plugin-infra/content-script'
 import { TokenIcon, FormattedAddress, Image, WalletIcon } from '@masknet/shared'
 import { useScrollBottomEvent } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -23,10 +25,11 @@ import { formatCurrency } from '@masknet/web3-shared-base'
 import { resolveActivityTypeBackgroundColor } from '@masknet/web3-providers/helpers'
 import { useNonFungibleTokenActivities } from '../../trending/useTrending.js'
 import { useI18N } from '../../../../utils/index.js'
+import { TrendingViewContext } from './context.js'
 
-const useStyles = makeStyles<{ isCollectionProjectPopper: boolean }>()((theme, { isCollectionProjectPopper }) => ({
+const useStyles = makeStyles<{ isPopper: boolean; snsThemeMode?: string }>()((theme, { isPopper, snsThemeMode }) => ({
     container: {
-        maxHeight: isCollectionProjectPopper ? 320 : 266,
+        maxHeight: isPopper ? 320 : 266,
         scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
@@ -35,10 +38,10 @@ const useStyles = makeStyles<{ isCollectionProjectPopper: boolean }>()((theme, {
     cell: {
         paddingLeft: theme.spacing(0.5),
         paddingRight: theme.spacing(0.5),
+        background: snsThemeMode === 'dim' && !isPopper ? '#15202b' : theme.palette.maskColor.bottom,
         fontSize: 12,
         fontWeight: 700,
         whiteSpace: 'nowrap',
-        backgroundColor: theme.palette.maskColor.bottom,
         border: 'none',
         '&:not(:first-child)': {
             textAlign: 'center',
@@ -104,19 +107,16 @@ export interface NonFungibleTickersTableProps {
     id: string
     chainId: Web3Helper.ChainIdAll
     result: Web3Helper.TokenResultAll
-    isCollectionProjectPopper?: boolean
 }
 
 type Cells = 'nft' | 'method' | 'value' | 'from' | 'to' | 'time'
 
-export function NonFungibleTickersTable({
-    id,
-    chainId,
-    result,
-    isCollectionProjectPopper = false,
-}: NonFungibleTickersTableProps) {
+export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTickersTableProps) {
     const { t } = useI18N()
-    const { classes } = useStyles({ isCollectionProjectPopper })
+    const theme = useTheme()
+    const snsThemeMode = useSNSThemeMode(theme)
+    const { isCollectionProjectPopper, isTokenTagPopper } = useContext(TrendingViewContext)
+    const { classes } = useStyles({ isPopper: isCollectionProjectPopper || isTokenTagPopper, snsThemeMode })
     const { Others } = useWeb3State(result.pluginID)
     const containerRef = useRef(null)
     const { activities, fetchMore, loadingNonFungibleTokenActivities } = useNonFungibleTokenActivities(
@@ -205,11 +205,7 @@ export function NonFungibleTickersTable({
                     {cell}
                 </TableCell>
             ))
-            return (
-                <TableRow key={index} className={classes.tableContent}>
-                    {cells}
-                </TableRow>
-            )
+            return <TableRow key={index}>{cells}</TableRow>
         }) ?? []
 
     const headCells = Object.values(headCellMap)
@@ -263,7 +259,7 @@ interface TransactionValueProps {
 }
 
 function TransactionValue({ result, chainId, activity }: TransactionValueProps) {
-    const { classes } = useStyles({ isCollectionProjectPopper: false })
+    const { classes } = useStyles({ isPopper: false })
     const chain = useNetworkDescriptor(result.pluginID, chainId)
     const { value: token } = useFungibleToken(result.pluginID, activity.trade_token?.address, activity.trade_token, {
         chainId: result.chainId,
@@ -287,9 +283,7 @@ function TransactionValue({ result, chainId, activity }: TransactionValueProps) 
             )}
 
             <Typography fontSize={12}>
-                {formatCurrency((activity.trade_price ?? activity.fee ?? 0).toFixed(4), '', {
-                    boundaries: { min: 0.00001 },
-                })}
+                {formatCurrency((activity.trade_price ?? activity.fee ?? 0).toFixed(4), '')}
             </Typography>
         </div>
     )

@@ -22,8 +22,7 @@ import { useSearchedKeyword } from '../DataSource/useSearchedKeyword.js'
 
 const useStyles = makeStyles()(() => ({
     contentWrapper: {
-        background:
-            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
+        background: 'transparent',
     },
     tabContent: {
         position: 'relative',
@@ -91,12 +90,12 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     if (!contentComponent) return null
 
     return (
-        <div className={classes.root}>
+        <div>
             <ScopedDomainsContainer.Provider>
                 <div className={classes.contentWrapper}>
-                    <div className={classes.content}>{contentComponent}</div>
+                    <div>{contentComponent}</div>
                     {tabs.length ? (
-                        <div className={classes.tabs}>
+                        <div>
                             <TabContext value={currentTab}>
                                 <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
                                     {tabs.map((tab) => (

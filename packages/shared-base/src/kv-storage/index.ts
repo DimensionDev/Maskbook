@@ -153,7 +153,7 @@ function createState(
             return initializedPromise!
         },
         get value() {
-            if (!initialized) throw new Error('Try to access K/V state before initialization finished.')
+            if (!initialized) throw new Error(`Try to access K/V state before initialization finished: ${scope}.`)
             return state
         },
         async setValue(value) {

@@ -125,7 +125,7 @@ export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
                         width={imageSize}
                     />
                 ) : null}
-                <div className={classes.article}>
+                <div>
                     {commentTarget?.title ? (
                         <Typography variant="h1" className={classes.title}>
                             {commentTarget?.title}

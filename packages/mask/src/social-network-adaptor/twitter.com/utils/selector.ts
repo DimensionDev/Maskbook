@@ -121,7 +121,7 @@ export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () 
 export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-labelledby="modal-header"]  div[data-testid="toolBar"] div[data-testid="geoButton"]')
 export const toolboxInSidebarSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="banner"] [role="navigation"] > div')
+    querySelector<E>('[role="banner"] nav[role="navigation"] > div')
 export const sideBarProfileSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="banner"] [role="navigation"] [data-testid="AppTabBar_Profile_Link"] > div')
 export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
@@ -207,8 +207,9 @@ export const postsContentSelector = () =>
         ].join(),
     )
 
-export const postAvatarsContentSelector = () =>
-    querySelectorAll('[data-testid="tweet"] > div > div > div > :nth-child(2)')
+export const postAvatarsContentSelector = () => querySelectorAll('[data-testid="tweet"] > div > div  > :nth-child(2)')
+
+export const postAvatarSelector = () => querySelectorAll('[data-testid^=UserAvatar-Container-]')
 
 const base = querySelector<HTMLScriptElement>('#react-root ~ script')
 const handle = /"screen_name":"(.*?)"/

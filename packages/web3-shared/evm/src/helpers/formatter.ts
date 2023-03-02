@@ -5,10 +5,6 @@ import { isValidDomain } from './domain.js'
 import { isValidAddress } from './address.js'
 import { SchemaType } from '../types/index.js'
 
-export function formatPrice(price: BigNumber.Value, decimalPlaces = 6) {
-    return new BigNumber(price).decimalPlaces(decimalPlaces).toString()
-}
-
 export function formatAmount(amount: BigNumber.Value = '0', decimals = 0) {
     return new BigNumber(amount).shiftedBy(decimals).toFixed()
 }
@@ -77,6 +73,10 @@ export function formatGweiToWei(value: BigNumber.Value) {
 
 export function formatEtherToGwei(value: BigNumber.Value) {
     return new BigNumber(value).shiftedBy(9).integerValue()
+}
+
+export function formatEtherToWei(value: BigNumber.Value) {
+    return new BigNumber(value).shiftedBy(18).integerValue()
 }
 
 export function formatGweiToEther(value: BigNumber.Value) {

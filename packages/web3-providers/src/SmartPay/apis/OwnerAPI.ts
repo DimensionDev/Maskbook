@@ -10,7 +10,7 @@ import {
     isValidAddress,
 } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import { LOG_ROOT, MAX_ACCOUNT_LENGTH, THE_GRAPH_PROD } from '../constants.js'
@@ -20,6 +20,13 @@ import { MulticallAPI } from '../../Multicall/index.js'
 import { Web3API } from '../../EVM/index.js'
 import type { OwnerAPI } from '../../entry-types.js'
 import { fetchJSON } from '../../entry-helpers.js'
+
+type OwnerChangedRecord = {
+    address: string
+    oldOwner: string
+    newOwner: string
+    blockNumber: string
+}
 
 export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGIN_EVM> {
     private web3 = new Web3API()
@@ -55,6 +62,16 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
         if (!CREATE2_FACTORY_CONTRACT_ADDRESS) throw new Error('No create2 contract.')
 
         return new Create2Factory(CREATE2_FACTORY_CONTRACT_ADDRESS)
+    }
+
+    private filterAccounts(accounts: Array<OwnerAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>>) {
+        return compact(
+            accounts.map((x, index, array) => {
+                const allElement = array.filter((y) => isSameAddress(y.address, x.address))
+                if (allElement.length === 1) return x
+                return x.creator ? x : null
+            }),
+        )
     }
 
     private createContractAccount(
@@ -102,33 +119,54 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
     }
 
     private async getAccountsFromTheGraph(chainId: ChainId, owner: string) {
-        const response = await fetchJSON<{
-            data: {
-                ownerChangeds: Array<{
-                    address: string
-                    oldOwner: string
-                    newOwner: string
-                }>
-            }
-        }>(THE_GRAPH_PROD, {
-            method: 'POST',
-            body: JSON.stringify({
-                query: `{
+        const allSettled = await Promise.allSettled([
+            fetchJSON<{
+                data: {
+                    ownerChangeds: OwnerChangedRecord[]
+                }
+            }>(THE_GRAPH_PROD, {
+                method: 'POST',
+                body: JSON.stringify({
+                    query: `{
                     ownerChangeds(where: { newOwner: "${owner}" }) {
                         address
                         oldOwner
                         newOwner
-                        
+                        blockNumber
                     }
                 }`,
+                }),
             }),
-        })
+            fetchJSON<{
+                data: {
+                    ownerChangeds: OwnerChangedRecord[]
+                }
+            }>(THE_GRAPH_PROD, {
+                method: 'POST',
+                body: JSON.stringify({
+                    query: `{
+                    ownerChangeds(where: { oldOwner: "${owner}" }) {
+                        address
+                        oldOwner
+                        newOwner
+                        blockNumber
+                    }
+                }`,
+                }),
+            }),
+        ])
 
-        if (!response.data.ownerChangeds.length) return []
+        const [newOwnerRecords, oldOwnerRecords] = allSettled.map((x) =>
+            x.status === 'fulfilled' ? x.value.data.ownerChangeds : [],
+        )
 
-        const data = unionWith(response.data.ownerChangeds, (a, b) => isSameAddress(a.address, b.address))
-
-        return compact(data.map((x) => this.createContractAccount(chainId, x.address, owner, '', true, true)))
+        return unionWith(newOwnerRecords, (a, b) => isSameAddress(a.address, b.address))
+            .filter((x) => {
+                const target = oldOwnerRecords.find((y) => y.oldOwner === x.newOwner)
+                // The address has been change owner
+                return !(target && isGreaterThan(target.blockNumber, x.blockNumber))
+            })
+            .map((x) => this.createContractAccount(chainId, x.address, owner, '', true, true))
     }
 
     /**
@@ -207,7 +245,7 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
                     : y.funded,
             }))
 
-        return result.filter((x) => (exact ? isSameAddress(x.owner, owner) : true))
+        return this.filterAccounts(result).filter((x) => (exact ? isSameAddress(x.owner, owner) : true))
     }
 
     async getAccountsByOwners(
@@ -215,16 +253,13 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
         owners: string[],
         exact = true,
     ): Promise<Array<OwnerAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>>> {
-        const allSettled = await Promise.allSettled(owners.map((x) => this.getAccountsByOwner(chainId, x, exact)))
+        const allSettled = await Promise.allSettled(owners.map((x) => this.getAccountsByOwner(chainId, x, false)))
         const result = allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
 
         /**
          * There may be a transfer of ownership between different owners with the same address,
          * giving priority to the result obtained by multicall
          */
-        return unionWith(result, (a, b) => {
-            if (!isSameAddress(a.address, b.address)) return false
-            return !a.creator && !!b.creator
-        })
+        return this.filterAccounts(result).filter((x) => (exact ? owners.some((y) => isSameAddress(y, x.owner)) : true))
     }
 }

@@ -277,6 +277,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                             openNFTConfirmDialog={openNFTConfirmDialog}
                                             onClose={onClose}
                                             setIsNFTRedPacketLoaded={setIsNFTRedPacketLoaded}
+                                            gasOption={gasOption}
+                                            onGasOptionChange={handleGasSettingChange}
                                         />
                                     </TabPanel>
                                 </div>
@@ -292,6 +294,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                 onBack={onBack}
                                 onCreated={handleCreated}
                                 settings={settings}
+                                gasOption={gasOption}
                             />
                         ) : null}
                     </DialogContent>

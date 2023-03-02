@@ -1,1 +1,15 @@
-{}
+{
+    "insufficient_balance": "余额不足",
+    "drawing": "抽取中",
+    "draw": "抽取",
+    "active": "启用",
+    "sold": "卖出",
+    "by": "由",
+    "limit": "上限:",
+    "articles": "文章",
+    "close": "已关闭",
+    "details": "详情",
+    "failed": "加载失败",
+    "retry": "重新加载",
+    "action_title": "{{title}} ({{price}} {{symbol}}/时间)"
+}

@@ -6,6 +6,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { SwapBancorRequest, TradeComputed } from '../../types/index.js'
 import { PluginTraderRPC } from '../../messages.js'
+import { toHex } from 'web3-utils'
 
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapBancorRequest> | null): AsyncState<string> {
     const { account, chainId: targetChainId } = useChainContext()
@@ -28,6 +29,10 @@ export function useTradeGasLimit(tradeComputed: TradeComputed<SwapBancorRequest>
         // Note that if approval is required, the API will also return the necessary approval transaction.
         const tradeTransaction = data.length === 1 ? data[0] : data[1]
 
-        return connection.estimateTransaction(pick(tradeTransaction.transaction, ['to', 'data', 'value', 'from']))
+        const config = pick(tradeTransaction.transaction, ['to', 'data', 'value', 'from'])
+        return connection.estimateTransaction({
+            ...config,
+            value: toHex(config.value),
+        })
     }, [trade, account, connection, pluginID])
 }

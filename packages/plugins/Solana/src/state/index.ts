@@ -18,10 +18,17 @@ export async function createWeb3State(
 ): Promise<SolanaWeb3State> {
     const Provider_ = new Provider(context)
     const Settings_ = new Settings(context)
+    const Wallet_ = new Wallet(context, {
+        providerType: Provider_.providerType,
+    })
 
     await Provider_.storage.account.initializedPromise
     await Provider_.storage.providerType.initializedPromise
     await Settings_.storage.currencyType.initializedPromise
+    await Wallet_.storage.initializedPromise
+
+    Provider_.setup()
+    Wallet_.setup()
 
     return {
         AddressBook: new AddressBook(context, {
@@ -45,9 +52,7 @@ export async function createWeb3State(
             account: Provider_.account,
             providerType: Provider_.providerType,
         }),
-        Wallet: new Wallet(context, {
-            providerType: Provider_.providerType,
-        }),
+        Wallet: Wallet_,
         Others: new Others(context),
         Storage: new Storage(),
     }

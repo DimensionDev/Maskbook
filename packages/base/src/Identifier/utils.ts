@@ -67,5 +67,5 @@ Object.freeze(Identifier)
  */
 export function banSlash(input: string | undefined | null) {
     if (!input) return
-    if (input.includes('/')) throw new TypeError('Cannot contain / in a part of identifier')
+    if (input.includes('/')) throw new TypeError(`Cannot contain / in a part of identifier: ${input}`)
 }

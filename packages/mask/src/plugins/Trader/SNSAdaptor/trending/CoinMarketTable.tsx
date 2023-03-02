@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         width: 132.5,
         height: 66,
-        background: theme.palette.background.default,
+        background: theme.palette.maskColor.bg,
         borderRadius: 8,
         justifyContent: 'center',
         alignItems: 'center',

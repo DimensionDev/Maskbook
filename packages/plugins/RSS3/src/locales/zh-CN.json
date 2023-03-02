@@ -1,1 +1,24 @@
-{}
+{
+    "token_operation$mint": "<to>{{to}}</to> 铸币 <bold>{{value}} {{symbol}}</bold>",
+    "token_operation$send": "<from>{{from}}</from> 发送到 <to>{{to}}</to>",
+    "token_operation$claim": "<to>{{to}}</to> 领取自 <from>{{from}}</from>",
+    "token_operation_verbose$mint": "$t(token_operation$mint)",
+    "token_operation_verbose$burn": "$t(token_operation$burn)",
+    "liquidity$supply": "<user>{{user}}</user> 在 <platform>{{platform}}</platform> 上提供流动资金",
+    "liquidity$add": "<user>{{user}}</user> 在 <platform>{{platform}}</platform> 上提供流动资金",
+    "liquidity$repay": "<user>{{user}}</user> 在 <platform>{{platform}}</platform> 上偿还流动资金",
+    "liquidity$borrow": "<user>{{user}}</user> 在 <platform>{{platform}}</platform> 上借流动资金",
+    "token_value": "{{- value}} {{symbol}}",
+    "collectible_trade$platform": "<bold>{{user}}</bold> 售出 <collectible>{{collectible}}</collectible> 至 <recipient>{{recipient}}</recipient> <bold>{{cost_value}} {{cost_symbol}}</bold> <bold>{{platform}}</bold>",
+    "collectible_burn": "<user>{{user}}</user>销毁<collectible>{{collectible}}</collectible>",
+    "donation_donate": "<bold>{{user}}</bold> 捐赠了 <bold>{{cost_value}} {{cost_symbol}}</bold>",
+    "note$mint": "<bold>{{user}}</bold> 在 <bold>{{platform}}</bold> 铸造了笔记",
+    "note$revise": "<bold>{{user}}</bold> 在 <bold>{{platform}}</bold> 上修改了备注",
+    "profile$create": "<user>{{user}}</user> 在 <platform>{{platform}}</platform> 上偿还流动资金",
+    "propose": "<bold>{{user}}</bold> 提议",
+    "original": "原始文件",
+    "details": "详情",
+    "no_data$activities": "没有与此地址关联的订阅源。",
+    "no_data$donation": "没有与此地址关联的订阅源。",
+    "no_data$social": "没有与此地址关联的订阅源。"
+}
