@@ -34,6 +34,7 @@ import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useMountReport, useTelemetry } from '@masknet/web3-telemetry/hooks'
 import { TelemetryAPI } from '@masknet/web3-providers/types'
+import { Typography } from '@mui/material'
 
 export interface TraderProps extends withClasses<'root'> {
     defaultInputCoin?: Web3Helper.FungibleTokenAll
@@ -220,7 +221,12 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     )
 
     useUpdateEffect(() => {
-        if (tradeCallbackError) showSingletonSnackbar(t.swap_failed(), { processing: false, variant: 'error' })
+        if (tradeCallbackError)
+            showSingletonSnackbar(t.swap_failed(), {
+                processing: false,
+                variant: 'error',
+                message: <Typography>{t.swap_failed_description()}</Typography>,
+            })
     }, [tradeCallbackError, showSingletonSnackbar])
 
     useEffect(() => {

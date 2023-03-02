@@ -115,7 +115,7 @@ export class WalletState<ProviderType extends string, Transaction> implements We
 
     async updateWallets(wallets: Wallet[]) {
         if (!wallets.length) return
-        this.storage.setValue({
+        await this.storage.setValue({
             ...this.storage.value,
             [this.providerType]: uniqWith([...this.all, ...wallets], (a, b) => isSameAddress(a.address, b.address)),
         })

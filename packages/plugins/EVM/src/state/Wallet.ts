@@ -80,7 +80,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
                 isSameAddress(a.address, b.address),
             )
 
-            this.updateWallets(result)
+            await this.updateWallets(result)
             this.ref.value = result
         }
 
