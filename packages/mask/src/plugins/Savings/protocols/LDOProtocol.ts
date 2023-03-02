@@ -2,18 +2,18 @@ import type Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
 import {
-    ChainId,
+    type ChainId,
     createContract,
     getLidoConstants,
-    SchemaType,
+    type SchemaType,
     TransactionEventType,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
-import { FungibleToken, ZERO } from '@masknet/web3-shared-base'
+import { type FungibleToken, ZERO } from '@masknet/web3-shared-base'
 import { fetchText } from '@masknet/web3-providers/helpers'
 import type { Lido } from '@masknet/web3-contracts/types/Lido.js'
 import LidoABI from '@masknet/web3-contracts/abis/Lido.json'
-import { ProtocolType, SavingsProtocol } from '../types.js'
+import { ProtocolType, type SavingsProtocol } from '../types.js'
 
 export class LidoProtocol implements SavingsProtocol {
     private _apr = '0.00'

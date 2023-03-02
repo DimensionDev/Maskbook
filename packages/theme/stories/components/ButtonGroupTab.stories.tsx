@@ -3,7 +3,7 @@ import TabContext from '@mui/lab/TabContext'
 import TabPanel from '@mui/lab/TabPanel'
 import { Tab } from '@mui/material'
 import { useState } from 'react'
-import { ButtonGroupTabList, ButtonGroupTabListProps } from '../../src/index.js'
+import { ButtonGroupTabList, type ButtonGroupTabListProps } from '../../src/index.js'
 
 const defaultTabs = ['One', 'Two', 'Three']
 const { meta, of } = story(function ({

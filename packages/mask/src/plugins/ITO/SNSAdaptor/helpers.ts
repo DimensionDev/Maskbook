@@ -1,7 +1,7 @@
 import { omit } from 'lodash-es'
 import type { BigNumber } from 'bignumber.js'
 import type { Result } from 'ts-results-es'
-import { ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { type ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import type { TypedMessage } from '@masknet/typed-message'
 import { createRenderWithMetadata, createTypedMessageMetadataReader } from '@masknet/typed-message-react'
 import { ITO_MetaKey_1, ITO_MetaKey_2 } from '../constants.js'

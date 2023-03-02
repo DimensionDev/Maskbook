@@ -1,4 +1,4 @@
-import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
+import { createPluginMessage, type PluginMessageEmitter } from '@masknet/plugin-infra'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from './constants.js'
 

@@ -1,8 +1,8 @@
 import { Icons } from '@masknet/icons'
-import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
+import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogContent, Typography } from '@mui/material'
-import { FC, memo, ReactNode } from 'react'
+import { type FC, memo, type ReactNode } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

@@ -1,5 +1,5 @@
 import type { Storage } from '@masknet/web3-shared-base'
-import { ECKeyIdentifier, fromHex, NextIDPlatform, SignType, toBase64 } from '@masknet/shared-base'
+import { type ECKeyIdentifier, fromHex, type NextIDPlatform, SignType, toBase64 } from '@masknet/shared-base'
 import { NextIDStorage as NextIDStorageProvider } from '@masknet/web3-providers'
 
 export class NextIDStorage implements Storage {

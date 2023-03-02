@@ -1,10 +1,10 @@
 import {
     decompressK256Key,
-    ECKeyIdentifier,
+    type ECKeyIdentifier,
     NextIDAction,
-    PersonaIdentifier,
+    type PersonaIdentifier,
     ProfileIdentifier,
-    ProfileInformationFromNextID,
+    type ProfileInformationFromNextID,
     RelationFavor,
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -17,9 +17,9 @@ import {
     createProfileDB,
     deleteProfileDB,
     detachProfileDB,
-    LinkedProfileDetails,
-    PersonaRecord,
-    ProfileRecord,
+    type LinkedProfileDetails,
+    type PersonaRecord,
+    type ProfileRecord,
     queryProfileDB,
     queryProfilesDB,
 } from '../../../database/persona/db.js'

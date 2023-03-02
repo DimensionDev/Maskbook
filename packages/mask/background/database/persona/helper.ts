@@ -1,13 +1,13 @@
 import { safeUnreachable } from '@masknet/kit'
 import {
-    AESCryptoKey,
-    AESJsonWebKey,
+    type AESCryptoKey,
+    type AESJsonWebKey,
     ECKeyIdentifier,
     ECKeyIdentifierFromJsonWebKey,
-    EC_Private_JsonWebKey,
-    EC_Public_CryptoKey,
-    EC_Public_JsonWebKey,
-    PersonaIdentifier,
+    type EC_Private_JsonWebKey,
+    type EC_Public_CryptoKey,
+    type EC_Public_JsonWebKey,
+    type PersonaIdentifier,
     ProfileIdentifier,
 } from '@masknet/shared-base'
 import {
@@ -16,9 +16,9 @@ import {
     createOrUpdatePersonaDB,
     createPersonaDB,
     createPersonaDBReadonlyAccess,
-    FullPersonaDBTransaction,
-    LinkedProfileDetails,
-    PersonaRecord,
+    type FullPersonaDBTransaction,
+    type LinkedProfileDetails,
+    type PersonaRecord,
     queryPersonaByProfileDB,
     queryPersonasWithPrivateKey,
     queryProfileDB,

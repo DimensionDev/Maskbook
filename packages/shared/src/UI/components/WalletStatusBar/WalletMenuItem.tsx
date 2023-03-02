@@ -14,7 +14,7 @@ import {
     useWeb3State,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { WalletDescription, WalletDescriptionProps } from './WalletDescription.js'
+import { WalletDescription, type WalletDescriptionProps } from './WalletDescription.js'
 import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({

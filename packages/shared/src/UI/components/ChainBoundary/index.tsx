@@ -4,7 +4,7 @@ import React, {
     useMemo,
     cloneElement,
     Children,
-    DetailedReactHTMLElement,
+    type DetailedReactHTMLElement,
     isValidElement,
 } from 'react'
 import { useAsyncFn } from 'react-use'
@@ -26,7 +26,7 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@masknet/kit'
 import { WalletIcon } from '../WalletIcon/index.js'
-import { ActionButtonPromise, ActionButtonPromiseProps } from '../ActionButton/index.js'
+import { ActionButtonPromise, type ActionButtonPromiseProps } from '../ActionButton/index.js'
 import { Icons } from '@masknet/icons'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'

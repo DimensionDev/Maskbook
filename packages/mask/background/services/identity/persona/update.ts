@@ -2,9 +2,9 @@ import { decodeArrayBuffer } from '@masknet/kit'
 import type { MobilePersona } from '@masknet/public-api'
 import {
     ECKeyIdentifierFromJsonWebKey,
-    EC_JsonWebKey,
+    type EC_JsonWebKey,
     isEC_Private_JsonWebKey,
-    PersonaIdentifier,
+    type PersonaIdentifier,
 } from '@masknet/shared-base'
 import { decode } from '@msgpack/msgpack'
 import {

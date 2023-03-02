@@ -5,9 +5,9 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     CrossIsolationMessages,
     DashboardRoutes,
-    MaskEvents,
-    PersonaInformation,
-    PluginID,
+    type MaskEvents,
+    type PersonaInformation,
+    type PluginID,
     isSamePersona,
     isSameProfile,
     resolveNextIDIdentityToProfile,

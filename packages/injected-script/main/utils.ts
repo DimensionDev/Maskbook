@@ -1,4 +1,4 @@
-import { CustomEventId, encodeEvent, InternalEvents } from '../shared/index.js'
+import { CustomEventId, encodeEvent, type InternalEvents } from '../shared/index.js'
 import { $Content, $ } from './intrinsic.js'
 
 export const cloneIntoContent = <T>(obj: T) => {

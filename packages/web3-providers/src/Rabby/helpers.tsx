@@ -1,5 +1,5 @@
 import {
-    ChainId,
+    type ChainId,
     getRedPacketConstants,
     getMaskBoxConstants,
     getITOConstants,

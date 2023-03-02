@@ -2,10 +2,10 @@ import type { TransactionReceipt } from 'web3-core'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import {
     EthereumMethodType,
-    Transaction,
+    type Transaction,
     UserTransaction,
-    Middleware,
-    ConnectionContext,
+    type Middleware,
+    type ConnectionContext,
 } from '@masknet/web3-shared-evm'
 import { getReceiptStatus } from '../utils.js'
 import { Web3StateSettings } from '../../../settings/index.js'

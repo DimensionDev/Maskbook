@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup, ButtonGroupProps, styled, Tab } from '@mui/material'
+import { Box, Button, ButtonGroup, type ButtonGroupProps, styled, Tab } from '@mui/material'
 import { useTabContext, getPanelId, getTabId } from '@mui/lab/TabContext'
 import {
     forwardRef,
@@ -8,7 +8,7 @@ import {
     useRef,
     useEffect,
     useImperativeHandle,
-    ForwardRefExoticComponent,
+    type ForwardRefExoticComponent,
     useMemo,
 } from 'react'
 import { BaseTab } from './BaseTab.js'

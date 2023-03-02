@@ -3,7 +3,13 @@ import { toHex } from 'web3-utils'
 import type { ProviderOptions } from '@masknet/web3-shared-base'
 import type { StorageObject } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
-import { ChainId, getDefaultChainId, isValidAddress, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
+import {
+    type ChainId,
+    getDefaultChainId,
+    isValidAddress,
+    PayloadEditor,
+    type ProviderType,
+} from '@masknet/web3-shared-evm'
 import type { EVM_Provider } from '../types.js'
 import { BaseProvider } from './Base.js'
 import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'

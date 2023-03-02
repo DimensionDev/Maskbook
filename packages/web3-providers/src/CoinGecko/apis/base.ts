@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { CurrencyType, Price } from '@masknet/web3-shared-base'
+import { CurrencyType, type Price } from '@masknet/web3-shared-base'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import { COINGECKO_URL_BASE } from '../constants.js'
 import type { Category, CoinInfo, Exchange, ThumbCoin, ThumbCollection } from '../types.js'

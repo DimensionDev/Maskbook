@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import type { Currency } from '@uniswap/sdk-core'
-import { Pool, Route } from '@uniswap/v3-sdk'
+import { type Pool, Route } from '@uniswap/v3-sdk'
 import { useV3SwapPools } from './useV3SwapPools.js'
 import { useSingleHopOnly } from './useSingleHopOnly.js'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'

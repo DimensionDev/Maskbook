@@ -1,5 +1,5 @@
-import { CssBaseline, Theme, ThemeProvider } from '@mui/material'
-import { MaskIconPalette, MaskIconPaletteContext } from '@masknet/icons'
+import { CssBaseline, type Theme, ThemeProvider } from '@mui/material'
+import { type MaskIconPalette, MaskIconPaletteContext } from '@masknet/icons'
 import { CustomSnackbarProvider } from '../Components/index.js'
 import { compose } from '@masknet/shared-base'
 

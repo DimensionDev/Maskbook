@@ -1,7 +1,7 @@
 import base58 from 'bs58'
 import type { Transaction } from '@solana/web3.js'
 import Wallet from '@project-serum/sol-wallet-adapter'
-import { ChainId, ProviderType } from '@masknet/web3-shared-solana'
+import { type ChainId, ProviderType } from '@masknet/web3-shared-solana'
 import type { SolanaProvider } from '../types.js'
 import { BaseProvider } from './Base.js'
 

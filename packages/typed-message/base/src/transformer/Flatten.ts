@@ -11,7 +11,7 @@ import {
 import type { TypedMessage } from '../base.js'
 import { visitEachTypedMessageChild } from '../visitor/index.js'
 import { isSerializableTypedMessage } from '../utils/index.js'
-import { emptyTransformationContext, TransformationContext } from './context.js'
+import { emptyTransformationContext, type TransformationContext } from './context.js'
 
 export function FlattenTypedMessage(message: TypedMessage, context: TransformationContext): TypedMessage {
     if (isTypedMessagePromise(message) && 'value' in message.promise)

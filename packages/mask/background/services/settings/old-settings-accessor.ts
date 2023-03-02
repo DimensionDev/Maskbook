@@ -1,5 +1,5 @@
 import { head } from 'lodash-es'
-import { ECKeyIdentifier, PersonaIdentifier, ValueRefWithReady } from '@masknet/shared-base'
+import { ECKeyIdentifier, type PersonaIdentifier, type ValueRefWithReady } from '@masknet/shared-base'
 import { BooleanPreference } from '@masknet/plugin-infra'
 import {
     appearanceSettings,

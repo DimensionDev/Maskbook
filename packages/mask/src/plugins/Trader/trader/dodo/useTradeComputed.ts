@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js'
 import { useMemo } from 'react'
 import { rightShift, ZERO } from '@masknet/web3-shared-base'
-import { SwapRouteData, TradeComputed, TradeStrategy } from '../../types/index.js'
+import { type SwapRouteData, type TradeComputed, TradeStrategy } from '../../types/index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 export function useTradeComputed(

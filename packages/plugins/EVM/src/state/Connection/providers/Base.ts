@@ -8,8 +8,8 @@ import {
     chainResolver,
     createWeb3,
     createWeb3Provider,
-    ChainId,
-    ProviderType,
+    type ChainId,
+    type ProviderType,
     ProviderURL,
     EthereumMethodType,
 } from '@masknet/web3-shared-evm'

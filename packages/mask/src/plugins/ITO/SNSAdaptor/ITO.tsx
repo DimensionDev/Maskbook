@@ -4,10 +4,17 @@ import {
     isNativeTokenAddress,
     explorerResolver,
     chainResolver,
-    ChainId,
-    SchemaType,
+    type ChainId,
+    type SchemaType,
 } from '@masknet/web3-shared-evm'
-import { isZero, ZERO, isGreaterThan, isSameAddress, formatBalance, FungibleToken } from '@masknet/web3-shared-base'
+import {
+    isZero,
+    ZERO,
+    isGreaterThan,
+    isSameAddress,
+    formatBalance,
+    type FungibleToken,
+} from '@masknet/web3-shared-base'
 import { Box, Card, Link, Typography } from '@mui/material'
 import {
     SOCIAL_MEDIA_NAME,
@@ -33,7 +40,7 @@ import { useDestructCallback } from './hooks/useDestructCallback.js'
 import { useIfQualified } from './hooks/useIfQualified.js'
 import { usePoolTradeInfo } from './hooks/usePoolTradeInfo.js'
 import { checkRegionRestrict, decodeRegionCode, useIPRegion } from './hooks/useRegion.js'
-import { ITO_Status, JSON_PayloadInMask } from '../types.js'
+import { ITO_Status, type JSON_PayloadInMask } from '../types.js'
 import { StyledLinearProgress } from './StyledLinearProgress.js'
 import { SwapGuide, SwapStatus } from './SwapGuide.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'

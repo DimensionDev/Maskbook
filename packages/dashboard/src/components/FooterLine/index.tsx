@@ -1,4 +1,4 @@
-import { memo, useState, HTMLProps } from 'react'
+import { memo, useState, type HTMLProps } from 'react'
 import { styled, Breadcrumbs, Dialog, IconButton, Link, Typography } from '@mui/material'
 import { Close } from '@mui/icons-material'
 import { openWindow } from '@masknet/shared-base-ui'

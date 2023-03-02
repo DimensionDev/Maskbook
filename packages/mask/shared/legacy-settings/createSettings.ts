@@ -1,4 +1,4 @@
-import { ValueRef, ValueRefJSON, ValueRefWithReady, type ValueComparer } from '@masknet/shared-base'
+import { type ValueRef, ValueRefJSON, ValueRefWithReady, type ValueComparer } from '@masknet/shared-base'
 import type { Option } from 'ts-results-es'
 import { MaskMessages } from '../messages.js'
 

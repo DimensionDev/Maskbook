@@ -1,12 +1,12 @@
 import { uniqBy } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import { mapSubscription, mergeSubscription, safeEmptyList, StorageObject } from '@masknet/shared-base'
+import { mapSubscription, mergeSubscription, safeEmptyList, type StorageObject } from '@masknet/shared-base'
 import {
-    FungibleToken,
-    NonFungibleToken,
-    Token,
+    type FungibleToken,
+    type NonFungibleToken,
+    type Token,
     TokenType,
-    TokenState as Web3TokenState,
+    type TokenState as Web3TokenState,
 } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 

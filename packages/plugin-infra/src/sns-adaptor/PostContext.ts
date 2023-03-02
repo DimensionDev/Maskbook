@@ -1,10 +1,10 @@
 import { createContext, createElement, useContext } from 'react'
-import { Subscription, useSubscription } from 'use-subscription'
+import { type Subscription, useSubscription } from 'use-subscription'
 import type { Some } from 'ts-results-es'
 import {
     ObservableMap,
     ObservableSet,
-    PostIVIdentifier,
+    type PostIVIdentifier,
     ValueRef,
     type PostIdentifier,
     type ProfileIdentifier,

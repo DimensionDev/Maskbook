@@ -1,17 +1,17 @@
 import { memoize } from 'lodash-es'
 import { memoizePromise } from '@masknet/kit'
 import {
-    HubOptions,
-    HubIndicator,
-    FungibleAsset,
-    Pageable,
+    type HubOptions,
+    type HubIndicator,
+    type FungibleAsset,
+    type Pageable,
     TokenType,
     createPageable,
     createIndicator,
-    FungibleToken,
+    type FungibleToken,
     isSameAddress,
     CurrencyType,
-    NonFungibleToken,
+    type NonFungibleToken,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,

@@ -1,4 +1,4 @@
-import { ComponentProps, memo } from 'react'
+import { type ComponentProps, memo } from 'react'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import { Typography } from '@mui/material'

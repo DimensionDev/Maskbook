@@ -15,9 +15,15 @@ import {
     useAvailableBalance,
 } from '@masknet/shared'
 import { useNonFungibleOwnerTokens } from '@masknet/web3-hooks-evm'
-import { ChainId, SchemaType, useNftRedPacketConstants, formatTokenId, GasConfig } from '@masknet/web3-shared-evm'
+import {
+    type ChainId,
+    type SchemaType,
+    useNftRedPacketConstants,
+    formatTokenId,
+    type GasConfig,
+} from '@masknet/web3-shared-evm'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel.js'
-import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog.js'
+import { SelectNftTokenDialog, type OrderedERC721Token } from './SelectNftTokenDialog.js'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog.js'
 import { NFTSelectOption } from '../types.js'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'

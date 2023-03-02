@@ -4,9 +4,9 @@ import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { NextIDProof } from '@masknet/web3-providers'
 import {
-    PersonaIdentifier,
+    type PersonaIdentifier,
     ProfileIdentifier,
-    NextIDPlatform,
+    type NextIDPlatform,
     EnhanceableSite,
     EncryptionTargetType,
 } from '@masknet/shared-base'

@@ -1,10 +1,10 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
-import { mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
+import { mapSubscription, mergeSubscription, type StorageItem } from '@masknet/shared-base'
 import {
-    RecentTransaction,
+    type RecentTransaction,
     TransactionStatusType,
-    TransactionState as Web3TransactionState,
+    type TransactionState as Web3TransactionState,
 } from '@masknet/web3-shared-base'
 
 export type TransactionStorage<ChainId, Transaction> = Record<

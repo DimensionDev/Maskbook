@@ -1,10 +1,10 @@
-import { ReactNode, useCallback, useMemo, useState } from 'react'
-import { FixedSizeList, FixedSizeListProps, ListChildComponentProps } from 'react-window'
+import { type ReactNode, useCallback, useMemo, useState } from 'react'
+import { FixedSizeList, type FixedSizeListProps, type ListChildComponentProps } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-es'
 import { Box, Stack } from '@mui/material'
 import { makeStyles } from '../../UIHelper/index.js'
-import { MaskTextField, MaskTextFieldProps } from '../TextField/index.js'
+import { MaskTextField, type MaskTextFieldProps } from '../TextField/index.js'
 import { Icons } from '@masknet/icons'
 import { EmptyResult } from './EmptyResult.js'
 

@@ -1,6 +1,6 @@
 import { chunk, first, flatten } from 'lodash-es'
 import stringify from 'json-stable-stringify'
-import { ChainId, getTrendingConstants, isValidChainId } from '@masknet/web3-shared-evm'
+import { type ChainId, getTrendingConstants, isValidChainId } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { fetchJSON } from '../entry-helpers.js'
 

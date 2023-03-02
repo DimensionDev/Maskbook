@@ -1,5 +1,5 @@
 import { memoizePromise } from '@masknet/kit'
-import { steganographyEncodeImage as __steganographyEncodeImage, EncodeImageOptions } from '@masknet/encryption'
+import { steganographyEncodeImage as __steganographyEncodeImage, type EncodeImageOptions } from '@masknet/encryption'
 import { memoize } from 'lodash-es'
 
 async function fetchImage(url: string) {

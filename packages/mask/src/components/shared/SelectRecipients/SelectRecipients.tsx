@@ -3,8 +3,8 @@ import {
     EMPTY_LIST,
     NextIDPlatform,
     ProfileIdentifier,
-    ProfileInformation as Profile,
-    ProfileInformationFromNextID,
+    type ProfileInformation as Profile,
+    type ProfileInformationFromNextID,
 } from '@masknet/shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { batch } from 'async-call-rpc'

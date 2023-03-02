@@ -1,4 +1,3 @@
-import type {} from 'react/experimental'
 import * as React from 'react'
 import { memo, Suspense, useEffect, useState } from 'react'
 import type { TypedMessage, TypedMessagePromise } from '@masknet/typed-message'

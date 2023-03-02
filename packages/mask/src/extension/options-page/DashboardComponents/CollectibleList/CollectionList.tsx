@@ -7,7 +7,7 @@ import { ElementAnchor, RetryHint, useWeb3ProfileHiddenSettings } from '@masknet
 import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { CollectionType } from '@masknet/web3-providers/types'
-import { isSameAddress, SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
+import { isSameAddress, type SocialAccount, type SocialIdentity } from '@masknet/web3-shared-base'
 import { Box, Button, Stack, Typography, styled } from '@mui/material'
 import { useI18N } from '../../../../utils/index.js'
 import { CollectibleList } from './CollectibleList.js'

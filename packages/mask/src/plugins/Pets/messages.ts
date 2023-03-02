@@ -1,4 +1,4 @@
-import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
+import { createPluginMessage, type PluginMessageEmitter } from '@masknet/plugin-infra'
 import { serializer } from '@masknet/shared-base'
 import { PetsPluginID } from './constants.js'
 import type { PetsDialogEvent } from './types.js'

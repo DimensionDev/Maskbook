@@ -1,4 +1,4 @@
-import { GeneratedIconProps, Icons } from '@masknet/icons'
+import { type GeneratedIconProps, Icons } from '@masknet/icons'
 import { makeStyles } from '../../UIHelper/index.js'
 
 const useStyles = makeStyles()((theme) => ({

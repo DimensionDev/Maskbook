@@ -1,4 +1,4 @@
-import { useCallback, MouseEventHandler } from 'react'
+import { useCallback, type MouseEventHandler } from 'react'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Grid, Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'

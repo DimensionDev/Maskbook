@@ -3,10 +3,10 @@ import {
     createIndicator,
     createNextIndicator,
     createPageable,
-    FungibleAsset,
-    HubIndicator,
-    HubOptions,
-    Pageable,
+    type FungibleAsset,
+    type HubIndicator,
+    type HubOptions,
+    type Pageable,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'

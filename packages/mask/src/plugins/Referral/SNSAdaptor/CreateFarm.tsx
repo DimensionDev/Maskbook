@@ -16,14 +16,14 @@ import {
     TabsCreateFarm,
     TokenType,
     TransactionStatus,
-    PageInterface,
+    type PageInterface,
     PagesType,
-    ReferralMetaData,
-    FungibleTokenDetailed,
+    type ReferralMetaData,
+    type FungibleTokenDetailed,
 } from '../types.js'
 import { ATTRACE_FEE_PERCENT, NATIVE_TOKEN, META_KEY } from '../constants.js'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
-import { PluginReferralMessages, SelectTokenUpdated } from '../messages.js'
+import { PluginReferralMessages, type SelectTokenUpdated } from '../messages.js'
 import { roundValue, getRequiredChainId } from '../helpers/index.js'
 import { runCreateERC20PairFarm } from './utils/referralFarm.js'
 

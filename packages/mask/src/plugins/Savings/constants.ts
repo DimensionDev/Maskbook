@@ -1,6 +1,6 @@
 import { PluginID } from '@masknet/shared-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import { ChainId, createERC20Tokens, createNativeToken, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, createERC20Tokens, createNativeToken, type SchemaType } from '@masknet/web3-shared-evm'
 
 export const SAVINGS_PLUGIN_NAME = 'Savings'
 export const SAVINGS_PLUGIN_ID = PluginID.Savings

@@ -1,7 +1,7 @@
 import type { AESCryptoKey } from '@masknet/base'
 import {
     decrypt as lib_decrypt,
-    DecryptError,
+    type DecryptError,
     DecryptProgressKind,
     parsePayload,
     TwitterDecoder,

@@ -1,21 +1,21 @@
 import { memoize } from 'lodash-es'
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
-import { AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
+import { type AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
 import { delay } from '@masknet/kit'
 import {
     AddressType,
     SchemaType,
-    ChainId,
+    type ChainId,
     createContract,
     createWeb3Provider,
     createWeb3Request,
     isValidAddress,
-    Web3Provider,
-    Transaction,
-    TransactionDetailed,
-    TransactionReceipt,
-    Block,
+    type Web3Provider,
+    type Transaction,
+    type TransactionDetailed,
+    type TransactionReceipt,
+    type Block,
     isEmptyHex,
     getTransactionStatusType,
     EthereumMethodType,
@@ -26,17 +26,17 @@ import {
     createNativeToken,
     getTokenConstant,
     getEthereumConstant,
-    TransactionSignature,
+    type TransactionSignature,
     ProviderURL,
     getAverageBlockDelay,
 } from '@masknet/web3-shared-evm'
 import {
-    FungibleToken,
-    NonFungibleCollection,
-    NonFungibleToken,
-    NonFungibleTokenContract,
-    NonFungibleTokenMetadata,
-    TransactionStatusType,
+    type FungibleToken,
+    type NonFungibleCollection,
+    type NonFungibleToken,
+    type NonFungibleTokenContract,
+    type NonFungibleTokenMetadata,
+    type TransactionStatusType,
     createNonFungibleToken,
     createNonFungibleTokenCollection,
     createNonFungibleTokenContract,

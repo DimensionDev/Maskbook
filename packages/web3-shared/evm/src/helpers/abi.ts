@@ -1,5 +1,5 @@
 import type Web3 from 'web3'
-import { AbiOutput, hexToBytes, toAscii } from 'web3-utils'
+import { type AbiOutput, hexToBytes, toAscii } from 'web3-utils'
 
 export function decodeOutputString(web3: Web3, abis: AbiOutput[], output: string) {
     if (abis.length === 1) return web3.eth.abi.decodeParameter(abis[0], output)

@@ -14,7 +14,7 @@ import {
     ChainId,
     formatGweiToWei,
     formatWeiToGwei,
-    ChainIdOptionalRecord,
+    type ChainIdOptionalRecord,
     formatWeiToEther,
 } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'

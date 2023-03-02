@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
+import { MutationObserverWatcher, type LiveSelector } from '@dimensiondev/holoflows-kit'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { isReplyPageSelector, postEditorInPopupSelector, searchReplyToolbarSelector } from '../utils/selector.js'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'

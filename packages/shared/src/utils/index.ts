@@ -1,10 +1,10 @@
 import {
     CurrencyType,
-    FungibleAsset,
-    FungibleToken,
+    type FungibleAsset,
+    type FungibleToken,
     leftShift,
     multipliedBy,
-    NonFungibleToken,
+    type NonFungibleToken,
     TokenType,
 } from '@masknet/web3-shared-base'
 

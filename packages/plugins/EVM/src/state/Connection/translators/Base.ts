@@ -7,8 +7,8 @@ import {
     chainResolver,
     formatWeiToGwei,
     PayloadEditor,
-    Translator,
-    ConnectionContext,
+    type Translator,
+    type ConnectionContext,
 } from '@masknet/web3-shared-evm'
 import { Web3StateSettings } from '../../../settings/index.js'
 

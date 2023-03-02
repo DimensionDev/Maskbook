@@ -1,4 +1,4 @@
-import { IntervalWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
+import { IntervalWatcher, type LiveSelector } from '@dimensiondev/holoflows-kit'
 
 export const untilElementAvailable = async (ls: LiveSelector<HTMLElement, boolean>, timeout = 5000) => {
     const w = new IntervalWatcher(ls)

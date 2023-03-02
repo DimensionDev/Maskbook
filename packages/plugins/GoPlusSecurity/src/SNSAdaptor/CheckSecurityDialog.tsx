@@ -1,4 +1,4 @@
-import { memo, ReactNode, useEffect, useState } from 'react'
+import { memo, type ReactNode, useEffect, useState } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { Box, DialogActions, DialogContent, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'

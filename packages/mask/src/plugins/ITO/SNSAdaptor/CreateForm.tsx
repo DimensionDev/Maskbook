@@ -1,9 +1,9 @@
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import { type ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
 import formatDateTime from 'date-fns/format'
-import { SchemaType, formatAmount, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
-import { isGreaterThan, isZero, FungibleToken, leftShift } from '@masknet/web3-shared-base'
+import { SchemaType, formatAmount, useITOConstants, type ChainId } from '@masknet/web3-shared-evm'
+import { isGreaterThan, isZero, type FungibleToken, leftShift } from '@masknet/web3-shared-base'
 import {
     TokenIcon,
     PluginWalletStatusBar,
@@ -26,7 +26,7 @@ import type { ExchangeTokenAndAmountState } from './hooks/useExchangeTokenAmount
 import type { PoolSettings } from './hooks/useFill.js'
 import { useQualificationVerify } from './hooks/useQualificationVerify.js'
 import { decodeRegionCode, encodeRegionCode, regionCodes, useRegionSelect } from './hooks/useRegion.js'
-import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting.js'
+import { type AdvanceSettingData, AdvanceSetting } from './AdvanceSetting.js'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup.js'
 import { RegionSelect } from './RegionSelect.js'
 import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'

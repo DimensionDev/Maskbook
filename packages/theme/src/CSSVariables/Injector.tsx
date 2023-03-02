@@ -1,4 +1,4 @@
-import { GlobalStyles, Theme, useTheme } from '@mui/material'
+import { GlobalStyles, type Theme, useTheme } from '@mui/material'
 import { useRef } from 'react'
 import { CSSVariableInjectorCSS } from './applyToDOM.js'
 

@@ -1,17 +1,22 @@
 import * as bip39 from 'bip39'
 import { decodeArrayBuffer } from '@masknet/kit'
 import {
-    EC_Public_JsonWebKey,
-    PersonaIdentifier,
+    type EC_Public_JsonWebKey,
+    type PersonaIdentifier,
     isEC_Private_JsonWebKey,
-    ProfileIdentifier,
-    AESJsonWebKey,
+    type ProfileIdentifier,
+    type AESJsonWebKey,
 } from '@masknet/shared-base'
 import { createPersonaByJsonWebKey } from '../../../database/persona/helper.js'
 import { decode } from '@msgpack/msgpack'
 import { omit } from 'lodash-es'
 import { personaRecordToMobilePersona } from './mobile.js'
-import { attachProfileDB, LinkedProfileDetails, queryPersonaDB, queryPersonasDB } from '../../../database/persona/db.js'
+import {
+    attachProfileDB,
+    type LinkedProfileDetails,
+    queryPersonaDB,
+    queryPersonasDB,
+} from '../../../database/persona/db.js'
 import {
     deriveLocalKeyFromECDHKey,
     generate_ECDH_256k1_KeyPair_ByMnemonicWord,

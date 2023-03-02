@@ -1,8 +1,8 @@
 import {
-    AESJsonWebKey,
+    type AESJsonWebKey,
     ECKeyIdentifierFromJsonWebKey,
-    EC_Private_JsonWebKey,
-    EC_Public_JsonWebKey,
+    type EC_Private_JsonWebKey,
+    type EC_Public_JsonWebKey,
     isEC_Private_JsonWebKey,
     isEC_Public_JsonWebKey,
     isAESJsonWebKey,

@@ -1,7 +1,7 @@
 import { nth } from 'lodash-es'
 import type { FeeHistoryResult } from 'web3-eth'
 import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
-import { ChainId, chainResolver, GasOption } from '@masknet/web3-shared-evm'
+import { type ChainId, chainResolver, type GasOption } from '@masknet/web3-shared-evm'
 import { Web3API } from './Web3API.js'
 import type { GasOptionAPI } from '../../entry-types.js'
 

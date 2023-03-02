@@ -13,7 +13,7 @@ import {
     sendCode,
     uploadBackupValue,
     verifyCode,
-    VerifyCodeRequest,
+    type VerifyCodeRequest,
 } from '../../api.js'
 import { useLanguage } from '../../../Personas/api.js'
 import { decryptBackup, encryptBackup } from '@masknet/backup-format'

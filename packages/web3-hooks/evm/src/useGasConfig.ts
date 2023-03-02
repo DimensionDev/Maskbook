@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { GasEditor, ChainId, GasConfig } from '@masknet/web3-shared-evm'
+import { GasEditor, type ChainId, type GasConfig } from '@masknet/web3-shared-evm'
 import { useGasOptions } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 

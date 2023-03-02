@@ -1,9 +1,9 @@
 import urlcat from 'urlcat'
 import {
-    ChainDescriptor,
+    type ChainDescriptor,
     CurrencyType,
-    NetworkDescriptor,
-    ProviderDescriptor,
+    type NetworkDescriptor,
+    type ProviderDescriptor,
     SocialAddressType,
     SourceType,
 } from '../specs/index.js'

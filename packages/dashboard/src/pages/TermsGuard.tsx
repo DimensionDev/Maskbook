@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useEffect } from 'react'
+import { type FC, type PropsWithChildren, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 import urlcat from 'urlcat'

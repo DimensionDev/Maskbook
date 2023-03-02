@@ -2,7 +2,7 @@ import { assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
 import { SocialNetworkEnum } from '@masknet/encryption'
 import type { SocialNetworkUI } from '@masknet/types'
-import { IdentityResolved, Plugin, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { type IdentityResolved, type Plugin, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '@masknet/shared'
 import {
     createSubscriptionFromAsync,
@@ -16,7 +16,7 @@ import {
 } from '@masknet/shared-base'
 import type { ThemeSettings } from '@masknet/web3-shared-base'
 import { Flags } from '../../shared/index.js'
-import { SetupGuideContext, SetupGuideStep } from '../../shared/legacy-settings/types.js'
+import { type SetupGuideContext, SetupGuideStep } from '../../shared/legacy-settings/types.js'
 import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../shared/legacy-settings/settings.js'
 import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
 import Services from '../extension/service.js'

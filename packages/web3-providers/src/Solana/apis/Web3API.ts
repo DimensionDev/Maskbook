@@ -1,32 +1,32 @@
 import { memoize } from 'lodash-es'
 import {
-    AddressType,
-    ChainId,
+    type AddressType,
+    type ChainId,
     SchemaType,
-    Transaction,
-    TransactionDetailed,
-    TransactionReceipt,
-    Block,
-    Web3Provider,
-    Web3,
+    type Transaction,
+    type TransactionDetailed,
+    type TransactionReceipt,
+    type Block,
+    type Web3Provider,
+    type Web3,
     createClient,
     createNativeToken,
     isNativeTokenAddress,
     getNativeTokenAddress,
     decodeAddress,
-    TransactionSignature,
+    type TransactionSignature,
 } from '@masknet/web3-shared-solana'
 import {
     TransactionStatusType,
-    FungibleToken,
-    NonFungibleToken,
-    NonFungibleTokenMetadata,
-    NonFungibleTokenContract,
-    NonFungibleCollection,
+    type FungibleToken,
+    type NonFungibleToken,
+    type NonFungibleTokenMetadata,
+    type NonFungibleTokenContract,
+    type NonFungibleCollection,
     isSameAddress,
     createNonFungibleToken,
 } from '@masknet/web3-shared-base'
-import { Connection, PublicKey, TransactionResponse, sendAndConfirmRawTransaction } from '@solana/web3.js'
+import { type Connection, PublicKey, type TransactionResponse, sendAndConfirmRawTransaction } from '@solana/web3.js'
 import { MagicEdenAPI } from '../../MagicEden/index.js'
 import { SolanaFungibleAPI } from '../../Solana/index.js'
 import type { Web3BaseAPI } from '../../entry-types.js'

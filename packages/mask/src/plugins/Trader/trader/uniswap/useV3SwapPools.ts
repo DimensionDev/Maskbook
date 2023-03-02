@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import type { Currency, Token } from '@uniswap/sdk-core'
-import { FeeAmount, Pool } from '@uniswap/v3-sdk'
+import { FeeAmount, type Pool } from '@uniswap/v3-sdk'
 import { TradeProvider } from '@masknet/public-api'
 import { useAllCurrencyCombinations } from './useAllCommonPairs.js'
 import { PoolState, usePools } from './usePools.js'

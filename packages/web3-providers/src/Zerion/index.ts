@@ -2,21 +2,21 @@ import { first, unionWith } from 'lodash-es'
 import { getEnumAsArray } from '@masknet/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import {
-    Transaction,
-    HubOptions,
+    type Transaction,
+    type HubOptions,
     createPageable,
     createIndicator,
-    Pageable,
+    type Pageable,
     isSameAddress,
     TokenType,
     SourceType,
     createNextIndicator,
-    HubIndicator,
+    type HubIndicator,
     scale10,
     GasOptionType,
     toFixed,
 } from '@masknet/web3-shared-base'
-import { ChainId, createNativeToken, GasOption, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
+import { ChainId, createNativeToken, type GasOption, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import type { ZerionNonFungibleTokenItem, ZerionNonFungibleCollection, ZerionCoin } from './types.js'
 import { formatAsset, formatTransactions, isValidAsset } from './helpers.js'
 import {

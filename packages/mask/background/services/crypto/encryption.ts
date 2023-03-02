@@ -1,13 +1,13 @@
 import type { EC_Public_CryptoKey, ProfileIdentifier } from '@masknet/shared-base'
-import { isTypedMessageText, SerializableTypedMessages, TypedMessageText } from '@masknet/typed-message'
+import { isTypedMessageText, type SerializableTypedMessages, type TypedMessageText } from '@masknet/typed-message'
 import {
-    EC_Key,
+    type EC_Key,
     EC_KeyCurveEnum,
     encrypt,
-    EncryptionResultE2EMap,
-    EncryptTargetE2E,
-    EncryptTargetPublic,
-    SocialNetworkEnum,
+    type EncryptionResultE2EMap,
+    type EncryptTargetE2E,
+    type EncryptTargetPublic,
+    type SocialNetworkEnum,
     SocialNetworkEnumToProfileDomain,
 } from '@masknet/encryption'
 import { encryptByLocalKey, deriveAESByECDH, queryPublicKey } from '../../database/persona/helper.js'

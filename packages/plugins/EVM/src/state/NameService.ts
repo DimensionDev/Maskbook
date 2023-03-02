@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { NameServiceState } from '@masknet/web3-state'
-import { ChainId, formatEthereumAddress, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
+import { type ChainId, formatEthereumAddress, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { ENS, SpaceID } from '@masknet/web3-providers'
 import type { NameServiceAPI } from '@masknet/web3-providers/types'
 

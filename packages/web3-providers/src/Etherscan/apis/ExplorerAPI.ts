@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { ChainId, EtherscanURL } from '@masknet/web3-shared-evm'
+import { type ChainId, EtherscanURL } from '@masknet/web3-shared-evm'
 import type { Transaction } from '../types.js'
 import { toTransaction } from '../helpers.js'
 import type { ExplorerAPI } from '../../entry-types.js'

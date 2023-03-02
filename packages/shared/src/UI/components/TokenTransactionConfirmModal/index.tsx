@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { AssetPreviewer, InjectedDialog, InjectedDialogProps, TokenIcon } from '@masknet/shared'
+import { AssetPreviewer, InjectedDialog, type InjectedDialogProps, TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNonFungibleAsset, useWeb3State } from '@masknet/web3-hooks-base'

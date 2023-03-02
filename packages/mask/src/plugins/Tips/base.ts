@@ -1,4 +1,4 @@
-import { CurrentSNSNetwork, Plugin } from '@masknet/plugin-infra'
+import { CurrentSNSNetwork, type Plugin } from '@masknet/plugin-infra'
 import { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { languages } from './locales/languages.js'

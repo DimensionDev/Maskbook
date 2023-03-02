@@ -1,3 +1,4 @@
+/// <reference types="react/next" />
 import { unstable_useCacheRefresh, useContext } from 'react'
 import { millify } from 'millify'
 import { formatPercentage, isSameAddress } from '@masknet/web3-shared-base'

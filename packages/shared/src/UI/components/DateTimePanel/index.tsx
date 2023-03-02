@@ -1,4 +1,4 @@
-import { TextFieldProps, InputBase, Typography, inputBaseClasses } from '@mui/material'
+import { type TextFieldProps, InputBase, Typography, inputBaseClasses } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import formatDateTime from 'date-fns/format'
 

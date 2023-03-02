@@ -7,7 +7,7 @@ import {
     makeTypedMessageText,
     makeTypedMessageTuple,
     ParseLinkTransformer,
-    TypedMessage,
+    type TypedMessage,
     visitEachTypedMessageChild,
 } from '@masknet/typed-message'
 import { unstable_TUPLE_RENDER_STYLE } from '@masknet/typed-message-react'

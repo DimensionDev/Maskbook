@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { IconProps, Link } from '@mui/material'
+import { type IconProps, Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
 import { useSharedI18N, useSnackbarCallback } from '../../../index.js'

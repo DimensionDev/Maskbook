@@ -1,5 +1,5 @@
 import { compact } from 'lodash-es'
-import { isSameAddress, SearchResult, SearchResultType } from '@masknet/web3-shared-base'
+import { isSameAddress, type SearchResult, SearchResultType } from '@masknet/web3-shared-base'
 import type { Handler } from './type.js'
 import { FuseAPI } from '../Fuse/index.js'
 

@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { PluginID, NetworkPluginID, isDashboardPage, CrossIsolationMessages, TokenType } from '@masknet/shared-base'
+import {
+    PluginID,
+    NetworkPluginID,
+    isDashboardPage,
+    CrossIsolationMessages,
+    type TokenType,
+} from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import {
     useChainContext,
@@ -9,7 +15,7 @@ import {
     useWeb3State,
     useFungibleToken,
 } from '@masknet/web3-hooks-base'
-import { ChainId, GasEditor, SchemaType, Transaction } from '@masknet/web3-shared-evm'
+import { type ChainId, GasEditor, SchemaType, type Transaction } from '@masknet/web3-shared-evm'
 import { DialogContent, dialogTitleClasses, IconButton } from '@mui/material'
 import { InjectedDialog, useSelectAdvancedSettings, NetworkTab } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
@@ -17,7 +23,7 @@ import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { PluginTraderMessages } from '../../messages.js'
-import { Trader, TraderRef } from './Trader.js'
+import { Trader, type TraderRef } from './Trader.js'
 import { useI18N } from '../../../../utils/index.js'
 import { currentSlippageSettings } from '../../settings.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'

@@ -5,7 +5,7 @@ import {
     ObservableSet,
     parseURLs,
     PostIdentifier,
-    ProfileIdentifier,
+    type ProfileIdentifier,
     createSubscriptionFromValueRef,
     SubscriptionDebug as debug,
     mapSubscription,

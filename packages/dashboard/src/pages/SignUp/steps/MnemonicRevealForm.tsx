@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Stack, Box, IconButton, FormControlLabel, Checkbox } from '@mui/material'
 import { Refresh as RefreshIcon, Print as PrintIcon } from '@mui/icons-material'
 import { MaskColorVar, useCustomSnackbar } from '@masknet/theme'
-import { DashboardRoutes, ECKeyIdentifier } from '@masknet/shared-base'
+import { DashboardRoutes, type ECKeyIdentifier } from '@masknet/shared-base'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader.js'
 import {
     Body,

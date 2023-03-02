@@ -1,6 +1,6 @@
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useSharedI18N } from '../../../locales/index.js'
-import { makeStyles, ActionButtonProps, ActionButton } from '@masknet/theme'
+import { makeStyles, type ActionButtonProps, ActionButton } from '@masknet/theme'
 import { useEffect, useMemo } from 'react'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'

@@ -1,13 +1,13 @@
 import {
     createFungibleToken as createFungibleTokenShared,
     CurrencyType,
-    FungibleAsset,
-    FungibleToken,
+    type FungibleAsset,
+    type FungibleToken,
     leftShift,
     multipliedBy,
 } from '@masknet/web3-shared-base'
 import { getTokenConstants } from '../constants/index.js'
-import { ChainId, SchemaType } from '../types.js'
+import { type ChainId, SchemaType } from '../types.js'
 import { chainResolver } from './resolver.js'
 
 export function createNativeToken(chainId: ChainId) {

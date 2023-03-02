@@ -1,5 +1,5 @@
 import { useSubscription } from 'use-subscription'
-import { UNDEFINED, NetworkPluginID } from '@masknet/shared-base'
+import { UNDEFINED, type NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from './useWeb3State.js'
 
 export function useNonFungibleAssetSourceType<T extends NetworkPluginID>(pluginID?: T) {

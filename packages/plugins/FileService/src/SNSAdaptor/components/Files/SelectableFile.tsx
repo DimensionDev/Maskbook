@@ -2,9 +2,9 @@ import { Icons } from '@masknet/icons'
 import { formatFileSize } from '@masknet/kit'
 import { makeStyles } from '@masknet/theme'
 import { Checkbox, Typography } from '@mui/material'
-import { FC, memo } from 'react'
+import { type FC, memo } from 'react'
 import { Translate } from '../../../locales/index.js'
-import { FileBaseProps, FileFrame } from './FileFrame.js'
+import { type FileBaseProps, FileFrame } from './FileFrame.js'
 
 const useStyles = makeStyles()((theme) => ({
     desc: {

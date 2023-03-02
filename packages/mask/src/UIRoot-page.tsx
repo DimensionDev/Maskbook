@@ -1,5 +1,5 @@
 import { Suspense, useMemo } from 'react'
-import { StyledEngineProvider, Theme } from '@mui/material'
+import { StyledEngineProvider, type Theme } from '@mui/material'
 import { EnvironmentContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { TelemetryProvider } from '@masknet/web3-telemetry/hooks'
 import { I18NextProviderHMR, SharedContextProvider, SubscriptionProvider } from '@masknet/shared'
@@ -7,7 +7,7 @@ import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '
 import { ErrorBoundary, BuildInfo, useValueRef } from '@masknet/shared-base-ui'
 import { compose, getSiteType, i18NextInstance, NetworkPluginID } from '@masknet/shared-base'
 import { buildInfoMarkdown } from './utils/BuildInfoMarkdown.js'
-import { pluginIDSettings } from './../shared/legacy-settings/settings.js'
+import { pluginIDSettings } from '../shared/legacy-settings/settings.js'
 
 export function MaskUIRootPage(useTheme: () => Theme, children: React.ReactNode, fallback?: React.ReactNode) {
     return compose(

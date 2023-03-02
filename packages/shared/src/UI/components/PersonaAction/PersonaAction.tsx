@@ -5,7 +5,7 @@ import { PlatformAvatar } from './PlatformAvatar.js'
 import type { PersonaInformation } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { Icons } from '@masknet/icons'
-import { PropsWithChildren, useCallback, useState } from 'react'
+import { type PropsWithChildren, useCallback, useState } from 'react'
 import { formatPublicKey } from '../../../utils/index.js'
 import { useSharedI18N } from '../../../locales/index.js'
 

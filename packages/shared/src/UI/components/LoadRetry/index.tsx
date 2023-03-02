@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Button, ButtonProps, Stack, Typography } from '@mui/material'
+import { Button, type ButtonProps, Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales/index.js'
 
 interface RetryHintProps {

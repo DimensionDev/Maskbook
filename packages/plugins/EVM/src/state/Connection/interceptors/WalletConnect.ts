@@ -1,5 +1,5 @@
 import { toHex } from 'web3-utils'
-import { ConnectionContext, EthereumMethodType, Middleware } from '@masknet/web3-shared-evm'
+import { type ConnectionContext, EthereumMethodType, type Middleware } from '@masknet/web3-shared-evm'
 
 export class WalletConnect implements Middleware<ConnectionContext> {
     async fn(context: ConnectionContext, next: () => Promise<void>) {

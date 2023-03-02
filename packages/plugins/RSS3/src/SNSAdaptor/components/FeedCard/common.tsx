@@ -1,4 +1,4 @@
-import { ReverseAddressProps, ReversedAddress } from '@masknet/shared'
+import { type ReverseAddressProps, ReversedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'

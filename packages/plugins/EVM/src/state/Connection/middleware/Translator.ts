@@ -1,4 +1,9 @@
-import { ChainId, Middleware, Translator as Translator_, ConnectionContext } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    type Middleware,
+    type Translator as Translator_,
+    type ConnectionContext,
+} from '@masknet/web3-shared-evm'
 import { Base } from '../translators/Base.js'
 import { Astar } from '../translators/Astar.js'
 import { Polygon } from '../translators/Polygon.js'

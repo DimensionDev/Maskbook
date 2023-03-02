@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { useSnackbarCallback } from '@masknet/shared'
-import { formatPersonaFingerprint, ProfileInformationFromNextID } from '@masknet/shared-base'
+import { formatPersonaFingerprint, type ProfileInformationFromNextID } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Checkbox, ListItem, ListItemAvatar, ListItemText } from '@mui/material'
 import { truncate } from 'lodash-es'

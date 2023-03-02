@@ -1,7 +1,7 @@
 import { memo, useEffect, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router-dom'
-import { EnhanceableSite, NextIDAction, PopupRoutes, SignType } from '@masknet/shared-base'
+import { type EnhanceableSite, NextIDAction, PopupRoutes, SignType } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID } from '@masknet/shared'
 import { usePopupCustomSnackbar } from '@masknet/theme'

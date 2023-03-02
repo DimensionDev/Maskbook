@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
+import { type EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import type { RSS3_KEY_SNS } from '../../constants.js'
 import type { AvatarMetaDB } from '../../types.js'
 import { useSaveAvatarToRSS3 } from './useSaveNFTAvatarToRSS3.js'

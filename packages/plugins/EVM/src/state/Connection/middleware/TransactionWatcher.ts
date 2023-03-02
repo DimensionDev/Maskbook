@@ -1,5 +1,5 @@
 import type { RecognizableError } from '@masknet/web3-shared-base'
-import { ConnectionContext, EthereumMethodType, Middleware } from '@masknet/web3-shared-evm'
+import { type ConnectionContext, EthereumMethodType, type Middleware } from '@masknet/web3-shared-evm'
 import { Web3StateSettings } from '../../../settings/index.js'
 
 export class TransactionWatcher implements Middleware<ConnectionContext> {

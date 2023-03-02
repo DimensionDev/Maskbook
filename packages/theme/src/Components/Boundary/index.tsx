@@ -1,4 +1,14 @@
-import { cloneElement, createContext, FC, memo, ReactElement, RefObject, useContext, useMemo, useRef } from 'react'
+import {
+    cloneElement,
+    createContext,
+    type FC,
+    memo,
+    type ReactElement,
+    type RefObject,
+    useContext,
+    useMemo,
+    useRef,
+} from 'react'
 
 interface Options {
     boundaryRef: RefObject<HTMLElement>

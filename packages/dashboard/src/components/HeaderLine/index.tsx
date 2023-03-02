@@ -1,4 +1,4 @@
-import { FC, HTMLProps, memo } from 'react'
+import { type FC, type HTMLProps, memo } from 'react'
 import { useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
 

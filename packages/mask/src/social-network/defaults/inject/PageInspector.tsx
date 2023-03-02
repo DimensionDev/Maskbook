@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { PageInspector, PageInspectorProps } from '../../../components/InjectedComponents/PageInspector.js'
+import { PageInspector, type PageInspectorProps } from '../../../components/InjectedComponents/PageInspector.js'
 import { attachReactTreeWithoutContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 
 export interface InjectPageInspectorDefaultConfig {}

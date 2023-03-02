@@ -7,6 +7,10 @@ import { AsyncCall, AsyncGeneratorCall } from 'async-call-rpc/full'
 import { assertEnvironment, Environment, MessageTarget, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { getLocalImplementation, serializer } from '@masknet/shared-base'
 import type { GeneratorServices, Services } from './types.js'
+// #endregion
+
+// #region Setup GeneratorServices
+import { decryptionWithSocialNetworkDecoding } from './crypto/decryption.js'
 assertEnvironment(Environment.ManifestBackground)
 
 const debugMode = process.env.NODE_ENV === 'development' || process.env.engine === 'safari'
@@ -61,10 +65,6 @@ function setup<K extends keyof Services>(key: K, implementation: () => Promise<S
         thenable: false,
     })
 }
-// #endregion
-
-// #region Setup GeneratorServices
-import { decryptionWithSocialNetworkDecoding } from './crypto/decryption.js'
 {
     const GeneratorService: GeneratorServices = {
         decryption: decryptionWithSocialNetworkDecoding,

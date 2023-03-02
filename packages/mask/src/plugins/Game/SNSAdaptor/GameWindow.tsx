@@ -7,7 +7,7 @@ import { IconClose, IconFull, IconShare } from '../constants.js'
 import { getCurrentIdentifier } from '../../../social-network-adaptor/utils.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { GameInfo, GameNFT } from '../types.js'
-import { NetworkPluginID, EnhanceableSite } from '@masknet/shared-base'
+import { type NetworkPluginID, EnhanceableSite } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({
     root: {

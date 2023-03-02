@@ -1,4 +1,4 @@
-import { Composer, ConnectionContext } from '@masknet/web3-shared-evm'
+import { Composer, type ConnectionContext } from '@masknet/web3-shared-evm'
 import { AddressBook } from './middleware/AddressBook.js'
 import { Interceptor } from './middleware/Interceptor.js'
 import { Nonce } from './middleware/Nonce.js'

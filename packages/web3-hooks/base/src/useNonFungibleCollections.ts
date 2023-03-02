@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
-import { asyncIteratorToArray, NetworkPluginID } from '@masknet/shared-base'
-import { HubIndicator, NonFungibleCollection, pageableToIterator } from '@masknet/web3-shared-base'
+import { asyncIteratorToArray, type NetworkPluginID } from '@masknet/shared-base'
+import { type HubIndicator, type NonFungibleCollection, pageableToIterator } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'

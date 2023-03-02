@@ -1,4 +1,4 @@
-import { makeStyles, ActionButton, ActionButtonProps } from '@masknet/theme'
+import { makeStyles, ActionButton, type ActionButtonProps } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useSharedI18N } from '../../../locales/index.js'

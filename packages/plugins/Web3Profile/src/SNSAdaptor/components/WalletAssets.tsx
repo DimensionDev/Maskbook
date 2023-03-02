@@ -8,7 +8,7 @@ import { ChainId, explorerResolver, NETWORK_DESCRIPTORS } from '@masknet/web3-sh
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import { Empty } from './Empty.js'
 import { CollectionList } from './CollectionList.js'
-import { PersonaImageIcon, CollectionTypes, WalletTypes } from '@masknet/shared'
+import { PersonaImageIcon, type CollectionTypes, type WalletTypes } from '@masknet/shared'
 import { SceneMap, Scene } from '../../constants.js'
 
 const useStyles = makeStyles()((theme) => {

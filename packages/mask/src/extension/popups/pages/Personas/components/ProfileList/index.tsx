@@ -9,11 +9,11 @@ import { Avatar, Link, List, ListItem, ListItemText, Typography } from '@mui/mat
 import { definedSocialNetworkUIs } from '../../../../../../social-network/index.js'
 import { SOCIAL_MEDIA_ICON_MAPPING, usePersonaProofs } from '@masknet/shared'
 import {
-    ProfileIdentifier,
-    ProfileInformation,
+    type ProfileIdentifier,
+    type ProfileInformation,
     EnhanceableSite,
     NextIDAction,
-    NextIDPlatform,
+    type NextIDPlatform,
     PopupRoutes,
     EMPTY_LIST,
 } from '@masknet/shared-base'

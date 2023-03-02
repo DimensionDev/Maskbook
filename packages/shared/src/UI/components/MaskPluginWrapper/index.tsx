@@ -1,14 +1,14 @@
 import { Typography, SnackbarContent, Link } from '@mui/material'
 import { makeStyles, MaskColorVar, MaskLightTheme } from '@masknet/theme'
-import { Suspense, ReactNode, useMemo, forwardRef, useImperativeHandle, useState } from 'react'
+import { Suspense, type ReactNode, useMemo, forwardRef, useImperativeHandle, useState } from 'react'
 import { useSharedI18N } from '@masknet/shared'
 import { Box } from '@mui/system'
 import {
     usePluginI18NField,
     PluginI18NFieldRender,
-    PluginWrapperComponent,
-    Plugin,
-    PluginWrapperMethods,
+    type PluginWrapperComponent,
+    type Plugin,
+    type PluginWrapperMethods,
 } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
 

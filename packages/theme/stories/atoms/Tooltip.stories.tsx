@@ -1,5 +1,5 @@
 import { MuiArgs, story } from '../utils/index.js'
-import { TooltipProps, Tooltip as MuiTooltip, Button } from '@mui/material'
+import { type TooltipProps, Tooltip as MuiTooltip, Button } from '@mui/material'
 import { useState } from 'react'
 
 const { meta, of } = story((props: TooltipProps) => {

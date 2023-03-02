@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Trade as V2Trade } from '@uniswap/v2-sdk'
-import { Percent, Fraction, CurrencyAmount, Currency } from '@uniswap/sdk-core'
+import { Percent, Fraction, CurrencyAmount, type Currency } from '@uniswap/sdk-core'
 import type { Trade } from '../../types/index.js'
 
 const BASE_FEE = new Percent(30, 10000)

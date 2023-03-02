@@ -1,4 +1,4 @@
-import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
+import { type ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import { fetchJSON } from '../../entry-helpers.js'
 import { REDPACKET_API_URL, NFT_REDPACKET_API_URL } from '../constants.js'
 

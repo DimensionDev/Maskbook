@@ -4,9 +4,9 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     createIndicator,
     createPageable,
-    HubOptions,
-    NonFungibleAsset,
-    Pageable,
+    type HubOptions,
+    type NonFungibleAsset,
+    type Pageable,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-solana'

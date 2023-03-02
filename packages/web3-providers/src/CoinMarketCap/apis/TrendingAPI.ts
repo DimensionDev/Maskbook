@@ -2,7 +2,7 @@ import getUnixTime from 'date-fns/getUnixTime'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { TokenType, SourceType } from '@masknet/web3-shared-base'
 import {
-    ChainId,
+    type ChainId,
     chainResolver,
     getTokenConstant,
     isNativeTokenSymbol,

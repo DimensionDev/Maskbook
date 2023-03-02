@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { IconButton, InputBase, InputBaseProps } from '@mui/material'
+import { IconButton, InputBase, type InputBaseProps } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
     input: {

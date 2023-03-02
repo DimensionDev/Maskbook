@@ -1,4 +1,4 @@
-import { createKVStorageHost, KVStorageBackend } from '@masknet/shared-base'
+import { createKVStorageHost, type KVStorageBackend } from '@masknet/shared-base'
 import { Services, Messages } from '../API.js'
 
 const memory: KVStorageBackend = {

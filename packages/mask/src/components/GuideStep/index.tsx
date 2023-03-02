@@ -1,4 +1,4 @@
-import { PropsWithChildren, useRef, cloneElement, useEffect, ReactElement, useState } from 'react'
+import { type PropsWithChildren, useRef, cloneElement, useEffect, type ReactElement, useState } from 'react'
 import { useLocation } from 'react-use'
 import { debounce } from 'lodash-es'
 import { useValueRef } from '@masknet/shared-base-ui'

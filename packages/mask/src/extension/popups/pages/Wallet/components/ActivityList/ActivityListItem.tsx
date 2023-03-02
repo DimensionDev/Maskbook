@@ -3,8 +3,8 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Button, ListItem, ListItemText, Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
-    RecentTransactionComputed,
-    TransactionDescriptor,
+    type RecentTransactionComputed,
+    type TransactionDescriptor,
     TransactionDescriptorType,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'

@@ -11,8 +11,8 @@ import {
 } from 'react'
 import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
 import { Icons } from '@masknet/icons'
-import { CompositionContext, CompositionType } from '@masknet/plugin-infra/content-script'
-import { EncryptionTargetType, ProfileInformation } from '@masknet/shared-base'
+import { CompositionContext, type CompositionType } from '@masknet/plugin-infra/content-script'
+import { EncryptionTargetType, type ProfileInformation } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
 import { LoadingButton } from '@mui/lab'
@@ -22,8 +22,8 @@ import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients.
 import { CharLimitIndicator } from './CharLimitIndicator.js'
 import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMethodSelector.js'
 import { EncryptionTargetSelector } from './EncryptionTargetSelector.js'
-import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender.js'
-import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor.js'
+import { PluginEntryRender, type PluginEntryRenderRef } from './PluginEntryRender.js'
+import { TypedMessageEditor, type TypedMessageEditorRef } from './TypedMessageEditor.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

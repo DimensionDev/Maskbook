@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    // "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": true,
     // Classification follows https://www.typescriptlang.org/tsconfig
 
     // Type Checking

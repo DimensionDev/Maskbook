@@ -1,6 +1,5 @@
 import { PluginSnapshotRPC } from '../../messages.js'
 import { use, cache } from 'react'
-import type {} from 'react/next'
 
 const Request = cache(Suspender)
 export function useProposal(id: string) {

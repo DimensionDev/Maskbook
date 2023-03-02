@@ -1,4 +1,13 @@
-import { FC, HTMLProps, memo, PropsWithChildren, ReactNode, useEffect, useRef, useState } from 'react'
+import {
+    type FC,
+    type HTMLProps,
+    memo,
+    type PropsWithChildren,
+    type ReactNode,
+    useEffect,
+    useRef,
+    useState,
+} from 'react'
 import { Icons } from '@masknet/icons'
 import { Typography } from '@mui/material'
 import { makeStyles, ShadowRootTooltip, useBoundedPopperProps } from '@masknet/theme'

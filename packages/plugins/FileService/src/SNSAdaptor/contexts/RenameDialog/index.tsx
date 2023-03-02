@@ -1,6 +1,6 @@
 import { createUITaskManager } from '@masknet/shared'
 import { useContext } from 'react'
-import { RenameDialog, RenameDialogProps } from './RenameDialog.js'
+import { RenameDialog, type RenameDialogProps } from './RenameDialog.js'
 
 const { TaskManagerContext, TaskManagerProvider: RenameProvider } = createUITaskManager<RenameDialogProps, string>(
     RenameDialog,

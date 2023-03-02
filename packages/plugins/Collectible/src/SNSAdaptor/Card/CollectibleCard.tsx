@@ -1,4 +1,4 @@
-import { Card, CardContent, CardProps } from '@mui/material'
+import { Card, CardContent, type CardProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => {

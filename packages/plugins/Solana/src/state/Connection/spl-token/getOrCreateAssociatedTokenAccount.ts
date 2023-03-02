@@ -1,5 +1,5 @@
 import { TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token'
-import { type Connection, PublicKey, Commitment, Transaction } from '@solana/web3.js'
+import { type Connection, type PublicKey, type Commitment, Transaction } from '@solana/web3.js'
 import { createAssociatedTokenAccountInstruction } from './createAssociatedTokenAccountInstruction.js'
 import { getAccountInfo } from './getAccountInfo.js'
 import { getAssociatedTokenAddress } from './getAssociatedTokenAddress.js'

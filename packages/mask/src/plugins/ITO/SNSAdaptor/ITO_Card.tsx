@@ -10,7 +10,7 @@ import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { useI18N } from '../../../utils/i18n-next-ui.js'
 import { useMaskClaimCallback } from './hooks/useMaskClaimCallback.js'
 import { useMaskITO_Packet } from './hooks/useMaskITO_Packet.js'
-import { FungibleToken, formatBalance } from '@masknet/web3-shared-base'
+import { type FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

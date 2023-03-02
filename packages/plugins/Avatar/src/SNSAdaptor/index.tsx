@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { Plugin, PluginI18NFieldRender, SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { type Plugin, PluginI18NFieldRender, SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, Web3ContextProvider } from '@masknet/web3-hooks-base'

@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useContext, useMemo } from 'react'
+import { createContext, type PropsWithChildren, useContext, useMemo } from 'react'
 import { ValueRef } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import type { SharedComponentOverwrite } from './types.js'

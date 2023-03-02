@@ -1,5 +1,3 @@
-export * from './extract.js'
-
 import type {
     TypedMessage,
     SerializableTypedMessages,
@@ -7,6 +5,8 @@ import type {
     NonSerializableWithAltTypedMessage,
 } from '../base.js'
 import { isEqual } from 'lodash-es'
+
+export * from './extract.js'
 
 export function isNonSerializableTypedMessageWithAlt(x: TypedMessage): x is NonSerializableWithAltTypedMessage {
     const y = x as NonSerializableWithAltTypedMessage

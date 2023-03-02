@@ -10,7 +10,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../locales/index.js'
 import { roundValue } from '../../helpers/index.js'
 import { harvestRewards } from '../utils/rewards.js'
-import { PagesType, TransactionStatus, AccountRewards, RewardDetailed, ChangePage } from '../../types.js'
+import { PagesType, TransactionStatus, type AccountRewards, type RewardDetailed, type ChangePage } from '../../types.js'
 
 import { AccordionReward } from './AccordionReward.js'
 import { ReferredTokenRewards } from './ReferredTokenRewards.js'

@@ -1,4 +1,4 @@
-import { FC, Fragment } from 'react'
+import { type FC, Fragment } from 'react'
 import type { BigNumber } from 'bignumber.js'
 
 export interface FormattedCurrencyProps {

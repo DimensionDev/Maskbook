@@ -1,8 +1,8 @@
 import { useContext } from 'react'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ContextOptions, createUITaskManager } from '../../UITaskManager.js'
-import { SelectGasSettingsDialogProps, SelectGasSettingsDialog } from '../../components/SelectGasSettingsDialog.js'
+import { type ContextOptions, createUITaskManager } from '../../UITaskManager.js'
+import { type SelectGasSettingsDialogProps, SelectGasSettingsDialog } from '../../components/SelectGasSettingsDialog.js'
 
 interface AdvancedSettings<T extends NetworkPluginID = NetworkPluginID> {
     slippageTolerance?: number

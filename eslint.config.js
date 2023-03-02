@@ -337,7 +337,7 @@ const codeStyleRules = {
     // '@typescript-eslint/prefer-function-type': 'warn',
     '@typescript-eslint/prefer-reduce-type-parameter': 'warn',
     // '@typescript-eslint/sort-type-constituents': 'warn',
-    // '@typescript-eslint/triple-slash-reference': { lib: 'never', path: 'never', types: 'always' },
+    // '@typescript-eslint/triple-slash-reference': ['error', { lib: 'never', path: 'never', types: 'always' }],
     // '@typescript-eslint/unified-signatures': 'warn', // prefer merging overload
     '@dimensiondev/prefer-early-return': 'warn',
     // '@dimensiondev/no-redundant-variable': 'warn',
@@ -399,23 +399,26 @@ const moduleSystemRules = {
 
     // Style
     'import/no-named-default': 'warn', // bans import { default as T }
-    // 'import/no-useless-path-segments': 'warn',
+    'import/no-useless-path-segments': 'warn',
     'import/no-webpack-loader-syntax': 'error',
     // 'import/no-anonymous-default-export': 'error',
     'import/no-duplicates': 'warn', // duplicate specifiers
-    // 'import/no-empty-named-blocks': 'warn', // bans import T, {}
+    'import/no-empty-named-blocks': 'warn', // bans import T, {}
     'unused-imports/no-unused-imports': 'warn',
     // 'unicorn/prefer-node-protocol': 'warn',
-    // '@typescript-eslint/consistent-type-exports': { fixMixedExportsWithInlineTypeSpecifier: true },
-    // '@typescript-eslint/consistent-type-imports': {
-    //     prefer: 'type-imports',
-    //     disallowTypeAnnotations: false,
-    //     fixStyle: 'inline-type-imports',
-    // },
+    '@typescript-eslint/consistent-type-exports': ['warn', { fixMixedExportsWithInlineTypeSpecifier: true }],
+    '@typescript-eslint/consistent-type-imports': [
+        'warn',
+        {
+            prefer: 'type-imports',
+            disallowTypeAnnotations: false,
+            fixStyle: 'inline-type-imports',
+        },
+    ],
     'no-useless-rename': 'error',
 
     // Avoid mistake
-    // 'import/first': 'warn', // ES import always runs first even if you inserted some statements inside.
+    'import/first': 'warn', // ES import always runs first even if you inserted some statements inside.
     'import/no-absolute-path': 'error',
     // 'import/no-cycle': 'warn',
     // 'import/no-extraneous-dependencies': 'error', // import from devDependencies might be a mistake

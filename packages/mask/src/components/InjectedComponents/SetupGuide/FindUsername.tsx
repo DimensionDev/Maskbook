@@ -1,4 +1,4 @@
-import { WizardDialog, WizardDialogProps } from './WizardDialog.js'
+import { WizardDialog, type WizardDialogProps } from './WizardDialog.js'
 import { useI18N } from '../../../utils/index.js'
 import { useState } from 'react'
 import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'

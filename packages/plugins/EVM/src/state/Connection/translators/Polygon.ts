@@ -1,4 +1,4 @@
-import { ConnectionContext, EthereumMethodType, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
+import { type ConnectionContext, EthereumMethodType, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
 import { Base } from './Base.js'
 
 export class Polygon extends Base {

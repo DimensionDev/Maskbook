@@ -1,5 +1,5 @@
 import type { PartialRequired } from '@masknet/shared-base'
-import { HubOptions, SourceType, CurrencyType, createPredicate } from '@masknet/web3-shared-base'
+import { type HubOptions, type SourceType, type CurrencyType, createPredicate } from '@masknet/web3-shared-base'
 
 export class HubStateBaseClient<ChainId> {
     constructor(

@@ -1,6 +1,6 @@
 import { List, ListItem } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { NFTImageCollectibleAvatar, CollectionTypes } from '@masknet/shared'
+import { NFTImageCollectibleAvatar, type CollectionTypes } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TokenType } from '@masknet/web3-shared-base'

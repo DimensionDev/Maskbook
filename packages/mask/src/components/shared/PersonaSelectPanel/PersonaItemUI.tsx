@@ -1,13 +1,13 @@
 import { useMemo } from 'react'
 import { Avatar, Box, Stack, Typography } from '@mui/material'
 import {
-    BindingProof,
+    type BindingProof,
     resolveNextIDIdentityToProfile,
-    ECKeyIdentifier,
+    type ECKeyIdentifier,
     formatPersonaFingerprint,
     isSamePersona,
     isSameProfile,
-    PersonaInformation,
+    type PersonaInformation,
 } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'

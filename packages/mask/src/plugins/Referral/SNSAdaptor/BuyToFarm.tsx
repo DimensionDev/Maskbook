@@ -1,4 +1,4 @@
-import { useCallback, useState, MouseEventHandler } from 'react'
+import { useCallback, useState, type MouseEventHandler } from 'react'
 import { useAsync } from 'react-use'
 import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
 import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
@@ -9,12 +9,18 @@ import { v4 as uuid } from 'uuid'
 import { EMPTY_LIST, CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 
 import { useI18N } from '../locales/index.js'
-import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages.js'
+import { PluginReferralMessages, type SelectTokenUpdated, ReferralRPC } from '../messages.js'
 
 import { getRequiredChainId } from '../helpers/index.js'
 import { singAndPostProofOfRecommendationWithReferrer } from './utils/proofOfRecommendation.js'
 import { MASK_REFERRER, SWAP_CHAIN_ID } from '../constants.js'
-import { TabsReferAndBuy, TransactionStatus, PageInterface, PagesType, FungibleTokenDetailed } from '../types.js'
+import {
+    TabsReferAndBuy,
+    TransactionStatus,
+    type PageInterface,
+    PagesType,
+    type FungibleTokenDetailed,
+} from '../types.js'
 
 import { WalletConnectedBoundary, ChainBoundary } from '@masknet/shared'
 import { MyRewards } from './MyRewards/index.js'

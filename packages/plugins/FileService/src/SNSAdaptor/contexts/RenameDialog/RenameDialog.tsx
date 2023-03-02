@@ -1,8 +1,8 @@
 import { Icons } from '@masknet/icons'
-import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
+import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogContent, InputBase, Typography } from '@mui/material'
-import { FC, memo, ReactNode, useState } from 'react'
+import { type FC, memo, type ReactNode, useState } from 'react'
 import { useI18N } from '../../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({

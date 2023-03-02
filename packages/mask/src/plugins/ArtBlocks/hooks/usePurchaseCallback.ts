@@ -2,7 +2,7 @@ import { useAsyncFn } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId, ContractTransaction, SchemaType } from '@masknet/web3-shared-evm'
+import { type ChainId, ContractTransaction, SchemaType } from '@masknet/web3-shared-evm'
 import { useArtBlocksContract } from './useArtBlocksContract.js'
 
 export function usePurchaseCallback(chainId: ChainId, projectId: string, amount: string, schema = SchemaType.Native) {

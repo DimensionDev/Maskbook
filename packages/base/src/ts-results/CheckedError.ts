@@ -1,4 +1,4 @@
-import { Err, Result } from 'ts-results-es'
+import { Err, type Result } from 'ts-results-es'
 
 export class CheckedError<T> extends Error {
     constructor(private kind: T, private reason: any) {

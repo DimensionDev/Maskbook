@@ -3,13 +3,13 @@ import { uniqWith } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     attemptUntil,
-    DomainResult,
-    EOAResult,
-    FungibleTokenResult,
+    type DomainResult,
+    type EOAResult,
+    type FungibleTokenResult,
     isSameAddress,
-    NonFungibleCollectionResult,
-    NonFungibleTokenResult,
-    SearchResult,
+    type NonFungibleCollectionResult,
+    type NonFungibleTokenResult,
+    type SearchResult,
     SearchResultType,
     SourceType,
 } from '@masknet/web3-shared-base'

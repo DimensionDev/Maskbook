@@ -4,7 +4,13 @@ import { Typography, Link } from '@mui/material'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
-import { NonFungibleTokenEvent, formatBalance, isZero, isValidTimestamp, ActivityType } from '@masknet/web3-shared-base'
+import {
+    type NonFungibleTokenEvent,
+    formatBalance,
+    isZero,
+    isValidTimestamp,
+    ActivityType,
+} from '@masknet/web3-shared-base'
 import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
