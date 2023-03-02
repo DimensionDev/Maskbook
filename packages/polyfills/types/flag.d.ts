@@ -15,7 +15,6 @@ declare module NodeJS {
         VERSION: string
         COMMIT_HASH: string
         COMMIT_DATE: string
-        REMOTE_URL: string
         BRANCH_NAME: string
         /**
          * Run skip tests like
@@ -23,6 +22,5 @@ declare module NodeJS {
          */
         RUN_SKIP_TESTS: string
         DIRTY: string
-        TAG_DIRTY: string
     }
 }
