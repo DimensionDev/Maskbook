@@ -100,19 +100,19 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         }
     }
 
-    private getOptions(initial?: TelemetryAPI.CommonOptions): TelemetryAPI.CommonOptions {
+    private getOptions(initials?: TelemetryAPI.CommonOptions): TelemetryAPI.CommonOptions {
         return {
             user: {
                 ...this.userOptions,
-                ...initial?.user,
+                ...initials?.user,
             },
             device: {
                 ...this.deviceOptions,
-                ...initial?.device,
+                ...initials?.device,
             },
             network: {
                 ...this.networkOptions,
-                ...initial?.network,
+                ...initials?.network,
             },
         }
     }
@@ -121,9 +121,9 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         groupID: TelemetryAPI.GroupID,
         type: TelemetryAPI.EventType | TelemetryAPI.ExceptionType,
         ID: TelemetryAPI.EventID | TelemetryAPI.ExceptionID,
-        initial: TelemetryAPI.CommonOptions,
+        initials: TelemetryAPI.CommonOptions,
     ): Event {
-        const options = this.getOptions(initial)
+        const options = this.getOptions(initials)
         return {
             level: groupID === TelemetryAPI.GroupID.Event ? 'info' : 'error',
             message: ID,
