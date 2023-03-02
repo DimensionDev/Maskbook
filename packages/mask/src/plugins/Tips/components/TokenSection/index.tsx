@@ -50,7 +50,6 @@ export const TokenSection: FC<Props> = ({ className, ...rest }) => {
                 token={token}
                 amount={amount}
                 isAvailableBalance={isAvailableBalance}
-                maxAmountSignificant={6}
                 onAmountChange={setAmount}
                 balance={balance}
                 onSelectToken={onSelectTokenChipClick}
