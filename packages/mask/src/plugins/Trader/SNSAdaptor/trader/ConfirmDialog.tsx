@@ -58,7 +58,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
     const gasFeeUSD = useMemo(() => {
         if (!gasFee) return '0'
-        return formatCurrency(formatWeiToEther(gasFee).times(nativeTokenPrice))
+        return formatCurrency(formatWeiToEther(gasFee).times(nativeTokenPrice), 'USD', { onlyRemainTwoDecimal: true })
     }, [gasFee, nativeTokenPrice])
 
     const isGreatThanSlippageSetting = useGreatThanSlippageSetting(trade?.priceImpact)

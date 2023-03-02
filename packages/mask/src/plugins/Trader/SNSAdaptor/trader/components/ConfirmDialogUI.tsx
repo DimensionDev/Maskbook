@@ -466,9 +466,8 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                                     formatter={formatBalance}
                                 />
                                 <span>
-                                    {gasFeeUSD === '<$0.01'
-                                        ? t('plugin_trader_tx_cost_very_small', { usd: gasFeeUSD })
-                                        : t('plugin_trader_confirm_tx_cost', { usd: gasFeeUSD })}
+                                    {gasFeeUSD.includes('<') ? '' : '\u2248'}
+                                    {gasFeeUSD}
                                 </span>
                             </Typography>
                         </Box>
