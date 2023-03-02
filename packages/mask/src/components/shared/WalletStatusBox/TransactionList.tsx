@@ -10,7 +10,7 @@ import {
     isSameAddress,
     type RecentTransactionComputed,
     TransactionStatusType,
-    Transaction,
+    type Transaction,
 } from '@masknet/web3-shared-base'
 import { getContractOwnerDomain } from '@masknet/web3-shared-evm'
 import { Grid, type GridProps, Link, List, ListItem, type ListProps, Stack, Typography } from '@mui/material'
