@@ -48,7 +48,6 @@ export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
     const personas = await queryOwnedPersonaInformation(true)
     MaskMessages.events.restoreSuccess.sendToAll({
         wallets: compact([...wallets.map((x) => x.address), ...personas.map((x) => x.address)]),
-        // wallets: [...wallets, ...personas.map((x) => ({ address: x.address, name: x.nickname }))],
     })
 }
 
@@ -204,6 +203,7 @@ async function restorePlugins(backup: NormalizedBackup.Data['plugins']) {
             continue
         }
         works.add(
+            // eslint-disable-next-line @typescript-eslint/no-loop-func
             (async () => {
                 const x = await f(item)
                 if (x.err) console.error(`[@masknet/plugin-infra] Plugin ${plugin} failed to restore its backup.`, item)

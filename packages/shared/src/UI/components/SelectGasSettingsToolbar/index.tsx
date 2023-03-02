@@ -140,6 +140,7 @@ export function SelectGasSettingsToolbarUI({
     const t = useSharedI18N()
     const { classes, cx, theme } = useStyles()
     const { gasOptions, GAS_OPTION_NAMES } = SettingsContext.useContainer()
+
     const [approveDialogOpen, setApproveDialogOpen] = useState(false)
     const [isCustomGas, setIsCustomGas] = useState(false)
     const [currentGasOptionType, setCurrentGasOptionType] = useState<GasOptionType>(GasOptionType.NORMAL)
@@ -269,7 +270,7 @@ export function SelectGasSettingsToolbarUI({
         if (!gasFee || gasFee.isZero()) return '$0'
         if (!currentGasCurrency || isSameAddress(nativeToken?.address, currentGasCurrency)) {
             return formatCurrency(formatWeiToEther(gasFee).times(nativeTokenPrice), 'USD', {
-                boundaries: { min: 0.01, minExp: 2, expandExp: 0 },
+                onlyRemainTwoDecimal: true,
             })
         }
 
@@ -278,7 +279,7 @@ export function SelectGasSettingsToolbarUI({
         return formatCurrency(
             new BigNumber(formatBalance(gasFee, currencyToken?.decimals)).times(currencyTokenPrice),
             'USD',
-            { boundaries: { min: 0.01, minExp: 2, expandExp: 0 } },
+            { onlyRemainTwoDecimal: true },
         )
     }, [
         gasFee,

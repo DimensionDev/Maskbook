@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src/plugin-worker",
+    "outDir": "./dist/plugin-worker",
+    "tsBuildInfoFile": "./dist/plugin-worker.tsbuildinfo",
+    "lib": ["WebWorker", "ES2022"]
+  },
+  "include": ["src/plugin-worker"],
+  "references": [{ "path": "../base" }, { "path": "../shared-base" }, { "path": "../plugin-infra" }]
+}

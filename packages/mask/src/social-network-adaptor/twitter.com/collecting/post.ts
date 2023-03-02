@@ -5,7 +5,7 @@ import type { EventListener } from '@servie/events'
 import type { SocialNetworkUI as Next } from '@masknet/types'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { creator, globalUIState } from '../../../social-network/index.js'
-import { postIdParser, postParser, postImagesParser, postContentMessageParser } from '../utils/fetch.js'
+import { getPostId, postParser, postImagesParser, postContentMessageParser } from '../utils/fetch.js'
 import { postsContentSelector, postsImageSelector, timelinePostContentSelector } from '../utils/selector.js'
 import Services from '../../../extension/service.js'
 import { injectMaskIconToPostTwitter } from '../injection/MaskIcon.js'
@@ -139,8 +139,8 @@ function registerPostCollectorInner(
             const tweetNode = getTweetNode(node)
             const parentTweetNode = isQuotedTweet(tweetNode) ? getParentTweetNode(tweetNode!) : null
             if (!tweetNode) return node.innerText
-            const parentTweetId = parentTweetNode ? postIdParser(parentTweetNode) : ''
-            const tweetId = postIdParser(tweetNode)
+            const parentTweetId = parentTweetNode ? getPostId(parentTweetNode) : ''
+            const tweetId = getPostId(tweetNode)
             // To distinguish tweet nodes between timeline and detail page
             const isDetailPage = isDetailTweet(tweetNode)
             return `${isDetailPage ? 'detail' : 'normal'}/${parentTweetId}/${tweetId}`
@@ -160,7 +160,9 @@ export function collectVerificationPost(keyword: string) {
     const postNodes = timelinePostContentSelector().evaluate()
 
     for (const postNode of postNodes) {
-        const postId = postIdParser(postNode)
+        const tweetNode = postNode.closest<HTMLElement>('[data-testid=tweet]')
+        if (!tweetNode) continue
+        const postId = getPostId(tweetNode)
         const postContent = postContentMessageParser(postNode)
         const content = postContent
             .map((x) => {

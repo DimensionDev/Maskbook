@@ -27,12 +27,14 @@ import { useCallback } from 'react'
 import { WalletIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { useI18N } from '../../utils/index.js'
-import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc/index.js'
-import GuideStep from '../GuideStep/index.js'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { FiberManualRecord as FiberManualRecordIcon } from '@mui/icons-material'
+import { useMountReport } from '@masknet/web3-telemetry/hooks'
+import { TelemetryAPI } from '@masknet/web3-providers/types'
+import { useI18N } from '../../utils/index.js'
+import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc/index.js'
+import GuideStep from '../GuideStep/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -74,6 +76,7 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const { openDialog } = useRemoteControlledDialog(WalletMessages.events.applicationDialogUpdated)
+    useMountReport(TelemetryAPI.EventID.AccessToolbox)
     return (
         <GuideStep step={1} total={4} tip={t('user_guide_tip_1')}>
             <Container>

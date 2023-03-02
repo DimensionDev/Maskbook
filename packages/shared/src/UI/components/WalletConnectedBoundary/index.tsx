@@ -8,8 +8,11 @@ import {
     useNetworkContext,
     useNativeTokenBalance,
     useRiskWarningApproved,
+    useWallet,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { useAsync } from 'react-use'
+import { SmartPayBundler } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()({
     button: {
@@ -24,17 +27,18 @@ export interface WalletConnectedBoundaryProps extends withClasses<'connectWallet
     hideRiskWarningConfirmed?: boolean
     ActionButtonProps?: ActionButtonProps
     startIcon?: React.ReactNode
-    isSmartPay?: boolean
 }
 
 export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
-    const { children = null, offChain = false, hideRiskWarningConfirmed = false, expectedChainId, isSmartPay } = props
+    const { children = null, offChain = false, hideRiskWarningConfirmed = false, expectedChainId } = props
 
     const t = useSharedI18N()
     const { classes, cx } = useStyles(undefined, { props })
 
     const { pluginID } = useNetworkContext()
     const { account, chainId: chainIdValid } = useChainContext({ chainId: expectedChainId })
+    const wallet = useWallet()
+    const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     const nativeTokenBalance = useNativeTokenBalance(undefined, {
         chainId: chainIdValid,
@@ -80,7 +84,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
             </ActionButton>
         )
 
-    if (!isSmartPay && isZero(nativeTokenBalance.value ?? '0') && !offChain)
+    if (!(wallet?.owner && chainIdValid === smartPayChainId) && isZero(nativeTokenBalance.value ?? '0') && !offChain)
         return (
             <ActionButton
                 className={buttonClass}

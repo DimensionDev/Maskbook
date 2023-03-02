@@ -19,7 +19,7 @@ export * from './types.js'
  */
 export function createKVStorageHost(
     backend: KVStorageBackend,
-    message: MessageChannel<[string, unknown]>,
+    message: Pick<MessageChannel<[string, unknown]>, 'on'>,
     signal = new AbortController().signal,
 ): ScopedStorage<never>['createSubScope'] {
     return (name, defaultValues) => {
@@ -53,7 +53,7 @@ const alwaysThrowHandler = () => {
 function createScope(
     signal: AbortSignal,
     backend: KVStorageBackend,
-    message: MessageChannel<any>,
+    message: Pick<MessageChannel<any>, 'on'>,
     parentScope: string | null,
     scope: string,
     defaultValues: any,
@@ -101,7 +101,7 @@ function createScope(
 function createState(
     signal: AbortSignal,
     backend: KVStorageBackend,
-    message: MessageChannel<any>,
+    message: Pick<MessageChannel<any>, 'on'>,
     scope: string,
     prop: string,
     defaultValue: any,
@@ -153,7 +153,7 @@ function createState(
             return initializedPromise!
         },
         get value() {
-            if (!initialized) throw new Error('Try to access K/V state before initialization finished.')
+            if (!initialized) throw new Error(`Try to access K/V state before initialization finished: ${scope}.`)
             return state
         },
         async setValue(value) {

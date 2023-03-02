@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { ReactNode, useContext } from 'react'
 import { pick } from 'lodash-es'
 import {
     Box,
@@ -20,8 +20,9 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { formatCurrency, formatElapsed } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils/index.js'
 import type { Ticker } from '../../types/index.js'
+import { TrendingViewContext } from './context.js'
 
-const useStyles = makeStyles<{ snsThemeMode?: string }>()((theme, { snsThemeMode }) => ({
+const useStyles = makeStyles<{ snsThemeMode?: string; isPopper?: boolean }>()((theme, { snsThemeMode, isPopper }) => ({
     container: {
         maxHeight: 266,
         scrollbarWidth: 'none',
@@ -32,7 +33,7 @@ const useStyles = makeStyles<{ snsThemeMode?: string }>()((theme, { snsThemeMode
     cell: {
         paddingLeft: theme.spacing(0.5),
         paddingRight: theme.spacing(0.5),
-        background: snsThemeMode === 'dim' ? '#15202b' : theme.palette.maskColor.bottom,
+        background: snsThemeMode === 'dim' && !isPopper ? '#15202b' : theme.palette.maskColor.bottom,
         fontSize: 12,
         fontWeight: 700,
         whiteSpace: 'nowrap',
@@ -71,7 +72,8 @@ export function TickersTable({ tickers }: TickersTableProps) {
     const { t } = useI18N()
     const theme = useTheme()
     const snsThemeMode = useSNSThemeMode(theme)
-    const { classes } = useStyles({ snsThemeMode })
+    const { isCollectionProjectPopper, isTokenTagPopper } = useContext(TrendingViewContext)
+    const { classes } = useStyles({ snsThemeMode, isPopper: isCollectionProjectPopper || isTokenTagPopper })
 
     const headCellMap: Record<Cells, string> = {
         volume: t('plugin_trader_table_volume'),

@@ -50,7 +50,6 @@ export async function* pageableToIterator<T>(
     } = {},
 ) {
     let indicator = createIndicator()
-
     for (let i = 0; i < maxSize; i += 1) {
         try {
             const pageable = await getPageable(indicator)

@@ -19,13 +19,19 @@ describe('formatBalance util test', () => {
         { give: 123456789, decimals: 10, significant: 2, expected: '0.012' },
         { give: 123456789, decimals: 10, significant: 3, expected: '0.0123' },
         { give: 123456789, decimals: 10, significant: 4, expected: '0.01234' },
-        { give: 123456789, decimals: 15, significant: 16, expected: '<0.000001' },
-        { give: 123456789, decimals: 15, significant: 17, expected: '<0.000001' },
-        { give: 123456789, decimals: 15, significant: 18, expected: '<0.000001' },
-        { give: 123456789, decimals: 15, significant: 19, expected: '<0.000001' },
+        { give: 123456789, decimals: 15, significant: 16, expected: '0.00000012' },
+        { give: 23456789, decimals: 15, significant: 17, expected: '0.00000002' },
+        { give: 123456789, decimals: 15, significant: 18, expected: '0.00000012' },
+        { give: 123456789, decimals: 15, significant: 19, expected: '0.00000012' },
         { give: 123456789, decimals: 20, significant: 20, expected: '<0.000001' },
         { give: 352476637275640, decimals: 18, significant: 2, expected: '0.00035' },
-    ])('.format($give)', ({ give, decimals, significant, expected }) => {
+        { give: 133555, decimals: 12, significant: 20, expected: '0.00000013' },
+        { give: 1, decimals: 6, significant: 20, expected: '0.000001' },
+        { give: 1, decimals: 7, significant: 20, expected: '0.0000001' },
+        { give: 10, decimals: 7, significant: 20, expected: '0.000001' },
+        { give: 11, decimals: 9, significant: 20, expected: '0.00000001' },
+        { give: 11, decimals: 10, significant: 20, expected: '<0.000001' },
+    ])('.format($give $decimals $significant)', ({ give, decimals, significant, expected }) => {
         expect(formatBalance(give, decimals, significant)).toBe(expected)
     })
 

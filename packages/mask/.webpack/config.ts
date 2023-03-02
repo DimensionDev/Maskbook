@@ -182,7 +182,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
             }),
             new DefinePlugin({
                 'process.browser': 'true',
-                'process.version': JSON.stringify('v18.11.0'),
+                'process.version': JSON.stringify('v19.0.0'),
                 // MetaMaskInpageProvider => extension-port-stream => readable-stream depends on stdin and stdout
                 'process.stdout': '/* stdout */ null',
                 'process.stderr': '/* stdin */ null',

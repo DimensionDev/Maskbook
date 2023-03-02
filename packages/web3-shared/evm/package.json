@@ -12,16 +12,16 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@ensdomains/address-encoder": "^0.2.6",
-    "ethers": "^5.7.2",
+    "@ethersproject/bytes": "5.7.0",
     "@ethersproject/keccak256": "5.7.0",
     "@ethersproject/strings": "5.7.0",
-    "@ethersproject/bytes": "5.7.0",
     "@masknet/shared-base": "workspace:^",
     "@masknet/web3-constants": "workspace:^",
     "@masknet/web3-contracts": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "bignumber.js": "9.1.0",
     "ethereum-blockies": "^0.1.1",
+    "ethers": "^5.7.2",
     "fortmatic": "^2.2.1",
     "fuse.js": "6.6.2",
     "punycode": "^2.1.1",
@@ -34,8 +34,8 @@
     "web3": "1.8.0",
     "web3-core": "1.8.0",
     "web3-core-helpers": "1.8.0",
-    "web3-eth-contract": "1.8.0",
     "web3-eth-abi": "1.8.0",
+    "web3-eth-contract": "1.8.0",
     "web3-utils": "1.8.0"
   },
   "devDependencies": {
@@ -43,6 +43,6 @@
     "@types/ethereum-blockies": "^0.1.0",
     "@types/punycode": "^2.1.0",
     "@types/use-subscription": "^1.0.0",
-    "@types/uuid": "^8.3.4"
+    "@types/uuid": "^9.0.1"
   }
 }

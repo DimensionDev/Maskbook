@@ -4,6 +4,8 @@ import { Button, Stack, Typography } from '@mui/material'
 import { useI18N } from '../../locales/index.js'
 import { Icons } from '@masknet/icons'
 import { PersonaSelectPanel } from '../../../../components/shared/PersonaSelectPanel/PersonaSelectPanel.js'
+import { useMountReport } from '@masknet/web3-telemetry/hooks'
+import { TelemetryAPI } from '@masknet/web3-providers/types'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -28,6 +30,9 @@ interface CreatePersonaActionProps {
 export const CreatePersonaAction = memo<CreatePersonaActionProps>(({ disabled, onCreate }) => {
     const t = useI18N()
     const { classes } = useStyles()
+
+    useMountReport(TelemetryAPI.EventID.AccessWeb3TabCreatePersonaTab)
+
     return (
         <>
             <Stack flex={1} px={1.25} justifyContent="flex-start" width="100%" boxSizing="border-box">

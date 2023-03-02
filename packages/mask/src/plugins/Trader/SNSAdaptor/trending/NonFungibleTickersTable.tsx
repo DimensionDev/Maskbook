@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useContext } from 'react'
 import formatDateTime from 'date-fns/format'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import {
@@ -25,104 +25,98 @@ import { formatCurrency } from '@masknet/web3-shared-base'
 import { resolveActivityTypeBackgroundColor } from '@masknet/web3-providers/helpers'
 import { useNonFungibleTokenActivities } from '../../trending/useTrending.js'
 import { useI18N } from '../../../../utils/index.js'
+import { TrendingViewContext } from './context.js'
 
-const useStyles = makeStyles<{ isCollectionProjectPopper: boolean; snsThemeMode?: string }>()(
-    (theme, { isCollectionProjectPopper, snsThemeMode }) => ({
-        container: {
-            maxHeight: isCollectionProjectPopper ? 320 : 266,
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
+const useStyles = makeStyles<{ isPopper: boolean; snsThemeMode?: string }>()((theme, { isPopper, snsThemeMode }) => ({
+    container: {
+        maxHeight: isPopper ? 320 : 266,
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        cell: {
-            paddingLeft: theme.spacing(0.5),
-            paddingRight: theme.spacing(0.5),
-            background: snsThemeMode === 'dim' ? '#15202b' : theme.palette.maskColor.bottom,
-            fontSize: 12,
-            fontWeight: 700,
-            whiteSpace: 'nowrap',
-            border: 'none',
-            '&:not(:first-child)': {
-                textAlign: 'center',
-            },
-            '&:last-child': {
-                textAlign: 'right',
-            },
+    },
+    cell: {
+        paddingLeft: theme.spacing(0.5),
+        paddingRight: theme.spacing(0.5),
+        background: snsThemeMode === 'dim' && !isPopper ? '#15202b' : theme.palette.maskColor.bottom,
+        fontSize: 12,
+        fontWeight: 700,
+        whiteSpace: 'nowrap',
+        border: 'none',
+        '&:not(:first-child)': {
+            textAlign: 'center',
         },
-        nftImage: {
-            height: 20,
-            width: 20,
-            marginRight: 4,
-            borderRadius: 4,
+        '&:last-child': {
+            textAlign: 'right',
         },
-        nftCell: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        cellWrapper: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
-        methodCellWrapper: {
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-        },
-        methodCell: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: 24,
-            width: 62,
-            borderRadius: 500,
-            fontWeight: 400,
-        },
-        tokenIcon: {
-            width: 16,
-            height: 16,
-            marginRight: 4,
-        },
-        imageLoading: {
-            color: theme.palette.maskColor.main,
-            height: '15px !important',
-            width: '15px !important',
-        },
-        linkIcon: {
-            color: theme.palette.text.primary,
-        },
-        transactionLink: {
-            height: 16,
-            marginLeft: 4,
-        },
-        placeholder: {
-            paddingTop: theme.spacing(10),
-            paddingBottom: theme.spacing(10),
-            borderStyle: 'none',
-        },
-    }),
-)
+    },
+    nftImage: {
+        height: 20,
+        width: 20,
+        marginRight: 4,
+        borderRadius: 4,
+    },
+    nftCell: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    cellWrapper: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    methodCellWrapper: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    methodCell: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 24,
+        width: 62,
+        borderRadius: 500,
+        fontWeight: 400,
+    },
+    tokenIcon: {
+        width: 16,
+        height: 16,
+        marginRight: 4,
+    },
+    imageLoading: {
+        color: theme.palette.maskColor.main,
+        height: '15px !important',
+        width: '15px !important',
+    },
+    linkIcon: {
+        color: theme.palette.text.primary,
+    },
+    transactionLink: {
+        height: 16,
+        marginLeft: 4,
+    },
+    placeholder: {
+        paddingTop: theme.spacing(10),
+        paddingBottom: theme.spacing(10),
+        borderStyle: 'none',
+    },
+}))
 
 export interface NonFungibleTickersTableProps {
     id: string
     chainId: Web3Helper.ChainIdAll
     result: Web3Helper.TokenResultAll
-    isCollectionProjectPopper?: boolean
 }
 
 type Cells = 'nft' | 'method' | 'value' | 'from' | 'to' | 'time'
 
-export function NonFungibleTickersTable({
-    id,
-    chainId,
-    result,
-    isCollectionProjectPopper = false,
-}: NonFungibleTickersTableProps) {
+export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTickersTableProps) {
     const { t } = useI18N()
     const theme = useTheme()
     const snsThemeMode = useSNSThemeMode(theme)
-    const { classes } = useStyles({ isCollectionProjectPopper, snsThemeMode })
+    const { isCollectionProjectPopper, isTokenTagPopper } = useContext(TrendingViewContext)
+    const { classes } = useStyles({ isPopper: isCollectionProjectPopper || isTokenTagPopper, snsThemeMode })
     const { Others } = useWeb3State(result.pluginID)
     const containerRef = useRef(null)
     const { activities, fetchMore, loadingNonFungibleTokenActivities } = useNonFungibleTokenActivities(
@@ -211,11 +205,7 @@ export function NonFungibleTickersTable({
                     {cell}
                 </TableCell>
             ))
-            return (
-                <TableRow key={index} className={classes.tableContent}>
-                    {cells}
-                </TableRow>
-            )
+            return <TableRow key={index}>{cells}</TableRow>
         }) ?? []
 
     const headCells = Object.values(headCellMap)
@@ -269,7 +259,7 @@ interface TransactionValueProps {
 }
 
 function TransactionValue({ result, chainId, activity }: TransactionValueProps) {
-    const { classes } = useStyles({ isCollectionProjectPopper: false })
+    const { classes } = useStyles({ isPopper: false })
     const chain = useNetworkDescriptor(result.pluginID, chainId)
     const { value: token } = useFungibleToken(result.pluginID, activity.trade_token?.address, activity.trade_token, {
         chainId: result.chainId,
@@ -293,9 +283,7 @@ function TransactionValue({ result, chainId, activity }: TransactionValueProps) 
             )}
 
             <Typography fontSize={12}>
-                {formatCurrency((activity.trade_price ?? activity.fee ?? 0).toFixed(4), '', {
-                    boundaries: { min: 0.00001 },
-                })}
+                {formatCurrency((activity.trade_price ?? activity.fee ?? 0).toFixed(4), '')}
             </Typography>
         </div>
     )

@@ -81,8 +81,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     // #region select token
-    const { value: nativeTokenDetailed } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
-    const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
+    const { value: nativeTokenDetailed } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const [token = nativeTokenDetailed, setToken] = useState<FungibleToken<ChainId, SchemaType> | undefined>(
         origin?.token,
     )
@@ -152,11 +152,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         if (isZero(shares || '0')) return 'Enter shares'
         if (isGreaterThan(shares || '0', 255)) return 'At most 255 recipients'
         if (isZero(amount)) return 'Enter an amount'
-        if (isGreaterThan(totalAmount, balance))
-            return tr('plugin_gitcoin_insufficient_balance', { symbol: token.symbol })
-        if (!isAvailableGasBalance) {
-            return tr('no_enough_gas_fees')
-        }
+
         if (!isDivisible)
             return t.indivisible({
                 symbol: token.symbol!,
@@ -164,6 +160,17 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             })
         return ''
     }, [account, amount, totalAmount, shares, token, balance, t, tr])
+
+    const gasValidationMessage = useMemo(() => {
+        if (!token) return ''
+        if (isGreaterThan(totalAmount, balance))
+            return tr('plugin_gitcoin_insufficient_balance', { symbol: token?.symbol })
+        if (!isAvailableGasBalance) {
+            return tr('no_enough_gas_fees')
+        }
+
+        return ''
+    }, [isAvailableBalance, totalAmount, balance, token?.symbol])
 
     const creatingParams = useMemo(
         () => ({
@@ -282,9 +289,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         expectedChainId={chainId}
                         forceShowingWrongNetworkButton>
-                        <WalletConnectedBoundary
-                            isSmartPay={!!wallet?.owner && chainId === smartPayChainId}
-                            expectedChainId={chainId}>
+                        <WalletConnectedBoundary expectedChainId={chainId}>
                             <EthereumERC20TokenApprovedBoundary
                                 onlyInfiniteUnlock
                                 amount={totalAmount.toFixed()}
@@ -302,9 +307,9 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                                     size="large"
                                     className={classes.button}
                                     fullWidth
-                                    disabled={!!validationMessage}
+                                    disabled={!!validationMessage || !!gasValidationMessage}
                                     onClick={onClick}>
-                                    {validationMessage || t.next()}
+                                    {validationMessage || gasValidationMessage || t.next()}
                                 </ActionButton>
                             </EthereumERC20TokenApprovedBoundary>
                         </WalletConnectedBoundary>

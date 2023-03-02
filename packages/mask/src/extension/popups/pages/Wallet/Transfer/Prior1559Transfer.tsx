@@ -381,6 +381,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 confirmLoading={loading}
                 maxAmount={maxAmount}
                 popoverContent={popoverContent}
+                disableConfirm={!amount || isZero(amount)}
             />
             {otherWallets ? menu : null}
         </FormProvider>
@@ -398,6 +399,7 @@ export interface Prior1559TransferUIProps {
     confirmLoading: boolean
     maxAmount: string
     popoverContent?: ReactElement
+    disableConfirm?: boolean
 }
 
 type TransferFormData = {
@@ -419,6 +421,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
         confirmLoading,
         maxAmount,
         popoverContent,
+        disableConfirm,
     }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
@@ -612,6 +615,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                         loading={confirmLoading}
                         variant="contained"
                         className={classes.button}
+                        disabled={disableConfirm}
                         onClick={handleConfirm}>
                         {t('confirm')}
                     </LoadingButton>

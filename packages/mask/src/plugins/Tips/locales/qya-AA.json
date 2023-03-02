@@ -16,6 +16,7 @@
     "save_failed": "crwdns18700:0crwdne18700:0",
     "send_tip": "crwdns16442:0crwdne16442:0",
     "sending_tip": "crwdns16444:0crwdne16444:0",
+    "no_enough_gas_fees": "crwdns19865:0crwdne19865:0",
     "nft_not_belong_to_you": "crwdns16446:0crwdne16446:0",
     "send_tip_successfully": "crwdns16448:0crwdne16448:0",
     "send_specific_tip_successfully": "crwdns16450:0{{- amount}}crwdnd16450:0{{name}}crwdne16450:0",

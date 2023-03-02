@@ -259,7 +259,7 @@ export class UserTransaction {
                 ),
             )
         }
-        if (!paymaster || isZeroAddress(paymaster)) {
+        if (!this.paymentToken || isZeroAddress(this.paymentToken)) {
             const { PAYMASTER_MASK_CONTRACT_ADDRESS, PAYMASTER_NATIVE_CONTRACT_ADDRESS } = getSmartPayConstants(
                 this.chainId,
             )

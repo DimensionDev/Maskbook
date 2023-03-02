@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import { useCallback, useState } from 'react'
 import { range, uniqBy } from 'lodash-es'
 import { WalletMessages } from '@masknet/plugin-wallet'

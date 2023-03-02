@@ -9,10 +9,10 @@ import { SmartPayFunder } from '@masknet/web3-providers'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
 import { useQueryQualifications } from '../../hooks/useQueryQualifications.js'
-import { useWallets } from '@masknet/web3-hooks-base'
 import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
 import { CrossIsolationMessages, DashboardRoutes } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { PluginSmartPayMessages } from '../../message.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -63,7 +63,6 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
     const navigate = useNavigate()
     const { classes } = useStyles()
     const { setSigner } = SmartPayContext.useContainer()
-    const wallets = useWallets()
     const personas = useAllPersonas()
     const currentProfile = useLastRecognizedIdentity()
     const { value = 0 } = useAsync(async () => {
@@ -81,12 +80,14 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
         CrossIsolationMessages.events.openPageConfirm,
     )
 
+    const { closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
+
     const handleCreate = useCallback(() => {
         if (loading || !qualifications) return
 
         // If there is no persona and no signer
         if (!personas.length && !qualifications.signPersona && !qualifications.signWallet) {
-            return setCreatePersonaConfirmDialog({
+            setCreatePersonaConfirmDialog({
                 open: true,
                 target: 'dashboard',
                 url: DashboardRoutes.Setup,
@@ -95,6 +96,7 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
                 actionHint: sharedI18N.create_persona_action(),
                 position: 'center',
             })
+            return closeDialog()
         }
 
         // if there is verified persona but current persona isn't verified
@@ -103,10 +105,11 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
             !qualifications.signPersona &&
             !qualifications.signWallet
         ) {
-            return setPersonaSelectPanelDialog({
+            setPersonaSelectPanelDialog({
                 open: true,
                 enableVerify: true,
             })
+            return closeDialog()
         }
 
         setSigner({

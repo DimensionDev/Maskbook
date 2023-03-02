@@ -8,5 +8,7 @@
     "risk_warning": "Risk Warning",
     "risk_warning_description": "The amount you want to trade will cause the price to drop by <span>{{impact}}</span> comparing to the current market price. As a result, you might lose <span>{{lostSymbol}}</span>  or <span>{{lostValue}}</span>.",
     "adjust_order": "Adjust order",
-    "make_trade_anyway": "Make Trade Anyway"
+    "make_trade_anyway": "Make Trade Anyway",
+    "swap_failed": "Swap Failed",
+    "swap_failed_description": "Network or Dex provider errors"
 }

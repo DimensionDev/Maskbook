@@ -2,6 +2,10 @@
 declare module NodeJS {
     interface ProcessEnv {
         readonly NODE_ENV: 'development' | 'production'
+        /**
+         * @deprecated In the SPA build target, the same build of the code might run in multiple environments.
+         * Therefore you should use feature detection to check the environment.
+         */
         readonly engine: 'chromium' | 'firefox' | 'safari'
         readonly channel: 'stable' | 'beta' | 'insider'
         readonly architecture: 'web' | 'app'
@@ -15,7 +19,6 @@ declare module NodeJS {
         VERSION: string
         COMMIT_HASH: string
         COMMIT_DATE: string
-        REMOTE_URL: string
         BRANCH_NAME: string
         /**
          * Run skip tests like
@@ -23,6 +26,5 @@ declare module NodeJS {
          */
         RUN_SKIP_TESTS: string
         DIRTY: string
-        TAG_DIRTY: string
     }
 }

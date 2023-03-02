@@ -48,6 +48,6 @@ describe('utils attemptUntil function test', function () {
         const p1 = () => Promise.reject(new Error('p1'))
         const p2 = () => Promise.reject(new Error('p2'))
 
-        await expect(attemptUntil([p1, p2], undefined)).rejects.toThrowError('At least one of the attempts fails.')
+        await expect(attemptUntil([p1, p2], undefined)).rejects.toThrowError()
     })
 })

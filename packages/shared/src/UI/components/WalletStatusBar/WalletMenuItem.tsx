@@ -15,7 +15,13 @@ import {
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { WalletDescription, WalletDescriptionProps } from './WalletDescription.js'
+import { makeStyles } from '@masknet/theme'
 
+const useStyles = makeStyles()((theme) => ({
+    icon: {
+        color: theme.palette.maskColor.line,
+    },
+}))
 interface WalletMenuItemProps {
     onSelect?: (value: WalletDescriptionProps, chainId: Web3Helper.ChainIdAll, pluginID: NetworkPluginID) => void
     address: string
@@ -28,6 +34,7 @@ interface WalletMenuItemProps {
 export const WalletMenuItem = memo<WalletMenuItemProps>(
     ({ address, selected, onChangeWallet, platform, onSelect, verified }) => {
         const t = useSharedI18N()
+        const { classes } = useStyles()
 
         const { pluginID } = useNetworkContext(platform ? resolveNextID_NetworkPluginID(platform) : undefined)
         const defaultChainId = useDefaultChainId(pluginID)
@@ -65,7 +72,7 @@ export const WalletMenuItem = memo<WalletMenuItemProps>(
                             style={{ filter: 'drop-shadow(0px 0px 6px rgba(28, 104, 243, 0.6))' }}
                         />
                     ) : (
-                        <Icons.RadioButtonUnChecked size={24} />
+                        <Icons.RadioButtonUnChecked size={24} className={classes.icon} />
                     )}
                 </ListItemIcon>
                 <WalletDescription {...descriptionProps} />

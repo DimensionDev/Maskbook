@@ -38,7 +38,7 @@ export function updateLanguage(next: LanguageOptions) {
     }
 }
 
-const cache = Symbol()
+const cache = Symbol('shared-base i18n cache')
 export function queryRemoteI18NBundle(
     _updater: (lang: string) => Promise<Array<[namespace: string, lang: string, json: object]>>,
 ) {

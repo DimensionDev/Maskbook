@@ -75,7 +75,7 @@ export const AvatarManagementProvider: FC<Props> = memo(({ children, socialIdent
     const contextValue: AvatarManagementContextOptions = useMemo(() => {
         setProof(first(nextIDPersonas))
         setProofs(nextIDWallets)
-        setSelectedAccount(first(nextIDWallets)?.identity || account || '')
+        setSelectedAccount(account || first(nextIDWallets)?.identity || '')
         return {
             pfpType: PFP_TYPE.PFP,
             targetAccount: selectedAccount,

@@ -85,7 +85,11 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     // #region amount minus estimate gas fee
     const { value: createParams } = useCreateParams(settings!, contract_version, publicKey)
     const isNativeToken = isSameAddress(settings?.token?.address, nativeTokenAddress)
-    const { transactionValue, estimateGasFee } = useTransactionValue(settings?.total, createParams?.gas)
+    const { transactionValue, estimateGasFee } = useTransactionValue(
+        settings?.total,
+        createParams?.gas,
+        gasOption?.gasCurrency,
+    )
     const isWaitGasBeMinus = (!estimateGasFee || loadingBalance) && isNativeToken
     const isBalanceInsufficient = new BigNumber(transactionValue).isLessThanOrEqualTo(0)
     const total = isNativeToken ? (isBalanceInsufficient ? '0' : transactionValue) : (settings?.total as string)

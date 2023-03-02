@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import { useCallback } from 'react'
 import { useContainer } from 'unstated-next'
 import { makeStyles, ActionButton } from '@masknet/theme'
@@ -16,7 +15,7 @@ import {
 } from '@masknet/shared'
 import { Box, Button, DialogActions, DialogContent, TextField, Typography } from '@mui/material'
 import { formatEthereumAddress, SchemaType, useMaskBoxConstants } from '@masknet/web3-shared-evm'
-import { formatBalance, formatPrice, multipliedBy } from '@masknet/web3-shared-base'
+import { formatBalance, formatCurrency, multipliedBy } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { BoxInfo } from '../../type.js'
 import { Context } from '../../hooks/useContext.js'
@@ -128,7 +127,7 @@ export function DrawDialog(props: DrawDialogProps) {
                     <Box className={classes.caption}>
                         <Typography color="textPrimary">
                             <span className={classes.value}>
-                                {formatPrice(multipliedBy(paymentTokenPrice, paymentCount), 6)}
+                                {formatCurrency(multipliedBy(paymentTokenPrice, paymentCount), '')}
                             </span>
                             <span>{paymentTokenDetailed?.symbol}</span>
                         </Typography>
@@ -137,7 +136,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                 <span>&asymp;</span>
                                 <TokenPrice
                                     chainId={chainId}
-                                    amount={formatPrice(paymentTokenPrice, 6)}
+                                    amount={formatCurrency(paymentTokenPrice, '')}
                                     contractAddress={paymentTokenDetailed.address}
                                 />
                             </Typography>

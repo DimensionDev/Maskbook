@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import { useCallback } from 'react'
 import { openWindow, useValueRef } from '@masknet/shared-base-ui'
 import { Button, Typography } from '@mui/material'
@@ -94,7 +93,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
     } = Context.useContainer()
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const lastRecognized = useLastRecognizedIdentity()
-    const { ownPersonaChanged, currentPersonaIdentifier, openDashboard } = useSNSAdaptorContext()
+    const { ownPersonaChanged, currentPersonaIdentifier, openDashboard, ownProofChanged } = useSNSAdaptorContext()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const personas = useAllPersonas()
     const onBeforeAction = useCallback(() => {
@@ -163,6 +162,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
                             currentPersonaIdentifier={currentIdentifier}
                             openDashboard={openDashboard}
                             ownPersonaChanged={ownPersonaChanged}
+                            ownProofChanged={ownProofChanged}
                             handlerPosition="top-right"
                             customHint
                             directTo={PluginID.Avatar}

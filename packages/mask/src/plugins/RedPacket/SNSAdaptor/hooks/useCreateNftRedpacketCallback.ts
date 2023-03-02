@@ -2,7 +2,7 @@ import { useAsyncFn } from 'react-use'
 import Web3Utils from 'web3-utils'
 import { EthereumAddress } from 'wallet.ts'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { decodeEvents, ContractTransaction } from '@masknet/web3-shared-evm'
+import { decodeEvents, ContractTransaction, GasConfig } from '@masknet/web3-shared-evm'
 import { toFixed } from '@masknet/web3-shared-base'
 import { useChainContext, useWeb3Connection, useWeb3 } from '@masknet/web3-hooks-base'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket.js'
@@ -14,6 +14,7 @@ export function useCreateNftRedpacketCallback(
     name: string,
     contractAddress: string,
     tokenIdList: string[],
+    gasOption?: GasConfig,
 ) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
@@ -65,10 +66,11 @@ export function useCreateNftRedpacketCallback(
                         await nftRedPacketContract.methods.create_red_packet(...params).estimateGas({ from: account }),
                     ),
                     chainId,
+                    ...(gasOption ?? {}),
                 },
             )
 
-            const hash = await connection.sendTransaction(tx)
+            const hash = await connection.sendTransaction(tx, { paymentToken: gasOption?.gasCurrency })
             const receipt = await connection.getTransactionReceipt(hash)
             if (receipt) {
                 const events = decodeEvents(web3, nftRedPacketContract.options.jsonInterface, receipt)
@@ -80,7 +82,18 @@ export function useCreateNftRedpacketCallback(
             }
             return { hash, receipt }
         },
-        [duration, message, name, contractAddress, connection, tokenIdList, nftRedPacketContract, account, chainId],
+        [
+            duration,
+            message,
+            name,
+            contractAddress,
+            connection,
+            tokenIdList,
+            nftRedPacketContract,
+            account,
+            chainId,
+            gasOption,
+        ],
     )
 
     return createCallback

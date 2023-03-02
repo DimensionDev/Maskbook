@@ -284,7 +284,6 @@ export async function getClaimAllPools(
         .filter((v) => Boolean(v)) as SwappedTokenType[]
 
     // 5. merge same swap token pools into one
-    // eslint-disable-next-line unicorn/no-array-reduce
     const swappedTokenList = swappedTokenUnmergedList.reduce((acc: SwappedTokenType[], cur) => {
         if (acc.some(checkClaimable(cur)) && cur.isClaimable) {
             // merge same claimable tokens to one

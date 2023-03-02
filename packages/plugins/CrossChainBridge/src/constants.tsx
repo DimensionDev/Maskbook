@@ -45,7 +45,6 @@ export function getCrossChainBridge(t: Record<string, () => string>) {
             name: 'Rainbow Bridge',
             ID: `${PLUGIN_ID}_rainbow_bridge`,
             isOfficial: true,
-            intro: t.rainbow_bridge_intro(),
             icon: <RainbowBridgeIcon />,
             link: 'https://rainbowbridge.app/transfer',
         },

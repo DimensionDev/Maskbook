@@ -267,7 +267,7 @@ export const Prior1559GasSetting = memo(() => {
                                                 .times(nativeTokenPrice)
                                                 .times(minGasLimit || 21000),
                                             'USD',
-                                            { boundaries: { min: 0.01 } },
+                                            { onlyRemainTwoDecimal: true },
                                         ),
                                     }}
                                     components={{ span: <span /> }}

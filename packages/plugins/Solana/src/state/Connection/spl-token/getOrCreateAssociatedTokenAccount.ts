@@ -28,7 +28,6 @@ export async function getOrCreateAssociatedTokenAccount(
     let account
     try {
         account = await getAccountInfo(connection, associatedToken, commitment, programId)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         // TokenAccountNotFoundError can be possible if the associated address has already received some lamports,
         // becoming a system account. Assuming program derived addressing is safe, this is the only case for the

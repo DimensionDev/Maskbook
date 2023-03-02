@@ -22,7 +22,7 @@ export const { makeStyles } = createMakeStyles({ useTheme }) as any as {
         },
     ) => {
         classes: StyleOverrides extends { classes?: { [key in infer ExtraKeys]?: string | undefined } }
-            ? Record<ExtraKeys | RuleName, string>
+            ? Record<string extends ExtraKeys ? RuleName : ExtraKeys | RuleName, string>
             : Record<RuleName, string>
         theme: Theme
         css: Css

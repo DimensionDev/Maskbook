@@ -81,3 +81,9 @@ export function isOpera() {
 export function isTwitter() {
     return location.href.includes(EnhanceableSite.Twitter)
 }
+
+export function getExtensionId() {
+    const url = browser.runtime.getURL('')
+    if (isChromium() || isOpera() || isEdge()) return url.match(/chrome-extension:\/\/([a-z]{32})/)?.[1] ?? ''
+    return
+}
