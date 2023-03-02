@@ -1,5 +1,5 @@
 import { Breadcrumbs, Event, GlobalHandlers } from '@sentry/browser'
-import { getSiteType, getAgentType } from '@masknet/shared-base'
+import { getSiteType, getAgentType, getExtensionId } from '@masknet/shared-base'
 import { formatMask } from '@masknet/web3-shared-base'
 import { TelemetryAPI } from '../types/Telemetry.js'
 
@@ -51,6 +51,7 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         // set global tags
         Sentry.setTag('agent', getAgentType())
         Sentry.setTag('site', getSiteType())
+        Sentry.setTag('extension_id', getExtensionId())
         Sentry.setTag('version', process.env.VERSION)
         Sentry.setTag('ua', navigator.userAgent)
     }
