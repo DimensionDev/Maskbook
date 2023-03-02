@@ -1,4 +1,3 @@
-/* eslint-disable no-bitwise */
 import { getImageType } from '@masknet/stego-js'
 import type { Dimension } from './presets.js'
 

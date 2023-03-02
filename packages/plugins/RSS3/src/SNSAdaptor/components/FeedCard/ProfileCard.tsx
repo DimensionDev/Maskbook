@@ -114,7 +114,6 @@ export const ProfileCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => {
                         [classes.verbose]: verbose,
                         [classes.center]: !metadata.bio && !verbose,
                     })}>
-                    {/* eslint-disable-next-line no-nested-ternary */}
                     {metadata.source === 'Lens' ? (
                         <LensAvatar handle={metadata.handle} size={imageSize} />
                     ) : metadata.profile_uri ? (

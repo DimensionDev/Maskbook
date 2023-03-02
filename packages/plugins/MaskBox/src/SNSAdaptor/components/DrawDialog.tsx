@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import { useCallback } from 'react'
 import { useContainer } from 'unstated-next'
 import { makeStyles, ActionButton } from '@masknet/theme'

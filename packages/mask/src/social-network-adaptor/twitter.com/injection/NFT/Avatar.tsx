@@ -6,7 +6,7 @@ import { postAvatarSelector } from '../../utils/selector.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 
 function getUserId(ele: HTMLElement) {
-    const attribute = ele?.getAttribute('data-testid') || ''
+    const attribute = ele?.dataset.testid || ''
     if (attribute.endsWith('unknown')) {
         return ele?.querySelector('a[href][role=link]')?.getAttribute('href')?.slice(1)
     }

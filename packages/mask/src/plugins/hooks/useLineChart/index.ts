@@ -213,7 +213,6 @@ export function useLineChart(
 
         // add tooltip
         d3.select(svgRef.current).on('mousemove', function () {
-            // eslint-disable-next-line @typescript-eslint/no-invalid-this
             const mx = d3.mouse(this)[0]
             if (mx < left - 10 || mx > left + contentWidth) {
                 // mouse not in the content view

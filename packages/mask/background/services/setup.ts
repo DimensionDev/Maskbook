@@ -69,6 +69,7 @@ import { decryptionWithSocialNetworkDecoding } from './crypto/decryption.js'
     const GeneratorService: GeneratorServices = {
         decryption: decryptionWithSocialNetworkDecoding,
     }
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     import.meta.webpackHot &&
         import.meta.webpackHot.accept(['./crypto/decryption'], async () => {
             GeneratorService.decryption = (
