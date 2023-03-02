@@ -40,7 +40,7 @@
     "personas_description": "Your twitter can create a free SmartPay wallet.",
     "swap": "Swap",
     "smart_pay_wallet": "Smart Pay Wallet",
-    "smart_pay_wallet_deployment": "SmartPay Wallet deployment",
+    "smart_pay_wallet_deployment": "SmartPay Wallet Deployment",
     "setup_smart_pay_managed_account": "Set up the Management Account for SmartPay Wallet",
     "send": "Send",
     "smart_pay_description": "Smart Pay is based on ERC-4337 and is currently deployed on Polygon Network. Multiple chains will be supported in the future. ERC-4337 is a new wallet proposal that would open the door for creativity in wallet design and could provide more important features. And we will design more fascinating features based on the new wallet proposal in Mask Network.",
@@ -61,6 +61,6 @@
     "network_error": "Network error.",
     "wallets": "Wallets",
     "waiting_for_user_signature": "Waiting for user signature",
-    "what_is_smart_pay": "What is Smart Pay",
-    "what_is_smart_pay_title": "What is smart pay?"
+    "what_is_smart_pay": "What is SmartPay",
+    "what_is_smart_pay_title": "What is SmartPay?"
 }
