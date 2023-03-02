@@ -337,7 +337,7 @@ const codeStyleRules = {
     // '@typescript-eslint/prefer-function-type': 'warn',
     '@typescript-eslint/prefer-reduce-type-parameter': 'warn',
     // '@typescript-eslint/sort-type-constituents': 'warn',
-    '@typescript-eslint/triple-slash-reference': ['error', { lib: 'never', path: 'never', types: 'always' }],
+    // '@typescript-eslint/triple-slash-reference': ['error', { lib: 'never', path: 'never', types: 'always' }],
     // '@typescript-eslint/unified-signatures': 'warn', // prefer merging overload
     '@dimensiondev/prefer-early-return': 'warn',
     // '@dimensiondev/no-redundant-variable': 'warn',
