@@ -1,7 +1,7 @@
-export type Unresolved<T> = T | (() => T)
+export type Unresolved<T, P = never> = T | ((options?: P) => T)
 
-export function resolve<T>(unresolved: Unresolved<T>): T {
+export function resolve<T, P>(unresolved: Unresolved<T, P>, options?: P): T {
     if (typeof unresolved !== 'function') return unresolved
-    // @ts-ignore
-    return unresolved() as T
+    const unresolveFunction = unresolved as (options?: P) => T
+    return unresolveFunction(options)
 }
