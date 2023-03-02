@@ -1,6 +1,7 @@
 import { Breadcrumbs, Event, GlobalHandlers } from '@sentry/browser'
 import { getSiteType, getAgentType } from '@masknet/shared-base'
 import { TelemetryAPI } from '../types/Telemetry.js'
+import { formatMask } from '@masknet/web3-shared-base'
 
 export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
     constructor() {
@@ -21,6 +22,23 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
             ],
             environment: process.env.NODE_ENV,
             tracesSampleRate: 1.0,
+            ignoreErrors: [
+                'At least one of the attempts fails.',
+                'Extension context invalidated.',
+                '[object Promise]',
+                'ResizeObserver loop limit exceeded',
+            ],
+            beforeSend(event) {
+                if (event.exception?.values?.length) {
+                    event.exception?.values?.forEach((error) => {
+                        error.value = formatMask(error.value)
+                    })
+                }
+                if (event.message) {
+                    event.message = formatMask(event.message)
+                }
+                return event
+            },
         })
 
         // set global tags
@@ -97,11 +115,7 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         return {
             message,
             level: type === TelemetryAPI.TypeID.Event ? 'info' : 'error',
-            user: options.user?.account
-                ? {
-                      username: options.user.account,
-                  }
-                : undefined,
+            user: {},
             tags: {
                 type: TelemetryAPI.TypeID.Event,
                 chain_id: options.network?.chainId,

@@ -48,6 +48,7 @@ const sns: Plugin.SNSAdaptor.Definition<
                             chainId,
                         }}>
                         <TrendingViewProvider
+                            isDSearch={!isProfilePage}
                             isCollectionProjectPopper={false}
                             isProfilePage={Boolean(isProfilePage)}
                             isTokenTagPopper={false}

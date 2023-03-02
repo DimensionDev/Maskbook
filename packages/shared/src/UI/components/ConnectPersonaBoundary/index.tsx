@@ -48,6 +48,7 @@ interface ConnectPersonaBoundaryProps {
     openDashboard: (route?: DashboardRoutes, search?: string) => Promise<any>
     identity?: IdentityResolved
     ownPersonaChanged: UnboundedRegistry<void>
+    ownProofChanged: UnboundedRegistry<void>
 }
 
 export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
@@ -65,6 +66,7 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
         ownPersonaChanged,
         identity,
         openDashboard,
+        ownProofChanged,
     }) => {
         const t = useSharedI18N()
         const { classes } = useStyles()
@@ -74,7 +76,7 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
             currentPersonaIdentifier,
             openDashboard,
             identity,
-            { events: { ownPersonaChanged } } as WebExtensionMessage<MaskEvents>,
+            { events: { ownPersonaChanged, ownProofChanged } } as WebExtensionMessage<MaskEvents>,
         )
         const isFnChildren = typeof children === 'function'
 

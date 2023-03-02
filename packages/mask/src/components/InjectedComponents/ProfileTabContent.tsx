@@ -466,6 +466,7 @@ function Content(props: ProfileTabContentProps) {
                                     currentPersonaIdentifier={currentIdentifier}
                                     openDashboard={Services.Helper.openDashboard}
                                     ownPersonaChanged={MaskMessages.events.ownPersonaChanged}
+                                    ownProofChanged={MaskMessages.events.ownProofChanged}
                                     customHint
                                     handlerPosition="top-right"
                                     directTo={PluginID.Web3Profile}>

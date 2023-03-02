@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { compact, uniqWith } from 'lodash-es'
+import { uniqWith } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     attemptUntil,
@@ -211,9 +211,14 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                     urlcat(DSEARCH_BASE_URL, '/non-fungible-collections/specific-list.json'),
                 ),
             ])
+        ).flatMap(
+            (v) =>
+                (v.status === 'fulfilled' && v.value ? v.value : []) as Array<
+                    | FungibleTokenResult<ChainId, SchemaType>
+                    | NonFungibleTokenResult<ChainId, SchemaType>
+                    | NonFungibleCollectionResult<ChainId, SchemaType>
+                >,
         )
-            .map((v) => (v.status === 'fulfilled' && v.value ? v.value : []))
-            .flat()
 
         const normalTokens = (
             await Promise.allSettled([
@@ -221,37 +226,18 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                 this.CoinGeckoClient.get(),
                 this.CoinMarketCapClient.get(),
             ])
+        ).flatMap(
+            (v) =>
+                (v.status === 'fulfilled' && v.value ? v.value : []) as Array<
+                    | FungibleTokenResult<ChainId, SchemaType>
+                    | NonFungibleTokenResult<ChainId, SchemaType>
+                    | NonFungibleCollectionResult<ChainId, SchemaType>
+                >,
         )
-            .map((v) => (v.status === 'fulfilled' && v.value ? v.value : []))
-            .flat()
 
         return {
-            specificTokens: compact<
-                | FungibleTokenResult<ChainId, SchemaType>
-                | NonFungibleTokenResult<ChainId, SchemaType>
-                | NonFungibleCollectionResult<ChainId, SchemaType>
-            >(
-                specificTokens.map((x) =>
-                    x.type === SearchResultType.FungibleToken ||
-                    x.type === SearchResultType.NonFungibleToken ||
-                    x.type === SearchResultType.CollectionListByTwitterHandler
-                        ? x
-                        : undefined,
-                ),
-            ),
-            normalTokens: compact<
-                | FungibleTokenResult<ChainId, SchemaType>
-                | NonFungibleTokenResult<ChainId, SchemaType>
-                | NonFungibleCollectionResult<ChainId, SchemaType>
-            >(
-                normalTokens.map((x) =>
-                    x.type === SearchResultType.FungibleToken ||
-                    x.type === SearchResultType.NonFungibleToken ||
-                    x.type === SearchResultType.CollectionListByTwitterHandler
-                        ? x
-                        : undefined,
-                ),
-            ),
+            specificTokens,
+            normalTokens,
         }
     }
 
@@ -323,7 +309,11 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         > = []
 
         if (name.length < 6) {
-            result = tokens.filter((t) => t.symbol?.toLowerCase() === name.toLowerCase())
+            result = tokens.filter(
+                (t) =>
+                    t.symbol?.toLowerCase() === name.toLowerCase() ||
+                    (name.length > 3 && t.name?.toLowerCase().startsWith(name.toLowerCase()) && t.rank && t.rank <= 20),
+            )
         }
 
         if (!result.length) {

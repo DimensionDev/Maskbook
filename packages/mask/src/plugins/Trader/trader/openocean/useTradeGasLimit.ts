@@ -6,6 +6,7 @@ import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Transaction } from '@masknet/web3-shared-evm'
 import type { SwapOOData, TradeComputed } from '../../types/index.js'
+import { toHex } from 'web3-utils'
 
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapOOData> | null): AsyncState<string> {
     const { account, chainId } = useChainContext()
@@ -21,7 +22,10 @@ export function useTradeGasLimit(tradeComputed: TradeComputed<SwapOOData> | null
 
     return useAsync(async () => {
         if (tradeComputed?.trade_?.estimatedGas) return tradeComputed.trade_.estimatedGas
-        if (!config || !connection?.estimateTransaction || pluginID !== NetworkPluginID.PLUGIN_EVM) return '0'
-        return connection.estimateTransaction(config)
+        if (!config?.value || !connection?.estimateTransaction || pluginID !== NetworkPluginID.PLUGIN_EVM) return '0'
+        return connection.estimateTransaction({
+            ...config,
+            value: toHex(config.value),
+        })
     }, [config, connection, tradeComputed?.trade_?.estimatedGas, pluginID])
 }

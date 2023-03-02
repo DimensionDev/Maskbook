@@ -105,6 +105,10 @@ export type ApplicationDialogEvent = {
     pluginID: string
 }
 
+export type PersonaBindFinishEvent = {
+    pluginID?: string
+}
+
 export type AvatarSettingDialogEvent = {
     open: boolean
     startPicking?: boolean

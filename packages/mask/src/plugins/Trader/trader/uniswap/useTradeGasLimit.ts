@@ -9,6 +9,7 @@ import type { Trade, TradeComputed, SwapCall } from '../../types/index.js'
 import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters.js'
 import { swapErrorToUserReadableMessage } from '../../helpers/index.js'
+import { toFixed } from '@masknet/web3-shared-base'
 
 interface FailedCall {
     parameters: SwapParameters
@@ -93,6 +94,6 @@ export function useTradeGasLimit(trade: TradeComputed<Trade> | null, tradeProvid
             bestCallOption = firstNoErrorCall
         }
 
-        return 'gasEstimate' in bestCallOption ? bestCallOption.gasEstimate.toFixed() : '0'
+        return 'gasEstimate' in bestCallOption ? toFixed(bestCallOption.gasEstimate) : '0'
     }, [tradeParameters.length, connection, pluginID])
 }
