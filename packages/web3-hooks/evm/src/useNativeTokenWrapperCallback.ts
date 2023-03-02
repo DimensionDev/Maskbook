@@ -4,6 +4,7 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, ContractTransaction, GasConfig } from '@masknet/web3-shared-evm'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useNativeTokenWrapperContract } from './useWrappedEtherContract.js'
+import { toHex } from 'web3-utils'
 
 export function useNativeTokenWrapperCallback(chainId?: ChainId) {
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -22,7 +23,7 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
             // estimate gas and compose transaction
             const tx = await new ContractTransaction(wrapperContract).fillAll(wrapperContract.methods.deposit(), {
                 from: account,
-                value: amount,
+                value: toHex(amount),
                 ...gasConfig,
             })
 

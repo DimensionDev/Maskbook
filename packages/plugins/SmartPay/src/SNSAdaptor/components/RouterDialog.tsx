@@ -83,7 +83,7 @@ export function RouterDialog() {
         if (verified || accounts.filter((x) => !x.deployed && x.funded).length) return navigate(RoutePaths.Deploy)
 
         return navigate(RoutePaths.InEligibility)
-    }, [open, lastRecognizedIdentity, personas, wallets])
+    }, [lastRecognizedIdentity, personas, wallets])
     // #endregion
 
     const title = useMemo(() => {
