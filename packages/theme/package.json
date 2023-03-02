@@ -25,7 +25,7 @@
   },
   "scripts": {
     "build-storybook": "build -- storybook build",
-    "start": "dev -- storybook dev -p 6006"
+    "start": "storybook dev -p 6006"
   },
   "dependencies": {
     "@masknet/icons": "workspace:^",

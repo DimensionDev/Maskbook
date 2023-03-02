@@ -13,7 +13,7 @@ const config = {
             strictMode: true,
         },
     },
-    stories: ['../stories/**/*.stories.@(ts|tsx)'],
+    stories: ['../stories'],
     addons: [
         '@storybook/addon-links',
         {
