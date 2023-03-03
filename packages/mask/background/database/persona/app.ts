@@ -11,11 +11,11 @@ import type {
 } from './type.js'
 import {
     ProfileIdentifier,
-    PersonaIdentifier,
+    type PersonaIdentifier,
     ECKeyIdentifier,
-    EC_Public_JsonWebKey,
-    EC_Private_JsonWebKey,
-    AESJsonWebKey,
+    type EC_Public_JsonWebKey,
+    type EC_Private_JsonWebKey,
+    type AESJsonWebKey,
     convertRawMapToIdentifierMap,
     convertIdentifierMapToRawMap,
 } from '@masknet/shared-base'

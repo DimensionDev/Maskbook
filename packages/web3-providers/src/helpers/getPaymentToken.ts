@@ -1,7 +1,7 @@
 import {
     APE,
     BUSD,
-    ChainId,
+    type ChainId,
     createNativeToken,
     DAI,
     HUSD,
@@ -17,6 +17,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 
 /* cspell:disable-next-line */
 const tokens = [APE, USDC, USDT, DAI, HUSD, BUSD, WBTC, WNATIVE, TATR, RARI]
+
 export function getPaymentToken(
     chainId: Web3Helper.ChainIdAll,
     token?: { name?: string; symbol?: string; address?: string },

@@ -2,9 +2,9 @@ import { ChainId, chainResolver, isNativeTokenAddress, NetworkType } from '@mask
 import { safeUnreachable } from '@masknet/kit'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants/index.js'
 import { PluginTraderRPC } from '../../messages.js'
-import { SwapQuoteResponse, TradeStrategy } from '../../types/index.js'
+import { type SwapQuoteResponse, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from '../0x/useSlippageTolerance.js'
-import { useChainContext, useDoubleBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useCustomBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -53,7 +53,7 @@ export function useTrade(
     const slippage = temporarySlippage || slippageSetting
 
     // Current only support
-    return useDoubleBlockBeatRetry(
+    return useCustomBlockBeatRetry(
         NetworkPluginID.PLUGIN_EVM,
         async () => {
             if (!inputToken || !outputToken || pluginID !== NetworkPluginID.PLUGIN_EVM) return null
@@ -93,5 +93,6 @@ export function useTrade(
             chainId,
             pluginID,
         ],
+        chainId === ChainId.BSC ? 6 : 3,
     )
 }

@@ -21,7 +21,7 @@ export function useTradeGasLimit(tradeComputed: TradeComputed<SwapOOData> | null
 
     return useAsync(async () => {
         if (tradeComputed?.trade_?.estimatedGas) return tradeComputed.trade_.estimatedGas
-        if (!config || !connection?.estimateTransaction || pluginID !== NetworkPluginID.PLUGIN_EVM) return '0'
+        if (!config?.value || !connection?.estimateTransaction || pluginID !== NetworkPluginID.PLUGIN_EVM) return '0'
         return connection.estimateTransaction(config)
     }, [config, connection, tradeComputed?.trade_?.estimatedGas, pluginID])
 }

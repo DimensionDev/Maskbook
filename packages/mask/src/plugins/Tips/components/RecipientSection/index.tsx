@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { FormControl, FormControlProps, Typography } from '@mui/material'
+import { FormControl, type FormControlProps, Typography } from '@mui/material'
 import type { FC } from 'react'
 import { useTip } from '../../contexts/index.js'
 import { useI18N } from '../../locales/index.js'

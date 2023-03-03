@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
     paper: {
         margin: 0,
         maxWidth: 320,
-        backgroundColor: theme.palette.maskColor.bottom,
+        background: theme.palette.maskColor.bottom,
     },
     title: {
         textAlign: 'center',

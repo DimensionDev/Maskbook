@@ -1,7 +1,7 @@
 /**
  * This icon should be sync with https://mask.io/img/MB--CircleCanvas--WhiteOverBlue.svg
  */
-import { SvgIcon, SvgIconProps } from '@mui/material'
+import { SvgIcon, type SvgIconProps } from '@mui/material'
 
 const MaskSmileFaceOutlinedSVG = (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 42 42">

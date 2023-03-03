@@ -3,19 +3,19 @@ import { ProviderState } from '@masknet/web3-state'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     chainResolver,
-    ChainId,
+    type ChainId,
     isValidAddress,
     isValidChainId,
     getInvalidChainId,
     NetworkType,
-    ProviderType,
-    Web3,
-    Web3Provider,
+    type ProviderType,
+    type Web3,
+    type Web3Provider,
     getDefaultChainId,
     getDefaultProviderType,
     getDefaultNetworkType,
 } from '@masknet/web3-shared-flow'
-import { Providers } from './Connection/provider.js'
+import { Providers } from './Provider/provider.js'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
     constructor(override context: Plugin.Shared.SharedUIContext) {

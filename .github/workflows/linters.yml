@@ -10,38 +10,35 @@ permissions:
   contents: read
   packages: read
 
-# Cancels all previous workflow runs for pull requests that have not completed.
 concurrency:
-  # The concurrency group contains the workflow name and the branch name for
-  # pull requests or the commit hash for any other events.
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
   cancel-in-progress: true
 
 jobs:
   prettier:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-      - run: npx prettier@2.8.0 --check .
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npx prettier@2.8.4 --check .
   markdownlint:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
       - run: npx markdownlint-cli .
   anti-trojan-source:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
       - run: npx anti-trojan-source --files='packages/**/src/**/*.{ts,tsx,js}'
   type-check:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: pnpm/action-setup@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: "18"
           cache: "pnpm"
@@ -53,11 +50,11 @@ jobs:
       - run: npx gulp codegen
       - run: npx gulp typescript
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: pnpm/action-setup@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: "18"
           cache: "pnpm"
@@ -68,13 +65,13 @@ jobs:
       - run: pnpm install
       - run: npx gulp codegen
       - run: npx gulp polyfill
-      - run: pnpm run test --coverage
+      - run: pnpm run test
   eslint:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: pnpm/action-setup@v2.2.1
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: "18"
           cache: "pnpm"
@@ -87,7 +84,7 @@ jobs:
         run: echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
         shell: bash
       - name: Restore ESLint cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ./.eslintcache
           key: linter-${{ steps.get-date.outputs.date }}

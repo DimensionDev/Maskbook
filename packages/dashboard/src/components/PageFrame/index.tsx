@@ -7,7 +7,7 @@ import {
     IconButton,
     paperClasses,
     styled,
-    Theme,
+    type Theme,
     Toolbar,
     Typography,
     useMediaQuery,

@@ -7,7 +7,7 @@ import {
     lighten,
     inputBaseClasses,
     chipClasses,
-    InputBaseProps,
+    type InputBaseProps,
     alpha,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -118,7 +118,6 @@ export interface FungibleTokenInputUIProps extends InputBaseProps {
     onMaxClick: () => void
     balance: string
     loadingBalance?: boolean
-    maxAmountSignificant?: number
     disableBalance?: boolean
     disableToken?: boolean
 }
@@ -131,7 +130,6 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
         onSelectToken,
         onMaxClick,
         balance,
-        maxAmountSignificant = 4,
         loadingBalance,
         disableMax = false,
         disableToken = false,
@@ -155,7 +153,7 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                                             <FormattedBalance
                                                 value={balance}
                                                 decimals={token?.decimals}
-                                                significant={maxAmountSignificant}
+                                                significant={token?.decimals}
                                                 formatter={formatBalance}
                                             />
                                         ) : (

@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
 import { MaskColorVar, makeStyles } from '@masknet/theme'
 import { Card, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'

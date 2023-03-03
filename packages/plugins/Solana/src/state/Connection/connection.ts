@@ -14,13 +14,13 @@ import {
     decodeAddress,
     isNativeTokenAddress,
     ProviderType,
-    SchemaType,
-    TransactionReceipt,
-    TransactionSignature,
+    type SchemaType,
+    type TransactionReceipt,
+    type TransactionSignature,
 } from '@masknet/web3-shared-solana'
 import {
-    BlockResponse,
-    Connection as SolConnection,
+    type BlockResponse,
+    type Connection as SolConnection,
     PublicKey,
     sendAndConfirmRawTransaction,
     SystemProgram,
@@ -29,9 +29,10 @@ import {
 import type { Plugin } from '@masknet/plugin-infra'
 import type { PartialRequired } from '@masknet/shared-base'
 import { Web3StateSettings } from '../../settings/index.js'
-import { Providers } from './provider.js'
+import { Providers } from '../Provider/provider.js'
 import { createTransferInstruction, getOrCreateAssociatedTokenAccount } from './spl-token/index.js'
 import type { SolanaConnection, SolanaConnectionOptions } from './types.js'
+import { identity, pickBy } from 'lodash-es'
 
 class Connection implements SolanaConnection {
     private connections: Map<ChainId, SolConnection> = new Map()
@@ -51,8 +52,8 @@ class Connection implements SolanaConnection {
             account: this.account,
             chainId: this.chainId,
             providerType: this.providerType,
-            ...initial,
-            ...overrides,
+            ...pickBy(initial, identity),
+            ...pickBy(overrides, identity),
         }
     }
 

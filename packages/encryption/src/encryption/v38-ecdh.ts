@@ -4,11 +4,11 @@ import { encryptWithAES } from '../utils/index.js'
 import {
     EncryptError,
     EncryptErrorReasons,
-    EncryptIO,
-    EncryptionResultE2E,
-    EncryptionResultE2EMap,
-    EncryptResult,
-    EncryptTargetE2E,
+    type EncryptIO,
+    type EncryptionResultE2E,
+    type EncryptionResultE2EMap,
+    type EncryptResult,
+    type EncryptTargetE2E,
 } from './EncryptionTypes.js'
 import { fillIV } from './utils.js'
 

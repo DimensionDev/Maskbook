@@ -1,10 +1,10 @@
-import { ChangeEvent, memo, useCallback, useMemo } from 'react'
+import { type ChangeEvent, memo, useCallback, useMemo } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { alpha, Box, Chip, chipClasses, lighten, Typography, InputBase } from '@mui/material'
 import { isDashboardPage } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { formatBalance, formatCurrency } from '@masknet/web3-shared-base'
-import { FormattedBalance, FormattedCurrency, SelectTokenChip, SelectTokenChipProps } from '@masknet/shared'
+import { formatBalance, formatCurrency, isZero } from '@masknet/web3-shared-base'
+import { FormattedBalance, SelectTokenChip, type SelectTokenChipProps } from '@masknet/shared'
 import { useI18N } from '../../../../../utils/index.js'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 
@@ -169,6 +169,8 @@ export const InputTokenPanelUI = memo<InputTokenPanelUIProps>(
             [onAmountChange, RE_MATCH_FRACTION_AMOUNT, RE_MATCH_WHOLE_AMOUNT],
         )
 
+        const priceUSD = formatCurrency(tokenValueUSD, 'USD', { onlyRemainTwoDecimal: true })
+
         return (
             <InputBase
                 fullWidth
@@ -216,7 +218,8 @@ export const InputTokenPanelUI = memo<InputTokenPanelUIProps>(
                             />
                         </Box>
                         <Typography className={classes.price}>
-                            &asymp; <FormattedCurrency value={tokenValueUSD} formatter={formatCurrency} />
+                            {priceUSD.includes('<') || isZero(tokenValueUSD) ? '' : '\u2248'}
+                            {priceUSD}
                         </Typography>
                     </>
                 }

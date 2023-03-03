@@ -2,14 +2,15 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Box } from '@mui/material'
-import { RSS3BaseAPI } from '@masknet/web3-providers/types'
+import { useMountReport } from '@masknet/web3-telemetry/hooks'
+import { RSS3BaseAPI, TelemetryAPI } from '@masknet/web3-providers/types'
 import { SocialAddressType, SearchResultType } from '@masknet/web3-shared-base'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
 import { setupContext } from './context.js'
-import { FeedPageProps, FeedsPage } from './FeedsPage.js'
+import { type FeedPageProps, FeedsPage } from './FeedsPage.js'
 
 function shouldDisplay(_?: SocialIdentity, socialAccount?: SocialAccount<Web3Helper.ChainIdAll>) {
     return socialAccount?.pluginID === NetworkPluginID.PLUGIN_EVM
@@ -23,6 +24,18 @@ const createProfileTabConfig = (label: string, props: FeedPageProps, priority = 
         UI: {
             TabContent: ({ socialAccount }) => {
                 const key = [socialAccount?.address ?? '-', props.tag ?? '-'].join('_')
+
+                useMountReport(() => {
+                    switch (props.tag) {
+                        case RSS3BaseAPI.Tag.Donation:
+                            return TelemetryAPI.EventID.AccessWeb3ProfileDialogDonationTab
+                        case RSS3BaseAPI.Tag.Social:
+                            return TelemetryAPI.EventID.AccessWeb3ProfileDialogSocialTab
+                        default:
+                            return TelemetryAPI.EventID.AccessWeb3ProfileDialogActivitiesTab
+                    }
+                })
+
                 return (
                     <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
                         <FeedsPage key={key} address={socialAccount?.address} {...props} />
@@ -54,6 +67,18 @@ const createSearchTabConfig = (
                     supportedAddressTypes: [SocialAddressType.ENS],
                 }
                 const key = [socialAccount?.address ?? '-', props.tag ?? '-'].join('_')
+
+                useMountReport(() => {
+                    switch (props.tag) {
+                        case RSS3BaseAPI.Tag.Donation:
+                            return TelemetryAPI.EventID.AccessWeb3TabDonationTab
+                        case RSS3BaseAPI.Tag.Social:
+                            return TelemetryAPI.EventID.AccessWeb3TabSocialTab
+                        default:
+                            return TelemetryAPI.EventID.AccessWeb3TabActivitiesTab
+                    }
+                })
+
                 return (
                     <Box style={{ minHeight: 300 }}>
                         <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>

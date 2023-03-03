@@ -1,7 +1,7 @@
 import type { JSON_PayloadInMask, PoolRecord, PoolFromNetwork } from '../types.js'
 import * as subgraph from './apis/subgraph.js'
 import * as database from './database.js'
-import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
+import { type ChainId, chainResolver } from '@masknet/web3-shared-evm'
 
 export async function getTradeInfo(pid: string, trader: string, chainId: ChainId) {
     const tradeInfo = await subgraph.getTradeInfo(chainId, pid, trader)

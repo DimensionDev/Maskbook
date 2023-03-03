@@ -3,11 +3,11 @@ import { CryptoKeyToJsonWebKey } from '../../../utils-pure/index.js'
 import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/openDB.js'
 import { assertPersonaDBConsistency } from './consistency.js'
 import {
-    AESJsonWebKey,
+    type AESJsonWebKey,
     convertIdentifierMapToRawMap,
     convertRawMapToIdentifierMap,
     ECKeyIdentifier,
-    PersonaIdentifier,
+    type PersonaIdentifier,
     ProfileIdentifier,
     RelationFavor,
     fromBase64URL,

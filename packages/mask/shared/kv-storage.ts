@@ -1,4 +1,4 @@
-import { createProxyKVStorageBackend, createKVStorageHost, KVStorageBackend, PluginID } from '@masknet/shared-base'
+import { createProxyKVStorageBackend, createKVStorageHost, type KVStorageBackend, PluginID } from '@masknet/shared-base'
 import { MaskMessages } from './messages.js'
 
 const indexedDBProxy = createProxyKVStorageBackend()
@@ -48,7 +48,6 @@ export const PersistentStorages = {
             [PluginID.Transak]: false,
             [PluginID.Pets]: false,
             [PluginID.GoPlusSecurity]: false,
-            [PluginID.Referral]: false,
         },
     }),
 }

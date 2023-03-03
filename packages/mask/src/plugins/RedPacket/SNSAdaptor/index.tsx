@@ -4,7 +4,7 @@ import {
     SchemaType,
     chainResolver,
     networkResolver,
-    NetworkType,
+    type NetworkType,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import { Trans } from 'react-i18next'
@@ -93,7 +93,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         label: (
             <>
                 <Icons.RedPacket size={16} />
-                Lucky Drop
+                <Trans ns={PluginID.RedPacket} i18nKey="name" />
             </>
         ),
     },

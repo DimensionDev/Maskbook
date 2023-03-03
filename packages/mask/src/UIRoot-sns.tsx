@@ -8,7 +8,7 @@ import { ErrorBoundary, BuildInfo, useValueRef } from '@masknet/shared-base-ui'
 import { compose, getSiteType, i18NextInstance, NetworkPluginID } from '@masknet/shared-base'
 import { buildInfoMarkdown } from './utils/BuildInfoMarkdown.js'
 import { activatedSocialNetworkUI } from './social-network/index.js'
-import { pluginIDSettings } from './../shared/legacy-settings/settings.js'
+import { pluginIDSettings } from '../shared/legacy-settings/settings.js'
 import { useMaskSiteAdaptorMixedTheme } from './utils/theme/useMaskSiteAdaptorMixedTheme.js'
 import { isFacebook } from './social-network-adaptor/facebook.com/base.js'
 

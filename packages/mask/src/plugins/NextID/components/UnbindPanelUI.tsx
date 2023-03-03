@@ -7,9 +7,9 @@ import { Done as DoneIcon } from '@mui/icons-material'
 import { useI18N } from '../locales/index.js'
 import { getMaskColor, makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
-import { formatPersonaFingerprint, NetworkPluginID, PersonaInformation } from '@masknet/shared-base'
+import { formatPersonaFingerprint, NetworkPluginID, type PersonaInformation } from '@masknet/shared-base'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
-import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab.js'
+import AbstractTab, { type AbstractTabProps } from '../../../components/shared/AbstractTab.js'
 
 const useStyles = makeStyles()((theme) => ({
     persona: {

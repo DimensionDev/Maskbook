@@ -3,7 +3,7 @@ import { makeStyles, MaskDialog, MaskColorVar, MaskLightTheme, useCustomSnackbar
 import { Box, Button, DialogContent, ThemeProvider, Typography } from '@mui/material'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { Icons } from '@masknet/icons'
-import { ForwardedRef, forwardRef, useEffect, useMemo, useRef, useState } from 'react'
+import { type ForwardedRef, forwardRef, useEffect, useMemo, useRef, useState } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import { toJpeg } from 'html-to-image'
 import { WatermarkURL } from '../../../assets/index.js'

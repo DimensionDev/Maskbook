@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-import { useEffect, RefObject } from 'react'
+import { useEffect, type RefObject } from 'react'
 import stringify from 'json-stable-stringify'
 import type { Dimension } from './useDimension.js'
 
@@ -124,7 +124,6 @@ export function usePriceLineChart(
 
         // add tooltip
         d3.select(svgRef.current).on('mousemove', function () {
-            // eslint-disable-next-line @typescript-eslint/no-invalid-this
             const mx = d3.mouse(this)[0]
             if (mx < left || mx > left + contentWidth) {
                 // mouse not in the content view

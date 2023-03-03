@@ -2,14 +2,14 @@ import urlcat from 'urlcat'
 import { first, last } from 'lodash-es'
 import {
     OrderSide,
-    HubOptions,
-    HubIndicator,
-    NonFungibleTokenOrder,
+    type HubOptions,
+    type HubIndicator,
+    type NonFungibleTokenOrder,
     createPageable,
     createIndicator,
     createNextIndicator,
-    NonFungibleTokenEvent,
-    NonFungibleTokenContract,
+    type NonFungibleTokenEvent,
+    type NonFungibleTokenContract,
     SourceType,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'

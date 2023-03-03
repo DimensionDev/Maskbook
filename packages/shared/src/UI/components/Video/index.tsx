@@ -1,6 +1,6 @@
 import { forwardRef, useMemo, useRef } from 'react'
 import { useAsync } from 'react-use'
-import { Skeleton, SkeletonProps } from '@mui/lab'
+import { Skeleton, type SkeletonProps } from '@mui/lab'
 import { fetchBlob } from '@masknet/web3-providers/helpers'
 
 export interface VideoRef {

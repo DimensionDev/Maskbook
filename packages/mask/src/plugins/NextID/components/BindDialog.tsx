@@ -1,7 +1,13 @@
 import { memo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { NetworkPluginID, Binding, PersonaInformation, NextIDAction, NextIDPlatform } from '@masknet/shared-base'
+import {
+    type NetworkPluginID,
+    type Binding,
+    type PersonaInformation,
+    NextIDAction,
+    NextIDPlatform,
+} from '@masknet/shared-base'
 import { delay } from '@masknet/kit'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { NextIDProof } from '@masknet/web3-providers'

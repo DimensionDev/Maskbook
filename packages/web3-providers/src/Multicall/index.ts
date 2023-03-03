@@ -4,12 +4,12 @@ import type { Multicall } from '@masknet/web3-contracts/types/Multicall.js'
 import type { BaseContract, NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import MulticallABI from '@masknet/web3-contracts/abis/Multicall.json'
 import {
-    ChainId,
+    type ChainId,
     ContractTransaction,
     createContract,
     decodeOutputString,
     getEthereumConstant,
-    UnboxTransactionObject,
+    type UnboxTransactionObject,
 } from '@masknet/web3-shared-evm'
 import { CONSERVATIVE_BLOCK_GAS_LIMIT, DEFAULT_GAS_LIMIT, DEFAULT_GAS_REQUIRED } from './constants.js'
 import { Web3API } from '../EVM/index.js'

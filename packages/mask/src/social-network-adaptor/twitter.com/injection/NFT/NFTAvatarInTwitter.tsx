@@ -24,7 +24,12 @@ import { useChainContext, useWeb3Hub } from '@masknet/web3-hooks-base'
 import { Box, Typography } from '@mui/material'
 import { AssetPreviewer, useShowConfirm } from '@masknet/shared'
 import type { AvatarMetaDB } from '@masknet/plugin-avatar'
-import { NetworkPluginID, EnhanceableSite, NFTAvatarEvent, CrossIsolationMessages } from '@masknet/shared-base'
+import {
+    NetworkPluginID,
+    type EnhanceableSite,
+    type NFTAvatarEvent,
+    CrossIsolationMessages,
+} from '@masknet/shared-base'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 import { Twitter } from '@masknet/web3-providers'
 

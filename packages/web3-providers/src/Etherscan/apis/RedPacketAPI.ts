@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { isSameAddress, Transaction } from '@masknet/web3-shared-base'
+import { isSameAddress, type Transaction } from '@masknet/web3-shared-base'
 import { EtherscanURL } from '@masknet/web3-shared-evm'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { RedPacketBaseAPI } from '../../types/RedPacket.js'

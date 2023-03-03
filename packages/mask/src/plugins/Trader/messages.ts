@@ -1,4 +1,4 @@
-import { createPluginMessage, createPluginRPC, PluginMessageEmitter } from '@masknet/plugin-infra'
+import { createPluginMessage, createPluginRPC, type PluginMessageEmitter } from '@masknet/plugin-infra'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
 import { PLUGIN_ID } from './constants/index.js'

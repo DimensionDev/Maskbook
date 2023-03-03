@@ -1,5 +1,5 @@
 import { timeout } from '@masknet/kit'
-import { None, Option, Some } from 'ts-results-es'
+import { None, type Option, Some } from 'ts-results-es'
 
 /**
  * Make sure that the storage is used serially.

@@ -43,7 +43,7 @@
     "use-subscription": "^1.8.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.2",
+    "@babel/core": "^7.21.0",
     "@storybook/addon-actions": "^6.5.13",
     "@storybook/addon-essentials": "^6.5.13",
     "@storybook/addon-links": "^6.5.13",
@@ -51,6 +51,6 @@
     "@storybook/manager-webpack5": "^6.5.13",
     "@storybook/react": "^6.5.13",
     "@types/react-window": "^1.8.4",
-    "babel-loader": "^9.1.0"
+    "babel-loader": "^9.1.2"
   }
 }

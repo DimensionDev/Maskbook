@@ -1,7 +1,7 @@
 import { LanguageOptions } from '@masknet/public-api'
 import i18n from 'i18next'
 import Detector from 'i18next-browser-languagedetector'
-import { debounce, DebouncedFunc } from 'lodash-es'
+import { debounce, type DebouncedFunc } from 'lodash-es'
 
 export const i18NextInstance = i18n.default || i18n
 if (process.env.NODE_ENV === 'development') {
@@ -38,7 +38,7 @@ export function updateLanguage(next: LanguageOptions) {
     }
 }
 
-const cache = Symbol()
+const cache = Symbol('shared-base i18n cache')
 export function queryRemoteI18NBundle(
     _updater: (lang: string) => Promise<Array<[namespace: string, lang: string, json: object]>>,
 ) {

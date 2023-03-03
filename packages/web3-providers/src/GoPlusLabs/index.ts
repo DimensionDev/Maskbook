@@ -2,12 +2,18 @@ import urlcat from 'urlcat'
 import { first, isEmpty, parseInt, uniqBy } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { ChainId, getGoPlusLabsConstants, isValidChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { FungibleTokenSpender, isSameAddress, NonFungibleContractSpender } from '@masknet/web3-shared-base'
+import { ChainId, getGoPlusLabsConstants, isValidChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { type FungibleTokenSpender, isSameAddress, type NonFungibleContractSpender } from '@masknet/web3-shared-base'
 import type { AuthorizationAPI } from '../types/Authorization.js'
 import type { SecurityAPI } from '../types/Security.js'
 import { GO_PLUS_LABS_ROOT_URL, INFINITE_VALUE } from './constants.js'
-import { GoPlusNFTInfo, GoPlusTokenInfo, GoPlusTokenSpender, NFTSpenderInfo, SecurityMessageLevel } from './types.js'
+import {
+    type GoPlusNFTInfo,
+    type GoPlusTokenInfo,
+    type GoPlusTokenSpender,
+    type NFTSpenderInfo,
+    SecurityMessageLevel,
+} from './types.js'
 import { SecurityMessages } from './rules.js'
 import { getAllMaskDappContractInfo } from '../Rabby/helpers.js'
 import { fetchJSON } from '../entry-helpers.js'

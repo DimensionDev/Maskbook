@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
-import { NonFungibleCollectionOverview, SourceType, TokenType } from '@masknet/web3-shared-base'
+import { type NonFungibleCollectionOverview, SourceType, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-solana'

@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
-import { PostInfoProvider, PostInfo } from '@masknet/plugin-infra/content-script'
-import { PostReplacer, PostReplacerProps } from '../../../components/InjectedComponents/PostReplacer.js'
+import { PostInfoProvider, type PostInfo } from '@masknet/plugin-infra/content-script'
+import { PostReplacer, type PostReplacerProps } from '../../../components/InjectedComponents/PostReplacer.js'
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
 import { noop } from 'lodash-es'
 

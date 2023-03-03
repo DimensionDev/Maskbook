@@ -17,7 +17,7 @@ export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabiliti
         const timeout = 5000
         const worker = async function (abort: AbortSignal) {
             const checkSignal = () => {
-                if (abort.aborted) throw new Error('Aborted')
+                if (abort.aborted) throw new Error('Abort to paste text to the composition dialog at twitter.')
             }
 
             if (!isCompose() && !hasEditor() && opt?.reason !== 'reply') {

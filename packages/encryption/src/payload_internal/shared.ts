@@ -1,6 +1,6 @@
 import { ProfileIdentifier, CheckedError, OptionalResult } from '@masknet/base'
 import { Ok } from 'ts-results-es'
-import { PayloadParseResult, SocialNetworkEnum } from '../payload/index.js'
+import { type PayloadParseResult, SocialNetworkEnum } from '../payload/index.js'
 import { CryptoException, PayloadException } from '../types/index.js'
 import { importAES } from '../utils/index.js'
 

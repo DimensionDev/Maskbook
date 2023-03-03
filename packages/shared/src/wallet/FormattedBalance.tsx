@@ -1,4 +1,4 @@
-import { FC, Fragment } from 'react'
+import { type FC, Fragment } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { isZero, isLessThan } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'

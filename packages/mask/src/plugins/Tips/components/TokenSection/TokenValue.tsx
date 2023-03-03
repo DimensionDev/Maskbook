@@ -1,4 +1,4 @@
-import { FC, HTMLProps, useMemo } from 'react'
+import { type FC, type HTMLProps, useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { useChainContext, useFungibleTokenPrice, useNetworkContext } from '@masknet/web3-hooks-base'
 import { TokenIcon } from '@masknet/shared'
@@ -50,11 +50,7 @@ export const TokenValue: FC<Props> = ({ className, ...rest }) => {
 
     const priceUSD = useMemo(() => {
         if (!tokenPrice || !amount) return
-        return formatCurrency(new BigNumber(amount).times(tokenPrice), 'USD', {
-            boundaries: {
-                min: 0.01,
-            },
-        })
+        return formatCurrency(new BigNumber(amount).times(tokenPrice), 'USD', { onlyRemainTwoDecimal: true })
     }, [amount, tokenPrice])
 
     return amount && token ? (

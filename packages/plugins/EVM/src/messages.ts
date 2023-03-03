@@ -1,4 +1,4 @@
-import { createPluginMessage, createPluginRPC, PluginMessageEmitter } from '@masknet/plugin-infra'
+import { createPluginMessage, createPluginRPC, type PluginMessageEmitter } from '@masknet/plugin-infra'
 import { serializer } from '@masknet/shared-base'
 import { PLUGIN_ID } from './constants/index.js'
 

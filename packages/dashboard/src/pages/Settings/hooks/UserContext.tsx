@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useState } from 'react'
+import { createContext, type PropsWithChildren, useState } from 'react'
 import SettingPasswordDialog from '../components/dialogs/SettingPasswordDialog.js'
 import { BackupPasswordConfirmDialog } from '../../../components/BackupPasswordConfirmDialog/index.js'
 

@@ -14,7 +14,7 @@ import {
     ChainId,
     formatGweiToWei,
     formatWeiToGwei,
-    ChainIdOptionalRecord,
+    type ChainIdOptionalRecord,
     formatWeiToEther,
 } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
@@ -267,7 +267,7 @@ export const Prior1559GasSetting = memo(() => {
                                                 .times(nativeTokenPrice)
                                                 .times(minGasLimit || 21000),
                                             'USD',
-                                            { boundaries: { min: 0.01 } },
+                                            { onlyRemainTwoDecimal: true },
                                         ),
                                     }}
                                     components={{ span: <span /> }}

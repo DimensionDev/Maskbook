@@ -1,9 +1,9 @@
 import {
     appendEncryptionTarget,
-    EC_Key,
+    type EC_Key,
     EC_KeyCurveEnum,
-    SocialNetworkEnum,
-    SupportedPayloadVersions,
+    type SocialNetworkEnum,
+    type SupportedPayloadVersions,
 } from '@masknet/encryption'
 import type { EC_Public_CryptoKey, PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { deriveAESByECDH, queryPublicKey } from '../../database/persona/helper.js'

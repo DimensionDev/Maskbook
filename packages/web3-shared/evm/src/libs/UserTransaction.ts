@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js'
 import { isUndefined, omitBy } from 'lodash-es'
 import type Web3 from 'web3'
 import * as ABICoder from 'web3-eth-abi'
-import { AbiItem, hexToBytes, keccak256, padLeft, toHex, toNumber } from 'web3-utils'
+import { type AbiItem, hexToBytes, keccak256, padLeft, toHex, toNumber } from 'web3-utils'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
 import { isGreaterThan, multipliedBy, toFixed } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
@@ -11,15 +11,15 @@ import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import type { EntryPoint } from '@masknet/web3-contracts/types/EntryPoint.js'
 import type { ChainId, Transaction, UserOperation } from '../types/index.js'
 import {
-    createContract,
     getZeroAddress,
     isZeroString,
     isEmptyHex,
     isZeroAddress,
-    formatEthereumAddress,
     isValidAddress,
     isNativeTokenAddress,
-} from '../helpers/index.js'
+} from '../helpers/address.js'
+import { createContract } from '../helpers/createContract.js'
+import { formatEthereumAddress } from '../helpers/formatter.js'
 import { getSmartPayConstants } from '../constants/index.js'
 import type { Signer } from './Signer.js'
 

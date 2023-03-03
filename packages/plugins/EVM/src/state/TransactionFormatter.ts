@@ -1,18 +1,18 @@
 import * as ABICoder from 'web3-eth-abi'
 import type { Plugin } from '@masknet/plugin-infra'
 import {
-    TransactionContext,
-    TransactionDescriptor as TransactionDescriptorBase,
+    type TransactionContext,
+    type TransactionDescriptor as TransactionDescriptorBase,
     TransactionDescriptorType,
 } from '@masknet/web3-shared-base'
 import { TransactionFormatterState } from '@masknet/web3-state'
 import {
     AccountTransaction,
-    ChainId,
+    type ChainId,
     isEmptyHex,
     isZeroAddress,
-    Transaction,
-    TransactionParameter,
+    type Transaction,
+    type TransactionParameter,
 } from '@masknet/web3-shared-evm'
 import { readABIs } from './TransactionFormatter/abi.js'
 import { createConnection } from './Connection/connection.js'

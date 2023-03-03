@@ -9,7 +9,7 @@ import { Box, Skeleton, Typography } from '@mui/material'
 import { useI18N } from '../locales/index.js'
 import { FeedCard } from './components/index.js'
 import { FeedDetailsProvider } from './contexts/FeedDetails.js'
-import { FeedOwnerContext, FeedOwnerOptions } from './contexts/index.js'
+import { FeedOwnerContext, type FeedOwnerOptions } from './contexts/index.js'
 import { useFeeds } from './hooks/useFeeds.js'
 
 const useStyles = makeStyles()((theme) => ({

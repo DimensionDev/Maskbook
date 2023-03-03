@@ -7,8 +7,8 @@ import { useContainer } from 'unstated-next'
 import { Button, Link, List } from '@mui/material'
 import {
     isSameAddress,
-    RecentTransactionComputed,
-    TransactionDescriptor,
+    type RecentTransactionComputed,
+    type TransactionDescriptor,
     TransactionDescriptorType,
 } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction } from '@masknet/web3-shared-evm'

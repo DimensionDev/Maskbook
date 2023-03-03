@@ -23,6 +23,7 @@ export namespace TrendingAPI {
 
     export interface Currency {
         id: string
+        chainId?: Web3Helper.ChainIdAll
         name: string
         symbol?: string
         description?: string
@@ -100,6 +101,7 @@ export namespace TrendingAPI {
         price_change_percentage_30d_in_currency?: number
         price_change_percentage_60d_in_currency?: number
         price_change_percentage_200d_in_currency?: number
+        atl_change_percentage?: number
         /** NFT only */
         floor_price?: number
         /** NFT only */

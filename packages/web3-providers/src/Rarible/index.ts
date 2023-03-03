@@ -2,10 +2,10 @@ import urlcat from 'urlcat'
 import { first } from 'lodash-es'
 import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import {
-    HubOptions,
-    NonFungibleAsset,
-    NonFungibleTokenEvent,
-    NonFungibleTokenOrder,
+    type HubOptions,
+    type NonFungibleAsset,
+    type NonFungibleTokenEvent,
+    type NonFungibleTokenOrder,
     OrderSide,
     TokenType,
     createPageable,
@@ -16,7 +16,7 @@ import {
     SourceType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
-import { RaribleEventType, RaribleOrder, RaribleHistory, RaribleNFTItemMapResponse } from './types.js'
+import { RaribleEventType, type RaribleOrder, type RaribleHistory, type RaribleNFTItemMapResponse } from './types.js'
 import { RaribleURL } from './constants.js'
 import { getPaymentToken, getAssetFullName, resolveActivityType, fetchJSON } from '../entry-helpers.js'
 import type { NonFungibleTokenAPI } from '../entry-types.js'

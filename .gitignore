@@ -1,3 +1,6 @@
+# tailwind
+packages/app/src/styles/index.css
+
 # generated files
 i18n_generated*
 icon-generated*

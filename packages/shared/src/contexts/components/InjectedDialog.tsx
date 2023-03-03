@@ -2,14 +2,14 @@
 import { EnhanceableSite, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
 import { omit } from 'lodash-es'
-import { Cx, makeStyles, useDialogStackActor, usePortalShadowRoot } from '@masknet/theme'
+import { type Cx, makeStyles, useDialogStackActor, usePortalShadowRoot } from '@masknet/theme'
 import {
     Dialog,
     DialogActions,
-    DialogClassKey,
+    type DialogClassKey,
     DialogContent,
-    DialogContentProps,
-    DialogProps,
+    type DialogContentProps,
+    type DialogProps,
     DialogTitle,
     IconButton,
     Stack,

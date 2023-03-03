@@ -1,22 +1,23 @@
 import urlcat from 'urlcat'
 import { first, uniqWith } from 'lodash-es'
 import {
-    BindingProof,
+    type BindingProof,
     fromHex,
-    NextIDAction,
-    NextIDBindings,
-    NextIDErrorBody,
-    NextIDPayload,
-    NextIDPersonaBindings,
+    type NextIDAction,
+    type NextIDBindings,
+    type NextIDErrorBody,
+    type NextIDPayload,
+    type NextIDPersonaBindings,
     NextIDPlatform,
     toBase64,
 } from '@masknet/shared-base'
-import { PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
+import { PROOF_BASE_URL_PROD, RELATION_SERVICE_URL, PROOF_BASE_URL_DEV } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
 import { fetchJSON } from '../entry-helpers.js'
 
-const BASE_URL = PROOF_BASE_URL_PROD
+const BASE_URL =
+    process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
 interface CreatePayloadBody {
     action: string
     platform: string
@@ -169,51 +170,47 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         }
     }
 
-    async queryProfilesByRelationService(domain: string) {
+    async queryProfilesByRelationService(address: string) {
         const response = await fetchJSON<{
             data: {
-                domain: {
-                    owner: {
-                        neighborWithTraversal: Array<{
-                            source: NextIDPlatform
-                            to: { platform: NextIDPlatform; displayName: string }
-                            from: { platform: NextIDPlatform; displayName: string }
-                        }>
-                    }
+                identity: {
+                    neighborWithTraversal: Array<{
+                        source: NextIDPlatform
+                        to: { platform: NextIDPlatform; displayName: string }
+                        from: { platform: NextIDPlatform; displayName: string }
+                    }>
                 }
             }
         }>(RELATION_SERVICE_URL, {
             method: 'POST',
             mode: 'cors',
             body: JSON.stringify({
-                operationName: 'GET_PROFILES_DOMAIN',
-                variables: { domain: domain.toLowerCase(), platform: 'ENS' },
+                operationName: 'GET_PROFILES_QUERY',
+                variables: { platform: 'ethereum', identity: address.toLowerCase() },
                 query: `
-                    query GET_PROFILES_DOMAIN($platform: String, $domain: String) {                    
-                        domain(domainSystem: $platform, name: $domain) {  
-                            owner {                    
-                                neighborWithTraversal(depth: 5) {
-                                    source
-                                    to {
-                                        platform
-                                        displayName                                                                                                        
-                                    }        
-                                    from {
-                                        platform
-                                        displayName                                                                                                        
-                                    }                                                                                          
-                                }
-                            }
+                    query GET_PROFILES_QUERY($platform: String, $identity: String) {                    
+                        identity(platform: $platform, identity: $identity) {                                   
+                            neighborWithTraversal(depth: 5) {
+                                source
+                                to {
+                                    platform
+                                    displayName                                                                                                        
+                                }        
+                                from {
+                                    platform
+                                    displayName                                                                                                        
+                                }                                                                                          
+                            }                          
                         }
                     }
                 `,
             }),
         })
 
-        const rawData = response.data.domain.owner.neighborWithTraversal
+        const rawData = response.data.identity.neighborWithTraversal
             .map((x) => createBindingProofFromProfileQuery(x.to.platform, x.source, x.to.displayName))
             .concat(
-                response.data.domain.owner.neighborWithTraversal.map((x) =>
+                response.data.identity.neighborWithTraversal.map((x) =>
                     createBindingProofFromProfileQuery(x.from.platform, x.source, x.from.displayName),
                 ),
             )

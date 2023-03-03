@@ -1,7 +1,7 @@
 import {
     CurrencyType,
-    FungibleAsset,
-    FungibleToken,
+    type FungibleAsset,
+    type FungibleToken,
     leftShift,
     multipliedBy,
     TokenType,

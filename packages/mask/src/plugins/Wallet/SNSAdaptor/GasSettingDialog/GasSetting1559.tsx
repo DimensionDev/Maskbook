@@ -1,4 +1,4 @@
-import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { type FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { z as zod } from 'zod'
 import { BigNumber } from 'bignumber.js'
@@ -274,7 +274,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                                                 .times(nativeTokenPrice)
                                                 .times(gasLimit ?? 21000),
                                             'USD',
-                                            { boundaries: { min: 0.01 } },
+                                            { onlyRemainTwoDecimal: true },
                                         ),
                                     }}
                                     components={{ span: <span /> }}

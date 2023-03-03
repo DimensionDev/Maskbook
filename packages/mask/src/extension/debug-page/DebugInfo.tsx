@@ -8,10 +8,8 @@ export const DEBUG_INFO = {
     'Build Date': process.env.channel_DATE,
     'Commit Hash': process.env.COMMIT_HASH,
     'Commit Date': process.env.COMMIT_DATE,
-    'Remote URL': process.env.REMOTE_URL,
     'Branch Name': process.env.BRANCH_NAME,
     Dirty: process.env.DIRTY,
-    'Tag Dirty': process.env.TAG_DIRTY,
 }
 
 export const DebugInfo = () => {

@@ -1,5 +1,5 @@
 import { useAsync } from 'react-use'
-import { AbiItem, toHex } from 'web3-utils'
+import { type AbiItem, toHex } from 'web3-utils'
 import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import { NetworkPluginID } from '@masknet/shared-base'

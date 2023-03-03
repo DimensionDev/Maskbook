@@ -5,11 +5,11 @@ import type { AbiItem } from 'web3-utils'
 import { DialogActions, DialogContent, Tab } from '@mui/material'
 import { EMPTY_LIST, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
-import { ChainId, createContract, getAaveConstants, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { ChainId, createContract, getAaveConstants, type SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { InjectedDialog, PluginWalletStatusBar, ChainBoundary, NetworkTab } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
 import { AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext.js'
-import { SavingsProtocol, TabType } from '../types.js'
+import { type SavingsProtocol, TabType } from '../types.js'
 import { SavingsTable } from './SavingsTable.js'
 import { SavingsFormDialog } from './SavingsForm.js'
 import type { AaveProtocolDataProvider } from '@masknet/web3-contracts/types/AaveProtocolDataProvider.js'
@@ -140,7 +140,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
         }
     }, [currentChainId])
 
-    const [currentTab, onChange, tabs] = useTabs('Deposit', 'Withdraw')
+    const [currentTab, onChange, tabs] = useTabs(t('plugin_savings_deposit'), t('plugin_savings_withdraw'))
 
     return (
         <Web3ContextProvider value={{ pluginID, chainId: ChainId.Mainnet }}>

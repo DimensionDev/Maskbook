@@ -4,14 +4,14 @@ import {
     createIndicator,
     createNextIndicator,
     createPageable,
-    HubIndicator,
-    HubOptions,
-    NonFungibleCollection,
-    NonFungibleTokenContract,
-    NonFungibleTokenEvent,
-    Pageable,
+    type HubIndicator,
+    type HubOptions,
+    type NonFungibleCollection,
+    type NonFungibleTokenContract,
+    type NonFungibleTokenEvent,
+    type Pageable,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-solana'
+import { ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-solana'
 import {
     createNonFungibleAsset,
     createNonFungibleCollection,

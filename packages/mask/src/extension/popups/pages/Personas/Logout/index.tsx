@@ -18,7 +18,7 @@ import {
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
-import { isSameAddress, Wallet } from '@masknet/web3-shared-base'
+import { isSameAddress, type Wallet } from '@masknet/web3-shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Trans } from 'react-i18next'
 import { first } from 'lodash-es'
@@ -132,7 +132,7 @@ const Logout = memo(() => {
     }, [selectedPersona, history, Provider, wallet, wallets, connection, smartPayChainId])
 
     const manageWallets = useMemo(() => {
-        return wallets.filter((x) => x.identifier?.toText() === selectedPersona?.identifier.toText())
+        return wallets.filter((x) => isSameAddress(x.owner, selectedPersona?.address))
     }, [wallets, selectedPersona])
 
     return (

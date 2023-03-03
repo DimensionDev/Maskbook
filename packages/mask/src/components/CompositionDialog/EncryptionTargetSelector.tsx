@@ -75,6 +75,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                     currentPersonaIdentifier={currentIdentifier}
                     openDashboard={Services.Helper.openDashboard}
                     ownPersonaChanged={MaskMessages.events.ownPersonaChanged}
+                    ownProofChanged={MaskMessages.events.ownProofChanged}
                     customHint
                     handlerPosition="top-right"
                     enableVerify={false}

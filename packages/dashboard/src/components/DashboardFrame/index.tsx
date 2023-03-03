@@ -1,6 +1,6 @@
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { MaskColorVar } from '@masknet/theme'
-import { Grid, styled, Theme, useMediaQuery } from '@mui/material'
+import { Grid, styled, type Theme, useMediaQuery } from '@mui/material'
 import { memo, Suspense, useMemo, useState } from 'react'
 import { FollowUs } from '../FollowUs/index.js'
 import { NavigationVersionFooter } from '../NavigationVersionFooter/index.js'

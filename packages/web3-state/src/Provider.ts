@@ -2,7 +2,13 @@ import { clone, first } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import { ECKeyIdentifier, getSiteType, mapSubscription, mergeSubscription, StorageObject } from '@masknet/shared-base'
+import {
+    type ECKeyIdentifier,
+    getSiteType,
+    mapSubscription,
+    mergeSubscription,
+    type StorageObject,
+} from '@masknet/shared-base'
 import type { Account, WalletProvider, ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
 
 export interface ProviderStorage<Account, ProviderType extends string> {
@@ -48,9 +54,6 @@ export class ProviderState<
             providerType: options.getDefaultProviderType(),
         })
         this.storage = storage
-
-        this.setupSubscriptions()
-        this.setupProviders()
     }
 
     get ready() {
@@ -64,7 +67,12 @@ export class ProviderState<
         ]).then(() => {})
     }
 
-    protected setupSubscriptions() {
+    async setup() {
+        await this.setupSubscriptions()
+        await this.setupProviders()
+    }
+
+    protected async setupSubscriptions() {
         if (!this.site) return
 
         this.providerType = mapSubscription(this.storage.providerType.subscription, (provider) => provider)
@@ -82,12 +90,18 @@ export class ProviderState<
         )
     }
 
-    private setupProviders() {
-        Object.entries(this.providers).forEach((entry) => {
+    private async setupProviders() {
+        for (const entry of Object.entries(this.providers)) {
             const [providerType, provider] = entry as [
                 ProviderType,
                 WalletProvider<ChainId, ProviderType, Web3Provider, Web3>,
             ]
+
+            try {
+                await provider.setup()
+            } catch {
+                // ignore setup errors
+            }
 
             provider.emitter.on('chainId', async (chainId) => {
                 await this.setAccount(providerType, {
@@ -120,7 +134,7 @@ export class ProviderState<
 
                 await this.storage.providerType.setValue(this.options.getDefaultProviderType())
             })
-        })
+        }
     }
 
     private async setAccount(providerType: ProviderType, account: Partial<Account<ChainId>>) {
@@ -187,7 +201,7 @@ export class ProviderState<
             await Promise.race([
                 (async () => {
                     await delay(30 /* seconds */ * 1000 /* milliseconds */)
-                    throw new Error('Timeout!')
+                    throw new Error(`Timeout of switching chain to ${chainId}.`)
                 })(),
                 provider.switchChain(chainId),
             ])

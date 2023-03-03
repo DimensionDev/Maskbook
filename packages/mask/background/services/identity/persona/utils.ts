@@ -2,13 +2,13 @@ import * as bip39 from 'bip39'
 import * as wallet from 'wallet.ts'
 import { encodeArrayBuffer, encodeText } from '@masknet/kit'
 import {
-    EC_Private_JsonWebKey,
-    EC_Public_JsonWebKey,
-    JsonWebKeyPair,
+    type EC_Private_JsonWebKey,
+    type EC_Public_JsonWebKey,
+    type JsonWebKeyPair,
     toBase64URL,
     decompressK256Key,
-    AESCryptoKey,
-    AESJsonWebKey,
+    type AESCryptoKey,
+    type AESJsonWebKey,
     isEC_Private_JsonWebKey,
 } from '@masknet/shared-base'
 import { CryptoKeyToJsonWebKey } from '../../../../utils-pure/index.js'

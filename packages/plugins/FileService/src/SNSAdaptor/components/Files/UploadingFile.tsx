@@ -1,8 +1,8 @@
 import { formatFileSize } from '@masknet/kit'
 import { makeStyles } from '@masknet/theme'
 import { LinearProgress, linearProgressClasses, Typography } from '@mui/material'
-import { FC, memo } from 'react'
-import { FileBaseProps, FileFrame } from './FileFrame.js'
+import { type FC, memo } from 'react'
+import { type FileBaseProps, FileFrame } from './FileFrame.js'
 
 const useStyles = makeStyles()((theme) => ({
     desc: {

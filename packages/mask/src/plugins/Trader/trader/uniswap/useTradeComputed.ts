@@ -8,7 +8,7 @@ import {
     uniswapPriceTo,
     uniswapTokenTo,
 } from '../../helpers/index.js'
-import { Trade, TradeComputed, TradeStrategy } from '../../types/index.js'
+import { type Trade, type TradeComputed, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { useTradeBreakdown } from './useTradeBreakdown.js'
 import type { Web3Helper } from '@masknet/web3-helpers'

@@ -4,7 +4,7 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useTrade as useNativeTokenTrade } from './native/useTrade.js'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed.js'
-import { SwapOOData, TradeInfo, TradeStrategy } from '../types/index.js'
+import { type SwapOOData, type TradeInfo, TradeStrategy, type TradeComputed } from '../types/index.js'
 import { useV3Trade as useUniswapV3Trade } from './uniswap/useTrade.js'
 import { useTradeComputed as useUniswapTradeComputed } from './uniswap/useTradeComputed.js'
 import { useTradeGasLimit as useUniswapTradeGasLimit } from './uniswap/useTradeGasLimit.js'
@@ -27,7 +27,6 @@ import { useTradeGasLimit as useOpenOceanTradeGasLimit } from './openocean/useTr
 import { TradeProvider } from '@masknet/public-api'
 import { useAvailableTraderProviders } from '../trending/useAvailableTraderProviders.js'
 import { useNativeTradeGasLimit } from './useNativeTradeGasLimit.js'
-import type { TradeComputed } from '../types/index.js'
 
 export function useAllTradeComputed(
     inputAmount: string,

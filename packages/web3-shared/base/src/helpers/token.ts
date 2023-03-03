@@ -1,10 +1,10 @@
 import { keyBy, mapValues } from 'lodash-es'
 import {
-    FungibleToken,
-    NonFungibleToken,
-    NonFungibleCollection,
-    NonFungibleTokenContract,
-    NonFungibleTokenMetadata,
+    type FungibleToken,
+    type NonFungibleToken,
+    type NonFungibleCollection,
+    type NonFungibleTokenContract,
+    type NonFungibleTokenMetadata,
     TokenType,
 } from '../specs/index.js'
 import type { Constants } from './types.js'

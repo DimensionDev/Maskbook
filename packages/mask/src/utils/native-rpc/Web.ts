@@ -1,11 +1,11 @@
 import {
-    MaskNetworkAPIs,
+    type MaskNetworkAPIs,
     RelationFavor,
-    EC_Private_JsonWebKey as Native_EC_Private_JsonWebKey,
-    EC_Public_JsonWebKey as Native_EC_Public_JsonWebKey,
-    AESJsonWebKey as Native_AESJsonWebKey,
-    MobileProfile,
-    MobileProfileRelation,
+    type EC_Private_JsonWebKey as Native_EC_Private_JsonWebKey,
+    type EC_Public_JsonWebKey as Native_EC_Public_JsonWebKey,
+    type AESJsonWebKey as Native_AESJsonWebKey,
+    type MobileProfile,
+    type MobileProfileRelation,
     LaunchPage,
 } from '@masknet/public-api'
 import { Environment, assertEnvironment } from '@dimensiondev/holoflows-kit'

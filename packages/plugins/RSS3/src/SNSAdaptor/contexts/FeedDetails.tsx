@@ -1,6 +1,6 @@
 import { createUITaskManager } from '@masknet/shared'
 import { useContext } from 'react'
-import { FeedDetailsDialog, FeedDetailsDialogProps } from '../components/DetailsDialog/index.js'
+import { FeedDetailsDialog, type FeedDetailsDialogProps } from '../components/DetailsDialog/index.js'
 
 const { TaskManagerContext, TaskManagerProvider: FeedDetailsProvider } = createUITaskManager<
     FeedDetailsDialogProps,

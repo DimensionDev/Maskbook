@@ -1,4 +1,4 @@
-import { Ok, Result } from 'ts-results-es'
+import { Ok, type Result } from 'ts-results-es'
 import type { PayloadWellFormed } from '../index.js'
 import {
     encode37,
@@ -7,10 +7,10 @@ import {
     parse38,
     parse39,
     parse40,
-    PayloadParserResult,
+    type PayloadParserResult,
 } from '../payload_internal/index.js'
 import { encodeSignatureContainer } from '../payload_internal/SignatureContainer.js'
-import { PayloadException, CryptoException } from '../types/index.js'
+import { PayloadException, type CryptoException } from '../types/index.js'
 import { CheckedError, OptionalResult } from '@masknet/base'
 export * from './types.js'
 

@@ -28,6 +28,7 @@ export function useTradeGasLimit(tradeComputed: TradeComputed<SwapBancorRequest>
         // Note that if approval is required, the API will also return the necessary approval transaction.
         const tradeTransaction = data.length === 1 ? data[0] : data[1]
 
-        return connection.estimateTransaction(pick(tradeTransaction.transaction, ['to', 'data', 'value', 'from']))
+        const config = pick(tradeTransaction.transaction, ['to', 'data', 'value', 'from'])
+        return connection.estimateTransaction(config)
     }, [trade, account, connection, pluginID])
 }

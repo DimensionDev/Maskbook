@@ -1,5 +1,8 @@
 {
+    "__plugin_description": "在 Twitter 上选择和展示您的 Web3 足迹。",
+    "persona_public_key_copy": "persona_public_key_copy",
     "current": "当前",
+    "plugin_wallet_view_on_explorer": "plugin_wallet_view_on_explorer",
     "wallets": "钱包",
     "donations": "捐赠",
     "footprints": "足迹",
@@ -48,6 +51,7 @@
     "no_collection$empty": "未找到 {{collection}} 。",
     "no_collection$hidden": "所有 {{collection}} 已隐藏。",
     "no_unlisted_collection": " 点击后可在 Web3 个人资料上显示您的 {{collection}}。",
+    "no_listed_collection": "点击未列出区域中的项目，在 Web3个人资料中显示您的 {{collection}}。",
     "wallet_setting_hint": "点击开关按钮来显示或隐藏钱包。",
     "no_authenticated_wallet": "尚未得到认证。",
     "no_items_found": "找不到任何项。",

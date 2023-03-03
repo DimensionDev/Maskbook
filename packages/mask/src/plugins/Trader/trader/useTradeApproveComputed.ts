@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { FungibleToken, ZERO } from '@masknet/web3-shared-base'
+import { type ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { type FungibleToken, ZERO } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { TradeProvider } from '@masknet/public-api'

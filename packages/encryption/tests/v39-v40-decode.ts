@@ -1,4 +1,3 @@
-import './setup.js'
 import { expect, test } from 'vitest'
 import { encodePayload, parsePayload } from '../src/index.js'
 import { PayloadException } from '../src/types/index.js'

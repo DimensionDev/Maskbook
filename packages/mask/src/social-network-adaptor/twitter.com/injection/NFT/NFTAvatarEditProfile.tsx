@@ -5,13 +5,14 @@ import { startWatch, createReactRootShadowed, MaskMessages } from '../../../../u
 import { searchEditProfileSelector } from '../../utils/selector.js'
 import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog } from './NFTAvatarEditProfileDialog.js'
-import { ButtonStyle, ButtonProps } from '../../constant.js'
+import { ButtonStyle, type ButtonProps } from '../../constant.js'
 import { useLastRecognizedIdentity, useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
 import { usePersonasFromDB } from '../../../../components/DataSource/usePersonasFromDB.js'
 import { ConnectPersonaBoundary } from '@masknet/shared'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { currentPersonaIdentifier } from '../../../../../shared/legacy-settings/settings.js'
 import Services from '../../../../extension/service.js'
+import { useEffect } from 'react'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     injectOpenNFTAvatarEditProfileButtonAtProfilePage(signal)
@@ -62,6 +63,11 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
             startPicking: true,
         })
     }
+    useEffect(() => {
+        return CrossIsolationMessages.events.personaBindFinished.on((ev) => {
+            if (ev.pluginID === PluginID.Avatar) clickHandler()
+        })
+    }, [clickHandler])
 
     return (
         <ConnectPersonaBoundary
@@ -70,6 +76,7 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
             currentPersonaIdentifier={currentIdentifier}
             openDashboard={Services.Helper.openDashboard}
             ownPersonaChanged={MaskMessages.events.ownPersonaChanged}
+            ownProofChanged={MaskMessages.events.ownProofChanged}
             handlerPosition="top-right"
             customHint
             directTo={PluginID.Avatar}>

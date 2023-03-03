@@ -9,14 +9,14 @@ import { isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { first, uniqBy } from 'lodash-es'
-import { FC, useCallback, useEffect, useMemo, useState } from 'react'
+import { type FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUpdateEffect } from 'react-use'
 import { SUPPORTED_CHAIN_IDS, supportPluginIds } from '../constants.js'
 import { useAvatarManagement } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
 import { AddNFT } from '../SNSAdaptor/AddNFT.js'
-import { AllChainsNonFungibleToken, PFP_TYPE } from '../types.js'
+import { type AllChainsNonFungibleToken, PFP_TYPE } from '../types.js'
 import { toPNG } from '../utils/index.js'
 import { NFTListPage } from './NFTListPage.js'
 import { RoutePaths } from './Routes.js'
@@ -119,7 +119,7 @@ export const NFTListDialog: FC = () => {
     const navigate = useNavigate()
 
     const { pluginID } = useNetworkContext()
-    const { account, chainId, setChainId } = useChainContext()
+    const { account, chainId, setChainId, setAccount } = useChainContext()
     const wallets = useWallets(pluginID)
     const [selectedPluginId, setSelectedPluginId] = useState(pluginID ?? NetworkPluginID.PLUGIN_EVM)
     const [addDialogOpen, setAddDialogOpen] = useState(false)
@@ -127,7 +127,7 @@ export const NFTListDialog: FC = () => {
     const [disabled, setDisabled] = useState(false)
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
     const { openPopupWindow } = useSNSAdaptorContext()
-
+    const [selectedAccount, setSelectedAccount] = useState(targetAccount)
     const targetWallet = wallets.find((x) => isSameAddress(targetAccount, x.address))
 
     // Set eth to the default chain
@@ -146,7 +146,7 @@ export const NFTListDialog: FC = () => {
         retry,
     } = useNonFungibleAssets(selectedPluginId, undefined, {
         chainId: actualChainId,
-        account: targetAccount,
+        account: selectedAccount,
     })
 
     useEffect(() => {
@@ -158,7 +158,9 @@ export const NFTListDialog: FC = () => {
 
     const { showSnackbar } = useCustomSnackbar()
     const onChangeWallet = (address: string, pluginID: NetworkPluginID, chainId: Web3Helper.ChainIdAll) => {
+        setAccount(address)
         setTargetAccount(address)
+        setSelectedAccount(address)
         setSelectedPluginId(pluginID)
         setChainId(chainId as ChainId)
         setSelectedToken(undefined)
@@ -341,11 +343,11 @@ export const NFTListDialog: FC = () => {
                     }
                     verifiedWallets={walletItems}
                     onChange={onChangeWallet}
-                    expectedAddress={targetAccount}>
+                    expectedAddress={selectedAccount}>
                     <ChainBoundary
                         expectedChainId={chainId}
                         predicate={supportPluginIds.includes(selectedPluginId) ? () => true : undefined}
-                        expectedAccount={targetAccount}
+                        expectedAccount={selectedAccount}
                         expectedPluginID={
                             !supportPluginIds.includes(selectedPluginId) ? NetworkPluginID.PLUGIN_EVM : selectedPluginId
                         }>

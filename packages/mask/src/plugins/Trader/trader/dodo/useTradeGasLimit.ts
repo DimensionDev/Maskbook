@@ -20,7 +20,7 @@ export function useTradeGasLimit(tradeComputed: TradeComputed<SwapRouteData> | n
     }, [account, tradeComputed])
 
     return useAsync(async () => {
-        if (!config || !connection?.estimateTransaction) return '0'
+        if (!config?.value || !connection?.estimateTransaction) return '0'
         return connection.estimateTransaction(config)
     }, [config, connection])
 }

@@ -1,5 +1,5 @@
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { SocialAccount, SocialAddressType } from '@masknet/web3-shared-base'
+import { type SocialAccount, SocialAddressType } from '@masknet/web3-shared-base'
 
 export function addressSorter(
     a: SocialAccount<Web3Helper.ChainIdAll>,

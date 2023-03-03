@@ -56,7 +56,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         label: (
             <>
                 <Icons.Markets size={16} />
-                ITO
+                <Trans i18nKey="plugin_ito_name" />
             </>
         ),
     },

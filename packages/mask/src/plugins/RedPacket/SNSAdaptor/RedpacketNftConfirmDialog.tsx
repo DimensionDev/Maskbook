@@ -3,11 +3,11 @@ import { makeStyles, ActionButton } from '@masknet/theme'
 import {
     formatEthereumAddress,
     explorerResolver,
-    ChainId,
-    SchemaType,
+    type ChainId,
+    type SchemaType,
     isNativeTokenAddress,
     formatTokenId,
-    GasConfig,
+    type GasConfig,
 } from '@masknet/web3-shared-evm'
 import { AssetPreviewer, PluginWalletStatusBar, ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'

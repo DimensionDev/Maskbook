@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { TradeInfo } from '../../types/index.js'
-import { ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
+import { type ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { resolveTradeProviderName } from '../../pipes.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { multipliedBy, formatBalance, ZERO, formatCurrency, formatPercentage } from '@masknet/web3-shared-base'
@@ -42,11 +42,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
 
     const gasFeeValueUSD = useMemo(() => {
         if (!gasFee) return ZERO.toString()
-        return formatCurrency(formatWeiToEther(gasFee).times(tokenPrice), 'USD', {
-            boundaries: {
-                min: 0.01,
-            },
-        })
+        return formatCurrency(formatWeiToEther(gasFee).times(tokenPrice), 'USD', { onlyRemainTwoDecimal: true })
     }, [gasFee, tokenPrice])
 
     const isGreatThanSlippageSetting = useGreatThanSlippageSetting(trade.value?.priceImpact)

@@ -3,7 +3,7 @@ import { Trans } from 'react-i18next'
 import { Result } from 'ts-results-es'
 import {
     useActivatedPluginsSNSAdaptor,
-    Plugin,
+    type Plugin,
     PluginI18NFieldRender,
     usePluginI18NField,
     useCompositionContext,

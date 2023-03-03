@@ -198,8 +198,9 @@ export const postsContentSelector = () =>
             '[data-testid="tweet"] + div > div:first-child div[lang]',
             '[data-testid="tweet"] + div > div div[data-testid="card.wrapper"]',
 
-            // quoted tweets
-            '[data-testid="tweet"] + div div[role="link"] div[lang]',
+            // quoted tweets in timeline
+            '[data-testid="tweet"] [aria-labelledby] div[role="link"] div[lang]',
+            // quoted tweets in detail page
             '[data-testid="tweet"] > div:last-child div[role="link"] div[lang]',
 
             // reply-tweets
@@ -207,8 +208,9 @@ export const postsContentSelector = () =>
         ].join(),
     )
 
-export const postAvatarsContentSelector = () =>
-    querySelectorAll('[data-testid="tweet"] > div > div > div > :nth-child(2)')
+export const postAvatarsContentSelector = () => querySelectorAll('[data-testid="tweet"] > div > div  > :nth-child(2)')
+
+export const postAvatarSelector = () => querySelectorAll('[data-testid^=UserAvatar-Container-]')
 
 const base = querySelector<HTMLScriptElement>('#react-root ~ script')
 const handle = /"screen_name":"(.*?)"/

@@ -2,7 +2,7 @@ import { useAsyncFn } from 'react-use'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { isValidAddress, GasConfig, TransactionEventType } from '@masknet/web3-shared-evm'
+import { isValidAddress, type GasConfig, TransactionEventType } from '@masknet/web3-shared-evm'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useERC721TokenContract } from './useERC721TokenContract.js'
 

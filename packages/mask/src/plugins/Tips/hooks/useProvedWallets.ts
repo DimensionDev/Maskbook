@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { head } from 'lodash-es'
-import { BindingProof, ECKeyIdentifier, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import { type BindingProof, ECKeyIdentifier, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import Services from '../../../extension/service.js'
 import { currentPersonaIdentifier } from '../../../../shared/legacy-settings/settings.js'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { MaskMessages } from '../../../utils/messages.js'
 import { usePersonaProofs } from '@masknet/shared'
 

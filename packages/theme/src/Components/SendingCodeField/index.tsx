@@ -1,5 +1,5 @@
 import { Box, Stack } from '@mui/material'
-import { ReactNode, useRef, useEffect, useState } from 'react'
+import { type ReactNode, useRef, useEffect, useState } from 'react'
 import { MaskTextField } from '../TextField/index.js'
 import { CountdownButton } from '../CountdownButton/index.js'
 

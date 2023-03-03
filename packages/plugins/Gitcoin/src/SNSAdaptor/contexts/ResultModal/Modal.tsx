@@ -1,4 +1,4 @@
-import { InjectedDialog, InjectedDialogProps, TokenIcon } from '@masknet/shared'
+import { InjectedDialog, type InjectedDialogProps, TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'

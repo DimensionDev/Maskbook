@@ -1,16 +1,16 @@
-import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { type ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { omit } from 'lodash-es'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import {
-    FungibleToken,
+    type FungibleToken,
     isGreaterThan,
     isZero,
     multipliedBy,
     rightShift,
     formatBalance,
 } from '@masknet/web3-shared-base'
-import { ChainId, GasConfig, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
+import { type ChainId, type GasConfig, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { MenuItem, Select, Box, InputBase, Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
@@ -28,7 +28,7 @@ import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18n } from '../../../utils/index.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
-import { RedPacketSettings, useCreateParams } from './hooks/useCreateCallback.js'
+import { type RedPacketSettings, useCreateParams } from './hooks/useCreateCallback.js'
 import { useAsync } from 'react-use'
 import { SmartPayBundler } from '@masknet/web3-providers'
 
@@ -48,6 +48,7 @@ const useStyles = makeStyles()((theme) => ({
         margin: 0,
         padding: 0,
         height: 40,
+        maxWidth: 286,
     },
     unlockContainer: {
         margin: 0,
@@ -81,8 +82,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     // #region select token
-    const { value: nativeTokenDetailed } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
-    const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
+    const { value: nativeTokenDetailed } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const [token = nativeTokenDetailed, setToken] = useState<FungibleToken<ChainId, SchemaType> | undefined>(
         origin?.token,
     )
@@ -304,7 +305,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                                 }
                                 spender={HAPPY_RED_PACKET_ADDRESS_V4}>
                                 <ActionButton
-                                    size="large"
+                                    size="medium"
                                     className={classes.button}
                                     fullWidth
                                     disabled={!!validationMessage || !!gasValidationMessage}

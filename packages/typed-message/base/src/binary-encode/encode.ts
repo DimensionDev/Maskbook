@@ -1,8 +1,8 @@
 import {
     isTypedMessageText,
     isTypedMessageTupleSerializable,
-    TypedMessageText,
-    TypedMessageTupleSerializable,
+    type TypedMessageText,
+    type TypedMessageTupleSerializable,
 } from '../core/index.js'
 import type { SerializableTypedMessages, TypedMessage } from '../base.js'
 import { encode } from '@msgpack/msgpack'

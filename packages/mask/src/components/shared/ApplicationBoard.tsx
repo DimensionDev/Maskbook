@@ -1,4 +1,4 @@
-import { useState, useContext, createContext, PropsWithChildren, useMemo, useRef } from 'react'
+import { useState, useContext, createContext, type PropsWithChildren, useMemo, useRef } from 'react'
 import { useTimeout } from 'react-use'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography } from '@mui/material'
@@ -8,7 +8,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, useI18N } from '../../utils/index.js'
-import { Application, getUnlistedApp } from './ApplicationSettingPluginList.js'
+import { type Application, getUnlistedApp } from './ApplicationSettingPluginList.js'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea.js'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus.js'
@@ -19,6 +19,8 @@ import { useCurrentPersonaConnectStatus } from '@masknet/shared'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
 import Services from '../../extension/service.js'
+import { useMountReport } from '@masknet/web3-telemetry/hooks'
+import { TelemetryAPI } from '@masknet/web3-providers/types'
 
 const useStyles = makeStyles<{
     shouldScroll: boolean
@@ -136,6 +138,9 @@ function ApplicationBoardContent(props: Props) {
         shouldScroll: listedAppList.length > 12,
         isCarouselReady: Boolean(isCarouselReady()),
     })
+
+    useMountReport(TelemetryAPI.EventID.AccessApplicationBoard)
+
     return (
         <>
             <ApplicationRecommendArea

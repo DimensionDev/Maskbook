@@ -2,11 +2,11 @@ import urlcat from 'urlcat'
 import { unionWith } from 'lodash-es'
 import {
     createPageable,
-    HubOptions,
+    type HubOptions,
     createIndicator,
     isSameAddress,
-    FungibleToken,
-    HubIndicator,
+    type FungibleToken,
+    type HubIndicator,
 } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { formatAssets, resolveDeBankAssetId } from '../helpers.js'

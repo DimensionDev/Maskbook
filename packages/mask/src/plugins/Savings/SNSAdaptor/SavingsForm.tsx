@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import type { AbiItem } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
-import { isLessThan, rightShift, ZERO, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
+import { isLessThan, rightShift, ZERO, formatBalance, formatCurrency, isPositive } from '@masknet/web3-shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import {
     createContract,
@@ -35,7 +35,7 @@ import {
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
 import { useI18N } from '../../../utils/index.js'
-import { ProtocolType, SavingsProtocol, TabType } from '../types.js'
+import { ProtocolType, type SavingsProtocol, TabType } from '../types.js'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
@@ -318,7 +318,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                             ) : (
                                 <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
                                     &asymp; <FormattedCurrency value={tokenValueUSD} formatter={formatCurrency} />
-                                    {estimatedGas > 0 ? (
+                                    {isPositive(estimatedGas) ? (
                                         <span className={classes.gasFee}>+ {formatBalance(estimatedGas, 18)} ETH</span>
                                     ) : (
                                         <span />

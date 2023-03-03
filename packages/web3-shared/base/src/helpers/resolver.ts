@@ -1,9 +1,9 @@
 import urlcat from 'urlcat'
 import {
-    ChainDescriptor,
+    type ChainDescriptor,
     CurrencyType,
-    NetworkDescriptor,
-    ProviderDescriptor,
+    type NetworkDescriptor,
+    type ProviderDescriptor,
     SocialAddressType,
     SourceType,
 } from '../specs/index.js'
@@ -320,7 +320,7 @@ export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, ident
         case NextIDPlatform.RSS3:
             return `https://rss3.io/result?search=${identifier}`
         case NextIDPlatform.LENS:
-            return `https://www.lensfrens.xyz/${identifier}`
+            return `https://www.lensfrens.xyz/${identifier}.lens`
         case NextIDPlatform.REDDIT:
             return `https://www.reddit.com/user/${identifier}`
         case NextIDPlatform.SYBIL:

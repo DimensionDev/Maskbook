@@ -1,8 +1,8 @@
 import urlcat from 'urlcat'
 import { compact, first, unionBy, unionWith } from 'lodash-es'
-import { AbiItem, padLeft, toHex } from 'web3-utils'
+import { type AbiItem, padLeft, toHex } from 'web3-utils'
 import {
-    ChainId,
+    type ChainId,
     ContractWallet,
     Create2Factory,
     createContract,

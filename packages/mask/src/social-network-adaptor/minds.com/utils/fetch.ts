@@ -5,8 +5,8 @@ import {
     makeTypedMessageAnchor,
     makeTypedMessageEmpty,
     makeTypedMessageText,
-    TypedMessage,
-    TypedMessageText,
+    type TypedMessage,
+    type TypedMessageText,
 } from '@masknet/typed-message'
 import { assertNonNull } from '@masknet/kit'
 

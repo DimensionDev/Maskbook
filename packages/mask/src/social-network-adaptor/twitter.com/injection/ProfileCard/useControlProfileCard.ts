@@ -1,5 +1,5 @@
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { CSSProperties, RefObject, useCallback, useEffect, useRef, useState } from 'react'
+import { type CSSProperties, type RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { CARD_HEIGHT, CARD_WIDTH } from './constants.js'
 
 interface Result {

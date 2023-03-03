@@ -3,22 +3,22 @@ import type { ECKeyIdentifier } from '@masknet/shared-base'
 import type { Connection, ConnectionOptions } from '@masknet/web3-shared-base'
 import { ErrorEditor } from './ErrorEditor.js'
 import { PayloadEditor } from './PayloadEditor.js'
-import { createJsonRpcPayload, createJsonRpcResponse } from '../helpers/index.js'
+import { createJsonRpcPayload, createJsonRpcResponse } from '../helpers/provider.js'
 import {
     EthereumMethodType,
     ChainId,
-    AddressType,
-    SchemaType,
+    type AddressType,
+    type SchemaType,
     ProviderType,
-    Signature,
-    Block,
-    UserOperation,
-    Transaction,
-    TransactionReceipt,
-    TransactionDetailed,
-    TransactionSignature,
-    Web3,
-    Web3Provider,
+    type Signature,
+    type Block,
+    type UserOperation,
+    type Transaction,
+    type TransactionReceipt,
+    type TransactionDetailed,
+    type TransactionSignature,
+    type Web3,
+    type Web3Provider,
 } from '../types/index.js'
 
 let pid = 0

@@ -4,8 +4,8 @@ import { Box, Button, Portal, Typography } from '@mui/material'
 import React, {
     cloneElement,
     createContext,
-    PropsWithChildren,
-    ReactElement,
+    type PropsWithChildren,
+    type ReactElement,
     useContext,
     useEffect,
     useRef,

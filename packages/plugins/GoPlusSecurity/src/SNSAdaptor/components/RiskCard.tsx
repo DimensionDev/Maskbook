@@ -1,4 +1,4 @@
-import { memo, ReactNode } from 'react'
+import { memo, type ReactNode } from 'react'
 import { Box, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { SecurityMessage, SecurityAPI } from '@masknet/web3-providers/types'

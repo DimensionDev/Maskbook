@@ -1,7 +1,7 @@
-import React, { createContext, ReactNode, useCallback, useContext, useState } from 'react'
+import React, { createContext, type ReactNode, useContext, useState } from 'react'
 import { isUndefined, omitBy } from 'lodash-es'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import { compose, MaskEvents, NetworkPluginID } from '@masknet/shared-base'
+import { compose, type MaskEvents, type NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
@@ -64,27 +64,10 @@ export function ChainContextProvider({ value, children }: React.ProviderProps<Ch
     const globalChainId = useChainId(pluginID)
     const globalNetworkType = useNetworkType(pluginID)
     const globalProviderType = useProviderType(pluginID)
+    const [account, setAccount] = useState<string>()
+    const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
     const [networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
     const [providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
-
-    const [chainIdMap, setChainIdMap] = useState<Partial<Record<NetworkPluginID, Web3Helper.ChainIdAll>>>({})
-    const chainId = chainIdMap[pluginID]
-    const setChainId = useCallback(
-        (id: Web3Helper.ChainIdAll) => {
-            setChainIdMap((map) => ({ ...map, [pluginID]: id }))
-        },
-        [pluginID],
-    )
-
-    const [accountMap, setAccountMap] = useState<Record<string, string>>({})
-    const accountKey = `${pluginID}:${chainId}`
-    const account = accountMap[accountKey]
-    const setAccount = useCallback(
-        (account: string) => {
-            setAccountMap((map) => ({ ...map, [accountKey]: account }))
-        },
-        [accountKey],
-    )
 
     return (
         <ChainContext.Provider

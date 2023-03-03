@@ -6,7 +6,7 @@ import { PluginPetMessages } from '../messages.js'
 import { useI18N } from '../locales/index.js'
 import { PluginGameMessages } from '../../Game/messages.js'
 import { NFF_TWITTER } from '../constants.js'
-import { ShowMeta, MenuType } from '../types.js'
+import { type ShowMeta, MenuType } from '../types.js'
 import { useCurrentVisitingUser } from '../hooks/index.js'
 import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
 

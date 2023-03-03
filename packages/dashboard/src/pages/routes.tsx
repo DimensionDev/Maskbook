@@ -3,10 +3,12 @@ import { Route, Routes, Navigate } from 'react-router-dom'
 import { useCustomSnackbar } from '@masknet/theme'
 import { SmartPayOwner, SmartPayBundler } from '@masknet/web3-providers'
 import { DashboardFrame } from '../components/DashboardFrame/index.js'
-import { DashboardRoutes, RestoreSuccessEvent } from '@masknet/shared-base'
+import { DashboardRoutes, type RestoreSuccessEvent } from '@masknet/shared-base'
 import { Messages } from '../API.js'
 import { useDashboardI18N } from '../locales/index.js'
 import { TermsGuard } from './TermsGuard.js'
+import { useMountReport } from '@masknet/web3-telemetry/hooks'
+import { TelemetryAPI } from '@masknet/web3-providers/types'
 
 const Wallets = lazy(() => import(/* webpackPrefetch: true */ './Wallets/index.js'))
 const Setup = lazy(() => import('./Setup/index.js'))
@@ -38,6 +40,8 @@ export function Pages() {
     useEffect(() => {
         return Messages.events.restoreSuccess.on(restoreCallback)
     }, [restoreCallback])
+
+    useMountReport(TelemetryAPI.EventID.AccessDashboard)
 
     return (
         <Suspense fallback={null}>

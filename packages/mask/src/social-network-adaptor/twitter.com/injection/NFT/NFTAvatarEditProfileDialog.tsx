@@ -89,6 +89,7 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
                 currentPersonaIdentifier={currentIdentifier}
                 openDashboard={Services.Helper.openDashboard}
                 ownPersonaChanged={MaskMessages.events.ownPersonaChanged}
+                ownProofChanged={MaskMessages.events.ownProofChanged}
                 handlerPosition="top-right"
                 customHint
                 directTo={PluginID.Avatar}>

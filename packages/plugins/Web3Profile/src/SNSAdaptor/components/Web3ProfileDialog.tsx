@@ -4,11 +4,11 @@ import { sortBy } from 'lodash-es'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
 import { DialogActions, DialogContent } from '@mui/material'
-import { InjectedDialog, LoadGuard, PersonaAction, usePersonaProofs, WalletTypes } from '@masknet/shared'
+import { InjectedDialog, LoadGuard, PersonaAction, usePersonaProofs, type WalletTypes } from '@masknet/shared'
 import {
     CrossIsolationMessages,
     EMPTY_LIST,
-    MaskEvents,
+    type MaskEvents,
     NetworkPluginID,
     NextIDPlatform,
     PopupRoutes,
@@ -18,7 +18,7 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import { TelemetryAPI } from '@masknet/web3-providers/types'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Sentry } from '@masknet/web3-providers'
-import { SceneMap, Scene } from '../../constants.js'
+import { SceneMap, type Scene } from '../../constants.js'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { context } from '../context.js'
 import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/index.js'
@@ -58,8 +58,9 @@ export function Web3ProfileDialog() {
     useEffect(() => {
         return CrossIsolationMessages.events.web3ProfileDialogEvent.on(({ open }) => {
             if (open)
-                Sentry?.captureEvent({
-                    eventID: TelemetryAPI.EventID.Web3ProfileDialogAccess,
+                Sentry.captureEvent({
+                    eventType: TelemetryAPI.EventType.Access,
+                    eventID: TelemetryAPI.EventID.AccessWeb3ProfileDialog,
                 })
             setOpen(open)
         })

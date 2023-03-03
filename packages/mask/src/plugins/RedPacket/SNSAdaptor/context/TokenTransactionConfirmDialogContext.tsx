@@ -1,6 +1,6 @@
 import { createUITaskManager } from '@masknet/shared'
 import { useContext } from 'react'
-import { TransactionConfirmDialog, TransactionConfirmDialogProps } from './TokenTransactionConfirmDialog.js'
+import { TransactionConfirmDialog, type TransactionConfirmDialogProps } from './TokenTransactionConfirmDialog.js'
 
 const { TaskManagerContext, TaskManagerProvider: TransactionConfirmDialogProvider } = createUITaskManager<
     TransactionConfirmDialogProps,

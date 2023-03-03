@@ -4,10 +4,10 @@ import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { FC, useMemo } from 'react'
+import { type FC, useMemo } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
-import { CardFrame, FeedCardProps } from '../base.js'
+import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType, getCost, getLastAction } from '../share.js'
 import { AddressLabel, formatValue, Label } from './common.js'
 
@@ -215,7 +215,6 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
                                 user,
                                 collectible: verbose ? metadata!.name : 'an NFT',
                                 other: formatEthereumAddress(otherAddress ?? '', 4),
-                                /* eslint-disable no-nested-ternary */
                                 context: isSending ? 'send' : costMetadata ? 'claim_cost' : 'claim',
                                 cost_value: formatValue(costMetadata),
                                 cost_symbol: costMetadata?.symbol!,

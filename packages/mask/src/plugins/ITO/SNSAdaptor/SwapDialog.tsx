@@ -10,9 +10,16 @@ import {
     EthereumERC20TokenApprovedBoundary,
 } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { leftShift, rightShift, ZERO, FungibleToken, currySameAddress, formatBalance } from '@masknet/web3-shared-base'
 import {
-    ChainId,
+    leftShift,
+    rightShift,
+    ZERO,
+    type FungibleToken,
+    currySameAddress,
+    formatBalance,
+} from '@masknet/web3-shared-base'
+import {
+    type ChainId,
     SchemaType,
     isNativeTokenAddress,
     useTokenConstants,

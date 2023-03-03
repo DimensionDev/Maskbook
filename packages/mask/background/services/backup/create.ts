@@ -1,4 +1,4 @@
-import { BackupPreview, generateBackupRAW, getBackupPreviewInfo } from '@masknet/backup-format'
+import { type BackupPreview, generateBackupRAW, getBackupPreviewInfo } from '@masknet/backup-format'
 import { createNewBackup } from './internal_create.js'
 
 export interface MobileBackupOptions {

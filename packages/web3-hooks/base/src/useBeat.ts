@@ -1,4 +1,4 @@
-import { DependencyList, useState } from 'react'
+import { type DependencyList, useState } from 'react'
 import { useAsyncRetry, useTimeoutFn } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
@@ -42,4 +42,16 @@ export function useDoubleBlockBeatRetry<T extends NetworkPluginID, R>(
     const { Others } = useWeb3State(pluginID)
     // @ts-ignore
     return useBeatRetry(fn, Others?.getAverageBlockDelay?.(chainId, 2) ?? DEFAULT_DOUBLE_BLOCK_DELAY, deps)
+}
+
+export function useCustomBlockBeatRetry<T extends NetworkPluginID, R>(
+    pluginID: T,
+    fn: () => Promise<R>,
+    deps: DependencyList = [],
+    scale = 1,
+): AsyncStateRetry<R> {
+    const { chainId } = useChainContext()
+    const { Others } = useWeb3State(pluginID)
+    // @ts-ignore
+    return useBeatRetry(fn, Others?.getAverageBlockDelay?.(chainId, scale) ?? DEFAULT_DOUBLE_BLOCK_DELAY, deps)
 }

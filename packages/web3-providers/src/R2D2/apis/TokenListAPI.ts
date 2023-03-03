@@ -1,7 +1,7 @@
 import { memoize, uniqBy } from 'lodash-es'
 import { memoizePromise } from '@masknet/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { FungibleToken, NonFungibleToken, TokenType } from '@masknet/web3-shared-base'
+import { type FungibleToken, type NonFungibleToken, TokenType } from '@masknet/web3-shared-base'
 import {
     ChainId,
     SchemaType,

@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { formatWeiToEther, ChainId, GasConfig, GasEditor, Transaction } from '@masknet/web3-shared-evm'
+import { formatWeiToEther, type ChainId, type GasConfig, GasEditor, type Transaction } from '@masknet/web3-shared-evm'
 import { formatBalance, formatCurrency, leftShift, multipliedBy } from '@masknet/web3-shared-base'
 import type { TradeComputed } from '../../types/index.js'
 import {
@@ -58,7 +58,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
     const gasFeeUSD = useMemo(() => {
         if (!gasFee) return '0'
-        return formatCurrency(formatWeiToEther(gasFee).times(nativeTokenPrice))
+        return formatCurrency(formatWeiToEther(gasFee).times(nativeTokenPrice), 'USD', { onlyRemainTwoDecimal: true })
     }, [gasFee, nativeTokenPrice])
 
     const isGreatThanSlippageSetting = useGreatThanSlippageSetting(trade?.priceImpact)
@@ -73,16 +73,8 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
     const lostValue = formatCurrency(
         multipliedBy(inputTokenPrice ?? 0, leftShift(lostTokenValue, trade.inputToken?.decimals ?? 0)),
-        'USD',
-        {
-            boundaries: {
-                min: 0.01,
-            },
-            symbols: {
-                // hide USD symbol
-                $: '',
-            },
-        },
+        '',
+        { onlyRemainTwoDecimal: true },
     )
 
     const handleOpenPriceImpactDialog = useCallback(() => {

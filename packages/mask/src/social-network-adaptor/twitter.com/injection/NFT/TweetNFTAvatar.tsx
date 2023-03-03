@@ -1,4 +1,4 @@
-import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { DOMProxy, type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { NFTBadgeTweet, NFTAvatarMiniClip, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
 import { MaskMessages, createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'

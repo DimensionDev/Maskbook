@@ -3,12 +3,13 @@ const { fetch: originalFetch } = globalThis
 
 enum Duration {
     SHORT = 60000, // 1 min
-    LONG = 1800000, // 30 mins
+    MEDIUM = 1800000, // 30 mins
+    LONG = 43200000, // 12 hours
 }
 
 const RULES = {
     // twitter shorten links
-    'https://t.co': Duration.LONG,
+    'https://t.co': Duration.MEDIUM,
     'https://gitcoin.co/grants/v1/api/grant': Duration.SHORT,
     'https://vcent-agent.r2d2.to': Duration.SHORT,
     'https://rss3.domains/name': Duration.SHORT,
@@ -24,10 +25,11 @@ const RULES = {
     // chainbase ENS
     'https://chainbase-proxy.r2d2.to/v1/ens': Duration.SHORT,
     // Mask Search List
-    'https://dsearch.mask.r2d2.to': Duration.LONG,
+    'https://dsearch.mask.r2d2.to': Duration.MEDIUM,
     // Smart Pay
-    'https://9rh2q3tdqj.execute-api.ap-east-1.amazonaws.com': Duration.SHORT,
-    'https://uldpla73li.execute-api.ap-east-1.amazonaws.com': Duration.SHORT,
+    'https://9rh2q3tdqj.execute-api.ap-east-1.amazonaws.com': Duration.LONG,
+    'https://uldpla73li.execute-api.ap-east-1.amazonaws.com': Duration.LONG,
+    'https://api.thegraph.com/subgraphs/name/dimensiondev/paygas-x-subgraph': Duration.LONG,
 }
 const URLS = Object.keys(RULES) as unknown as Array<keyof typeof RULES>
 

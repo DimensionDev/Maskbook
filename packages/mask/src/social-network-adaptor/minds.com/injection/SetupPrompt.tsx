@@ -1,4 +1,4 @@
-import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { NotSetupYetPrompt } from '../../../components/shared/NotSetupYetPrompt.js'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'

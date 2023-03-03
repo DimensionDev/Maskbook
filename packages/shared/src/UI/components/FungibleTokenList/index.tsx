@@ -1,8 +1,8 @@
 import {
-    ForwardedRef,
+    type ForwardedRef,
     forwardRef,
     memo,
-    ReactNode,
+    type ReactNode,
     useCallback,
     useEffect,
     useImperativeHandle,
@@ -10,8 +10,8 @@ import {
     useState,
 } from 'react'
 import { uniqBy } from 'lodash-es'
-import { EMPTY_LIST, EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles, MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
+import { EMPTY_LIST, EMPTY_OBJECT, type NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles, type MaskFixedSizeListProps, type MaskTextFieldProps, SearchableList } from '@masknet/theme'
 import { Box, Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales/index.js'
 import {
@@ -30,7 +30,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     CurrencyType,
     currySameAddress,
-    FungibleToken,
+    type FungibleToken,
     isSameAddress,
     leftShift,
     minus,

@@ -1,33 +1,29 @@
-import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { DOMProxy, type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { NFTBadgeTimeline, NFTAvatarMiniClip, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
 import { MaskMessages, createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
-import { postAvatarsContentSelector } from '../../utils/selector.js'
+import { postAvatarSelector } from '../../utils/selector.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 
-function getTwitterId(ele: HTMLElement) {
-    const twitterIdNodes = (ele.firstChild?.nextSibling as HTMLElement).querySelectorAll<HTMLElement>(
-        '[dir="ltr"] > span',
-    )
-    for (const node of twitterIdNodes) {
-        const id = node.innerText
-        if (id && id[0] === '@') return id.replace('@', '')
+function getUserId(ele: HTMLElement) {
+    const attribute = ele?.dataset.testid || ''
+    if (attribute.endsWith('unknown')) {
+        return ele?.querySelector('a[href][role=link]')?.getAttribute('href')?.slice(1)
     }
-
-    return
+    return attribute.split('-').pop()
 }
 
-function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
+function inject(selector: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
     startWatch(
-        new MutationObserverWatcher(main()).useForeach((ele, _, meta) => {
+        new MutationObserverWatcher(selector()).useForeach((ele) => {
             let remover = () => {}
             const remove = () => remover()
 
             const run = async () => {
-                const twitterId = getTwitterId(ele)
-                if (!twitterId) return
+                const userId = getUserId(ele)
+                if (!userId) return
 
-                const info = getInjectNodeInfo(ele.firstChild as HTMLElement)
+                const info = getInjectNodeInfo(ele)
                 if (!info) return
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: process.env.shadowRootMode } })
                 proxy.realCurrent = info.element.firstChild as HTMLElement
@@ -46,12 +42,12 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                                 identity={activatedSocialNetworkUI.collecting.identityProvider?.recognized.value}
                                 width={info.width}
                                 height={info.height}
-                                screenName={twitterId}
+                                screenName={userId}
                             />
                         ) : (
                             <NFTBadgeTimeline
                                 timelineUpdated={MaskMessages.events.NFTAvatarTimelineUpdated}
-                                userId={twitterId}
+                                userId={userId}
                                 avatarId={info.avatarId}
                                 width={info.width - 4}
                                 height={info.height - 4}
@@ -75,5 +71,5 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
 }
 
 export async function injectUserNFTAvatarAtTwitter(signal: AbortSignal) {
-    _(postAvatarsContentSelector, signal)
+    inject(postAvatarSelector, signal)
 }

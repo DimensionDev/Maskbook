@@ -1,15 +1,10 @@
-import { useEffect, useMemo, useState, useContext } from 'react'
+import { useEffect, useMemo, useState, useContext, useCallback } from 'react'
 import { compact, first } from 'lodash-es'
 import { TrendingViewContext } from './context.js'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import {
-    useChainContext,
-    useChainIdValid,
-    useNonFungibleAssetsByCollection,
-    Web3ContextProvider,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useNonFungibleAssetsByCollection, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
-import { createFungibleToken, SocialIdentity, TokenType } from '@masknet/web3-shared-base'
+import { createFungibleToken, type SocialIdentity, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTList, PluginCardFrameMini } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
@@ -115,6 +110,7 @@ const useStyles = makeStyles<{
             gap: 12,
         },
         hidden: {
+            padding: 0,
             visibility: 'hidden',
             height: 0,
         },
@@ -139,7 +135,6 @@ export function TrendingView(props: TrendingViewProps) {
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
     const isWeb3ProfileMinimalMode = useIsMinimalMode(PluginID.Web3Profile)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
 
     const site = getSiteType()
     const pluginIDs = useValueRef(pluginIDSettings)
@@ -155,11 +150,35 @@ export function TrendingView(props: TrendingViewProps) {
 
     // #region stats
     const [days, setDays] = useState(TrendingAPI.Days.ONE_WEEK)
+    const [currentPriceChange, setCurrentPriceChange] = useState(
+        trending?.market?.price_change_percentage_7d_in_currency,
+    )
+    const onPriceDaysControlChange = useCallback(
+        (days: number) => {
+            setDays(days)
+            if (days === TrendingAPI.Days.ONE_DAY)
+                setCurrentPriceChange(trending?.market?.price_change_percentage_24h_in_currency)
+            if (days === TrendingAPI.Days.ONE_MONTH)
+                setCurrentPriceChange(trending?.market?.price_change_percentage_30d_in_currency)
+            if (days === TrendingAPI.Days.ONE_WEEK)
+                setCurrentPriceChange(trending?.market?.price_change_percentage_7d_in_currency)
+            if (days === TrendingAPI.Days.ONE_YEAR)
+                setCurrentPriceChange(trending?.market?.price_change_percentage_1y_in_currency)
+            if (days === TrendingAPI.Days.MAX) setCurrentPriceChange(trending?.market?.atl_change_percentage)
+        },
+        [JSON.stringify(trending?.market)],
+    )
+
+    useEffect(() => {
+        onPriceDaysControlChange(TrendingAPI.Days.ONE_WEEK)
+    }, [JSON.stringify(trending?.market)])
+
     const {
         value: stats = EMPTY_LIST,
         loading: loadingStats,
         retry: retryStats,
     } = usePriceStats({
+        chainId: result.chainId,
         coinId: trending?.coin.id,
         dataProvider: trending?.dataProvider,
         currency: trending?.currency,
@@ -193,7 +212,6 @@ export function TrendingView(props: TrendingViewProps) {
         !isMinimalMode &&
         !isNFT &&
         !!trending?.coin.contract_address &&
-        chainIdValid &&
         (!swapExpectedContract?.pluginID || swapExpectedContract?.pluginID === NetworkPluginID.PLUGIN_EVM)
     // #endregion
 
@@ -271,7 +289,6 @@ export function TrendingView(props: TrendingViewProps) {
     // #endregion
 
     const { coin, tickers, market } = trending
-
     const component = (
         <TrendingViewDeck
             classes={{
@@ -314,7 +331,7 @@ export function TrendingView(props: TrendingViewProps) {
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}
-                            amount={market?.price_change_percentage_1h ?? market?.price_change_24h ?? 0}
+                            amount={currentPriceChange ?? trending?.market?.price_change_percentage_7d_in_currency ?? 0}
                             currency={trending.currency}
                             stats={stats}
                             retry={retryStats}
@@ -322,7 +339,7 @@ export function TrendingView(props: TrendingViewProps) {
                             <PriceChartDaysControl
                                 rangeOptions={DEFAULT_RANGE_OPTIONS}
                                 days={days}
-                                onDaysChange={setDays}
+                                onDaysChange={onPriceDaysControlChange}
                             />
                         </PriceChart>
                     </Box>
@@ -331,7 +348,6 @@ export function TrendingView(props: TrendingViewProps) {
                     <Box p={2}>
                         {isNFT ? (
                             <NonFungibleTickersTable
-                                isCollectionProjectPopper={isCollectionProjectPopper}
                                 id={
                                     (result.pluginID === NetworkPluginID.PLUGIN_SOLANA ? result.name : coin.address) ??
                                     ''

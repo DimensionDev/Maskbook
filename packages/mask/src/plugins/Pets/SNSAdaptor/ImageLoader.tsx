@@ -1,5 +1,5 @@
 import { LoadingBase } from '@masknet/theme'
-import { ImgHTMLAttributes, useState, SyntheticEvent } from 'react'
+import { type ImgHTMLAttributes, useState, type SyntheticEvent } from 'react'
 import { DefaultIcon } from '../constants.js'
 
 export function ImageLoader(props: ImgHTMLAttributes<HTMLImageElement>) {

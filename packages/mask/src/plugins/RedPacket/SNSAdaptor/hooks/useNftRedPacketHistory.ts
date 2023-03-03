@@ -1,9 +1,9 @@
 import { useAsyncRetry } from 'react-use'
 import type { BigNumber } from 'bignumber.js'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
-import { ChainId, getNftRedPacketConstants, chainResolver } from '@masknet/web3-shared-evm'
-import { useWeb3Connection } from '@masknet/web3-hooks-base'
-import { RedPacket } from '@masknet/web3-providers'
+import { type ChainId, getNftRedPacketConstants, chainResolver } from '@masknet/web3-shared-evm'
+import { useWallet, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { RedPacket, TheGraphRedPacket } from '@masknet/web3-providers'
 import { Interface } from '@ethersproject/abi'
 import type { NftRedPacketJSONPayload } from '../../types.js'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
@@ -15,11 +15,22 @@ const redPacketInterFace = new Interface(REDPACKET_ABI)
 const CREATE_RED_PACKET_METHOD_ID = '0x29e744bf'
 
 export function useNftRedPacketHistory(address: string, chainId: ChainId) {
+    const wallet = useWallet()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { NFT_RED_PACKET_ADDRESS_BLOCK_HEIGHT, RED_PACKET_NFT_ADDRESS } = getNftRedPacketConstants(chainId)
 
     return useAsyncRetry(async () => {
         if (!connection || !RED_PACKET_NFT_ADDRESS) return EMPTY_LIST
+        if (wallet?.owner) {
+            const historyTransactions = await TheGraphRedPacket.getNFTHistories(
+                chainId,
+                address,
+                RED_PACKET_NFT_ADDRESS,
+            )
+            if (!historyTransactions) return EMPTY_LIST
+
+            return RedPacketRPC.getNftRedPacketHistory(historyTransactions)
+        }
         const blockNumber = await connection.getBlockNumber()
         const historyTransactions = await RedPacket.getHistories(
             chainId,
@@ -78,5 +89,5 @@ export function useNftRedPacketHistory(address: string, chainId: ChainId) {
             }
         })
         return RedPacketRPC.getNftRedPacketHistory(payloadList)
-    }, [address, chainId, connection])
+    }, [address, chainId, connection, wallet?.owner])
 }

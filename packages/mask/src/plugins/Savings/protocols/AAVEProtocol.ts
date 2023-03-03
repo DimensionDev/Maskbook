@@ -7,16 +7,16 @@ import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import type { AaveLendingPool } from '@masknet/web3-contracts/types/AaveLendingPool.js'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
-import { FungibleToken, pow10, ZERO } from '@masknet/web3-shared-base'
+import { type FungibleToken, pow10, ZERO } from '@masknet/web3-shared-base'
 import {
-    ChainId,
+    type ChainId,
     createContract,
     getAaveConstants,
-    SchemaType,
+    type SchemaType,
     TransactionEventType,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
-import { ProtocolType, SavingsProtocol } from '../types.js'
+import { ProtocolType, type SavingsProtocol } from '../types.js'
 
 export class AAVEProtocol implements SavingsProtocol {
     static DEFAULT_APR = '0.17'

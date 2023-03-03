@@ -1,7 +1,7 @@
 import { sha3 } from 'web3-utils'
 import type { RequestArguments, TransactionConfig } from 'web3-core'
 import { defer } from '@masknet/kit'
-import { ConnectionContext, EthereumMethodType, Middleware } from '@masknet/web3-shared-evm'
+import { type ConnectionContext, EthereumMethodType, type Middleware } from '@masknet/web3-shared-evm'
 import type { EVM_ConnectionOptions } from '../types.js'
 
 /**

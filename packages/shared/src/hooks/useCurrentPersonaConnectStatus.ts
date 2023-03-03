@@ -5,8 +5,9 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     CrossIsolationMessages,
     DashboardRoutes,
-    MaskEvents,
-    PersonaInformation,
+    type MaskEvents,
+    type PersonaInformation,
+    type PluginID,
     isSamePersona,
     isSameProfile,
     resolveNextIDIdentityToProfile,
@@ -31,6 +32,7 @@ export function useCurrentPersonaConnectStatus(
     openDashboard: (route?: DashboardRoutes, search?: string) => Promise<any>,
     identity?: IdentityResolved,
     message?: WebExtensionMessage<MaskEvents>,
+    directTo?: PluginID,
 ) {
     const t = useSharedI18N()
 
@@ -138,6 +140,12 @@ export function useCurrentPersonaConnectStatus(
     ])
 
     useEffect(() => message?.events.ownPersonaChanged.on(retry), [retry, message])
+
+    useEffect(() => {
+        return message?.events.ownProofChanged.on(() => {
+            retry()
+        })
+    }, [message, retry])
 
     return { value, loading, retry, error }
 }

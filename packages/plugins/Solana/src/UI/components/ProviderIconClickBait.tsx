@@ -1,7 +1,7 @@
 import { isDashboardPage } from '@masknet/shared-base'
 import type { ProviderIconClickBaitProps } from '@masknet/web3-shared-base'
-import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-solana'
-import { cloneElement, HTMLAttributes, isValidElement } from 'react'
+import { type ChainId, type NetworkType, ProviderType } from '@masknet/web3-shared-solana'
+import { cloneElement, type HTMLAttributes, isValidElement } from 'react'
 
 export function ProviderIconClickBait({
     provider,

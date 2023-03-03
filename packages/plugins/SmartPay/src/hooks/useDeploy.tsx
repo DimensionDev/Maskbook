@@ -4,7 +4,7 @@ import getUnixTime from 'date-fns/getUnixTime'
 import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import {
     NetworkPluginID,
-    PersonaInformation,
+    type PersonaInformation,
     PopupRoutes,
     ProofType,
     SignType,
@@ -15,7 +15,7 @@ import type { OwnerAPI } from '@masknet/web3-providers/types'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import type { Wallet } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
-import { ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
+import { type ShowSnackbarOptions, type SnackbarKey, type SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import type { ManagerAccount } from '../type.js'
 import { useI18N } from '../locales/index.js'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -87,6 +87,7 @@ export function useDeploy(
                 await Wallet?.addWallet({
                     name: 'Smart Pay',
                     owner: signAccount.address,
+                    identifier: signAccount.identifier?.toText(),
                     address: contractAccount.address,
                     hasDerivationPath: false,
                     hasStoredKeyInfo: false,
@@ -161,6 +162,7 @@ export function useDeploy(
                 name: 'Smart Pay',
                 owner: signAccount.address,
                 address: contractAccount.address,
+                identifier: signAccount.identifier?.toText(),
                 hasDerivationPath: false,
                 hasStoredKeyInfo: false,
                 id: contractAccount.address,

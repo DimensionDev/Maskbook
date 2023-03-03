@@ -1,15 +1,15 @@
 import {
-    ChainDescriptor,
+    type ChainDescriptor,
     createChainResolver,
     createExplorerResolver,
     createNetworkResolver,
     createProviderResolver,
     isSameAddress,
-    NetworkDescriptor,
-    ProviderDescriptor,
-    OthersState as Web3OthersState,
-    FungibleToken,
-    NonFungibleToken,
+    type NetworkDescriptor,
+    type ProviderDescriptor,
+    type OthersState as Web3OthersState,
+    type FungibleToken,
+    type NonFungibleToken,
 } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 

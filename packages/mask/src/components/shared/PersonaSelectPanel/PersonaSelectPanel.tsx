@@ -7,8 +7,8 @@ import {
     EMPTY_LIST,
     isSamePersona,
     isSameProfile,
-    PersonaIdentifier,
-    ProfileIdentifier,
+    type PersonaIdentifier,
+    type ProfileIdentifier,
     resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -146,6 +146,8 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
                 closeApplicationBoard()
                 await handleVerifyNextID(selectedPersona.persona, currentProfileIdentify.identifier?.userId)
             }
+
+            if (isVerified) CrossIsolationMessages.events.personaBindFinished.sendToAll({ pluginID: finishTarget })
 
             if (finishTarget) {
                 CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({

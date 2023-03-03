@@ -10,15 +10,15 @@ import {
 import type { FungibleTokenAPI, NonFungibleTokenAPI, PriceAPI } from '@masknet/web3-providers/types'
 import {
     attemptUntil,
-    CurrencyType,
-    GasOptionType,
-    HubIndicator,
-    HubOptions,
-    Pageable,
+    type CurrencyType,
+    type GasOptionType,
+    type HubIndicator,
+    type HubOptions,
+    type Pageable,
     SourceType,
-    Transaction,
+    type Transaction,
 } from '@masknet/web3-shared-base'
-import { ChainId, GasOption, SchemaType } from '@masknet/web3-shared-solana'
+import { ChainId, type GasOption, type SchemaType } from '@masknet/web3-shared-solana'
 import type { SolanaHub } from './types.js'
 import { Web3StateSettings } from '../../settings/index.js'
 

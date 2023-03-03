@@ -1,4 +1,4 @@
-import { Children, FC, useState, HTMLProps, ReactElement } from 'react'
+import { Children, type FC, useState, type HTMLProps, type ReactElement } from 'react'
 import { makeStyles } from '../../UIHelper/makeStyles.js'
 import { MaskColorVar } from '../../CSSVariables/index.js'
 

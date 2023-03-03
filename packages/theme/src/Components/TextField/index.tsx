@@ -1,10 +1,10 @@
-import { ForwardedRef, forwardRef } from 'react'
+import { type ForwardedRef, forwardRef } from 'react'
 import {
     Box,
     formHelperTextClasses,
     TextField,
-    StandardTextFieldProps,
-    InputProps,
+    type StandardTextFieldProps,
+    type InputProps,
     Typography,
     InputBase,
 } from '@mui/material'

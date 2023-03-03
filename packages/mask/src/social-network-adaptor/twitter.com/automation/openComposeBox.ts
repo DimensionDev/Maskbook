@@ -1,5 +1,5 @@
-import { CrossIsolationMessages, CompositionDialogEvent } from '@masknet/shared-base'
-import { makeTypedMessageText, SerializableTypedMessages } from '@masknet/typed-message'
+import { CrossIsolationMessages, type CompositionDialogEvent } from '@masknet/shared-base'
+import { makeTypedMessageText, type SerializableTypedMessages } from '@masknet/typed-message'
 
 export function openComposeBoxTwitter(
     content: string | SerializableTypedMessages,

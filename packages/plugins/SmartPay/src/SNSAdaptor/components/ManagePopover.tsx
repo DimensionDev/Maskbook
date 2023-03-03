@@ -10,7 +10,7 @@ import { memo } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { useManagers } from '../../hooks/useManagers.js'
 import { useI18N } from '../../locales/index.js'
-import { ManagerAccount, ManagerAccountType } from '../../type.js'
+import { type ManagerAccount, ManagerAccountType } from '../../type.js'
 
 export interface ManagePopoverProps {
     open: boolean
@@ -22,6 +22,7 @@ export interface ManagePopoverProps {
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
+        background: theme.palette.maskColor.bottom,
         padding: theme.spacing(1.5, 1.5, 2, 1.5),
         boxSizing: 'border-box',
         backgroundColor: theme.palette.maskColor.bottom,

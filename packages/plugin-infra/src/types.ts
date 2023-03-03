@@ -2,7 +2,7 @@ import type React from 'react'
 import type { Option, Result } from 'ts-results-es'
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-/* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
+/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import type {
     BindingProof,
@@ -847,6 +847,14 @@ export namespace Plugin.SNSAdaptor {
         }
     }
 
+    export interface SettingsTabUIProps {
+        onClose: () => void
+        onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
+        bindingWallets?: BindingProof[]
+        currentPersona?: ECKeyIdentifier
+        pluginID: PluginID
+    }
+
     export interface SettingTab {
         ID: PluginID
         /**
@@ -860,13 +868,7 @@ export namespace Plugin.SNSAdaptor {
         priority: number
 
         UI?: {
-            TabContent: InjectUI<{
-                onClose: () => void
-                onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
-                bindingWallets?: BindingProof[]
-                currentPersona?: ECKeyIdentifier
-                pluginID: PluginID
-            }>
+            TabContent: InjectUI<SettingsTabUIProps>
         }
     }
 
@@ -1218,6 +1220,8 @@ export enum CurrentSNSNetwork {
     Twitter = 2,
     Instagram = 3,
     Minds = 4,
+
+    __SPA__ = 99,
 }
 
 export interface IdentityResolved {

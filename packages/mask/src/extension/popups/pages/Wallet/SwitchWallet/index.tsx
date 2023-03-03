@@ -93,7 +93,12 @@ const SwitchWallet = memo(() => {
                             onClick={() =>
                                 handleSelect(
                                     item.address,
-                                    item.owner ? { owner: item.owner, identifier: item.identifier } : undefined,
+                                    item.owner
+                                        ? {
+                                              owner: item.owner,
+                                              identifier: ECKeyIdentifier.from(item.identifier).unwrapOr(undefined),
+                                          }
+                                        : undefined,
                                 )
                             }
                             isSelected={isSameAddress(item.address, wallet?.address)}

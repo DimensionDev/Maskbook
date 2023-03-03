@@ -1,4 +1,4 @@
-import { memo, ReactElement, SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
+import { memo, type ReactElement, type SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
 import { ChevronDown } from 'react-feather'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { z as zod } from 'zod'
@@ -7,7 +7,13 @@ import { noop } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import { EthereumAddress } from 'wallet.ts'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { formatGweiToWei, formatEthereumAddress, ChainId, SchemaType, formatWeiToGwei } from '@masknet/web3-shared-evm'
+import {
+    formatGweiToWei,
+    formatEthereumAddress,
+    type ChainId,
+    SchemaType,
+    formatWeiToGwei,
+} from '@masknet/web3-shared-evm'
 import {
     isZero,
     isGreaterThan,
@@ -16,7 +22,7 @@ import {
     rightShift,
     isSameAddress,
     formatBalance,
-    FungibleAsset,
+    type FungibleAsset,
     GasOptionType,
 } from '@masknet/web3-shared-base'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
@@ -381,6 +387,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 confirmLoading={loading}
                 maxAmount={maxAmount}
                 popoverContent={popoverContent}
+                disableConfirm={!amount || isZero(amount)}
             />
             {otherWallets ? menu : null}
         </FormProvider>
@@ -398,6 +405,7 @@ export interface Prior1559TransferUIProps {
     confirmLoading: boolean
     maxAmount: string
     popoverContent?: ReactElement
+    disableConfirm?: boolean
 }
 
 type TransferFormData = {
@@ -419,6 +427,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
         confirmLoading,
         maxAmount,
         popoverContent,
+        disableConfirm,
     }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
@@ -612,6 +621,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                         loading={confirmLoading}
                         variant="contained"
                         className={classes.button}
+                        disabled={disableConfirm}
                         onClick={handleConfirm}>
                         {t('confirm')}
                     </LoadingButton>

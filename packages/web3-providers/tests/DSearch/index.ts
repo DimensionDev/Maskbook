@@ -1,8 +1,8 @@
 import { describe, expect, it, test } from 'vitest'
 import {
-    DomainResult,
-    NonFungibleCollectionResult,
-    NonFungibleTokenResult,
+    type DomainResult,
+    type NonFungibleCollectionResult,
+    type NonFungibleTokenResult,
     SearchResultType,
 } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'

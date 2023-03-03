@@ -3,12 +3,12 @@ import {
     createIndicator,
     createNextIndicator,
     createPageable,
-    HubOptions,
-    Pageable,
-    Transaction,
+    type HubOptions,
+    type Pageable,
+    type Transaction,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { ChainId, isValidChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, isValidChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import type { Tx } from '../types.js'
 import { fetchFromChainbase } from '../helpers.js'
 import type { HistoryAPI } from '../../entry-types.js'

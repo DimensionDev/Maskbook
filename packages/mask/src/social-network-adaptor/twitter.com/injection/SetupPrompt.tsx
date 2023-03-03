@@ -1,4 +1,4 @@
-import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
+import { MutationObserverWatcher, type LiveSelector } from '@dimensiondev/holoflows-kit'
 import { postEditorInTimelineSelector, postEditorInPopupSelector } from '../utils/selector.js'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { hasEditor, isCompose } from '../utils/postBox.js'

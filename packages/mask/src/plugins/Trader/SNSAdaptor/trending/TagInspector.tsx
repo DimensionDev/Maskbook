@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { SearchResultType, SocialIdentity } from '@masknet/web3-shared-base'
+import { SearchResultType, type SocialIdentity } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { DSearch } from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
@@ -83,6 +83,7 @@ function TrendingViewWrapper({
 
     return (
         <TrendingViewProvider
+            isDSearch={false}
             isCollectionProjectPopper={Boolean(isCollectionProjectPopper)}
             badgeBounding={badgeBounding}
             isProfilePage={false}

@@ -1,7 +1,7 @@
 import { uniqBy } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
-import { mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
+import { mapSubscription, mergeSubscription, type StorageItem } from '@masknet/shared-base'
 import type { AddressBookState as Web3AddressBookState } from '@masknet/web3-shared-base'
 
 export class AddressBookState<

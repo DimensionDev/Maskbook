@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { EMPTY_LIST, NextIDPlatform, PluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, NextIDPlatform, type PluginID } from '@masknet/shared-base'
 import { useWeb3State } from './useWeb3State.js'
 
 /**

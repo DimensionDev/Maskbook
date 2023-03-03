@@ -1,4 +1,4 @@
-import { AttachmentOptions, LandingPageMetadata, Provider, ProviderAgent } from '../types.js'
+import { type AttachmentOptions, type LandingPageMetadata, Provider, type ProviderAgent } from '../types.js'
 import arweave from './arweave.js'
 import ipfs from './ipfs.js'
 

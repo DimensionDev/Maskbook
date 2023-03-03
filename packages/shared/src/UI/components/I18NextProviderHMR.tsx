@@ -1,4 +1,6 @@
-import React, { PropsWithChildren, useEffect, useState } from 'react'
+import { type PropsWithChildren } from 'react'
+import type React from 'react'
+import { useEffect, useState } from 'react'
 import { I18nextProvider, initReactI18next, type I18nextProviderProps } from 'react-i18next'
 import { i18NextInstance } from '@masknet/shared-base'
 

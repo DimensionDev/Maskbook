@@ -1,6 +1,7 @@
 import { toHex } from 'web3-utils'
 import { GasOptionType, multipliedBy, toFixed } from '@masknet/web3-shared-base'
-import { formatWeiToEther, chainResolver } from '../helpers/index.js'
+import { formatWeiToEther } from '../helpers/formatter.js'
+import { chainResolver } from '../helpers/resolver.js'
 import type {
     ChainId,
     EIP1559GasConfig,

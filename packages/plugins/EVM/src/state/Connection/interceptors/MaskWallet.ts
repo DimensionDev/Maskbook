@@ -1,5 +1,5 @@
 import { toHex } from 'web3-utils'
-import { ConnectionContext, EthereumMethodType, Middleware } from '@masknet/web3-shared-evm'
+import { type ConnectionContext, EthereumMethodType, type Middleware } from '@masknet/web3-shared-evm'
 import { SharedContextSettings } from '../../../settings/index.js'
 
 export class MaskWallet implements Middleware<ConnectionContext> {

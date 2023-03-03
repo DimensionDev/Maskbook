@@ -3,8 +3,8 @@ import {
     createIndicator,
     createPageable,
     resolveArweaveURL,
-    HubOptions,
-    NonFungibleAsset,
+    type HubOptions,
+    type NonFungibleAsset,
     TokenType,
     SourceType,
 } from '@masknet/web3-shared-base'

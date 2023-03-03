@@ -8,11 +8,12 @@ export const base: Plugin.Shared.Definition = {
     description: { fallback: PLUGIN_DESCRIPTION },
     publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
     enableRequirement: {
-        architecture: { app: true, web: true },
+        architecture: { app: true, web: false },
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
         host_permissions: ['https://gitcoin.co/'],
     },
+    inMinimalModeByDefault: true,
     contribution: { postContent: new Set([/https:\/\/gitcoin.co\/grants\/\d+/]) },
     i18n: languages,
 }

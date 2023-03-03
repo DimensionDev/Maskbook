@@ -1,4 +1,4 @@
-import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Composition } from '../../../components/CompositionDialog/Composition.js'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { startWatch } from '../../../utils/watcher.js'

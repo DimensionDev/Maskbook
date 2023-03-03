@@ -1,10 +1,10 @@
 import { BigNumber } from 'bignumber.js'
-import { FungibleAsset, leftShift, multipliedBy, TokenType, Transaction } from '@masknet/web3-shared-base'
+import { type FungibleAsset, leftShift, multipliedBy, TokenType, type Transaction } from '@masknet/web3-shared-base'
 import { ChainId, getTokenConstant, SchemaType, formatEthereumAddress, isValidAddress } from '@masknet/web3-shared-evm'
 import {
-    ZerionAddressPosition,
+    type ZerionAddressPosition,
     ZerionRBDTransactionType,
-    ZerionTransactionItem,
+    type ZerionTransactionItem,
     ZerionTransactionStatus,
 } from './types.js'
 

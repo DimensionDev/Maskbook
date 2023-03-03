@@ -1,4 +1,4 @@
-import { Button, ButtonProps, styled } from '@mui/material'
+import { Button, type ButtonProps, styled } from '@mui/material'
 import { memo, useEffect, useRef } from 'react'
 
 const FlexibleTabTabWrap = styled(Button, {

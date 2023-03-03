@@ -1,8 +1,14 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
-import { TokenState, TokenStorage } from '@masknet/web3-state'
-import { isSameAddress, FungibleToken, NonFungibleToken } from '@masknet/web3-shared-base'
-import { ChainId, formatEthereumAddress, isValidAddress, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
+import { TokenState, type TokenStorage } from '@masknet/web3-state'
+import { isSameAddress, type FungibleToken, type NonFungibleToken } from '@masknet/web3-shared-base'
+import {
+    type ChainId,
+    formatEthereumAddress,
+    isValidAddress,
+    type SchemaType,
+    isValidChainId,
+} from '@masknet/web3-shared-evm'
 import { Web3StateSettings } from '../settings/index.js'
 
 export class Token extends TokenState<ChainId, SchemaType> {

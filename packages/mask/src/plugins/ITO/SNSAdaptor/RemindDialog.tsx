@@ -3,7 +3,13 @@ import { Checkbox, FormControlLabel, Link, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { FormattedAddress, TokenIcon } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
-import { ChainId, formatEthereumAddress, explorerResolver, networkResolver, SchemaType } from '@masknet/web3-shared-evm'
+import {
+    type ChainId,
+    formatEthereumAddress,
+    explorerResolver,
+    networkResolver,
+    type SchemaType,
+} from '@masknet/web3-shared-evm'
 import { SwapStatus } from './SwapGuide.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { computePoolAddress, Pool, FeeAmount } from '@uniswap/v3-sdk'
+import { computePoolAddress, Pool, type FeeAmount } from '@uniswap/v3-sdk'
 import type { Token, Currency } from '@uniswap/sdk-core'
 import { usePoolContracts } from '../../contracts/uniswap/usePoolContract.js'
 import type { TradeProvider } from '@masknet/public-api'

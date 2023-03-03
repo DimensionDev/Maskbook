@@ -2,7 +2,7 @@ import { memo } from 'react'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
-import { formatBalance } from '@masknet/web3-shared-base'
+import { formatBalance, isZero } from '@masknet/web3-shared-base'
 import { Box, TextField, Typography } from '@mui/material'
 import { FormattedBalance } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
@@ -140,7 +140,7 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
                                 width: '100%',
                             }}>
                             <Typography className={classes.provider}>{providerName}</Typography>
-                            {gasFee ? (
+                            {!isZero(gasFee) ? (
                                 <Typography className={classes.cost}>
                                     <Typography fontSize={14} lineHeight="20px" component="span">
                                         {t('plugin_trader_gas_fee')}
@@ -155,9 +155,8 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
                                         />
                                     </Typography>
                                     <Typography fontSize={14} lineHeight="20px" component="span">
-                                        {gasFeeValueUSD === '< $0.01'
-                                            ? t('plugin_trader_tx_cost_very_small', { usd: gasFeeValueUSD })
-                                            : t('plugin_trader_tx_cost_usd_new', { usd: gasFeeValueUSD })}
+                                        ({gasFeeValueUSD.includes('<') ? '' : '\u2248'}
+                                        {gasFeeValueUSD})
                                     </Typography>
                                 </Typography>
                             ) : null}

@@ -1,5 +1,5 @@
 import { memo, Fragment, createElement, useContext } from 'react'
-import { RenderFragmentsContext, RenderFragmentsContextType, DefaultRenderFragments } from './RenderFragments.js'
+import { RenderFragmentsContext, type RenderFragmentsContextType, DefaultRenderFragments } from './RenderFragments.js'
 import type { TypedMessageAnchor } from '@masknet/typed-message'
 import { parseLink } from '@masknet/typed-message/internal'
 

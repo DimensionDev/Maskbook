@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { Avatar, AvatarProps, useTheme } from '@mui/material'
+import { Avatar, type AvatarProps, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { name2Image } from './name2Image.js'
 

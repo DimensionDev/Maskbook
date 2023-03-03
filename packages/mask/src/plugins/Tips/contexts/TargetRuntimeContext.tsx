@@ -6,7 +6,7 @@ import {
     useNetworkContext,
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
-import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react'
+import { type FC, type PropsWithChildren, useCallback, useEffect, useState } from 'react'
 import { createContainer } from 'unstated-next'
 
 function useTargetRuntime(initPluginID?: NetworkPluginID) {

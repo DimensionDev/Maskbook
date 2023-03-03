@@ -1,5 +1,5 @@
 import { TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token'
-import { type Connection, PublicKey, Commitment, Transaction } from '@solana/web3.js'
+import { type Connection, type PublicKey, type Commitment, Transaction } from '@solana/web3.js'
 import { createAssociatedTokenAccountInstruction } from './createAssociatedTokenAccountInstruction.js'
 import { getAccountInfo } from './getAccountInfo.js'
 import { getAssociatedTokenAddress } from './getAssociatedTokenAddress.js'
@@ -28,7 +28,6 @@ export async function getOrCreateAssociatedTokenAccount(
     let account
     try {
         account = await getAccountInfo(connection, associatedToken, commitment, programId)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         // TokenAccountNotFoundError can be possible if the associated address has already received some lamports,
         // becoming a system account. Assuming program derived addressing is safe, this is the only case for the

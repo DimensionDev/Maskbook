@@ -1,5 +1,5 @@
 import type { HubIndicator, HubOptions } from '@masknet/web3-shared-base'
-import { ChainId, getCoinGeckoConstants, isNativeTokenAddress, isValidAddress } from '@masknet/web3-shared-evm'
+import { type ChainId, getCoinGeckoConstants, isNativeTokenAddress, isValidAddress } from '@masknet/web3-shared-evm'
 import { getTokenPrice, getTokenPriceByCoinId } from './base.js'
 import type { PriceAPI } from '../../entry-types.js'
 

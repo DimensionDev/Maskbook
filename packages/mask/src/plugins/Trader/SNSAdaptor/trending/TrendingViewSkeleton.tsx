@@ -4,7 +4,7 @@ import { CardContent, Stack, Typography } from '@mui/material'
 import { useI18N } from '../../../../utils/index.js'
 import { TrendingViewContext } from './context.js'
 import { PluginDescriptor } from './PluginDescriptor.js'
-import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
+import { TrendingCard, type TrendingCardProps } from './TrendingCard.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

@@ -2,9 +2,9 @@ import { useAsyncRetry } from 'react-use'
 import { useMemo } from 'react'
 import type { BigNumber } from 'bignumber.js'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
-import { ChainId, getRedPacketConstants, chainResolver } from '@masknet/web3-shared-evm'
-import { RedPacket } from '@masknet/web3-providers'
-import { useWeb3Connection } from '@masknet/web3-hooks-base'
+import { type ChainId, getRedPacketConstants, chainResolver } from '@masknet/web3-shared-evm'
+import { RedPacket, TheGraphRedPacket } from '@masknet/web3-providers'
+import { useWallet, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { RedPacketRPC } from '../../messages.js'
 import { Interface } from '@ethersproject/abi'
 import type { RedPacketJSONPayloadFromChain } from '../../types.js'
@@ -15,10 +15,23 @@ const redPacketInterFace = new Interface(REDPACKET_ABI)
 const CREATE_RED_PACKET_METHOD_ID = '0x5db05aba'
 
 export function useRedPacketHistory(address: string, chainId: ChainId) {
+    const wallet = useWallet()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT, HAPPY_RED_PACKET_ADDRESS_V4 } = getRedPacketConstants(chainId)
     const result = useAsyncRetry(async () => {
         if (!connection || !HAPPY_RED_PACKET_ADDRESS_V4) return EMPTY_LIST
+
+        if (wallet?.owner) {
+            const historyTransactions = await TheGraphRedPacket.getHistories(
+                chainId,
+                address,
+                HAPPY_RED_PACKET_ADDRESS_V4,
+            )
+
+            if (!historyTransactions) return EMPTY_LIST
+            return RedPacketRPC.getRedPacketHistoryFromDatabase(historyTransactions)
+        }
+
         const blockNumber = await connection.getBlockNumber()
         const historyTransactions = await RedPacket.getHistories(
             chainId,
@@ -82,7 +95,7 @@ export function useRedPacketHistory(address: string, chainId: ChainId) {
             }
         })
         return RedPacketRPC.getRedPacketHistoryFromDatabase(payloadList)
-    }, [address, chainId])
+    }, [address, chainId, wallet?.owner])
 
     const value = useMemo(() => result.value?.filter((x) => x.chainId === chainId), [chainId, result.value])
 

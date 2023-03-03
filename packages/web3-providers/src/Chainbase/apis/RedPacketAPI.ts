@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import {
-    Transaction,
+    type Transaction,
     createIndicator,
     createNextIndicator,
     createPageable,

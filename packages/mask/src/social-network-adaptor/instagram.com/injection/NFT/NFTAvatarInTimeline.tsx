@@ -1,5 +1,10 @@
-import { DOMProxy, LiveSelector, MutationObserverWatcher, UnboundedRegistry } from '@dimensiondev/holoflows-kit'
-import { MaskMessages, NFTAvatarEvent, createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import {
+    DOMProxy,
+    type LiveSelector,
+    MutationObserverWatcher,
+    type UnboundedRegistry,
+} from '@dimensiondev/holoflows-kit'
+import { MaskMessages, type NFTAvatarEvent, createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { NFTBadgeTimeline, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
 import { searchInstagramPostAvatarSelector } from '../../utils/selector.js'

@@ -8,9 +8,6 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '16px',
         fontWeight: 700,
     },
-    icon: {
-        color: theme.palette.text.secondary,
-    },
 }))
 
 export interface PriceChangedProps {
@@ -20,14 +17,12 @@ export interface PriceChangedProps {
 export function PriceChanged(props: PriceChangedProps) {
     const { classes } = useStyles()
     const colors = useTheme().palette.maskColor
+    const color = props.amount > 0 ? colors?.success : colors?.danger
     if (props.amount === 0) return null
     return (
         <Stack alignItems="center" direction="row">
-            {props.amount > 0 ? (
-                <Icons.ArrowDrop size={16} className={classes.icon} style={{ transform: 'rotate(180deg)' }} />
-            ) : null}
-            {props.amount < 0 ? <Icons.ArrowDrop size={16} className={classes.icon} /> : null}
-            <Typography className={classes.value} color={props.amount > 0 ? colors?.success : colors?.danger}>
+            <Icons.ArrowDrop size={16} style={{ color, transform: props.amount > 0 ? 'rotate(180deg)' : '' }} />
+            <Typography className={classes.value} color={color}>
                 {props.amount.toFixed(2)}%
             </Typography>
         </Stack>

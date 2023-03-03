@@ -1,3 +1,7 @@
+import { isCoreTypedMessages, type CoreTypedMessages } from './core/index.js'
+import { isWellKnownExtensionTypedMessages, type WellKnownExtensionTypedMessages } from './extension/index.js'
+import { composeSome } from './utils/internal.js'
+
 export type {
     Meta,
     TypedMessage,
@@ -83,10 +87,6 @@ export {
     // Not ready yet.
     // createMaskPayloadTransform,
 } from './transformer/index.js'
-
-import { isCoreTypedMessages, CoreTypedMessages } from './core/index.js'
-import { isWellKnownExtensionTypedMessages, WellKnownExtensionTypedMessages } from './extension/index.js'
-import { composeSome } from './utils/internal.js'
 
 export type WellKnownTypedMessages = WellKnownExtensionTypedMessages | CoreTypedMessages
 export const isWellKnownTypedMessages = composeSome(isCoreTypedMessages, isWellKnownExtensionTypedMessages)

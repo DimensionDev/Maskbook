@@ -10,26 +10,26 @@
   "dependencies": {
     "@masknet/static-module-record-swc": "^0.4.1",
     "@types/rimraf": "^3.0.2",
-    "chalk": "^5.1.2",
+    "chalk": "^5.2.0",
     "dotenv": "^16.0.3",
     "enquirer": "^2.3.6",
-    "fs-extra": "^10.1.0",
-    "glob": "^8.0.3",
-    "glob-promise": "^5.0.0",
+    "fs-extra": "^11.1.0",
+    "glob": "^8.1.0",
+    "glob-promise": "^6.0.2",
     "proper-lockfile": "^4.1.1",
     "rimraf": "^3.0.2",
     "source-map": "^0.7.4",
-    "yargs": "^17.6.2"
+    "yargs": "^17.7.1"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.13",
+    "@types/fs-extra": "^11.0.1",
     "@types/gulp": "^4.0.10",
-    "@types/lodash": "^4.14.190",
-    "@types/node": "18.7.16",
+    "@types/lodash": "^4.14.191",
+    "@types/node": "18.14.4",
     "@types/proper-lockfile": "^4.1.2",
-    "@types/yargs": "^17.0.14",
+    "@types/yargs": "^17.0.22",
     "gulp-cli": "^2.3.0",
     "ts-node": "^10.9.1",
-    "web-ext": "^7.4.0"
+    "web-ext": "^7.5.0"
   }
 }

@@ -7,7 +7,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useTelemetry } from '@masknet/web3-telemetry/hooks'
 import { NetworkPluginID, ProofType } from '@masknet/shared-base'
 import {
-    Web3,
+    type Web3,
     ChainId,
     ChainId as EVM_ChainId,
     ProviderType as EVM_ProviderType,
@@ -38,11 +38,15 @@ export function ConnectionContent(props: ConnectionContentProps) {
     const telemetry = useTelemetry()
 
     const onCaptureEvent = useCallback(async () => {
-        telemetry.captureEvent(TelemetryAPI.EventID.Debug)
+        telemetry.captureEvent(TelemetryAPI.EventType.Debug, TelemetryAPI.EventID.Debug)
     }, [telemetry])
 
     const onCaptureException = useCallback(async () => {
-        telemetry.captureException(TelemetryAPI.ExceptionID.Debug, new Error('A debug error.'))
+        telemetry.captureException(
+            TelemetryAPI.ExceptionType.Error,
+            TelemetryAPI.ExceptionID.Debug,
+            new Error('An error message.'),
+        )
     }, [telemetry])
 
     const onEstimateCallback = useCallback(async () => {

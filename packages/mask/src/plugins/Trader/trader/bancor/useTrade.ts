@@ -1,10 +1,10 @@
 import { useTraderConstants, ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../../messages.js'
-import { SwapBancorRequest, TradeStrategy } from '../../types/index.js'
+import { type SwapBancorRequest, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { leftShift } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useDoubleBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useCustomBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
@@ -26,7 +26,7 @@ export function useTrade(
     const outputAmount = leftShift(outputAmountWei, outputToken?.decimals).toFixed()
     const isExactIn = strategy === TradeStrategy.ExactIn
 
-    return useDoubleBlockBeatRetry(
+    return useCustomBlockBeatRetry(
         NetworkPluginID.PLUGIN_EVM,
         async () => {
             if (!inputToken || !outputToken || pluginID !== NetworkPluginID.PLUGIN_EVM) return null
@@ -65,5 +65,6 @@ export function useTrade(
             chainId,
             pluginID,
         ],
+        chainId === ChainId.BSC ? 6 : 3,
     )
 }

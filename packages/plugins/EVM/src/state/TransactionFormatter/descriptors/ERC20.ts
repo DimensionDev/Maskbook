@@ -1,6 +1,6 @@
 import { i18NextInstance } from '@masknet/shared-base'
-import { TransactionContext, isZero, leftShift, pow10 } from '@masknet/web3-shared-base'
-import { ChainId, TransactionParameter, SchemaType } from '@masknet/web3-shared-evm'
+import { type TransactionContext, isZero, leftShift, pow10 } from '@masknet/web3-shared-base'
+import { type ChainId, type TransactionParameter, SchemaType } from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types.js'
 import { getTokenAmountDescription } from '../utils.js'
 import { Web3StateSettings } from '../../../settings/index.js'

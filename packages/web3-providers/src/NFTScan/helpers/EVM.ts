@@ -6,18 +6,18 @@ import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
 import {
     formatPercentage,
-    NonFungibleAsset,
-    NonFungibleCollection,
-    NonFungibleTokenContract,
-    NonFungibleTokenEvent,
-    NonFungibleTokenTrait,
+    type NonFungibleAsset,
+    type NonFungibleCollection,
+    type NonFungibleTokenContract,
+    type NonFungibleTokenEvent,
+    type NonFungibleTokenTrait,
     resolveResourceURL,
     scale10,
     SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
 import {
-    ChainId,
+    type ChainId,
     chainResolver,
     createContract,
     isENSContractAddress,

@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
-import { ChainId, TransactionReceipt } from '@masknet/web3-shared-evm'
-import { EMPTY_LIST, Proof } from '@masknet/shared-base'
+import { ChainId, type TransactionReceipt } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST, type Proof } from '@masknet/shared-base'
 import { FunderAPI } from '../../types/Funder.js'
 import { Web3API } from '../../EVM/index.js'
 import { fetchJSON } from '../../entry-helpers.js'

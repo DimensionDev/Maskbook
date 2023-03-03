@@ -1,7 +1,14 @@
 import type { KVStorageBackend } from './types.js'
-import { IDBPDatabase, openDB } from 'idb/with-async-ittr'
+import { type IDBPDatabase, openDB } from 'idb/with-async-ittr'
 import { None, Some } from 'ts-results-es'
 
+/**
+ * Create a KVStorageBackend that stores the data in the indexedDB
+ * @param dbName The database name to use.
+ * @param onChange When the database receives a change. onChange should broadcast this to all clients.
+ * @param beforeAutoSync The promise to wait before the auto-sync starts.
+ * @returns A KVStorageBackend
+ */
 export function createIndexedDB_KVStorageBackend(
     dbName: string,
     onChange: (key: string, value: unknown) => void,

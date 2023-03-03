@@ -1,7 +1,7 @@
 import { compact, uniqBy } from 'lodash-es'
 import type { Plugin } from '@masknet/plugin-infra'
 import { IdentityServiceState } from '@masknet/web3-state'
-import { SocialIdentity, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
+import { type SocialIdentity, type SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import {
     NetworkPluginID,
     EMPTY_LIST,
@@ -10,9 +10,8 @@ import {
     NextIDPlatform,
     createLookupTableResolver,
     PluginID,
-    BindingProof,
+    type BindingProof,
 } from '@masknet/shared-base'
-import { KVStorage } from '@masknet/shared'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { ENS, Lens, MaskX, NextIDProof, NextIDStorage, RSS3, SpaceID, Twitter } from '@masknet/web3-providers'
 import { MaskX_BaseAPI } from '@masknet/web3-providers/types'
@@ -87,8 +86,6 @@ const resolveMaskXAddressType = createLookupTableResolver<MaskX_BaseAPI.SourceTy
 )
 
 export class IdentityService extends IdentityServiceState<ChainId> {
-    private KV = new KVStorage(`com.maskbook.user_${getSiteType()}`)
-
     constructor(protected context: Plugin.Shared.SharedUIContext) {
         super()
     }

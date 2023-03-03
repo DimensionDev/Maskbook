@@ -4,7 +4,7 @@ import ITO2_ABI from '@masknet/web3-contracts/abis/ITO2.json'
 import type { ITO } from '@masknet/web3-contracts/types/ITO.js'
 import type { ITO2 } from '@masknet/web3-contracts/types/ITO2.js'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { useITOConstants, ChainId } from '@masknet/web3-shared-evm'
+import { useITOConstants, type ChainId } from '@masknet/web3-shared-evm'
 import { useContract } from '@masknet/web3-hooks-evm'
 
 export function useITO_Contract(chainId?: ChainId, contractAddress?: string) {

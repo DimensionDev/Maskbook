@@ -2,8 +2,8 @@ import type { MobilePostRecord as NativePostRecord } from '@masknet/public-api'
 import type { PostRecord, PostReadWriteTransaction, PostReadOnlyTransaction } from './type.js'
 import {
     PostIVIdentifier,
-    AESJsonWebKey,
-    PersonaIdentifier,
+    type AESJsonWebKey,
+    type PersonaIdentifier,
     ProfileIdentifier,
     ECKeyIdentifier,
     convertRawMapToIdentifierMap,

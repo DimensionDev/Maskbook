@@ -1,4 +1,4 @@
-import { ConnectionContext, EthereumMethodType, Middleware } from '@masknet/web3-shared-evm'
+import { type ConnectionContext, EthereumMethodType, type Middleware } from '@masknet/web3-shared-evm'
 
 export class Fortmatic implements Middleware<ConnectionContext> {
     async fn(context: ConnectionContext, next: () => Promise<void>) {

@@ -9,7 +9,7 @@
     }
   },
   "dependencies": {
-    "@masknet/icons": "workspace:*",
+    "@masknet/icons": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/plugin-wallet": "workspace:^",
     "@masknet/shared": "workspace:^",
