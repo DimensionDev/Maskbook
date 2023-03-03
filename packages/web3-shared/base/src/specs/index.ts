@@ -8,6 +8,7 @@ import type {
     NetworkPluginID,
     NextIDPersonaBindings,
     NextIDPlatform,
+    BindingProof,
     ProfileIdentifier,
     Proof,
 } from '@masknet/shared-base'
@@ -668,12 +669,13 @@ export interface Result<ChainId> {
 export interface EOAResult<ChainId> extends Result<ChainId> {
     type: SearchResultType.EOA
     domain?: string
+    bindingProofList?: BindingProof[]
     address: string
 }
 
 export interface DomainResult<ChainId> extends Result<ChainId> {
     type: SearchResultType.Domain
-    domain: string
+    domain?: string
     address?: string
 }
 

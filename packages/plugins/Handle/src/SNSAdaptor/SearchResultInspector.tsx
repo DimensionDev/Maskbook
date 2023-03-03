@@ -114,12 +114,12 @@ export function SearchResultInspectorContent() {
         successText: t.wallets_address_copied(),
     })
     const isShowSocialAccountList = nextIdBindings.length > 3
-    const suffix = domain.split('.').pop()!
-    const ChainIcon = SuffixToChainIconMap[suffix] ?? Icons.ETH
+    const suffix = domain ? domain.split('.').pop()! : undefined
+    const ChainIcon = suffix ? SuffixToChainIconMap[suffix] ?? Icons.ETH : null
 
     const { setPair } = ScopedDomainsContainer.useContainer()
     useEffect(() => {
-        if (!reversedAddress) return
+        if (!reversedAddress || !domain) return
         setPair(reversedAddress, domain)
     }, [reversedAddress, domain])
 
@@ -128,9 +128,9 @@ export function SearchResultInspectorContent() {
             <PluginHeader />
             <Box className={classes.root}>
                 <section className={classes.ensInfo}>
-                    <ChainIcon size={30} className={classes.ensIcon} />
+                    {domain && ChainIcon ? <ChainIcon size={30} className={classes.ensIcon} /> : null}
                     <div>
-                        <Typography className={classes.domain}>{domain}</Typography>
+                        {domain ? <Typography className={classes.domain}>{domain}</Typography> : null}
                         {reversedAddress ? (
                             <Typography className={classes.reversedAddress}>
                                 {reversedAddress}{' '}
