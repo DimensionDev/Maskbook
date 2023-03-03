@@ -170,51 +170,47 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         }
     }
 
-    async queryProfilesByRelationService(domain: string) {
+    async queryProfilesByRelationService(address: string) {
         const response = await fetchJSON<{
             data: {
-                domain: {
-                    owner: {
-                        neighborWithTraversal: Array<{
-                            source: NextIDPlatform
-                            to: { platform: NextIDPlatform; displayName: string }
-                            from: { platform: NextIDPlatform; displayName: string }
-                        }>
-                    }
+                identity: {
+                    neighborWithTraversal: Array<{
+                        source: NextIDPlatform
+                        to: { platform: NextIDPlatform; displayName: string }
+                        from: { platform: NextIDPlatform; displayName: string }
+                    }>
                 }
             }
         }>(RELATION_SERVICE_URL, {
             method: 'POST',
             mode: 'cors',
             body: JSON.stringify({
-                operationName: 'GET_PROFILES_DOMAIN',
-                variables: { domain: domain.toLowerCase(), platform: 'ENS' },
+                operationName: 'GET_PROFILES_QUERY',
+                variables: { platform: 'ethereum', identity: address.toLowerCase() },
                 query: `
-                    query GET_PROFILES_DOMAIN($platform: String, $domain: String) {                    
-                        domain(domainSystem: $platform, name: $domain) {  
-                            owner {                    
-                                neighborWithTraversal(depth: 5) {
-                                    source
-                                    to {
-                                        platform
-                                        displayName                                                                                                        
-                                    }        
-                                    from {
-                                        platform
-                                        displayName                                                                                                        
-                                    }                                                                                          
-                                }
-                            }
+                    query GET_PROFILES_QUERY($platform: String, $identity: String) {                    
+                        identity(platform: $platform, identity: $identity) {                                   
+                            neighborWithTraversal(depth: 5) {
+                                source
+                                to {
+                                    platform
+                                    displayName                                                                                                        
+                                }        
+                                from {
+                                    platform
+                                    displayName                                                                                                        
+                                }                                                                                          
+                            }                          
                         }
                     }
                 `,
             }),
         })
 
-        const rawData = response.data.domain.owner.neighborWithTraversal
+        const rawData = response.data.identity.neighborWithTraversal
             .map((x) => createBindingProofFromProfileQuery(x.to.platform, x.source, x.to.displayName))
             .concat(
-                response.data.domain.owner.neighborWithTraversal.map((x) =>
+                response.data.identity.neighborWithTraversal.map((x) =>
                     createBindingProofFromProfileQuery(x.from.platform, x.source, x.from.displayName),
                 ),
             )
