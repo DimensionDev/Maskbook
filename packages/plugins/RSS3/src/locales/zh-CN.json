@@ -24,6 +24,7 @@
     "collectible_operation$send": "<user>{{user}}</user> 已发送 <collectible>{{collectible}}</collectible> 到 <other>{{other}}</other>",
     "collectible_operation$claim": "<user>{{user}}</user> 领取了来自 <other>{{other}}</other>的<collectible>{{collectible}}</collectible>",
     "collectible_operation$claim_cost": "$t(collectible_operation$claim)  <cost>{{cost_value}} {{cost_symbol}}</cost>",
+    "collectible_trade$no_platform": "<bold>{{user}}</bold>在<bold>{{platform}}</bold>上售出 <collectible>{{collectible}}</collectible> 至 <recipient>{{recipient}}</recipient> <bold>{{cost_value}} {{cost_symbol}}</bold>",
     "collectible_trade$platform": "<bold>{{user}}</bold> 售出 <collectible>{{collectible}}</collectible> 至 <recipient>{{recipient}}</recipient> <bold>{{cost_value}} {{cost_symbol}}</bold> <bold>{{platform}}</bold>",
     "collectible_burn": "<user>{{user}}</user>销毁<collectible>{{collectible}}</collectible>",
     "donation_donate": "<bold>{{user}}</bold> 捐赠了 <bold>{{cost_value}} {{cost_symbol}}</bold>",
