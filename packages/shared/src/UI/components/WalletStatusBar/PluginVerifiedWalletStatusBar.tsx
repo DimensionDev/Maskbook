@@ -17,6 +17,7 @@ import {
     useRecentTransactions,
     useWallets,
     useAccount,
+    useChainId,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
@@ -76,6 +77,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const { classes, cx } = useStyles()
 
         const account = useAccount()
+        const globalChainId = useChainId()
         const { chainId } = useChainContext()
         const allWallets = useWallets()
 
@@ -120,7 +122,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const defaultChainId = useDefaultChainId(defaultPluginId)
 
         const providerDescriptor = useProviderDescriptor(defaultPluginId)
-        const networkDescriptor = useNetworkDescriptor(defaultPluginId, chainId)
+        const networkDescriptor = useNetworkDescriptor(defaultPluginId, !isNextIdWallet ? chainId : defaultChainId)
 
         const pendingTransactions = useRecentTransactions(currentPluginID, TransactionStatusType.NOT_DEPEND)
 
@@ -174,7 +176,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                         onChangeWallet={openSelectProviderDialog}
                         selected={isSameAddress(descriptionProps.address, account)}
                         onSelect={onSelect}
-                        expectedChainId={isSmartPay ? smartPaySupportChainId : chainId}
+                        expectedChainId={isSmartPay ? smartPaySupportChainId : globalChainId}
                     />
                 ) : (
                     <MenuItem key="connect">
