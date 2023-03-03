@@ -50,12 +50,10 @@ function registerPostCollectorInner(
     cancel: AbortSignal,
 ) {
     const getTweetNode = (node: HTMLElement) => {
-        const root = node.closest<HTMLDivElement>(
-            [
-                'article > div',
-                'div[role="link"]', // retweet(quoted tweet) in new twitter
-            ].join(),
-        )
+        // retweet(quoted tweet) in new twitter
+        let root = node.closest<HTMLDivElement>('div[role="link"]')
+        // then normal tweet
+        root = root || node.closest<HTMLDivElement>('article > div')
         if (!root) return null
 
         const isCardNode = node.matches('[data-testid="card.wrapper"]')
