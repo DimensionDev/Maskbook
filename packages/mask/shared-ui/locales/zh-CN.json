@@ -556,6 +556,7 @@
     "plugin_poll_deadline": "距离投票结束还有{{time}}",
     "plugin_ito_empty_token": "无需解锁此ITO上的任何代币。",
     "plugin_collectibles_name": "NFT",
+    "plugin_collectibles_description": "直接在社交媒体上展示在 OpenSea 和 Rarible 上的收藏品的具体信息，并提供报价及竞价功能。",
     "plugin_ito_locked": "ITO 已锁定",
     "plugin_ito_share": "分享",
     "plugin_ito_enter": "参加",
