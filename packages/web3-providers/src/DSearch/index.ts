@@ -42,7 +42,7 @@ import { RSS3API } from '../RSS3/index.js'
 import { PlatformToChainIdMap } from '../RSS3/constants.js'
 import { ENS_API } from '../ENS/index.js'
 import { SpaceID_API } from '../SpaceID/index.js'
-import { NextIDProofAPI } from '../NextID/index.js'
+import { NextIDProofAPI } from '../NextID/proof.js'
 
 const isValidAddress = (address?: string): boolean => {
     return isValidAddressEVM(address) || isValidAddressFlow(address) || isValidAddressSolana(address)
