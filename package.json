@@ -123,7 +123,9 @@
       ],
       "allowedVersions": {
         "react": "0.0.0-experimental-d1e35c703-20221110",
-        "react-dom": "0.0.0-experimental-d1e35c703-20221110"
+        "react-dom": "0.0.0-experimental-d1e35c703-20221110",
+        "typescript": "5",
+        "rollup": "3"
       }
     },
     "patchedDependencies": {
