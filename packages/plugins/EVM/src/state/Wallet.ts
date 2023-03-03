@@ -40,12 +40,13 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
     }
 
     override async setup() {
+        if (this.providerType !== ProviderType.MaskWallet) return
+
+        await this.storage.initializedPromise
+
         const update = async () => {
-            if (this.providerType !== ProviderType.MaskWallet) return
-
             const wallets = this.context.wallets.getCurrentValue()
-
-            const localWallets = this.storage.initialized ? this.storage.value[ProviderType.MaskWallet] : []
+            const localWallets = this.storage.value[ProviderType.MaskWallet]
 
             this.ref.value = uniqWith([...wallets, ...(localWallets ?? [])], (a, b) =>
                 isSameAddress(a.address, b.address),
@@ -59,7 +60,6 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
             ])
 
             const now = new Date()
-
             const smartPayWallets = accounts
                 .filter((x) => x.deployed)
                 .map((x) => ({

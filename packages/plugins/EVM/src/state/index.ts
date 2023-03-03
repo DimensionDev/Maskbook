@@ -40,11 +40,6 @@ export async function createWeb3State(
     const Wallet_ = new Wallet(context, {
         providerType: createConstantSubscription(ProviderType.MaskWallet),
     })
-    const Connection_ = new Connection(context, {
-        chainId: Provider_.chainId,
-        account: Provider_.account,
-        providerType: Provider_.providerType,
-    })
 
     await Provider_.storage.account.initializedPromise
     await Provider_.storage.providerType.initializedPromise
@@ -80,11 +75,13 @@ export async function createWeb3State(
         Transaction: Transaction_,
         TransactionFormatter: new TransactionFormatter(context),
         TransactionWatcher: TransactionWatcher_,
-        Connection: Connection_,
+        Connection: new Connection(context, {
+            chainId: Provider_.chainId,
+            account: Provider_.account,
+            providerType: Provider_.providerType,
+        }),
         Wallet: Wallet_,
         Others: new Others(context),
         Storage: new Storage(),
     }
 }
-
-export * from './Connection/types.js'

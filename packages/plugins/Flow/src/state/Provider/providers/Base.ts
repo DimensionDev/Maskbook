@@ -20,6 +20,9 @@ export class BaseProvider implements FlowProvider {
         return Promise.resolve()
     }
 
+    setup(): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
     switchAccount(account?: string): Promise<void> {
         throw new Error('Method not implemented.')
     }

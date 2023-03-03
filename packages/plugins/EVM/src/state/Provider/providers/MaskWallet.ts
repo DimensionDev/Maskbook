@@ -3,9 +3,9 @@ import { ECKeyIdentifier, EMPTY_LIST, ExtensionSite, getSiteType, PopupRoutes } 
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { ChainId, chainResolver, isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
-import type { EVM_Provider } from '../types.js'
 import { BaseContractWalletProvider } from './BaseContractWallet.js'
 import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
+import type { EVM_Provider } from '../types.js'
 
 export class MaskWalletProvider extends BaseContractWalletProvider implements EVM_Provider {
     constructor() {

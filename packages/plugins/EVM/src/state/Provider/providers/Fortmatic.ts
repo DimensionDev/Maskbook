@@ -6,8 +6,8 @@ import { timeout } from '@masknet/kit'
 import type { FmProvider } from 'fortmatic/dist/cjs/src/core/fm-provider.js'
 import { ChainId, chainResolver, ProviderURL, ProviderType } from '@masknet/web3-shared-evm'
 import { createLookupTableResolver } from '@masknet/shared-base'
-import type { EVM_Provider } from '../types.js'
 import { BaseProvider } from './Base.js'
+import type { EVM_Provider } from '../types.js'
 
 // #region create in-page fortmatic provider
 

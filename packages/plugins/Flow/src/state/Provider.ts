@@ -15,7 +15,7 @@ import {
     getDefaultProviderType,
     getDefaultNetworkType,
 } from '@masknet/web3-shared-flow'
-import { Providers } from './Connection/provider.js'
+import { Providers } from './Provider/provider.js'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
     constructor(override context: Plugin.Shared.SharedUIContext) {

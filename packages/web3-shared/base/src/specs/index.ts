@@ -941,6 +941,8 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     readonly readyPromise: Promise<void>
     /** connection status */
     readonly connected: boolean
+    /** async setup tasks */
+    setup(): Promise<void>
     /** Switch to the designate account. */
     switchAccount(account?: string): Promise<void>
     /** Switch to the designate chain. */

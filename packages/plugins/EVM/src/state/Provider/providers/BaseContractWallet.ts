@@ -3,11 +3,9 @@ import { ECKeyIdentifier, StorageItem } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { ProviderType, isValidAddress } from '@masknet/web3-shared-evm'
-import type { EVM_Provider } from '../types.js'
-import { BaseHostedProvider } from './BaseHosted.js'
 import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
-
-const EMPTY_IDENTIFIER = new ECKeyIdentifier('secp256k1', 'EMPTY')
+import { BaseHostedProvider } from './BaseHosted.js'
+import type { EVM_Provider } from '../types.js'
 
 /**
  * EIP-4337 compatible smart contract based wallet.
@@ -37,7 +35,7 @@ export class BaseContractWalletProvider extends BaseHostedProvider implements EV
                 identifier: '',
             },
         })
-        
+
         this.ownerStorage = storage.value
 
         state.Wallet?.wallets?.subscribe(async () => {
@@ -54,8 +52,7 @@ export class BaseContractWalletProvider extends BaseHostedProvider implements EV
                     await this.switchChain(smartPayChainId)
                 }
             }
-        }
-
+        })
     }
 
     get ownerAccount() {

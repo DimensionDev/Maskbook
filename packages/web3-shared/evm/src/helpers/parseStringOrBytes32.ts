@@ -1,11 +1,4 @@
-import type Web3 from 'web3'
-import { AbiOutput, hexToBytes, toAscii } from 'web3-utils'
-
-export function decodeOutputString(web3: Web3, abis: AbiOutput[], output: string) {
-    if (abis.length === 1) return web3.eth.abi.decodeParameter(abis[0], output)
-    if (abis.length > 1) return web3.eth.abi.decodeParameters(abis, output)
-    return
-}
+import { hexToBytes, toAscii } from 'web3-utils'
 
 // parse a name or symbol from a token response
 const BYTES32_REGEX = /^0x[\dA-Fa-f]{64}$/

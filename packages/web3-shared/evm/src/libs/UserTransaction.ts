@@ -11,15 +11,15 @@ import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import type { EntryPoint } from '@masknet/web3-contracts/types/EntryPoint.js'
 import type { ChainId, Transaction, UserOperation } from '../types/index.js'
 import {
-    createContract,
     getZeroAddress,
     isZeroString,
     isEmptyHex,
     isZeroAddress,
-    formatEthereumAddress,
     isValidAddress,
     isNativeTokenAddress,
-} from '../helpers/index.js'
+} from '../helpers/address.js'
+import { createContract } from '../helpers/createContract.js'
+import { formatEthereumAddress } from '../helpers/formatter.js'
 import { getSmartPayConstants } from '../constants/index.js'
 import type { Signer } from './Signer.js'
 

@@ -34,6 +34,10 @@ export class BaseProvider implements EVM_Provider {
         return Promise.resolve()
     }
 
+    setup(): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+
     async switchAccount(account?: string | undefined): Promise<void> {
         throw new Error('Method not implemented.')
     }

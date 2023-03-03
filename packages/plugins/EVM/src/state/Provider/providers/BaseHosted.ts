@@ -1,13 +1,13 @@
 import type { RequestArguments } from 'web3-core'
 import { toHex } from 'web3-utils'
 import { delay } from '@masknet/kit'
-import type { ProviderOptions } from '@masknet/web3-shared-base'
-import type { StorageObject } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
+import type { StorageObject } from '@masknet/shared-base'
+import type { ProviderOptions } from '@masknet/web3-shared-base'
 import { ChainId, getDefaultChainId, isValidAddress, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
-import type { EVM_Provider } from '../types.js'
+import { SharedContextSettings } from '../../../settings/index.js'
 import { BaseProvider } from './Base.js'
-import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
+import type { EVM_Provider } from '../types.js'
 
 export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
     private hostedStorage:
@@ -29,7 +29,7 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         super(providerType)
     }
 
-    async setup() {
+    override async setup() {
         const context = await SharedContextSettings.readyPromise
 
         const { storage } = context.createKVStorage('memory', {}).createSubScope(`${this.providerType}_hosted`, {
@@ -42,7 +42,8 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         await this.hostedStorage.chainId.initializedPromise
 
         await this.onAccountChanged()
-        this.onChainChanged()
+        await this.onChainChanged()
+
         this.hostedStorage?.account.subscription.subscribe(this.onAccountChanged.bind(this))
         this.hostedStorage?.chainId.subscription.subscribe(this.onChainChanged.bind(this))
     }
@@ -55,6 +56,22 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
             getDefaultChainId,
             ...this.init,
         }
+    }
+
+    /**
+     * Block by the share context
+     * @returns
+     */
+    override get ready() {
+        return SharedContextSettings.ready
+    }
+
+    /**
+     * Block by the share context
+     * @returns
+     */
+    override get readyPromise() {
+        return SharedContextSettings.readyPromise.then(() => {})
     }
 
     get hostedAccount() {
@@ -73,24 +90,8 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         this.emitter.emit('chainId', toHex(this.hostedChainId))
     }
 
-    private onChainChanged() {
+    private async onChainChanged() {
         if (this.hostedChainId) this.emitter.emit('chainId', toHex(this.hostedChainId))
-    }
-
-    /**
-     * Block by the share context
-     * @returns
-     */
-    override get ready() {
-        return Web3StateSettings.ready
-    }
-
-    /**
-     * Block by the share context
-     * @returns
-     */
-    override get readyPromise() {
-        return Web3StateSettings.readyPromise.then(() => {})
     }
 
     override async switchAccount(account?: string) {

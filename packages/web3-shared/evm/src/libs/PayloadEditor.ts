@@ -5,7 +5,8 @@ import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
 import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json'
 import { ChainId, EthereumMethodType, Transaction, TransactionOptions, UserOperation } from '../types/index.js'
-import { createJsonRpcPayload, formatEthereumAddress } from '../helpers/index.js'
+import { formatEthereumAddress } from '../helpers/formatter.js'
+import { createJsonRpcPayload } from '../helpers/provider.js'
 import { ZERO_ADDRESS, getSmartPayConstant } from '../index.js'
 
 type Options = Pick<TransactionOptions, 'account' | 'chainId'>

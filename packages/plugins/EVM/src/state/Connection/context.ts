@@ -1,8 +1,8 @@
 import type { RequestArguments } from 'web3-core'
 import { ProviderType, ConnectionContext } from '@masknet/web3-shared-evm'
 import type { EVM_Connection, EVM_ConnectionOptions } from './types.js'
-import { RegisteredProviders } from '../Providers/provider.js'
-import type { BaseContractWalletProvider } from '../Providers/BaseContractWallet.js'
+import { Providers } from '../Provider/provider.js'
+import type { BaseContractWalletProvider } from '../Provider/providers/BaseContractWallet.js'
 import { SharedContextSettings, Web3StateSettings } from '../../settings/index.js'
 
 const initializer = {
@@ -20,11 +20,11 @@ const initializer = {
         return Web3StateSettings.value.Provider?.providerType?.getCurrentValue()
     },
     getDefaultOwner(providerType: ProviderType) {
-        const provider = RegisteredProviders[providerType] as BaseContractWalletProvider | undefined
+        const provider = Providers[providerType] as BaseContractWalletProvider | undefined
         return provider?.ownerAccount
     },
     getDefaultIdentifier(providerType: ProviderType) {
-        const provider = RegisteredProviders[providerType] as BaseContractWalletProvider | undefined
+        const provider = Providers[providerType] as BaseContractWalletProvider | undefined
         return provider?.ownerIdentifier
     },
 }
