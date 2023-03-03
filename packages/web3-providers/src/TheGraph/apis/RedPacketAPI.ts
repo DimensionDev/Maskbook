@@ -40,7 +40,7 @@ export class TheGraphRedPacketAPI {
 
         const response = await fetchJSON<{
             data: {
-                creationSuccesses: CreateSuccessRecord[]
+                redPackets: CreateSuccessRecord[]
             }
         }>(REDPACKET_API_URL, {
             method: 'POST',
@@ -67,8 +67,8 @@ export class TheGraphRedPacketAPI {
             }),
         })
 
-        if (!response?.data?.creationSuccesses?.length) return
-        return response.data.creationSuccesses.map((x) => ({
+        if (!response?.data?.redPackets?.length) return
+        return response.data.redPackets.map((x) => ({
             contract_address: contractAddress,
             txid: x.txid,
             chainId,

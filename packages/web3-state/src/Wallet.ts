@@ -131,9 +131,19 @@ export class WalletState<ProviderType extends string, Transaction> implements We
     }
 
     async removeWallet(address: string, password?: string | undefined) {
+        const orignal = this.storage.value?.[this.providerType]
         await this.storage.setValue({
             ...this.storage.value,
-            [this.providerType]: this.all.filter((x) => !isSameAddress(x.address, address)),
+            [this.providerType]: orignal?.filter((x) => !isSameAddress(x.address, address)),
+        })
+    }
+
+    async removeWallets(wallets: Wallet[]) {
+        if (!wallets.length) return
+        const orignal = this.storage.value?.[this.providerType]
+        await this.storage.setValue({
+            ...this.storage.value,
+            [this.providerType]: orignal?.filter((x) => !wallets.find((y) => isSameAddress(x.address, y.address))),
         })
     }
 

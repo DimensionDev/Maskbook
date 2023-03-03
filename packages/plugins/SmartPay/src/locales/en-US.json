@@ -35,7 +35,7 @@
     "erc_4337_features_three": "Post-quantum safe signature algorithms (eg. Lamport, Winternitz)",
     "erc_4337_features_four": "Upgradeability",
     "lucky_drop": "Lucky Drop",
-    "managed_accounts": "Manage Accounts",
+    "managed_accounts": "Manage Account",
     "ineligibility_tips": "Sorry, you are not in the free trial whitelist.",
     "white_list_tips": "You are in the trial whitelist.",
     "personas_description": "Create a SmartPay Wallet with your Twitter account.",
