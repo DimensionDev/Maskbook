@@ -326,7 +326,7 @@ const ContractInteraction = memo(() => {
             await WalletRPC.confirmRequest(request.payload, {
                 chainId: request.owner ? smartPayChainId : chainId,
                 owner: request.owner,
-                identifier: request.identifier,
+                identifier: request.identifier?.toText(),
                 paymentToken: gasCurrency,
             })
             navigate(-1)
