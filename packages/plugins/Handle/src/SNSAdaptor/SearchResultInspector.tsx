@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react'
 import { ChainId } from '@masknet/web3-shared-evm'
+import { openWindow } from '@masknet/shared-base-ui'
 import { useCopyToClipboard } from 'react-use'
 import { resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
 import { ScopedDomainsContainer, useWeb3State } from '@masknet/web3-hooks-base'
@@ -88,6 +89,7 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
             justifyContent: 'space-between',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
+            cursor: 'pointer',
             height: 36,
             padding: theme.spacing(0, 1),
             background: alpha(theme.palette.common.white, 0.5),
@@ -157,17 +159,15 @@ export function SearchResultInspectorContent() {
                         <section className={classes.bindingsWrapper}>
                             {nextIdBindings.map((x, i) => (
                                 <SocialTooltip key={i} platform={x.source}>
-                                    <div className={classes.badge}>
-                                        <Link
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className={classes.link}
-                                            href={resolveNextIDPlatformLink(x.platform, x.identity)}>
+                                    <div
+                                        className={classes.badge}
+                                        onClick={() => openWindow(resolveNextIDPlatformLink(x.platform, x.identity))}>
+                                        <div className={classes.link}>
                                             {resolveNextIDPlatformIcon(x.platform)}
                                             <Typography className={cx(classes.socialName, classes.rightSpace)}>
                                                 {x.identity}
                                             </Typography>
-                                        </Link>
+                                        </div>
                                         <Icons.LinkOut size={20} className={classes.linkOutIcon} />
                                     </div>
                                 </SocialTooltip>
