@@ -82,6 +82,7 @@
     "blockchain_error_your_referral_farms": "您的推荐挖矿目前无法从区块链中检索。请稍后再试。",
     "blockchain_error_referral_farms": "您的推荐挖矿目前无法从区块链中检索。请稍后再试。",
     "blockchain_error_referral_farm": "您的推荐挖矿目前无法从区块链中检索。请稍后再试。",
+    "oracle_error_your_rewards": "您的奖励目前无法被检索到。请稍后再试。",
     "dismiss": "忽略",
     "go_wrong": "出现了一些问题。",
     "wallet_balance": "余额",
