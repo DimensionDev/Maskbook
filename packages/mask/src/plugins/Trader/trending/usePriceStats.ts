@@ -6,16 +6,26 @@ import { PluginTraderRPC } from '../messages.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { TrendingAPI } from '@masknet/web3-providers/types'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 interface Options {
+    chainId: Web3Helper.ChainIdAll
     coinId?: string
     currency?: Currency
     days?: TrendingAPI.Days
     dataProvider?: SourceType
 }
 
-export function usePriceStats({ coinId, currency, days = TrendingAPI.Days.MAX, dataProvider }: Options) {
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+export function usePriceStats({
+    chainId: coinChainId,
+    coinId,
+    currency,
+    days = TrendingAPI.Days.MAX,
+    dataProvider,
+}: Options) {
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
+        chainId: coinChainId,
+    })
     return useAsyncRetry(async () => {
         if (isUndefined(days) || isUndefined(coinId) || isUndefined(dataProvider) || isUndefined(currency)) return []
         return PluginTraderRPC.getPriceStats(chainId, coinId, currency, days, dataProvider)
