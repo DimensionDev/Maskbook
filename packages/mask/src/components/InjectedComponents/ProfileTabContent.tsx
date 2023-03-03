@@ -227,8 +227,8 @@ function Content(props: ProfileTabContentProps) {
         const Component = getProfileTabContent(componentTabId)
         if (!Component) return null
 
-        return <Component identity={currentVisitingSocialIdentity} socialAccount={selectedSocialAccount} />
-    }, [componentTabId, selectedSocialAccount, currentVisitingSocialIdentity])
+        return <Component identity={currentSocialIdentity} socialAccount={selectedSocialAccount} />
+    }, [componentTabId, selectedSocialAccount, currentSocialIdentity])
 
     const lackHostPermission = usePluginHostPermissionCheck(activatedPlugins.filter((x) => x.ProfileCardTabs?.length))
 
