@@ -89,6 +89,8 @@
     "plugin_collectible_minimum_bid": "最低出价",
     "plugin_collectible_set_starting_bid_price": "设置您的起始竞价价格。",
     "plugin_collectible_reserve_price": "底标价格",
+    "plugin_collectible_reserve_price_helper": "通过设置底标价格来建立一个隐形的限制。底标价格必须大于或等于起始价格。",
+    "plugin_collectible_auction_auto_end": "您的拍卖将在这个时候自动结束，最高出价者将将赢得拍卖。无需取消！",
     "plugin_collectible_enter_minimum_bid": "输入最低出价",
     "plugin_collectible_enter_reserve_price": "输入底标价格",
     "plugin_collectible_invalid_reserve_price": "无效底标价格",
