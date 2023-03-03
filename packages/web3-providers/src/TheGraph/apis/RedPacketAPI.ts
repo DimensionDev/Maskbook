@@ -46,12 +46,11 @@ export class TheGraphRedPacketAPI {
             method: 'POST',
             body: JSON.stringify({
                 query: `{
-                    redPackets(where: { creator: "${senderAddress}" }) {
+                    redPackets(where: { creator_address: "${senderAddress}" }) {
                           creator {
                               address
                           }
                           message
-             
                           block_number,
                           creation_time,
                           duration,
@@ -104,7 +103,7 @@ export class TheGraphRedPacketAPI {
             method: 'POST',
             body: JSON.stringify({
                 query: `{
-                    nftredPackets(where: { creator: "${senderAddress}" }) {
+                    nftredPackets(where: { creator_address: "${senderAddress}" }) {
                         id
                         txid
                         shares
@@ -127,7 +126,6 @@ export class TheGraphRedPacketAPI {
         if (!response?.data?.nftredPackets?.length) return
         return response.data.nftredPackets.map((x) => ({
             chainId,
-
             contract_address: contractAddress,
             txid: x.txid,
             contract_version: 1,

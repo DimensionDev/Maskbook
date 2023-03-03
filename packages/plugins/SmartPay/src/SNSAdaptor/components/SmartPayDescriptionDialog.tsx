@@ -45,9 +45,6 @@ export const SmartPayDescriptionDialog = memo(() => {
                     <Typography component="li" className={classes.content}>
                         {t.setup_smart_pay_two()}
                     </Typography>
-                    <Typography component="li" className={classes.content}>
-                        {t.setup_smart_pay_three()}
-                    </Typography>
                 </Box>
                 <Typography className={classes.title}>{t.erc_4337_features_title()}</Typography>
                 <Box component="ul">

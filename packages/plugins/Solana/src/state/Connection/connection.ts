@@ -53,7 +53,7 @@ class Connection implements SolanaConnection {
             chainId: this.chainId,
             providerType: this.providerType,
             ...pickBy(initial, identity),
-            ...pickBy(initial, identity),
+            ...pickBy(overrides, identity),
         }
     }
 

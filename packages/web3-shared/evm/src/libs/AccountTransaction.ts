@@ -42,7 +42,7 @@ export class AccountTransaction {
             ...this.transaction,
             ...pickBy(overrides, identity),
         }
-        const result = pickBy(
+        return pickBy(
             {
                 from,
                 to,
@@ -57,7 +57,5 @@ export class AccountTransaction {
             },
             identity,
         )
-
-        return result
     }
 }

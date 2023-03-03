@@ -92,7 +92,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
         [allTradeComputed, focusedTrade, gasConfig],
     )
 
-    useUpdateEffect(() => {
+    useEffect(() => {
         if (!chainIdValid || !chainIdList.includes(chainId)) setChainId(ChainId.Mainnet)
     }, [chainIdValid, chainIdList, chainId])
 

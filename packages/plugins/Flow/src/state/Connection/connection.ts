@@ -34,7 +34,7 @@ class Connection implements FlowConnection {
             chainId: this.chainId,
             providerType: this.providerType,
             ...pickBy(initial, identity),
-            ...pickBy(initial, identity),
+            ...pickBy(overrides, identity),
         }
     }
 

@@ -20,7 +20,7 @@ export class HubStateBaseClient<ChainId> {
             sourceType: this.sourceType,
             currencyType: this.currencyType,
             ...pickBy(initial, identity),
-            ...pickBy(initial, identity),
+            ...pickBy(overrides, identity),
         }
     }
 
