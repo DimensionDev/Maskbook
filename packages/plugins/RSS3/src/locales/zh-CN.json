@@ -14,6 +14,7 @@
     "donation_donate": "<bold>{{user}}</bold> 捐赠了 <bold>{{cost_value}} {{cost_symbol}}</bold>",
     "note$mint": "<bold>{{user}}</bold> 在 <bold>{{platform}}</bold> 铸造了笔记",
     "note$revise": "<bold>{{user}}</bold> 在 <bold>{{platform}}</bold> 上修改了备注",
+    "note$comment": "<bold>{{user}}</bold> 在 <bold>{{platform}}</bold> 上评论",
     "profile$create": "<user>{{user}}</user> 在 <platform>{{platform}}</platform> 上偿还流动资金",
     "propose": "<bold>{{user}}</bold> 提议",
     "original": "原始文件",
