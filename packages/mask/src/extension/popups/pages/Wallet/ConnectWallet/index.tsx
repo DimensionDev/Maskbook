@@ -102,9 +102,7 @@ const ConnectWalletPage = memo(() => {
                     }),
                 )
             } else {
-                const account = await connection?.connect({
-                    chainId: await connection?.getChainId(),
-                })
+                const account = await connection?.connect()
 
                 navigate(PopupRoutes.VerifyWallet, {
                     state: {
