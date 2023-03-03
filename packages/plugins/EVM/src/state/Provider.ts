@@ -16,7 +16,7 @@ import {
     getDefaultNetworkType,
     getDefaultProviderType,
 } from '@masknet/web3-shared-evm'
-import { Providers } from './Connection/provider.js'
+import { Providers } from './Provider/provider.js'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
     constructor(context: Plugin.Shared.SharedUIContext) {
@@ -32,7 +32,7 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
         })
     }
 
-    protected override setupSubscriptions() {
+    protected override async setupSubscriptions() {
         this.providerType = mapSubscription(this.storage.providerType.subscription, (provider) => provider)
 
         this.chainId = mapSubscription(

@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
 import { createLookupTableResolver } from '@masknet/shared-base'
-import { isValidDomain } from './domain.js'
+import { isValidDomain } from './isValidDomain.js'
 import { isValidAddress } from './address.js'
 import { SchemaType } from '../types/index.js'
 

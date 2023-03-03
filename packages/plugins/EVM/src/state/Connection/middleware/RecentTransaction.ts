@@ -6,8 +6,8 @@ import {
     UserTransaction,
     Middleware,
     ConnectionContext,
+    getTransactionStatusType,
 } from '@masknet/web3-shared-evm'
-import { getReceiptStatus } from '../utils.js'
 import { Web3StateSettings } from '../../../settings/index.js'
 
 export class RecentTransaction implements Middleware<ConnectionContext> {
@@ -37,7 +37,7 @@ export class RecentTransaction implements Middleware<ConnectionContext> {
                     if (isSquashed) return
 
                     const receipt = context.result as TransactionReceipt | null
-                    const status = getReceiptStatus(receipt)
+                    const status = getTransactionStatusType(receipt)
                     if (!receipt?.transactionHash || status === TransactionStatusType.NOT_DEPEND) return
 
                     // update built-in notifier

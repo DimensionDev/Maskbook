@@ -13,7 +13,7 @@ import type {
 import type { Plugin } from '@masknet/plugin-infra'
 import { PartialRequired, toHex } from '@masknet/shared-base'
 import { FlowWeb3 } from '@masknet/web3-providers'
-import { Providers } from './provider.js'
+import { Providers } from '../Provider/provider.js'
 import type { FlowConnection, FlowConnectionOptions } from './types.js'
 import { Web3StateSettings } from '../../settings/index.js'
 

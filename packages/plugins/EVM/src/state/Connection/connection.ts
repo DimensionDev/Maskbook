@@ -40,9 +40,9 @@ import {
 } from '@masknet/web3-shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
+import { Providers } from '../Provider/provider.js'
 import { dispatch } from './composer.js'
 import { createContext } from './context.js'
-import { Providers } from './provider.js'
 import type { EVM_Connection, EVM_ConnectionOptions } from './types.js'
 import { Web3StateSettings } from '../../settings/index.js'
 

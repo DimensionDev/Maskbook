@@ -5,7 +5,7 @@ import DepositPaymasterABI from '@masknet/web3-contracts/abis/DepositPaymaster.j
 import type { DepositPaymaster as DepositPaymasterType } from '@masknet/web3-contracts/types/DepositPaymaster.js'
 import type { ChainId } from '../types/index.js'
 import { getSmartPayConstants } from '../constants/constants.js'
-import { createContract } from '../helpers/index.js'
+import { createContract } from '../helpers/createContract.js'
 import { ProviderURL } from './ProviderURL.js'
 
 export class DepositPaymaster {

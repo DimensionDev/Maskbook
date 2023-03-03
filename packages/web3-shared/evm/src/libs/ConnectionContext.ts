@@ -3,7 +3,7 @@ import type { ECKeyIdentifier } from '@masknet/shared-base'
 import type { Connection, ConnectionOptions } from '@masknet/web3-shared-base'
 import { ErrorEditor } from './ErrorEditor.js'
 import { PayloadEditor } from './PayloadEditor.js'
-import { createJsonRpcPayload, createJsonRpcResponse } from '../helpers/index.js'
+import { createJsonRpcPayload, createJsonRpcResponse } from '../helpers/provider.js'
 import {
     EthereumMethodType,
     ChainId,
