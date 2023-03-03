@@ -52,7 +52,7 @@
     "send_tip_successfully": "小费发送成功。",
     "send_specific_tip_successfully": "已成功发送 {{amount}} {{name}} 小费。",
     "search": "搜索",
-    "web3_profile": "Web3个人资料",
+    "web3_profile": "Web3 名片",
     "mask_network": "Mask Network",
     "create_persona_intro": "请创建您的身份以使用 Web3 个人资料。",
     "add_wallet_intro": "在 Web3 中，您可以给已安装Mask Network的好友展示接收打赏的地址，NFT 收藏品，捐赠记录和其他链上信息。",

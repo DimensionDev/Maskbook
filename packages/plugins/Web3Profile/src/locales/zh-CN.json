@@ -7,7 +7,7 @@
     "donations": "捐赠",
     "footprints": "足迹",
     "NFTs": "NFTs",
-    "web3_profile": "Web3个人资料",
+    "web3_profile": "Web3 名片",
     "EVM_wallet": "EVM 钱包",
     "Solana_wallet": "Solana 钱包",
     "Flow_wallet": "Flow 钱包",
@@ -55,6 +55,6 @@
     "wallet_setting_hint": "点击开关按钮来显示或隐藏钱包。",
     "no_authenticated_wallet": "尚未得到认证。",
     "no_items_found": "找不到任何项。",
-    "account_empty": "请验证此身份以设置您的 Web3 个人资料。",
+    "account_empty": "请验证此身份以设置您的 Web3 名片。",
     "load_more": "加载更多"
 }

@@ -49,7 +49,7 @@
     "erc721_insufficient_balance": "余额不足",
     "erc721_tab_title": "收藏品",
     "erc20_tab_title": "代币",
-    "claimed": "已认领 {{- amount}}",
+    "claimed": "已认领",
     "details": "红包详情",
     "display_name": "红包",
     "select_existing": "历史",
