@@ -27,15 +27,10 @@ export function ENSProvider({ children, result }: PropsWithChildren<SearchResult
 
     const tokenId = domain ? resolveNonFungibleTokenIdFromEnsDomain(domain) : ''
 
-    const { value: nextIdBindings = EMPTY_LIST } = useAsync(
-        async () =>
-            nextIdBindings_
-                ? nextIdBindings_
-                : reversedAddress
-                ? NextIDProof.queryProfilesByRelationService(reversedAddress)
-                : EMPTY_LIST,
-        [reversedAddress, JSON.stringify(nextIdBindings_)],
-    )
+    const { value: nextIdBindings = EMPTY_LIST } = useAsync(async () => {
+        if (nextIdBindings_) return nextIdBindings_
+        return reversedAddress ? NextIDProof.queryProfilesByRelationService(reversedAddress) : EMPTY_LIST
+    }, [reversedAddress, JSON.stringify(nextIdBindings_)])
 
     return (
         <ENSContext.Provider
