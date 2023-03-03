@@ -31,8 +31,6 @@ export default {
     '/[DimensionDev.Maskbook] develop/packages/plugins/Avatar/src/locales/%locale%.json': 'com.maskbook.avatar',
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Trader/locales/%locale%.json': 'com.maskbook.trader',
     '/[DimensionDev.Maskbook] develop/packages/plugins/Gitcoin/src/locales/%locale%.json': 'co.gitcoin',
-    '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Referral/locales/%locale%.json':
-        'com.maskbook.referral',
     '/[DimensionDev.Maskbook] develop/packages/plugins/MaskBox/src/locales/%locale%.json': 'com.maskbook.box',
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Game/locales/%locale%.json': 'com.maskbook.game',
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/Pets/locales/%locale%.json': 'com.maskbook.pets',

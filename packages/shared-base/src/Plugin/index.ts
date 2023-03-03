@@ -41,7 +41,6 @@ export enum PluginID {
     CyberConnect = 'me.cyberconnect.app',
     GoPlusSecurity = 'io.gopluslabs.security',
     CrossChainBridge = 'io.mask.cross-chain-bridge',
-    Referral = 'com.maskbook.referral',
     Web3Profile = 'io.mask.web3-profile',
     Web3ProfileCard = 'io.mask.web3-profile-card',
     ScamSniffer = 'io.scamsniffer.mask-plugin',
