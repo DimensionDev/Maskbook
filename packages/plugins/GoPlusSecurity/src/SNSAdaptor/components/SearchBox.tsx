@@ -95,7 +95,7 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
 
     return (
         <Stack direction="row" spacing={1}>
-            <Box width={120} height={40}>
+            <Box width={140} height={40}>
                 <Button onClick={onOpen} variant="outlined" className={classes.selectedButton}>
                     <Stack
                         className={classes.option}

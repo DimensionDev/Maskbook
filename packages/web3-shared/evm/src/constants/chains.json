@@ -751,7 +751,7 @@
     },
     {
         "chainId": 25,
-        "name": "Cronos Mainnet Beta",
+        "name": "Cronos",
         "type": "Cronos Mainnet Beta",
         "network": "mainnet",
         "features": [],
@@ -833,7 +833,7 @@
     },
     {
         "chainId": 66,
-        "name": "OKXChain Mainnet",
+        "name": "OKXChain",
         "type": "OKXChain Mainnet",
         "network": "mainnet",
         "features": [],
@@ -969,7 +969,7 @@
     },
     {
         "chainId": 128,
-        "name": "Huobi ECO Chain Mainnet",
+        "name": "Huobi ECO",
         "type": "Huobi ECO Chain Mainnet",
         "network": "mainnet",
         "features": [],
