@@ -16,6 +16,7 @@
     "token_info_token_name": "Token 名称",
     "token_info_token_contract_address": "Token 合约地址",
     "token_info_contract_creator": "合约创建者",
+    "token_info_contract_owner": "合同所有者",
     "token_info_total_supply": "总供应量",
     "token_market_cap": "市值",
     "not_found_tip_network_error": "1. 确保网络正常运作；",
