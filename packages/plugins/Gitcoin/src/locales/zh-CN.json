@@ -22,6 +22,7 @@
     "active": "启用",
     "grant_status$active": "启用",
     "grant_status$closed": "已关闭",
+    "admin": "由 <bold>{{admin}}</bold>",
     "give_back_to_match_pool": "返回到 Gitcoin 匹配库",
     "total_contribution": "您的捐款总额",
     "donate_dialog_title": "捐赠结账"

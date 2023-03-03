@@ -21,13 +21,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check Milestone
-        if: "github.event.pull_request.milestone == null && github.event.pull_request.milestone.title != 'docs(i18n): sync i18n files from Crowdin'"
+        if: "github.event.pull_request.milestone == null && github.event.pull_request.title != 'docs(i18n): sync i18n files from Crowdin'"
         run: |
           echo "Please set a milestone."
           exit 1
 
       - name: Check target branch of develop
-        if: ${{ github.base_ref == 'develop' }} # merge to develop
+        if: ${{ github.base_ref == 'develop' && github.event.pull_request.milestone != null }} # merge to develop
         run: |
           if [[ ${{ github.event.pull_request.milestone.title }} =~ ^[0-9]+.[0-9]+.0$ ]]
           then

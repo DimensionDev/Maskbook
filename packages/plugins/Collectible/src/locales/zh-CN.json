@@ -59,6 +59,8 @@
     "plugin_collectible_item": "物品",
     "plugin_collectible_refresh": "刷新",
     "plugin_collectible_failed_load": "无法在 {{source}} 加载您的NFT。",
+    "plugin_collectible_approved_tips": "通过勾选此框，代表我承认此收藏品未经过OpenSeare审核或授权。",
+    "plugin_collectible_agree_terms": "通过勾选此框，代表我同意OpenSea的 <terms>服务条款</terms>。",
     "plugin_collectible_convert_eth": "兑换 ETH",
     "plugin_collectible_sale_end": "出售结束于 {{time}}",
     "plugin_collectible_set_initial_price": "设置初始价格。",
