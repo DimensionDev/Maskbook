@@ -34,12 +34,6 @@ const useStyles = makeStyles()((theme) => ({
         height: 40,
         borderRadius: 8,
     },
-    chainName: {
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        width: 50,
-    },
 }))
 
 interface SearchBoxProps {
@@ -101,7 +95,7 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
 
     return (
         <Stack direction="row" spacing={1}>
-            <Box width={120} height={40}>
+            <Box width={140} height={40}>
                 <Button onClick={onOpen} variant="outlined" className={classes.selectedButton}>
                     <Stack
                         className={classes.option}
@@ -112,9 +106,7 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
                         width="100%">
                         <Stack gap={0.5} display="inline-flex" direction="row" alignItems="center">
                             <WalletIcon mainIcon={selectedChain?.icon} size={18} />
-                            <Typography fontSize={14} className={classes.chainName}>
-                                {getChainName(selectedChain)}
-                            </Typography>
+                            <Typography fontSize={14}>{getChainName(selectedChain)}</Typography>
                         </Stack>
                         <KeyboardArrowDownIcon />
                     </Stack>
