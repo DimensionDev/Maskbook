@@ -1,5 +1,5 @@
 import { SingletonModal } from '../components/SingletonModal.js'
-import { Example, ExampleCloseProps, ExampleOpenProps } from './Example/index.js'
+import { Example, type ExampleCloseProps, type ExampleOpenProps } from './Example/index.js'
 
 const ExampleDialog = new SingletonModal<ExampleOpenProps, ExampleCloseProps>()
 
@@ -14,11 +14,11 @@ export function Modals() {
 async function Demo() {
     // imperative call
     ExampleDialog.open({
-        name: 'Vitalik Buterin',
+        name: 'World',
     })
 
-    // returns { message: "Welcome Vitalik Buterin!" }
+    // returns { message: "Welcome World!" }
     await ExampleDialog.openAndWaitForClose({
-        name: 'Vitalik Buterin',
+        name: 'World',
     })
 }

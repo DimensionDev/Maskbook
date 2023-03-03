@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useImperativeHandle, useMemo, useState } from 'react'
+import { forwardRef, useImperativeHandle, useMemo, useState } from 'react'
 import type { SingletonModalRefCreator } from '../../components/SingletonModal.js'
 
 export interface ExampleOpenProps {
@@ -38,7 +38,7 @@ export const Example = forwardRef<SingletonModalRefCreator<ExampleOpenProps, Exa
         if (!open) return null
         return (
             <div>
-                <span>This is an oridinary message.</span>
+                <span>This is an ordinary message.</span>
             </div>
         )
     },
