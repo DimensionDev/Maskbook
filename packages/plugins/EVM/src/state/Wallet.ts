@@ -39,7 +39,7 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
         }
     }
 
-    override setup() {
+    override async setup() {
         const update = async () => {
             if (this.providerType !== ProviderType.MaskWallet) return
 

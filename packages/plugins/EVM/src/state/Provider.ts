@@ -16,11 +16,11 @@ import {
     getDefaultNetworkType,
     getDefaultProviderType,
 } from '@masknet/web3-shared-evm'
-import { Providers } from './Connection/provider.js'
+import { RegisteredProviders } from './Connection/provider.js'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
     constructor(context: Plugin.Shared.SharedUIContext) {
-        super(context, Providers, {
+        super(context, RegisteredProviders, {
             isSameAddress,
             isValidAddress,
             isValidChainId,

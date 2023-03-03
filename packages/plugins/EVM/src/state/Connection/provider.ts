@@ -15,7 +15,7 @@ import { NoneProvider } from './providers/None.js'
 /**
  * Register all supported providers
  */
-export const Providers: Record<ProviderType, BaseProvider> = {
+export const RegisteredProviders: Record<ProviderType, BaseProvider> = {
     [ProviderType.None]: new NoneProvider(),
     [ProviderType.MaskWallet]: new MaskWalletProvider(),
     [ProviderType.MetaMask]: new MetaMaskProvider(),

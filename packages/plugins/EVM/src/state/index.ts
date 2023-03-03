@@ -40,6 +40,11 @@ export async function createWeb3State(
     const Wallet_ = new Wallet(context, {
         providerType: createConstantSubscription(ProviderType.MaskWallet),
     })
+    const Connection_ = new Connection(context, {
+        chainId: Provider_.chainId,
+        account: Provider_.account,
+        providerType: Provider_.providerType,
+    })
 
     await Provider_.storage.account.initializedPromise
     await Provider_.storage.providerType.initializedPromise
@@ -49,8 +54,8 @@ export async function createWeb3State(
     await TransactionWatcher_.storage.initializedPromise
     await Wallet_.storage.initializedPromise
 
-    Provider_.setup()
-    Wallet_.setup()
+    await Provider_.setup()
+    await Wallet_.setup()
 
     return {
         Settings: Settings_,
@@ -75,11 +80,7 @@ export async function createWeb3State(
         Transaction: Transaction_,
         TransactionFormatter: new TransactionFormatter(context),
         TransactionWatcher: TransactionWatcher_,
-        Connection: new Connection(context, {
-            chainId: Provider_.chainId,
-            account: Provider_.account,
-            providerType: Provider_.providerType,
-        }),
+        Connection: Connection_,
         Wallet: Wallet_,
         Others: new Others(context),
         Storage: new Storage(),

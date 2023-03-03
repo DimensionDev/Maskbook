@@ -15,7 +15,7 @@ import {
 import { Web3 } from '@masknet/web3-providers'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
-import { Providers } from '../provider.js'
+import { RegisteredProviders } from '../provider.js'
 import type { BaseContractWalletProvider } from '../providers/BaseContractWallet.js'
 import { SharedContextSettings } from '../../../settings/index.js'
 
@@ -112,7 +112,7 @@ export class ContractWallet implements Middleware<ConnectionContext> {
     }
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
-        const provider = Providers[context.providerType] as BaseContractWalletProvider | undefined
+        const provider = RegisteredProviders[context.providerType] as BaseContractWalletProvider | undefined
 
         if (!context.writeable) {
             await next()

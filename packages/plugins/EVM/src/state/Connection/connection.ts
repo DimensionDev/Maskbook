@@ -42,7 +42,7 @@ import { Web3 } from '@masknet/web3-providers'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
 import { dispatch } from './composer.js'
 import { createContext } from './context.js'
-import { Providers } from './provider.js'
+import { RegisteredProviders } from './provider.js'
 import type { EVM_Connection, EVM_ConnectionOptions } from './types.js'
 import { Web3StateSettings } from '../../settings/index.js'
 
@@ -99,7 +99,7 @@ class Connection implements EVM_Connection {
                                     break
                                 default: {
                                     const provider =
-                                        Providers[
+                                        RegisteredProviders[
                                             PayloadEditor.fromPayload(context.request).readonly
                                                 ? ProviderType.MaskWallet
                                                 : options.providerType
@@ -389,7 +389,7 @@ class Connection implements EVM_Connection {
     }
     async switchChain(chainId: ChainId, initial?: EVM_ConnectionOptions): Promise<void> {
         const options = this.getOptions(initial)
-        await Providers[options.providerType].switchChain(chainId)
+        await RegisteredProviders[options.providerType].switchChain(chainId)
     }
     async getNativeTokenBalance(initial?: EVM_ConnectionOptions): Promise<string> {
         const options = this.getOptions(initial)

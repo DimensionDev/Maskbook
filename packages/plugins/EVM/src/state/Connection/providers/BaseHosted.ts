@@ -1,5 +1,6 @@
 import type { RequestArguments } from 'web3-core'
 import { toHex } from 'web3-utils'
+import { delay } from '@masknet/kit'
 import type { ProviderOptions } from '@masknet/web3-shared-base'
 import type { StorageObject } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
@@ -7,7 +8,6 @@ import { ChainId, getDefaultChainId, isValidAddress, PayloadEditor, ProviderType
 import type { EVM_Provider } from '../types.js'
 import { BaseProvider } from './Base.js'
 import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
-import { delay } from '@masknet/kit'
 
 export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
     private hostedStorage:
@@ -27,24 +27,24 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         },
     ) {
         super(providerType)
+    }
 
-        // setup storage
-        SharedContextSettings.readyPromise.then(async (context) => {
-            const { storage } = context.createKVStorage('memory', {}).createSubScope(`${this.providerType}_hosted`, {
-                account: this.options.getDefaultAccount(),
-                chainId: this.options.getDefaultChainId(),
-            })
+    async setup() {
+        const context = await SharedContextSettings.readyPromise
 
-            this.hostedStorage = storage
-
-            await this.hostedStorage.account.initializedPromise
-            await this.hostedStorage.chainId.initializedPromise
-
-            await this.onAccountChanged()
-            this.onChainChanged()
-            this.hostedStorage?.account.subscription.subscribe(this.onAccountChanged.bind(this))
-            this.hostedStorage?.chainId.subscription.subscribe(this.onChainChanged.bind(this))
+        const { storage } = context.createKVStorage('memory', {}).createSubScope(`${this.providerType}_hosted`, {
+            account: this.options.getDefaultAccount(),
+            chainId: this.options.getDefaultChainId(),
         })
+        this.hostedStorage = storage
+
+        await this.hostedStorage.account.initializedPromise
+        await this.hostedStorage.chainId.initializedPromise
+
+        await this.onAccountChanged()
+        this.onChainChanged()
+        this.hostedStorage?.account.subscription.subscribe(this.onAccountChanged.bind(this))
+        this.hostedStorage?.chainId.subscription.subscribe(this.onChainChanged.bind(this))
     }
 
     protected get options() {

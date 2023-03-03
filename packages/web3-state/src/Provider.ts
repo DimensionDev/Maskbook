@@ -61,7 +61,7 @@ export class ProviderState<
         ]).then(() => {})
     }
 
-    setup() {
+    async setup() {
         this.setupSubscriptions()
         this.setupProviders()
     }
