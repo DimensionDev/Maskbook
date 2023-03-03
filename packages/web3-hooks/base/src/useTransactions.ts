@@ -18,7 +18,7 @@ export function useTransactions<S extends 'all' | void = void, T extends Network
                     indicator,
                 })
             },
-            { maxSize: 99 },
+            { maxSize: 999 },
         )
     }, [account, chainId, hub, options?.chainId, options?.account])
 }
