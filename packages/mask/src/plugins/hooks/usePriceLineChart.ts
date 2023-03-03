@@ -22,6 +22,6 @@ export function usePriceLineChart(
         color,
         tickFormat: `${sign},.2s`,
         formatTooltip: (value: number) =>
-            sign.match(/^[A-Za-z]+$/) ? formatCurrency(value, sign) : `${sign} ${value.toFixed(2)}`,
+            sign.match(/^[A-Za-z]{3}$/) ? formatCurrency(value, sign) : `${sign} ${value.toFixed(2)}`,
     })
 }
