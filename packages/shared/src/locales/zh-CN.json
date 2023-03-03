@@ -185,5 +185,6 @@
     "persona_boundary_connect_persona": "连接身份",
     "persona_boundary_verify_persona": "验证您的Twitter ID",
     "applications_create_persona_title": "身份",
+    "applications_create_persona_hint": "使用此功能需要先创建一个身份并验证您的社交媒体账号。",
     "applications_create_persona_action": "创建身份"
 }
