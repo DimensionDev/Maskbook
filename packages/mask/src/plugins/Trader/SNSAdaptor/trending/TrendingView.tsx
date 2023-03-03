@@ -184,6 +184,7 @@ export function TrendingView(props: TrendingViewProps) {
         loading: loadingStats,
         retry: retryStats,
     } = usePriceStats({
+        chainId: result.chainId,
         coinId: trending?.coin.id,
         dataProvider: trending?.dataProvider,
         currency: trending?.currency,
