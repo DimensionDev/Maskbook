@@ -30,6 +30,7 @@ export const useWalletName = (
 
         return providerDescriptor?.name || Others?.formatAddress(account, 4)
     }, [
+        wallets,
         expectedAccount,
         providerType,
         domain,
