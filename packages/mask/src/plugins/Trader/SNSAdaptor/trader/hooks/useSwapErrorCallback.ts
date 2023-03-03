@@ -20,7 +20,7 @@ export function useSwapErrorCallback() {
 
     return useCallback(
         (message: string) => {
-            if (!message.includes('User rejected transaction')) {
+            if (!message.includes('User rejected transaction') && !message.includes('Transaction was rejected')) {
                 showSingletonSnackbar(t.swap_failed(), {
                     processing: false,
                     variant: 'error',
