@@ -1,3 +1,4 @@
+import { keccak256 } from 'web3-utils'
 import { regexMatch } from '../../../utils/utils.js'
 import { flattenDeep } from 'lodash-es'
 import { canonifyImgUrl } from './url.js'
@@ -32,13 +33,15 @@ export const getPostId = (node: HTMLElement) => {
     }
     const isRetweet = !!node.querySelector('[data-testid=socialContext]')
 
-    let pid: string = node.innerText
+    let pid = ''
     if (idNode) {
         pid = parseId(idNode.href)
     } else if (timeNode) {
         // Quoted tweet in timeline has no a status link to detail page,
         // so use the timestamp as post id instead
         pid = timeNode.getAttribute('datetime')!
+    } else {
+        pid = `keccak256:${keccak256(node.innerText)}`
     }
 
     // You can't retweet a tweet or a retweet, but only cancel retweeting
