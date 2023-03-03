@@ -73,7 +73,7 @@
     "token_no_history": "您还没有创建任何代币红包。尝试创建红包并与您的朋友分享。",
     "history_claimed": "已认领： <strong>{{claimedShares}}/{{shares}}</strong> 份额",
     "send": "发送",
-    "history_duration": "时间: {{startTime}} ~ {{endTime}} (UTC+8)",
+    "history_duration": "时间: {{- startTime}} ~ {{- endTime}} (UTC+8)",
     "best_wishes": "最好的祝福！",
     "nft_data_broken": "由于数据损坏，红包无法发送。",
     "from": "来自：@{{name}}",
