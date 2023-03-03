@@ -80,6 +80,6 @@
     "web3-utils": "1.8.0"
   },
   "peerDependencies": {
-    "react-i18next": "^11.15.3"
+    "react-i18next": "^12"
   }
 }

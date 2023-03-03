@@ -50,7 +50,7 @@
     "@storybook/builder-webpack5": "^6.5.13",
     "@storybook/manager-webpack5": "^6.5.13",
     "@storybook/react": "^6.5.13",
-    "@types/react-window": "^1.8.4",
+    "@types/react-window": "^1.8.5",
     "babel-loader": "^9.1.2"
   }
 }

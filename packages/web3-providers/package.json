@@ -56,7 +56,7 @@
     "bloom-filters": "^3.0.0",
     "date-fns": "^2.29.3",
     "fuse.js": "6.6.2",
-    "graphql-request": "^3.4.0",
+    "graphql-request": "^3.5.0",
     "json-stable-stringify": "^1.0.2",
     "lru-cache": "^7.10.1",
     "react-use": "^17.4.0",

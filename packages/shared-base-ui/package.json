@@ -20,7 +20,7 @@
     "uuid": "^9.0.0"
   },
   "peerDependencies": {
-    "react-i18next": "^11.15.3"
+    "react-i18next": "^12"
   },
   "sideEffect": false
 }

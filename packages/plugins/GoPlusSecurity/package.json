@@ -33,7 +33,7 @@
     "@masknet/web3-hooks-evm": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
-    "react-use": "^17.3.2",
+    "react-use": "^17.4.0",
     "urlcat": "^2.0.4",
     "wallet.ts": "1.0.1"
   }
