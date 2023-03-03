@@ -87,6 +87,7 @@ export function useDeploy(
                 await Wallet?.addWallet({
                     name: 'Smart Pay',
                     owner: signAccount.address,
+                    identifier: signAccount.identifier?.toText(),
                     address: contractAccount.address,
                     hasDerivationPath: false,
                     hasStoredKeyInfo: false,
@@ -161,6 +162,7 @@ export function useDeploy(
                 name: 'Smart Pay',
                 owner: signAccount.address,
                 address: contractAccount.address,
+                identifier: signAccount.identifier?.toText(),
                 hasDerivationPath: false,
                 hasStoredKeyInfo: false,
                 id: contractAccount.address,

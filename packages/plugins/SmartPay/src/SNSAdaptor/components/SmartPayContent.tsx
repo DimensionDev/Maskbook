@@ -8,7 +8,7 @@ import {
     ApproveMaskDialog,
     FormattedCurrency,
 } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { CrossIsolationMessages, ECKeyIdentifier, EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import {
@@ -158,6 +158,7 @@ const useStyles = makeStyles()((theme) => ({
         maxHeight: 320,
     },
     menuPaper: {
+        background: theme.palette.maskColor.bottom,
         '::-webkit-scrollbar': {
             backgroundColor: 'transparent',
             width: 20,
@@ -322,7 +323,7 @@ export const SmartPayContent = memo(() => {
             account,
             chainId,
             owner: wallet?.owner,
-            identifier: wallet?.identifier,
+            identifier: ECKeyIdentifier.from(wallet?.identifier).unwrapOr(undefined),
             providerType: ProviderType.MaskWallet,
             silent: true,
         })

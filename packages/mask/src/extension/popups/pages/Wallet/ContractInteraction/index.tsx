@@ -166,7 +166,7 @@ const ContractInteraction = memo(() => {
     const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [transferError, setTransferError] = useState(false)
     const [gasCurrency, setGasCurrency] = useState<string>()
-    const { value: request, loading: requestLoading } = useUnconfirmedRequest()
+    const { value: request, loading: requestLoading, error } = useUnconfirmedRequest()
     const { value: transactionDescription } = useAsync(async () => {
         if (!request?.transactionContext?.chainId) return
         return TransactionFormatter?.formatTransaction?.(request?.transactionContext?.chainId, {
@@ -395,13 +395,13 @@ const ContractInteraction = memo(() => {
     const totalUSD = new BigNumber(gasFeeUSD).plus(tokenValueUSD).toString()
 
     useUpdateEffect(() => {
-        if (!request && !requestLoading) {
+        if (!request && !requestLoading && !error) {
             navigate(PopupRoutes.Wallet, { replace: true })
         }
         if (request?.paymentToken) {
             setGasCurrency(request.paymentToken)
         }
-    }, [request, requestLoading])
+    }, [request, requestLoading, error])
 
     useTitle(typeName ?? t('popups_wallet_contract_interaction'))
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, to)

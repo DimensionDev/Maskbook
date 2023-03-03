@@ -221,7 +221,7 @@ export function Deploy({ open }: { open: boolean }) {
                         </Box>
                         <Box display="flex" flexDirection="column" justifyContent="space-between">
                             <Typography lineHeight="18px" fontWeight={700}>
-                                SmartPay Wallet {nonce ?? 0 + 1}
+                                SmartPay Wallet
                             </Typography>
 
                             <Typography className={classes.address}>

@@ -835,7 +835,7 @@ export interface Wallet {
     /** an abstract wallet has been deployed */
     deployed?: boolean
     /** persona identifier */
-    identifier?: ECKeyIdentifier
+    identifier?: string
 }
 
 export interface Transaction<ChainId, SchemaType> {
