@@ -6,8 +6,8 @@ import {
     UserTransaction,
     Middleware,
     ConnectionContext,
+    getReceiptStatus,
 } from '@masknet/web3-shared-evm'
-import { getReceiptStatus } from '../utils.js'
 import { Web3StateSettings } from '../../../settings/index.js'
 
 export class RecentTransaction implements Middleware<ConnectionContext> {
