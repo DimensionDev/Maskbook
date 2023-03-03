@@ -20,20 +20,20 @@ export class RSS3API implements RSS3BaseAPI.Provider {
         sign: (message: string) => Promise<string> = () => {
             throw new Error('Not supported.')
         },
-    ): RSS3 {
-        return new RSS3({
+    ): RSS3.default {
+        return new (RSS3.default || RSS3)({
             endpoint: RSS3_LEGACY_ENDPOINT,
             address,
             sign,
         })
     }
-    async getFileData<T>(rss3: RSS3, address: string, key: string) {
+    async getFileData<T>(rss3: RSS3.default, address: string, key: string) {
         const file = await rss3.files.get(address)
         if (!file) throw new Error('The account was not found.')
         const descriptor = Object.getOwnPropertyDescriptor(file, key)
         return descriptor?.value as T | undefined
     }
-    async setFileData<T>(rss3: RSS3, address: string, key: string, data: T): Promise<T> {
+    async setFileData<T>(rss3: RSS3.default, address: string, key: string, data: T): Promise<T> {
         const file = await rss3.files.get(address)
         if (!file) throw new Error('The account was not found.')
         const descriptor = Object.getOwnPropertyDescriptor(file, key)
