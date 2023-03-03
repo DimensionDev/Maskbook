@@ -86,7 +86,7 @@
     "wallets_transfer": "转账",
     "wallets_assets": "资产",
     "wallets_transfer_memo": "备注",
-    "wallets_transfer_amount": "数额",
+    "wallets_transfer_amount": "金额",
     "wallets_transfer_to_address": "发送到地址",
     "wallets_transfer_error_amount_absence": "输入数额",
     "wallets_transfer_error_address_absence": "输入收款人地址",
