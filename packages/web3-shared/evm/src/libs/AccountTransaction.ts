@@ -40,7 +40,7 @@ export class AccountTransaction {
     fill(overrides?: Transaction): Transaction {
         const { chainId, from, to, value, gas, gasPrice, maxPriorityFeePerGas, maxFeePerGas, data, nonce } = {
             ...this.transaction,
-            ...overrides,
+            ...pickBy(overrides, identity),
         }
         return pickBy(
             {

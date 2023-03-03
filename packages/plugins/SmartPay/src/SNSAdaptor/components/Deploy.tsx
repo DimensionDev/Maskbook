@@ -209,7 +209,10 @@ export function Deploy({ open }: { open: boolean }) {
     return (
         <>
             <Box className={classes.content}>
-                <SmartPayBanner>{t.personas_description()}</SmartPayBanner>
+                <SmartPayBanner>
+                    <Typography>{t.white_list_tips()}</Typography>
+                    <Typography>{t.personas_description()}</Typography>
+                </SmartPayBanner>
                 <Box className={classes.walletDescription}>
                     <Box display="flex" alignItems="center" columnGap={1.5}>
                         <Box position="relative" width={30} height={30}>

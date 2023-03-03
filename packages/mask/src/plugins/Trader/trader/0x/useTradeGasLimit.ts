@@ -6,7 +6,6 @@ import { SUPPORTED_CHAIN_ID_LIST } from './constants.js'
 import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { toHex } from 'web3-utils'
 
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapQuoteResponse> | null) {
     const { account, chainId: targetChainId } = useChainContext()
@@ -29,9 +28,6 @@ export function useTradeGasLimit(tradeComputed: TradeComputed<SwapQuoteResponse>
             !config
         )
             return '0'
-        return connection.estimateTransaction({
-            ...config,
-            value: toHex(config.value),
-        })
+        return connection.estimateTransaction(config)
     }, [targetChainId, tradeComputed, config, connection, pluginID])
 }

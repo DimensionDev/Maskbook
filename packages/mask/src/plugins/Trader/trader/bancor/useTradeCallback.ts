@@ -8,8 +8,10 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../../messages.js'
 import type { SwapBancorRequest, TradeComputed } from '../../types/index.js'
+import { useSwapErrorCallback } from '../../SNSAdaptor/trader/hooks/useSwapErrorCallback.js'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest> | null, gasConfig?: GasConfig) {
+    const notifyError = useSwapErrorCallback()
     const { account, chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
     const connection = useWeb3Connection(pluginID, { chainId })
@@ -32,18 +34,25 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
         // Note that if approval is required, the API will also return the necessary approval transaction.
         const tradeTransaction = data.length === 1 ? data[0] : data[1]
 
-        const config = pick(tradeTransaction.transaction, ['to', 'data', 'value', 'from'])
-        const config_ = {
-            ...config,
-            gas: (await connection.estimateTransaction?.(config)) ?? ZERO.toString(),
-            ...gasConfig,
+        try {
+            const config = pick(tradeTransaction.transaction, ['to', 'data', 'from', 'value'])
+            const gas = await connection.estimateTransaction?.(config)
+            const config_ = {
+                ...config,
+                gas: gas ?? ZERO.toString(),
+            }
+
+            // send transaction and wait for hash
+
+            const hash = await connection.sendTransaction(config_, { chainId, overrides: { ...gasConfig } })
+            const receipt = await connection.getTransactionReceipt(hash)
+
+            return receipt?.transactionHash
+        } catch (error) {
+            if (error instanceof Error) {
+                notifyError(error.message)
+            }
+            return
         }
-
-        // send transaction and wait for hash
-
-        const hash = await connection.sendTransaction(config_, { chainId, overrides: { ...gasConfig } })
-        const receipt = await connection.getTransactionReceipt(hash)
-
-        return receipt?.transactionHash
-    }, [connection, account, chainId, stringify(trade), gasConfig, pluginID])
+    }, [connection, account, chainId, stringify(trade), gasConfig, pluginID, notifyError])
 }

@@ -1,4 +1,4 @@
-import { first } from 'lodash-es'
+import { first, identity, pickBy } from 'lodash-es'
 import type { BlockObject, MutateOptions, QueryOptions } from '@blocto/fcl'
 import { AddressType, ChainId, ProviderType, SchemaType, TransactionReceipt } from '@masknet/web3-shared-flow'
 import type {
@@ -33,8 +33,8 @@ class Connection implements FlowConnection {
             account: this.account,
             chainId: this.chainId,
             providerType: this.providerType,
-            ...initial,
-            ...overrides,
+            ...pickBy(initial, identity),
+            ...pickBy(overrides, identity),
         }
     }
 
