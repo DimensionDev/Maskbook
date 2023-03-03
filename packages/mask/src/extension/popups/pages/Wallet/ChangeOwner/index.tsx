@@ -2,6 +2,7 @@ import { Icons } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import {
     DashboardRoutes,
+    ECKeyIdentifier,
     formatPersonaFingerprint,
     NetworkPluginID,
     PopupRoutes,
@@ -134,7 +135,7 @@ interface ManagerAccount {
     type: ManagerAccountType
     name?: string
     address?: string
-    rawPublicKey?: string
+    identifier?: ECKeyIdentifier
 }
 
 export default function ChangeOwner() {
@@ -169,7 +170,7 @@ export default function ChangeOwner() {
             account: contractAccount?.address,
             providerType: ProviderType.MaskWallet,
             owner: contractAccount?.owner,
-            identifier: contractAccount?.identifier,
+            identifier: ECKeyIdentifier.from(contractAccount?.identifier).unwrapOr(undefined),
         })
 
         if (!hash) return
@@ -182,6 +183,7 @@ export default function ChangeOwner() {
         await Wallet?.updateOrAddWallet({
             name: 'Smart Pay',
             owner: manageAccount.address,
+            identifier: manageAccount.identifier?.toText(),
             address: contractAccount.address,
             hasDerivationPath: false,
             hasStoredKeyInfo: false,
@@ -280,7 +282,7 @@ export default function ChangeOwner() {
                                             type: ManagerAccountType.Persona,
                                             name: persona.nickname,
                                             address: persona.address,
-                                            rawPublicKey: persona.identifier.rawPublicKey,
+                                            identifier: persona.identifier,
                                         })
                                     }}>
                                     <Box display="flex" alignItems="center" columnGap={0.5}>

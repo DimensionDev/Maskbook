@@ -6,7 +6,7 @@ type CreateSuccessRecord = {
     creator: string
     creation_time: string
     duration: string
-    blockNumber: string
+    block_number: number
     message: string
     shares: string
     name: string
@@ -16,6 +16,7 @@ type CreateSuccessRecord = {
     total: string
     txid: string
     is_random: boolean
+    id: string
 }
 
 type NFTRedpacketRecord = {
@@ -32,6 +33,7 @@ type NFTRedpacketRecord = {
     }
     name: string
     message: string
+    id: string
 }
 
 export class TheGraphRedPacketAPI {
@@ -62,6 +64,7 @@ export class TheGraphRedPacketAPI {
                           total,
                           txid,
                           is_random
+                          id,
                       }
                   }`,
             }),
@@ -71,13 +74,14 @@ export class TheGraphRedPacketAPI {
         return response.data.creationSuccesses.map((x) => ({
             contract_address: contractAddress,
             txid: x.txid,
+            id: x.id,
             chainId,
             shares: Number(x.shares),
             total: x.total,
             duration: Number(x.duration) * 1000,
-            block_number: Number(x.blockNumber),
+            block_number: Number(x.block_number),
             contract_version: 4,
-            networkType: chainResolver.networkType(chainId),
+            network: chainResolver.networkType(chainId),
             token_address: x.token.address,
             sender: {
                 address: senderAddress,
@@ -118,6 +122,7 @@ export class TheGraphRedPacketAPI {
                         }
                         name
                         message
+                        id
                     }
                 }`,
             }),
@@ -125,6 +130,7 @@ export class TheGraphRedPacketAPI {
 
         if (!response?.data?.nftredPackets?.length) return
         return response.data.nftredPackets.map((x) => ({
+            id: x.id,
             chainId,
             contract_address: contractAddress,
             txid: x.txid,

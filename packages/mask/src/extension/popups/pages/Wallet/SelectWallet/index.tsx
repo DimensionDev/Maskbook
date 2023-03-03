@@ -4,7 +4,7 @@ import { first } from 'lodash-es'
 import { makeStyles } from '@masknet/theme'
 import { Button, List, Typography } from '@mui/material'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { ECKeyIdentifier, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { useChainIdValid, useWallets, useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
@@ -150,7 +150,7 @@ const SelectWallet = memo(() => {
                 ? {
                       address: selected,
                       owner: wallet.owner,
-                      identifier: wallet.identifier,
+                      identifier: ECKeyIdentifier.from(wallet.identifier).unwrapOr(undefined),
                   }
                 : {
                       address: selected,

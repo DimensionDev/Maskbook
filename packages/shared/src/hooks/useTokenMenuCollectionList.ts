@@ -13,16 +13,24 @@ export function useTokenMenuCollectionList(
 
     const SourceTypeList = collectionList.map((x) => x.source)
 
-    return collectionList.filter(
-        (x) =>
-            !(
-                currentCollection &&
-                x.source !== currentCollection.source &&
-                (([SourceType.CoinMarketCap, SourceType.CoinGecko].includes(currentCollection.source) &&
-                    [SourceType.CoinMarketCap, SourceType.CoinGecko].includes(x.source)) ||
-                    (currentCollection.source === SourceType.NFTScan &&
-                        SourceTypeList.includes(SourceType.CoinGecko) &&
-                        x.source === SourceType.CoinMarketCap))
-            ),
-    )
+    return collectionList.filter((x) => {
+        if (
+            currentCollection &&
+            x.source !== currentCollection.source &&
+            [SourceType.CoinMarketCap, SourceType.CoinGecko].includes(currentCollection.source) &&
+            [SourceType.CoinMarketCap, SourceType.CoinGecko].includes(x.source)
+        ) {
+            return false
+        }
+
+        if (
+            (currentCollection?.source === SourceType.NFTScan || !currentCollection) &&
+            SourceTypeList.includes(SourceType.CoinGecko) &&
+            x.source === SourceType.CoinMarketCap
+        ) {
+            return false
+        }
+
+        return true
+    })
 }

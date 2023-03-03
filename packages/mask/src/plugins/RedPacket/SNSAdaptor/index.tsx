@@ -93,7 +93,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         label: (
             <>
                 <Icons.RedPacket size={16} />
-                Lucky Drop
+                <Trans ns={PluginID.RedPacket} i18nKey="name" />
             </>
         ),
     },

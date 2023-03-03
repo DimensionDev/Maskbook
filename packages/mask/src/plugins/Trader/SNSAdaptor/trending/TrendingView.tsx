@@ -114,12 +114,6 @@ const useStyles = makeStyles<{
             visibility: 'hidden',
             height: 0,
         },
-        divider: {
-            width: '100%',
-            height: 1,
-            background: theme.palette.divider,
-            margin: '8px 0',
-        },
     }
 })
 
@@ -184,6 +178,7 @@ export function TrendingView(props: TrendingViewProps) {
         loading: loadingStats,
         retry: retryStats,
     } = usePriceStats({
+        chainId: result.chainId,
         coinId: trending?.coin.id,
         dataProvider: trending?.dataProvider,
         currency: trending?.currency,
@@ -424,7 +419,6 @@ export function TrendingView(props: TrendingViewProps) {
                     </Box>
                 )}
             </Stack>
-            {isDSearch && <div className={classes.divider} />}
         </TrendingViewDeck>
     )
 

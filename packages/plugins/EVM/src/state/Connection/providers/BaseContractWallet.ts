@@ -16,7 +16,7 @@ export class BaseContractWalletProvider extends BaseHostedProvider implements EV
     private ownerStorage:
         | StorageItem<{
               account: string
-              identifier: ECKeyIdentifier
+              identifier: string
           }>
         | undefined
 
@@ -34,13 +34,13 @@ export class BaseContractWalletProvider extends BaseHostedProvider implements EV
             value: {
                 account: this.options.getDefaultAccount(),
                 // empty string means EOA signer
-                identifier: EMPTY_IDENTIFIER,
+                identifier: '',
             },
         })
-
+        
         this.ownerStorage = storage.value
 
-        Web3StateSettings.value.Wallet?.wallets?.subscribe(async () => {
+        state.Wallet?.wallets?.subscribe(async () => {
             if (!this.hostedAccount) return
             const wallets = state.Wallet?.wallets?.getCurrentValue()
             const target = wallets?.find((x) => isSameAddress(x.address, this.hostedAccount))
@@ -48,13 +48,14 @@ export class BaseContractWalletProvider extends BaseHostedProvider implements EV
             if (target?.owner) {
                 await this.ownerStorage?.setValue({
                     account: target.owner,
-                    identifier: target.identifier ?? EMPTY_IDENTIFIER,
+                    identifier: target.identifier ?? '',
                 })
                 if (this.hostedChainId !== smartPayChainId) {
                     await this.switchChain(smartPayChainId)
                 }
             }
-        })
+        }
+
     }
 
     get ownerAccount() {
@@ -62,7 +63,7 @@ export class BaseContractWalletProvider extends BaseHostedProvider implements EV
     }
 
     get ownerIdentifier() {
-        const identifier = this.ownerStorage?.value.identifier
+        const identifier = ECKeyIdentifier.from(this.ownerStorage?.value.identifier).unwrapOr(undefined)
         return identifier?.rawPublicKey === 'EMPTY' ? undefined : identifier
     }
 
@@ -72,7 +73,7 @@ export class BaseContractWalletProvider extends BaseHostedProvider implements EV
         if (!owner || !isValidAddress(owner.account)) {
             await this.ownerStorage?.setValue({
                 account: this.options.getDefaultAccount(),
-                identifier: owner?.identifier ?? EMPTY_IDENTIFIER,
+                identifier: owner?.identifier?.toText() ?? '',
             })
         } else {
             // delay for syncing storage
@@ -83,7 +84,7 @@ export class BaseContractWalletProvider extends BaseHostedProvider implements EV
 
             await this.ownerStorage?.setValue({
                 account: owner.account,
-                identifier: owner.identifier ?? EMPTY_IDENTIFIER,
+                identifier: owner.identifier?.toText() ?? '',
             })
         }
     }
