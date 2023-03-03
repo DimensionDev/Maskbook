@@ -70,9 +70,9 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export default memo(function Welcome() {
-    const [agreed, setAgreed] = TermsAgreedContext.useContainer()
-    const [read, setRead] = useState(agreed)
-    const [allowedToCollect, setAllowedToCollect] = useState(false)
+    const [, setAgreed] = TermsAgreedContext.useContainer()
+    const [read, setRead] = useState(true)
+    const [allowedToCollect, setAllowedToCollect] = useState(true)
     const [params] = useSearchParams()
     const navigate = useNavigate()
 
