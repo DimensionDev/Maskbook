@@ -37,7 +37,9 @@ export const InEligibilityTips = memo(() => {
     const t = useI18N()
     return (
         <DialogContent className={classes.dialogContent}>
-            <SmartPayBanner>{t.ineligibility_tips()}</SmartPayBanner>
+            <SmartPayBanner>
+                <Typography>{t.ineligibility_tips()}</Typography>
+            </SmartPayBanner>
             <Typography className={classes.description}>
                 <Translate.eligibility_description
                     components={{

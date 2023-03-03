@@ -136,7 +136,7 @@ const SignRequest = memo(() => {
                 await WalletRPC.confirmRequest(value.payload, {
                     disableClose: !!goBack,
                     owner: wallet?.owner,
-                    identifier: wallet?.identifier?.toText(),
+                    identifier: wallet?.identifier,
                 })
                 navigate(-1)
             } catch (error_) {

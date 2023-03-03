@@ -1,4 +1,4 @@
-import { compact, uniqWith } from 'lodash-es'
+import { compact, isEqual, uniqWith } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
 import { WalletState } from '@masknet/web3-state'
@@ -73,14 +73,19 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
                     updatedAt: now,
                     owner: x.owner,
                     deployed: x.deployed,
-                    identifier: allPersonas.find((persona) => isSameAddress(x.owner, persona.address))?.identifier,
+                    identifier: allPersonas
+                        .find((persona) => isSameAddress(x.owner, persona.address))
+                        ?.identifier.toText(),
                 }))
 
             const result = uniqWith([...wallets, ...(localWallets ?? []), ...smartPayWallets], (a, b) =>
                 isSameAddress(a.address, b.address),
             )
 
-            await this.updateWallets(result)
+            if (!isEqual(result, localWallets)) {
+                await this.updateWallets(result)
+            }
+
             this.ref.value = result
         }
 

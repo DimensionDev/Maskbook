@@ -132,7 +132,7 @@ const Logout = memo(() => {
     }, [selectedPersona, history, Provider, wallet, wallets, connection, smartPayChainId])
 
     const manageWallets = useMemo(() => {
-        return wallets.filter((x) => x.identifier?.toText() === selectedPersona?.identifier.toText())
+        return wallets.filter((x) => isSameAddress(x.owner, selectedPersona?.address))
     }, [wallets, selectedPersona])
 
     return (

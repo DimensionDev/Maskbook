@@ -22,7 +22,7 @@ export const useUnconfirmedRequest = () => {
         const transactionContext = await TransactionFormatter?.createContext(chainId, computedPayload)
         return {
             owner: payload.owner,
-            identifier: payload.identifier ? ECKeyIdentifier.from(payload.identifier).unwrap() : undefined,
+            identifier: payload.identifier ? ECKeyIdentifier.from(payload.identifier).unwrapOr(undefined) : undefined,
             paymentToken: payload.paymentToken ?? nativeTokenAddress,
             payload: omit(payload, 'owner', 'identifier', 'paymentToken') as JsonRpcPayload,
             computedPayload,
