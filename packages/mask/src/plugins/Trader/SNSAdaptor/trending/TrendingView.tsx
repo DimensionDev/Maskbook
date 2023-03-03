@@ -129,7 +129,7 @@ export interface TrendingViewProps {
 export function TrendingView(props: TrendingViewProps) {
     const { resultList, identity, setActive, currentResult } = props
     const [result, setResult] = useState(currentResult ?? resultList[0])
-    const { isTokenTagPopper, isCollectionProjectPopper, isProfilePage, isDSearch } = useContext(TrendingViewContext)
+    const { isTokenTagPopper, isCollectionProjectPopper, isProfilePage } = useContext(TrendingViewContext)
     const { t } = useI18N()
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
@@ -178,6 +178,7 @@ export function TrendingView(props: TrendingViewProps) {
         loading: loadingStats,
         retry: retryStats,
     } = usePriceStats({
+        chainId: result.chainId,
         coinId: trending?.coin.id,
         dataProvider: trending?.dataProvider,
         currency: trending?.currency,

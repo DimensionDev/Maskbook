@@ -56,10 +56,10 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD', options
         twelveDecimalExp,
     } = BOUNDARIES
 
-    const symbol = currency ? DIGITAL_CURRENCY_SYMBOLS[currency] : ''
+    const symbol = currency ? DIGITAL_CURRENCY_SYMBOLS[currency.toUpperCase()] : ''
 
     let formatter: Intl.NumberFormat
-    let isIntlCurrencyValid = !DIGITAL_CURRENCY_SYMBOLS[currency]
+    let isIntlCurrencyValid = !DIGITAL_CURRENCY_SYMBOLS[currency.toUpperCase()]
 
     try {
         formatter = new Intl.NumberFormat('en-US', {

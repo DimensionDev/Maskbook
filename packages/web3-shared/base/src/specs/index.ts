@@ -835,7 +835,7 @@ export interface Wallet {
     /** an abstract wallet has been deployed */
     deployed?: boolean
     /** persona identifier */
-    identifier?: ECKeyIdentifier
+    identifier?: string
 }
 
 export interface Transaction<ChainId, SchemaType> {
@@ -941,6 +941,8 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     readonly readyPromise: Promise<void>
     /** connection status */
     readonly connected: boolean
+    /** async setup tasks */
+    setup(): Promise<void>
     /** Switch to the designate account. */
     switchAccount(account?: string): Promise<void>
     /** Switch to the designate chain. */

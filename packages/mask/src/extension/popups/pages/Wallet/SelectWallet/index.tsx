@@ -1,10 +1,11 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { useAsync } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { first } from 'lodash-es'
 import { makeStyles } from '@masknet/theme'
 import { Button, List, Typography } from '@mui/material'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { ECKeyIdentifier, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { type ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { useChainIdValid, useWallets, useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
@@ -16,7 +17,6 @@ import Services from '../../../../service.js'
 import { WalletItem } from './WalletItem.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { WalletStartUp } from '../components/StartUp/index.js'
-import { useAsync } from 'react-use'
 
 const useStyles = makeStyles()({
     content: {
@@ -150,7 +150,7 @@ const SelectWallet = memo(() => {
                 ? {
                       address: selected,
                       owner: wallet.owner,
-                      identifier: wallet.identifier,
+                      identifier: ECKeyIdentifier.from(wallet.identifier).unwrapOr(undefined),
                   }
                 : {
                       address: selected,

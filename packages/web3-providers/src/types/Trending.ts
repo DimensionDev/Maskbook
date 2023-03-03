@@ -23,6 +23,7 @@ export namespace TrendingAPI {
 
     export interface Currency {
         id: string
+        chainId?: Web3Helper.ChainIdAll
         name: string
         symbol?: string
         description?: string

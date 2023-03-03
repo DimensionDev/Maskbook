@@ -48,6 +48,7 @@ const useStyles = makeStyles()((theme) => ({
         margin: 0,
         padding: 0,
         height: 40,
+        maxWidth: 286,
     },
     unlockContainer: {
         margin: 0,
@@ -304,7 +305,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                                 }
                                 spender={HAPPY_RED_PACKET_ADDRESS_V4}>
                                 <ActionButton
-                                    size="large"
+                                    size="medium"
                                     className={classes.button}
                                     fullWidth
                                     disabled={!!validationMessage || !!gasValidationMessage}

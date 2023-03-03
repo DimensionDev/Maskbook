@@ -1,9 +1,9 @@
 import type { RequestArguments } from 'web3-core'
 import { ProviderType, ConnectionContext } from '@masknet/web3-shared-evm'
 import type { EVM_Connection, EVM_ConnectionOptions } from './types.js'
-import { Providers } from './provider.js'
+import { Providers } from '../Provider/provider.js'
+import type { BaseContractWalletProvider } from '../Provider/providers/BaseContractWallet.js'
 import { SharedContextSettings, Web3StateSettings } from '../../settings/index.js'
-import type { BaseContractWalletProvider } from './providers/BaseContractWallet.js'
 
 const initializer = {
     getDefaultAccount(providerType: ProviderType) {

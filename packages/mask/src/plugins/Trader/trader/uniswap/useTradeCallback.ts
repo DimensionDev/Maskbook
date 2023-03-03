@@ -9,6 +9,8 @@ import type { SwapCall, Trade, TradeComputed } from '../../types/index.js'
 import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { ZERO } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { useSwapErrorCallback } from '../../SNSAdaptor/trader/hooks/useSwapErrorCallback.js'
+import { identity, pickBy } from 'lodash-es'
 
 interface FailedCall {
     parameters: SwapParameters
@@ -35,6 +37,7 @@ export function useTradeCallback(
     gasConfig?: GasConfig,
     allowedSlippage?: number,
 ) {
+    const notifyError = useSwapErrorCallback()
     const { account, chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
     const connection = useWeb3Connection(pluginID, { chainId })
@@ -98,16 +101,16 @@ export function useTradeCallback(
         if (!bestCallOption) {
             const errorCalls = estimatedCalls.filter((call): call is FailedCall => 'error' in call)
             if (errorCalls.length > 0) {
+                notifyError('Errors')
                 return
             }
             const firstNoErrorCall = estimatedCalls.find((call): call is SwapCallEstimate => !('error' in call))
-            if (!firstNoErrorCall) {
-                return
-            }
+
             bestCallOption = firstNoErrorCall
         }
 
         if (!bestCallOption) {
+            notifyError('No Best Call Option')
             return
         }
 
@@ -123,7 +126,7 @@ export function useTradeCallback(
                     data: calldata,
                     ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed() } : {}),
                     ...(!value || /^0x0*$/.test(value) ? {} : { value }),
-                    ...gasConfig,
+                    ...pickBy(gasConfig, identity),
                 },
                 {
                     chainId,
@@ -142,5 +145,5 @@ export function useTradeCallback(
                     : 'Transaction rejected.',
             )
         }
-    }, [connection, account, tradeParameters, gasConfig, chainId, pluginID])
+    }, [connection, account, tradeParameters, gasConfig, chainId, pluginID, notifyError])
 }

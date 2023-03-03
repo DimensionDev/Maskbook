@@ -48,7 +48,6 @@ export const PersistentStorages = {
             [PluginID.Transak]: false,
             [PluginID.Pets]: false,
             [PluginID.GoPlusSecurity]: false,
-            [PluginID.Referral]: false,
         },
     }),
 }

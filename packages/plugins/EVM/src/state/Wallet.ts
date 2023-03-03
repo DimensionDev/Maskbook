@@ -1,4 +1,4 @@
-import { compact, uniqWith } from 'lodash-es'
+import { compact, isEqual, uniqWith } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
 import { WalletState } from '@masknet/web3-state'
@@ -39,13 +39,14 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
         }
     }
 
-    override setup() {
+    override async setup() {
+        if (this.providerType !== ProviderType.MaskWallet) return
+
+        await this.storage.initializedPromise
+
         const update = async () => {
-            if (this.providerType !== ProviderType.MaskWallet) return
-
             const wallets = this.context.wallets.getCurrentValue()
-
-            const localWallets = this.storage.initialized ? this.storage.value[ProviderType.MaskWallet] : []
+            const localWallets = this.storage.value[ProviderType.MaskWallet]
 
             this.ref.value = uniqWith([...wallets, ...(localWallets ?? [])], (a, b) =>
                 isSameAddress(a.address, b.address),
@@ -59,7 +60,6 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
             ])
 
             const now = new Date()
-
             const smartPayWallets = accounts
                 .filter((x) => x.deployed)
                 .map((x) => ({
@@ -73,14 +73,19 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
                     updatedAt: now,
                     owner: x.owner,
                     deployed: x.deployed,
-                    identifier: allPersonas.find((persona) => isSameAddress(x.owner, persona.address))?.identifier,
+                    identifier: allPersonas
+                        .find((persona) => isSameAddress(x.owner, persona.address))
+                        ?.identifier.toText(),
                 }))
 
             const result = uniqWith([...wallets, ...(localWallets ?? []), ...smartPayWallets], (a, b) =>
                 isSameAddress(a.address, b.address),
             )
 
-            await this.updateWallets(result)
+            if (!isEqual(result, localWallets)) {
+                await this.updateWallets(result)
+            }
+
             this.ref.value = result
         }
 

@@ -29,17 +29,18 @@ interface WalletMenuItemProps {
     verified?: boolean
     onChangeWallet?: () => void
     platform?: NextIDPlatform
+    expectedChainId?: Web3Helper.ChainIdAll
 }
 
 export const WalletMenuItem = memo<WalletMenuItemProps>(
-    ({ address, selected, onChangeWallet, platform, onSelect, verified }) => {
+    ({ address, selected, onChangeWallet, platform, onSelect, verified, expectedChainId }) => {
         const t = useSharedI18N()
         const { classes } = useStyles()
 
         const { pluginID } = useNetworkContext(platform ? resolveNextID_NetworkPluginID(platform) : undefined)
         const defaultChainId = useDefaultChainId(pluginID)
         const { chainId } = useChainContext({
-            chainId: platform ? defaultChainId : undefined,
+            chainId: platform ? defaultChainId : expectedChainId,
         })
 
         const name = useWalletName(address, pluginID, !!platform)

@@ -158,10 +158,15 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
             onSend(patchedHistory, collection)
         }, [onSend, canSend, patchedHistory, collection, isPasswordValid])
 
-        const { value: redpacketStatus } = useAvailabilityNftRedPacket(patchedHistory.rpid, account)
+        const { value: redpacketStatus } = useAvailabilityNftRedPacket(
+            patchedHistory.rpid,
+            account,
+            patchedHistory.chainId,
+        )
         const bitStatusList = redpacketStatus
             ? redpacketStatus.bitStatusList
             : fill(Array(patchedHistory.token_ids.length), false)
+
         const handleMouseEnter: MouseEventHandler<HTMLButtonElement> = (event) => {
             if (canSend && !isPasswordValid) {
                 handleShowPopover(event.currentTarget)

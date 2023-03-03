@@ -27,8 +27,8 @@ export async function createWeb3State(
     await Settings_.storage.currencyType.initializedPromise
     await Wallet_.storage.initializedPromise
 
-    Provider_.setup()
-    Wallet_.setup()
+    await Provider_.setup()
+    await Wallet_.setup()
 
     return {
         AddressBook: new AddressBook(context, {

@@ -1,7 +1,7 @@
 import { identity, pickBy } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import { ZERO_ADDRESS } from '../constants/index.js'
-import { isEmptyHex } from '../helpers/index.js'
+import { isEmptyHex } from '../helpers/address.js'
 import type { Transaction } from '../types/index.js'
 
 export class AccountTransaction {
@@ -40,7 +40,7 @@ export class AccountTransaction {
     fill(overrides?: Transaction): Transaction {
         const { chainId, from, to, value, gas, gasPrice, maxPriorityFeePerGas, maxFeePerGas, data, nonce } = {
             ...this.transaction,
-            ...overrides,
+            ...pickBy(overrides, identity),
         }
         return pickBy(
             {

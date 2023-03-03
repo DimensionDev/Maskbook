@@ -6,9 +6,10 @@ import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { GasConfig, Transaction } from '@masknet/web3-shared-evm'
 import type { SwapRouteSuccessResponse, TradeComputed } from '../../types/index.js'
-import { toHex } from 'web3-utils'
+import { useSwapErrorCallback } from '../../SNSAdaptor/trader/hooks/useSwapErrorCallback.js'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapRouteSuccessResponse> | null, gasConfig?: GasConfig) {
+    const notifyError = useSwapErrorCallback()
     const { account, chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
     const connection = useWeb3Connection(pluginID, { chainId })
@@ -18,8 +19,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapRouteSuccessRe
         if (!account || !tradeComputed?.trade_) return null
         return {
             from: account,
-            value: tradeComputed.trade_.value ? toHex(tradeComputed.trade_.value) : undefined,
-            ...pick(tradeComputed.trade_, ['to', 'data']),
+            ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
         } as Transaction
     }, [account, tradeComputed])
 
@@ -28,15 +28,22 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapRouteSuccessRe
             return
         }
 
-        const hash = await connection.sendTransaction(
-            {
-                ...config,
-                gas: await connection.estimateTransaction?.(config),
-                ...gasConfig,
-            },
-            { chainId, overrides: { ...gasConfig } },
-        )
-        const receipt = await connection.getTransactionReceipt(hash)
-        return receipt?.transactionHash
-    }, [connection, account, chainId, stringify(config), gasConfig, pluginID])
+        try {
+            const gas = await connection.estimateTransaction?.(config)
+            const hash = await connection.sendTransaction(
+                {
+                    ...config,
+                    gas,
+                },
+                { chainId, overrides: { ...gasConfig } },
+            )
+            const receipt = await connection.getTransactionReceipt(hash)
+            return receipt?.transactionHash
+        } catch (error) {
+            if (error instanceof Error) {
+                notifyError(error.message)
+            }
+            return
+        }
+    }, [connection, account, chainId, stringify(config), gasConfig, pluginID, notifyError])
 }

@@ -1,11 +1,11 @@
-import { memo, useMemo, useState } from 'react'
+import { memo, useState } from 'react'
 import { Box, Button, InputAdornment, MenuItem, Stack, Typography } from '@mui/material'
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material'
-import { makeStyles, MaskTextField, ShadowRootMenu } from '@masknet/theme'
+import { makeStyles, MaskTextField } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import type { SecurityAPI } from '@masknet/web3-providers/types'
 import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
-import { WalletIcon } from '@masknet/shared'
+import { WalletIcon, useMenuConfig } from '@masknet/shared'
 import { useI18N } from '../../locales/index.js'
 import { useSupportedChains } from '../hooks/useSupportedChains.js'
 
@@ -34,6 +34,13 @@ const useStyles = makeStyles()((theme) => ({
         height: 40,
         borderRadius: 8,
     },
+    menu: {
+        background: theme.palette.maskColor.bottom,
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
+                : '0px 4px 30px rgba(0, 0, 0, 0.1)',
+    },
 }))
 
 interface SearchBoxProps {
@@ -56,47 +63,38 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
         }
     >()
     const [searchContent, setSearchSearchContent] = useState<string>()
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-
-    const onClose = () => setAnchorEl(null)
-    const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
-
     const { value: supportedChains = [] } = useSupportedChains()
 
-    const menuElements = useMemo(() => {
-        if (!supportedChains.length) return
-        setSelectedChain(supportedChains[0])
-        return (
-            supportedChains
-                .filter((x) => x.icon)
-                .map((chain) => {
-                    return (
-                        <MenuItem
-                            key={chain.chainId}
-                            onClick={() => {
-                                setSelectedChain(chain)
-                                onClose()
-                            }}>
-                            <Stack
-                                display="inline-flex"
-                                direction="row"
-                                alignItems="center"
-                                justifyContent="flex-start"
-                                gap={1}
-                                width="100%">
-                                <WalletIcon mainIcon={chain?.icon} size={18} />
-                                <Typography>{getChainName(chain)}</Typography>
-                            </Stack>
-                        </MenuItem>
-                    )
-                }) ?? []
-        )
-    }, [supportedChains.length])
+    const [menu, openMenu] = useMenuConfig(
+        supportedChains
+            .filter((x) => x.icon)
+            .map((chain) => {
+                return (
+                    <MenuItem
+                        key={chain.chainId}
+                        onClick={() => {
+                            setSelectedChain(chain)
+                        }}>
+                        <Stack
+                            display="inline-flex"
+                            direction="row"
+                            alignItems="center"
+                            justifyContent="flex-start"
+                            gap={1}
+                            width="100%">
+                            <WalletIcon mainIcon={chain?.icon} size={18} />
+                            <Typography>{getChainName(chain)}</Typography>
+                        </Stack>
+                    </MenuItem>
+                )
+            }) ?? [],
+        { classes: { paper: classes.menu } },
+    )
 
     return (
         <Stack direction="row" spacing={1}>
-            <Box width={120} height={40}>
-                <Button onClick={onOpen} variant="outlined" className={classes.selectedButton}>
+            <Box width={140} height={40}>
+                <Button onClick={openMenu} variant="outlined" className={classes.selectedButton}>
                     <Stack
                         className={classes.option}
                         display="inline-flex"
@@ -105,8 +103,8 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
                         alignItems="center"
                         width="100%">
                         <Stack gap={0.5} display="inline-flex" direction="row" alignItems="center">
-                            <WalletIcon mainIcon={selectedChain?.icon} size={18} />
-                            <Typography fontSize={14}>{getChainName(selectedChain)}</Typography>
+                            <WalletIcon mainIcon={selectedChain?.icon ?? supportedChains[0]?.icon} size={18} />
+                            <Typography fontSize={14}>{getChainName(selectedChain ?? supportedChains[0])}</Typography>
                         </Stack>
                         <KeyboardArrowDownIcon />
                     </Stack>
@@ -141,9 +139,8 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
                     {t.search()}
                 </Button>
             </Stack>
-            <ShadowRootMenu open={!!anchorEl} onClose={onClose} anchorEl={anchorEl}>
-                {menuElements}
-            </ShadowRootMenu>
+
+            {menu}
         </Stack>
     )
 })

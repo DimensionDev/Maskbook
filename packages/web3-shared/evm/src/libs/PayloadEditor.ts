@@ -11,7 +11,8 @@ import {
     type TransactionOptions,
     type UserOperation,
 } from '../types/index.js'
-import { createJsonRpcPayload, formatEthereumAddress } from '../helpers/index.js'
+import { formatEthereumAddress } from '../helpers/formatter.js'
+import { createJsonRpcPayload } from '../helpers/provider.js'
 import { ZERO_ADDRESS, getSmartPayConstant } from '../index.js'
 
 type Options = Pick<TransactionOptions, 'account' | 'chainId'>

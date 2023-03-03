@@ -140,7 +140,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
         }
     }, [currentChainId])
 
-    const [currentTab, onChange, tabs] = useTabs('Deposit', 'Withdraw')
+    const [currentTab, onChange, tabs] = useTabs(t('plugin_savings_deposit'), t('plugin_savings_withdraw'))
 
     return (
         <Web3ContextProvider value={{ pluginID, chainId: ChainId.Mainnet }}>

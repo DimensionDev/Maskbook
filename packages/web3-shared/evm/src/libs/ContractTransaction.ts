@@ -1,5 +1,6 @@
 import { identity, pickBy } from 'lodash-es'
 import { toHex } from 'web3-utils'
+import { type Unresolved, resolve } from '@masknet/shared-base'
 import type {
     BaseContract,
     PayableTx,
@@ -8,18 +9,13 @@ import type {
 } from '@masknet/web3-contracts/types/types.js'
 import type { Transaction } from '../types/index.js'
 
-type TransactionResolver<T extends BaseContract | null> =
-    | PayableTransactionObject<unknown>
-    | NonPayableTransactionObject<unknown>
-    | ((contract: T) => PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown> | undefined)
+type TransactionResolver<T extends BaseContract | null> = Unresolved<
+    PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown> | undefined,
+    T
+>
 
 export class ContractTransaction<T extends BaseContract | null> {
     constructor(private contract: T) {}
-
-    private resolve(transactionResolver: TransactionResolver<T>) {
-        if (typeof transactionResolver === 'function') return transactionResolver(this.contract)
-        return transactionResolver
-    }
 
     /**
      * Fill the transaction without gas (for calling a readonly transaction)
@@ -28,7 +24,7 @@ export class ContractTransaction<T extends BaseContract | null> {
      * @returns
      */
     fill(transactionResolver: TransactionResolver<T>, overrides?: Partial<Transaction>): Transaction {
-        const transaction = this.resolve(transactionResolver)
+        const transaction = resolve(transactionResolver, this.contract)
 
         return pickBy(
             {
@@ -56,7 +52,7 @@ export class ContractTransaction<T extends BaseContract | null> {
      * @returns
      */
     async fillAll(transactionResolver: TransactionResolver<T>, overrides?: Partial<Transaction>) {
-        const transaction = this.resolve(transactionResolver)
+        const transaction = resolve(transactionResolver, this.contract)
         const transactionEncoded = this.fill(transactionResolver, overrides)
 
         if (!transactionEncoded.gas) {
@@ -84,7 +80,7 @@ export class ContractTransaction<T extends BaseContract | null> {
     }
 
     async send(transactionResolver: TransactionResolver<T>, overrides?: Partial<Transaction>) {
-        const transaction = this.resolve(transactionResolver)
+        const transaction = resolve(transactionResolver, this.contract)
         const transactionEncoded = await this.fillAll(transactionResolver, overrides)
         const receipt = await transaction?.send(transactionEncoded as PayableTx)
         return receipt?.transactionHash ?? ''

@@ -1,7 +1,7 @@
 import { isNil } from 'lodash-es'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { defer } from '@masknet/kit'
-import type { ECKeyIdentifier, SignType } from '@masknet/shared-base'
+import { ECKeyIdentifier, type SignType } from '@masknet/shared-base'
 import { SmartPayAccount, Web3 } from '@masknet/web3-providers'
 import {
     ChainId,
@@ -34,7 +34,7 @@ async function internalSend(
         signableConfig,
     } = PayloadEditor.fromPayload(payload, options)
     const owner = options?.owner
-    const identifier = options?.identifier
+    const identifier = ECKeyIdentifier.from(options?.identifier).unwrapOr(undefined)
     const paymentToken = options?.paymentToken
     const signer = identifier
         ? new Signer(identifier, <T>(type: SignType, message: T, identifier?: ECKeyIdentifier) =>
@@ -144,7 +144,7 @@ export async function send(payload: JsonRpcPayload, options?: TransactionOptions
             await WalletRPC.pushUnconfirmedRequest({
                 ...editor.fill(),
                 owner: options?.owner,
-                identifier: options?.identifier?.toText(),
+                identifier: options?.identifier,
                 paymentToken: options?.paymentToken,
             })
             UNCONFIRMED_CALLBACK_MAP.set(editor.pid!, callback)

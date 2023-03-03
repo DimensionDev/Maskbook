@@ -1,5 +1,7 @@
 import { SourceType } from '@masknet/web3-shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
+import { ChainId } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export const CURRENCIES_MAP: Record<SourceType, undefined | TrendingAPI.Currency[]> = {
     [SourceType.CoinGecko]: [
@@ -21,9 +23,31 @@ export const CURRENCIES_MAP: Record<SourceType, undefined | TrendingAPI.Currency
     [SourceType.NFTScan]: [
         {
             id: 'eth',
+            chainId: ChainId.Mainnet,
             name: '\u039E',
             symbol: '\u039E',
             description: 'Ethereum',
+        },
+        {
+            id: 'Matic',
+            chainId: ChainId.Matic,
+            name: 'Matic',
+            symbol: 'Matic',
+            description: 'Matic',
+        },
+        {
+            id: 'matic',
+            chainId: ChainId.BSC,
+            name: 'BNB',
+            symbol: 'BNB',
+            description: 'BNB',
+        },
+        {
+            id: 'arbitrum',
+            chainId: ChainId.Arbitrum,
+            name: 'Arbitrum',
+            symbol: 'Arbitrum',
+            description: 'Arbitrum',
         },
     ],
     [SourceType.UniswapInfo]: undefined,
@@ -63,6 +87,9 @@ export const CURRENCIES_MAP: Record<SourceType, undefined | TrendingAPI.Currency
  * @param dataProvider
  * @returns
  */
-export function useCurrentCurrency(dataProvider: SourceType | undefined) {
-    return dataProvider ? CURRENCIES_MAP[dataProvider]?.[0] : undefined
+export function useCurrentCurrency(dataProvider: SourceType | undefined, chainId?: Web3Helper.ChainIdAll) {
+    if (!dataProvider) return undefined
+    const currencies = CURRENCIES_MAP[dataProvider]
+    if (!currencies) return
+    return chainId ? currencies.find((x) => x.chainId === chainId) : undefined
 }

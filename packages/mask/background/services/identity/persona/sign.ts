@@ -34,12 +34,13 @@ export async function signWithPersona<T>(
                 new Promise<PersonaIdentifier>((resolve, reject) => {
                     MaskMessages.events.personaSignRequest.on((approval) => {
                         if (approval.requestID !== requestID) return
-                        if (!approval.selectedPersona) reject(new Error('Persona Rejected'))
+                        if (!approval.selectedPersona)
+                            reject(new Error('The user refused to sign message with persona.'))
                         resolve(approval.selectedPersona!)
                     })
                 }),
                 60 * 1000,
-                'Timeout',
+                'Timeout of signing with persona.',
             )
         }
         return identifier
