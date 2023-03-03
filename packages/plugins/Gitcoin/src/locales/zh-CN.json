@@ -28,6 +28,7 @@
     "admin": "由 <bold>{{admin}}</bold>",
     "give_back_to_match_pool": "返回到 Gitcoin 匹配库",
     "total_contribution": "您的捐款总额",
+    "give_back_tooltip": "为Gitcoin匹配池做出贡献！资金用于当前和未来的捐赠轮次。 选定的金额将添加到您的捐赠贡献之上。",
     "donate_successfully": "您成功捐赠了 {{- uiAmount}} {{symbol}} 。",
     "donate_dialog_title": "捐赠结账"
 }

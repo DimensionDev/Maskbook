@@ -23,6 +23,7 @@
     "error$oversized": "文件太大，限制为 {{limit}}。",
     "on_change_file": "更改文件",
     "__plugin_name": "Web3 文件服务",
+    "__plugin_description": "永久去中心化的文件存储。上传和分享Arweave上的文件给Mask Network 上的朋友。",
     "provider_arweave": "Arweave",
     "provider_ipfs": "IPFS",
     "cancel": "取消",

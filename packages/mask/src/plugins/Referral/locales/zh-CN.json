@@ -1,5 +1,6 @@
 {
     "__plugin_name": "Referral Farms",
+    "__description": "分配流动性挖矿就像奖励推荐挖矿。",
     "powered_by": "Powered by",
     "create_by": "Created by",
     "tab_new": "新建",
@@ -64,6 +65,7 @@
     "adjust_rewards_desc": "增加/减少每日挖矿奖励或存入额外挖矿奖励以充值转推荐挖矿",
     "additional_farm_rewards": "额外奖励",
     "confirm_deposit": "确认存款",
+    "adjust_total_reward_desc": "确认存入 {{reward}} {{symbol}} 以充值推荐挖矿",
     "adjust_daily_reward_desc": "确认调整每日挖矿奖励到 {{reward}} {{symbol}} ",
     "adjust_daily_and_total_reward_desc": "确认存入 {{totalReward}} {{symbol}} 来充值推荐挖矿，并将每日挖矿奖励调整为 {{dailyReward}} {{symbol}}",
     "transaction": "交易",
