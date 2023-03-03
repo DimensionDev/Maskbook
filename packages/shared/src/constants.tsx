@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { GeneratedIcon, Icons } from '@masknet/icons'
-import { EnhanceableSite, NextIDPlatform } from '@masknet/shared-base'
+import { EnhanceableSite, NextIDPlatform } from '@masknet/web3-shared-base'
 
 export const SOCIAL_MEDIA_ICON_MAPPING: Record<EnhanceableSite | string, ReactNode> = {
     [EnhanceableSite.Twitter]: <Icons.TwitterColored />,

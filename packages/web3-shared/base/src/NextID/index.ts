@@ -1,7 +1,6 @@
 import { ProfileIdentifier } from '@masknet/base'
-import { NextIDPlatform } from '../NextID/type.js'
-import { EnhanceableSite } from '../Site/type.js'
-import { createLookupTableResolver } from '../utils/index.js'
+import { EnhanceableSite, createLookupTableResolver } from '../index.js'
+import { NextIDPlatform } from './type.js'
 
 export const resolveNextIDPlatformToNetwork = createLookupTableResolver<NextIDPlatform, EnhanceableSite | undefined>(
     {

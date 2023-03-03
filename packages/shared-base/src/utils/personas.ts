@@ -1,4 +1,5 @@
-import type { PersonaIdentifier, PersonaInformation, ProfileInformation } from '../index.js'
+import type { PersonaInformation, ProfileInformation } from '@masknet/web3-shared-base'
+import type { PersonaIdentifier } from '../index.js'
 import { ECKeyIdentifier, ProfileIdentifier, Identifier } from '../index.js'
 
 export function formatPersonaFingerprint(fingerprint: string, size = 0) {

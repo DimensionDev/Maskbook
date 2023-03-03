@@ -1,4 +1,4 @@
-import { createLookupTableResolver, NetworkPluginID } from '@masknet/shared-base'
+import { createLookupTableResolver, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { TrendingAPI } from '../../entry-types.js'

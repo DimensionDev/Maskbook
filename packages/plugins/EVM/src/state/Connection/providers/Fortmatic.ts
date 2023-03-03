@@ -5,7 +5,7 @@ import type { RequestArguments } from 'web3-core'
 import { timeout } from '@masknet/kit'
 import type { FmProvider } from 'fortmatic/dist/cjs/src/core/fm-provider.js'
 import { ChainId, chainResolver, ProviderURL, ProviderType } from '@masknet/web3-shared-evm'
-import { createLookupTableResolver } from '@masknet/shared-base'
+import { createLookupTableResolver } from '@masknet/web3-shared-base'
 import type { EVM_Provider } from '../types.js'
 import { BaseProvider } from './Base.js'
 

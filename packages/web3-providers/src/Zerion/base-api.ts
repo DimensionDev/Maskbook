@@ -1,4 +1,4 @@
-import { createLookupTableResolver } from '@masknet/shared-base'
+import { createLookupTableResolver } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { mapKeys } from 'lodash-es'
 import io from 'socket.io-client'

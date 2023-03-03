@@ -12,8 +12,9 @@ import {
     SearchResult,
     SearchResultType,
     SourceType,
+    NetworkPluginID,
 } from '@masknet/web3-shared-base'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     ChainId as ChainIdEVM,
     isValidAddress as isValidAddressEVM,

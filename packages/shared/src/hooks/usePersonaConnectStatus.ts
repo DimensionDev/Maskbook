@@ -1,5 +1,5 @@
 import { useAllPersonas, useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import type { PersonaInformation } from '@masknet/shared-base'
+import type { PersonaInformation } from '@masknet/web3-shared-base'
 import { useMemo } from 'react'
 
 export function usePersonaConnectStatus(): {

@@ -1,7 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { openWindow } from '@masknet/shared-base-ui'
-import { NetworkPluginID } from '@masknet/shared-base'
+import {
+    NetworkPluginID,
+    leftShift,
+    rightShift,
+    ZERO,
+    FungibleToken,
+    currySameAddress,
+    formatBalance,
+} from '@masknet/web3-shared-base'
 import {
     useSelectFungibleToken,
     useOpenShareTxDialog,
@@ -10,7 +18,6 @@ import {
     EthereumERC20TokenApprovedBoundary,
 } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { leftShift, rightShift, ZERO, FungibleToken, currySameAddress, formatBalance } from '@masknet/web3-shared-base'
 import {
     ChainId,
     SchemaType,

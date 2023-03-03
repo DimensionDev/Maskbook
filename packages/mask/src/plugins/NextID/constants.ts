@@ -1,4 +1,4 @@
-import { PluginID } from '@masknet/shared-base'
+import { PluginID } from '@masknet/web3-shared-base'
 
 export const PLUGIN_ID = PluginID.NextID
 export const PLUGIN_DESCRIPTION = 'Next ID'

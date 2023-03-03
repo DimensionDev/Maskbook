@@ -1,5 +1,5 @@
 import { delay } from '@masknet/kit'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { EnhanceableSite } from '@masknet/web3-shared-base'
 import { Mirror } from '@masknet/web3-providers'
 import type { Writer } from '@masknet/web3-providers/types'
 import type { SocialNetworkUI } from '@masknet/types'

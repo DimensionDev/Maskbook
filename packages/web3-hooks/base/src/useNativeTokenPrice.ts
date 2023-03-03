@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useNativeTokenAddress } from './useNativeTokenAddress.js'
 import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'

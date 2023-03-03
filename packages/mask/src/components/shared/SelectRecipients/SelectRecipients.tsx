@@ -1,11 +1,4 @@
-import {
-    ECKeyIdentifier,
-    EMPTY_LIST,
-    NextIDPlatform,
-    ProfileIdentifier,
-    ProfileInformation as Profile,
-    ProfileInformationFromNextID,
-} from '@masknet/shared-base'
+import { ProfileInformation as Profile, ProfileInformationFromNextID, NextIDPlatform } from '@masknet/web3-shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { batch } from 'async-call-rpc'
 import { cloneDeep, uniqBy } from 'lodash-es'
@@ -17,6 +10,7 @@ import { useCurrentIdentity } from '../../DataSource/useActivatedUI.js'
 import { SelectRecipientsDialogUI } from './SelectRecipientsDialog.js'
 import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch.js'
 import { usePersonasFromNextID } from '@masknet/shared'
+import { ECKeyIdentifier, EMPTY_LIST, ProfileIdentifier } from '@masknet/shared-base'
 
 export interface SelectRecipientsUIProps {
     items: LazyRecipients

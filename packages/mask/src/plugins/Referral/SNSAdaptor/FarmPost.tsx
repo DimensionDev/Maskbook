@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { useAsync } from 'react-use'
-import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useWeb3, useChainContext } from '@masknet/web3-hooks-base'

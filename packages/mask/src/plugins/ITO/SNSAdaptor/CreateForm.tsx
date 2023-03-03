@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
 import formatDateTime from 'date-fns/format'
 import { SchemaType, formatAmount, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
-import { isGreaterThan, isZero, FungibleToken, leftShift } from '@masknet/web3-shared-base'
+import { isGreaterThan, isZero, FungibleToken, leftShift, NetworkPluginID } from '@masknet/web3-shared-base'
 import {
     TokenIcon,
     PluginWalletStatusBar,
@@ -12,7 +12,6 @@ import {
     DateTimePanel,
     EthereumERC20TokenApprovedBoundary,
 } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, Stack, Typography, InputBase, inputBaseClasses } from '@mui/material'
 import { makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
 import { Check as CheckIcon, Close as UnCheckIcon } from '@mui/icons-material'

@@ -1,7 +1,7 @@
 import { story } from '@masknet/storybook-shared'
 import { PersonaSetup as C } from '../../../src/pages/Personas/components/PersonaSetup/index.js'
 import { action } from '@storybook/addon-actions'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { EnhanceableSite } from '@masknet/web3-shared-base'
 
 const { meta, of } = story(C)
 

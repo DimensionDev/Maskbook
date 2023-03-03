@@ -27,7 +27,8 @@ import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/
 import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon.js'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector.js'
 import { injectPostActionsAtTwitter } from './injection/PostActions/index.js'
-import { EnhanceableSite, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
+import { ProfileIdentifier } from '@masknet/shared-base'
+import { EnhanceableSite, FontSize, NextIDPlatform, ThemeColor, ThemeMode } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter.js'
 import { injectTips } from './injection/Tips/index.js'
@@ -43,7 +44,6 @@ import { injectProfileCover } from './injection/ProfileCover.js'
 import { injectProfileCardHolder } from './injection/ProfileCard/index.js'
 import { injectAvatar } from './injection/Avatar/index.js'
 import { injectPluginSettingsDialogAtTwitter } from './injection/PluginSettingsDialog.js'
-import { FontSize, ThemeColor, ThemeMode } from '@masknet/web3-shared-base'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`

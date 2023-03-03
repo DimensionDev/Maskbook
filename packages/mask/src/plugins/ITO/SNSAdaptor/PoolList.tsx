@@ -6,7 +6,7 @@ import type { JSON_PayloadInMask } from '../types.js'
 import { PoolInList } from './PoolInList.js'
 import { useI18N } from '../../../utils/index.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

@@ -4,9 +4,9 @@ import type {
     EC_Public_JsonWebKey,
     AESJsonWebKey,
     ProfileIdentifier,
-    RelationFavor,
     PostIVIdentifier,
 } from '@masknet/shared-base'
+import type { RelationFavor } from '@masknet/web3-shared-base'
 import type { Option } from 'ts-results-es'
 
 // All optional type in this file is marked by Option<T> because we don't want to miss any field.

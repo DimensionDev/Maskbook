@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { createERC20Token, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Trader } from '../../../../../plugins/Trader/SNSAdaptor/trader/Trader.js'

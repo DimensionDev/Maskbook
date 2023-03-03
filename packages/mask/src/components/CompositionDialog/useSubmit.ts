@@ -1,6 +1,6 @@
 import { socialNetworkEncoder } from '@masknet/encryption'
 import { SOCIAL_MEDIA_NAME } from '@masknet/shared'
-import { PluginID, ProfileIdentifier } from '@masknet/shared-base'
+import type { ProfileIdentifier } from '@masknet/shared-base'
 import type { Meta } from '@masknet/typed-message'
 import { useCallback } from 'react'
 import Services from '../../extension/service.js'
@@ -11,6 +11,7 @@ import { I18NFunction, useI18N } from '../../utils/index.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import type { SubmitComposition } from './CompositionUI.js'
 import { SteganographyPayload } from './SteganographyPayload.js'
+import { PluginID } from '@masknet/web3-shared-base'
 
 export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'reply') {
     const { t: originalTran } = useI18N()

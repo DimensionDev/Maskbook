@@ -1,5 +1,4 @@
-import { createLookupTableResolver } from '@masknet/shared-base'
-import { ActivityType } from '@masknet/web3-shared-base'
+import { createLookupTableResolver, ActivityType } from '@masknet/web3-shared-base'
 
 export const resolveActivityTypeBackgroundColor = createLookupTableResolver<ActivityType, string>(
     {

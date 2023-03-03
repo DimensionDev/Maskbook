@@ -8,7 +8,7 @@ import schemaV3 from './schema-v3.json'
 import type { Result } from 'ts-results-es'
 import { isNil } from 'lodash-es'
 import { encodeArrayBuffer, encodeText } from '@masknet/kit'
-import { createLookupTableResolver } from '@masknet/shared-base'
+import { createLookupTableResolver } from '@masknet/web3-shared-base'
 import urlcat from 'urlcat'
 import { openWindow } from '@masknet/shared-base-ui'
 

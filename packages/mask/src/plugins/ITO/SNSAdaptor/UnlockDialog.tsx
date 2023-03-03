@@ -1,6 +1,5 @@
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { formatBalance, FungibleToken, isGreaterThan, rightShift } from '@masknet/web3-shared-base'
+import { NetworkPluginID, formatBalance, FungibleToken, isGreaterThan, rightShift } from '@masknet/web3-shared-base'
 import { useCallback, useState } from 'react'
 import { SchemaType, formatEthereumAddress, explorerResolver, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'

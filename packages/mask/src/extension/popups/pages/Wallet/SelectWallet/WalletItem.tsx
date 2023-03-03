@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Wallet } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'

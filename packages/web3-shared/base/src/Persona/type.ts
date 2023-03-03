@@ -34,6 +34,7 @@ export enum RelationFavor {
     UNCOLLECTED = 1,
     DEPRECATED = 0,
 }
+
 export interface RelationProfile {
     favorite?: boolean
     avatar?: string

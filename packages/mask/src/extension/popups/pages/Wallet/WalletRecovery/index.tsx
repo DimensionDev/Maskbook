@@ -19,7 +19,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { LoadingButton } from '@mui/lab'
 import { currentPersonaIdentifier } from '../../../../../../shared/legacy-settings/settings.js'
 import { useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { first } from 'lodash-es'
 import { useTitle } from '../../../hook/useTitle.js'
 

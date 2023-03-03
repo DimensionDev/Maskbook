@@ -1,6 +1,6 @@
 import { useAsyncFn } from 'react-use'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ContractTransaction } from '@masknet/web3-shared-evm'
 import { useITO_Contract } from './useITO_Contract.js'
 

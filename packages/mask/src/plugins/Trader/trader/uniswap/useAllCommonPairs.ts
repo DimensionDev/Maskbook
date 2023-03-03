@@ -8,7 +8,7 @@ import type { TradeProvider } from '@masknet/public-api'
 import { useGetTradeContext } from '../useGetTradeContext.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currencyA?: Currency, currencyB?: Currency) {
     const { chainId } = useChainContext()

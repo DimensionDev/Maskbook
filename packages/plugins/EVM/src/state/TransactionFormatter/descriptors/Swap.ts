@@ -1,9 +1,8 @@
 import Web3 from 'web3'
 import { first, last } from 'lodash-es'
-import { i18NextInstance } from '@masknet/shared-base'
+import { i18NextInstance, TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
 import UniswapV3MulticallFunctionExactInputABI from '@masknet/web3-contracts/abis/UniswapV3MulticallFunctionExactInput.json'
 import UniswapV3MulticallFunctionExactInputSingleABI from '@masknet/web3-contracts/abis/UniswapV3MulticallFunctionExactInputSingle.json'
-import { TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
 import {
     ChainId,
     TransactionParameter,

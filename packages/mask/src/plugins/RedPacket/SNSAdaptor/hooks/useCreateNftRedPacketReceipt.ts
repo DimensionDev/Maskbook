@@ -4,8 +4,7 @@ import type { BigNumber } from 'bignumber.js'
 import { useNftRedPacketConstants } from '@masknet/web3-shared-evm'
 import NFT_REDPACKET_ABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
 
 const interFace = new Interface(NFT_REDPACKET_ABI)
 

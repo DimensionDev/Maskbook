@@ -9,7 +9,6 @@ import {
     ECKeyIdentifier,
     PersonaIdentifier,
     ProfileIdentifier,
-    RelationFavor,
     fromBase64URL,
 } from '@masknet/shared-base'
 import { bufferToHex, privateToPublic, publicToAddress } from 'ethereumjs-util'
@@ -30,6 +29,8 @@ import type {
     PersonaRecord,
 } from './type.js'
 import { isEmpty } from 'lodash-es'
+import { RelationFavor } from '@masknet/web3-shared-base'
+
 /**
  * Database structure:
  *

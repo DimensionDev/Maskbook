@@ -1,5 +1,5 @@
-import type { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { NetworkPluginID, PluginID } from '@masknet/web3-shared-base'
 
 export namespace TelemetryAPI {
     export enum TypeID {

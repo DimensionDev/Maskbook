@@ -1,8 +1,8 @@
-import { getEnhanceableSiteType } from '@masknet/shared-base'
 import { useCallback } from 'react'
 import { RSS3_KEY_SNS } from '../../constants.js'
 import type { NextIDAvatarMeta } from '../../types.js'
 import { useSaveNFTAvatar } from '../rss3/index.js'
+import { getEnhanceableSiteType } from '@masknet/web3-shared-base'
 
 export function useSaveToRSS3() {
     const saveNFTAvatar = useSaveNFTAvatar()

@@ -16,6 +16,7 @@
     "@masknet/theme": "workspace:^",
     "@masknet/typed-message": "workspace:^",
     "@masknet/web3-providers": "workspace:^",
+    "@masknet/web3-shared-base": "workspace:*",
     "react-use": "^17.4.0",
     "use-subscription": "^1.8.0"
   }

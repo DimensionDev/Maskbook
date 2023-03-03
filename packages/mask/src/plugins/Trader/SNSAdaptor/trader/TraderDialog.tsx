@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { PluginID, NetworkPluginID, isDashboardPage, CrossIsolationMessages, TokenType } from '@masknet/shared-base'
+import { isDashboardPage, CrossIsolationMessages, TokenType } from '@masknet/shared-base'
+import { NetworkPluginID, PluginID } from '@masknet/web3-shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import {
     useChainContext,

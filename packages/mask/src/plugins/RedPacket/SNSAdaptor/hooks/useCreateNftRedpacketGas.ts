@@ -1,7 +1,6 @@
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket.js'
 import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
-import { toFixed } from '@masknet/web3-shared-base'
 import { useMemo } from 'react'
 import { useAsync } from 'react-use'
 import Web3Utils from 'web3-utils'

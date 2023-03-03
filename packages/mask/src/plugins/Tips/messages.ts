@@ -1,4 +1,4 @@
-import { PluginID } from '@masknet/shared-base'
+import { PluginID } from '@masknet/web3-shared-base'
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
 import type { TipTask } from './types/index.js'
 

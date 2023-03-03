@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from './useContext.js'
 import { useWallets } from './useWallets.js'

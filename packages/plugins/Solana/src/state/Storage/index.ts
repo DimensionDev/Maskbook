@@ -1,6 +1,6 @@
 import { unreachable } from '@masknet/kit'
-import { StorageProviderType } from '@masknet/web3-shared-base'
-import type { ECKeyIdentifier, NextIDPlatform } from '@masknet/shared-base'
+import { StorageProviderType, NextIDPlatform } from '@masknet/web3-shared-base'
+import type { ECKeyIdentifier } from '@masknet/shared-base'
 import { StorageState } from '@masknet/web3-state'
 import { KVStorage, NextIDStorage } from '@masknet/shared'
 import { SharedContextSettings } from '../../settings/index.js'

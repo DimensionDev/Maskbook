@@ -6,8 +6,8 @@ import type {
     EC_Private_JsonWebKey,
     EC_Public_JsonWebKey,
     ProfileIdentifier,
-    RelationFavor,
 } from '@masknet/shared-base'
+import type { RelationFavor } from '@masknet/web3-shared-base'
 
 /** @internal */
 export type FullPersonaDBTransaction<Mode extends 'readonly' | 'readwrite'> = IDBPSafeTransaction<

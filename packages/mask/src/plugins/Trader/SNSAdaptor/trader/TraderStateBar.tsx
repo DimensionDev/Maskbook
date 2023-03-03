@@ -12,11 +12,11 @@ import {
     useTokenSecurity,
     ChainBoundary,
 } from '@masknet/shared'
-import { isPopupPage, NetworkPluginID, PluginID, PopupRoutes } from '@masknet/shared-base'
+import { isPopupPage, PopupRoutes } from '@masknet/shared-base'
+import { NetworkPluginID, PluginID, isLessThan, leftShift, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useEnvironmentContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
-import { isLessThan, leftShift, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, formatWeiToEther, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 
 import Services from '../../../../extension/service.js'

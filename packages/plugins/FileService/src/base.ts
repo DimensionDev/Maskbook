@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { PluginID } from '@masknet/shared-base'
+import { PluginID } from '@masknet/web3-shared-base'
 import { languages } from './locales/languages.js'
 import { META_KEY_1, META_KEY_2 } from './constants.js'
 

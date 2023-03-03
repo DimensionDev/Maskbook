@@ -1,6 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { ChainBoundary, SocialIcon } from '@masknet/shared'
-import { NetworkPluginID, purify } from '@masknet/shared-base'
+import { purify } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { LoadingBase, makeStyles, ShadowRootIsolation } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { alpha, Box, Button, Card, Link, Stack, Typography } from '@mui/material'

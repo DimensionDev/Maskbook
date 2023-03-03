@@ -9,10 +9,10 @@ import {
     multipliedBy,
     rightShift,
     formatBalance,
+    NetworkPluginID,
 } from '@masknet/web3-shared-base'
 import { ChainId, GasConfig, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { MenuItem, Select, Box, InputBase, Typography } from '@mui/material'
-import { NetworkPluginID } from '@masknet/shared-base'
 import {
     useSelectFungibleToken,
     FungibleTokenInput,

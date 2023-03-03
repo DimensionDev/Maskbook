@@ -7,7 +7,16 @@ import {
     ChainId,
     SchemaType,
 } from '@masknet/web3-shared-evm'
-import { isZero, ZERO, isGreaterThan, isSameAddress, formatBalance, FungibleToken } from '@masknet/web3-shared-base'
+import {
+    isZero,
+    ZERO,
+    isGreaterThan,
+    isSameAddress,
+    formatBalance,
+    FungibleToken,
+    NetworkPluginID,
+    EnhanceableSite,
+} from '@masknet/web3-shared-base'
 import { Box, Card, Link, Typography } from '@mui/material'
 import {
     SOCIAL_MEDIA_NAME,
@@ -21,7 +30,6 @@ import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
 import { BigNumber } from 'bignumber.js'
 import formatDateTime from 'date-fns/format'
 import { startCase } from 'lodash-es'
-import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { useAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils/index.js'

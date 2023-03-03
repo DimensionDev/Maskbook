@@ -1,4 +1,4 @@
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type {
     Connection,
     ConnectionOptions,

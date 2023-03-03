@@ -1,4 +1,4 @@
-import { PluginID } from '@masknet/shared-base'
+import { PluginID } from '@masknet/web3-shared-base'
 import {
     CBridgeIcon,
     ArbitrumOneBridgeIcon,

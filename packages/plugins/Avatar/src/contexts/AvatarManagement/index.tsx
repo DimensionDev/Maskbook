@@ -1,5 +1,6 @@
-import { BindingProof, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { NextIDPlatform, BindingProof } from '@masknet/web3-shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { first, noop } from 'lodash-es'
 import {

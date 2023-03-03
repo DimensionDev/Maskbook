@@ -1,6 +1,6 @@
 import { SocialNetworkEnum } from '@masknet/encryption'
 import type { SocialNetwork } from '@masknet/types'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { EnhanceableSite } from '@masknet/web3-shared-base'
 
 const origins = ['https://mobile.twitter.com/*', 'https://twitter.com/*']
 export const twitterBase: SocialNetwork.Base = {

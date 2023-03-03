@@ -3,13 +3,14 @@ import { useAsyncFn } from 'react-use'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
-import { PersonaInformation, PopupRoutes, SignType } from '@masknet/shared-base'
+import { PopupRoutes, SignType } from '@masknet/shared-base'
 import { MaskMessages, useI18N } from '../../../../../utils/index.js'
 import { usePersonasFromDB } from '../../../../../components/DataSource/usePersonasFromDB.js'
 import { PersonaContext } from '../hooks/usePersonaContext.js'
 import { MethodAfterPersonaSign } from '../../Wallet/type.js'
 import Services from '../../../../service.js'
 import { useTitle } from '../../../hook/useTitle.js'
+import type { PersonaInformation } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()(() => ({
     container: {

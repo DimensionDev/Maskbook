@@ -1,4 +1,4 @@
-import type { ProfileInformation, NextIDPlatform, BindingProof } from '@masknet/shared-base'
+import type { NextIDPlatform, BindingProof, ProfileInformation } from '@masknet/web3-shared-base'
 
 export interface Account extends ProfileInformation {
     is_valid?: boolean

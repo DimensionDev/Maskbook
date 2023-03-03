@@ -13,8 +13,7 @@ import {
     useWeb3Hub,
 } from '@masknet/web3-hooks-base'
 import { useERC721ContractSetApproveForAllCallback } from '@masknet/web3-hooks-evm'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { NetworkDescriptor, TokenType, NonFungibleContractSpender } from '@masknet/web3-shared-base'
+import { NetworkPluginID, NetworkDescriptor, TokenType, NonFungibleContractSpender } from '@masknet/web3-shared-base'
 import { useI18N } from '../locales/index.js'
 import { ApprovalLoadingContent } from './ApprovalLoadingContent.js'
 import { ApprovalEmptyContent } from './ApprovalEmptyContent.js'

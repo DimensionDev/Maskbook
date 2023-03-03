@@ -3,13 +3,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Box, IconButton, MenuItem, Stack, Typography } from '@mui/material'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine/index.js'
-import {
-    PersonaIdentifier,
-    ProfileIdentifier,
-    ProfileInformation,
-    DashboardRoutes,
-    NextIDAction,
-} from '@masknet/shared-base'
+import { PersonaIdentifier, ProfileIdentifier, DashboardRoutes } from '@masknet/shared-base'
 import { useMenu, usePersonaProofs } from '@masknet/shared'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
@@ -27,7 +21,7 @@ import { useExportPrivateKey } from '../../hooks/useExportPrivateKey.js'
 import { useExportMnemonicWords } from '../../hooks/useExportMnemonicWords.js'
 import { Messages, PluginServices } from '../../../../API.js'
 import { useWallets } from '@masknet/web3-hooks-base'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { NextIDAction, ProfileInformation, isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     setting: {

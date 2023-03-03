@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { chainResolver } from '@masknet/web3-shared-evm'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { GasSetting1559 } from './GasSetting1559.js'

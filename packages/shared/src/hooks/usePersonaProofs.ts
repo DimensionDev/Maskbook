@@ -1,6 +1,7 @@
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import { BindingProof, EMPTY_LIST, MaskEvents } from '@masknet/shared-base'
+import { EMPTY_LIST, MaskEvents } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
+import type { BindingProof } from '@masknet/web3-shared-base'
 import { useCallback, useEffect } from 'react'
 import { useAsyncFn } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'

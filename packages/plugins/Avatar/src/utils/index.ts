@@ -8,14 +8,12 @@ import {
     isSameAddress,
     resolveCrossOriginURL,
     resolveResourceURL,
-} from '@masknet/web3-shared-base'
-import {
-    EnhanceableSite,
     NetworkPluginID,
+    EnhanceableSite,
     NextIDPersonaBindings,
     NextIDPlatform,
     getSiteType,
-} from '@masknet/shared-base'
+} from '@masknet/web3-shared-base'
 import { NextIDProof, NextIDStorage } from '@masknet/web3-providers'
 import type { AllChainsNonFungibleToken, NextIDAvatarMeta } from '../types.js'
 import { PLUGIN_ID } from '../constants.js'

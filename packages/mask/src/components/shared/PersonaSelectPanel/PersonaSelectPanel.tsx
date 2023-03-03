@@ -9,7 +9,6 @@ import {
     isSameProfile,
     PersonaIdentifier,
     ProfileIdentifier,
-    resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
@@ -25,6 +24,7 @@ import { useCurrentPersona } from '../../DataSource/usePersonaConnectStatus.js'
 import { ErrorPanel } from './ErrorPanel.js'
 import type { PersonaNextIDMixture } from './PersonaItemUI.js'
 import { PersonaItemUI } from './PersonaItemUI.js'
+import { resolveNextIDIdentityToProfile } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {

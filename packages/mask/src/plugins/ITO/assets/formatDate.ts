@@ -1,4 +1,4 @@
-import { i18NextInstance } from '@masknet/shared-base'
+import { i18NextInstance } from '@masknet/web3-shared-base'
 
 export const dateTimeFormat = (date: Date, includeTime = true) =>
     new Intl.DateTimeFormat(i18NextInstance.language, {

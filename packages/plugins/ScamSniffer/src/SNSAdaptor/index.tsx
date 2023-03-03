@@ -1,7 +1,7 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import { base } from '../base.js'
 import { Icons } from '@masknet/icons'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { EnhanceableSite } from '@masknet/web3-shared-base'
 import { PLUGIN_DESCRIPTION, PLUGIN_NAME } from '../constants.js'
 import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'

@@ -10,7 +10,7 @@ import { makeStyles } from '@masknet/theme'
 import { Instagram } from '@masknet/web3-providers'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { SelectTokenInfo } from '@masknet/plugin-avatar'
-import type { EnhanceableSite } from '@masknet/shared-base'
+import type { EnhanceableSite } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()(() => ({

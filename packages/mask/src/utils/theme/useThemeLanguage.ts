@@ -2,7 +2,7 @@
 
 import { LanguageOptions, SupportedLanguages } from '@masknet/public-api'
 import { jaJP, koKR, zhTW, zhCN, enUS, Localization } from '@mui/material/locale/index.js'
-import { updateLanguage } from '@masknet/shared-base'
+import { updateLanguage } from '@masknet/web3-shared-base'
 import { startTransition, useEffect } from 'react'
 
 const langs: Record<SupportedLanguages, Localization> = {

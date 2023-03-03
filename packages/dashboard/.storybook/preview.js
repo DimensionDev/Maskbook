@@ -5,8 +5,8 @@ import { applyMaskColorVars, CustomSnackbarProvider, DashboardDarkTheme } from '
 import { addSharedI18N, I18NextProviderHMR } from '@masknet/shared'
 // import { withMatrix } from 'storybook-addon-matrix'
 import { addDashboardI18N } from '../src/locales/languages'
-import { i18NextInstance } from '@masknet/shared-base'
 import { DisableShadowRootContext } from '@masknet/theme'
+import { i18NextInstance } from '@masknet/web3-shared-base'
 
 addDashboardI18N(i18NextInstance)
 addSharedI18N(i18NextInstance)

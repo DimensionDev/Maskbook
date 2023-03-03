@@ -4,7 +4,7 @@ import { Avatar, Box, DialogContent, Link, List, ListItem, Typography } from '@m
 import { SchemaType, explorerResolver, ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { useChainContext, useNonFungibleCollections } from '@masknet/web3-hooks-base'

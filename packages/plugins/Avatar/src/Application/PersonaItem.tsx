@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography, ListItemButton } from '@mui/material'
-import type { BindingProof } from '@masknet/shared-base'
+import type { BindingProof } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TokenType } from '@masknet/web3-shared-base'
 import { Twitter } from '@masknet/web3-providers'

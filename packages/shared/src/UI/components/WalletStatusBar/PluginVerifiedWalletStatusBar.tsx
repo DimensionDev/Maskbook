@@ -6,7 +6,14 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { alpha, Box, Button, Divider, MenuItem, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales/index.js'
 import { Action } from './Action.js'
-import { BindingProof, NetworkPluginID, isDashboardPage } from '@masknet/shared-base'
+import { isDashboardPage } from '@masknet/shared-base'
+import {
+    NetworkPluginID,
+    isSameAddress,
+    resolveNextID_NetworkPluginID,
+    TransactionStatusType,
+    BindingProof,
+} from '@masknet/web3-shared-base'
 import {
     useChainContext,
     useNetworkContext,
@@ -22,7 +29,6 @@ import { Icons } from '@masknet/icons'
 import type { WalletDescriptionProps } from './WalletDescription.js'
 import { useWalletName } from './hooks/useWalletName.js'
 import { WalletDescription } from './WalletDescription.js'
-import { isSameAddress, resolveNextID_NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
 import { WalletMenuItem } from './WalletMenuItem.js'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useMenuConfig } from '../../../index.js'

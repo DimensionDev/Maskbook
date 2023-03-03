@@ -2,19 +2,18 @@ import urlcat from 'urlcat'
 import { first, uniqWith } from 'lodash-es'
 import {
     BindingProof,
-    fromHex,
     NextIDAction,
     NextIDBindings,
     NextIDErrorBody,
     NextIDPayload,
     NextIDPersonaBindings,
     NextIDPlatform,
-    toBase64,
-} from '@masknet/shared-base'
+} from '@masknet/web3-shared-base'
 import { PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
 import { fetchJSON } from '../entry-helpers.js'
+import { fromHex, toBase64 } from '@masknet/shared-base'
 
 const BASE_URL = PROOF_BASE_URL_PROD
 interface CreatePayloadBody {

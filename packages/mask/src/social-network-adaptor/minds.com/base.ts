@@ -1,6 +1,6 @@
 import { SocialNetworkEnum } from '@masknet/encryption'
 import type { SocialNetwork } from '@masknet/types'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { EnhanceableSite } from '@masknet/web3-shared-base'
 
 const origins = ['https://www.minds.com/*', 'https://minds.com/*', 'https://cdn.minds.com/*']
 export const mindsBase: SocialNetwork.Base = {

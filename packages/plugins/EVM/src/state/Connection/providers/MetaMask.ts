@@ -1,9 +1,9 @@
 import createMetaMaskProvider from '@dimensiondev/metamask-extension-provider'
 import { injectedMetaMaskProvider } from '@masknet/injected-script'
-import { isEthereumInjected } from '@masknet/shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import type { EVM_Provider } from '../types.js'
 import { BaseInjectedProvider } from './BaseInjected.js'
+import { isEthereumInjected } from '@masknet/web3-shared-base'
 
 export class MetaMaskProvider extends BaseInjectedProvider implements EVM_Provider {
     constructor() {

@@ -14,9 +14,10 @@ import { Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { LoadingButton } from '@mui/lab'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
-import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes } from '@masknet/shared-base'
 import { toHex, fromWei } from 'web3-utils'
 import {
+    NetworkPluginID,
     formatCurrency,
     GasOptionType,
     isGreaterThan,

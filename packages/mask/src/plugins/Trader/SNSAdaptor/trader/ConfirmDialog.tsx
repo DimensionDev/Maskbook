@@ -3,7 +3,7 @@ import { useAsyncFn } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { formatWeiToEther, ChainId, GasConfig, GasEditor, Transaction } from '@masknet/web3-shared-evm'
-import { formatBalance, formatCurrency, leftShift, multipliedBy } from '@masknet/web3-shared-base'
+import { formatBalance, formatCurrency, leftShift, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { TradeComputed } from '../../types/index.js'
 import {
     useNativeTokenPrice,
@@ -14,7 +14,6 @@ import {
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useSelectAdvancedSettings } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
 import { currentSlippageSettings } from '../../settings.js'
 import { PluginTraderMessages } from '../../messages.js'

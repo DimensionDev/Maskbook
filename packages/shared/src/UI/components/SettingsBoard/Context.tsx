@@ -10,7 +10,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { GasOptionType } from '@masknet/web3-shared-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { GasSettingsType } from './types/index.js'
 
 const DEFAULT_SLIPPAGE_TOLERANCE = 0.5

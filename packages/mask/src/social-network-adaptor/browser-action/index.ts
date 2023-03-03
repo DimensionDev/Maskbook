@@ -2,7 +2,8 @@ import type { SocialNetwork, SocialNetworkUI } from '@masknet/types'
 import { defineSocialNetworkUI, definedSocialNetworkUIs } from '../../social-network/index.js'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { SocialNetworkEnum } from '@masknet/encryption'
-import { EnhanceableSite, ValueRef } from '@masknet/shared-base'
+import { ValueRef } from '@masknet/shared-base'
+import { EnhanceableSite } from '@masknet/web3-shared-base'
 
 const base: SocialNetwork.Base = {
     encryptionNetwork: SocialNetworkEnum.Unknown,

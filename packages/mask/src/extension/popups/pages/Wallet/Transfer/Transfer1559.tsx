@@ -28,6 +28,7 @@ import {
     isZero,
     multipliedBy,
     rightShift,
+    NetworkPluginID,
 } from '@masknet/web3-shared-base'
 import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -35,7 +36,6 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Button, Chip, Collapse, Link, MenuItem, Popover, Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { Icons } from '@masknet/icons'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { FormattedAddress, FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
 import { ExpandMore } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'

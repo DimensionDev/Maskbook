@@ -2,7 +2,7 @@
 
 import { useTranslation, UseTranslationOptions } from 'react-i18next'
 import type en from '../../shared-ui/locales/en-US.json'
-import type { i18NextInstance, TranslateOptions } from '@masknet/shared-base'
+import type { i18NextInstance, TranslateOptions } from '@masknet/web3-shared-base'
 
 type PluralsSuffix = 'zero' | 'one' | 'two' | 'few' | 'many' | 'other'
 

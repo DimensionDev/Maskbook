@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { compact } from 'lodash-es'
 import Web3Utils from 'web3-utils'
-import { NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { NetworkPluginID, PluginID } from '@masknet/web3-shared-base'
 import {
     useChainContext,
     useWeb3Connection,

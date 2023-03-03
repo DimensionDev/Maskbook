@@ -8,17 +8,11 @@ import { PersonaContext } from '../hooks/usePersonaContext.js'
 import Services from '../../../../service.js'
 import { LoadingButton } from '@mui/lab'
 import { useNavigate } from 'react-router-dom'
-import {
-    PopupRoutes,
-    formatPersonaFingerprint,
-    type PersonaInformation,
-    NetworkPluginID,
-    CrossIsolationMessages,
-} from '@masknet/shared-base'
+import { PopupRoutes, formatPersonaFingerprint, CrossIsolationMessages } from '@masknet/shared-base'
+import { NetworkPluginID, isSameAddress, Wallet, PersonaInformation } from '@masknet/web3-shared-base'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
-import { isSameAddress, Wallet } from '@masknet/web3-shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Trans } from 'react-i18next'
 import { first } from 'lodash-es'

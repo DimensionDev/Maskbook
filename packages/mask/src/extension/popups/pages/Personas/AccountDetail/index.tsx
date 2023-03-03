@@ -1,7 +1,7 @@
 import { memo, useEffect, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router-dom'
-import { EnhanceableSite, NextIDAction, PopupRoutes, SignType } from '@masknet/shared-base'
+import { PopupRoutes, SignType } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID } from '@masknet/shared'
 import { usePopupCustomSnackbar } from '@masknet/theme'
@@ -11,6 +11,7 @@ import { PersonaContext } from '../hooks/usePersonaContext.js'
 import { AccountDetailUI } from './UI.js'
 import Service from '../../../../service.js'
 import { DisconnectDialog } from '../components/DisconnectDialog/index.js'
+import { EnhanceableSite, NextIDAction } from '@masknet/web3-shared-base'
 
 const AccountDetail = memo(() => {
     const { t } = useI18N()

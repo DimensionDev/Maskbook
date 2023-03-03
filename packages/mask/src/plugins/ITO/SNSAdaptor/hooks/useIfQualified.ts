@@ -3,7 +3,7 @@ import type { Qualification } from '@masknet/web3-contracts/types/Qualification.
 import type { Qualification2 } from '@masknet/web3-contracts/types/Qualification2.js'
 import { useQualificationContract } from './useQualificationContract.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useIfQualified(address: string, ito_address: string) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

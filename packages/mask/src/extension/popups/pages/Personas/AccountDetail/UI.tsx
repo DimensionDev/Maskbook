@@ -6,7 +6,7 @@ import type { Account } from '../type.js'
 import { AccountAvatar } from '../components/AccountAvatar/index.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { Trans } from 'react-i18next'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { EnhanceableSite } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()(() => ({
     container: {

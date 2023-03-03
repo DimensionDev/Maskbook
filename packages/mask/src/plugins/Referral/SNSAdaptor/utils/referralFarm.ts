@@ -6,7 +6,7 @@ import { parseUnits } from '@ethersproject/units'
 import { ChainId, ContractTransaction, createContract } from '@masknet/web3-shared-evm'
 import ReferralFarmsV1ABI from '@masknet/web3-contracts/abis/ReferralFarmsV1.json'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 import { roundValue, toChainAddressEthers } from '../../helpers/index.js'

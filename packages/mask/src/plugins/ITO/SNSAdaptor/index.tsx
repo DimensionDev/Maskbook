@@ -13,11 +13,11 @@ import { ITO_MetadataReader, payloadIntoMask } from './helpers.js'
 import { CompositionDialog } from './CompositionDialog.js'
 import { Icons } from '@masknet/icons'
 import { ApplicationEntry, SOCIAL_MEDIA_NAME } from '@masknet/shared'
-import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages } from '@masknet/shared-base'
+import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 import { ClaimAllDialog } from './ClaimAllDialog.js'
 import { useFungibleToken } from '@masknet/web3-hooks-base'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { formatBalance } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

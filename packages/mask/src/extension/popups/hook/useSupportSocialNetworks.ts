@@ -1,6 +1,6 @@
 import { useAsync } from 'react-use'
 import Service from '../../service.js'
-import type { EnhanceableSite } from '@masknet/shared-base'
+import type { EnhanceableSite } from '@masknet/web3-shared-base'
 
 export const useSupportSocialNetworks = () => {
     return useAsync(async () => {

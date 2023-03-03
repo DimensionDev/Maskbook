@@ -1,4 +1,4 @@
-import { PluginID } from '@masknet/shared-base'
+import { PluginID } from '@masknet/web3-shared-base'
 
 export const ARTBLOCKS_PLUGIN_ID = PluginID.ArtBlocks
 export const PLUGIN_NAME = 'ArtBlocks'

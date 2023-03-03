@@ -1,21 +1,23 @@
 import { compact, uniqBy } from 'lodash-es'
 import type { Plugin } from '@masknet/plugin-infra'
 import { IdentityServiceState } from '@masknet/web3-state'
-import { SocialIdentity, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import {
+    SocialIdentity,
+    SocialAddress,
+    SocialAddressType,
     NetworkPluginID,
-    EMPTY_LIST,
+    PluginID,
+    createLookupTableResolver,
     EnhanceableSite,
     getSiteType,
     NextIDPlatform,
-    createLookupTableResolver,
-    PluginID,
     BindingProof,
-} from '@masknet/shared-base'
+} from '@masknet/web3-shared-base'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { ENS, Lens, MaskX, NextIDProof, NextIDStorage, RSS3, SpaceID, Twitter } from '@masknet/web3-providers'
 import { MaskX_BaseAPI } from '@masknet/web3-providers/types'
 import { Web3StateSettings } from '../settings/index.js'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
 const SID_RE = /[^\t\n\v()[\]]{1,256}\.bnb\b/gi

@@ -1,9 +1,10 @@
 import { Icons } from '@masknet/icons'
-import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, Stack, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
 import { useI18N } from '../../../utils/index.js'
+import { PluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     button: {

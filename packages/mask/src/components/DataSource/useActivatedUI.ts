@@ -6,8 +6,14 @@ import { ValueRef } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { NextIDProof } from '@masknet/web3-providers'
-import type { ProfileInformation } from '@masknet/shared-base'
-import { FontSize, SocialIdentity, ThemeColor, ThemeMode, ThemeSettings } from '@masknet/web3-shared-base'
+import {
+    FontSize,
+    ProfileInformation,
+    SocialIdentity,
+    ThemeColor,
+    ThemeMode,
+    ThemeSettings,
+} from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network/index.js'
 import Services from '../../extension/service.js'
 import { MaskMessages } from '../../utils/index.js'

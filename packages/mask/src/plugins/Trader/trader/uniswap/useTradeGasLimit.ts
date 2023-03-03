@@ -4,12 +4,11 @@ import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import type { BigNumber } from 'bignumber.js'
 import type { TradeProvider } from '@masknet/public-api'
 import type { SwapParameters } from '@uniswap/v2-sdk'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
 import type { Trade, TradeComputed, SwapCall } from '../../types/index.js'
 import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters.js'
 import { swapErrorToUserReadableMessage } from '../../helpers/index.js'
-import { toFixed } from '@masknet/web3-shared-base'
 
 interface FailedCall {
     parameters: SwapParameters

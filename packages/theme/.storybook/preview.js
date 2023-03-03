@@ -4,8 +4,8 @@ import { MaskDarkTheme, MaskLightTheme, applyMaskColorVars, DisableShadowRootCon
 // Not compatible?
 // import { withMatrix } from 'storybook-addon-matrix'
 import { I18nextProvider, initReactI18next } from 'react-i18next'
-import { i18NextInstance } from '@masknet/shared-base'
 import { CustomSnackbarProvider } from '../src/index.js'
+import { i18NextInstance } from '@masknet/web3-shared-base'
 
 initReactI18next.init(i18NextInstance)
 

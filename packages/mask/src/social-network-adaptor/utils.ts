@@ -1,6 +1,7 @@
 import { CurrentSNSNetwork } from '@masknet/plugin-infra'
 import type { SocialNetwork } from '@masknet/types'
-import { EnhanceableSite, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import { EnhanceableSite } from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI, globalUIState } from '../social-network/index.js'
 
 export function getCurrentSNSNetwork(current: SocialNetwork.Base['networkIdentifier']): CurrentSNSNetwork {

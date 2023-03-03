@@ -1,5 +1,6 @@
 import { useSubscription } from 'use-subscription'
-import { UNDEFINED, NetworkPluginID } from '@masknet/shared-base'
+import { UNDEFINED } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useWeb3State } from './useWeb3State.js'
 
 export function useCurrencyType<T extends NetworkPluginID>(pluginID?: T) {

@@ -1,4 +1,4 @@
-import { PluginID } from '@masknet/shared-base'
+import { PluginID } from '@masknet/web3-shared-base'
 
 export const GamePluginID = PluginID.Game
 export const Share_Twitter = 'https://twitter.com/NonFFriend/status/1544559284075110400'

@@ -3,7 +3,7 @@ import { useAsync } from 'react-use'
 import { useAddressType, useChainContext } from '@masknet/web3-hooks-base'
 import { GoPlusLabs } from '@masknet/web3-providers'
 import { AddressType } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useI18N } from '../../locales/index.js'
 import type { ValidationTuple } from '../../types/index.js'
 

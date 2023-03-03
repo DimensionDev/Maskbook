@@ -10,8 +10,8 @@ import {
     isEmptyHex,
     isValidAddress,
 } from '@masknet/web3-shared-evm'
-import type { ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import type { ECKeyIdentifier } from '@masknet/shared-base'
+import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
 import { SmartPayBundlerAPI } from './BundlerAPI.js'
 import { SmartPayOwnerAPI } from './OwnerAPI.js'
 import { Web3API } from '../../EVM/index.js'

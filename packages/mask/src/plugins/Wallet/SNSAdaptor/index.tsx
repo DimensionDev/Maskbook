@@ -1,5 +1,5 @@
 import { getEnumAsArray } from '@masknet/kit'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '@masknet/plugin-wallet'
 import { SelectNftContractDialog } from './SelectNftContractDialog/index.js'

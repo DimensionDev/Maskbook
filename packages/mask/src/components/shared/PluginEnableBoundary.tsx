@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { useAsyncFn } from 'react-use'
 import { Icons } from '@masknet/icons'
-import type { PluginID } from '@masknet/shared-base'
+import type { PluginID } from '@masknet/web3-shared-base'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'

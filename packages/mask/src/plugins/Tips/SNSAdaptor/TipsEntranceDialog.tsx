@@ -4,16 +4,9 @@ import { sortBy, last } from 'lodash-es'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { InjectedDialog, useSnackbarCallback } from '@masknet/shared'
-import {
-    NextIDPlatform,
-    CrossIsolationMessages,
-    EMPTY_LIST,
-    formatPersonaFingerprint,
-    PluginID,
-    NetworkPluginID,
-} from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, formatPersonaFingerprint } from '@masknet/shared-base'
+import { NetworkPluginID, isSameAddress, isGreaterThan, PluginID, NextIDPlatform } from '@masknet/web3-shared-base'
 import { LoadingBase, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
-import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
 import { DialogContent, DialogActions, Avatar, Typography } from '@mui/material'
 import { delay } from '@masknet/kit'
 import Services from '../../../extension/service.js'

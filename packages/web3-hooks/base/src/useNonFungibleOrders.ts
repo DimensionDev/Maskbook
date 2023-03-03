@@ -1,6 +1,5 @@
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID, HubIndicator } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { HubIndicator } from '@masknet/web3-shared-base'
 import { useChainContext } from './useContext.js'
 import { usePageableAsync } from './usePageableAsync.js'
 import { useWeb3Hub } from './useWeb3Hub.js'

@@ -3,16 +3,11 @@ import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import { getMaskColor, MaskColorVar, makeStyles, LoadingBase } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { DisconnectProfileDialog } from '../DisconnectProfileDialog/index.js'
-import {
-    PersonaIdentifier,
-    ProfileIdentifier,
-    BindingProof,
-    NextIDPlatform,
-    EnhanceableSite,
-} from '@masknet/shared-base'
+import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import { Icons } from '@masknet/icons'
+import { BindingProof, EnhanceableSite, NextIDPlatform } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {

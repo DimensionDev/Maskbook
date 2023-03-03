@@ -1,5 +1,5 @@
-import { StorageProviderType } from '@masknet/web3-shared-base'
-import type { ECKeyIdentifier, NextIDPlatform } from '@masknet/shared-base'
+import { StorageProviderType, NextIDPlatform } from '@masknet/web3-shared-base'
+import type { ECKeyIdentifier } from '@masknet/shared-base'
 import { StorageState } from '@masknet/web3-state'
 import { unreachable } from '@masknet/kit'
 import { KVStorage, RSS3Storage, NextIDStorage } from '@masknet/shared'

@@ -5,13 +5,13 @@ import {
     useActivatedPluginsSNSAdaptor,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
-import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 import { DSearch } from '@masknet/web3-providers'
-import type { SearchResult, SocialIdentity } from '@masknet/web3-shared-base'
+import { PluginID, SearchResult, SocialIdentity } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Tab } from '@mui/material'
 import { first } from 'lodash-es'

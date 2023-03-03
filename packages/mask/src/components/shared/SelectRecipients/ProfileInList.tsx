@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { useSnackbarCallback } from '@masknet/shared'
-import { formatPersonaFingerprint, ProfileInformationFromNextID } from '@masknet/shared-base'
+import { formatPersonaFingerprint } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Checkbox, ListItem, ListItemAvatar, ListItemText } from '@mui/material'
 import { truncate } from 'lodash-es'
@@ -9,6 +9,7 @@ import Highlighter from 'react-highlight-words'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../../utils/index.js'
 import { Avatar } from '../../../utils/components/Avatar.js'
+import type { ProfileInformationFromNextID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

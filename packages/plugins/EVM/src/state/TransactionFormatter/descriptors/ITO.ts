@@ -1,6 +1,5 @@
 import type { AbiItem } from 'web3-utils'
-import { i18NextInstance } from '@masknet/shared-base'
-import { TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
+import { TransactionContext, i18NextInstance, isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, getITOConstants, TransactionParameter } from '@masknet/web3-shared-evm'
 import ITO_ABI from '@masknet/web3-contracts/abis/ITO2.json'
 import { Web3StateSettings } from '../../../settings/index.js'

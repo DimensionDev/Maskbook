@@ -1,6 +1,5 @@
 import type { WyvernSchemaName } from 'opensea-js/lib/types.js'
-import type { SourceType } from '@masknet/web3-shared-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { SourceType, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 export enum TabType {

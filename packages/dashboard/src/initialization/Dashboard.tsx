@@ -14,7 +14,7 @@ import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { TelemetryProvider } from '@masknet/web3-telemetry/hooks'
 import { EnvironmentContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { i18NextInstance, NetworkPluginID, queryRemoteI18NBundle } from '@masknet/shared-base'
+import { NetworkPluginID, i18NextInstance, queryRemoteI18NBundle } from '@masknet/web3-shared-base'
 
 import '../utils/kv-storage.js'
 

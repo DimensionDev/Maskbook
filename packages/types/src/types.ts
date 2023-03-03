@@ -2,13 +2,10 @@ import type { Subscription } from 'use-subscription'
 import type {
     ValueRef,
     EncryptionTargetType,
-    EnhanceableSite,
-    NextIDPlatform,
     ObservableWeakMap,
     PersonaIdentifier,
     PostIdentifier,
     ProfileIdentifier,
-    ProfileInformation,
 } from '@masknet/shared-base'
 import type { PaletteMode, Theme } from '@mui/material'
 import type { GrayscaleAlgorithm, SocialNetworkEnum } from '@masknet/encryption'
@@ -16,7 +13,7 @@ import type { IdentityResolved, PostContext, PostContextCreation, PostInfo } fro
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { RenderFragmentsContextType } from '@masknet/typed-message-react'
 import type { SharedComponentOverwrite } from '@masknet/shared'
-import type { ThemeSettings } from '@masknet/web3-shared-base'
+import type { EnhanceableSite, NextIDPlatform, ProfileInformation, ThemeSettings } from '@masknet/web3-shared-base'
 
 export declare namespace SocialNetwork {
     export interface Utils {

@@ -1,6 +1,5 @@
 import getUnixTime from 'date-fns/getUnixTime'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { TokenType, SourceType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, TokenType, SourceType } from '@masknet/web3-shared-base'
 import {
     ChainId,
     chainResolver,

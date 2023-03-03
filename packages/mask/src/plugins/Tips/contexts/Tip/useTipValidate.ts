@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, isGreaterThan, isLessThanOrEqualTo, rightShift, TokenType } from '@masknet/web3-shared-base'
 import { useChainContext, useNetworkContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
-import { isGreaterThan, isLessThanOrEqualTo, rightShift, TokenType } from '@masknet/web3-shared-base'
 import { useI18N } from '../../locales/index.js'
 import type { ValidationTuple } from '../../types/index.js'
 import type { TipContextOptions } from './TipContext.js'

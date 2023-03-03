@@ -8,7 +8,16 @@ import {
     ApproveMaskDialog,
     FormattedCurrency,
 } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, PopupRoutes } from '@masknet/shared-base'
+import {
+    NetworkPluginID,
+    formatBalance,
+    formatCurrency,
+    getTokenUSDValue,
+    isLessThan,
+    isSameAddress,
+    toFixed,
+} from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import {
@@ -36,14 +45,6 @@ import {
 } from '@mui/material'
 import { useAsyncFn, useCopyToClipboard } from 'react-use'
 import { memo, useCallback, useMemo, useState } from 'react'
-import {
-    formatBalance,
-    formatCurrency,
-    getTokenUSDValue,
-    isLessThan,
-    isSameAddress,
-    toFixed,
-} from '@masknet/web3-shared-base'
 import { compact, isNaN, sum } from 'lodash-es'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'

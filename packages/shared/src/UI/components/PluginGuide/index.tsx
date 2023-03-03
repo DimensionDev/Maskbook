@@ -1,4 +1,4 @@
-import type { PluginID } from '@masknet/shared-base'
+import type { PluginID } from '@masknet/web3-shared-base'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Button, Portal, Typography } from '@mui/material'
 import React, {

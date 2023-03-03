@@ -1,7 +1,7 @@
 import { useState, useMemo, ReactNode } from 'react'
 import { useTimeout } from 'react-use'
 import type { Constant } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { makeStyles, useCustomSnackbar, ShadowRootPopper, ActionButton, LoadingBase } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import {

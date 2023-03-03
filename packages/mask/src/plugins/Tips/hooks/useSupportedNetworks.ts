@@ -1,5 +1,6 @@
 import { Icons, GeneratedIconProps } from '@masknet/icons'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+
 export interface SupportedNetworkMap {
     name: string
     icon: React.ComponentType<GeneratedIconProps>

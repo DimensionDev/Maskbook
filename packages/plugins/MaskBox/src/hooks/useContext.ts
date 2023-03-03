@@ -29,8 +29,9 @@ import {
     isLessThanOrEqualTo,
     isSameAddress,
     multipliedBy,
+    NetworkPluginID,
 } from '@masknet/web3-shared-base'
-import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     useChainContext,
     useBalance,

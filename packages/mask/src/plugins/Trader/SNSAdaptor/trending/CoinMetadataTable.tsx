@@ -18,7 +18,7 @@ import { Linking, useMenuConfig } from '@masknet/shared'
 import { useI18N } from '../../../../utils/index.js'
 import { ContractSection } from './ContractSection.js'
 import type { CommunityType } from '../../types/index.js'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ContractItem } from './ContractItem.js'
 
 const useStyles = makeStyles()((theme) => ({

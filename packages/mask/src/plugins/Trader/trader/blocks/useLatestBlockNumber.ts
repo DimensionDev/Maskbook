@@ -2,7 +2,7 @@ import { useAsyncRetry } from 'react-use'
 import { getPastTimestamps } from '../../helpers/blocks.js'
 import { PluginTraderRPC } from '../../messages.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 
 /**
  * The latest block numbers (ethereum)

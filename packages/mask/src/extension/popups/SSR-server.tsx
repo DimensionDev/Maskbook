@@ -1,7 +1,7 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
 import { Suspense } from 'react'
-import { i18NextInstance, updateLanguage, PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes } from '@masknet/shared-base'
 import { once, noop } from 'lodash-es'
 import { DisableShadowRootContext, MaskThemeProvider } from '@masknet/theme'
 import { CacheProvider } from '@emotion/react'
@@ -18,6 +18,7 @@ import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageT
 import { PersonaHeaderUI } from './pages/Personas/components/PersonaHeader/UI.js'
 import { NormalHeader } from './components/NormalHeader/index.js'
 import { addShareBaseI18N } from '@masknet/shared-base-ui'
+import { i18NextInstance, updateLanguage } from '@masknet/web3-shared-base'
 
 const init = once(() =>
     i18NextInstance.init().then(() => {

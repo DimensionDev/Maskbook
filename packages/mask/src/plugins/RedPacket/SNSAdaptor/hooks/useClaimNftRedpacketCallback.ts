@@ -1,9 +1,8 @@
 import { useAsyncFn } from 'react-use'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
 import { ContractTransaction } from '@masknet/web3-shared-evm'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useNftRedPacketContract } from './useNftRedPacketContract.js'
-import { toFixed } from '@masknet/web3-shared-base'
 
 const EXTRA_GAS_PER_NFT = 335
 

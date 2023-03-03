@@ -1,6 +1,13 @@
 import { getEnumAsArray } from '@masknet/kit'
-import { NetworkPluginID, EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
-import { ChainDescriptor, createFungibleToken, NetworkDescriptor, ProviderDescriptor } from '@masknet/web3-shared-base'
+import {
+    EnhanceableSite,
+    ExtensionSite,
+    NetworkPluginID,
+    ChainDescriptor,
+    createFungibleToken,
+    NetworkDescriptor,
+    ProviderDescriptor,
+} from '@masknet/web3-shared-base'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types.js'
 import { getTokenConstant } from './constants.js'
 

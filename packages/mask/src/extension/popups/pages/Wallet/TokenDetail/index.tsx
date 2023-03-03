@@ -4,7 +4,14 @@ import { ArrowDownCircle, ArrowUpCircle } from 'react-feather'
 import { useNavigate } from 'react-router-dom'
 import { compact, intersectionWith } from 'lodash-es'
 import urlcat from 'urlcat'
-import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
+import { PopupRoutes } from '@masknet/shared-base'
+import {
+    NetworkPluginID,
+    formatBalance,
+    formatCurrency,
+    getTokenUSDValue,
+    isSameAddress,
+} from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useContainer } from 'unstated-next'
@@ -17,7 +24,6 @@ import Services from '../../../../service.js'
 import { ActivityList } from '../components/ActivityList/index.js'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useTitle } from '../../../hook/useTitle.js'
-import { formatBalance, formatCurrency, getTokenUSDValue, isSameAddress } from '@masknet/web3-shared-base'
 import { useNativeToken, useWallet } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()({

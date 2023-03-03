@@ -1,8 +1,9 @@
 import { useAsync } from 'react-use'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { useGameConstants } from '@masknet/web3-shared-evm'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import type { GameRSSNode, GameInfo } from '../types.js'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useGameList() {
     const { Storage } = useWeb3State(NetworkPluginID.PLUGIN_EVM)

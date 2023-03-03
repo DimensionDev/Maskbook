@@ -1,6 +1,6 @@
 import { SocialNetworkEnum } from '@masknet/encryption'
 import type { SocialNetwork } from '@masknet/types'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { EnhanceableSite } from '@masknet/web3-shared-base'
 
 const origins = ['https://mirror.xyz/*']
 export const mirrorBase: SocialNetwork.Base = {

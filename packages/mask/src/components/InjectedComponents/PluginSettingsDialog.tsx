@@ -7,7 +7,8 @@ import {
     usePluginI18NField,
     getSettingsTabContent,
 } from '@masknet/plugin-infra/content-script'
-import { PluginID, NextIDPlatform, EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
+import { EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
+import { NextIDPlatform, PluginID } from '@masknet/web3-shared-base'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'

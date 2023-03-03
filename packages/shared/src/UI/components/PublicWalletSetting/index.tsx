@@ -4,18 +4,10 @@ import { differenceWith, uniq } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Typography, Box } from '@mui/material'
-import {
-    PluginID,
-    BindingProof,
-    CrossIsolationMessages,
-    ECKeyIdentifier,
-    EMPTY_LIST,
-    NextIDPlatform,
-    PopupRoutes,
-} from '@masknet/shared-base'
+import { CrossIsolationMessages, ECKeyIdentifier, EMPTY_LIST, PopupRoutes } from '@masknet/shared-base'
+import { NextIDPlatform, BindingProof, PluginID, isSameAddress } from '@masknet/web3-shared-base'
 import { useHiddenAddressSettings, useWeb3State } from '@masknet/web3-hooks-base'
 import { WalletSettingCard } from '@masknet/shared'
-import { isSameAddress } from '@masknet/web3-shared-base'
 import { useSharedI18N } from '../../../locales/index.js'
 import { SettingActions } from './SettingActions.js'
 

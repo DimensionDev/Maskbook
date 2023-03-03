@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { PluginID } from '@masknet/shared-base'
+import { PluginID } from '@masknet/web3-shared-base'
 import { Flags } from '../../../shared/index.js'
 
 export const base: Plugin.Shared.Definition = {

@@ -11,9 +11,8 @@ import { LoadingButton } from '@mui/lab'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { formatGweiToEther, formatGweiToWei, formatWeiToGwei } from '@masknet/web3-shared-evm'
-import { isLessThanOrEqualTo, isPositive, multipliedBy } from '@masknet/web3-shared-base'
+import { isLessThanOrEqualTo, isPositive, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { NetworkPluginID } from '@masknet/shared-base'
 import {
     useChainContext,
     useWeb3State,

@@ -1,5 +1,5 @@
 import { TradeProvider } from '@masknet/public-api'
-import { createLookupTableResolver } from '@masknet/shared-base'
+import { createLookupTableResolver } from '@masknet/web3-shared-base'
 
 export const resolveTradeProviderName = createLookupTableResolver<TradeProvider, string>(
     {

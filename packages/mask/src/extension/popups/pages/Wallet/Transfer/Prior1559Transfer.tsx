@@ -6,9 +6,8 @@ import { BigNumber } from 'bignumber.js'
 import { noop } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import { EthereumAddress } from 'wallet.ts'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { formatGweiToWei, formatEthereumAddress, ChainId, SchemaType, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import {
+    NetworkPluginID,
     isZero,
     isGreaterThan,
     isGreaterThanOrEqualTo,
@@ -19,6 +18,7 @@ import {
     FungibleAsset,
     GasOptionType,
 } from '@masknet/web3-shared-base'
+import { formatGweiToWei, formatEthereumAddress, ChainId, SchemaType, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'

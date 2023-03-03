@@ -13,8 +13,7 @@ import {
     useRecentTransactions,
     useChainContext,
 } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { TransactionStatusType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { PluginMessages } from '../../../../API.js'
 import { useDashboardI18N } from '../../../../locales/index.js'

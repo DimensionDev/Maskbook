@@ -26,7 +26,7 @@ import { useGetTradeContext } from './useGetTradeContext.js'
 import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
 import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn.js'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useTradeCallback(
     provider?: TradeProvider,

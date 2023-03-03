@@ -9,13 +9,21 @@ import {
     TokenWithSocialGroupMenu,
     useTokenMenuCollectionList,
 } from '@masknet/shared'
-import { NetworkPluginID, PluginID, EMPTY_LIST, EnhanceableSite, CrossIsolationMessages } from '@masknet/shared-base'
+import { EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
+import {
+    EnhanceableSite,
+    NetworkPluginID,
+    PluginID,
+    SourceType,
+    TokenType,
+    formatCurrency,
+    SocialIdentity,
+} from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { MaskColors, MaskDarkTheme, MaskLightTheme, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { SourceType, TokenType, formatCurrency, SocialIdentity } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import {
     Avatar,

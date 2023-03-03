@@ -1,7 +1,7 @@
 import { isEqual } from 'lodash-es'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
-import { EnhanceableSite, ExtensionSite, updateLanguage, NetworkPluginID } from '@masknet/shared-base'
+import { EnhanceableSite, ExtensionSite, NetworkPluginID, updateLanguage } from '@masknet/web3-shared-base'
 import { BooleanPreference } from '@masknet/plugin-infra'
 import { Sentry } from '@masknet/web3-providers'
 import { createGlobalSettings, createBulkSettings } from './createSettings.js'

@@ -1,16 +1,8 @@
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Emitter } from '@servie/events'
-import type {
-    ECKeyIdentifier,
-    EnhanceableSite,
-    ExtensionSite,
-    NetworkPluginID,
-    NextIDPersonaBindings,
-    NextIDPlatform,
-    ProfileIdentifier,
-    Proof,
-} from '@masknet/shared-base'
+import type { ECKeyIdentifier, ProfileIdentifier } from '@masknet/base'
+import type { EnhanceableSite, ExtensionSite, NetworkPluginID, Proof } from '@masknet/web3-shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
     ReturnChainResolver,
@@ -18,6 +10,7 @@ import type {
     ReturnNetworkResolver,
     ReturnProviderResolver,
 } from '../helpers/index.js'
+import type { NextIDPersonaBindings, NextIDPlatform } from '../NextID/type.js'
 
 export interface Pageable<Item, Indicator = unknown> {
     /** the indicator of the current page */

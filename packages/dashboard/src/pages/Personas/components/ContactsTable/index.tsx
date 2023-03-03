@@ -3,7 +3,7 @@ import { useUpdateEffect } from 'react-use'
 import { useContainer } from 'unstated-next'
 import { sortBy } from 'lodash-es'
 import { useContacts } from '../../hooks/useContacts.js'
-import { RelationFavor, RelationProfile } from '@masknet/shared-base'
+
 import { TableContainer, Box, TablePagination, Stack, Table, TableBody } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { EmptyContactPlaceholder } from '../EmptyContactPlaceholder/index.js'
@@ -12,6 +12,8 @@ import { useDashboardI18N } from '../../../../locales/index.js'
 import { Messages } from '../../../../API.js'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import { ContactTableRow } from '../ContactTableRow/index.js'
+import { RelationFavor } from '@masknet/public-api'
+import type { RelationProfile } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

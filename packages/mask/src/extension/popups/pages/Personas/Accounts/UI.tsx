@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import { Icons } from '@masknet/icons'
-import type { EnhanceableSite } from '@masknet/shared-base'
+import type { EnhanceableSite } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
 import { AccountAvatar } from '../components/AccountAvatar/index.js'

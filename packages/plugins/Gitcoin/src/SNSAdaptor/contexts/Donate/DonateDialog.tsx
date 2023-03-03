@@ -11,10 +11,10 @@ import {
     useSelectFungibleToken,
     WalletConnectedBoundary,
 } from '@masknet/shared'
-import { EMPTY_LIST, isTwitter, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { NetworkPluginID, formatBalance, FungibleToken, rightShift, ZERO, isTwitter } from '@masknet/web3-shared-base'
 import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useChainContext, useFungibleTokenBalance, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { formatBalance, FungibleToken, rightShift, ZERO } from '@masknet/web3-shared-base'
 import { ChainId, isNativeTokenAddress, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
 import { Box, DialogActions, DialogContent, Typography } from '@mui/material'
 import { FC, memo, useCallback, useLayoutEffect, useMemo, useState } from 'react'

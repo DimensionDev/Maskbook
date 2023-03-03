@@ -6,7 +6,7 @@ import type {
     ProfileInformation as Profile,
     ProfileInformation,
     ProfileInformationFromNextID,
-} from '@masknet/shared-base'
+} from '@masknet/web3-shared-base'
 import { Boundary, LoadingBase, makeStyles } from '@masknet/theme'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
 import { Fuse } from '@masknet/web3-providers'

@@ -8,8 +8,13 @@ import {
     useFungibleTokenBalance,
     useWallets,
 } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { FungibleAsset, isSameAddress, RecentTransactionComputed, Wallet } from '@masknet/web3-shared-base'
+import {
+    NetworkPluginID,
+    FungibleAsset,
+    isSameAddress,
+    RecentTransactionComputed,
+    Wallet,
+} from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
 import { compact } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'

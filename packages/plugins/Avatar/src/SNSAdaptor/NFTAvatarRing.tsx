@@ -1,4 +1,4 @@
-import { isFirefox } from '@masknet/shared-base'
+import { isFirefox } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
 import { RainbowBox } from './RainbowBox.js'
 

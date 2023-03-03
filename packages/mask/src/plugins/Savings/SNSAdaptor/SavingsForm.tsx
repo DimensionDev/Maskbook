@@ -2,7 +2,15 @@ import { useState, useMemo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import type { AbiItem } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
-import { isLessThan, rightShift, ZERO, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
+import {
+    isLessThan,
+    rightShift,
+    ZERO,
+    formatBalance,
+    formatCurrency,
+    NetworkPluginID,
+    createLookupTableResolver,
+} from '@masknet/web3-shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import {
     createContract,
@@ -39,7 +47,6 @@ import { ProtocolType, SavingsProtocol, TabType } from '../types.js'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { createLookupTableResolver, NetworkPluginID } from '@masknet/shared-base'
 
 export const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {

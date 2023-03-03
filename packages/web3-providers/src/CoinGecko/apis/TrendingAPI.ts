@@ -1,6 +1,5 @@
 import { compact, uniq, uniqBy } from 'lodash-es'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { attemptUntil, TokenType, SourceType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, attemptUntil, TokenType, SourceType } from '@masknet/web3-shared-base'
 import {
     ChainId,
     chainResolver,

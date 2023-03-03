@@ -1,6 +1,5 @@
 import type { AbiItem } from 'web3-utils'
-import { i18NextInstance } from '@masknet/shared-base'
-import { TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
+import { i18NextInstance, TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, getMaskBoxConstants, TransactionParameter } from '@masknet/web3-shared-evm'
 import MaskBox_ABI from '@masknet/web3-contracts/abis/MaskBox.json'
 import { Web3StateSettings } from '../../../settings/index.js'

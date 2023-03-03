@@ -10,9 +10,10 @@ import {
     RecentTransactionComputed,
     TransactionDescriptor,
     TransactionDescriptorType,
+    NetworkPluginID,
 } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
-import { EMPTY_LIST, PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, PopupRoutes } from '@masknet/shared-base'
 import { WalletContext } from '../../hooks/useWalletContext.js'
 import { useI18N } from '../../../../../../utils/index.js'
 import { ReplaceType } from '../../type.js'

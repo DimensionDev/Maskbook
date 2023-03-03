@@ -9,8 +9,7 @@ import {
     EthereumERC20TokenApprovedBoundary,
 } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { FungibleToken, leftShift } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { FungibleToken, leftShift, NetworkPluginID } from '@masknet/web3-shared-base'
 import { SchemaType, useArtBlocksConstants, ChainId } from '@masknet/web3-shared-evm'
 import {
     Card,

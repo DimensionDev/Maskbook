@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
-import { getSubscriptionCurrentValue, NetworkPluginID } from '@masknet/shared-base'
+import { getSubscriptionCurrentValue } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useChainContext } from './useContext.js'
 import { useWeb3State } from './useWeb3State.js'
 

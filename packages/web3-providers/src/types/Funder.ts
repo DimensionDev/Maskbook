@@ -1,4 +1,4 @@
-import type { Proof } from '@masknet/shared-base'
+import type { Proof } from '@masknet/web3-shared-base'
 
 export namespace FunderAPI {
     export interface Payload {

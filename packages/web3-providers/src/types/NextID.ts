@@ -5,7 +5,7 @@ import type {
     NextIDPayload,
     NextIDPlatform,
     NextIDPersonaBindings,
-} from '@masknet/shared-base'
+} from '@masknet/web3-shared-base'
 
 export namespace NextIDBaseAPI {
     export interface Storage {

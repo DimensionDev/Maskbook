@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { NFTAvatarButton } from '@masknet/plugin-avatar'
 import { startWatch, createReactRootShadowed, MaskMessages } from '../../../../utils/index.js'
 import { searchEditProfileSelector } from '../../utils/selector.js'
-import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog } from './NFTAvatarEditProfileDialog.js'
 import { ButtonStyle, ButtonProps } from '../../constant.js'
 import { useLastRecognizedIdentity, useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
@@ -13,6 +13,7 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import { currentPersonaIdentifier } from '../../../../../shared/legacy-settings/settings.js'
 import Services from '../../../../extension/service.js'
 import { useEffect } from 'react'
+import { PluginID } from '@masknet/web3-shared-base'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     injectOpenNFTAvatarEditProfileButtonAtProfilePage(signal)

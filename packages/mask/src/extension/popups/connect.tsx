@@ -1,4 +1,5 @@
-import { NetworkPluginID, PopupRoutes, queryRemoteI18NBundle } from '@masknet/shared-base'
+import { PopupRoutes } from '@masknet/shared-base'
+import { NetworkPluginID, queryRemoteI18NBundle } from '@masknet/web3-shared-base'
 import { lazy, useEffect, useState } from 'react'
 import { MaskUIRootPage } from '../../UIRoot-page.js'
 import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'

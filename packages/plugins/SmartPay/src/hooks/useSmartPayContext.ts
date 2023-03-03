@@ -1,5 +1,4 @@
-import type { PersonaInformation } from '@masknet/shared-base'
-import type { Wallet } from '@masknet/web3-shared-base'
+import type { PersonaInformation, Wallet } from '@masknet/web3-shared-base'
 import { useState } from 'react'
 import { createContainer } from 'unstated-next'
 

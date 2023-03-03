@@ -1,7 +1,12 @@
 import urlcat from 'urlcat'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { HubOptions, HubIndicator, SourceType, NonFungibleTokenRarity } from '@masknet/web3-shared-base'
-import { createLookupTableResolver } from '@masknet/shared-base'
+import {
+    HubOptions,
+    HubIndicator,
+    SourceType,
+    NonFungibleTokenRarity,
+    createLookupTableResolver,
+} from '@masknet/web3-shared-base'
 import { GEM_API_URL, RARITY_SOURCE_TYPE } from './constants.js'
 import type { NonFungibleTokenAPI } from '../entry-types.js'
 import { fetchJSON } from '../entry-helpers.js'

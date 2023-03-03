@@ -1,6 +1,5 @@
 import LRU from 'lru-cache'
-import type { Storage } from '@masknet/web3-shared-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { Storage, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { RSS3 } from '@masknet/web3-providers'
 

@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { useWeb3Connection, useChainContext, useNetworkContext, useWeb3 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useTelemetry } from '@masknet/web3-telemetry/hooks'
-import { NetworkPluginID, ProofType } from '@masknet/shared-base'
+import { NetworkPluginID, ProofType } from '@masknet/web3-shared-base'
 import {
     Web3,
     ChainId,

@@ -1,11 +1,12 @@
 import { useRef } from 'react'
 import { useAsyncFn } from 'react-use'
-import { fromHex, NextIDAction, NextIDPlatform, PersonaInformation, SignType, toBase64 } from '@masknet/shared-base'
+import { fromHex, SignType, toBase64 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import Services from '../../extension/service.js'
 import { MaskMessages } from '../../utils/index.js'
 import { languageSettings } from '../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { NextIDAction, NextIDPlatform, PersonaInformation } from '@masknet/web3-shared-base'
 
 export function useNextIDVerify() {
     const verifyPostCollectTimer = useRef<NodeJS.Timer | null>(null)

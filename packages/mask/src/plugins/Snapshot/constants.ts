@@ -1,4 +1,4 @@
-import { PluginID } from '@masknet/shared-base'
+import { PluginID } from '@masknet/web3-shared-base'
 
 export const SNAPSHOT_PLUGIN_NAME = 'Snapshot'
 export const SNAPSHOT_PLUGIN_ID = PluginID.Snapshot

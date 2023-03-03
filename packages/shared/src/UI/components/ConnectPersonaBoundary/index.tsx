@@ -2,10 +2,11 @@ import { memo, ReactNode, useCallback, useMemo } from 'react'
 import { Button, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import type { DashboardRoutes, MaskEvents, PersonaInformation, PluginID } from '@masknet/shared-base'
+import type { DashboardRoutes, MaskEvents } from '@masknet/shared-base'
 import { PersonaConnectStatus, useCurrentPersonaConnectStatus, useSharedI18N } from '../../../index.js'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import type { UnboundedRegistry, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import type { PersonaInformation, PluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

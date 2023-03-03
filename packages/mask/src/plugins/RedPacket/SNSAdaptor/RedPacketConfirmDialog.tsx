@@ -15,8 +15,7 @@ import { FormattedBalance, useOpenShareTxDialog, PluginWalletStatusBar, ChainBou
 import { useI18N } from '../locales/index.js'
 import { RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback.js'
 import { useTransactionValue } from '@masknet/web3-hooks-evm'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { formatBalance, isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID, formatBalance, isSameAddress } from '@masknet/web3-shared-base'
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types.js'
 import { RedPacketRPC } from '../messages.js'
 

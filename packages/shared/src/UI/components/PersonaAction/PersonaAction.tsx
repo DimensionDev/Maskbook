@@ -2,12 +2,12 @@ import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { useCopyToClipboard } from 'react-use'
 import { PlatformAvatar } from './PlatformAvatar.js'
-import type { PersonaInformation } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { Icons } from '@masknet/icons'
 import { PropsWithChildren, useCallback, useState } from 'react'
 import { formatPublicKey } from '../../../utils/index.js'
 import { useSharedI18N } from '../../../locales/index.js'
+import type { PersonaInformation } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     bottomFixed: {

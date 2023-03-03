@@ -3,7 +3,7 @@ import { useSubscription } from 'use-subscription'
 import { NextIDProof } from '@masknet/web3-providers'
 import { context } from '../context.js'
 import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { NextIDPlatform } from '@masknet/shared-base'
+import { NextIDPlatform } from '@masknet/web3-shared-base'
 
 export function usePersonaVerify() {
     const { getNextIDPlatform, queryPersonaByProfile } = useSNSAdaptorContext()

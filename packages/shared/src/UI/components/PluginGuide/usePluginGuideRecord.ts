@@ -1,4 +1,4 @@
-import type { PluginID } from '@masknet/shared-base'
+import type { PluginID } from '@masknet/web3-shared-base'
 import { useCallback } from 'react'
 import { useLocalStorage } from 'react-use'
 

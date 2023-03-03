@@ -11,10 +11,10 @@ import {
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { GrantPermissions, InjectedDialog, useSharedI18N } from '@masknet/shared'
-import { PluginID } from '@masknet/shared-base'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip.js'
 import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
+import { PluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     sup: {

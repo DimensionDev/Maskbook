@@ -1,11 +1,12 @@
 import urlcat from 'urlcat'
 import { ChainId, TransactionReceipt } from '@masknet/web3-shared-evm'
-import { EMPTY_LIST, Proof } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { FunderAPI } from '../../types/Funder.js'
 import { Web3API } from '../../EVM/index.js'
 import { fetchJSON } from '../../entry-helpers.js'
 import { FUNDER_PROD } from '../constants.js'
 import { BigNumber } from 'bignumber.js'
+import type { Proof } from '@masknet/web3-shared-base'
 
 export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     private web3 = new Web3API()

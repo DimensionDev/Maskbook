@@ -8,13 +8,14 @@ import { PersonaSetup } from './components/PersonaSetup/index.js'
 import { PersonaDrawer } from './components/PersonaDrawer/index.js'
 import { PersonaContext } from './hooks/usePersonaContext.js'
 import { useDashboardI18N } from '../../locales/index.js'
-import { DashboardRoutes, PersonaInformation } from '@masknet/shared-base'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { ContentContainer } from '../../components/ContentContainer/index.js'
 import { PersonaContent } from './components/PersonaContent/index.js'
 import { PersonaRowCard } from './components/PersonaCard/Row.js'
 import { PersonaStateBar } from './components/PersonaStateBar/index.js'
 import { UserProvider } from '../Settings/hooks/UserContext.js'
 import { useNavigate } from 'react-router-dom'
+import type { PersonaInformation } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     tab: {

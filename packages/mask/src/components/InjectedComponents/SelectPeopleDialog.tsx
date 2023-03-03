@@ -4,7 +4,7 @@ import { Button, DialogActions, DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../utils/index.js'
 import { SelectProfileUI } from '../shared/SelectProfileUI/index.js'
-import type { ProfileInformation as Profile } from '@masknet/shared-base'
+import type { ProfileInformation as Profile } from '@masknet/web3-shared-base'
 import { uniqBy } from 'lodash-es'
 
 export interface SelectProfileDialogProps {

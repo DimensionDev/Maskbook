@@ -1,17 +1,11 @@
 import { useMemo } from 'react'
 import { Avatar, Box, Stack, Typography } from '@mui/material'
-import {
-    BindingProof,
-    resolveNextIDIdentityToProfile,
-    ECKeyIdentifier,
-    formatPersonaFingerprint,
-    isSamePersona,
-    isSameProfile,
-    PersonaInformation,
-} from '@masknet/shared-base'
+import { ECKeyIdentifier, formatPersonaFingerprint, isSamePersona, isSameProfile } from '@masknet/shared-base'
+
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import type { IdentityResolved } from '@masknet/plugin-infra'
+import { BindingProof, PersonaInformation, resolveNextIDIdentityToProfile } from '@masknet/web3-shared-base'
 
 /* cspell:disable-next-line */
 // TODO: Migrate to SocialIdentity by @Lanttcat

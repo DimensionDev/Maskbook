@@ -1,7 +1,7 @@
 import { Plugin } from '@masknet/plugin-infra'
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { PluginGuide, PluginGuideProvider } from '@masknet/shared'
-import { EnhanceableSite, PluginID } from '@masknet/shared-base'
+import { EnhanceableSite, PluginID } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Stack } from '@mui/material'
 import type { FC } from 'react'

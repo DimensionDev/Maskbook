@@ -2,11 +2,12 @@ import { first, isUndefined, omitBy } from 'lodash-es'
 import Web3 from 'web3'
 import { AbiItem, hexToNumber, hexToNumberString, toHex } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
-import type { ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
+import type { ECKeyIdentifier } from '@masknet/shared-base'
 import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json'
 import { ChainId, EthereumMethodType, Transaction, TransactionOptions, UserOperation } from '../types/index.js'
 import { createJsonRpcPayload, formatEthereumAddress } from '../helpers/index.js'
 import { ZERO_ADDRESS, getSmartPayConstant } from '../index.js'
+import type { Proof, ProofPayload } from '@masknet/web3-shared-base'
 
 type Options = Pick<TransactionOptions, 'account' | 'chainId'>
 

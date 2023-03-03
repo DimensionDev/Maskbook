@@ -8,7 +8,7 @@ import {
     usePostInfoDetails,
 } from '@masknet/plugin-infra/content-script'
 import { useWeb3State, Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Flags } from '../../../../../shared/index.js'
 import { createReactRootShadowed } from '../../../../utils/index.js'
 

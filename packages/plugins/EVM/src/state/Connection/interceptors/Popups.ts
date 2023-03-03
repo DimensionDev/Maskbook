@@ -1,6 +1,6 @@
 import { isUndefined, omitBy } from 'lodash-es'
 import { ErrorEditor, Middleware, ConnectionContext } from '@masknet/web3-shared-evm'
-import { ExtensionSite, getSiteType, isEnhanceableSiteType } from '@masknet/shared-base'
+import { ExtensionSite, getSiteType, isEnhanceableSiteType } from '@masknet/web3-shared-base'
 import { SharedContextSettings } from '../../../settings/index.js'
 
 export class Popups implements Middleware<ConnectionContext> {

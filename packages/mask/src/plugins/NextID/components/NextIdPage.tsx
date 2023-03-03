@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { PluginID, PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
+import { PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import { PluginCardFrameMini, useCurrentPersonaConnectStatus, usePersonaProofs } from '@masknet/shared'
 import Services from '../../../extension/service.js'
@@ -19,6 +19,7 @@ import { MaskMessages } from '../../../utils/messages.js'
 import { useAllPersonas } from '@masknet/plugin-infra/content-script'
 import { currentPersonaIdentifier } from '../../../../shared/legacy-settings/settings.js'
 import { useValueRef } from '@masknet/shared-base-ui'
+import { PluginID } from '@masknet/web3-shared-base'
 
 export function NextIdPage() {
     const currentProfileIdentifier = useLastRecognizedIdentity()

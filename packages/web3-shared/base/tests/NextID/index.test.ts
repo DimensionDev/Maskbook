@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest'
 import {
+    EnhanceableSite,
+    NextIDPlatform,
     resolveNetworkToNextIDPlatform,
     resolveNextIDIdentityToProfile,
     resolveNextIDPlatformToNetwork,
-} from '../../src/NextID/index.js'
-import { NextIDPlatform } from '../../src/NextID/type.js'
-import { EnhanceableSite } from '../../src/Site/type.js'
+} from '../../src/index.js'
 
 describe('test next id util methods', () => {
     test('should get the ui network when give the nextID platform', () => {

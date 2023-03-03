@@ -9,12 +9,9 @@ import {
     createSubscriptionFromValueRef,
     DashboardRoutes,
     ECKeyIdentifier,
-    EnhanceableSite,
-    i18NextInstance,
-    queryRemoteI18NBundle,
     ValueRef,
 } from '@masknet/shared-base'
-import type { ThemeSettings } from '@masknet/web3-shared-base'
+import { EnhanceableSite, i18NextInstance, queryRemoteI18NBundle, ThemeSettings } from '@masknet/web3-shared-base'
 import { Flags } from '../../shared/index.js'
 import { SetupGuideContext, SetupGuideStep } from '../../shared/legacy-settings/types.js'
 import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../shared/legacy-settings/settings.js'

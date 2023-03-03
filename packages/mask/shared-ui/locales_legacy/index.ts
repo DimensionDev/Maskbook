@@ -1,4 +1,4 @@
-import { i18NextInstance } from '@masknet/shared-base'
+import { i18NextInstance } from '@masknet/web3-shared-base'
 import type en from '../locales/en-US.json'
 
 // Deprecates. Prefer useMaskI18n()

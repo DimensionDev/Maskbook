@@ -1,10 +1,5 @@
-import {
-    ECKeyIdentifier,
-    EMPTY_LIST,
-    NextIDPersonaBindings,
-    NextIDPlatform,
-    ProfileIdentifier,
-} from '@masknet/shared-base'
+import { ECKeyIdentifier, EMPTY_LIST, ProfileIdentifier } from '@masknet/shared-base'
+import { NextIDPersonaBindings, NextIDPlatform } from '@masknet/web3-shared-base'
 import { compact, uniqBy } from 'lodash-es'
 
 export function useTwitterIdByWalletSearch(

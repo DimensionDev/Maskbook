@@ -1,5 +1,5 @@
 import { useAsync } from 'react-use'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Grid, Typography } from '@mui/material'
 

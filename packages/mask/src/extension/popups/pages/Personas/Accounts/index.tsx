@@ -3,12 +3,13 @@ import { useTitle } from '../../../hook/useTitle.js'
 import { AccountsUI } from './UI.js'
 import { PersonaContext } from '../hooks/usePersonaContext.js'
 import { useI18N } from '../../../../../utils/index.js'
-import { EMPTY_LIST, EnhanceableSite, PopupRoutes } from '@masknet/shared-base'
+import { EMPTY_LIST, PopupRoutes } from '@masknet/shared-base'
 import { useAsyncFn } from 'react-use'
 import Services from '../../../../service.js'
 import type { Account } from '../type.js'
 import { useNavigate } from 'react-router-dom'
 import { useSupportSocialNetworks } from '../../../hook/useSupportSocialNetworks.js'
+import type { EnhanceableSite } from '@masknet/web3-shared-base'
 
 const Accounts = memo(() => {
     const { t } = useI18N()

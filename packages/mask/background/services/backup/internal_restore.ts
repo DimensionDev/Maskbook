@@ -1,7 +1,7 @@
 import { delay } from '@masknet/kit'
 import type { NormalizedBackup } from '@masknet/backup-format'
 import { activatedPluginsWorker, registeredPlugins } from '@masknet/plugin-infra/background-worker'
-import { PluginID, ProfileIdentifier, RelationFavor } from '@masknet/shared-base'
+import type { ProfileIdentifier } from '@masknet/shared-base'
 import { MaskMessages } from '../../../shared/messages.js'
 import {
     consistentPersonaDBWriteAccess,
@@ -21,6 +21,7 @@ import type { LatestRecipientDetailDB, LatestRecipientReasonDB } from '../../dat
 import { internal_wallet_restore } from './internal_wallet_restore.js'
 import { queryOwnedPersonaInformation } from '../identity/index.js'
 import { compact } from 'lodash-es'
+import { PluginID, RelationFavor } from '@masknet/web3-shared-base'
 
 export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
     const { plugins, posts, wallets } = backup

@@ -6,7 +6,7 @@ import { PluginWalletStatusBar, InjectedDialog, useSharedI18N, NetworkTab, Chain
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { NetworkPluginID, PluginID } from '@masknet/web3-shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../locales/index.js'
 import { WalletMessages } from '@masknet/plugin-wallet'

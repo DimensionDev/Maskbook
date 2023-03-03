@@ -5,14 +5,8 @@ import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
 import { DialogActions, DialogContent } from '@mui/material'
 import { InjectedDialog, LoadGuard, PersonaAction, usePersonaProofs, WalletTypes } from '@masknet/shared'
-import {
-    CrossIsolationMessages,
-    EMPTY_LIST,
-    MaskEvents,
-    NetworkPluginID,
-    NextIDPlatform,
-    PopupRoutes,
-} from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, MaskEvents, PopupRoutes } from '@masknet/shared-base'
+import { NextIDPlatform, NetworkPluginID } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { TelemetryAPI } from '@masknet/web3-providers/types'

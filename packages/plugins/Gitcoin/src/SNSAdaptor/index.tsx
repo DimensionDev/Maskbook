@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { Plugin, SNSAdaptorContext, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
-import { parseURLs, PluginID } from '@masknet/shared-base'
+import { parseURLs } from '@masknet/shared-base'
 import { MaskLightTheme } from '@masknet/theme'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { ThemeProvider } from '@mui/material'
@@ -11,6 +11,7 @@ import { PLUGIN_META_KEY, PLUGIN_NAME } from '../constants.js'
 import { SharedContext } from '../settings.js'
 import { ResultModalProvider, DonateProvider } from './contexts/index.js'
 import { PreviewCard } from './PreviewCard.js'
+import { PluginID } from '@masknet/web3-shared-base'
 
 const isGitcoin = (x: string): boolean => /^https:\/\/gitcoin.co\/grants\/\d+/.test(x)
 

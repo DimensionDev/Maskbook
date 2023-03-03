@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import { FungibleToken, multipliedBy } from '@masknet/web3-shared-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useMaskBoxContract } from './useMaskBoxContract.js'
 

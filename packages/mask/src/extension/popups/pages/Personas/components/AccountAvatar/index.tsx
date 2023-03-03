@@ -3,7 +3,7 @@ import { memo } from 'react'
 import { Avatar } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { SOCIAL_MEDIA_ROUND_ICON_MAPPING } from '@masknet/shared'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { EnhanceableSite } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()(() => ({
     container: {

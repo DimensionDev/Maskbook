@@ -3,10 +3,9 @@ import { makeStyles } from '@masknet/theme'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, InputBase, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { useI18N } from '../../locales/index.js'
 import { useChainContext, useNetworkContext, useWeb3Connection, useWeb3Hub } from '@masknet/web3-hooks-base'
-import type { NonFungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     addNFT: {

@@ -1,5 +1,5 @@
 import { createPluginMessage, createPluginRPC, createPluginRPCGenerator } from '@masknet/plugin-infra'
-import { PluginID } from '@masknet/shared-base'
+import { PluginID } from '@masknet/web3-shared-base'
 
 import.meta.webpackHot && import.meta.webpackHot.accept()
 

@@ -4,9 +4,8 @@ import { omit } from 'lodash-es'
 import { useSubscription } from 'use-subscription'
 import formatDateTime from 'date-fns/format'
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, isZero, formatBalance, FungibleToken, TokenType } from '@masknet/web3-shared-base'
 import { SchemaType, chainResolver, ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { isZero, formatBalance, FungibleToken, TokenType } from '@masknet/web3-shared-base'
 import {
     Box,
     Card,

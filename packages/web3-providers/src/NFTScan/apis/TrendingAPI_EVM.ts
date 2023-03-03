@@ -5,8 +5,9 @@ import {
     SourceType,
     NonFungibleCollectionOverview,
     NonFungibleTokenActivity,
+    NetworkPluginID,
 } from '@masknet/web3-shared-base'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import { COIN_RECOMMENDATION_SIZE } from '../../Trending/constants.js'
 import type { EVM, Response } from '../types/index.js'

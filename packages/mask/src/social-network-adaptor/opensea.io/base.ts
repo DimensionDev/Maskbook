@@ -1,6 +1,6 @@
 import { SocialNetworkEnum } from '@masknet/encryption'
 import type { SocialNetwork } from '@masknet/types'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { EnhanceableSite } from '@masknet/web3-shared-base'
 
 const origins = ['https://opensea.io/*']
 export const openseaBase: SocialNetwork.Base = {

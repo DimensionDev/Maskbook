@@ -1,5 +1,5 @@
 import type { MobileProfile } from '@masknet/public-api'
-import type { ProfileIdentifier, ProfileInformation } from '@masknet/shared-base'
+import type { ProfileIdentifier } from '@masknet/shared-base'
 import {
     createPersonaDBReadonlyAccess,
     ProfileRecord,
@@ -10,6 +10,7 @@ import { hasLocalKeyOf } from '../../../database/persona/helper.js'
 import { queryProfilesDB as queryProfilesFromIndexedDB } from '../../../database/persona/web.js'
 import { toProfileInformation } from '../../__utils__/convert.js'
 import { profileRecordToMobileProfile } from './mobile.js'
+import type { ProfileInformation } from '@masknet/web3-shared-base'
 
 export interface MobileQueryProfilesOptions {
     network?: string

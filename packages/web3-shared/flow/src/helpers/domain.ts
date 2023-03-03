@@ -1,4 +1,4 @@
-import { createLookupTableResolver } from '@masknet/shared-base'
+import { createLookupTableResolver } from '@masknet/web3-shared-base'
 import { SchemaType } from '../types.js'
 
 export function formatDomainName(domain?: string, size?: number) {

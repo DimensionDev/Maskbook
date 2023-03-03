@@ -5,8 +5,7 @@ import { chainResolver } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useChainContext, useGasOptions, useGasPrice } from '@masknet/web3-hooks-base'
-import { GasOptionType } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
 
 export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

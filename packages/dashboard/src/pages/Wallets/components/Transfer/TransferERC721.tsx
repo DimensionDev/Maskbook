@@ -7,8 +7,14 @@ import { EthereumAddress } from 'wallet.ts'
 import { Controller, useForm } from 'react-hook-form'
 import { makeStyles, MaskColorVar, MaskTextField } from '@masknet/theme'
 import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
-import { isSameAddress, NonFungibleToken, NonFungibleTokenContract, multipliedBy } from '@masknet/web3-shared-base'
-import { NetworkPluginID, DashboardRoutes } from '@masknet/shared-base'
+import {
+    isSameAddress,
+    NonFungibleToken,
+    NonFungibleTokenContract,
+    multipliedBy,
+    NetworkPluginID,
+} from '@masknet/web3-shared-base'
+import { DashboardRoutes } from '@masknet/shared-base'
 import {
     SchemaType,
     formatWeiToEther,

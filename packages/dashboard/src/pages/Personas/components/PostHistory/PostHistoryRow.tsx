@@ -2,11 +2,12 @@ import { memo, ReactNode, useCallback, useMemo } from 'react'
 import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { getMaskColor, MaskColorVar, makeStyles } from '@masknet/theme'
-import { PostInformation, PluginID } from '@masknet/shared-base'
+import type { PostInformation } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { Services } from '../../../../API.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
+import { PluginID } from '@masknet/web3-shared-base'
 
 const MSG_DELIMITER = '2c1aca02'
 

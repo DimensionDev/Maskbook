@@ -1,8 +1,9 @@
 import { noop } from 'lodash-es'
-import { ObservableSet, PluginID } from '@masknet/shared-base'
+import { ObservableSet } from '@masknet/shared-base'
 import { Emitter } from '@servie/events'
 import { BooleanPreference, Plugin } from '../types.js'
 import { getPluginDefine, onNewPluginRegistered, registeredPlugins } from './store.js'
+import type { PluginID } from '@masknet/web3-shared-base'
 
 // Plugin state machine
 // not-loaded => loaded

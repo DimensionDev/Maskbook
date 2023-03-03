@@ -15,7 +15,19 @@ import {
 import { FormattedBalance, FormattedCurrency, TokenIcon, useGasCurrencyMenu } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
-import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
+import { PopupRoutes } from '@masknet/shared-base'
+import {
+    NetworkPluginID,
+    formatBalance,
+    formatCurrency,
+    isGreaterThan,
+    isLessThan,
+    leftShift,
+    pow10,
+    toFixed,
+    TransactionDescriptorType,
+    ZERO,
+} from '@masknet/web3-shared-base'
 import { LoadingButton } from '@mui/lab'
 import { unreachable } from '@masknet/kit'
 import { BigNumber } from 'bignumber.js'
@@ -33,17 +45,6 @@ import {
     useWallet,
     useWeb3State,
 } from '@masknet/web3-hooks-base'
-import {
-    formatBalance,
-    formatCurrency,
-    isGreaterThan,
-    isLessThan,
-    leftShift,
-    pow10,
-    toFixed,
-    TransactionDescriptorType,
-    ZERO,
-} from '@masknet/web3-shared-base'
 import { useTitle } from '../../../hook/useTitle.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { CopyIconButton } from '../../../components/CopyIconButton/index.js'

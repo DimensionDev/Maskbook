@@ -1,5 +1,4 @@
-import { PluginID } from '@masknet/shared-base'
-import { SourceType } from '@masknet/web3-shared-base'
+import { PluginID, SourceType } from '@masknet/web3-shared-base'
 
 export const PLUGIN_NAME = 'Collectibles'
 export const PLUGIN_DESCRIPTION = 'An NFT collectible viewer.'

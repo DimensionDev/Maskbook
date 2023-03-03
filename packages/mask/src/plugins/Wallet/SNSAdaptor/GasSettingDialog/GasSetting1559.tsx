@@ -8,10 +8,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionButton, makeStyles, MaskColorVar } from '@masknet/theme'
 import { formatGweiToWei, formatWeiToEther, formatWeiToGwei, useTokenConstants } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useI18N } from '../../../../utils/index.js'
-import type { GasSettingProps } from './types.js'
 import {
+    NetworkPluginID,
     formatCurrency,
     GasOptionType,
     isGreaterThan,
@@ -21,6 +19,8 @@ import {
     isPositive,
     multipliedBy,
 } from '@masknet/web3-shared-base'
+import { useI18N } from '../../../../utils/index.js'
+import type { GasSettingProps } from './types.js'
 import { useChainContext, useFungibleTokenPrice, useGasOptions } from '@masknet/web3-hooks-base'
 import { Trans } from 'react-i18next'
 

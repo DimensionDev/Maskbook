@@ -2,14 +2,8 @@ import { useCallback, useRef } from 'react'
 import { useAsyncFn } from 'react-use'
 import getUnixTime from 'date-fns/getUnixTime'
 import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import {
-    NetworkPluginID,
-    PersonaInformation,
-    PopupRoutes,
-    ProofType,
-    SignType,
-    TimeoutController,
-} from '@masknet/shared-base'
+import { PopupRoutes, SignType, TimeoutController } from '@masknet/shared-base'
+import { NetworkPluginID, PersonaInformation, ProofType } from '@masknet/web3-shared-base'
 import { useChainContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import type { OwnerAPI } from '@masknet/web3-providers/types'
 import { ProviderType } from '@masknet/web3-shared-evm'

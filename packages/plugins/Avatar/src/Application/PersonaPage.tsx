@@ -1,4 +1,5 @@
-import { BindingProof, EMPTY_LIST, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { NextIDPlatform, BindingProof, PersonaInformation } from '@masknet/web3-shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Box, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'

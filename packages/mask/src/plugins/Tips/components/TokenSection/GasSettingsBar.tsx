@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { SelectGasSettingsToolbar } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useChainContext, useGasPrice, useNativeTokenPrice, useWallet } from '@masknet/web3-hooks-base'
 import { createNativeToken, GasConfig, isNativeTokenAddress, GasEditor } from '@masknet/web3-shared-evm'
 import { useGasLimit } from './useGasLimit.js'

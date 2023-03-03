@@ -2,17 +2,12 @@ import { memo } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine/index.js'
-import {
-    type NextIDPersonaBindings,
-    type PersonaIdentifier,
-    type ProfileIdentifier,
-    type ProfileInformation,
-    formatPersonaFingerprint,
-} from '@masknet/shared-base'
+import { type PersonaIdentifier, type ProfileIdentifier, formatPersonaFingerprint } from '@masknet/shared-base'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import type { SocialNetwork } from '../../api.js'
 import { usePersonaProofs } from '@masknet/shared'
 import { Messages } from '../../../../API.js'
+import type { NextIDPersonaBindings, ProfileInformation } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     card: {

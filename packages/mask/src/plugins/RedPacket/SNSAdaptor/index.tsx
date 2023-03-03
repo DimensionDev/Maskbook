@@ -9,10 +9,9 @@ import {
 } from '@masknet/web3-shared-evm'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
-import { PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { PluginID, NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 import { ApplicationEntry } from '@masknet/shared'
 import { useFungibleToken } from '@masknet/web3-hooks-base'
-import { formatBalance } from '@masknet/web3-shared-base'
 import { base } from '../base.js'
 import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants.js'
 import {

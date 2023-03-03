@@ -1,6 +1,7 @@
 import type { AbiItem } from 'web3-utils'
 import type { BundlerAPI, AbstractAccountAPI, FunderAPI } from '@masknet/web3-providers/types'
-import { ECKeyIdentifier, NetworkPluginID, SignType } from '@masknet/shared-base'
+import { ECKeyIdentifier, SignType } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import {
     ChainId,
     ConnectionContext,

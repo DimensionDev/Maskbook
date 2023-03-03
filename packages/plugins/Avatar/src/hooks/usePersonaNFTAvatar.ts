@@ -1,6 +1,6 @@
 import LRU from 'lru-cache'
 import { useAsyncRetry } from 'react-use'
-import { EnhanceableSite, NetworkPluginID, getEnhanceableSiteType, getSiteType } from '@masknet/shared-base'
+import { EnhanceableSite, getEnhanceableSiteType, getSiteType, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { RSS3_KEY_SNS } from '../constants.js'
 import type { AvatarMetaDB, NextIDAvatarMeta } from '../types.js'
 import { useGetNFTAvatar } from './useGetNFTAvatar.js'

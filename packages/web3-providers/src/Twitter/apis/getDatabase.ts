@@ -1,4 +1,4 @@
-import { isFirefox } from '@masknet/shared-base'
+import { isFirefox } from '@masknet/web3-shared-base'
 
 /* cspell:disable-next-line */
 const DB_NAME = 'localforage'

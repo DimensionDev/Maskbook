@@ -3,8 +3,14 @@ import { useAsyncRetry } from 'react-use'
 import type { TradeInfo } from '../../types/index.js'
 import { ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { resolveTradeProviderName } from '../../pipes.js'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { multipliedBy, formatBalance, ZERO, formatCurrency, formatPercentage } from '@masknet/web3-shared-base'
+import {
+    NetworkPluginID,
+    multipliedBy,
+    formatBalance,
+    ZERO,
+    formatCurrency,
+    formatPercentage,
+} from '@masknet/web3-shared-base'
 import { PluginTraderRPC } from '../../messages.js'
 import { TradeProvider } from '@masknet/public-api'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'

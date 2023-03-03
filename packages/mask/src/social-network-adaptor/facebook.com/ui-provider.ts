@@ -1,10 +1,11 @@
 /* eslint-disable tss-unused-classes/unused-classes */
 import type { SocialNetworkUI } from '@masknet/types'
 import { makeStyles } from '@masknet/theme'
-import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
+import { ProfileIdentifier } from '@masknet/shared-base'
 import { stateCreator } from '../../social-network/utils.js'
 import { facebookBase } from './base.js'
 import { facebookShared } from './shared.js'
+import { EnhanceableSite } from '@masknet/web3-shared-base'
 import { getProfilePageUrlAtFacebook } from './utils/parse-username.js'
 import { taskOpenComposeBoxFacebook } from './automation/openComposeBox.js'
 import { pasteTextToCompositionFacebook } from './automation/pasteTextToComposition.js'

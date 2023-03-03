@@ -1,4 +1,4 @@
-import { createLookupTableResolver, NextIDPlatform } from '@masknet/shared-base'
+import { NextIDPlatform, createLookupTableResolver } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 import type { ReactNode } from 'react'
 

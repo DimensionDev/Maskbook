@@ -1,7 +1,8 @@
 import { story } from '@masknet/storybook-shared'
 import { ConnectedPersonaLine as C } from '../../../src/pages/Personas/components/PersonaLine/index.js'
 import { action } from '@storybook/addon-actions'
-import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
+import { ProfileIdentifier } from '@masknet/shared-base'
+import { EnhanceableSite } from '@masknet/web3-shared-base'
 
 const { meta, of } = story(C)
 

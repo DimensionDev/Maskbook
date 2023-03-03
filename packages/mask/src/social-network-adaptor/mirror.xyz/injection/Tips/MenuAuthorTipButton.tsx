@@ -6,7 +6,8 @@ import {
     useActivatedPluginsSNSAdaptor,
     useIsMinimalMode,
 } from '@masknet/plugin-infra/content-script'
-import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { NetworkPluginID, PluginID } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { SocialAccount } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'

@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
-import type { ProfileInformation } from '@masknet/shared-base'
 import Services from '../../extension/service.js'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
 import type { LazyRecipients } from './CompositionUI.js'
+import type { ProfileInformation } from '@masknet/web3-shared-base'
 
 export function useRecipientsList(): LazyRecipients {
     const current = useCurrentIdentity()?.identifier

@@ -4,8 +4,8 @@ import { Icons } from '@masknet/icons'
 import { Box } from '@mui/material'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { SocialAddressType, SearchResultType } from '@masknet/web3-shared-base'
-import { NetworkPluginID, parseURLs } from '@masknet/shared-base'
+import { SocialAddressType, SearchResultType, NetworkPluginID } from '@masknet/web3-shared-base'
+import { parseURLs } from '@masknet/shared-base'
 import {
     type Plugin,
     usePostInfoDetails,

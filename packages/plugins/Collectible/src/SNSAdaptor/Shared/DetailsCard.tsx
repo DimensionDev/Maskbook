@@ -1,9 +1,8 @@
 import { Icons } from '@masknet/icons'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
-import { SourceType } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../locales/i18n_generated.js'
 

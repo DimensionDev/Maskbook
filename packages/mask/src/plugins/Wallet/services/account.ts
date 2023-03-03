@@ -1,5 +1,6 @@
 import { defer, DeferTuple } from '@masknet/kit'
-import type { ECKeyIdentifier, EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
+import type { ECKeyIdentifier } from '@masknet/shared-base'
+import type { EnhanceableSite, ExtensionSite } from '@masknet/web3-shared-base'
 
 const recordSites = new Map<EnhanceableSite | ExtensionSite, boolean>()
 

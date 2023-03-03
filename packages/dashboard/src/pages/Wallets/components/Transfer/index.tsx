@@ -9,7 +9,7 @@ import { useDashboardI18N } from '../../../../locales/index.js'
 import { TransferERC721 } from './TransferERC721.js'
 import { TransferTab } from './types.js'
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useNativeToken } from '@masknet/web3-hooks-base'
 

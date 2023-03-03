@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import type { BindingProof } from '@masknet/shared-base'
+import type { BindingProof } from '@masknet/web3-shared-base'
 import { isSameAddress, resolveNetworkWalletName, resolveNextID_NetworkPluginID } from '@masknet/web3-shared-base'
 import {
     useDefaultChainId,

@@ -1,6 +1,7 @@
 import { useActivatedPlugin, useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog, InjectedDialogProps, useOpenShareTxDialog, NetworkTab } from '@masknet/shared'
-import { PluginID, EMPTY_LIST, EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { EnhanceableSite, NetworkPluginID, PluginID } from '@masknet/web3-shared-base'
 import {
     useChainContext,
     useWeb3Connection,

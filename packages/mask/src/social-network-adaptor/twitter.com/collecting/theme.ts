@@ -1,10 +1,9 @@
 import { delay } from '@masknet/kit'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createLookupTableResolver } from '@masknet/shared-base'
+import { createLookupTableResolver, FontSize, ThemeMode } from '@masknet/web3-shared-base'
 import type { SocialNetworkUI as Next } from '@masknet/types'
 import { Twitter } from '@masknet/web3-providers'
 import { TwitterBaseAPI } from '@masknet/web3-providers/types'
-import { FontSize, ThemeMode } from '@masknet/web3-shared-base'
 import { creator } from '../../../social-network/utils.js'
 import { composeAnchorSelector } from '../utils/selector.js'
 

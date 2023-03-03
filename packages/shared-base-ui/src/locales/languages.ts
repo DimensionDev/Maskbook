@@ -16,7 +16,7 @@ export const languages = {
     'zh-CN': zh_CN,
     zh: zh_TW,
 }
-import { createI18NBundle } from '@masknet/shared-base'
+import { createI18NBundle } from '@masknet/web3-shared-base'
 export const addShareBaseI18N = createI18NBundle('shareBase', languages)
 // @ts-ignore
 if (import.meta.webpackHot) {

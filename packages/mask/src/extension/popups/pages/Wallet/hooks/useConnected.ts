@@ -1,7 +1,7 @@
 import { useAsync } from 'react-use'
 import Services from '../../../../service.js'
-import { getSiteType } from '@masknet/shared-base'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
+import { getSiteType } from '@masknet/web3-shared-base'
 
 export function useConnected() {
     const { value = { connected: false, url: '' } } = useAsync(async () => {

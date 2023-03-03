@@ -12,7 +12,7 @@ import {
 import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
 import { Icons } from '@masknet/icons'
 import { CompositionContext, CompositionType } from '@masknet/plugin-infra/content-script'
-import { EncryptionTargetType, ProfileInformation } from '@masknet/shared-base'
+import { EncryptionTargetType } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
 import { LoadingButton } from '@mui/lab'
@@ -24,6 +24,7 @@ import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMeth
 import { EncryptionTargetSelector } from './EncryptionTargetSelector.js'
 import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender.js'
 import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor.js'
+import type { ProfileInformation } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

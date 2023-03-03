@@ -4,7 +4,7 @@ import { useAsync } from 'react-use'
 import type { TradeComputed, SwapQuoteResponse } from '../../types/index.js'
 import { SUPPORTED_CHAIN_ID_LIST } from './constants.js'
 import { useChainContext, useNetworkContext, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { toHex } from 'web3-utils'
 

@@ -1,5 +1,5 @@
 import { Environment, MessageTarget, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import { createI18NBundle, i18NextInstance } from '@masknet/shared-base'
+import { createI18NBundle, i18NextInstance } from '@masknet/web3-shared-base'
 import type { BasicHostHooks } from '@masknet/sandboxed-plugin-runtime'
 
 export function createHostAPIs(isBackground: boolean): BasicHostHooks {

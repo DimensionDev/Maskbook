@@ -1,4 +1,4 @@
-import { PluginID, EnhanceableSite } from '@masknet/shared-base'
+import { EnhanceableSite, PluginID } from '@masknet/web3-shared-base'
 
 export const PLUGIN_ID = PluginID.Web3ProfileCard
 export const PLUGIN_NAME = 'Web3ProfileCard'

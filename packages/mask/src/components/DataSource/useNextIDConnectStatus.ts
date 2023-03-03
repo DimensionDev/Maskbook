@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import stringify from 'json-stable-stringify'
-import type { NextIDPlatform, PersonaIdentifier } from '@masknet/shared-base'
+import type { PersonaIdentifier } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { usePersonaConnectStatus } from './usePersonaConnectStatus.js'
@@ -13,6 +13,7 @@ import { SetupGuideStep } from '../../../shared/legacy-settings/types.js'
 import { useLastRecognizedIdentity } from './useActivatedUI.js'
 import Services from '../../extension/service.js'
 import { useSetupGuideStatus } from '../GuideStep/useSetupGuideStatus.js'
+import type { NextIDPlatform } from '@masknet/web3-shared-base'
 
 let isOpenedVerifyDialog = false
 let isOpenedFromButton = false

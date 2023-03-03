@@ -1,7 +1,7 @@
 import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ConsoleContent } from './ConsoleContent.js'
 import { useRemoteControlledDialog } from '../../../../../shared-base-ui/src/hooks/index.js'

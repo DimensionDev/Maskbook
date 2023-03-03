@@ -1,11 +1,11 @@
 import { PlatformCard } from './PlatformCard.js'
-import type { PersonaInformation } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import type { AccountType } from '../types.js'
 import type { Scene } from '../../constants.js'
 import { Empty } from './Empty.js'
 import { Box } from '@mui/material'
 import { useI18N } from '../../locales/index.js'
+import type { PersonaInformation } from '@masknet/web3-shared-base'
 
 export interface MainProps {
     persona?: PersonaInformation

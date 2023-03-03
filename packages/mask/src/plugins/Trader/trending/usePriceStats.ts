@@ -1,10 +1,9 @@
 import { useAsyncRetry } from 'react-use'
 import type { Currency } from '../types/index.js'
-import type { SourceType } from '@masknet/web3-shared-base'
+import type { SourceType, NetworkPluginID } from '@masknet/web3-shared-base'
 import { isUndefined } from 'lodash-es'
 import { PluginTraderRPC } from '../messages.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 
 interface Options {

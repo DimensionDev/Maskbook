@@ -5,16 +5,9 @@ import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import type {
-    BindingProof,
     ECKeyIdentifier,
-    EnhanceableSite,
-    ExtensionSite,
-    NetworkPluginID,
-    NextIDPlatform,
     PostIdentifier,
     PersonaIdentifier,
-    PersonaInformation,
-    PluginID,
     PopupRoutes,
     DashboardRoutes,
     ProfileIdentifier,
@@ -23,10 +16,11 @@ import type {
     NFTAvatarEvent,
     ValueRefWithReady,
 } from '@masknet/shared-base'
-import type { TypedMessage } from '@masknet/typed-message'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import type {
+    EnhanceableSite,
+    NetworkPluginID,
     ChainDescriptor,
+    PluginID,
     NetworkDescriptor,
     ProviderDescriptor,
     SearchResult,
@@ -37,7 +31,13 @@ import type {
     Web3EnableRequirement,
     Web3State,
     Web3UI,
+    ExtensionSite,
+    NextIDPlatform,
+    BindingProof,
+    PersonaInformation,
 } from '@masknet/web3-shared-base'
+import type { TypedMessage } from '@masknet/typed-message'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ChainId as ChainIdEVM, TransactionOptions } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { CompositionType } from './entry-content-script.js'

@@ -18,8 +18,15 @@ import {
     formatWeiToEther,
 } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
-import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
-import { formatCurrency, GasOptionType, isLessThan, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
+import { PopupRoutes } from '@masknet/shared-base'
+import {
+    NetworkPluginID,
+    formatCurrency,
+    GasOptionType,
+    isLessThan,
+    pow10,
+    TransactionDescriptorType,
+} from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'

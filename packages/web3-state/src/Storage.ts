@@ -1,5 +1,5 @@
-import type { ECKeyIdentifier, NextIDPlatform } from '@masknet/shared-base'
-import { Web3StorageServiceState, StorageProviderType, Storage } from '@masknet/web3-shared-base'
+import type { ECKeyIdentifier } from '@masknet/shared-base'
+import { NextIDPlatform, Web3StorageServiceState, StorageProviderType, Storage } from '@masknet/web3-shared-base'
 
 export class StorageState implements Web3StorageServiceState {
     constructor(

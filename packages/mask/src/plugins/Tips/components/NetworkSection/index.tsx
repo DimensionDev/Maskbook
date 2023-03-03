@@ -1,9 +1,10 @@
 import type { FC, HTMLProps } from 'react'
-import { PluginID, EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { makeStyles } from '@masknet/theme'
 import { NetworkTab } from '@masknet/shared'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
+import { PluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {

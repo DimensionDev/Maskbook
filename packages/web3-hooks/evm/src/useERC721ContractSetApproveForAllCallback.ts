@@ -1,5 +1,6 @@
 import { useAsyncFn } from 'react-use'
-import { NetworkPluginID, TimeoutController } from '@masknet/shared-base'
+import { TimeoutController } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useERC721TokenContract } from './useERC721TokenContract.js'

@@ -1,5 +1,6 @@
-import type { ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
+import type { ECKeyIdentifier } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Signer } from '@masknet/web3-shared-evm'
 
 export namespace AbstractAccountAPI {

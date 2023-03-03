@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { PluginID } from '@masknet/shared-base'
 import { useActivatedPluginsSNSAdaptor, createInjectHooksRenderer } from '@masknet/plugin-infra/content-script'
 import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI.js'
+import { PluginID } from '@masknet/web3-shared-base'
 
 export interface ProfileCoverProps extends withClasses<'root'> {}
 

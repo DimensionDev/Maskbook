@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
-import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogContent, Stack, Typography } from '@mui/material'
 import { useI18N } from '../../locales/index.js'
 import { context } from '../context.js'
+import { PluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

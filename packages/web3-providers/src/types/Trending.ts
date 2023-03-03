@@ -1,7 +1,6 @@
-import type { TokenType, SourceType } from '@masknet/web3-shared-base'
+import type { TokenType, SourceType, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import type { NetworkPluginID } from '@masknet/shared-base'
 
 export namespace TrendingAPI {
     export interface Settings {

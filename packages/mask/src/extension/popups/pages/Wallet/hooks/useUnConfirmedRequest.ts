@@ -5,7 +5,8 @@ import type { JsonRpcPayload } from 'web3-core-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { PayloadEditor } from '@masknet/web3-shared-evm'
 import { useChainContext, useNativeTokenAddress, useWeb3State } from '@masknet/web3-hooks-base'
-import { ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
+import { ECKeyIdentifier } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 
 export const useUnconfirmedRequest = () => {

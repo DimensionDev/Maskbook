@@ -1,8 +1,9 @@
 import { useAsyncRetry } from 'react-use'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import type { SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3State } from './useWeb3State.js'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 type AddressList = Array<SocialAddress<Web3Helper.ChainIdAll>>
 

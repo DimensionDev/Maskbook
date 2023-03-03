@@ -1,6 +1,6 @@
+import { i18NextInstance } from '@masknet/web3-shared-base'
 import React, { PropsWithChildren, useEffect, useState } from 'react'
 import { I18nextProvider, initReactI18next, type I18nextProviderProps } from 'react-i18next'
-import { i18NextInstance } from '@masknet/shared-base'
 
 initReactI18next.init(i18NextInstance)
 export function I18NextProviderHMR(props: PropsWithChildren<I18nextProviderProps>): JSX.Element {

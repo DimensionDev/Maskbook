@@ -2,7 +2,7 @@ import { forwardRef, useCallback, useEffect, useImperativeHandle, useState, useM
 import { useUnmount, useUpdateEffect } from 'react-use'
 import { delay } from '@masknet/kit'
 import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
-import { formatBalance } from '@masknet/web3-shared-base'
+import { formatBalance, NetworkPluginID, PluginID } from '@masknet/web3-shared-base'
 import { ChainId, GasConfig } from '@masknet/web3-shared-evm'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -31,7 +31,6 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { TraderStateBar } from './TraderStateBar.js'
 import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 
 export interface TraderProps extends withClasses<'root'> {
     defaultInputCoin?: Web3Helper.FungibleTokenAll

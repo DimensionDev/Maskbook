@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ActionButton, makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { useChainContext, useFungibleToken, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'

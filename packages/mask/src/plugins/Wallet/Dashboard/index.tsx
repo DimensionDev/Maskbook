@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '@masknet/plugin-wallet'
-import { ExtensionSite, getSiteType, NetworkPluginID } from '@masknet/shared-base'
+import { ExtensionSite, getSiteType, NetworkPluginID } from '@masknet/web3-shared-base'
 import { SelectNftContractDialog } from '../SNSAdaptor/SelectNftContractDialog/index.js'
 import { SelectProviderDialog } from '../SNSAdaptor/SelectProviderDialog/index.js'
 import { WalletStatusDialog } from '../SNSAdaptor/WalletStatusDialog/index.js'

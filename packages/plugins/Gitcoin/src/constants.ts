@@ -1,5 +1,5 @@
 import { GeneratedIcon, Icons } from '@masknet/icons'
-import { PluginID } from '@masknet/shared-base'
+import { PluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 export const PLUGIN_ID = PluginID.Gitcoin

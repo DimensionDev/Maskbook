@@ -1,12 +1,4 @@
-import {
-    decompressK256Key,
-    ECKeyIdentifier,
-    NextIDAction,
-    PersonaIdentifier,
-    ProfileIdentifier,
-    ProfileInformationFromNextID,
-    RelationFavor,
-} from '@masknet/shared-base'
+import { decompressK256Key, ECKeyIdentifier, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { MaskMessages } from '../../../../shared/messages.js'
 import { storeAvatar } from '../../../database/avatar-cache/avatar.js'
@@ -24,6 +16,8 @@ import {
     queryProfilesDB,
 } from '../../../database/persona/db.js'
 import { createOrUpdatePersonaDB, createOrUpdateRelationDB } from '../../../database/persona/web.js'
+import { RelationFavor } from '@masknet/public-api'
+import { NextIDAction, type ProfileInformationFromNextID } from '@masknet/web3-shared-base'
 
 export interface UpdateProfileInfo {
     nickname?: string | null

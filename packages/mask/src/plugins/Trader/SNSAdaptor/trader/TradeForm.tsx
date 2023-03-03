@@ -7,14 +7,22 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel.js'
 import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
 import { ChainId, GasConfig, GasEditor, Transaction } from '@masknet/web3-shared-evm'
-import { rightShift, multipliedBy, isZero, ZERO, formatBalance } from '@masknet/web3-shared-base'
+import {
+    rightShift,
+    multipliedBy,
+    isZero,
+    ZERO,
+    formatBalance,
+    NetworkPluginID,
+    PluginID,
+} from '@masknet/web3-shared-base'
 import { Tune as TuneIcon } from '@mui/icons-material'
 import { TokenPanelType, TradeInfo } from '../../types/index.js'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../../utils/index.js'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
-import { isDashboardPage, isPopupPage, PluginID, NetworkPluginID } from '@masknet/shared-base'
+import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { currentSlippageSettings } from '../../settings.js'

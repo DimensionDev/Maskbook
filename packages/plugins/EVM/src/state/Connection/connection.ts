@@ -3,7 +3,7 @@ import { AbiItem, toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import type { ECKeyIdentifier, PartialRequired, Proof } from '@masknet/shared-base'
+import type { ECKeyIdentifier, PartialRequired } from '@masknet/shared-base'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
 import type { ERC1155 } from '@masknet/web3-contracts/types/ERC1155.js'
@@ -37,6 +37,7 @@ import {
     NonFungibleCollection,
     NonFungibleTokenContract,
     TransactionStatusType,
+    Proof,
 } from '@masknet/web3-shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'

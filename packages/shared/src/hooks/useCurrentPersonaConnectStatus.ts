@@ -2,20 +2,12 @@ import type { IdentityResolved } from '@masknet/plugin-infra/content-script'
 import { useSharedI18N } from '../index.js'
 import type { PersonaConnectStatus } from '../types.js'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import {
-    CrossIsolationMessages,
-    DashboardRoutes,
-    MaskEvents,
-    PersonaInformation,
-    PluginID,
-    isSamePersona,
-    isSameProfile,
-    resolveNextIDIdentityToProfile,
-} from '@masknet/shared-base'
+import { CrossIsolationMessages, DashboardRoutes, MaskEvents, isSamePersona, isSameProfile } from '@masknet/shared-base'
 import { useCallback, useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import { PersonaInformation, PluginID, resolveNextIDIdentityToProfile } from '@masknet/web3-shared-base'
 
 const DEFAULT_PERSONA_CONNECT_STATUS: PersonaConnectStatus = {
     action: undefined,

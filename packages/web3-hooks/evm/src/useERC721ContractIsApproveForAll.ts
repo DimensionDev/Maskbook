@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { safeNonPayableTransactionCall } from '@masknet/web3-shared-evm'

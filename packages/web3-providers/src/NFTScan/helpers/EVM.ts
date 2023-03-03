@@ -1,10 +1,9 @@
 import urlcat from 'urlcat'
 import type { AbiItem } from 'web3-utils'
 import { first } from 'lodash-es'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
-import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import {
+    NetworkPluginID,
     formatPercentage,
     NonFungibleAsset,
     NonFungibleCollection,
@@ -16,6 +15,8 @@ import {
     SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
+import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
+import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
 import {
     ChainId,
     chainResolver,

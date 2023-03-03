@@ -14,8 +14,7 @@ import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
 import { useCreateRedPacketReceipt } from './hooks/useCreateRedPacketReceipt.js'
 import { useRefundCallback } from './hooks/useRefundCallback.js'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { formatBalance, FungibleToken, minus } from '@masknet/web3-shared-base'
+import { NetworkPluginID, formatBalance, FungibleToken, minus } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ isViewed: boolean }>()((theme, { isViewed }) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`

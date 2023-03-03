@@ -11,7 +11,6 @@ import {
     mapSubscription,
     EMPTY_LIST,
     PostIVIdentifier,
-    EnhanceableSite,
 } from '@masknet/shared-base'
 import type {
     PostContext,
@@ -31,6 +30,7 @@ import { activatedSocialNetworkUI } from '../ui.js'
 import { resolveFacebookLink } from '../../social-network-adaptor/facebook.com/utils/resolveFacebookLink.js'
 import type { SupportedPayloadVersions } from '@masknet/encryption'
 import { difference } from 'lodash-es'
+import { EnhanceableSite } from '@masknet/web3-shared-base'
 
 export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSActions) {
     return function createPostContext(opt: PostContextCreation): PostContext {

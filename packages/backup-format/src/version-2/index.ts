@@ -7,7 +7,6 @@ import {
     isEC_Public_JsonWebKey,
     PostIVIdentifier,
     ProfileIdentifier,
-    RelationFavor,
 } from '@masknet/shared-base'
 import __ from 'elliptic'
 import { Convert } from 'pvtsutils'
@@ -16,6 +15,7 @@ import { None, Some } from 'ts-results-es'
 import { createEmptyNormalizedBackup } from '../normalize/index.js'
 import type { NormalizedBackup } from '../normalize/type.js'
 import { hex2buffer } from '../utils/hex2buffer.js'
+import type { RelationFavor } from '@masknet/web3-shared-base'
 
 export function isBackupVersion2(item: unknown): item is BackupJSONFileVersion2 {
     try {

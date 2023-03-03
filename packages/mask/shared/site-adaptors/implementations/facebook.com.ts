@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { EnhanceableSite } from '@masknet/web3-shared-base'
 import { defineSiteAdaptor } from '../definitions.js'
 import type { SiteAdaptor } from '../types.js'
 

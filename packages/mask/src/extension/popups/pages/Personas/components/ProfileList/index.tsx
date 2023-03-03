@@ -8,21 +8,14 @@ import { NextIDProof } from '@masknet/web3-providers'
 import { Avatar, Link, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { definedSocialNetworkUIs } from '../../../../../../social-network/index.js'
 import { SOCIAL_MEDIA_ICON_MAPPING, usePersonaProofs } from '@masknet/shared'
-import {
-    ProfileIdentifier,
-    ProfileInformation,
-    EnhanceableSite,
-    NextIDAction,
-    NextIDPlatform,
-    PopupRoutes,
-    EMPTY_LIST,
-} from '@masknet/shared-base'
+import { ProfileIdentifier, PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { MaskMessages, useI18N } from '../../../../../../utils/index.js'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import Services from '../../../../../service.js'
 import { DisconnectDialog } from '../DisconnectDialog/index.js'
 import { MethodAfterPersonaSign } from '../../../Wallet/type.js'
+import { EnhanceableSite, NextIDAction, NextIDPlatform, ProfileInformation } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     list: {

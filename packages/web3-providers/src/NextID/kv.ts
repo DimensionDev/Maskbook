@@ -4,7 +4,7 @@
 import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
 import { Err, Ok, Result } from 'ts-results-es'
-import type { NextIDPlatform, NextIDStoragePayload } from '@masknet/shared-base'
+import type { NextIDPlatform, NextIDStoragePayload } from '@masknet/web3-shared-base'
 import { KV_BASE_URL_DEV, KV_BASE_URL_PROD } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
 import type { NextIDBaseAPI } from '../entry-types.js'

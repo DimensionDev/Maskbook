@@ -2,13 +2,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { head, unionWith } from 'lodash-es'
 import { createContainer } from 'unstated-next'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { ECKeyIdentifier, EMPTY_LIST, isSameProfile, PersonaInformation, ProfileIdentifier } from '@masknet/shared-base'
+import { ECKeyIdentifier, EMPTY_LIST, isSameProfile, ProfileIdentifier } from '@masknet/shared-base'
 import { currentPersonaIdentifier } from '../../../../../../shared/legacy-settings/settings.js'
 import Services from '../../../../service.js'
 import { MaskMessages } from '../../../../../utils/index.js'
 import type { Account } from '../type.js'
 import { initialPersonaInformation } from './PersonaContextInitialData.js'
 import { NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP, usePersonaProofs } from '@masknet/shared'
+import type { PersonaInformation } from '@masknet/web3-shared-base'
 
 function useSSRPersonaInformation() {
     const [personas, setPersonas] = useState(useValueRef(initialPersonaInformation))

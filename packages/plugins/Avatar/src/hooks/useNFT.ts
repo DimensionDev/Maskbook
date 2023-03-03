@@ -1,8 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useWeb3Hub, useWeb3State } from '@masknet/web3-hooks-base'
-import { formatBalance, CurrencyType } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { formatBalance, CurrencyType, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NFTInfo } from '../types.js'
 

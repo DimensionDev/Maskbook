@@ -2,9 +2,15 @@ import { memo, useCallback, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { delay } from '@masknet/kit'
 import { useCustomSnackbar } from '@masknet/theme'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import {
+    isSameAddress,
+    NetworkPluginID,
+    NextIDAction,
+    NextIDPlatform,
+    Binding,
+    PersonaInformation,
+} from '@masknet/web3-shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { NetworkPluginID, Binding, PersonaInformation, NextIDAction, NextIDPlatform } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { usePersonaSign } from '../hooks/usePersonaSign.js'
 import { useWalletSign } from '../hooks/useWalletSign.js'

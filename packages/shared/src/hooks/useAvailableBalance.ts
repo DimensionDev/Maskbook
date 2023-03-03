@@ -1,4 +1,4 @@
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, isGreaterThan, isSameAddress, toFixed, ZERO } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     useChainContext,
@@ -8,7 +8,6 @@ import {
     useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import { SmartPayBundler } from '@masknet/web3-providers'
-import { isGreaterThan, isSameAddress, toFixed, ZERO } from '@masknet/web3-shared-base'
 import { ChainId, DepositPaymaster, GasConfig, GasEditor, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { BigNumber } from 'bignumber.js'
 import { useMemo } from 'react'

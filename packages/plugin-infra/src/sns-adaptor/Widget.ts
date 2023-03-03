@@ -1,5 +1,5 @@
 import React, { createElement, Fragment, useMemo } from 'react'
-import type { PluginID } from '@masknet/shared-base'
+import type { PluginID } from '@masknet/web3-shared-base'
 import { useActivatedPluginsSNSAdaptor } from '../manager/sns-adaptor.js'
 import type { Plugin } from '../types.js'
 

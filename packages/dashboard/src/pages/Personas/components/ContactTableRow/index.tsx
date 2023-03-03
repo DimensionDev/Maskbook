@@ -8,7 +8,7 @@ import { useDashboardI18N } from '../../../../locales/index.js'
 import { useAddContactToFavorite, useRemoveContactFromFavorite } from '../../hooks/useFavoriteContact.js'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import { LoadingButton } from '@mui/lab'
-import type { RelationProfile } from '@masknet/shared-base'
+import type { RelationProfile } from '@masknet/web3-shared-base'
 import { Image, Icon } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({

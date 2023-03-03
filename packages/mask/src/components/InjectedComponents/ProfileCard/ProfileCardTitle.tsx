@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { PluginID } from '@masknet/shared-base'
+import { PluginID } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'

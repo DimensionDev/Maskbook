@@ -8,8 +8,16 @@ import { useDashboardI18N } from '../../../../locales/index.js'
 import { EmptyPlaceholder } from '../EmptyPlaceholder/index.js'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
 import { FungibleTokenTableRow } from '../FungibleTokenTableRow/index.js'
-import { NetworkPluginID, DashboardRoutes, EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
-import { CurrencyType, isGreaterThanOrEqualTo, isLessThan, leftShift, minus, toZero } from '@masknet/web3-shared-base'
+import { DashboardRoutes, EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
+import {
+    NetworkPluginID,
+    CurrencyType,
+    isGreaterThanOrEqualTo,
+    isLessThan,
+    leftShift,
+    minus,
+    toZero,
+} from '@masknet/web3-shared-base'
 import { useNetworkContext, useNativeToken } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'

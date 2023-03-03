@@ -3,7 +3,7 @@ import { SNSAdaptorContext, PluginI18NFieldRender } from '@masknet/plugin-infra/
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
-import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
 import { MaskColorVar } from '@masknet/theme'
 import { Link } from '@mui/material'
@@ -13,6 +13,7 @@ import { setupStorage, storageDefaultValue } from '../storage/index.js'
 import { TipsEntranceDialog } from './TipsEntranceDialog.js'
 import { TipsRealmContent } from './components/TipsRealmContent/index.js'
 import { SharedContextSettings } from '../settings/index.js'
+import { PluginID } from '@masknet/web3-shared-base'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

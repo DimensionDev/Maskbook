@@ -1,5 +1,5 @@
 import { SocialNetworkEnum } from '@masknet/encryption'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { EnhanceableSite } from '@masknet/web3-shared-base'
 import type { SocialNetwork } from '@masknet/types'
 
 const origins = ['https://www.facebook.com/*', 'https://m.facebook.com/*', 'https://facebook.com/*']

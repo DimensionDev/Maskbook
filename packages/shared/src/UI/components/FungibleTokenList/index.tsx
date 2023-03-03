@@ -10,7 +10,17 @@ import {
     useState,
 } from 'react'
 import { uniqBy } from 'lodash-es'
-import { EMPTY_LIST, EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
+import {
+    NetworkPluginID,
+    CurrencyType,
+    currySameAddress,
+    FungibleToken,
+    isSameAddress,
+    leftShift,
+    minus,
+    toZero,
+} from '@masknet/web3-shared-base'
 import { makeStyles, MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
 import { Box, Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales/index.js'
@@ -27,15 +37,6 @@ import {
     useAccount,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import {
-    CurrencyType,
-    currySameAddress,
-    FungibleToken,
-    isSameAddress,
-    leftShift,
-    minus,
-    toZero,
-} from '@masknet/web3-shared-base'
 import { getFungibleTokenItem } from './FungibleTokenItem.js'
 import { ManageTokenListBar } from './ManageTokenListBar.js'
 import { TokenListMode } from './type.js'

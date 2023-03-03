@@ -1,7 +1,7 @@
 import { Chip } from '@mui/material'
 import type { ChipProps } from '@mui/material/Chip'
 import { Avatar } from '../../../utils/index.js'
-import type { ProfileInformation as Profile } from '@masknet/shared-base'
+import type { ProfileInformation as Profile } from '@masknet/web3-shared-base'
 
 export interface ProfileInChipProps {
     onDelete?(): void

@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import type { DefaultComponentProps } from '@mui/material/OverridableComponent.js'
 import type { ListItemTypeMap } from '@mui/material/ListItem'
 import { Avatar } from '../../../utils/index.js'
-import type { ProfileInformation as Profile } from '@masknet/shared-base'
+import type { ProfileInformation as Profile } from '@masknet/web3-shared-base'
 
 export interface ProfileInListProps {
     item: Profile

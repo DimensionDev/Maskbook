@@ -1,13 +1,14 @@
 import { memo, useEffect, useMemo, useRef } from 'react'
 import { Icons } from '@masknet/icons'
 import { PluginI18NFieldRender, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Avatar, Box, List, ListItem, ListItemAvatar, Stack, Switch, Typography } from '@mui/material'
 import { Services } from '../../extension/service.js'
 import { useI18N } from '../../utils/index.js'
 import { useAsyncRetry } from 'react-use'
+import { PluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     listItem: {

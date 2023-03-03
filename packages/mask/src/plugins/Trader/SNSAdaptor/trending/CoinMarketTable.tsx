@@ -2,9 +2,15 @@ import { Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Ty
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import {
+    NetworkPluginID,
+    SourceType,
+    formatInteger,
+    formatMarketCap,
+    formatSupply,
+    TokenType,
+} from '@masknet/web3-shared-base'
 import { WalletIcon } from '@masknet/shared'
-import { SourceType, formatInteger, formatMarketCap, formatSupply, TokenType } from '@masknet/web3-shared-base'
 import type { Trending } from '../../types/index.js'
 import { useI18N } from '../../../../utils/index.js'
 import { useTrendingOverview } from '../../trending/useTrending.js'

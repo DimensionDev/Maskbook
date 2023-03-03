@@ -1,4 +1,4 @@
-import { EnhanceableSite } from '@masknet/shared-base'
+import { EnhanceableSite } from '@masknet/web3-shared-base'
 import Services from '../extension/service.js'
 
 const { fetch: original_fetch } = globalThis

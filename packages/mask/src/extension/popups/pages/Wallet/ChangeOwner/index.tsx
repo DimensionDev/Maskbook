@@ -1,15 +1,9 @@
 import { Icons } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
-import {
-    DashboardRoutes,
-    formatPersonaFingerprint,
-    NetworkPluginID,
-    PopupRoutes,
-    TimeoutController,
-} from '@masknet/shared-base'
+import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
+import { DashboardRoutes, formatPersonaFingerprint, PopupRoutes, TimeoutController } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
-import { isSameAddress } from '@masknet/web3-shared-base'
 import { explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Link, Popover, Typography, Button } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'

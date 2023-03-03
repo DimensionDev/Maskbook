@@ -1,6 +1,7 @@
 import { story } from '@masknet/storybook-shared'
 import { PersonaCardUI as C } from '../../../src/pages/Personas/components/PersonaCard/index.js'
-import { ECKeyIdentifier, ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
+import { ECKeyIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import { EnhanceableSite } from '@masknet/web3-shared-base'
 import { action } from '@storybook/addon-actions'
 
 const { meta, of } = story(C)

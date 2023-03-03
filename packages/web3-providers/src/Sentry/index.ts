@@ -1,7 +1,6 @@
 import { Breadcrumbs, Event, GlobalHandlers } from '@sentry/browser'
-import { getSiteType, getAgentType } from '@masknet/shared-base'
 import { TelemetryAPI } from '../types/Telemetry.js'
-import { formatMask } from '@masknet/web3-shared-base'
+import { formatMask, getAgentType, getSiteType } from '@masknet/web3-shared-base'
 
 export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
     constructor() {

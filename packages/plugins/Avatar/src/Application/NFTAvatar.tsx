@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { EnhanceableSite } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, Stack } from '@mui/material'
 import { RainbowBox } from '../SNSAdaptor/RainbowBox.js'

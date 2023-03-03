@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { FormattedAddress, ImageIcon, useSnackbarCallback } from '@masknet/shared'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'

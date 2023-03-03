@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { PluginITO_RPC } from '../../messages.js'
 
 export function usePoolPayload(pid: string) {

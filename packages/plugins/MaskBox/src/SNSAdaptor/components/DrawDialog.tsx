@@ -17,7 +17,7 @@ import {
 import { Box, Button, DialogActions, DialogContent, TextField, Typography } from '@mui/material'
 import { formatEthereumAddress, SchemaType, useMaskBoxConstants } from '@masknet/web3-shared-evm'
 import { formatBalance, formatCurrency, multipliedBy } from '@masknet/web3-shared-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { BoxInfo } from '../../type.js'
 import { Context } from '../../hooks/useContext.js'
 import { useI18N } from '../../locales/index.js'

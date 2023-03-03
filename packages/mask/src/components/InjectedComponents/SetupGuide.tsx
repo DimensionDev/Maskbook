@@ -3,13 +3,8 @@ import stringify from 'json-stable-stringify'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { NextIDProof } from '@masknet/web3-providers'
-import {
-    PersonaIdentifier,
-    ProfileIdentifier,
-    NextIDPlatform,
-    EnhanceableSite,
-    EncryptionTargetType,
-} from '@masknet/shared-base'
+import { PersonaIdentifier, ProfileIdentifier, EncryptionTargetType } from '@masknet/shared-base'
+import { EnhanceableSite, NextIDPlatform } from '@masknet/web3-shared-base'
 import { useI18N } from '../../utils/index.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { currentSetupGuideStatus, userGuideStatus, userPinExtension } from '../../../shared/legacy-settings/settings.js'

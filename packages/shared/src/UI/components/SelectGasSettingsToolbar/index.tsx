@@ -17,8 +17,8 @@ import {
     isSameAddress,
     ZERO,
     toFixed,
+    NetworkPluginID,
 } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
 import {
     ChainId,
     DepositPaymaster,

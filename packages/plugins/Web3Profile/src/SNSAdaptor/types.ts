@@ -1,4 +1,4 @@
-import type { BindingProof, NextIDPlatform, ProfileInformation } from '@masknet/shared-base'
+import type { ProfileInformation, NextIDPlatform, BindingProof } from '@masknet/web3-shared-base'
 import type { Web3ProfileStorage, WalletsCollection, CollectionTypes } from '@masknet/shared'
 
 export interface GeneralAsset {

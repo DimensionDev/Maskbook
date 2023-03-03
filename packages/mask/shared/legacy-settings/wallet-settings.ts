@@ -1,6 +1,6 @@
-import { PluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { createGlobalSettings } from './createSettings.js'
+import { PluginID } from '@masknet/web3-shared-base'
 
 export enum LockStatus {
     INIT = 0,

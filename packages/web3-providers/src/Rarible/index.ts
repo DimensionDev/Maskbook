@@ -1,7 +1,8 @@
 import urlcat from 'urlcat'
 import { first } from 'lodash-es'
-import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import {
+    createLookupTableResolver,
     HubOptions,
     NonFungibleAsset,
     NonFungibleTokenEvent,
