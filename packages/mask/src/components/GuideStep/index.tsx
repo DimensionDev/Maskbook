@@ -112,11 +112,13 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
 
     const history = useLocation()
 
+    const stepVisible = isCurrentStep && !finished && !!clientRect?.top && !!clientRect.left
+
     useEffect(() => {
-        document.body.style.overflow = isCurrentStep ? 'hidden' : ''
-        document.documentElement.style.overflow = isCurrentStep ? 'hidden' : ''
+        document.body.style.overflow = stepVisible ? 'hidden' : ''
+        document.documentElement.style.overflow = stepVisible ? 'hidden' : ''
         document.body.style.paddingLeft = 'calc(100vw - 100%)'
-    }, [isCurrentStep])
+    }, [stepVisible])
 
     const onSkip = () => {
         sayHelloShowed[networkIdentifier].value = true
