@@ -1626,6 +1626,8 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
     /** The provider type of the currently visiting site. */
     providerType?: Subscription<ProviderType>
 
+    setup(): Promise<void>
+
     /** Detect if a provider is ready */
     isReady: (providerType: ProviderType) => boolean
     /** Wait until a provider ready */
@@ -1691,6 +1693,7 @@ export interface WalletState<Transaction> {
     /** The currently stored wallet by MaskWallet. */
     wallets?: Subscription<Wallet[]>
 
+    setup(): Promise<void>
     addWallet(wallet: Wallet): Promise<void>
     updateWallet(
         address: string,
@@ -1701,7 +1704,6 @@ export interface WalletState<Transaction> {
     renameWallet(address: string, name: string): Promise<void>
     removeWallets(wallets: Wallet[]): Promise<void>
     removeWallet(address: string, password?: string): Promise<void>
-
     signTransaction(address: string, transaction: Transaction): Promise<string>
     signMessage(address: string, type: string, message: string, password?: string): Promise<string>
 }

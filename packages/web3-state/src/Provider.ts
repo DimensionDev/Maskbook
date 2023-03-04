@@ -69,8 +69,6 @@ export class ProviderState<
     protected async setupSubscriptions() {
         if (!this.site) return
 
-        this.providerType = mapSubscription(this.storage.providerType.subscription, (provider) => provider)
-
         this.chainId = mapSubscription(
             mergeSubscription(this.storage.account.subscription),
             ([account]) => account.chainId,
@@ -82,6 +80,7 @@ export class ProviderState<
         this.networkType = mapSubscription(mergeSubscription(this.storage.account.subscription), ([account]) =>
             this.options.getNetworkTypeFromChainId(account.chainId),
         )
+        this.providerType = mapSubscription(this.storage.providerType.subscription, (provider) => provider)
     }
 
     private async setupProviders() {
