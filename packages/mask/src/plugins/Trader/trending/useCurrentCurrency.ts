@@ -91,5 +91,7 @@ export function useCurrentCurrency(chainId: Web3Helper.ChainIdAll, dataProvider:
     if (!dataProvider) return undefined
     const currencies = CURRENCIES_MAP[dataProvider]
     if (!currencies) return
-    return chainId ? currencies.find((x) => x.chainId === chainId) : undefined
+    return chainId && dataProvider === SourceType.NFTScan
+        ? currencies.find((x) => x.chainId === chainId)
+        : CURRENCIES_MAP[dataProvider]?.[0]
 }
