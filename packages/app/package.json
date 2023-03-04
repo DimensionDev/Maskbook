@@ -67,9 +67,11 @@
     "devDependencies": {
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
         "copy-webpack-plugin": "^11.0.0",
+        "css-loader": "^6.7.3",
         "html-webpack-plugin": "^5.5.0",
         "react-refresh": "^0.14.0",
         "source-map-loader": "^4.0.1",
+        "style-loader": "^3.3.1",
         "swc-loader": "^0.2.3",
         "webpack": "^5.75.0",
         "webpack-cli": "^5.0.1",

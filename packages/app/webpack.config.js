@@ -44,6 +44,10 @@ function Configuration(env, argv) {
         module: {
             rules: [
                 {
+                    test: /\.css$/i,
+                    use: ['style-loader', 'css-loader'],
+                },
+                {
                     test: /\.tsx?$/,
                     include: fileURLToPath(new URL('../../', import.meta.url)),
                     loader: 'swc-loader',

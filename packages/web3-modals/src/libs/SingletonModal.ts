@@ -1,10 +1,10 @@
-export type SingletonModalRefCreator<OpenProps, CloseProps> = (
-    onOpen: (props: OpenProps) => void,
-    onClose: (props: CloseProps) => void,
+export type SingletonModalRefCreator<OpenProps = void, CloseProps = void> = (
+    onOpen: (props?: OpenProps) => void,
+    onClose: (props?: CloseProps) => void,
     onAbort: (error: Error) => void,
 ) => {
-    open: (props: OpenProps) => void
-    close: (props: CloseProps) => void
+    open: (props?: OpenProps) => void
+    close: (props?: CloseProps) => void
     abort?: (error: Error) => void
 }
 
@@ -13,8 +13,8 @@ export interface SingletonModalProps {
 }
 
 export class SingletonModal<
-    OpenProps,
-    CloseProps,
+    OpenProps = void,
+    CloseProps = void,
     T extends SingletonModalRefCreator<OpenProps, CloseProps> = SingletonModalRefCreator<OpenProps, CloseProps>,
 > {
     private onOpen: ReturnType<T>['open'] | undefined
@@ -29,7 +29,14 @@ export class SingletonModal<
      * Register a React modal component that implemented a forwarded ref.
      * The ref item should be fed with open and close methods.
      */
-    register(creator: T) {
+    register(creator: T | null) {
+        if (!creator) {
+            this.dispatchOpen = undefined
+            this.dispatchClose = undefined
+            this.dispatchAbort = undefined
+            return
+        }
+
         const ref = creator(
             (props) => this.onOpen?.(props),
             (props) => this.onClose?.(props),
@@ -44,7 +51,7 @@ export class SingletonModal<
      * Open the registered modal component with props
      * @param props
      */
-    open(props: OpenProps) {
+    open(props?: OpenProps) {
         this.dispatchOpen?.(props)
     }
 
@@ -52,7 +59,7 @@ export class SingletonModal<
      * Close the registered modal component with props
      * @param props
      */
-    close(props: CloseProps) {
+    close(props?: CloseProps) {
         this.dispatchClose?.(props)
     }
 
@@ -67,8 +74,8 @@ export class SingletonModal<
      * Open the registered modal component and wait for it closes
      * @param props
      */
-    openAndWaitForClose(props: OpenProps): Promise<CloseProps> {
-        return new Promise<CloseProps>((resolve, reject) => {
+    openAndWaitForClose(props?: OpenProps): Promise<CloseProps | undefined> {
+        return new Promise<CloseProps | undefined>((resolve, reject) => {
             this.open(props)
 
             this.onClose = (props) => resolve(props)
