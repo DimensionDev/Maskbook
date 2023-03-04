@@ -2,6 +2,7 @@
     "__display_name": "文件服务",
     "__description": "上传和分享文件至 Arweave 网络，永久性地存储数据。",
     "__composition_entry": "📃 文件服务",
+    "name": "文件服务",
     "on_insert": "使用该文件",
     "uploading_preparing": "准备中",
     "uploading_estimating_time": "预计时间…",
