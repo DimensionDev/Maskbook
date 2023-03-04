@@ -1,4 +1,8 @@
-import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { upperFirst } from 'lodash-es'
+import { DashboardRoutes } from '@masknet/shared-base'
+import { Button, Stack } from '@mui/material'
+import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import {
     Body,
     ColumnContentLayout,
@@ -6,26 +10,15 @@ import {
     PersonaLogoBox,
     SignUpAccountLogo,
 } from '../../../components/RegisterFrame/ColumnContentLayout.js'
-import { useNavigate } from 'react-router-dom'
-import { DashboardRoutes } from '@masknet/shared-base'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader.js'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
-import { upperFirst } from 'lodash-es'
-import { Button, Stack } from '@mui/material'
-import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { ActionCard } from '../../../components/ActionCard/index.js'
 
 export const ConnectSocialMedia = () => {
     const navigate = useNavigate()
     const t = useDashboardI18N()
     const { currentPersona, connectPersona, definedSocialNetworks } = PersonaContext.useContainer()
-
-    useEffect(() => {
-        if (currentPersona && currentPersona?.linkedProfiles.length > 0) {
-            navigate(DashboardRoutes.Personas, { replace: true })
-        }
-    }, [currentPersona])
 
     const handleConnect = async (networkIdentifier: string) => {
         if (currentPersona) {
