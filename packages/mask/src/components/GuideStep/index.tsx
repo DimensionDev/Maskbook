@@ -135,6 +135,7 @@ export default function GuideStep({
         if (disabled) return
         document.body.style.overflow = open ? 'hidden' : ''
         document.documentElement.style.overflow = open ? 'hidden' : ''
+        document.body.style.paddingLeft = 'calc(100vw - 100%)'
     }, [open])
 
     const onSkip = () => {
