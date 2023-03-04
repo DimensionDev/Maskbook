@@ -91,12 +91,6 @@ export class ProviderState<
                     WalletProvider<ChainId, ProviderType, Web3Provider, Web3>,
                 ]
 
-                try {
-                    await provider.setup()
-                } catch {
-                    // ignore setup errors
-                }
-
                 provider.emitter.on('chainId', async (chainId) => {
                     await this.setAccount(providerType, {
                         chainId: Number.parseInt(chainId, 16) as ChainId,
@@ -128,6 +122,12 @@ export class ProviderState<
 
                     await this.storage.providerType.setValue(this.options.getDefaultProviderType())
                 })
+
+                try {
+                    await provider.setup()
+                } catch {
+                    // ignore setup errors
+                }
             }),
         )
     }
