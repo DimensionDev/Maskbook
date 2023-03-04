@@ -131,6 +131,13 @@ export default function GuideStep({
         location.assign('/home')
     }, [lastStep, history])
 
+    useEffect(() => {
+        if (disabled) return
+        document.body.style.overflow = open ? 'hidden' : ''
+        document.documentElement.style.overflow = open ? 'hidden' : ''
+        document.body.style.paddingLeft = 'calc(100vw - 100%)'
+    }, [open])
+
     const onSkip = () => {
         setOpen(false)
         userGuideStatus[ui.networkIdentifier].value = Flags.userGuideLevel
