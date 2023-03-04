@@ -135,7 +135,6 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     }
 
     const onTry = () => {
-        userGuideStatus[networkIdentifier].value = '1'
         userGuideFinished[networkIdentifier].value = true
         onComplete?.()
     }
