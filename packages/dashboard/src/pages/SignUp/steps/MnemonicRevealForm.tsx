@@ -60,17 +60,12 @@ export const MnemonicRevealForm = memo(() => {
     }
 
     const onConfirm = async () => {
-        if (!id) {
-            await create()
-        }
-
+        if (!id) await create()
         navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`)
     }
 
     const onPreview = async (type: 'print' | 'download') => {
-        if (!id) {
-            await create()
-        }
+        if (!id) await create()
 
         setPreview({
             open: true,
