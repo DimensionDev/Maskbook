@@ -7,7 +7,7 @@
     },
     "scripts": {
         "start": "npx webpack serve",
-        "build": "npx webpack",
+        "build": "pnpm run build:css && npx webpack",
         "build:css": "cross-env TAILWIND_MODE=build NODE_ENV=production postcss src/styles/tailwind.css -o src/styles/index.css",
         "watch:css": "cross-env TAILWIND_MODE=watch NODE_ENV=development postcss src/styles/tailwind.css -o src/styles/index.css --watch"
     },
