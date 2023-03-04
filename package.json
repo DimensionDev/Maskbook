@@ -1,10 +1,10 @@
 {
   "name": "mask-network",
   "type": "module",
-  "packageManager": "pnpm@7.13.2",
+  "packageManager": "pnpm@7.29.0-1",
   "engines": {
     "node": ">=18.7.0",
-    "pnpm": ">=7.7.0",
+    "pnpm": ">=7.29.0-1",
     "yarn": ">=999.0.0",
     "npm": ">=999.0.0"
   },
@@ -51,7 +51,7 @@
     "lodash-es": "^4.17.21",
     "react": "0.0.0-experimental-d1e35c703-20221110",
     "react-dom": "0.0.0-experimental-d1e35c703-20221110",
-    "react-i18next": "^12.0.0",
+    "react-i18next": "^12.2.0",
     "ses": "0.18.1",
     "ts-results-es": "3.5.0"
   },
@@ -88,7 +88,7 @@
     "ts-node": "^10.9.1",
     "typescript": "5.1.0-dev.20230302",
     "vite": "^4.1.4",
-    "vitest": "^0.29.1"
+    "vitest": "^0.29.2"
   },
   "pnpm": {
     "overrides": {
@@ -123,7 +123,9 @@
       ],
       "allowedVersions": {
         "react": "0.0.0-experimental-d1e35c703-20221110",
-        "react-dom": "0.0.0-experimental-d1e35c703-20221110"
+        "react-dom": "0.0.0-experimental-d1e35c703-20221110",
+        "typescript": "5",
+        "rollup": "3"
       }
     },
     "patchedDependencies": {

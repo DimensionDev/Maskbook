@@ -48,6 +48,6 @@
     "async-call-rpc": "^6.1.5"
   },
   "peerDependencies": {
-    "react-i18next": "^11.15.3"
+    "react-i18next": "^12"
   }
 }
