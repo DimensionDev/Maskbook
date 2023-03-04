@@ -16,15 +16,14 @@ export async function createWeb3State(
     context: Plugin.Shared.SharedUIContext,
 ): Promise<FlowWeb3State> {
     const Provider_ = new Provider(context)
+    await Provider_.storage.account.initializedPromise
+    await Provider_.storage.providerType.initializedPromise
+    await Provider_.setup()
+
     const Wallet_ = new Wallet(context, {
         providerType: Provider_.providerType,
     })
-
-    await Provider_.storage.account.initializedPromise
-    await Provider_.storage.providerType.initializedPromise
     await Wallet_.storage.initializedPromise
-
-    await Provider_.setup()
     await Wallet_.setup()
 
     return {

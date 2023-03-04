@@ -17,18 +17,18 @@ export async function createWeb3State(
     context: Plugin.Shared.SharedUIContext,
 ): Promise<SolanaWeb3State> {
     const Provider_ = new Provider(context)
-    const Settings_ = new Settings(context)
+    await Provider_.storage.account.initializedPromise
+    await Provider_.storage.providerType.initializedPromise
+    await Provider_.setup()
+
     const Wallet_ = new Wallet(context, {
         providerType: Provider_.providerType,
     })
-
-    await Provider_.storage.account.initializedPromise
-    await Provider_.storage.providerType.initializedPromise
-    await Settings_.storage.currencyType.initializedPromise
     await Wallet_.storage.initializedPromise
-
-    await Provider_.setup()
     await Wallet_.setup()
+
+    const Settings_ = new Settings(context)
+    await Settings_.storage.currencyType.initializedPromise
 
     return {
         AddressBook: new AddressBook(context, {
