@@ -1,4 +1,4 @@
-import { SingletonModal } from '../components/SingletonModal.js'
+import { SingletonModal } from '../libs/SingletonModal.js'
 import { Example, type ExampleCloseProps, type ExampleOpenProps } from './Example/index.js'
 
 const ExampleDialog = new SingletonModal<ExampleOpenProps, ExampleCloseProps>()

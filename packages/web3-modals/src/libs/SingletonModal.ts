@@ -21,8 +21,9 @@ export class SingletonModal<
     private onClose: ReturnType<T>['close'] | undefined
     private onAbort: ReturnType<T>['abort'] | undefined
 
-    private openForwarded: ReturnType<T>['open'] | undefined
-    private closeForwarded: ReturnType<T>['close'] | undefined
+    private dispatchOpen: ReturnType<T>['open'] | undefined
+    private dispatchClose: ReturnType<T>['close'] | undefined
+    private dispatchAbort: ReturnType<T>['abort'] | undefined
 
     /**
      * Register a React modal component that implemented a forwarded ref.
@@ -34,8 +35,9 @@ export class SingletonModal<
             (props) => this.onClose?.(props),
             (error) => this.onAbort?.(error),
         )
-        this.openForwarded = ref.open
-        this.closeForwarded = ref.close
+        this.dispatchOpen = ref.open
+        this.dispatchClose = ref.close
+        this.dispatchAbort = ref.abort
     }
 
     /**
@@ -43,7 +45,7 @@ export class SingletonModal<
      * @param props
      */
     open(props: OpenProps) {
-        this.openForwarded?.(props)
+        this.dispatchOpen?.(props)
     }
 
     /**
@@ -51,7 +53,14 @@ export class SingletonModal<
      * @param props
      */
     close(props: CloseProps) {
-        this.closeForwarded?.(props)
+        this.dispatchClose?.(props)
+    }
+
+    /**
+     * Abort the registered modal component with Error
+     */
+    abort(error: Error) {
+        this.dispatchAbort?.(error)
     }
 
     /**
