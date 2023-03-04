@@ -20,8 +20,8 @@ export class RSS3API implements RSS3BaseAPI.Provider {
         sign: (message: string) => Promise<string> = () => {
             throw new Error('Not supported.')
         },
-    ): RSS3.default {
-        return new (RSS3.default || RSS3)({
+    ): RSS3 {
+        return new RSS3({
             endpoint: RSS3_LEGACY_ENDPOINT,
             address,
             sign,
