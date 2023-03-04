@@ -9,6 +9,8 @@ const betaOrInsiderOnly = insiderOnly || process.env.channel === 'beta'
 
 // TODO: In future, we can turn this object into a Proxy to receive flags from remote
 export const Flags = {
+    /** @deprecated */
+    userGuideLevel: 'v2',
     isolated_dashboard_bridge_enabled: false,
     mask_SDK_ready: betaOrInsiderOnly,
     /** Don't inject injected script in this mode. Native side will do the job. */
