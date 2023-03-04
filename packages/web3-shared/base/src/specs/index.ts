@@ -557,6 +557,10 @@ export interface NonFungibleTokenEvent<ChainId, SchemaType> {
     from?: Identity
     /** the account fullfil the order */
     to?: Identity
+    /** the account who send the token */
+    send?: Identity
+    /** the account who receive the token */
+    receive?: Identity
     /** unix timestamp */
     timestamp: number
     /** relate token price */
