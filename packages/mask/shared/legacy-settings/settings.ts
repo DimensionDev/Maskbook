@@ -33,6 +33,7 @@ export const pluginIDSettings = createGlobalSettings<Record<EnhanceableSite | Ex
 
 export const currentSetupGuideStatus = createBulkSettings('currentSetupGuideStatus', '')
 export const userGuideStatus = createBulkSettings('userGuideStatus', '')
+export const userGuideFinished = createBulkSettings('userGuideFinished', false)
 export const sayHelloShowed = createBulkSettings('sayHelloShowed', false)
 export const userPinExtension = createGlobalSettings('userPinExtension', false)
 export const dismissVerifyNextID = createBulkSettings<Record<string, boolean>>('dismissVerifyNextID', {}, isEqual)
