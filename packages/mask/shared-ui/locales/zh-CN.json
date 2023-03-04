@@ -466,6 +466,7 @@
     "plugin_trader_sales": "交易量（24h）",
     "plugin_trader_rank": "排名 # {{rank}}",
     "plugin_trader_info": "信息资料",
+    "plugin_trader_website": "网站",
     "plugin_trader_community": "社区",
     "plugin_savings": "储蓄",
     "plugin_savings_asset": "资产",

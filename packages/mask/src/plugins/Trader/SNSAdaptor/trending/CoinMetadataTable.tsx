@@ -89,7 +89,9 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const metadataLinks = [['Website', trending.coin.home_urls]] as Array<[string, string[] | undefined]>
+    const metadataLinks = [[t('plugin_trader_website'), trending.coin.home_urls]] as Array<
+        [string, string[] | undefined]
+    >
 
     const contracts = trending.contracts?.filter((x) => x.chainId) ?? [
         {
