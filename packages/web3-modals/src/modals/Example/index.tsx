@@ -2,7 +2,7 @@ import { forwardRef, Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/24/outline'
 import type { SingletonModalRefCreator } from '../../libs/SingletonModal.js'
-import { useSingletonModal } from '../../hooks/useSignletonModal.js'
+import { useSingletonModal } from '../../hooks/useSingletonModal.js'
 
 export interface ExampleOpenProps {
     email: string
