@@ -24,36 +24,35 @@ export async function createWeb3State(
     signal: AbortSignal,
     context: Plugin.Shared.SharedUIContext,
 ): Promise<EVM_Web3State> {
-    const Provider_ = new Provider(context)
-    await Provider_.storage.account.initializedPromise
-    await Provider_.storage.providerType.initializedPromise
-    await Provider_.setup()
-
     const Wallet_ = new Wallet(context, {
         providerType: createConstantSubscription(ProviderType.MaskWallet),
     })
-    await Wallet_.storage.initializedPromise
+    await Wallet_.readyPromise
     await Wallet_.setup()
+
+    const Provider_ = new Provider(context)
+    await Provider_.readyPromise
+    await Provider_.setup()
 
     const AddressBook_ = new AddressBook(context, {
         chainId: Provider_.chainId,
     })
-    await AddressBook_.storage.initializedPromise
+    await AddressBook_.readyPromise
 
     const Settings_ = new Settings(context)
-    await Settings_.storage.currencyType.initializedPromise
+    await Settings_.readyPromise
 
     const Transaction_ = new Transaction(context, {
         chainId: Provider_.chainId,
         account: Provider_.account,
     })
-    await Transaction_.storage.initializedPromise
+    await Transaction_.readyPromise
 
     const TransactionWatcher_ = new TransactionWatcher(context, {
         chainId: Provider_.chainId,
         transactions: Transaction_.transactions,
     })
-    await TransactionWatcher_.storage.initializedPromise
+    await TransactionWatcher_.readyPromise
 
     return {
         Settings: Settings_,

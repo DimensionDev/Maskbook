@@ -25,22 +25,21 @@ export class BaseContractWalletProvider extends BaseHostedProvider implements EV
     override async setup() {
         await super.setup()
 
-        const context = await SharedContextSettings.readyPromise
-        const state = await Web3StateSettings.readyPromise
-
-        const { storage } = context.createKVStorage('memory', {}).createSubScope(`${this.providerType}_owner`, {
-            value: {
-                account: this.options.getDefaultAccount(),
-                // empty string means EOA signer
-                identifier: '',
-            },
-        })
+        const { storage } = SharedContextSettings.value
+            .createKVStorage('memory', {})
+            .createSubScope(`${this.providerType}_owner`, {
+                value: {
+                    account: this.options.getDefaultAccount(),
+                    // empty string means EOA signer
+                    identifier: '',
+                },
+            })
 
         this.ownerStorage = storage.value
 
-        state.Wallet?.wallets?.subscribe(async () => {
+        Web3StateSettings.value.Wallet?.wallets?.subscribe(async () => {
             if (!this.hostedAccount) return
-            const wallets = state.Wallet?.wallets?.getCurrentValue()
+            const wallets = Web3StateSettings.value.Wallet?.wallets?.getCurrentValue()
             const target = wallets?.find((x) => isSameAddress(x.address, this.hostedAccount))
             const smartPayChainId = await SmartPayBundler.getSupportedChainId()
             if (target?.owner) {
@@ -53,6 +52,14 @@ export class BaseContractWalletProvider extends BaseHostedProvider implements EV
                 }
             }
         })
+    }
+
+    override get ready() {
+        return [super.ready, this.ownerStorage?.initialized].every((x) => !!x)
+    }
+
+    override get readyPromise() {
+        return Promise.all([super.readyPromise, this.ownerStorage?.initializedPromise]).then(() => {})
     }
 
     get ownerAccount() {

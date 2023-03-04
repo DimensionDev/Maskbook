@@ -15,9 +15,6 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
     override async setup() {
         await super.setup()
 
-        await Web3StateSettings.readyPromise
-        await Web3StateSettings.value.Wallet?.readyPromise
-
         Web3StateSettings.value.Wallet?.wallets?.subscribe(async () => {
             const primaryWallet = first(this.wallets)
             const smartPayChainId = await SmartPayBundler.getSupportedChainId()
@@ -67,7 +64,6 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
         )
 
         const account = first(await SharedContextSettings.value.selectAccount())
-
         if (!account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}`)
 
         // switch account
