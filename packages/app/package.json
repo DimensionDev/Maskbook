@@ -7,7 +7,7 @@
     },
     "scripts": {
         "start": "npx webpack serve",
-        "build": "npx webpack",
+        "build": "pnpm run build:css && npx webpack",
         "build:css": "cross-env TAILWIND_MODE=build NODE_ENV=production postcss src/styles/tailwind.css -o src/styles/index.css",
         "watch:css": "cross-env TAILWIND_MODE=watch NODE_ENV=development postcss src/styles/tailwind.css -o src/styles/index.css --watch"
     },
@@ -39,6 +39,7 @@
         "@masknet/web3-contracts": "workspace:^",
         "@masknet/web3-helpers": "workspace:^",
         "@masknet/web3-hooks-base": "workspace:^",
+        "@masknet/web3-modals": "workspace:^",
         "@masknet/web3-providers": "workspace:^",
         "@masknet/web3-shared-base": "workspace:^",
         "@masknet/web3-shared-evm": "workspace:^",
@@ -66,9 +67,11 @@
     "devDependencies": {
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
         "copy-webpack-plugin": "^11.0.0",
+        "css-loader": "^6.7.3",
         "html-webpack-plugin": "^5.5.0",
         "react-refresh": "^0.14.0",
         "source-map-loader": "^4.0.1",
+        "style-loader": "^3.3.1",
         "swc-loader": "^0.2.3",
         "webpack": "^5.75.0",
         "webpack-cli": "^5.0.1",
