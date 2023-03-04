@@ -466,6 +466,7 @@
     "plugin_trader_sales": "Sales (24h)",
     "plugin_trader_rank": "Rank #{{rank}}",
     "plugin_trader_info": "Info",
+    "plugin_trader_website": "Website",
     "plugin_trader_community": "Community",
     "plugin_savings": "Savings",
     "plugin_savings_asset": "Asset",

@@ -128,7 +128,7 @@
     "gas_settings_error_max_priority_gas_fee_too_low": "最大优先费用在当前网络环境下过低。",
     "gas_settings_error_max_priority_gas_fee_too_high": "最大优先费用过高。您或许支付了超过需要的费用。",
     "gas_settings_error_max_priority_gas_fee_imbalance": "最大手续费不能低于最大优先级费用。",
-    "gas_usd_price": " ≈ {{usd}}",
+    "gas_usd_price": " ≈ {{- usd}}",
     "plugin_default_title": "默认",
     "plugin_provider_by": "Provided by",
     "plugin_card_frame_default_title": "Web3个人资料",
