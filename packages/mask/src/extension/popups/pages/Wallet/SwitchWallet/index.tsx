@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button, List } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { type ECKeyIdentifier, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { ECKeyIdentifier, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { MAX_WALLET_LIMIT } from '@masknet/shared'
 import { useChainContext, useWallet, useWallets, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { WalletItem } from './WalletItem.js'
@@ -93,7 +93,12 @@ const SwitchWallet = memo(() => {
                             onClick={() =>
                                 handleSelect(
                                     item.address,
-                                    item.owner ? { owner: item.owner, identifier: item.identifier } : undefined,
+                                    item.owner
+                                        ? {
+                                              owner: item.owner,
+                                              identifier: ECKeyIdentifier.from(item.identifier).unwrapOr(undefined),
+                                          }
+                                        : undefined,
                                 )
                             }
                             isSelected={isSameAddress(item.address, wallet?.address)}

@@ -22,6 +22,7 @@ export interface ManagePopoverProps {
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
+        background: theme.palette.maskColor.bottom,
         padding: theme.spacing(1.5, 1.5, 2, 1.5),
         boxSizing: 'border-box',
         backgroundColor: theme.palette.maskColor.bottom,

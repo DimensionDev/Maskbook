@@ -331,6 +331,9 @@ importers:
       '@masknet/web3-hooks-base':
         specifier: workspace:^
         version: link:../web3-hooks/base
+      '@masknet/web3-modals':
+        specifier: workspace:^
+        version: link:../web3-modals
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../web3-providers
@@ -407,6 +410,9 @@ importers:
       copy-webpack-plugin:
         specifier: ^11.0.0
         version: 11.0.0(webpack@5.75.0)
+      css-loader:
+        specifier: ^6.7.3
+        version: 6.7.3(webpack@5.75.0)
       html-webpack-plugin:
         specifier: ^5.5.0
         version: 5.5.0(webpack@5.75.0)
@@ -416,6 +422,9 @@ importers:
       source-map-loader:
         specifier: ^4.0.1
         version: 4.0.1(webpack@5.75.0)
+      style-loader:
+        specifier: ^3.3.1
+        version: 3.3.1(webpack@5.75.0)
       swc-loader:
         specifier: ^0.2.3
         version: 0.2.3(@swc/core@1.3.37)(webpack@5.75.0)
@@ -530,6 +539,9 @@ importers:
       '@masknet/web3-hooks-evm':
         specifier: workspace:^
         version: link:../web3-hooks/evm
+      '@masknet/web3-modals':
+        specifier: workspace:^
+        version: link:../web3-modals
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../web3-providers
@@ -890,6 +902,9 @@ importers:
       '@masknet/web3-hooks-evm':
         specifier: workspace:^
         version: link:../web3-hooks/evm
+      '@masknet/web3-modals':
+        specifier: workspace:^
+        version: link:../web3-modals
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../web3-providers
@@ -1426,6 +1441,9 @@ importers:
       '@masknet/web3-hooks-base':
         specifier: workspace:^
         version: link:../../web3-hooks/base
+      '@masknet/web3-modals':
+        specifier: workspace:^
+        version: link:../../web3-modals
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../../web3-providers
@@ -1498,6 +1516,9 @@ importers:
       '@masknet/web3-hooks-base':
         specifier: workspace:^
         version: link:../../web3-hooks/base
+      '@masknet/web3-modals':
+        specifier: workspace:^
+        version: link:../../web3-modals
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../../web3-providers
@@ -1633,6 +1654,9 @@ importers:
       '@masknet/web3-hooks-evm':
         specifier: workspace:^
         version: link:../../web3-hooks/evm
+      '@masknet/web3-modals':
+        specifier: workspace:^
+        version: link:../../web3-modals
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../../web3-providers
@@ -2110,6 +2134,9 @@ importers:
       '@masknet/web3-hooks-evm':
         specifier: workspace:^
         version: link:../../web3-hooks/evm
+      '@masknet/web3-modals':
+        specifier: workspace:^
+        version: link:../../web3-modals
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../../web3-shared/base
@@ -2179,6 +2206,9 @@ importers:
       '@masknet/web3-hooks-evm':
         specifier: workspace:^
         version: link:../../web3-hooks/evm
+      '@masknet/web3-modals':
+        specifier: workspace:^
+        version: link:../../web3-modals
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../../web3-providers
@@ -2317,6 +2347,9 @@ importers:
       '@masknet/web3-hooks-evm':
         specifier: workspace:^
         version: link:../../web3-hooks/evm
+      '@masknet/web3-modals':
+        specifier: workspace:^
+        version: link:../../web3-modals
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../../web3-providers
@@ -2522,6 +2555,9 @@ importers:
       '@masknet/web3-helpers':
         specifier: workspace:^
         version: link:../../web3-helpers
+      '@masknet/web3-modals':
+        specifier: workspace:^
+        version: link:../../web3-modals
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../../web3-shared/base
@@ -3324,6 +3360,87 @@ importers:
         specifier: 1.8.0
         version: 1.8.0(patch_hash=dcxxuqxbti2wcxbar42oow5yze)
       web3-core:
+        specifier: 1.8.0
+        version: 1.8.0
+      web3-utils:
+        specifier: 1.8.0
+        version: 1.8.0
+
+  packages/web3-modals:
+    dependencies:
+      '@headlessui/react':
+        specifier: ^1.7.11
+        version: 1.7.11(react-dom@0.0.0-experimental-d1e35c703-20221110)(react@0.0.0-experimental-d1e35c703-20221110)
+      '@heroicons/react':
+        specifier: ^2.0.16
+        version: 2.0.16(react@0.0.0-experimental-d1e35c703-20221110)
+      '@masknet/icons':
+        specifier: workspace:^
+        version: link:../icons
+      '@masknet/shared':
+        specifier: workspace:^
+        version: link:../shared
+      '@masknet/shared-base':
+        specifier: workspace:^
+        version: link:../shared-base
+      '@masknet/shared-base-ui':
+        specifier: workspace:^
+        version: link:../shared-base-ui
+      '@masknet/theme':
+        specifier: workspace:^
+        version: link:../theme
+      '@masknet/web3-constants':
+        specifier: workspace:^
+        version: link:../web3-constants
+      '@masknet/web3-contracts':
+        specifier: workspace:^
+        version: link:../web3-contracts
+      '@masknet/web3-helpers':
+        specifier: workspace:^
+        version: link:../web3-helpers
+      '@masknet/web3-hooks-base':
+        specifier: workspace:^
+        version: link:../web3-hooks/base
+      '@masknet/web3-hooks-evm':
+        specifier: workspace:^
+        version: link:../web3-hooks/evm
+      '@masknet/web3-shared-base':
+        specifier: workspace:^
+        version: link:../web3-shared/base
+      '@masknet/web3-shared-evm':
+        specifier: workspace:^
+        version: link:../web3-shared/evm
+      '@masknet/web3-shared-flow':
+        specifier: workspace:^
+        version: link:../web3-shared/flow
+      '@masknet/web3-shared-solana':
+        specifier: workspace:^
+        version: link:../web3-shared/solana
+      '@servie/events':
+        specifier: ^3.0.0
+        version: 3.0.0
+      bignumber.js:
+        specifier: 9.1.0
+        version: 9.1.0
+      date-fns:
+        specifier: ^2.29.3
+        version: 2.29.3
+      react-use:
+        specifier: ^17.4.0
+        version: 17.4.0(react-dom@0.0.0-experimental-d1e35c703-20221110)(react@0.0.0-experimental-d1e35c703-20221110)
+      urlcat:
+        specifier: ^2.0.4
+        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+      web3:
+        specifier: 1.8.0
+        version: 1.8.0(patch_hash=dcxxuqxbti2wcxbar42oow5yze)
+      web3-core:
+        specifier: 1.8.0
+        version: 1.8.0
+      web3-core-helpers:
+        specifier: 1.8.0
+        version: 1.8.0
+      web3-eth-abi:
         specifier: 1.8.0
         version: 1.8.0
       web3-utils:
@@ -6588,6 +6705,7 @@ packages:
 
   /@dimensiondev/eslint-plugin@0.0.2-20220516081411-2649814(eslint@8.35.0):
     resolution: {integrity: sha512-cEEKTD1ku7ScTuifqrZHAXpc8a1hwew12MLee/jvFEdOkoQSDxYiqAh7V35wQLGappUUyqJiLc6vgk6qlpzQeA==, tarball: download/@DimensionDev/eslint-plugin/0.0.2-20220516081411-2649814/f6b6b4579bfb2788600cef1c58230fadd0f66ac8}
+    engines: {node: '>= 16'}
     peerDependencies:
       eslint: '>= 8'
     dependencies:
@@ -7689,6 +7807,23 @@ packages:
   /@gar/promisify@1.1.3:
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}
     dev: true
+
+  /@headlessui/react@1.7.11(react-dom@0.0.0-experimental-d1e35c703-20221110)(react@0.0.0-experimental-d1e35c703-20221110):
+    resolution: {integrity: sha512-EaDbVgcyiylhtskZZf4Qb/JiiByY7cYbd0qgZ9xm2pm2X7hKojG0P4TaQYKgPOV3vojPhd/pZyQh3nmRkkcSyw==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: ^16 || ^17 || ^18 || 0.0.0-experimental-d1e35c703-20221110
+      react-dom: ^16 || ^17 || ^18 || 0.0.0-experimental-d1e35c703-20221110
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
+    dependencies:
+      client-only: 0.0.1
+      react: 0.0.0-experimental-d1e35c703-20221110
+      react-dom: 0.0.0-experimental-d1e35c703-20221110(react@0.0.0-experimental-d1e35c703-20221110)
+    dev: false
 
   /@headlessui/react@1.7.12(react-dom@0.0.0-experimental-d1e35c703-20221110)(react@0.0.0-experimental-d1e35c703-20221110):
     resolution: {integrity: sha512-FhSx5V+Qp0GvbTpaxyS+ymGDDNntCacClWsk/d8Upbr19g3AsPbjfPk4+m2CgJGcuCB5Dz7LpUIOAbvQTyjL2g==}
@@ -17174,6 +17309,23 @@ packages:
       postcss-modules-values: 4.0.0(postcss@8.4.21)
       postcss-value-parser: 4.2.0
       schema-utils: 3.1.1
+      semver: 7.3.8
+      webpack: 5.75.0(@swc/core@1.3.37)(webpack-cli@5.0.1)
+    dev: true
+
+  /css-loader@6.7.3(webpack@5.75.0):
+    resolution: {integrity: sha512-qhOH1KlBMnZP8FzRO6YCH9UHXQhVMcEGLyNdb7Hv2cpcmJbW0YrddO+tG1ab5nT41KpHIYGsbeHqxB9xPu1pKQ==}
+    engines: {node: '>= 12.13.0'}
+    peerDependencies:
+      webpack: ^5.0.0
+    dependencies:
+      icss-utils: 5.1.0(postcss@8.4.21)
+      postcss: 8.4.21
+      postcss-modules-extract-imports: 3.0.0(postcss@8.4.21)
+      postcss-modules-local-by-default: 4.0.0(postcss@8.4.21)
+      postcss-modules-scope: 3.0.0(postcss@8.4.21)
+      postcss-modules-values: 4.0.0(postcss@8.4.21)
+      postcss-value-parser: 4.2.0
       semver: 7.3.8
       webpack: 5.75.0(@swc/core@1.3.37)(webpack-cli@5.0.1)
     dev: true
@@ -30715,6 +30867,15 @@ packages:
       webpack: 5.75.0(@swc/core@1.3.37)(webpack-cli@5.0.1)
     dev: true
 
+  /style-loader@3.3.1(webpack@5.75.0):
+    resolution: {integrity: sha512-GPcQ+LDJbrcxHORTRes6Jy2sfvK2kS6hpSfI/fXhPt+spVzxF6LJ1dHLN9zIGmVaaP044YKaIatFaufENRiDoQ==}
+    engines: {node: '>= 12.13.0'}
+    peerDependencies:
+      webpack: ^5.0.0
+    dependencies:
+      webpack: 5.75.0(@swc/core@1.3.37)(webpack-cli@5.0.1)
+    dev: true
+
   /style-to-object@0.3.0:
     resolution: {integrity: sha512-CzFnRRXhzWIdItT3OmF8SQfWyahHhjq3HwcMNCNLn+N7klOOqPjMeG/4JSu77D7ypZdGvSzvkrbyeTMizz2VrA==}
     dependencies:
@@ -34519,6 +34680,7 @@ time:
   /@ethersproject/strings@5.6.0: '2022-03-10T00:45:55.625Z'
   /@ethersproject/strings@5.7.0: '2022-08-19T21:19:26.755Z'
   /@ethersproject/units@5.6.0: '2022-03-10T00:45:58.398Z'
+  /@headlessui/react@1.7.11: '2023-02-15T14:12:20.403Z'
   /@headlessui/react@1.7.12: '2023-02-24T15:30:00.335Z'
   /@heroicons/react@2.0.16: '2023-02-17T16:32:41.336Z'
   /@magic-works/i18n-codegen@0.5.0: '2023-02-17T06:35:05.095Z'
@@ -34630,6 +34792,7 @@ time:
   /cross-env@7.0.3: '2020-12-01T20:25:26.541Z'
   /crypto-browserify@3.12.0: '2017-11-03T12:22:40.198Z'
   /cspell@6.27.0: '2023-02-26T07:50:14.230Z'
+  /css-loader@6.7.3: '2022-12-14T15:04:21.863Z'
   /cssnano@5.1.15: '2023-02-15T21:25:19.866Z'
   /d3@5.16.0: '2020-04-20T17:59:07.964Z'
   /date-fns@2.29.3: '2022-09-13T12:36:12.348Z'
@@ -34724,6 +34887,7 @@ time:
   /source-map@0.7.4: '2022-06-04T22:57:10.068Z'
   /stream-browserify@3.0.0: '2020-04-16T12:50:54.368Z'
   /stream-http@2.8.3: '2018-06-02T01:17:56.106Z'
+  /style-loader@3.3.1: '2021-10-21T15:03:14.617Z'
   /svgo-loader@4.0.0: '2023-01-21T06:39:04.523Z'
   /svgo@3.0.2: '2022-11-18T16:47:44.481Z'
   /swc-loader@0.2.3: '2022-06-09T15:26:53.432Z'

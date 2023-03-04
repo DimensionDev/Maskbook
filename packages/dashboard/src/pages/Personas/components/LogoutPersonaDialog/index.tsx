@@ -43,7 +43,7 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(
         }, [identifier, onClose, address])
 
         const manageWallets = useMemo(() => {
-            return wallets.filter((x) => x.identifier?.toText() === identifier.toText())
+            return wallets.filter((x) => x.identifier === identifier.toText())
         }, [wallets, identifier])
 
         return (

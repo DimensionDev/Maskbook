@@ -1,28 +1,29 @@
-import { memoize, noop } from 'lodash-es'
-import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
-import { IntervalWatcher, DOMProxy, type DOMProxyEvents } from '@dimensiondev/holoflows-kit'
-import type { EventListener } from '@servie/events'
-import type { SocialNetworkUI as Next } from '@masknet/types'
+import { DOMProxy, IntervalWatcher, type DOMProxyEvents } from '@dimensiondev/holoflows-kit'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
-import { creator, globalUIState } from '../../../social-network/index.js'
-import { getPostId, postParser, postImagesParser, postContentMessageParser } from '../utils/fetch.js'
-import { postsContentSelector, postsImageSelector, timelinePostContentSelector } from '../utils/selector.js'
-import Services from '../../../extension/service.js'
-import { injectMaskIconToPostTwitter } from '../injection/MaskIcon.js'
+import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import {
-    makeTypedMessageImage,
-    makeTypedMessageTupleFromList,
+    isTypedMessageAnchor,
+    isTypedMessageText,
     makeTypedMessageEmpty,
+    makeTypedMessageImage,
     makeTypedMessagePromise,
     makeTypedMessageTuple,
-    isTypedMessageText,
-    isTypedMessageAnchor,
+    makeTypedMessageTupleFromList,
 } from '@masknet/typed-message'
-import { untilElementAvailable } from '../../../utils/dom.js'
-import { twitterBase } from '../base.js'
-import { twitterShared } from '../shared.js'
+import type { SocialNetworkUI as Next } from '@masknet/types'
+import type { EventListener } from '@servie/events'
+import { memoize, noop } from 'lodash-es'
+import utils from 'web3-utils'
+import Services from '../../../extension/service.js'
+import { creator, globalUIState } from '../../../social-network/index.js'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context.js'
+import { untilElementAvailable } from '../../../utils/dom.js'
 import { getCurrentIdentifier } from '../../utils.js'
+import { twitterBase } from '../base.js'
+import { injectMaskIconToPostTwitter } from '../injection/MaskIcon.js'
+import { twitterShared } from '../shared.js'
+import { getPostId, postContentMessageParser, postImagesParser, postParser } from '../utils/fetch.js'
+import { postsContentSelector, postsImageSelector, timelinePostContentSelector } from '../utils/selector.js'
 import { IdentityProviderTwitter } from './identity.js'
 
 function getPostActionsNode(postNode: HTMLElement | null) {
@@ -50,12 +51,10 @@ function registerPostCollectorInner(
     cancel: AbortSignal,
 ) {
     const getTweetNode = (node: HTMLElement) => {
-        const root = node.closest<HTMLDivElement>(
-            [
-                'article > div',
-                'div[role="link"]', // retweet(quoted tweet) in new twitter
-            ].join(),
-        )
+        // retweet(quoted tweet) in new twitter
+        let root = node.closest<HTMLDivElement>('div[role="link"]')
+        // then normal tweet
+        root = root || node.closest<HTMLDivElement>('article > div')
         if (!root) return null
 
         const isCardNode = node.matches('[data-testid="card.wrapper"]')
@@ -138,7 +137,7 @@ function registerPostCollectorInner(
         .assignKeys((node) => {
             const tweetNode = getTweetNode(node)
             const parentTweetNode = isQuotedTweet(tweetNode) ? getParentTweetNode(tweetNode!) : null
-            if (!tweetNode) return node.innerText
+            if (!tweetNode) return `keccak256:${utils.keccak256(node.innerText)}`
             const parentTweetId = parentTweetNode ? getPostId(parentTweetNode) : ''
             const tweetId = getPostId(tweetNode)
             // To distinguish tweet nodes between timeline and detail page

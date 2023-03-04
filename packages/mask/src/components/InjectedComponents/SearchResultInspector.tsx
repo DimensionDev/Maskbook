@@ -11,7 +11,7 @@ import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 import { DSearch } from '@masknet/web3-providers'
-import type { SearchResult, SocialIdentity } from '@masknet/web3-shared-base'
+import { type SearchResult, type SocialIdentity, SearchResultType } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Tab } from '@mui/material'
 import { first } from 'lodash-es'
@@ -20,21 +20,25 @@ import { useAsyncRetry } from 'react-use'
 import { decentralizedSearchSettings } from '../../../shared/legacy-settings/settings.js'
 import { useSearchedKeyword } from '../DataSource/useSearchedKeyword.js'
 
-const useStyles = makeStyles<{ isProfilePage?: boolean }>()((theme, { isProfilePage }) => ({
-    contentWrapper: {
-        background: isProfilePage
-            ? 'transparent'
-            : 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
-    },
-    tabContent: {
-        position: 'relative',
-        maxHeight: 478,
-        overflow: 'auto',
-        '&::-webkit-scrollbar': {
-            display: 'none',
+const useStyles = makeStyles<{ isProfilePage?: boolean; searchType?: SearchResultType }>()(
+    (theme, { isProfilePage, searchType }) => ({
+        contentWrapper: {
+            background:
+                isProfilePage || (searchType !== SearchResultType.EOA && searchType !== SearchResultType.Domain)
+                    ? 'transparent'
+                    : 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
         },
-    },
-}))
+        tabContent: {
+            position: 'relative',
+            maxHeight: 478,
+            borderBottom: isProfilePage ? 'unset' : `1px solid ${theme.palette.divider}`,
+            overflow: 'auto',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
+        },
+    }),
+)
 
 export interface SearchResultInspectorProps {
     keyword?: string
@@ -45,7 +49,6 @@ export interface SearchResultInspectorProps {
 }
 
 export function SearchResultInspector(props: SearchResultInspectorProps) {
-    const { classes } = useStyles({ isProfilePage: props.isProfilePage })
     const translate = usePluginI18NField()
 
     const dSearchEnabled = useValueRef(decentralizedSearchSettings)
@@ -61,6 +64,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
 
     const currentCollection = props.currentCollection ?? resultList.value?.[0]
 
+    const { classes } = useStyles({ isProfilePage: props.isProfilePage, searchType: currentCollection?.type })
     const contentComponent = useMemo(() => {
         if (!currentCollection || !resultList.value?.length) return null
         const Component = getSearchResultContent(currentCollection)

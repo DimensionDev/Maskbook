@@ -1,14 +1,14 @@
 import { createContext, type PropsWithChildren } from 'react'
 import { useAsync } from 'react-use'
 import { NextIDProof } from '@masknet/web3-providers'
-import type { SearchResultType, DomainResult } from '@masknet/web3-shared-base'
+import type { SearchResultType, EOAResult } from '@masknet/web3-shared-base'
 import { type BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import { resolveNonFungibleTokenIdFromEnsDomain, type ChainId } from '@masknet/web3-shared-evm'
 
 interface ENSContextProps {
     nextIdBindings: BindingProof[]
     reversedAddress: string | undefined
-    domain: string
+    domain: string | undefined
     tokenId: string | undefined
 }
 
@@ -23,12 +23,14 @@ ENSContext.displayName = 'ENSContext'
 export function ENSProvider({ children, result }: PropsWithChildren<SearchResultInspectorProps>) {
     const domain = result.domain
     const reversedAddress = result.address
-    const tokenId = resolveNonFungibleTokenIdFromEnsDomain(domain)
+    const nextIdBindings_ = result.bindingProofList
 
-    const { value: nextIdBindings = EMPTY_LIST } = useAsync(
-        async () => (reversedAddress ? NextIDProof.queryProfilesByRelationService(domain) : EMPTY_LIST),
-        [reversedAddress],
-    )
+    const tokenId = domain ? resolveNonFungibleTokenIdFromEnsDomain(domain) : ''
+
+    const { value: nextIdBindings = EMPTY_LIST } = useAsync(async () => {
+        if (nextIdBindings_) return nextIdBindings_
+        return reversedAddress ? NextIDProof.queryProfilesByRelationService(reversedAddress) : EMPTY_LIST
+    }, [reversedAddress, JSON.stringify(nextIdBindings_)])
 
     return (
         <ENSContext.Provider
@@ -44,7 +46,7 @@ export function ENSProvider({ children, result }: PropsWithChildren<SearchResult
 }
 
 export interface SearchResultInspectorProps {
-    result: DomainResult<ChainId>
+    result: EOAResult<ChainId>
     keyword: string
     keywordType?: SearchResultType
 }

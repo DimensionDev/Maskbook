@@ -67,12 +67,12 @@ export class ProviderState<
         ]).then(() => {})
     }
 
-    setup() {
-        this.setupSubscriptions()
-        this.setupProviders()
+    async setup() {
+        await this.setupSubscriptions()
+        await this.setupProviders()
     }
 
-    protected setupSubscriptions() {
+    protected async setupSubscriptions() {
         if (!this.site) return
 
         this.providerType = mapSubscription(this.storage.providerType.subscription, (provider) => provider)
@@ -90,12 +90,18 @@ export class ProviderState<
         )
     }
 
-    private setupProviders() {
-        Object.entries(this.providers).forEach((entry) => {
+    private async setupProviders() {
+        for (const entry of Object.entries(this.providers)) {
             const [providerType, provider] = entry as [
                 ProviderType,
                 WalletProvider<ChainId, ProviderType, Web3Provider, Web3>,
             ]
+
+            try {
+                await provider.setup()
+            } catch {
+                // ignore setup errors
+            }
 
             provider.emitter.on('chainId', async (chainId) => {
                 await this.setAccount(providerType, {
@@ -128,7 +134,7 @@ export class ProviderState<
 
                 await this.storage.providerType.setValue(this.options.getDefaultProviderType())
             })
-        })
+        }
     }
 
     private async setAccount(providerType: ProviderType, account: Partial<Account<ChainId>>) {
@@ -195,7 +201,7 @@ export class ProviderState<
             await Promise.race([
                 (async () => {
                     await delay(30 /* seconds */ * 1000 /* milliseconds */)
-                    throw new Error('Timeout!')
+                    throw new Error(`Timeout of switching chain to ${chainId}.`)
                 })(),
                 provider.switchChain(chainId),
             ])

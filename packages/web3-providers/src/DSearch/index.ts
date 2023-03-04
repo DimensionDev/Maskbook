@@ -42,6 +42,7 @@ import { RSS3API } from '../RSS3/index.js'
 import { PlatformToChainIdMap } from '../RSS3/constants.js'
 import { ENS_API } from '../ENS/index.js'
 import { SpaceID_API } from '../SpaceID/index.js'
+import { NextIDProofAPI } from '../NextID/proof.js'
 
 const isValidAddress = (address?: string): boolean => {
     return isValidAddressEVM(address) || isValidAddressFlow(address) || isValidAddressSolana(address)
@@ -91,6 +92,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
     private CoinGeckoTrending = new CoinGeckoTrendingAPI()
     private ENS = new ENS_API()
     private SpaceID = new SpaceID_API()
+    private NextIDProof = new NextIDProofAPI()
 
     private parseKeyword(keyword: string): { word: string; field?: string } {
         const words = keyword.split(':')
@@ -184,18 +186,35 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             ['', ChainIdEVM.Mainnet],
         )
 
-        if (!isValidDomainEVM(domain)) return EMPTY_LIST
+        if (isValidDomainEVM(domain)) {
+            return [
+                {
+                    type: SearchResultType.EOA,
+                    pluginID: NetworkPluginID.PLUGIN_EVM,
+                    chainId: chainId as ChainId,
+                    keyword: address,
+                    domain,
+                    address,
+                },
+            ]
+        }
 
-        return [
-            {
-                type: SearchResultType.EOA,
-                pluginID: NetworkPluginID.PLUGIN_EVM,
-                chainId: chainId as ChainId,
-                keyword: address,
-                domain,
-                address,
-            },
-        ]
+        const bindingProofList = await this.NextIDProof.queryProfilesByRelationService(address)
+
+        if (bindingProofList?.length > 0) {
+            return [
+                {
+                    type: SearchResultType.EOA,
+                    pluginID: NetworkPluginID.PLUGIN_EVM,
+                    chainId: chainId as ChainId,
+                    keyword: address,
+                    bindingProofList,
+                    address,
+                },
+            ]
+        }
+
+        return EMPTY_LIST
     }
 
     private async searchTokens() {
@@ -464,8 +483,6 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
             const addressList = await this.searchAddress(keyword)
             if (addressList.length) return addressList as T[]
-
-            // TODO: query fungible token by coingecko
         }
 
         if (name) return this.searchTokenByName(name) as Promise<T[]>

@@ -15,12 +15,14 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
     },
     tips: {
-        color: theme.palette.maskColor.publicMain,
-        fontSize: 16,
-        fontWeight: 700,
-        lineHeight: '120%',
-        width: '100%',
-        wordBreak: 'break-word',
+        '& > p': {
+            color: theme.palette.maskColor.publicMain,
+            fontSize: 16,
+            fontWeight: 700,
+            lineHeight: '120%',
+            width: '100%',
+            wordBreak: 'break-word',
+        },
     },
 }))
 

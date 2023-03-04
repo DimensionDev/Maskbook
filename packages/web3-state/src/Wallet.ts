@@ -54,7 +54,7 @@ export class WalletState<ProviderType extends string, Transaction> implements We
         return this.storage.initializedPromise
     }
 
-    setup() {}
+    async setup() {}
 
     async addWallet(wallet: Wallet) {
         const now = new Date()
@@ -115,9 +115,12 @@ export class WalletState<ProviderType extends string, Transaction> implements We
 
     async updateWallets(wallets: Wallet[]) {
         if (!wallets.length) return
+        const result = wallets.filter(
+            (x) => !this.all.find((y) => isSameAddress(x.address, y.address) && isSameAddress(x.owner, y.owner)),
+        )
         await this.storage.setValue({
             ...this.storage.value,
-            [this.providerType]: uniqWith([...this.all, ...wallets], (a, b) => isSameAddress(a.address, b.address)),
+            [this.providerType]: uniqWith([...this.all, ...result], (a, b) => isSameAddress(a.address, b.address)),
         })
     }
 

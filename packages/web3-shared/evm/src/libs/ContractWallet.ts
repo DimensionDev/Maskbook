@@ -5,7 +5,7 @@ import type { WalletProxy } from '@masknet/web3-contracts/types/WalletProxy.js'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import WalletProxyABI from '@masknet/web3-contracts/abis/WalletProxy.json'
 import { WalletProxyByteCode } from '@masknet/web3-contracts/bytes/WalletProxy.mjs'
-import { createContract } from '../helpers/transaction.js'
+import { createContract } from '../helpers/createContract.js'
 import { getSmartPayConstants, ZERO_ADDRESS } from '../constants/index.js'
 import type { ChainId } from '../types/index.js'
 

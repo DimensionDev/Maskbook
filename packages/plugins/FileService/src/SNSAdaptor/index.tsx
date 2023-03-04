@@ -14,8 +14,9 @@ import { FileViewer } from './FileViewer.js'
 import { setupStorage, type StorageOptions } from './storage.js'
 import { openBrowser, openPicker } from './emitter.js'
 import { FileServiceInjection } from './FileServiceInjection.js'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { formatFileSize } from '@masknet/kit'
+import { Trans } from 'react-i18next'
 
 type BadgeRenderer<T> = (f: T) => Plugin.SNSAdaptor.BadgeDescriptor
 
@@ -43,7 +44,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
         label: (
             <>
                 <Icons.FileService size={16} />
-                File Service
+                <Trans ns={PluginID.FileService} i18nKey="name" />
             </>
         ),
         onClick: ({ compositionType, metadata }) => {

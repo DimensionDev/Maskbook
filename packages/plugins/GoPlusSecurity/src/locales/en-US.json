@@ -29,7 +29,7 @@
     "default_placeholder": "Note: Scams detections might not be 100% guaranteed.",
     "not_found_tip_title": "Results not found now. it might be chain network error, on-chain data abnormal or the token address is not covered now. please check as followings:",
     "not_found_tip_network_error": "1. Make sure network is working;",
-    "not_found_tip_network_chain_correct": "2. Mask sure the chain network or token address is correct;",
+    "not_found_tip_network_chain_correct": "2. Make sure the chain network or token address is correct;",
     "not_found_tip_network_address_not_cover": "3. Token address is not covered now, it might take more than 60s to get contract information again. Please try it later.",
     "risk_safe_description": "This token has no risky or attention factors.",
     "risk_contract_source_code_verified_title": "Contract source code verified",

@@ -1,3 +1,4 @@
+import { keccak256 } from 'web3-utils'
 import { regexMatch } from '../../../utils/utils.js'
 import { flattenDeep } from 'lodash-es'
 import { canonifyImgUrl } from './url.js'
@@ -22,16 +23,27 @@ const parseId = (t: string) => {
  */
 export const getPostId = (node: HTMLElement) => {
     let idNode: HTMLAnchorElement | undefined | null = null
-    const timeNode = node.querySelector('a[href*="/status/"] time')
+    let timeNode = node.querySelector('a[href*="/status/"] time')
     if (timeNode) {
         idNode = timeNode.parentElement as HTMLAnchorElement
     } else {
         // Quoted tweet has no `a[href*="/status/"] time` but only `time`
-        const quotedTweetTimeNode = node.querySelector('time')
-        idNode = quotedTweetTimeNode?.closest('[role=link]')?.querySelector<HTMLAnchorElement>('a[href*="/status/"]')
+        timeNode = node.querySelector('time')
+        idNode = timeNode?.closest('[role=link]')?.querySelector<HTMLAnchorElement>('a[href*="/status/"]')
     }
     const isRetweet = !!node.querySelector('[data-testid=socialContext]')
-    const pid = idNode ? parseId(idNode.href) : parseId(location.href)
+
+    let pid = ''
+    if (idNode) {
+        pid = parseId(idNode.href)
+    } else if (timeNode) {
+        // Quoted tweet in timeline has no a status link to detail page,
+        // so use the timestamp as post id instead
+        pid = timeNode.getAttribute('datetime')!
+    } else {
+        pid = `keccak256:${keccak256(node.innerText)}`
+    }
+
     // You can't retweet a tweet or a retweet, but only cancel retweeting
     return isRetweet ? `retweet:${pid}` : pid
 }

@@ -8,6 +8,7 @@ import type {
     NetworkPluginID,
     NextIDPersonaBindings,
     NextIDPlatform,
+    BindingProof,
     ProfileIdentifier,
     Proof,
 } from '@masknet/shared-base'
@@ -668,12 +669,13 @@ export interface Result<ChainId> {
 export interface EOAResult<ChainId> extends Result<ChainId> {
     type: SearchResultType.EOA
     domain?: string
+    bindingProofList?: BindingProof[]
     address: string
 }
 
 export interface DomainResult<ChainId> extends Result<ChainId> {
     type: SearchResultType.Domain
-    domain: string
+    domain?: string
     address?: string
 }
 
@@ -833,7 +835,7 @@ export interface Wallet {
     /** an abstract wallet has been deployed */
     deployed?: boolean
     /** persona identifier */
-    identifier?: ECKeyIdentifier
+    identifier?: string
 }
 
 export interface Transaction<ChainId, SchemaType> {
@@ -939,6 +941,8 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     readonly readyPromise: Promise<void>
     /** connection status */
     readonly connected: boolean
+    /** async setup tasks */
+    setup(): Promise<void>
     /** Switch to the designate account. */
     switchAccount(account?: string): Promise<void>
     /** Switch to the designate chain. */

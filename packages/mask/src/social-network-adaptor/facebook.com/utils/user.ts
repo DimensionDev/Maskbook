@@ -52,13 +52,15 @@ export function getBioDescription() {
 
 export function getFacebookId() {
     const node = isMobileFacebook ? searchUserIdSelectorOnMobile().evaluate() : searchUserIdSelector().evaluate()
+    if (!node?.href) return ''
 
-    if (!node) return ''
-    const url = new URL(node.href)
-
-    if (url.pathname === '/profile.php') return url.searchParams.get(isMobileFacebook ? 'lst' : 'id')
-
-    return url.pathname.replaceAll('/', '')
+    try {
+        const url = new URL(node.href)
+        if (url.pathname === '/profile.php') return url.searchParams.get(isMobileFacebook ? 'lst' : 'id')
+        return url.pathname.replaceAll('/', '')
+    } catch {
+        return ''
+    }
 }
 
 const FACEBOOK_AVATAR_ID_MATCH = /(\w+).(?:png|jpg|gif|bmp)/

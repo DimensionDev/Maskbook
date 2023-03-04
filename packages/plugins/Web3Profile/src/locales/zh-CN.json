@@ -1,4 +1,5 @@
 {
+    "__plugin_description": "在 Twitter 上选择和展示您的 Web3 足迹。",
     "persona_public_key_copy": "persona_public_key_copy",
     "current": "当前",
     "plugin_wallet_view_on_explorer": "plugin_wallet_view_on_explorer",
@@ -6,7 +7,7 @@
     "donations": "捐赠",
     "footprints": "足迹",
     "NFTs": "NFTs",
-    "web3_profile": "Web3个人资料",
+    "web3_profile": "Web3 名片",
     "EVM_wallet": "EVM 钱包",
     "Solana_wallet": "Solana 钱包",
     "Flow_wallet": "Flow 钱包",
@@ -50,9 +51,10 @@
     "no_collection$empty": "未找到 {{collection}} 。",
     "no_collection$hidden": "所有 {{collection}} 已隐藏。",
     "no_unlisted_collection": " 点击后可在 Web3 个人资料上显示您的 {{collection}}。",
+    "no_listed_collection": "点击未列出区域中的项目，在 Web3个人资料中显示您的 {{collection}}。",
     "wallet_setting_hint": "点击开关按钮来显示或隐藏钱包。",
     "no_authenticated_wallet": "尚未得到认证。",
     "no_items_found": "找不到任何项。",
-    "account_empty": "请验证此身份以设置您的 Web3 个人资料。",
+    "account_empty": "请验证此身份以设置您的 Web3 名片。",
     "load_more": "加载更多"
 }

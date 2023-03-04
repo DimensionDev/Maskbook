@@ -1,5 +1,5 @@
 import { memo, type PropsWithChildren, useCallback, useMemo, useState } from 'react'
-import { useUpdateEffect } from 'react-use'
+import { useAsync, useUpdateEffect } from 'react-use'
 import { first, omit } from 'lodash-es'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -16,6 +16,8 @@ import {
     useDefaultChainId,
     useRecentTransactions,
     useWallets,
+    useAccount,
+    useChainId,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
@@ -26,6 +28,7 @@ import { isSameAddress, resolveNextID_NetworkPluginID, TransactionStatusType } f
 import { WalletMenuItem } from './WalletMenuItem.js'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useMenuConfig } from '../../../index.js'
+import { SmartPayBundler } from '@masknet/web3-providers'
 
 const isDashboard = isDashboardPage()
 
@@ -73,10 +76,14 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const t = useSharedI18N()
         const { classes, cx } = useStyles()
 
-        const { account, chainId } = useChainContext()
+        const account = useAccount()
+        const globalChainId = useChainId()
+        const { chainId } = useChainContext()
         const allWallets = useWallets()
 
-        const isSmartPay = allWallets.find((x) => isSameAddress(x.address, account) && x.owner)
+        const isSmartPay = !!allWallets.find((x) => isSameAddress(x.address, account) && x.owner)
+        const { value: smartPaySupportChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
+
         const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
             WalletMessages.events.selectProviderDialogUpdated,
         )
@@ -101,7 +108,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
             ? resolveNextID_NetworkPluginID(defaultVerifiedWallet?.platform)
             : undefined
 
-        const isNextIdWallet = (!account || !isSameAddress(account, expectedAddress)) && !isSmartPay
+        const isNextIdWallet = !account || !isSameAddress(account, expectedAddress)
 
         const defaultPluginId = isNextIdWallet ? pluginIdByDefaultVerifiedWallet : currentPluginID
 
@@ -115,7 +122,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const defaultChainId = useDefaultChainId(defaultPluginId)
 
         const providerDescriptor = useProviderDescriptor(defaultPluginId)
-        const networkDescriptor = useNetworkDescriptor(defaultPluginId, chainId)
+        const networkDescriptor = useNetworkDescriptor(defaultPluginId, !isNextIdWallet ? chainId : defaultChainId)
 
         const pendingTransactions = useRecentTransactions(currentPluginID, TransactionStatusType.NOT_DEPEND)
 
@@ -169,6 +176,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                         onChangeWallet={openSelectProviderDialog}
                         selected={isSameAddress(descriptionProps.address, account)}
                         onSelect={onSelect}
+                        expectedChainId={isSmartPay ? smartPaySupportChainId : globalChainId}
                     />
                 ) : (
                     <MenuItem key="connect">

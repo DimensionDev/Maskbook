@@ -1,5 +1,5 @@
-import { first } from 'lodash-es'
-import { type AbiItem, toHex } from 'web3-utils'
+import { first, identity, pickBy } from 'lodash-es'
+import { toHex, type AbiItem } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
@@ -40,9 +40,9 @@ import {
 } from '@masknet/web3-shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
+import { Providers } from '../Provider/provider.js'
 import { dispatch } from './composer.js'
 import { createContext } from './context.js'
-import { Providers } from './provider.js'
 import type { EVM_Connection, EVM_ConnectionOptions } from './types.js'
 import { Web3StateSettings } from '../../settings/index.js'
 
@@ -148,12 +148,12 @@ class Connection implements EVM_Connection {
             account: this.account,
             chainId: this.chainId,
             providerType: this.providerType,
-            ...initial,
+            ...pickBy(initial, identity),
             overrides: {
                 from: initial?.account ?? this.account,
                 chainId: initial?.chainId ?? this.chainId,
-                ...initial?.overrides,
-                ...overrides?.overrides,
+                ...pickBy(initial?.overrides, identity),
+                ...pickBy(overrides?.overrides, identity),
             },
         }
     }
@@ -500,10 +500,10 @@ class Connection implements EVM_Connection {
                 {
                     method: EthereumMethodType.ETH_ESTIMATE_GAS,
                     params: [
-                        {
+                        new AccountTransaction({
                             from: options.account,
                             ...transaction,
-                        },
+                        }).fill(options.overrides),
                     ],
                 },
                 options,

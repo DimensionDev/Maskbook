@@ -4,22 +4,22 @@ import { REDPACKET_API_URL, NFT_REDPACKET_API_URL } from '../constants.js'
 
 type CreateSuccessRecord = {
     creator: string
-    blockTimestamp: string
     creation_time: string
     duration: string
-    blockNumber: string
-    id: string
+    block_number: number
     message: string
-    number: string
+    shares: string
     name: string
-    token_address: string
+    token: {
+        address: string
+    }
     total: string
-    transactionHash: string
-    ifrandom: boolean
+    txid: string
+    is_random: boolean
+    id: string
 }
 
 type NFTRedpacketRecord = {
-    id: string
     txid: string
     shares: number
     token_ids: string[]
@@ -33,6 +33,7 @@ type NFTRedpacketRecord = {
     }
     name: string
     message: string
+    id: string
 }
 
 export class TheGraphRedPacketAPI {
@@ -47,20 +48,23 @@ export class TheGraphRedPacketAPI {
             method: 'POST',
             body: JSON.stringify({
                 query: `{
-                    creationSuccesses(where: { creator: "${senderAddress}" }) {
-                        creator
-                        message
-                        id
-                        blockNumber,
-                        blockTimestamp,
-                        creation_time,
-                        duration,
-                        number,
-                        name,
-                        token_address,
-                        total,
-                        transactionHash,
-                        ifrandom
+                    redPackets(where: { creator_address: "${senderAddress}" }) {
+                          creator {
+                              address
+                          }
+                          message
+                          block_number,
+                          creation_time,
+                          duration,
+                          shares,
+                          name,
+                          token {
+                              address
+                          },
+                          total,
+                          txid,
+                          is_random
+                          id,
                       }
                   }`,
             }),
@@ -69,15 +73,16 @@ export class TheGraphRedPacketAPI {
         if (!response?.data?.creationSuccesses?.length) return
         return response.data.creationSuccesses.map((x) => ({
             contract_address: contractAddress,
-            txid: x.transactionHash,
+            txid: x.txid,
+            id: x.id,
             chainId,
-            shares: Number(x.number),
+            shares: Number(x.shares),
             total: x.total,
             duration: Number(x.duration) * 1000,
-            block_number: Number(x.blockNumber),
+            block_number: Number(x.block_number),
             contract_version: 4,
-            networkType: chainResolver.networkType(chainId),
-            token_address: x.token_address,
+            network: chainResolver.networkType(chainId),
+            token_address: x.token.address,
             sender: {
                 address: senderAddress,
                 name: x.name,
@@ -87,7 +92,7 @@ export class TheGraphRedPacketAPI {
             creation_time: Number(x.creation_time),
             total_remaining: '',
             password: '',
-            is_random: x.ifrandom,
+            is_random: x.is_random,
         }))
     }
 
@@ -117,6 +122,7 @@ export class TheGraphRedPacketAPI {
                         }
                         name
                         message
+                        id
                     }
                 }`,
             }),
@@ -124,8 +130,8 @@ export class TheGraphRedPacketAPI {
 
         if (!response?.data?.nftredPackets?.length) return
         return response.data.nftredPackets.map((x) => ({
+            id: x.id,
             chainId,
-
             contract_address: contractAddress,
             txid: x.txid,
             contract_version: 1,
