@@ -247,6 +247,12 @@ export function createNonFungibleTokenEvent(
         to: {
             address: transaction.to,
         },
+        send: {
+            address: transaction.send,
+        },
+        receive: {
+            address: transaction.receive,
+        },
         assetName: transaction.contract_name,
         assetPermalink: createPermalink(chainId, transaction.contract_address, transaction.token_id),
         priceInToken: paymentToken
