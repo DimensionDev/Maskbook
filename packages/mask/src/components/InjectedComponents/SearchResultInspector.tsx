@@ -76,7 +76,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
                 identity={props.identity}
             />
         )
-    }, [resultList.value, props.isProfilePage, props.identity])
+    }, [currentCollection, resultList.value, props.isProfilePage, props.identity])
 
     const tabs = useMemo(() => {
         if (!currentCollection) return EMPTY_LIST

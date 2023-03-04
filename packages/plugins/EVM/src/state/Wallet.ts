@@ -6,8 +6,8 @@ import {
     EMPTY_LIST,
     mapSubscription,
     mergeSubscription,
-    ValueRef,
     createSubscriptionFromValueRef,
+    ValueRef,
     SignType,
     CrossIsolationMessages,
 } from '@masknet/shared-base'
