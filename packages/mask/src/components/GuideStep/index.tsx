@@ -7,7 +7,6 @@ import { Box, Typography, styled, Portal } from '@mui/material'
 import { sayHelloShowed, userGuideFinished, userGuideStatus } from '../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { useI18N } from '../../utils/index.js'
-import { Flags } from '../../../shared/flags.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -100,19 +99,6 @@ export interface GuideStepProps extends PropsWithChildren<{}> {
     onComplete?: () => void
 }
 
-// TODO Flags.userGuideLevel was incorrectly set to userGuideStatus
-// We migrate old setting to the new userGuideFinished
-// We will keep this until version 2.21
-function useMigrateBuggyFinishedFlag() {
-    const { networkIdentifier } = activatedSocialNetworkUI
-    const currentStep = useValueRef(userGuideStatus[networkIdentifier])
-
-    const buggyFinishedFlag = currentStep === Flags.userGuideLevel
-    useEffect(() => {
-        if (buggyFinishedFlag) userGuideFinished[networkIdentifier].value = true
-    }, [buggyFinishedFlag])
-}
-
 export default function GuideStep({ total, step, tip, children, arrow = true, onComplete }: GuideStepProps) {
     const { t } = useI18N()
     const { classes, cx } = useStyles()
@@ -123,8 +109,6 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const currentStep = useValueRef(userGuideStatus[networkIdentifier])
     const finished = useValueRef(userGuideFinished[networkIdentifier])
     const isCurrentStep = +currentStep === step
-
-    useMigrateBuggyFinishedFlag()
 
     const history = useLocation()
 
