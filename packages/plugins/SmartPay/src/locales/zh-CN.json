@@ -37,6 +37,7 @@
     "lucky_drop": "红包",
     "managed_accounts": "管理账户",
     "ineligibility_tips": "很抱歉, 您不在免费体验该功能的白名单中。",
+    "white_list_tips": "您在试用白名单中。",
     "personas_description": "你的Twitter可以创建一个免费的 SmartPay 钱包。",
     "swap": "兑换",
     "smart_pay_wallet": "SmartPay钱包",
