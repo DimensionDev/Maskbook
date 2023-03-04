@@ -33,8 +33,6 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
     }
 
     protected override async setupSubscriptions() {
-        this.providerType = mapSubscription(this.storage.providerType.subscription, (provider) => provider)
-
         this.chainId = mapSubscription(
             mergeSubscription(this.storage.account.subscription),
             ([account]) => account.chainId,
@@ -46,6 +44,7 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
         this.networkType = mapSubscription(mergeSubscription(this.storage.account.subscription), ([account]) => {
             return this.options.getNetworkTypeFromChainId(account.chainId)
         })
+        this.providerType = mapSubscription(this.storage.providerType.subscription, (provider) => provider)
     }
 
     override async connect(

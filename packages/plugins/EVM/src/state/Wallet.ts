@@ -32,9 +32,8 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
         if (this.subscriptions.providerType) {
             this.wallets = mapSubscription(
                 mergeSubscription(this.subscriptions.providerType, this.storage.subscription, this.subscription),
-                ([providerType, storage, wallets]) => {
-                    return providerType === ProviderType.MaskWallet ? wallets : storage[providerType] ?? EMPTY_LIST
-                },
+                ([providerType, storage, wallets]) =>
+                    providerType === ProviderType.MaskWallet ? wallets : storage[providerType] ?? EMPTY_LIST,
             )
         }
     }
