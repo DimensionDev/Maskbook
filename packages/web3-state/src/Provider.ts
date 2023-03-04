@@ -85,50 +85,52 @@ export class ProviderState<
     }
 
     private async setupProviders() {
-        for (const entry of Object.entries(this.providers)) {
-            const [providerType, provider] = entry as [
-                ProviderType,
-                WalletProvider<ChainId, ProviderType, Web3Provider, Web3>,
-            ]
+        await Promise.all(
+            Object.entries(this.providers).map(async (entry) => {
+                const [providerType, provider] = entry as [
+                    ProviderType,
+                    WalletProvider<ChainId, ProviderType, Web3Provider, Web3>,
+                ]
 
-            try {
-                await provider.setup()
-            } catch {
-                // ignore setup errors
-            }
+                try {
+                    await provider.setup()
+                } catch {
+                    // ignore setup errors
+                }
 
-            provider.emitter.on('chainId', async (chainId) => {
-                await this.setAccount(providerType, {
-                    chainId: Number.parseInt(chainId, 16) as ChainId,
+                provider.emitter.on('chainId', async (chainId) => {
+                    await this.setAccount(providerType, {
+                        chainId: Number.parseInt(chainId, 16) as ChainId,
+                    })
                 })
-            })
-            provider.emitter.on('connect', async ({ account }) => {
-                if (!this.options.isValidAddress(account)) return
-                // provider should update before account, otherwise account failed to update
-                await this.setProvider(providerType)
-                await this.setAccount(providerType, {
-                    account,
-                })
-            })
-            provider.emitter.on('accounts', async (accounts) => {
-                const account = first(accounts)
-
-                if (account && this.options.isValidAddress(account))
+                provider.emitter.on('connect', async ({ account }) => {
+                    if (!this.options.isValidAddress(account)) return
+                    // provider should update before account, otherwise account failed to update
+                    await this.setProvider(providerType)
                     await this.setAccount(providerType, {
                         account,
                     })
-            })
-            provider.emitter.on('disconnect', async () => {
-                await this.setAccount(providerType, {
-                    account: '',
-                    chainId: this.options.getDefaultChainId(),
                 })
+                provider.emitter.on('accounts', async (accounts) => {
+                    const account = first(accounts)
 
-                if (!this.site) return
+                    if (account && this.options.isValidAddress(account))
+                        await this.setAccount(providerType, {
+                            account,
+                        })
+                })
+                provider.emitter.on('disconnect', async () => {
+                    await this.setAccount(providerType, {
+                        account: '',
+                        chainId: this.options.getDefaultChainId(),
+                    })
 
-                await this.storage.providerType.setValue(this.options.getDefaultProviderType())
-            })
-        }
+                    if (!this.site) return
+
+                    await this.storage.providerType.setValue(this.options.getDefaultProviderType())
+                })
+            }),
+        )
     }
 
     private async setAccount(providerType: ProviderType, account: Partial<Account<ChainId>>) {

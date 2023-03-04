@@ -1,4 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import { createConstantSubscription } from '@masknet/shared-base'
+import { ProviderType } from '@masknet/web3-shared-solana'
 import { Provider } from './Provider.js'
 import { AddressBook } from './AddressBook.js'
 import { Hub } from './Hub.js'
@@ -16,19 +18,18 @@ export async function createWeb3State(
     signal: AbortSignal,
     context: Plugin.Shared.SharedUIContext,
 ): Promise<SolanaWeb3State> {
-    const Provider_ = new Provider(context)
-    await Provider_.storage.account.initializedPromise
-    await Provider_.storage.providerType.initializedPromise
-    await Provider_.setup()
-
     const Wallet_ = new Wallet(context, {
-        providerType: Provider_.providerType,
+        providerType: createConstantSubscription(ProviderType.Phantom),
     })
-    await Wallet_.storage.initializedPromise
+    await Wallet_.readyPromise
     await Wallet_.setup()
 
+    const Provider_ = new Provider(context)
+    await Provider_.readyPromise
+    await Provider_.setup()
+
     const Settings_ = new Settings(context)
-    await Settings_.storage.currencyType.initializedPromise
+    await Settings_.readyPromise
 
     return {
         AddressBook: new AddressBook(context, {
