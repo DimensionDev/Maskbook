@@ -90,9 +90,9 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
         }
 
         update()
-        this.context.wallets.subscribe(update)
+
         this.context.allPersonas?.subscribe(update)
-        this.storage.subscription.subscribe(update)
+        this.context.wallets.subscribe(update)
     }
 
     override async addWallet(wallet: WalletItem): Promise<void> {
@@ -105,11 +105,13 @@ export class Wallet extends WalletState<ProviderType, Transaction> {
 
     override async removeWallet(address: string, password?: string | undefined): Promise<void> {
         if (this.providerType === ProviderType.MaskWallet) {
+            await super.removeWallet(address, password)
             await this.context.removeWallet(address, password)
             CrossIsolationMessages.events.ownerDeletionEvent.sendToAll({ owner: address })
-        } else {
-            await super.removeWallet(address, password)
+            return
         }
+
+        await super.removeWallet(address, password)
     }
 
     override signTransaction(address: string, transaction: Transaction): Promise<string> {
