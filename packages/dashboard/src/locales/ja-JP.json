@@ -304,6 +304,8 @@
     "settings_dialogs_backup_to_cloud": "クラウドにバックアップ",
     "settings_dialogs_merge_to_local_data": "クラウドバックアップをローカルに統合し、クラウドにバックアップします",
     "settings_dialogs_backup_action_desc": "クラウドバックアップは既に存在しています。バックアップ前にクラウドバックアップをローカルに統合するか、直接バックアップしてください。",
+    "settings_dialogs_backup_to_cloud_action": "このオプションは、既存のクラウドバックアップをローカルデータで上書きします。",
+    "settings_dialogs_backup_merge_cloud": "このオプションは、復号化のために既存のクラウドバックアップのパスワードの入力が必要です。 既存のクラウドバックアップとローカルデータが組み合わされ、暗号化してクラウドにアップロードされます。",
     "settings_dialogs_backup_merged_tip": "既にクラウドバックアップをローカルに取得しています。バックアップを実行したい場合は、バックアップボタンをクリックしてすべてのデータをクラウドに更新します。",
     "settings_label_backup_password": "バックアップパスワード",
     "settings_label_new_backup_password": "新しいバックアップパスワード",
@@ -329,5 +331,7 @@
     "labs_swap": "スワップ",
     "labs_swap_desc": "追加料金と制限なしに Dex を通じてトークンを購入します。",
     "labs_transak": "Transak",
-    "labs_transak_desc": "Transak より 60 以上の国でクリプトを購入することができます。"
+    "labs_transak_desc": "Transak より 60 以上の国でクリプトを購入することができます。",
+    "labs_savings": "貯蓄",
+    "labs_savings_desc": "さまざまな貯蓄プロトコルに暗号を導入し、貯蓄が増えるのを見守りします。"
 }
