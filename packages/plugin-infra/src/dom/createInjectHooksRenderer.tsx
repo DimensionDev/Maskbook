@@ -82,7 +82,9 @@ function RawHookRender<T>({ UI, data }: { data: T; UI: Raw<T> }) {
         setF(UI.init(sig.signal, ref))
         return () => sig.abort()
     }, [ref, UI.init])
-    useEffect(() => void f?.(data), [f, data])
+    useEffect(() => {
+        f?.(data)
+    }, [f, data])
 
     return <div ref={setRef} />
 }

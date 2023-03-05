@@ -89,7 +89,9 @@ export function createSubscriptionFromAsyncSuspense<T>(
 
             const undo = subscribe(sub)
             signal?.addEventListener('abort', undo, { once: true })
-            return () => void undo()
+            return () => {
+                undo()
+            }
         },
     }
 }
