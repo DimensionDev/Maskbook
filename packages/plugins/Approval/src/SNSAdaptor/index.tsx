@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Trans } from 'react-i18next'
 import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
@@ -8,7 +9,6 @@ import { ApprovalDialog } from './ApprovalDialog.js'
 import { Web3ContextProvider, useNetworkContext } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { PluginID } from '@masknet/shared-base'
-import { Trans } from 'react-i18next'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

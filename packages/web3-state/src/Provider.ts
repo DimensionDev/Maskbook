@@ -16,7 +16,7 @@ export class ProviderState<
     NetworkType extends string,
     Web3Provider,
     Web3,
-> implements Web3ProviderState<ChainId, ProviderType, NetworkType>
+> implements Web3ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3>
 {
     protected site = getSiteType()
 
@@ -171,6 +171,10 @@ export class ProviderState<
 
     untilReady(providerType: ProviderType) {
         return this.providers[providerType].readyPromise
+    }
+
+    getWalletProvider(providerType: ProviderType) {
+        return this.providers[providerType]
     }
 
     async connect(

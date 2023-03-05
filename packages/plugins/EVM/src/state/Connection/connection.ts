@@ -37,6 +37,7 @@ import {
     NonFungibleCollection,
     NonFungibleTokenContract,
     TransactionStatusType,
+    Wallet,
 } from '@masknet/web3-shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
@@ -216,6 +217,93 @@ class Connection implements EVM_Connection {
             this.getOptions(initial),
         )
     }
+
+    getWallets(initial?: EVM_ConnectionOptions): Promise<Wallet[]> {
+        return this.hijackedRequest<Wallet[]>(
+            {
+                method: EthereumMethodType.MASK_WALLETS,
+                params: [],
+            },
+            this.getOptions(initial),
+        )
+    }
+
+    async addWallet(wallet: Wallet, initial?: EVM_ConnectionOptions): Promise<void> {
+        await this.hijackedRequest<void>(
+            {
+                method: EthereumMethodType.MASK_ADD_WALLET,
+                params: [wallet],
+            },
+            this.getOptions(initial),
+        )
+    }
+
+    async updateWallet(address: string, wallet: Wallet, initial?: EVM_ConnectionOptions): Promise<void> {
+        await this.hijackedRequest<void>(
+            {
+                method: EthereumMethodType.MASK_UPDATE_WALLET,
+                params: [address, wallet],
+            },
+            this.getOptions(initial),
+        )
+    }
+
+    async updateOrAddWallet(wallet: Wallet, initial?: EVM_ConnectionOptions): Promise<void> {
+        await this.hijackedRequest<void>(
+            {
+                method: EthereumMethodType.MASK_ADD_OR_UPDATE_WALLET,
+                params: [wallet],
+            },
+            this.getOptions(initial),
+        )
+    }
+
+    async renameWallet(address: string, name: string, initial?: EVM_ConnectionOptions): Promise<void> {
+        await this.hijackedRequest<void>(
+            {
+                method: EthereumMethodType.MASK_RENAME_WALLET,
+                params: [address, name],
+            },
+            this.getOptions(initial),
+        )
+    }
+
+    async removeWallet(address: string, password?: string | undefined, initial?: EVM_ConnectionOptions): Promise<void> {
+        await this.hijackedRequest<void>(
+            {
+                method: EthereumMethodType.MASK_REMOVE_WALLET,
+                params: [address, password],
+            },
+            this.getOptions(initial),
+        )
+    }
+
+    async updateWallets(
+        wallets: Wallet[],
+        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<void> {
+        await this.hijackedRequest<void>(
+            {
+                method: EthereumMethodType.MASK_UPDATE_WALLETS,
+                params: wallets,
+            },
+            this.getOptions(initial),
+        )
+    }
+
+    async removeWallets(
+        wallets: Wallet[],
+        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<void> {
+        await this.hijackedRequest<void>(
+            {
+                method: EthereumMethodType.MASK_REMOVE_WALLETS,
+                params: wallets,
+            },
+            this.getOptions(initial),
+        )
+    }
+
     async approveFungibleToken(
         address: string,
         recipient: string,
@@ -585,7 +673,7 @@ class Connection implements EVM_Connection {
         return Promise.all(transactions.map((x) => this.signTransaction(x, initial)))
     }
 
-    supportedChainIds(initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
+    supportedChainIds(initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<ChainId[]>(
             {
@@ -596,7 +684,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    supportedEntryPoints(initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
+    supportedEntryPoints(initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<string[]>(
             {
@@ -607,11 +695,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    async callUserOperation(
-        owner: string,
-        operation: UserOperation,
-        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
-    ) {
+    async callUserOperation(owner: string, operation: UserOperation, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<string>(
             {
@@ -628,11 +712,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    async sendUserOperation(
-        owner: string,
-        operation: UserOperation,
-        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
-    ) {
+    async sendUserOperation(owner: string, operation: UserOperation, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<string>(
             {
@@ -649,11 +729,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    async transfer(
-        recipient: string,
-        amount: string,
-        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
-    ) {
+    async transfer(recipient: string, amount: string, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         const contract = this.getWalletContract(options.account, options)
         if (!contract) throw new Error('Failed to create contract.')
@@ -678,7 +754,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    async changeOwner(recipient: string, initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
+    async changeOwner(recipient: string, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         const contract = this.getWalletContract(options.account, options)
         if (!contract) throw new Error('Failed to create contract.')
@@ -703,7 +779,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    async fund(proof: Proof, initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
+    async fund(proof: Proof, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<string>(
             {
@@ -714,11 +790,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    async deploy(
-        owner: string,
-        identifier?: ECKeyIdentifier,
-        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
-    ) {
+    async deploy(owner: string, identifier?: ECKeyIdentifier, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<string>(
             {

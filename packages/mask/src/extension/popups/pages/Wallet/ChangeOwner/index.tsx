@@ -1,3 +1,7 @@
+import { useCallback, useMemo, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useAsync, useAsyncFn } from 'react-use'
+import { useContainer } from 'unstated-next'
 import { Icons } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import {
@@ -9,14 +13,10 @@ import {
     TimeoutController,
 } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useChainContext, useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet, useWallets, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Link, Popover, Typography, Button } from '@mui/material'
-import { useCallback, useMemo, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useAsync, useAsyncFn } from 'react-use'
-import { useContainer } from 'unstated-next'
 import { useI18N } from '../../../../../utils/index.js'
 import Services from '../../../../service.js'
 import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
@@ -148,9 +148,8 @@ export default function ChangeOwner() {
 
     const { smartPayChainId } = useContainer(PopupContext)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
-    const { Wallet } = useWeb3State()
-    const wallets = useWallets()
     const wallet = useWallet()
+    const wallets = useWallets()
 
     const { selectedWallet: contractAccount } = useContainer(WalletContext)
 
@@ -180,7 +179,7 @@ export default function ChangeOwner() {
         })
 
         if (!result?.status) return
-        await Wallet?.updateOrAddWallet({
+        await connection?.updateOrAddWallet?.({
             name: 'Smart Pay',
             owner: manageAccount.address,
             identifier: manageAccount.identifier?.toText(),
@@ -191,7 +190,7 @@ export default function ChangeOwner() {
             createdAt: new Date(),
             updatedAt: new Date(),
         })
-    }, [manageAccount?.address, smartPayChainId, contractAccount, wallet])
+    }, [manageAccount?.address, smartPayChainId, contractAccount, wallet, connection])
 
     useTitle(t('popups_wallet_change_owner'))
 

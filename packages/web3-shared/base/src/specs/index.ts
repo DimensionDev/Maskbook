@@ -937,7 +937,13 @@ export interface WatchEvents<ChainId, Transaction> {
 }
 
 export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
-    emitter: Emitter<ProviderEvents<ChainId, ProviderType>>
+    readonly emitter: Emitter<ProviderEvents<ChainId, ProviderType>>
+
+    readonly subscription: {
+        account: Subscription<string>
+        chainId: Subscription<ChainId>
+        wallets: Subscription<Wallet[]>
+    }
 
     /** Get to know whether the provider is ready. */
     readonly ready: boolean
@@ -947,6 +953,20 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     readonly connected: boolean
     /** async setup tasks */
     setup(): Promise<void>
+    /** Add a new wallet. */
+    addWallet(wallet: Wallet): Promise<void>
+    /** Update a wallet. */
+    updateWallet(address: string, wallet: Wallet): Promise<void>
+    /** Add or update a new wallet on demand. */
+    updateOrAddWallet(wallet: Wallet): Promise<void>
+    /** Rename a wallet */
+    renameWallet(address: string, name: string): Promise<void>
+    /** Remove a wallet */
+    removeWallet(address: string, password?: string | undefined): Promise<void>
+    /** Update a bunch of wallets. */
+    updateWallets(wallets: Wallet[]): Promise<void>
+    /** Remove a bunch of wallets. */
+    removeWallets(wallets: Wallet[]): Promise<void>
     /** Switch to the designate account. */
     switchAccount(account?: string): Promise<void>
     /** Switch to the designate chain. */
@@ -1104,8 +1124,6 @@ export interface Connection<
     ): Promise<NonFungibleCollection<ChainId, SchemaType>>
     /** Get the currently connected account. */
     getAccount(initial?: Web3ConnectionOptions): Promise<string>
-    /** Get all supported accounts with metadata. */
-    getWallets?: (initial?: Web3ConnectionOptions) => Promise<Wallet[]>
     /** Get the currently chain id. */
     getChainId(initial?: Web3ConnectionOptions): Promise<ChainId>
     /** Switch to sub network */
@@ -1197,6 +1215,22 @@ export interface Connection<
     connect(initial?: Web3ConnectionOptions): Promise<Account<ChainId>>
     /** Break connection */
     disconnect(initial?: Web3ConnectionOptions): Promise<void>
+    /** Get all wallets. */
+    getWallets?: (initial?: Web3ConnectionOptions) => Promise<Wallet[]>
+    /** Add a new wallet. */
+    addWallet?: (wallet: Wallet, initial?: Web3ConnectionOptions) => Promise<void>
+    /** Update a wallet. */
+    updateWallet?: (address: string, wallet: Wallet, initial?: Web3ConnectionOptions) => Promise<void>
+    /** Add or update a new wallet on demand. */
+    updateOrAddWallet?: (wallet: Wallet, initial?: Web3ConnectionOptions) => Promise<void>
+    /** Rename a wallet */
+    renameWallet?: (address: string, name: string, initial?: Web3ConnectionOptions) => Promise<void>
+    /** Remove a wallet */
+    removeWallet?: (address: string, password?: string | undefined, initial?: Web3ConnectionOptions) => Promise<void>
+    /** Update a bunch of wallets. */
+    updateWallets?: (wallets: Wallet[], initial?: Web3ConnectionOptions) => Promise<void>
+    /** Remove a bunch of wallets. */
+    removeWallets?: (wallets: Wallet[], initial?: Web3ConnectionOptions) => Promise<void>
     /** Confirm transaction */
     confirmTransaction(hash: string, initial?: Web3ConnectionOptions): Promise<TransactionReceipt>
     /** Replace transaction */
@@ -1613,7 +1647,7 @@ export interface TransactionWatcherState<ChainId, Transaction> {
         status: TransactionStatusType,
     ) => Promise<void>
 }
-export interface ProviderState<ChainId, ProviderType, NetworkType> {
+export interface ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
     ready: boolean
     readyPromise: Promise<void>
 
@@ -1632,6 +1666,11 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
     isReady: (providerType: ProviderType) => boolean
     /** Wait until a provider ready */
     untilReady: (providerType: ProviderType) => Promise<void>
+
+    /** Get a registered wallet provider. */
+    getWalletProvider: (
+        providerType: ProviderType,
+    ) => WalletProvider<ChainId, ProviderType, Web3Provider, Web3> | undefined
 
     /** Connect with the provider and set chain id. */
     connect: (
@@ -1685,27 +1724,6 @@ export interface ConnectionState<
     getWeb3Provider?: (initial?: Web3ConnectionOptions) => Web3Provider
     /** Get connection */
     getConnection?: (initial?: Web3ConnectionOptions) => Web3Connection
-}
-export interface WalletState<Transaction> {
-    ready: boolean
-    readyPromise: Promise<void>
-
-    /** The currently stored wallet by MaskWallet. */
-    wallets?: Subscription<Wallet[]>
-
-    setup(): Promise<void>
-    addWallet(wallet: Wallet): Promise<void>
-    updateWallet(
-        address: string,
-        updates: Partial<Omit<Wallet, 'id' | 'address' | 'createdAt' | 'createdAt'>>,
-    ): Promise<void>
-    updateOrAddWallet(wallet: Wallet): Promise<void>
-    updateWallets(wallets: Wallet[]): Promise<void>
-    renameWallet(address: string, name: string): Promise<void>
-    removeWallets(wallets: Wallet[]): Promise<void>
-    removeWallet(address: string, password?: string): Promise<void>
-    signTransaction(address: string, transaction: Transaction): Promise<string>
-    signMessage(address: string, type: string, message: string, password?: string): Promise<string>
 }
 export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
     // #region resolvers
@@ -1821,8 +1839,7 @@ export interface Web3State<
         Web3,
         Web3Provider
     >
-    Provider?: ProviderState<ChainId, ProviderType, NetworkType>
-    Wallet?: WalletState<Transaction>
+    Provider?: ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3>
     Others?: OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
     Storage?: Web3StorageServiceState
 }
