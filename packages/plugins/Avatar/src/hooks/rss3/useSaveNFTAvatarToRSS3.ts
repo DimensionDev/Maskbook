@@ -13,7 +13,7 @@ export function useSaveAvatarToRSS3() {
             const storage = Storage.createRSS3Storage(address)
             const _nfts = await storage?.get<Record<string, NFTRSSNode>>(snsKey)
             await storage?.set<Record<string, NFTRSSNode>>(snsKey, {
-                ...(_nfts ?? {}),
+                ..._nfts,
                 [nft.userId]: { signature, nft },
             })
 

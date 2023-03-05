@@ -66,7 +66,7 @@ export function useCreateNftRedpacketCallback(
                         await nftRedPacketContract.methods.create_red_packet(...params).estimateGas({ from: account }),
                     ),
                     chainId,
-                    ...(gasOption ?? {}),
+                    ...gasOption,
                 },
             )
 

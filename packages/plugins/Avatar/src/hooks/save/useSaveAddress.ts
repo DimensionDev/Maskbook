@@ -18,7 +18,7 @@ export function useSaveAddress(pluginID?: NetworkPluginID) {
                 | undefined
 
             await addressStorage.set<AddressStorageV2>(userId, {
-                ...(prevData ?? {}),
+                ...prevData,
                 [pluginID]: account,
                 [userId]: { address: account, networkPluginID: pluginID },
             } as AddressStorageV2)

@@ -102,7 +102,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
             slippageTolerance: currentSlippageSettings.value / 100,
             transaction: {
                 gas,
-                ...(gasConfig ?? {}),
+                ...gasConfig,
             },
         })
 

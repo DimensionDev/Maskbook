@@ -326,7 +326,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                 slippageTolerance: currentSlippageSettings.value / 100,
                 transaction: {
                     gas: focusedTrade?.gas.value ?? MIN_GAS_LIMIT,
-                    ...(gasConfig ?? {}),
+                    ...gasConfig,
                 },
             })
 
