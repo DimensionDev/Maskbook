@@ -189,7 +189,7 @@ const codeStyleRules = {
     'no-useless-call': 'warn', // expr.call(undefined, ...)
     'no-useless-catch': 'warn', // catch (e) { throw e }
     'no-useless-concat': 'warn', // "a" + "b"
-    // 'no-useless-escape': 'warn', // "hol\a"
+    'no-useless-escape': 'warn', // "hol\a"
     // 'no-lone-blocks': 'warn', // no block that not introducing a new scope
     // 'react/jsx-no-useless-fragment': 'warn', // <><TheOnlyChild /></>
     // 'unicorn/no-console-spaces': 'warn', // console.log('id: ', id)
@@ -200,7 +200,7 @@ const codeStyleRules = {
     // 'unicorn/no-useless-spread': 'warn', // new Set([...iterable])
     // 'unicorn/no-useless-switch-case': 'warn', // case 1: default:
     // 'unicorn/no-useless-undefined': 'warn', // let x = undefined
-    // 'unicorn/no-zero-fractions': 'warn', // 1.0
+    'unicorn/no-zero-fractions': 'warn', // 1.0
     // 'unicorn/prefer-export-from': 'warn', // prefer export { } from than import-and-export
     // 'unicorn/prefer-native-coercion-functions': 'warn', // no coercion wrapper v => Boolean(v)
     '@typescript-eslint/await-thenable': 'warn', // await 1
@@ -331,7 +331,7 @@ const codeStyleRules = {
     'unicorn/escape-case': 'warn', // correct casing of escape '\xA9'
     'unicorn/no-hex-escape': 'warn', // correct casing of escape '\u001B'
     // 'unicorn/numeric-separators-style': 'warn', // correct using of 1_234_567
-    // 'unicorn/number-literal-case': 'warn', // correct casing of 0xFF
+    'unicorn/number-literal-case': 'warn', // correct casing of 0xFF
     'unicorn/prefer-prototype-methods': 'warn', // prefer Array.prototype.slice than [].slice
     'unicorn/relative-url-style': ['warn', 'always'], // prefer relative url starts with ./
     // 'unicorn/text-encoding-identifier-case': 'warn', // prefer 'utf-8' than 'UTF-8'

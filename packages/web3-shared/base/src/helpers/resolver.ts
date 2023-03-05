@@ -385,7 +385,7 @@ export function resolveIPFS_URL(cidOrURL: string | undefined): string | undefine
 
     // eliminate cors proxy
     if (cidOrURL.startsWith(CORS_HOST)) {
-        return trimQuery(resolveIPFS_URL(decodeURIComponent(cidOrURL.replace(new RegExp(`^${CORS_HOST}\??`), '')))!)
+        return trimQuery(resolveIPFS_URL(decodeURIComponent(cidOrURL.replace(new RegExp(`^${CORS_HOST}??`), '')))!)
     }
 
     // a ipfs.io host
