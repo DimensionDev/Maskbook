@@ -2,13 +2,13 @@ import React, { lazy, Suspense, useCallback, useEffect } from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom'
 import { useCustomSnackbar } from '@masknet/theme'
 import { SmartPayOwner, SmartPayBundler } from '@masknet/web3-providers'
-import { DashboardFrame } from '../components/DashboardFrame/index.js'
+import { useMountReport } from '@masknet/web3-telemetry/hooks'
+import { TelemetryAPI } from '@masknet/web3-providers/types'
 import { DashboardRoutes, RestoreSuccessEvent } from '@masknet/shared-base'
 import { Messages } from '../API.js'
 import { useDashboardI18N } from '../locales/index.js'
 import { TermsGuard } from './TermsGuard.js'
-import { useMountReport } from '@masknet/web3-telemetry/hooks'
-import { TelemetryAPI } from '@masknet/web3-providers/types'
+import { DashboardFrame } from '../components/DashboardFrame/index.js'
 
 const Wallets = lazy(() => import(/* webpackPrefetch: true */ './Wallets/index.js'))
 const Setup = lazy(() => import('./Setup/index.js'))
@@ -23,19 +23,21 @@ const CreateWallet = lazy(() => import('./CreateMaskWallet/index.js'))
 export function Pages() {
     const t = useDashboardI18N()
     const { showSnackbar } = useCustomSnackbar()
-    const restoreCallback = useCallback(async ({ wallets }: RestoreSuccessEvent) => {
-        const chainId = await SmartPayBundler.getSupportedChainId()
-
-        const accounts = await SmartPayOwner.getAccountsByOwners(chainId, wallets)
-        const deployedWallet = accounts.filter((x) => x.deployed)
-        if (!deployedWallet.length) return
-        showSnackbar(t.recovery_smart_pay_wallet_title(), {
-            variant: 'success',
-            message: t.recovery_smart_pay_wallet_description({
-                count: deployedWallet.length,
-            }),
-        })
-    }, [])
+    const restoreCallback = useCallback(
+        async ({ wallets }: RestoreSuccessEvent) => {
+            const chainId = await SmartPayBundler.getSupportedChainId()
+            const accounts = await SmartPayOwner.getAccountsByOwners(chainId, wallets)
+            const deployedWallet = accounts.filter((x) => x.deployed)
+            if (!deployedWallet.length) return
+            showSnackbar(t.recovery_smart_pay_wallet_title(), {
+                variant: 'success',
+                message: t.recovery_smart_pay_wallet_description({
+                    count: deployedWallet.length,
+                }),
+            })
+        },
+        [showSnackbar],
+    )
 
     useEffect(() => {
         return Messages.events.restoreSuccess.on(restoreCallback)
