@@ -188,7 +188,7 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
         }
     }
 
-    override request<T extends unknown>(requestArguments: RequestArguments): Promise<T> {
+    override request<T>(requestArguments: RequestArguments): Promise<T> {
         switch (requestArguments.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
                 return Promise.resolve(this.connector.chainId) as Promise<T>

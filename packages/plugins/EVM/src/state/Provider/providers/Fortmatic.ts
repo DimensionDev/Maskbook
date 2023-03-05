@@ -143,7 +143,7 @@ export default class FortmaticProvider extends BaseProvider implements EVM_Provi
         }
     }
 
-    override request<T extends unknown>(requestArguments: RequestArguments) {
+    override request<T>(requestArguments: RequestArguments) {
         return this.createProvider().send<T>(requestArguments.method, requestArguments.params)
     }
 }

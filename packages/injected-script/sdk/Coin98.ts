@@ -18,7 +18,7 @@ export class Coin98Provider extends InjectedProvider {
         super(pathnameMap[type])
     }
 
-    override async request<T extends unknown>(data: RequestArguments): Promise<T> {
+    override async request<T>(data: RequestArguments): Promise<T> {
         // coin98 cannot handle it correctly (test with coin98 v6.0.3)
         if (data.method === 'eth_chainId') {
             return this.getProperty('chainId') as T

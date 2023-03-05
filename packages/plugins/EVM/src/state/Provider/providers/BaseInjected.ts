@@ -42,10 +42,7 @@ export class BaseInjectedProvider extends BaseProvider implements EVM_Provider {
         return this.bridge as unknown as Web3Provider
     }
 
-    override async request<T extends unknown>(
-        requestArguments: RequestArguments,
-        options?: ProviderOptions<ChainId>,
-    ): Promise<T> {
+    override async request<T>(requestArguments: RequestArguments, options?: ProviderOptions<ChainId>): Promise<T> {
         const provider = this.createWeb3Provider(options)
         return provider.request(requestArguments)
     }
