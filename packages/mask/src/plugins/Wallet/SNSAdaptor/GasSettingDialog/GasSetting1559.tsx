@@ -321,7 +321,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                             <Trans
                                 i18nKey="popups_wallet_gas_fee_settings_usd"
                                 values={{
-                                    usd: formatWeiToEther(Number(maxPriorityFeePerGas) ?? 0)
+                                    usd: formatWeiToEther(Number(maxPriorityFeePerGas))
                                         .times(nativeTokenPrice)
                                         .times(inputGasLimit || 1)
                                         .toFixed(2),
@@ -361,7 +361,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                             <Trans
                                 i18nKey="popups_wallet_gas_fee_settings_usd"
                                 values={{
-                                    usd: formatWeiToEther(Number(maxFeePerGas) ?? 0)
+                                    usd: formatWeiToEther(Number(maxFeePerGas))
                                         .times(nativeTokenPrice)
                                         .times(inputGasLimit || 1)
                                         .toFixed(2),

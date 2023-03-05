@@ -66,7 +66,7 @@ export async function getPriceStats(coinId: string, currencyId: string, days: nu
 export async function getTokenPrice(platform_id: string, address: string, currencyType = CurrencyType.USD) {
     const price = await getTokenPrices(platform_id, [address], currencyType)
 
-    return Number(price[address.toLowerCase()][currencyType]) ?? 0
+    return Number(price[address.toLowerCase()][currencyType])
 }
 
 export async function getTokensPrice(listOfAddress: string[], currencyType = CurrencyType.USD) {

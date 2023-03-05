@@ -760,7 +760,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                 i18nKey="popups_wallet_gas_fee_settings_usd"
                                 values={{
                                     usd: formatCurrency(
-                                        formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
+                                        formatGweiToEther(Number(maxPriorityFeePerGas))
                                             .times(etherPrice)
                                             .times(gasLimit),
                                         'USD',
@@ -797,9 +797,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                 shouldUnescape
                                 values={{
                                     usd: formatCurrency(
-                                        formatGweiToEther(Number(maxFeePerGas) ?? 0)
-                                            .times(etherPrice)
-                                            .times(gasLimit),
+                                        formatGweiToEther(Number(maxFeePerGas)).times(etherPrice).times(gasLimit),
                                         'USD',
                                         { onlyRemainTwoDecimal: true },
                                     ),

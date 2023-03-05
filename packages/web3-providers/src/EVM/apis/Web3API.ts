@@ -305,7 +305,7 @@ export class Web3API
         if (actualSchema === SchemaType.ERC1155) {
             const contract = this.getERC1155Contract(chainId, address)
             // the owner has at least 1 token
-            return toNumber((await contract?.methods.balanceOf(owner, tokenId).call()) ?? 0) > 0 ?? false
+            return toNumber((await contract?.methods.balanceOf(owner, tokenId).call()) ?? 0) > 0
         }
 
         // ERC721

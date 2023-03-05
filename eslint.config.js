@@ -97,7 +97,7 @@ const avoidMistakeRules = {
 
     // Confusing code
     'no-bitwise': 'error', // need mark out
-    // 'no-constant-binary-expression': 'error', // a + b ?? c
+    'no-constant-binary-expression': 'error', // a + b ?? c
     'no-control-regex': 'error', // RegEx
     'no-div-regex': 'error', // RegEx
     'no-label-var': 'warn', // name collision

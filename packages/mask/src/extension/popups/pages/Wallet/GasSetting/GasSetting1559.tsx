@@ -406,7 +406,7 @@ export const GasSetting1559 = memo(() => {
                             i18nKey="popups_wallet_gas_fee_settings_usd"
                             values={{
                                 usd: formatCurrency(
-                                    formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
+                                    formatGweiToEther(Number(maxPriorityFeePerGas))
                                         .times(nativeTokenPrice)
                                         .times(gasLimit),
                                     'USD',
@@ -446,9 +446,7 @@ export const GasSetting1559 = memo(() => {
                             i18nKey="popups_wallet_gas_fee_settings_usd"
                             values={{
                                 usd: formatCurrency(
-                                    formatGweiToEther(Number(maxFeePerGas) ?? 0)
-                                        .times(nativeTokenPrice)
-                                        .times(gasLimit),
+                                    formatGweiToEther(Number(maxFeePerGas)).times(nativeTokenPrice).times(gasLimit),
                                     'USD',
                                     { onlyRemainTwoDecimal: true },
                                 ),

@@ -24,7 +24,9 @@ function useSSRPersonaInformation() {
             .then(() => set(false))
     }, [])
     const [useServerSnapshot, set] = useState(true)
-    useEffect(() => void initialPersonaInformation ?? revalidate(), [])
+    useEffect(() => {
+        initialPersonaInformation ?? revalidate()
+    }, [])
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(revalidate), [])
 
     return {
