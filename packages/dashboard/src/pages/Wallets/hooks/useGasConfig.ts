@@ -78,7 +78,7 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
               }
             : // it's a BigNumber so it's ok
               // eslint-disable-next-line @typescript-eslint/no-base-to-string
-              { gas: toHex(gasLimit_), gasPrice: toHex(gasPrice.toString()) }
+              { gas: toHex(gasLimit_), gasPrice: toHex((gasPrice as BigNumber.Value).toString()) }
     }, [is1559Supported, gasLimit_, maxFee, priorityFee, gasPrice, chainId])
 
     return {
