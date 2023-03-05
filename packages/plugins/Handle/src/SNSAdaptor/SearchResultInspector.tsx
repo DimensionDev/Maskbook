@@ -165,7 +165,7 @@ export function SearchResultInspectorContent() {
                                         <div className={classes.link}>
                                             {resolveNextIDPlatformIcon(x.platform)}
                                             <Typography className={cx(classes.socialName, classes.rightSpace)}>
-                                                {x.identity}
+                                                {x.name}
                                             </Typography>
                                         </div>
                                         <Icons.LinkOut size={20} className={classes.linkOutIcon} />

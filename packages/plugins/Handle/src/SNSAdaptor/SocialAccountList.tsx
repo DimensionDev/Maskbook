@@ -111,7 +111,7 @@ export function SocialAccountList({ nextIdBindings }: SocialAccountListProps) {
                     disabled={false}
                     onClick={() => openWindow(resolveNextIDPlatformLink(x.platform, x.identity))}>
                     {resolveNextIDPlatformIcon(x.platform)}
-                    <Typography className={cx(classes.socialName, classes.accountNameInList)}>{x.identity}</Typography>
+                    <Typography className={cx(classes.socialName, classes.accountNameInList)}>{x.name}</Typography>
                     <div className={classes.menuItemNextIdIcon}>
                         <Icons.LinkOut size={20} className={classes.linkOutIcon} />
                     </div>

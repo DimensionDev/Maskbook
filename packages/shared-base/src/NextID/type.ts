@@ -47,6 +47,7 @@ export interface BindingProof {
      * For Twitter, it's twitter account
      */
     identity: string
+    name: string
     created_at: string
     invalid_reason: string
     latest_checked_at?: string
