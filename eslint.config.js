@@ -133,7 +133,7 @@ const avoidMistakeRules = {
     'default-case-last': 'error', // default: should be the last
     eqeqeq: 'error', // ===
     'no-cond-assign': 'error', // if (a = b)
-    // 'no-duplicate-case': 'error', // switch
+    'no-duplicate-case': 'error', // switch
     'no-empty-character-class': 'error', // RegEx /[]/ means a empty character class, not "[]"
     'no-global-assign': 'error', // onmessage = ...
     // 'no-self-assign': 'error', // a = a

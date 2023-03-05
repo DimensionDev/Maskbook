@@ -35,8 +35,6 @@ export class Squash implements Middleware<ConnectionContext> {
             case EthereumMethodType.ETH_GET_TRANSACTION_COUNT:
                 const [account, tag = 'latest'] = params as [string, string]
                 return sha3([chainId, method, account, tag].join(','))
-            case EthereumMethodType.ETH_BLOCK_NUMBER:
-                return sha3([chainId, method].join(','))
             case EthereumMethodType.ETH_CALL:
             case EthereumMethodType.ETH_ESTIMATE_GAS: {
                 const [config, tag = 'latest'] = params as [TransactionConfig, string]
