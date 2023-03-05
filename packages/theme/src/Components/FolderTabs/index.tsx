@@ -80,6 +80,7 @@ export const FolderTabs: FC<FolderTabsProps> = ({ children: childNodes, defaultV
         return (
             <button
                 key={label}
+                type="button"
                 tabIndex={index === 0 ? 0 : -1}
                 role="tab"
                 className={cx(classes.tab, selected ? classes.selected : null)}

@@ -49,13 +49,19 @@ export const DatabaseOps: React.FC = () => {
     return (
         <section>
             <p>
-                <button onClick={onBackup}>{t('database_backup')}</button>
+                <button type="button" onClick={onBackup}>
+                    {t('database_backup')}
+                </button>
             </p>
             <p>
-                <button onClick={onRestore}>{t('database_overwrite')}</button>
+                <button type="button" onClick={onRestore}>
+                    {t('database_overwrite')}
+                </button>
             </p>
             <p>
-                <button onClick={onClear}>{t('database_clear')}</button>
+                <button type="button" onClick={onClear}>
+                    {t('database_clear')}
+                </button>
             </p>
         </section>
     )

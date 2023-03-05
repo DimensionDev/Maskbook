@@ -20,8 +20,12 @@ export function ThirdPartyRequestPermission(props: ThirdPartyRequestPermissionPr
                     <li key={key}>{ThirdPartyPluginPermission[permission]}</li>
                 ))}
             </ul>
-            <button onClick={() => window.close()}>{t('cancel')}</button>
-            <button onClick={() => props.onGrant(props.permissions)}>{t('popups_grant')}</button>
+            <button type="button" onClick={() => window.close()}>
+                {t('cancel')}
+            </button>
+            <button type="button" onClick={() => props.onGrant(props.permissions)}>
+                {t('popups_grant')}
+            </button>
         </main>
     )
 }

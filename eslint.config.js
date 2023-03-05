@@ -111,7 +111,7 @@ const avoidMistakeRules = {
     radix: 'warn', // parseInt('1', _required_)
     'unicorn/require-array-join-separator': 'warn', // Array.join(_required_)
     'unicorn/require-number-to-fixed-digits-argument': 'warn', // Number#toFixed(_required_)
-    // 'react/button-has-type': 'error', // default type is "submit" which refresh the page
+    'react/button-has-type': 'error', // default type is "submit" which refresh the page
     '@typescript-eslint/require-array-sort-compare': 'error', // Array#sort(_required_)
     '@dimensiondev/type-no-instanceof-wrapper': 'warn', // bans `expr instanceof String` etc
     /// Footgun language features
