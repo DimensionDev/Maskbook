@@ -103,7 +103,7 @@ export type CheckSecurityDialogEvent =
 export type ApplicationDialogEvent = {
     open: boolean
     pluginID: string
-    selectedPersona: PersonaInformation
+    selectedPersona?: PersonaInformation
 }
 
 export type PersonaBindFinishEvent = {

@@ -116,7 +116,7 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         if (this.walletStorage?.wallets.value.some((x) => isSameAddress(x.address, address))) return
 
         await this.walletStorage?.wallets.setValue([
-            ...this.walletStorage?.wallets.value,
+            ...(this.walletStorage?.wallets.value ?? []),
             {
                 ...wallet,
                 id: address,
@@ -182,7 +182,9 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
                 ),
         )
         await this.walletStorage?.wallets.setValue(
-            uniqWith([...this.walletStorage?.wallets.value, ...result], (a, b) => isSameAddress(a.address, b.address)),
+            uniqWith([...(this.walletStorage?.wallets.value ?? []), ...result], (a, b) =>
+                isSameAddress(a.address, b.address),
+            ),
         )
     }
 
