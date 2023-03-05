@@ -86,7 +86,7 @@ const avoidMistakeRules = {
     // 'unicorn/require-post-message-target-origin': 'warn', // postMessage(data, 'origin')
     // 'react/iframe-missing-sandbox': 'warn', // <iframe sandbox="..." />
     'react/jsx-no-script-url': 'error', // javascript:
-    // 'react/no-danger': 'error', // dangerouslySetInnerHTML
+    'react/no-danger': 'error', // dangerouslySetInnerHTML
     'react/no-danger-with-children': 'error', // dangerouslySetInnerHTML + children
     '@typescript-eslint/no-implied-eval': 'error', // setTimeout('code')
     // '@dimensiondev/browser-no-set-html': 'error', // .innerHTML =

@@ -139,8 +139,7 @@ export function PreviewCard(props: PreviewCardProps) {
         if (!grant?.description_rich) return ['', grant?.description || '']
         const ops = JSON.parse(grant.description_rich).ops as object[]
         const converter = new QuillDeltaToHtmlConverter(ops)
-        const html = purify(converter.convert())
-        return [grantDetailStyle, html]
+        return [grantDetailStyle, converter.convert()]
     }, [grant?.description_rich, grant?.description])
 
     if (loading)
@@ -299,5 +298,10 @@ export function PreviewCard(props: PreviewCardProps) {
 // under the ShadowRootIsolation context.
 function PreviewCardRender({ __html }: { __html: string | TrustedHTML }) {
     const { classes, cx } = useStyles()
-    return <div className={cx(classes.description, 'grant-detail')} dangerouslySetInnerHTML={{ __html }} />
+    const safeHTML = useMemo(() => {
+        if (typeof __html === 'string') return purify(__html)
+        return __html
+    }, [__html])
+    // eslint-disable-next-line react/no-danger this is safe because purify has been called
+    return <div className={cx(classes.description, 'grant-detail')} dangerouslySetInnerHTML={{ __html: safeHTML }} />
 }

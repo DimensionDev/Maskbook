@@ -1,12 +1,11 @@
 /// <reference types="@masknet/global-types/dom" />
 /// <reference types="react/next" />
-import { markdownTransformIpfsURL, purify } from '@masknet/shared-base'
+import { markdownTransformIpfsURL } from '@masknet/shared-base'
 import { memo, use } from 'react'
 import type { Options } from 'react-markdown'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 
 import { makeStyles } from '@masknet/theme'
-import { useRemarkable } from '../../../hooks/useRemarkable.js'
 
 const useStyles = makeStyles()((theme) => ({
     markdown: {
@@ -33,17 +32,6 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
 }))
-
-export interface LegacyMarkdownProps {
-    content: string
-    className?: string
-}
-
-export function LegacyMarkdown({ content, className }: LegacyMarkdownProps) {
-    const { classes, cx } = useStyles()
-    const html = purify(useRemarkable(content))
-    return <div dangerouslySetInnerHTML={{ __html: html }} className={cx(classes.markdown, className)} />
-}
 
 interface MarkdownProps extends Options {
     defaultStyle?: boolean
