@@ -159,7 +159,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     <SettingSwitch
                         disabled={source === 'official-native' && mode === TokenListMode.Manage}
                         classes={{ root: classes.switch }}
-                        onClick={async (event) => {
+                        onChange={async (event) => {
                             event.stopPropagation()
                             event.preventDefault()
                             onTrustOrBlockTokenToLocal(event)

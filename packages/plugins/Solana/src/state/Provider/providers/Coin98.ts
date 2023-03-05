@@ -12,18 +12,18 @@ export class Coin98Provider extends BaseInjectedProvider implements SolanaProvid
     }
 
     override async signMessage(message: string): Promise<string> {
-        const { signature } = await this.bridge.request({
+        const { signature } = (await this.bridge.request({
             method: Coin98MethodType.SOL_SIGN,
             params: [new TextEncoder().encode(message)],
-        })
+        })) as any
         return signature
     }
 
     override async signTransaction(transaction: Transaction): Promise<Transaction> {
-        const { signature, publicKey } = await this.bridge.request({
+        const { signature, publicKey } = (await this.bridge.request({
             method: Coin98MethodType.SOL_SIGN,
             params: [transaction],
-        })
+        })) as any
         transaction.addSignature(publicKey, signature)
         return transaction
     }
@@ -31,10 +31,10 @@ export class Coin98Provider extends BaseInjectedProvider implements SolanaProvid
     override async connect(chainId: ChainId): Promise<Account<ChainId>> {
         await this.readyPromise
 
-        const accounts = await this.bridge.request({
+        const accounts = (await this.bridge.request({
             method: Coin98MethodType.SOL_ACCOUNTS,
             params: [],
-        })
+        })) as any
 
         return {
             chainId,
