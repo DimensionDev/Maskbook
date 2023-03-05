@@ -192,7 +192,7 @@ const codeStyleRules = {
     'no-useless-escape': 'warn', // "hol\a"
     // 'no-lone-blocks': 'warn', // no block that not introducing a new scope
     // 'react/jsx-no-useless-fragment': 'warn', // <><TheOnlyChild /></>
-    // 'unicorn/no-console-spaces': 'warn', // console.log('id: ', id)
+    'unicorn/no-console-spaces': 'warn', // console.log('id: ', id)
     // 'unicorn/no-empty-file': 'warn',
     // 'unicorn/no-useless-fallback-in-spread': 'warn', // {...(foo || {})}
     'unicorn/no-useless-length-check': 'warn', // array.length === 0 || array.every(...)

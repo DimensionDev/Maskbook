@@ -35,7 +35,7 @@ export function convertRawMapToIdentifierMap<T>(it: I<T>, ...of: unknown[]): Map
 
     if (droppedValues.size) {
         console.warn(
-            '[@masknet/shared-base] identifierRawMapToMap: Some value violates the constraint. Dropped values: ',
+            '[@masknet/shared-base] identifierRawMapToMap: Some value violates the constraint. Dropped values:',
             droppedValues,
             'constraints:',
             of,

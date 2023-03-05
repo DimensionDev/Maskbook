@@ -40,7 +40,7 @@ function attachReactTreeToMountedRoot(
     const key = options.key || 'main'
 
     if (shadow.querySelector(`${tag}.${key}`)) {
-        console.error('Tried to create root in', shadow, 'with key', key, ' which is already used. Skip rendering.')
+        console.error('Tried to create root in', shadow, 'with key', key, 'which is already used. Skip rendering.')
         return {
             destroy: noop,
             render: noop,
