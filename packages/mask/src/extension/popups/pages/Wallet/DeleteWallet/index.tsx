@@ -1,21 +1,21 @@
 import { first } from 'lodash-es'
 import { memo, useCallback, useMemo, useState } from 'react'
+import { Trans } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { useContainer } from 'unstated-next'
 import { Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { FormattedAddress } from '@masknet/shared'
-import { useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
+import { useWallet, useWallets, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { WalletContext } from '../hooks/useWalletContext.js'
 import { useTitle } from '../../../hook/useTitle.js'
-import { useContainer } from 'unstated-next'
 import { PopupContext } from '../../../hook/usePopupContext.js'
-import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()({
     content: {
@@ -101,7 +101,6 @@ const useStyles = makeStyles()({
 const DeleteWallet = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
-    const { Wallet } = useWeb3State()
     const connection = useWeb3Connection()
     const { selectedWallet } = WalletContext.useContainer()
     const currentWallet = useWallet()
@@ -115,13 +114,12 @@ const DeleteWallet = memo(() => {
     const onConfirm = useCallback(async () => {
         if (!wallet?.address) return
         try {
-            await Wallet?.removeWallet?.(wallet.address, password)
+            await connection?.removeWallet?.(wallet.address, password)
+            const wallets = await connection?.getWallets?.()
             const newWallet = first(
-                Wallet?.wallets
-                    ?.getCurrentValue()
-                    .filter(
-                        (x) => !isSameAddress(x.address, wallet.address) && !isSameAddress(x.owner, wallet.address),
-                    ),
+                wallets?.filter(
+                    (x) => !isSameAddress(x.address, wallet.address) && !isSameAddress(x.owner, wallet.address),
+                ),
             )
             await connection?.connect({
                 account: newWallet?.address,
@@ -135,7 +133,7 @@ const DeleteWallet = memo(() => {
                 )
             }
         }
-    }, [wallet, password, Wallet, connection, smartPayChainId])
+    }, [wallet, password, connection, smartPayChainId])
 
     const manageWallets = useMemo(() => {
         return wallets.filter((x) => isSameAddress(x.owner, wallet?.address))

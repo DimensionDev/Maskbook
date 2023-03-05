@@ -1,4 +1,5 @@
 import { makeStyles } from '@masknet/theme'
+import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict'
 import { Typography, Link } from '@mui/material'
 import { useWeb3State } from '@masknet/web3-hooks-base'
@@ -57,6 +58,7 @@ const useStyles = makeStyles()((theme) => ({
     textBase: {
         display: 'flex',
         alignItems: 'center',
+        whiteSpace: 'nowrap',
         lineHeight: '18px',
         color: theme.palette.maskColor.publicSecond,
         '& > strong': {
@@ -126,25 +128,31 @@ export function ActivityCard(props: ActivityCardProps) {
                 ) : null}
             </div>
             <div className={classes.flex}>
-                {activity.from ? (
+                {activity.send && (
                     <Typography className={classes.textBase}>
                         {t.plugin_collectible_from()}
-                        <strong title={activity.from.address}>
-                            {activity.from.nickname ||
-                                (activity.from.address ? Others?.formatAddress(activity.from.address, 4) : '-')}
+                        <strong title={activity.send.address}>
+                            {type === ActivityType.Mint
+                                ? Others?.formatAddress(ZERO_ADDRESS, 4)
+                                : activity.send.nickname ||
+                                  (activity.send.address ? Others?.formatAddress(activity.send.address, 4) : '-')}
                         </strong>
                     </Typography>
-                ) : null}
+                )}
                 <Typography className={classes.textBase}>
-                    {activity.to ? (
+                    {activity.receive && activity.from?.address && (
                         <>
                             {t.plugin_collectible_to()}
-                            <strong title={activity.to.address}>
-                                {activity.to.nickname ||
-                                    (activity.to.address ? Others?.formatAddress(activity.to.address, 4) : '-')}
+                            <strong title={activity.receive.address}>
+                                {type === ActivityType.Mint
+                                    ? Others?.formatAddress(activity.from?.address, 4)
+                                    : activity.receive.nickname ||
+                                      (activity.receive.address
+                                          ? Others?.formatAddress(activity.receive.address, 4)
+                                          : '-')}
                             </strong>
                         </>
-                    ) : null}
+                    )}
                     {isValidTimestamp(activity.timestamp) &&
                         formatDistanceToNowStrict(new Date(activity.timestamp!), {
                             addSuffix: true,

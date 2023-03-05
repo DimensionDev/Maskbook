@@ -87,9 +87,11 @@ export const CURRENCIES_MAP: Record<SourceType, undefined | TrendingAPI.Currency
  * @param dataProvider
  * @returns
  */
-export function useCurrentCurrency(dataProvider: SourceType | undefined, chainId?: Web3Helper.ChainIdAll) {
+export function useCurrentCurrency(chainId: Web3Helper.ChainIdAll, dataProvider: SourceType | undefined) {
     if (!dataProvider) return undefined
     const currencies = CURRENCIES_MAP[dataProvider]
     if (!currencies) return
-    return chainId ? currencies.find((x) => x.chainId === chainId) : undefined
+    return chainId && dataProvider === SourceType.NFTScan
+        ? currencies.find((x) => x.chainId === chainId)
+        : CURRENCIES_MAP[dataProvider]?.[0]
 }

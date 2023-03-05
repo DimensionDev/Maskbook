@@ -12,7 +12,12 @@ import {
 } from '@masknet/shared-base'
 import { useI18N } from '../../utils/index.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
-import { currentSetupGuideStatus, userGuideStatus, userPinExtension } from '../../../shared/legacy-settings/settings.js'
+import {
+    currentSetupGuideStatus,
+    userGuideFinished,
+    userGuideStatus,
+    userPinExtension,
+} from '../../../shared/legacy-settings/settings.js'
 import Services from '../../extension/service.js'
 import { SetupGuideStep } from '../../../shared/legacy-settings/types.js'
 import { FindUsername } from './SetupGuide/FindUsername.js'
@@ -20,7 +25,6 @@ import { VerifyNextID } from './SetupGuide/VerifyNextID.js'
 import { PinExtension } from './SetupGuide/PinExtension.js'
 import { useSetupGuideStepInfo } from './SetupGuide/useSetupGuideStepInfo.js'
 import { useNextIDVerify } from '../DataSource/useNextIDVerify.js'
-import { Flags } from '../../../shared/flags.js'
 
 // #region setup guide ui
 interface SetupGuideUIProps {
@@ -129,7 +133,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         if (!userPinExtension.value) {
             userPinExtension.value = true
         }
-        if (network === EnhanceableSite.Twitter && userGuideStatus[network].value !== Flags.userGuideLevel) {
+        if (network === EnhanceableSite.Twitter && !userGuideFinished[network].value) {
             userGuideStatus[network].value = '1'
         } else {
             onCreate()

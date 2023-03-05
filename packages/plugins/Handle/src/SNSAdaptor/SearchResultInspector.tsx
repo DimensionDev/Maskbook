@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react'
+import { useCopyToClipboard } from 'react-use'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { openWindow } from '@masknet/shared-base-ui'
-import { useCopyToClipboard } from 'react-use'
 import { resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
 import { ScopedDomainsContainer, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'

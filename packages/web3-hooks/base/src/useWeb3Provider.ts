@@ -8,7 +8,7 @@ export function useWeb3Provider<S extends 'all' | void = void, T extends Network
     pluginID?: T,
     options?: Web3Helper.Web3ConnectionOptionsScope<S, T>,
 ) {
-    const { Connection, Others } = useWeb3State(pluginID)
+    const { Connection } = useWeb3State(pluginID)
     const { account, chainId, providerType } = useChainContext()
 
     const web3Provider = useMemo(() => {

@@ -23,5 +23,6 @@ export function useNonFungibleEvents<S extends 'all' | void = void, T extends Ne
             return hub.getNonFungibleTokenEvents?.(address ?? '', id ?? '', { ...options, indicator: nextIndicator })
         },
         [address, id, hub],
+        `${address}_${id}`,
     )
 }

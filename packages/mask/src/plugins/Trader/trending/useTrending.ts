@@ -79,7 +79,7 @@ export function useTrendingById(
     trending?: TrendingAPI.Trending | null
 }> {
     const { chainId } = useChainContext({ chainId: result.chainId })
-    const currency = useCurrentCurrency(result.source, result.chainId)
+    const currency = useCurrentCurrency(result.chainId, result.source)
 
     const {
         value: trending,

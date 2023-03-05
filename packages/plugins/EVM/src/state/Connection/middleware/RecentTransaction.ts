@@ -12,9 +12,9 @@ import { Web3StateSettings } from '../../../settings/index.js'
 
 export class RecentTransaction implements Middleware<ConnectionContext> {
     async fn(context: ConnectionContext, next: () => Promise<void>) {
-        const { Transaction, TransactionWatcher, BalanceNotifier, BlockNumberNotifier } = Web3StateSettings.value
-
         await next()
+
+        const { Transaction, TransactionWatcher, BalanceNotifier, BlockNumberNotifier } = Web3StateSettings.value
 
         try {
             switch (context.method) {

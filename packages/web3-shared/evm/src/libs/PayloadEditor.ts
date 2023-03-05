@@ -2,6 +2,7 @@ import { first, isUndefined, omitBy } from 'lodash-es'
 import Web3 from 'web3'
 import { type AbiItem, hexToNumber, hexToNumberString, toHex } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
+import type { Wallet } from '@masknet/web3-shared-base'
 import type { ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
 import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json'
 import {
@@ -127,6 +128,18 @@ export class PayloadEditor {
             ...raw,
             from: raw?.from ?? this.options?.account,
             chainId: raw?.chainId ?? this.options?.chainId,
+        }
+    }
+
+    get wallet() {
+        const { method, params } = this.payload
+        switch (method) {
+            case EthereumMethodType.MASK_ADD_WALLET:
+            case EthereumMethodType.MASK_ADD_OR_UPDATE_WALLET:
+                const [wallet] = params as [Wallet]
+                return wallet
+            default:
+                return
         }
     }
 

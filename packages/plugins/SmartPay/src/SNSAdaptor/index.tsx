@@ -6,11 +6,12 @@ import { SmartPayEntry } from './components/SmartPayEntry.js'
 import { setupContext, context } from './context.js'
 import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useWallets, Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { ReceiveDialog, SmartPayDescriptionDialog, SmartPayDialog } from './components/index.js'
 import { useAsync } from 'react-use'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { first } from 'lodash-es'
+import { Trans } from 'react-i18next'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -51,7 +52,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             ApplicationEntryID: PLUGIN_ID,
             appBoardSortingDefaultPriority: 3,
             marketListSortingPriority: 3,
-            name: { i18nKey: '__plugin_name', fallback: 'Smart Pay' },
+            name: <Trans ns={PluginID.SmartPay} i18nKey="__plugin_name" />,
             icon: <Icons.SmartPay size={36} />,
             category: 'other',
         },

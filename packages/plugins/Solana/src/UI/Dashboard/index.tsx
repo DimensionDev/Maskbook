@@ -39,11 +39,12 @@ const dashboard: Plugin.Dashboard.Definition<
 > = {
     ...base,
     async init(signal, context) {
+        SharedContextSettings.value = context
+
         const Web3State = await createWeb3State(signal, context)
 
         dashboard.Web3State = Web3State
         Web3StateSettings.value = Web3State
-        SharedContextSettings.value = context
     },
 }
 
