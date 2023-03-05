@@ -182,7 +182,7 @@ const codeStyleRules = {
     'no-debugger': 'warn',
     'no-extra-bind': 'warn', // unused bind on a function that does not uses this
     'no-extra-boolean-cast': 'warn', // if (!!expr)
-    // 'no-empty-pattern': 'warn', // const { a: {} } = expr
+    'no-empty-pattern': 'warn', // const { a: {} } = expr
     'no-extra-label': 'warn', // break/continue is ok without label
     'no-unneeded-ternary': 'warn', // expr ? true : false
     'no-useless-backreference': 'error', // RegEx
