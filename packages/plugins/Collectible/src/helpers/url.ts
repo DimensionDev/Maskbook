@@ -215,7 +215,10 @@ export function getPayloadFromURL(url?: string): CollectiblePayload | undefined 
                 chainId: rule.chainId,
                 provider: rule.provider,
                 address: rule.address?.(matched[1]) ?? matched[1],
-                tokenId: rule.pluginID === NetworkPluginID.PLUGIN_SOLANA ? '' : matched[2],
+                tokenId:
+                    rule.pluginID === NetworkPluginID.PLUGIN_SOLANA
+                        ? rule.address?.(matched[1]) ?? matched[1]
+                        : matched[2],
             }
         }
     }
