@@ -1,9 +1,9 @@
-import { PropsWithChildren, useRef, cloneElement, useEffect, ReactElement, useState } from 'react'
-import { useLocation } from 'react-use'
-import { debounce } from 'lodash-es'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { Box, Typography, styled, Portal } from '@mui/material'
+import { Box, Portal, styled, Typography } from '@mui/material'
+import { debounce } from 'lodash-es'
+import { cloneElement, PropsWithChildren, ReactElement, useEffect, useRef, useState } from 'react'
+import { useLocation } from 'react-use'
 import { sayHelloShowed, userGuideFinished, userGuideStatus } from '../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { useI18N } from '../../utils/index.js'
@@ -139,20 +139,30 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
         onComplete?.()
     }
 
+    const [inserted, setInserted] = useState(false)
+    useEffect(() => {
+        const observer = new MutationObserver((_, observer) => {
+            if (!childrenRef.current) return
+            const cr = childrenRef.current.getBoundingClientRect()
+            if (!cr.height) return
+            setInserted(true)
+            observer.disconnect()
+        })
+        observer.observe(document.body, { childList: true, subtree: true })
+
+        return () => observer.disconnect()
+    }, [])
+
+    // const inserted = childrenRef.current ? document.body.contains(childrenRef.current) : false
     useEffect(() => {
         const setGuideStepRect = () => {
+            if (!inserted) return
             const cr = childrenRef.current?.getBoundingClientRect()
             if (cr) {
                 const bottomAvailable = window.innerHeight - cr.height - cr.top > 200
                 setBottomAvailable(bottomAvailable)
-                if (!cr.width) {
-                    setClientRect({ ...cr, top: 30, left: window.innerWidth - 300 })
-                } else {
-                    setClientRect(cr)
-                }
-            } else {
-                setClientRect(cr)
             }
+            setClientRect(cr)
         }
         setGuideStepRect()
 
@@ -163,13 +173,13 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
         return () => {
             window.removeEventListener('resize', onResize)
         }
-    }, [childrenRef.current, currentStep, isCurrentStep, history])
+    }, [childrenRef.current, inserted, currentStep, history])
 
     return (
         <>
             {cloneElement(children as ReactElement<any>, { ref: childrenRef })}
             {usePortalShadowRoot((container) => {
-                if (!isCurrentStep || finished || !clientRect?.top || !clientRect?.left) return null
+                if (!stepVisible) return null
                 return (
                     <Portal container={container}>
                         <div className={classes.mask} onClick={(e) => e.stopPropagation()}>
