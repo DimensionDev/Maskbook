@@ -66,10 +66,10 @@ describe('DSearch test', () => {
         const result = await DSearch.search('mathcastles', SearchResultType.CollectionListByTwitterHandler)
 
         expect(result.length).toBe(1)
-        if (result[0].type === SearchResultType.CollectionListByTwitterHandler) {
+        if (result[0].type === SearchResultType.NonFungibleCollection) {
             expect(result[0].name).toBe('Terraforms')
         } else {
-            expect(result[0].type).toBe(SearchResultType.CollectionListByTwitterHandler)
+            expect(result[0].type).toBe(SearchResultType.NonFungibleCollection)
         }
     })
 
