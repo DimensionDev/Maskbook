@@ -33,7 +33,6 @@
 
     // Interop Constraints
     "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
 
     // Language and Environment
     "jsx": "react-jsx",
