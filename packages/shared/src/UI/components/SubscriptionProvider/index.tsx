@@ -10,14 +10,14 @@ export function SubscriptionProvider({
     children,
 }: React.PropsWithChildren<{ pluginID: NetworkPluginID; providerType: Web3Helper.ProviderTypeAll }>) {
     const { Connection, Provider } = useWeb3State(pluginID)
+
     useEffect(
         () =>
             CrossIsolationMessages.events.ownerDeletionEvent.on(async ({ owner }) => {
-                const provider = Provider?.getWalletProvider(providerType)
                 const connection = Connection?.getConnection?.()
                 const account = Provider?.account?.getCurrentValue()
-                const targets = provider?.subscription?.wallets
-                    ?.getCurrentValue()
+                const targets = Provider?.getWalletProvider(providerType)
+                    ?.subscription?.wallets?.getCurrentValue()
                     .filter((x) => isSameAddress(x.owner, owner))
                 if (targets?.length) await connection?.removeWallets?.(targets)
                 if (targets?.some((x) => isSameAddress(x.address, account))) await connection?.disconnect()
