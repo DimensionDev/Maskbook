@@ -23,7 +23,9 @@ export const FormattedBalance: FC<FormattedBalanceProps> = (props) => {
     const valueInt = new BigNumber(value ?? '0').toFixed(0)
     let formatted = formatter(valueInt, decimals, significant)
     if (minimumBalance && !isZero(formatted) && isLessThan(valueInt, minimumBalance)) {
-        formatted = '<' + formatter(minimumBalance, decimals, significant)
+        // it's a BigNumber so it's ok
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
+        formatted = '<' + formatter(minimumBalance, decimals, significant).toString()
     }
     const { classes } = useStyles(undefined, { props })
 

@@ -26,7 +26,7 @@ export interface StyleProps {
     offsetY?: number
 }
 
-export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offsetY }, refs) => {
+export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offsetY }, classNames) => {
     const spinningAnimationKeyFrames = keyframes`
         to {
           transform: rotate(360deg)
@@ -58,11 +58,11 @@ export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, {
             theme.palette.mode === 'dark'
                 ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
                 : '0px 4px 30px rgba(0, 0, 0, 0.1)',
-        [`& .${refs.title}`]: {
+        [`& .${classNames.title}`]: {
             color: 'inherit',
         },
 
-        [`& .${refs.message}`]: {
+        [`& .${classNames.message}`]: {
             color: 'inherit',
         },
     }
@@ -71,10 +71,10 @@ export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, {
         color: theme.palette.maskColor.white,
         boxShadow: `0px 6px 20px ${alpha(theme.palette.maskColor.success, 0.15)}`,
         backdropFilter: 'blur(16px)',
-        [`& .${refs.title}`]: {
+        [`& .${classNames.title}`]: {
             color: 'inherit',
         },
-        [`& .${refs.message}`]: {
+        [`& .${classNames.message}`]: {
             color: alpha(theme.palette.maskColor.white, 0.8),
             '& svg': {
                 color: theme.palette.maskColor.white,
@@ -87,10 +87,10 @@ export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, {
         color: theme.palette.maskColor.white,
         boxShadow: `0px 6px 20px ${alpha(theme.palette.maskColor.danger, 0.15)}`,
         backdropFilter: 'blur(16px)',
-        [`& .${refs.title}`]: {
+        [`& .${classNames.title}`]: {
             color: 'inherit',
         },
-        [`& .${refs.message}`]: {
+        [`& .${classNames.message}`]: {
             color: alpha(theme.palette.maskColor.white, 0.8),
             '& svg': {
                 color: theme.palette.maskColor.white,
@@ -105,10 +105,10 @@ export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, {
             theme.palette.mode === 'dark'
                 ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
                 : '0px 4px 30px rgba(0, 0, 0, 0.1)',
-        [`& .${refs.title}`]: {
+        [`& .${classNames.title}`]: {
             color: 'inherit',
         },
-        [`& .${refs.message}`]: {
+        [`& .${classNames.message}`]: {
             color: alpha(theme.palette.maskColor.white, 0.8),
             '& svg': {
                 color: theme.palette.maskColor.white,
@@ -121,10 +121,10 @@ export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, {
         color: theme.palette.maskColor.white,
         boxShadow: `0px 6px 20px ${alpha(theme.palette.maskColor.warn, 0.15)}`,
         backdropFilter: 'blur(16px)',
-        [`& .${refs.title}`]: {
+        [`& .${classNames.title}`]: {
             color: 'inherit',
         },
-        [`& .${refs.message}`]: {
+        [`& .${classNames.message}`]: {
             color: alpha(theme.palette.maskColor.white, 0.8),
             '& svg': {
                 color: theme.palette.maskColor.white,
@@ -145,23 +145,6 @@ export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, {
             borderRadius: 12,
             width: 380,
             flexWrap: 'nowrap !important' as 'nowrap',
-            [`&.${success.ref}`]: {
-                background: MaskColorVar.greenMain,
-                color: MaskColorVar.lightestBackground,
-            },
-            [`&.${error.ref}`]: {
-                background: MaskColorVar.redMain,
-                color: MaskColorVar.lightestBackground,
-                title: {
-                    color: 'inherit',
-                },
-            },
-            [`&.${info.ref}`]: {
-                color: MaskColorVar.lightestBackground,
-            },
-            [`&.${warning.ref}`]: {
-                color: '#ffffff',
-            },
         },
         // eslint-disable-next-line tss-unused-classes/unused-classes
         default: defaultVariant,

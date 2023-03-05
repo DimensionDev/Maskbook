@@ -151,7 +151,7 @@ const avoidMistakeRules = {
     // 'react/jsx-no-leaked-render': 'error', // <div>{0 && <Something />}</div> will render "0"!
     'react/no-unstable-nested-components': 'error', // rerender bugs
     'react-hooks/rules-of-hooks': 'error', // react hooks
-    // '@typescript-eslint/no-base-to-string': 'error', // prevent buggy .toString() call
+    '@typescript-eslint/no-base-to-string': 'error', // prevent buggy .toString() call
     '@typescript-eslint/no-loop-func': 'warn', // capture a loop variable might be a bug
     // '@typescript-eslint/no-duplicate-enum-values': 'error', // enum { a = 1, b = 1 }
     '@dimensiondev/string-no-locale-case': 'error', // in non-i18n cases use locale-aware string methods are wrong
