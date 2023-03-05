@@ -302,6 +302,7 @@ function PreviewCardRender({ __html }: { __html: string | TrustedHTML }) {
         if (typeof __html === 'string') return purify(__html)
         return __html
     }, [__html])
-    // eslint-disable-next-line react/no-danger this is safe because purify has been called
+    // this is safe because purify has been called
+    // eslint-disable-next-line react/no-danger
     return <div className={cx(classes.description, 'grant-detail')} dangerouslySetInnerHTML={{ __html: safeHTML }} />
 }
