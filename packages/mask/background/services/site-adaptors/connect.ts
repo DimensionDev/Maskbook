@@ -1,12 +1,12 @@
+import { compact } from 'lodash-es'
+import stringify from 'json-stable-stringify'
 import { delay } from '@masknet/kit'
-import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { openOrActiveTab } from '@masknet/shared-base-ui'
+import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { currentSetupGuideStatus, userGuideStatus } from '../../../shared/legacy-settings/settings.js'
 import { SetupGuideStep } from '../../../shared/legacy-settings/types.js'
 import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions.js'
 import { requestSiteAdaptorsPermission } from '../helper/request-permission.js'
-import stringify from 'json-stable-stringify'
-import { compact } from 'lodash-es'
 import type { SiteAdaptor } from '../../../shared/site-adaptors/types.js'
 
 const hasPermission = async (origin: string): Promise<boolean> => {
@@ -101,7 +101,7 @@ export async function connectSite(
 
     if (!(await requestSiteAdaptorsPermission([worker]))) return
 
-    // #region reset the global setup status setting
+    // #region reset the global setup status settings
     currentSetupGuideStatus[network].value = stringify({
         status: type === 'nextID' ? SetupGuideStep.VerifyOnNextID : SetupGuideStep.FindUsername,
         persona: identifier.toText(),

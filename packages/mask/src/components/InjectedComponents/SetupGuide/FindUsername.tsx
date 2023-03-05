@@ -1,12 +1,12 @@
-import { WizardDialog, WizardDialogProps } from './WizardDialog.js'
-import { useI18N } from '../../../utils/index.js'
 import { useState } from 'react'
-import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
+import { Trans } from 'react-i18next'
 import { Box, Typography } from '@mui/material'
 import { ActionButtonPromise } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { Trans } from 'react-i18next'
+import { WizardDialog, WizardDialogProps } from './WizardDialog.js'
+import { useI18N } from '../../../utils/index.js'
+import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
 
 export const useFindUsernameStyles = makeStyles()((theme) => ({
     avatar: {
@@ -94,9 +94,8 @@ export function FindUsername({
     stepUpdating,
 }: FindUsernameProps) {
     const { t } = useI18N()
-    const [connected, setConnected] = useState(false)
-
     const { classes, cx } = useFindUsernameStyles()
+    const [connected, setConnected] = useState(false)
 
     return (
         <WizardDialog

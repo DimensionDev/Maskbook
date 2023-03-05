@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import {
     EnhanceableSite,
@@ -8,42 +8,41 @@ import {
     ProfileIdentifier,
     resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
+import { usePersonaProofs } from '@masknet/shared'
 import { useValueRef } from '@masknet/shared-base-ui'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import { currentSetupGuideStatus, userPinExtension } from '../../../../shared/legacy-settings/settings.js'
+import { userPinExtension } from '../../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import { SetupGuideContext, SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
+import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
 import Services from '../../../extension/service.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { MaskMessages } from '../../../../shared/index.js'
-import { usePersonaProofs } from '@masknet/shared'
+import { useSetupGuideStatus } from '../../GuideStep/useSetupGuideStatus.js'
 
 export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
-    const ui = activatedSocialNetworkUI
-    const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
+    const UI = activatedSocialNetworkUI
+    const platform = UI.configuration.nextIDConfig?.platform as NextIDPlatform
 
     // #region parse setup status
     const lastPinExtensionSetting = useValueRef(userPinExtension)
-    const _lastSettingState = useValueRef(currentSetupGuideStatus[ui.networkIdentifier])
-    const lastSettingState = useMemo<SetupGuideContext>(() => {
-        try {
-            return JSON.parse(_lastSettingState)
-        } catch {
-            return {}
-        }
-    }, [_lastSettingState])
+    const lastSettingState = useSetupGuideStatus()
     // #endregion
+
+    console.log('DEBUG: useSetupGuideStepInfo')
+    console.log({
+        platform,
+        lastPinExtensionSetting,
+        lastSettingState,
+    })
 
     // #region Get SNS username
     const lastRecognized = useLastRecognizedIdentity()
-    const getUsername = () => lastSettingState.username || lastRecognized.identifier?.userId || ''
-    const [username, setUsername] = useState(getUsername)
+    const [username, setUsername] = useState(() => lastSettingState.username || lastRecognized.identifier?.userId || '')
 
     useEffect(() => {
-        const handler = (val: IdentityResolved) => {
+        return UI.collecting.identityProvider?.recognized.addListener((val: IdentityResolved) => {
             if (username === '' && val.identifier) setUsername(val.identifier.userId)
-        }
-        return ui.collecting.identityProvider?.recognized.addListener(handler)
+        })
     }, [username])
     // #endregion
 
@@ -54,7 +53,7 @@ export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])
 
     useEffect(() => {
-        if (username || ui.networkIdentifier !== EnhanceableSite.Twitter) return
+        if (username || UI.networkIdentifier !== EnhanceableSite.Twitter) return
         // In order to collect user info after login, need to reload twitter once
         let reloaded = false
         const handler = () => {
@@ -99,11 +98,9 @@ export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
             }
         }
 
-        const profileIdentifier = ProfileIdentifier.of(ui.networkIdentifier, username).unwrap()
-
         // Should connected persona
         const personaConnectedProfile = persona?.linkedProfiles.find((x) =>
-            isSameProfile(x.identifier, profileIdentifier),
+            isSameProfile(x.identifier, ProfileIdentifier.of(UI.networkIdentifier, username).unwrap()),
         )
         if (!personaConnectedProfile) return composeInfo(SetupGuideStep.FindUsername, 'doing')
 
@@ -125,14 +122,5 @@ export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
 
         // Default
         return composeInfo(SetupGuideStep.Close, 'done')
-    }, [
-        lastSettingState,
-        persona,
-        username,
-        ui.networkIdentifier,
-        platform,
-        lastPinExtensionSetting,
-        composeInfo,
-        proofs?.length,
-    ])
+    }, [lastSettingState.status, persona, username, platform, lastPinExtensionSetting, composeInfo, proofs?.length])
 }

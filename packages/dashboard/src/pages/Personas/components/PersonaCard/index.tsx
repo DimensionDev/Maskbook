@@ -107,7 +107,9 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                             return (
                                 <UnconnectedPersonaLine
                                     key={networkIdentifier}
-                                    onConnect={() => onConnect(identifier, networkIdentifier)}
+                                    onConnect={() => {
+                                        return onConnect(identifier, networkIdentifier)
+                                    }}
                                     networkIdentifier={networkIdentifier}
                                 />
                             )

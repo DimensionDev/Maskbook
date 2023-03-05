@@ -36,7 +36,7 @@ export function Pages() {
                 }),
             })
         },
-        [showSnackbar],
+        [t, showSnackbar],
     )
 
     useEffect(() => {

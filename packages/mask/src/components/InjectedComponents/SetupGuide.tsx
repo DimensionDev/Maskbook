@@ -33,18 +33,19 @@ interface SetupGuideUIProps {
 }
 
 function SetupGuideUI(props: SetupGuideUIProps) {
+    const UI = activatedSocialNetworkUI
+
     const { t } = useI18N()
     const { persona } = props
     const { showSnackbar } = useCustomSnackbar()
     const [, handleVerifyNextID] = useNextIDVerify()
-    const ui = activatedSocialNetworkUI
-    const [enableNextID] = useState(ui.configuration.nextIDConfig?.enable)
+    const [enableNextID] = useState(UI.configuration.nextIDConfig?.enable)
 
     const {
-        value: { step, userId, currentIdentityResolved, destinedPersonaInfo, type } = {
-            step: SetupGuideStep.Close,
-            userId: '',
+        value: { type, step, userId, currentIdentityResolved, destinedPersonaInfo } = {
             type: 'close',
+            userId: '',
+            step: SetupGuideStep.Close,
         },
         loading: loadingSetupGuideStep,
         retry: retryCheckStep,
@@ -59,14 +60,14 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                 variant: 'success',
                 message: t('setup_guide_connected_description'),
             }),
-        [],
+        [t, showSnackbar],
     )
 
     useEffect(() => {
         if (!(type === 'done' && !hasOperation)) return
 
         notify()
-        currentSetupGuideStatus[ui.networkIdentifier].value = ''
+        // currentSetupGuideStatus[UI.networkIdentifier].value = ''
     }, [type, hasOperation, notify])
     // #endregion
 
@@ -79,7 +80,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     )
 
     const onConnect = useCallback(async () => {
-        const id = ProfileIdentifier.of(ui.networkIdentifier, userId)
+        const id = ProfileIdentifier.of(UI.networkIdentifier, userId)
         if (!id.some) return
         // attach persona with SNS profile
         await Services.Identity.attachProfile(id.val, persona, {
@@ -93,16 +94,16 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         setOperation(true)
         if (step !== SetupGuideStep.FindUsername) return
 
-        currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
+        currentSetupGuideStatus[UI.networkIdentifier].value = stringify({
             status: SetupGuideStep.VerifyOnNextID,
         })
-    }, [ui.networkIdentifier, destinedPersonaInfo, step])
+    }, [UI.networkIdentifier, destinedPersonaInfo, step])
 
     const onVerify = useCallback(async () => {
         if (!userId) return
         if (!destinedPersonaInfo) return
 
-        const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
+        const platform = UI.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
         if (!platform) return
 
         const isBound = await NextIDProof.queryIsBound(destinedPersonaInfo.identifier.publicKeyAsHex, platform, userId)
@@ -114,22 +115,33 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     const onVerifyDone = useCallback(() => {
         if (step === SetupGuideStep.VerifyOnNextID) {
-            currentSetupGuideStatus[ui.networkIdentifier].value = ''
+            currentSetupGuideStatus[UI.networkIdentifier].value = ''
         }
         retryCheckStep()
     }, [step, retryCheckStep])
 
     const onClose = useCallback(() => {
-        currentSetupGuideStatus[ui.networkIdentifier].value = ''
+        currentSetupGuideStatus[UI.networkIdentifier].value = ''
         userPinExtension.value = true
-    }, [ui.networkIdentifier])
+    }, [])
+
+    const onCreate = useCallback(() => {
+        let content = t('setup_guide_say_hello_content')
+        if (UI.networkIdentifier === EnhanceableSite.Twitter) {
+            content += t('setup_guide_say_hello_follow', { account: '@realMaskNetwork' })
+        }
+
+        UI.automation.maskCompositionDialog?.open?.(makeTypedMessageText(content), {
+            target: EncryptionTargetType.Public,
+        })
+    }, [])
 
     const onPinClose = useCallback(() => {
         userPinExtension.value = true
     }, [])
 
     const onPinDone = useCallback(() => {
-        const network = ui.networkIdentifier
+        const network = UI.networkIdentifier
         if (!userPinExtension.value) {
             userPinExtension.value = true
         }
@@ -138,18 +150,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         } else {
             onCreate()
         }
-    }, [])
-
-    const onCreate = () => {
-        let content = t('setup_guide_say_hello_content')
-        if (ui.networkIdentifier === EnhanceableSite.Twitter) {
-            content += t('setup_guide_say_hello_follow', { account: '@realMaskNetwork' })
-        }
-
-        ui.automation.maskCompositionDialog?.open?.(makeTypedMessageText(content), {
-            target: EncryptionTargetType.Public,
-        })
-    }
+    }, [onCreate])
 
     switch (step) {
         case SetupGuideStep.FindUsername:
@@ -171,7 +172,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                     personaIdentifier={destinedPersonaInfo?.identifier}
                     personaName={destinedPersonaInfo?.nickname}
                     username={userId}
-                    network={ui.networkIdentifier}
+                    network={UI.networkIdentifier}
                     avatar={currentIdentityResolved?.avatar}
                     onVerify={onVerify}
                     onDone={onVerifyDone}
