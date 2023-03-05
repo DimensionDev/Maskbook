@@ -316,27 +316,27 @@ export declare namespace Web3Helper {
     export type ChainIdScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all' ? Web3Helper.ChainIdAll : Web3Helper.Definition[T]['ChainId']
+    > = S extends 'all' ? ChainIdAll : Definition[T]['ChainId']
     export type AddressTypeScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all' ? Web3Helper.AddressTypeAll : Web3Helper.Definition[T]['AddressType']
+    > = S extends 'all' ? AddressTypeAll : Definition[T]['AddressType']
     export type NetworkTypeScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all' ? Web3Helper.NetworkTypeAll : Web3Helper.Definition[T]['NetworkType']
+    > = S extends 'all' ? NetworkTypeAll : Definition[T]['NetworkType']
     export type ProviderTypeScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all' ? Web3Helper.ProviderTypeAll : Web3Helper.Definition[T]['ProviderType']
+    > = S extends 'all' ? ProviderTypeAll : Definition[T]['ProviderType']
     export type SchemaTypeScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all' ? Web3Helper.SchemaTypeAll : Web3Helper.Definition[T]['SchemaType']
+    > = S extends 'all' ? SchemaTypeAll : Definition[T]['SchemaType']
     export type TransactionScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all' ? TransactionAll : Web3Helper.Definition[T]['Transaction']
+    > = S extends 'all' ? TransactionAll : Definition[T]['Transaction']
     export type RecentTransactionScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,

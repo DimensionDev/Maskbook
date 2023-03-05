@@ -40,9 +40,9 @@ export namespace MulticallBaseAPI {
             chainId: ChainId,
             contracts: T[],
             names: K[],
-            calls: MulticallBaseAPI.Call[],
+            calls: Call[],
             overrides?: NonPayableTx,
             blockNumber?: number,
-        ): Promise<Array<MulticallBaseAPI.DecodeResult<T, K, R>>>
+        ): Promise<Array<DecodeResult<T, K, R>>>
     }
 }

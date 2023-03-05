@@ -206,10 +206,10 @@ const codeStyleRules = {
     '@typescript-eslint/no-extra-non-null-assertion': 'warn', // foo!!!.bar
     // '@typescript-eslint/no-inferrable-types': 'warn', // let x: number = 1
     '@typescript-eslint/no-meaningless-void-operator': 'warn', // void a_void_call()
-    // '@typescript-eslint/no-non-null-asserted-nullish-coalescing': 'warn', // foo! ?? bar
+    '@typescript-eslint/no-non-null-asserted-nullish-coalescing': 'warn', // foo! ?? bar
     // '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'warn', // no if (nullable_bool === true)
     // '@typescript-eslint/no-unnecessary-condition': 'warn', // no if (some_object)
-    // '@typescript-eslint/no-unnecessary-qualifier': 'warn', // no extra qualifier in enum/namespace
+    '@typescript-eslint/no-unnecessary-qualifier': 'warn', // no extra qualifier in enum/namespace
     // '@typescript-eslint/no-unnecessary-type-arguments': 'warn', // provided type argument equals the default
     // '@typescript-eslint/no-unnecessary-type-assertion': 'warn', // non_nullable!
     // '@typescript-eslint/no-unnecessary-type-constraint': 'warn', // T extends any
