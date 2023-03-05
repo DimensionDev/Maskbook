@@ -36,7 +36,7 @@
     "tip_nft_share_post": "我刚刚打赏了一个 {{name}} 到@{{recipientSnsId}} 的钱包地址 {{recipient}}\n\n{{promote}}",
     "tip_add": "添加",
     "tip_adding": "添加中",
-    "tip_add_collectibles": "添加收藏品",
+    "tip_add_collectibles": "添加 NFT",
     "tip_add_collectibles_contract_address": "输入合约地址",
     "tip_add_collectibles_token_id": "Token ID",
     "tip_add_collectibles_error": "合约地址不正确或此收藏品不属于您。",
