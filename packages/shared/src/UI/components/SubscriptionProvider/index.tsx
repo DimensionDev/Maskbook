@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages, type NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 

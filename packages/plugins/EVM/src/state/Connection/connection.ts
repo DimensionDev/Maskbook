@@ -37,7 +37,7 @@ import {
     type NonFungibleCollection,
     type NonFungibleTokenContract,
     TransactionStatusType,
-    Wallet,
+    type Wallet,
 } from '@masknet/web3-shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'

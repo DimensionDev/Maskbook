@@ -1,7 +1,7 @@
 import { Emitter } from '@servie/events'
 import type { Account, ProviderEvents, ProviderOptions, Wallet } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
-import { ChainId, ProviderType, Web3, Web3Provider } from '@masknet/web3-shared-flow'
+import { ChainId, type ProviderType, type Web3, type Web3Provider } from '@masknet/web3-shared-flow'
 import type { FlowProvider } from '../types.js'
 
 export class BaseProvider implements FlowProvider {

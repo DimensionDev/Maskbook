@@ -8,7 +8,7 @@ import {
     chainResolver,
     createWeb3,
     createWeb3Provider,
-    type ChainId,
+    ChainId,
     type ProviderType,
     ProviderURL,
     EthereumMethodType,
