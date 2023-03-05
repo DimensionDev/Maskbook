@@ -9,7 +9,5 @@ async function Suspender(id: string) {
     const proposal = await PluginSnapshotRPC.fetchProposal(id)
 
     proposal.status = !proposal.isStart ? 'Pending' : proposal.isEnd ? 'Closed' : 'Active'
-    proposal.authorName = proposal.authorName
-    proposal.authorAvatar = proposal.authorAvatar
     return proposal
 }

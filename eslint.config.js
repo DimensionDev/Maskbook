@@ -136,7 +136,7 @@ const avoidMistakeRules = {
     'no-duplicate-case': 'error', // switch
     'no-empty-character-class': 'error', // RegEx /[]/ means a empty character class, not "[]"
     'no-global-assign': 'error', // onmessage = ...
-    // 'no-self-assign': 'error', // a = a
+    'no-self-assign': 'error', // a = a
     'no-self-compare': 'error', // a === a
     'no-sparse-arrays': 'error', // [,, 1]
     'no-unmodified-loop-condition': 'error', // loop bug
