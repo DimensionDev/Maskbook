@@ -94,7 +94,6 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
         update()
         SharedContextSettings.value.wallets.subscribe(update)
         SharedContextSettings.value.allPersonas?.subscribe(update)
-        super.subscription.wallets.subscribe(update)
     }
 
     override async addWallet(wallet: Wallet): Promise<void> {
