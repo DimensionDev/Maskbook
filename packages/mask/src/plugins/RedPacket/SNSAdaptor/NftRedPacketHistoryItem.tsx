@@ -239,7 +239,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                                             strong: <strong />,
                                         }}
                                         values={{
-                                            claimedShares: bitStatusList.filter((x) => x).length.toString(),
+                                            claimedShares: bitStatusList.filter(Boolean).length.toString(),
                                             shares: patchedHistory.shares.toString(),
                                         }}
                                     />

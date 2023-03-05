@@ -25,7 +25,7 @@ export function getProfileIdentifierAtFacebook(links: link[] | link, allowCollec
     try {
         if (!Array.isArray(links)) links = [links]
         const result = links
-            .filter((x) => x)
+            .filter(Boolean)
             .map((x) => ({ nickname: x!.ariaLabel, id: getUserID(x!.href), dom: x }))
             .filter((x) => x.id)
         const { dom, id, nickname } = result[0] || {}

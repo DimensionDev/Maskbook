@@ -44,6 +44,6 @@ export async function createBackupFile(options: BackupOptions): Promise<{
         noWallets: excludeWallet,
     })
     const file = generateBackupRAW(backup)
-    const personaNickNames = [...backup.personas.values()].map((p) => p.nickname.unwrapOr('')).filter((x) => x)
+    const personaNickNames = [...backup.personas.values()].map((p) => p.nickname.unwrapOr('')).filter(Boolean)
     return { file, personaNickNames }
 }

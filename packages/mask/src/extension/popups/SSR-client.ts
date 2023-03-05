@@ -9,7 +9,7 @@ let trustedHTML: (x: string) => string
 {
     if (typeof trustedTypes === 'object') {
         const policy = trustedTypes.createPolicy('ssr', {
-            createHTML: (x: string) => String(x),
+            createHTML: String,
         })
         trustedHTML = (x) => policy.createHTML(x)
     } else {

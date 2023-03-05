@@ -94,7 +94,7 @@ export const CreateWallet = memo(() => {
                         <Typography>{t.wallets_create_wallet_refresh()}</Typography>
                     </Refresh>
                     <MnemonicGeneratorContainer>
-                        <MnemonicReveal words={[...Array(12).keys()].map((i) => String(i))} />
+                        <MnemonicReveal words={[...Array(12).keys()].map(String)} />
                     </MnemonicGeneratorContainer>
                 </TabPanel>
                 <TabPanel classes={{ root: classes.root }} value={tabs.json}>

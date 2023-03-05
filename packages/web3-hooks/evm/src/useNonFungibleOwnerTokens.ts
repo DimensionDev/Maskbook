@@ -54,7 +54,7 @@ export function useNonFungibleOwnerTokens(
 
         const listOfPairs = (await Promise.allSettled(allRequest))
             .map((x) => (x.status === 'fulfilled' ? x.value : undefined))
-            .filter((value) => value) as Array<[string, string]>
+            .filter(Boolean) as Array<[string, string]>
 
         if (!listOfPairs.length) return
 

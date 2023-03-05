@@ -32,7 +32,7 @@ async function Suspender(id: ProposalIdentifier['id'], space: ProposalIdentifier
                       }))
             return {
                 choiceIndex: typeof v.choice === 'number' ? v.choice : undefined,
-                choiceIndexes: typeof v.choice === 'number' ? undefined : Object.keys(v.choice).map((i) => Number(i)),
+                choiceIndexes: typeof v.choice === 'number' ? undefined : Object.keys(v.choice).map(Number),
                 choice: typeof v.choice === 'number' ? proposal.choices[v.choice - 1] : undefined,
                 choices,
                 totalWeight: choices
