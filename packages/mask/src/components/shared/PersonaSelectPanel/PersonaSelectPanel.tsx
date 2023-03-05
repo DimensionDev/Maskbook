@@ -144,6 +144,12 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
             if (!isVerified && enableVerify) {
                 onClose?.()
                 closeApplicationBoard()
+                if (finishTarget) {
+                    CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
+                        open: false,
+                        pluginID: finishTarget,
+                    })
+                }
                 await handleVerifyNextID(selectedPersona.persona, currentProfileIdentify.identifier?.userId)
             }
 
