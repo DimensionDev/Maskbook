@@ -122,7 +122,7 @@ function ApplicationBoardContent(props: Props) {
                 .sort((a, b) => {
                     return (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0)
                 })
-                .filter((x) => Boolean(x.entry.RenderEntryComponent)),
+                .filter((x) => !!x.entry.RenderEntryComponent),
         [snsAdaptorPlugins, currentWeb3Network, chainId, account],
     )
     const recommendFeatureAppList = applicationList
@@ -136,7 +136,7 @@ function ApplicationBoardContent(props: Props) {
     // #endregion
     const { classes, cx } = useStyles({
         shouldScroll: listedAppList.length > 12,
-        isCarouselReady: Boolean(isCarouselReady()),
+        isCarouselReady: !!isCarouselReady(),
     })
 
     useMountReport(TelemetryAPI.EventID.AccessApplicationBoard)
@@ -296,7 +296,7 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
                 isSNSConnectToCurrentPersona,
                 shouldDisplayTooltipHint:
                     ApplicationCurrentStatus?.isSNSConnectToCurrentPersona === false && personaConnectStatus.connected,
-                shouldVerifyNextId: Boolean(!personaConnectStatus.verified && ApplicationCurrentStatus),
+                shouldVerifyNextId: !!(!personaConnectStatus.verified && ApplicationCurrentStatus),
                 currentPersonaPublicKey,
                 currentSNSConnectedPersonaPublicKey,
                 isLoading: personaStatusLoading || personaAgainstSNSConnectStatusLoading,

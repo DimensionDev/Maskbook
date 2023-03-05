@@ -419,11 +419,11 @@ export const FungibleTokenList = forwardRef(
                     FixedSizeListProps={FixedSizeListProps}
                     SearchFieldProps={SearchFieldProps}
                 />
-                {mode === TokenListMode.List && enableManage && (
+                {mode === TokenListMode.List && enableManage ? (
                     <Box className={classes.bar}>
                         <ManageTokenListBar onClick={() => setMode(TokenListMode.Manage)} />
                     </Box>
-                )}
+                ) : null}
             </Stack>
         )
     },

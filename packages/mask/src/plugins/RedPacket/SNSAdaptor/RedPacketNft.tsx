@@ -226,8 +226,8 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         retryAvailability()
     }, [account])
 
-    const outdated = Boolean(availability?.isClaimedAll || availability?.isCompleted || availability?.expired)
-    const { classes, cx } = useStyles({ claimed: Boolean(availability?.isClaimed), outdated })
+    const outdated = !!(availability?.isClaimedAll || availability?.isCompleted || availability?.expired)
+    const { classes, cx } = useStyles({ claimed: !!availability?.isClaimed, outdated })
     // #region on share
     const postLink = usePostLink()
     const shareText = useMemo(() => {

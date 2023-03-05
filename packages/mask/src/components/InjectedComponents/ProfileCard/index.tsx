@@ -186,7 +186,7 @@ export const ProfileCard: FC<Props> = ({ identity, badgeBounding, currentAddress
                         identity={identity}
                         badgeBounding={badgeBounding}
                     />
-                    {tabs.length > 0 && currentTab && (
+                    {tabs.length > 0 && currentTab ? (
                         <div className={classes.tabs}>
                             <TabContext value={currentTab}>
                                 <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
@@ -201,7 +201,7 @@ export const ProfileCard: FC<Props> = ({ identity, badgeBounding, currentAddress
                                 </MaskTabList>
                             </TabContext>
                         </div>
-                    )}
+                    ) : null}
                 </div>
                 <div className={classes.content}>
                     <ScopedDomainsContainer.Provider>{component}</ScopedDomainsContainer.Provider>

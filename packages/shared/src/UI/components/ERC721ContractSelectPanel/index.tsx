@@ -69,7 +69,7 @@ export interface ERC721TokenSelectPanelProps {
 export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const { onContractChange, collection, label, chainId = ChainId.Mainnet, balance } = props
     const t = useSharedI18N()
-    const { classes, cx } = useStyles({ hasIcon: Boolean(collection?.iconURL) })
+    const { classes, cx } = useStyles({ hasIcon: !!collection?.iconURL })
     const { Others } = useWeb3State()
 
     const { setDialog: setNftContractDialog } = useRemoteControlledDialog(

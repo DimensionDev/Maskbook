@@ -180,13 +180,13 @@ export const RestoreFromCloud = memo(() => {
                     )}
                 </Step>
             </Stepper>
-            {openSynchronizePasswordDialog && (
+            {openSynchronizePasswordDialog ? (
                 <ConfirmSynchronizePasswordDialog
                     open={openSynchronizePasswordDialog}
                     onClose={() => onCloseSynchronizePassword()}
                     onConform={synchronizePassword}
                 />
-            )}
+            ) : null}
             <Box sx={{ pt: 4, pb: 2, width: '100%' }}>
                 <MaskAlert description={t.sign_in_account_cloud_backup_warning()} />
             </Box>

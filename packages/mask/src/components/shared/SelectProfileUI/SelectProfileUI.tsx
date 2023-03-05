@@ -108,19 +108,19 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                 sx={{
                     display: 'flex',
                 }}>
-                {showSelectAll && SelectAllButton}
-                {showSelectNone && SelectNoneButton}
+                {showSelectAll ? SelectAllButton : null}
+                {showSelectNone ? SelectNoneButton : null}
             </Box>
             <Box
                 sx={{
                     flex: 1,
                 }}>
                 <List dense>
-                    {listBeforeSearch.length > 0 && listAfterSearch.length === 0 && search && (
+                    {listBeforeSearch.length > 0 && listAfterSearch.length === 0 && search ? (
                         <ListItem>
                             <ListItemText primary={t('no_search_result')} />
                         </ListItem>
-                    )}
+                    ) : null}
                     <FixedSizeList
                         itemSize={56}
                         itemCount={listAfterSearch.length}

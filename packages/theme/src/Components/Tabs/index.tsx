@@ -249,16 +249,16 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
                     ref={anchorRef}
                     style={{ visibility: 'hidden', height: defaultTabSize }}
                 />
-                <FlexibleButtonGroupPanel isOpen={open && isTabsOverflow} ref={flexPanelRef}>
+                <FlexibleButtonGroupPanel isOpen={!!(open && isTabsOverflow)} ref={flexPanelRef}>
                     <FlexButtonGroupWrap
                         maskVariant={variant}
                         isOpen={open}
-                        isOverflow={isTabsOverflow && !hideArrowButton}
+                        isOverflow={!!(isTabsOverflow && !hideArrowButton)}
                         {...rest}
                         ref={innerRef}
                         role="tablist">
                         {flexibleTabs}
-                        {isTabsOverflow && !hideArrowButton && (
+                        {isTabsOverflow && !hideArrowButton ? (
                             <ArrowButtonWrap
                                 variant="text"
                                 size="small"
@@ -271,7 +271,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
                                     sx={{ transform: open ? 'rotate(90deg)' : 'rotate(270deg)' }}
                                 />
                             </ArrowButtonWrap>
-                        )}
+                        ) : null}
                     </FlexButtonGroupWrap>
                 </FlexibleButtonGroupPanel>
             </Box>

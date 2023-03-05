@@ -257,7 +257,7 @@ function NetworkItem({
                 ) : (
                     <ImageIcon size={30} icon={network.icon} />
                 )}
-                {selected && <Icons.Selected size={12} className={classes.checkedBadge} />}
+                {selected ? <Icons.Selected size={12} className={classes.checkedBadge} /> : null}
             </div>
             <Typography className={cx(classes.networkName, selected ? classes.selected : '')}>
                 {Others?.chainResolver.chainName(network.chainId)}

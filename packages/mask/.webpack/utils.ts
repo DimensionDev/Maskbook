@@ -15,5 +15,5 @@ export type EntryDescription = Exclude<
     string | string[]
 >
 export function nonNullable<T>(x: T | false | undefined | null): x is T {
-    return Boolean(x)
+    return !!x
 }

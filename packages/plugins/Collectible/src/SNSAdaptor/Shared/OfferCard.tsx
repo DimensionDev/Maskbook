@@ -94,11 +94,11 @@ export function OfferCard(props: OfferCardProps) {
                                 {formatBalance(offer.priceInToken?.amount, offer.priceInToken?.token.decimals || 18, 6)}
                             </strong>
                         </Typography>
-                        {offer.price?.usd && (
+                        {offer.price?.usd ? (
                             <Typography className={classes.textBase} fontSize={12}>
                                 <strong>{formatCurrency(offer.price.usd)}</strong>
                             </Typography>
-                        )}
+                        ) : null}
                     </div>
                 </div>
                 <div className={classes.flex}>

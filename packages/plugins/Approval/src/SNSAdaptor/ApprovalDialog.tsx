@@ -171,7 +171,7 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
                                         const x = chainResolver.networkType(chainId)
                                         return x
                                     })
-                                    .filter((x) => Boolean(x)) as NetworkType[],
+                                    .filter((x) => !!x) as NetworkType[],
                             })
                         }}
                         fullWidth>

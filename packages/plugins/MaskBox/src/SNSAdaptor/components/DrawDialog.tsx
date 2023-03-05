@@ -240,7 +240,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                 </Typography>
                             </Box>
                         </Box>
-                        {isAllowanceEnough && (
+                        {isAllowanceEnough ? (
                             <Box className={classes.section} display="flex" alignItems="center">
                                 <Typography className={classes.title} color="textPrimary">
                                     Gas Fee:
@@ -252,7 +252,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                     />
                                 </Box>
                             </Box>
-                        )}
+                        ) : null}
                     </Box>
                 </Box>
             </DialogContent>

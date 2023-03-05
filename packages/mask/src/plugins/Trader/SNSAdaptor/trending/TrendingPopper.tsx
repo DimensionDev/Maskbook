@@ -60,7 +60,7 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
             setBadgeBounding(ev.badgeBounding)
             setAddress(ev.address ?? '')
             setIdentity(ev.identity)
-            setIsNFTProjectPopper(Boolean(ev.isCollectionProjectPopper))
+            setIsNFTProjectPopper(!!ev.isCollectionProjectPopper)
             setActive(true)
         })
     }, [position.y])

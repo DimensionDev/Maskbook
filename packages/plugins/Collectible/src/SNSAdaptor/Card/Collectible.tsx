@@ -242,7 +242,7 @@ export function Collectible(props: CollectibleProps) {
                     </Paper>
                 </CardContent>
             </CollectiblePaper>
-            {endDate && isValidDate(endDate) && isAfter(endDate, Date.now()) && (
+            {endDate && isValidDate(endDate) && isAfter(endDate, Date.now()) ? (
                 <Box sx={{ marginTop: 1 }}>
                     <Typography className={classes.countdown}>
                         {t.plugin_collectible_sale_end({
@@ -250,7 +250,7 @@ export function Collectible(props: CollectibleProps) {
                         })}
                     </Typography>
                 </Box>
-            )}
+            ) : null}
         </>
     )
 }

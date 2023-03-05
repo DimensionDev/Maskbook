@@ -50,11 +50,11 @@ export function Provider(props: ProviderProps) {
                 <Typography className={classes.name} variant="h3">
                     {props.name}
                 </Typography>
-                {props.description && (
+                {props.description ? (
                     <Typography className={classes.description} color="textSecondary" variant="body2">
                         {props.description}
                     </Typography>
-                )}
+                ) : null}
             </ButtonBase>
         </Card>
     )

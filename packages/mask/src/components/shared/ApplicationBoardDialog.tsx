@@ -90,7 +90,7 @@ export function ApplicationBoardDialog() {
             <InjectedDialog
                 open={open}
                 maxWidth="sm"
-                isOnBack={openSettings && !quickMode}
+                isOnBack={!!(openSettings && !quickMode)}
                 onClose={closeDialog}
                 titleTabs={
                     openSettings ? (
@@ -121,7 +121,7 @@ export function ApplicationBoardDialog() {
                         <ApplicationBoard closeDialog={closeDialog} />
                     )}
                     {/* TODO: remove this*/}
-                    {openPersonaSelectPanelDialog && <PersonaSelectPanelDialog />}
+                    {openPersonaSelectPanelDialog ? <PersonaSelectPanelDialog /> : null}
                 </DialogContent>
             </InjectedDialog>
         </TabContext>

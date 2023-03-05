@@ -58,7 +58,7 @@ export function CollectibleProviderIcon(props: CollectibleProviderIconProps) {
     return (
         <div className={className}>
             {renderProviderIcon(provider)}
-            {active && <Icons.FillSuccess className={classes.activeIcon} />}
+            {active ? <Icons.FillSuccess className={classes.activeIcon} /> : null}
         </div>
     )
 }

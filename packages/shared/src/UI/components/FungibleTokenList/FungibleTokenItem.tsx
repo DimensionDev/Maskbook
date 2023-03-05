@@ -204,7 +204,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     button
                     className={`${classes.list} dashboard token-list`}
                     onClick={handleTokenSelect}
-                    disabled={selected && mode === TokenListMode.List}>
+                    disabled={!!(selected && mode === TokenListMode.List)}>
                     <ListItemIcon>
                         <TokenIcon
                             className={classes.icon}
@@ -227,12 +227,12 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                                     rel="noopener noreferrer">
                                     <Icons.PopupLink size={18} className={classes.link} />
                                 </Link>
-                                {isTrust && (
+                                {isTrust ? (
                                     <span className={classes.byUser}>
                                         <span className={classes.bull}>&bull;</span>
                                         {t.erc20_token_add_by_user()}
                                     </span>
-                                )}
+                                ) : null}
                             </span>
                         </Typography>
                         <Typography

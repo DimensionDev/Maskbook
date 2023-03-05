@@ -39,7 +39,7 @@ export const DesktopMnemonicConfirm = memo((props: DesktopMnemonicConfirmProps) 
                         placeholder={i + 1 + '.'}
                         value={word}
                         InputProps={{ disableUnderline: true }}
-                        disabled={indexes && !indexes.includes(i)}
+                        disabled={!!(indexes && !indexes.includes(i))}
                         onChange={(e) => {
                             const text = e.target.value
                             if (

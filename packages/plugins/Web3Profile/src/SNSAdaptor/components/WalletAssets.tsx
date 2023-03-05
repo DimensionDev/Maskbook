@@ -141,9 +141,9 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                     </Link>
                 </div>
                 <div className={classes.rightIcons}>
-                    {loadAll && (
+                    {loadAll ? (
                         <Icons.DoubleArrowUp size={16} className={classes.arrowUp} onClick={() => setLoadAll(false)} />
-                    )}
+                    ) : null}
                     <Icons.Edit2 size={20} onClick={onSetting} className={classes.editIcon} />
                 </div>
             </Box>

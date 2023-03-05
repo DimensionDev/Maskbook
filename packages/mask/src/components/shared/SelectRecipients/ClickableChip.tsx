@@ -33,7 +33,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { checked }) => ({
 }))
 
 export function ClickableChip(props: ClickableChipProps) {
-    const { classes, cx } = useStyles({ checked: Boolean(props.checked) })
+    const { classes, cx } = useStyles({ checked: !!props.checked })
     return (
         <Chip
             deleteIcon={props.checked ? <DoneIcon className={classes.icon} /> : undefined}

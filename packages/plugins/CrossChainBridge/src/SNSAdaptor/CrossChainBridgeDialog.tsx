@@ -66,13 +66,13 @@ export function CrossChainBridgeDialog(props: CrossChainBridgeDialogProps) {
                             <div className={classes.bridgeInfo}>
                                 <Typography className={classes.bridgeName}>
                                     {bridge?.name}
-                                    {bridge?.isOfficial && (
+                                    {bridge?.isOfficial ? (
                                         <Typography className={classes.officialTag}>{t.official()}</Typography>
-                                    )}
+                                    ) : null}
                                 </Typography>
-                                {bridge?.intro && (
+                                {bridge?.intro ? (
                                     <Typography className={classes.bridgeIntro}>{bridge.intro}</Typography>
-                                )}
+                                ) : null}
                             </div>
                         </div>
                     ))}

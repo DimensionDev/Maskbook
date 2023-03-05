@@ -394,9 +394,9 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 }}
                             />
                             <Box marginTop="8px">
-                                {isTokenSecurityEnable && tokenSecurityInfo && !error && (
+                                {isTokenSecurityEnable && tokenSecurityInfo && !error ? (
                                     <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
-                                )}
+                                ) : null}
                             </Box>
 
                             <Box marginTop="12px">

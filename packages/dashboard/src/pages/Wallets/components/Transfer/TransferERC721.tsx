@@ -361,11 +361,11 @@ export const TransferERC721 = memo(() => {
                             name="contract"
                         />
                     </Box>
-                    {loadingOwnerList && tokenDetailedOwnerList.length === 0 && (
+                    {loadingOwnerList && tokenDetailedOwnerList.length === 0 ? (
                         <Box pt={4}>
                             <LoadingPlaceholder />
                         </Box>
-                    )}
+                    ) : null}
                     <Box width="100%" mt={2}>
                         {tokenDetailedOwnerList.length > 0 && !loadingOwnerList && (
                             <Controller

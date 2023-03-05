@@ -447,7 +447,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
         } = useFormContext<TransferFormData>()
 
         useUpdateEffect(() => {
-            setPopoverOpen(Boolean(popoverContent && anchorEl.current))
+            setPopoverOpen(!!(popoverContent && anchorEl.current))
         }, [popoverContent])
 
         return (

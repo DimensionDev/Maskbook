@@ -262,7 +262,7 @@ export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
         <ThemeProvider theme={dialogTheme}>
             <DialogContent className={classes.wrapper}>
                 <section className={classes.header}>
-                    {icon && cloneElement(icon, { width: 64, height: 64, stroke: iconColor })}
+                    {icon ? cloneElement(icon, { width: 64, height: 64, stroke: iconColor }) : null}
                     <Typography className={classes.primary} variant="h5">
                         {primary}
                     </Typography>

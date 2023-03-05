@@ -148,7 +148,7 @@ const avoidMistakeRules = {
     'valid-typeof': 'error', // typeof expr === undefined
     'unicorn/no-invalid-remove-event-listener': 'error', // removeEventListener('click', f.bind(...))
     'react/jsx-no-comment-textnodes': 'warn', // <div>// comment</div> will render text!
-    // 'react/jsx-no-leaked-render': 'error', // <div>{0 && <Something />}</div> will render "0"!
+    'react/jsx-no-leaked-render': 'error', // <div>{0 && <Something />}</div> will render "0"!
     'react/no-unstable-nested-components': 'error', // rerender bugs
     'react-hooks/rules-of-hooks': 'error', // react hooks
     '@typescript-eslint/no-base-to-string': 'error', // prevent buggy .toString() call

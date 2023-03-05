@@ -214,7 +214,7 @@ export function TraderStateBar({
                                     focusedTrade?.loading || !focusedTrade?.value || !!validationMessage || isSwapping
                                 }
                                 onSwap={onSwap}
-                                showTokenSecurity={isTokenSecurityEnable && isRisky}>
+                                showTokenSecurity={!!(isTokenSecurityEnable && isRisky)}>
                                 <ActionButton
                                     fullWidth
                                     loading={isSwapping}

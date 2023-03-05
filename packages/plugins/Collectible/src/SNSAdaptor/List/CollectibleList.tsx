@@ -55,7 +55,7 @@ export function CollectibleList(props: CollectibleListProps) {
 
     return (
         <Box className={classes.list}>
-            {loading && <LoadingSkeleton className={classes.root} />}
+            {loading ? <LoadingSkeleton className={classes.root} /> : null}
             {error || (collectibles.length === 0 && !loading) ? (
                 <Box className={classes.text}>
                     <Typography color="textSecondary">{t.dashboard_no_collectible_found()}</Typography>

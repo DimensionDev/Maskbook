@@ -62,11 +62,11 @@ export const RestoreFromMnemonic = () => {
                     puzzleWords={values}
                     setAll={setMnemonic}
                 />
-                {error && (
+                {error ? (
                     <Typography className={classes.error} variant="body2">
                         {error}
                     </Typography>
-                )}
+                ) : null}
             </Box>
             <ButtonContainer>
                 <LoadingButton

@@ -66,7 +66,7 @@ export const RiskCardUI = memo<RiskCardUIProps>(({ icon, title, titleColor, desc
                 <Typography className={classes.header} color={titleColor}>
                     {title}
                 </Typography>
-                {description && <Typography className={classes.description}>{description}</Typography>}
+                {description ? <Typography className={classes.description}>{description}</Typography> : null}
             </Box>
         </Stack>
     )

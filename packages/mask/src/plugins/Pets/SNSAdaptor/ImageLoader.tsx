@@ -11,11 +11,11 @@ export function ImageLoader(props: ImgHTMLAttributes<HTMLImageElement>) {
         <>
             <img
                 {...props}
-                onLoad={() => setLoaded(Boolean(props.src))}
+                onLoad={() => setLoaded(!!props.src)}
                 onError={onErrorHandle}
                 style={{ display: loaded || !props.src ? 'block' : 'none' }}
             />
-            {!loaded && Boolean(props.src) ? <LoadingBase size={20} /> : null}
+            {!loaded && !!props.src ? <LoadingBase size={20} /> : null}
         </>
     )
 }

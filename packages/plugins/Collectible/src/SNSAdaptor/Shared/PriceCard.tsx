@@ -114,12 +114,12 @@ export function PriceCard(props: PriceCardProps) {
                                 )}
                             </strong>
                         </Typography>
-                        {topOffer?.price?.usd && (
+                        {topOffer?.price?.usd ? (
                             <Typography className={classes.textBase}>
                                 ({priceUSD.includes('<') || isZero(topOffer?.price?.usd) ? '' : '\u2248'}
                                 {priceUSD})
                             </Typography>
-                        )}
+                        ) : null}
                     </div>
                 )}
                 <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} />

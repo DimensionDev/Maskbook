@@ -116,7 +116,9 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                             </Typography>
                         </Stack>
                         <WalletStatusBox />
-                        {isBound && <Typography className={classes.error}>{t.bind_wallet_bound_error()}</Typography>}
+                        {isBound ? (
+                            <Typography className={classes.error}>{t.bind_wallet_bound_error()}</Typography>
+                        ) : null}
                         <Box mt={3}>
                             <LoadingButton
                                 fullWidth

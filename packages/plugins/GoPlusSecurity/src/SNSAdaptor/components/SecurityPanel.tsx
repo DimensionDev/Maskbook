@@ -113,7 +113,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                     </Stack>
                 </Stack>
                 <Stack>
-                    {hasWarningFactor && (
+                    {hasWarningFactor ? (
                         <div
                             style={{
                                 backgroundColor:
@@ -139,7 +139,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                                 {riskyFactors !== 0 ? t.high_risk() : t.medium_risk()}
                             </Typography>
                         </div>
-                    )}
+                    ) : null}
                 </Stack>
             </Stack>
             <Stack spacing={1}>

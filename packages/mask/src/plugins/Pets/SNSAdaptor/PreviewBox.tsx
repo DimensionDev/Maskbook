@@ -140,7 +140,7 @@ export function PreviewBox(props: Props) {
 
     return (
         <div className={classes.box}>
-            {props.message && (
+            {props.message ? (
                 <div
                     className={cx({
                         [classes.msgBox]: true,
@@ -148,15 +148,16 @@ export function PreviewBox(props: Props) {
                     })}>
                     {props.message}
                 </div>
-            )}
-            {props.mediaUrl &&
-                (props.tokenInfo?.glbSupport ? (
+            ) : null}
+            {props.mediaUrl ? (
+                props.tokenInfo?.glbSupport ? (
                     <div>
                         <ModelView className={classes.glbView} source={props.mediaUrl} />
                     </div>
                 ) : (
                     renderPreview(props.mediaUrl, props.imageUrl ?? '')
-                ))}
+                )
+            ) : null}
             {!(props.message || props.mediaUrl) && (
                 <div className={classes.noData}>
                     <Typography color="textPrimary">{t.pets_dialog_preview()}</Typography>

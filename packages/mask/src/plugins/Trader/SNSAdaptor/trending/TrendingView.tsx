@@ -405,7 +405,7 @@ export function TrendingView(props: TrendingViewProps) {
                     </Web3ContextProvider>
                 ) : null}
 
-                {isNFT && (
+                {isNFT ? (
                     <Box className={cx(classes.nftItems, currentTab === ContentTabs.NFTItems ? '' : classes.hidden)}>
                         <NFTList
                             pluginID={result.pluginID}
@@ -417,7 +417,7 @@ export function TrendingView(props: TrendingViewProps) {
                             gap={16}
                         />
                     </Box>
-                )}
+                ) : null}
             </Stack>
         </TrendingViewDeck>
     )

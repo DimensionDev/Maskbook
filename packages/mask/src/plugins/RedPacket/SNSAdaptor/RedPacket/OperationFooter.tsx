@@ -115,7 +115,7 @@ export function OperationFooter({
                     </ActionButton>
                 )}
 
-                {(canClaim || canRefund) && (
+                {canClaim || canRefund ? (
                     <ChainBoundary
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         expectedChainId={(chainId as ChainId) ?? ChainId.Mainnet}
@@ -129,7 +129,7 @@ export function OperationFooter({
                             {getObtainButton(onClaimOrRefund)}
                         </WalletConnectedBoundary>
                     </ChainBoundary>
-                )}
+                ) : null}
             </Box>
         </Box>
     )

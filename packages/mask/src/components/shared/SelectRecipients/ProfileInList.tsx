@@ -161,7 +161,7 @@ export function ProfileInList(props: ProfileInListProps) {
                             textToHighlight={textToHighlight}
                         />
                         <Icons.Copy className={classes.actionIcon} onClick={onCopyPubkey} />
-                        {profile.fromNextID && <Icons.NextIDMini className={classes.badge} />}
+                        {profile.fromNextID ? <Icons.NextIDMini className={classes.badge} /> : null}
                     </div>
                 }
             />

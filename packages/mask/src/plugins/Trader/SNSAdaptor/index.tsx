@@ -50,9 +50,9 @@ const sns: Plugin.SNSAdaptor.Definition<
                         <TrendingViewProvider
                             isDSearch={!isProfilePage}
                             isCollectionProjectPopper={false}
-                            isProfilePage={Boolean(isProfilePage)}
+                            isProfilePage={!!isProfilePage}
                             isTokenTagPopper={false}
-                            isPreciseSearch={Boolean(Others?.isValidAddress(keyword))}>
+                            isPreciseSearch={!!Others?.isValidAddress(keyword)}>
                             <TrendingView
                                 resultList={resultList as Web3Helper.TokenResultAll[]}
                                 identity={identity}

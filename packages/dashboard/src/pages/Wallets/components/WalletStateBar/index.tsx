@@ -144,7 +144,7 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
                     {network.name}
                 </Typography>
             </Stack>
-            {isPending && (
+            {isPending ? (
                 <Stack
                     direction="row"
                     alignItems="center"
@@ -161,7 +161,7 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
                         {t.wallet_transactions_pending()}
                     </Typography>
                 </Stack>
-            )}
+            ) : null}
             <Stack direction="row" onClick={openConnectWalletDialog} sx={{ cursor: 'pointer' }}>
                 <Stack mx={1} justifyContent="center">
                     <WalletIcon mainIcon={provider.icon} size={38} />

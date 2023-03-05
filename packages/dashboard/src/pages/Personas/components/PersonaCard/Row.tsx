@@ -170,7 +170,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
 
     return (
         <Stack direction="row" alignItems="center" justifyContent="space-around" position="relative">
-            {avatarOn && <UploadAvatarDialog open={avatarOn} onClose={() => toggleAvatar(false)} />}
+            {avatarOn ? <UploadAvatarDialog open={avatarOn} onClose={() => toggleAvatar(false)} /> : null}
             <IconButton
                 onClick={(e) => {
                     e.stopPropagation()
@@ -240,7 +240,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                 </Box>
             </Box>
             {menu}
-            {renameDialogOpen && (
+            {renameDialogOpen ? (
                 <RenameDialog
                     open={renameDialogOpen}
                     nickname={nickname}
@@ -250,7 +250,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                         setRenameDialogOpen(false)
                     }}
                 />
-            )}
+            ) : null}
             <LogoutPersonaDialog
                 nickname={nickname}
                 open={logoutDialogOpen}

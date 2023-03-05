@@ -288,7 +288,7 @@ export function ITO(props: ITO_Props) {
     // #region buy info
     const { value: tradeInfo, loading: loadingTradeInfo, retry: retryPoolTradeInfo } = usePoolTradeInfo(pid, account)
     const isBuyer =
-        chainId === payload.chain_id && (isGreaterThan(availability?.swapped ?? 0, 0) || Boolean(availability?.claimed))
+        chainId === payload.chain_id && (isGreaterThan(availability?.swapped ?? 0, 0) || !!availability?.claimed)
 
     const successShareText = t(
         isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)

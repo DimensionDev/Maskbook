@@ -104,33 +104,29 @@ export function ActivityCard(props: ActivityCardProps) {
                     {type}
                 </Typography>
                 {![ActivityType.Mint, ActivityType.CancelOffer].includes(type) &&
-                    activity.priceInToken &&
-                    !isZero(activity.priceInToken.amount) && (
-                        <div className={classes.salePrice}>
-                            {(activity.paymentToken?.logoURL && (
-                                <img
-                                    width={24}
-                                    height={24}
-                                    src={activity.priceInToken.token.logoURL}
-                                    alt={activity.priceInToken.token.symbol}
-                                />
-                            )) || (
-                                <Typography className={classes.fallbackSymbol}>
-                                    {activity.priceInToken.token.symbol || activity.priceInToken.token.name}
-                                </Typography>
-                            )}
-                            <Typography className={classes.salePriceText}>
-                                {formatBalance(
-                                    activity.priceInToken.amount,
-                                    activity.priceInToken.token.decimals || 18,
-                                    2,
-                                )}
+                activity.priceInToken &&
+                !isZero(activity.priceInToken.amount) ? (
+                    <div className={classes.salePrice}>
+                        {(activity.paymentToken?.logoURL && (
+                            <img
+                                width={24}
+                                height={24}
+                                src={activity.priceInToken.token.logoURL}
+                                alt={activity.priceInToken.token.symbol}
+                            />
+                        )) || (
+                            <Typography className={classes.fallbackSymbol}>
+                                {activity.priceInToken.token.symbol || activity.priceInToken.token.name}
                             </Typography>
-                        </div>
-                    )}
+                        )}
+                        <Typography className={classes.salePriceText}>
+                            {formatBalance(activity.priceInToken.amount, activity.priceInToken.token.decimals || 18, 2)}
+                        </Typography>
+                    </div>
+                ) : null}
             </div>
             <div className={classes.flex}>
-                {activity.from && (
+                {activity.from ? (
                     <Typography className={classes.textBase}>
                         {t.plugin_collectible_from()}
                         <strong title={activity.from.address}>
@@ -138,9 +134,9 @@ export function ActivityCard(props: ActivityCardProps) {
                                 (activity.from.address ? Others?.formatAddress(activity.from.address, 4) : '-')}
                         </strong>
                     </Typography>
-                )}
+                ) : null}
                 <Typography className={classes.textBase}>
-                    {activity.to && (
+                    {activity.to ? (
                         <>
                             {t.plugin_collectible_to()}
                             <strong title={activity.to.address}>
@@ -148,19 +144,19 @@ export function ActivityCard(props: ActivityCardProps) {
                                     (activity.to.address ? Others?.formatAddress(activity.to.address, 4) : '-')}
                             </strong>
                         </>
-                    )}
+                    ) : null}
                     {isValidTimestamp(activity.timestamp) &&
                         formatDistanceToNowStrict(new Date(activity.timestamp!), {
                             addSuffix: true,
                         })}
-                    {activity.hash && (
+                    {activity.hash ? (
                         <Link
                             className={classes.link}
                             href={Others?.explorerResolver.transactionLink?.(activity.chainId, activity.hash) ?? ''}
                             target="_blank">
                             <Icons.LinkOut className={classes.linkOut} size={16} />
                         </Link>
-                    )}
+                    ) : null}
                 </Typography>
             </div>
         </div>

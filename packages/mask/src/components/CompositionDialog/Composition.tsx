@@ -95,7 +95,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
 
             setOpen(open)
             setReason(reason)
-            setIsOpenFromApplicationBoard(Boolean(options?.isOpenFromApplicationBoard))
+            setIsOpenFromApplicationBoard(!!options?.isOpenFromApplicationBoard)
             setInitialMetas(options?.initialMetas ?? EMPTY_OBJECT)
             if (content) UI.current?.setMessage(content)
             if (options?.target) UI.current?.setEncryptionKind(options.target)

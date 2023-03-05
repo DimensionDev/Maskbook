@@ -88,20 +88,20 @@ export function CheckSecurityDialog() {
                         </Box>
                     )}
                     <Stack flex={1}>
-                        {(searching || loadingToken) && (
+                        {searching || loadingToken ? (
                             <Center>
                                 <Searching />
                             </Center>
-                        )}
-                        {error && !searching && !loadingToken && <NotFound />}
-                        {!error && !searching && !loadingToken && value && (
+                        ) : null}
+                        {error && !searching && !loadingToken ? <NotFound /> : null}
+                        {!error && !searching && !loadingToken && value ? (
                             <SecurityPanel
                                 tokenInfo={tokenDetailed}
                                 tokenSecurity={value}
                                 tokenPrice={tokenPrice}
                                 tokenMarketCap={tokenMarketCapInfo}
                             />
-                        )}
+                        ) : null}
                         {!error && !searching && !loadingToken && !value && (
                             <Center>
                                 <DefaultPlaceholder />

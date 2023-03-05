@@ -157,7 +157,7 @@ export const ApplicationSettingPluginSwitch = memo(({ focusPluginID }: Props) =>
                                 />
                             </Stack>
                         </Stack>
-                        {x.entry.features?.length && (
+                        {x.entry.features?.length ? (
                             <Stack direction="row" mt={1.25}>
                                 <Box className={classes.placeholder} />
                                 <Stack spacing={1.25}>
@@ -173,7 +173,7 @@ export const ApplicationSettingPluginSwitch = memo(({ focusPluginID }: Props) =>
                                     ))}
                                 </Stack>
                             </Stack>
-                        )}
+                        ) : null}
                     </Stack>
                 </ListItem>
             ))}

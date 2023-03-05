@@ -78,7 +78,7 @@ export const PersonaItemUI = (props: PersonaItemProps) => {
     return (
         <Stack direction="row" alignItems="center" gap={1} onClick={onClick}>
             <Box flexGrow={0} position="relative">
-                {data.avatar && (
+                {data.avatar ? (
                     <Avatar
                         src={data.avatar}
                         sx={{
@@ -88,7 +88,7 @@ export const PersonaItemUI = (props: PersonaItemProps) => {
                             borderRadius: '50%',
                         }}
                     />
-                )}
+                ) : null}
                 {!data.avatar && <Icons.MenuPersonasActive size={30} />}
                 {isSamePersona(currentPersonaIdentifier, data.persona) && <Box className={classes.indicator} />}
             </Box>

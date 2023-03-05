@@ -43,7 +43,7 @@ export const DashboardFrame = memo((props: DashboardFrameProps) => {
     return (
         <DashboardContext.Provider value={context}>
             <Root container>
-                {isLargeScreen && (
+                {isLargeScreen ? (
                     <LeftContainer item xs={2}>
                         <Navigation />
                         <div>
@@ -51,7 +51,7 @@ export const DashboardFrame = memo((props: DashboardFrameProps) => {
                             <NavigationVersionFooter />
                         </div>
                     </LeftContainer>
-                )}
+                ) : null}
                 <Grid container direction="column" item xs={isLargeScreen ? 10 : 12}>
                     <Suspense fallback={null}>
                         <ErrorBoundary>{props.children}</ErrorBoundary>

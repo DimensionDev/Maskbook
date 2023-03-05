@@ -174,7 +174,7 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
             <Stack direction="row">
                 <Box sx={{ flexGrow: 1 }}>
                     <Box>
-                        {selectedCollection && (
+                        {selectedCollection ? (
                             <Box display="flex" alignItems="center" ml={2}>
                                 <CollectionIcon collection={selectedCollection} />
                                 <Typography
@@ -186,7 +186,7 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
                                     {renderCollectibles.length ? `(${renderCollectibles.length})` : null}
                                 </Typography>
                             </Box>
-                        )}
+                        ) : null}
                         <CollectibleList
                             pluginID={socialAccount.pluginID}
                             retry={retryFetchCollectible}
@@ -195,7 +195,7 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
                             {...gridProps}
                         />
                     </Box>
-                    {error && !done && <RetryHint hint={false} retry={nextPage} />}
+                    {error && !done ? <RetryHint hint={false} retry={nextPage} /> : null}
                     <ElementAnchor
                         callback={() => {
                             if (nextPage) nextPage()

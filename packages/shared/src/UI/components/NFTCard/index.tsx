@@ -175,7 +175,7 @@ export function NFTImage(props: NFTImageProps) {
                         isSameNFT(pluginID, token, selectedToken) ? classes.itemSelected : '',
                     )}
                 />
-                {showNetwork && <ImageIcon classes={{ icon: classes.networkIcon }} icon={iconURL} size={20} />}
+                {showNetwork ? <ImageIcon classes={{ icon: classes.networkIcon }} icon={iconURL} size={20} /> : null}
 
                 {showBadge && isSameNFT(pluginID, token, selectedToken) ? (
                     <Icons.Selected className={classes.itemIcon} />

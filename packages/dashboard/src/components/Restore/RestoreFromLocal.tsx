@@ -124,7 +124,7 @@ export const RestoreFromLocal = memo(() => {
                         <FileUpload onChange={handleSetFile} accept={Object.values(supportedFileType).join(',')} />
                     </Card>
                 )}
-                {restoreStatus === RestoreStatus.Verified && json && <BackupPreviewCard json={json} />}
+                {restoreStatus === RestoreStatus.Verified && json ? <BackupPreviewCard json={json} /> : null}
                 {restoreStatus === RestoreStatus.Decrypting && (
                     <Box sx={{ mt: 4 }}>
                         <PasswordField

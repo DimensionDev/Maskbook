@@ -193,17 +193,17 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                             {referenceURL}
                         </Link>
                     </Typography>
-                    {date && (
+                    {date ? (
                         <Typography fontSize="14px" fontWeight={400} marginTop="12px">
                             {date}
                         </Typography>
-                    )}
-                    {location && (
+                    ) : null}
+                    {location ? (
                         <Typography fontSize="14px" fontWeight={400} marginTop="8px">
                             <span className={classes.themeColor}>@</span>
                             {location}
                         </Typography>
-                    )}
+                    ) : null}
                     <Typography fontSize="16px" fontWeight={700} marginTop="16px">
                         {t.description()}
                     </Typography>

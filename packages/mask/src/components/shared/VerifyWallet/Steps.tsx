@@ -160,21 +160,21 @@ export function Steps(props: StepsProps) {
     return (
         <div className={classes.container}>
             <CurrentWalletBox notInPop={notInPop} walletName={walletName} wallet={wallet} changeWallet={changeWallet} />
-            {notEvm && wallet.account && (
+            {notEvm && wallet.account ? (
                 <Typography className={classes.hasBound}>{t('plugin_tips_not_evm_alert')}</Typography>
-            )}
-            {isBound && step !== SignSteps.SecondStepDone && (
+            ) : null}
+            {isBound && step !== SignSteps.SecondStepDone ? (
                 <Typography className={classes.hasBound}>
                     {t('wallet_verify_has_bound', {
                         currentPersona: nickname ?? 'Persona Name',
                     })}
                 </Typography>
-            )}
-            {notConnected && (
+            ) : null}
+            {notConnected ? (
                 <Typography className={classes.hasBound} style={{ textAlign: 'center' }}>
                     {t('wallet_verify_empty_alert')}
                 </Typography>
-            )}
+            ) : null}
             {!notConnected && (
                 <div className={classes.stepBox}>
                     <div className={classes.stepLine}>

@@ -48,13 +48,13 @@ export function SelectProfileDialog(props: SelectProfileDialogProps) {
                     onSetSelected={select}
                 />
             </DialogContent>
-            {rejection && (
+            {rejection ? (
                 <DialogContent className={classes.content}>
                     <>
                         Error: {rejection.message} {console.error(rejection)}
                     </>
                 </DialogContent>
-            )}
+            ) : null}
             <DialogActions>
                 <Button size="large" onClick={onClose}>
                     {t('cancel')}

@@ -214,16 +214,16 @@ export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarCo
     }
     return (
         <SnackbarContent ref={ref} className={cx(classes.content, classes[props.variant!])}>
-            {variantIcon && <div className={classes.icon}>{variantIcon}</div>}
+            {variantIcon ? <div className={classes.icon}>{variantIcon}</div> : null}
             <div className={classes.texts}>
                 <Typography className={classes.title} variant="h2">
                     {props.title}
                 </Typography>
-                {props.message && (
+                {props.message ? (
                     <Typography className={classes.message} variant="body1">
                         {props.message}
                     </Typography>
-                )}
+                ) : null}
             </div>
             <div className={classes.action}>{renderedAction}</div>
         </SnackbarContent>

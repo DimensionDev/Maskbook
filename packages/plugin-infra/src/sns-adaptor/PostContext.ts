@@ -150,6 +150,6 @@ function isSubscription(x: any): x is Subscription<any> {
     return (
         typeof x === 'object' &&
         x !== null &&
-        Boolean((x as Subscription<any>).getCurrentValue && (x as Subscription<any>).subscribe)
+        !!((x as Subscription<any>).getCurrentValue && (x as Subscription<any>).subscribe)
     )
 }

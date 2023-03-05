@@ -83,9 +83,9 @@ const DecryptPostSuccessAppendShare = memo(function DecryptPostSuccessAppendShar
             <Link color="primary" onClick={() => setShowDialog(true)} className={classes.addRecipientsLink}>
                 {t('decrypted_postbox_add_recipients')}
             </Link>
-            {showDialog && (
+            {showDialog ? (
                 <AppendShareDetail whoAmI={props.whoAmI} onClose={() => setShowDialog(false)} recipients={recipients} />
-            )}
+            ) : null}
         </>
     ) : null
     return <DecryptPostSuccessBase {...props}>{rightActions}</DecryptPostSuccessBase>

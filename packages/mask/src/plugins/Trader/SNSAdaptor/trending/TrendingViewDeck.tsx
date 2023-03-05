@@ -362,9 +362,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         />
                                     )}
                                 </Stack>
-                                {isTokenSecurityEnable && tokenSecurityInfo && !error && !isNFT && (
+                                {isTokenSecurityEnable && tokenSecurityInfo && !error && !isNFT ? (
                                     <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
-                                )}
+                                ) : null}
                             </Stack>
                         </Stack>
                     </Stack>

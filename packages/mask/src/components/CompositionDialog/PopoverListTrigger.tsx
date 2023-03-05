@@ -60,7 +60,7 @@ export function PopoverListTrigger({
             <Popover
                 disablePortal
                 className={classes.popper}
-                open={Boolean(anchorEl)}
+                open={!!anchorEl}
                 anchorEl={anchorEl}
                 onClose={() => setAnchorEl(null)}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}

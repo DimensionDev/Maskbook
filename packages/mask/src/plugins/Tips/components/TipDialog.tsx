@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from 'react'
-import { useBoolean } from 'react-use'
 import { ChainBoundary, InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
 import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -18,6 +17,7 @@ import { NetworkSection } from './NetworkSection/index.js'
 import { NFTSection } from './NFTSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
 import { TokenSection } from './TokenSection/index.js'
+import { useBoolean } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {

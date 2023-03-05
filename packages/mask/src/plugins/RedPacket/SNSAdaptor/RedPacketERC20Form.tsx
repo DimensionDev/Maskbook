@@ -176,7 +176,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const creatingParams = useMemo(
         () => ({
             duration,
-            isRandom: Boolean(isRandom),
+            isRandom: !!isRandom,
             name: senderName,
             message: message || t.best_wishes(),
             shares: shares || 0,

@@ -179,7 +179,9 @@ const CustomEntry = memo(
                 label={
                     <>
                         <PluginI18NFieldRender field={label} pluginID={id} />
-                        {unstable && <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />}
+                        {unstable ? (
+                            <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />
+                        ) : null}
                     </>
                 }
                 onClick={() => {
@@ -215,7 +217,9 @@ const DialogEntry = memo(
                 label={
                     <>
                         <PluginI18NFieldRender field={label} pluginID={id} />
-                        {unstable && <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />}
+                        {unstable ? (
+                            <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />
+                        ) : null}
                     </>
                 }
                 disabled={props.readonly}

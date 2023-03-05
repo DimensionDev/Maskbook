@@ -9,6 +9,6 @@ async function start() {
     let meta: unknown = undefined
     if (currentSNSContext) meta = (await Services.ThirdPartyPlugin.getHostedMeta(currentSNSContext))?.[1]
     // TODO: listen to SNSContext connected status
-    return maskSDK.request_init({ SNSContext: { connected: Boolean(currentSNSContext), meta } })
+    return maskSDK.request_init({ SNSContext: { connected: !!currentSNSContext, meta } })
 }
 start()

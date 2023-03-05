@@ -127,7 +127,7 @@ export const Balance = memo<BalanceCardProps>(
                         />
                     </BalanceDisplayContainer>
                 </Box>
-                {showOperations && (
+                {showOperations ? (
                     <ButtonGroup>
                         <Button size="small" onClick={onSend} endIcon={<Icons.Send size={12} />}>
                             {t.wallets_balance_Send()}
@@ -146,7 +146,7 @@ export const Balance = memo<BalanceCardProps>(
                             {t.wallets_balance_Receive()}
                         </Button>
                     </ButtonGroup>
-                )}
+                ) : null}
             </BalanceContainer>
         )
     },

@@ -37,7 +37,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
     const isClaimed = availability.claimed_amount !== '0'
     const isRefunded = isEmpty && availability.claimed < availability.total
     const isCreator = isSameAddress(payload?.sender.address ?? '', account)
-    const isPasswordValid = Boolean(payload.password && payload.password !== 'PASSWORD INVALID')
+    const isPasswordValid = !!(payload.password && payload.password !== 'PASSWORD INVALID')
     return {
         ...asyncResult,
         computed: {

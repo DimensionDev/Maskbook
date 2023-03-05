@@ -52,7 +52,7 @@ function ProfileCardHolder() {
             setTwitterId(event.userId)
             setBadgeBounding(event.badgeBounding)
             setTimeout(() => {
-                setOpenFromTrendingCard(Boolean(event.openFromTrendingCard))
+                setOpenFromTrendingCard(!!event.openFromTrendingCard)
             }, 200)
         })
     }, [])

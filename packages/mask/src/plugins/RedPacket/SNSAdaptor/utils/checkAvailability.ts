@@ -35,7 +35,7 @@ function decodeResult(data: string): RedpacketAvailability {
         balance: parseHexToInt(results[1]),
         total: +parseHexToInt(results[2]),
         claimed: +parseHexToInt(results[3]),
-        expired: Boolean(results[4]),
+        expired: !!results[4],
         claimed_amount: parseHexToInt(results[5]),
     }
 }

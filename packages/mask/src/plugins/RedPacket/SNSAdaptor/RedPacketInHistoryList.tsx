@@ -173,7 +173,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const rpid = receipt?.rpid ?? ''
     const creation_time = receipt?.creation_time ?? 0
 
-    const { classes, cx } = useStyles({ isViewed: isViewed && Boolean(rpid) })
+    const { classes, cx } = useStyles({ isViewed: isViewed && !!rpid })
 
     const patchedHistory: RedPacketJSONPayload | RedPacketJSONPayloadFromChain = useMemo(
         () => ({ ...props.history, rpid, creation_time }),
@@ -221,7 +221,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
 
     // #region password lost tips
     const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLButtonElement) | null>(null)
-    const openPopper = Boolean(anchorEl)
+    const openPopper = !!anchorEl
     // #endregion
 
     // #region refund time
@@ -234,14 +234,14 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         <ListItem className={classes.root} ref={ref}>
             {!rpid ? null : (
                 <Box className={classes.box}>
-                    {isViewed && (
+                    {isViewed ? (
                         <TokenIcon
                             className={classes.icon}
                             address={historyToken?.address ?? ''}
                             name={historyToken?.name}
                             logoURL={historyToken?.logoURL}
                         />
-                    )}
+                    ) : null}
                     <Box className={classes.content}>
                         <section className={classes.section}>
                             <div className={classes.div}>
