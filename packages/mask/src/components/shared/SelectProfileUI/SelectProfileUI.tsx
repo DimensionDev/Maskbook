@@ -128,14 +128,14 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                         width="100%"
                         height={400}>
                         {({ index, style }) =>
-                            listAfterSearch[index] ? ProfileListItem(listAfterSearch[index], style as any) : null
+                            listAfterSearch[index] ? profileListItem(listAfterSearch[index], style as any) : null
                         }
                     </FixedSizeList>
                 </List>
             </Box>
         </div>
     )
-    function ProfileListItem(item: Profile, style: React.CSSProperties) {
+    function profileListItem(item: Profile, style: React.CSSProperties) {
         return (
             <ProfileInList
                 key={item.identifier.toText()}

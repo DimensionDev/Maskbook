@@ -236,7 +236,7 @@ export const NFTListDialog: FC = () => {
         (x) => x.contract?.address?.toLowerCase() + x.tokenId,
     ).filter((x) => (actualChainId ? x.chainId === actualChainId : true))
 
-    const NoNFTList = () => {
+    const getNoNFTList = () => {
         if (loadError && !collectibles.length) {
             return Retry
         }
@@ -278,7 +278,7 @@ export const NFTListDialog: FC = () => {
                             tokens={tokensInList}
                             tokenInfo={selectedToken}
                             onChange={setSelectedToken}
-                            children={NoNFTList()}
+                            children={getNoNFTList()}
                             nextPage={nextPage}
                             loadError={!!loadError}
                             loadFinish={loadFinish}

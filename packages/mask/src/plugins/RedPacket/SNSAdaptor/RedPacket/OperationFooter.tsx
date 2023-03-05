@@ -63,7 +63,7 @@ export function OperationFooter({
         WalletMessages.events.selectProviderDialogUpdated,
     )
     // #endregion
-    const ObtainButton = (props: { onClick?: MouseEventHandler<HTMLButtonElement> | undefined }) => {
+    function getObtainButton(onClick: MouseEventHandler<HTMLButtonElement>) {
         if (!canClaim && !canRefund) return null
 
         if (!account) {
@@ -96,7 +96,7 @@ export function OperationFooter({
                 fullWidth
                 loading={isLoading}
                 disabled={isLoading}
-                onClick={props.onClick}>
+                onClick={onClick}>
                 {canClaim ? (isClaiming ? t.claiming() : t.claim()) : isRefunding ? t.refunding() : t.refund()}
             </ActionButton>
         )
@@ -126,7 +126,7 @@ export function OperationFooter({
                             expectedChainId={chainId ?? ChainId.Mainnet}
                             startIcon={<Icons.ConnectWallet size={18} />}
                             ActionButtonProps={{ variant: 'roundedDark' }}>
-                            <ObtainButton onClick={onClaimOrRefund} />
+                            {getObtainButton(onClaimOrRefund)}
                         </WalletConnectedBoundary>
                     </ChainBoundary>
                 )}

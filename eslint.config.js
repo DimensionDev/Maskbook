@@ -112,7 +112,7 @@ const avoidMistakeRules = {
     'unicorn/require-array-join-separator': 'warn', // Array.join(_required_)
     // This rule breaks BigNumber class which has different .toFixed() default value.
     // 'unicorn/require-number-to-fixed-digits-argument': 'warn', // Number#toFixed(_required_)
-    // 'react/button-has-type': 'error', // default type is "submit" which refresh the page
+    'react/button-has-type': 'error', // default type is "submit" which refresh the page
     '@typescript-eslint/require-array-sort-compare': 'error', // Array#sort(_required_)
     '@dimensiondev/type-no-instanceof-wrapper': 'warn', // bans `expr instanceof String` etc
     /// Footgun language features
@@ -149,7 +149,7 @@ const avoidMistakeRules = {
     'unicorn/no-invalid-remove-event-listener': 'error', // removeEventListener('click', f.bind(...))
     'react/jsx-no-comment-textnodes': 'warn', // <div>// comment</div> will render text!
     // 'react/jsx-no-leaked-render': 'error', // <div>{0 && <Something />}</div> will render "0"!
-    // 'react/no-unstable-nested-components': 'error', // rerender bugs
+    'react/no-unstable-nested-components': 'error', // rerender bugs
     'react-hooks/rules-of-hooks': 'error', // react hooks
     // '@typescript-eslint/no-base-to-string': 'error', // prevent buggy .toString() call
     '@typescript-eslint/no-loop-func': 'warn', // capture a loop variable might be a bug

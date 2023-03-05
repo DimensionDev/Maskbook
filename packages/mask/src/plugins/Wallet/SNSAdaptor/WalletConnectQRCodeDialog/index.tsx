@@ -61,7 +61,7 @@ export const QRCodeDialog: React.FC<QRCodeDialogProps> = ({ uri, open, onClose, 
     const { t } = useI18N()
     const { classes } = useStyles()
     const [qrMode, setQRMode] = useState(false)
-    const PlatformSelector: React.FC = () => {
+    function getPlatformSelector() {
         if (!uri) {
             return null
         } else if (qrMode || mode === 'qrcode') {
@@ -75,9 +75,7 @@ export const QRCodeDialog: React.FC<QRCodeDialogProps> = ({ uri, open, onClose, 
     }
     return (
         <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_connect_dialog_title')}>
-            <DialogContent className={classes.container}>
-                <PlatformSelector />
-            </DialogContent>
+            <DialogContent className={classes.container}>{getPlatformSelector()}</DialogContent>
             {mode !== 'qrcode' && (
                 <DialogActions className={classes.actions}>
                     <Button onClick={() => setQRMode(!qrMode)}>

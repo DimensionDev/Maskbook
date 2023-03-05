@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect, useRef, useCallback, type MouseEventHandler } from 'react'
+import { useState, useLayoutEffect, useRef, useCallback } from 'react'
 import { flatten, uniq } from 'lodash-es'
 import formatDateTime from 'date-fns/format'
 import { useChainContext, useFungibleToken, useFungibleTokens } from '@masknet/web3-hooks-base'
@@ -227,21 +227,6 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         setTimeout(() => setInitLoading(false), 1000)
     }, [])
 
-    const ObtainButton = (props: { onClick?: MouseEventHandler<HTMLButtonElement> | undefined }) => {
-        return (
-            <WalletConnectedBoundary expectedChainId={chainId}>
-                <ActionButton
-                    fullWidth
-                    className={cx(classes.actionButton)}
-                    loading={isClaiming}
-                    disabled={claimablePids!.length === 0}
-                    onClick={props.onClick}>
-                    {t('plugin_ito_claim_all')}
-                </ActionButton>
-            </WalletConnectedBoundary>
-        )
-    }
-
     return (
         <SnackbarProvider
             domRoot={DialogRef.current as HTMLElement}
@@ -285,7 +270,18 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                             expectedChainId={chainId}
                             noSwitchNetworkTip>
-                            {swappedTokens?.length ? <ObtainButton onClick={claim} /> : null}
+                            {swappedTokens?.length ? (
+                                <WalletConnectedBoundary expectedChainId={chainId}>
+                                    <ActionButton
+                                        fullWidth
+                                        className={cx(classes.actionButton)}
+                                        loading={isClaiming}
+                                        disabled={claimablePids!.length === 0}
+                                        onClick={claim}>
+                                        {t('plugin_ito_claim_all')}
+                                    </ActionButton>
+                                </WalletConnectedBoundary>
+                            ) : null}
                         </ChainBoundary>
                     </PluginWalletStatusBar>
                 </DialogActions>

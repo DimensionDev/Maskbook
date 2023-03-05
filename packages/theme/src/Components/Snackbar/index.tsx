@@ -265,9 +265,12 @@ export const CustomSnackbarProvider = memo<
             disableWindowBlurListener
             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             hideIconVariant
+            // this is a false positive, SnackbarProvider won't use it like it is a component.
+            // eslint-disable-next-line react/no-unstable-nested-components
             content={(key, title) => (
                 <CustomSnackbarContent id={key} variant={rest.variant ?? 'default'} title={title} offsetY={offsetY} />
             )}
+            // eslint-disable-next-line react/no-unstable-nested-components
             action={(key) => (
                 <IconButton size="large" onClick={onDismiss(key)} sx={{ color: 'inherit' }}>
                     <CloseIcon color="inherit" />

@@ -141,8 +141,7 @@ const Profile = ({ url }: { url: string }) => {
 
     const [currentTab, onChange, tabs] = useTabs(ProfileTab.Followings, ProfileTab.Followers)
 
-    const Nodata = () => {
-        const t = useI18N()
+    function getNodata() {
         return (
             <Box className={classes.statusBox} p={2}>
                 <Icons.EmptySimple size={32} />
@@ -242,10 +241,10 @@ const Profile = ({ url }: { url: string }) => {
                         />
                     </MaskTabList>
                     <TabPanel value={tabs.Followings} className={classes.panel}>
-                        <FollowersPage hint={<Nodata />} address={identity?.address} tab={ProfileTab.Followings} />
+                        <FollowersPage hint={getNodata()} address={identity?.address} tab={ProfileTab.Followings} />
                     </TabPanel>
                     <TabPanel value={tabs.Followers} className={classes.panel}>
-                        <FollowersPage hint={<Nodata />} address={identity?.address} tab={ProfileTab.Followers} />
+                        <FollowersPage hint={getNodata()} address={identity?.address} tab={ProfileTab.Followers} />
                     </TabPanel>
                 </Stack>
             </div>
