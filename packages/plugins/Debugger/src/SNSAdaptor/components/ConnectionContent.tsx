@@ -75,7 +75,8 @@ export function ConnectionContent(props: ConnectionContentProps) {
                 },
             },
         )
-        window.alert(estimatedGas)
+        // eslint-disable-next-line no-alert
+        alert(estimatedGas)
     }, [web3, connection])
 
     const onTransferCallback = useCallback(() => {
@@ -211,8 +212,8 @@ export function ConnectionContent(props: ConnectionContentProps) {
                         return ''
                 }
             }
-
-            window.alert(`Signed: ${await sign()}`)
+            // eslint-disable-next-line no-alert
+            alert(`Signed: ${await sign()}`)
         },
         [chainId, connection],
     )

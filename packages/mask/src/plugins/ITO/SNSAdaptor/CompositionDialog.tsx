@@ -196,6 +196,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
                     })) ?? ''
             }
             if (!payload.password) {
+                // eslint-disable-next-line no-alert
                 alert('Failed to sign the password.')
                 return
             }

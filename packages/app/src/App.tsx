@@ -38,6 +38,7 @@ export function App() {
                                     setEmail('')
                                 } catch (error) {
                                     if (error instanceof Error) {
+                                        // eslint-disable-next-line no-alert
                                         alert(error.message)
                                     }
                                 }

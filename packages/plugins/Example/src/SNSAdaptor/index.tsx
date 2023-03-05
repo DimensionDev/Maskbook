@@ -28,6 +28,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     // GlobalInjection: GlobalComponent,
     CompositionDialogEntry: {
         label: { i18nKey: '__entry__', fallback: '\uD83E\uDD14 Example' },
+        // eslint-disable-next-line no-alert
         onClick: () => alert('It works \u2122!'),
     },
     // CompositionDialogEntry: {

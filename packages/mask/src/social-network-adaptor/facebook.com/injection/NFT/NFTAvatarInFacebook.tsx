@@ -128,6 +128,7 @@ function NFTAvatarInFacebook() {
                 if (!avatarInfo) {
                     setNFTEvent(undefined)
                     setAvatar(undefined)
+                    // eslint-disable-next-line no-alert
                     window.alert('Sorry, failed to save NFT Avatar. Please set again.')
                     return
                 }
@@ -138,7 +139,8 @@ function NFTAvatarInFacebook() {
             } catch (error) {
                 setNFTEvent(undefined)
                 setAvatar(undefined)
-                window.alert((error as any).message)
+                // eslint-disable-next-line no-alert
+                alert((error as any).message)
                 return
             }
         } else if (storages.address.value && storages.userId.value && storages.tokenId.value) {
@@ -160,7 +162,8 @@ function NFTAvatarInFacebook() {
                 if (!avatarInfo) {
                     clearStorages()
                     setAvatar(undefined)
-                    window.alert('Sorry, failed to save NFT Avatar. Please set again.')
+                    // eslint-disable-next-line no-alert
+                    alert('Sorry, failed to save NFT Avatar. Please set again.')
                     return
                 }
                 setAvatar(avatarInfo)
@@ -168,7 +171,8 @@ function NFTAvatarInFacebook() {
             } catch (error) {
                 clearStorages()
                 setAvatar(undefined)
-                window.alert((error as any).message)
+                // eslint-disable-next-line no-alert
+                alert((error as any).message)
                 return
             }
         }

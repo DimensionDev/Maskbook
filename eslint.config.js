@@ -166,13 +166,14 @@ const avoidMistakeRules = {
 }
 const codeStyleRules = {
     // Deprecated
-    // 'no-alert': 'warn', // alert()
+    'no-alert': 'warn', // alert()
     'no-proto': 'error', // __proto__ accessor
     'no-prototype-builtins': 'error', // bans `obj.hasOwnProperty()` etc
     'no-var': 'error', // var x
     'unicorn/no-new-buffer': 'error', // NodeJS
     'react/no-deprecated': 'error',
     'react/no-find-dom-node': 'error',
+    // Let's wait for https://github.com/typescript-eslint/typescript-eslint/issues/6572
     // '@typescript-eslint/no-namespace': 'error', // namespace T {}
     '@typescript-eslint/prefer-namespace-keyword': 'error', // but if you really need to, don't use `module T {}`
 

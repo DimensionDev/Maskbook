@@ -146,12 +146,14 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
             RSS3_KEY_SNS.TWITTER,
         ).catch((error) => {
             setNFTEvent(undefined)
-            window.alert(error.message)
+            // eslint-disable-next-line no-alert
+            alert(error.message)
             return
         })
         if (!avatar) {
             setNFTEvent(undefined)
-            window.alert('Sorry, failed to save NFT Avatar. Please set again.')
+            // eslint-disable-next-line no-alert
+            alert('Sorry, failed to save NFT Avatar. Please set again.')
             return
         }
 

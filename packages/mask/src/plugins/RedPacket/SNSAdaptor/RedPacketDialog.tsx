@@ -128,7 +128,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         async (payload: RedPacketJSONPayload) => {
             if (payload.password === '') {
                 if (payload.contract_version === 1) {
+                    // eslint-disable-next-line no-alert
                     alert('Unable to share a lucky drop without a password. But you can still withdraw the lucky drop.')
+                    // eslint-disable-next-line no-alert
                     payload.password = prompt('Please enter the password of the lucky drop:', '') ?? ''
                 } else if (payload.contract_version > 1 && payload.contract_version < 4) {
                     // just sign out the password if it is lost.
