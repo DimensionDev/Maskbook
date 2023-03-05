@@ -20,13 +20,9 @@ import type { EVM_Provider } from '../types.js'
 export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
     protected walletStorage:
         | StorageObject<{
-              wallets: Wallet[]
-          }>
-        | undefined
-    protected hostedStorage:
-        | StorageObject<{
               account: string
               chainId: ChainId
+              wallets: Wallet[]
           }>
         | undefined
 
@@ -48,27 +44,22 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
 
         const { storage: walletStorage } = context
             .createKVStorage('memory', {})
-            .createSubScope(`${this.providerType}_wallets`, {
+            .createSubScope(`${this.providerType}_hosted`, {
+                account: this.options.getDefaultAccount(),
+                chainId: this.options.getDefaultChainId(),
                 wallets: [] as Wallet[],
             })
         this.walletStorage = walletStorage
 
-        const { storage: hostedStorage } = context
-            .createKVStorage('memory', {})
-            .createSubScope(`${this.providerType}_hosted`, {
-                account: this.options.getDefaultAccount(),
-                chainId: this.options.getDefaultChainId(),
-            })
-        this.hostedStorage = hostedStorage
-
-        await this.hostedStorage.account.initializedPromise
-        await this.hostedStorage.chainId.initializedPromise
+        await this.walletStorage.account.initializedPromise
+        await this.walletStorage.chainId.initializedPromise
+        await this.walletStorage.wallets.initializedPromise
 
         await this.onAccountChanged()
         await this.onChainChanged()
 
-        this.hostedStorage?.account.subscription.subscribe(this.onAccountChanged.bind(this))
-        this.hostedStorage?.chainId.subscription.subscribe(this.onChainChanged.bind(this))
+        this.walletStorage?.account.subscription.subscribe(this.onAccountChanged.bind(this))
+        this.walletStorage?.chainId.subscription.subscribe(this.onChainChanged.bind(this))
     }
 
     protected get options() {
@@ -85,16 +76,16 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
     override get ready() {
         return [
             this.walletStorage?.wallets.initialized,
-            this.hostedStorage?.account.initialized,
-            this.hostedStorage?.chainId.initialized,
+            this.walletStorage?.account.initialized,
+            this.walletStorage?.chainId.initialized,
         ].every((x) => !!x)
     }
 
     override get readyPromise() {
         return Promise.all([
             this.walletStorage?.wallets.initializedPromise,
-            this.hostedStorage?.account.initializedPromise,
-            this.hostedStorage?.chainId.initializedPromise,
+            this.walletStorage?.account.initializedPromise,
+            this.walletStorage?.chainId.initializedPromise,
         ]).then(() => {})
     }
 
@@ -103,11 +94,11 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
     }
 
     get hostedAccount() {
-        return this.hostedStorage?.account.value ?? this.options.getDefaultAccount()
+        return this.walletStorage?.account.value ?? this.options.getDefaultAccount()
     }
 
     get hostedChainId() {
-        return this.hostedStorage?.chainId.value ?? this.options.getDefaultChainId()
+        return this.walletStorage?.chainId.value ?? this.options.getDefaultChainId()
     }
 
     override async addWallet(wallet: Wallet): Promise<void> {
@@ -191,14 +182,13 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         const supported = await this.options.isSupportedAccount(account)
         if (!supported) throw new Error(`Not supported account: ${account}`)
 
-        await this.hostedStorage?.account.setValue(account)
+        await this.walletStorage?.account.setValue(account)
     }
 
     override async switchChain(chainId: ChainId) {
         const supported = await this.options.isSupportedChainId(chainId)
         if (!supported) throw new Error(`Not supported chain id: ${chainId}`)
-
-        await this.hostedStorage?.chainId.setValue(chainId)
+        await this.walletStorage?.chainId.setValue(chainId)
     }
 
     override async request<T extends unknown>(

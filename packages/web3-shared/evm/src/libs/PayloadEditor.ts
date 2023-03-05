@@ -8,6 +8,7 @@ import { ChainId, EthereumMethodType, Transaction, TransactionOptions, UserOpera
 import { formatEthereumAddress } from '../helpers/formatter.js'
 import { createJsonRpcPayload } from '../helpers/provider.js'
 import { ZERO_ADDRESS, getSmartPayConstant } from '../index.js'
+import type { Wallet } from '@masknet/web3-shared-base'
 
 type Options = Pick<TransactionOptions, 'account' | 'chainId'>
 
@@ -121,6 +122,18 @@ export class PayloadEditor {
             ...raw,
             from: raw?.from ?? this.options?.account,
             chainId: raw?.chainId ?? this.options?.chainId,
+        }
+    }
+
+    get wallet() {
+        const { method, params } = this.payload
+        switch (method) {
+            case EthereumMethodType.MASK_ADD_WALLET:
+            case EthereumMethodType.MASK_ADD_OR_UPDATE_WALLET:
+                const [wallet] = params as [Wallet]
+                return wallet
+            default:
+                return
         }
     }
 

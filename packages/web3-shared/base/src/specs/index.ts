@@ -1207,6 +1207,16 @@ export interface Connection<
     connect(initial?: Web3ConnectionOptions): Promise<Account<ChainId>>
     /** Break connection */
     disconnect(initial?: Web3ConnectionOptions): Promise<void>
+    /** Add a new wallet. */
+    addWallet?: (wallet: Wallet, initial?: Web3ConnectionOptions) => Promise<void>
+    /** Update a wallet. */
+    updateWallet?: (address: string, wallet: Wallet, initial?: Web3ConnectionOptions) => Promise<void>
+    /** Add or update a new wallet on demand. */
+    updateOrAddWallet?: (wallet: Wallet, initial?: Web3ConnectionOptions) => Promise<void>
+    /** Rename a wallet */
+    renameWallet?: (address: string, name: string, initial?: Web3ConnectionOptions) => Promise<void>
+    /** Remove a wallet */
+    removeWallet?: (address: string, password?: string | undefined, initial?: Web3ConnectionOptions) => Promise<void>
     /** Confirm transaction */
     confirmTransaction(hash: string, initial?: Web3ConnectionOptions): Promise<TransactionReceipt>
     /** Replace transaction */
