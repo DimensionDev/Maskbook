@@ -4,6 +4,8 @@ import { Icons } from '@masknet/icons'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { base } from '../base.js'
 import { useState } from 'react'
+import { PluginID } from '@masknet/shared-base'
+import { Trans } from 'react-i18next'
 import { CrossChainBridgeDialog } from './CrossChainBridgeDialog.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -12,7 +14,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.CrossBridge size={36} />
-            const name = { i18nKey: '__plugin_name', fallback: 'Cross-chain' }
+            const name = <Trans ns={PluginID.CrossChainBridge} i18nKey="__plugin_name" />
             const iconFilterColor = 'rgba(183, 212, 255, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
