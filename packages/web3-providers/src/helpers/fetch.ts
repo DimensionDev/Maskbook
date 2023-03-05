@@ -1,3 +1,5 @@
+import { captureFetchException } from './captureFetchException.js'
+
 const { fetch: originalFetch } = globalThis
 
 export type Fetcher<T = Response> = (input: RequestInfo | URL, init?: RequestInit, next?: Fetcher) => Promise<T>
@@ -19,19 +21,6 @@ export async function fetch(input: RequestInfo | URL, init?: RequestInit, fetche
         hasError = true
         throw error
     } finally {
-        if (hasError) {
-            const request = new Request(input, init)
-
-            Sentry.captureException(new Error(`Failed to fetch: ${request.url}`), {
-                tags: {
-                    source: new URL(request.url).host,
-                    method: request.method.toUpperCase(),
-                    url: request.url,
-                    response_type: response?.type,
-                    status_code: response?.status,
-                    status_text: response?.statusText,
-                },
-            })
-        }
+        if (hasError) captureFetchException(new Request(input, init), response)
     }
 }
