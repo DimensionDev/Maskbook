@@ -34,10 +34,10 @@ function getDimensionAsJPEG(buf: ArrayBuffer) {
     const dataView = new DataView(buf)
     let i = 0
     if (
-        dataView.getUint8(i) === 0xFF &&
-        dataView.getUint8(i + 1) === 0xD8 && // SOI marker
-        dataView.getUint8(i + 2) === 0xFF &&
-        dataView.getUint8(i + 3) === 0xE0 // APP0 marker
+        dataView.getUint8(i) === 0xff &&
+        dataView.getUint8(i + 1) === 0xd8 && // SOI marker
+        dataView.getUint8(i + 2) === 0xff &&
+        dataView.getUint8(i + 3) === 0xe0 // APP0 marker
     ) {
         i += 4
         if (
@@ -51,10 +51,10 @@ function getDimensionAsJPEG(buf: ArrayBuffer) {
             while (i < dataView.byteLength) {
                 i += block_length
                 if (i >= dataView.byteLength) return
-                if (dataView.getUint8(i) !== 0xFF) return
+                if (dataView.getUint8(i) !== 0xff) return
                 if (
-                    dataView.getUint8(i + 1) === 0xC0 || // SOF0 marker
-                    dataView.getUint8(i + 1) === 0xC2 // SOF2 marker
+                    dataView.getUint8(i + 1) === 0xc0 || // SOF0 marker
+                    dataView.getUint8(i + 1) === 0xc2 // SOF2 marker
                 ) {
                     return {
                         height: dataView.getUint8(i + 5) * 256 + dataView.getUint8(i + 6),

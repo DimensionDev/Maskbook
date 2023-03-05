@@ -12,7 +12,6 @@ import {
 } from '../../../shared/legacy-settings/settings.js'
 import { MaskMessages } from '../../../shared/messages.js'
 import { queryPersonasDB } from '../../../background/database/persona/db.js'
-import { __deprecated__getStorage } from '../../utils/deprecated-storage.js'
 
 function create<T>(settings: ValueRefWithReady<T>) {
     async function get() {
@@ -56,4 +55,4 @@ export async function setPluginMinimalModeEnabled(id: string, enabled: boolean) 
 
 export const [getDecentralizedSearchSettings, setDecentralizedSearchSettings] = create(decentralizedSearchSettings)
 
-export { __deprecated__getStorage as getLegacySettingsInitialValue }
+export { __deprecated__getStorage as getLegacySettingsInitialValue } from '../../utils/deprecated-storage.js'

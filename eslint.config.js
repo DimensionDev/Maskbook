@@ -198,10 +198,8 @@ const codeStyleRules = {
     'unicorn/no-useless-length-check': 'warn', // array.length === 0 || array.every(...)
     'unicorn/no-useless-promise-resolve-reject': 'warn', // return Promise.resolve(value) in async function
     // 'unicorn/no-useless-spread': 'warn', // new Set([...iterable])
-    // 'unicorn/no-useless-switch-case': 'warn', // case 1: default:
-    // 'unicorn/no-useless-undefined': 'warn', // let x = undefined
     'unicorn/no-zero-fractions': 'warn', // 1.0
-    // 'unicorn/prefer-export-from': 'warn', // prefer export { } from than import-and-export
+    'unicorn/prefer-export-from': 'warn', // prefer export { } from than import-and-export
     // 'unicorn/prefer-native-coercion-functions': 'warn', // no coercion wrapper v => Boolean(v)
     '@typescript-eslint/await-thenable': 'warn', // await 1
     // '@typescript-eslint/no-empty-interface': 'warn', // interface T extends Q {}
