@@ -5,8 +5,8 @@ import { Bonfida } from '@masknet/web3-providers'
 import type { NameServiceAPI } from '@masknet/web3-providers/types'
 
 export class NameService extends NameServiceState<ChainId> {
-    constructor(context?: Plugin.Shared.SharedContext) {
-        super(context!, {
+    constructor(context: Plugin.Shared.SharedContext) {
+        super(context, {
             isValidName: (x) => isValidDomain(x),
             isValidAddress: (x) => isValidAddress(x) && !isZeroAddress(x),
             formatAddress,
