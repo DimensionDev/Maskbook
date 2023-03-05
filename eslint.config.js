@@ -124,7 +124,7 @@ const avoidMistakeRules = {
     /// Little-known language features
     'no-constructor-return': 'error', // constructor() { return expr }
     'react/no-namespace': 'error', // <svg:rect> react does not support
-    // '@typescript-eslint/no-unsafe-declaration-merging': 'error',
+    '@typescript-eslint/no-unsafe-declaration-merging': 'error',
     '@typescript-eslint/no-mixed-enums': 'error', // enum { a = 1, b = "b" }
     '@typescript-eslint/prefer-literal-enum-member': 'error', // enum { a = outsideVar }
 
