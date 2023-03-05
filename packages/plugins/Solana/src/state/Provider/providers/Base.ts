@@ -1,6 +1,6 @@
 import type { Transaction } from '@solana/web3.js'
 import { Emitter } from '@servie/events'
-import type { Account, ProviderEvents, ProviderOptions } from '@masknet/web3-shared-base'
+import type { Account, ProviderEvents, ProviderOptions, Wallet } from '@masknet/web3-shared-base'
 import type { ChainId, ProviderType, Web3, Web3Provider } from '@masknet/web3-shared-solana'
 import type { SolanaProvider } from '../types.js'
 
@@ -26,6 +26,21 @@ export class BaseProvider implements SolanaProvider {
     }
 
     setup(): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+    addWallet(wallet: Wallet): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+    updateWallet(address: string, wallet: Wallet): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+    updateOrAddWallet(wallet: Wallet): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+    renameWallet(address: string, name: string): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+    removeWallet(address: string, password?: string | undefined): Promise<void> {
         throw new Error('Method not implemented.')
     }
     switchAccount(account?: string): Promise<void> {

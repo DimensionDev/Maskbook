@@ -3,7 +3,7 @@ import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
 import { delay } from '@masknet/kit'
 import { Emitter } from '@servie/events'
-import type { Account, ProviderEvents, ProviderOptions } from '@masknet/web3-shared-base'
+import type { Account, ProviderEvents, ProviderOptions, Wallet } from '@masknet/web3-shared-base'
 import {
     chainResolver,
     createWeb3,
@@ -35,6 +35,22 @@ export class BaseProvider implements EVM_Provider {
     }
 
     setup(): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+
+    addWallet(wallet: Wallet): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+    updateWallet(address: string, wallet: Wallet): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+    updateOrAddWallet(wallet: Wallet): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+    renameWallet(address: string, name: string): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+    removeWallet(address: string, password?: string | undefined): Promise<void> {
         throw new Error('Method not implemented.')
     }
 

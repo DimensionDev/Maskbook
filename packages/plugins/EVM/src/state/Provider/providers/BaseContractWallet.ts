@@ -3,7 +3,7 @@ import { ECKeyIdentifier, StorageItem } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { ProviderType, isValidAddress } from '@masknet/web3-shared-evm'
-import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
+import { SharedContextSettings } from '../../../settings/index.js'
 import { BaseHostedProvider } from './BaseHosted.js'
 import type { EVM_Provider } from '../types.js'
 
@@ -11,7 +11,7 @@ import type { EVM_Provider } from '../types.js'
  * EIP-4337 compatible smart contract based wallet.
  */
 export class BaseContractWalletProvider extends BaseHostedProvider implements EVM_Provider {
-    private ownerStorage:
+    protected ownerStorage:
         | StorageItem<{
               account: string
               identifier: string
@@ -25,23 +25,21 @@ export class BaseContractWalletProvider extends BaseHostedProvider implements EV
     override async setup() {
         await super.setup()
 
-        const context = await SharedContextSettings.readyPromise
-        const state = await Web3StateSettings.readyPromise
-
-        const { storage } = context.createKVStorage('memory', {}).createSubScope(`${this.providerType}_owner`, {
-            value: {
-                account: this.options.getDefaultAccount(),
-                // empty string means EOA signer
-                identifier: '',
-            },
-        })
+        const { storage } = SharedContextSettings.value
+            .createKVStorage('memory', {})
+            .createSubScope(`${this.providerType}_owner`, {
+                value: {
+                    account: this.options.getDefaultAccount(),
+                    // empty string means EOA signer
+                    identifier: '',
+                },
+            })
 
         this.ownerStorage = storage.value
 
-        state.Wallet?.wallets?.subscribe(async () => {
+        this.walletStorage?.wallets.subscription?.subscribe(async () => {
             if (!this.hostedAccount) return
-            const wallets = state.Wallet?.wallets?.getCurrentValue()
-            const target = wallets?.find((x) => isSameAddress(x.address, this.hostedAccount))
+            const target = this.wallets?.find((x) => isSameAddress(x.address, this.hostedAccount))
             const smartPayChainId = await SmartPayBundler.getSupportedChainId()
             if (target?.owner) {
                 await this.ownerStorage?.setValue({

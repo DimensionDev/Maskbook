@@ -947,6 +947,16 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     readonly connected: boolean
     /** async setup tasks */
     setup(): Promise<void>
+    /** Add a new wallet. */
+    addWallet(wallet: Wallet): Promise<void>
+    /** Update a wallet. */
+    updateWallet(address: string, wallet: Wallet): Promise<void>
+    /** Add or update a new wallet on demand. */
+    updateOrAddWallet(wallet: Wallet): Promise<void>
+    /** Rename a wallet */
+    renameWallet(address: string, name: string): Promise<void>
+    /** Remove a wallet */
+    removeWallet(address: string, password?: string | undefined): Promise<void>
     /** Switch to the designate account. */
     switchAccount(account?: string): Promise<void>
     /** Switch to the designate chain. */

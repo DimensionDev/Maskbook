@@ -1,10 +1,10 @@
 import { first } from 'lodash-es'
-import { ECKeyIdentifier, EMPTY_LIST, ExtensionSite, getSiteType, PopupRoutes } from '@masknet/shared-base'
+import { ECKeyIdentifier, ExtensionSite, getSiteType, PopupRoutes } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { ChainId, chainResolver, isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { BaseContractWalletProvider } from './BaseContractWallet.js'
-import { SharedContextSettings, Web3StateSettings } from '../../../settings/index.js'
+import { SharedContextSettings } from '../../../settings/index.js'
 import type { EVM_Provider } from '../types.js'
 
 export class MaskWalletProvider extends BaseContractWalletProvider implements EVM_Provider {
@@ -15,7 +15,7 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
     override async setup() {
         await super.setup()
 
-        Web3StateSettings.value.Wallet?.wallets?.subscribe(async () => {
+        this.walletStorage?.wallets.subscription?.subscribe(async () => {
             const primaryWallet = first(this.wallets)
             const smartPayChainId = await SmartPayBundler.getSupportedChainId()
             if (!this.hostedAccount && primaryWallet) {
@@ -23,10 +23,6 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
                 await this.switchChain(primaryWallet.owner ? smartPayChainId : ChainId.Mainnet)
             }
         })
-    }
-
-    private get wallets() {
-        return Web3StateSettings.value.Wallet?.wallets?.getCurrentValue() ?? EMPTY_LIST
     }
 
     override async connect(

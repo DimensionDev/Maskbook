@@ -110,7 +110,7 @@ export class WalletState<ProviderType extends string, Transaction> implements We
                 omit(wallet, ['id', 'address', 'createdAt', 'updatedAt', 'storedKeyInfo']),
             )
         }
-        this.addWallet(wallet)
+        await this.addWallet(wallet)
     }
 
     async updateWallets(wallets: Wallet[]) {
