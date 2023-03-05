@@ -214,7 +214,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     },
 }
 
-function wrapWithAssert(env: Environment, f: Function) {
+function wrapWithAssert(env: Environment, f: (...args: any) => any) {
     return (...args: any[]) => {
         assertEnvironment(env)
         return f(...args)
@@ -223,7 +223,7 @@ function wrapWithAssert(env: Environment, f: Function) {
 
 try {
     for (const key of Object.keys(MaskNetworkAPI) as Array<keyof MaskNetworkAPIs>) {
-        const fn: Function = MaskNetworkAPI[key]
+        const fn: (...args: any) => any = MaskNetworkAPI[key]
         if (key.startsWith('SNSAdaptor_')) {
             MaskNetworkAPI[key] = wrapWithAssert(Environment.ContentScript, fn)
         } else {

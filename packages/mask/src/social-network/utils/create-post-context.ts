@@ -34,7 +34,7 @@ import { difference } from 'lodash-es'
 
 export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSActions) {
     return function createPostContext(opt: PostContextCreation): PostContext {
-        const cancel: Array<Function | undefined> = []
+        const cancel: Array<() => void> = []
         opt.signal?.addEventListener('abort', () => cancel.forEach((fn) => fn?.()))
 
         // #region Mentioned links
@@ -51,7 +51,8 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                 else links.value = text
             }
             cancel.push(opt.rawMessage.subscribe(evaluate))
-            cancel.push(opt.postMentionedLinksProvider?.subscribe(evaluate))
+            const f = opt.postMentionedLinksProvider?.subscribe(evaluate)
+            f && cancel.push(f)
             return createSubscriptionFromValueRef(links)
         })()
         // #endregion

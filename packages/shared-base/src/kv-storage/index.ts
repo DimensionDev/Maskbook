@@ -122,8 +122,8 @@ function createState(
         })
     let state = defaultValue
 
-    const listeners = new Set<Function>()
-    function subscribe(f: Function) {
+    const listeners = new Set<() => void>()
+    function subscribe(f: () => void) {
         listeners.add(f)
         return () => listeners.delete(f)
     }

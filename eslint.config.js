@@ -48,7 +48,16 @@ const avoidMistakeRules = {
     'react/no-invalid-html-attribute': 'warn',
     'react/void-dom-elements-no-children': 'error', // <img>children</img>
     /// TypeScript bad practice
-    // '@typescript-eslint/ban-types': 'error',
+    '@typescript-eslint/ban-types': [
+        'error',
+        {
+            types: {
+                // {} is widely used in React.PropsWithChildren<{}>. Unban this until we find better alternatives
+                '{}': false,
+            },
+            extendDefaults: true,
+        },
+    ],
     // '@typescript-eslint/no-invalid-void-type': 'warn', // Disallow void type outside of generic or return types
     '@typescript-eslint/no-misused-new': 'error', // wrong 'new ()' or 'constructor()' signatures
     /// Unicode support

@@ -9,7 +9,7 @@ export async function instagramUpload(url: string) {
     if (!postButton || target.length === 0) return
     const done = false
     for (const input of target) {
-        defineFunctionOnContentObject(input, 'click', (_target: Function, thisArg, args) => {
+        defineFunctionOnContentObject(input, 'click', (_target: (...args: any) => any, thisArg, args) => {
             if (done) {
                 _target.apply(thisArg, args)
             }

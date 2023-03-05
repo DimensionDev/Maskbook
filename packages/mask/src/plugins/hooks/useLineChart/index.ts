@@ -17,7 +17,7 @@ export function useLineChart(
     opts: {
         color?: string
         tickFormat?: string
-        formatTooltip?: Function
+        formatTooltip?: (value: number) => number | string
     },
 ) {
     const theme = useTheme()
