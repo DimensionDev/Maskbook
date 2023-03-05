@@ -60,7 +60,7 @@ export function createFungibleAsset(
         balance,
         price,
         value: {
-            [CurrencyType.USD]: multipliedBy(price?.usd ?? 0, leftShift(balance, token.decimals)).toFixed(0),
+            [CurrencyType.USD]: multipliedBy(price?.usd ?? 0, leftShift(balance, token.decimals)).toFixed(),
         },
     }
 }

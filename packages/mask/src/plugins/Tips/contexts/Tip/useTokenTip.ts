@@ -21,7 +21,7 @@ export function useTokenTip<T extends NetworkPluginID>(
             account,
             ...options,
         }
-        const totalAmount = rightShift(amount, token.decimals).toFixed(0)
+        const totalAmount = rightShift(amount, token.decimals).toFixed()
         return connection.transferFungibleToken(token?.address, recipient, totalAmount, '', connectionOptions)
     }, [JSON.stringify(options), account, token?.address, token?.decimals, amount])
 

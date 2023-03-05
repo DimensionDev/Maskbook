@@ -161,7 +161,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
         if (!isNativeTokenAddress(token?.address)) return balance
         // Add gas padding.
         return balance.gt(gasFee) ? balance.minus(new BigNumber(gasFee).times(2)) : ZERO
-    }, [token?.address, balance.toFixed(0), gasFee])
+    }, [token?.address, balance.toFixed(), gasFee])
     const maxAmount = availableBalance.div(1 + giveBack).toFixed(0)
 
     // #region submit button

@@ -30,7 +30,7 @@ export function useNativeTradeGasLimit(
         )
             return '0'
 
-        const tradeAmount = trade.inputAmount.toFixed(0)
+        const tradeAmount = trade.inputAmount.toFixed()
 
         if (!tradeAmount || !wrapperContract) return '0'
 

@@ -66,9 +66,9 @@ export function useTradeCallback(
         // trade with the native token
         let transactionValue = '0'
         if (trade.strategy === TradeStrategy.ExactIn && Others?.isNativeTokenSchemaType(trade.inputToken.schema))
-            transactionValue = trade.inputAmount.toFixed(0)
+            transactionValue = trade.inputAmount.toFixed()
         else if (trade.strategy === TradeStrategy.ExactOut && Others?.isNativeTokenSchemaType(trade.outputToken.schema))
-            transactionValue = trade.outputAmount.toFixed(0)
+            transactionValue = trade.outputAmount.toFixed()
 
         try {
             // send transaction and wait for hash
@@ -78,14 +78,14 @@ export function useTradeCallback(
                           swap_,
                           inputTokenAddress,
                           outputTokenAddress,
-                          trade.inputAmount.toFixed(0),
-                          tradeAmount.toFixed(0),
+                          trade.inputAmount.toFixed(),
+                          tradeAmount.toFixed(),
                       )
                     : exchangeProxyContract.methods.multihopBatchSwapExactOut(
                           swap_,
                           inputTokenAddress,
                           outputTokenAddress,
-                          tradeAmount.toFixed(0),
+                          tradeAmount.toFixed(),
                       ),
                 {
                     from: account,

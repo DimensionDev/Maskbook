@@ -8,7 +8,7 @@ import { fetchJSON } from '../entry-helpers.js'
 const METASWAP_API = 'https://gas-api.metaswap.codefi.network/'
 
 function formatAmountAsWei(amount = '0') {
-    return formatGweiToWei(amount).toFixed(0)
+    return formatGweiToWei(amount).toFixed()
 }
 
 export class MetaSwapAPI implements GasOptionAPI.Provider<ChainId, GasOption> {

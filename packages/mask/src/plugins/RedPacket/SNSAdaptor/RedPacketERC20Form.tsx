@@ -183,7 +183,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             token: token
                 ? (omit(token, ['logoURI']) as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>)
                 : undefined,
-            total: totalAmount.toFixed(0),
+            total: totalAmount.toFixed(),
         }),
         [isRandom, senderName, message, t, shares, token, totalAmount],
     )
@@ -293,7 +293,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                         <WalletConnectedBoundary expectedChainId={chainId}>
                             <EthereumERC20TokenApprovedBoundary
                                 onlyInfiniteUnlock
-                                amount={totalAmount.toFixed(0)}
+                                amount={totalAmount.toFixed()}
                                 classes={{ container: classes.unlockContainer }}
                                 ActionButtonProps={{
                                     size: 'medium',

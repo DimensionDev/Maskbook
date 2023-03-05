@@ -65,7 +65,7 @@ export class SolanaWeb3API
     }
     async getBalance(chainId: ChainId, address: string): Promise<string> {
         const balance = await this.getWeb3Connection(chainId).getBalance(decodeAddress(address))
-        return balance.toFixed(0)
+        return balance.toFixed()
     }
     async getNativeTokenBalance(chainId: ChainId, owner: string): Promise<string> {
         if (!owner) return '0'

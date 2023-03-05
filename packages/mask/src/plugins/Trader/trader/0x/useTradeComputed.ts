@@ -29,7 +29,7 @@ export function useTradeComputed(
             // minimumProtocolFee
             priceImpact: ZERO,
 
-            trade_: { ...trade, buyAmount: outputAmount.toFixed(0) },
+            trade_: { ...trade, buyAmount: outputAmount.toFixed() },
         } as TradeComputed<SwapQuoteResponse>
     }, [trade, strategy, inputToken, outputToken])
 }

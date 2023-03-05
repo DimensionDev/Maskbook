@@ -65,7 +65,7 @@ export class ContractTransaction<T extends BaseContract | null> {
                 })
 
                 if (gas) {
-                    transactionEncoded.gas = gas.toFixed(0)
+                    transactionEncoded.gas = gas.toFixed()
                 }
             } catch {
                 // do nothing

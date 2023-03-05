@@ -260,7 +260,7 @@ export function DrawDialog(props: DrawDialogProps) {
                 <PluginWalletStatusBar>
                     <WalletConnectedBoundary expectedChainId={chainId}>
                         <EthereumERC20TokenApprovedBoundary
-                            amount={multipliedBy(paymentTokenPrice, paymentCount).toFixed(0)}
+                            amount={multipliedBy(paymentTokenPrice, paymentCount).toFixed()}
                             spender={MASK_BOX_CONTRACT_ADDRESS}
                             token={paymentTokenDetailed?.schema === SchemaType.ERC20 ? paymentTokenDetailed : undefined}
                             ActionButtonProps={{ size: 'medium', sx: { marginTop: 2 } }}>

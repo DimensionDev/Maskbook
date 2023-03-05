@@ -36,10 +36,10 @@ export function createFungibleAsset(
 ): FungibleAsset<ChainId, SchemaType> {
     return {
         ...token,
-        balance: leftShift(balance, 8).toFixed(0),
+        balance: leftShift(balance, 8).toFixed(),
         price,
         value: {
-            [CurrencyType.USD]: multipliedBy(price?.usd ?? 0, leftShift(balance, 8)).toFixed(0),
+            [CurrencyType.USD]: multipliedBy(price?.usd ?? 0, leftShift(balance, 8)).toFixed(),
         },
     }
 }

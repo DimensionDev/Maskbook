@@ -17,7 +17,7 @@ export function useTradeCallback(
         if (!trade.inputToken || !trade.outputToken) return
 
         // input amount and output amount are the same value
-        const tradeAmount = trade.inputAmount.toFixed(0)
+        const tradeAmount = trade.inputAmount.toFixed()
 
         let result: string | undefined
         if (

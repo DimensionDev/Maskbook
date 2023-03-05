@@ -8,7 +8,7 @@ describe('leftShift util test', () => {
         { give: 1, shift: 3, expected: '0.001' },
         { give: 1, shift: 4, expected: '0.0001' },
     ])('.format($give)', ({ give, shift, expected }) => {
-        expect(leftShift(give, shift).toFixed(0)).toBe(expected)
+        expect(leftShift(give, shift).toFixed()).toBe(expected)
     })
 })
 

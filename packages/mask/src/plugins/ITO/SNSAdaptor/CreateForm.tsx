@@ -143,21 +143,21 @@ export function CreateForm(props: CreateFormProps) {
 
     const [message, setMessage] = useState(origin?.title ?? '')
     const [totalOfPerWallet, setTotalOfPerWallet] = useState(
-        isZero(origin?.limit || '0') ? '' : leftShift(origin?.limit ?? '0', origin?.token?.decimals).toFixed(0),
+        isZero(origin?.limit || '0') ? '' : leftShift(origin?.limit ?? '0', origin?.token?.decimals).toFixed(),
     )
     const [tokenAndAmount, setTokenAndAmount] = useState<ExchangeTokenAndAmountState>()
     const TAS: ExchangeTokenAndAmountState[] = []
     if (origin?.token && origin?.total) {
         TAS.push({
             token: origin?.token,
-            amount: leftShift(origin?.total ?? '0', origin?.token.decimals).toFixed(0),
+            amount: leftShift(origin?.total ?? '0', origin?.token.decimals).toFixed(),
             key: uuid(),
         })
     }
     if (origin?.exchangeTokens && origin?.exchangeAmounts) {
         origin?.exchangeTokens.map((i, x) =>
             TAS.push({
-                amount: leftShift(origin?.exchangeAmounts[x] || '0', i?.decimals).toFixed(0),
+                amount: leftShift(origin?.exchangeAmounts[x] || '0', i?.decimals).toFixed(),
                 token: i,
                 key: uuid(),
             }),

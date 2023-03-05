@@ -113,7 +113,7 @@ export function uniswapTokenTo(token: Token) {
 }
 
 export function uniswapCurrencyAmountTo(currencyAmount: CurrencyAmount<Currency>) {
-    return pow10(currencyAmount.currency.decimals).multipliedBy(currencyAmount.toFixed(0))
+    return pow10(currencyAmount.currency.decimals).multipliedBy(currencyAmount.toFixed())
 }
 
 export function isTradeBetter(

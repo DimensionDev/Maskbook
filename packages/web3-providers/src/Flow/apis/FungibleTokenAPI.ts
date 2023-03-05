@@ -58,7 +58,7 @@ async function getTokenBalance(
         `,
             args: (arg, t) => [arg(account, t.Address)],
         })
-        return rightShift(balance, decimals).integerValue().toFixed(0)
+        return rightShift(balance, decimals).integerValue().toFixed()
     } catch {
         return '0'
     }

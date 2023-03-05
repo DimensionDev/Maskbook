@@ -6,7 +6,7 @@ import { isValidAddress } from './address.js'
 import { SchemaType } from '../types/index.js'
 
 export function formatAmount(amount: BigNumber.Value = '0', decimals = 0) {
-    return new BigNumber(amount).shiftedBy(decimals).toFixed(0)
+    return new BigNumber(amount).shiftedBy(decimals).toFixed()
 }
 
 export function formatEthereumAddress(address: string, size = 0) {

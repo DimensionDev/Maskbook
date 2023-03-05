@@ -146,7 +146,7 @@ const ReplaceTransaction = memo(() => {
 
     const gasFee = multipliedBy(is1559 ? gasPriceEIP1559 : gasPricePrior1559, gas ? gas : 0)
         .integerValue()
-        .toFixed(0)
+        .toFixed()
 
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {

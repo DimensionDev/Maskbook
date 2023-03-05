@@ -38,7 +38,7 @@ export function useAllTradeComputed(
     const inputTokenProduct = pow10(inputToken?.decimals ?? 0)
     const inputAmount_ = multipliedBy(inputAmount || '0', inputTokenProduct)
         .integerValue()
-        .toFixed(0)
+        .toFixed()
     const { value: tradeProviders = EMPTY_LIST } = useAvailableTraderProviders(chainId)
 
     // NATIVE-WNATIVE pair

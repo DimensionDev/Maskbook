@@ -9,7 +9,7 @@ export function formatBalance(
 ) {
     let balance = new BigNumber(rawValue)
     if (!balance.isInteger()) {
-        const message = `Expected an integer but got ${balance.toFixed(0)}`
+        const message = `Expected an integer but got ${balance.toFixed()}`
         if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
             throw new Error(message)
         } else {
