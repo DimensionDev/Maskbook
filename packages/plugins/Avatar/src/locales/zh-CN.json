@@ -10,8 +10,8 @@
     "connect_your_wallet": "连接您的钱包",
     "upload_avatar_failed_message": "抱歉，保存 NFT 头像失败。请重新设置。",
     "upload_avatar_success_message": "更新 NFT 头像成功！",
-    "collectible_not_found": "未找到任何NFT。",
-    "add_collectible": "添加NFT",
+    "collectible_not_found": "未找到任何 NFT。",
+    "add_collectible": "添加 NFT",
     "set_avatar_title": "设置 NFT 头像",
     "set_up_title$pfp": "设置 NFT 头像",
     "set_up_title$background": "设置 NFT 背景",
@@ -22,7 +22,7 @@
     "collectible_on_polygon": "只有Etherum上的NFT支持预览。我们目前<br/>也在支持 Polygon NFT。 <br/>请在这里添加您的NFT。",
     "collectible_no_eth": "没有任何可预览的NFT。请在这里添加您的NFT。",
     "collectible_no_collectible": "当前钱包中未找到任何NFT。",
-    "no_collectible_found": "未找到任何NFT。",
+    "no_collectible_found": "未找到任何 NFT。",
     "load_failed": "加载失败",
     "reload": "重新加载",
     "application_hint": "在社交网络上展示您的 NFT。人们可以在Twitter上出价、购买或查看您珍贵的 NFT。",
@@ -53,5 +53,5 @@
     "nft_add_button_label": "添加",
     "plugin_avatar_input_token_address": "输入合约地址",
     "plugin_avatar_input_token_id": "Token ID",
-    "dashboard_no_collectible_found": "未找到任何NFT。"
+    "dashboard_no_collectible_found": "未找到任何 NFT。"
 }
