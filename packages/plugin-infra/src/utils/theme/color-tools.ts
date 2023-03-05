@@ -9,7 +9,7 @@ export function isDark([r, g, b]: RGB) {
 
 export function toRGB(channels: RGB | undefined) {
     if (!channels) return ''
-    return `rgb(${channels.join()})`
+    return `rgb(${channels.join(',')})`
 }
 
 export function fromRGB(rgb: string): RGB | undefined {

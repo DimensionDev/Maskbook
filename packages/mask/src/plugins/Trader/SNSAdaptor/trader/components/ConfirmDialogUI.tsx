@@ -312,7 +312,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                             </Typography>
                             <Typography className={classes.amount}>
                                 <FormattedBalance
-                                    value={inputAmount.toFixed() ?? '0'}
+                                    value={inputAmount.toFixed(0) ?? '0'}
                                     decimals={inputToken.decimals}
                                     significant={6}
                                     formatter={formatBalance}
@@ -347,7 +347,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                             </Typography>
                             <Typography className={classes.amount}>
                                 <FormattedBalance
-                                    value={outputAmount.toFixed() ?? '0'}
+                                    value={outputAmount.toFixed(0) ?? '0'}
                                     decimals={outputToken.decimals}
                                     significant={6}
                                     formatter={formatBalance}

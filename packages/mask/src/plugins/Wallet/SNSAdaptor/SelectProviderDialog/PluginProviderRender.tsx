@@ -151,7 +151,7 @@ export function PluginProviderRender({
 
     const selectedNetwork = useMemo(() => {
         return networks.find((x) => x.ID === undeterminedNetworkID) ?? first(networks)!
-    }, [undeterminedNetworkID, networks.map((x) => x.ID).join()])
+    }, [undeterminedNetworkID, networks.map((x) => x.ID).join(',')])
 
     return (
         <>

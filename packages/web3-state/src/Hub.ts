@@ -51,7 +51,7 @@ export class HubState<ChainId, SchemaType, GasOption> implements Web3HubState<Ch
                 sizePerPage?: number,
                 maxPageSize?: number,
             ) => {
-                return [chainId, account, sourceType, currencyType, sizePerPage, maxPageSize].join()
+                return [chainId, account, sourceType, currencyType, sizePerPage, maxPageSize].join(',')
             },
         )
     }

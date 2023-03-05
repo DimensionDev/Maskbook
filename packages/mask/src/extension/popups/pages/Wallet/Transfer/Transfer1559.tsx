@@ -379,7 +379,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const { value: minGasLimit } = useGasLimit(
         selectedAsset?.schema,
         selectedAsset?.address,
-        rightShift(amount ?? 0, selectedAsset?.decimals).toFixed(),
+        rightShift(amount ?? 0, selectedAsset?.decimals).toFixed(0),
         EthereumAddress.isValid(address) ? address : registeredAddress,
     )
     // #endregion
@@ -393,7 +393,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         const gasFee = formatGweiToWei(maxFeePerGas || 0).multipliedBy(minGasLimit ?? MIN_GAS_LIMIT)
         let amount_ = new BigNumber(tokenBalance ?? 0)
         amount_ = selectedAsset?.schema === SchemaType.Native ? amount_.minus(gasFee) : amount_
-        return formatBalance(BigNumber.max(0, amount_).toFixed(), selectedAsset?.decimals)
+        return formatBalance(BigNumber.max(0, amount_).toFixed(0), selectedAsset?.decimals)
     }, [selectedAsset, maxFeePerGas, minGasLimit, tokenBalance])
 
     // #region set default gasLimit
@@ -424,7 +424,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
 
     const [{ loading, error }, onSubmit] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
-            const transferAmount = rightShift(data.amount || '0', selectedAsset?.decimals).toFixed()
+            const transferAmount = rightShift(data.amount || '0', selectedAsset?.decimals).toFixed(0)
 
             // If input address is ens domain, use registeredAddress to transfer
             if (Others?.isValidDomain?.(data.address)) {

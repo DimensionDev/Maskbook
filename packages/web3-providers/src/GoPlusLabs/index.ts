@@ -157,7 +157,7 @@ export class GoPlusLabsAPI implements SecurityAPI.Provider<ChainId> {
         }>(
             urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v1/token_security/:id', {
                 id: chainId,
-                contract_addresses: uniqBy(addresses, (x) => x.toLowerCase()).join(),
+                contract_addresses: uniqBy(addresses, (x) => x.toLowerCase()).join(','),
             }),
         )
 

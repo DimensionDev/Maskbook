@@ -29,7 +29,7 @@ export const PreviewCard = ({ links }: PreviewCardProps) => {
 
     const { value, loading } = useAsync(() => {
         return CryptoScamDB.getScamWarnings(uniq(links))
-    }, [links.join()])
+    }, [links.join(',')])
 
     usePluginWrapper(!(loading || !value?.length))
 

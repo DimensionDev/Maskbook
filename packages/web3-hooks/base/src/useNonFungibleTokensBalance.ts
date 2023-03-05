@@ -12,5 +12,5 @@ export function useNonFungibleTokensBalance<S extends 'all' | void = void, T ext
     return useAsyncRetry(async () => {
         if (!connection) return EMPTY_OBJECT
         return connection.getNonFungibleTokensBalance(listOfAddress ?? [])
-    }, [listOfAddress?.join(), connection])
+    }, [listOfAddress?.join(','), connection])
 }

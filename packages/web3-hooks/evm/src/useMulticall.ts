@@ -228,7 +228,7 @@ export function useMulticallStateDecoded<
                 return { succeed: false, gasUsed, value: null, error }
             }
         })
-    }, [web3, contracts.map((x) => x.options.address).join(), names.join(), state])
+    }, [web3, contracts.map((x) => x.options.address).join(','), names.join(','), state])
 }
 // #endregion
 
@@ -247,7 +247,7 @@ export function useSingleContractMultipleData<T extends BaseContract, K extends 
             gasLimit,
             contract.methods[names[i]](...data).encodeABI() as string,
         ])
-    }, [contract?.options.address, names.join(), callDatas.flatMap((x) => x).join()])
+    }, [contract?.options.address, names.join(','), callDatas.flatMap((x) => x).join(',')])
     const [state, callback] = useMulticallCallback(chainId, blockNumber)
     const results = useMulticallStateDecoded(
         Array.from({ length: calls.length }, () => contract as T),
@@ -273,7 +273,7 @@ export function useMultipleContractSingleData<T extends BaseContract, K extends 
                 gasLimit,
                 contract.methods[names[i]](...callData).encodeABI() as string,
             ]),
-        [contracts.map((x) => x.options.address).join(), names.join(), callData.join()],
+        [contracts.map((x) => x.options.address).join(','), names.join(','), callData.join(',')],
     )
 
     const [state, callback] = useMulticallCallback(chainId, blockNumber)
@@ -295,7 +295,12 @@ export function useMultipleContractMultipleData<T extends BaseContract, K extend
                 gasLimit,
                 contract.methods[names[i]](callDatas[i]).encodeABI() as string,
             ]),
-        [contracts.map((x) => x.options.address).join(), names.join(), callDatas.flatMap((x) => x).join(), gasLimit],
+        [
+            contracts.map((x) => x.options.address).join(','),
+            names.join(','),
+            callDatas.flatMap((x) => x).join(','),
+            gasLimit,
+        ],
     )
     const [state, callback] = useMulticallCallback(chainId)
     const results = useMulticallStateDecoded(contracts, names, state, chainId)

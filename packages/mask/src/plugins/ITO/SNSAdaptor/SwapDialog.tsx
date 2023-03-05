@@ -115,7 +115,7 @@ export function SwapDialog(props: SwapDialogProps) {
 
     const [swapAmount, setSwapAmount] = useState<BigNumber>(tokenAmount.multipliedBy(ratio))
     const [inputAmountForUI, setInputAmountForUI] = useState(
-        swapAmount.isZero() ? '' : leftShift(swapAmount, swapToken?.decimals).toFixed(),
+        swapAmount.isZero() ? '' : leftShift(swapAmount, swapToken?.decimals).toFixed(0),
     )
     // #region select token
     const selectFungibleToken = useSelectFungibleToken<void, NetworkPluginID.PLUGIN_EVM>()
@@ -133,7 +133,7 @@ export function SwapDialog(props: SwapDialogProps) {
         setTokenAmount(initAmount)
         setSwapAmount(initAmount.multipliedBy(ratio))
         setInputAmountForUI(
-            initAmount.isZero() ? '' : leftShift(initAmount.multipliedBy(ratio), picked.decimals).toFixed(),
+            initAmount.isZero() ? '' : leftShift(initAmount.multipliedBy(ratio), picked.decimals).toFixed(0),
         )
     }, [
         initAmount,
@@ -142,7 +142,7 @@ export function SwapDialog(props: SwapDialogProps) {
         exchangeTokens
             .map((x) => x.address)
             .sort((a, b) => a.localeCompare(b, 'en-US'))
-            .join(),
+            .join(','),
     ])
     // #endregion
 
@@ -155,7 +155,7 @@ export function SwapDialog(props: SwapDialogProps) {
 
     // #region maxAmount for TokenAmountPanel
     const maxAmount = useMemo(
-        () => BigNumber.min(maxSwapAmount.multipliedBy(ratio).dp(0), tokenBalance).toFixed(),
+        () => BigNumber.min(maxSwapAmount.multipliedBy(ratio).dp(0), tokenBalance).toFixed(0),
         [maxSwapAmount, ratio, tokenBalance],
     )
     // #endregion
@@ -168,7 +168,7 @@ export function SwapDialog(props: SwapDialogProps) {
 
     const [{ loading: isSwapping }, swapCallback] = useSwapCallback(
         payload,
-        swapAmount.toFixed(),
+        swapAmount.toFixed(0),
         swapToken ? swapToken : { address: NATIVE_TOKEN_ADDRESS },
         qualificationInfo?.isQualificationHasLucky,
     )
@@ -234,7 +234,7 @@ export function SwapDialog(props: SwapDialogProps) {
                 token={swapToken}
                 onAmountChange={(value) => {
                     const val = value === '' || value === '0' ? ZERO : rightShift(value, swapToken.decimals)
-                    const isMax = value === leftShift(maxAmount, swapToken.decimals).toFixed() && !val.isZero()
+                    const isMax = value === leftShift(maxAmount, swapToken.decimals).toFixed(0) && !val.isZero()
                     const tokenAmount = isMax ? maxSwapAmount : val.dividedBy(ratio)
                     const swapAmount = isMax ? tokenAmount.multipliedBy(ratio) : val.dp(0)
                     setInputAmountForUI(
@@ -252,7 +252,7 @@ export function SwapDialog(props: SwapDialogProps) {
                 <WalletConnectedBoundary expectedChainId={payload.chain_id}>
                     <EthereumERC20TokenApprovedBoundary
                         onlyInfiniteUnlock
-                        amount={swapAmount.toFixed()}
+                        amount={swapAmount.toFixed(0)}
                         spender={payload.contract_address}
                         token={swapToken.schema === SchemaType.ERC20 ? swapToken : undefined}>
                         <ActionButton

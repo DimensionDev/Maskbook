@@ -115,7 +115,7 @@ function createOrder(chainId: ChainId, order: RaribleOrder): NonFungibleTokenOrd
                 : undefined,
         priceInToken: paymentToken
             ? {
-                  amount: scale10(order.takePrice ?? order.makePrice ?? '0', paymentToken?.decimals).toFixed(),
+                  amount: scale10(order.takePrice ?? order.makePrice ?? '0', paymentToken?.decimals).toFixed(0),
                   token: paymentToken,
               }
             : undefined,
@@ -151,7 +151,7 @@ function createEvent(chainId: ChainId, history: RaribleHistory): NonFungibleToke
             : undefined,
         priceInToken: paymentToken
             ? {
-                  amount: scale10(history.price, paymentToken.decimals).toFixed(),
+                  amount: scale10(history.price, paymentToken.decimals).toFixed(0),
                   token: paymentToken,
               }
             : undefined,

@@ -16,5 +16,5 @@ export function useNonFungibleTokens<S extends 'all' | void = void, T extends Ne
         return Promise.all(
             listOfPairs?.map((x) => connection.getNonFungibleToken(x[0], x[1], undefined, options)) ?? [],
         )
-    }, [connection, listOfPairs?.join()])
+    }, [connection, listOfPairs?.join(',')])
 }

@@ -13,5 +13,5 @@ export function useFungibleTokensBalance<S extends 'all' | void = void, T extend
     return useAsyncRetry(async () => {
         if (!connection || !listOfAddress?.length) return EMPTY_OBJECT
         return connection.getFungibleTokensBalance(listOfAddress, options)
-    }, [listOfAddress?.join(), connection, JSON.stringify(options)])
+    }, [listOfAddress?.join(','), connection, JSON.stringify(options)])
 }

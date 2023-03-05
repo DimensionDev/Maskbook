@@ -6,7 +6,7 @@ function resolveContentNode(node: HTMLElement) {
         [
             'm-activityv2__content .m-activityContentText__body > m-readmore span:first-child',
             'm-activityv2__content .m-activityContent__mediaDescriptionText',
-        ].join() as any,
+        ].join(',') as any,
     )
 }
 

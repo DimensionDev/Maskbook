@@ -73,8 +73,8 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
         return is1559Supported
             ? {
                   gas: toHex(gasLimit_),
-                  maxFeePerGas: toHex(new BigNumber(maxFee).integerValue().toFixed()),
-                  maxPriorityFeePerGas: toHex(new BigNumber(priorityFee).integerValue().toFixed()),
+                  maxFeePerGas: toHex(new BigNumber(maxFee).integerValue().toFixed(0)),
+                  maxPriorityFeePerGas: toHex(new BigNumber(priorityFee).integerValue().toFixed(0)),
               }
             : { gas: toHex(gasLimit_), gasPrice: toHex(gasPrice.toString()) }
     }, [is1559Supported, gasLimit_, maxFee, priorityFee, gasPrice, chainId])

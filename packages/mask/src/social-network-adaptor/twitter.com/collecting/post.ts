@@ -62,7 +62,7 @@ function registerPostCollectorInner(
             [
                 '[data-testid="tweet"] div[lang]',
                 '[data-testid="tweet"] + div div[lang]', // detailed
-            ].join(),
+            ].join(','),
         )
 
         // if a text node already exists, it's not going to decrypt the card node

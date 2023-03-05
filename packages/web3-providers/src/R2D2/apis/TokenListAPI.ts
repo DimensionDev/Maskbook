@@ -83,7 +83,7 @@ export class R2D2TokenListAPI implements TokenListAPI.Provider<ChainId, SchemaTy
                     }
                 })
             },
-            (urls, chainId) => `${chainId}-${urls.join()}`,
+            (urls, chainId) => `${chainId}-${urls.join(',')}`,
         )
 
         return result(urls ?? FUNGIBLE_TOKEN_LISTS, chainId)

@@ -62,7 +62,10 @@ export function useV3BestTradeExactIn(
         loading: quotesLoading,
         error: quotesError,
         retry: quotesRetry,
-    } = useAsyncRetry(() => quotesCallback(quotesCalls), [quoterContract, quotesCalls.map((x) => x.join()).join()])
+    } = useAsyncRetry(
+        () => quotesCallback(quotesCalls),
+        [quoterContract, quotesCalls.map((x) => x.join(',')).join(',')],
+    )
 
     const asyncBestTrade = (() => {
         if (!amountIn || !currencyOut || pluginID !== NetworkPluginID.PLUGIN_EVM) {
@@ -187,7 +190,10 @@ export function useV3BestTradeExactOut(
         loading: quotesLoading,
         error: quotesError,
         retry: quotesRetry,
-    } = useAsyncRetry(() => quotesCallback(quotesCalls), [quotesCallback, quotesCalls.map((x) => x.join()).join()])
+    } = useAsyncRetry(
+        () => quotesCallback(quotesCalls),
+        [quotesCallback, quotesCalls.map((x) => x.join(',')).join(',')],
+    )
     const asyncBestTrade = (() => {
         if (
             !amountOut ||

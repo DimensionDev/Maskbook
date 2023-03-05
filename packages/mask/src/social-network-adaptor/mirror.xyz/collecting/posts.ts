@@ -37,7 +37,7 @@ export function queryInjectPoint(node: HTMLElement) {
             // if have header image is 4, either 3 entry: address link + time
             ':scope > div:nth-child(3) > div > div > a~div',
             ':scope > div:nth-child(4) > div > div > a~div',
-        ].join(),
+        ].join(','),
     )
     return allANode.item(allANode.length - 1) as HTMLElement
 }

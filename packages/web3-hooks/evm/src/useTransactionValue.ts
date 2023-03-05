@@ -16,13 +16,13 @@ export function useTransactionValue(originalValue?: BigNumber.Value, gas?: strin
     const estimateGasFee = !gas
         ? undefined
         : gasPrice && gasPrice !== '0'
-        ? new BigNumber(gasPrice).multipliedBy(gas).multipliedBy(1.5).toFixed()
+        ? new BigNumber(gasPrice).multipliedBy(gas).multipliedBy(1.5).toFixed(0)
         : undefined
 
     const transactionValue = new BigNumber(balance).isLessThan(
         new BigNumber(originalValue ?? '0').plus(new BigNumber(estimateGasFee ?? '0')),
     )
-        ? new BigNumber(originalValue ?? '0').minus(estimateGasFee ?? '0').toFixed()
+        ? new BigNumber(originalValue ?? '0').minus(estimateGasFee ?? '0').toFixed(0)
         : (originalValue as string)
 
     return { transactionValue, estimateGasFee }

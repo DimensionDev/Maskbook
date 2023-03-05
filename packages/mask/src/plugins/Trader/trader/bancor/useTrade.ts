@@ -22,8 +22,8 @@ export function useTrade(
     const { pluginID } = useNetworkContext()
     const { BANCOR_ETH_ADDRESS } = useTraderConstants(chainId)
 
-    const inputAmount = leftShift(inputAmountWei, inputToken?.decimals).toFixed()
-    const outputAmount = leftShift(outputAmountWei, outputToken?.decimals).toFixed()
+    const inputAmount = leftShift(inputAmountWei, inputToken?.decimals).toFixed(0)
+    const outputAmount = leftShift(outputAmountWei, outputToken?.decimals).toFixed(0)
     const isExactIn = strategy === TradeStrategy.ExactIn
 
     return useCustomBlockBeatRetry(

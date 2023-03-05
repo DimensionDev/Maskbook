@@ -126,7 +126,7 @@ export function TraderStateBar({
     const maxAmount = useMemo(() => {
         const marginGasPrice = multipliedBy(gasPrice ?? 0, 1.1)
         const gasFee = multipliedBy(marginGasPrice, focusedTrade?.gas.value ?? MIN_GAS_LIMIT)
-        let amount_ = new BigNumber(inputTokenBalanceAmount.toFixed() ?? 0)
+        let amount_ = new BigNumber(inputTokenBalanceAmount.toFixed(0) ?? 0)
         amount_ = Others?.isNativeTokenSchemaType(inputToken?.schema) ? amount_.minus(gasFee) : amount_
         return leftShift(BigNumber.max(0, amount_), inputToken?.decimals).toFixed(5)
     }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken, Others?.isNativeTokenSchemaType])
@@ -156,8 +156,8 @@ export function TraderStateBar({
         trades,
         inputToken,
         outputToken,
-        inputTokenBalanceAmount.toFixed(),
-        inputTokenTradeAmount.toFixed(),
+        inputTokenBalanceAmount.toFixed(0),
+        inputTokenTradeAmount.toFixed(0),
         maxAmount,
         Others?.isNativeTokenSchemaType,
     ])
@@ -186,7 +186,7 @@ export function TraderStateBar({
                         <EthereumERC20TokenApprovedBoundary
                             onlyInfiniteUnlock
                             spender={approveAddress}
-                            amount={approveAmount.toFixed()}
+                            amount={approveAmount.toFixed(0)}
                             classes={{ container: classes.unlockContainer }}
                             contractName={focusedTrade?.provider ? resolveTradeProviderName(focusedTrade.provider) : ''}
                             infiniteUnlockContent={t('plugin_trader_unlock_symbol', {

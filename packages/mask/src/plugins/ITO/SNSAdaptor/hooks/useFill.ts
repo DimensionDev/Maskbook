@@ -88,7 +88,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             endTime: new Date(Math.floor(endTime.getTime() / 1000) * 1000),
             unlockTime: unlockTime ? new Date(Math.floor(unlockTime.getTime() / 1000) * 1000) : undefined,
             password: signedPassword,
-            exchangeAmounts: paramsObj.exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toFixed()),
+            exchangeAmounts: paramsObj.exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toFixed(0)),
         }
 
         const config = {
@@ -178,7 +178,7 @@ export function useFillParams(poolSettings: PoolSettings | undefined) {
             endTime: endTime_,
             message: [name, title, regions].join(MSG_DELIMITER),
             exchangeAddrs: exchangeTokens.map((x) => x.address),
-            ratios: exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toFixed()),
+            ratios: exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toFixed(0)),
             unlockTime: unlockTime_,
             tokenAddrs: token!.address,
             total,

@@ -37,12 +37,12 @@ export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<Cha
                 decimals: x.decimals,
                 name: x.name,
                 symbol: x.symbol,
-                balance: rightShift(x.amount, x.decimals).toFixed(),
+                balance: rightShift(x.amount, x.decimals).toFixed(0),
                 price: {
                     [CurrencyType.USD]: toFixed(x.price),
                 },
                 value: {
-                    [CurrencyType.USD]: multipliedBy(x.price ?? 0, x.amount).toFixed(),
+                    [CurrencyType.USD]: multipliedBy(x.price ?? 0, x.amount).toFixed(0),
                 },
                 logoURL: x.logo_url,
             }

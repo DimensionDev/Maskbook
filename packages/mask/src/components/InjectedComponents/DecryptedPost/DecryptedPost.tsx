@@ -146,7 +146,7 @@ export function DecryptPost(props: DecryptPostProps) {
             )
         })
         return () => signal.abort()
-    }, [deconstructedPayload, postBy, postMetadataImages.join(), whoAmI, mentionedLinks.join()])
+    }, [deconstructedPayload, postBy, postMetadataImages.join(','), whoAmI, mentionedLinks.join(',')])
 
     if (!deconstructedPayload && progress.every((x) => x.progress.internal)) return null
     return (

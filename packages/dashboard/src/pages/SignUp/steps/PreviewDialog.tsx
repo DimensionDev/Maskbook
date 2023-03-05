@@ -118,7 +118,7 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
     const qrValue = useMemo(() => {
         const main = words?.length ? `mnemonic/${btoa(words.join(' '))}` : `privatekey/${privateKey}`
         return `mask://persona/${main}?nickname=${personaName}`
-    }, [words?.join(), privateKey, personaName])
+    }, [words?.join(','), privateKey, personaName])
 
     useEffect(() => {
         if (state.value) {

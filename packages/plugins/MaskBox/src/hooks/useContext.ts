@@ -279,7 +279,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     useEffect(() => {
         const firstPaymentTokenAddress = first(boxInfo?.payments)?.token.address
         if (paymentTokenAddress === '' && firstPaymentTokenAddress) setPaymentTokenAddress(firstPaymentTokenAddress)
-    }, [paymentTokenAddress, boxInfo?.payments.map((x) => x.token.address).join()])
+    }, [paymentTokenAddress, boxInfo?.payments.map((x) => x.token.address).join(',')])
     // #endregion
 
     // #region transactions

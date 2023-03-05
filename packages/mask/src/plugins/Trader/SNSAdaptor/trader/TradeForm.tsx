@@ -230,7 +230,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const maxAmount = useMemo(() => {
             const marginGasPrice = multipliedBy(gasPrice ?? 0, 1.1)
             const gasFee = multipliedBy(marginGasPrice, focusedTrade?.gas.value ?? MIN_GAS_LIMIT)
-            let amount_ = new BigNumber(inputTokenBalanceAmount.toFixed() ?? 0)
+            let amount_ = new BigNumber(inputTokenBalanceAmount.toFixed(0) ?? 0)
             amount_ = BigNumber.max(
                 0,
                 Others?.isNativeTokenSchemaType(inputToken?.schema) ? amount_.minus(gasFee) : amount_,
@@ -351,7 +351,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                     <InputTokenPanel
                         chainId={chainId}
                         amount={inputAmount}
-                        balance={inputTokenBalanceAmount.toFixed()}
+                        balance={inputTokenBalanceAmount.toFixed(0)}
                         token={inputToken}
                         onAmountChange={handleAmountChange}
                         maxAmount={maxAmount}

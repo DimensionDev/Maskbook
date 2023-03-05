@@ -273,7 +273,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     const { value: minGasLimit, error } = useGasLimit(
         selectedAsset?.schema,
         selectedAsset?.address,
-        rightShift(amount ? amount : 0, selectedAsset?.decimals).toFixed(),
+        rightShift(amount ? amount : 0, selectedAsset?.decimals).toFixed(0),
         EthereumAddress.isValid(address) ? address : '',
     )
     // #endregion
@@ -287,7 +287,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
         let amount_ = new BigNumber(tokenBalance || '0')
         amount_ = selectedAsset?.schema === SchemaType.Native ? amount_.minus(multipliedBy(30000, gasPrice)) : amount_
 
-        return BigNumber.max(0, amount_).toFixed()
+        return BigNumber.max(0, amount_).toFixed(0)
     }, [selectedAsset?.balance, gasPrice, selectedAsset?.type, tokenBalance])
 
     // #region set default gasLimit
@@ -309,7 +309,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
     const [{ loading }, onSubmit] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
-            const transferAmount = rightShift(data.amount || '0', selectedAsset?.decimals).toFixed()
+            const transferAmount = rightShift(data.amount || '0', selectedAsset?.decimals).toFixed(0)
             await transferCallback(transferAmount, data.address, {
                 gasPrice: toHex(formatGweiToWei(data.gasPrice).toString()),
                 gas: data.gasLimit,

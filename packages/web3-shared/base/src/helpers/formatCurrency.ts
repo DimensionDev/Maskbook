@@ -100,7 +100,7 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD', options
                             : onlyRemainTwoDecimal
                             ? '0.01'
                             : isLessThanTwelveDecimalBoundary
-                            ? sixDecimalBoundary.toFixed()
+                            ? sixDecimalBoundary.toFixed(0)
                             : isGreatThanEightDecimalBoundary
                             ? bn.decimalPlaces(10).toFixed(twelveDecimalExp).replace(/0+$/, '')
                             : bn.toFixed(twelveDecimalExp).replace(/0+$/, '')

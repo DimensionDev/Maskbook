@@ -42,12 +42,12 @@ export class ContractFungibleTokenAPI implements FungibleTokenAPI.Provider<Chain
 
         return {
             ...fungibleToken,
-            balance: balance.toFixed(),
+            balance: balance.toFixed(0),
             price: {
                 [CurrencyType.USD]: toFixed(price),
             },
             value: {
-                [CurrencyType.USD]: multipliedBy(price ?? 0, formatBalance(balance, fungibleToken.decimals)).toFixed(),
+                [CurrencyType.USD]: multipliedBy(price ?? 0, formatBalance(balance, fungibleToken.decimals)).toFixed(0),
             },
         }
     }

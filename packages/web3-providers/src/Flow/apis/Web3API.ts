@@ -58,7 +58,7 @@ export class FlowWeb3API
     async getBalance(chainId: ChainId, address: string): Promise<string> {
         const web3 = this.getWeb3(chainId)
         const account = await web3.send([web3.getAccount(address)]).then(web3.decode)
-        return account.balance.toFixed()
+        return account.balance.toFixed(0)
     }
     getNativeTokenBalance(chainId: ChainId, owner: string): Promise<string> {
         throw new Error('Method not implemented.')

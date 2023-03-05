@@ -22,30 +22,30 @@ export class Squash implements Middleware<ConnectionContext> {
         switch (method) {
             case EthereumMethodType.ETH_GET_CODE: {
                 const [address, tag = 'latest'] = params as [string, string]
-                return sha3([chainId, method, address, tag].join())
+                return sha3([chainId, method, address, tag].join(','))
             }
             case EthereumMethodType.ETH_GET_BLOCK_BY_NUMBER: {
                 const [number, full] = params as [string, boolean]
-                return sha3([chainId, method, number, full].join())
+                return sha3([chainId, method, number, full].join(','))
             }
             case EthereumMethodType.ETH_BLOCK_NUMBER: {
-                return sha3([chainId, method].join())
+                return sha3([chainId, method].join(','))
             }
             case EthereumMethodType.ETH_GET_BALANCE:
             case EthereumMethodType.ETH_GET_TRANSACTION_COUNT:
                 const [account, tag = 'latest'] = params as [string, string]
-                return sha3([chainId, method, account, tag].join())
+                return sha3([chainId, method, account, tag].join(','))
             case EthereumMethodType.ETH_BLOCK_NUMBER:
-                return sha3([chainId, method].join())
+                return sha3([chainId, method].join(','))
             case EthereumMethodType.ETH_CALL:
             case EthereumMethodType.ETH_ESTIMATE_GAS: {
                 const [config, tag = 'latest'] = params as [TransactionConfig, string]
-                return sha3([chainId, method, JSON.stringify(config), tag].join())
+                return sha3([chainId, method, JSON.stringify(config), tag].join(','))
             }
             case EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT:
             case EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH:
                 const [hash] = params as [string]
-                return sha3([chainId, method, hash].join())
+                return sha3([chainId, method, hash].join(','))
             default:
                 return
         }

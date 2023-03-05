@@ -131,7 +131,7 @@ export function createNonFungibleAsset(
         traits: getAssetTraits(asset),
         priceInToken: asset.latest_trade_price
             ? {
-                  amount: scale10(asset.latest_trade_price, WNATIVE[chainId].decimals).toFixed(),
+                  amount: scale10(asset.latest_trade_price, WNATIVE[chainId].decimals).toFixed(0),
                   // FIXME: cannot get payment token
                   token:
                       asset.latest_trade_symbol === 'ETH'
@@ -251,7 +251,7 @@ export function createNonFungibleTokenEvent(
         assetPermalink: createPermalink(chainId, transaction.contract_address, transaction.token_id),
         priceInToken: paymentToken
             ? {
-                  amount: scale10(transaction.trade_price, paymentToken?.decimals).toFixed(),
+                  amount: scale10(transaction.trade_price, paymentToken?.decimals).toFixed(0),
                   token: paymentToken,
               }
             : undefined,

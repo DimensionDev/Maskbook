@@ -124,7 +124,7 @@ export function useTradeCallback(
                     from: account,
                     to: address,
                     data: calldata,
-                    ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed() } : {}),
+                    ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed(0) } : {}),
                     ...(!value || /^0x0*$/.test(value) ? {} : { value }),
                     ...pickBy(gasConfig, identity),
                 },

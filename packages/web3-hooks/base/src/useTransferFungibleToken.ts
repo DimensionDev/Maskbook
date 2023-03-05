@@ -21,7 +21,7 @@ export function useTransferFungibleToken<T extends NetworkPluginID>(
         return connection.transferFungibleToken(
             token?.address,
             recipient,
-            rightShift(amount, token.decimals).toFixed(),
+            rightShift(amount, token.decimals).toFixed(0),
             '',
             {
                 account,

@@ -18,9 +18,9 @@ export async function swapQuote(request: SwapQuoteRequest, networkType: NetworkT
         params[key] = value
     })
     if (request.slippagePercentage)
-        params.slippagePercentage = new BigNumber(request.slippagePercentage).dividedBy(BIPS_BASE).toFixed()
+        params.slippagePercentage = new BigNumber(request.slippagePercentage).dividedBy(BIPS_BASE).toFixed(0)
     if (request.buyTokenPercentageFee)
-        params.buyTokenPercentageFee = new BigNumber(request.buyTokenPercentageFee).dividedBy(100).toFixed()
+        params.buyTokenPercentageFee = new BigNumber(request.buyTokenPercentageFee).dividedBy(100).toFixed(0)
 
     const response_ = await fetchJSON<SwapQuoteResponse | SwapErrorResponse>(
         urlcat(ZRX_BASE_URL[networkType], 'swap/v1/quote', params),

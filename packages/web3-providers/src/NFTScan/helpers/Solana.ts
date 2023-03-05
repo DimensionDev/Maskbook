@@ -78,7 +78,7 @@ export function createNonFungibleAsset(chainId: ChainId, asset: Solana.Asset): N
             })) ?? EMPTY_LIST,
         priceInToken: asset.latest_trade_price
             ? {
-                  amount: scale10(asset.latest_trade_price, nativeToken.decimals).toFixed(),
+                  amount: scale10(asset.latest_trade_price, nativeToken.decimals).toFixed(0),
                   // FIXME: cannot get payment token
                   token: nativeToken,
               }
@@ -174,7 +174,7 @@ export function createNonFungibleTokenEvent(
         priceInToken:
             paymentToken && transaction.trade_price
                 ? {
-                      amount: scale10(transaction.trade_price ?? 0, paymentToken?.decimals).toFixed(),
+                      amount: scale10(transaction.trade_price ?? 0, paymentToken?.decimals).toFixed(0),
                       token: paymentToken,
                   }
                 : undefined,

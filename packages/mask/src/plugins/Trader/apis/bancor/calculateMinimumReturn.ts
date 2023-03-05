@@ -15,5 +15,5 @@ export const calculateMinimumReturn = ({
     const toWei = rightShift(toAmount || '0', toToken.decimals)
     const slippageWei = new BigNumber(slippage).dividedBy(BIPS_BASE)
     const minReturnWei = toWei.times(ONE.minus(slippageWei))
-    return leftShift(minReturnWei, toToken.decimals).toFixed()
+    return leftShift(minReturnWei, toToken.decimals).toFixed(0)
 }

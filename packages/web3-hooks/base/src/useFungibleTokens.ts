@@ -13,5 +13,5 @@ export function useFungibleTokens<S extends 'all' | void = void, T extends Netwo
     return useAsyncRetry<Array<Web3Helper.FungibleTokenScope<S, T>>>(async () => {
         if (!connection) return EMPTY_LIST
         return Promise.all(listOfAddress?.map((x) => connection.getFungibleToken(x)) ?? [])
-    }, [connection, listOfAddress?.join()])
+    }, [connection, listOfAddress?.join(',')])
 }

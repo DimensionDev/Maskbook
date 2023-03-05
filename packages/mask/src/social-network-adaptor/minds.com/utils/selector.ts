@@ -49,7 +49,7 @@ export const composeButtonSelector = () =>
         [
             '.m-sidebarNavigation__item m-sidebarNavigation__item--compose',
             '.m-sidebarNavigation__item--compose a', // legacy
-        ].join(),
+        ].join(','),
         true,
     )
 
@@ -76,7 +76,7 @@ export const postContentSelector = () =>
             'm-activityv2 m-activityv2__content .m-activityContentText__body > m-readmore > span:first-child',
             'm-activity:not(.m-activity--minimalMode) m-activity__content .m-activityContent__messageWrapper > span:first-child',
             'm-activity:not(.m-activity--minimalMode) m-activity__content .m-activityContent__mediaDescriptionText',
-        ].join(),
+        ].join(','),
     )
 
 export const searchMindsProfileCover = () => querySelector('div[data-cy="data-minds-channel-banner"]')

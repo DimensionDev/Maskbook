@@ -239,7 +239,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                         ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
                         classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
                         <EthereumERC20TokenApprovedBoundary
-                            amount={approvalData?.approveAmount.toFixed() ?? ''}
+                            amount={approvalData?.approveAmount.toFixed(0) ?? ''}
                             token={approvalData?.approveToken}
                             spender={approvalData?.approveAddress}>
                             <ActionButtonPromise

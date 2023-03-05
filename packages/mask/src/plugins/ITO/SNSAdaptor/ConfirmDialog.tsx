@@ -47,7 +47,7 @@ function SwapItem(props: SwapItemProps) {
                 {t('plugin_ito_swap_title', {
                     swap: exchange ? swap?.symbol : token?.symbol,
                     token: exchange ? token?.symbol : swap?.symbol,
-                    amount: exchange ? ONE.dividedBy(amount_).toFixed() : amount_.toFixed(),
+                    amount: exchange ? ONE.dividedBy(amount_).toFixed(0) : amount_.toFixed(0),
                 })}
             </Typography>
             <div onClick={() => setExchange(!exchange)}>

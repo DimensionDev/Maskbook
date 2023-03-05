@@ -10,7 +10,7 @@ export class ProviderURL {
     constructor() {}
 
     get footprint() {
-        return sha3([navigator.userAgent, navigator.language, screen.width, screen.height].join())
+        return sha3([navigator.userAgent, navigator.language, screen.width, screen.height].join(','))
     }
 
     get seed() {

@@ -4,7 +4,7 @@ import type { TransactionReceipt, Web3 } from '../types/index.js'
 
 export function decodeEvents(web3: Web3, abis: AbiItem[], receipt: TransactionReceipt) {
     // the topic0 for identifying which abi to be used for decoding the event
-    const listOfTopic0 = abis.map((abi) => keccak256(`${abi.name}(${abi.inputs?.map((x) => x.type).join()})`))
+    const listOfTopic0 = abis.map((abi) => keccak256(`${abi.name}(${abi.inputs?.map((x) => x.type).join(',')})`))
 
     // decode events
     const events = receipt.logs.map((log) => {

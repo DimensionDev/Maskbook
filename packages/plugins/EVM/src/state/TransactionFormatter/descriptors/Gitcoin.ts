@@ -35,7 +35,7 @@ export class GitcoinDescriptor implements TransactionDescriptor {
                 const token = await hub?.getFungibleToken?.(address, { chainId: context.chainId })
                 const amount = new BigNumber(parameters._donations[0].amount)
                     .plus(parameters._donations[1].amount)
-                    .toFixed()
+                    .toFixed(0)
                 return {
                     chainId: context.chainId,
                     tokenInAddress: address,

@@ -36,7 +36,7 @@ export function useSortedTrades(traders: TradeInfo[], chainId: Web3Helper.ChainI
                         isGreaterThan(trade.value.outputAmount, MINIMUM_AMOUNT) &&
                         trade.gas.value
                     ) {
-                        const gasFee = multipliedBy(gasPrice, trade.gas.value).integerValue().toFixed()
+                        const gasFee = multipliedBy(gasPrice, trade.gas.value).integerValue().toFixed(0)
 
                         const gasFeeUSD = leftShift(gasFee ?? 0, nativeToken?.decimals).times(nativeTokenPrice)
 

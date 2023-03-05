@@ -53,7 +53,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const { value: outputTokenPrice = 0 } = useFungibleTokenPrice(pluginID, outputToken.address)
 
     const gasFee = useMemo(() => {
-        return gas && gasPrice ? multipliedBy(gasPrice, gas).integerValue().toFixed() : '0'
+        return gas && gasPrice ? multipliedBy(gasPrice, gas).integerValue().toFixed(0) : '0'
     }, [gas, gasPrice])
 
     const gasFeeUSD = useMemo(() => {

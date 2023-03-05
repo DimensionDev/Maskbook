@@ -90,7 +90,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     // #endregion
 
     // transfer amount
-    const transferAmount = rightShift(amount || '0', selectedToken.decimals).toFixed()
+    const transferAmount = rightShift(amount || '0', selectedToken.decimals).toFixed(0)
     const erc20GasLimit = useGasLimit(
         selectedToken.type === TokenType.Fungible
             ? selectedToken.symbol === nativeToken.value?.symbol
@@ -121,7 +121,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
 
         let amount_ = new BigNumber(tokenBalance || '0')
         amount_ = selectedToken.schema === SchemaType.Native ? amount_.minus(gasFee) : amount_
-        return BigNumber.max(0, amount_).toFixed()
+        return BigNumber.max(0, amount_).toFixed(0)
     }, [tokenBalance, gasPrice, selectedToken?.type, amount, gasLimit, maxFee, is1559Supported])
 
     const [{ loading: isTransferring }, transferCallback] = useTokenTransferCallback(tokenType, selectedToken.address)

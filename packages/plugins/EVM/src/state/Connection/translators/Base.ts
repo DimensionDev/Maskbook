@@ -23,9 +23,9 @@ export class Base implements Translator<ConnectionContext> {
             if (config.gas) {
                 config.gas = toHex(
                     BigNumber.max(
-                        toHex(addGasMargin(config.gas as string).toFixed()),
+                        toHex(addGasMargin(config.gas as string).toFixed(0)),
                         context.chainId === ChainId.Optimism ? 25000 : 21000,
-                    ).toFixed(),
+                    ).toFixed(0),
                 )
             }
 
