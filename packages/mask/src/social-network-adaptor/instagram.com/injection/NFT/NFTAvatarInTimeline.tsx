@@ -57,7 +57,7 @@ const TimeLineRainbow = memo(
     },
 )
 
-function _(selector: () => LiveSelector<HTMLImageElement, false>, signal: AbortSignal) {
+function _(selector: () => LiveSelector<HTMLImageElement>, signal: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(selector()).useForeach((element) => {
             let remove = noop

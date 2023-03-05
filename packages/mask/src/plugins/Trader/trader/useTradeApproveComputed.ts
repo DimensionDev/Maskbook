@@ -10,7 +10,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 
 // Only Support EVM ERC20
 export function useTradeApproveComputed(
-    trade: TradeComputed<unknown> | null,
+    trade: TradeComputed | null,
     provider?: TradeProvider,
     token?: Web3Helper.FungibleTokenAll,
 ) {

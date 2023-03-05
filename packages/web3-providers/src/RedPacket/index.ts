@@ -56,7 +56,7 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
 
     async getCollectionsByOwner(
         account: string,
-        { chainId, indicator }: HubOptions<ChainId, HubIndicator> = {},
+        { chainId, indicator }: HubOptions<ChainId> = {},
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, HubIndicator>> {
         const url = urlcat(DSEARCH_BASE_URL, '/nft-lucky-drop/specific-list.json')
         const result = await fetchJSON<{

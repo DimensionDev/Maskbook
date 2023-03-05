@@ -9,7 +9,7 @@ export interface CountdownButtonProps extends ButtonProps {
 export const CountdownButton = forwardRef<HTMLButtonElement, CountdownButtonProps>((props, ref) => {
     const { duration = 60, children, repeatContent = 'Resend', onClick, disabled, ...others } = props
     const [countdown, setCountdown] = useState<number | undefined>(undefined)
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setCountdown(duration)
         onClick?.(event)
     }

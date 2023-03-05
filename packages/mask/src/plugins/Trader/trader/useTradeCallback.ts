@@ -30,7 +30,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useTradeCallback(
     provider?: TradeProvider,
-    tradeComputed?: TradeComputed<unknown> | null,
+    tradeComputed?: TradeComputed | null,
     gasConfig?: GasConfig,
     allowedSlippage?: number,
 ): AsyncFnReturn<() => Promise<string | undefined>> {

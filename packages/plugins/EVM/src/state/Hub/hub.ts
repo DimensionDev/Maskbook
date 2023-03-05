@@ -39,7 +39,6 @@ import {
     type Pageable,
     type CurrencyType,
     type Transaction,
-    type HubIndicator,
     attemptUntil,
     createPageable,
     createIndicator,
@@ -117,7 +116,7 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
         )
     }
 
-    override getFungibleToken(address: string, initial?: HubOptions<ChainId, HubIndicator> | undefined) {
+    override getFungibleToken(address: string, initial?: HubOptions<ChainId> | undefined) {
         const connection = Web3StateSettings.value.Connection?.getConnection?.({
             chainId: initial?.chainId,
         })

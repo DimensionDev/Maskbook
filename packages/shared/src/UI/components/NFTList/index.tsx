@@ -17,7 +17,7 @@ export type NFTKeyPair = [address: string, tokenId: string]
 
 interface Props {
     selectable?: boolean
-    tokens: Array<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID>>
+    tokens: Web3Helper.NonFungibleAssetScope[]
     selectedPairs?: NFTKeyPair[]
     onChange?: (id: string | null, contractAddress?: string) => void
     limit?: number

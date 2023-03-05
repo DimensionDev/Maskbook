@@ -6,7 +6,7 @@ import { searchRetweetAvatarSelector, searchTweetAvatarSelector } from '../../ut
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 import { noop } from 'lodash-es'
 
-function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
+function _(main: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(main()).useForeach((ele, _, meta) => {
             let remover = noop

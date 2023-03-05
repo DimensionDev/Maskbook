@@ -23,20 +23,7 @@ function openDialog() {
         open: true,
     })
 }
-const sns: Plugin.SNSAdaptor.Definition<
-    ChainId,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown
-> = {
+const sns: Plugin.SNSAdaptor.Definition<ChainId> = {
     ...base,
     init() {},
     SearchResultInspector: {

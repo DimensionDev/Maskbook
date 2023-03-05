@@ -4,7 +4,6 @@ import {
     type Pageable,
     createPageable,
     createIndicator,
-    type HubIndicator,
     type FungibleTokenSecurity,
     type FungibleToken,
     type FungibleAsset,
@@ -33,10 +32,7 @@ export class HubStateFungibleClient<ChainId, SchemaType> extends HubStateBaseCli
         throw new Error('Method not implemented.')
     }
 
-    async getFungibleTokenBalance(
-        address: string,
-        initial?: HubOptions<ChainId, HubIndicator> | undefined,
-    ): Promise<number> {
+    async getFungibleTokenBalance(address: string, initial?: HubOptions<ChainId> | undefined): Promise<number> {
         throw new Error('Method not implemented.')
     }
 
@@ -144,14 +140,14 @@ export class HubStateFungibleClient<ChainId, SchemaType> extends HubStateBaseCli
 
     async getFungibleToken(
         address: string,
-        initial?: HubOptions<ChainId, HubIndicator> | undefined,
+        initial?: HubOptions<ChainId> | undefined,
     ): Promise<FungibleToken<ChainId, SchemaType> | undefined> {
         throw new Error('Method not implemented.')
     }
 
     async getFungibleTokens(
         account: string,
-        initial?: HubOptions<ChainId, HubIndicator> | undefined,
+        initial?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<Error | FungibleToken<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
     }

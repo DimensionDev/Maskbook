@@ -19,7 +19,6 @@ import {
     createNextIndicator,
     type NonFungibleAsset,
     type NonFungibleTokenStats,
-    type HubIndicator,
     formatPercentage,
     dividedBy,
     resolveIPFS_URL,
@@ -356,11 +355,11 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         )
     }
 
-    async getOffers(address: string, tokenId: string, options?: HubOptions<ChainId, HubIndicator> | undefined) {
+    async getOffers(address: string, tokenId: string, options?: HubOptions<ChainId> | undefined) {
         return this.getOrders(address, tokenId, OrderSide.Buy, options)
     }
 
-    async getListings(address: string, tokenId: string, options?: HubOptions<ChainId, HubIndicator> | undefined) {
+    async getListings(address: string, tokenId: string, options?: HubOptions<ChainId> | undefined) {
         return this.getOrders(address, tokenId, OrderSide.Sell, options)
     }
 

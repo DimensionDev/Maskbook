@@ -7,7 +7,7 @@ import { Web3StateSettings } from '../../../settings/index.js'
 
 export class ERC20Descriptor implements TransactionDescriptor {
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
-        const context = context_ as TransactionContext<ChainId, string | undefined>
+        const context = context_ as TransactionContext<ChainId>
         if (!context.methods?.length) return
 
         const connection = Web3StateSettings.value.Connection?.getConnection?.({

@@ -10,7 +10,7 @@ export type AsyncStatePageable<T> = Omit<AsyncStateRetry<T>, 'value'> & {
 }
 
 export const usePageableAsync = <T>(
-    fn: (nextIndicator?: HubIndicator) => Promise<Pageable<T, unknown> | undefined>,
+    fn: (nextIndicator?: HubIndicator) => Promise<Pageable<T> | undefined>,
     deps: DependencyList = [],
     key?: string,
 ): AsyncStatePageable<T> => {

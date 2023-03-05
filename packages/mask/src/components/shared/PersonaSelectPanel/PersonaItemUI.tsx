@@ -23,7 +23,7 @@ export interface PersonaNextIDMixture {
 
 interface PersonaItemProps extends withClasses<'checked' | 'unchecked'> {
     data: PersonaNextIDMixture
-    onCopy: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
+    onCopy: (e: React.MouseEvent<HTMLElement>) => void
     onClick: () => void
     currentPersona?: PersonaNextIDMixture
     currentPersonaIdentifier?: ECKeyIdentifier

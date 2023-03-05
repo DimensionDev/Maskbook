@@ -78,7 +78,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
 
     // TODO: 6002: avoid using i18n text in a service. delegate it to ui.
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
-        const context = context_ as TransactionContext<ChainId, string | undefined>
+        const context = context_ as TransactionContext<ChainId>
 
         const {
             HAPPY_RED_PACKET_ADDRESS_V1,

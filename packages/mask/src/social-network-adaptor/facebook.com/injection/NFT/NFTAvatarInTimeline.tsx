@@ -74,7 +74,7 @@ function getFacebookId(element: HTMLElement | SVGElement) {
     return url.pathname.replace('/', '')
 }
 
-function _(selector: () => LiveSelector<HTMLElement | SVGElement, false>, signal: AbortSignal) {
+function _(selector: () => LiveSelector<HTMLElement | SVGElement>, signal: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(selector()).useForeach((element, key) => {
             let remove = noop

@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export const AdditionalContent = memo(function AdditionalContent(props: AdditionalContentProps): JSX.Element {
     const { classes } = useStyles()
-    const stop = useCallback((ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => ev.stopPropagation(), [])
+    const stop = useCallback((ev: React.MouseEvent<HTMLDivElement>) => ev.stopPropagation(), [])
     const { progress, title, message } = props
     const ProgressJSX = !progress ? null : progress === true ? (
         <CircularProgress size={20} color="primary" variant="indeterminate" />

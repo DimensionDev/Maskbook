@@ -33,8 +33,8 @@ export interface PostContextCoAuthor {
 }
 
 export interface PostContextComment {
-    readonly commentsSelector: LiveSelector<HTMLElement, false>
-    readonly commentBoxSelector: LiveSelector<HTMLElement, false>
+    readonly commentsSelector: LiveSelector<HTMLElement>
+    readonly commentBoxSelector: LiveSelector<HTMLElement>
 }
 export interface PostContextCreation extends PostContextAuthor {
     readonly rootElement: DOMProxy

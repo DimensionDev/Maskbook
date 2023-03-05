@@ -14,7 +14,7 @@ function getUserId(ele: HTMLElement) {
     return attribute.split('-').pop()
 }
 
-function inject(selector: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
+function inject(selector: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(selector()).useForeach((ele) => {
             let remover = noop

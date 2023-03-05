@@ -5,8 +5,7 @@ import type { DetailedHTMLProps, HTMLAttributes } from 'react'
 
 export const ConnectActionList: StyledComponent<
     MUIStyledCommonProps<Theme>,
-    DetailedHTMLProps<HTMLAttributes<HTMLUListElement>, HTMLUListElement>,
-    {}
+    DetailedHTMLProps<HTMLAttributes<HTMLUListElement>, HTMLUListElement>
 > = styled('ul')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',

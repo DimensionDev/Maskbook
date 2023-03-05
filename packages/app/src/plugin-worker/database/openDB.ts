@@ -48,7 +48,7 @@ export interface IDBPSafeObjectStore<
     StoreName extends StoreNames<DBTypes> = StoreNames<DBTypes>,
     Writable extends boolean = boolean,
 > extends Pick<
-        IDBPObjectStore<DBTypes, TxStores, StoreName, 'readonly'>,
+        IDBPObjectStore<DBTypes, TxStores, StoreName>,
         'get' | 'getAll' | 'getAllKeys' | 'getKey' | 'count' | 'autoIncrement' | 'indexNames' | 'keyPath' | 'name'
     > {
     add: Writable extends true ? IDBPObjectStore<DBTypes, TxStores, StoreName, 'readwrite'>['add'] : unknown

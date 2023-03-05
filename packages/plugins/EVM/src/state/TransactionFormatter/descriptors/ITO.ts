@@ -29,7 +29,7 @@ export class ITODescriptor extends DescriptorWithTransactionDecodedReceipt imple
         return getTokenAmountDescription(to_value, token)
     }
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
-        const context = context_ as TransactionContext<ChainId, string | undefined>
+        const context = context_ as TransactionContext<ChainId>
         const hub = Web3StateSettings.value.Hub?.getHub?.({
             chainId: context.chainId,
         })

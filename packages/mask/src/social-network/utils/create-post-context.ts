@@ -23,7 +23,6 @@ import type {
 import {
     extractTextFromTypedMessage,
     makeTypedMessageTupleFromList,
-    type TypedMessage,
     type TypedMessageTuple,
 } from '@masknet/typed-message'
 import type { Subscription } from 'use-subscription'
@@ -149,7 +148,7 @@ export function createRefsForCreatePostContext() {
     const postBy = new ValueRef<ProfileIdentifier | null>(null)
     const postCoAuthors = new ValueRef<PostContextCoAuthor[]>([])
     const postID = new ValueRef<string | null>(null)
-    const postMessage = new ValueRef<TypedMessageTuple<readonly TypedMessage[]>>(makeTypedMessageTupleFromList())
+    const postMessage = new ValueRef<TypedMessageTuple>(makeTypedMessageTupleFromList())
     const postMetadataImages = new ObservableSet<string>()
     const postMetadataMentionedLinks = new ObservableMap<unknown, string>()
     const subscriptions: Omit<PostContextCreation, 'rootElement' | 'actionsElement' | 'suggestedInjectionPoint'> = {

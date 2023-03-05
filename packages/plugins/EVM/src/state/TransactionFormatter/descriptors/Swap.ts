@@ -17,7 +17,7 @@ import { getTokenAmountDescription } from '../utils.js'
 
 export class SwapDescriptor implements TransactionDescriptor {
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
-        const context = context_ as TransactionContext<ChainId, string | undefined>
+        const context = context_ as TransactionContext<ChainId>
         const hub = Web3StateSettings.value.Hub?.getHub?.({
             chainId: context.chainId,
         })

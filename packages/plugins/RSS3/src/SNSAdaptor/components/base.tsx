@@ -88,7 +88,7 @@ export const CardFrame: FC<CardFrameProps> = ({
     return (
         <article
             className={cx(className, verbose ? null : classes.inspectable)}
-            onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            onClick={(event: React.MouseEvent<HTMLDivElement>) => {
                 onClick?.(event)
                 if (!verbose) {
                     viewDetails({

@@ -260,7 +260,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
 
     async getAssets(
         account: string,
-        options?: HubOptions<ChainId, HubIndicator>,
+        options?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
     }
@@ -287,7 +287,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
     async getEvents(
         address: string,
         tokenId: string,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
+        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
@@ -301,11 +301,11 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         return this.createPageable(events_, indicator)
     }
 
-    async getOffers(address: string, tokenId: string, options: HubOptions<ChainId, HubIndicator> = {}) {
+    async getOffers(address: string, tokenId: string, options: HubOptions<ChainId> = {}) {
         return this.getOrders(address, tokenId, OrderSide.Buy, options)
     }
 
-    async getListings(address: string, tokenId: string, options: HubOptions<ChainId, HubIndicator> = {}) {
+    async getListings(address: string, tokenId: string, options: HubOptions<ChainId> = {}) {
         return this.getOrders(address, tokenId, OrderSide.Sell, options)
     }
 
@@ -313,7 +313,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         address: string,
         tokenId: string,
         side: OrderSide,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
+        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
@@ -327,10 +327,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         return this.createPageable(orders, indicator)
     }
 
-    async getCollectionsByKeyword(
-        keyword: string,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
-    ) {
+    async getCollectionsByKeyword(keyword: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {}) {
         const response = await this.request<{
             search: {
                 nodes: Collection[]

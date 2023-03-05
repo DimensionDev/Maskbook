@@ -7,7 +7,6 @@ import {
     createIndicator,
     type NonFungibleCollection,
     type NonFungibleTokenRarity,
-    type HubIndicator,
     type NonFungibleTokenEvent,
     type NonFungibleTokenOrder,
     type OrderSide,
@@ -32,10 +31,7 @@ export class HubStateNonFungibleClient<ChainId, SchemaType> extends HubStateBase
         throw new Error('Method not implemented.')
     }
 
-    async getNonFungibleTokenBalance(
-        address: string,
-        initial?: HubOptions<ChainId, HubIndicator> | undefined,
-    ): Promise<number> {
+    async getNonFungibleTokenBalance(address: string, initial?: HubOptions<ChainId> | undefined): Promise<number> {
         throw new Error('Method not implemented.')
     }
 
@@ -128,7 +124,7 @@ export class HubStateNonFungibleClient<ChainId, SchemaType> extends HubStateBase
     async getNonFungibleTokenEvents(
         address: string,
         tokenId: string,
-        initial?: HubOptions<ChainId, HubIndicator> | undefined,
+        initial?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>> {
         const options = this.getOptions(initial)
         const providers = this.getProviders(initial)
@@ -141,7 +137,7 @@ export class HubStateNonFungibleClient<ChainId, SchemaType> extends HubStateBase
     async getNonFungibleTokenListings(
         address: string,
         tokenId: string,
-        initial?: HubOptions<ChainId, HubIndicator> | undefined,
+        initial?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>> {
         const options = this.getOptions(initial)
         const providers = this.getProviders(initial)
@@ -154,7 +150,7 @@ export class HubStateNonFungibleClient<ChainId, SchemaType> extends HubStateBase
     async getNonFungibleTokenOffers(
         address: string,
         tokenId: string,
-        initial?: HubOptions<ChainId, HubIndicator> | undefined,
+        initial?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>> {
         const options = this.getOptions(initial)
         const providers = this.getProviders(initial)
@@ -169,7 +165,7 @@ export class HubStateNonFungibleClient<ChainId, SchemaType> extends HubStateBase
         address: string,
         tokenId: string,
         side: OrderSide,
-        initial?: HubOptions<ChainId, HubIndicator> | undefined,
+        initial?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>> {
         const options = this.getOptions(initial)
         const providers = this.getProviders(initial)

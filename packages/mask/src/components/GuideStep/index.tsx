@@ -177,7 +177,7 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
 
     return (
         <>
-            {cloneElement(children as ReactElement<any>, { ref: childrenRef })}
+            {cloneElement(children as ReactElement, { ref: childrenRef })}
             {usePortalShadowRoot((container) => {
                 if (!stepVisible) return null
                 return (

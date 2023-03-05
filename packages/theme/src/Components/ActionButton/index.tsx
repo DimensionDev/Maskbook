@@ -16,7 +16,7 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-export function ActionButton<T extends React.ComponentType<any> = React.ComponentType<{}>>(
+export function ActionButton<T extends React.ComponentType<any> = React.ComponentType>(
     props: ActionButtonProps & PropsOf<T>,
 ) {
     const { width, loading, children, className, style, ...rest } = props

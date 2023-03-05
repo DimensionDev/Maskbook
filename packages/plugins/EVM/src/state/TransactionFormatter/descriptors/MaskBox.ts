@@ -29,7 +29,7 @@ export class MaskBoxDescriptor extends DescriptorWithTransactionDecodedReceipt i
         return getTokenAmountDescription(amount, token)
     }
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
-        const context = context_ as TransactionContext<ChainId, string | undefined>
+        const context = context_ as TransactionContext<ChainId>
 
         const { MASK_BOX_CONTRACT_ADDRESS } = getMaskBoxConstants(context.chainId)
         if (!isSameAddress(context.to, MASK_BOX_CONTRACT_ADDRESS)) return

@@ -3,7 +3,6 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { VerifiedUser as VerifiedUserIcon } from '@mui/icons-material'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -59,7 +58,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface FigureCardProps {
     hideSubTitle?: boolean
     timeline?: boolean
-    asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID>
+    asset: Web3Helper.NonFungibleAssetScope
 }
 
 export function FigureCard(props: FigureCardProps) {

@@ -135,7 +135,7 @@ export function PluginGuide({ children, arrow = true, disabled = false, step }: 
 
     return (
         <>
-            {cloneElement(children as ReactElement<any>, { ref: childrenRef })}
+            {cloneElement(children as ReactElement, { ref: childrenRef })}
             {usePortalShadowRoot((container) => {
                 if (!open) return null
                 return (

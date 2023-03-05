@@ -3,7 +3,6 @@ import {
     createIndicator,
     createNextIndicator,
     createPageable,
-    type HubIndicator,
     type HubOptions,
     type NonFungibleAsset,
     type NonFungibleTokenContract,
@@ -171,14 +170,14 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
 
     async getAssets(
         account: string,
-        options?: HubOptions<ChainId, HubIndicator>,
+        options?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
     }
 
     async getContract(
         address: string,
-        { chainId = ChainId.Mainnet }: HubOptions<ChainId, HubIndicator> = {},
+        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined> {
         if (!isValidChainId(chainId)) return
 
@@ -191,7 +190,7 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
     async getEvents(
         address: string,
         tokenId: string,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
+        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await fetchFromLooksRare<{
@@ -246,7 +245,7 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         address: string,
         tokenId: string,
         side: OrderSide,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
+        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await fetchFromLooksRare<{
@@ -277,11 +276,11 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         )
     }
 
-    async getOffers(address: string, tokenId: string, options?: HubOptions<ChainId, HubIndicator> | undefined) {
+    async getOffers(address: string, tokenId: string, options?: HubOptions<ChainId> | undefined) {
         return this.getOrders(address, tokenId, OrderSide.Buy, options)
     }
 
-    async getListings(address: string, tokenId: string, options?: HubOptions<ChainId, HubIndicator> | undefined) {
+    async getListings(address: string, tokenId: string, options?: HubOptions<ChainId> | undefined) {
         return this.getOrders(address, tokenId, OrderSide.Sell, options)
     }
 }

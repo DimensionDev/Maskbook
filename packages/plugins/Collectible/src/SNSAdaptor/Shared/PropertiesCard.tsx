@@ -70,7 +70,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface PropertiesCardProps {
-    asset: Web3Helper.NonFungibleAssetScope<void>
+    asset: Web3Helper.NonFungibleAssetScope
     rank?: number
     timeline?: boolean
 }

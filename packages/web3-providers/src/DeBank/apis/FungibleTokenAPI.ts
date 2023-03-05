@@ -6,7 +6,6 @@ import {
     createIndicator,
     isSameAddress,
     type FungibleToken,
-    type HubIndicator,
 } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { formatAssets, resolveDeBankAssetId } from '../helpers.js'
@@ -55,7 +54,7 @@ export class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId
     async getTrustedAssets(
         address: string,
         trustedFungibleTokens?: Array<FungibleToken<ChainId, SchemaType>>,
-        options?: HubOptions<ChainId, HubIndicator>,
+        options?: HubOptions<ChainId>,
     ) {
         const trustTokenAssets = await this.contractFungibleToken.getTrustedAssets(
             address,

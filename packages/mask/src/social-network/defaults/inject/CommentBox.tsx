@@ -23,7 +23,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
     useCustomStyles: (props?: any) => {
         classes: Record<T, string>
     } = makeStyles()({}) as any,
-    mountPointCallback?: (node: DOMProxy<HTMLElement, HTMLSpanElement, HTMLSpanElement>) => void,
+    mountPointCallback?: (node: DOMProxy) => void,
 ) {
     const CommentBoxUI = memo(function CommentBoxUI({ dom }: { dom: HTMLElement | null }) {
         const info = useContext(PostInfoContext)

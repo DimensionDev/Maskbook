@@ -210,7 +210,7 @@ const codeStyleRules = {
     // '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'warn', // no if (nullable_bool === true)
     // '@typescript-eslint/no-unnecessary-condition': 'warn', // no if (some_object)
     '@typescript-eslint/no-unnecessary-qualifier': 'warn', // no extra qualifier in enum/namespace
-    // '@typescript-eslint/no-unnecessary-type-arguments': 'warn', // provided type argument equals the default
+    '@typescript-eslint/no-unnecessary-type-arguments': 'warn', // provided type argument equals the default
     // '@typescript-eslint/no-unnecessary-type-assertion': 'warn', // non_nullable!
     // '@typescript-eslint/no-unnecessary-type-constraint': 'warn', // T extends any
     // '@typescript-eslint/no-useless-constructor': 'warn', // empty constructor
