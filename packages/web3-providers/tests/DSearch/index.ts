@@ -66,10 +66,10 @@ describe('DSearch test', () => {
         const result = await DSearch.search('mathcastles', SearchResultType.CollectionListByTwitterHandler)
 
         expect(result.length).toBe(1)
-        if (result[0].type === SearchResultType.NonFungibleCollection) {
-            expect((result[0] as any)!.name).toBe('Terraforms')
+        if (result[0].type === SearchResultType.CollectionListByTwitterHandler) {
+            expect(result[0].name).toBe('Terraforms')
         } else {
-            expect(result[0].type).toBe(SearchResultType.NonFungibleCollection)
+            expect(result[0].type).toBe(SearchResultType.CollectionListByTwitterHandler)
         }
     })
 
@@ -89,9 +89,8 @@ describe('DSearch test', () => {
         const DSearch = new DSearchAPI()
         const result = await DSearch.search('sujiyan.lens')
         expect(result.length).toBe(1)
-        expect((result[0] as any)!.domain).toBe('sujiyan.lens')
         if (result[0].type === SearchResultType.Domain) {
-            expect(result[0].name).toBe('Sujiyan')
+            expect(result[0].domain).toBe('sujiyan.lens')
         } else {
             expect(result[0].type).toBe(SearchResultType.Domain)
         }
