@@ -1,49 +1,31 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import {
     EnhanceableSite,
     isSameProfile,
-    NextIDPlatform,
     PersonaIdentifier,
     ProfileIdentifier,
     resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
 import { usePersonaProofs } from '@masknet/shared'
 import { useValueRef } from '@masknet/shared-base-ui'
-import type { IdentityResolved } from '@masknet/plugin-infra'
 import { userPinExtension } from '../../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
+import { MaskMessages } from '../../../../shared/index.js'
 import Services from '../../../extension/service.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
-import { MaskMessages } from '../../../../shared/index.js'
 import { useSetupGuideStatus } from '../../GuideStep/useSetupGuideStatus.js'
 
-export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
-    const UI = activatedSocialNetworkUI
-    const platform = UI.configuration.nextIDConfig?.platform as NextIDPlatform
-
+export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
     // #region parse setup status
     const lastPinExtensionSetting = useValueRef(userPinExtension)
     const lastSettingState = useSetupGuideStatus()
     // #endregion
 
-    console.log('DEBUG: useSetupGuideStepInfo')
-    console.log({
-        platform,
-        lastPinExtensionSetting,
-        lastSettingState,
-    })
-
     // #region Get SNS username
     const lastRecognized = useLastRecognizedIdentity()
-    const [username, setUsername] = useState(() => lastSettingState.username || lastRecognized.identifier?.userId || '')
-
-    useEffect(() => {
-        return UI.collecting.identityProvider?.recognized.addListener((val: IdentityResolved) => {
-            if (username === '' && val.identifier) setUsername(val.identifier.userId)
-        })
-    }, [username])
+    const username = lastSettingState.username || lastRecognized.identifier?.userId || ''
     // #endregion
 
     const { value: persona, retry } = useAsyncRetry(async () => {
@@ -53,7 +35,7 @@ export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])
 
     useEffect(() => {
-        if (username || UI.networkIdentifier !== EnhanceableSite.Twitter) return
+        if (username || activatedSocialNetworkUI.networkIdentifier !== EnhanceableSite.Twitter) return
         // In order to collect user info after login, need to reload twitter once
         let reloaded = false
         const handler = () => {
@@ -83,10 +65,8 @@ export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
 
     const { value: proofs } = usePersonaProofs(destinedPersona.publicKeyAsHex, MaskMessages)
 
-    return useAsyncRetry(async () => {
-        if (!persona) {
-            return composeInfo(SetupGuideStep.Close, 'close')
-        }
+    return useMemo(() => {
+        if (!persona || !username) return composeInfo(SetupGuideStep.Close, 'close')
 
         // Not set status
         if (!lastSettingState.status) {
@@ -100,15 +80,17 @@ export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
 
         // Should connected persona
         const personaConnectedProfile = persona?.linkedProfiles.find((x) =>
-            isSameProfile(x.identifier, ProfileIdentifier.of(UI.networkIdentifier, username).unwrap()),
+            isSameProfile(
+                x.identifier,
+                ProfileIdentifier.of(activatedSocialNetworkUI.networkIdentifier, username).unwrap(),
+            ),
         )
         if (!personaConnectedProfile) return composeInfo(SetupGuideStep.FindUsername, 'doing')
 
         // The SNS is enabled NextID
-        if (!platform) {
-            // Should show pin extension when not set
+        // Should show pin extension when not set
+        if (!activatedSocialNetworkUI.configuration.nextIDConfig?.platform)
             return composeInfo(SetupGuideStep.Close, 'close')
-        }
 
         // Should verified persona
         const verifiedProfile = proofs?.find(
@@ -122,5 +104,13 @@ export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
 
         // Default
         return composeInfo(SetupGuideStep.Close, 'done')
-    }, [lastSettingState.status, persona, username, platform, lastPinExtensionSetting, composeInfo, proofs?.length])
+    }, [
+        lastSettingState.status,
+        persona,
+        username,
+        lastPinExtensionSetting,
+        composeInfo,
+        proofs?.length,
+        lastRecognized.identifier?.userId,
+    ])
 }

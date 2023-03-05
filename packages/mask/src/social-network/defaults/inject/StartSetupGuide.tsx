@@ -8,12 +8,12 @@ function UI({ unmount, persona }: { unmount: () => void; persona: PersonaIdentif
 }
 
 export function createTaskStartSetupGuideDefault() {
-    return (signal: AbortSignal, for_: PersonaIdentifier) => {
+    return (signal: AbortSignal, persona: PersonaIdentifier) => {
         const controller = new AbortController()
         const combinedSignal = combineAbortSignal(controller.signal, signal)
         attachReactTreeWithoutContainer(
             'setup-guide',
-            <UI persona={for_} unmount={() => controller.abort()} />,
+            <UI persona={persona} unmount={() => controller.abort()} />,
             combinedSignal,
         )
     }

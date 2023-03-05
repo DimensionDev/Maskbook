@@ -15,10 +15,6 @@ export const useSocialAccountsBySettings = (
         error: loadSocialAccountsError,
         retry: retrySocialAccounts,
     } = useSocialAccountsAll(identity, typeWhitelist, sorter)
-
-    if (process.env.NODE_ENV === 'development') {
-        console.assert(identity?.publicKey, 'To get hidden address settings, identity.publicKey required')
-    }
     const {
         value: hiddenAddress,
         loading: loadingHiddenAddress,
