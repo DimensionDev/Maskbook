@@ -153,7 +153,7 @@ const avoidMistakeRules = {
     'react-hooks/rules-of-hooks': 'error', // react hooks
     '@typescript-eslint/no-base-to-string': 'error', // prevent buggy .toString() call
     '@typescript-eslint/no-loop-func': 'warn', // capture a loop variable might be a bug
-    // '@typescript-eslint/no-duplicate-enum-values': 'error', // enum { a = 1, b = 1 }
+    '@typescript-eslint/no-duplicate-enum-values': 'error', // enum { a = 1, b = 1 }
     '@dimensiondev/string-no-locale-case': 'error', // in non-i18n cases use locale-aware string methods are wrong
 
     // Performance
