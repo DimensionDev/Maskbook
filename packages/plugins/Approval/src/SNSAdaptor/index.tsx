@@ -7,6 +7,8 @@ import { base } from '../base.js'
 import { ApprovalDialog } from './ApprovalDialog.js'
 import { Web3ContextProvider, useNetworkContext } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
+import { PluginID } from '@masknet/shared-base'
+import { Trans } from 'react-i18next'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -14,7 +16,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.Approval size={36} />
-            const name = { i18nKey: 'plugin_name', fallback: 'Approval' }
+            const name = <Trans ns={PluginID.Approval} i18nKey="plugin_name" />
             const iconFilterColor = 'rgba(251, 176, 59, 0.3)'
             return {
                 ApplicationEntryID: base.ID,

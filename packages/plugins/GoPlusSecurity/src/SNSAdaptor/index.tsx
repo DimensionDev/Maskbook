@@ -6,7 +6,7 @@ import { Icons } from '@masknet/icons'
 import { Trans } from 'react-i18next'
 import { setupContext } from './context.js'
 import CheckSecurityConfirmDialog from './components/CheckSecurityConfirmDialog.js'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { CheckSecurityDialog } from './CheckSecurityDialog.js'
 import { RiskWarningDialog } from './components/RiskWarningDialog.js'
 
@@ -27,7 +27,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.SecurityChecker size={36} />
-            const name = { i18nKey: '__plugin_name', fallback: 'Check Security' }
+            const name = <Trans ns={PluginID.GoPlusSecurity} i18nKey="__plugin_name" />
 
             return {
                 ApplicationEntryID: base.ID,
