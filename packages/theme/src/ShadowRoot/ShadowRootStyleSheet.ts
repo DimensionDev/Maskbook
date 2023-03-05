@@ -86,10 +86,10 @@ class ConstructableStyleSheet {
 
         if (typeof XPCNativeWrapper === 'undefined') {
             // push & unshift crashes Chrome 103. Not tested on other versions.
-            container.adoptedStyleSheets = [this.globalSheet, ...container.adoptedStyleSheets!, this.sheet]
+            container.adoptedStyleSheets = [this.globalSheet, ...container.adoptedStyleSheets, this.sheet]
         } else {
             // assignment does not work on Firefox 102. Not tested on other versions.
-            const unsafe = XPCNativeWrapper.unwrap(container.adoptedStyleSheets!)
+            const unsafe = XPCNativeWrapper.unwrap(container.adoptedStyleSheets)
             Array.prototype.unshift.call(unsafe, XPCNativeWrapper.unwrap(this.globalSheet))
             Array.prototype.push.call(unsafe, XPCNativeWrapper.unwrap(this.sheet))
         }

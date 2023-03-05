@@ -154,7 +154,7 @@ export function ActivityCard(props: ActivityCardProps) {
                         </>
                     ) : null}
                     {isValidTimestamp(activity.timestamp) &&
-                        formatDistanceToNowStrict(new Date(activity.timestamp!), {
+                        formatDistanceToNowStrict(new Date(activity.timestamp), {
                             addSuffix: true,
                         })}
                     {activity.hash ? (

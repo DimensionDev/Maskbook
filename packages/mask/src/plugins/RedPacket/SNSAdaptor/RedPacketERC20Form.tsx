@@ -156,7 +156,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
 
         if (!isDivisible)
             return t.indivisible({
-                symbol: token.symbol!,
+                symbol: token.symbol,
                 amount: formatBalance(1, token.decimals),
             })
         return ''

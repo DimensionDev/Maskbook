@@ -130,9 +130,7 @@ export class AlchemyFlowAPI implements NonFungibleTokenAPI.Provider<ChainId, Sch
                 pageKey: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,
             }),
         )
-        const assets = res?.nfts?.map((nft) =>
-            createNonFungibleToken((chainId as ChainId | undefined) ?? ChainId.Mainnet, nft),
-        )
+        const assets = res?.nfts?.map((nft) => createNonFungibleToken(chainId ?? ChainId.Mainnet, nft))
         return createPageable(assets, createIndicator(indicator))
     }
 }

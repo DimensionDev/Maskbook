@@ -59,7 +59,7 @@ function InjectContentScript(signal: AbortSignal) {
             MaskMessages.events.maskSDKHotModuleReload.on(async () => {
                 const code = (await fetchUserScript(maskSDK_URL)) + '\n;console.log("[@masknet/sdk] SDK reloaded.")'
                 for (const tab of await browser.tabs.query({})) {
-                    browser.tabs.executeScript(tab.id!, { code }).then(noop)
+                    browser.tabs.executeScript(tab.id, { code }).then(noop)
                 }
             }),
         )

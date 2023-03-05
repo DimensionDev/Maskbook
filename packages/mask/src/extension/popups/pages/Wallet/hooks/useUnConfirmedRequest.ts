@@ -17,7 +17,7 @@ export const useUnconfirmedRequest = () => {
         const payload = await WalletRPC.topUnconfirmedRequest()
         if (!payload) return
 
-        const computedPayload = PayloadEditor.fromPayload(payload).config!
+        const computedPayload = PayloadEditor.fromPayload(payload).config
         const formatterTransaction = await TransactionFormatter?.formatTransaction(chainId, computedPayload)
         const transactionContext = await TransactionFormatter?.createContext(chainId, computedPayload)
         return {

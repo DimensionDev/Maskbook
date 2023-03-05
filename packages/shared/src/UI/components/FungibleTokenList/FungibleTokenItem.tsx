@@ -111,7 +111,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
         const token = data.dataSet[index]
         const onSelect = data.onSelect
 
-        const { chainId, address, name, symbol, decimals, logoURL, balance } = token!
+        const { chainId, address, name, symbol, decimals, logoURL, balance } = token
 
         const isBlocked = useTokenBlocked(address)
         const isTrust = useTokenTrusted(address, token.chainId)
@@ -162,7 +162,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                         onClick={async (event) => {
                             event.stopPropagation()
                             event.preventDefault()
-                            onTrustOrBlockTokenToLocal(event as any)
+                            onTrustOrBlockTokenToLocal(event)
                         }}
                         size="small"
                         checked={!isBlocked}

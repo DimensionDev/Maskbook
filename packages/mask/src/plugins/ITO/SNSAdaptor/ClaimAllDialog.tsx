@@ -276,7 +276,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                         fullWidth
                                         className={cx(classes.actionButton)}
                                         loading={isClaiming}
-                                        disabled={claimablePids!.length === 0}
+                                        disabled={claimablePids.length === 0}
                                         onClick={claim}>
                                         {t('plugin_ito_claim_all')}
                                     </ActionButton>

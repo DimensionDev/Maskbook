@@ -17,7 +17,7 @@ export async function instagramUpload(url: string) {
             for (const x of Object.keys(raw)) {
                 // Old react for __reactEventHandlers, new for __reactProps
                 if (x.startsWith('__reactEventHandlers') || x.startsWith('__reactProps')) {
-                    ;(raw as any)[x].onChange({ target: { files: [file] } })
+                    raw[x].onChange({ target: { files: [file] } })
                 }
             }
         })

@@ -140,7 +140,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         Web3Utils.sha3(payload.sender.message) ?? '',
                         { account },
                     )
-                    payload.password = payload.password!.slice(2)
+                    payload.password = payload.password.slice(2)
                 }
             }
 

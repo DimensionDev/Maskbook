@@ -84,7 +84,7 @@ export async function getLatestMarketPairs(id: string, currency: string) {
         return {
             data: {
                 id,
-                market_pairs: [] as Pair[],
+                market_pairs: [],
                 num_market_pairs: 0,
             },
         }
@@ -165,7 +165,7 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
                 pluginID: NetworkPluginID.PLUGIN_EVM,
                 icon_url: `${CMC_STATIC_BASE_URL}/img/coins/64x64/${x.platform.coin.id}.png`,
             }))
-            .filter((x) => isValidChainId(x.chainId as ChainId))
+            .filter((x) => isValidChainId(x.chainId))
 
         function getPlatform(coinInfo: CoinInfo, contracts: TrendingAPI.Contract[], contract_address?: string) {
             if (isNativeTokenSymbol(coinInfo.symbol) && chainResolver.chainId(coinInfo.name))

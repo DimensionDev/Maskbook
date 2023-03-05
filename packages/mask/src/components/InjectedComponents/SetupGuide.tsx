@@ -3,13 +3,7 @@ import stringify from 'json-stable-stringify'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { NextIDProof } from '@masknet/web3-providers'
-import {
-    type PersonaIdentifier,
-    ProfileIdentifier,
-    type NextIDPlatform,
-    EnhanceableSite,
-    EncryptionTargetType,
-} from '@masknet/shared-base'
+import { type PersonaIdentifier, ProfileIdentifier, EnhanceableSite, EncryptionTargetType } from '@masknet/shared-base'
 import { useI18N } from '../../utils/index.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import {
@@ -102,7 +96,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         if (!userId) return
         if (!destinedPersonaInfo) return
 
-        const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
+        const platform = ui.configuration.nextIDConfig?.platform
         if (!platform) return
 
         const isBound = await NextIDProof.queryIsBound(destinedPersonaInfo.identifier.publicKeyAsHex, platform, userId)

@@ -9,7 +9,7 @@ export function createHostAPIs(isBackground: boolean): BasicHostHooks {
                 .then((x) => x.json())
                 .catch(() => ({}))
             // TODO: validate type of plugins here
-            return Object.entries(plugins) as Array<[string, any]>
+            return Object.entries(plugins)
         },
         async fetchManifest(id: string, isLocal: boolean) {
             const prefix: string = isLocal ? 'local-plugin' : 'plugin'

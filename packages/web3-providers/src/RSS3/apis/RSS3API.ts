@@ -43,7 +43,7 @@ export class RSS3API implements RSS3BaseAPI.Provider {
         }
         rss3.files.set(Object.assign(file, { [key]: value }))
         await rss3.files.sync()
-        return value as T
+        return value
     }
     async getDonations(address: string, { indicator, size = 100 }: HubOptions<ChainId> = {}) {
         if (!address) return createPageable([], createIndicator(indicator))

@@ -22,7 +22,7 @@ export function GasSettingsBar() {
         chainId,
     })
     const { value: defaultGasPrice = '1' } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const nativeToken = useMemo(() => createNativeToken(chainId!), [chainId])
+    const nativeToken = useMemo(() => createNativeToken(chainId), [chainId])
     const GAS_LIMIT = isNativeToken ? ETH_GAS_LIMIT : ERC20_GAS_LIMIT
     const { value: gasLimit = GAS_LIMIT } = useGasLimit()
 

@@ -467,7 +467,7 @@ export function ITO(props: ITO_Props) {
                 new BigNumber(availability?.swapped || 0).isGreaterThan(0) ? (
                     <Typography className={classes.footerInfo}>
                         {t('plugin_ito_wait_unlock_time', {
-                            unlockTime: formatDateTime(unlockTime!, 'yyyy-MM-dd HH:mm'),
+                            unlockTime: formatDateTime(unlockTime, 'yyyy-MM-dd HH:mm'),
                         })}
                     </Typography>
                 ) : null}

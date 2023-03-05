@@ -65,7 +65,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
             }),
         })
         if (!response?.data) return
-        return response.data.map((x) => createNonFungibleAsset(chainId as ChainId, x))
+        return response.data.map((x) => createNonFungibleAsset(chainId, x))
     }
 
     async getCoinActivities(

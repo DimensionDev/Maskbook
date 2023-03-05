@@ -237,15 +237,12 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                             <Grid item xs={6}>
                                 <Paper className={classes.data}>
                                     <Link
-                                        href={explorerResolver.addressLink(
-                                            chainId,
-                                            poolSettings?.qualificationAddress!,
-                                        )}
+                                        href={explorerResolver.addressLink(chainId, poolSettings?.qualificationAddress)}
                                         target="_blank"
                                         rel="noopener noreferrer">
                                         <Typography>
                                             <FormattedAddress
-                                                address={poolSettings?.qualificationAddress!}
+                                                address={poolSettings?.qualificationAddress}
                                                 size={4}
                                                 formatter={formatEthereumAddress}
                                             />
@@ -265,7 +262,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                             <Grid item xs={6}>
                                 <Paper className={classes.data}>
                                     <Typography>
-                                        {decodeRegionCode(poolSettings?.regions!).length}/{regionCodes.length}
+                                        {decodeRegionCode(poolSettings?.regions).length}/{regionCodes.length}
                                     </Typography>
                                 </Paper>
                             </Grid>
@@ -281,7 +278,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                             <Grid item xs={6}>
                                 <Paper className={classes.data}>
                                     <Typography>
-                                        {formatDateTime(poolSettings?.unlockTime!, 'yyyy-MM-dd HH:mm:ss')}
+                                        {formatDateTime(poolSettings?.unlockTime, 'yyyy-MM-dd HH:mm:ss')}
                                     </Typography>
                                 </Paper>
                             </Grid>

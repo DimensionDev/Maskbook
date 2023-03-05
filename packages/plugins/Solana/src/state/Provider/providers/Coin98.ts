@@ -1,5 +1,5 @@
 import { first } from 'lodash-es'
-import type { PublicKey, Transaction } from '@solana/web3.js'
+import type { Transaction } from '@solana/web3.js'
 import { injectedCoin98SolanaProvider } from '@masknet/injected-script'
 import type { Account } from '@masknet/web3-shared-base'
 import { type ChainId, Coin98MethodType, ProviderType } from '@masknet/web3-shared-solana'
@@ -12,23 +12,18 @@ export class Coin98Provider extends BaseInjectedProvider implements SolanaProvid
     }
 
     override async signMessage(message: string): Promise<string> {
-        const { signature } = (await this.bridge.request({
+        const { signature } = await this.bridge.request({
             method: Coin98MethodType.SOL_SIGN,
             params: [new TextEncoder().encode(message)],
-        })) as {
-            signature: string
-        }
+        })
         return signature
     }
 
     override async signTransaction(transaction: Transaction): Promise<Transaction> {
-        const { signature, publicKey } = (await this.bridge.request({
+        const { signature, publicKey } = await this.bridge.request({
             method: Coin98MethodType.SOL_SIGN,
             params: [transaction],
-        })) as {
-            signature: Buffer
-            publicKey: PublicKey
-        }
+        })
         transaction.addSignature(publicKey, signature)
         return transaction
     }
@@ -36,10 +31,10 @@ export class Coin98Provider extends BaseInjectedProvider implements SolanaProvid
     override async connect(chainId: ChainId): Promise<Account<ChainId>> {
         await this.readyPromise
 
-        const accounts = (await this.bridge.request({
+        const accounts = await this.bridge.request({
             method: Coin98MethodType.SOL_ACCOUNTS,
             params: [],
-        })) as string[]
+        })
 
         return {
             chainId,

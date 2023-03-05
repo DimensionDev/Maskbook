@@ -87,7 +87,7 @@ export const TokenSwapCard: FC<TokenSwapCardProps> = ({ feed, ...rest }) => {
                     }}
                     components={{
                         user: <Label title={feed.owner} />,
-                        platform: <Label title={feed.platform!} />,
+                        platform: <Label title={feed.platform} />,
                         bold: <Label />,
                     }}
                 />

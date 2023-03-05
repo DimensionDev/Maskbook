@@ -59,7 +59,7 @@ export async function storeAvatar(identifier: IdentifierWithAvatar, avatar: Arra
         if (hasNativeAPI) {
             // ArrayBuffer is unreachable on Native side.
             if (typeof avatar !== 'string') return
-            await nativeAPI?.api.store_avatar({ identifier: identifier.toText(), avatar: avatar as string })
+            await nativeAPI?.api.store_avatar({ identifier: identifier.toText(), avatar })
             return
         }
         if (typeof avatar === 'string') {

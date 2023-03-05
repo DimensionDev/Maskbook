@@ -108,7 +108,7 @@ export const LiquidityCard: FC<TokenFeedCardProps> = ({ feed, className, ...rest
                                     context: metadata?.action!,
                                 }}
                                 components={{
-                                    user: <Label title={action.address_from!} />,
+                                    user: <Label title={action.address_from} />,
                                     platform: <Label />,
                                     bold: <Label />,
                                 }}

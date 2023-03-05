@@ -6,7 +6,6 @@ import {
     makeTypedMessageEmpty,
     makeTypedMessageText,
     type TypedMessage,
-    type TypedMessageText,
 } from '@masknet/typed-message'
 import { assertNonNull } from '@masknet/kit'
 
@@ -65,7 +64,7 @@ export const postContentMessageParser = (node: HTMLElement) => {
             const flattened = flattenDeep(Array.from(node.childNodes, make))
             // conjunct text messages under same node
             if (flattened.every(isTypedMessageText))
-                return makeTypedMessageText((flattened as TypedMessageText[]).map((x) => x.content).join(''))
+                return makeTypedMessageText(flattened.map((x) => x.content).join(''))
             return flattened
         } else return makeTypedMessageEmpty()
     }

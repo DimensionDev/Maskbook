@@ -13,11 +13,7 @@ export default function SignIn() {
     const navigate = useNavigate()
 
     const { state: _state, search } = useLocation()
-    const state = _state as any as
-        | undefined
-        | {
-              from?: string
-          }
+    const state = _state as undefined | { from?: string }
 
     const from = new URLSearchParams(search).get('from')
 

@@ -136,7 +136,7 @@ export function useTradeCallback(
             const receipt = await connection.getTransactionReceipt(hash)
             return receipt?.transactionHash
         } catch (error: any) {
-            if (!(error as any)?.code) {
+            if (!error?.code) {
                 throw error
             }
             throw new Error(

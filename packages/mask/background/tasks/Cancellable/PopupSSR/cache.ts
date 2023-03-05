@@ -33,7 +33,7 @@ export function startListen(
         throttledTask()
     } else {
         session.get(CACHE_KEY).then((result) => {
-            if (result[CACHE_KEY]) cache = result[CACHE_KEY] as any
+            if (result[CACHE_KEY]) cache = result[CACHE_KEY]
             else throttledTask()
         })
     }

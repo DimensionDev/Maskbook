@@ -60,8 +60,8 @@ export function useTradeBreakdown(trade: Trade | null) {
                 realizedLPFeeAmount,
 
                 // different ver of @uniswap/sdk-core were used by @uniswap/v2-sdk and @uniswap/v3-sdk
-                realizedLPFee: trade.inputAmount.multiply(realizedLPFeePercent) as CurrencyAmount<Currency>,
-                priceImpact: trade.priceImpact.subtract(realizedLPFeePercent) as Percent,
+                realizedLPFee: trade.inputAmount.multiply(realizedLPFeePercent),
+                priceImpact: trade.priceImpact.subtract(realizedLPFeePercent),
             }
         } catch {
             return null

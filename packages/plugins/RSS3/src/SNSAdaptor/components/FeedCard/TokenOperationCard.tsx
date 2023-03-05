@@ -94,13 +94,13 @@ export const TokenOperationCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) =>
                         values={{
                             from,
                             to,
-                            value: formatValue(metadata!),
-                            symbol: metadata!.symbol,
+                            value: formatValue(metadata),
+                            symbol: metadata.symbol,
                             context,
                         }}
                         components={{
-                            from: <Label title={action.address_from!} />,
-                            to: <Label title={action.address_to!} />,
+                            from: <Label title={action.address_from} />,
+                            to: <Label title={action.address_to} />,
                             bold: <Label />,
                         }}
                     />
@@ -109,13 +109,13 @@ export const TokenOperationCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) =>
                         values={{
                             from,
                             to,
-                            value: formatValue(metadata!),
-                            symbol: metadata!.symbol,
+                            value: formatValue(metadata),
+                            symbol: metadata.symbol,
                             context,
                         }}
                         components={{
-                            from: <Label title={action.address_from!} />,
-                            to: <Label title={action.address_to!} />,
+                            from: <Label title={action.address_from} />,
+                            to: <Label title={action.address_to} />,
                             bold: <Label />,
                         }}
                     />

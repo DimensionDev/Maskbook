@@ -8,7 +8,7 @@ import { formatWriter, getMirrorUserId } from './utils.js'
 
 export const getCurrentUserInfo = async () => {
     if (location.host !== EnhanceableSite.Mirror) return
-    const userAddress = localStorage.getItem('mirror.userAddress') as string | null
+    const userAddress = localStorage.getItem('mirror.userAddress')
 
     if (!userAddress) return
     return Mirror.getWriter(userAddress)

@@ -92,7 +92,7 @@ export class TransactionState<ChainId extends PropertyKey, Transaction>
                 updatedAt: now,
                 status: TransactionStatusType.NOT_DEPEND,
                 candidates: {
-                    [id]: transaction as Transaction,
+                    [id]: transaction,
                 },
             },
             ...(all[chainId]?.[address_] ?? []),

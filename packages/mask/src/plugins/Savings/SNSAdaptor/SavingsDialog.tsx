@@ -170,7 +170,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                             tabPanel: classes.tabPanel,
                                             indicator: classes.indicator,
                                         }}
-                                        chains={chains.filter(Boolean) as ChainId[]}
+                                        chains={chains.filter(Boolean)}
                                         pluginID={NetworkPluginID.PLUGIN_EVM}
                                     />
                                 </div>

@@ -199,12 +199,10 @@ export const Prior1559GasSetting = memo(() => {
         ) {
             // if rpc payload contain gas price, set it to default values
             if (value?.formatterTransaction._tx.gasPrice) {
-                const minGasPrice = minGasPriceOfChain[chainId as ChainId]
+                const minGasPrice = minGasPriceOfChain[chainId]
                 // if the gas price in payload is lower than minimum value
                 if (minGasPrice && isLessThan(value.formatterTransaction._tx.gasPrice, minGasPrice)) {
-                    // it's a BigNumber so it's ok
-                    // eslint-disable-next-line @typescript-eslint/no-base-to-string
-                    setValue('gasPrice', (minGasPrice as BigNumber.Value).toString())
+                    setValue('gasPrice', new BigNumber(minGasPrice).toString())
                 }
                 setValue('gasPrice', formatWeiToGwei(value.formatterTransaction._tx.gasPrice).toString())
             } else {

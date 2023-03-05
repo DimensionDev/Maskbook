@@ -250,7 +250,7 @@ export function TrendingView(props: TrendingViewProps) {
                   }
                 : undefined,
         ]
-        return compact(configs).map((x) => <Tab value={x.key} key={x!.key} label={x.label} />)
+        return compact(configs).map((x) => <Tab value={x.key} key={x.key} label={x.label} />)
     }, [t, isSwappable, isNFT])
     // #endregion
 

@@ -1,11 +1,5 @@
 import { describe, expect, it, test } from 'vitest'
-import {
-    type DomainResult,
-    type NonFungibleCollectionResult,
-    type NonFungibleTokenResult,
-    SearchResultType,
-} from '@masknet/web3-shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
+import { SearchResultType } from '@masknet/web3-shared-base'
 import { DSearchAPI } from '../../src/DSearch/index.js'
 
 /* cspell:disable */
@@ -69,28 +63,37 @@ describe('DSearch test', () => {
 
     it('should return collection by twitter handle', async () => {
         const DSearch = new DSearchAPI()
-        const result = (await DSearch.search('mathcastles', SearchResultType.CollectionListByTwitterHandler)) as Array<
-            NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        >
+        const result = await DSearch.search('mathcastles', SearchResultType.CollectionListByTwitterHandler)
 
         expect(result.length).toBe(1)
-        expect(result[0]?.name).toBe('Terraforms')
+        if (result[0].type === SearchResultType.CollectionListByTwitterHandler) {
+            expect((result[0] as any)!.name).toBe('Terraforms')
+        } else {
+            expect(result[0].type).toBe(SearchResultType.CollectionListByTwitterHandler)
+        }
     })
 
     it('should return all the data with tag prefix', async () => {
         const DSearch = new DSearchAPI()
-        const result = (await DSearch.search('$eth')) as Array<
-            NonFungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        >
+        const result = await DSearch.search('$eth')
 
         expect(result.length).toBe(1)
-        expect(result[0]?.name).toBe('eth1')
+        if (result[0].type === SearchResultType.NonFungibleToken) {
+            expect(result[0].name).toBe('eth1')
+        } else {
+            expect(result[0].type).toBe(SearchResultType.FungibleToken)
+        }
     })
 
     test('searching lens profile', async () => {
         const DSearch = new DSearchAPI()
-        const result = (await DSearch.search('sujiyan.lens')) as Array<DomainResult<Web3Helper.ChainIdAll>>
+        const result = await DSearch.search('sujiyan.lens')
         expect(result.length).toBe(1)
-        expect(result[0].domain).toBe('sujiyan.lens')
+        expect((result[0] as any)!.domain).toBe('sujiyan.lens')
+        if ('name' in result[0]) {
+            expect(result[0].name).toBe('Sujiyan')
+        } else {
+            throw new Error('unknown type of result: ' + result[0].type)
+        }
     })
 })

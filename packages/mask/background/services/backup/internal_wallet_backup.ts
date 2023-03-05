@@ -76,7 +76,7 @@ function LegacyWalletRecordToJSONFormat(wallet: LegacyWalletRecord): NormalizedB
 
     // generate keys for managed wallet
     try {
-        const wallet_ = wallet as LegacyWalletRecord
+        const wallet_ = wallet
         backup.passphrase = Some(wallet_.passphrase)
         if (wallet_.mnemonic?.length)
             backup.mnemonic = Some<NormalizedBackup.Mnemonic>({
@@ -120,5 +120,5 @@ function keyToAddr(key: string, type: 'public' | 'private'): string {
     const ec = new EC('secp256k1')
     const key_ = key.replace(/^0x/, '')
     const keyPair = type === 'public' ? ec.keyFromPublic(key_) : ec.keyFromPrivate(key_)
-    return EthereumAddress.from(keyPair.getPublic(false, 'array') as any).address
+    return EthereumAddress.from(Buffer.from(keyPair.getPublic(false, 'array'))).address
 }

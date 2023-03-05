@@ -23,5 +23,5 @@ export async function getTweetData(tweetAddress: string) {
     const url = TWEET_BASE_URL + tweetAddress
     const response = await fetch(url)
     const tweetResponse: TweetDataResponse = await response.json()
-    return (tweetResponse as TweetDataResponse).results
+    return tweetResponse.results
 }

@@ -524,9 +524,7 @@ export class Web3API
                 contractERC721?.methods.symbol().call() ?? EMPTY_STRING,
             ])
 
-            const [name, symbol] = results.map((result) =>
-                result.status === 'fulfilled' ? result.value : '',
-            ) as string[]
+            const [name, symbol] = results.map((result) => (result.status === 'fulfilled' ? result.value : ''))
 
             return createNonFungibleTokenContract(
                 chainId,
@@ -544,7 +542,7 @@ export class Web3API
             contract?.methods.symbol().call() ?? EMPTY_STRING,
         ])
 
-        const [name, symbol] = results.map((result) => (result.status === 'fulfilled' ? result.value : '')) as string[]
+        const [name, symbol] = results.map((result) => (result.status === 'fulfilled' ? result.value : ''))
 
         return createNonFungibleTokenContract<ChainId, SchemaType.ERC721>(
             chainId,
@@ -567,7 +565,7 @@ export class Web3API
         // ERC721
         const contract = this.getERC721Contract(chainId, address)
         const results = await Promise.allSettled([contract?.methods.name().call() ?? EMPTY_STRING])
-        const [name] = results.map((result) => (result.status === 'fulfilled' ? result.value : '')) as string[]
+        const [name] = results.map((result) => (result.status === 'fulfilled' ? result.value : ''))
         return createNonFungibleTokenCollection(chainId, address, name ?? 'Unknown Token', '')
     }
 }

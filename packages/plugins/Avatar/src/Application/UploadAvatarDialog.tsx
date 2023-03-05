@@ -113,7 +113,7 @@ export const UploadAvatarDialog: FC = () => {
             <DialogContent className={classes.content}>
                 <AvatarEditor
                     ref={(e) => setEditor(e)}
-                    image={image!}
+                    image={image}
                     style={{ width: 'auto', height: 400, borderRadius: 8 }}
                     scale={scale}
                     rotate={0}

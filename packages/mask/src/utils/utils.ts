@@ -49,7 +49,7 @@ export function regexMatch(input: string, pattern: RegExp, index: number | null 
     const r = input.match(pattern)
     if (isNull(r)) return null
     if (index === null) {
-        return r as RegExpMatchArray as any
+        return r as any
     }
-    return r[index] as string as any
+    return r[index]
 }

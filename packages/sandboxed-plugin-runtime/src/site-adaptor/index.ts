@@ -58,7 +58,7 @@ export class SiteAdaptorPluginHost extends PluginRunner<SiteAdaptorHostHooks, Si
                 if (!data) return null
                 if (!('text' in data))
                     throw new TypeError('registerMetadataBadgeRender must return an object with text.')
-                const { text, tooltip } = data as any
+                const { text, tooltip } = data
                 // assert
                 Children.only(text)
                 tooltip && Children.only(tooltip)

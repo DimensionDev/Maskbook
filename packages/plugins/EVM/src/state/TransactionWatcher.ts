@@ -44,7 +44,7 @@ export class TransactionWatcher extends TransactionWatcherState<ChainId, Transac
         if (Transaction) {
             // update record status in transaction state
             if (status !== TransactionStatusType.NOT_DEPEND && transaction.from)
-                await Transaction.updateTransaction?.(chainId, transaction.from as string, id, status)
+                await Transaction.updateTransaction?.(chainId, transaction.from, id, status)
 
             // only tracked records will get notified
             if (transaction.from) {

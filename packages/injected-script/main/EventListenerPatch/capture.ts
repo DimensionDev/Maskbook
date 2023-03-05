@@ -79,7 +79,7 @@ export function dispatchEventRaw<T extends Event>(
     overwrites: Partial<T> = {},
 ) {
     let currentTarget: null | Node | Document = target
-    const event = getMockedEvent(eventBase, () => (isTwitter() ? target! : currentTarget!), overwrites)
+    const event = getMockedEvent(eventBase, () => (isTwitter() ? target : currentTarget) as any, overwrites)
     // Note: in firefox, "event" is "Opaque". Displayed as an empty object.
     const type = eventBase.type
     if (!CapturingEvents.has(type))
@@ -137,7 +137,7 @@ export function dispatchEventRaw<T extends Event>(
                     // HACK: https://github.com/DimensionDev/Maskbook/pull/4970/
                     if (key === 'currentTarget' || (key === 'target' && isTwitter()))
                         return unwrapXRayVision(currentTarget())
-                    return (source as any)[key] ?? (unwrapXRayVision(target) as any)[key]
+                    return (source as any)[key] ?? unwrapXRayVision(target)[key]
                 },
             }),
         )

@@ -3,5 +3,5 @@ import { useNetworkContext } from './useContext.js'
 
 export function useCurrentPluginID(expectedPluginID?: NetworkPluginID) {
     const { pluginID } = useNetworkContext()
-    return expectedPluginID ?? pluginID!
+    return expectedPluginID ?? pluginID
 }

@@ -231,12 +231,9 @@ export const GasSetting1559 = memo(() => {
             if (value?.formatterTransaction._tx.maxFeePerGas && value?.formatterTransaction._tx.maxPriorityFeePerGas) {
                 setValue(
                     'maxPriorityFeePerGas',
-                    fromWei(toFixed(value.formatterTransaction._tx.maxPriorityFeePerGas as string), 'gwei'),
+                    fromWei(toFixed(value.formatterTransaction._tx.maxPriorityFeePerGas), 'gwei'),
                 )
-                setValue(
-                    'maxFeePerGas',
-                    fromWei(toFixed(value.formatterTransaction._tx.maxFeePerGas as string), 'gwei'),
-                )
+                setValue('maxFeePerGas', fromWei(toFixed(value.formatterTransaction._tx.maxFeePerGas), 'gwei'))
             } else {
                 setOption(1)
             }

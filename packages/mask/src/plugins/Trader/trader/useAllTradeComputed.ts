@@ -4,7 +4,7 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useTrade as useNativeTokenTrade } from './native/useTrade.js'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed.js'
-import { type SwapOOData, type TradeInfo, TradeStrategy, type TradeComputed } from '../types/index.js'
+import { type TradeInfo, TradeStrategy } from '../types/index.js'
 import { useV3Trade as useUniswapV3Trade } from './uniswap/useTrade.js'
 import { useTradeComputed as useUniswapTradeComputed } from './uniswap/useTradeComputed.js'
 import { useTradeGasLimit as useUniswapTradeGasLimit } from './uniswap/useTradeGasLimit.js'
@@ -175,7 +175,7 @@ export function useAllTradeComputed(
         inputToken,
         outputToken,
     )
-    const openoceanSwapEstimateGas = useOpenOceanTradeGasLimit(openocean as TradeComputed<SwapOOData> | null)
+    const openoceanSwapEstimateGas = useOpenOceanTradeGasLimit(openocean)
 
     // trisolaris
     const {

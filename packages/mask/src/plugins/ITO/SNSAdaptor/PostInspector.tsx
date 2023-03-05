@@ -32,12 +32,9 @@ export function PostInspector(props: PostInspectorProps) {
         value: tokenDetailed,
         loading: _loadingToken,
         retry: retryToken,
-    } = useFungibleToken(
-        NetworkPluginID.PLUGIN_EVM,
-        typeof token === 'string' ? (token as string) : (token as FungibleToken<ChainId, SchemaType>).address,
-        undefined,
-        { chainId: _payload.chain_id },
-    )
+    } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, typeof token === 'string' ? token : token.address, undefined, {
+        chainId: _payload.chain_id,
+    })
 
     const exchangeFungibleTokens = useMemo(
         () =>
@@ -86,8 +83,8 @@ export function PostInspector(props: PostInspectorProps) {
                 typeof token === 'string'
                     ? {
                           ..._payload,
-                          token: tokenDetailed! as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>,
-                          exchange_tokens: exchangeTokensDetailed! as Array<
+                          token: tokenDetailed as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>,
+                          exchange_tokens: exchangeTokensDetailed as Array<
                               FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>
                           >,
                       }

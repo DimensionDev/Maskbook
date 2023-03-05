@@ -363,7 +363,7 @@ export class UserTransaction {
 
         return UserTransaction.fillUserOperation(chainId, {
             sender: formatEthereumAddress(from),
-            nonce: toNumber(nonce as number),
+            nonce: toNumber(nonce),
             callGas: transaction.gas ?? DEFAULT_USER_OPERATION.callGas,
             callData: coder.encodeFunctionCall(CALL_WALLET_TYPE, [to, value, data]),
             maxFeePerGas: transaction.maxFeePerGas ?? transaction.gasPrice ?? DEFAULT_USER_OPERATION.maxFeePerGas,

@@ -96,7 +96,7 @@ const CreateMnemonic = memo(() => {
 
     const [walletState, onSubmit] = useAsyncFn(async () => {
         const name = new URLSearchParams(location.search).get('name')
-        const password = (location.state as any)?.password
+        const password = location.state?.password
         // if the name doesn't exist, navigate to form page
         if (!name) {
             resetCallback()
@@ -130,7 +130,7 @@ const CreateMnemonic = memo(() => {
     }, [refreshCallback, resetCallback])
 
     useEffect(() => {
-        if (!(location.state as any)?.password && !hasPassword && !loading) navigate(-1)
+        if (!location.state?.password && !hasPassword && !loading) navigate(-1)
     }, [location.state, hasPassword, loading])
 
     return (

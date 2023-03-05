@@ -146,7 +146,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         payload.current.token = settings.token
 
         const record: RedPacketRecord = {
-            id: receipt.transactionHash!,
+            id: receipt.transactionHash,
             from: '',
             password: privateKey,
             contract_version,

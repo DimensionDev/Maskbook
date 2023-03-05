@@ -10,7 +10,7 @@ try {
             EventTarget.prototype.addEventListener = function (type, listener, options) {
                 old.call(this, type, listener)
                 if (typeof options === 'object' && options && options.signal) {
-                    options.signal!.addEventListener('abort', () => this.removeEventListener(type, listener), {
+                    options.signal.addEventListener('abort', () => this.removeEventListener(type, listener), {
                         once: true,
                     })
                 }
