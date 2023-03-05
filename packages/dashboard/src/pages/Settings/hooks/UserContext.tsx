@@ -1,4 +1,4 @@
-import { createContext, type PropsWithChildren, useState } from 'react'
+import { createContext, type PropsWithChildren, useState, useMemo, useCallback } from 'react'
 import SettingPasswordDialog from '../components/dialogs/SettingPasswordDialog.js'
 import { BackupPasswordConfirmDialog } from '../../../components/BackupPasswordConfirmDialog/index.js'
 
@@ -62,31 +62,40 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
     const [confirmCallback, setConfirmCallback] = useState<[ConfirmPasswordCallback] | null>(null)
     const [confirmOption, setConfirmOption] = useState<ConfirmPasswordOption>()
 
-    const updateUser = (obj: Partial<User>) => {
-        const updated = { ...user, ...obj }
-        setUser(updated)
-        localStorage.setItem('backupPassword', btoa(updated.backupPassword ?? ''))
-        localStorage.setItem('email', updated.email || '')
-        localStorage.setItem('phone', updated.phone || '')
-        localStorage.setItem('backupMethod', updated.backupMethod || '')
-        localStorage.setItem('backupAt', updated.backupAt || '')
-    }
+    const updateUser = useCallback(
+        (obj: Partial<User>) => {
+            const updated = { ...user, ...obj }
+            setUser(updated)
+            localStorage.setItem('backupPassword', btoa(updated.backupPassword ?? ''))
+            localStorage.setItem('email', updated.email || '')
+            localStorage.setItem('phone', updated.phone || '')
+            localStorage.setItem('backupMethod', updated.backupMethod || '')
+            localStorage.setItem('backupAt', updated.backupAt || '')
+        },
+        [user],
+    )
 
-    const ensurePasswordSet = (f: VerifyPasswordSet) => {
-        if (user.backupPassword) f()
-        else setCallback([f])
-    }
+    const ensurePasswordSet = useCallback(
+        (f: VerifyPasswordSet) => {
+            if (user.backupPassword) f()
+            else setCallback([f])
+        },
+        [user.backupPassword],
+    )
 
-    const confirmPassword = (f: ConfirmPasswordCallback, option?: ConfirmPasswordOption) => {
-        const { force = true } = option ?? {}
+    const confirmPassword = useCallback(
+        (f: ConfirmPasswordCallback, option?: ConfirmPasswordOption) => {
+            const { force = true } = option ?? {}
 
-        if (!force && !user.backupPassword && !option?.hasSmartPay) {
-            f()
-        } else {
-            setConfirmCallback([f])
-            setConfirmOption(option)
-        }
-    }
+            if (!force && !user.backupPassword && !option?.hasSmartPay) {
+                f()
+            } else {
+                setConfirmCallback([f])
+                setConfirmOption(option)
+            }
+        },
+        [user.backupPassword],
+    )
 
     const onSet = () => {
         callback?.[0]?.()
@@ -97,8 +106,17 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
         setConfirmCallback(null)
     }
 
+    const userContext = useMemo(
+        () => ({
+            user,
+            updateUser,
+            ensurePasswordSet,
+            confirmPassword,
+        }),
+        [user, updateUser, ensurePasswordSet, confirmPassword],
+    )
     return (
-        <UserContext.Provider value={{ user, updateUser, ensurePasswordSet, confirmPassword }}>
+        <UserContext.Provider value={userContext}>
             {children}
             <SettingPasswordDialog open={!!callback} onSet={onSet} onClose={() => setCallback(null)} />
             {!!confirmCallback && (

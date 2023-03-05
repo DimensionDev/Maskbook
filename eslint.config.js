@@ -158,7 +158,7 @@ const avoidMistakeRules = {
 
     // Performance
     'react/jsx-key': ['warn', { checkFragmentShorthand: true, checkKeyMustBeforeSpread: true, warnOnDuplicates: true }], // key={data.key}
-    // 'react/jsx-no-constructed-context-values': 'warn', // <Provider value={{}}> (should be cached!)
+    'react/jsx-no-constructed-context-values': 'warn', // <Provider value={{}}> (should be cached!)
     // 'react/no-array-index-key': 'warn', // no key={index}
     // 'react/no-object-type-as-default-prop': 'warn', // function Component({ items = [] })
     // 'unicorn/consistent-function-scoping': 'warn', // hoist unnecessary higher order functions

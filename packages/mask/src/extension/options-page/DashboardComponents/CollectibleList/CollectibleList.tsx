@@ -105,8 +105,9 @@ export function CollectibleList(props: CollectibleListProps) {
 
     const listRef = useRef<typeof Box>(null)
 
+    const context = useMemo(() => ({ collectiblesRetry: retry }), [retry])
     return (
-        <CollectibleListContext.Provider value={{ collectiblesRetry: retry }}>
+        <CollectibleListContext.Provider value={context}>
             <Box className={classes.list} ref={listRef}>
                 {loading ? <LoadingSkeleton className={classes.root} /> : null}
                 {error || (collectibles.length === 0 && !loading) ? (

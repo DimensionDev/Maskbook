@@ -286,21 +286,32 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
     const { isSNSConnectToCurrentPersona, currentPersonaPublicKey, currentSNSConnectedPersonaPublicKey } =
         ApplicationCurrentStatus ?? {}
 
+    const Context = useMemo(
+        () => ({
+            personaAction: personaConnectStatus.action,
+            isPersonaCreated: personaConnectStatus.hasPersona,
+            isPersonaConnected: personaConnectStatus.connected,
+            isNextIDVerify: personaConnectStatus.verified,
+            isSNSConnectToCurrentPersona,
+            shouldDisplayTooltipHint:
+                ApplicationCurrentStatus?.isSNSConnectToCurrentPersona === false && personaConnectStatus.connected,
+            shouldVerifyNextId: !!(!personaConnectStatus.verified && ApplicationCurrentStatus),
+            currentPersonaPublicKey,
+            currentSNSConnectedPersonaPublicKey,
+            isLoading: personaStatusLoading || personaAgainstSNSConnectStatusLoading,
+        }),
+        [
+            ApplicationCurrentStatus,
+            personaStatusLoading,
+            personaAgainstSNSConnectStatusLoading,
+            personaConnectStatus.action,
+            personaConnectStatus.hasPersona,
+            personaConnectStatus.connected,
+            personaConnectStatus.verified,
+        ],
+    )
     return (
-        <ApplicationEntryStatusContext.Provider
-            value={{
-                personaAction: personaConnectStatus.action,
-                isPersonaCreated: personaConnectStatus.hasPersona,
-                isPersonaConnected: personaConnectStatus.connected,
-                isNextIDVerify: personaConnectStatus.verified,
-                isSNSConnectToCurrentPersona,
-                shouldDisplayTooltipHint:
-                    ApplicationCurrentStatus?.isSNSConnectToCurrentPersona === false && personaConnectStatus.connected,
-                shouldVerifyNextId: !!(!personaConnectStatus.verified && ApplicationCurrentStatus),
-                currentPersonaPublicKey,
-                currentSNSConnectedPersonaPublicKey,
-                isLoading: personaStatusLoading || personaAgainstSNSConnectStatusLoading,
-            }}>
+        <ApplicationEntryStatusContext.Provider value={Context}>
             {props.children}
         </ApplicationEntryStatusContext.Provider>
     )
