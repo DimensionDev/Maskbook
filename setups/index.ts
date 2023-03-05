@@ -11,18 +11,16 @@ globalThis.Request = Request
 globalThis.Response = Response
 
 // Add `navigator` polyfill.
-// @ts-ignore
-globalThis.navigator = {
+Reflect.set(globalThis, 'navigator', {
     userAgent: 'vitest',
     language: 'en',
-}
+} as Navigator)
 
 // Add `screen` polyfill.
-// @ts-ignore
-globalThis.screen = {
+Reflect.set(globalThis, 'screen', {
     width: 0,
     height: 0,
-}
+} as Screen)
 
 const server = setupServer(...BundlerHandlers, ...DSearchHandlers)
 

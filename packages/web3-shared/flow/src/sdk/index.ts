@@ -9,7 +9,7 @@ export function createClient(chainId: ChainId) {
         'accessNode.api': authConstants.ACCESS_NODE_API ?? '',
         'app.detail.title': authConstants.MASK_APP_TITLE,
         'app.detail.icon': authConstants.MASK_APP_ICON,
-        // @ts-ignore
+        // @ts-expect-error untyped api?
         'challenge.handshake': authConstants.CHALLENGE_HANDSHAKE ?? '',
         'discovery.wallet.method': 'HTTP/POST',
     })

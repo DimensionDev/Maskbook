@@ -264,7 +264,6 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
             },
         },
         ignoreWarnings: [/Failed to parse source map/],
-        // @ts-ignore
         devServer: {
             hot: flags.hmr ? 'only' : false,
             liveReload: false,

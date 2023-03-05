@@ -145,7 +145,7 @@ export async function normalizeBackupVersion2(item: BackupJSONFileVersion2): Pro
 
     for (const wallet of wallets || []) {
         if (wallet.privateKey?.d && !wallet.publicKey) {
-            // @ts-ignore
+            // @ts-expect-error cjs-esm interop
             const ec = new (__.ec || __.default.ec)('secp256k1') as __.ec
             const key = ec.keyFromPrivate(wallet.privateKey.d)
             const hexPub = key.getPublic('hex').slice(2)

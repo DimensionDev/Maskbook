@@ -16,7 +16,7 @@ export function MaskUIRootPage(useTheme: () => Theme, children: React.ReactNode,
         (children) => <BuildInfo.Provider value={buildInfoMarkdown} children={children} />,
 
         // Provide the minimal environment (i18n context) for CrashUI in page mode
-        (children) => I18NextProviderHMR({ i18n: i18NextInstance, children }),
+        (children) => <I18NextProviderHMR i18n={i18NextInstance} children={children} />,
         (children) => StyledEngineProvider({ injectFirst: true, children }),
         (children) => <ErrorBoundary children={children} />,
         (children) => <MaskUIRoot useTheme={useTheme} fallback={fallback} children={children} />,

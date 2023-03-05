@@ -17,9 +17,7 @@ export const MuiArgs = {
     button: {
         disabled: { type: 'boolean' },
         ...enumIn<ButtonProps>({
-            // @ts-ignore
             color: (e) => e(['primary', 'success', 'warning', 'error', 'info']),
-            // @ts-ignore
             variant: (e) =>
                 e([
                     'contained',

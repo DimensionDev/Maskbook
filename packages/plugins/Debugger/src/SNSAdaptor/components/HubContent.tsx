@@ -170,7 +170,7 @@ export function HubContent(props: HubContentProps) {
                                             try {
                                                 console.log(`Query ${key}:`)
                                                 console.log(
-                                                    // @ts-ignore
+                                                    // @ts-expect-error the ...parameters call is unsafe
                                                     await hub?.[key]?.(...parameters, {
                                                         chainId,
                                                         account,

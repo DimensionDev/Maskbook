@@ -54,7 +54,6 @@ export function CrossChainBridgeDialog(props: CrossChainBridgeDialogProps) {
     const t = useI18N()
     const { classes } = useStyles(undefined, { props })
     const { open, onClose } = props
-    // @ts-ignore
     const bridges = getCrossChainBridge(t)
 
     return (

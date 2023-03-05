@@ -29,7 +29,6 @@ if (process.env.architecture === 'app') {
              * Typescript will not add the file to the project dependency tree
              * but webpack will do constant folding
              */
-            // @ts-ignore
             // eslint-disable-next-line no-useless-concat
             import('../../src/utils/native-rpc/' + 'Web.ts').then((x) => x.MaskNetworkAPI),
             {
@@ -40,7 +39,6 @@ if (process.env.architecture === 'app') {
         nativeAPI = { type: 'iOS', api }
     } else if (process.env.engine === 'firefox') {
         const api = (sharedNativeAPI = AsyncCall<AndroidNativeAPIs>(
-            // @ts-ignore
             // eslint-disable-next-line no-useless-concat
             import('../../src/utils/native-rpc/' + 'Web.ts').then((x) => x.MaskNetworkAPI),
             {

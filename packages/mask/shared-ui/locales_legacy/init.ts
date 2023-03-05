@@ -1,6 +1,8 @@
 import { i18NextInstance } from '@masknet/shared-base'
 
-// @ts-ignore to prevent TypeScript complains
+// Note: dashboard and mask has circular reference.To prevent typescript complain, this line is ignored.We cannot use expect here since dashboard might already built.
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { addDashboardI18N } from '@masknet/dashboard'
 import { addMaskI18N } from '../locales/languages.js'
 import { addSharedI18N } from '@masknet/shared'

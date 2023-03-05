@@ -106,11 +106,10 @@ export function useLineChart(
             .attr('stroke-width', 2)
             .attr(
                 'd',
-                // @ts-ignore
                 d3
                     .line()
-                    .x((d) => x((d as any).date))
-                    .y((d) => y((d as any).value)),
+                    .x((d) => x((d as any).date)!)
+                    .y((d) => y((d as any).value)!) as any,
             )
 
         // create tooltip

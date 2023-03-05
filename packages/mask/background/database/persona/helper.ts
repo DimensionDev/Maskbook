@@ -99,8 +99,8 @@ async function getLocalKeyOf(id: ProfileIdentifier, tx: FullPersonaDBTransaction
 
 // #region ECDH
 export async function deriveAESByECDH(pub: EC_Public_CryptoKey, of?: ProfileIdentifier | PersonaIdentifier) {
-    // @ts-expect-error
-    const curve = pub.algorithm.namedCurve || ''
+    // Note: the correct type should be EcKeyAlgorithm but it is missing in worker dts
+    const curve = (pub.algorithm as EcKeyImportParams).namedCurve || ''
     const sameCurvePrivateKeys = new Map<ECKeyIdentifier, EC_Private_JsonWebKey>()
 
     await createPersonaDBReadonlyAccess(async (tx) => {

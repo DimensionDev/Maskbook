@@ -108,7 +108,7 @@ export function useSwapParameters(
                 return {
                     address: routerV2Contract.options.address,
                     calldata: routerV2Contract.methods[methodName as keyof typeof routerV2Contract.methods](
-                        // @ts-ignore
+                        // @ts-expect-error unsafe call
                         ...args,
                     ).encodeABI(),
                     value,

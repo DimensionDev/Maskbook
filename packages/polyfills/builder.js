@@ -3,7 +3,6 @@ import { readFile, writeFile } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
 import builder from 'core-js-builder'
 import { rollup } from 'rollup'
-// @ts-expect-error
 import { loadConfigFile } from 'rollup/loadConfigFile'
 
 let polyfillVersion = '__'

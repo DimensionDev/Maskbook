@@ -2,7 +2,7 @@
 export async function devtoolsEval<T>(script: string, runInContentScript: boolean): Promise<T> {
     const [result, exception] = await browser.devtools.inspectedWindow.eval(
         script,
-        // @ts-expect-error
+        // @ts-expect-error .d.ts does not include this api.
         runInContentScript ? { useContentScriptContext: true } : undefined,
     )
     if (exception) {

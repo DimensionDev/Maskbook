@@ -123,9 +123,9 @@ export function createFungibleTokensFromConstants<T extends Constants<string>, C
     ) => {
         const chainIdGroup = keyBy(chainIds, 'value')
         return mapValues(chainIdGroup, ({ key: chainName, value: chainId }) => {
-            const evaluator = <R>(f: ((chainId: ChainId) => R) | R): R =>
-                // @ts-ignore
-                typeof f === 'function' ? f(chainId as ChainId) : f
+            function evaluator<R extends string | number>(f: ((chainId: ChainId) => R) | R): R {
+                return typeof f === 'function' ? f(chainId) : f
+            }
 
             return createFungibleToken<ChainId, SchemaType>(
                 chainId,

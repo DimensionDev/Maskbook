@@ -3,7 +3,7 @@ import { DevtoolsMessage, GLOBAL_ID_KEY, createReactDevToolsWall } from '../shar
 
 initialize(window)
 if (process.env.NODE_ENV === 'development') {
-    // @ts-expect-error
+    // @ts-expect-error conditionally import
     const { injectIntoGlobalHook } = require('react-refresh/runtime')
     injectIntoGlobalHook(window)
 }

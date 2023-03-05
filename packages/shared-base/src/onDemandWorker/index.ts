@@ -130,7 +130,7 @@ function throws() {
 }
 
 function cloneEvent(e: MessageEvent | ErrorEvent) {
-    // @ts-ignore
-    return new e.constructor(e.type, e)
+    if (e instanceof MessageEvent) return new MessageEvent(e.type, { data: e.data })
+    return new ErrorEvent(e.type, e)
 }
 type WorkerConstructorParameters = [stringUrl: string | URL, options?: WorkerOptions]

@@ -17,10 +17,11 @@ and limitations under the License.
 
 const functionPrototype = Object.getPrototypeOf(Function)
 // [[Metadata]] internal slot
-function id(x) {
-    return x
+class id {
+    constructor(id) {
+        return id
+    }
 }
-// @ts-ignore
 class Metadata extends id {
     constructor(item) {
         super(item)

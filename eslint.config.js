@@ -6,13 +6,12 @@ import UnusedImportsPlugin from 'eslint-plugin-unused-imports'
 import UnusedClassesPlugin from 'eslint-plugin-tss-unused-classes'
 import ReactPlugin from 'eslint-plugin-react'
 import ReactHooksPlugin from 'eslint-plugin-react-hooks'
-// @ts-expect-error
 import ImportPlugin from 'eslint-plugin-import'
 import TypeScriptPlugin from '@typescript-eslint/eslint-plugin'
-// @ts-expect-error
 import DimensionDevPlugin from '@dimensiondev/eslint-plugin'
 
 import { pathToFileURL } from 'url'
+
 // this is a patch to https://github.com/typescript-eslint/typescript-eslint/issues/3811
 if (pathToFileURL(process.argv[1]).toString().includes('eslint/bin/eslint.js')) {
     // cspell: disable-next-line
@@ -34,14 +33,17 @@ Object.keys(DimensionDevPlugin.rules)
 const avoidMistakeRules = {
     // Code quality
     'no-invalid-regexp': 'error', // RegEx
-    // 'unicorn/no-abusive-eslint-disable': 'error', // disable a rule requires a reason
-    // '@typescript-eslint/ban-ts-comment': {
-    //     'ts-expect-error': 'allow-with-description',
-    //     'ts-ignore': false,
-    //     'ts-nocheck': false,
-    //     'ts-check': true,
-    //     minimumDescriptionLength: 5,
-    // }, // disable a rule requires a reason
+    'unicorn/no-abusive-eslint-disable': 'error', // disable a rule requires a reason
+    '@typescript-eslint/ban-ts-comment': [
+        'error',
+        {
+            'ts-expect-error': 'allow-with-description',
+            'ts-ignore': true,
+            'ts-nocheck': true,
+            'ts-check': false,
+            minimumDescriptionLength: 5,
+        },
+    ], // disable a rule requires a reason
     /// React bad practice
     'react/no-invalid-html-attribute': 'warn',
     'react/void-dom-elements-no-children': 'error', // <img>children</img>
@@ -449,6 +451,7 @@ export default [
             '**/build',
             '**/dist',
             '**/i18n_generated.ts',
+            '**/languages.ts',
             '**/.storybook',
             'packages/contracts',
             'storybook-static',

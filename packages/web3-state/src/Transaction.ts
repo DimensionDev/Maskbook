@@ -7,8 +7,7 @@ import {
     type TransactionState as Web3TransactionState,
 } from '@masknet/web3-shared-base'
 
-export type TransactionStorage<ChainId, Transaction> = Record<
-    // @ts-ignore
+export type TransactionStorage<ChainId extends PropertyKey, Transaction> = Record<
     ChainId,
     | Record<
           // address
@@ -18,7 +17,9 @@ export type TransactionStorage<ChainId, Transaction> = Record<
     | undefined
 >
 
-export class TransactionState<ChainId, Transaction> implements Web3TransactionState<ChainId, Transaction> {
+export class TransactionState<ChainId extends PropertyKey, Transaction>
+    implements Web3TransactionState<ChainId, Transaction>
+{
     static MAX_RECORD_SIZE = 20
 
     public storage: StorageItem<TransactionStorage<ChainId, Transaction>> = null!
@@ -99,7 +100,6 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
 
         await this.storage.setValue({
             ...all,
-            // @ts-ignore
             [chainId]: {
                 ...all[chainId],
                 [address_]: transactions.slice(0, TransactionState.MAX_RECORD_SIZE),
@@ -132,7 +132,6 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
 
         await this.storage.setValue({
             ...all,
-            // @ts-ignore
             [chainId]: {
                 ...all[chainId],
                 [address_]: transactions,
@@ -167,7 +166,6 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
 
         await this.storage.setValue({
             ...all,
-            // @ts-ignore
             [chainId]: {
                 ...all[chainId],
                 [address_]: transactions,
@@ -181,7 +179,6 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
 
         await this.storage.setValue({
             ...all,
-            // @ts-ignore
             [chainId]: {
                 ...all[chainId],
                 [address_]: all[chainId]?.[address_]?.filter((x) => !Object.keys(x.candidates).includes(id)),
@@ -202,7 +199,6 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
 
         await this.storage.setValue({
             ...all,
-            // @ts-ignore
             [chainId]: {
                 ...all[chainId],
                 [address_]: [],

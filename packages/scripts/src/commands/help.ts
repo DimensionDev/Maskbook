@@ -1,8 +1,6 @@
 import { task } from '../utils/index.js'
 import Gulp from 'gulp'
-// @ts-ignore internal apis
 import logTasks from 'gulp-cli/lib/shared/log/tasks.js'
-// @ts-ignore
 import getTask from 'gulp-cli/lib/versioned/^4.0.0/log/get-task.js'
 
 export async function help() {
