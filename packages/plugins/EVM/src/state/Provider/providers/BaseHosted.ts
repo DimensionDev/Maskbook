@@ -113,15 +113,15 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         const address = this.options.formatAddress(wallet.address)
 
         // already added
-        if (this.wallets.some((x) => isSameAddress(x.address, address))) return
+        if (this.walletStorage?.wallets.value.some((x) => isSameAddress(x.address, address))) return
 
         await this.walletStorage?.wallets.setValue([
-            ...this.wallets,
+            ...(this.walletStorage?.wallets.value ?? []),
             {
                 ...wallet,
                 id: address,
                 address,
-                name: wallet.name.trim() || `Account ${this.wallets.length + 1}`,
+                name: wallet.name.trim() || `Account ${this.walletStorage?.wallets.value.length + 1}`,
                 createdAt: now,
                 updatedAt: now,
             },
@@ -132,12 +132,12 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         address: string,
         updates: Partial<Omit<Wallet, 'id' | 'address' | 'createdAt' | 'updatedAt' | 'storedKeyInfo'>>,
     ) {
-        const wallet = this.wallets.find((x) => isSameAddress(x.address, address))
+        const wallet = this.walletStorage?.wallets.value.find((x) => isSameAddress(x.address, address))
         if (!wallet) throw new Error('Failed to find wallet.')
 
         const now = new Date()
         await this.walletStorage?.wallets.setValue(
-            this.wallets.map((x) =>
+            this.walletStorage?.wallets.value.map((x) =>
                 isSameAddress(x.address, address)
                     ? {
                           ...x,
@@ -151,7 +151,7 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
     }
 
     override async updateOrAddWallet(wallet: Wallet) {
-        const target = this.wallets.find((x) => isSameAddress(x.address, wallet.address))
+        const target = this.walletStorage?.wallets.value.find((x) => isSameAddress(x.address, wallet.address))
         if (target) {
             return this.updateWallet(
                 target.address,
@@ -168,23 +168,30 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
     }
 
     override async removeWallet(address: string, password?: string | undefined) {
-        await this.walletStorage?.wallets.setValue(this.wallets?.filter((x) => !isSameAddress(x.address, address)))
+        await this.walletStorage?.wallets.setValue(
+            this.walletStorage?.wallets.value?.filter((x) => !isSameAddress(x.address, address)),
+        )
     }
 
     override async updateWallets(wallets: Wallet[]): Promise<void> {
         if (!wallets.length) return
         const result = wallets.filter(
-            (x) => !this.wallets.find((y) => isSameAddress(x.address, y.address) && isSameAddress(x.owner, y.owner)),
+            (x) =>
+                !this.walletStorage?.wallets.value.find(
+                    (y) => isSameAddress(x.address, y.address) && isSameAddress(x.owner, y.owner),
+                ),
         )
         await this.walletStorage?.wallets.setValue(
-            uniqWith([...this.wallets, ...result], (a, b) => isSameAddress(a.address, b.address)),
+            uniqWith([...(this.walletStorage?.wallets.value ?? []), ...result], (a, b) =>
+                isSameAddress(a.address, b.address),
+            ),
         )
     }
 
     override async removeWallets(wallets: Wallet[]): Promise<void> {
         if (!wallets.length) return
         await this.walletStorage?.wallets.setValue(
-            this.wallets?.filter((x) => !wallets.find((y) => isSameAddress(x.address, y.address))),
+            this.walletStorage?.wallets.value?.filter((x) => !wallets.find((y) => isSameAddress(x.address, y.address))),
         )
     }
 
