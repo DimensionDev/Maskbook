@@ -32,7 +32,7 @@ export function useDeploy(
     const snackbarKeyRef = useRef<SnackbarKey>()
     const t = useI18N()
 
-    const { Wallet, TransactionWatcher } = useWeb3State()
+    const { TransactionWatcher } = useWeb3State()
     const { signWithPersona, hasPaymentPassword, openPopupWindow } = useSNSAdaptorContext()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -84,7 +84,7 @@ export function useDeploy(
 
                 if (!result?.status) return
 
-                await Wallet?.addWallet({
+                await connection?.addWallet?.({
                     name: 'Smart Pay',
                     owner: signAccount.address,
                     identifier: signAccount.identifier?.toText(),
@@ -158,7 +158,7 @@ export function useDeploy(
 
             if (!deployResult?.status) return
 
-            await Wallet?.addWallet({
+            await connection?.addWallet?.({
                 name: 'Smart Pay',
                 owner: signAccount.address,
                 address: contractAccount.address,
@@ -212,6 +212,5 @@ export function useDeploy(
         nonce,
         onSuccess,
         TransactionWatcher,
-        Wallet,
     ])
 }

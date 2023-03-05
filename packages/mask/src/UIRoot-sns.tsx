@@ -2,6 +2,7 @@ import { Suspense, useMemo } from 'react'
 import { useSNSThemeMode } from '@masknet/plugin-infra/content-script'
 import { EnvironmentContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { TelemetryProvider } from '@masknet/web3-telemetry/hooks'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { I18NextProviderHMR, SharedContextProvider, SubscriptionProvider } from '@masknet/shared'
 import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
 import { ErrorBoundary, BuildInfo, useValueRef } from '@masknet/shared-base-ui'
@@ -35,7 +36,9 @@ function MaskUIRoot({ children }: React.PropsWithChildren<{}>) {
             <EnvironmentContextProvider value={context}>
                 <Web3ContextProvider value={context}>
                     <TelemetryProvider>
-                        <SubscriptionProvider>
+                        <SubscriptionProvider
+                            pluginID={NetworkPluginID.PLUGIN_EVM}
+                            providerType={ProviderType.MaskWallet}>
                             <I18NextProviderHMR i18n={i18NextInstance}>{children}</I18NextProviderHMR>
                         </SubscriptionProvider>
                     </TelemetryProvider>

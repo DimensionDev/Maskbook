@@ -1,4 +1,4 @@
-import { omit } from 'lodash-es'
+import { omit, uniqWith } from 'lodash-es'
 import type { RequestArguments } from 'web3-core'
 import { toHex } from 'web3-utils'
 import { delay } from '@masknet/kit'
@@ -18,7 +18,7 @@ import { BaseProvider } from './Base.js'
 import type { EVM_Provider } from '../types.js'
 
 export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
-    protected walletStorage:
+    private walletStorage:
         | StorageObject<{
               account: string
               chainId: ChainId
@@ -29,20 +29,18 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
     constructor(
         protected override providerType: ProviderType,
         protected initial?: {
+            formatAddress?: () => string
             isSupportedAccount?: (account: string) => Promise<boolean>
             isSupportedChainId?: (chainId: ChainId) => Promise<boolean>
             getDefaultAccount?: () => string
             getDefaultChainId?: () => ChainId
-            formatAddress?: () => string
         },
     ) {
         super(providerType)
     }
 
     override async setup() {
-        const context = await SharedContextSettings.readyPromise
-
-        const { storage: walletStorage } = context
+        const { storage: walletStorage } = SharedContextSettings.value
             .createKVStorage('memory', {})
             .createSubScope(`${this.providerType}_hosted`, {
                 account: this.options.getDefaultAccount(),
@@ -58,8 +56,8 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         await this.onAccountChanged()
         await this.onChainChanged()
 
-        this.walletStorage?.account.subscription.subscribe(this.onAccountChanged.bind(this))
-        this.walletStorage?.chainId.subscription.subscribe(this.onChainChanged.bind(this))
+        this.walletStorage.account.subscription.subscribe(this.onAccountChanged.bind(this))
+        this.walletStorage.chainId.subscription.subscribe(this.onChainChanged.bind(this))
     }
 
     protected get options() {
@@ -87,6 +85,15 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
             this.walletStorage?.account.initializedPromise,
             this.walletStorage?.chainId.initializedPromise,
         ]).then(() => {})
+    }
+
+    override get subscription() {
+        if (!this.walletStorage) return super.subscription
+        return {
+            account: this.walletStorage?.account.subscription,
+            chainId: this.walletStorage?.chainId.subscription,
+            wallets: this.walletStorage?.wallets.subscription,
+        }
     }
 
     get wallets() {
@@ -162,6 +169,23 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
 
     override async removeWallet(address: string, password?: string | undefined) {
         await this.walletStorage?.wallets.setValue(this.wallets?.filter((x) => !isSameAddress(x.address, address)))
+    }
+
+    override async updateWallets(wallets: Wallet[]): Promise<void> {
+        if (!wallets.length) return
+        const result = wallets.filter(
+            (x) => !this.wallets.find((y) => isSameAddress(x.address, y.address) && isSameAddress(x.owner, y.owner)),
+        )
+        await this.walletStorage?.wallets.setValue(
+            uniqWith([...this.wallets, ...result], (a, b) => isSameAddress(a.address, b.address)),
+        )
+    }
+
+    override async removeWallets(wallets: Wallet[]): Promise<void> {
+        if (!wallets.length) return
+        await this.walletStorage?.wallets.setValue(
+            this.wallets?.filter((x) => !wallets.find((y) => isSameAddress(x.address, y.address))),
+        )
     }
 
     private async onAccountChanged() {

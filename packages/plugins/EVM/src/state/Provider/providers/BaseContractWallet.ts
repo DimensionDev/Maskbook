@@ -11,7 +11,7 @@ import type { EVM_Provider } from '../types.js'
  * EIP-4337 compatible smart contract based wallet.
  */
 export class BaseContractWalletProvider extends BaseHostedProvider implements EVM_Provider {
-    protected ownerStorage:
+    private ownerStorage:
         | StorageItem<{
               account: string
               identifier: string
@@ -37,7 +37,9 @@ export class BaseContractWalletProvider extends BaseHostedProvider implements EV
 
         this.ownerStorage = storage.value
 
-        this.walletStorage?.wallets.subscription?.subscribe(async () => {
+        await this.ownerStorage.initializedPromise
+
+        this.subscription.wallets?.subscribe(async () => {
             if (!this.hostedAccount) return
             const target = this.wallets?.find((x) => isSameAddress(x.address, this.hostedAccount))
             const smartPayChainId = await SmartPayBundler.getSupportedChainId()

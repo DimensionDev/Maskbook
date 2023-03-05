@@ -45,9 +45,6 @@ const dashboard: Plugin.Dashboard.Definition<
 
         dashboard.Web3State = Web3State
         Web3StateSettings.value = Web3State
-
-        await Web3State.Wallet?.setup()
-        await Web3State.Provider?.setup()
     },
 }
 

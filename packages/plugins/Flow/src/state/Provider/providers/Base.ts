@@ -1,10 +1,19 @@
 import { Emitter } from '@servie/events'
 import type { Account, ProviderEvents, ProviderOptions, Wallet } from '@masknet/web3-shared-base'
-import type { ChainId, ProviderType, Web3, Web3Provider } from '@masknet/web3-shared-flow'
+import { EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
+import { ChainId, ProviderType, Web3, Web3Provider } from '@masknet/web3-shared-flow'
 import type { FlowProvider } from '../types.js'
 
 export class BaseProvider implements FlowProvider {
     emitter = new Emitter<ProviderEvents<ChainId, ProviderType>>()
+
+    get subscription() {
+        return {
+            account: createConstantSubscription(''),
+            chainId: createConstantSubscription(ChainId.Mainnet),
+            wallets: createConstantSubscription<Wallet[]>(EMPTY_LIST),
+        }
+    }
 
     get connected() {
         return false
@@ -36,6 +45,12 @@ export class BaseProvider implements FlowProvider {
         throw new Error('Method not implemented.')
     }
     removeWallet(address: string, password?: string | undefined): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+    updateWallets(wallets: Wallet[]): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+    removeWallets(wallets: Wallet[]): Promise<void> {
         throw new Error('Method not implemented.')
     }
     switchAccount(account?: string): Promise<void> {

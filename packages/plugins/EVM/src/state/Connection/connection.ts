@@ -278,6 +278,32 @@ class Connection implements EVM_Connection {
         )
     }
 
+    async updateWallets(
+        wallets: Wallet[],
+        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<void> {
+        await this.hijackedRequest<void>(
+            {
+                method: EthereumMethodType.MASK_UPDATE_WALLETS,
+                params: wallets,
+            },
+            this.getOptions(initial),
+        )
+    }
+
+    async removeWallets(
+        wallets: Wallet[],
+        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<void> {
+        await this.hijackedRequest<void>(
+            {
+                method: EthereumMethodType.MASK_REMOVE_WALLETS,
+                params: wallets,
+            },
+            this.getOptions(initial),
+        )
+    }
+
     async approveFungibleToken(
         address: string,
         recipient: string,

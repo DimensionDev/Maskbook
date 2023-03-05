@@ -45,9 +45,6 @@ const sns: Plugin.SNSAdaptor.Definition<
 
         sns.Web3State = Web3State
         Web3StateSettings.value = Web3State
-
-        await Web3State.Wallet?.setup()
-        await Web3State.Provider?.setup()
     },
 }
 

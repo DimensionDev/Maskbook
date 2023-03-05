@@ -1,6 +1,4 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { createConstantSubscription } from '@masknet/shared-base'
-import { ProviderType } from '@masknet/web3-shared-evm'
 import { AddressBook } from './AddressBook.js'
 import { Hub } from './Hub.js'
 import { RiskWarning } from './RiskWarning.js'
@@ -9,7 +7,6 @@ import { Transaction } from './Transaction.js'
 import { NameService } from './NameService.js'
 import { Connection } from './Connection.js'
 import { Provider } from './Provider.js'
-import { Wallet } from './Wallet.js'
 import { Others } from './Others.js'
 import { Settings } from './Settings.js'
 import { TransactionFormatter } from './TransactionFormatter.js'
@@ -24,11 +21,6 @@ export async function createWeb3State(
     signal: AbortSignal,
     context: Plugin.Shared.SharedUIContext,
 ): Promise<EVM_Web3State> {
-    const Wallet_ = new Wallet(context, {
-        providerType: createConstantSubscription(ProviderType.MaskWallet),
-    })
-    await Wallet_.setup()
-
     const Provider_ = new Provider(context)
     await Provider_.setup()
 
@@ -76,7 +68,6 @@ export async function createWeb3State(
             account: Provider_.account,
             providerType: Provider_.providerType,
         }),
-        Wallet: Wallet_,
         Others: new Others(context),
         Storage: new Storage(),
     }

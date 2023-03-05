@@ -1,13 +1,10 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { ProviderType } from '@masknet/web3-shared-flow'
-import { createConstantSubscription } from '@masknet/shared-base'
 import { AddressBook } from './AddressBook.js'
 import { Hub } from './Hub.js'
 import { Provider } from './Provider.js'
 import { Connection } from './Connection.js'
 import { Settings } from './Settings.js'
 import { Transaction } from './Transaction.js'
-import { Wallet } from './Wallet.js'
 import { Others } from './Others.js'
 import type { FlowWeb3State } from './Connection/types.js'
 import { IdentityService } from './IdentityService.js'
@@ -18,6 +15,7 @@ export async function createWeb3State(
     context: Plugin.Shared.SharedUIContext,
 ): Promise<FlowWeb3State> {
     const Provider_ = new Provider(context)
+    await Provider_.setup()
 
     return {
         AddressBook: new AddressBook(context, {
@@ -38,9 +36,6 @@ export async function createWeb3State(
             chainId: Provider_.chainId,
             account: Provider_.account,
             providerType: Provider_.providerType,
-        }),
-        Wallet: new Wallet(context, {
-            providerType: createConstantSubscription(ProviderType.Blocto),
         }),
         Others: new Others(context),
         Storage: new Storage(),

@@ -14,11 +14,20 @@ import {
     EthereumMethodType,
 } from '@masknet/web3-shared-evm'
 import type { EVM_Provider } from '../types.js'
+import { EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
 
 export class BaseProvider implements EVM_Provider {
     constructor(protected providerType: ProviderType) {}
 
     emitter = new Emitter<ProviderEvents<ChainId, ProviderType>>()
+
+    get subscription() {
+        return {
+            account: createConstantSubscription(''),
+            chainId: createConstantSubscription(ChainId.Mainnet),
+            wallets: createConstantSubscription<Wallet[]>(EMPTY_LIST),
+        }
+    }
 
     get connected() {
         return false
@@ -51,6 +60,12 @@ export class BaseProvider implements EVM_Provider {
         throw new Error('Method not implemented.')
     }
     removeWallet(address: string, password?: string | undefined): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+    updateWallets(wallets: Wallet[]): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+    removeWallets(wallets: Wallet[]): Promise<void> {
         throw new Error('Method not implemented.')
     }
 

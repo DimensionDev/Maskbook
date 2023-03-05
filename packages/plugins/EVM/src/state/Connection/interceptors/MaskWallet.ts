@@ -18,7 +18,6 @@ export class MaskWallet implements Middleware<ConnectionContext> {
         }
 
         const { account, chainId } = SharedContextSettings.value
-        const provider = Providers[ProviderType.MaskWallet]
 
         switch (context.request.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
@@ -27,10 +26,17 @@ export class MaskWallet implements Middleware<ConnectionContext> {
             case EthereumMethodType.ETH_ACCOUNTS:
                 context.write([account])
                 break
+            case EthereumMethodType.MASK_WALLETS:
+                try {
+                    context.write(Providers[ProviderType.MaskWallet].subscription.wallets.getCurrentValue())
+                } catch (error) {
+                    context.abort(context)
+                }
+                break
             case EthereumMethodType.MASK_ADD_WALLET:
                 try {
                     if (!context.wallet) throw new Error('No wallet to be added.')
-                    await provider.addWallet(context.wallet)
+                    await Providers[ProviderType.MaskWallet].addWallet(context.wallet)
                     context.write()
                 } catch (error) {
                     context.abort(context)
@@ -39,7 +45,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
             case EthereumMethodType.MASK_ADD_OR_UPDATE_WALLET:
                 try {
                     if (!context.wallet) throw new Error('No wallet to be added.')
-                    await provider.updateOrAddWallet(context.wallet)
+                    await Providers[ProviderType.MaskWallet].updateOrAddWallet(context.wallet)
                     context.write()
                 } catch (error) {
                     context.abort(context)
@@ -49,7 +55,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                 try {
                     const [address, updates] = context.requestArguments.params as [string, Wallet]
                     if (!isValidAddress(address)) throw new Error('Not a valid wallet address.')
-                    await provider.updateWallet(address, updates)
+                    await Providers[ProviderType.MaskWallet].updateWallet(address, updates)
                     context.write()
                 } catch (error) {
                     context.abort(context)
@@ -59,7 +65,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                 try {
                     const [address, name] = context.requestArguments.params as [string, string]
                     if (!isValidAddress(address)) throw new Error('Not a valid wallet address.')
-                    await provider.renameWallet(address, name)
+                    await Providers[ProviderType.MaskWallet].renameWallet(address, name)
                     context.write()
                 } catch (error) {
                     context.abort(context)
@@ -69,7 +75,27 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                 try {
                     const [address, password] = context.requestArguments.params as [string, string | undefined]
                     if (!isValidAddress(address)) throw new Error('Not a valid wallet address.')
-                    await provider.removeWallet(address, password)
+                    await Providers[ProviderType.MaskWallet].removeWallet(address, password)
+                    context.write()
+                } catch (error) {
+                    context.abort(context)
+                }
+                break
+            case EthereumMethodType.MASK_UPDATE_WALLETS:
+                try {
+                    const wallets = context.requestArguments.params as Wallet[]
+                    if (wallets.some((x) => !isValidAddress(x.address))) throw new Error('Not a valid wallet address.')
+                    await Providers[ProviderType.MaskWallet].updateWallets(wallets)
+                    context.write()
+                } catch (error) {
+                    context.abort(context)
+                }
+                break
+            case EthereumMethodType.MASK_REMOVE_WALLETS:
+                try {
+                    const wallets = context.requestArguments.params as Wallet[]
+                    if (wallets.some((x) => !isValidAddress(x.address))) throw new Error('Not a valid wallet address.')
+                    await Providers[ProviderType.MaskWallet].removeWallets(wallets)
                     context.write()
                 } catch (error) {
                     context.abort(context)
