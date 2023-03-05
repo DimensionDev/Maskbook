@@ -37,18 +37,9 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const { persona } = props
     const { showSnackbar } = useCustomSnackbar()
     const [, handleVerifyNextID] = useNextIDVerify()
-    const ui = activatedSocialNetworkUI
-    const [enableNextID] = useState(ui.configuration.nextIDConfig?.enable)
+    const [enableNextID] = useState(activatedSocialNetworkUI.configuration.nextIDConfig?.enable)
 
-    const {
-        value: { step, userId, currentIdentityResolved, destinedPersonaInfo, type } = {
-            step: SetupGuideStep.Close,
-            userId: '',
-            type: 'close',
-        },
-        loading: loadingSetupGuideStep,
-        retry: retryCheckStep,
-    } = useSetupGuideStepInfo(persona)
+    const { type, step, userId, currentIdentityResolved, destinedPersonaInfo } = useSetupGuideStepInfo(persona)
 
     // #region should not show notification if user have operation
     const [hasOperation, setOperation] = useState(false)
@@ -59,14 +50,14 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                 variant: 'success',
                 message: t('setup_guide_connected_description'),
             }),
-        [],
+        [t, showSnackbar],
     )
 
     useEffect(() => {
         if (!(type === 'done' && !hasOperation)) return
 
         notify()
-        currentSetupGuideStatus[ui.networkIdentifier].value = ''
+        currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier].value = ''
     }, [type, hasOperation, notify])
     // #endregion
 
@@ -79,7 +70,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     )
 
     const onConnect = useCallback(async () => {
-        const id = ProfileIdentifier.of(ui.networkIdentifier, userId)
+        const id = ProfileIdentifier.of(activatedSocialNetworkUI.networkIdentifier, userId)
         if (!id.some) return
         // attach persona with SNS profile
         await Services.Identity.attachProfile(id.val, persona, {
@@ -93,16 +84,16 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         setOperation(true)
         if (step !== SetupGuideStep.FindUsername) return
 
-        currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
+        currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier].value = stringify({
             status: SetupGuideStep.VerifyOnNextID,
         })
-    }, [ui.networkIdentifier, destinedPersonaInfo, step])
+    }, [activatedSocialNetworkUI.networkIdentifier, destinedPersonaInfo, step, persona, userId])
 
     const onVerify = useCallback(async () => {
         if (!userId) return
         if (!destinedPersonaInfo) return
 
-        const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
+        const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
         if (!platform) return
 
         const isBound = await NextIDProof.queryIsBound(destinedPersonaInfo.identifier.publicKeyAsHex, platform, userId)
@@ -114,22 +105,32 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     const onVerifyDone = useCallback(() => {
         if (step === SetupGuideStep.VerifyOnNextID) {
-            currentSetupGuideStatus[ui.networkIdentifier].value = ''
+            currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier].value = ''
         }
-        retryCheckStep()
-    }, [step, retryCheckStep])
+    }, [step])
 
     const onClose = useCallback(() => {
-        currentSetupGuideStatus[ui.networkIdentifier].value = ''
+        currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier].value = ''
         userPinExtension.value = true
-    }, [ui.networkIdentifier])
+    }, [])
+
+    const onCreate = useCallback(() => {
+        let content = t('setup_guide_say_hello_content')
+        if (activatedSocialNetworkUI.networkIdentifier === EnhanceableSite.Twitter) {
+            content += t('setup_guide_say_hello_follow', { account: '@realMaskNetwork' })
+        }
+
+        activatedSocialNetworkUI.automation.maskCompositionDialog?.open?.(makeTypedMessageText(content), {
+            target: EncryptionTargetType.Public,
+        })
+    }, [t])
 
     const onPinClose = useCallback(() => {
         userPinExtension.value = true
     }, [])
 
     const onPinDone = useCallback(() => {
-        const network = ui.networkIdentifier
+        const network = activatedSocialNetworkUI.networkIdentifier
         if (!userPinExtension.value) {
             userPinExtension.value = true
         }
@@ -138,18 +139,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         } else {
             onCreate()
         }
-    }, [])
-
-    const onCreate = () => {
-        let content = t('setup_guide_say_hello_content')
-        if (ui.networkIdentifier === EnhanceableSite.Twitter) {
-            content += t('setup_guide_say_hello_follow', { account: '@realMaskNetwork' })
-        }
-
-        ui.automation.maskCompositionDialog?.open?.(makeTypedMessageText(content), {
-            target: EncryptionTargetType.Public,
-        })
-    }
+    }, [onCreate])
 
     switch (step) {
         case SetupGuideStep.FindUsername:
@@ -159,10 +149,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                     username={userId}
                     avatar={currentIdentityResolved?.avatar}
                     onConnect={onConnect}
-                    onDone={retryCheckStep}
                     onClose={onClose}
                     enableNextID={enableNextID}
-                    stepUpdating={loadingSetupGuideStep}
                 />
             )
         case SetupGuideStep.VerifyOnNextID:
@@ -171,7 +159,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                     personaIdentifier={destinedPersonaInfo?.identifier}
                     personaName={destinedPersonaInfo?.nickname}
                     username={userId}
-                    network={ui.networkIdentifier}
+                    network={activatedSocialNetworkUI.networkIdentifier}
                     avatar={currentIdentityResolved?.avatar}
                     onVerify={onVerify}
                     onDone={onVerifyDone}
