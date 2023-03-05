@@ -115,7 +115,6 @@ const avoidMistakeRules = {
     '@typescript-eslint/require-array-sort-compare': 'error', // Array#sort(_required_)
     '@dimensiondev/type-no-instanceof-wrapper': 'warn', // bans `expr instanceof String` etc
     /// Footgun language features
-    // 'no-case-declarations': 'error', // case 1: let a = 1; case 2: a
     'no-compare-neg-zero': 'error', // x === -0 is wrong
     'no-new-wrappers': 'error', // wrapper objects are bad
     'no-unsafe-finally': 'error', // finally { return expr }
@@ -123,7 +122,7 @@ const avoidMistakeRules = {
     '@typescript-eslint/no-loss-of-precision': 'error', // 5123000000000000000000000000001 is 5123000000000000000000000000000 actually
     '@typescript-eslint/prefer-enum-initializers': 'warn', // add a new item in the middle is an API breaking change.
     /// Little-known language features
-    // 'no-constructor-return': 'error', // constructor() { return expr }
+    'no-constructor-return': 'error', // constructor() { return expr }
     'react/no-namespace': 'error', // <svg:rect> react does not support
     // '@typescript-eslint/no-unsafe-declaration-merging': 'error',
     '@typescript-eslint/no-mixed-enums': 'error', // enum { a = 1, b = "b" }

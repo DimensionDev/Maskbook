@@ -2,14 +2,7 @@ import { useCallback, useRef } from 'react'
 import { useAsyncFn } from 'react-use'
 import getUnixTime from 'date-fns/getUnixTime'
 import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import {
-    NetworkPluginID,
-    type PersonaInformation,
-    PopupRoutes,
-    ProofType,
-    SignType,
-    TimeoutController,
-} from '@masknet/shared-base'
+import { NetworkPluginID, type PersonaInformation, PopupRoutes, ProofType, SignType } from '@masknet/shared-base'
 import { useChainContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import type { OwnerAPI } from '@masknet/web3-providers/types'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -79,7 +72,7 @@ export function useDeploy(
                 if (!hash) return
 
                 const result = await connection?.confirmTransaction(hash, {
-                    signal: new TimeoutController(5 * 60 * 1000).signal,
+                    signal: AbortSignal.timeout(5 * 60 * 1000),
                 })
 
                 if (!result?.status) return
@@ -141,7 +134,7 @@ export function useDeploy(
             if (!hash) throw new Error('Deploy Failed')
 
             const result = await connection?.confirmTransaction(hash, {
-                signal: new TimeoutController(5 * 60 * 1000).signal,
+                signal: AbortSignal.timeout(5 * 60 * 1000),
             })
 
             if (!result?.status) return
@@ -153,7 +146,7 @@ export function useDeploy(
             if (!deployHash) return
 
             const deployResult = await connection?.confirmTransaction(deployHash, {
-                signal: new TimeoutController(5 * 60 * 1000).signal,
+                signal: AbortSignal.timeout(5 * 60 * 1000),
             })
 
             if (!deployResult?.status) return

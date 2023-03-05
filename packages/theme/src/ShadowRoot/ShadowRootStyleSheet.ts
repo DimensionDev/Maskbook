@@ -34,6 +34,8 @@ export class StyleSheet {
             const un_global = Reflect.get(options.container, 'sheet')
             if (!(un_global instanceof StyleSheet)) throw new TypeError()
 
+            // A hack to the emotion StyleSheet
+            // eslint-disable-next-line no-constructor-return
             return {
                 tags: [],
                 key: options.key,

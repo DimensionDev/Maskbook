@@ -6,7 +6,6 @@ import {
     formatPersonaFingerprint,
     NetworkPluginID,
     PopupRoutes,
-    TimeoutController,
 } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
@@ -176,7 +175,7 @@ export default function ChangeOwner() {
         if (!hash) return
 
         const result = await connection?.confirmTransaction(hash, {
-            signal: new TimeoutController(5 * 60 * 1000).signal,
+            signal: AbortSignal.timeout(5 * 60 * 1000),
         })
 
         if (!result?.status) return

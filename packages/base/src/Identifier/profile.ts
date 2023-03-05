@@ -34,6 +34,8 @@ export class ProfileIdentifier extends Identifier {
         if (!userID) throw new TypeError('[@masknet/base] userID cannot be empty.')
 
         const networkCache = (id[network] ??= {})
+        // return the cache to keep the object identity
+        // eslint-disable-next-line no-constructor-return
         if (networkCache[userID]) return networkCache[userID]
 
         banSlash(network)
