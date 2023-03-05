@@ -9,10 +9,7 @@ export class NoneProvider extends BaseProvider implements EVM_Provider {
         super(ProviderType.None)
     }
 
-    override async request<T extends unknown>(
-        requestArguments: RequestArguments,
-        options?: ProviderOptions<ChainId>,
-    ): Promise<T> {
+    override async request<T>(requestArguments: RequestArguments, options?: ProviderOptions<ChainId>): Promise<T> {
         return this.createWeb3Provider(options).request<T>(
             PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
         )

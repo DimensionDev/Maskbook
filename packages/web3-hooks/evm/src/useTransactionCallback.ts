@@ -3,7 +3,7 @@ import { useAsyncFn } from 'react-use'
 import type { PayableTransactionObject, PayableTx } from '@masknet/web3-contracts/types/types.js'
 import { TransactionEventType } from '@masknet/web3-shared-evm'
 
-export function useTransactionCallback<T extends unknown>(
+export function useTransactionCallback<T>(
     config: PayableTx | undefined,
     method: PayableTransactionObject<T> | undefined,
 ) {

@@ -24,7 +24,7 @@ export class HubStateBaseClient<ChainId> {
         }
     }
 
-    protected getPredicateProviders<T extends unknown>(
+    protected getPredicateProviders<T>(
         providers: Partial<Record<SourceType, T>>,
         defaultProviders: T[],
         initial?: HubOptions<ChainId>,

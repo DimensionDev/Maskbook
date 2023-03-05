@@ -69,7 +69,7 @@ class Connection implements EVM_Connection {
 
     // Hijack RPC requests and process them with koa like middleware
     private get hijackedRequest() {
-        return <T extends unknown>(requestArguments: RequestArguments, initial?: EVM_ConnectionOptions) => {
+        return <T>(requestArguments: RequestArguments, initial?: EVM_ConnectionOptions) => {
             return new Promise<T>(async (resolve, reject) => {
                 const options = this.getOptions(initial)
                 const context = createContext(this, requestArguments, options)

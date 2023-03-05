@@ -215,10 +215,7 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         await this.walletStorage?.chainId.setValue(chainId)
     }
 
-    override async request<T extends unknown>(
-        requestArguments: RequestArguments,
-        options?: ProviderOptions<ChainId>,
-    ): Promise<T> {
+    override async request<T>(requestArguments: RequestArguments, options?: ProviderOptions<ChainId>): Promise<T> {
         return Web3.getWeb3Provider(options?.chainId || this.hostedChainId).request<T>(
             PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
         )

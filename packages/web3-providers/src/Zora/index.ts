@@ -265,12 +265,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         throw new Error('Method not implemented.')
     }
 
-    private async getEventsFiltered<T extends unknown>(
-        chainId: ChainId,
-        address: string,
-        tokenId: string,
-        eventTypes: EventType[],
-    ) {
+    private async getEventsFiltered<T>(chainId: ChainId, address: string, tokenId: string, eventTypes: EventType[]) {
         if (!isValidChainId(chainId)) return []
         const response = await this.request<{
             events: {

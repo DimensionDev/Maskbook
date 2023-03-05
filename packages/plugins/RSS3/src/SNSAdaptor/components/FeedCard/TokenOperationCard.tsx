@@ -95,7 +95,7 @@ export const TokenOperationCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) =>
                             from,
                             to,
                             value: formatValue(metadata),
-                            symbol: metadata.symbol,
+                            symbol: metadata!.symbol,
                             context,
                         }}
                         components={{
@@ -110,7 +110,7 @@ export const TokenOperationCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) =>
                             from,
                             to,
                             value: formatValue(metadata),
-                            symbol: metadata.symbol,
+                            symbol: metadata!.symbol,
                             context,
                         }}
                         components={{

@@ -66,10 +66,10 @@ describe('DSearch test', () => {
         const result = await DSearch.search('mathcastles', SearchResultType.CollectionListByTwitterHandler)
 
         expect(result.length).toBe(1)
-        if (result[0].type === SearchResultType.CollectionListByTwitterHandler) {
-            expect((result[0] as any)!.name).toBe('Terraforms')
+        if (result[0].type === SearchResultType.NonFungibleCollection) {
+            expect(result[0].name).toBe('Terraforms')
         } else {
-            expect(result[0].type).toBe(SearchResultType.CollectionListByTwitterHandler)
+            expect(result[0].type).toBe(SearchResultType.NonFungibleCollection)
         }
     })
 
@@ -89,11 +89,10 @@ describe('DSearch test', () => {
         const DSearch = new DSearchAPI()
         const result = await DSearch.search('sujiyan.lens')
         expect(result.length).toBe(1)
-        expect((result[0] as any)!.domain).toBe('sujiyan.lens')
-        if ('name' in result[0]) {
-            expect(result[0].name).toBe('Sujiyan')
+        if (result[0].type === SearchResultType.Domain) {
+            expect(result[0].domain).toBe('sujiyan.lens')
         } else {
-            throw new Error('unknown type of result: ' + result[0].type)
+            expect(result[0].type).toBe(SearchResultType.Domain)
         }
     })
 })

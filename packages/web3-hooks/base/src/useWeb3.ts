@@ -8,7 +8,7 @@ import { useWeb3State } from './useWeb3State.js'
 export function useWeb3<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     options?: Web3Helper.Web3ConnectionOptions<T>,
-) {
+): Web3Helper.Web3Scope<S, T> | null {
     const { Connection } = useWeb3State(pluginID)
     const { account, chainId, providerType } = useChainContext()
 
@@ -21,5 +21,5 @@ export function useWeb3<S extends 'all' | void = void, T extends NetworkPluginID
         })
     }, [account, chainId, providerType, JSON.stringify(options)])
 
-    return web3 as Web3Helper.Web3Scope<S, T> | null
+    return web3 || null
 }

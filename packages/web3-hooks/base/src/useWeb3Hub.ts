@@ -7,7 +7,7 @@ import { useChainContext } from './useContext.js'
 export function useWeb3Hub<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     options?: Web3Helper.Web3HubOptionsScope<S, T>,
-) {
+): Web3Helper.Web3HubScope<S, T> | null {
     const { Hub } = useWeb3State(pluginID)
     const { account, chainId } = useChainContext()
 
@@ -19,5 +19,5 @@ export function useWeb3Hub<S extends 'all' | void = void, T extends NetworkPlugi
         })
     }, [account, chainId, Hub?.getHub, JSON.stringify(options)])
 
-    return hub as Web3Helper.Web3HubScope<S, T> | null
+    return hub || null
 }
