@@ -101,6 +101,7 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
     }
 
     override async removeWallet(address: string, password?: string | undefined): Promise<void> {
+        await super.removeWallet(address, password)
         await SharedContextSettings.value.removeWallet(address, password)
         CrossIsolationMessages.events.ownerDeletionEvent.sendToAll({ owner: address })
     }
