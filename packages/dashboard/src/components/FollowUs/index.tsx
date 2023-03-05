@@ -26,9 +26,11 @@ const TwitterColoredContainer = styled('div')(() => ({
     background: 'linear-gradient(90deg, rgba(253, 251, 251, 0.8) 0%, rgba(235, 237, 238, 0.8) 100%)',
 }))
 
+function openMaskNetwork() {
+    return openWindow('https://twitter.com/realMaskNetwork')
+}
 export function FollowUs() {
     const t = useDashboardI18N()
-    const openMaskNetwork = () => openWindow('https://twitter.com/realMaskNetwork')
     return (
         <div style={{ padding: '0 16px', height: 80, marginBottom: 16 }} onClick={() => openMaskNetwork()}>
             <FollowUsContainer>

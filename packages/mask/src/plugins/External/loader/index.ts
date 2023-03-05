@@ -31,11 +31,6 @@ async function fetchTemplate(url: string | null) {
 
 const indentLevel = 2
 function htmlToTemplate(top: NodeListOf<ChildNode>) {
-    function* text(indent: number, text: Text) {
-        for (const line of text.textContent?.split('\n') || '') {
-            yield `${getIndent(indent)}. ${line}`
-        }
-    }
     function* html(indent: number, node: HTMLElement): Generator<string> {
         yield `${getIndent(indent)}>${node.tagName.toLowerCase()}`
         for (const attr of node.attributes) {
@@ -49,11 +44,17 @@ function htmlToTemplate(top: NodeListOf<ChildNode>) {
             else if (node instanceof HTMLElement) yield* html(indent, node)
         }
     }
-    function getIndent(x: number) {
-        return ' '.repeat(x)
-    }
     function isText(node: ChildNode): node is Text {
         return node.nodeType === document.TEXT_NODE
     }
     return [...convertList(0, top)].join('\n')
+}
+
+function* text(indent: number, text: Text) {
+    for (const line of text.textContent?.split('\n') || '') {
+        yield `${getIndent(indent)}. ${line}`
+    }
+}
+function getIndent(x: number) {
+    return ' '.repeat(x)
 }

@@ -74,15 +74,11 @@ function ProfileCardHolder() {
         }
     }, [twitterId])
 
-    const handleClick = (event: React.MouseEvent) => {
-        event.stopPropagation()
-    }
-
     const { value: resolvedIdentity, loading: resolving } = useSocialIdentity(identity)
 
     return (
         <Fade in={active || openFromTrendingCard} easing="linear" timeout={250}>
-            <div className={classes.root} style={style} ref={holderRef} onClick={handleClick}>
+            <div className={classes.root} style={style} ref={holderRef} onClick={stopPropagation}>
                 {loading || resolving ? (
                     <div className={classes.loading}>
                         <LoadingBase size={36} />
@@ -93,4 +89,8 @@ function ProfileCardHolder() {
             </div>
         </Fade>
     )
+}
+
+function stopPropagation(event: React.MouseEvent) {
+    event.stopPropagation()
 }

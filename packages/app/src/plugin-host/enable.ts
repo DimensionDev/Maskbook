@@ -43,6 +43,7 @@ async function reject(): Promise<never> {
     throw new Error('Not implemented')
 }
 
+const asyncNoop = async () => {}
 const emptyEventRegistry: UnboundedRegistry<any> = {
     send: noop,
     off: noop,
@@ -50,7 +51,7 @@ const emptyEventRegistry: UnboundedRegistry<any> = {
     sendByBroadcast: noop,
     sendToAll: noop,
     sendToBackgroundPage: noop,
-    pause: () => async () => {},
+    pause: () => asyncNoop,
     sendToContentScripts: noop,
     sendToFocusedPage: noop,
     sendToLocal: noop,
@@ -58,7 +59,7 @@ const emptyEventRegistry: UnboundedRegistry<any> = {
     bind: () => ({
         off: noop,
         on: () => noop,
-        pause: () => async () => {},
+        pause: () => asyncNoop,
         send: noop,
     }),
     async *[Symbol.asyncIterator]() {},

@@ -51,14 +51,13 @@ interface NormalNFTProps {
     handleClose: () => void
 }
 
+function handleMenuShow(e: React.MouseEvent) {
+    e.preventDefault()
+}
 export function NormalNFT(props: NormalNFTProps) {
     const { start, infoShow, showMeta, handleClose } = props
     const { classes, cx } = useStyles()
     const { classes: boxClasses } = useBoxStyles()
-
-    const handleMenuShow = (e: React.MouseEvent) => {
-        e.preventDefault()
-    }
 
     const [position, setPosition] = useState({ x: 50, y: 150 })
     const moveHandle = (x: number, y: number) => {

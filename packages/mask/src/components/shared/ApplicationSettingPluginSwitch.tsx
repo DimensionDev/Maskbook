@@ -81,6 +81,11 @@ interface Props {
     focusPluginID?: PluginID | typeof DSearch_KEY
 }
 
+async function onSwitch(id: string, checked: boolean) {
+    if (id === PluginID.GoPlusSecurity && checked === false)
+        return CrossIsolationMessages.events.checkSecurityConfirmationDialogEvent.sendToAll({ open: true })
+    await Services.Settings.setPluginMinimalModeEnabled(id, !checked)
+}
 export const ApplicationSettingPluginSwitch = memo(({ focusPluginID }: Props) => {
     const { classes } = useStyles()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
@@ -99,12 +104,6 @@ export const ApplicationSettingPluginSwitch = memo(({ focusPluginID }: Props) =>
         if (!focusPluginID || noAvailablePlugins || !targetPluginRef.current) return
         targetPluginRef.current.scrollIntoView()
     }, [focusPluginID, noAvailablePlugins])
-
-    async function onSwitch(id: string, checked: boolean) {
-        if (id === PluginID.GoPlusSecurity && checked === false)
-            return CrossIsolationMessages.events.checkSecurityConfirmationDialogEvent.sendToAll({ open: true })
-        await Services.Settings.setPluginMinimalModeEnabled(id, !checked)
-    }
 
     return (
         <List>

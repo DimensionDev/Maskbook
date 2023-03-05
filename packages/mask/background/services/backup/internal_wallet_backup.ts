@@ -111,11 +111,11 @@ function keyToJWK(key: string, type: 'public' | 'private'): JsonWebKey {
         kty: 'EC',
         d: type === 'private' ? base64(privKey.toArray()) : undefined,
     }
-    function base64(nums: number[]) {
-        return toBase64URL(new Uint8Array(nums).buffer)
-    }
 }
 
+function base64(nums: number[]) {
+    return toBase64URL(new Uint8Array(nums).buffer)
+}
 function keyToAddr(key: string, type: 'public' | 'private'): string {
     const ec = new EC('secp256k1')
     const key_ = key.replace(/^0x/, '')

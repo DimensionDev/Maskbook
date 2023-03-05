@@ -73,55 +73,55 @@ export class PayloadEditor {
         return this.options?.chainId
     }
 
-    get config() {
-        const getRaw = () => {
-            const { method, params } = this.payload
-            switch (method) {
-                case EthereumMethodType.ETH_CALL:
-                case EthereumMethodType.ETH_ESTIMATE_GAS:
-                case EthereumMethodType.ETH_SIGN_TRANSACTION:
-                case EthereumMethodType.ETH_SEND_TRANSACTION:
-                    return (params as [Transaction])[0]
-                case EthereumMethodType.MASK_REPLACE_TRANSACTION:
-                    return (params as [string, Transaction])[1]
-                case EthereumMethodType.MASK_DEPLOY:
-                    if (!this.options?.chainId) throw new Error('Unknown chain id.')
+    private getRaw() {
+        const { method, params } = this.payload
+        switch (method) {
+            case EthereumMethodType.ETH_CALL:
+            case EthereumMethodType.ETH_ESTIMATE_GAS:
+            case EthereumMethodType.ETH_SIGN_TRANSACTION:
+            case EthereumMethodType.ETH_SEND_TRANSACTION:
+                return (params as [Transaction])[0]
+            case EthereumMethodType.MASK_REPLACE_TRANSACTION:
+                return (params as [string, Transaction])[1]
+            case EthereumMethodType.MASK_DEPLOY:
+                if (!this.options?.chainId) throw new Error('Unknown chain id.')
 
-                    const [owner] = params as [string]
+                const [owner] = params as [string]
 
-                    // compose a fake transaction to be accepted by Transaction Watcher
-                    return {
-                        from: owner,
-                        to: getSmartPayConstant(this.options?.chainId, 'CREATE2_FACTORY_CONTRACT_ADDRESS'),
-                        chainId: this.options?.chainId,
-                        data: new Web3().eth.abi.encodeFunctionCall(
-                            CREATE2_FACTORY_ABI.find((x) => x.name === 'deploy')! as AbiItem,
-                            ['0x', toHex(0)],
-                        ),
-                    }
-                case EthereumMethodType.MASK_FUND:
-                    if (!this.options?.chainId) throw new Error('Unknown chain id.')
+                // compose a fake transaction to be accepted by Transaction Watcher
+                return {
+                    from: owner,
+                    to: getSmartPayConstant(this.options?.chainId, 'CREATE2_FACTORY_CONTRACT_ADDRESS'),
+                    chainId: this.options?.chainId,
+                    data: new Web3().eth.abi.encodeFunctionCall(
+                        CREATE2_FACTORY_ABI.find((x) => x.name === 'deploy')! as AbiItem,
+                        ['0x', toHex(0)],
+                    ),
+                }
+            case EthereumMethodType.MASK_FUND:
+                if (!this.options?.chainId) throw new Error('Unknown chain id.')
 
-                    const [proof] = params as [Proof]
-                    const { ownerAddress, nonce = 0 } = JSON.parse(proof.payload) as ProofPayload
+                const [proof] = params as [Proof]
+                const { ownerAddress, nonce = 0 } = JSON.parse(proof.payload) as ProofPayload
 
-                    // compose a fake transaction to be accepted by Transaction Watcher
-                    return {
-                        from: ownerAddress,
-                        // it's a not-exist address, use the zero address as a placeholder
-                        to: ZERO_ADDRESS,
-                        chainId: this.options?.chainId,
-                        data: new Web3().eth.abi.encodeFunctionCall(
-                            CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem,
-                            [ownerAddress, toHex(nonce)],
-                        ),
-                    }
-                default:
-                    return
-            }
+                // compose a fake transaction to be accepted by Transaction Watcher
+                return {
+                    from: ownerAddress,
+                    // it's a not-exist address, use the zero address as a placeholder
+                    to: ZERO_ADDRESS,
+                    chainId: this.options?.chainId,
+                    data: new Web3().eth.abi.encodeFunctionCall(
+                        CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem,
+                        [ownerAddress, toHex(nonce)],
+                    ),
+                }
+            default:
+                return
         }
+    }
 
-        const raw = getRaw()
+    get config() {
+        const raw = this.getRaw()
 
         return {
             ...raw,
@@ -168,12 +168,6 @@ export class PayloadEditor {
 
     get signableConfig() {
         if (!this.config) return
-
-        const parseHexNumberString = (hex: string | number | undefined) =>
-            typeof hex !== 'undefined' ? hexToNumberString(hex ?? '0x0') : undefined
-
-        const parseHexNumber = (hex: string | number | undefined) =>
-            typeof hex !== 'undefined' ? hexToNumber(hex) : undefined
 
         return omitBy(
             {
@@ -247,4 +241,12 @@ export class PayloadEditor {
     static fromPayload(payload: JsonRpcPayload, options?: Options) {
         return new PayloadEditor(payload, options)
     }
+}
+
+function parseHexNumberString(hex: string | number | undefined) {
+    return typeof hex !== 'undefined' ? hexToNumberString(hex ?? '0x0') : undefined
+}
+
+function parseHexNumber(hex: string | number | undefined) {
+    return typeof hex !== 'undefined' ? hexToNumber(hex) : undefined
 }

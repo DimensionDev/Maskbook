@@ -161,7 +161,7 @@ const avoidMistakeRules = {
     'react/jsx-no-constructed-context-values': 'warn', // <Provider value={{}}> (should be cached!)
     // 'react/no-array-index-key': 'warn', // no key={index}
     // 'react/no-object-type-as-default-prop': 'warn', // function Component({ items = [] })
-    // 'unicorn/consistent-function-scoping': 'warn', // hoist unnecessary higher order functions
+    'unicorn/consistent-function-scoping': 'warn', // hoist unnecessary higher order functions
     // 'unicorn/no-unsafe-regex': 'warn', // prevent RegExDoS
 }
 const codeStyleRules = {
@@ -488,6 +488,12 @@ export default [
             ...avoidMistakeRules,
             ...codeStyleRules,
             ...moduleSystemRules,
+        },
+    },
+    {
+        files: ['packages/**/tests/**/*.ts'],
+        rules: {
+            'unicorn/consistent-function-scoping': 'off',
         },
     },
 ]

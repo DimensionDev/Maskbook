@@ -11,6 +11,7 @@ import { NFTBadgeTimeline, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
 import { isMobileFacebook } from '../../utils/isMobile.js'
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
+import { noop } from 'lodash-es'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -76,7 +77,7 @@ function getFacebookId(element: HTMLElement | SVGElement) {
 function _(selector: () => LiveSelector<HTMLElement | SVGElement, false>, signal: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(selector()).useForeach((element, key) => {
-            let remove = () => {}
+            let remove = noop
 
             const run = async () => {
                 const facebookId = getFacebookId(element)

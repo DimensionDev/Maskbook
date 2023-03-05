@@ -29,6 +29,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+function onConfirm() {
+    return context.setMinimalMode(PluginID.GoPlusSecurity, true)
+}
 function CheckSecurityConfirmDialog() {
     const t = useI18N()
     const { classes } = useStyles()
@@ -42,8 +45,6 @@ function CheckSecurityConfirmDialog() {
     }, [])
 
     const onClose = () => setOpen(false)
-
-    const onConfirm = () => context.setMinimalMode(PluginID.GoPlusSecurity, true)
 
     return (
         <InjectedDialog

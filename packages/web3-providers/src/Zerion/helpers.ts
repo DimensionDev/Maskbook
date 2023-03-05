@@ -14,13 +14,14 @@ export function isValidAsset(data: ZerionAddressPosition) {
     return isValidAddress(address)
 }
 
+function isNativeToken(symbol: string) {
+    return ['ETH', 'BNB', 'MATIC', 'ARETH', 'AETH', 'ONE', 'ASTR', 'XDAI'].includes(symbol)
+}
 export function formatAsset(chainId: ChainId, data: ZerionAddressPosition): FungibleAsset<ChainId, SchemaType> {
     const { asset, chain, quantity } = data
     const { address: address_, decimals } = asset.implementations[chain]
     const balance = leftShift(quantity, decimals).toNumber()
     const price = asset.price?.value ?? 0
-    const isNativeToken = (symbol: string) =>
-        ['ETH', 'BNB', 'MATIC', 'ARETH', 'AETH', 'ONE', 'ASTR', 'XDAI'].includes(symbol)
     const address = isNativeToken(asset.symbol) ? getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS', '') : address_
 
     return {

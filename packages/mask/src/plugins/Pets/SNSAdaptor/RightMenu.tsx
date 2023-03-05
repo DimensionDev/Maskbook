@@ -113,11 +113,6 @@ function RightMenu(props: Props) {
         props.onClose()
     }
 
-    function stopPop(e: React.MouseEvent) {
-        e.stopPropagation()
-        e.nativeEvent.stopPropagation()
-    }
-
     return (
         <div
             ref={refMenuDom}
@@ -142,3 +137,8 @@ function RightMenu(props: Props) {
 }
 
 export default RightMenu
+
+function stopPop(e: React.MouseEvent) {
+    e.stopPropagation()
+    e.nativeEvent.stopPropagation()
+}

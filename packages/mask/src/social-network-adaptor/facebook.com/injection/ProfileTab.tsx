@@ -82,24 +82,23 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
+function styleTab(textColor: string, borderColor: string) {
+    const ele = profileTabSelectedSelector().evaluate()
+    if (!ele) return
+
+    const textEle = ele.querySelector('span')
+    const borderEle = ele.querySelector('span ~ div:last-child') as HTMLDivElement
+    if (!textEle || !borderEle) return
+    textEle.style.color = textColor
+    borderEle.style.backgroundColor = borderColor
+
+    const iconEle = ele.querySelector('svg')
+    if (!iconEle) return
+    iconEle.style.fill = textColor
+}
 export function ProfileTabAtFacebook() {
     const { classes } = useStyles()
     const [action, setAction] = useState('reset')
-
-    function styleTab(textColor: string, borderColor: string) {
-        const ele = profileTabSelectedSelector().evaluate()
-        if (!ele) return
-
-        const textEle = ele.querySelector('span')
-        const borderEle = ele.querySelector('span ~ div:last-child') as HTMLDivElement
-        if (!textEle || !borderEle) return
-        textEle.style.color = textColor
-        borderEle.style.backgroundColor = borderColor
-
-        const iconEle = ele.querySelector('svg')
-        if (!iconEle) return
-        iconEle.style.fill = textColor
-    }
 
     function clear() {
         setAction('clear')

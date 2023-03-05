@@ -142,6 +142,7 @@ export function isTradeBetter(
     }
 }
 
+const wrapEtherMemo = memoize((chainId: ChainId) => toUniswapToken(chainId, WNATIVE[chainId]))
 export class ExtendedEther extends Ether {
     public override get wrapped(): Token {
         if (this.chainId in WNATIVE) return ExtendedEther.wrapEther(this.chainId)
@@ -154,7 +155,5 @@ export class ExtendedEther extends Ether {
         return this._cachedEther[chainId] ?? (this._cachedEther[chainId] = new ExtendedEther(chainId))
     }
 
-    public static wrapEther: (chainID: ChainId) => Token = memoize((chainId: ChainId) =>
-        toUniswapToken(chainId, WNATIVE[chainId]),
-    )
+    public static wrapEther: (chainID: ChainId) => Token = wrapEtherMemo
 }

@@ -10,6 +10,11 @@ import { base } from '../base.js'
 import { setupContext } from '../context.js'
 import { SharedContextSettings } from '../settings.js'
 
+function clickHandler() {
+    CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
+        open: true,
+    })
+}
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
@@ -47,11 +52,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
             return {
                 RenderEntryComponent(EntryComponentProps) {
-                    const clickHandler = () => {
-                        CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
-                            open: true,
-                        })
-                    }
                     return (
                         <ApplicationEntry
                             title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}

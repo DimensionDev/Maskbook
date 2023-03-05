@@ -3,6 +3,7 @@ import { Plugin } from '@masknet/plugin-infra'
 import { Avatar } from '../../../../components/InjectedComponents/Avatar.js'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { inpageAvatarSelector } from '../../utils/selector.js'
+import { noop } from 'lodash-es'
 
 function getTwitterId(ele: HTMLElement) {
     const profileLink = ele.querySelector('a[role="link"]') as HTMLAnchorElement
@@ -13,7 +14,7 @@ function getTwitterId(ele: HTMLElement) {
 export async function injectAvatar(signal: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(inpageAvatarSelector()).useForeach((ele) => {
-            let remover = () => {}
+            let remover = noop
             const remove = () => remover()
 
             const run = async () => {

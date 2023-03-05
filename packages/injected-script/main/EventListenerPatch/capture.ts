@@ -43,6 +43,8 @@ defineFunctionOnContentObject(
     },
 )
 
+const noop = () => {}
+Object.freeze(noop)
 function normalizeAddEventListenerArgs(
     args: Parameters<EventTarget['addEventListener']>,
 ): EventListenerDescriptor & { type: string; f: EventListener } {
@@ -51,7 +53,7 @@ function normalizeAddEventListenerArgs(
     const listener = args[1]
     const options = args[2]
 
-    let f: EventListener = () => {}
+    let f: EventListener = noop
     if (typeof listener === 'function') f = listener
     else if (typeof listener === 'object' && listener !== null) {
         const _f = listener.handleEvent

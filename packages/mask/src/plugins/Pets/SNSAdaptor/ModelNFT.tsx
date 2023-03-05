@@ -50,6 +50,9 @@ interface ModelNFTProps {
     showMeta: ShowMeta | undefined
 }
 
+function handleMenuShow(e: React.MouseEvent) {
+    e.preventDefault()
+}
 export function ModelNFT(props: ModelNFTProps) {
     const { start, showMeta } = props
     const { classes, cx } = useStyles()
@@ -57,13 +60,6 @@ export function ModelNFT(props: ModelNFTProps) {
     const [position, setPosition] = useState({ x: 50, y: 150 })
     const moveHandle = (x: number, y: number) => {
         setPosition({ x, y })
-        setMenuShow(false)
-    }
-
-    const [isMenuShow, setMenuShow] = useState(false)
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-    const handleMenuShow = (e: React.MouseEvent) => {
-        e.preventDefault()
     }
     return (
         <div>

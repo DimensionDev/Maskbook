@@ -103,10 +103,11 @@ async function recoverWalletFromPrivateKey(privateKey: string) {
         privateKeyInHex: privateKey.startsWith('0x') ? privateKey : `0x${privateKey}`,
         mnemonic: [],
     }
-    function privateKeyVerify(key: string) {
-        if (!/[\da-f]{64}/i.test(key)) return false
-        const k = new BigNumber(key, 16)
-        const n = new BigNumber('fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141', 16)
-        return !k.isZero() && k.isLessThan(n)
-    }
+}
+
+function privateKeyVerify(key: string) {
+    if (!/[\da-f]{64}/i.test(key)) return false
+    const k = new BigNumber(key, 16)
+    const n = new BigNumber('fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141', 16)
+    return !k.isZero() && k.isLessThan(n)
 }

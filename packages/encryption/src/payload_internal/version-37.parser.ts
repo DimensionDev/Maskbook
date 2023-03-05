@@ -79,12 +79,12 @@ async function parseEncryption(encryption: unknown): Promise<PayloadParseResult.
         if (typeof item !== 'object' || item === null) return {}
         return Object.fromEntries(await Promise.all(Object.entries(item).map(parseAuthorEphemeralPublicKey)))
     }
-    async function parseAuthorEphemeralPublicKey([key, value]: [string | number, unknown]) {
-        const isEnumLike = Number.parseInt(key.toString(), 10)
-        if (!Number.isNaN(isEnumLike)) key = isEnumLike
-        const result = await importAsymmetryKey(key, value, 'authorEphemeralPublicKey')
-        return [key, result] as const
-    }
+}
+async function parseAuthorEphemeralPublicKey([key, value]: [string | number, unknown]) {
+    const isEnumLike = Number.parseInt(key.toString(), 10)
+    if (!Number.isNaN(isEnumLike)) key = isEnumLike
+    const result = await importAsymmetryKey(key, value, 'authorEphemeralPublicKey')
+    return [key, result] as const
 }
 async function parseAES(aes: unknown) {
     return andThenAsync(assertUint8Array(aes, 'aes', CryptoException.InvalidCryptoKey), importAES256)

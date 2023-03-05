@@ -26,13 +26,12 @@ export async function requestExtensionPermission(permission: Permissions.Permiss
             browser.windows.onRemoved.removeListener(listener)
         })
     })
-
-    function sendNotification(result: boolean) {
-        if (result) MaskMessages.events.hostPermissionChanged.sendToAll()
-        return result
-    }
 }
 
+function sendNotification(result: boolean) {
+    if (result) MaskMessages.events.hostPermissionChanged.sendToAll()
+    return result
+}
 export async function requestHostPermission(origins: readonly string[]) {
     const currentOrigins = (await browser.permissions.getAll()).origins || []
     const extra = origins.filter((i) => !currentOrigins?.includes(i))

@@ -66,13 +66,12 @@ const useStyles = makeStyles<{ buttonSize: number; fontSize: number }>()((theme,
         fontSize,
     },
 }))
-
+function clickHandler() {
+    CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
+        open: true,
+    })
+}
 function OpenNFTAvatarEditProfileButtonInTwitter() {
-    const clickHandler = () => {
-        CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
-            open: true,
-        })
-    }
     const personas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)

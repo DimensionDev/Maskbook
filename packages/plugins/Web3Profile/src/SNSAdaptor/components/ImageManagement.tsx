@@ -106,6 +106,9 @@ export interface ImageManagementProps {
     getWalletHiddenRetry: () => void
     unlistedCollectionConfig?: UnlistedConfig['collections'][string]
 }
+async function openPopupsWindow() {
+    await context.openPopupWindow(PopupRoutes.ConnectWallet)
+}
 export function ImageManagement({
     scene,
     currentPersona,
@@ -136,9 +139,6 @@ export function ImageManagement({
 
     const hasConnectedWallets = allWallets.length > 0
 
-    const openPopupsWindow = async () => {
-        await context.openPopupWindow(PopupRoutes.ConnectWallet)
-    }
     const unlistedKeys = useMemo(() => {
         if (!unlistedCollectionConfig || !settingWallet?.address) return EMPTY_LIST
         const field = sceneToCollectionCategoryMap[scene]

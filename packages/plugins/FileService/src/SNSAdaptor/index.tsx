@@ -20,6 +20,9 @@ import { Trans } from 'react-i18next'
 
 type BadgeRenderer<T> = (f: T) => Plugin.SNSAdaptor.BadgeDescriptor
 
+function clickHandler() {
+    return openBrowser('popup')
+}
 const definition: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
@@ -61,7 +64,6 @@ const definition: Plugin.SNSAdaptor.Definition = {
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
-                    const clickHandler = () => openBrowser('popup')
                     return (
                         <ApplicationEntry
                             title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}

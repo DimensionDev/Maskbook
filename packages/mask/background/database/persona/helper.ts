@@ -23,6 +23,7 @@ import {
     queryPersonasWithPrivateKey,
     queryProfileDB,
 } from './db.js'
+import { noop } from 'lodash-es'
 
 // #region Local key helpers
 /**
@@ -60,7 +61,7 @@ export async function decryptByLocalKey(
         // TODO: We may push every local key we owned to the candidate list so we can also decrypt when authorHint is null, but that might be a performance pitfall when localKey field is not indexed.
     }
 
-    let check = () => {}
+    let check = noop
     return Promise.any(
         candidateKeys.map(async (key): Promise<ArrayBuffer> => {
             const k = await crypto.subtle.importKey('jwk', key, { name: 'AES-GCM', length: 256 }, false, ['decrypt'])

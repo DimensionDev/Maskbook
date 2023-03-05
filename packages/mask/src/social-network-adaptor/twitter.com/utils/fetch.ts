@@ -84,13 +84,13 @@ export const postAvatarParser = (node: HTMLElement) => {
     return avatarElement ? avatarElement.src : undefined
 }
 
+function resolveType(content: string) {
+    if (content.startsWith('@')) return 'user'
+    if (content.startsWith('#')) return 'hash'
+    if (content.startsWith('$')) return 'cash'
+    return 'normal'
+}
 export const postContentMessageParser = (node: HTMLElement) => {
-    function resolve(content: string) {
-        if (content.startsWith('@')) return 'user'
-        if (content.startsWith('#')) return 'hash'
-        if (content.startsWith('$')) return 'cash'
-        return 'normal'
-    }
     function make(node: Node): TypedMessage | TypedMessage[] {
         if (node.nodeType === Node.TEXT_NODE) {
             if (!node.nodeValue) return makeTypedMessageEmpty()
@@ -102,7 +102,7 @@ export const postContentMessageParser = (node: HTMLElement) => {
             if (!content) return makeTypedMessageEmpty()
             const altImage = node.querySelector('img')
             return makeTypedMessageAnchor(
-                resolve(content),
+                resolveType(content),
                 href ?? '',
                 content,
                 altImage ? makeTypedMessageImage(altImage.src, altImage) : undefined,

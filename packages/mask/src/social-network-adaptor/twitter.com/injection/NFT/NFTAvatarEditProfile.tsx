@@ -51,18 +51,18 @@ function useNFTAvatarButtonStyles() {
     const style = ButtonStyle[themeSettings.size]
     return useStyles(style)
 }
+function clickHandler() {
+    CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
+        open: true,
+        startPicking: true,
+    })
+}
 function OpenNFTAvatarEditProfileButtonInTwitter() {
     const { classes } = useNFTAvatarButtonStyles()
     const allPersonas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
-    const clickHandler = () => {
-        CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
-            open: true,
-            startPicking: true,
-        })
-    }
     useEffect(() => {
         return CrossIsolationMessages.events.personaBindFinished.on((ev) => {
             if (ev.pluginID === PluginID.Avatar) clickHandler()

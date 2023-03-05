@@ -12,9 +12,11 @@ export const DEBUG_INFO = {
     Dirty: process.env.DIRTY,
 }
 
+function onNewBugIssue() {
+    return openWindow(makeNewBugIssueURL())
+}
 export const DebugInfo = () => {
     const { t } = useI18N()
-    const onNewBugIssue = () => openWindow(makeNewBugIssueURL())
 
     return (
         <>

@@ -30,7 +30,7 @@ import type { Subscription } from 'use-subscription'
 import { activatedSocialNetworkUI } from '../ui.js'
 import { resolveFacebookLink } from '../../social-network-adaptor/facebook.com/utils/resolveFacebookLink.js'
 import type { SupportedPayloadVersions } from '@masknet/encryption'
-import { difference } from 'lodash-es'
+import { difference, noop } from 'lodash-es'
 
 export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSActions) {
     return function createPostContext(opt: PostContextCreation): PostContext {
@@ -109,7 +109,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                 opt.postImagesProvider ||
                 debug({
                     getCurrentValue: () => EMPTY_LIST,
-                    subscribe: () => () => {},
+                    subscribe: () => noop,
                 }),
 
             rawMessage: opt.rawMessage,

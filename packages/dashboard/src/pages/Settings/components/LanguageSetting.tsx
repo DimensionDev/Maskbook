@@ -1,20 +1,20 @@
 /* eslint-disable @dimensiondev/unicode-specific-set */
-import { MenuItem } from '@mui/material'
+import { MenuItem, type SelectChangeEvent } from '@mui/material'
 import { useLanguage } from '../../Personas/api.js'
 import { Services } from '../../../API.js'
 import SettingSelect from './SettingSelect.js'
 import { LanguageOptions } from '@masknet/public-api'
 import { useDashboardI18N } from '../../../locales/index.js'
 
+function onLanguageChange(event: SelectChangeEvent<LanguageOptions>) {
+    Services.Settings.setLanguage(event.target.value as LanguageOptions)
+}
 export default function LanguageSetting() {
     const lang = useLanguage()
-    const handleChange = (event: any) => {
-        Services.Settings.setLanguage(event.target.value)
-    }
     const t = useDashboardI18N()
 
     return (
-        <SettingSelect value={lang} onChange={handleChange}>
+        <SettingSelect value={lang} onChange={onLanguageChange}>
             <MenuItem value={LanguageOptions.__auto__}>{t.settings_language_auto()}</MenuItem>
             <MenuItem value={LanguageOptions.enUS}>English</MenuItem>
             <MenuItem value={LanguageOptions.zhCN}>简体中文</MenuItem>

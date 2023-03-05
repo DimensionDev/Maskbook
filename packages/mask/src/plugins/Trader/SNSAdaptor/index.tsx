@@ -18,6 +18,11 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { CollectionProjectAvatarBadge } from '../../../components/shared/AvatarBadge/CollectionProjectAvatarBadge.js'
 import { useCollectionByTwitterHandler } from '../../../plugins/Trader/trending/useTrending.js'
 
+function openDialog() {
+    return CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
+        open: true,
+    })
+}
 const sns: Plugin.SNSAdaptor.Definition<
     ChainId,
     unknown,
@@ -93,10 +98,6 @@ const sns: Plugin.SNSAdaptor.Definition<
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
-                    const openDialog = () =>
-                        CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
-                            open: true,
-                        })
                     return (
                         <ApplicationEntry
                             {...EntryComponentProps}

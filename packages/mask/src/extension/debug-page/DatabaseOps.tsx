@@ -5,47 +5,47 @@ import { useI18N } from '../../utils/index.js'
 
 __DEBUG__ONLY__enableCryptoKeySerialization()
 
+async function onBackup() {
+    const payload = await backupAll()
+    if (payload === undefined) {
+        return
+    }
+    const timestamp = ((value: Date) => {
+        const values = [
+            value.getUTCFullYear(),
+            value.getUTCMonth() + 1,
+            value.getUTCDate(),
+            value.getUTCHours(),
+            value.getUTCMinutes(),
+            value.getUTCSeconds(),
+        ]
+        return values.map((value) => value.toString().padStart(2, '0')).join('')
+    })(new Date())
+    download(`masknetwork-dump-${timestamp}.json`, payload)
+}
+async function onRestore() {
+    const file = await select()
+    if (file === undefined) {
+        return
+    }
+    // cspell:disable-next-line
+    const parsed = (await serializer.deserialization(await file.text())) as BackupFormat
+    await restoreAll(parsed)
+}
+async function onClear() {
+    const databases = await indexedDB.databases?.()
+    if (databases === undefined) {
+        return
+    }
+    await Promise.all(
+        databases.map(async ({ name }) => {
+            if (!name) return
+            await timeout(wrap(indexedDB.deleteDatabase(name)), 500)
+        }),
+    )
+}
 export const DatabaseOps: React.FC = () => {
     const { t } = useI18N()
-    const onBackup = async () => {
-        const payload = await backupAll()
-        if (payload === undefined) {
-            return
-        }
-        const timestamp = ((value: Date) => {
-            const values = [
-                value.getUTCFullYear(),
-                value.getUTCMonth() + 1,
-                value.getUTCDate(),
-                value.getUTCHours(),
-                value.getUTCMinutes(),
-                value.getUTCSeconds(),
-            ]
-            return values.map((value) => value.toString().padStart(2, '0')).join('')
-        })(new Date())
-        download(`masknetwork-dump-${timestamp}.json`, payload)
-    }
-    const onRestore = async () => {
-        const file = await select()
-        if (file === undefined) {
-            return
-        }
-        // cspell:disable-next-line
-        const parsed = (await serializer.deserialization(await file.text())) as BackupFormat
-        await restoreAll(parsed)
-    }
-    const onClear = async () => {
-        const databases = await indexedDB.databases?.()
-        if (databases === undefined) {
-            return
-        }
-        await Promise.all(
-            databases.map(async ({ name }) => {
-                if (!name) return
-                await timeout(wrap(indexedDB.deleteDatabase(name)), 500)
-            }),
-        )
-    }
     return (
         <section>
             <p>
