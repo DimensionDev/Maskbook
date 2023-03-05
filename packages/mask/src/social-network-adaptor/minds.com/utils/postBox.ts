@@ -9,6 +9,6 @@ export const getEditorContent = () => {
 
 export const isCompose = () => !!composerModalSelector().evaluate()
 
-export const hasFocus = (x: LiveSelector<HTMLElement, true>) => x.evaluate()! === document.activeElement
+export const hasFocus = (x: LiveSelector<HTMLElement, true>) => x.evaluate() === document.activeElement
 
 export const hasEditor = () => !!postEditorDraftContentSelector().evaluate()

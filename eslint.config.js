@@ -103,9 +103,8 @@ const avoidMistakeRules = {
     'no-label-var': 'warn', // name collision
     'no-plusplus': 'warn', // ++i? i++?
     'no-sequences': 'warn', // (a, b)
-    // 'unicorn/no-keyword-prefix': 'warn', // bans variable names like newT or classT
     // 'react/no-unescaped-entities': 'warn', // <div> >1 </div>
-    // '@typescript-eslint/no-confusing-non-null-assertion': 'error', // a! == b
+    '@typescript-eslint/no-confusing-non-null-assertion': 'error', // a! == b
 
     // Problematic language features
     /// API with trap
