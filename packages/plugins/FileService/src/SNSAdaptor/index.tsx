@@ -59,7 +59,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.FileService size={36} />
-            const name = { i18nKey: '__plugin_name', fallback: 'File Service' }
+            const name = <Trans ns={PluginID.FileService} i18nKey="__plugin_name" />
             const iconFilterColor = 'rgba(247, 147, 30, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
@@ -82,11 +82,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
                 marketListSortingPriority: 2,
                 icon,
                 category: 'dapp',
-                description: {
-                    i18nKey: '__plugin_description',
-                    fallback:
-                        'Decentralized file storage, permanently. Upload and share files to your Mask friends on top of Arweave Network.',
-                },
+                description: <Trans ns={PluginID.FileService} i18nKey="__plugin_description" />,
                 name,
                 iconFilterColor,
                 tutorialLink: 'https://realmasknetwork.notion.site/8c8fe1efce5a48b49739a38f4ea8c60f',

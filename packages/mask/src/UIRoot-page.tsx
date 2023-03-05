@@ -1,5 +1,6 @@
 import { Suspense, useMemo } from 'react'
 import { StyledEngineProvider, type Theme } from '@mui/material'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { EnvironmentContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { TelemetryProvider } from '@masknet/web3-telemetry/hooks'
 import { I18NextProviderHMR, SharedContextProvider, SubscriptionProvider } from '@masknet/shared'
@@ -42,7 +43,9 @@ function MaskUIRoot({ children, useTheme, fallback }: MaskUIRootProps) {
                 <EnvironmentContextProvider value={context}>
                     <Web3ContextProvider value={context}>
                         <TelemetryProvider>
-                            <SubscriptionProvider>
+                            <SubscriptionProvider
+                                pluginID={NetworkPluginID.PLUGIN_EVM}
+                                providerType={ProviderType.MaskWallet}>
                                 <SharedContextProvider>
                                     <Suspense fallback={fallback}>
                                         <CSSVariableInjector />

@@ -137,6 +137,10 @@ export class ConnectionContext {
         }
     }
 
+    get wallet() {
+        return this.payloadEditor.wallet
+    }
+
     get userOperation() {
         return this.payloadEditor.userOperation
     }

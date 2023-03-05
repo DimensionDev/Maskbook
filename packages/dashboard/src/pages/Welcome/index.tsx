@@ -10,6 +10,7 @@ import { HeaderLine } from '../../components/HeaderLine/index.js'
 import { TermsAgreedContext } from '../../hooks/useTermsAgreed.js'
 import { DashboardTrans, useDashboardI18N } from '../../locales/index.js'
 import { Article } from './Article.js'
+import { delay } from '@masknet/kit'
 
 const useStyles = makeStyles()((theme) => ({
     page: {
@@ -89,9 +90,12 @@ export default memo(function Welcome() {
 
         const url = await Services.SocialNetwork.setupSite('twitter.com', false)
         if (!url) return
+        if (from === DashboardRoutes.Setup) return
         if (from && from !== DashboardRoutes.Personas) {
+            // Delay opening sns page to let use realize the route has changed that happened above
+            await delay(300)
             browser.tabs.create({
-                active: true,
+                active: false,
                 url,
             })
         } else {

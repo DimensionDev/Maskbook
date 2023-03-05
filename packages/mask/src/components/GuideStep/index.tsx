@@ -3,9 +3,8 @@ import { useLocation } from 'react-use'
 import { debounce } from 'lodash-es'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { Box, Typography, styled, Portal } from '@mui/material'
-import { Flags } from '../../../shared/flags.js'
-import { sayHelloShowed, userGuideStatus } from '../../../shared/legacy-settings/settings.js'
+import { Box, Portal, styled, Typography } from '@mui/material'
+import { sayHelloShowed, userGuideFinished, userGuideStatus } from '../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { useI18N } from '../../utils/index.js'
 
@@ -97,56 +96,38 @@ export interface GuideStepProps extends PropsWithChildren<{}> {
     step: number
     tip: string
     arrow?: boolean
-    disabled?: boolean
     onComplete?: () => void
 }
 
-export default function GuideStep({
-    total,
-    step,
-    tip,
-    children,
-    arrow = true,
-    disabled = false,
-    onComplete,
-}: GuideStepProps) {
+export default function GuideStep({ total, step, tip, children, arrow = true, onComplete }: GuideStepProps) {
     const { t } = useI18N()
     const { classes, cx } = useStyles()
     const childrenRef = useRef<HTMLElement>()
     const [clientRect, setClientRect] = useState<DOMRect | undefined>()
-    const [open, setOpen] = useState(false)
     const [bottomAvailable, setBottomAvailable] = useState(true)
-    const ui = activatedSocialNetworkUI
-    const lastStep = useValueRef(userGuideStatus[ui.networkIdentifier])
+    const { networkIdentifier } = activatedSocialNetworkUI
+    const currentStep = useValueRef(userGuideStatus[networkIdentifier])
+    const finished = useValueRef(userGuideFinished[networkIdentifier])
+    const isCurrentStep = +currentStep === step
+
     const history = useLocation()
 
-    useEffect(() => {
-        if (disabled) return
-        if (location.pathname !== '/home') return
-        const open = +lastStep === step
-        setOpen(open)
-
-        if (!open) return
-        if (location.pathname === '/home') return
-        location.assign('/home')
-    }, [lastStep, history])
+    const stepVisible = isCurrentStep && !finished && !!clientRect?.top && !!clientRect.left
 
     useEffect(() => {
-        if (disabled) return
-        document.body.style.overflow = open ? 'hidden' : ''
-        document.documentElement.style.overflow = open ? 'hidden' : ''
-    }, [open])
+        document.body.style.overflow = stepVisible ? 'hidden' : ''
+        document.documentElement.style.overflow = stepVisible ? 'hidden' : ''
+        document.body.style.paddingLeft = 'calc(100vw - 100%)'
+    }, [stepVisible])
 
     const onSkip = () => {
-        setOpen(false)
-        userGuideStatus[ui.networkIdentifier].value = Flags.userGuideLevel
-        sayHelloShowed[ui.networkIdentifier].value = true
+        sayHelloShowed[networkIdentifier].value = true
+        userGuideFinished[networkIdentifier].value = true
     }
 
     const onNext = () => {
-        setOpen(false)
         if (step !== total) {
-            userGuideStatus[ui.networkIdentifier].value = String(step + 1)
+            userGuideStatus[networkIdentifier].value = String(step + 1)
         }
         if (step === total - 1) {
             document.body.scrollIntoView()
@@ -154,25 +135,34 @@ export default function GuideStep({
     }
 
     const onTry = () => {
-        setOpen(false)
-        userGuideStatus[ui.networkIdentifier].value = Flags.userGuideLevel
+        userGuideFinished[networkIdentifier].value = true
         onComplete?.()
     }
 
+    const [inserted, setInserted] = useState(false)
+    useEffect(() => {
+        const observer = new MutationObserver((_, observer) => {
+            if (!childrenRef.current) return
+            const cr = childrenRef.current.getBoundingClientRect()
+            if (!cr.height) return
+            setInserted(true)
+            observer.disconnect()
+        })
+        observer.observe(document.body, { childList: true, subtree: true })
+
+        return () => observer.disconnect()
+    }, [])
+
+    // const inserted = childrenRef.current ? document.body.contains(childrenRef.current) : false
     useEffect(() => {
         const setGuideStepRect = () => {
+            if (!inserted) return
             const cr = childrenRef.current?.getBoundingClientRect()
             if (cr) {
                 const bottomAvailable = window.innerHeight - cr.height - cr.top > 200
                 setBottomAvailable(bottomAvailable)
-                if (!cr.width) {
-                    setClientRect({ ...cr, top: 30, left: window.innerWidth - 300 })
-                } else {
-                    setClientRect(cr)
-                }
-            } else {
-                setClientRect(cr)
             }
+            setClientRect(cr)
         }
         setGuideStepRect()
 
@@ -183,13 +173,13 @@ export default function GuideStep({
         return () => {
             window.removeEventListener('resize', onResize)
         }
-    }, [childrenRef.current, lastStep, open, history])
+    }, [childrenRef.current, inserted, currentStep, history])
 
     return (
         <>
             {cloneElement(children as ReactElement<any>, { ref: childrenRef })}
             {usePortalShadowRoot((container) => {
-                if (!open || !clientRect?.top || !clientRect?.left) return null
+                if (!stepVisible) return null
                 return (
                     <Portal container={container}>
                         <div className={classes.mask} onClick={(e) => e.stopPropagation()}>

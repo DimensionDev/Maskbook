@@ -5,7 +5,6 @@ import { Hub } from './Hub.js'
 import { Connection } from './Connection.js'
 import { Settings } from './Settings.js'
 import { Transaction } from './Transaction.js'
-import { Wallet } from './Wallet.js'
 import { Others } from './Others.js'
 import type { SolanaWeb3State } from './Connection/types.js'
 import { IdentityService } from './IdentityService.js'
@@ -17,18 +16,9 @@ export async function createWeb3State(
     context: Plugin.Shared.SharedUIContext,
 ): Promise<SolanaWeb3State> {
     const Provider_ = new Provider(context)
-    const Settings_ = new Settings(context)
-    const Wallet_ = new Wallet(context, {
-        providerType: Provider_.providerType,
-    })
-
-    await Provider_.storage.account.initializedPromise
-    await Provider_.storage.providerType.initializedPromise
-    await Settings_.storage.currencyType.initializedPromise
-    await Wallet_.storage.initializedPromise
-
     await Provider_.setup()
-    await Wallet_.setup()
+
+    const Settings_ = new Settings(context)
 
     return {
         AddressBook: new AddressBook(context, {
@@ -52,7 +42,6 @@ export async function createWeb3State(
             account: Provider_.account,
             providerType: Provider_.providerType,
         }),
-        Wallet: Wallet_,
         Others: new Others(context),
         Storage: new Storage(),
     }

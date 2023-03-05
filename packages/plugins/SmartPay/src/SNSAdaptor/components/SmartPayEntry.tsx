@@ -1,5 +1,5 @@
-import { CrossIsolationMessages, DashboardRoutes } from '@masknet/shared-base'
-import { memo, useCallback } from 'react'
+import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
+import { memo, useCallback, useEffect } from 'react'
 import { ApplicationEntry, useSharedI18N } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { PLUGIN_ID } from '../../constants.js'
@@ -64,6 +64,7 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
             return setPersonaSelectPanelDialog({
                 open: true,
                 enableVerify: true,
+                target: PluginID.SmartPay,
             })
         }
 
@@ -73,6 +74,16 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
             signPersona: value.signPersona,
         })
     }, [loading, wallets, value, personas])
+
+    useEffect(() => {
+        return CrossIsolationMessages.events.applicationDialogEvent.on(({ selectedPersona, pluginID, open }) => {
+            if (pluginID !== PluginID.SmartPay) return
+            setSmartPayDialog({
+                open,
+                signPersona: selectedPersona,
+            })
+        })
+    }, [])
 
     return (
         <ApplicationEntry
