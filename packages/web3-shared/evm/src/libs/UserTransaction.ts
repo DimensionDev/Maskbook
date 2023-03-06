@@ -169,7 +169,7 @@ export class UserTransaction {
         return contract
     }
 
-    async assetUserOperation(web3: Web3, overrides?: Required<Pick<UserOperation, 'initCode' | 'nonce'>>) {
+    async assertUserOperation(web3: Web3, overrides?: Required<Pick<UserOperation, 'initCode' | 'nonce'>>) {
         // from overrides
         if (overrides) {
             this.userOperation.nonce = overrides.nonce
