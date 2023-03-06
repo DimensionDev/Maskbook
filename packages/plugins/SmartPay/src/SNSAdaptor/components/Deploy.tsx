@@ -357,7 +357,7 @@ export function Deploy({ open }: { open: boolean }) {
                 )}
             </Box>
             <CreateSuccessDialog
-                open
+                open={successDialogOpen}
                 onClose={async () => {
                     if (!contractAccount) return
                     await connection?.addWallet?.({
