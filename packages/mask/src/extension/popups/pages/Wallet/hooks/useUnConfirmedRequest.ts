@@ -23,7 +23,7 @@ export const useUnconfirmedRequest = () => {
         return {
             owner: payload.owner,
             identifier: payload.identifier ? ECKeyIdentifier.from(payload.identifier).unwrapOr(undefined) : undefined,
-            paymentToken: payload.paymentToken ?? nativeTokenAddress,
+            paymentToken: payload.paymentToken,
             payload: omit(payload, 'owner', 'identifier', 'paymentToken') as JsonRpcPayload,
             computedPayload,
             formatterTransaction,

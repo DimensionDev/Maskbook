@@ -75,7 +75,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
             return
         }
 
-        await userTransaction.assetUserOperation(this.web3.getWeb3(chainId), await getOverrides())
+        await userTransaction.assertUserOperation(this.web3.getWeb3(chainId), await getOverrides())
         return this.bundler.sendUserOperation(chainId, await userTransaction.signUserOperation(signer))
     }
 
