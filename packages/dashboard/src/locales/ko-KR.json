@@ -111,7 +111,7 @@
     "wallets_startup_import_desc": "Mask 월렛은 개인키, JSON.File, 니모닉 단어를 지원합니다.",
     "wallets_startup_import_action": "불러오기",
     "wallets_startup_connect": "플러그인 월렛 연결하기",
-    "wallets_startup_connect_desc": "Mask network는 Metamask, WalletConnect를 지원합니다.",
+    "wallets_startup_connect_desc": "Mask Network는 Metamask, WalletConnect를 지원합니다.",
     "wallets_startup_connect_action": "연결",
     "wallets_connect_wallet_metamask": "MetaMask",
     "wallets_connect_wallet_connect": "월렛 연결하기",
