@@ -1,9 +1,5 @@
 import { Icons } from '@masknet/icons'
-import {
-    useAllPersonas,
-    useCurrentPersonaInformation,
-    useLastRecognizedIdentity,
-} from '@masknet/plugin-infra/content-script'
+import { useAllPersonas, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
@@ -47,9 +43,8 @@ export function RouterDialog() {
     const navigate = useNavigate()
     const personas = useAllPersonas()
     const wallets = useWallets()
-    const currentPersona = useCurrentPersonaInformation()
 
-    const { signer, setSigner } = SmartPayContext.useContainer()
+    const { setSigner } = SmartPayContext.useContainer()
 
     const { setDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDescriptionDialogEvent)
 
@@ -69,7 +64,7 @@ export function RouterDialog() {
 
     // #region query white list
     const { loading: queryVerifyLoading } = useAsync(async () => {
-        if (!lastRecognizedIdentity?.identifier?.userId) return
+        if (!lastRecognizedIdentity?.identifier?.userId || !open) return
         const chainId = await SmartPayBundler.getSupportedChainId()
         const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
             ...wallets.filter((x) => !x.owner).map((x) => x.address),

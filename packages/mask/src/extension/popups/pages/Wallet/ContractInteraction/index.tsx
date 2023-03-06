@@ -10,7 +10,6 @@ import {
     formatWeiToEther,
     isNativeTokenAddress,
     PayloadEditor,
-    useSmartPayConstants,
 } from '@masknet/web3-shared-evm'
 import { FormattedBalance, FormattedCurrency, TokenIcon, useGasCurrencyMenu } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
@@ -24,7 +23,6 @@ import {
     useChainContext,
     useChainIdSupport,
     useFungibleToken,
-    useFungibleTokenBalance,
     useFungibleTokenPrice,
     useGasOptions,
     useMaskTokenAddress,
@@ -49,7 +47,6 @@ import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
 import { useContainer } from 'unstated-next'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { Icons } from '@masknet/icons'
-import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { StyledRadio } from '../../../components/StyledRadio/index.js'
 
 const useStyles = makeStyles()(() => ({
@@ -252,8 +249,6 @@ const ContractInteraction = memo(() => {
     const maskAddress = useMaskTokenAddress()
     const { value: maskToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, maskAddress)
 
-    const { PAYMASTER_MASK_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
-
     const { value: currencyRatio } = useAsync(async () => {
         if (!smartPayChainId) return
         const depositPaymaster = new DepositPaymaster(smartPayChainId)
@@ -271,48 +266,6 @@ const ContractInteraction = memo(() => {
         () => new BigNumber(gasPrice ?? defaultPrices?.gasPrice ?? 0),
         [gasPrice, defaultPrices?.gasPrice],
     )
-
-    const { value: maskGasFee = ZERO } = useAsync(async () => {
-        if (!request || !currencyRatio || chainId !== smartPayChainId) return ZERO
-        const { signableConfig } = PayloadEditor.fromPayload(request.payload, {
-            chainId: request.owner ? smartPayChainId : chainId,
-        })
-
-        if (!signableConfig) return ZERO
-        const connection = Connection?.getConnection?.()
-        const gas = await connection?.estimateTransaction?.(signableConfig, undefined, {
-            paymentToken: maskToken?.address,
-        })
-
-        return new BigNumber(
-            toFixed(
-                (isSupport1559 ? gasPriceEIP1559 : gasPricePriorEIP1559)
-                    .multipliedBy(gas ?? 0)
-                    .integerValue()
-                    .multipliedBy(currencyRatio),
-                0,
-            ),
-        )
-    }, [
-        maskToken?.address,
-        request,
-        smartPayChainId,
-        chainId,
-        currencyRatio,
-        gasPriceEIP1559,
-        gasPricePriorEIP1559,
-        isSupport1559,
-    ])
-
-    const { value: maskBalance = '0' } = useFungibleTokenBalance(undefined, maskToken?.address)
-
-    const { value: maskAllowance = '0' } = useERC20TokenAllowance(maskAddress, PAYMASTER_MASK_CONTRACT_ADDRESS, {
-        chainId: smartPayChainId,
-    })
-
-    const availableBalanceTooLow = useMemo(() => {
-        return isGreaterThan(maskGasFee, maskAllowance) || isGreaterThan(maskGasFee, maskBalance)
-    }, [maskAllowance, maskToken?.decimals, maskGasFee, maskBalance])
 
     const handleChangeGasCurrency = useCallback(
         async (address: string) => {
@@ -361,15 +314,6 @@ const ContractInteraction = memo(() => {
             navigate(PopupRoutes.Wallet, { replace: true })
         }
     }, [request, requestLoading, error])
-
-    // when the request's payment token is undefined and the mask balance is sufficient, the default is to use the mask as the payment token
-    useAsync(async () => {
-        if (smartPayChainId !== chainId || !maskToken?.address) return
-        if (!request?.paymentToken && !availableBalanceTooLow) {
-            await handleChangeGasCurrency(maskToken.address)
-        }
-    }, [availableBalanceTooLow, smartPayChainId, chainId, handleChangeGasCurrency, maskToken?.address])
-    // #endregion
 
     // handlers
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
@@ -517,7 +461,7 @@ const ContractInteraction = memo(() => {
                                 }
                                 formatter={formatBalance}
                             />
-                            {request?.owner && !availableBalanceTooLow ? (
+                            {request?.owner && request.allowMaskAsGas ? (
                                 <Icons.ArrowDrop onClick={openCurrencyMenu} />
                             ) : null}
                             <Link
@@ -527,7 +471,7 @@ const ContractInteraction = memo(() => {
                                 {t('popups_wallet_contract_interaction_edit')}
                             </Link>
                         </Typography>
-                        {request?.owner && !availableBalanceTooLow ? currencyMenu : null}
+                        {request?.owner && request.allowMaskAsGas ? currencyMenu : null}
                     </div>
 
                     {!isGreaterThan(totalUSD, pow10(9)) ? (
