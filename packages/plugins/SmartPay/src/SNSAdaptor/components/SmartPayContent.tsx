@@ -188,7 +188,7 @@ export const SmartPayContent = memo(() => {
     // #region Remote Dialog Controller
     const { setDialog: setReceiveDialog } = useRemoteControlledDialog(PluginSmartPayMessages.receiveDialogEvent)
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(CrossIsolationMessages.events.swapDialogEvent)
-    const { closeDialog, open: smartpayDialogOpen } = useRemoteControlledDialog(
+    const { closeDialog, open: smartPayDialogOpen } = useRemoteControlledDialog(
         PluginSmartPayMessages.smartPayDialogEvent,
     )
     // #endregion
@@ -364,12 +364,11 @@ export const SmartPayContent = memo(() => {
 
     // #endregion
 
-    //
     useUpdateEffect(() => {
-        if (!smartpayDialogOpen) return
+        if (!smartPayDialogOpen) return
         refreshAssets()
         refreshRemainFrequency()
-    }, [smartpayDialogOpen, refreshAssets, refreshRemainFrequency])
+    }, [smartPayDialogOpen, refreshAssets, refreshRemainFrequency])
 
     return (
         <>

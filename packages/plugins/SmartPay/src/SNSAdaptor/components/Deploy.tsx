@@ -7,7 +7,13 @@ import { ImageIcon, PersonaAction, useSnackbarCallback, WalletDescription } from
 import { formatPersonaFingerprint, NetworkPluginID } from '@masknet/shared-base'
 import { explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Typography, alpha, Box } from '@mui/material'
-import { useChainContext, useNetworkDescriptor, useProviderDescriptor, useWallets } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useNetworkDescriptor,
+    useProviderDescriptor,
+    useWallets,
+    useWeb3Connection,
+} from '@masknet/web3-hooks-base'
 import { SmartPayOwner } from '@masknet/web3-providers'
 import {
     useCurrentPersonaInformation,
@@ -138,7 +144,11 @@ export function Deploy({ open }: { open: boolean }) {
     const { personaManagers, walletManagers } = useManagers()
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, {
+        providerType: ProviderType.MaskWallet,
+        account: undefined,
+        chainId,
+    })
     const { closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
 
     const { signer } = SmartPayContext.useContainer()
@@ -348,7 +358,19 @@ export function Deploy({ open }: { open: boolean }) {
             </Box>
             <CreateSuccessDialog
                 open={successDialogOpen}
-                onClose={() => {
+                onClose={async () => {
+                    if (!contractAccount) return
+                    await connection?.addWallet?.({
+                        name: 'Smart pay',
+                        owner: manager?.address,
+                        address: contractAccount?.address,
+                        identifier: manager?.identifier?.toText(),
+                        hasDerivationPath: false,
+                        hasStoredKeyInfo: false,
+                        id: contractAccount?.address,
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                    })
                     toggle()
                     navigate(RoutePaths.Main)
                 }}
