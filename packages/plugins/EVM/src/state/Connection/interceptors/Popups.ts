@@ -8,16 +8,12 @@ import {
     getSmartPayConstants,
     DepositPaymaster,
     PayloadEditor,
-    createContract,
 } from '@masknet/web3-shared-evm'
 import { ExtensionSite, getSiteType, isEnhanceableSiteType } from '@masknet/shared-base'
 import { SharedContextSettings } from '../../../settings/index.js'
 import { SmartPayBundler, Web3 } from '@masknet/web3-providers'
 import { BigNumber } from 'bignumber.js'
 import { isGreaterThan, toFixed } from '@masknet/web3-shared-base'
-import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
-import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
-import type { AbiItem } from 'web3-utils'
 
 const DEFAULT_PAYMENT_TOKEN_STATE = {
     allowMaskAsGas: false,
@@ -27,7 +23,7 @@ const DEFAULT_PAYMENT_TOKEN_STATE = {
 export class Popups implements Middleware<ConnectionContext> {
     private async getPaymentToken(context: ConnectionContext) {
         const smartPayChainId = await SmartPayBundler.getSupportedChainId()
-        if (context.chainId !== smartPayChainId) return DEFAULT_PAYMENT_TOKEN_STATE
+        if (context.chainId !== smartPayChainId || !context.owner) return DEFAULT_PAYMENT_TOKEN_STATE
 
         const { PAYMASTER_MASK_CONTRACT_ADDRESS } = getSmartPayConstants(context.chainId)
         if (!PAYMASTER_MASK_CONTRACT_ADDRESS) return DEFAULT_PAYMENT_TOKEN_STATE
@@ -35,7 +31,8 @@ export class Popups implements Middleware<ConnectionContext> {
         const web3 = Web3.getWeb3(context.chainId)
         const maskAddress = getMaskTokenAddress(context.chainId)
 
-        const contract = createContract<ERC20>(web3, maskAddress, ERC20ABI as AbiItem[])
+        const contract = Web3.getERC20Contract(context.chainId, maskAddress)
+
         if (!contract) return DEFAULT_PAYMENT_TOKEN_STATE
 
         const depositPaymaster = new DepositPaymaster(context.chainId)
@@ -59,9 +56,7 @@ export class Popups implements Middleware<ConnectionContext> {
             0,
         )
 
-        const maskBalance = await context.connection.getFungibleTokenBalance(maskAddress, undefined, {
-            chainId: context.chainId,
-        })
+        const maskBalance = await Web3.getFungibleTokenBalance(context.chainId, maskAddress, context.account)
 
         const maskAllowance = await contract.methods
             .allowance(context.account, PAYMASTER_MASK_CONTRACT_ADDRESS)

@@ -94,24 +94,24 @@ export class Web3API
         return createWeb3Provider(createWeb3Request(provider.send.bind(provider)))
     }
 
-    private getWeb3Contract<T extends BaseContract>(chainId: ChainId, address: string, ABI: AbiItem[]) {
+    getWeb3Contract<T extends BaseContract>(chainId: ChainId, address: string, ABI: AbiItem[]) {
         const web3 = this.getWeb3(chainId)
         return createContract<T>(web3, address, ABI)
     }
 
-    private getERC20Contract(chainId: ChainId, address: string) {
+    getERC20Contract(chainId: ChainId, address: string) {
         return this.getWeb3Contract<ERC20>(chainId, address, ERC20ABI as AbiItem[])
     }
 
-    private getERC721Contract(chainId: ChainId, address: string) {
+    getERC721Contract(chainId: ChainId, address: string) {
         return this.getWeb3Contract<ERC721>(chainId, address, ERC721ABI as AbiItem[])
     }
 
-    private getERC1155Contract(chainId: ChainId, address: string) {
+    getERC1155Contract(chainId: ChainId, address: string) {
         return this.getWeb3Contract<ERC1155>(chainId, address, ERC1155ABI as AbiItem[])
     }
 
-    private getERC165Contract(chainId: ChainId, address: string) {
+    getERC165Contract(chainId: ChainId, address: string) {
         return this.getWeb3Contract<ERC165>(chainId, address, ERC165ABI as AbiItem[])
     }
 
