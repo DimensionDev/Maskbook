@@ -8,6 +8,7 @@
     "search": "搜索",
     "loading_token": "正在加载代币...",
     "search_no_result": "没有任何结果。",
+    "nft_already_added": "此 NFT 已被添加。",
     "nft_invalid_owner": "此收藏品不属于您。",
     "nft_max_shares": "NFT红包合约最多支持 {{amount}} 个NFT投放。",
     "nft_max_shares_tip": "NFT红包合约最多支持 {{amount, number}} 个NFT投放。",
