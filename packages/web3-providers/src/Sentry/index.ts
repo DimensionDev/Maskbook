@@ -4,6 +4,12 @@ import { formatMask } from '@masknet/web3-shared-base'
 import { TelemetryAPI } from '../types/Telemetry.js'
 
 const IGNORE_ERRORS = [
+    // Twitter NFT Avatar API
+    'yb0w3z63oa',
+    // Twitter Identity API
+    'mr8asf7i4h',
+    // ScamDB
+    'scam.mask.r2d2.to',
     'At least one of the attempts fails.',
     'Extension context invalidated.',
     '[object Promise]',
