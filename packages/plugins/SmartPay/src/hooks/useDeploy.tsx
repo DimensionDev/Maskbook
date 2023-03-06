@@ -84,17 +84,6 @@ export function useDeploy(
 
                 if (!result?.status) return
 
-                await connection?.addWallet?.({
-                    name: 'Smart Pay',
-                    owner: signAccount.address,
-                    identifier: signAccount.identifier?.toText(),
-                    address: contractAccount.address,
-                    hasDerivationPath: false,
-                    hasStoredKeyInfo: false,
-                    id: contractAccount.address,
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                })
                 onSuccess?.()
 
                 return result?.transactionHash
@@ -157,18 +146,6 @@ export function useDeploy(
             })
 
             if (!deployResult?.status) return
-
-            await connection?.addWallet?.({
-                name: 'Smart Pay',
-                owner: signAccount.address,
-                address: contractAccount.address,
-                identifier: signAccount.identifier?.toText(),
-                hasDerivationPath: false,
-                hasStoredKeyInfo: false,
-                id: contractAccount.address,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            })
 
             onSuccess?.()
 
