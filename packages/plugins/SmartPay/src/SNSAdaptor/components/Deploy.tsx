@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useAsync, useBoolean, useCopyToClipboard } from 'react-use'
+import { useAsync, useBoolean, useCopyToClipboard, useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
@@ -7,9 +7,13 @@ import { ImageIcon, PersonaAction, useSnackbarCallback, WalletDescription } from
 import { formatPersonaFingerprint, NetworkPluginID } from '@masknet/shared-base'
 import { explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Typography, alpha, Box } from '@mui/material'
-import { useChainContext, useNetworkDescriptor, useProviderDescriptor } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkDescriptor, useProviderDescriptor, useWallets } from '@masknet/web3-hooks-base'
 import { SmartPayOwner } from '@masknet/web3-providers'
-import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import {
+    useCurrentPersonaInformation,
+    useLastRecognizedIdentity,
+    useSNSAdaptorContext,
+} from '@masknet/plugin-infra/content-script'
 
 import { useI18N } from '../../locales/index.js'
 import { ManagePopover } from './ManagePopover.js'
@@ -23,6 +27,8 @@ import { useDeploy } from '../../hooks/useDeploy.js'
 import { useManagers } from '../../hooks/useManagers.js'
 import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
 import { isSameAddress } from '@masknet/web3-shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { PluginSmartPayMessages } from '../../message.js'
 
 const useStyles = makeStyles()((theme) => ({
     walletDescription: {
@@ -122,6 +128,8 @@ export function Deploy({ open }: { open: boolean }) {
     const t = useI18N()
     const navigate = useNavigate()
     const { classes } = useStyles()
+    const wallets = useWallets()
+    const currentPersona = useCurrentPersonaInformation()
     const [successDialogOpen, toggle] = useBoolean(false)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [manager, setManager] = useState<ManagerAccount | undefined>()
@@ -130,6 +138,8 @@ export function Deploy({ open }: { open: boolean }) {
     const { personaManagers, walletManagers } = useManagers()
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+
+    const { closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
 
     const { signer } = SmartPayContext.useContainer()
     const { signWallet, signPersona } = signer || {}
@@ -205,6 +215,16 @@ export function Deploy({ open }: { open: boolean }) {
             return
         }
     }, [personaManagers, walletManagers, manager])
+
+    useUpdateEffect(() => {
+        if (
+            (signer?.signPersona &&
+                currentPersona?.identifier.publicKeyAsHex !== signer.signPersona.identifier.publicKeyAsHex) ||
+            (signer?.signWallet && !wallets.some((x) => isSameAddress(x.address, signer.signWallet?.address)))
+        ) {
+            closeDialog()
+        }
+    }, [currentPersona, signer, wallets])
 
     return (
         <>

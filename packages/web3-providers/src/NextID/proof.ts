@@ -176,8 +176,8 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 identity: {
                     neighborWithTraversal: Array<{
                         source: NextIDPlatform
-                        to: { platform: NextIDPlatform; displayName: string }
-                        from: { platform: NextIDPlatform; displayName: string }
+                        to: { platform: NextIDPlatform; displayName: string; identity: string }
+                        from: { platform: NextIDPlatform; displayName: string; identity: string }
                     }>
                 }
             }
@@ -194,10 +194,12 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                                 source
                                 to {
                                     platform
+                                    identity
                                     displayName                                                                                                        
                                 }        
                                 from {
                                     platform
+                                    identity
                                     displayName                                                                                                        
                                 }                                                                                          
                             }                          
@@ -208,10 +210,10 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         })
 
         const rawData = response.data.identity.neighborWithTraversal
-            .map((x) => createBindingProofFromProfileQuery(x.to.platform, x.source, x.to.displayName))
+            .map((x) => createBindingProofFromProfileQuery(x.to.platform, x.source, x.to.identity, x.to.displayName))
             .concat(
                 response.data.identity.neighborWithTraversal.map((x) =>
-                    createBindingProofFromProfileQuery(x.from.platform, x.source, x.from.displayName),
+                    createBindingProofFromProfileQuery(x.from.platform, x.source, x.from.identity, x.to.displayName),
                 ),
             )
 
@@ -253,11 +255,17 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     }
 }
 
-function createBindingProofFromProfileQuery(platform: NextIDPlatform, source: NextIDPlatform, identity: string) {
+function createBindingProofFromProfileQuery(
+    platform: NextIDPlatform,
+    source: NextIDPlatform,
+    identity: string,
+    name: string,
+) {
     return {
         platform,
         source,
         identity,
+        name,
         created_at: '',
         invalid_reason: '',
         last_checked_at: '',

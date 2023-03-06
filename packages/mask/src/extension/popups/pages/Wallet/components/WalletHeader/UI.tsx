@@ -147,7 +147,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                             ) : null}
                         </Typography>
                         {!hiddenConnected ? (
-                            <Typography className={classes.connected}>
+                            <Typography className={classes.connected} component="div">
                                 <div
                                     className={cx(
                                         classes.dot,

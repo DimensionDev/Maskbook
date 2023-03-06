@@ -303,7 +303,7 @@ export const resolveNextIDPlatformName = createLookupTableResolver<NextIDPlatfor
     },
 )
 
-export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, identifier: string) => {
+export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, identifier: string, name: string) => {
     switch (networkPlatform) {
         case NextIDPlatform.Ethereum:
             return `https://etherscan.io/address/${identifier}`
@@ -312,7 +312,7 @@ export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, ident
         case NextIDPlatform.GitHub:
             return `https://github.com/${identifier}`
         case NextIDPlatform.Keybase:
-            return `https://keybase.io/${identifier}`
+            return `https://keybase.io/${name}`
         case NextIDPlatform.Twitter:
             return `https://twitter.com/${identifier}`
         case NextIDPlatform.ENS:
@@ -320,7 +320,7 @@ export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, ident
         case NextIDPlatform.RSS3:
             return `https://rss3.io/result?search=${identifier}`
         case NextIDPlatform.LENS:
-            return `https://www.lensfrens.xyz/${identifier}.lens`
+            return `https://www.lensfrens.xyz/${identifier}`
         case NextIDPlatform.REDDIT:
             return `https://www.reddit.com/user/${identifier}`
         case NextIDPlatform.SYBIL:

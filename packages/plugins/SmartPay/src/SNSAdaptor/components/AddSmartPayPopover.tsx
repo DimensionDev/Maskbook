@@ -1,5 +1,5 @@
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useEffect } from 'react'
 import { Box, Button, Popover, Typography } from '@mui/material'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { Icon, useSharedI18N } from '@masknet/shared'
@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
 import { useQueryQualifications } from '../../hooks/useQueryQualifications.js'
 import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
-import { CrossIsolationMessages, DashboardRoutes } from '@masknet/shared-base'
+import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginSmartPayMessages } from '../../message.js'
 
@@ -96,7 +96,7 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
                 actionHint: sharedI18N.create_persona_action(),
                 position: 'center',
             })
-            return closeDialog()
+            return
         }
 
         // if there is verified persona but current persona isn't verified
@@ -108,8 +108,9 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
             setPersonaSelectPanelDialog({
                 open: true,
                 enableVerify: true,
+                target: PluginID.SmartPay,
             })
-            return closeDialog()
+            return
         }
 
         setSigner({
@@ -122,6 +123,21 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
             },
         })
     }, [loading, qualifications])
+
+    useEffect(() => {
+        return CrossIsolationMessages.events.applicationDialogEvent.on(({ selectedPersona, pluginID, open }) => {
+            if (!open) return closeDialog()
+            if (pluginID !== PluginID.SmartPay) return
+            setSigner({
+                signPersona: selectedPersona,
+            })
+            navigate(RoutePaths.Deploy, {
+                state: {
+                    canBack: true,
+                },
+            })
+        })
+    }, [closeDialog])
 
     return usePortalShadowRoot((container) => (
         <Popover

@@ -161,11 +161,13 @@ export function SearchResultInspectorContent() {
                                 <SocialTooltip key={i} platform={x.source}>
                                     <div
                                         className={classes.badge}
-                                        onClick={() => openWindow(resolveNextIDPlatformLink(x.platform, x.identity))}>
+                                        onClick={() =>
+                                            openWindow(resolveNextIDPlatformLink(x.platform, x.identity, x.name))
+                                        }>
                                         <div className={classes.link}>
                                             {resolveNextIDPlatformIcon(x.platform)}
                                             <Typography className={cx(classes.socialName, classes.rightSpace)}>
-                                                {x.identity}
+                                                {x.name}
                                             </Typography>
                                         </div>
                                         <Icons.LinkOut size={20} className={classes.linkOutIcon} />

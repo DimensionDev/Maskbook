@@ -1,7 +1,6 @@
 import { compact, first, isEqual, uniqWith } from 'lodash-es'
 import {
     createSubscriptionFromValueRef,
-    CrossIsolationMessages,
     type ECKeyIdentifier,
     EMPTY_LIST,
     ExtensionSite,
@@ -48,11 +47,9 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
 
         const update = async () => {
             const wallets = SharedContextSettings.value.wallets.getCurrentValue()
-            const localWallets = super.wallets
 
-            this.ref.value = uniqWith([...wallets, ...(localWallets ?? [])], (a, b) =>
-                isSameAddress(a.address, b.address),
-            )
+            // speed up first paint
+            this.ref.value = uniqWith([...wallets, ...super.wallets], (a, b) => isSameAddress(a.address, b.address))
 
             const allPersonas = SharedContextSettings.value.allPersonas?.getCurrentValue() ?? []
             const chainId = await SmartPayBundler.getSupportedChainId()
@@ -66,7 +63,7 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
                 .filter((x) => x.deployed)
                 .map((x) => ({
                     id: x.address,
-                    name: localWallets?.find((item) => isSameAddress(item.address, x.address))?.name ?? 'Smart Pay',
+                    name: super.wallets.find((item) => isSameAddress(item.address, x.address))?.name ?? 'Smart Pay',
                     address: x.address,
                     hasDerivationPath: false,
                     hasStoredKeyInfo: false,
@@ -80,7 +77,7 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
                         ?.identifier.toText(),
                 }))
 
-            const result = uniqWith([...wallets, ...localWallets, ...smartPayWallets], (a, b) =>
+            const result = uniqWith([...wallets, ...super.wallets, ...smartPayWallets], (a, b) =>
                 isSameAddress(a.address, b.address),
             )
 
@@ -94,7 +91,6 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
         update()
         SharedContextSettings.value.wallets.subscribe(update)
         SharedContextSettings.value.allPersonas?.subscribe(update)
-        super.subscription.wallets.subscribe(update)
     }
 
     override async addWallet(wallet: Wallet): Promise<void> {
@@ -102,8 +98,10 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
     }
 
     override async removeWallet(address: string, password?: string | undefined): Promise<void> {
+        const scWallets = this.wallets.filter((x) => isSameAddress(x.owner, address))
+        if (scWallets.length) await super.removeWallets(scWallets)
+        await super.removeWallet(address, password)
         await SharedContextSettings.value.removeWallet(address, password)
-        CrossIsolationMessages.events.ownerDeletionEvent.sendToAll({ owner: address })
     }
 
     override async connect(
