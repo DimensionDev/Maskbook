@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { useUpdateEffect } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -55,10 +55,9 @@ export function useIterator<T>(
         setLoading(false)
     }, [iterator])
 
-    useUpdateEffect(() => {
-        if (!iterator) return
+    useEffect(() => {
         if (next) next()
-    }, [next, iterator])
+    }, [next])
 
     if (loading) {
         return {
