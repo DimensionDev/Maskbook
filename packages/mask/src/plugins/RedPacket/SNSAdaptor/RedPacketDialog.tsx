@@ -78,7 +78,6 @@ interface RedPacketDialogProps {
 export default function RedPacketDialog(props: RedPacketDialogProps) {
     const t = useI18N()
     const { t: i18n } = useBaseI18N()
-    const [open, setOpen] = useState(false)
     const [showHistory, setShowHistory] = useState(false)
     const [gasOption, setGasOption] = useState<GasConfig>()
     const { pluginID } = useNetworkContext()

@@ -25,6 +25,7 @@ type OwnerShip = {
     address: string
     owner: string
     id: string
+    creator: string
 }
 
 export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGIN_EVM> {
@@ -130,6 +131,7 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
                       id
                       address
                       owner
+                      creator
                     }
                 }`,
             }),
