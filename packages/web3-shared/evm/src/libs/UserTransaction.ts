@@ -169,6 +169,33 @@ export class UserTransaction {
         return contract
     }
 
+    async assetUserOperation(web3: Web3, overrides?: Required<Pick<UserOperation, 'initCode' | 'nonce'>>) {
+        // from overrides
+        if (overrides) {
+            this.userOperation.nonce = overrides.nonce
+            this.userOperation.initCode = overrides.initCode
+        }
+
+        const { initCode, nonce, sender, callData, callGas, preVerificationGas, maxFeePerGas, maxPriorityFeePerGas } =
+            this.userOperation
+
+        if (!isEmptyHex(initCode) && nonce === 0) throw new Error('Missing init code.')
+
+        if (!isValidAddress(sender)) throw new Error('Invalid sentry address.')
+
+        if (!isEmptyHex(callData)) throw new Error('Missing call data.')
+
+        if (isZeroString(callGas)) throw new Error('Missing call gas.')
+
+        if (isZeroString(preVerificationGas)) throw new Error('Missing pre-verification gas.')
+
+        if (isZeroString(maxFeePerGas)) throw new Error('Missing max fee per gas.')
+
+        if (isZeroString(maxPriorityFeePerGas)) throw new Error('Missing max priority fee per gas.')
+
+        return this
+    }
+
     async fillUserOperation(web3: Web3, overrides?: Required<Pick<UserOperation, 'initCode' | 'nonce'>>) {
         // from overrides
         if (overrides) {
@@ -176,17 +203,8 @@ export class UserTransaction {
             this.userOperation.initCode = overrides.initCode
         }
 
-        const {
-            initCode,
-            nonce,
-            sender,
-            callData,
-            callGas,
-            preVerificationGas,
-            maxFeePerGas,
-            maxPriorityFeePerGas,
-            paymaster,
-        } = this.userOperation
+        const { initCode, nonce, sender, callData, callGas, preVerificationGas, maxFeePerGas, maxPriorityFeePerGas } =
+            this.userOperation
 
         // add sender
         if (!isEmptyHex(initCode) && !isValidAddress(sender)) {
