@@ -16,7 +16,8 @@ import { useWeb3Hub } from './useWeb3Hub.js'
 import { useWeb3State } from './useWeb3State.js'
 import { useTrustedFungibleTokens } from './useTrustedFungibleTokens.js'
 import { useBlockedFungibleTokens } from './useBlockedFungibleTokens.js'
-import { unionWith } from 'lodash-es'
+import { noop, unionWith } from 'lodash-es'
+import { useEffect } from 'react'
 
 export function useFungibleAssets<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
@@ -27,9 +28,9 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
     const hub = useWeb3Hub(pluginID, options)
     const trustedTokens = useTrustedFungibleTokens(pluginID)
     const blockedTokens = useBlockedFungibleTokens(pluginID)
-    const { Others } = useWeb3State(pluginID)
+    const { Others, BalanceNotifier } = useWeb3State(pluginID)
 
-    return useAsyncRetry<Array<Web3Helper.FungibleAssetScope<S, T>>>(async () => {
+    const asyncRetry = useAsyncRetry<Array<Web3Helper.FungibleAssetScope<S, T>>>(async () => {
         if (!account || !hub) return EMPTY_LIST
 
         const isTrustedToken = currySameAddress(trustedTokens.map((x) => x.address))
@@ -106,4 +107,14 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
                 return 0
             })
     }, [account, chainId, schemaType, hub, trustedTokens, blockedTokens, Others])
+
+    useEffect(() => {
+        BalanceNotifier?.emitter.on('update', (ev) => {
+            if (isSameAddress(account, ev.account)) {
+                asyncRetry.retry()
+            }
+        }) ?? noop
+    }, [account, asyncRetry.retry, BalanceNotifier])
+
+    return asyncRetry
 }

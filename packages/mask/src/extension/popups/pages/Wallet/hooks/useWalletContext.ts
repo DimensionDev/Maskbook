@@ -19,12 +19,12 @@ function useWalletContext() {
     const location = useLocation()
     const wallets = useWallets()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { value: assets, loading } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, { chainId })
+    const { value: assets, loading, retry } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, { chainId })
     const transactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM)
     const [currentToken, setCurrentToken] = useState<FungibleAsset<ChainId, SchemaType>>()
     const [transaction, setTransaction] = useState<RecentTransactionComputed<ChainId, Transaction>>()
     const [selectedWallet, setSelectedWallet] = useState<Wallet | null>()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { Others, TransactionWatcher } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     const maskAddress = Others?.getMaskTokenAddress(chainId)
     const { value: maskBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, maskAddress, { chainId })
@@ -56,6 +56,7 @@ function useWalletContext() {
         currentToken,
         setCurrentToken,
         assets: allAssets,
+        refreshAssets: retry,
         transactions,
         assetsLoading: loading,
         transaction,
