@@ -55,6 +55,11 @@ export function useIterator<T>(
         setLoading(false)
     }, [iterator])
 
+    useUpdateEffect(() => {
+        if (!iterator) return
+        if (next) next()
+    }, [next, iterator])
+
     if (loading) {
         return {
             retry,
