@@ -21,7 +21,7 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     async getRemainFrequency(handler: string) {
         try {
             const result = await this.getWhiteList(handler)
-            if (!result.totalCount || result.twitterHandler !== handler) return 0
+            if (!result.totalCount || result.twitterHandler !== handler.toLowerCase()) return 0
             return BigNumber.max(result.totalCount - result.usedCount, 0).toNumber()
         } catch {
             return 0
@@ -64,7 +64,7 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     async verify(handler: string) {
         try {
             const result = await this.getWhiteList(handler)
-            return result.twitterHandler === handler && result.usedCount < result.totalCount
+            return result.twitterHandler === handler.toLowerCase() && result.usedCount < result.totalCount
         } catch {
             return false
         }
