@@ -69,7 +69,7 @@ const Permissions: FC = () => {
     return (
         <>
             <Typography className={classes.h2} variant="h2" mt="16px">
-                Mask network requires authorization for the following domains in order to provide comprehensive
+                Mask Network requires authorization for the following domains in order to provide comprehensive
                 services.
             </Typography>
 

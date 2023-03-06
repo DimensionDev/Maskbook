@@ -3,7 +3,11 @@ import stringify from 'json-stable-stringify'
 import { delay } from '@masknet/kit'
 import { openOrActiveTab } from '@masknet/shared-base-ui'
 import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
-import { currentSetupGuideStatus, userGuideStatus } from '../../../shared/legacy-settings/settings.js'
+import {
+    currentSetupGuideStatus,
+    userGuideFinished,
+    userGuideStatus,
+} from '../../../shared/legacy-settings/settings.js'
 import { SetupGuideStep } from '../../../shared/legacy-settings/types.js'
 import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions.js'
 import { requestSiteAdaptorsPermission } from '../helper/request-permission.js'
@@ -70,6 +74,10 @@ export async function getSitesWithoutPermission(): Promise<SiteAdaptor.Definitio
         return x
     })
     return compact(await Promise.all(promises))
+}
+
+export async function hasSetup(network: string) {
+    return !!userGuideStatus[network].value || userGuideFinished[network].value
 }
 
 export async function setupSite(network: string, newTab: boolean) {
