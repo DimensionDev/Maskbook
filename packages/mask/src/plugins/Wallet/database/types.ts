@@ -6,6 +6,7 @@ export interface RequestPayload extends JsonRpcPayload {
     owner?: string
     identifier?: string
     paymentToken?: string
+    allowMaskAsGas?: boolean
 }
 export interface UnconfirmedRequestChunkRecord {
     /** A chunk of unconfirmed rpc requests */

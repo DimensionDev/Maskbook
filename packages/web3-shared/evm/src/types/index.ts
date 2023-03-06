@@ -301,6 +301,7 @@ export interface TransactionOptions {
     owner?: string
     identifier?: string
     paymentToken?: string
+    allowMaskAsGas?: boolean
 
     // popups control
     disableClose?: boolean
