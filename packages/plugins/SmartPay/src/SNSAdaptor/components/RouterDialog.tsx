@@ -69,7 +69,7 @@ export function RouterDialog() {
 
     // #region query white list
     const { loading: queryVerifyLoading } = useAsync(async () => {
-        if (!lastRecognizedIdentity?.identifier?.userId) return
+        if (!lastRecognizedIdentity?.identifier?.userId || !open) return
         const chainId = await SmartPayBundler.getSupportedChainId()
         const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
             ...wallets.filter((x) => !x.owner).map((x) => x.address),
