@@ -333,5 +333,6 @@
     "labs_transak": "Transak",
     "labs_transak_desc": "Transak より 60 以上の国でクリプトを購入することができます。",
     "labs_savings": "貯蓄",
-    "labs_savings_desc": "さまざまな貯蓄プロトコルに暗号を導入し、貯蓄が増えるのを見守りします。"
+    "labs_savings_desc": "さまざまな貯蓄プロトコルに暗号を導入し、貯蓄が増えるのを見守りします。",
+    "labs_snapshot": "Snapshot"
 }
