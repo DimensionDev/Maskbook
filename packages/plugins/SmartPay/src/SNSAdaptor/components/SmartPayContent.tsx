@@ -34,7 +34,7 @@ import {
     Radio,
     Typography,
 } from '@mui/material'
-import { useAsyncFn, useCopyToClipboard } from 'react-use'
+import { useAsyncFn, useAsyncRetry, useCopyToClipboard, useUpdateEffect } from 'react-use'
 import { memo, useCallback, useMemo, useState } from 'react'
 import {
     formatBalance,
@@ -51,7 +51,8 @@ import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { AddSmartPayPopover } from './AddSmartPayPopover.js'
 import { AccountsManagerPopover } from './AccountsManagePopover.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { SmartPayFunder } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     dialogContent: {
@@ -187,7 +188,9 @@ export const SmartPayContent = memo(() => {
     // #region Remote Dialog Controller
     const { setDialog: setReceiveDialog } = useRemoteControlledDialog(PluginSmartPayMessages.receiveDialogEvent)
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(CrossIsolationMessages.events.swapDialogEvent)
-    const { closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
+    const { closeDialog, open: smartpayDialogOpen } = useRemoteControlledDialog(
+        PluginSmartPayMessages.smartPayDialogEvent,
+    )
     // #endregion
 
     // #region web3 state
@@ -204,7 +207,7 @@ export const SmartPayContent = memo(() => {
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const maskAddress = Others?.getMaskTokenAddress(chainId)
 
-    const { value: assets } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
+    const { value: assets, retry: refreshAssets } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
         chainId,
     })
 
@@ -252,6 +255,12 @@ export const SmartPayContent = memo(() => {
         successText: t.copy_wallet_address_success(),
     })
     // #endregion
+
+    const currentProfile = useLastRecognizedIdentity()
+    const { value = 0, retry: refreshRemainFrequency } = useAsyncRetry(async () => {
+        if (!currentProfile?.identifier?.userId) return 0
+        return SmartPayFunder.getRemainFrequency(currentProfile.identifier.userId)
+    }, [currentProfile])
 
     const [menu, openMenu] = useMenuConfig(
         contractAccounts?.map((contractAccount, index) => {
@@ -354,6 +363,14 @@ export const SmartPayContent = memo(() => {
     }, [account, wallet])
 
     // #endregion
+
+    //
+    useUpdateEffect(() => {
+        if (!smartpayDialogOpen) return
+        refreshAssets()
+        refreshRemainFrequency()
+    }, [smartpayDialogOpen, refreshAssets, refreshRemainFrequency])
+
     return (
         <>
             <DialogContent className={classes.dialogContent}>
@@ -393,7 +410,9 @@ export const SmartPayContent = memo(() => {
                     </Typography>
                     <Box display="flex" columnGap={1} position="absolute" top={16} right={16}>
                         <Icons.KeySquare onClick={(event) => setManageAnchorEl(event.currentTarget)} size={24} />
-                        <Icons.Add onClick={(event) => setAddAnchorEl(event.currentTarget)} size={24} />
+                        {value > 0 ? (
+                            <Icons.Add onClick={(event) => setAddAnchorEl(event.currentTarget)} size={24} />
+                        ) : null}
                         <AddSmartPayPopover
                             open={!!addAnchorEl}
                             anchorEl={addAnchorEl}
