@@ -200,6 +200,7 @@ export function Deploy({ open }: { open: boolean }) {
 
     const handleSelectManager = useCallback((manager: ManagerAccount) => {
         setManager(manager)
+        setAnchorEl(null)
     }, [])
 
     useEffect(() => {
