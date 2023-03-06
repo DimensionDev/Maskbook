@@ -1,10 +1,10 @@
 import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
-import { CrossIsolationMessages, DashboardRoutes, PersonaIdentifier } from '@masknet/shared-base'
+import { DashboardRoutes, PersonaIdentifier } from '@masknet/shared-base'
 import { MaskDialog } from '@masknet/theme'
-import { useWallets } from '@masknet/web3-hooks-base'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { useWallets, useWeb3State } from '@masknet/web3-hooks-base'
+import { formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { LoadingButton } from '@mui/lab'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { Services } from '../../../../API.js'
@@ -25,13 +25,19 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(
         const navigate = useNavigate()
         const wallets = useWallets()
         const { changeCurrentPersona } = PersonaContext.useContainer()
+        const { Provider } = useWeb3State()
+
+        const manageWallets = useMemo(() => {
+            return wallets.filter((x) => x.identifier === identifier.toText())
+        }, [wallets, identifier])
 
         const handleLogout = useCallback(async () => {
             await Services.Identity.logoutPersona(identifier)
             const lastCreatedPersona = await Services.Identity.queryLastPersonaCreated()
 
-            if (address) {
-                CrossIsolationMessages.events.ownerDeletionEvent.sendToAll({ owner: address })
+            if (address && manageWallets.length) {
+                const maskProvider = Provider?.getWalletProvider(ProviderType.MaskWallet)
+                await maskProvider?.removeWallets(manageWallets)
             }
             if (lastCreatedPersona) {
                 await changeCurrentPersona(lastCreatedPersona)
@@ -40,11 +46,7 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(
                 onClose()
                 navigate(DashboardRoutes.Setup)
             }
-        }, [identifier, onClose, address])
-
-        const manageWallets = useMemo(() => {
-            return wallets.filter((x) => x.identifier === identifier.toText())
-        }, [wallets, identifier])
+        }, [identifier, onClose, address, manageWallets.length])
 
         return (
             <MaskDialog open={open} title={t.personas_logout()} onClose={onClose} maxWidth="xs">
