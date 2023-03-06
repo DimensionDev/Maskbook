@@ -7,8 +7,6 @@ export async function captureFetchException(request: Request, response?: Respons
             response_type: response?.type,
             status_code: response?.status,
             status_text: response?.statusText,
-        },
-        extra: {
             request_headers: JSON.stringify(Object.fromEntries(request.headers.entries())),
             request_body: await getRequestJSON(request.clone()),
             request_text: await getRequestText(request.clone()),

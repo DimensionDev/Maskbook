@@ -58,8 +58,14 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         Sentry.setTag('agent', getAgentType())
         Sentry.setTag('site', getSiteType())
         Sentry.setTag('extension_id', getExtensionId())
+        Sentry.setTag('channel', process.env.channel)
         Sentry.setTag('version', process.env.VERSION)
         Sentry.setTag('ua', navigator.userAgent)
+        Sentry.setTag('engine', process.env.engine)
+        Sentry.setTag('build_date', process.env.BUILD_DATE)
+        Sentry.setTag('branch_name', process.env.BRANCH_NAME)
+        Sentry.setTag('commit_date', process.env.COMMIT_DATE)
+        Sentry.setTag('commit_hash', process.env.COMMIT_HASH)
     }
 
     // The sentry needs to be opened at the runtime.
