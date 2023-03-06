@@ -28,7 +28,6 @@ export class Popups implements Middleware<ConnectionContext> {
         const { PAYMASTER_MASK_CONTRACT_ADDRESS } = getSmartPayConstants(context.chainId)
         if (!PAYMASTER_MASK_CONTRACT_ADDRESS) return DEFAULT_PAYMENT_TOKEN_STATE
 
-        const web3 = Web3.getWeb3(context.chainId)
         const maskAddress = getMaskTokenAddress(context.chainId)
 
         const contract = Web3.getERC20Contract(context.chainId, maskAddress)
