@@ -28,8 +28,7 @@ const RULES = {
     'https://dsearch.mask.r2d2.to': Duration.MEDIUM,
     // Smart Pay
     'https://9rh2q3tdqj.execute-api.ap-east-1.amazonaws.com': Duration.LONG,
-    'https://uldpla73li.execute-api.ap-east-1.amazonaws.com': Duration.LONG,
-    'https://api.thegraph.com/subgraphs/name/dimensiondev/paygas-x-subgraph': Duration.LONG,
+    'https://uldpla73li.execute-api.ap-east-1.amazonaws.com': Duration.SHORT,
 }
 const URLS = Object.keys(RULES) as unknown as Array<keyof typeof RULES>
 
