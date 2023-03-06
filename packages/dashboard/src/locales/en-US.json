@@ -394,5 +394,6 @@
     "recovery_smart_pay_wallet_description_one": "{{count}} SmartPay wallet is detected locally. Recovering successfully.",
     "recovery_smart_pay_wallet_description_other": "{{count}} SmartPay wallets are detected locally. Recovering successfully.",
     "welcome_request_to_collect": "Allow us to collect your usage information to help us make improvements.",
+    "wallet_history_no_data": "No histories",
     "welcome_agreement_policy": "I have read and agree to the <agreement>Service Agreement</agreement> and <policy>Privacy Policy</policy>."
 }

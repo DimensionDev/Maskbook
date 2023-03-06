@@ -1,5 +1,5 @@
-import { Dispatch, memo, SetStateAction, useMemo, useState } from 'react'
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import { Dispatch, memo, SetStateAction, useMemo, useState, useEffect } from 'react'
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { LoadingBase, makeStyles, MaskColorVar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useTransactions, useNetworkContext } from '@masknet/web3-hooks-base'
@@ -8,6 +8,7 @@ import { HistoryTableRow } from '../HistoryTableRow/index.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { ElementAnchor, useIterator } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -25,6 +26,19 @@ const useStyles = makeStyles()((theme) => ({
         padding: '12px 0 12px',
         border: 'none',
         backgroundColor: MaskColorVar.primaryBackground,
+    },
+    placeholder: {
+        display: 'flex',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        rowGap: 14,
+    },
+    placeholderText: {
+        fontSize: 14,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.second,
     },
 }))
 
@@ -48,6 +62,11 @@ export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
     const dataSource = useMemo(() => {
         return value.filter((x) => x.chainId === selectedChainId)
     }, [value, selectedChainId])
+
+    useEffect(() => {
+        if (!iterator) return
+        if (next) next()
+    }, [next, iterator])
 
     return (
         <HistoryTableUI
@@ -74,9 +93,10 @@ export interface HistoryTableUIProps {
     selectedChainId: Web3Helper.ChainIdAll
 }
 
-export const HistoryTableUI = memo<HistoryTableUIProps>(({ dataSource, next, done, selectedChainId }) => {
+export const HistoryTableUI = memo<HistoryTableUIProps>(({ dataSource, next, isLoading, done, selectedChainId }) => {
     const t = useDashboardI18N()
     const { classes, cx } = useStyles()
+
     return (
         <>
             {dataSource.length ? (
@@ -107,11 +127,16 @@ export const HistoryTableUI = memo<HistoryTableUIProps>(({ dataSource, next, don
                         </TableBody>
                     </Table>
                 </TableContainer>
-            ) : (
+            ) : isLoading || !done ? (
                 <Box className={cx(classes.container, classes.loading)}>
                     <LoadingBase />
                 </Box>
-            )}
+            ) : !isLoading && dataSource.length === 0 ? (
+                <Box className={classes.placeholder}>
+                    <Icons.EmptySimple variant="light" size={36} />
+                    <Typography className={classes.placeholderText}>{t.wallet_history_no_data()}</Typography>
+                </Box>
+            ) : null}
             <ElementAnchor callback={() => next?.()}>
                 {!done && dataSource?.length ? <LoadingBase /> : null}
             </ElementAnchor>
