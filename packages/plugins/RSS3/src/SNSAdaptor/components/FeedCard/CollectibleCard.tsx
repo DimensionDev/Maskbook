@@ -93,7 +93,7 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center'>()((t
 
 const { Tag, Type } = RSS3BaseAPI
 export function isCollectibleFeed(feed: RSS3BaseAPI.Web3Feed): feed is RSS3BaseAPI.CollectibleFeed {
-    return feed.tag === Tag.Collectible
+    return feed.tag === Tag.Collectible && feed.type !== Type.Approval
 }
 
 function isRegisteringENS(feed: RSS3BaseAPI.CollectibleFeed) {

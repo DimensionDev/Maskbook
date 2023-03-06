@@ -10,6 +10,7 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: theme.spacing(1),
         fontWeight: 700,
         marginRight: theme.spacing(1),
+        whiteSpace: 'nowrap',
         '&:first-of-type': {
             marginLeft: 0,
         },

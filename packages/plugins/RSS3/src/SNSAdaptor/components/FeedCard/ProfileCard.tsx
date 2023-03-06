@@ -69,7 +69,7 @@ export function isProfileFeed(feed: RSS3BaseAPI.Web3Feed): feed is RSS3BaseAPI.P
     return feed.tag === Tag.Social && feed.type === Type.Profile
 }
 
-interface CollectibleCardProps extends Omit<FeedCardProps, 'feed'> {
+interface ProfileCardProps extends Omit<FeedCardProps, 'feed'> {
     feed: RSS3BaseAPI.ProfileFeed
 }
 
@@ -79,7 +79,7 @@ interface CollectibleCardProps extends Omit<FeedCardProps, 'feed'> {
  *
  * - ProfileCreate
  */
-export const ProfileCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => {
+export const ProfileCard: FC<ProfileCardProps> = ({ feed, ...rest }) => {
     const { verbose } = rest
     const { classes, cx } = useStyles()
 
