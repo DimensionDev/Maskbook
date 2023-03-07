@@ -83,7 +83,8 @@ export default memo(function Welcome() {
         }
         setAgreed(true)
         const from = params.get('from')
-        if (from && from !== DashboardRoutes.Personas) {
+        const hasRedirect = from && from !== DashboardRoutes.Personas
+        if (hasRedirect) {
             const search = params.get('search')
             navigate(urlcat(from, search ? new URLSearchParams(search).entries() : {}))
         }
@@ -91,12 +92,12 @@ export default memo(function Welcome() {
         // warm up, otherwise we can't access correct value from userGuideStatus
         await Services.SocialNetwork.hasSetup(EnhanceableSite.Twitter)
         const hasSetup = await Services.SocialNetwork.hasSetup(EnhanceableSite.Twitter)
-        if (hasSetup) return
 
         const url = await Services.SocialNetwork.setupSite(EnhanceableSite.Twitter, false)
         if (!url) return
-        if (from === DashboardRoutes.Setup) return
-        if (from && from !== DashboardRoutes.Personas) {
+        if (hasRedirect && (hasSetup || from === DashboardRoutes.Setup)) return
+
+        if (hasRedirect) {
             // Delay opening sns page to let use realize the route has changed that happened above
             await delay(300)
             browser.tabs.create({
