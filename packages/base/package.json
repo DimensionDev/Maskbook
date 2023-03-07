@@ -13,10 +13,12 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@masknet/kit": "0.1.0",
+        "@masknet/public-api": "workspace:^",
         "anchorme": "^2.1.2",
         "pvtsutils": "^1.3.2",
         "tiny-secp256k1": "^2.2.1",
-        "ts-results-es": "^3.5.0"
+        "ts-results-es": "^3.5.0",
+        "i18next-browser-languagedetector": "^7.0.1"
     },
     "files": [
         "src",

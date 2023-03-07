@@ -9,7 +9,7 @@ import {
     mergeSubscription,
     type StorageObject,
 } from '@masknet/shared-base'
-import type { Account, WalletProvider, ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
+import { type Account, type WalletProvider, type ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
 
 export interface ProviderStorage<Account, ProviderType extends string> {
     account: Account

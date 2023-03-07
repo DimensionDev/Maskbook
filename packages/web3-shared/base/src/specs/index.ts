@@ -11,7 +11,7 @@ import type {
     BindingProof,
     ProfileIdentifier,
     Proof,
-} from '@masknet/shared-base'
+} from '@masknet/base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
     ReturnChainResolver,

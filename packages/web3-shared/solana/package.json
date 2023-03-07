@@ -15,7 +15,7 @@
     "src/**/*.json"
   ],
   "dependencies": {
-    "@masknet/shared-base": "workspace:^",
+    "@masknet/base":"workspace:^",
     "@masknet/web3-constants": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@solana/web3.js": "^1.44.2",

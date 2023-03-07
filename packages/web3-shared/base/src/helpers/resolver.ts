@@ -7,7 +7,7 @@ import {
     SocialAddressType,
     SourceType,
 } from '../specs/index.js'
-import { NetworkPluginID, createLookupTableResolver, NextIDPlatform } from '@masknet/shared-base'
+import { NetworkPluginID, createLookupTableResolver, NextIDPlatform } from '@masknet/base'
 
 export interface ExplorerRoutes {
     addressPathname?: string
