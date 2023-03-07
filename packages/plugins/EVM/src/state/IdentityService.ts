@@ -284,9 +284,32 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             this.getSocialAddressesFromMaskX(identity),
             this.getSocialAddressFromLens(identity),
         ])
-        const identities = allSettled
+        const identities_ = allSettled
             .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
             .filter(Boolean) as Array<SocialAddress<ChainId>>
-        return uniqBy(identities, (x) => [x.type, x.label, x.address.toLowerCase()].join('_'))
+
+        const identities = uniqBy(identities_, (x) => [x.type, x.label, x.address.toLowerCase()].join('_'))
+
+        if (!getNextIDPlatform() && !(process.env.channel === 'stable' && process.env.NODE_ENV === 'production')) {
+            return identities
+        }
+
+        const allSettledTwitterHandler = await Promise.allSettled(
+            identities.map(async (x) => {
+                const bindingProofs = await NextIDProof.queryProfilesByRelationService(x.address)
+                const twitterHandler = bindingProofs.find((x) => x.platform === NextIDPlatform.Twitter)?.identity
+                return twitterHandler
+            }),
+        )
+
+        const twitterHandlerList = allSettledTwitterHandler
+            .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
+            .filter(Boolean)
+
+        const isTwitterHandlerMatched = twitterHandlerList.some(
+            (x) => x && x.toLowerCase() === identity.identifier?.userId.toLowerCase(),
+        )
+
+        return isTwitterHandlerMatched ? identities : EMPTY_LIST
     }
 }
