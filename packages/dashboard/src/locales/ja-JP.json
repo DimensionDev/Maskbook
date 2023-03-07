@@ -335,5 +335,15 @@
     "labs_savings": "貯蓄",
     "labs_savings_desc": "さまざまな貯蓄プロトコルに暗号を導入し、貯蓄が増えるのを見守りします。",
     "labs_snapshot": "Snapshot",
-    "labs_gitcoin": "Gitcoin"
+    "labs_snapshot_desc": "ソーシャルメディア上で直接提案にを表示し、投票します。",
+    "labs_market_trend": "マーケットトレンド",
+    "labs_market_trend_desc": "トークン情報、価格チャート、取引情報をソーシャルメディアに直接表示します。",
+    "labs_collectibles": "コレクション",
+    "labs_collectibles_desc": "OpenSeaとRaribleのコレクションの具体的な情報を表示し、ソーシャルメディアで直接オファーします。",
+    "labs_gitcoin": "Gitcoin",
+    "labs_gitcoin_desc": "Gitcoinプロジェクトの具体的な情報を表示し、ソーシャルメディア上で直接プロジェクトに寄付します。",
+    "labs_valuables": "貴重品",
+    "labs_valuables_desc": "オリジナルのクリエイターによってサイン入りツイートを購入&販売。",
+    "labs_mask_box": "MaskBox",
+    "labs_mask_box_desc": "NFTミステリーボックスを発売するためのプロフェッショナルなマルチチェーン分散型プラットフォームです。"
 }
