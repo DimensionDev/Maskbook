@@ -4,4 +4,3 @@
 /// <reference path="./global.d.ts" />
 /// <reference path="./theme-global.d.cts" />
 /// <reference path="./webpack-hmr.d.ts" />
-/// <reference path="./web3-core.d.ts" />
