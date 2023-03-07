@@ -1,7 +1,6 @@
-import { compact } from 'lodash-es'
+import { compact, first } from 'lodash-es'
 import stringify from 'json-stable-stringify'
 import { delay } from '@masknet/kit'
-import { openOrActiveTab } from '@masknet/shared-base-ui'
 import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { currentSetupGuideStatus, userGuideStatus } from '../../../shared/legacy-settings/settings.js'
 import { SetupGuideStep } from '../../../shared/legacy-settings/types.js'
@@ -99,20 +98,30 @@ export async function connectSite(
     const worker = definedSiteAdaptors.get(network)
     if (!worker) return
 
-    if (!(await requestSiteAdaptorsPermission([worker]))) return
+    const permissionGranted = await requestSiteAdaptorsPermission([worker])
+    if (!permissionGranted) return
 
-    // #region reset the global setup status settings
     currentSetupGuideStatus[network].value = stringify({
         status: type === 'nextID' ? SetupGuideStep.VerifyOnNextID : SetupGuideStep.FindUsername,
         persona: identifier.toText(),
         username: profile?.userId,
     })
 
+    const url = worker.homepage
+    if (!url) return
+
     await delay(100)
-    // #endregion
     if (openInNewTab) {
         await browser.tabs.create({ active: true, url: worker.homepage })
     } else {
-        await openOrActiveTab(worker.homepage)
+        const openedTabs = await browser.tabs.query({ url: `${url}/*` })
+        const targetTab = openedTabs.find((x: { active: boolean }) => x.active) ?? first(openedTabs)
+
+        if (targetTab?.id && targetTab.windowId) {
+            await browser.tabs.update(targetTab.id, { active: true })
+            await browser.windows.update(targetTab.windowId, { focused: true })
+        } else {
+            await browser.tabs.create({ active: true, url })
+        }
     }
 }

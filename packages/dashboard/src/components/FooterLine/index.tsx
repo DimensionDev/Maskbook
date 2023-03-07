@@ -88,7 +88,7 @@ export const FooterLine = memo((props: Props) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const [isOpen, setOpen] = useState(false)
-    const version = globalThis.browser?.runtime.getManifest()?.version ?? process.env.VERSION
+    const version = process.env.VERSION
 
     const openVersionLink = (event: React.MouseEvent) => {
         // `MouseEvent.prototype.metaKey` on macOS (`Command` key), Windows (`Windows` key), Linux (`Super` key)

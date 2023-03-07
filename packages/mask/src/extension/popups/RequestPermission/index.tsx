@@ -3,26 +3,23 @@ import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAsyncRetry } from 'react-use'
 import { RequestPermission } from './RequestPermission.js'
+import type { Manifest } from 'webextension-polyfill'
 
-const acceptable: readonly browser.permissions.Permission[] = [
-    'alarms',
+const CanRequestDynamically: readonly Manifest.OptionalPermission[] = [
     'clipboardRead',
     'clipboardWrite',
-    'contextMenus',
-    'contextualIdentities',
-    'menus',
     'notifications',
     'webRequestBlocking',
 ]
-function isAcceptablePermission(x: string): x is browser.permissions.Permission {
-    return (acceptable as string[]).includes(x)
+function canRequestDynamically(x: string): x is Manifest.OptionalPermission {
+    return (CanRequestDynamically as string[]).includes(x)
 }
 
 export default function RequestPermissionPage() {
     const location = useLocation()
     const params = new URLSearchParams(location.search)
     const origins = params.getAll('origins')
-    const permissions = params.getAll('permissions').filter(isAcceptablePermission)
+    const permissions = params.getAll('permissions').filter(canRequestDynamically)
 
     const { retry, value: hasPermission } = useAsyncRetry(
         () => browser.permissions.contains({ origins, permissions }),

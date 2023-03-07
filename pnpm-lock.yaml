@@ -1197,9 +1197,6 @@ importers:
         specifier: 3.16.0
         version: 3.16.0
     devDependencies:
-      '@dimensiondev/webextension-shim':
-        specifier: 0.0.3-20210823035705-4257e12
-        version: 0.0.3-20210823035705-4257e12(typescript@5.1.0-dev.20230302)
       '@nice-labs/emit-file-webpack-plugin':
         specifier: ^1.1.3
         version: 1.1.3(webpack@5.75.0)
@@ -6730,22 +6727,6 @@ packages:
       detect-browser: 3.0.1
       extension-port-stream: 1.0.0
     dev: false
-
-  /@dimensiondev/webextension-shim@0.0.3-20210823035705-4257e12(typescript@5.1.0-dev.20230302):
-    resolution: {integrity: sha512-zkpb1xzfyhWu9c5FZc4HHa5aBrUVdQCNGfmnUzNk2kU6AaCtfVeB4i39LLaPVLCP5nKKAVnbWNe88fGYSmcryw==, tarball: download/@DimensionDev/webextension-shim/0.0.3-20210823035705-4257e12/6370cba6050206017392aee974de473688ff0a29}
-    hasBin: true
-    peerDependencies:
-      typescript: ^3.8.3 || 5
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      async-call-rpc: 4.2.1
-      buffer: 6.0.3
-      systemjs: 6.3.2
-      typescript: 5.1.0-dev.20230302
-      web-ext-types: 3.2.1
-    dev: true
 
   /@discoveryjs/json-ext@0.5.7:
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
@@ -14133,10 +14114,6 @@ packages:
   /astral-regex@2.0.0:
     resolution: {integrity: sha512-Z7tMw1ytTXt5jqMcOP+OQteU1VuNK9Y02uuJtKQ1Sv69jXQKKg5cibLwGJow8yzZP+eAc18EmLGPal0bp36rvQ==}
     engines: {node: '>=8'}
-    dev: true
-
-  /async-call-rpc@4.2.1:
-    resolution: {integrity: sha512-MRtUVp1eFKRLLPE+frvTUXnhcDnTM1altJg0dcSnlJ9AaodvZOv6b9/+kE8wGNlT33uRn0fYXZODY1XmZZQ6IQ==}
     dev: true
 
   /async-call-rpc@6.1.5:
@@ -31033,10 +31010,6 @@ packages:
     resolution: {integrity: sha512-qImOD23aDfnIDNqlG1NOehdB9IYsn1V9oByPjKY1nakv2MQYCEMyX033/q+aEtYCpmYK1cv2+NTmlH+ra6GA5A==}
     dev: true
 
-  /systemjs@6.3.2:
-    resolution: {integrity: sha512-zcALS1RIYtsQBG4fbaE+cJzKx+UoEuSM8xCkGGH99i7p7Ym3ALvhi9QrpF2lo0CMQaejqrE1GnbkuG2m/+H7ew==}
-    dev: true
-
   /tailwindcss@3.2.7(postcss@8.4.21)(ts-node@10.9.1):
     resolution: {integrity: sha512-B6DLqJzc21x7wntlH/GsZwEXTBttVSl1FtCzC8WP4oBc/NKef7kaax5jeihkkCEWc831/5NDJ9gRNDK6NEioQQ==}
     engines: {node: '>=12.13.0'}
@@ -33005,10 +32978,6 @@ packages:
       '@zxing/text-encoding': 0.9.0
     dev: true
 
-  /web-ext-types@3.2.1:
-    resolution: {integrity: sha512-oQZYDU3W8X867h8Jmt3129kRVKklz70db40Y6OzoTTuzOJpF/dB2KULJUf0txVPyUUXuyzV8GmT3nVvRHoG+Ew==}
-    dev: true
-
   /web-ext@7.5.0:
     resolution: {integrity: sha512-Ymflj7Aq/LOD+zGoyvwRbAPx/yMJeig2OEb/rRXYrWl6NWRI5E0c2iWGqlBcnL45iKrOzz70H438dVeJk0w2ug==}
     engines: {node: '>=14.0.0', npm: '>=6.9.0'}
@@ -34659,7 +34628,6 @@ time:
   /@dimensiondev/holoflows-kit@0.9.0-20221128033345-3a4bb0c: '2022-11-28T03:34:25Z'
   /@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f: '2021-10-13T08:39:07Z'
   /@dimensiondev/metamask-extension-provider@3.0.6-20221105074301-8806fca: '2022-11-05T07:43:23Z'
-  /@dimensiondev/webextension-shim@0.0.3-20210823035705-4257e12: '2021-08-23T03:58:32Z'
   /@emotion/serialize@1.1.0: '2022-07-31T09:06:36.799Z'
   /@emotion/server@11.10.0: '2022-07-31T09:06:36.914Z'
   /@emotion/styled@11.10.4: '2022-08-30T09:02:33.440Z'

@@ -1,9 +1,13 @@
-import type { Appearance, LanguageOptions } from '@masknet/public-api'
+import type { Appearance, LanguageOptions, RelationFavor } from '@masknet/public-api'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
-import type { ProfileIdentifier, PersonaIdentifier } from '@masknet/base'
-import type { NetworkPluginID } from '../Plugin/index.js'
-import type { PersonaInformation, RelationFavor } from '../Persona/type.js'
-import type { EnhanceableSite, ExtensionSite } from '../Site/index.js'
+import type {
+    ProfileIdentifier,
+    PersonaIdentifier,
+    EnhanceableSite,
+    ExtensionSite,
+    NetworkPluginID,
+    PersonaInformation,
+} from '@masknet/base'
 
 export type PersonaSelectPanelDialogEvent = {
     open: boolean
