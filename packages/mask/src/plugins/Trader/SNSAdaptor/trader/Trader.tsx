@@ -1,16 +1,18 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useState, useMemo } from 'react'
-import { useUnmount, useUpdateEffect } from 'react-use'
+import { useAsync, useUnmount, useUpdateEffect } from 'react-use'
 import { delay } from '@masknet/kit'
 import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
-import { formatBalance } from '@masknet/web3-shared-base'
-import { ChainId, GasConfig } from '@masknet/web3-shared-evm'
+import { formatBalance, isSameAddress, isZero, minus, toFixed } from '@masknet/web3-shared-base'
+import { ChainId, DepositPaymaster, EIP1559GasConfig, GasConfig } from '@masknet/web3-shared-evm'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     useChainContext,
     useChainIdValid,
     useFungibleTokenBalance,
+    useMaskTokenAddress,
     useNetworkContext,
+    useWallet,
     useWeb3State,
 } from '@masknet/web3-hooks-base'
 import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
@@ -33,6 +35,8 @@ import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useMountReport, useTelemetry } from '@masknet/web3-telemetry/hooks'
 import { TelemetryAPI } from '@masknet/web3-providers/types'
+import { SmartPayBundler } from '@masknet/web3-providers'
+import { BigNumber } from 'bignumber.js'
 
 export interface TraderProps extends withClasses<'root'> {
     defaultInputCoin?: Web3Helper.FungibleTokenAll
@@ -49,7 +53,7 @@ export interface TraderRef {
 
 export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, ref) => {
     const telemetry = useTelemetry()
-
+    const wallet = useWallet()
     const { defaultOutputCoin, chainId: targetChainId, defaultInputCoin, settings = false } = props
     const t = useI18N()
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
@@ -331,15 +335,69 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     }, [allTradeComputed])
     // #endregion
 
+    // #region hack for smartPay, will be removed
+    const maskTokenAddress = useMaskTokenAddress()
+
+    const { value: smartPayConfig } = useAsync(async () => {
+        const smartPayChainId = await SmartPayBundler.getSupportedChainId()
+        const depositPaymaster = new DepositPaymaster(smartPayChainId)
+        const ratio = await depositPaymaster.getRatio()
+
+        return {
+            ratio,
+            smartPayChainId,
+        }
+    }, [])
+
+    const actualBalance = useMemo(() => {
+        if (
+            !wallet?.owner ||
+            chainId !== smartPayConfig?.smartPayChainId ||
+            !isSameAddress(inputToken?.address, maskTokenAddress)
+        )
+            return inputTokenBalance
+
+        return toFixed(
+            minus(
+                inputTokenBalance,
+
+                new BigNumber((gasConfig as EIP1559GasConfig).maxFeePerGas)
+                    .multipliedBy(
+                        focusedTrade?.gas.value && !isZero(focusedTrade?.gas.value)
+                            ? focusedTrade?.gas.value
+                            : '150000',
+                    )
+                    .integerValue()
+                    .multipliedBy(smartPayConfig?.ratio ?? 1),
+            ),
+            0,
+        )
+    }, [
+        gasConfig,
+        wallet,
+        inputToken?.address,
+        maskTokenAddress,
+        smartPayConfig,
+        chainId,
+        inputTokenBalance,
+        focusedTrade,
+    ])
+    // #endregion
+
     return (
         <>
             <TradeForm
+                isSmartPay={
+                    !!wallet?.owner &&
+                    chainId === smartPayConfig?.smartPayChainId &&
+                    isSameAddress(inputToken?.address, maskTokenAddress)
+                }
                 settings={settings}
                 classes={props.classes}
                 trades={sortedAllTradeComputed}
                 inputToken={inputToken}
                 outputToken={outputToken}
-                inputTokenBalance={inputTokenBalance}
+                inputTokenBalance={actualBalance}
                 inputAmount={inputAmount}
                 onInputAmountChange={onInputAmountChange}
                 onTokenChipClick={onTokenChipClick}
@@ -368,7 +426,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                 trades={sortedAllTradeComputed}
                 inputToken={inputToken}
                 outputToken={outputToken}
-                inputTokenBalance={inputTokenBalance}
+                inputTokenBalance={actualBalance}
                 inputAmount={inputAmount}
                 focusedTrade={focusedTrade}
                 gasPrice={gasPrice}
