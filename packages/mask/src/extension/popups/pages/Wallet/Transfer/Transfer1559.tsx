@@ -8,6 +8,7 @@ import { EthereumAddress } from 'wallet.ts'
 import { BigNumber } from 'bignumber.js'
 import {
     ChainId,
+    DepositPaymaster,
     explorerResolver,
     formatEthereumAddress,
     formatGweiToEther,
@@ -26,8 +27,10 @@ import {
     isPositive,
     isSameAddress,
     isZero,
+    minus,
     multipliedBy,
     rightShift,
+    toFixed,
 } from '@masknet/web3-shared-base'
 import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -51,6 +54,7 @@ import {
     useWeb3Connection,
     useGasOptions,
     useNetworkContext,
+    useMaskTokenAddress,
 } from '@masknet/web3-hooks-base'
 import { AccountItem } from './AccountItem.js'
 import { TransferAddressError } from '../type.js'
@@ -58,6 +62,8 @@ import { useI18N } from '../../../../../utils/index.js'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
 import Services from '../../../../service.js'
 import { Trans } from 'react-i18next'
+import { useContainer } from 'unstated-next'
+import { PopupContext } from '../../../hook/usePopupContext.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -205,6 +211,8 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         message: string
     } | null>()
 
+    const { smartPayChainId } = useContainer(PopupContext)
+
     const { value: etherPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
         chainId: nativeToken?.chainId,
     })
@@ -310,7 +318,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         },
     })
 
-    const [address, amount, maxFeePerGas] = methods.watch(['address', 'amount', 'maxFeePerGas'])
+    const [address, amount, maxFeePerGas, gasLimit] = methods.watch(['address', 'amount', 'maxFeePerGas', 'gasLimit'])
 
     // #region resolve ENS domain
     const {
@@ -389,12 +397,46 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         selectedAsset?.address ?? '',
     )
 
+    // #region hack for smartpay, will be removed
+    const maskTokenAddress = useMaskTokenAddress()
+    const { value: ratio } = useAsync(async () => {
+        if (!smartPayChainId) return
+        const depositPaymaster = new DepositPaymaster(smartPayChainId)
+        return depositPaymaster.getRatio()
+    }, [smartPayChainId])
+
+    const actualSelected = useMemo(() => {
+        if (!selectedAsset) return
+        if (
+            !wallet?.owner ||
+            chainId !== smartPayChainId ||
+            !isSameAddress(selectedAsset?.address, maskTokenAddress) ||
+            !ratio
+        )
+            return selectedAsset
+
+        return {
+            ...selectedAsset,
+            balance: toFixed(
+                minus(
+                    selectedAsset?.balance,
+                    new BigNumber(formatGweiToWei(maxFeePerGas))
+                        .multipliedBy(!isZero(gasLimit) ? gasLimit : 150000)
+                        .integerValue()
+                        .multipliedBy(ratio),
+                ),
+                0,
+            ),
+        }
+    }, [gasLimit, maxFeePerGas, selectedAsset, maskTokenAddress, smartPayChainId, chainId, wallet?.owner, ratio])
+    // #endregion
+
     const maxAmount = useMemo(() => {
         const gasFee = formatGweiToWei(maxFeePerGas || 0).multipliedBy(minGasLimit ?? MIN_GAS_LIMIT)
         let amount_ = new BigNumber(tokenBalance ?? 0)
-        amount_ = selectedAsset?.schema === SchemaType.Native ? amount_.minus(gasFee) : amount_
-        return formatBalance(BigNumber.max(0, amount_).toFixed(), selectedAsset?.decimals)
-    }, [selectedAsset, maxFeePerGas, minGasLimit, tokenBalance])
+        amount_ = actualSelected?.schema === SchemaType.Native ? amount_.minus(gasFee) : amount_
+        return formatBalance(BigNumber.max(0, amount_).toFixed(), actualSelected?.decimals)
+    }, [actualSelected, maxFeePerGas, minGasLimit, tokenBalance])
 
     // #region set default gasLimit
     useUpdateEffect(() => {
@@ -536,7 +578,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 openAssetMenu={openAssetMenu}
                 handleMaxClick={handleMaxClick}
                 etherPrice={etherPrice ?? 0}
-                selectedAsset={selectedAsset}
+                selectedAsset={actualSelected}
                 handleCancel={handleCancel}
                 handleConfirm={methods.handleSubmit(onSubmit)}
                 confirmLoading={loading}

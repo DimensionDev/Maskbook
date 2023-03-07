@@ -14,10 +14,20 @@ export interface InputTokenPanelProps extends withClasses<'root'> {
     token?: Web3Helper.FungibleTokenAll | null
     onAmountChange: (amount: string) => void
     SelectTokenChip?: Partial<SelectTokenChipProps>
+    isAvailabelBalance?: boolean
 }
 
 export const InputTokenPanel = memo<InputTokenPanelProps>(
-    ({ chainId, token, balance, onAmountChange, amount, SelectTokenChip: SelectTokenChipProps, maxAmount }) => {
+    ({
+        chainId,
+        token,
+        balance,
+        onAmountChange,
+        amount,
+        SelectTokenChip: SelectTokenChipProps,
+        maxAmount,
+        isAvailabelBalance,
+    }) => {
         const { pluginID } = useNetworkContext()
         const { Others } = useWeb3State()
         const { value: tokenPrice = 0 } = useFungibleTokenPrice(pluginID, token?.address.toLowerCase())
@@ -29,6 +39,7 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
 
         return (
             <InputTokenPanelUI
+                isAvailableBalance={isAvailabelBalance}
                 balance={
                     Others?.isNativeTokenAddress(token?.address) ? formatEtherToWei(maxAmount).toString() : balance
                 }

@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useUpdateEffect } from 'react-use'
+import { useAsync, useUpdateEffect } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { Icons } from '@masknet/icons'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
@@ -12,11 +12,23 @@ import {
     useWeb3State,
     useNativeToken,
     useNativeTokenPrice,
+    useMaskTokenAddress,
+    useWallet,
 } from '@masknet/web3-hooks-base'
 import { FormattedAddress, TokenAmountPanel, useSelectFungibleToken } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { MaskColorVar, MaskTextField } from '@masknet/theme'
-import { TokenType, FungibleToken, isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
+import {
+    TokenType,
+    FungibleToken,
+    isGreaterThan,
+    isZero,
+    multipliedBy,
+    rightShift,
+    isSameAddress,
+    minus,
+    toFixed,
+} from '@masknet/web3-shared-base'
 import {
     SchemaType,
     formatWeiToEther,
@@ -26,11 +38,14 @@ import {
     isValidAddress,
     NetworkType,
     isNativeTokenAddress,
+    DepositPaymaster,
+    EIP1559GasConfig,
 } from '@masknet/web3-shared-evm'
 import { Tune as TuneIcon } from '@mui/icons-material'
 import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { useGasConfig } from '../../hooks/useGasConfig.js'
+import { SmartPayBundler } from '@masknet/web3-providers'
 
 export interface TransferERC20Props {
     token: FungibleToken<ChainId, SchemaType>
@@ -40,6 +55,7 @@ const GAS_LIMIT = 21000
 
 export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const t = useDashboardI18N()
+    const wallet = useWallet()
     const anchorEl = useRef<HTMLDivElement | null>(null)
     const [amount, setAmount] = useState('')
     const [address, setAddress] = useState('')
@@ -108,14 +124,50 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     }, [gasLimit, gasPrice, maxFee, is1559Supported])
     const gasFeeInUsd = formatWeiToEther(gasFee).multipliedBy(nativeTokenPrice.value ?? 0)
 
+    // #region hack for smartpay, will be removed
+    const maskTokenAddress = useMaskTokenAddress()
+
+    const { value: smartpayConfig } = useAsync(async () => {
+        const smartPayChainId = await SmartPayBundler.getSupportedChainId()
+        const depositPaymaster = new DepositPaymaster(smartPayChainId)
+        const ratio = await depositPaymaster.getRatio()
+
+        return {
+            ratio,
+            smartPayChainId,
+        }
+    }, [])
+
+    const actualBalance = useMemo(() => {
+        if (
+            !wallet?.owner ||
+            chainId !== smartpayConfig?.smartPayChainId ||
+            !isSameAddress(selectedToken?.address, maskTokenAddress)
+        )
+            return tokenBalance
+
+        return toFixed(
+            minus(
+                tokenBalance,
+
+                new BigNumber((gasConfig as EIP1559GasConfig).maxFeePerGas)
+                    .multipliedBy(!isZero(gasLimit) ? gasLimit : '150000')
+                    .integerValue()
+                    .multipliedBy(smartpayConfig?.ratio ?? 1),
+            ),
+            0,
+        )
+    }, [gasConfig, wallet, selectedToken?.address, maskTokenAddress, smartpayConfig, chainId, tokenBalance, gasLimit])
+    // #endregion
+
     const maxAmount = useMemo(() => {
         const price = is1559Supported && maxFee ? new BigNumber(maxFee) : gasPrice
         const gasFee = multipliedBy(gasLimit, price)
 
-        let amount_ = new BigNumber(tokenBalance || '0')
+        let amount_ = new BigNumber(actualBalance || '0')
         amount_ = selectedToken.schema === SchemaType.Native ? amount_.minus(gasFee) : amount_
         return BigNumber.max(0, amount_).toFixed()
-    }, [tokenBalance, gasPrice, selectedToken?.type, amount, gasLimit, maxFee, is1559Supported])
+    }, [actualBalance, gasPrice, selectedToken?.type, amount, gasLimit, maxFee, is1559Supported])
 
     const [{ loading: isTransferring }, transferCallback] = useTokenTransferCallback(tokenType, selectedToken.address)
 
@@ -262,7 +314,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                     <TokenAmountPanel
                         amount={amount}
                         maxAmount={maxAmount}
-                        balance={tokenBalance}
+                        balance={actualBalance}
                         label={t.wallets_transfer_amount()}
                         token={selectedToken}
                         onAmountChange={setAmount}

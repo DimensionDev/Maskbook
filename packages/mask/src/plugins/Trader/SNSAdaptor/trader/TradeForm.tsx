@@ -178,6 +178,7 @@ export interface AllTradeFormProps extends withClasses<'root'> {
     onSwitch: () => void
     settings?: boolean
     gasConfig?: GasConfig
+    isSmartPay: boolean
 }
 
 export const TradeForm = memo<AllTradeFormProps>(
@@ -191,7 +192,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         inputTokenBalance,
         focusedTrade,
         onFocusedTradeChange,
-
+        isSmartPay,
         gasPrice,
         onSwitch,
         settings,
@@ -349,6 +350,7 @@ export const TradeForm = memo<AllTradeFormProps>(
             <>
                 <Box className={classes.root}>
                     <InputTokenPanel
+                        isAvailabelBalance={isSmartPay}
                         chainId={chainId}
                         amount={inputAmount}
                         balance={inputTokenBalanceAmount.toFixed()}
