@@ -1,11 +1,11 @@
 import type EVM_Web3 from 'web3'
-import type { RequestArguments, Transaction as Web3Transaction } from 'web3-core'
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type {
-    NonPayableTransactionObject,
-    PayableTransactionObject,
+    RequestArguments,
+    Transaction as Web3Transaction,
     TransactionReceipt as Web3TransactionReceipt,
-} from '@masknet/web3-contracts/types/types.js'
+} from 'web3-core'
+import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types.js'
 
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
 
