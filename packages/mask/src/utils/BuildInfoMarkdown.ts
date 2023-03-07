@@ -1,11 +1,10 @@
 export const buildInfoMarkdown = `## Build info
-- Version: ${globalThis.browser?.runtime?.getManifest?.()?.version ?? process.env.VERSION}
+- Version: ${process.env.VERSION}
 - NODE_ENV: ${process.env.NODE_ENV}
 - target: ${process.env.engine}
 - build: ${process.env.channel}
 - architecture: ${process.env.architecture}
 - BUILD_DATE: ${process.env.BUILD_DATE}
-- VERSION: ${process.env.VERSION}
 
 ## Git (${process.env.DIRTY ? '*' : ''}):
 

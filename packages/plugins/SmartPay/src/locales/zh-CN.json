@@ -28,7 +28,7 @@
     "deploy_tips_description_three": "目前 SmartPay 钱包仅支持在 Polygon Network 上体验免 gas fee 及更换管理账户的功能。",
     "deploy_tips_description_four": "该 SmartPay 钱包只能接收 Polygon 网络的资产。请勿使用该地址接受其他 EVM 链条的资产。",
     "eligibility_description": "您可以关注 <Link>Mask Network</Link> 官方 Twitter 账号或加入 <Discord>Discord</Discord> 参与该活动, 免费获得用 SmartPay 钱包体验免网络费的区块链交互操作. 后续将会公布第二批参与该功能测试的用户名单。",
-    "eligibility_query": "点击<Link>查阅</Link>您是否在第一批免费部署 SmartPay 钱包的白名单内。",
+    "eligibility_query": "点击<Link>此处</Link>填写 SmartPay 钱包白名单申请表单。",
     "erc_4337_features_title": "ERC-4337 将会为钱包的设计打开更多的可行性和重要的功能的大门",
     "erc_4337_features_one": "支持多签和社交恢复",
     "erc_4337_features_two": "更高效和简洁的签名算法(eg. Schnorr, BLS)",

@@ -1,13 +1,14 @@
+import type { Events } from 'webextension-polyfill'
+
 // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/devtools/inspectedWindow/eval
 export async function devtoolsEval<T>(script: string, runInContentScript: boolean): Promise<T> {
     const [result, exception] = await browser.devtools.inspectedWindow.eval(
         script,
-        // @ts-expect-error .d.ts does not include this api.
         runInContentScript ? { useContentScriptContext: true } : undefined,
     )
     if (exception) {
         if ('isException' in exception) throw new EvalError(exception.value)
-        else throw new Error(exception.code)
+        else throw new Error((exception as any).code)
     }
     return result
 }
@@ -17,7 +18,7 @@ export function createPanel(name: string) {
 }
 
 export function attachListener<T>(
-    listenerObject: Listener<T>,
+    listenerObject: Events.Event<(arg: T) => void>,
     f: (arg: T) => void,
     options: Pick<AddEventListenerOptions, 'once' | 'signal'>,
 ) {

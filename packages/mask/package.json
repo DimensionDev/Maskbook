@@ -160,7 +160,6 @@
     "zod": "3.16.0"
   },
   "devDependencies": {
-    "@dimensiondev/webextension-shim": "0.0.3-20210823035705-4257e12",
     "@nice-labs/emit-file-webpack-plugin": "^1.1.3",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
     "@types/color": "^3.0.3",
