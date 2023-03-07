@@ -297,8 +297,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         const allSettledTwitterHandler = await Promise.allSettled(
             identities.map(async (x) => {
                 const bindingProofs = await NextIDProof.queryProfilesByRelationService(x.address)
-                const twitterHandler = bindingProofs.find((x) => x.platform === NextIDPlatform.Twitter)?.identity
-                return twitterHandler
+                return bindingProofs.find((x) => x.platform === NextIDPlatform.Twitter)?.identity
             }),
         )
 
