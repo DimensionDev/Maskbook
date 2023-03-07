@@ -1,12 +1,17 @@
 import { useAsyncFn } from 'react-use'
-import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
 import type { ITO } from '@masknet/web3-contracts/types/ITO.js'
 import type { ITO2 } from '@masknet/web3-contracts/types/ITO2.js'
 import type { Qualification } from '@masknet/web3-contracts/types/Qualification.js'
 import type { Qualification2 } from '@masknet/web3-contracts/types/Qualification2.js'
 import type { PayableTx } from '@masknet/web3-contracts/types/types.js'
-import { type ChainId, SchemaType, TransactionEventType, useITOConstants } from '@masknet/web3-shared-evm'
+import {
+    type ChainId,
+    type TransactionReceipt,
+    SchemaType,
+    TransactionEventType,
+    useITOConstants,
+} from '@masknet/web3-shared-evm'
 import {
     isSameAddress,
     isPositive,

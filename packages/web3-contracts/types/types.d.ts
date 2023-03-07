@@ -3,8 +3,14 @@
 /* eslint-disable */
 import BN from 'bn.js'
 import { Contract } from 'web3-eth-contract'
-import { EventLog, PromiEvent, TransactionReceipt } from 'web3-core/types'
+import { EventLog, PromiEvent, TransactionReceipt as Web3TransactionReceipt } from 'web3-core/types'
 import { EventEmitter } from 'events'
+
+export type TransactionReceipt = Omit<Web3TransactionReceipt, 'events'> & {
+    events?: {
+        [eventName: string]: EventLog | undefined
+    }
+}
 
 interface EstimateGasOptions {
     from?: string
