@@ -8,8 +8,11 @@ const IGNORE_ERRORS = [
     'yb0w3z63oa',
     // Twitter Identity API
     'mr8asf7i4h',
+    'https://t.co/',
     // ScamDB
-    'scam.mask.r2d2.to',
+    'https://scam.mask.r2d2.to',
+    // RSS3 domain query
+    'https://rss3.domains/name',
     'At least one of the attempts fails.',
     'Extension context invalidated.',
     '[object Promise]',
