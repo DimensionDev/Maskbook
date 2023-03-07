@@ -135,7 +135,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         // the settings is not available
         if (!settings?.token) return
 
-        const FillSuccess = (receipt.events?.FillSuccess.returnValues ?? {}) as {
+        const FillSuccess = (receipt.events?.FillSuccess?.returnValues ?? {}) as {
             total: string
             id: string
             creator: string

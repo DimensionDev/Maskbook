@@ -25,7 +25,7 @@ export function decodeEvents(web3: Web3, abis: AbiItem[], receipt: TransactionRe
         } as EventLog
     })
     return events.reduce<{
-        [eventName: string]: EventLog
+        [eventName: string]: EventLog | undefined
     }>((accumulate, event) => {
         if (event) accumulate[event.event] = event
         return accumulate

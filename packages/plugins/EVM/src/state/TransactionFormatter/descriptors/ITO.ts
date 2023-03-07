@@ -14,7 +14,7 @@ export class ITODescriptor extends DescriptorWithTransactionDecodedReceipt imple
         })
         const events = await this.getReceipt(chainId, contractAddress, ITO_ABI as AbiItem[], hash)
 
-        const { to_value, token_address, to_address } = (events?.ClaimSuccess.returnValues ?? {}) as {
+        const { to_value, token_address, to_address } = (events?.ClaimSuccess?.returnValues ?? {}) as {
             to_value: string
             token_address: string
             to_address: string
