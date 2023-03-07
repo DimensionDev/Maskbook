@@ -17,11 +17,11 @@ function startPluginHost() {
         [],
         (x) => {
             const clearCurrentPersonaIdentifier = MaskMessages.events.currentPersonaIdentifier.on(x)
-            const clearPersonasChanged = MaskMessages.events.personasChanged.on(x)
+            const clearOwnPersonaChanged = MaskMessages.events.ownPersonaChanged.on(x)
 
             return () => {
                 clearCurrentPersonaIdentifier()
-                clearPersonasChanged()
+                clearOwnPersonaChanged()
             }
         },
     )
