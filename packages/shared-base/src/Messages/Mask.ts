@@ -171,6 +171,11 @@ export interface RestoreSuccessEvent {
 
 export interface redpacketDialogEvent {
     open: boolean
+    source?: string
+}
+
+export interface SmartPayDialogEvent {
+    open: boolean
 }
 
 export interface ProfileNFTsPageEvent {

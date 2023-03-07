@@ -16,6 +16,7 @@ import type {
     AvatarSettingDialogEvent,
     redpacketDialogEvent,
     PersonaBindFinishEvent,
+    SmartPayDialogEvent,
 } from './Mask.js'
 
 /**
@@ -47,7 +48,7 @@ export interface CrossIsolationEvents {
     walletSettingsDialogEvent: WalletSettingsDialogEvent
     avatarSettingDialogEvent: AvatarSettingDialogEvent
     redpacketDialogEvent: redpacketDialogEvent
-
+    smartPayDialogEvent: SmartPayDialogEvent
     /** emit when open new page . */
     openPageConfirm: OpenPageConfirmEvent
     /**
