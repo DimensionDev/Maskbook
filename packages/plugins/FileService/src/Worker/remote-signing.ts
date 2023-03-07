@@ -5,9 +5,6 @@ import { ARWEAVE_SIGNING } from '../constants.js'
 export async function sign(transaction: Transaction.default) {
     const response = await fetch(ARWEAVE_SIGNING, {
         method: 'POST',
-        // Allow workaround based on version
-        // headers: { 'mask-version': process.env.VERSION },
-        // Temporary workaround for https://github.com/msgpack/msgpack-javascript/issues/145
         body: Uint8Array.from(await makeRequest(transaction)),
     })
     transaction.setSignature(await response.json())

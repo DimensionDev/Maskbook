@@ -82,8 +82,14 @@ export function isTwitter() {
     return location.href.includes(EnhanceableSite.Twitter)
 }
 
-export function getExtensionId() {
-    const url = browser.runtime.getURL('')
-    if (isChromium() || isOpera() || isEdge()) return url.match(/chrome-extension:\/\/([a-z]{32})/)?.[1] ?? ''
+export function getExtensionId(): string | undefined {
+    try {
+        if (isChromium() || isOpera() || isEdge()) {
+            // @ts-expect-error this package should not access browser global. It makes this package non-portable.
+            return browser.runtime.getURL('').match(/chrome-extension:\/\/([a-z]{32})/)?.[1] ?? ''
+        }
+    } catch {
+        // in case browser does not exist
+    }
     return
 }

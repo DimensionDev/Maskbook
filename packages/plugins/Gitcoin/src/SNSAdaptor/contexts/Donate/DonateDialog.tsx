@@ -189,7 +189,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
                         <img className={classes.bannerImage} src={grant.logo_url} />
                     </div>
                 ) : null}
-                <form className={classes.form} noValidate autoComplete="off">
+                <form noValidate autoComplete="off">
                     <Box ml={-1.5}>
                         <NetworkTab pluginID={NetworkPluginID.PLUGIN_EVM} chains={availableChains} />
                     </Box>

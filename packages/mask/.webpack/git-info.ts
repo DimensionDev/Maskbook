@@ -3,7 +3,6 @@ import git from '@nice-labs/git-rev'
 
 interface GitInfoReport {
     BUILD_DATE: string
-    VERSION: string
     COMMIT_HASH: string
     COMMIT_DATE: string
     BRANCH_NAME: string
@@ -20,10 +19,8 @@ export function emitGitInfo(reproducible: boolean) {
 
 /** Get git info */
 export function getGitInfo(reproducible: boolean): GitInfoReport {
-    const VERSION = require('../src/manifest.json').version
     const report: GitInfoReport = {
         BUILD_DATE: new Date(0).toISOString(),
-        VERSION: VERSION + '-reproducible',
         COMMIT_HASH: 'N/A',
         COMMIT_DATE: 'N/A',
         BRANCH_NAME: 'N/A',
@@ -33,7 +30,6 @@ export function getGitInfo(reproducible: boolean): GitInfoReport {
         if (reproducible && !git.isRepository()) return report
         const DIRTY = git.isDirty()
         report.BUILD_DATE = new Date().toISOString()
-        report.VERSION = VERSION + (DIRTY ? '*' : '')
         report.COMMIT_HASH = git.commitHash(true)
         report.COMMIT_DATE = git.commitDate().toISOString()
         report.BRANCH_NAME = git.branchName()

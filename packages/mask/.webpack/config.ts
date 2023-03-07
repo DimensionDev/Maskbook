@@ -19,6 +19,7 @@ import { BuildFlags, normalizeBuildFlags, computedBuildFlags, computeCacheKey } 
 import './clean-hmr'
 
 export function createConfiguration(_inputFlags: BuildFlags): Configuration {
+    const VERSION = require('../src/manifest.json').version
     const flags = normalizeBuildFlags(_inputFlags)
     const computedFlags = computedBuildFlags(flags)
     const cacheKey = computeCacheKey(flags, computedFlags)
@@ -181,6 +182,9 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
                 MASK_SENTRY_DSN: process.env.MASK_SENTRY_DSN ?? '',
             }),
             new DefinePlugin({
+                'process.env.VERSION': `(typeof browser === 'object' && browser.runtime ? browser.runtime.getManifest().version : ${JSON.stringify(
+                    VERSION,
+                )})`,
                 'process.browser': 'true',
                 'process.version': JSON.stringify('v19.0.0'),
                 // MetaMaskInpageProvider => extension-port-stream => readable-stream depends on stdin and stdout
