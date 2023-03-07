@@ -1,4 +1,4 @@
-import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useEffect, useState } from 'react'
 
 import RedPacketDialog from './RedPacketDialog.js'
@@ -15,15 +15,5 @@ export function RedPacketInjection() {
     }, [])
 
     if (!open) return null
-    return (
-        <RedPacketDialog
-            open
-            onClose={() => {
-                setOpen(false)
-                if (source === PluginID.SmartPay) {
-                    CrossIsolationMessages.events.smartPayDialogEvent.sendToAll({ open: true })
-                }
-            }}
-        />
-    )
+    return <RedPacketDialog open onClose={() => setOpen(false)} source={source} />
 }
