@@ -390,9 +390,9 @@
     "create_wallet_done": "Done",
     "create_wallet_verify_words": "Verify mnemonic words",
     "create_wallet_mnemonic_word_not_match": "The mnemonic word is incorrect",
-    "recovery_smart_pay_wallet_title": "Recovery SmartPay wallet",
+    "recovery_smart_pay_wallet_title": "SmartPay Wallet Recovery",
     "recovery_smart_pay_wallet_description_one": "{{count}} local SmartPay wallet has been detected and successfully recovered.",
-    "recovery_smart_pay_wallet_description_other": "{{count}} local SmartPay wallet(s) has been detected and successfully recovered.",
+    "recovery_smart_pay_wallet_description_other": "{{count}} local SmartPay wallets has been detected and successfully recovered.",
     "welcome_request_to_collect": "Allow us to collect your usage information to help us make improvements.",
     "wallet_history_no_data": "No history records.",
     "welcome_agreement_policy": "I have read and agree to the <agreement>Service Agreement</agreement> and <policy>Privacy Policy</policy>."
