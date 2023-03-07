@@ -50,7 +50,7 @@
     "setup_smart_pay_two": "可以在 Mask Network 生态内体验免 gas 的去中心化应用，如红包，ITO 和 Tips 等。",
     "setup_smart_pay_three": "您的私钥和 Json 文件只能在 SmartPay 中使用。",
     "scan_address_to_payment": "扫描地址以接收付款",
-    "remain_mask_tips": "{{- balance }} 授权的 {{ symbol }} 用于支付gas。",
+    "remain_mask_tips": "Mask 代币可用于支付 gas 费用。",
     "remain_times_tips_one": "Twitter 账户仍有 {{count}} 次创建 SmartPay 钱包的机会。",
     "remain_times_tips_other": "Twitter 账户仍有 {{count}} 次创建 SmartPay 钱包的机会。",
     "personas": "身份",
