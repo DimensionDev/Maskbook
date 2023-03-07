@@ -8,7 +8,7 @@ import {
     ApproveMaskDialog,
     FormattedCurrency,
 } from '@masknet/shared'
-import { CrossIsolationMessages, ECKeyIdentifier, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { CrossIsolationMessages, ECKeyIdentifier, NetworkPluginID, PluginID, PopupRoutes } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import {
@@ -320,7 +320,7 @@ export const SmartPayContent = memo(() => {
     }, [account, wallet, connection, chainId])
     const [{ loading: openLuckDropLoading }, handleLuckDropClick] = useAsyncFn(async () => {
         await connectToCurrent()
-        CrossIsolationMessages.events.redpacketDialogEvent.sendToLocal({ open: true })
+        CrossIsolationMessages.events.redpacketDialogEvent.sendToLocal({ open: true, source: PluginID.SmartPay })
 
         closeDialog()
     }, [connectToCurrent])
