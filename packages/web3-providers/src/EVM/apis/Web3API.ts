@@ -470,9 +470,7 @@ export class Web3API
             if (uri.startsWith('https://api.opensea.io/') && tokenId) return uri.replace('0x{id}', tokenId)
 
             // add cors header
-            if (!uri.startsWith('ipfs://')) return resolveCrossOriginURL(resolveIPFS_URL(uri))!
-
-            return uri
+            return resolveCrossOriginURL(resolveIPFS_URL(uri))!
         }
         const actualSchema = schema ?? (await this.getSchemaType(chainId, address))
 
