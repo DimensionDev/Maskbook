@@ -12,7 +12,6 @@
   "types": "./dist/index.d.js",
   "dependencies": {
     "@blocto/fcl": "^0.0.78-alpha.10",
-    "@masknet/shared-base": "workspace:^",
     "@masknet/web3-constants": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@onflow/types": "^0.0.5",

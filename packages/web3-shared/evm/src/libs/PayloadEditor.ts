@@ -2,8 +2,7 @@ import { first, isUndefined, omitBy } from 'lodash-es'
 import Web3 from 'web3'
 import { type AbiItem, hexToNumber, hexToNumberString, toHex } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
-import type { Wallet } from '@masknet/web3-shared-base'
-import type { ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
+import type { Wallet , ECKeyIdentifier, Proof, ProofPayload } from '@masknet/web3-shared-base'
 import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json'
 import {
     type ChainId,

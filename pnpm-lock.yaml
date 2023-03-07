@@ -462,9 +462,15 @@ importers:
       '@masknet/kit':
         specifier: 0.1.0
         version: 0.1.0
+      '@masknet/public-api':
+        specifier: workspace:*
+        version: link:../public-api
       anchorme:
         specifier: ^2.1.2
         version: 2.1.2
+      i18next-browser-languagedetector:
+        specifier: ^7.0.1
+        version: 7.0.1
       pvtsutils:
         specifier: ^1.3.2
         version: 1.3.2
@@ -2991,9 +2997,6 @@ importers:
       dompurify:
         specifier: ^2.4.1
         version: 2.4.1
-      i18next-browser-languagedetector:
-        specifier: ^7.0.1
-        version: 7.0.1
       idb:
         specifier: ^7.1.1
         version: 7.1.1
@@ -3248,9 +3251,9 @@ importers:
 
   packages/web3-helpers:
     dependencies:
-      '@masknet/shared-base':
+      '@masknet/base':
         specifier: workspace:^
-        version: link:../shared-base
+        version: link:../base
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../web3-shared/base
@@ -3579,12 +3582,12 @@ importers:
       '@dimensiondev/mask-wallet-core':
         specifier: 0.1.0-20211013082857-eb62e5f
         version: 0.1.0-20211013082857-eb62e5f(protobufjs@6.11.2)
+      '@masknet/base':
+        specifier: workspace:^
+        version: link:../../base
       '@masknet/public-api':
         specifier: workspace:^
         version: link:../../public-api
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../../shared-base
       '@servie/events':
         specifier: ^3.0.0
         version: 3.0.0
@@ -3628,9 +3631,6 @@ importers:
       '@ethersproject/strings':
         specifier: 5.7.0
         version: 5.7.0
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../../shared-base
       '@masknet/web3-constants':
         specifier: workspace:^
         version: link:../../web3-constants
@@ -3716,9 +3716,6 @@ importers:
       '@blocto/fcl':
         specifier: ^0.0.78-alpha.10
         version: 0.0.78-alpha.10(google-protobuf@3.20.1)
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../../shared-base
       '@masknet/web3-constants':
         specifier: workspace:^
         version: link:../../web3-constants
@@ -3740,9 +3737,6 @@ importers:
 
   packages/web3-shared/solana:
     dependencies:
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../../shared-base
       '@masknet/web3-constants':
         specifier: workspace:^
         version: link:../../web3-constants
@@ -3807,9 +3801,6 @@ importers:
 
   packages/web3-telemetry:
     dependencies:
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../shared-base
       '@masknet/web3-helpers':
         specifier: workspace:^
         version: link:../web3-helpers
@@ -3819,6 +3810,9 @@ importers:
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../web3-providers
+      '@masknet/web3-shared-base':
+        specifier: workspace:^
+        version: link:../web3-shared/base
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-d1e35c703-20221110)(react@0.0.0-experimental-d1e35c703-20221110)

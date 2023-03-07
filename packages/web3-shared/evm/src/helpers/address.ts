@@ -1,7 +1,7 @@
 import { EthereumAddress } from 'wallet.ts'
 import { getEnumAsArray } from '@masknet/kit'
-import { isPopupPage } from '@masknet/shared-base'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { isPopupPage, isSameAddress } from '@masknet/web3-shared-base'
+
 import { getENSConstants, getRedPacketConstants, getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
 import { ChainId, NetworkType, ProviderType } from '../types/index.js'
 

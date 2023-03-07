@@ -1,5 +1,5 @@
 import { getEnumAsArray } from '@masknet/kit'
-import { EnhanceableSite, ExtensionSite, NetworkPluginID } from '@masknet/shared-base'
+import { EnhanceableSite, ExtensionSite, NetworkPluginID } from '@masknet/web3-shared-base'
 import {
     type ChainDescriptor,
     createFungibleToken,

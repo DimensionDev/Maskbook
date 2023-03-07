@@ -1,6 +1,6 @@
 import { identity, pickBy } from 'lodash-es'
 import { toHex } from 'web3-utils'
-import { type Unresolved, resolve } from '@masknet/shared-base'
+import { type Unresolved, resolve } from '@masknet/web3-shared-base'
 import type {
     BaseContract,
     PayableTx,

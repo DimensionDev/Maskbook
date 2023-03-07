@@ -11,7 +11,7 @@
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@masknet/shared-base": "workspace:^",
+    "@masknet/base": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
     "@masknet/web3-shared-flow": "workspace:^",
