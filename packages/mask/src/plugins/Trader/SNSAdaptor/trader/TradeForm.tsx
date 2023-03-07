@@ -350,7 +350,7 @@ export const TradeForm = memo<AllTradeFormProps>(
             <>
                 <Box className={classes.root}>
                     <InputTokenPanel
-                        isAvailabelBalance={isSmartPay}
+                        isAvailableBalance={isSmartPay}
                         chainId={chainId}
                         amount={inputAmount}
                         balance={inputTokenBalanceAmount.toFixed()}

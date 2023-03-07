@@ -397,7 +397,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         selectedAsset?.address ?? '',
     )
 
-    // #region hack for smartpay, will be removed
+    // #region hack for smartPay, will be removed
     const maskTokenAddress = useMaskTokenAddress()
     const { value: ratio } = useAsync(async () => {
         if (!smartPayChainId) return

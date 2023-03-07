@@ -335,10 +335,10 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     }, [allTradeComputed])
     // #endregion
 
-    // #region hack for smartpay, will be removed
+    // #region hack for smartPay, will be removed
     const maskTokenAddress = useMaskTokenAddress()
 
-    const { value: smartpayConfig } = useAsync(async () => {
+    const { value: smartPayConfig } = useAsync(async () => {
         const smartPayChainId = await SmartPayBundler.getSupportedChainId()
         const depositPaymaster = new DepositPaymaster(smartPayChainId)
         const ratio = await depositPaymaster.getRatio()
@@ -352,7 +352,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const actualBalance = useMemo(() => {
         if (
             !wallet?.owner ||
-            chainId !== smartpayConfig?.smartPayChainId ||
+            chainId !== smartPayConfig?.smartPayChainId ||
             !isSameAddress(inputToken?.address, maskTokenAddress)
         )
             return inputTokenBalance
@@ -368,7 +368,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                             : '150000',
                     )
                     .integerValue()
-                    .multipliedBy(smartpayConfig?.ratio ?? 1),
+                    .multipliedBy(smartPayConfig?.ratio ?? 1),
             ),
             0,
         )
@@ -377,7 +377,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
         wallet,
         inputToken?.address,
         maskTokenAddress,
-        smartpayConfig,
+        smartPayConfig,
         chainId,
         inputTokenBalance,
         focusedTrade,
@@ -389,7 +389,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             <TradeForm
                 isSmartPay={
                     !!wallet?.owner &&
-                    chainId === smartpayConfig?.smartPayChainId &&
+                    chainId === smartPayConfig?.smartPayChainId &&
                     isSameAddress(inputToken?.address, maskTokenAddress)
                 }
                 settings={settings}

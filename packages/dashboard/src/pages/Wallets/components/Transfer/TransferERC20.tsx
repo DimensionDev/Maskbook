@@ -124,10 +124,10 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     }, [gasLimit, gasPrice, maxFee, is1559Supported])
     const gasFeeInUsd = formatWeiToEther(gasFee).multipliedBy(nativeTokenPrice.value ?? 0)
 
-    // #region hack for smartpay, will be removed
+    // #region hack for smartPay, will be removed
     const maskTokenAddress = useMaskTokenAddress()
 
-    const { value: smartpayConfig } = useAsync(async () => {
+    const { value: smartPayConfig } = useAsync(async () => {
         const smartPayChainId = await SmartPayBundler.getSupportedChainId()
         const depositPaymaster = new DepositPaymaster(smartPayChainId)
         const ratio = await depositPaymaster.getRatio()
@@ -141,7 +141,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const actualBalance = useMemo(() => {
         if (
             !wallet?.owner ||
-            chainId !== smartpayConfig?.smartPayChainId ||
+            chainId !== smartPayConfig?.smartPayChainId ||
             !isSameAddress(selectedToken?.address, maskTokenAddress)
         )
             return tokenBalance
@@ -153,11 +153,11 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                 new BigNumber((gasConfig as EIP1559GasConfig).maxFeePerGas)
                     .multipliedBy(!isZero(gasLimit) ? gasLimit : '150000')
                     .integerValue()
-                    .multipliedBy(smartpayConfig?.ratio ?? 1),
+                    .multipliedBy(smartPayConfig?.ratio ?? 1),
             ),
             0,
         )
-    }, [gasConfig, wallet, selectedToken?.address, maskTokenAddress, smartpayConfig, chainId, tokenBalance, gasLimit])
+    }, [gasConfig, wallet, selectedToken?.address, maskTokenAddress, smartPayConfig, chainId, tokenBalance, gasLimit])
     // #endregion
 
     const maxAmount = useMemo(() => {
