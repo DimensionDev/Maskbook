@@ -15,20 +15,19 @@ export async function queryRemoteI18NBundle(lang: string): Promise<Bundle[]> {
     return results.filter((x): x is PromiseFulfilledResult<Bundle> => x.status === 'fulfilled').map((x) => x.value)
 }
 
+const I18N_LOCALES_HOST = 'https://maskbook.pages.dev/'
+
 function fetchTranslatedBundle(lang: string) {
     return Object.entries(list).map(async ([url, namespace]): Promise<Bundle> => {
         const path = url.replace('%locale%', lang)
-        const response = await fetch(
-            'https://distributions.crowdin.net/c4267b19b900d4c0b67f018ulde/content' + path,
-            fetchOption,
-        )
+        const response = await fetch(I18N_LOCALES_HOST + path, fetchOption)
         return [namespace, lang, await response.json()]
     })
 }
 function fetchEnglishBundle() {
     return Object.entries(list).map(async ([url, namespace]): Promise<Bundle> => {
-        const path = url.replace('/[DimensionDev.Maskbook] ', '').replace('%locale%', 'en-US')
-        const response = await fetch('https://raw.githubusercontent.com/DimensionDev/Maskbook/' + path, fetchOption)
+        const path = url.replace('%locale%', 'en-US')
+        const response = await fetch(I18N_LOCALES_HOST + path, fetchOption)
         return [namespace, 'en-US', await response.json()]
     })
 }

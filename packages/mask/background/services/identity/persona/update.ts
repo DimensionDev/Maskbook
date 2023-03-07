@@ -7,6 +7,7 @@ import {
     PersonaIdentifier,
 } from '@masknet/shared-base'
 import { decode } from '@msgpack/msgpack'
+import { MaskMessages } from '../../../../shared/messages.js'
 import {
     consistentPersonaDBWriteAccess,
     queryPersonaDB,
@@ -43,13 +44,15 @@ export async function loginPersona(identifier: PersonaIdentifier) {
 }
 
 export async function logoutPersona(identifier: PersonaIdentifier) {
-    return consistentPersonaDBWriteAccess((t) =>
+    await consistentPersonaDBWriteAccess((t) =>
         updatePersonaDB(
             { identifier, hasLogout: true },
             { linkedProfiles: 'merge', explicitUndefinedField: 'ignore' },
             t,
         ),
     )
+
+    MaskMessages.events.personasChanged.sendToAll()
 }
 
 export async function setupPersona(id: PersonaIdentifier) {

@@ -109,7 +109,6 @@ const Logout = memo(() => {
 
     const [{ loading }, onLogout] = useAsyncFn(async () => {
         if (!selectedPersona) return
-        await Services.Identity.logoutPersona(selectedPersona.identifier)
         if (selectedPersona.address) {
             if (isSameAddress(selectedPersona.address, wallet?.owner)) {
                 const newWallet = first(wallets)
@@ -124,6 +123,7 @@ const Logout = memo(() => {
                 await maskProvider?.removeWallets(manageWallets)
             }
         }
+        await Services.Identity.logoutPersona(selectedPersona.identifier)
         const currentPersona = await Services.Settings.getCurrentPersonaIdentifier()
         if (!currentPersona) {
             const lastCreatedPersona = await Services.Identity.queryLastPersonaCreated()

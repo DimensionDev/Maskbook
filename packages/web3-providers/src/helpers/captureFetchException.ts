@@ -1,30 +1,55 @@
 export async function captureFetchException(request: Request, response?: Response) {
-    Sentry.captureException(new Error(`Failed to fetch: ${request.url}`), {
-        tags: {
-            source: new URL(request.url).host,
-            method: request.method.toUpperCase(),
-            url: request.url,
-            response_type: response?.type,
-            status_code: response?.status,
-            status_text: response?.statusText,
-            request_headers: JSON.stringify(Object.fromEntries(request.headers.entries())),
-            request_body: await getRequestJSON(request.clone()),
-            request_text: await getRequestText(request.clone()),
+    const requestHeaders = getHeaders(request.clone())
+    const responseHeaders = getHeaders(response?.clone())
+    const requestBody = await getBody(request.clone())
+    const responseBody = await getBody(response?.clone())
+
+    Sentry.captureException(
+        new Error(
+            [
+                `Failed to fetch: ${request.url}`,
+                `  with Request Headers: ${requestHeaders}`,
+                `  with Request Body: ${requestBody}`,
+                `  with Response Headers: ${responseHeaders}`,
+                `  with Response Body: ${responseBody}`,
+            ].join('\n'),
+        ),
+        {
+            tags: {
+                source: new URL(request.url).host,
+                method: request.method.toUpperCase(),
+                url: request.url,
+                response_type: response?.type,
+                response_redirected: response?.redirected,
+                status_code: response?.status,
+                status_text: response?.statusText,
+            },
+            extra: {
+                request_headers: requestHeaders,
+                request_body: requestBody,
+                response_headers: responseHeaders,
+                response_body: responseBody,
+                response_type: response?.type,
+                response_code: response?.status,
+                response_status: response?.statusText,
+                response_redirected: response?.redirected,
+            },
         },
-    })
+    )
 }
-function getRequestJSON(request: Request) {
+
+function getHeaders(requestOrResponse?: Request | Response) {
     try {
-        return request.json()
+        return JSON.stringify(Object.fromEntries(requestOrResponse?.headers.entries() ?? []))
     } catch {
-        return
+        return 'N/A'
     }
 }
 
-function getRequestText(request: Request) {
+function getBody(requestOrResponse?: Request | Response) {
     try {
-        return request.text()
+        return requestOrResponse?.text()
     } catch {
-        return
+        return 'N/A'
     }
 }

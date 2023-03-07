@@ -15,7 +15,15 @@ function startPluginHost() {
     const allPersonaSub = createSubscriptionFromAsync(
         () => Services.Identity.queryOwnedPersonaInformation(true),
         [],
-        MaskMessages.events.currentPersonaIdentifier.on,
+        (x) => {
+            const clearCurrentPersonaIdentifier = MaskMessages.events.currentPersonaIdentifier.on(x)
+            const clearOwnPersonaChanged = MaskMessages.events.ownPersonaChanged.on(x)
+
+            return () => {
+                clearCurrentPersonaIdentifier()
+                clearOwnPersonaChanged()
+            }
+        },
     )
 
     startPluginDashboard(
