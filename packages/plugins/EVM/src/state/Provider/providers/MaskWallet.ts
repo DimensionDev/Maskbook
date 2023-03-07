@@ -119,6 +119,8 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
                 await this.switchAccount(address, owner)
                 await this.switchChain(chainId)
 
+                if (siteType) await SharedContextSettings.value.recordConnectedSites(siteType, true)
+
                 return {
                     account: address,
                     chainId,

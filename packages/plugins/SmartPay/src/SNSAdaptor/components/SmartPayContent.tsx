@@ -429,14 +429,7 @@ export const SmartPayContent = memo(() => {
                                                     title={
                                                         availableBalanceTooLow
                                                             ? t.allow_mask_as_gas_token_description()
-                                                            : t.remain_mask_tips({
-                                                                  balance: formatBalance(
-                                                                      allowance,
-                                                                      maskToken?.decimals,
-                                                                      4,
-                                                                  ),
-                                                                  symbol: maskToken?.symbol ?? '',
-                                                              })
+                                                            : t.remain_mask_tips()
                                                     }
                                                     placement="top">
                                                     <Typography
