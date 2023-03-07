@@ -3,12 +3,13 @@ import { defineSocialNetworkUI, definedSocialNetworkUIs } from '../../social-net
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { SocialNetworkEnum } from '@masknet/encryption'
 import { EnhanceableSite, ValueRef } from '@masknet/shared-base'
+import { useThemePopupVariant } from './customization/custom.js'
 
 const base: SocialNetwork.Base = {
     encryptionNetwork: SocialNetworkEnum.Unknown,
     networkIdentifier: EnhanceableSite.Localhost,
     declarativePermissions: { origins: [] },
-    shouldActivate(location) {
+    shouldActivate() {
         return isEnvironment(Environment.ManifestAction)
     },
 }
@@ -17,7 +18,9 @@ const define: SocialNetworkUI.Definition = {
     automation: {},
     collecting: {},
     configuration: {},
-    customization: {},
+    customization: {
+        useTheme: useThemePopupVariant,
+    },
     injection: {},
     utils: { createPostContext: null! },
     async init(signal) {

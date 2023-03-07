@@ -3,24 +3,24 @@ import produce, { setAutoFreeze } from 'immer'
 import { type Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
 import { useThemeSettings } from '../../../components/DataSource/useActivatedUI.js'
 
-export function useThemeMirrorVariant(baseTheme: Theme) {
+export function useThemeInstagramVariant(baseTheme: Theme) {
     const themeSettings = useThemeSettings()
 
     return useMemo(() => {
         setAutoFreeze(false)
 
-        const MirrorTheme = produce(baseTheme, (theme) => {
+        const InstagramTheme = produce(baseTheme, (theme) => {
             theme.components = theme.components || {}
             theme.components.MuiTypography = {
                 styleOverrides: {
                     root: {
                         fontFamily:
-                            '"Inter var",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
+                            "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
                     },
                 },
             }
         })
         setAutoFreeze(true)
-        return unstable_createMuiStrictModeTheme(MirrorTheme)
+        return unstable_createMuiStrictModeTheme(InstagramTheme)
     }, [baseTheme, themeSettings])
 }
