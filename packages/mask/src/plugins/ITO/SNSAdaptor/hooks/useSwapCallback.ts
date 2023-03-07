@@ -1,5 +1,5 @@
 import { useAsyncFn } from 'react-use'
-import type { TransactionReceipt } from 'web3-core/types'
+import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
 import type { ITO } from '@masknet/web3-contracts/types/ITO.js'
 import type { ITO2 } from '@masknet/web3-contracts/types/ITO2.js'

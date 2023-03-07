@@ -16,87 +16,90 @@ overrides:
   '@storybook/react-docgen-typescript-plugin': npm:react-docgen-typescript-plugin@1.0.2
 
 patchedDependencies:
-  gulp@4.0.2:
-    hash: 2y5kpiugqogdejwrac5fzdim7y
-    path: patches/gulp@4.0.2.patch
-  '@uniswap/v3-sdk@3.9.0':
-    hash: i674dmxu47nk67u5bur7yueebu
-    path: patches/@uniswap__v3-sdk@3.9.0.patch
-  urlcat@2.0.4:
-    hash: fggwetex7eobhq3hztj4obsulu
-    path: patches/urlcat@2.0.4.patch
   cross-fetch@3.1.5:
     hash: fffro4yjhjxi2jqwpqmojnjbce
     path: patches/cross-fetch@3.1.5.patch
-  '@ceramicnetwork/rpc-transport@0.3.1':
-    hash: subw5upjv36ceix3wmw66isn6u
-    path: patches/@ceramicnetwork__rpc-transport@0.3.1.patch
+  '@uniswap/v3-sdk@3.9.0':
+    hash: i674dmxu47nk67u5bur7yueebu
+    path: patches/@uniswap__v3-sdk@3.9.0.patch
   ipfs-http-client@57.0.3:
     hash: 7oiabyd5hzeabolk22o64jpd4i
     path: patches/ipfs-http-client@57.0.3.patch
-  '@ethersphere/bee-js@5.0.0':
-    hash: g3xomw7pzn5koufm6j4gkm6n5m
-    path: patches/@ethersphere__bee-js@5.0.0.patch
+  gulp@4.0.2:
+    hash: 2y5kpiugqogdejwrac5fzdim7y
+    path: patches/gulp@4.0.2.patch
+  '@ceramicnetwork/rpc-transport@0.3.1':
+    hash: subw5upjv36ceix3wmw66isn6u
+    path: patches/@ceramicnetwork__rpc-transport@0.3.1.patch
   '@emotion/use-insertion-effect-with-fallbacks@1.0.0':
     hash: ewwh6qko3asynoh7f6o5yjipdy
     path: patches/@emotion__use-insertion-effect-with-fallbacks@1.0.0.patch
   '@emotion/cache@11.10.3':
     hash: anquw7u43yedhv6g6kmhzkdhze
     path: patches/@emotion__cache@11.10.3.patch
+  urlcat@2.0.4:
+    hash: fggwetex7eobhq3hztj4obsulu
+    path: patches/urlcat@2.0.4.patch
   '@emotion/react@11.10.4':
     hash: obcydjbogyjam4qag626nceajy
     path: patches/@emotion__react@11.10.4.patch
-  '@mui/base@5.0.0-alpha.100':
-    hash: cc7k56pam6cgsdxwjuynldgftq
-    path: patches/@mui__base@5.0.0-alpha.100.patch
+  '@ethersphere/bee-js@5.0.0':
+    hash: g3xomw7pzn5koufm6j4gkm6n5m
+    path: patches/@ethersphere__bee-js@5.0.0.patch
   micromark@3.1.0:
     hash: w5le45vl373yc24qnd4o3e4hz4
     path: patches/micromark@3.1.0.patch
-  micromark-util-symbol@1.0.1:
-    hash: jkhnsgx77ffpyllfnod5pyn4ue
-    path: patches/micromark-util-symbol@1.0.1.patch
   react-devtools-inline@4.26.1:
     hash: fpee2mntbhrd2bberabvpkyh5q
     path: patches/react-devtools-inline@4.26.1.patch
-  '@types/react-avatar-editor@13.0.0':
-    hash: 6wzwgbn4gsisp2tjbg76iifhqq
-    path: patches/@types__react-avatar-editor@13.0.0.patch
+  micromark-util-symbol@1.0.1:
+    hash: jkhnsgx77ffpyllfnod5pyn4ue
+    path: patches/micromark-util-symbol@1.0.1.patch
   '@hookform/resolvers@2.9.10':
     hash: dqqyd5a3hlw75qwefcjrgni3fy
     path: patches/@hookform__resolvers@2.9.10.patch
+  '@types/react-avatar-editor@13.0.0':
+    hash: 6wzwgbn4gsisp2tjbg76iifhqq
+    path: patches/@types__react-avatar-editor@13.0.0.patch
+  '@mui/base@5.0.0-alpha.100':
+    hash: cc7k56pam6cgsdxwjuynldgftq
+    path: patches/@mui__base@5.0.0-alpha.100.patch
   web3@1.8.0:
     hash: dcxxuqxbti2wcxbar42oow5yze
     path: patches/web3@1.8.0.patch
-  rss3-next@0.6.17:
-    hash: db27yqpr4wdtpwfyvaxcqd4jpi
-    path: patches/rss3-next@0.6.17.patch
   fuse.js@6.6.2:
     hash: b2o4qvyfvxmpo7347sqko6h22a
     path: patches/fuse.js@6.6.2.patch
-  '@project-serum/sol-wallet-adapter@0.2.6':
-    hash: dl5wqnnaxjm7biesxtvdpr7gpe
-    path: patches/@project-serum__sol-wallet-adapter@0.2.6.patch
+  rss3-next@0.6.17:
+    hash: db27yqpr4wdtpwfyvaxcqd4jpi
+    path: patches/rss3-next@0.6.17.patch
   '@types/react-highlight-words@0.16.4':
     hash: cu6glh5cl4qvdid3ys3m6a2f7e
     path: patches/@types__react-highlight-words@0.16.4.patch
   fortmatic@2.2.1:
     hash: tb3oevqnvhntsyfyhi2z6spuea
     path: patches/fortmatic@2.2.1.patch
-  bloom-filters@3.0.0:
-    hash: 2etetjrjxbcye2oktxqpij75ey
-    path: patches/bloom-filters@3.0.0.patch
   reflect-metadata@0.1.13:
     hash: pnra5xi77mqlyipflqvcm4z6ga
     path: patches/reflect-metadata@0.1.13.patch
+  '@project-serum/sol-wallet-adapter@0.2.6':
+    hash: dl5wqnnaxjm7biesxtvdpr7gpe
+    path: patches/@project-serum__sol-wallet-adapter@0.2.6.patch
+  bloom-filters@3.0.0:
+    hash: 2etetjrjxbcye2oktxqpij75ey
+    path: patches/bloom-filters@3.0.0.patch
+  '@sentry/core@7.37.2':
+    hash: rklncqa6modgoos6z6mwlg3pli
+    path: patches/@sentry__core@7.37.2.patch
+  web3-core@1.8.0:
+    hash: ie6z5nhvcuo3lg2pk6xeacwpbi
+    path: patches/web3-core@1.8.0.patch
   '@walletconnect/client@1.7.8':
     hash: 2krbsxzv524dzcdemy7vploqza
     path: patches/@walletconnect__client@1.7.8.patch
   '@cyberlab/cyberconnect@4.2.2':
     hash: 7wgc4b53ygfwefhtjbh3dydjgy
     path: patches/@cyberlab__cyberconnect@4.2.2.patch
-  '@sentry/core@7.37.2':
-    hash: rklncqa6modgoos6z6mwlg3pli
-    path: patches/@sentry__core@7.37.2.patch
   arweave@1.11.4:
     hash: lwxdtt2msovfmigiutpkaty3lq
     path: patches/arweave@1.11.4.patch
@@ -1168,7 +1171,7 @@ importers:
         version: 1.8.0(patch_hash=dcxxuqxbti2wcxbar42oow5yze)
       web3-core:
         specifier: 1.8.0
-        version: 1.8.0
+        version: 1.8.0(patch_hash=ie6z5nhvcuo3lg2pk6xeacwpbi)
       web3-core-helpers:
         specifier: 1.8.0
         version: 1.8.0
@@ -1347,7 +1350,7 @@ importers:
         version: 1.8.0(patch_hash=dcxxuqxbti2wcxbar42oow5yze)
       web3-core:
         specifier: 1.8.0
-        version: 1.8.0
+        version: 1.8.0(patch_hash=ie6z5nhvcuo3lg2pk6xeacwpbi)
       web3-core-helpers:
         specifier: 1.8.0
         version: 1.8.0
@@ -1776,7 +1779,7 @@ importers:
         version: 1.8.0(patch_hash=dcxxuqxbti2wcxbar42oow5yze)
       web3-core:
         specifier: 1.8.0
-        version: 1.8.0
+        version: 1.8.0(patch_hash=ie6z5nhvcuo3lg2pk6xeacwpbi)
       web3-core-helpers:
         specifier: 1.8.0
         version: 1.8.0
@@ -3231,7 +3234,7 @@ importers:
         version: 5.1.2(typescript@5.1.0-dev.20230302)
       web3-core:
         specifier: 1.8.0
-        version: 1.8.0
+        version: 1.8.0(patch_hash=ie6z5nhvcuo3lg2pk6xeacwpbi)
     devDependencies:
       bn.js:
         specifier: ^4.12.0
@@ -3358,7 +3361,7 @@ importers:
         version: 1.8.0(patch_hash=dcxxuqxbti2wcxbar42oow5yze)
       web3-core:
         specifier: 1.8.0
-        version: 1.8.0
+        version: 1.8.0(patch_hash=ie6z5nhvcuo3lg2pk6xeacwpbi)
       web3-utils:
         specifier: 1.8.0
         version: 1.8.0
@@ -3433,7 +3436,7 @@ importers:
         version: 1.8.0(patch_hash=dcxxuqxbti2wcxbar42oow5yze)
       web3-core:
         specifier: 1.8.0
-        version: 1.8.0
+        version: 1.8.0(patch_hash=ie6z5nhvcuo3lg2pk6xeacwpbi)
       web3-core-helpers:
         specifier: 1.8.0
         version: 1.8.0
@@ -3553,7 +3556,7 @@ importers:
         version: 1.8.0(patch_hash=dcxxuqxbti2wcxbar42oow5yze)
       web3-core:
         specifier: 1.8.0
-        version: 1.8.0
+        version: 1.8.0(patch_hash=ie6z5nhvcuo3lg2pk6xeacwpbi)
       web3-eth:
         specifier: 1.8.0
         version: 1.8.0
@@ -3678,7 +3681,7 @@ importers:
         version: 1.8.0(patch_hash=dcxxuqxbti2wcxbar42oow5yze)
       web3-core:
         specifier: 1.8.0
-        version: 1.8.0
+        version: 1.8.0(patch_hash=ie6z5nhvcuo3lg2pk6xeacwpbi)
       web3-core-helpers:
         specifier: 1.8.0
         version: 1.8.0
@@ -33104,7 +33107,7 @@ packages:
       eventemitter3: 4.0.4
       web3-core-helpers: 1.8.0
 
-  /web3-core@1.8.0:
+  /web3-core@1.8.0(patch_hash=ie6z5nhvcuo3lg2pk6xeacwpbi):
     resolution: {integrity: sha512-9sCA+Z02ci6zoY2bAquFiDjujRwmSKHiSGi4B8IstML8okSytnzXk1izHYSynE7ahIkguhjWAuXFvX76F5rAbA==}
     engines: {node: '>=8.0.0'}
     dependencies:
@@ -33118,6 +33121,7 @@ packages:
     transitivePeerDependencies:
       - encoding
       - supports-color
+    patched: true
 
   /web3-eth-abi@1.8.0:
     resolution: {integrity: sha512-xPeMb2hS9YLQK/Q5YZpkcmzoRGM+/R8bogSrYHhNC3hjZSSU0YRH+1ZKK0f9YF4qDZaPMI8tKWIMSCDIpjG6fg==}
@@ -33137,7 +33141,7 @@ packages:
       ethereumjs-util: 7.1.5
       scrypt-js: 3.0.1
       uuid: 3.3.2
-      web3-core: 1.8.0
+      web3-core: 1.8.0(patch_hash=ie6z5nhvcuo3lg2pk6xeacwpbi)
       web3-core-helpers: 1.8.0
       web3-core-method: 1.8.0
       web3-utils: 1.8.0
@@ -33151,7 +33155,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       '@types/bn.js': 5.1.1
-      web3-core: 1.8.0
+      web3-core: 1.8.0(patch_hash=ie6z5nhvcuo3lg2pk6xeacwpbi)
       web3-core-helpers: 1.8.0
       web3-core-method: 1.8.0
       web3-core-promievent: 1.8.0
@@ -33168,7 +33172,7 @@ packages:
     dependencies:
       content-hash: 2.5.2
       eth-ens-namehash: 2.0.8
-      web3-core: 1.8.0
+      web3-core: 1.8.0(patch_hash=ie6z5nhvcuo3lg2pk6xeacwpbi)
       web3-core-helpers: 1.8.0
       web3-core-promievent: 1.8.0
       web3-eth-abi: 1.8.0
@@ -33191,7 +33195,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       '@types/node': 18.11.9
-      web3-core: 1.8.0
+      web3-core: 1.8.0(patch_hash=ie6z5nhvcuo3lg2pk6xeacwpbi)
       web3-core-helpers: 1.8.0
       web3-core-method: 1.8.0
       web3-net: 1.8.0
@@ -33205,7 +33209,7 @@ packages:
     resolution: {integrity: sha512-hist52os3OT4TQFB/GxPSMxTh3995sz6LPvQpPvj7ktSbpg9RNSFaSsPlCT63wUAHA3PZb1FemkAIeQM5t72Lw==}
     engines: {node: '>=8.0.0'}
     dependencies:
-      web3-core: 1.8.0
+      web3-core: 1.8.0(patch_hash=ie6z5nhvcuo3lg2pk6xeacwpbi)
       web3-core-helpers: 1.8.0
       web3-core-method: 1.8.0
       web3-core-subscriptions: 1.8.0
@@ -33226,7 +33230,7 @@ packages:
     resolution: {integrity: sha512-kX6EAacK7QrOe7DOh0t5yHS5q2kxZmTCxPVwSz9io9xBeE4n4UhmzGJ/VfhP2eM3OPKYeypcR3LEO6zZ8xn2vw==}
     engines: {node: '>=8.0.0'}
     dependencies:
-      web3-core: 1.8.0
+      web3-core: 1.8.0(patch_hash=ie6z5nhvcuo3lg2pk6xeacwpbi)
       web3-core-method: 1.8.0
       web3-utils: 1.8.0
     transitivePeerDependencies:
@@ -33292,7 +33296,7 @@ packages:
     resolution: {integrity: sha512-DNRgSa9Jf9xYFUGKSMylrf+zt3MPjhI2qF+UWX07o0y3+uf8zalDGiJOWvIS4upAsdPiKKVJ7co+Neof47OMmg==}
     engines: {node: '>=8.0.0'}
     dependencies:
-      web3-core: 1.8.0
+      web3-core: 1.8.0(patch_hash=ie6z5nhvcuo3lg2pk6xeacwpbi)
       web3-core-method: 1.8.0
       web3-core-subscriptions: 1.8.0
       web3-net: 1.8.0
@@ -33328,7 +33332,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       web3-bzz: 1.8.0
-      web3-core: 1.8.0
+      web3-core: 1.8.0(patch_hash=ie6z5nhvcuo3lg2pk6xeacwpbi)
       web3-eth: 1.8.0
       web3-eth-personal: 1.8.0
       web3-net: 1.8.0
