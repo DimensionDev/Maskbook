@@ -1,8 +1,9 @@
 export async function captureFetchException(request: Request, response?: Response) {
     const requestHeaders = getHeaders(request.clone())
     const responseHeaders = getHeaders(response?.clone())
-    const requestBody = (await getBodyAsJSON(request.clone())) || (await getBodyAsText(request.clone()))
-    const responseBody = (await getBodyAsJSON(response?.clone())) || (await getBodyAsText(response?.clone()))
+    const requestBody = await getBody(request.clone())
+    const responseBody = await getBody(response?.clone())
+
     Sentry.captureException(
         new Error(
             [
@@ -19,8 +20,19 @@ export async function captureFetchException(request: Request, response?: Respons
                 method: request.method.toUpperCase(),
                 url: request.url,
                 response_type: response?.type,
+                response_redirected: response?.redirected,
                 status_code: response?.status,
                 status_text: response?.statusText,
+            },
+            extra: {
+                request_headers: requestHeaders,
+                request_body: requestBody,
+                response_headers: responseHeaders,
+                response_body: responseBody,
+                response_type: response?.type,
+                response_code: response?.status,
+                response_status: response?.statusText,
+                response_redirected: response?.redirected,
             },
         },
     )
@@ -34,15 +46,7 @@ function getHeaders(requestOrResponse?: Request | Response) {
     }
 }
 
-function getBodyAsJSON(requestOrResponse?: Request | Response) {
-    try {
-        return requestOrResponse?.json()
-    } catch {
-        return 'N/A'
-    }
-}
-
-function getBodyAsText(requestOrResponse?: Request | Response) {
+function getBody(requestOrResponse?: Request | Response) {
     try {
         return requestOrResponse?.text()
     } catch {
