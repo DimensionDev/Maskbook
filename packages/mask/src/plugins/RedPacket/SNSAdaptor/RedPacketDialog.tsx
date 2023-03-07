@@ -73,7 +73,7 @@ interface RedPacketDialogProps {
     open: boolean
     onClose: () => void
     isOpenFromApplicationBoard?: boolean
-    source?: string
+    source?: PluginID
 }
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
