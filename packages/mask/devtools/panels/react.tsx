@@ -6,6 +6,7 @@ import { DevtoolsMessage, createReactDevToolsWall, GLOBAL_ID_KEY } from '../shar
 import { initialize, createBridge, type DevtoolsProps, createStore } from 'react-devtools-inline/frontend.js'
 import type { ComponentType } from 'react'
 import { attachListener, createPanel, devtoolsEval } from './utils.js'
+import type { DevtoolsPanels } from 'webextension-polyfill/namespaces/devtools_panels.js'
 
 const registerOnStyleChange = (() => {
     let lastText = ''
@@ -27,8 +28,8 @@ const registerOnStyleChange = (() => {
     return registerOnStyleChange
 })()
 
-let components: browser.devtools.panels.ExtensionPanel
-let profiler: browser.devtools.panels.ExtensionPanel
+let components: DevtoolsPanels.ExtensionPanel
+let profiler: DevtoolsPanels.ExtensionPanel
 let componentsWindow: Window
 let profilerWindow: Window
 
