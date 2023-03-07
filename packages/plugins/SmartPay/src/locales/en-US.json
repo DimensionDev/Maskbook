@@ -50,7 +50,7 @@
     "setup_smart_pay_two": "Free gas experience in Mask Network’s dApps like Lucky Drop, ITO and Tips.",
     "setup_smart_pay_three": "Your private key and Json file can only be used in SmartPay.",
     "scan_address_to_payment": "Scan address to receive payment",
-    "remain_mask_tips": "{{- balance }} approved {{ symbol }} remained for gas fee.",
+    "remain_mask_tips": "MASK token can be used to pay gas fee.",
     "remain_times_tips_one": "The Twitter account above remains {{count}} time to create SmartPay Wallet.",
     "remain_times_tips_other": "The Twitter account above remains {{count}} times to create SmartPay Wallet.",
     "personas": "Personas",

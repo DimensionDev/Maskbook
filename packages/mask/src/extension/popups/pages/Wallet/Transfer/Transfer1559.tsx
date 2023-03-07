@@ -46,7 +46,6 @@ import { toHex } from 'web3-utils'
 import {
     useChainContext,
     useFungibleToken,
-    useFungibleTokenBalance,
     useLookupAddress,
     useNativeTokenPrice,
     useWallet,
@@ -392,11 +391,6 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     )
     // #endregion
 
-    const { value: tokenBalance = '0' } = useFungibleTokenBalance(
-        NetworkPluginID.PLUGIN_EVM,
-        selectedAsset?.address ?? '',
-    )
-
     // #region hack for smartPay, will be removed
     const maskTokenAddress = useMaskTokenAddress()
     const { value: ratio } = useAsync(async () => {
@@ -433,10 +427,10 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
 
     const maxAmount = useMemo(() => {
         const gasFee = formatGweiToWei(maxFeePerGas || 0).multipliedBy(minGasLimit ?? MIN_GAS_LIMIT)
-        let amount_ = new BigNumber(tokenBalance ?? 0)
+        let amount_ = new BigNumber(actualSelected?.balance ?? 0)
         amount_ = actualSelected?.schema === SchemaType.Native ? amount_.minus(gasFee) : amount_
         return formatBalance(BigNumber.max(0, amount_).toFixed(), actualSelected?.decimals)
-    }, [actualSelected, maxFeePerGas, minGasLimit, tokenBalance])
+    }, [actualSelected, maxFeePerGas, minGasLimit])
 
     // #region set default gasLimit
     useUpdateEffect(() => {
