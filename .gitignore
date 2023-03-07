@@ -11,6 +11,8 @@ icon-generated*
 # JetBrain personal settings
 .idea
 
+.vim
+
 # testing
 /reports
 /junit.xml
