@@ -6,7 +6,6 @@ export function useCreatePersonaV2() {
         const identifier = await Services.Identity.createPersonaByMnemonicV2(mnemonicWord, nickName, '')
         await delay(300)
         Messages.events.ownPersonaChanged.sendToAll(undefined)
-
         return identifier
     }
 }
@@ -16,7 +15,6 @@ export function useCreatePersonaByPrivateKey() {
         const identifier = await Services.Identity.createPersonaByPrivateKey(privateKey, nickName)
         await delay(300)
         Messages.events.ownPersonaChanged.sendToAll(undefined)
-
         return identifier
     }
 }
