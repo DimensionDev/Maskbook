@@ -23,6 +23,7 @@ import { injectUserNFTAvatarAtInstagram } from './injection/NFT/NFTAvatarInTimel
 import { injectProfileTabAtInstagram } from './injection/ProfileTab.js'
 import { injectProfileTabContentAtInstagram } from './injection/ProfileTabContent.js'
 import { injectAvatar } from './injection/Avatar/index.js'
+import { useThemeInstagramVariant } from './customization/custom.js'
 
 const define: SocialNetworkUI.Definition = {
     ...instagramShared,
@@ -42,7 +43,9 @@ const define: SocialNetworkUI.Definition = {
         themeSettingsProvider: ThemeSettingsProviderInstagram,
     },
     configuration: {},
-    customization: {},
+    customization: {
+        useTheme: useThemeInstagramVariant,
+    },
     init(signal) {
         const profiles = stateCreator.profiles()
         InitAutonomousStateProfiles(signal, profiles, instagramBase.networkIdentifier)
