@@ -112,8 +112,8 @@ importers:
   .:
     dependencies:
       '@dimensiondev/holoflows-kit':
-        specifier: 0.9.0-20221128033345-3a4bb0c
-        version: 0.9.0-20221128033345-3a4bb0c
+        specifier: 0.9.0-20230307045856-46252fb
+        version: 0.9.0-20230307045856-46252fb
       '@emotion/cache':
         specifier: 11.10.3
         version: 11.10.3(patch_hash=anquw7u43yedhv6g6kmhzkdhze)
@@ -6709,8 +6709,13 @@ packages:
       eslint: 8.35.0
     dev: true
 
-  /@dimensiondev/holoflows-kit@0.9.0-20221128033345-3a4bb0c:
-    resolution: {integrity: sha512-C6ztos76jva7otyEe/C4A67mB+5Q6dC7Oh3d6+AYKCfwj4NDZLgtF96Cy0GVb9jQHwmOTemYZ37+0p3Zl2aCPA==, tarball: download/@DimensionDev/holoflows-kit/0.9.0-20221128033345-3a4bb0c/e7a52cd29536212c8e4dfe5e0b825ed64bc96104}
+  /@dimensiondev/holoflows-kit@0.9.0-20230307045856-46252fb:
+    resolution: {integrity: sha512-SprqopLhwmps3Zjrr/fsl+kPmYv6hEc9gZvF3EDtr4v2D2zj1PUkUwktku7fBgzvidivOxyarsLGgGorzhsK6Q==, tarball: download/@DimensionDev/holoflows-kit/0.9.0-20230307045856-46252fb/70734fddff9acedef83c8f3925fd0ae615c00be7}
+    peerDependencies:
+      '@types/webextension-polyfill': ^0.10.0
+    peerDependenciesMeta:
+      '@types/webextension-polyfill':
+        optional: true
     dependencies:
       '@servie/events': 3.0.0
       event-iterator: 2.0.0
@@ -34631,7 +34636,7 @@ time:
   /@commitlint/config-conventional@17.4.4: '2023-02-17T15:34:43.196Z'
   /@dimensiondev/common-protocols@1.6.0-20210723072221-8f46a92: '2021-07-23T07:22:56Z'
   /@dimensiondev/eslint-plugin@0.0.2-20220516081411-2649814: '2022-05-16T08:17:05Z'
-  /@dimensiondev/holoflows-kit@0.9.0-20221128033345-3a4bb0c: '2022-11-28T03:34:25Z'
+  /@dimensiondev/holoflows-kit@0.9.0-20230307045856-46252fb: '2023-03-07T04:58:40Z'
   /@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f: '2021-10-13T08:39:07Z'
   /@dimensiondev/metamask-extension-provider@3.0.6-20221105074301-8806fca: '2022-11-05T07:43:23Z'
   /@emotion/serialize@1.1.0: '2022-07-31T09:06:36.799Z'

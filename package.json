@@ -30,7 +30,7 @@
     "spellcheck": "cspell lint --no-must-find-files"
   },
   "dependencies": {
-    "@dimensiondev/holoflows-kit": "0.9.0-20221128033345-3a4bb0c",
+    "@dimensiondev/holoflows-kit": "0.9.0-20230307045856-46252fb",
     "@emotion/cache": "11.10.3",
     "@emotion/react": "11.10.4",
     "@emotion/serialize": "1.1.0",

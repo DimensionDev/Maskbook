@@ -7,7 +7,7 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "emitDeclarationOnly": true
   },
-  "include": ["./ecmascript", "./ecmascript-intl", "./types", "./web-apis"],
+  "include": ["./ecmascript", "./ecmascript-intl", "./web-apis"],
   // This package MUST NOT use any other package.
   "references": []
 }
