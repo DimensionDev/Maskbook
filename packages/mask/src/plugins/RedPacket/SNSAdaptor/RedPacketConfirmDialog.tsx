@@ -120,7 +120,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         // the settings is not available
         if (!settings?.token) return
 
-        const CreationSuccess = (events?.CreationSuccess.returnValues ?? {}) as {
+        const CreationSuccess = (events?.CreationSuccess?.returnValues ?? {}) as {
             creation_time: string
             creator: string
             id: string
@@ -129,7 +129,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         }
 
         // the events log is not available
-        if (!events?.CreationSuccess.returnValues.id) return
+        if (!events?.CreationSuccess?.returnValues?.id) return
 
         payload.current.sender = {
             address: account,

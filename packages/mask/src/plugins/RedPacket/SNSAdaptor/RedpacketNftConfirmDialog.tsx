@@ -170,7 +170,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
         if (typeof receipt?.transactionHash !== 'string') return
         setTransactionId(receipt.transactionHash)
         RedPacketRPC.addRedPacketNft({ id: receipt.transactionHash, password: privateKey, contract_version: 1 })
-        const { id } = (events?.CreationSuccess.returnValues ?? {}) as {
+        const { id } = (events?.CreationSuccess?.returnValues ?? {}) as {
             id?: string
         }
         if (!id) return

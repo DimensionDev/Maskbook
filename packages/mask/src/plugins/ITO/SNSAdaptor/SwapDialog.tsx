@@ -179,7 +179,7 @@ export function SwapDialog(props: SwapDialogProps) {
             await openShareTxDialog({
                 hash: receipt.transactionHash,
             })
-            const { to_value } = (receipt.events?.SwapSuccess.returnValues ?? {}) as {
+            const { to_value } = (receipt.events?.SwapSuccess?.returnValues ?? {}) as {
                 to_value: string
             }
             setActualSwapAmount(to_value)
