@@ -1,7 +1,8 @@
 import bs58 from 'bs58'
 import * as Web3 from '@solana/web3.js'
 import { getEnumAsArray } from '@masknet/kit'
-import { isSameAddress, createLookupTableResolver } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { createLookupTableResolver } from '@masknet/base'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types.js'
 import { getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
 

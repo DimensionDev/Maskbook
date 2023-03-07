@@ -463,7 +463,7 @@ importers:
         specifier: 0.1.0
         version: 0.1.0
       '@masknet/public-api':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../public-api
       anchorme:
         specifier: ^2.1.2
@@ -3628,6 +3628,9 @@ importers:
       '@ethersproject/strings':
         specifier: 5.7.0
         version: 5.7.0
+      '@masknet/base':
+        specifier: workspace:^
+        version: link:../../base
       '@masknet/web3-constants':
         specifier: workspace:^
         version: link:../../web3-constants
@@ -3713,6 +3716,9 @@ importers:
       '@blocto/fcl':
         specifier: ^0.0.78-alpha.10
         version: 0.0.78-alpha.10(google-protobuf@3.20.1)
+      '@masknet/base':
+        specifier: workspace:^
+        version: link:../../base
       '@masknet/web3-constants':
         specifier: workspace:^
         version: link:../../web3-constants
@@ -3734,6 +3740,9 @@ importers:
 
   packages/web3-shared/solana:
     dependencies:
+      '@masknet/base':
+        specifier: workspace:^
+        version: link:../../base
       '@masknet/web3-constants':
         specifier: workspace:^
         version: link:../../web3-constants
@@ -3798,6 +3807,9 @@ importers:
 
   packages/web3-telemetry:
     dependencies:
+      '@masknet/base':
+        specifier: workspace:^
+        version: link:../base
       '@masknet/web3-helpers':
         specifier: workspace:^
         version: link:../web3-helpers

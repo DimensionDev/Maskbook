@@ -1,5 +1,5 @@
 import { useMount } from 'react-use'
-import { type Unresolved, resolve } from '@masknet/web3-shared-base'
+import { type Unresolved, resolve } from '@masknet/base'
 import { TelemetryAPI } from '@masknet/web3-providers/types'
 import { useTelemetry } from './useTelemetry.js'
 

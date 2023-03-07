@@ -2,14 +2,14 @@ import { clone, first } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import { mapSubscription, mergeSubscription, type StorageObject } from '@masknet/shared-base'
 import {
-    type Account,
-    type WalletProvider,
-    type ProviderState as Web3ProviderState,
     type ECKeyIdentifier,
     getSiteType,
-} from '@masknet/web3-shared-base'
+    mapSubscription,
+    mergeSubscription,
+    type StorageObject,
+} from '@masknet/shared-base'
+import { type Account, type WalletProvider, type ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
 
 export interface ProviderStorage<Account, ProviderType extends string> {
     account: Account
