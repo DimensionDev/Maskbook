@@ -87,20 +87,17 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
 
     const isTokenTip = tipType === TokenType.Fungible
     const shareText = useMemo(() => {
-        const promote = t.tip_mask_promote()
         const message = isTokenTip
             ? t.tip_token_share_post({
                   amount,
                   symbol: token?.symbol || 'token',
                   recipientSnsId,
                   recipient: recipientAddress,
-                  promote,
               })
             : t.tip_nft_share_post({
                   name: nonFungibleTokenContract?.name || 'NFT',
                   recipientSnsId,
                   recipient: recipientAddress,
-                  promote,
               })
         return message
     }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientSnsId, t])
