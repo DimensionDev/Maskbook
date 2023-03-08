@@ -18,8 +18,7 @@
     }
   },
   "dependencies": {
-    "@masknet/web3-shared-base": "workspace:^",
-    "@masknet/base":"workspace:^",
+    "@masknet/shared-base": "workspace:^",
     "@masknet/web3-helpers": "workspace:^",
     "@masknet/web3-hooks-base": "workspace:^",
     "@masknet/web3-providers": "workspace:^",
