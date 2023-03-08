@@ -27,7 +27,7 @@ const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x)
 const Web3ContextType = { pluginID: NetworkPluginID.PLUGIN_EVM }
 
 export default function DashboardRoot() {
-    useEffect(queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
+    useEffect(() => queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
 
     // #region theme
     const appearance = useAppearance()

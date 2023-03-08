@@ -35,7 +35,7 @@ function PluginRenderDelayed() {
 
 export default function PopupsConnect() {
     const [title, setTitle] = useState('')
-    useEffect(queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
+    useEffect(() => queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
 
     return MaskUIRootPage(
         usePopupTheme,
