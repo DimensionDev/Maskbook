@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { first } from 'lodash-es'
 import { makeStyles } from '@masknet/theme'
@@ -8,7 +9,6 @@ import { PropertiesCard } from '../../Shared/PropertiesCard.js'
 import { PriceCard } from '../../Shared/PriceCard.js'
 import { DetailsCard } from '../../Shared/DetailsCard.js'
 import { Context } from '../../Context/index.js'
-import { memo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
