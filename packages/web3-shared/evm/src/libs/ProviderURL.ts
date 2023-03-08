@@ -2,6 +2,8 @@ import { createDeviceSeed } from '@masknet/shared-base'
 import { getRPCConstants } from '../constants/constants.js'
 import type { ChainId } from '../types/index.js'
 
+const DEVICE_SEED = createDeviceSeed()
+
 export class ProviderURL {
     /**
      * @deprecated Don't new ProviderEditor()
@@ -13,7 +15,7 @@ export class ProviderURL {
         const { RPC_URLS, RPC_WEIGHTS } = getRPCConstants(chainId)
         if (!RPC_URLS || !RPC_WEIGHTS) throw new Error(`No RPC presets at chainId: ${chainId}.`)
 
-        return RPC_URLS[RPC_WEIGHTS[createDeviceSeed() % RPC_URLS.length]]
+        return RPC_URLS[RPC_WEIGHTS[DEVICE_SEED % RPC_URLS.length]]
     }
 
     static fromOfficial(chainId: ChainId) {
