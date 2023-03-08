@@ -1,6 +1,7 @@
 import { compact, first, isEqual, uniqWith } from 'lodash-es'
 import {
     createSubscriptionFromValueRef,
+    CrossIsolationMessages,
     ECKeyIdentifier,
     EMPTY_LIST,
     ExtensionSite,
@@ -91,6 +92,7 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
         update()
         SharedContextSettings.value.wallets.subscribe(update)
         SharedContextSettings.value.allPersonas?.subscribe(update)
+        CrossIsolationMessages.events.renameWallet.on(update)
     }
 
     override async addWallet(wallet: Wallet): Promise<void> {
@@ -102,6 +104,11 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
         if (scWallets.length) await super.removeWallets(scWallets)
         await super.removeWallet(address, password)
         await SharedContextSettings.value.removeWallet(address, password)
+    }
+
+    override async renameWallet(address: string, name: string) {
+        await super.renameWallet(address, name)
+        CrossIsolationMessages.events.renameWallet.sendToAll({})
     }
 
     override async connect(

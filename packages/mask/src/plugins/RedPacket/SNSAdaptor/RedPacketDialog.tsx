@@ -154,7 +154,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         if (step === CreateRedPacketPageStep.ConfirmPage) setStep(CreateRedPacketPageStep.NewRedPacketPage)
         if (step === CreateRedPacketPageStep.NewRedPacketPage) {
             onClose()
-            CrossIsolationMessages.events.smartPayDialogEvent.sendToAll({ open: true })
+            if (props.source === PluginID.SmartPay) {
+                CrossIsolationMessages.events.smartPayDialogEvent.sendToAll({ open: true })
+            }
         }
     }, [step, props.source])
     const onNext = useCallback(() => {
