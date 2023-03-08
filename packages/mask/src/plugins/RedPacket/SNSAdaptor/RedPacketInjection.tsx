@@ -1,5 +1,5 @@
-import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { useEffect, useState } from 'react'
+import { CrossIsolationMessages, type PluginID } from '@masknet/shared-base'
 
 import RedPacketDialog from './RedPacketDialog.js'
 
