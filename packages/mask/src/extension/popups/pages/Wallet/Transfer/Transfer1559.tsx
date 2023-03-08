@@ -567,6 +567,11 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     return (
         <FormProvider {...methods}>
             <Transfer1559TransferUI
+                isAvailableBalance={
+                    !!wallet?.owner &&
+                    chainId === smartPayChainId &&
+                    isSameAddress(selectedAsset?.address, maskTokenAddress)
+                }
                 accountName={wallet?.name ?? ''}
                 openAccountMenu={openMenu}
                 openAssetMenu={openAssetMenu}
@@ -596,6 +601,7 @@ export interface Transfer1559UIProps {
     confirmLoading: boolean
     popoverContent?: ReactElement
     disableConfirm?: boolean
+    isAvailableBalance: boolean
 }
 
 type TransferFormData = {
@@ -619,6 +625,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
         confirmLoading,
         popoverContent,
         disableConfirm,
+        isAvailableBalance,
     }) => {
         const anchorEl = useRef<HTMLDivElement | null>(null)
         const { t } = useI18N()
@@ -692,7 +699,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                     <Typography className={classes.label}>
                         <span>{t('popups_wallet_choose_token')}</span>
                         <Typography className={classes.balance} component="span">
-                            {t('wallet_balance')}:
+                            {isAvailableBalance ? t('wallet_available_balance') : t('wallet_balance')}:
                             <FormattedBalance
                                 value={selectedAsset?.balance}
                                 decimals={selectedAsset?.decimals}
