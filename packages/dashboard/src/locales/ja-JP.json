@@ -346,6 +346,7 @@
     "labs_valuables_desc": "オリジナルのクリエイターによってサイン入りツイートを購入&販売。",
     "labs_mask_box": "MaskBox",
     "labs_mask_box_desc": "NFTミステリーボックスを発売するためのプロフェッショナルなマルチチェーン分散型プラットフォームです。",
+    "version_of_unstable": "バージョン {{version}}-{{build}}-{{hash}}",
     "register_restore_backups_file": "ファイル",
     "register_restore_backups_text": "テキスト"
 }
