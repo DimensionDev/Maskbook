@@ -40,15 +40,17 @@ export async function captureFetchException(request: Request, response?: Respons
 
 function getHeaders(requestOrResponse?: Request | Response) {
     try {
-        return JSON.stringify(Object.fromEntries(requestOrResponse?.headers.entries() ?? []))
+        if (!requestOrResponse) return 'N/A'
+        return JSON.stringify(Object.fromEntries(requestOrResponse.headers.entries()))
     } catch {
         return 'N/A'
     }
 }
 
-function getBody(requestOrResponse?: Request | Response) {
+async function getBody(requestOrResponse?: Request | Response) {
     try {
-        return requestOrResponse?.text()
+        const text = await requestOrResponse?.text()
+        return text ?? 'N/A'
     } catch {
         return 'N/A'
     }
