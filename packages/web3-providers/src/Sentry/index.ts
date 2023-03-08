@@ -1,5 +1,11 @@
 import { Breadcrumbs, Event, GlobalHandlers } from '@sentry/browser'
-import { getSiteType, getAgentType, getExtensionId } from '@masknet/shared-base'
+import {
+    getSiteType,
+    getAgentType,
+    getExtensionId,
+    createDeviceSeed,
+    createDeviceFingerprint,
+} from '@masknet/shared-base'
 import { formatMask } from '@masknet/web3-shared-base'
 import { TelemetryAPI } from '../types/Telemetry.js'
 
@@ -20,6 +26,9 @@ const IGNORE_ERRORS = [
     '[object Promise]',
     'ResizeObserver loop limit exceeded',
 ]
+
+const DEVICE_SEED = createDeviceSeed()
+const DEVICE_FINGERPRINT = createDeviceFingerprint()
 
 export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
     constructor() {
@@ -66,6 +75,8 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         Sentry.setTag('channel', process.env.channel)
         Sentry.setTag('version', process.env.VERSION)
         Sentry.setTag('ua', navigator.userAgent)
+        Sentry.setTag('device_seed', DEVICE_SEED)
+        Sentry.setTag('device_fingerprint', DEVICE_FINGERPRINT)
         Sentry.setTag('engine', process.env.engine)
         Sentry.setTag('build_date', process.env.BUILD_DATE)
         Sentry.setTag('branch_name', process.env.BRANCH_NAME)
