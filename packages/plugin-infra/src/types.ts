@@ -38,7 +38,7 @@ import type {
     Web3State,
     Web3UI,
 } from '@masknet/web3-shared-base'
-import type { ChainId as ChainIdEVM, TransactionOptions } from '@masknet/web3-shared-evm'
+import type { TransactionOptions } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { CompositionType } from './entry-content-script.js'
 
@@ -163,10 +163,6 @@ export namespace Plugin.Shared {
 
     export interface SharedUIContext extends SharedContext {
         allPersonas?: Subscription<PersonaInformation[]>
-        /** The selected account of Mask Wallet */
-        account: Subscription<string>
-        /** The selected chainId of Mask Wallet */
-        chainId: Subscription<ChainIdEVM>
         /** The selected persona */
         currentPersona: Subscription<PersonaIdentifier | undefined>
         /** Get all wallets */

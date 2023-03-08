@@ -4,7 +4,6 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { asyncIteratorToArray } from '@masknet/shared-base'
 import { formatEthereumAddress, isValidAddress } from '@masknet/web3-shared-evm'
 import { PluginDB } from '../../../database/Plugin.db.js'
-import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings.js'
 import type { WalletRecord } from '../type.js'
 
 function WalletRecordOutDB(record: WalletRecord) {
@@ -16,7 +15,7 @@ function WalletRecordOutDB(record: WalletRecord) {
     }
 }
 
-export async function getWallet(address = currentMaskWalletAccountSettings.value) {
+export async function getWallet(address: string) {
     if (!address) return null
     if (!isValidAddress(address)) throw new Error('Not a valid address.')
     const wallet = (await PluginDB.get('wallet', formatEthereumAddress(address))) ?? null

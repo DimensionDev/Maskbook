@@ -1,19 +1,19 @@
 import type { RequestArguments } from 'web3-core'
-import { ProviderType, ConnectionContext } from '@masknet/web3-shared-evm'
+import { ProviderType, ConnectionContext, ChainId } from '@masknet/web3-shared-evm'
 import type { EVM_Connection, EVM_ConnectionOptions } from './types.js'
 import { Providers } from '../Provider/provider.js'
 import type { BaseContractWalletProvider } from '../Provider/providers/BaseContractWallet.js'
-import { SharedContextSettings, Web3StateSettings } from '../../settings/index.js'
+import { Web3StateSettings } from '../../settings/index.js'
 
 const initializer = {
     getDefaultAccount(providerType: ProviderType) {
         return providerType === ProviderType.MaskWallet
-            ? SharedContextSettings.value.account.getCurrentValue()
+            ? ''
             : Web3StateSettings.value.Provider?.account?.getCurrentValue()
     },
     getDefaultChainId(providerType: ProviderType) {
         return providerType === ProviderType.MaskWallet
-            ? SharedContextSettings.value.chainId.getCurrentValue()
+            ? ChainId.Mainnet
             : Web3StateSettings.value.Provider?.chainId?.getCurrentValue()
     },
     getDefaultProviderType() {
