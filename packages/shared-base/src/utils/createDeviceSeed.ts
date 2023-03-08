@@ -5,7 +5,7 @@ import { createDeviceFingerprint } from './createDeviceFingerprint.js'
  * Create a numeric seed to categorize a device.
  * @returns
  */
-export function createDeviceSeed() {
+export function createDeviceSeed(length = 10) {
     const fingerprint = createDeviceFingerprint()
-    return fingerprint ? hexToNumber(fingerprint.slice(0, 10)) : 0
+    return fingerprint ? hexToNumber(fingerprint.slice(0, length)) : 0
 }
