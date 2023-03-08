@@ -5,7 +5,7 @@ import RedPacketDialog from './RedPacketDialog.js'
 
 export function RedPacketInjection() {
     const [open, setOpen] = useState(false)
-    const [source, setSource] = useState<string>()
+    const [source, setSource] = useState<PluginID>()
 
     useEffect(() => {
         return CrossIsolationMessages.events.redpacketDialogEvent.on(({ open, source: pluginId }) => {
@@ -15,15 +15,5 @@ export function RedPacketInjection() {
     }, [])
 
     if (!open) return null
-    return (
-        <RedPacketDialog
-            open
-            onClose={() => {
-                setOpen(false)
-                if (source === PluginID.SmartPay) {
-                    CrossIsolationMessages.events.smartPayDialogEvent.sendToAll({ open: true })
-                }
-            }}
-        />
-    )
+    return <RedPacketDialog open onClose={() => setOpen(false)} source={source} />
 }

@@ -7,6 +7,7 @@ import { z as zod } from 'zod'
 import { EthereumAddress } from 'wallet.ts'
 import { BigNumber } from 'bignumber.js'
 import {
+    addGasMargin,
     ChainId,
     DepositPaymaster,
     explorerResolver,
@@ -415,7 +416,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 minus(
                     selectedAsset?.balance,
                     new BigNumber(formatGweiToWei(maxFeePerGas))
-                        .multipliedBy(!isZero(gasLimit) ? gasLimit : 150000)
+                        .multipliedBy(!isZero(gasLimit) ? addGasMargin(gasLimit) : '200000')
                         .integerValue()
                         .multipliedBy(ratio),
                 ),
