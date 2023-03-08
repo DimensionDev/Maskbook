@@ -24,7 +24,7 @@ const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/
 const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/
 const LENS_RE = /[^\s()[\]]{1,256}\.lens\b/i
 const LENS_URL_RE = /https?:\/\/.+\/(\w+\.lens)/
-const LENS_DOMAIN_RE = /\w+.lens/
+const LENS_DOMAIN_RE = /\w+\.lens/
 
 function getENSNames(userId: string, nickname: string, bio: string) {
     return [userId.match(ENS_RE), nickname.match(ENS_RE), bio.match(ENS_RE)].flatMap((result) => result ?? [])
