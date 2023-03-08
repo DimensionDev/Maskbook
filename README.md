@@ -9,7 +9,6 @@
 # Mask Network
 
 [![GitHub license][badge-license]][license]
-[![Circle CI][badge-ci]][circle-ci]
 [![Join the chat at https://gitter.im/Maskbook/community][badge-gitter]][gitter]
 [![Chrome Web Store][badge-chrome]][client-chrome]
 [![Mozilla Add-on][badge-firefox]][client-firefox]
@@ -60,6 +59,7 @@ Please submit your **resume** to `jobs (at) mask.io`
 [badge-gitter]: https://badges.gitter.im/Maskbook/community.svg
 [badge-license]: https://img.shields.io/badge/license-AGPL-blue.svg?style=flat-square
 [client-chrome]: https://chrome.google.com/webstore/detail/maskbook/jkoeaghipilijlahjplgbfiocjhldnap/
+[client-firefox]: https://addons.mozilla.org/en-US/firefox/addon/maskbook/
 [crowdin]: https://crowdin.com/project/mask-network
 [fossa-status]: https://app.fossa.io/api/projects/git%2Bgithub.com%2FDimensionDev%2FMaskbook.svg?type=large
 [fossa]: https://app.fossa.io/projects/git%2Bgithub.com%2FDimensionDev%2FMaskbook
