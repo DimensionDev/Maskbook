@@ -1,11 +1,11 @@
 import { compact } from 'lodash-es'
-import { DialogContent, Button, Tab } from '@mui/material'
+import { DialogContent, Tab } from '@mui/material'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
-import { PluginWalletStatusBar, InjectedDialog, useSharedI18N, NetworkTab, ChainBoundary } from '@masknet/shared'
+import { PluginWalletStatusBar, InjectedDialog, useSharedI18N, NetworkTab } from '@masknet/shared'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { type ChainId, chainResolver, type NetworkType } from '@masknet/web3-shared-evm'
+import { type ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../locales/index.js'
@@ -158,29 +158,7 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
                 )}
             </section>
 
-            <PluginWalletStatusBar className={classes.footer}>
-                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
-                    <Button
-                        variant="contained"
-                        size="medium"
-                        onClick={() => {
-                            setSelectProviderDialog({
-                                open: true,
-                                supportedNetworkList: chainIdList
-                                    ?.map((chainId) => {
-                                        const x = chainResolver.networkType(chainId)
-                                        return x
-                                    })
-                                    .filter((x) => !!x) as NetworkType[],
-                            })
-                        }}
-                        fullWidth>
-                        {pluginID === NetworkPluginID.PLUGIN_EVM
-                            ? t.wallet_status_button_change()
-                            : t.wallet_status_button_change_to_evm()}
-                    </Button>
-                </ChainBoundary>
-            </PluginWalletStatusBar>
+            <PluginWalletStatusBar className={classes.footer} />
         </div>
     )
 }
