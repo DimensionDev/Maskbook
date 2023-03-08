@@ -371,6 +371,8 @@
     "register_restore_backups_hint": "ここでファイルをクリックまたはドラッグしてください",
     "register_restore_backups_file": "ファイル",
     "register_restore_backups_text": "テキスト",
+    "register_restore_backups_tabs": "バックアップの復元タブ",
+    "create_wallet_mnemonic_tip": "ニーモニックフレーズを保存することを忘れないでください。ウォレットにアクセスする際に必要になります。",
     "create_wallet_wallet_name": "ウォレット名",
     "create_wallet_re_enter_payment_password": "支払いパスワードを再入力"
 }
