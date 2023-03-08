@@ -1,4 +1,4 @@
-import { i18NextInstance } from '@masknet/base'
+import { i18NextInstance } from '@masknet/shared-base'
 
 export function formatElapsed(from: number) {
     const msPerMinute = 60 * 1000
