@@ -26,6 +26,7 @@ function createCanvasFingerprint() {
     context.textBaseline = 'alphabetic'
     context.fillStyle = 'rgb(255,5,5)'
     context.rotate(0.03)
+    // eslint-disable-next-line @dimensiondev/unicode-specific-set
     context.fillText('mask9é0#マスクfbz1마스크$%^@£éú面具', 4, 17)
     context.fillStyle = 'rgb(155,255,5)'
     context.shadowBlur = 8
@@ -48,9 +49,6 @@ export const createDeviceFingerprint: ReturnType<typeof memoize> = memoize((): s
                 navigator.language,
                 navigator.maxTouchPoints,
                 navigator.hardwareConcurrency,
-                screen.availWidth,
-                screen.availHeight,
-                screen.pixelDepth,
             ].join(),
         ) ?? ''
     )
