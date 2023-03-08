@@ -22,51 +22,58 @@ const DEFAULT_PAYMENT_TOKEN_STATE = {
 
 export class Popups implements Middleware<ConnectionContext> {
     private async getPaymentToken(context: ConnectionContext) {
-        const smartPayChainId = await SmartPayBundler.getSupportedChainId()
-        if (context.chainId !== smartPayChainId || !context.owner) return DEFAULT_PAYMENT_TOKEN_STATE
+        try {
+            const smartPayChainId = await SmartPayBundler.getSupportedChainId()
+            if (context.chainId !== smartPayChainId || !context.owner) return DEFAULT_PAYMENT_TOKEN_STATE
 
-        const { PAYMASTER_MASK_CONTRACT_ADDRESS } = getSmartPayConstants(context.chainId)
-        if (!PAYMASTER_MASK_CONTRACT_ADDRESS) return DEFAULT_PAYMENT_TOKEN_STATE
+            const { PAYMASTER_MASK_CONTRACT_ADDRESS } = getSmartPayConstants(context.chainId)
+            if (!PAYMASTER_MASK_CONTRACT_ADDRESS) return DEFAULT_PAYMENT_TOKEN_STATE
 
-        const maskAddress = getMaskTokenAddress(context.chainId)
+            const maskAddress = getMaskTokenAddress(context.chainId)
 
-        const contract = Web3.getERC20Contract(context.chainId, maskAddress)
+            const contract = Web3.getERC20Contract(context.chainId, maskAddress)
 
-        if (!contract) return DEFAULT_PAYMENT_TOKEN_STATE
+            if (!contract) return DEFAULT_PAYMENT_TOKEN_STATE
 
-        const depositPaymaster = new DepositPaymaster(context.chainId)
-        const ratio = await depositPaymaster.getRatio()
+            const depositPaymaster = new DepositPaymaster(context.chainId)
+            const ratio = await depositPaymaster.getRatio()
 
-        const { signableConfig } = PayloadEditor.fromPayload(context.request, {
-            chainId: context.chainId,
-        })
+            const { signableConfig } = PayloadEditor.fromPayload(context.request, {
+                chainId: context.chainId,
+            })
 
-        if (!signableConfig?.maxFeePerGas) return DEFAULT_PAYMENT_TOKEN_STATE
+            if (!signableConfig?.maxFeePerGas) return DEFAULT_PAYMENT_TOKEN_STATE
 
-        const gas = await context.connection.estimateTransaction?.(signableConfig, undefined, {
-            paymentToken: maskAddress,
-        })
+            const gas = await context.connection.estimateTransaction?.(signableConfig, undefined, {
+                paymentToken: maskAddress,
+            })
 
-        const maskGasFee = toFixed(
-            new BigNumber(signableConfig.maxFeePerGas)
-                .multipliedBy(gas ?? 0)
-                .integerValue()
-                .multipliedBy(ratio),
-            0,
-        )
+            const maskGasFee = toFixed(
+                new BigNumber(signableConfig.maxFeePerGas)
+                    .multipliedBy(gas ?? 0)
+                    .integerValue()
+                    .multipliedBy(ratio),
+                0,
+            )
 
-        const maskBalance = await Web3.getFungibleTokenBalance(context.chainId, maskAddress, context.account)
+            const maskBalance = await Web3.getFungibleTokenBalance(context.chainId, maskAddress, context.account)
 
-        const maskAllowance = await contract.methods
-            .allowance(context.account, PAYMASTER_MASK_CONTRACT_ADDRESS)
-            .call({ from: context.account })
+            const maskAllowance = await contract.methods
+                .allowance(context.account, PAYMASTER_MASK_CONTRACT_ADDRESS)
+                .call({ from: context.account })
 
-        const availableBalanceTooLow =
-            isGreaterThan(maskGasFee, maskAllowance) || isGreaterThan(maskGasFee, maskBalance)
+            const availableBalanceTooLow =
+                isGreaterThan(maskGasFee, maskAllowance) || isGreaterThan(maskGasFee, maskBalance)
 
-        return {
-            allowMaskAsGas: !availableBalanceTooLow,
-            paymentToken: context.paymentToken ?? !availableBalanceTooLow ? maskAddress : undefined,
+            return {
+                allowMaskAsGas: !availableBalanceTooLow,
+                paymentToken: context.paymentToken ?? !availableBalanceTooLow ? maskAddress : undefined,
+            }
+        } catch (error) {
+            return {
+                allowMaskAsGas: false,
+                paymentToken: undefined,
+            }
         }
     }
     async fn(context: ConnectionContext, next: () => Promise<void>) {
