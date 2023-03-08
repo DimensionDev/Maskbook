@@ -1,7 +1,7 @@
 import type { Appearance, LanguageOptions } from '@masknet/public-api'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { ProfileIdentifier, PersonaIdentifier } from '@masknet/base'
-import type { NetworkPluginID } from '../Plugin/index.js'
+import type { NetworkPluginID, PluginID } from '../Plugin/index.js'
 import type { PersonaInformation, RelationFavor } from '../Persona/type.js'
 import type { EnhanceableSite, ExtensionSite } from '../Site/index.js'
 
@@ -172,7 +172,7 @@ export interface RestoreSuccessEvent {
 
 export interface redpacketDialogEvent {
     open: boolean
-    source?: string
+    source?: PluginID
 }
 
 export interface SmartPayDialogEvent {
