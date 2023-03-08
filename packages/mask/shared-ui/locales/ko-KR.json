@@ -1,4 +1,7 @@
 {
+    "promote": "🎭🎭🎭 일반 택스트가 지루해요? Mask.io 설치하여 암호화된 트윗을 친구에게 보내 보세요!",
+    "promote_red_packet": "🧧🧧🧧 Mask.io 설치하여 행운 드랍으로 친구에게 토큰이나 NFT를 보내세요!",
+    "promote_ito": "Mask.io 설치하여 {{sns}}에서 탈중앙화 에셋을 무료로 론칭하거나 토큰 론칭에 참여해 보세요!",
     "database_backup": "데이터베이스 백업",
     "database_overwrite": "백업으로 데이터베이스를 덮어쓰기",
     "database_clear": "데이터베이스 지우기",
