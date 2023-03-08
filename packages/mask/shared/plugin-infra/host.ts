@@ -5,22 +5,15 @@ import { Emitter } from '@servie/events'
 import { createI18NBundle, createSubscriptionFromValueRef, i18NextInstance } from '@masknet/shared-base'
 import { MaskMessages } from '../../shared/messages.js'
 import { InMemoryStorages, PersistentStorages } from '../../shared/index.js'
-import { nativeAPI, hasNativeAPI } from '../../shared/native-rpc/index.js'
 import {
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
 } from '../legacy-settings/wallet-settings.js'
 
-export type PartialSharedUIContext = Pick<
-    Plugin.Shared.SharedUIContext,
-    'nativeType' | 'hasNativeAPI' | 'account' | 'chainId' | 'createKVStorage'
->
+export type PartialSharedUIContext = Pick<Plugin.Shared.SharedUIContext, 'account' | 'chainId' | 'createKVStorage'>
 let sharedUIContextSingleton: Omit<PartialSharedUIContext, 'createKVStorage'>
 export const createPartialSharedUIContext = (id: string, signal: AbortSignal): PartialSharedUIContext => {
     sharedUIContextSingleton ??= {
-        nativeType: nativeAPI?.type,
-        hasNativeAPI,
-
         account: createSubscriptionFromValueRef(currentMaskWalletAccountSettings),
         chainId: createSubscriptionFromValueRef(currentMaskWalletChainIdSettings),
     }

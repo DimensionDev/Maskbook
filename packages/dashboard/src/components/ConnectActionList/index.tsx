@@ -11,7 +11,6 @@ export const ConnectActionList: StyledComponent<
     flexDirection: 'column',
     listStyle: 'none',
     padding: 0,
-    // TODO: mobile
     width: 520,
     // TODO: deep style
     [`& .${listItemClasses.root}`]: {

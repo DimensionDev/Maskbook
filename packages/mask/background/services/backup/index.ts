@@ -1,4 +1,4 @@
-export { mobile_generateBackupJSON, generateBackupPreviewInfo, createBackupFile, type BackupOptions } from './create.js'
+export { generateBackupPreviewInfo, createBackupFile, type BackupOptions } from './create.js'
 export {
     addUnconfirmedBackup,
     getUnconfirmedBackup,

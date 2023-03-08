@@ -6,11 +6,7 @@ let disconnected = false
 const { signal } = hmr(import.meta.webpackHot)
 
 // Listen to API request from dashboard
-if (
-    (process.env.NODE_ENV === 'development' || process.env.channel !== 'stable') &&
-    process.env.architecture === 'web' &&
-    process.env.engine === 'chromium'
-) {
+if ((process.env.NODE_ENV === 'development' || process.env.channel !== 'stable') && process.env.engine === 'chromium') {
     WebExtensionMessage.acceptExternalConnect((conn) => {
         if (disconnected) return false
         console.log('New connection from', conn)

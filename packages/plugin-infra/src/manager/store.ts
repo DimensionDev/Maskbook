@@ -99,10 +99,6 @@ export function getRegisteredWeb3Providers() {
 }
 
 function __meetRegisterRequirement(def: Plugin.Shared.Definition) {
-    // arch check
-    if (process.env.architecture === 'app' && !def.enableRequirement.architecture.app) return false
-    if (process.env.architecture === 'web' && !def.enableRequirement.architecture.web) return false
-
     // build variant check
     if (process.env.NODE_ENV === 'production') {
         try {

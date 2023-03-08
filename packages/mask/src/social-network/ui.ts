@@ -90,10 +90,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.collecting.currentVisitingIdentityProvider?.start(signal)
 
     ui.injection.pageInspector?.(signal)
-    if (Flags.toolbox_enabled) {
-        ui.injection.toolbox?.(signal, 'wallet')
-        ui.injection.toolbox?.(signal, 'application')
-    }
+    ui.injection.toolbox?.(signal, 'wallet')
+    ui.injection.toolbox?.(signal, 'application')
     ui.injection.newPostComposition?.start?.(signal)
     ui.injection.searchResult?.(signal)
     ui.injection.userBadge?.(signal)

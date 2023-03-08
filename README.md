@@ -29,10 +29,6 @@ For general introductions, see [Mask.io](https://mask.io).
 - [Mask Network on Chrome Web Store][client-chrome]
 - [Mask Network on Firefox Addon Store][client-firefox]
 
-- [Mask Network for iOS][client-ios]
-- [Mask Network for iOS Testflight][client-ios-testflight]
-- (Beta!) [Mask Network for Android][client-android]
-
 ## Useful Links
 
 - [User Forum](https://github.com/DimensionDev/Maskbook/discussions)
@@ -63,12 +59,7 @@ Please submit your **resume** to `jobs (at) mask.io`
 [badge-fossa]: https://app.fossa.io/api/projects/git%2Bgithub.com%2FDimensionDev%2FMaskbook.svg?type=shield
 [badge-gitter]: https://badges.gitter.im/Maskbook/community.svg
 [badge-license]: https://img.shields.io/badge/license-AGPL-blue.svg?style=flat-square
-[client-android]: https://play.google.com/store/apps/details?id=com.dimension.maskbook
 [client-chrome]: https://chrome.google.com/webstore/detail/maskbook/jkoeaghipilijlahjplgbfiocjhldnap/
-[client-firefox]: https://addons.mozilla.org/en-US/firefox/addon/maskbook/
-[client-ios-testflight]: https://testflight.apple.com/join/PYomz4pJ
-[client-ios]: https://apps.apple.com/app/id1478382964
-[circle-ci]: https://circleci.com/gh/DimensionDev/Maskbook
 [crowdin]: https://crowdin.com/project/mask-network
 [fossa-status]: https://app.fossa.io/api/projects/git%2Bgithub.com%2FDimensionDev%2FMaskbook.svg?type=large
 [fossa]: https://app.fossa.io/projects/git%2Bgithub.com%2FDimensionDev%2FMaskbook

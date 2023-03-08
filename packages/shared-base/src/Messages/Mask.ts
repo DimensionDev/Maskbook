@@ -19,12 +19,6 @@ export interface MaskSettingsEvents {
     languageSettings: LanguageOptions
     currentPersonaIdentifier: string
 }
-
-export interface MaskMobileOnlyEvents {
-    mobile_app_suspended: void
-    mobile_app_resumed: void
-}
-
 export interface MaskSNSEvents {
     // TODO: Maybe in-page UI related messages should use Context instead of messages?
     autoPasteFailed: AutoPasteFailedEvent
@@ -39,7 +33,7 @@ export interface MaskSNSEvents {
     Native_visibleSNS_currentDetectedProfileUpdated: ProfileIdentifier
 }
 
-export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, MaskSNSEvents {
+export interface MaskEvents extends MaskSettingsEvents, MaskSNSEvents {
     /** value is "bulkKey" */
     legacySettings_bulkDiscoverNS: string
     /** emit when the settings changed. */
