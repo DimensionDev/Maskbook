@@ -172,11 +172,6 @@ export namespace Plugin.Shared {
         /** Get all wallets */
         wallets: Subscription<Wallet[]>
 
-        /** Native platform type */
-        nativeType?: 'Android' | 'iOS'
-        /** Native API supported */
-        hasNativeAPI: boolean
-
         /** Open Dashboard with a new window */
         openDashboard(route?: DashboardRoutes, search?: string): Promise<any>
 
@@ -326,7 +321,6 @@ export namespace Plugin.Shared {
      */
     export interface EnableRequirement {
         target: ReleaseStages
-        architecture: Record<'app' | 'web', boolean>
         /** The SNS Network this plugin supports. */
         networks: SupportedNetworksDeclare
         /** The Web3 Network this plugin supports */

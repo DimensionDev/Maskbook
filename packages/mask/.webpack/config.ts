@@ -166,7 +166,6 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
                 // This is a valuable trade-off.
                 const runtimeValues = {
                     ...getGitInfo(flags.reproducibleBuild),
-                    architecture: flags.architecture,
                     engine: flags.engine,
                     channel: flags.channel,
                     manifest: String(flags.manifest),
@@ -249,8 +248,7 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
         output: {
             environment: {
                 module: false,
-                // Our iOS App doesn't support dynamic import (it requires a heavy post-build time transform).
-                dynamicImport: computedFlags.supportDynamicImport,
+                dynamicImport: true,
             },
             path: flags.outputPath,
             filename: 'js/[name].js',
@@ -325,7 +323,6 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
         if (entry !== 'background' && entry !== 'devtools') {
             withReactDevTools(entries[entry])
         }
-        with_iOSPatch(entries[entry])
     }
 
     return baseConfig
@@ -333,11 +330,6 @@ export function createConfiguration(_inputFlags: BuildFlags): Configuration {
     function withReactDevTools(entry: EntryDescription) {
         if (!flags.devtools) return
         entry.import = joinEntryItem(join(__dirname, '../devtools/content-script/index.ts'), entry.import)
-    }
-    function with_iOSPatch(entry: EntryDescription) {
-        if (flags.engine === 'safari' && flags.architecture === 'app') {
-            entry.import = joinEntryItem(entry.import, join(__dirname, '../src/polyfill/permissions.js'))
-        }
     }
 }
 function addHTMLEntry(

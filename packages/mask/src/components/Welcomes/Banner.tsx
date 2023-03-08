@@ -7,7 +7,6 @@ import { activatedSocialNetworkUI, globalUIState } from '../../social-network/in
 import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskIconInMinds, MaskSharpIcon, useCurrentPersonaConnectStatus } from '@masknet/shared'
 import { useMount } from 'react-use'
-import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc/index.js'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
@@ -78,11 +77,9 @@ export function Banner(props: BannerProps) {
             return
         }
 
-        hasNativeAPI
-            ? nativeAPI?.api.misc_openDashboardView()
-            : Services.Helper.openDashboard(
-                  personaConnectStatus.hasPersona ? DashboardRoutes.Personas : DashboardRoutes.Setup,
-              )
+        Services.Helper.openDashboard(
+            personaConnectStatus.hasPersona ? DashboardRoutes.Personas : DashboardRoutes.Setup,
+        )
     }, [networkIdentifier, nextStep])
     const defaultUserName = networkIdentifier
         ? {

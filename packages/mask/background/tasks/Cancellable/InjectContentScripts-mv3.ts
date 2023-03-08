@@ -22,9 +22,6 @@ function OldImplementation(signal: AbortSignal) {
         if (arg.url === 'about:blank') return
         if (!arg.url.startsWith('http')) return
 
-        // This option is conflict with MV3.
-        if (Flags.support_declarative_user_script) return
-
         const contains = await browser.permissions.contains({ origins: [arg.url] })
         if (!contains) return
 
@@ -63,7 +60,6 @@ async function unregisterExistingScripts() {
 }
 
 function prepareMainWorldScript(matches: string[]): Scripting.RegisteredContentScript[] {
-    if (Flags.support_declarative_user_script) return []
     if (Flags.has_firefox_xray_vision) return []
 
     const result: Scripting.RegisteredContentScript = {
@@ -103,6 +99,6 @@ async function prepareContentScript(matches: string[]): Promise<Scripting.Regist
         runAt: 'document_idle',
         matches,
     }
-    if (Flags.has_firefox_xray_vision && !Flags.support_declarative_user_script) return [xrayScript, content]
+    if (Flags.has_firefox_xray_vision) return [xrayScript, content]
     return [content]
 }

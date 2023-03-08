@@ -124,28 +124,15 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                             </Button>
                         ) : null}
                         {url ? (
-                            process.env.architecture === 'app' && process.env.engine === 'firefox' ? (
-                                <Button
-                                    className={classes.button}
-                                    component={Link}
-                                    variant="text"
-                                    href={url}
-                                    download={fileName}
-                                    startIcon={<Download />}>
-                                    {t('download')}
-                                </Button>
-                            ) : (
-                                <Button
-                                    className={classes.button}
-                                    variant="text"
-                                    onClick={() => saveFileFromUrl(url, fileName)}
-                                    startIcon={<Download />}>
-                                    {t('download')}
-                                </Button>
-                            )
+                            <Button
+                                className={classes.button}
+                                variant="text"
+                                onClick={() => saveFileFromUrl(url, fileName)}
+                                startIcon={<Download />}>
+                                {t('download')}
+                            </Button>
                         ) : null}
-                        {/* Open it in a new tab does not make sense for app. */}
-                        {url && process.env.architecture === 'web' ? (
+                        {url ? (
                             <Button
                                 className={classes.button}
                                 variant="text"

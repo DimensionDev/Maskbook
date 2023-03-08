@@ -13,7 +13,7 @@ import type { GeneratorServices, Services } from './types.js'
 import { decryptionWithSocialNetworkDecoding } from './crypto/decryption.js'
 assertEnvironment(Environment.ManifestBackground)
 
-const debugMode = process.env.NODE_ENV === 'development' || process.env.engine === 'safari'
+const debugMode = process.env.NODE_ENV === 'development'
 const message = new WebExtensionMessage<Record<string, any>>({ domain: '$' })
 const hmr = new EventTarget()
 

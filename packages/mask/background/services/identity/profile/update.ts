@@ -42,11 +42,6 @@ export async function updateProfileInfo(identifier: ProfileIdentifier, data: Upd
     if (data.avatarURL) await storeAvatar(identifier, data.avatarURL)
 }
 
-export function mobile_removeProfile(id: ProfileIdentifier): Promise<void> {
-    if (process.env.architecture !== 'app') throw new TypeError('This function is only available in app')
-    return consistentPersonaDBWriteAccess((t) => deleteProfileDB(id, t))
-}
-
 export async function detachProfileWithNextID(
     uuid: string,
     personaPublicKey: string,

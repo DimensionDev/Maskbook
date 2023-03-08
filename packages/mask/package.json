@@ -139,7 +139,6 @@
     "react-window": "^1.8.8",
     "remarkable": "^2.0.1",
     "rss3-next": "^0.6.17",
-    "safari-14-idb-fix": "^3.0.0",
     "scrypt-js": "^3.0.1",
     "socket.io-client": "2.4.0",
     "stream-browserify": "^3.0.0",

@@ -41,5 +41,3 @@ assignees: Jack-Works, jk234ert
  <!-- Correct the version if it is not the case -->
 - [ ] Latest Chrome (stable channel)
 - [ ] Latest Firefox (stable channel)
-- [ ] Android 11
-- [ ] iOS 14
