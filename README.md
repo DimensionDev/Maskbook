@@ -52,7 +52,6 @@ see [SECURITY.md](.github/SECURITY.md)
 Please submit your **resume** to `jobs (at) mask.io`
 
 [badge-chrome]: https://img.shields.io/chrome-web-store/v/jkoeaghipilijlahjplgbfiocjhldnap.svg?logo=Maskbook&logoColor=%231c68f3&style=flat-square&label=Chrome%20store
-[badge-ci]: https://img.shields.io/circleci/project/github/DimensionDev/Maskbook.svg?style=flat-square&logo=circleci
 [badge-crowdin]: https://badges.crowdin.net/mask-network/localized.svg
 [badge-firefox]: https://img.shields.io/amo/v/maskbook?label=Firefox%20store&style=flat-square
 [badge-fossa]: https://app.fossa.io/api/projects/git%2Bgithub.com%2FDimensionDev%2FMaskbook.svg?type=shield
