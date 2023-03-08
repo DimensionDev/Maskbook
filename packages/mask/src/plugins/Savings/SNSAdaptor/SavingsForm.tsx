@@ -224,20 +224,21 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     }, [tab, protocol, account, chainId, web3, tokenAmount, openShareTxDialog])
 
     const buttonDom = useMemo(() => {
-        if (tab === TabType.Deposit)
-            return (
-                <ChainBoundary
-                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+        return (
+            <ChainBoundary
+                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                expectedChainId={chainId}
+                noSwitchNetworkTip
+                switchChainWithoutPopup
+                ActionButtonPromiseProps={{
+                    fullWidth: true,
+                    classes: { root: classes.button, disabled: classes.disabledButton },
+                }}>
+                <WalletConnectedBoundary
                     expectedChainId={chainId}
-                    noSwitchNetworkTip
-                    ActionButtonPromiseProps={{
-                        fullWidth: true,
-                        classes: { root: classes.button, disabled: classes.disabledButton },
-                    }}>
-                    <WalletConnectedBoundary
-                        expectedChainId={chainId}
-                        ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
-                        classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
+                    ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
+                    classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
+                    {tab === TabType.Deposit ? (
                         <EthereumERC20TokenApprovedBoundary
                             amount={approvalData?.approveAmount.toFixed() ?? ''}
                             token={approvalData?.approveToken}
@@ -257,38 +258,24 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                                 executor={executor}
                             />
                         </EthereumERC20TokenApprovedBoundary>
-                    </WalletConnectedBoundary>
-                </ChainBoundary>
-            )
-
-        return (
-            <ChainBoundary
-                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                expectedChainId={chainId}
-                noSwitchNetworkTip
-                ActionButtonPromiseProps={{
-                    fullWidth: true,
-                    classes: { root: classes.button, disabled: classes.disabledButton },
-                }}>
-                <WalletConnectedBoundary
-                    expectedChainId={chainId}
-                    ActionButtonProps={{ classes: { root: classes.button } }}
-                    classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
-                    <ActionButtonPromise
-                        fullWidth
-                        init={
-                            needsSwap
-                                ? 'Swap ' + protocol.bareToken.symbol
-                                : validationMessage || t('plugin_savings_withdraw') + ' ' + protocol.stakeToken.symbol
-                        }
-                        waiting={t('plugin_savings_process_withdraw')}
-                        failed={t('failed')}
-                        failedOnClick="use executor"
-                        complete={t('done')}
-                        disabled={validationMessage !== ''}
-                        noUpdateEffect
-                        executor={executor}
-                    />
+                    ) : (
+                        <ActionButtonPromise
+                            fullWidth
+                            init={
+                                needsSwap
+                                    ? 'Swap ' + protocol.bareToken.symbol
+                                    : validationMessage ||
+                                      t('plugin_savings_withdraw') + ' ' + protocol.stakeToken.symbol
+                            }
+                            waiting={t('plugin_savings_process_withdraw')}
+                            failed={t('failed')}
+                            failedOnClick="use executor"
+                            complete={t('done')}
+                            disabled={validationMessage !== ''}
+                            noUpdateEffect
+                            executor={executor}
+                        />
+                    )}
                 </WalletConnectedBoundary>
             </ChainBoundary>
         )
