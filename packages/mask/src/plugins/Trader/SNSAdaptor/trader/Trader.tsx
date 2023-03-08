@@ -3,7 +3,7 @@ import { useAsync, useUnmount, useUpdateEffect } from 'react-use'
 import { delay } from '@masknet/kit'
 import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
 import { formatBalance, isSameAddress, isZero, minus, toFixed } from '@masknet/web3-shared-base'
-import { ChainId, DepositPaymaster, EIP1559GasConfig, GasConfig } from '@masknet/web3-shared-evm'
+import { addGasMargin, ChainId, DepositPaymaster, EIP1559GasConfig, GasConfig } from '@masknet/web3-shared-evm'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
@@ -364,7 +364,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                 new BigNumber((gasConfig as EIP1559GasConfig).maxFeePerGas)
                     .multipliedBy(
                         focusedTrade?.gas.value && !isZero(focusedTrade?.gas.value)
-                            ? focusedTrade?.gas.value
+                            ? addGasMargin(focusedTrade?.gas.value)
                             : '150000',
                     )
                     .integerValue()
