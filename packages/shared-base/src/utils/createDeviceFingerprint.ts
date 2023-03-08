@@ -49,7 +49,7 @@ export const createDeviceFingerprint: ReturnType<typeof memoize> = memoize((): s
                 navigator.language,
                 navigator.maxTouchPoints,
                 navigator.hardwareConcurrency,
-            ].join(),
+            ].join(''),
         ) ?? ''
     )
 })

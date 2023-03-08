@@ -16,7 +16,8 @@ function getUserId(ele: HTMLElement) {
 function inject(selector: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(selector()).useForeach((ele) => {
-            let remover = () => {}
+            let remover: () => void | undefined
+
             const run = async () => {
                 const userId = getUserId(ele)
                 if (!userId) return
@@ -61,7 +62,7 @@ function inject(selector: () => LiveSelector<HTMLElement>, signal: AbortSignal) 
             return {
                 onNodeMutation: run,
                 onTargetChanged: run,
-                onRemove: () => remover(),
+                onRemove: () => remover?.(),
             }
         }),
         signal,
