@@ -1,4 +1,4 @@
-import { compact, first, isEqual, uniqWith } from 'lodash-es'
+import { compact, debounce, first, isEqual, uniqWith } from 'lodash-es'
 import {
     createSubscriptionFromValueRef,
     ECKeyIdentifier,
@@ -45,7 +45,7 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
             }
         })
 
-        const update = async () => {
+        const update = debounce(async () => {
             const wallets = SharedContextSettings.value.wallets.getCurrentValue()
 
             // speed up first paint
@@ -54,7 +54,7 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
             const allPersonas = SharedContextSettings.value.allPersonas?.getCurrentValue() ?? []
             const chainId = await SmartPayBundler.getSupportedChainId()
             const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
-                ...this.wallets.map((x) => x.address),
+                ...wallets.map((x) => x.address),
                 ...compact(allPersonas.map((x) => x.address)),
             ])
 
@@ -86,7 +86,7 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
             }
 
             this.ref.value = result
-        }
+        }, 1000)
 
         update()
         SharedContextSettings.value.wallets.subscribe(update)
