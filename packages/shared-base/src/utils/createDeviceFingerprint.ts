@@ -2,6 +2,8 @@ import { memoize } from 'lodash-es'
 import { sha3 } from 'web3-utils'
 
 function createCanvasFingerprint() {
+    if (process.env.NODE_ENV === 'test') return ''
+
     const canvas = document.createElement('canvas')
     const context = canvas.getContext('2d')
 
