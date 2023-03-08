@@ -4,7 +4,7 @@ import { Box, Button, Popover, Typography } from '@mui/material'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { Icon, useSharedI18N } from '@masknet/shared'
 import { useAllPersonas, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
-import { useAsync } from 'react-use'
+import { useAsyncRetry, useUpdateEffect } from 'react-use'
 import { SmartPayFunder } from '@masknet/web3-providers'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
@@ -65,7 +65,7 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
     const { setSigner } = SmartPayContext.useContainer()
     const personas = useAllPersonas()
     const currentProfile = useLastRecognizedIdentity()
-    const { value = 0 } = useAsync(async () => {
+    const { value = 0, retry } = useAsyncRetry(async () => {
         if (!currentProfile?.identifier?.userId) return 0
         return SmartPayFunder.getRemainFrequency(currentProfile.identifier.userId)
     }, [currentProfile])
@@ -138,6 +138,11 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
             })
         })
     }, [closeDialog])
+
+    useUpdateEffect(() => {
+        if (!open) return
+        retry()
+    }, [open, retry])
 
     return usePortalShadowRoot((container) => (
         <Popover

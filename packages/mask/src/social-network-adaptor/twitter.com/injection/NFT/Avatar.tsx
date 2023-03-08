@@ -4,20 +4,19 @@ import { MaskMessages, createReactRootShadowed, startWatch } from '../../../../u
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { postAvatarSelector } from '../../utils/selector.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
-import { noop } from 'lodash-es'
 
 function getUserId(ele: HTMLElement) {
-    const attribute = ele?.dataset.testid || ''
+    const attribute = ele?.getAttribute('data-testid') || ''
     if (attribute.endsWith('unknown')) {
         return ele?.querySelector('a[href][role=link]')?.getAttribute('href')?.slice(1)
     }
     return attribute.split('-').pop()
 }
 
-function inject(selector: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
+function inject(selector: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(selector()).useForeach((ele) => {
-            let remover = noop
+            let remover = () => {}
             const remove = () => remover()
 
             const run = async () => {

@@ -22,14 +22,14 @@ const RULES = {
     'https://mr8asf7i4h.execute-api.us-east-1.amazonaws.com': Duration.SHORT,
     // coingecko
     'https://coingecko-agent.r2d2.to/api/v3': Duration.SHORT,
-    // chainbase ENS
+    // chainbase
     'https://chainbase-proxy.r2d2.to/v1/ens': Duration.SHORT,
+    'https://chainbase-proxy.r2d2.to/v1/space-id': Duration.SHORT,
     // Mask Search List
     'https://dsearch.mask.r2d2.to': Duration.MEDIUM,
     // Smart Pay
     'https://9rh2q3tdqj.execute-api.ap-east-1.amazonaws.com': Duration.LONG,
-    'https://uldpla73li.execute-api.ap-east-1.amazonaws.com': Duration.LONG,
-    'https://api.thegraph.com/subgraphs/name/dimensiondev/paygas-x-subgraph': Duration.LONG,
+    'https://uldpla73li.execute-api.ap-east-1.amazonaws.com': Duration.SHORT,
 }
 const URLS = Object.keys(RULES) as unknown as Array<keyof typeof RULES>
 

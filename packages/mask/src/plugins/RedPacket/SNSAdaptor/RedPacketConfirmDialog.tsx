@@ -91,7 +91,10 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         gasOption?.gasCurrency,
     )
     const isWaitGasBeMinus = (!estimateGasFee || loadingBalance) && isNativeToken
-    const isBalanceInsufficient = new BigNumber(transactionValue).isLessThanOrEqualTo(0)
+
+    const isBalanceInsufficient =
+        isSameAddress(gasOption?.gasCurrency, nativeToken?.address) &&
+        new BigNumber(transactionValue).isLessThanOrEqualTo(0)
     const total = isNativeToken ? (isBalanceInsufficient ? '0' : transactionValue) : (settings?.total as string)
     const formatTotal = formatBalance(total, settings?.token?.decimals ?? 18, isNativeToken ? 3 : 0)
     const formatAvg = formatBalance(

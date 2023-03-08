@@ -40,5 +40,5 @@ export const Flags = {
 } as const
 
 if (process.env.NODE_ENV === 'development') {
-    console.log('Mask network starts with flags:', Flags)
+    console.log('Mask Network starts with flags:', Flags)
 }

@@ -8,14 +8,13 @@ import {
     ApproveMaskDialog,
     FormattedCurrency,
 } from '@masknet/shared'
-import { CrossIsolationMessages, ECKeyIdentifier, EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { CrossIsolationMessages, ECKeyIdentifier, NetworkPluginID, PluginID, PopupRoutes } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import {
     useChainContext,
     useFungibleAssets,
     useFungibleToken,
-    useFungibleTokenBalance,
     useNetworkDescriptor,
     useWallets,
     useWeb3Connection,
@@ -34,7 +33,7 @@ import {
     Radio,
     Typography,
 } from '@mui/material'
-import { useAsyncFn, useCopyToClipboard } from 'react-use'
+import { useAsyncFn, useAsyncRetry, useCopyToClipboard, useUpdateEffect } from 'react-use'
 import { memo, useCallback, useMemo, useState } from 'react'
 import {
     formatBalance,
@@ -44,14 +43,14 @@ import {
     isSameAddress,
     toFixed,
 } from '@masknet/web3-shared-base'
-import { compact, isNaN, sum } from 'lodash-es'
+import { isNaN, sum } from 'lodash-es'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { AddSmartPayPopover } from './AddSmartPayPopover.js'
 import { AccountsManagerPopover } from './AccountsManagePopover.js'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { SmartPayFunder } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     dialogContent: {
@@ -187,7 +186,9 @@ export const SmartPayContent = memo(() => {
     // #region Remote Dialog Controller
     const { setDialog: setReceiveDialog } = useRemoteControlledDialog(PluginSmartPayMessages.receiveDialogEvent)
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(CrossIsolationMessages.events.swapDialogEvent)
-    const { closeDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
+    const { closeDialog, open: smartPayDialogOpen } = useRemoteControlledDialog(
+        PluginSmartPayMessages.smartPayDialogEvent,
+    )
     // #endregion
 
     // #region web3 state
@@ -204,7 +205,7 @@ export const SmartPayContent = memo(() => {
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const maskAddress = Others?.getMaskTokenAddress(chainId)
 
-    const { value: assets } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
+    const { value: assets, retry: refreshAssets } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
         chainId,
     })
 
@@ -217,29 +218,12 @@ export const SmartPayContent = memo(() => {
 
     const availableBalanceTooLow = isLessThan(formatBalance(allowance, maskToken?.decimals), 0.1)
 
-    const { value: maskBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, maskAddress)
-
-    const allAssets = useMemo(() => {
-        if (!assets) return EMPTY_LIST
-
-        const target = assets.filter((asset) => asset.chainId === chainId)
-        if (target.length > 1) return target
-
-        const maskAsset: Web3Helper.FungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM> | undefined = maskToken
-            ? {
-                  ...maskToken,
-                  balance: maskBalance ?? '0',
-              }
-            : undefined
-        return compact([...target, maskAsset])
-    }, [assets, maskToken, maskBalance, chainId])
-
     const balance = useMemo(() => {
-        if (!allAssets.length) return 0
-        const values = allAssets.map((x) => getTokenUSDValue(x.value))
+        if (!assets?.length) return 0
+        const values = assets.map((x) => getTokenUSDValue(x.value))
 
         return sum(values)
-    }, [allAssets])
+    }, [assets])
 
     // #endregion
 
@@ -252,6 +236,12 @@ export const SmartPayContent = memo(() => {
         successText: t.copy_wallet_address_success(),
     })
     // #endregion
+
+    const currentProfile = useLastRecognizedIdentity()
+    const { value = 0, retry: refreshRemainFrequency } = useAsyncRetry(async () => {
+        if (!currentProfile?.identifier?.userId) return 0
+        return SmartPayFunder.getRemainFrequency(currentProfile.identifier.userId)
+    }, [currentProfile])
 
     const [menu, openMenu] = useMenuConfig(
         contractAccounts?.map((contractAccount, index) => {
@@ -330,7 +320,7 @@ export const SmartPayContent = memo(() => {
     }, [account, wallet, connection, chainId])
     const [{ loading: openLuckDropLoading }, handleLuckDropClick] = useAsyncFn(async () => {
         await connectToCurrent()
-        CrossIsolationMessages.events.redpacketDialogEvent.sendToLocal({ open: true })
+        CrossIsolationMessages.events.redpacketDialogEvent.sendToLocal({ open: true, source: PluginID.SmartPay })
 
         closeDialog()
     }, [connectToCurrent])
@@ -354,6 +344,13 @@ export const SmartPayContent = memo(() => {
     }, [account, wallet])
 
     // #endregion
+
+    useUpdateEffect(() => {
+        if (!smartPayDialogOpen) return
+        refreshAssets()
+        refreshRemainFrequency()
+    }, [smartPayDialogOpen, refreshAssets, refreshRemainFrequency])
+
     return (
         <>
             <DialogContent className={classes.dialogContent}>
@@ -393,7 +390,9 @@ export const SmartPayContent = memo(() => {
                     </Typography>
                     <Box display="flex" columnGap={1} position="absolute" top={16} right={16}>
                         <Icons.KeySquare onClick={(event) => setManageAnchorEl(event.currentTarget)} size={24} />
-                        <Icons.Add onClick={(event) => setAddAnchorEl(event.currentTarget)} size={24} />
+                        {value > 0 ? (
+                            <Icons.Add onClick={(event) => setAddAnchorEl(event.currentTarget)} size={24} />
+                        ) : null}
                         <AddSmartPayPopover
                             open={!!addAnchorEl}
                             anchorEl={addAnchorEl}
@@ -410,80 +409,80 @@ export const SmartPayContent = memo(() => {
                     </Box>
                 </Box>
                 <List dense className={classes.list}>
-                    {allAssets?.map((token, index) => (
-                        <ListItem className={classes.listItem} key={index}>
-                            <Box display="flex" alignItems="center" columnGap="10px">
-                                <TokenIcon
-                                    size={36}
-                                    address={token.address}
-                                    name={token.name}
-                                    chainId={token.chainId}
-                                    logoURL={token.logoURL}
-                                />
-                                <Box>
-                                    <Typography fontSize={16} lineHeight="20px" fontWeight={700}>
-                                        {token.symbol}
-                                        {isSameAddress(token.address, maskAddress) ? (
-                                            <ShadowRootTooltip
-                                                title={
-                                                    availableBalanceTooLow
-                                                        ? t.allow_mask_as_gas_token_description()
-                                                        : t.remain_mask_tips({
-                                                              balance: formatBalance(allowance, maskToken?.decimals, 4),
-                                                              symbol: maskToken?.symbol ?? '',
-                                                          })
+                    {assets
+                        ?.filter((asset) => asset.chainId === chainId)
+                        ?.map((token, index) => (
+                            <ListItem className={classes.listItem} key={index}>
+                                <Box display="flex" alignItems="center" columnGap="10px">
+                                    <TokenIcon
+                                        size={36}
+                                        address={token.address}
+                                        name={token.name}
+                                        chainId={token.chainId}
+                                        logoURL={token.logoURL}
+                                    />
+                                    <Box>
+                                        <Typography fontSize={16} lineHeight="20px" fontWeight={700}>
+                                            {token.symbol}
+                                            {isSameAddress(token.address, maskAddress) ? (
+                                                <ShadowRootTooltip
+                                                    title={
+                                                        availableBalanceTooLow
+                                                            ? t.allow_mask_as_gas_token_description()
+                                                            : t.remain_mask_tips()
+                                                    }
+                                                    placement="top">
+                                                    <Typography
+                                                        ml={1}
+                                                        onClick={async () => {
+                                                            if (!availableBalanceTooLow) return
+                                                            await connectToCurrent()
+                                                            setApproveDialogOpen(true)
+                                                        }}
+                                                        component="span"
+                                                        className={classes.maskGasTip}
+                                                        display="inline-flex"
+                                                        alignItems="center">
+                                                        {availableBalanceTooLow ? (
+                                                            <>
+                                                                (
+                                                                <Icons.GasStation size={18} sx={{ marginRight: 0.5 }} />
+                                                                {t.allow_mask_as_gas_token()})
+                                                            </>
+                                                        ) : (
+                                                            <Icons.GasStation size={18} />
+                                                        )}
+                                                    </Typography>
+                                                </ShadowRootTooltip>
+                                            ) : null}
+                                        </Typography>
+                                        <Typography className={classes.name}>
+                                            {token.name}
+                                            <Link
+                                                href={
+                                                    chainId
+                                                        ? Others?.explorerResolver.addressLink(chainId, token.address)
+                                                        : undefined
                                                 }
-                                                placement="top">
-                                                <Typography
-                                                    ml={1}
-                                                    onClick={async () => {
-                                                        if (!availableBalanceTooLow) return
-                                                        await connectToCurrent()
-                                                        setApproveDialogOpen(true)
-                                                    }}
-                                                    component="span"
-                                                    className={classes.maskGasTip}
-                                                    display="inline-flex"
-                                                    alignItems="center">
-                                                    {availableBalanceTooLow ? (
-                                                        <>
-                                                            (<Icons.GasStation size={18} sx={{ marginRight: 0.5 }} />
-                                                            {t.allow_mask_as_gas_token()})
-                                                        </>
-                                                    ) : (
-                                                        <Icons.GasStation size={18} />
-                                                    )}
-                                                </Typography>
-                                            </ShadowRootTooltip>
-                                        ) : null}
-                                    </Typography>
-                                    <Typography className={classes.name}>
-                                        {token.name}
-                                        <Link
-                                            href={
-                                                chainId
-                                                    ? Others?.explorerResolver.addressLink(chainId, token.address)
-                                                    : undefined
-                                            }
-                                            target="_blank"
-                                            title="View on Explorer"
-                                            rel="noopener noreferrer"
-                                            className={classes.linkIcon}>
-                                            <Icons.LinkOut size={14} />
-                                        </Link>
-                                    </Typography>
+                                                target="_blank"
+                                                title="View on Explorer"
+                                                rel="noopener noreferrer"
+                                                className={classes.linkIcon}>
+                                                <Icons.LinkOut size={14} />
+                                            </Link>
+                                        </Typography>
+                                    </Box>
                                 </Box>
-                            </Box>
-                            <ListItemText className={classes.balance}>
-                                <FormattedBalance
-                                    value={isNaN(token.balance) ? 0 : token.balance}
-                                    decimals={isNaN(token.decimals) ? 0 : token.decimals}
-                                    significant={6}
-                                    formatter={formatBalance}
-                                />
-                            </ListItemText>
-                        </ListItem>
-                    ))}
+                                <ListItemText className={classes.balance}>
+                                    <FormattedBalance
+                                        value={isNaN(token.balance) ? 0 : token.balance}
+                                        decimals={isNaN(token.decimals) ? 0 : token.decimals}
+                                        significant={6}
+                                        formatter={formatBalance}
+                                    />
+                                </ListItemText>
+                            </ListItem>
+                        ))}
                 </List>
                 <ApproveMaskDialog open={approveDialogOpen} handleClose={() => setApproveDialogOpen(false)} />
             </DialogContent>

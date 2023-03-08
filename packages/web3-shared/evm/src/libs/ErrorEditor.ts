@@ -29,9 +29,9 @@ export class ErrorEditor {
 
         {
             const responseError = this.response?.error as unknown
-            if (responseError instanceof Error) return ErrorEditor.fromError(responseError, this.fallback).error
+            if (responseError instanceof Error) return responseError
             if (responseError && typeof (responseError as Error).message === 'string')
-                return ErrorEditor.fromError(responseError, this.fallback).error
+                return new Error((responseError as Error).message)
             if (responseError && typeof responseError === 'string') return new Error(responseError)
         }
 

@@ -44,7 +44,7 @@
     "cancel": "取消",
     "delete": "删除",
     "copy_success_of_wallet_address": "成功复制钱包地址！",
-    "disconnect_warning": "这个钱包将不再显示在您的 web 3 个人资料页面。 您的Mask朋友不能再给这个钱包发送小费，或浏览这个地址下的NFT、捐赠记录和其他链上信息。",
+    "disconnect_warning": "这个钱包将不再显示在您的 web3 个人资料页面。 您的Mask朋友不能再给这个钱包发送小费，或浏览这个地址下的NFT、捐赠记录和其他链上信息。",
     "tips": "小费",
     "token_insufficient_balance": "余额不足",
     "sending_tip": "发送中...",

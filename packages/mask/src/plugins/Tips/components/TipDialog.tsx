@@ -1,9 +1,11 @@
 import { useCallback, useMemo } from 'react'
+import { useAsync, useBoolean, useUpdateEffect } from 'react-use'
+import { SmartPayBundler } from '@masknet/web3-providers'
 import { ChainBoundary, InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
 import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, MaskTabList } from '@masknet/theme'
-import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import type { NonFungibleAsset } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
@@ -17,7 +19,6 @@ import { NetworkSection } from './NetworkSection/index.js'
 import { NFTSection } from './NFTSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
 import { TokenSection } from './TokenSection/index.js'
-import { useBoolean } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -81,24 +82,22 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         validation: [isValid, validateMessage],
     } = useTip()
     const { pluginID } = useNetworkContext()
-    const { chainId } = useChainContext()
+    const wallet = useWallet()
+    const { chainId, setChainId } = useChainContext()
 
     const isTokenTip = tipType === TokenType.Fungible
     const shareText = useMemo(() => {
-        const promote = t.tip_mask_promote()
         const message = isTokenTip
             ? t.tip_token_share_post({
                   amount,
                   symbol: token?.symbol || 'token',
                   recipientSnsId,
                   recipient: recipientAddress,
-                  promote,
               })
             : t.tip_nft_share_post({
                   name: nonFungibleTokenContract?.name || 'NFT',
                   recipientSnsId,
                   recipient: recipientAddress,
-                  promote,
               })
         return message
     }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientSnsId, t])
@@ -139,6 +138,12 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const pluginIDs = useValueRef(pluginIDSettings)
 
     const pluginId = site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM
+
+    const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
+
+    useUpdateEffect(() => {
+        if (wallet?.owner && smartPayChainId) setChainId(smartPayChainId)
+    }, [wallet?.owner, smartPayChainId])
 
     return (
         <TabContext value={currentTab}>
