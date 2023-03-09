@@ -51,6 +51,7 @@
     "@solana/spl-token": "^0.1.8",
     "@solana/spl-token-registry": "^0.2.1301",
     "@solana/web3.js": "^1.44.2",
+    "@servie/events": "^3.0.0",
     "@types/socket.io-client": "^1.4.36",
     "bignumber.js": "9.1.0",
     "bloom-filters": "^3.0.0",
@@ -63,6 +64,7 @@
     "rss3-next": "^0.6.17",
     "socket.io-client": "2.4.0",
     "urlcat": "^2.0.4",
+    "use-subscription": "^1.8.0",
     "uuid": "^9.0.0",
     "wallet.ts": "^1.0.1",
     "web3": "1.8.0",
@@ -73,6 +75,7 @@
   "devDependencies": {
     "@sentry/browser": "7.37.2",
     "@sentry/types": "^7.40.0",
-    "@types/json-stable-stringify": "^1.0.34"
+    "@types/json-stable-stringify": "^1.0.34",
+    "@types/use-subscription": "^1.0.0"
   }
 }

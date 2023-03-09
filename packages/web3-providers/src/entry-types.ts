@@ -34,6 +34,7 @@ export * from './types/Web3.js'
 export * from './types/Telemetry.js'
 export * from './types/RedPacket.js'
 export * from './types/NameService.js'
+export * from './types/Wallet.js'
 
 // Implementations
 export * from './DeBank/types.js'
