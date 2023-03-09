@@ -16,6 +16,7 @@ import {
     useCurrentVisitingSocialIdentity,
     useThemeSettings,
 } from '@masknet/plugin-infra/content-script'
+import { isDeviceOnWhitelist } from '@masknet/shared-base'
 
 export interface ConsoleContentProps {
     onClose?: () => void
@@ -43,6 +44,10 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const themeSettings = useThemeSettings()
 
     const table: Array<{ name: string; content: JSX.Element }> = [
+        {
+            name: 'A/B Testing',
+            content: <Typography variant="body2">{isDeviceOnWhitelist() ? 'A' : 'B'}</Typography>,
+        },
         {
             name: 'Color',
             content: (

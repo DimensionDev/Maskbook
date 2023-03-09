@@ -1,6 +1,7 @@
 export * from './asyncIterator.js'
 export * from './isPopupPage.js'
 export * from './isDashboardPage.js'
+export * from './isDeviceOnWhitelist.js'
 export * from './getLocalImplementation.js'
 export * from './isDeviceOnWhitelist.js'
 export * from './markdown.js'
