@@ -6,8 +6,8 @@ import {
     type Middleware,
     ProviderType,
     isValidAddress,
+    ChainId,
 } from '@masknet/web3-shared-evm'
-import { SharedContextSettings } from '../../../settings/index.js'
 import { Providers } from '../../Provider/provider.js'
 
 export class MaskWallet implements Middleware<ConnectionContext> {
@@ -17,11 +17,11 @@ export class MaskWallet implements Middleware<ConnectionContext> {
             return
         }
 
-        const { account, chainId } = SharedContextSettings.value
+        const account = ''
 
         switch (context.request.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
-                context.write(toHex(chainId.getCurrentValue()))
+                context.write(toHex(ChainId.Mainnet))
                 break
             case EthereumMethodType.ETH_ACCOUNTS:
                 context.write([account])
