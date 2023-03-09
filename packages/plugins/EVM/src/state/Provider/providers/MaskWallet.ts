@@ -1,6 +1,7 @@
-import { compact, first, isEqual, uniqWith } from 'lodash-es'
+import { compact, debounce, first, isEqual, uniqWith } from 'lodash-es'
 import {
     createSubscriptionFromValueRef,
+    CrossIsolationMessages,
     ECKeyIdentifier,
     EMPTY_LIST,
     ExtensionSite,
@@ -45,7 +46,7 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
             }
         })
 
-        const update = async () => {
+        const update = debounce(async () => {
             const wallets = SharedContextSettings.value.wallets.getCurrentValue()
 
             // speed up first paint
@@ -54,7 +55,7 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
             const allPersonas = SharedContextSettings.value.allPersonas?.getCurrentValue() ?? []
             const chainId = await SmartPayBundler.getSupportedChainId()
             const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
-                ...this.wallets.map((x) => x.address),
+                ...wallets.map((x) => x.address),
                 ...compact(allPersonas.map((x) => x.address)),
             ])
 
@@ -86,11 +87,12 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
             }
 
             this.ref.value = result
-        }
+        }, 1000)
 
         update()
         SharedContextSettings.value.wallets.subscribe(update)
         SharedContextSettings.value.allPersonas?.subscribe(update)
+        CrossIsolationMessages.events.renameWallet.on(update)
     }
 
     override async addWallet(wallet: Wallet): Promise<void> {
@@ -102,6 +104,11 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
         if (scWallets.length) await super.removeWallets(scWallets)
         await super.removeWallet(address, password)
         await SharedContextSettings.value.removeWallet(address, password)
+    }
+
+    override async renameWallet(address: string, name: string) {
+        await super.renameWallet(address, name)
+        CrossIsolationMessages.events.renameWallet.sendToAll({})
     }
 
     override async connect(

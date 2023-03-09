@@ -40,6 +40,7 @@ import {
     isNativeTokenAddress,
     DepositPaymaster,
     EIP1559GasConfig,
+    addGasMargin,
 } from '@masknet/web3-shared-evm'
 import { Tune as TuneIcon } from '@mui/icons-material'
 import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
@@ -151,7 +152,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                 tokenBalance,
 
                 new BigNumber((gasConfig as EIP1559GasConfig).maxFeePerGas)
-                    .multipliedBy(!isZero(gasLimit) ? gasLimit : '150000')
+                    .multipliedBy(!isZero(gasLimit) ? addGasMargin(gasLimit) : '200000')
                     .integerValue()
                     .multipliedBy(smartPayConfig?.ratio ?? 1),
             ),

@@ -17,6 +17,7 @@ import type {
     redpacketDialogEvent,
     PersonaBindFinishEvent,
     SmartPayDialogEvent,
+    RenameWalletEvent,
 } from './Mask.js'
 
 /**
@@ -44,6 +45,7 @@ export interface CrossIsolationEvents {
     swapDialogEvent: SwapDialogEvent
     settingsDialogEvent: SettingsDialogEvent
     profileCardEvent: ProfileCardEvent
+    renameWallet: RenameWalletEvent
     nonFungibleTokenDialogEvent: NonFungibleTokenDialogEvent
     walletSettingsDialogEvent: WalletSettingsDialogEvent
     avatarSettingDialogEvent: AvatarSettingDialogEvent

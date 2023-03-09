@@ -21,7 +21,7 @@ async function cleanRelationDB(anotherList: Set<ProfileIdentifier>) {
 async function cleanProfileWithNoLinkedPersona(signal: AbortSignal) {
     if (hasNativeAPI) return // we don't do database house keeping work on mobile
 
-    const timeout = setTimeout(cleanProfileWithNoLinkedPersona, 1000 * 60 * 60 * 24 /** 1 day */)
+    const timeout = setTimeout(cleanProfileWithNoLinkedPersona, 1000 * 60 * 60 * 24 /** 1 day */, signal)
     signal.addEventListener('abort', () => clearTimeout(timeout))
 
     const cleanedList = new Set<ProfileIdentifier>()

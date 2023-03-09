@@ -1,5 +1,11 @@
 import { Breadcrumbs, Event, GlobalHandlers } from '@sentry/browser'
-import { getSiteType, getAgentType, getExtensionId } from '@masknet/shared-base'
+import {
+    getSiteType,
+    getAgentType,
+    getExtensionId,
+    createDeviceSeed,
+    createDeviceFingerprint,
+} from '@masknet/shared-base'
 import { formatMask } from '@masknet/web3-shared-base'
 import { TelemetryAPI } from '../types/Telemetry.js'
 
@@ -8,16 +14,33 @@ const IGNORE_ERRORS = [
     'yb0w3z63oa',
     // Twitter Identity API
     'mr8asf7i4h',
-    'https://t.co/',
+    // Twitter Assets
+    'https://t.co',
+    'https://pbs.twimg.com',
+    'https://abs.twimg.com',
+    'https://twitter.com',
+    // source code
+    'https://maskbook.pages.dev',
+    // KV
+    'https://kv.r2d2.to/api/com.maskbook.pets',
+    'https://kv.r2d2.to/api/com.maskbook.user',
     // ScamDB
     'https://scam.mask.r2d2.to',
     // RSS3 domain query
     'https://rss3.domains/name',
+    // CDN
+    'cdninstagram.com',
+    'fbcdn.net',
+    'imgix.net',
+    // misc
     'At least one of the attempts fails.',
     'Extension context invalidated.',
     '[object Promise]',
     'ResizeObserver loop limit exceeded',
 ]
+
+const DEVICE_SEED = createDeviceSeed()
+const DEVICE_FINGERPRINT = createDeviceFingerprint()
 
 export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
     constructor() {
@@ -64,6 +87,8 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         Sentry.setTag('channel', process.env.channel)
         Sentry.setTag('version', process.env.VERSION)
         Sentry.setTag('ua', navigator.userAgent)
+        Sentry.setTag('device_seed', DEVICE_SEED)
+        Sentry.setTag('device_fingerprint', DEVICE_FINGERPRINT)
         Sentry.setTag('engine', process.env.engine)
         Sentry.setTag('build_date', process.env.BUILD_DATE)
         Sentry.setTag('branch_name', process.env.BRANCH_NAME)

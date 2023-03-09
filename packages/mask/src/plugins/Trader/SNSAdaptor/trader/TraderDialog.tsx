@@ -95,7 +95,7 @@ export function TraderDialog() {
         defaultInputCoin: undefined,
         defaultOutputCoin: undefined,
     })
-    const chainIdRef = useRef<Web3Helper.ChainIdAll>(chainId)
+
     const [open, setOpen] = useState(false)
 
     const selectAdvancedSettings = useSelectAdvancedSettings()
@@ -131,9 +131,6 @@ export function TraderDialog() {
     )
 
     // #region update default input or output token
-    useEffect(() => {
-        chainIdRef.current = chainId
-    }, [chainId])
 
     useEffect(() => {
         return CrossIsolationMessages.events.swapDialogEvent.on(({ open, traderProps }) => {
