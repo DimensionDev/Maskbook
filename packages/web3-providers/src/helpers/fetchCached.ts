@@ -33,6 +33,13 @@ const RULES = {
 }
 const URLS = Object.keys(RULES) as unknown as Array<keyof typeof RULES>
 
+function openCaches(key: string) {
+    if ('caches' in globalThis) {
+        return caches.open(key)
+    }
+    return
+}
+
 export async function fetchCached(
     input: RequestInfo | URL,
     init?: RequestInit,
@@ -54,8 +61,8 @@ export async function fetchCached(
     if (!rule) return next(request, init)
 
     // hit a cached request
-    const cache = await caches.open(rule)
-    const hit = await cache.match(request)
+    const cache = await openCaches(rule)
+    const hit = await cache?.match(request)
     const date = hit?.headers.get('x-cache-date')
 
     if (hit && date) {
@@ -68,7 +75,7 @@ export async function fetchCached(
     const { ok, status, statusText, body, headers } = response.clone()
 
     if (ok && status === 200 && body) {
-        await cache.put(
+        await cache?.put(
             request.clone(),
             new Response(body, {
                 status,
@@ -94,10 +101,10 @@ export async function staleCached(info: RequestInfo | URL, init?: RequestInit): 
     const rule = URLS.find((x) => url.includes(x))
     if (!rule) return
 
-    const cache = await caches.open(rule)
-    const hit = await cache.match(request)
+    const cache = await openCaches(rule)
+    const hit = await cache?.match(request)
     if (!hit) return
 
-    await cache.delete(request)
+    await cache?.delete(request)
     return hit
 }
