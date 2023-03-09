@@ -3488,6 +3488,9 @@ importers:
       '@metaplex/js':
         specifier: ^4.11.7
         version: 4.11.7(@metaplex-foundation/mpl-auction@0.0.2)(@metaplex-foundation/mpl-core@0.0.2)(@metaplex-foundation/mpl-metaplex@0.0.5)(@metaplex-foundation/mpl-token-metadata@1.1.0)(@metaplex-foundation/mpl-token-vault@0.0.2)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)
+      '@servie/events':
+        specifier: ^3.0.0
+        version: 3.0.0
       '@solana/buffer-layout':
         specifier: ^4.0.0
         version: 4.0.0
@@ -3539,6 +3542,9 @@ importers:
       urlcat:
         specifier: ^2.0.4
         version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+      use-subscription:
+        specifier: ^1.8.0
+        version: 1.8.0(react@0.0.0-experimental-d1e35c703-20221110)
       uuid:
         specifier: ^9.0.0
         version: 9.0.0
@@ -3567,6 +3573,9 @@ importers:
       '@types/json-stable-stringify':
         specifier: ^1.0.34
         version: 1.0.34
+      '@types/use-subscription':
+        specifier: ^1.0.0
+        version: 1.0.0
 
   packages/web3-shared/base:
     dependencies:
