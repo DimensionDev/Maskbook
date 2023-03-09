@@ -1,11 +1,11 @@
 import LRU from 'lru-cache'
 import { groupBy, first, compact, uniq } from 'lodash-es'
 import {
-    SocialAddress,
-    SocialIdentity,
-    IdentityServiceState as Web3SocialIdentityState,
+    type SocialAddress,
+    type SocialIdentity,
+    type IdentityServiceState as Web3SocialIdentityState,
     SocialAddressType,
-    SocialAccount,
+    type SocialAccount,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 

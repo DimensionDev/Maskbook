@@ -1,4 +1,4 @@
-import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
 import { max } from 'lodash-es'

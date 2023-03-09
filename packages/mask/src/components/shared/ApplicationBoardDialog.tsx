@@ -6,7 +6,7 @@ import { InjectedDialog } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
 import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
-import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages, type PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationBoard } from './ApplicationBoard.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -90,7 +90,7 @@ export function ApplicationBoardDialog() {
             <InjectedDialog
                 open={open}
                 maxWidth="sm"
-                isOnBack={openSettings && !quickMode}
+                isOnBack={!!(openSettings && !quickMode)}
                 onClose={closeDialog}
                 titleTabs={
                     openSettings ? (
@@ -121,7 +121,7 @@ export function ApplicationBoardDialog() {
                         <ApplicationBoard closeDialog={closeDialog} />
                     )}
                     {/* TODO: remove this*/}
-                    {openPersonaSelectPanelDialog && <PersonaSelectPanelDialog />}
+                    {openPersonaSelectPanelDialog ? <PersonaSelectPanelDialog /> : null}
                 </DialogContent>
             </InjectedDialog>
         </TabContext>

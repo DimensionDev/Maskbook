@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import type { SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
 import { useWeb3State } from './useWeb3State.js'
 
@@ -19,5 +19,5 @@ export function useSocialAddresses<T extends NetworkPluginID>(
         const listOfAddress = await IdentityService.lookup(identity)
         const sorted = sorter && listOfAddress.length ? listOfAddress.sort(sorter) : listOfAddress
         return includes?.length ? sorted.filter((x) => includes.includes(x.type)) : sorted
-    }, [identity?.identifier?.userId, includes?.join(), sorter, IdentityService?.lookup])
+    }, [identity?.identifier?.userId, includes?.join(','), sorter, IdentityService?.lookup])
 }

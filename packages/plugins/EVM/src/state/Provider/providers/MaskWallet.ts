@@ -2,14 +2,14 @@ import { compact, debounce, first, isEqual, uniqWith } from 'lodash-es'
 import {
     createSubscriptionFromValueRef,
     CrossIsolationMessages,
-    ECKeyIdentifier,
+    type ECKeyIdentifier,
     EMPTY_LIST,
     ExtensionSite,
     getSiteType,
     PopupRoutes,
     ValueRef,
 } from '@masknet/shared-base'
-import { isSameAddress, Wallet } from '@masknet/web3-shared-base'
+import { isSameAddress, type Wallet } from '@masknet/web3-shared-base'
 import { SmartPayBundler, SmartPayOwner } from '@masknet/web3-providers'
 import { ChainId, chainResolver, isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { BaseContractWalletProvider } from './BaseContractWallet.js'

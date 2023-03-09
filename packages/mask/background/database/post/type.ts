@@ -43,5 +43,5 @@ export interface PostDB extends DBSchema {
     }
 }
 
-export type PostReadOnlyTransaction = IDBPSafeTransaction<PostDB, ['post'], 'readonly'>
+export type PostReadOnlyTransaction = IDBPSafeTransaction<PostDB, ['post']>
 export type PostReadWriteTransaction = IDBPSafeTransaction<PostDB, ['post'], 'readwrite'>

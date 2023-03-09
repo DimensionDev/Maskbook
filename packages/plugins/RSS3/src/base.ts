@@ -9,7 +9,6 @@ export const base: Plugin.Shared.Definition<ChainId> = {
     description: { fallback: PLUGIN_DESCRIPTION },
     publisher: { name: { fallback: PLUGIN_NAME }, link: 'https://rss3.bio/' },
     enableRequirement: {
-        architecture: { app: false, web: true },
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
     },

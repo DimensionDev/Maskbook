@@ -9,7 +9,7 @@ let trustedHTML: (x: string) => string
 {
     if (typeof trustedTypes === 'object') {
         const policy = trustedTypes.createPolicy('ssr', {
-            createHTML: (x: string) => String(x),
+            createHTML: String,
         })
         trustedHTML = (x) => policy.createHTML(x)
     } else {
@@ -25,6 +25,8 @@ if (location.hash === '#/personas') {
 
         // Push SSR code
         document.head.insertAdjacentHTML('beforeend', trustedHTML(css))
+        // this is safe because it comes from SSR
+        // eslint-disable-next-line @dimensiondev/browser-no-set-html
         document.body.innerHTML = trustedHTML('<div id="root-ssr">' + html + '</div>')
         console.timeEnd('[SSR] Request')
 

@@ -6,7 +6,7 @@ import type { FC } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardType } from '../share.js'
-import { CardFrame, FeedCardProps } from '../base.js'
+import { CardFrame, type FeedCardProps } from '../base.js'
 import { Label } from './common.js'
 import { LensAvatar } from './LensAvatar.js'
 
@@ -69,7 +69,7 @@ export function isProfileFeed(feed: RSS3BaseAPI.Web3Feed): feed is RSS3BaseAPI.P
     return feed.tag === Tag.Social && feed.type === Type.Profile
 }
 
-interface CollectibleCardProps extends Omit<FeedCardProps, 'feed'> {
+interface ProfileCardProps extends Omit<FeedCardProps, 'feed'> {
     feed: RSS3BaseAPI.ProfileFeed
 }
 
@@ -79,7 +79,7 @@ interface CollectibleCardProps extends Omit<FeedCardProps, 'feed'> {
  *
  * - ProfileCreate
  */
-export const ProfileCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => {
+export const ProfileCard: FC<ProfileCardProps> = ({ feed, ...rest }) => {
     const { verbose } = rest
     const { classes, cx } = useStyles()
 
@@ -114,7 +114,6 @@ export const ProfileCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => {
                         [classes.verbose]: verbose,
                         [classes.center]: !metadata.bio && !verbose,
                     })}>
-                    {/* eslint-disable-next-line no-nested-ternary */}
                     {metadata.source === 'Lens' ? (
                         <LensAvatar handle={metadata.handle} size={imageSize} />
                     ) : metadata.profile_uri ? (

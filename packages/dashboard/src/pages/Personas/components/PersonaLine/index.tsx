@@ -1,10 +1,10 @@
-import { memo, MouseEvent, useState } from 'react'
+import { memo, type MouseEvent, useState } from 'react'
 import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import { getMaskColor, MaskColorVar, makeStyles, LoadingBase } from '@masknet/theme'
 import {
-    PersonaIdentifier,
-    ProfileIdentifier,
-    BindingProof,
+    type PersonaIdentifier,
+    type ProfileIdentifier,
+    type BindingProof,
     NextIDPlatform,
     EnhanceableSite,
 } from '@masknet/shared-base'

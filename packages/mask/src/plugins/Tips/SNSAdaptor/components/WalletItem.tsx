@@ -119,7 +119,7 @@ export function WalletItem({ address, isDefault, deletable, fallbackName, onSetD
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
                     <Typography className={classes.accountName}>{walletName}</Typography>
-                    {isDefault && <Typography className={classes.defaultBadge}>{t.default()}</Typography>}
+                    {isDefault ? <Typography className={classes.defaultBadge}>{t.default()}</Typography> : null}
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2" title={address}>

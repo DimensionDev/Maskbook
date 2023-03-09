@@ -11,7 +11,7 @@ import { FileInfoMetadataReader } from '../helpers.js'
 import type { FileInfo } from '../types.js'
 import { MultipleFileChip, SingleFileChip } from './components/index.js'
 import { FileViewer } from './FileViewer.js'
-import { setupStorage, StorageOptions } from './storage.js'
+import { setupStorage, type StorageOptions } from './storage.js'
 import { openBrowser, openPicker } from './emitter.js'
 import { FileServiceInjection } from './FileServiceInjection.js'
 import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
@@ -20,6 +20,9 @@ import { Trans } from 'react-i18next'
 
 type BadgeRenderer<T> = (f: T) => Plugin.SNSAdaptor.BadgeDescriptor
 
+function clickHandler() {
+    return openBrowser('popup')
+}
 const definition: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
@@ -61,7 +64,6 @@ const definition: Plugin.SNSAdaptor.Definition = {
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
-                    const clickHandler = () => openBrowser('popup')
                     return (
                         <ApplicationEntry
                             title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}

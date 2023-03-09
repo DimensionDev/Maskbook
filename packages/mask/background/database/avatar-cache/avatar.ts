@@ -1,24 +1,15 @@
-import { queryAvatarDB, isAvatarOutdatedDB, storeAvatarDB, IdentifierWithAvatar, createAvatarDBAccess } from './db.js'
-import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc/index.js'
+import {
+    queryAvatarDB,
+    isAvatarOutdatedDB,
+    storeAvatarDB,
+    type IdentifierWithAvatar,
+    createAvatarDBAccess,
+} from './db.js'
 import { blobToDataURL, memoizePromise } from '@masknet/kit'
 import { createTransaction } from '../utils/openDB.js'
 import { memoize } from 'lodash-es'
 
-/**
- * Get a (cached) blob url for an identifier. No cache for native api.
- * ? Because of cross-origin restrictions, we cannot use blob url here. sad :(
- */
-async function nativeImpl(identifiers: IdentifierWithAvatar[]): Promise<Map<IdentifierWithAvatar, string>> {
-    const map = new Map<IdentifierWithAvatar, string>(new Map())
-    await Promise.allSettled(
-        identifiers.map(async (id) => {
-            const result = await nativeAPI!.api.query_avatar({ identifier: id.toText() })
-            result && map.set(id, result)
-        }),
-    )
-    return map
-}
-const indexedDBImpl = memoizePromise(
+const impl = memoizePromise(
     memoize,
     async function (identifiers: IdentifierWithAvatar[]): Promise<Map<IdentifierWithAvatar, string>> {
         const promises: Array<Promise<unknown>> = []
@@ -40,7 +31,7 @@ const indexedDBImpl = memoizePromise(
     (id: IdentifierWithAvatar[]) => id.flatMap((x) => x.toText()).join(';'),
 )
 export const queryAvatarsDataURL: (identifiers: IdentifierWithAvatar[]) => Promise<Map<IdentifierWithAvatar, string>> =
-    hasNativeAPI ? nativeImpl : indexedDBImpl
+    impl
 
 /**
  * Store an avatar with a url for an identifier.
@@ -50,12 +41,6 @@ export const queryAvatarsDataURL: (identifiers: IdentifierWithAvatar[]) => Promi
 
 export async function storeAvatar(identifier: IdentifierWithAvatar, avatar: ArrayBuffer | string): Promise<void> {
     try {
-        if (hasNativeAPI) {
-            // ArrayBuffer is unreachable on Native side.
-            if (typeof avatar !== 'string') return
-            await nativeAPI?.api.store_avatar({ identifier: identifier.toText(), avatar: avatar as string })
-            return
-        }
         if (typeof avatar === 'string') {
             if (avatar.startsWith('https') === false) return
             const isOutdated = await isAvatarOutdatedDB(
@@ -79,6 +64,6 @@ export async function storeAvatar(identifier: IdentifierWithAvatar, avatar: Arra
     } catch (error) {
         console.error('[AvatarDB] Store avatar failed', error)
     } finally {
-        indexedDBImpl.cache.clear()
+        impl.cache.clear()
     }
 }

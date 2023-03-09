@@ -1,8 +1,8 @@
 import { first } from 'lodash-es'
-import type { PublicKey, Transaction } from '@solana/web3.js'
+import type { Transaction } from '@solana/web3.js'
 import { injectedCoin98SolanaProvider } from '@masknet/injected-script'
 import type { Account } from '@masknet/web3-shared-base'
-import { ChainId, Coin98MethodType, ProviderType } from '@masknet/web3-shared-solana'
+import { type ChainId, Coin98MethodType, ProviderType } from '@masknet/web3-shared-solana'
 import type { SolanaProvider } from '../types.js'
 import { BaseInjectedProvider } from './BaseInjected.js'
 
@@ -15,9 +15,7 @@ export class Coin98Provider extends BaseInjectedProvider implements SolanaProvid
         const { signature } = (await this.bridge.request({
             method: Coin98MethodType.SOL_SIGN,
             params: [new TextEncoder().encode(message)],
-        })) as {
-            signature: string
-        }
+        })) as any
         return signature
     }
 
@@ -25,10 +23,7 @@ export class Coin98Provider extends BaseInjectedProvider implements SolanaProvid
         const { signature, publicKey } = (await this.bridge.request({
             method: Coin98MethodType.SOL_SIGN,
             params: [transaction],
-        })) as {
-            signature: Buffer
-            publicKey: PublicKey
-        }
+        })) as any
         transaction.addSignature(publicKey, signature)
         return transaction
     }
@@ -39,7 +34,7 @@ export class Coin98Provider extends BaseInjectedProvider implements SolanaProvid
         const accounts = (await this.bridge.request({
             method: Coin98MethodType.SOL_ACCOUNTS,
             params: [],
-        })) as string[]
+        })) as any
 
         return {
             chainId,

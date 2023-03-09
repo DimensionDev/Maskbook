@@ -3,7 +3,7 @@ import { Box, Card } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { AssetPreviewer, NetworkIcon } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages, type NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

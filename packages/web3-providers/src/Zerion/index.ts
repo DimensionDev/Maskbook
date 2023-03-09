@@ -2,21 +2,20 @@ import { first, unionWith } from 'lodash-es'
 import { getEnumAsArray } from '@masknet/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import {
-    Transaction,
-    HubOptions,
+    type Transaction,
+    type HubOptions,
     createPageable,
     createIndicator,
-    Pageable,
+    type Pageable,
     isSameAddress,
     TokenType,
     SourceType,
     createNextIndicator,
-    HubIndicator,
     scale10,
     GasOptionType,
     toFixed,
 } from '@masknet/web3-shared-base'
-import { ChainId, createNativeToken, GasOption, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
+import { ChainId, createNativeToken, type GasOption, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import type { ZerionNonFungibleTokenItem, ZerionNonFungibleCollection, ZerionCoin } from './types.js'
 import { formatAsset, formatTransactions, isValidAsset } from './helpers.js'
 import {
@@ -155,10 +154,7 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
         if (!payload) return
         return this.createNonFungibleTokenAssetFromNFT(chainId, payload)
     }
-    async getAssets(
-        account: string,
-        { chainId = ChainId.Mainnet, indicator, size }: HubOptions<ChainId, HubIndicator> = {},
-    ) {
+    async getAssets(account: string, { chainId = ChainId.Mainnet, indicator, size }: HubOptions<ChainId> = {}) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await getNonFungibleAssets(account, indicator?.index, size)
         if (!response.payload.nft.length) return createPageable(EMPTY_LIST, createIndicator(indicator))
@@ -173,7 +169,7 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
 
     async getAssetsByCollection(
         address: string,
-        { chainId = ChainId.Mainnet, indicator, size, account }: HubOptions<ChainId, HubIndicator> = {},
+        { chainId = ChainId.Mainnet, indicator, size, account }: HubOptions<ChainId> = {},
     ) {
         if (!account || !isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await getNonFungibleAssets(account, indicator?.index, size, address)

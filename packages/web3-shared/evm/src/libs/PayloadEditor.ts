@@ -1,11 +1,17 @@
 import { first, isUndefined, omitBy } from 'lodash-es'
 import Web3 from 'web3'
-import { AbiItem, hexToNumber, hexToNumberString, toHex } from 'web3-utils'
+import { type AbiItem, hexToNumber, hexToNumberString, toHex } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Wallet } from '@masknet/web3-shared-base'
 import type { ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
 import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json'
-import { ChainId, EthereumMethodType, Transaction, TransactionOptions, UserOperation } from '../types/index.js'
+import {
+    type ChainId,
+    EthereumMethodType,
+    type Transaction,
+    type TransactionOptions,
+    type UserOperation,
+} from '../types/index.js'
 import { formatEthereumAddress } from '../helpers/formatter.js'
 import { createJsonRpcPayload } from '../helpers/provider.js'
 import { ZERO_ADDRESS, getSmartPayConstant } from '../index.js'
@@ -68,55 +74,55 @@ export class PayloadEditor {
         return this.options?.chainId
     }
 
-    get config() {
-        const getRaw = () => {
-            const { method, params } = this.payload
-            switch (method) {
-                case EthereumMethodType.ETH_CALL:
-                case EthereumMethodType.ETH_ESTIMATE_GAS:
-                case EthereumMethodType.ETH_SIGN_TRANSACTION:
-                case EthereumMethodType.ETH_SEND_TRANSACTION:
-                    return (params as [Transaction])[0]
-                case EthereumMethodType.MASK_REPLACE_TRANSACTION:
-                    return (params as [string, Transaction])[1]
-                case EthereumMethodType.MASK_DEPLOY:
-                    if (!this.options?.chainId) throw new Error('Unknown chain id.')
+    private getRaw() {
+        const { method, params } = this.payload
+        switch (method) {
+            case EthereumMethodType.ETH_CALL:
+            case EthereumMethodType.ETH_ESTIMATE_GAS:
+            case EthereumMethodType.ETH_SIGN_TRANSACTION:
+            case EthereumMethodType.ETH_SEND_TRANSACTION:
+                return (params as [Transaction])[0]
+            case EthereumMethodType.MASK_REPLACE_TRANSACTION:
+                return (params as [string, Transaction])[1]
+            case EthereumMethodType.MASK_DEPLOY:
+                if (!this.options?.chainId) throw new Error('Unknown chain id.')
 
-                    const [owner] = params as [string]
+                const [owner] = params as [string]
 
-                    // compose a fake transaction to be accepted by Transaction Watcher
-                    return {
-                        from: owner,
-                        to: getSmartPayConstant(this.options?.chainId, 'CREATE2_FACTORY_CONTRACT_ADDRESS'),
-                        chainId: this.options?.chainId,
-                        data: new Web3().eth.abi.encodeFunctionCall(
-                            CREATE2_FACTORY_ABI.find((x) => x.name === 'deploy')! as AbiItem,
-                            ['0x', toHex(0)],
-                        ),
-                    }
-                case EthereumMethodType.MASK_FUND:
-                    if (!this.options?.chainId) throw new Error('Unknown chain id.')
+                // compose a fake transaction to be accepted by Transaction Watcher
+                return {
+                    from: owner,
+                    to: getSmartPayConstant(this.options?.chainId, 'CREATE2_FACTORY_CONTRACT_ADDRESS'),
+                    chainId: this.options?.chainId,
+                    data: new Web3().eth.abi.encodeFunctionCall(
+                        CREATE2_FACTORY_ABI.find((x) => x.name === 'deploy')! as AbiItem,
+                        ['0x', toHex(0)],
+                    ),
+                }
+            case EthereumMethodType.MASK_FUND:
+                if (!this.options?.chainId) throw new Error('Unknown chain id.')
 
-                    const [proof] = params as [Proof]
-                    const { ownerAddress, nonce = 0 } = JSON.parse(proof.payload) as ProofPayload
+                const [proof] = params as [Proof]
+                const { ownerAddress, nonce = 0 } = JSON.parse(proof.payload) as ProofPayload
 
-                    // compose a fake transaction to be accepted by Transaction Watcher
-                    return {
-                        from: ownerAddress,
-                        // it's a not-exist address, use the zero address as a placeholder
-                        to: ZERO_ADDRESS,
-                        chainId: this.options?.chainId,
-                        data: new Web3().eth.abi.encodeFunctionCall(
-                            CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem,
-                            [ownerAddress, toHex(nonce)],
-                        ),
-                    }
-                default:
-                    return
-            }
+                // compose a fake transaction to be accepted by Transaction Watcher
+                return {
+                    from: ownerAddress,
+                    // it's a not-exist address, use the zero address as a placeholder
+                    to: ZERO_ADDRESS,
+                    chainId: this.options?.chainId,
+                    data: new Web3().eth.abi.encodeFunctionCall(
+                        CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem,
+                        [ownerAddress, toHex(nonce)],
+                    ),
+                }
+            default:
+                return
         }
+    }
 
-        const raw = getRaw()
+    get config() {
+        const raw = this.getRaw()
 
         return {
             ...raw,
@@ -176,12 +182,6 @@ export class PayloadEditor {
     get signableConfig() {
         if (!this.config) return
 
-        const parseHexNumberString = (hex: string | number | undefined) =>
-            typeof hex !== 'undefined' ? hexToNumberString(hex ?? '0x0') : undefined
-
-        const parseHexNumber = (hex: string | number | undefined) =>
-            typeof hex !== 'undefined' ? hexToNumber(hex) : undefined
-
         return omitBy(
             {
                 ...this.config,
@@ -237,7 +237,7 @@ export class PayloadEditor {
         return this.payload
     }
 
-    static from<T extends unknown>(id: number, method: string, params: T[] = [], options?: Options) {
+    static from<T>(id: number, method: string, params: T[] = [], options?: Options) {
         return new PayloadEditor(
             createJsonRpcPayload(id, {
                 method,
@@ -247,11 +247,19 @@ export class PayloadEditor {
         )
     }
 
-    static fromMethod<T extends unknown>(method: string, params: T[] = [], options?: Options) {
+    static fromMethod<T>(method: string, params: T[] = [], options?: Options) {
         return PayloadEditor.from(0, method, params, options)
     }
 
     static fromPayload(payload: JsonRpcPayload, options?: Options) {
         return new PayloadEditor(payload, options)
     }
+}
+
+function parseHexNumberString(hex: string | number | undefined) {
+    return typeof hex !== 'undefined' ? hexToNumberString(hex ?? '0x0') : undefined
+}
+
+function parseHexNumber(hex: string | number | undefined) {
+    return typeof hex !== 'undefined' ? hexToNumber(hex) : undefined
 }

@@ -4,7 +4,7 @@ import {
     EthereumERC20TokenApprovedBoundary,
     FungibleTokenInput,
     InjectedDialog,
-    InjectedDialogProps,
+    type InjectedDialogProps,
     NetworkTab,
     PluginWalletStatusBar,
     TokenIcon,
@@ -14,10 +14,10 @@ import {
 import { EMPTY_LIST, isTwitter, NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useChainContext, useFungibleTokenBalance, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { formatBalance, FungibleToken, rightShift, ZERO } from '@masknet/web3-shared-base'
-import { ChainId, isNativeTokenAddress, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
+import { formatBalance, type FungibleToken, rightShift, ZERO } from '@masknet/web3-shared-base'
+import { type ChainId, isNativeTokenAddress, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
 import { Box, DialogActions, DialogContent, Typography } from '@mui/material'
-import { FC, memo, useCallback, useLayoutEffect, useMemo, useState } from 'react'
+import { type FC, memo, useCallback, useLayoutEffect, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { useDonateCallback } from '../../hooks/useDonateCallback.js'
 import { useI18N } from '../../../locales/i18n_generated.js'
@@ -189,7 +189,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
                         <img className={classes.bannerImage} src={grant.logo_url} />
                     </div>
                 ) : null}
-                <form className={classes.form} noValidate autoComplete="off">
+                <form noValidate autoComplete="off">
                     <Box ml={-1.5}>
                         <NetworkTab pluginID={NetworkPluginID.PLUGIN_EVM} chains={availableChains} />
                     </Box>

@@ -106,11 +106,11 @@ export function NFTListPage(props: NFTListPageProps) {
                     </ListItem>
                 ))}
             </List>
-            {loadError && !loadFinish && tokens.length && (
+            {loadError && !loadFinish && tokens.length ? (
                 <Stack py={1} style={{ gridColumnStart: 1, gridColumnEnd: 6 }}>
                     <RetryHint hint={false} retry={nextPage} />
                 </Stack>
-            )}
+            ) : null}
             <ElementAnchor callback={nextPage}>{!loadFinish && tokens.length !== 0 && <LoadingBase />}</ElementAnchor>
         </Box>
     )

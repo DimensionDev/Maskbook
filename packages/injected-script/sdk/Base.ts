@@ -1,7 +1,7 @@
 import { createPromise, sendEvent } from './utils.js'
 
 export class InjectedProvider {
-    private events = new Map<string, Set<Function>>()
+    private events = new Map<string, Set<(data: unknown) => void>>()
     private isReadyInternal = false
     private isConnectedInternal = false
 
@@ -57,7 +57,7 @@ export class InjectedProvider {
     /**
      * Send RPC request to the sdk object.
      */
-    request<T extends unknown>(data: unknown): Promise<T> {
+    request<T>(data: unknown): Promise<T> {
         return createPromise((id) => sendEvent('web3BridgeExecute', [this.pathname, 'request'].join('.'), id, data))
     }
 

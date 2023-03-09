@@ -1,5 +1,5 @@
 import { useAsyncFn } from 'react-use'
-import { NetworkPluginID, BindingProof, ECKeyIdentifier } from '@masknet/shared-base'
+import { NetworkPluginID, type BindingProof, type ECKeyIdentifier } from '@masknet/shared-base'
 import type { TwitterBaseAPI } from '@masknet/web3-providers/types'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { AllChainsNonFungibleToken, NextIDAvatarMeta } from '../../types.js'

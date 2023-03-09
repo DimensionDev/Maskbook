@@ -72,14 +72,14 @@ export abstract class PluginRunner<HostHooks extends BasicHostHooks, HostPluginI
             if (this.plugins.has(id)) continue
 
             const abort = new AbortController()
-            const isLocal = Boolean(data.local && this.allowLocalOverrides)
+            const isLocal = !!(data.local && this.allowLocalOverrides)
             this.hooks.fetchLocaleFiles(id, isLocal, this.pluginList.get(id)?.locales ?? [])
             this.startPluginInner(id, isLocal, abort.signal, abort.abort.bind(abort))
         }
     }
     async startPlugin_bridged(id: string, signal: AbortSignal) {
         const abort = new AbortController()
-        const isLocal = Boolean(this.pluginList.get(id)!.local && this.allowLocalOverrides)
+        const isLocal = !!(this.pluginList.get(id)!.local && this.allowLocalOverrides)
         this.hooks.fetchLocaleFiles(id, isLocal, this.pluginList.get(id)?.locales ?? [])
         await this.startPluginInner(id, isLocal, combineAbortSignal(abort.signal, signal), abort.abort.bind(abort))
         return this.plugins.get(id)!

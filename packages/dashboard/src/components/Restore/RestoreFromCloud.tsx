@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { Step, Stepper } from '../Stepper/index.js'
 import { LoadingCard } from './steps/LoadingCard.js'
-import { BackupPreview, decryptBackup } from '@masknet/backup-format'
+import { type BackupPreview, decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
 import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext.js'
 import { AccountType } from '../../pages/Settings/type.js'
@@ -180,13 +180,13 @@ export const RestoreFromCloud = memo(() => {
                     )}
                 </Step>
             </Stepper>
-            {openSynchronizePasswordDialog && (
+            {openSynchronizePasswordDialog ? (
                 <ConfirmSynchronizePasswordDialog
                     open={openSynchronizePasswordDialog}
                     onClose={() => onCloseSynchronizePassword()}
                     onConform={synchronizePassword}
                 />
-            )}
+            ) : null}
             <Box sx={{ pt: 4, pb: 2, width: '100%' }}>
                 <MaskAlert description={t.sign_in_account_cloud_backup_warning()} />
             </Box>

@@ -21,7 +21,7 @@ export const DefaultRenderFragments = {
     }),
 }
 export interface RenderFragmentsContextType {
-    Container?: React.ComponentType<{}>
+    Container?: React.ComponentType
     Text?: React.ComponentType<RenderFragmentsContextType.TextProps>
     Image?: React.ComponentType<RenderFragmentsContextType.ImageProps>
     Metadata?: React.ComponentType<MetadataRenderProps>

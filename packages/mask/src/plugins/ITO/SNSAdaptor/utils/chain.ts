@@ -2,9 +2,9 @@ import urlcat from 'urlcat'
 import { BigNumber } from 'bignumber.js'
 import isAfter from 'date-fns/isAfter'
 import isEqual from 'date-fns/isEqual'
-import { isSameAddress, FungibleToken, TokenType } from '@masknet/web3-shared-base'
+import { isSameAddress, type FungibleToken, TokenType } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId, EtherscanURL, getITOConstants, SchemaType } from '@masknet/web3-shared-evm'
+import { type ChainId, EtherscanURL, getITOConstants, SchemaType } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
 import ITO_ABI from '@masknet/web3-contracts/abis/ITO2.json'
 import type { PoolFromNetwork, JSON_PayloadFromChain, SwappedTokenType } from '../../types.js'
@@ -163,7 +163,7 @@ export async function getAllPoolsAsSeller(
 
     return eventLogResponse
         .map((v) => (v.status === 'fulfilled' && v.value ? v.value : null))
-        .filter((v) => Boolean(v)) as PoolFromNetwork[]
+        .filter((v) => !!v) as PoolFromNetwork[]
 }
 
 export async function getClaimAllPools(
@@ -243,7 +243,7 @@ export async function getClaimAllPools(
         )
     )
         .map((v) => (v.status === 'fulfilled' && v.value ? v.value : null))
-        .filter((v) => Boolean(v)) as SwapRawFilteredType[]
+        .filter((v) => !!v) as SwapRawFilteredType[]
 
     interface SwapSuccessEventParams {
         to_address: string
@@ -281,10 +281,9 @@ export async function getClaimAllPools(
         )
     )
         .map((v) => (v.status === 'fulfilled' && v.value ? v.value : null))
-        .filter((v) => Boolean(v)) as SwappedTokenType[]
+        .filter((v) => !!v) as SwappedTokenType[]
 
     // 5. merge same swap token pools into one
-    // eslint-disable-next-line unicorn/no-array-reduce
     const swappedTokenList = swappedTokenUnmergedList.reduce((acc: SwappedTokenType[], cur) => {
         if (acc.some(checkClaimable(cur)) && cur.isClaimable) {
             // merge same claimable tokens to one

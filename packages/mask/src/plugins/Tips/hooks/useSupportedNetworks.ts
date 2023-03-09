@@ -1,4 +1,4 @@
-import { Icons, GeneratedIconProps } from '@masknet/icons'
+import { Icons, type GeneratedIconProps } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/shared-base'
 export interface SupportedNetworkMap {
     name: string

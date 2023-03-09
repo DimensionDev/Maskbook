@@ -2,7 +2,7 @@
 
 import type { LanguageOptions } from '@masknet/public-api'
 import { Appearance, MaskColors } from '@masknet/theme'
-import { PaletteMode, unstable_createMuiStrictModeTheme } from '@mui/material'
+import { type PaletteMode, unstable_createMuiStrictModeTheme } from '@mui/material'
 import { MaskDarkTheme, MaskLightTheme } from './MaskTheme.js'
 import { useThemeLanguage } from './useThemeLanguage.js'
 import produce, { setAutoFreeze } from 'immer'

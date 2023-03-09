@@ -118,6 +118,11 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     )
 }
 
+function handleOpenDialog() {
+    CrossIsolationMessages.events.web3ProfileDialogEvent.sendToAll({
+        open: true,
+    })
+}
 function Content(props: ProfileTabContentProps) {
     const { classes } = useStyles(undefined, { props })
 
@@ -280,11 +285,6 @@ function Content(props: ProfileTabContentProps) {
     const onSelect = (address: string) => {
         setSelectedAddress(address)
         setMenuOpen(false)
-    }
-    const handleOpenDialog = () => {
-        CrossIsolationMessages.events.web3ProfileDialogEvent.sendToAll({
-            open: true,
-        })
     }
 
     const { value: collectionList = EMPTY_LIST } = useCollectionByTwitterHandler(currentVisitingUserId)

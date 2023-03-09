@@ -4,7 +4,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { TransactionState } from '@masknet/web3-state'
 import {
     ChainId,
-    Transaction as EVM_Transaction,
+    type Transaction as EVM_Transaction,
     formatEthereumAddress,
     isValidChainId,
 } from '@masknet/web3-shared-evm'

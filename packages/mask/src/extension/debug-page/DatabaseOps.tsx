@@ -5,57 +5,63 @@ import { useI18N } from '../../utils/index.js'
 
 __DEBUG__ONLY__enableCryptoKeySerialization()
 
+async function onBackup() {
+    const payload = await backupAll()
+    if (payload === undefined) {
+        return
+    }
+    const timestamp = ((value: Date) => {
+        const values = [
+            value.getUTCFullYear(),
+            value.getUTCMonth() + 1,
+            value.getUTCDate(),
+            value.getUTCHours(),
+            value.getUTCMinutes(),
+            value.getUTCSeconds(),
+        ]
+        return values.map((value) => value.toString().padStart(2, '0')).join('')
+    })(new Date())
+    download(`masknetwork-dump-${timestamp}.json`, payload)
+}
+async function onRestore() {
+    const file = await select()
+    if (file === undefined) {
+        return
+    }
+    // cspell:disable-next-line
+    const parsed = (await serializer.deserialization(await file.text())) as BackupFormat
+    await restoreAll(parsed)
+}
+async function onClear() {
+    const databases = await indexedDB.databases?.()
+    if (databases === undefined) {
+        return
+    }
+    await Promise.all(
+        databases.map(async ({ name }) => {
+            if (!name) return
+            await timeout(wrap(indexedDB.deleteDatabase(name)), 500)
+        }),
+    )
+}
 export const DatabaseOps: React.FC = () => {
     const { t } = useI18N()
-    const onBackup = async () => {
-        const payload = await backupAll()
-        if (payload === undefined) {
-            return
-        }
-        const timestamp = ((value: Date) => {
-            const values = [
-                value.getUTCFullYear(),
-                value.getUTCMonth() + 1,
-                value.getUTCDate(),
-                value.getUTCHours(),
-                value.getUTCMinutes(),
-                value.getUTCSeconds(),
-            ]
-            return values.map((value) => value.toString().padStart(2, '0')).join('')
-        })(new Date())
-        download(`masknetwork-dump-${timestamp}.json`, payload)
-    }
-    const onRestore = async () => {
-        const file = await select()
-        if (file === undefined) {
-            return
-        }
-        // cspell:disable-next-line
-        const parsed = (await serializer.deserialization(await file.text())) as BackupFormat
-        await restoreAll(parsed)
-    }
-    const onClear = async () => {
-        const databases = await indexedDB.databases?.()
-        if (databases === undefined) {
-            return
-        }
-        await Promise.all(
-            databases.map(async ({ name }) => {
-                if (!name) return
-                await timeout(wrap(indexedDB.deleteDatabase(name)), 500)
-            }),
-        )
-    }
     return (
         <section>
             <p>
-                <button onClick={onBackup}>{t('database_backup')}</button>
+                <button type="button" onClick={onBackup}>
+                    {t('database_backup')}
+                </button>
             </p>
             <p>
-                <button onClick={onRestore}>{t('database_overwrite')}</button>
+                <button type="button" onClick={onRestore}>
+                    {t('database_overwrite')}
+                </button>
             </p>
             <p>
-                <button onClick={onClear}>{t('database_clear')}</button>
+                <button type="button" onClick={onClear}>
+                    {t('database_clear')}
+                </button>
             </p>
         </section>
     )
@@ -108,7 +114,7 @@ async function restoreAll(parsed: BackupFormat) {
                         await db.add(storeName, value, key)
                     }
                 } catch (error) {
-                    console.error('Recover error when ', key, value, parsed)
+                    console.error('Recover error when', key, value, parsed)
                     // Error from IndexedDB transaction is not recoverable
                     throw error
                 }

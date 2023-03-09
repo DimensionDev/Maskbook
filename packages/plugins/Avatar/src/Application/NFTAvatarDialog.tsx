@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react'
+import { type FC, useMemo } from 'react'
 import { Box, DialogContent } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { MemoryRouter } from 'react-router-dom'

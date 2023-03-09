@@ -6,7 +6,7 @@ import { BigNumber } from 'bignumber.js'
 import type { FC, HTMLProps, ReactNode } from 'react'
 import formatDateTime from 'date-fns/format'
 import { useViewFeedDetails } from '../contexts/index.js'
-import { CardType, cardTypeIconMap, formatTimestamp, getPlatformIcon } from './share.js'
+import { type CardType, cardTypeIconMap, formatTimestamp, getPlatformIcon } from './share.js'
 
 export interface FeedCardBaseProps {
     feed: RSS3BaseAPI.Web3Feed
@@ -88,7 +88,7 @@ export const CardFrame: FC<CardFrameProps> = ({
     return (
         <article
             className={cx(className, verbose ? null : classes.inspectable)}
-            onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            onClick={(event: React.MouseEvent<HTMLDivElement>) => {
                 onClick?.(event)
                 if (!verbose) {
                     viewDetails({

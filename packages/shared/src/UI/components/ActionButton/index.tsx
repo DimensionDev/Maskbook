@@ -30,7 +30,7 @@ const circle = <CircularProgress color="inherit" size={18} />
 
 interface DebounceButtonProps extends Omit<ButtonProps, 'color' | 'onClick'> {
     color?: ButtonProps['color'] | 'danger'
-    onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => unknown
+    onClick: (e: React.MouseEvent<HTMLButtonElement>) => unknown
 }
 
 function useDebounceAsync<T extends any[]>(

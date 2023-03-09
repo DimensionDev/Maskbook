@@ -8,6 +8,7 @@ import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { TipButtonStyle } from '../../constant.js'
 import { normalFollowButtonSelector as selector } from '../../utils/selector.js'
 import { getUserIdentity } from '../../utils/user.js'
+import { noop } from 'lodash-es'
 
 function getTwitterId(ele: HTMLElement) {
     const profileLink = ele.closest('[data-testid="UserCell"]')?.querySelector('a[role="link"]')
@@ -19,7 +20,7 @@ export function injectTipsButtonOnFollowButton(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())
     startWatch(
         watcher.useForeach((ele) => {
-            let remover = () => {}
+            let remover = noop
             const remove = () => remover()
 
             const run = async () => {

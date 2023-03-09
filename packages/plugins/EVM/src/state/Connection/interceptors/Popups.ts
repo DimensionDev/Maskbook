@@ -1,19 +1,19 @@
 import { isUndefined, omitBy } from 'lodash-es'
+import { BigNumber } from 'bignumber.js'
 import {
     ErrorEditor,
-    Middleware,
-    ConnectionContext,
-    TransactionOptions,
+    type Middleware,
+    type ConnectionContext,
+    type TransactionOptions,
     getMaskTokenAddress,
     getSmartPayConstants,
     DepositPaymaster,
     PayloadEditor,
 } from '@masknet/web3-shared-evm'
 import { ExtensionSite, getSiteType, isEnhanceableSiteType } from '@masknet/shared-base'
-import { SharedContextSettings } from '../../../settings/index.js'
 import { SmartPayBundler, Web3 } from '@masknet/web3-providers'
-import { BigNumber } from 'bignumber.js'
 import { isGreaterThan, toFixed } from '@masknet/web3-shared-base'
+import { SharedContextSettings } from '../../../settings/index.js'
 
 const DEFAULT_PAYMENT_TOKEN_STATE = {
     allowMaskAsGas: false,

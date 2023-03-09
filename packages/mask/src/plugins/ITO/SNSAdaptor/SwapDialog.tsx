@@ -10,9 +10,16 @@ import {
     EthereumERC20TokenApprovedBoundary,
 } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { leftShift, rightShift, ZERO, FungibleToken, currySameAddress, formatBalance } from '@masknet/web3-shared-base'
 import {
-    ChainId,
+    leftShift,
+    rightShift,
+    ZERO,
+    type FungibleToken,
+    currySameAddress,
+    formatBalance,
+} from '@masknet/web3-shared-base'
+import {
+    type ChainId,
     SchemaType,
     isNativeTokenAddress,
     useTokenConstants,
@@ -135,7 +142,7 @@ export function SwapDialog(props: SwapDialogProps) {
         exchangeTokens
             .map((x) => x.address)
             .sort((a, b) => a.localeCompare(b, 'en-US'))
-            .join(),
+            .join(','),
     ])
     // #endregion
 
@@ -172,7 +179,7 @@ export function SwapDialog(props: SwapDialogProps) {
             await openShareTxDialog({
                 hash: receipt.transactionHash,
             })
-            const { to_value } = (receipt.events?.SwapSuccess.returnValues ?? {}) as {
+            const { to_value } = (receipt.events?.SwapSuccess?.returnValues ?? {}) as {
                 to_value: string
             }
             setActualSwapAmount(to_value)

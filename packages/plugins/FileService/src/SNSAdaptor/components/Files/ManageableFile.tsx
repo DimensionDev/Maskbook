@@ -2,10 +2,10 @@ import { Icons } from '@masknet/icons'
 import { formatFileSize } from '@masknet/kit'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { MenuItem, Typography } from '@mui/material'
-import { FC, memo, useRef, useState } from 'react'
+import { type FC, memo, useRef, useState } from 'react'
 import { Translate, useI18N } from '../../../locales/index.js'
 import type { FileInfo } from '../../../types.js'
-import { FileBaseProps, FileFrame } from './FileFrame.js'
+import { type FileBaseProps, FileFrame } from './FileFrame.js'
 
 const useStyles = makeStyles()((theme) => ({
     desc: {

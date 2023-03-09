@@ -1,11 +1,9 @@
 import { getPermissionRequestURL } from '../../../shared/definitions/routes.js'
-import { Flags } from '../../../shared/flags.js'
 import { MaskMessages } from '../../../shared/messages.js'
 import type { SiteAdaptor } from '../../../shared/site-adaptors/types.js'
 import type { Permissions } from 'webextension-polyfill'
 
 export async function requestExtensionPermission(permission: Permissions.Permissions): Promise<boolean> {
-    if (Flags.no_web_extension_dynamic_permission_request) return true
     if (await browser.permissions.contains(permission)) return true
     try {
         return await browser.permissions.request(permission).then(sendNotification)
@@ -26,13 +24,12 @@ export async function requestExtensionPermission(permission: Permissions.Permiss
             browser.windows.onRemoved.removeListener(listener)
         })
     })
-
-    function sendNotification(result: boolean) {
-        if (result) MaskMessages.events.hostPermissionChanged.sendToAll()
-        return result
-    }
 }
 
+function sendNotification(result: boolean) {
+    if (result) MaskMessages.events.hostPermissionChanged.sendToAll()
+    return result
+}
 export async function requestHostPermission(origins: readonly string[]) {
     const currentOrigins = (await browser.permissions.getAll()).origins || []
     const extra = origins.filter((i) => !currentOrigins?.includes(i))

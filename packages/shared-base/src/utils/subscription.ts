@@ -1,6 +1,6 @@
 import { noop } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import { None, Option, Some } from 'ts-results-es'
+import { None, type Option, Some } from 'ts-results-es'
 import type { ValueRef } from '@masknet/shared-base'
 
 export async function getSubscriptionCurrentValue<T>(
@@ -89,7 +89,9 @@ export function createSubscriptionFromAsyncSuspense<T>(
 
             const undo = subscribe(sub)
             signal?.addEventListener('abort', undo, { once: true })
-            return () => void undo()
+            return () => {
+                undo()
+            }
         },
     }
 }

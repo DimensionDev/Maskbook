@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren } from 'react'
+import { createContext, useMemo, type PropsWithChildren } from 'react'
 import { useAsync } from 'react-use'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { SearchResultType, EOAResult } from '@masknet/web3-shared-base'
@@ -31,18 +31,17 @@ export function ENSProvider({ children, result }: PropsWithChildren<SearchResult
         if (nextIdBindings_) return nextIdBindings_
         return reversedAddress ? NextIDProof.queryProfilesByRelationService(reversedAddress) : EMPTY_LIST
     }, [reversedAddress, JSON.stringify(nextIdBindings_)])
-
-    return (
-        <ENSContext.Provider
-            value={{
-                reversedAddress,
-                tokenId,
-                domain,
-                nextIdBindings,
-            }}>
-            {children}
-        </ENSContext.Provider>
+    const context = useMemo(
+        () => ({
+            reversedAddress,
+            tokenId,
+            domain,
+            nextIdBindings,
+        }),
+        [reversedAddress, tokenId, domain, nextIdBindings],
     )
+
+    return <ENSContext.Provider value={context}>{children}</ENSContext.Provider>
 }
 
 export interface SearchResultInspectorProps {

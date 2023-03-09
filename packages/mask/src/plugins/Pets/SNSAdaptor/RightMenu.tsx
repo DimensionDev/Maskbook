@@ -6,7 +6,7 @@ import { PluginPetMessages } from '../messages.js'
 import { useI18N } from '../locales/index.js'
 import { PluginGameMessages } from '../../Game/messages.js'
 import { NFF_TWITTER } from '../constants.js'
-import { ShowMeta, MenuType } from '../types.js'
+import { type ShowMeta, MenuType } from '../types.js'
 import { useCurrentVisitingUser } from '../hooks/index.js'
 import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
 
@@ -113,11 +113,6 @@ function RightMenu(props: Props) {
         props.onClose()
     }
 
-    function stopPop(e: React.MouseEvent) {
-        e.stopPropagation()
-        e.nativeEvent.stopPropagation()
-    }
-
     return (
         <div
             ref={refMenuDom}
@@ -142,3 +137,8 @@ function RightMenu(props: Props) {
 }
 
 export default RightMenu
+
+function stopPop(e: React.MouseEvent) {
+    e.stopPropagation()
+    e.nativeEvent.stopPropagation()
+}

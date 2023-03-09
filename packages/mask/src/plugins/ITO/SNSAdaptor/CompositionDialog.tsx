@@ -1,5 +1,5 @@
 import { useActivatedPlugin, useCompositionContext } from '@masknet/plugin-infra/content-script'
-import { InjectedDialog, InjectedDialogProps, useOpenShareTxDialog, NetworkTab } from '@masknet/shared'
+import { InjectedDialog, type InjectedDialogProps, useOpenShareTxDialog, NetworkTab } from '@masknet/shared'
 import { PluginID, EMPTY_LIST, EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import {
     useChainContext,
@@ -21,12 +21,12 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { useI18N } from '../../../utils/index.js'
 import { ITO_MetaKey_2, MSG_DELIMITER } from '../constants.js'
 import { PluginITO_RPC } from '../messages.js'
-import { DialogTabs, JSON_PayloadInMask } from '../types.js'
+import { DialogTabs, type JSON_PayloadInMask } from '../types.js'
 import { ConfirmDialog } from './ConfirmDialog.js'
 import { CreateForm } from './CreateForm.js'
 import { payloadOutMask } from './helpers.js'
 import { PoolList } from './PoolList.js'
-import { PoolSettings, useFillCallback } from './hooks/useFill.js'
+import { type PoolSettings, useFillCallback } from './hooks/useFill.js'
 import { Icons } from '@masknet/icons'
 
 interface StyleProps {
@@ -135,7 +135,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         // the settings is not available
         if (!settings?.token) return
 
-        const FillSuccess = (receipt.events?.FillSuccess.returnValues ?? {}) as {
+        const FillSuccess = (receipt.events?.FillSuccess?.returnValues ?? {}) as {
             total: string
             id: string
             creator: string
@@ -196,6 +196,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
                     })) ?? ''
             }
             if (!payload.password) {
+                // eslint-disable-next-line no-alert
                 alert('Failed to sign the password.')
                 return
             }

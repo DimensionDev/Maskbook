@@ -6,7 +6,7 @@ import type { NormalizedBackup } from '@masknet/backup-format'
 import type { LegacyWalletRecord, WalletRecord } from '../../../shared/definitions/wallet.js'
 import { ec as EC } from 'elliptic'
 import { EthereumAddress } from 'wallet.ts'
-import { toBase64URL, EC_Public_JsonWebKey, EC_Private_JsonWebKey } from '@masknet/shared-base'
+import { toBase64URL, type EC_Public_JsonWebKey, type EC_Private_JsonWebKey } from '@masknet/shared-base'
 
 export async function internal_wallet_backup() {
     const wallet = await Promise.all([backupAllWallets(), backupAllLegacyWallets()])
@@ -76,7 +76,7 @@ function LegacyWalletRecordToJSONFormat(wallet: LegacyWalletRecord): NormalizedB
 
     // generate keys for managed wallet
     try {
-        const wallet_ = wallet as LegacyWalletRecord
+        const wallet_ = wallet
         backup.passphrase = Some(wallet_.passphrase)
         if (wallet_.mnemonic?.length)
             backup.mnemonic = Some<NormalizedBackup.Mnemonic>({
@@ -111,14 +111,14 @@ function keyToJWK(key: string, type: 'public' | 'private'): JsonWebKey {
         kty: 'EC',
         d: type === 'private' ? base64(privKey.toArray()) : undefined,
     }
-    function base64(nums: number[]) {
-        return toBase64URL(new Uint8Array(nums).buffer)
-    }
 }
 
+function base64(nums: number[]) {
+    return toBase64URL(new Uint8Array(nums).buffer)
+}
 function keyToAddr(key: string, type: 'public' | 'private'): string {
     const ec = new EC('secp256k1')
     const key_ = key.replace(/^0x/, '')
     const keyPair = type === 'public' ? ec.keyFromPublic(key_) : ec.keyFromPrivate(key_)
-    return EthereumAddress.from(keyPair.getPublic(false, 'array') as any).address
+    return EthereumAddress.from(Buffer.from(keyPair.getPublic(false, 'array'))).address
 }

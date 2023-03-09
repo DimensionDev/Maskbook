@@ -1,19 +1,19 @@
 import { delay } from '@masknet/kit'
 import type { NormalizedBackup } from '@masknet/backup-format'
 import { activatedPluginsWorker, registeredPlugins } from '@masknet/plugin-infra/background-worker'
-import { PluginID, ProfileIdentifier, RelationFavor } from '@masknet/shared-base'
+import { type PluginID, type ProfileIdentifier, RelationFavor } from '@masknet/shared-base'
 import { MaskMessages } from '../../../shared/messages.js'
 import {
     consistentPersonaDBWriteAccess,
     createOrUpdatePersonaDB,
     createOrUpdateProfileDB,
     createOrUpdateRelationDB,
-    LinkedProfileDetails,
+    type LinkedProfileDetails,
 } from '../../database/persona/db.js'
 import {
     withPostDBTransaction,
     createPostDB,
-    PostRecord,
+    type PostRecord,
     queryPostDB,
     updatePostDB,
 } from '../../database/post/index.js'
@@ -78,7 +78,7 @@ async function restorePersonas(backup: NormalizedBackup.Data) {
                                 parameter: { path: mnemonic.path, withPassword: mnemonic.hasPassword },
                             }))
                             .unwrapOr(undefined),
-                        linkedProfiles: persona.linkedProfiles as Map<ProfileIdentifier, unknown> as any,
+                        linkedProfiles: persona.linkedProfiles as any,
                         // "login" again because this is the restore process.
                         // We need to explicitly set this flag because the backup may already in the database (but marked as "logout").
                         hasLogout: false,
@@ -197,15 +197,17 @@ async function restorePlugins(backup: NormalizedBackup.Data['plugins']) {
         const f = plugin.backup?.onRestore
         if (!f) {
             console.warn(
-                `[@masknet/plugin-infra] Found a backup of plugin ${plugin} but it did not register a onRestore callback.`,
+                `[@masknet/plugin-infra] Found a backup of plugin ${plugin.ID} but it did not register a onRestore callback.`,
                 item,
             )
             continue
         }
         works.add(
+            // eslint-disable-next-line @typescript-eslint/no-loop-func
             (async () => {
                 const x = await f(item)
-                if (x.err) console.error(`[@masknet/plugin-infra] Plugin ${plugin} failed to restore its backup.`, item)
+                if (x.err)
+                    console.error(`[@masknet/plugin-infra] Plugin ${plugin.ID} failed to restore its backup.`, item)
                 return x.unwrap()
             })(),
         )

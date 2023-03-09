@@ -1,5 +1,5 @@
 import { compact } from 'lodash-es'
-import { isSameAddress, SearchResult, SearchResultType } from '@masknet/web3-shared-base'
+import { isSameAddress, type SearchResult, SearchResultType } from '@masknet/web3-shared-base'
 import type { Handler } from './type.js'
 import { FuseAPI } from '../Fuse/index.js'
 
@@ -208,7 +208,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                 type: 'exact',
                 filter: (data: SearchResult<ChainId, SchemaType>, keyword: string) => {
                     if (data.type !== SearchResultType.CollectionListByTwitterHandler) return false
-                    return Boolean(data.collection?.socialLinks?.twitter?.toLowerCase().endsWith(keyword.toLowerCase()))
+                    return !!data.collection?.socialLinks?.twitter?.toLowerCase().endsWith(keyword.toLowerCase())
                 },
             },
         ],

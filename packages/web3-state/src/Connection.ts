@@ -97,7 +97,7 @@ export class ConnectionState<
                     providerType?: ProviderType
                 },
             ) => {
-                return [options?.chainId, options?.account, options?.providerType].join()
+                return [options?.chainId, options?.account, options?.providerType].join(',')
             },
         )
     }

@@ -8,8 +8,7 @@ if (import.meta.webpackHot) {
             if (!(key in maskSDKServer)) Reflect.deleteProperty(hmr_sdkServer, key)
         }
         for (const key of Object.keys(maskSDKServer)) {
-            // @ts-expect-error
-            hmr_sdkServer[key] = maskSDKServer[key]
+            Reflect.set(hmr_sdkServer, key, Reflect.get(maskSDKServer, key))
         }
     })
 }

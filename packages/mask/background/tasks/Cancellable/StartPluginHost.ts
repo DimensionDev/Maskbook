@@ -1,4 +1,4 @@
-import { startPluginWorker, Plugin } from '@masknet/plugin-infra/background-worker'
+import { startPluginWorker, type Plugin } from '@masknet/plugin-infra/background-worker'
 import { createPluginDatabase } from '../../database/plugin-db/index.js'
 import { createPluginHost, createSharedContext } from '../../../shared/plugin-infra/host.js'
 import { getPluginMinimalModeEnabled } from '../../services/settings/old-settings-accessor.js'

@@ -32,7 +32,7 @@ export class ValueRef<T> {
     }
     setServerSnapshot(value: T): void {
         if (this.hasSSRValue) {
-            if (this.isEqual(this._ssrValue!, value)) return
+            if (this.isEqual(this._ssrValue, value)) return
             throw new Error('Cannot change the server side snapshot')
         }
         this.hasSSRValue = true
@@ -50,6 +50,7 @@ export class ValueRef<T> {
 
 export class ValueRefWithReady<T> extends ValueRef<T> {
     constructor(value?: T | undefined, isEqual: ValueComparer<T> = defaultComparer) {
+        // this is unsafe. we assigned T | undefined to T
         super(value!, isEqual)
         const [promise, resolve] = defer<void>()
         this.readyPromise = promise.then(() => this.value)

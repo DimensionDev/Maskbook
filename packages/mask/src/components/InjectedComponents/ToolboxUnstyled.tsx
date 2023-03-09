@@ -1,9 +1,9 @@
 import {
     CircularProgress,
-    ListItemButtonProps,
-    ListItemIconProps,
-    ListItemTextProps,
-    TypographyProps,
+    type ListItemButtonProps,
+    type ListItemIconProps,
+    type ListItemTextProps,
+    type TypographyProps,
     Typography as MuiTypography,
     ListItemButton as MuiListItemButton,
     ListItemIcon as MuiListItemIcon,
@@ -33,7 +33,6 @@ import { FiberManualRecord as FiberManualRecordIcon } from '@mui/icons-material'
 import { useMountReport } from '@masknet/web3-telemetry/hooks'
 import { TelemetryAPI } from '@masknet/web3-providers/types'
 import { useI18N } from '../../utils/index.js'
-import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc/index.js'
 import GuideStep from '../GuideStep/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -206,9 +205,8 @@ function useToolbox() {
     }
 
     const openWallet = useCallback(() => {
-        if (hasNativeAPI) return nativeAPI?.api.misc_openCreateWalletView()
         return account ? openWalletStatusDialog() : openSelectProviderDialog()
-    }, [openWalletStatusDialog, openSelectProviderDialog, account, hasNativeAPI])
+    }, [openWalletStatusDialog, openSelectProviderDialog, account])
 
     const walletTitle = renderButtonText()
 

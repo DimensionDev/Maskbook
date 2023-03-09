@@ -4,17 +4,17 @@ import { mapKeys } from 'lodash-es'
 import io from 'socket.io-client'
 import {
     SocketRequestNameSpace,
-    SocketRequestBody,
-    SocketNameSpace,
+    type SocketRequestBody,
+    type SocketNameSpace,
     SocketRequestType,
-    SocketResponseBody,
-    ZerionAssetResponseBody,
-    ZerionCoinResponseBody,
-    ZerionTransactionResponseBody,
-    ZerionNonFungibleTokenResponseBody,
-    ZerionNonFungibleCollectionBody,
-    ZerionNonFungibleTokenInfoBody,
-    ZerionGasResponseBody,
+    type SocketResponseBody,
+    type ZerionAssetResponseBody,
+    type ZerionCoinResponseBody,
+    type ZerionTransactionResponseBody,
+    type ZerionNonFungibleTokenResponseBody,
+    type ZerionNonFungibleCollectionBody,
+    type ZerionNonFungibleTokenInfoBody,
+    type ZerionGasResponseBody,
 } from './types.js'
 
 const ZERION_API = 'wss://api-v4.zerion.io'

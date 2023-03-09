@@ -1,13 +1,13 @@
 import {
-    SyntheticEvent,
+    type SyntheticEvent,
     cloneElement,
     isValidElement,
     useCallback,
     useState,
-    MutableRefObject,
+    type MutableRefObject,
     createElement,
 } from 'react'
-import { Menu, MenuProps } from '@mui/material'
+import { Menu, type MenuProps } from '@mui/material'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { useUpdate } from 'react-use'
 

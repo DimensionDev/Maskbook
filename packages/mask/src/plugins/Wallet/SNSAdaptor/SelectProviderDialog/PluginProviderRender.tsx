@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
-import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
+import { getSiteType, type NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NetworkIconClickBaitProps, ProviderIconClickBaitProps } from '@masknet/web3-shared-base'
@@ -151,7 +151,7 @@ export function PluginProviderRender({
 
     const selectedNetwork = useMemo(() => {
         return networks.find((x) => x.ID === undeterminedNetworkID) ?? first(networks)!
-    }, [undeterminedNetworkID, networks.map((x) => x.ID).join()])
+    }, [undeterminedNetworkID, networks.map((x) => x.ID).join(',')])
 
     return (
         <>
@@ -257,7 +257,7 @@ function NetworkItem({
                 ) : (
                     <ImageIcon size={30} icon={network.icon} />
                 )}
-                {selected && <Icons.Selected size={12} className={classes.checkedBadge} />}
+                {selected ? <Icons.Selected size={12} className={classes.checkedBadge} /> : null}
             </div>
             <Typography className={cx(classes.networkName, selected ? classes.selected : '')}>
                 {Others?.chainResolver.chainName(network.chainId)}

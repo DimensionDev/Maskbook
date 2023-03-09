@@ -79,7 +79,7 @@ export function NextIdPage() {
                     <PluginEnableBoundary pluginID={PluginID.Web3Profile}>{getActionComponent}</PluginEnableBoundary>
                 </ThemeProvider>
             </PluginCardFrameMini>
-            {openBindDialog && currentPersona && isOwn && (
+            {openBindDialog && currentPersona && isOwn ? (
                 <BindDialog
                     open={openBindDialog}
                     onClose={() => toggleBindDialog(false)}
@@ -87,7 +87,7 @@ export function NextIdPage() {
                     bounds={proofs.value ?? EMPTY_LIST}
                     onBound={proofs.retry}
                 />
-            )}
+            ) : null}
         </>
     )
 }

@@ -1,11 +1,11 @@
 import type { ComponentType, FC, HTMLProps } from 'react'
-import { GeneratedIconProps, Icons } from '@masknet/icons'
+import { type GeneratedIconProps, Icons } from '@masknet/icons'
 
 const socialIconMap = {
     'twitter.com': Icons.Twitter,
     'github.com': Icons.GitHub,
     default: Icons.Globe,
-} satisfies Record<string, ComponentType<GeneratedIconProps<never>>>
+} satisfies Record<string, ComponentType<GeneratedIconProps>>
 
 interface Props extends HTMLProps<HTMLDivElement> {
     /** Social url */

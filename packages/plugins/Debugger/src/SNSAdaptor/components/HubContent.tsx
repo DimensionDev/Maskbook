@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useChainContext, useWeb3Hub } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
-import { Hub, OrderSide, resolveSourceTypeName, SourceType } from '@masknet/web3-shared-base'
+import { type Hub, OrderSide, resolveSourceTypeName, SourceType } from '@masknet/web3-shared-base'
 import { Button, MenuItem, Table, TableBody, TableCell, TableRow, TextField, Typography } from '@mui/material'
 import { getEnumAsArray } from '@masknet/kit'
 import { Icons } from '@masknet/icons'
@@ -170,7 +170,7 @@ export function HubContent(props: HubContentProps) {
                                             try {
                                                 console.log(`Query ${key}:`)
                                                 console.log(
-                                                    // @ts-ignore
+                                                    // @ts-expect-error the ...parameters call is unsafe
                                                     await hub?.[key]?.(...parameters, {
                                                         chainId,
                                                         account,

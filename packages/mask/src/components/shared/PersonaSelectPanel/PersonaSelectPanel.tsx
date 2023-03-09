@@ -7,8 +7,8 @@ import {
     EMPTY_LIST,
     isSamePersona,
     isSameProfile,
-    PersonaIdentifier,
-    ProfileIdentifier,
+    type PersonaIdentifier,
+    type ProfileIdentifier,
     resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -270,11 +270,11 @@ function ActionContent(props: ActionContentProps) {
     if (!buttonText) return null
     return (
         <Stack gap={1.5} mt={1.5}>
-            {hint && (
+            {hint ? (
                 <Typography color={(t) => t.palette.maskColor.main} fontSize={14} lineHeight="18px" height={36}>
                     {hint}
                 </Typography>
-            )}
+            ) : null}
             <Stack direction="row" justifyContent="center">
                 <Button color="primary" className={classes.button} onClick={onClick}>
                     <Icons.Identity size={18} />

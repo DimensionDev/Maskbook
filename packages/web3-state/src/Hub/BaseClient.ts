@@ -1,6 +1,6 @@
-import type { PartialRequired } from '@masknet/shared-base'
-import { HubOptions, SourceType, CurrencyType, createPredicate } from '@masknet/web3-shared-base'
 import { identity, pickBy } from 'lodash-es'
+import type { PartialRequired } from '@masknet/shared-base'
+import { type HubOptions, type SourceType, type CurrencyType, createPredicate } from '@masknet/web3-shared-base'
 
 export class HubStateBaseClient<ChainId> {
     constructor(
@@ -24,7 +24,7 @@ export class HubStateBaseClient<ChainId> {
         }
     }
 
-    protected getPredicateProviders<T extends unknown>(
+    protected getPredicateProviders<T>(
         providers: Partial<Record<SourceType, T>>,
         defaultProviders: T[],
         initial?: HubOptions<ChainId>,

@@ -90,7 +90,7 @@ export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = 
             '.profile',
             'a[href*="header_photo"] ~ div',
             'div[data-testid="primaryColumn"] > div > div:last-child > div > div > div > div ~ div', // new twitter without header photo
-        ].join(),
+        ].join(','),
         singleMode,
     )
 // #endregion
@@ -105,7 +105,7 @@ export const composeAnchorSelector: () => LiveSelector<HTMLAnchorElement, true> 
             'aside a[href="/compose/tweet"]',
             // can't see the compose button on share popup, use the tweetButton instead
             '[role=main] [role=button][data-testid=tweetButton]',
-        ].join(),
+        ].join(','),
     )
 export const composeAnchorTextSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
     querySelector<HTMLAnchorElement>(
@@ -176,7 +176,7 @@ export const postsImageSelector = (node: HTMLElement) =>
         [
             '[data-testid="tweet"] > div > div img[src*="media"]',
             '[data-testid="tweet"] ~ div img[src*="media"]', // image in detail page for new twitter
-        ].join(),
+        ].join(','),
     )
 
 export const timelinePostContentSelector = () =>
@@ -184,7 +184,7 @@ export const timelinePostContentSelector = () =>
         [
             '[data-testid="tweet"] div + div div[lang]',
             '[data-testid="tweet"] div + div div[data-testid="card.wrapper"]', // link box tweets
-        ].join(),
+        ].join(','),
     )
 
 export const postsContentSelector = () =>
@@ -205,7 +205,7 @@ export const postsContentSelector = () =>
 
             // reply-tweets
             '[data-testid="tweet"] + div div div[lang][dir]',
-        ].join(),
+        ].join(','),
     )
 
 export const postAvatarsContentSelector = () => querySelectorAll('[data-testid="tweet"] > div > div  > :nth-child(2)')
@@ -237,7 +237,7 @@ export const searchSelfHandleSelector = () => {
         [
             '[data-testid="SideNav_AccountSwitcher_Button"] [tabindex="-1"] [dir="ltr"] span',
             '#layers [role="group"] [role="dialog"] [role="link"] [dir="ltr"] span', // sidebar opened in mobile
-        ].join(),
+        ].join(','),
     )
 }
 
@@ -246,7 +246,7 @@ export const searchSelfNicknameSelector = () => {
         [
             '[data-testid="SideNav_AccountSwitcher_Button"] [dir="auto"] span span',
             '#layers [role="group"] [role="dialog"] [role="link"] span span', // sidebar opened in mobile
-        ].join(),
+        ].join(','),
     )
 }
 
@@ -259,7 +259,7 @@ export const searchSelfAvatarSelector = () => {
             '#layers ~ div [role="banner"] [role="button"] img',
             '[data-testid="DashButton_ProfileIcon_Link"] [role="presentation"] img',
             '#layers [role="group"] [role="dialog"] [role="link"] img', // sidebar opened in mobile
-        ].join(),
+        ].join(','),
     )
 }
 // #endregion
@@ -301,10 +301,10 @@ export const searchProfileSetAvatarSelector = () =>
 
 // #region avatar selector
 export const searchTwitterAvatarLinkSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E, true>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector('div  a')
+    querySelector<E>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector('div  a')
 
 export const searchTwitterAvatarSelector = () =>
-    querySelector<E, true>('a[href$="/photo"]').querySelector('img').closest<E>(1)
+    querySelector<E>('a[href$="/photo"]').querySelector('img').closest<E>(1)
 // #endregion
 
 // #region twitter avatar

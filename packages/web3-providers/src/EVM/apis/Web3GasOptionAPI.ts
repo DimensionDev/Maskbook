@@ -1,7 +1,7 @@
 import { nth } from 'lodash-es'
 import type { FeeHistoryResult } from 'web3-eth'
 import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
-import { ChainId, chainResolver, GasOption } from '@masknet/web3-shared-evm'
+import { type ChainId, chainResolver, type GasOption } from '@masknet/web3-shared-evm'
 import { Web3API } from './Web3API.js'
 import type { GasOptionAPI } from '../../entry-types.js'
 
@@ -11,7 +11,6 @@ export class Web3GasOptionAPI implements GasOptionAPI.Provider<ChainId, GasOptio
     private web3 = new Web3API()
 
     private avg(arr: number[]) {
-        // eslint-disable-next-line unicorn/no-array-reduce
         const sum = arr.reduce((a, v) => a + v)
         return Math.round(sum / arr.length)
     }

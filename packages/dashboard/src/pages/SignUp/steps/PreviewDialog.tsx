@@ -3,7 +3,7 @@ import { makeStyles, MaskDialog, MaskColorVar, MaskLightTheme, useCustomSnackbar
 import { Box, Button, DialogContent, ThemeProvider, Typography } from '@mui/material'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { Icons } from '@masknet/icons'
-import { ForwardedRef, forwardRef, useEffect, useMemo, useRef, useState } from 'react'
+import { type ForwardedRef, forwardRef, useEffect, useMemo, useRef, useState } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import { toJpeg } from 'html-to-image'
 import { WatermarkURL } from '../../../assets/index.js'
@@ -118,7 +118,7 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
     const qrValue = useMemo(() => {
         const main = words?.length ? `mnemonic/${btoa(words.join(' '))}` : `privatekey/${privateKey}`
         return `mask://persona/${main}?nickname=${personaName}`
-    }, [words?.join(), privateKey, personaName])
+    }, [words?.join(','), privateKey, personaName])
 
     useEffect(() => {
         if (state.value) {

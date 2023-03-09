@@ -1,4 +1,4 @@
-import { DOMProxy, DOMProxyEvents, IntervalWatcher } from '@dimensiondev/holoflows-kit'
+import { DOMProxy, IntervalWatcher, type DOMProxyEvents } from '@dimensiondev/holoflows-kit'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import {
@@ -47,6 +47,26 @@ function isDetailTweet(tweetNode: HTMLElement) {
     return isDetail
 }
 
+function getTweetNode(node: HTMLElement) {
+    // retweet(quoted tweet) in new twitter
+    let root = node.closest<HTMLDivElement>('div[role="link"]')
+    // then normal tweet
+    root = root || node.closest<HTMLDivElement>('article > div')
+    if (!root) return null
+
+    const isCardNode = node.matches('[data-testid="card.wrapper"]')
+    const hasTextNode = !!root.querySelector(
+        [
+            '[data-testid="tweet"] div[lang]',
+            '[data-testid="tweet"] + div div[lang]', // detailed
+        ].join(','),
+    )
+
+    // if a text node already exists, it's not going to decrypt the card node
+    if (isCardNode && hasTextNode) return null
+
+    return root
+}
 function registerPostCollectorInner(
     postStore: Next.CollectingCapabilities.PostsProvider['posts'],
     cancel: AbortSignal,

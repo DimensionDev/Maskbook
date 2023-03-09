@@ -2,8 +2,8 @@ import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { TransactionWatcherState } from '@masknet/web3-state'
-import { ChainId, Transaction } from '@masknet/web3-shared-evm'
-import { RecentTransaction, TransactionStatusType } from '@masknet/web3-shared-base'
+import { ChainId, type Transaction } from '@masknet/web3-shared-evm'
+import { type RecentTransaction, TransactionStatusType } from '@masknet/web3-shared-base'
 import { TransactionCheckers } from './TransactionWatcher/checker.js'
 import { Web3StateSettings } from '../settings/index.js'
 
@@ -44,7 +44,7 @@ export class TransactionWatcher extends TransactionWatcherState<ChainId, Transac
         if (Transaction) {
             // update record status in transaction state
             if (status !== TransactionStatusType.NOT_DEPEND && transaction.from)
-                await Transaction.updateTransaction?.(chainId, transaction.from as string, id, status)
+                await Transaction.updateTransaction?.(chainId, transaction.from, id, status)
 
             // only tracked records will get notified
             if (transaction.from) {

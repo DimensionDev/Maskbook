@@ -22,32 +22,25 @@ function InjectContentScript(signal: AbortSignal) {
         const contains = await browser.permissions.contains({ origins: [arg.url] })
         if (!contains) return
 
-        /**
-         * A `manifest.webextension-shim.json` field is used to declare user scripts.
-         */
-        if (!Flags.support_declarative_user_script) {
-            const detail: ExtensionTypes.InjectDetails = { runAt: 'document_start', frameId: arg.frameId }
+        const detail: ExtensionTypes.InjectDetails = { runAt: 'document_start', frameId: arg.frameId }
 
-            // #region Injected script
-            if (Flags.has_firefox_xray_vision) {
-                browser.tabs.executeScript(arg.tabId, { ...detail, file: injectedScriptURL })
-            } else {
-                // Refresh the injected script every time in the development mode.
-                const code =
-                    process.env.NODE_ENV === 'development'
-                        ? await fetchUserScript(injectedScriptURL)
-                        : await injectedScript
-                browser.tabs.executeScript(arg.tabId, { ...detail, code }).catch(HandleError(arg))
-            }
-            // #endregion
-
-            // #region Mask SDK
-            if (Flags.mask_SDK_ready) {
-                const code = process.env.NODE_ENV === 'development' ? await fetchUserScript(maskSDK_URL) : await maskSDK
-                browser.tabs.executeScript(arg.tabId, { ...detail, code }).catch(HandleError(arg))
-            }
-            // #endregion
+        // #region Injected script
+        if (Flags.has_firefox_xray_vision) {
+            browser.tabs.executeScript(arg.tabId, { ...detail, file: injectedScriptURL })
+        } else {
+            // Refresh the injected script every time in the development mode.
+            const code =
+                process.env.NODE_ENV === 'development' ? await fetchUserScript(injectedScriptURL) : await injectedScript
+            browser.tabs.executeScript(arg.tabId, { ...detail, code }).catch(HandleError(arg))
         }
+        // #endregion
+
+        // #region Mask SDK
+        if (Flags.mask_SDK_ready) {
+            const code = process.env.NODE_ENV === 'development' ? await fetchUserScript(maskSDK_URL) : await maskSDK
+            browser.tabs.executeScript(arg.tabId, { ...detail, code }).catch(HandleError(arg))
+        }
+        // #endregion
         injectContentScript(arg.tabId, arg.frameId).catch(HandleError(arg))
     }
     browser.webNavigation.onCommitted.addListener(onCommittedListener)
@@ -59,7 +52,7 @@ function InjectContentScript(signal: AbortSignal) {
             MaskMessages.events.maskSDKHotModuleReload.on(async () => {
                 const code = (await fetchUserScript(maskSDK_URL)) + '\n;console.log("[@masknet/sdk] SDK reloaded.")'
                 for (const tab of await browser.tabs.query({})) {
-                    browser.tabs.executeScript(tab.id!, { code }).then(noop)
+                    browser.tabs.executeScript(tab.id, { code }).then(noop)
                 }
             }),
         )

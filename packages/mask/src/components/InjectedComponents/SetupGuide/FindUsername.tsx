@@ -4,7 +4,7 @@ import { Box, Typography } from '@mui/material'
 import { ActionButtonPromise } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { WizardDialog, WizardDialogProps } from './WizardDialog.js'
+import { WizardDialog, type WizardDialogProps } from './WizardDialog.js'
 import { useI18N } from '../../../utils/index.js'
 import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
 

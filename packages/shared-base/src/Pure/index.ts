@@ -1,6 +1,6 @@
 export const EMPTY_LIST = Object.freeze([]) as never[]
 
-export function safeEmptyList<T extends unknown>(list?: T[]): T[] {
+export function safeEmptyList<T>(list?: T[]): T[] {
     if (!list?.length) return EMPTY_LIST
     return list
 }

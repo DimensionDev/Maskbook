@@ -1,18 +1,21 @@
+import { Icons } from '@masknet/icons'
 import { Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
+import { formatDomainName } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import type { FC } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
+import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
-import { CardFrame, FeedCardProps } from '../base.js'
 import { Label } from './common.js'
-import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles<void, 'body'>()((theme, _, refs) => ({
     summary: {
         color: theme.palette.maskColor.third,
+        display: 'flex',
+        alignItems: 'center',
     },
     body: {
         display: 'flex',
@@ -55,7 +58,7 @@ export function isProfileLinkFeed(feed: RSS3BaseAPI.Web3Feed): feed is RSS3BaseA
     return feed.tag === Tag.Social && [Type.Follow, Type.Unfollow].includes(feed.type)
 }
 
-interface CollectibleCardProps extends Omit<FeedCardProps, 'feed'> {
+interface ProfileLinkCardProps extends Omit<FeedCardProps, 'feed'> {
     feed: RSS3BaseAPI.ProfileLinkFeed
 }
 
@@ -78,15 +81,17 @@ const resolveHandle = (metadata: RSS3BaseAPI.FollowMetadata) => {
  *
  * - ProfileLink, aka Follow, Unfollow
  */
-export const ProfileLinkCard: FC<CollectibleCardProps> = ({ feed, className, ...rest }) => {
+export const ProfileLinkCard: FC<ProfileLinkCardProps> = ({ feed, className, ...rest }) => {
     const { classes, cx } = useStyles()
 
     const action = feed.actions[0]
     const metadata = action.metadata
 
     const user = useAddressLabel(feed.owner)
+    const formattedUser = formatDomainName(user, 16, true)
     const otherEns = useAddressLabel(metadata?.address ?? '')
     const other = metadata ? resolveHandle(metadata) : otherEns
+    const formattedOther = formatDomainName(other, 16, true)
 
     return (
         <CardFrame
@@ -97,14 +102,14 @@ export const ProfileLinkCard: FC<CollectibleCardProps> = ({ feed, className, ...
             <Typography className={classes.summary}>
                 <Translate.profile_link
                     values={{
-                        user,
-                        other,
+                        user: formattedUser,
+                        other: formattedOther,
                         platform: feed.platform!,
                         context: feed.type,
                     }}
                     components={{
-                        user: <Label />,
-                        other: <Label />,
+                        user: <Label title={user} />,
+                        other: <Label title={other} />,
                         platform: <Label />,
                     }}
                 />
@@ -121,7 +126,9 @@ export const ProfileLinkCard: FC<CollectibleCardProps> = ({ feed, className, ...
                             width={32}
                             src={`https://cdn.stamp.fyi/avatar/${feed.owner}`}
                         />
-                        <Typography className={classes.name}>{user}</Typography>
+                        <Typography className={classes.name} title={user}>
+                            {formattedUser}
+                        </Typography>
                     </div>
                     <Icons.RSS3ProfileLink height={18} width="auto" />
                     <div className={classes.user}>
@@ -134,7 +141,9 @@ export const ProfileLinkCard: FC<CollectibleCardProps> = ({ feed, className, ...
                             height={32}
                             width={32}
                         />
-                        <Typography className={classes.name}>{other}</Typography>
+                        <Typography className={classes.name} title={other}>
+                            {formattedOther}
+                        </Typography>
                     </div>
                 </div>
             ) : null}

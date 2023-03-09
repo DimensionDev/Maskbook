@@ -2,14 +2,14 @@ import { omit } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import { Emitter } from '@servie/events'
 import type { JsonRpcPayload } from 'web3-core-helpers'
-import { getSubscriptionCurrentValue, StorageItem } from '@masknet/shared-base'
+import { getSubscriptionCurrentValue, type StorageItem } from '@masknet/shared-base'
 import {
-    TransactionChecker,
+    type TransactionChecker,
     TransactionStatusType,
-    WatchEvents,
-    TransactionWatcherState as Web3TransactionWatcherState,
-    RecentTransaction,
-    RecognizableError,
+    type WatchEvents,
+    type TransactionWatcherState as Web3TransactionWatcherState,
+    type RecentTransaction,
+    type RecognizableError,
 } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 
@@ -21,8 +21,7 @@ interface TransactionWatcherItem<ChainId, Transaction> {
     transaction: Transaction
 }
 
-type TransactionWatcher<ChainId, Transaction> = Record<
-    // @ts-ignore
+type TransactionWatcher<ChainId extends PropertyKey, Transaction> = Record<
     ChainId,
     Record<
         // transaction id
@@ -31,7 +30,7 @@ type TransactionWatcher<ChainId, Transaction> = Record<
     >
 >
 
-class Watcher<ChainId, Transaction> {
+class Watcher<ChainId extends PropertyKey, Transaction> {
     static MAX_ITEM_SIZE = 40
 
     private timer: NodeJS.Timeout | null = null
@@ -52,7 +51,6 @@ class Watcher<ChainId, Transaction> {
     private async setStorage(chainId: ChainId, id: string, item: TransactionWatcherItem<ChainId, Transaction>) {
         await this.storage.setValue({
             ...this.storage.value,
-            // @ts-ignore
             [chainId]: {
                 ...this.getStorage(chainId),
                 [item.id]: item,
@@ -63,7 +61,6 @@ class Watcher<ChainId, Transaction> {
     private async deleteStorage(chainId: ChainId, id: string) {
         await this.storage.setValue({
             ...this.storage.value,
-            // @ts-ignore
             [chainId]: omit(this.getStorage(chainId), [id]),
         })
     }
@@ -165,7 +162,7 @@ class Watcher<ChainId, Transaction> {
     }
 }
 
-export class TransactionWatcherState<ChainId, Transaction>
+export class TransactionWatcherState<ChainId extends PropertyKey, Transaction>
     implements Web3TransactionWatcherState<ChainId, Transaction>
 {
     private watchers: Map<ChainId, Watcher<ChainId, Transaction>> = new Map()

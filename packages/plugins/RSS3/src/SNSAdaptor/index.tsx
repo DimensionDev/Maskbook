@@ -10,7 +10,7 @@ import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
 import { setupContext } from './context.js'
-import { FeedPageProps, FeedsPage } from './FeedsPage.js'
+import { type FeedPageProps, FeedsPage } from './FeedsPage.js'
 
 function shouldDisplay(_?: SocialIdentity, socialAccount?: SocialAccount<Web3Helper.ChainIdAll>) {
     return socialAccount?.pluginID === NetworkPluginID.PLUGIN_EVM

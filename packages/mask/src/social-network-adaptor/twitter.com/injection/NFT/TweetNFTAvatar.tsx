@@ -1,14 +1,15 @@
-import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { DOMProxy, type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { NFTBadgeTweet, NFTAvatarMiniClip, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
 import { MaskMessages, createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { searchRetweetAvatarSelector, searchTweetAvatarSelector } from '../../utils/selector.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
+import { noop } from 'lodash-es'
 
-function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
+function _(main: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(main()).useForeach((ele, _, meta) => {
-            let remover = () => {}
+            let remover = noop
             const remove = () => remover()
 
             const run = async () => {

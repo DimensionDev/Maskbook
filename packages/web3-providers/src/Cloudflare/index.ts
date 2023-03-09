@@ -1,7 +1,7 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { currySameAddress } from '@masknet/web3-shared-base'
 import {
-    ChainId,
+    type ChainId,
     formatEthereumAddress,
     getTokenAssetBaseURLConstants,
     isNativeTokenAddress,

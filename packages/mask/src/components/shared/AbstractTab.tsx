@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { Tabs, Tab, Box, BoxProps, Paper } from '@mui/material'
+import { Tabs, Tab, Box, type BoxProps, Paper } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
     tab: {

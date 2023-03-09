@@ -1,12 +1,12 @@
 import { List, ListItem, Typography } from '@mui/material'
 import { makeStyles, Boundary, useCustomSnackbar } from '@masknet/theme'
 import type { FileInfo } from '../../types.js'
-import { FC, HTMLProps, useCallback, useRef } from 'react'
+import { type FC, type HTMLProps, useCallback, useRef } from 'react'
 import {
     DisplayingFile,
-    DisplayingFileProps,
+    type DisplayingFileProps,
     ManageableFile,
-    ManageableFileProps,
+    type ManageableFileProps,
     SelectableFile,
     UploadingFile,
 } from './Files/index.js'

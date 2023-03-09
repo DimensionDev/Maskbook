@@ -9,8 +9,9 @@ import {
     DialogContent,
 } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
+import type { Permissions } from 'webextension-polyfill'
 
-export interface RequestPermissionProps extends browser.permissions.Permissions {
+export interface RequestPermissionProps extends Permissions.AnyPermissions {
     onRequestApprove(): void
     onCancel(): void
 }

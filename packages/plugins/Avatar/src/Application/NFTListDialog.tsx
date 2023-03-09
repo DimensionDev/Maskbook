@@ -9,14 +9,14 @@ import { isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { first, uniqBy } from 'lodash-es'
-import { FC, useCallback, useEffect, useMemo, useState } from 'react'
+import { type FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUpdateEffect } from 'react-use'
 import { SUPPORTED_CHAIN_IDS, supportPluginIds } from '../constants.js'
 import { useAvatarManagement } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
 import { AddNFT } from '../SNSAdaptor/AddNFT.js'
-import { AllChainsNonFungibleToken, PFP_TYPE } from '../types.js'
+import { type AllChainsNonFungibleToken, PFP_TYPE } from '../types.js'
 import { toPNG } from '../utils/index.js'
 import { NFTListPage } from './NFTListPage.js'
 import { RoutePaths } from './Routes.js'
@@ -236,7 +236,7 @@ export const NFTListDialog: FC = () => {
         (x) => x.contract?.address?.toLowerCase() + x.tokenId,
     ).filter((x) => (actualChainId ? x.chainId === actualChainId : true))
 
-    const NoNFTList = () => {
+    const getNoNFTList = () => {
         if (loadError && !collectibles.length) {
             return Retry
         }
@@ -278,7 +278,7 @@ export const NFTListDialog: FC = () => {
                             tokens={tokensInList}
                             tokenInfo={selectedToken}
                             onChange={setSelectedToken}
-                            children={NoNFTList()}
+                            children={getNoNFTList()}
                             nextPage={nextPage}
                             loadError={!!loadError}
                             loadFinish={loadFinish}

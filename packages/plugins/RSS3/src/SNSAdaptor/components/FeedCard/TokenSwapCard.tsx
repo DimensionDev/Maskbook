@@ -7,7 +7,7 @@ import { useI18N } from '../../../locales/index.js'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardType } from '../share.js'
-import { CardFrame, FeedCardProps } from '../base.js'
+import { CardFrame, type FeedCardProps } from '../base.js'
 import { formatValue, Label } from './common.js'
 
 const useStyles = makeStyles<void, 'tokenIcon' | 'verboseToken'>()((theme, _, refs) => ({
@@ -87,7 +87,7 @@ export const TokenSwapCard: FC<TokenSwapCardProps> = ({ feed, ...rest }) => {
                     }}
                     components={{
                         user: <Label title={feed.owner} />,
-                        platform: <Label title={feed.platform!} />,
+                        platform: <Label title={feed.platform} />,
                         bold: <Label />,
                     }}
                 />

@@ -1,10 +1,10 @@
-import { FC, memo, MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { type FC, memo, type MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useIntersectionObserver } from '@react-hookz/web'
 import { fill } from 'lodash-es'
 import { TokenIcon } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { isSameAddress, NonFungibleCollection } from '@masknet/web3-shared-base'
+import { isSameAddress, type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
@@ -239,7 +239,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                                             strong: <strong />,
                                         }}
                                         values={{
-                                            claimedShares: bitStatusList.filter((x) => x).length.toString(),
+                                            claimedShares: bitStatusList.filter(Boolean).length.toString(),
                                             shares: patchedHistory.shares.toString(),
                                         }}
                                     />

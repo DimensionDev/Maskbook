@@ -52,8 +52,8 @@ export async function getLocalImplementationExotic<T extends object>(
             get(_, key) {
                 if (key === 'then') return
                 const target = RPCCache.get(ref)
-                // @ts-ignore
-                return target?.[key]
+                if (!target) return undefined
+                return Reflect.get(target, key)
             },
             getOwnPropertyDescriptor(_, key) {
                 const target = RPCCache.get(ref)

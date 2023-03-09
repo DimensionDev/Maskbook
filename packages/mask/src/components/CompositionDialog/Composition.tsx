@@ -10,7 +10,7 @@ import Services from '../../extension/service.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, useI18N } from '../../utils/index.js'
 import { useCurrentIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
-import { CompositionDialogUI, CompositionRef, E2EUnavailableReason } from './CompositionUI.js'
+import { CompositionDialogUI, type CompositionRef, E2EUnavailableReason } from './CompositionUI.js'
 import { useCompositionClipboardRequest } from './useCompositionClipboardRequest.js'
 import { useRecipientsList } from './useRecipientsList.js'
 import { useSubmit } from './useSubmit.js'
@@ -95,7 +95,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
 
             setOpen(open)
             setReason(reason)
-            setIsOpenFromApplicationBoard(Boolean(options?.isOpenFromApplicationBoard))
+            setIsOpenFromApplicationBoard(!!options?.isOpenFromApplicationBoard)
             setInitialMetas(options?.initialMetas ?? EMPTY_OBJECT)
             if (content) UI.current?.setMessage(content)
             if (options?.target) UI.current?.setEncryptionKind(options.target)

@@ -5,14 +5,14 @@ import { omit } from 'lodash-es'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useWeb3Connection, useWeb3 } from '@masknet/web3-hooks-base'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
-import { FungibleToken, isLessThan, toFixed } from '@masknet/web3-shared-base'
+import { type FungibleToken, isLessThan, toFixed } from '@masknet/web3-shared-base'
 import {
-    ChainId,
+    type ChainId,
     SchemaType,
     useTokenConstants,
     decodeEvents,
     ContractTransaction,
-    GasConfig,
+    type GasConfig,
 } from '@masknet/web3-shared-evm'
 import { useRedPacketContract } from './useRedPacketContract.js'
 
@@ -159,7 +159,7 @@ export function useCreateCallback(
                 from: account,
                 value: toFixed(token.schema === SchemaType.Native ? paramsObj.total : 0),
                 gas,
-                ...(gasOption ?? {}),
+                ...gasOption,
             },
         )
 

@@ -1,7 +1,13 @@
 import { toHex } from 'web3-utils'
 import { EthereumAddress } from 'wallet.ts'
 import { Web3 } from '@masknet/web3-providers'
-import { ChainId, EthereumMethodType, ProviderType, Middleware, ConnectionContext } from '@masknet/web3-shared-evm'
+import {
+    type ChainId,
+    EthereumMethodType,
+    ProviderType,
+    type Middleware,
+    type ConnectionContext,
+} from '@masknet/web3-shared-evm'
 
 export class Nonce implements Middleware<ConnectionContext> {
     static INITIAL_NONCE = -1

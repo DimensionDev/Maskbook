@@ -1,4 +1,4 @@
-import { DashboardRoutes, PopupRoutes } from '@masknet/shared-base'
+import { type DashboardRoutes, PopupRoutes } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import { MaskMessages } from '../../../shared/index.js'
 
@@ -36,7 +36,7 @@ async function openWindow(url: string): Promise<void> {
             // has no physical dimensions
 
             if (process.env.manifest === '2') {
-                // @ts-expect-error
+                // @ts-expect-error the project is configured to run in a worker, but mv2 is actually a page env.
                 const { screenX, screenY, outerWidth } = window
                 top = Math.max(screenY, 0)
                 left = Math.max(screenX + (outerWidth - 350), 0)

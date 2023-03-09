@@ -6,7 +6,7 @@ import { SourceType } from '@masknet/web3-shared-base'
 import { Box, Button, Tooltip, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils/index.js'
-import { ChangeEventOptions, CollectibleItem, SelectableProps } from './CollectibleItem.js'
+import { type ChangeEventOptions, CollectibleItem, type SelectableProps } from './CollectibleItem.js'
 import { CollectibleListContext } from './CollectibleListContext.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 import type { CollectibleGridProps } from '../../types.js'
@@ -105,10 +105,11 @@ export function CollectibleList(props: CollectibleListProps) {
 
     const listRef = useRef<typeof Box>(null)
 
+    const context = useMemo(() => ({ collectiblesRetry: retry }), [retry])
     return (
-        <CollectibleListContext.Provider value={{ collectiblesRetry: retry }}>
+        <CollectibleListContext.Provider value={context}>
             <Box className={classes.list} ref={listRef}>
-                {loading && <LoadingSkeleton className={classes.root} />}
+                {loading ? <LoadingSkeleton className={classes.root} /> : null}
                 {error || (collectibles.length === 0 && !loading) ? (
                     <Box className={classes.text}>
                         <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>

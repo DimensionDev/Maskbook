@@ -2,7 +2,7 @@ import { memo } from 'react'
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
 import { type PostInfo, PostInfoProvider } from '@masknet/plugin-infra/content-script'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
-import { PostInspector, PostInspectorProps } from '../../../components/InjectedComponents/PostInspector.js'
+import { PostInspector, type PostInspectorProps } from '../../../components/InjectedComponents/PostInspector.js'
 import { makeStyles } from '@masknet/theme'
 import { noop } from 'lodash-es'
 

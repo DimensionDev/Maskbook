@@ -11,8 +11,8 @@ import {
 } from 'react'
 import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
 import { Icons } from '@masknet/icons'
-import { CompositionContext, CompositionType } from '@masknet/plugin-infra/content-script'
-import { EncryptionTargetType, ProfileInformation } from '@masknet/shared-base'
+import { CompositionContext, type CompositionType } from '@masknet/plugin-infra/content-script'
+import { EncryptionTargetType, type ProfileInformation } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
 import { LoadingButton } from '@mui/lab'
@@ -22,8 +22,8 @@ import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients.
 import { CharLimitIndicator } from './CharLimitIndicator.js'
 import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMethodSelector.js'
 import { EncryptionTargetSelector } from './EncryptionTargetSelector.js'
-import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender.js'
-import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor.js'
+import { PluginEntryRender, type PluginEntryRenderRef } from './PluginEntryRender.js'
+import { TypedMessageEditor, type TypedMessageEditorRef } from './TypedMessageEditor.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -269,14 +269,14 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
             </div>
             <div className={classes.actions}>
                 {props.maxLength ? <CharLimitIndicator value={currentPostSize} max={props.maxLength} /> : null}
-                {props.requireClipboardPermission && !props.hasClipboardPermission && (
+                {props.requireClipboardPermission && !props.hasClipboardPermission ? (
                     <Button
                         variant="roundedContained"
                         onClick={props.onRequestClipboardPermission}
                         sx={{ marginRight: 1 }}>
                         {t('post_dialog_enable_paste_auto')}
                     </Button>
-                )}
+                ) : null}
                 <LoadingButton
                     style={{ opacity: 1 }}
                     disabled={!submitAvailable}

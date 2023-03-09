@@ -7,16 +7,16 @@ import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import type { AaveLendingPool } from '@masknet/web3-contracts/types/AaveLendingPool.js'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
-import { FungibleToken, pow10, ZERO } from '@masknet/web3-shared-base'
+import { type FungibleToken, pow10, ZERO } from '@masknet/web3-shared-base'
 import {
-    ChainId,
+    type ChainId,
     createContract,
     getAaveConstants,
-    SchemaType,
+    type SchemaType,
     TransactionEventType,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
-import { ProtocolType, SavingsProtocol } from '../types.js'
+import { ProtocolType, type SavingsProtocol } from '../types.js'
 
 export class AAVEProtocol implements SavingsProtocol {
     static DEFAULT_APR = '0.17'
@@ -141,7 +141,7 @@ export class AAVEProtocol implements SavingsProtocol {
             const contract = createContract<ERC20>(web3, aTokenId || ZERO_ADDRESS, ERC20ABI as AbiItem[])
             this._balance = new BigNumber((await contract?.methods.balanceOf(account).call()) ?? '0')
         } catch (error) {
-            console.error('AAVE BALANCE ERROR: ', error)
+            console.error('AAVE BALANCE ERROR:', error)
             this._balance = ZERO
         }
     }
@@ -155,7 +155,7 @@ export class AAVEProtocol implements SavingsProtocol {
 
             return new BigNumber(gasEstimate || 0)
         } catch (error) {
-            console.error('AAVE deposit estimate ERROR: ', error)
+            console.error('AAVE deposit estimate ERROR:', error)
             return ZERO
         }
     }

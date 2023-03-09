@@ -1,5 +1,5 @@
-/* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
-import { EC_Key, PayloadParseResult, EC_KeyCurveEnum, Signature } from '../payload/index.js'
+/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
+import { type EC_Key, type PayloadParseResult, EC_KeyCurveEnum, type Signature } from '../payload/index.js'
 import { CryptoException, PayloadException } from '../types/index.js'
 import { Result, Ok, Some } from 'ts-results-es'
 import {

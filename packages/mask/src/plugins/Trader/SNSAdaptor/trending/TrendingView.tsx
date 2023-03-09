@@ -4,7 +4,7 @@ import { TrendingViewContext } from './context.js'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { useChainContext, useNonFungibleAssetsByCollection, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
-import { createFungibleToken, SocialIdentity, TokenType } from '@masknet/web3-shared-base'
+import { createFungibleToken, type SocialIdentity, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTList, PluginCardFrameMini } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID, getSiteType } from '@masknet/shared-base'
@@ -250,7 +250,7 @@ export function TrendingView(props: TrendingViewProps) {
                   }
                 : undefined,
         ]
-        return compact(configs).map((x) => <Tab value={x.key} key={x!.key} label={x.label} />)
+        return compact(configs).map((x) => <Tab value={x.key} key={x.key} label={x.label} />)
     }, [t, isSwappable, isNFT])
     // #endregion
 
@@ -405,7 +405,7 @@ export function TrendingView(props: TrendingViewProps) {
                     </Web3ContextProvider>
                 ) : null}
 
-                {isNFT && (
+                {isNFT ? (
                     <Box className={cx(classes.nftItems, currentTab === ContentTabs.NFTItems ? '' : classes.hidden)}>
                         <NFTList
                             pluginID={result.pluginID}
@@ -417,7 +417,7 @@ export function TrendingView(props: TrendingViewProps) {
                             gap={16}
                         />
                     </Box>
-                )}
+                ) : null}
             </Stack>
         </TrendingViewDeck>
     )

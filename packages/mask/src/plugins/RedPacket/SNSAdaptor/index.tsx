@@ -4,7 +4,7 @@ import {
     SchemaType,
     chainResolver,
     networkResolver,
-    NetworkType,
+    type NetworkType,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import { Trans } from 'react-i18next'

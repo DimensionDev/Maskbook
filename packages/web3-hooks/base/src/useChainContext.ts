@@ -1,5 +1,4 @@
 import type { NetworkPluginID } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from './useContext.js'
 
 export function useCurrentAccount<T extends NetworkPluginID>(pluginID?: T) {
@@ -9,15 +8,15 @@ export function useCurrentAccount<T extends NetworkPluginID>(pluginID?: T) {
 
 export function useCurrentChainId<T extends NetworkPluginID>(pluginID?: T) {
     const web3 = useChainContext()
-    return web3.chainId as Web3Helper.Definition[T]['ChainId'] | undefined
+    return web3.chainId
 }
 
 export function useCurrentProviderType<T extends NetworkPluginID>(pluginID?: T) {
     const web3 = useChainContext()
-    return web3.providerType as Web3Helper.Definition[T]['ProviderType'] | undefined
+    return web3.providerType
 }
 
 export function useCurrentNetworkType<T extends NetworkPluginID>(pluginID?: T) {
     const web3 = useChainContext()
-    return web3.networkType as Web3Helper.Definition[T]['NetworkType'] | undefined
+    return web3.networkType
 }

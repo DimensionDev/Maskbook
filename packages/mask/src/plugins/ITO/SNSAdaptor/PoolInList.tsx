@@ -5,8 +5,8 @@ import { useSubscription } from 'use-subscription'
 import formatDateTime from 'date-fns/format'
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { SchemaType, chainResolver, ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { isZero, formatBalance, FungibleToken, TokenType } from '@masknet/web3-shared-base'
+import { SchemaType, chainResolver, type ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { isZero, formatBalance, type FungibleToken, TokenType } from '@masknet/web3-shared-base'
 import {
     Box,
     Card,
@@ -25,7 +25,7 @@ import { useI18N } from '../../../utils/index.js'
 import { MSG_DELIMITER } from '../constants.js'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
 import { usePoolTradeInfo } from './hooks/usePoolTradeInfo.js'
-import { ITO_Status, JSON_PayloadFromChain, JSON_PayloadInMask, PoolFromNetwork } from '../types.js'
+import { ITO_Status, type JSON_PayloadFromChain, type JSON_PayloadInMask, type PoolFromNetwork } from '../types.js'
 import { useDestructCallback } from './hooks/useDestructCallback.js'
 import { PersistentStorages } from '../../../../shared/index.js'
 import { useChainContext, useFungibleToken, useFungibleTokens } from '@masknet/web3-hooks-base'
@@ -197,41 +197,6 @@ export function PoolInList(props: PoolInListProps) {
     const base = new BigNumber(pool.total).minus(pool.total_remaining).dividedBy(pool.total).toNumber()
     const progress = 100 * base
 
-    const StatusButton = () => {
-        return (
-            <>
-                {loadingTradeInfo || loadingAvailability ? null : canWithdraw ? (
-                    <ActionButton
-                        loading={destructing}
-                        disabled={destructing}
-                        fullWidth
-                        size="small"
-                        onClick={() => destruct(pool.pid)}>
-                        {t('plugin_ito_withdraw')}
-                    </ActionButton>
-                ) : canSend ? (
-                    <ActionButton
-                        fullWidth
-                        size="small"
-                        onClick={() =>
-                            onSend?.(
-                                omit({ ...pool, token: poolToken, exchange_tokens: exchangeTokens }, [
-                                    'token_addresses',
-                                    'exchange_token_addresses',
-                                ]) as JSON_PayloadInMask,
-                            )
-                        }>
-                        {t('plugin_ito_list_button_send')}
-                    </ActionButton>
-                ) : isWithdrawn ? (
-                    <ActionButton fullWidth size="small" disabled>
-                        {t('plugin_ito_withdrawn')}
-                    </ActionButton>
-                ) : null}
-            </>
-        )
-    }
-
     return poolToken && exchangeTokens ? (
         <div className={classes.top}>
             <Card className={classes.root} variant="outlined">
@@ -268,7 +233,34 @@ export function PoolInList(props: PoolInListProps) {
                             ) : null}
                         </Box>
                         <Box className={classes.button}>
-                            <StatusButton />
+                            {loadingTradeInfo || loadingAvailability ? null : canWithdraw ? (
+                                <ActionButton
+                                    loading={destructing}
+                                    disabled={destructing}
+                                    fullWidth
+                                    size="small"
+                                    onClick={() => destruct(pool.pid)}>
+                                    {t('plugin_ito_withdraw')}
+                                </ActionButton>
+                            ) : canSend ? (
+                                <ActionButton
+                                    fullWidth
+                                    size="small"
+                                    onClick={() =>
+                                        onSend?.(
+                                            omit({ ...pool, token: poolToken, exchange_tokens: exchangeTokens }, [
+                                                'token_addresses',
+                                                'exchange_token_addresses',
+                                            ]) as JSON_PayloadInMask,
+                                        )
+                                    }>
+                                    {t('plugin_ito_list_button_send')}
+                                </ActionButton>
+                            ) : isWithdrawn ? (
+                                <ActionButton fullWidth size="small" disabled>
+                                    {t('plugin_ito_withdrawn')}
+                                </ActionButton>
+                            ) : null}
                         </Box>
                     </Box>
                     <Box className={classes.progress}>

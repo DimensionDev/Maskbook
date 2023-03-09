@@ -10,7 +10,7 @@ import { memo } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { useManagers } from '../../hooks/useManagers.js'
 import { useI18N } from '../../locales/index.js'
-import { ManagerAccount, ManagerAccountType } from '../../type.js'
+import { type ManagerAccount, ManagerAccountType } from '../../type.js'
 
 export interface ManagePopoverProps {
     open: boolean

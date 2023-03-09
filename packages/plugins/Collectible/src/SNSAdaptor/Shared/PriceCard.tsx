@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { Skeleton, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NonFungibleTokenOrder, formatBalance, formatCurrency, isZero } from '@masknet/web3-shared-base'
+import { type NonFungibleTokenOrder, formatBalance, formatCurrency, isZero } from '@masknet/web3-shared-base'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { SourceProviderSwitcher } from '@masknet/shared'
 import { Context } from '../Context/index.js'
@@ -114,12 +114,12 @@ export function PriceCard(props: PriceCardProps) {
                                 )}
                             </strong>
                         </Typography>
-                        {topOffer?.price?.usd && (
+                        {topOffer?.price?.usd ? (
                             <Typography className={classes.textBase}>
                                 ({priceUSD.includes('<') || isZero(topOffer?.price?.usd) ? '' : '\u2248'}
                                 {priceUSD})
                             </Typography>
-                        )}
+                        ) : null}
                     </div>
                 )}
                 <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} />

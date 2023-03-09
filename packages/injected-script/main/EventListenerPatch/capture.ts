@@ -43,6 +43,8 @@ defineFunctionOnContentObject(
     },
 )
 
+const noop = () => {}
+Object.freeze(noop)
 function normalizeAddEventListenerArgs(
     args: Parameters<EventTarget['addEventListener']>,
 ): EventListenerDescriptor & { type: string; f: EventListener } {
@@ -51,7 +53,7 @@ function normalizeAddEventListenerArgs(
     const listener = args[1]
     const options = args[2]
 
-    let f: EventListener = () => {}
+    let f: EventListener = noop
     if (typeof listener === 'function') f = listener
     else if (typeof listener === 'object' && listener !== null) {
         const _f = listener.handleEvent
@@ -77,7 +79,7 @@ export function dispatchEventRaw<T extends Event>(
     overwrites: Partial<T> = {},
 ) {
     let currentTarget: null | Node | Document = target
-    const event = getMockedEvent(eventBase, () => (isTwitter() ? target! : currentTarget!), overwrites)
+    const event = getMockedEvent(eventBase, () => (isTwitter() ? target : currentTarget) as any, overwrites)
     // Note: in firefox, "event" is "Opaque". Displayed as an empty object.
     const type = eventBase.type
     if (!CapturingEvents.has(type))
@@ -135,7 +137,7 @@ export function dispatchEventRaw<T extends Event>(
                     // HACK: https://github.com/DimensionDev/Maskbook/pull/4970/
                     if (key === 'currentTarget' || (key === 'target' && isTwitter()))
                         return unwrapXRayVision(currentTarget())
-                    return (source as any)[key] ?? (unwrapXRayVision(target) as any)[key]
+                    return (source as any)[key] ?? unwrapXRayVision(target)[key]
                 },
             }),
         )

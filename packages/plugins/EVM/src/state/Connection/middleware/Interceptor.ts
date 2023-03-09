@@ -1,4 +1,4 @@
-import { Composer, ConnectionContext, Middleware, ProviderType } from '@masknet/web3-shared-evm'
+import { Composer, type ConnectionContext, type Middleware, ProviderType } from '@masknet/web3-shared-evm'
 import { SmartPayAccount, SmartPayBundler, SmartPayFunder } from '@masknet/web3-providers'
 import { NoneWallet } from '../interceptors/None.js'
 import { MaskWallet } from '../interceptors/MaskWallet.js'

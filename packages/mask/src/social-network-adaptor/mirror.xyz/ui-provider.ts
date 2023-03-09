@@ -11,6 +11,7 @@ import { useInjectedDialogClassesOverwriteMirror } from './customization/ui-over
 import { injectPostActionsAtMirror } from './injection/PostActions/index.js'
 import { PostProviderMirror } from './collecting/posts.js'
 import { ThemeSettingsProviderMirror } from './collecting/theme.js'
+import { useThemeMirrorVariant } from './customization/custom.js'
 
 // TODO: access chrome permission
 const define: SocialNetworkUI.Definition = {
@@ -34,6 +35,7 @@ const define: SocialNetworkUI.Definition = {
                 classes: useInjectedDialogClassesOverwriteMirror,
             },
         },
+        useTheme: useThemeMirrorVariant,
     },
     init(signal) {
         const profiles = stateCreator.profiles()

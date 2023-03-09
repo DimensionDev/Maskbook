@@ -61,7 +61,7 @@ async function fixDBInconsistency(diagnosis: Diagnosis, t: ReadwriteFullPersonaD
 async function* checkFullPersonaDBConsistency(
     checkRange: 'full check' | Map<ProfileIdentifier | PersonaIdentifier, any>,
     t: ReadwriteFullPersonaDBTransaction,
-): AsyncGenerator<Diagnosis, void, unknown> {
+): AsyncGenerator<Diagnosis, void> {
     for await (const persona of t.objectStore('personas')) {
         const personaID = ECKeyIdentifier.from(persona.key)
         if (personaID.none) {
@@ -85,7 +85,7 @@ async function* checkFullPersonaDBConsistency(
 async function* checkPersonaLink(
     personaID: PersonaIdentifier,
     t: ReadwriteFullPersonaDBTransaction,
-): AsyncGenerator<Diagnosis, void, unknown> {
+): AsyncGenerator<Diagnosis, void> {
     const rec = await t.objectStore('personas').get(personaID.toText())
     const linkedProfiles = rec?.linkedProfiles
     if (!linkedProfiles) return
@@ -109,7 +109,7 @@ async function* checkPersonaLink(
 async function* checkProfileLink(
     profile: ProfileIdentifier,
     t: ReadwriteFullPersonaDBTransaction,
-): AsyncGenerator<Diagnosis, void, unknown> {
+): AsyncGenerator<Diagnosis, void> {
     const rec = await t.objectStore('profiles').get(profile.toText())
     const invalidLinkedPersona = rec?.linkedPersona
     if (!invalidLinkedPersona) return

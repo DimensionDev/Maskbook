@@ -5,7 +5,7 @@ import {
     ObservableSet,
     parseURLs,
     PostIdentifier,
-    ProfileIdentifier,
+    type ProfileIdentifier,
     createSubscriptionFromValueRef,
     SubscriptionDebug as debug,
     mapSubscription,
@@ -23,18 +23,17 @@ import type {
 import {
     extractTextFromTypedMessage,
     makeTypedMessageTupleFromList,
-    type TypedMessage,
     type TypedMessageTuple,
 } from '@masknet/typed-message'
 import type { Subscription } from 'use-subscription'
 import { activatedSocialNetworkUI } from '../ui.js'
 import { resolveFacebookLink } from '../../social-network-adaptor/facebook.com/utils/resolveFacebookLink.js'
 import type { SupportedPayloadVersions } from '@masknet/encryption'
-import { difference } from 'lodash-es'
+import { difference, noop } from 'lodash-es'
 
 export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSActions) {
     return function createPostContext(opt: PostContextCreation): PostContext {
-        const cancel: Array<Function | undefined> = []
+        const cancel: Array<() => void> = []
         opt.signal?.addEventListener('abort', () => cancel.forEach((fn) => fn?.()))
 
         // #region Mentioned links
@@ -51,7 +50,8 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                 else links.value = text
             }
             cancel.push(opt.rawMessage.subscribe(evaluate))
-            cancel.push(opt.postMentionedLinksProvider?.subscribe(evaluate))
+            const f = opt.postMentionedLinksProvider?.subscribe(evaluate)
+            f && cancel.push(f)
             return createSubscriptionFromValueRef(links)
         })()
         // #endregion
@@ -108,7 +108,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                 opt.postImagesProvider ||
                 debug({
                     getCurrentValue: () => EMPTY_LIST,
-                    subscribe: () => () => {},
+                    subscribe: () => noop,
                 }),
 
             rawMessage: opt.rawMessage,
@@ -148,7 +148,7 @@ export function createRefsForCreatePostContext() {
     const postBy = new ValueRef<ProfileIdentifier | null>(null)
     const postCoAuthors = new ValueRef<PostContextCoAuthor[]>([])
     const postID = new ValueRef<string | null>(null)
-    const postMessage = new ValueRef<TypedMessageTuple<readonly TypedMessage[]>>(makeTypedMessageTupleFromList())
+    const postMessage = new ValueRef<TypedMessageTuple>(makeTypedMessageTupleFromList())
     const postMetadataImages = new ObservableSet<string>()
     const postMetadataMentionedLinks = new ObservableMap<unknown, string>()
     const subscriptions: Omit<PostContextCreation, 'rootElement' | 'actionsElement' | 'suggestedInjectionPoint'> = {

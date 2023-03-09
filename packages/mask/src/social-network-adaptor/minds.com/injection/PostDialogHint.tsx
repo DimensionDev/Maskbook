@@ -1,4 +1,4 @@
-import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useCallback } from 'react'

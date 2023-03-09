@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { GeneratedIcon, Icons } from '@masknet/icons'
+import { type GeneratedIcon, Icons } from '@masknet/icons'
 import { EnhanceableSite, NextIDPlatform } from '@masknet/shared-base'
 
 export const SOCIAL_MEDIA_ICON_MAPPING: Record<EnhanceableSite | string, ReactNode> = {

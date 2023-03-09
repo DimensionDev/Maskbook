@@ -84,7 +84,7 @@ namespace Version38Or39 {
                 main(subscribeGunMapData([postHash[0]], isValidData, abortSignal)),
             ]).then(() => queue.stop())
 
-            async function main(keyProvider: AsyncGenerator<unknown>) {
+            async function main(keyProvider: AsyncGenerator) {
                 for await (const data of keyProvider) Promise.resolve(data).then(emit, noop)
             }
             function emit(result: unknown) {
@@ -240,7 +240,7 @@ namespace Version37 {
             // future results
             main(subscribeGunMapData([keyPartition], isValidData, abortSignal))
 
-            async function main(keyProvider: AsyncGenerator<unknown>) {
+            async function main(keyProvider: AsyncGenerator) {
                 for await (const data of keyProvider) Promise.resolve(data).then(emit, noop)
                 queue.stop()
             }

@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import type { BigNumber } from 'bignumber.js'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
-import { ChainId, getNftRedPacketConstants, chainResolver } from '@masknet/web3-shared-evm'
+import { type ChainId, getNftRedPacketConstants, chainResolver } from '@masknet/web3-shared-evm'
 import { useWallet, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { RedPacket, TheGraphRedPacket } from '@masknet/web3-providers'
 import { Interface } from '@ethersproject/abi'

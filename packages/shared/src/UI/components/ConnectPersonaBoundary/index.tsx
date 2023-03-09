@@ -1,9 +1,9 @@
-import { memo, ReactNode, useCallback, useMemo } from 'react'
+import { memo, type ReactNode, useCallback, useMemo } from 'react'
 import { Button, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import type { DashboardRoutes, MaskEvents, PersonaInformation, PluginID } from '@masknet/shared-base'
-import { PersonaConnectStatus, useCurrentPersonaConnectStatus, useSharedI18N } from '../../../index.js'
+import { type PersonaConnectStatus, useCurrentPersonaConnectStatus, useSharedI18N } from '../../../index.js'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import type { UnboundedRegistry, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 
@@ -122,7 +122,7 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
                 <Stack style={{ pointerEvents: status.action ? 'none' : 'auto' }} display="inline-flex">
                     {actionComponent}
                 </Stack>
-                {(status.action || statusLoading) && <Stack className={classes.mask} display="inline-flex" />}
+                {status.action || statusLoading ? <Stack className={classes.mask} display="inline-flex" /> : null}
             </Stack>
         )
     },

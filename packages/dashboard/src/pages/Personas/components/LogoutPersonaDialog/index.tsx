@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
-import { DashboardRoutes, PersonaIdentifier } from '@masknet/shared-base'
+import { DashboardRoutes, type PersonaIdentifier } from '@masknet/shared-base'
 import { MaskDialog } from '@masknet/theme'
 import { useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'

@@ -1,13 +1,13 @@
 import { safeUnreachable } from '@masknet/kit'
 import {
-    AESCryptoKey,
-    AESJsonWebKey,
+    type AESCryptoKey,
+    type AESJsonWebKey,
     ECKeyIdentifier,
     ECKeyIdentifierFromJsonWebKey,
-    EC_Private_JsonWebKey,
-    EC_Public_CryptoKey,
-    EC_Public_JsonWebKey,
-    PersonaIdentifier,
+    type EC_Private_JsonWebKey,
+    type EC_Public_CryptoKey,
+    type EC_Public_JsonWebKey,
+    type PersonaIdentifier,
     ProfileIdentifier,
 } from '@masknet/shared-base'
 import {
@@ -16,13 +16,14 @@ import {
     createOrUpdatePersonaDB,
     createPersonaDB,
     createPersonaDBReadonlyAccess,
-    FullPersonaDBTransaction,
-    LinkedProfileDetails,
-    PersonaRecord,
+    type FullPersonaDBTransaction,
+    type LinkedProfileDetails,
+    type PersonaRecord,
     queryPersonaByProfileDB,
     queryPersonasWithPrivateKey,
     queryProfileDB,
 } from './db.js'
+import { noop } from 'lodash-es'
 
 // #region Local key helpers
 /**
@@ -60,7 +61,7 @@ export async function decryptByLocalKey(
         // TODO: We may push every local key we owned to the candidate list so we can also decrypt when authorHint is null, but that might be a performance pitfall when localKey field is not indexed.
     }
 
-    let check = () => {}
+    let check = noop
     return Promise.any(
         candidateKeys.map(async (key): Promise<ArrayBuffer> => {
             const k = await crypto.subtle.importKey('jwk', key, { name: 'AES-GCM', length: 256 }, false, ['decrypt'])
@@ -99,8 +100,8 @@ async function getLocalKeyOf(id: ProfileIdentifier, tx: FullPersonaDBTransaction
 
 // #region ECDH
 export async function deriveAESByECDH(pub: EC_Public_CryptoKey, of?: ProfileIdentifier | PersonaIdentifier) {
-    // @ts-expect-error
-    const curve = pub.algorithm.namedCurve || ''
+    // Note: the correct type should be EcKeyAlgorithm but it is missing in worker dts
+    const curve = (pub.algorithm as EcKeyImportParams).namedCurve || ''
     const sameCurvePrivateKeys = new Map<ECKeyIdentifier, EC_Private_JsonWebKey>()
 
     await createPersonaDBReadonlyAccess(async (tx) => {

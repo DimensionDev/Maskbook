@@ -1,10 +1,10 @@
-import { ChangeEvent, memo, useCallback, useMemo } from 'react'
+import { type ChangeEvent, memo, useCallback, useMemo } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { alpha, Box, Chip, chipClasses, lighten, Typography, InputBase } from '@mui/material'
 import { isDashboardPage } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatBalance, formatCurrency, isZero } from '@masknet/web3-shared-base'
-import { FormattedBalance, SelectTokenChip, SelectTokenChipProps } from '@masknet/shared'
+import { FormattedBalance, SelectTokenChip, type SelectTokenChipProps } from '@masknet/shared'
 import { useI18N } from '../../../../../utils/index.js'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 

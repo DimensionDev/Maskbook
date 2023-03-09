@@ -1,4 +1,4 @@
-import { GeneratedIcon, Icons } from '@masknet/icons'
+import { type GeneratedIcon, Icons } from '@masknet/icons'
 import { PluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 
@@ -20,7 +20,7 @@ export const TENANTS = [
     'ZIL',
 ] as const
 export const SUPPORTED_TENANTS = ['ETH']
-export type TenantTypes = typeof TENANTS[number]
+export type TenantTypes = (typeof TENANTS)[number]
 
 export const TenantToChainIconMap: Record<TenantTypes, GeneratedIcon> = {
     ALGORAND: Icons.Algorand,

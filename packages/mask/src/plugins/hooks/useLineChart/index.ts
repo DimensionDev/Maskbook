@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-import { useEffect, RefObject } from 'react'
+import { useEffect, type RefObject } from 'react'
 import stringify from 'json-stable-stringify'
 import type { Dimension } from '../useDimension.js'
 import format from 'date-fns/format'
@@ -17,7 +17,7 @@ export function useLineChart(
     opts: {
         color?: string
         tickFormat?: string
-        formatTooltip?: Function
+        formatTooltip?: (value: number) => number | string
     },
 ) {
     const theme = useTheme()
@@ -106,11 +106,10 @@ export function useLineChart(
             .attr('stroke-width', 2)
             .attr(
                 'd',
-                // @ts-ignore
                 d3
                     .line()
-                    .x((d) => x((d as any).date))
-                    .y((d) => y((d as any).value)),
+                    .x((d) => x((d as any).date)!)
+                    .y((d) => y((d as any).value)!) as any,
             )
 
         // create tooltip
@@ -213,7 +212,6 @@ export function useLineChart(
 
         // add tooltip
         d3.select(svgRef.current).on('mousemove', function () {
-            // eslint-disable-next-line @typescript-eslint/no-invalid-this
             const mx = d3.mouse(this)[0]
             if (mx < left - 10 || mx > left + contentWidth) {
                 // mouse not in the content view

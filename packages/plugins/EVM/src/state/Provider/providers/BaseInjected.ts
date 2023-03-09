@@ -2,7 +2,7 @@ import { first } from 'lodash-es'
 import type { RequestArguments } from 'web3-core'
 import { isEthereumInjected } from '@masknet/shared-base'
 import type { InjectedProvider } from '@masknet/injected-script'
-import { ChainId, EthereumMethodType, ProviderType, Web3Provider } from '@masknet/web3-shared-evm'
+import { type ChainId, EthereumMethodType, type ProviderType, type Web3Provider } from '@masknet/web3-shared-evm'
 import type { ProviderOptions } from '@masknet/web3-shared-base'
 import { BaseProvider } from './Base.js'
 import type { EVM_Provider } from '../types.js'
@@ -42,12 +42,9 @@ export class BaseInjectedProvider extends BaseProvider implements EVM_Provider {
         return this.bridge as unknown as Web3Provider
     }
 
-    override async request<T extends unknown>(
-        requestArguments: RequestArguments,
-        options?: ProviderOptions<ChainId>,
-    ): Promise<T> {
+    override async request<T>(requestArguments: RequestArguments, options?: ProviderOptions<ChainId>): Promise<T> {
         const provider = this.createWeb3Provider(options)
-        return provider.request(requestArguments) as Promise<T>
+        return provider.request(requestArguments)
     }
 
     override async connect() {

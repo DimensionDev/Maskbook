@@ -1,9 +1,15 @@
 import { compact, uniqBy } from 'lodash-es'
 import type { CollectionTypes, WalletsCollection, WalletTypes } from '@masknet/shared'
-import { NetworkPluginID, BindingProof, NextIDPlatform, PersonaInformation, EMPTY_LIST } from '@masknet/shared-base'
+import {
+    NetworkPluginID,
+    type BindingProof,
+    NextIDPlatform,
+    type PersonaInformation,
+    EMPTY_LIST,
+} from '@masknet/shared-base'
 import { AlchemyEVM, NextIDStorage, RSS3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { type ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from '../constants.js'
 import type { Collection, UnlistedConfig, PersonaKV } from './types.js'
 

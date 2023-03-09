@@ -11,7 +11,7 @@ import {
     useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import { InjectedDialog, NetworkTab } from '@masknet/shared'
-import { ChainId, GasConfig, GasEditor } from '@masknet/web3-shared-evm'
+import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { DialogContent, Tab } from '@mui/material'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
@@ -26,7 +26,7 @@ import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
 import { RedPacketMetaKey } from '../constants.js'
-import { DialogTabs, RedPacketJSONPayload } from '../types.js'
+import { DialogTabs, type RedPacketJSONPayload } from '../types.js'
 import type { RedPacketSettings } from './hooks/useCreateCallback.js'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog.js'
 import { RedPacketPast } from './RedPacketPast.js'
@@ -128,7 +128,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         async (payload: RedPacketJSONPayload) => {
             if (payload.password === '') {
                 if (payload.contract_version === 1) {
+                    // eslint-disable-next-line no-alert
                     alert('Unable to share a lucky drop without a password. But you can still withdraw the lucky drop.')
+                    // eslint-disable-next-line no-alert
                     payload.password = prompt('Please enter the password of the lucky drop:', '') ?? ''
                 } else if (payload.contract_version > 1 && payload.contract_version < 4) {
                     // just sign out the password if it is lost.
@@ -138,7 +140,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         Web3Utils.sha3(payload.sender.message) ?? '',
                         { account },
                     )
-                    payload.password = payload.password!.slice(2)
+                    payload.password = payload.password.slice(2)
                 }
             }
 

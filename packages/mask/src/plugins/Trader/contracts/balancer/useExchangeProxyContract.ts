@@ -1,7 +1,7 @@
 import type { AbiItem } from 'web3-utils'
 import ExchangeProxyABI from '@masknet/web3-contracts/abis/ExchangeProxy.json'
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy.js'
-import { ChainId, useTraderConstants } from '@masknet/web3-shared-evm'
+import { type ChainId, useTraderConstants } from '@masknet/web3-shared-evm'
 import { useContract } from '@masknet/web3-hooks-evm'
 
 export function useExchangeProxyContract(chainId?: ChainId) {

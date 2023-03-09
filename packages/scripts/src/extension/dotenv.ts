@@ -6,7 +6,7 @@ import type { BuildFlags } from './flags.js'
 export function applyDotEnv(flags: BuildFlags) {
     if (flags.mode === 'production') return
 
-    const noMV3Support = flags.architecture === 'app' || flags.engine !== 'chromium'
+    const noMV3Support = flags.engine !== 'chromium'
     const { parsed } = config({ path: fileURLToPath(new URL('./.env/dev-preference', ROOT_PATH)) })
     if (!parsed) return
 

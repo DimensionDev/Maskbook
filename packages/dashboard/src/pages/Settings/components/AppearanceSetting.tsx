@@ -1,4 +1,4 @@
-import { MenuItem } from '@mui/material'
+import { MenuItem, type SelectChangeEvent } from '@mui/material'
 import { Services } from '../../../API.js'
 import { useAppearance } from '../../Personas/api.js'
 import { Appearance } from '@masknet/theme'
@@ -6,12 +6,12 @@ import { Appearance } from '@masknet/theme'
 import SettingSelect from './SettingSelect.js'
 import { useDashboardI18N } from '../../../locales/index.js'
 
+function handleChange(event: SelectChangeEvent<Appearance>) {
+    Services.Settings.setTheme(event.target.value as Appearance)
+}
 export default function AppearanceSetting() {
     const t = useDashboardI18N()
     const mode = useAppearance()
-    const handleChange = (event: any) => {
-        Services.Settings.setTheme(event.target.value)
-    }
 
     return (
         <SettingSelect value={mode} onChange={handleChange}>

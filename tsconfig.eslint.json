@@ -1,6 +1,10 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "noEmit": true
+    "noEmit": true,
+    "composite": false,
+    "strict": true
   },
-  "include": ["./packages/"]
+  "include": ["./packages/"],
+  "exclude": ["./**/dist/*"]
 }

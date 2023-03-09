@@ -10,15 +10,14 @@ import {
 import type { FungibleTokenAPI, NonFungibleTokenAPI, PriceAPI } from '@masknet/web3-providers/types'
 import {
     attemptUntil,
-    CurrencyType,
-    GasOptionType,
-    HubIndicator,
-    HubOptions,
-    Pageable,
+    type CurrencyType,
+    type GasOptionType,
+    type HubOptions,
+    type Pageable,
     SourceType,
-    Transaction,
+    type Transaction,
 } from '@masknet/web3-shared-base'
-import { ChainId, GasOption, SchemaType } from '@masknet/web3-shared-solana'
+import { ChainId, type GasOption, type SchemaType } from '@masknet/web3-shared-solana'
 import type { SolanaHub } from './types.js'
 import { Web3StateSettings } from '../../settings/index.js'
 
@@ -39,7 +38,7 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
         )
     }
 
-    override getFungibleToken(address: string, initial?: HubOptions<ChainId, HubIndicator> | undefined) {
+    override getFungibleToken(address: string, initial?: HubOptions<ChainId> | undefined) {
         const connection = Web3StateSettings.value.Connection?.getConnection?.({
             chainId: initial?.chainId,
         })

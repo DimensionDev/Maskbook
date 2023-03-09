@@ -1,4 +1,4 @@
-/* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
+/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginID } from '@masknet/shared-base'
 import { Typography } from '@mui/material'
@@ -28,6 +28,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     // GlobalInjection: GlobalComponent,
     CompositionDialogEntry: {
         label: { i18nKey: '__entry__', fallback: '\uD83E\uDD14 Example' },
+        // eslint-disable-next-line no-alert
         onClick: () => alert('It works \u2122!'),
     },
     // CompositionDialogEntry: {

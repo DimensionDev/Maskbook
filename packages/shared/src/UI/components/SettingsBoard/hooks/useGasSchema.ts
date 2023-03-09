@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import { z as zod } from 'zod'
 import { useSharedI18N } from '@masknet/shared'
-import { ChainId, formatGweiToWei, GasOption, Transaction } from '@masknet/web3-shared-evm'
+import { type ChainId, formatGweiToWei, type GasOption, type Transaction } from '@masknet/web3-shared-evm'
 import {
-    GasOptionType,
+    type GasOptionType,
     isGreaterThanOrEqualTo,
     isLessThan,
     isLessThanOrEqualTo,

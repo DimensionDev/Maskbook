@@ -1,10 +1,10 @@
-import { ForwardedRef, forwardRef } from 'react'
+import { type ForwardedRef, forwardRef } from 'react'
 import {
     Box,
     formHelperTextClasses,
     TextField,
-    StandardTextFieldProps,
-    InputProps,
+    type StandardTextFieldProps,
+    type InputProps,
     Typography,
     InputBase,
 } from '@mui/material'
@@ -78,17 +78,17 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
     const { classes } = useStyles()
     return (
         <Box sx={sx} {...wrapperProps}>
-            {label && typeof label === 'string' && (
+            {label && typeof label === 'string' ? (
                 <Typography sx={{ mb: 1 }} variant="body2" className={classes.label}>
                     {label}
-                    {required && (
+                    {required ? (
                         <Typography className={classes.required} component="span">
                             *
                         </Typography>
-                    )}
+                    ) : null}
                 </Typography>
-            )}
-            {label && typeof label !== 'string' && label}
+            ) : null}
+            {label && typeof label !== 'string' ? label : null}
             {isDashboard ? (
                 <TextField
                     ref={ref}

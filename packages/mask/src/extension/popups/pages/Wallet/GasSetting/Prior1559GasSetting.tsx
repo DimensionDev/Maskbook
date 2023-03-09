@@ -14,7 +14,7 @@ import {
     ChainId,
     formatGweiToWei,
     formatWeiToGwei,
-    ChainIdOptionalRecord,
+    type ChainIdOptionalRecord,
     formatWeiToEther,
 } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
@@ -199,10 +199,10 @@ export const Prior1559GasSetting = memo(() => {
         ) {
             // if rpc payload contain gas price, set it to default values
             if (value?.formatterTransaction._tx.gasPrice) {
-                const minGasPrice = minGasPriceOfChain[chainId as ChainId]
+                const minGasPrice = minGasPriceOfChain[chainId]
                 // if the gas price in payload is lower than minimum value
                 if (minGasPrice && isLessThan(value.formatterTransaction._tx.gasPrice, minGasPrice)) {
-                    setValue('gasPrice', minGasPrice.toString())
+                    setValue('gasPrice', new BigNumber(minGasPrice).toString())
                 }
                 setValue('gasPrice', formatWeiToGwei(value.formatterTransaction._tx.gasPrice).toString())
             } else {

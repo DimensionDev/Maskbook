@@ -1,6 +1,6 @@
-import { MouseEvent, useCallback, useState, useMemo, useRef, useEffect } from 'react'
+import { type MouseEvent, useCallback, useState, useMemo, useRef, useEffect } from 'react'
 import { useIntersectionObserver } from '@react-hookz/web'
-import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/material'
+import { Box, ListItem, Typography, Popper, useMediaQuery, type Theme } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -9,13 +9,13 @@ import nextDay from 'date-fns/nextDay'
 import { Translate, useI18N } from '../locales/index.js'
 import { dateTimeFormat } from '../../ITO/assets/formatDate.js'
 import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress.js'
-import { RedPacketJSONPayload, RedPacketJSONPayloadFromChain, RedPacketStatus } from '../types.js'
+import { type RedPacketJSONPayload, type RedPacketJSONPayloadFromChain, RedPacketStatus } from '../types.js'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
 import { useCreateRedPacketReceipt } from './hooks/useCreateRedPacketReceipt.js'
 import { useRefundCallback } from './hooks/useRefundCallback.js'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { formatBalance, FungibleToken, minus } from '@masknet/web3-shared-base'
+import { formatBalance, type FungibleToken, minus } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ isViewed: boolean }>()((theme, { isViewed }) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -173,7 +173,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const rpid = receipt?.rpid ?? ''
     const creation_time = receipt?.creation_time ?? 0
 
-    const { classes, cx } = useStyles({ isViewed: isViewed && Boolean(rpid) })
+    const { classes, cx } = useStyles({ isViewed: isViewed && !!rpid })
 
     const patchedHistory: RedPacketJSONPayload | RedPacketJSONPayloadFromChain = useMemo(
         () => ({ ...props.history, rpid, creation_time }),
@@ -221,7 +221,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
 
     // #region password lost tips
     const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLButtonElement) | null>(null)
-    const openPopper = Boolean(anchorEl)
+    const openPopper = !!anchorEl
     // #endregion
 
     // #region refund time
@@ -234,14 +234,14 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         <ListItem className={classes.root} ref={ref}>
             {!rpid ? null : (
                 <Box className={classes.box}>
-                    {isViewed && (
+                    {isViewed ? (
                         <TokenIcon
                             className={classes.icon}
                             address={historyToken?.address ?? ''}
                             name={historyToken?.name}
                             logoURL={historyToken?.logoURL}
                         />
-                    )}
+                    ) : null}
                     <Box className={classes.content}>
                         <section className={classes.section}>
                             <div className={classes.div}>

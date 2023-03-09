@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js'
 import { isUndefined, omitBy } from 'lodash-es'
 import type Web3 from 'web3'
 import * as ABICoder from 'web3-eth-abi'
-import { AbiItem, hexToBytes, keccak256, padLeft, toHex, toNumber } from 'web3-utils'
+import { type AbiItem, hexToBytes, keccak256, padLeft, toHex, toNumber } from 'web3-utils'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
 import { isGreaterThan, multipliedBy, toFixed } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
@@ -354,7 +354,7 @@ export class UserTransaction {
 
         return UserTransaction.fillUserOperation(chainId, {
             sender: formatEthereumAddress(from),
-            nonce: toNumber(nonce as number),
+            nonce: toNumber(nonce),
             callGas: transaction.gas ?? DEFAULT_USER_OPERATION.callGas,
             callData: coder.encodeFunctionCall(CALL_WALLET_TYPE, [to, value, data]),
             maxFeePerGas: transaction.maxFeePerGas ?? transaction.gasPrice ?? DEFAULT_USER_OPERATION.maxFeePerGas,

@@ -2,14 +2,14 @@ import { forwardRef, useRef, memo, useCallback } from 'react'
 import { keyframes } from 'tss-react'
 import {
     SnackbarProvider,
-    SnackbarProviderProps,
-    SnackbarKey,
+    type SnackbarProviderProps,
+    type SnackbarKey,
     useSnackbar,
-    VariantType,
-    SnackbarMessage,
+    type VariantType,
+    type SnackbarMessage,
     SnackbarContent,
-    SnackbarAction,
-    OptionsObject,
+    type SnackbarAction,
+    type OptionsObject,
 } from 'notistack'
 import { Typography, IconButton, alpha } from '@mui/material'
 import { Close as CloseIcon, Warning as WarningIcon, Info as InfoIcon } from '@mui/icons-material'
@@ -26,7 +26,7 @@ export interface StyleProps {
     offsetY?: number
 }
 
-export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offsetY }, refs) => {
+export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offsetY }, classNames) => {
     const spinningAnimationKeyFrames = keyframes`
         to {
           transform: rotate(360deg)
@@ -58,11 +58,11 @@ export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, {
             theme.palette.mode === 'dark'
                 ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
                 : '0px 4px 30px rgba(0, 0, 0, 0.1)',
-        [`& .${refs.title}`]: {
+        [`& .${classNames.title}`]: {
             color: 'inherit',
         },
 
-        [`& .${refs.message}`]: {
+        [`& .${classNames.message}`]: {
             color: 'inherit',
         },
     }
@@ -71,10 +71,10 @@ export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, {
         color: theme.palette.maskColor.white,
         boxShadow: `0px 6px 20px ${alpha(theme.palette.maskColor.success, 0.15)}`,
         backdropFilter: 'blur(16px)',
-        [`& .${refs.title}`]: {
+        [`& .${classNames.title}`]: {
             color: 'inherit',
         },
-        [`& .${refs.message}`]: {
+        [`& .${classNames.message}`]: {
             color: alpha(theme.palette.maskColor.white, 0.8),
             '& svg': {
                 color: theme.palette.maskColor.white,
@@ -87,10 +87,10 @@ export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, {
         color: theme.palette.maskColor.white,
         boxShadow: `0px 6px 20px ${alpha(theme.palette.maskColor.danger, 0.15)}`,
         backdropFilter: 'blur(16px)',
-        [`& .${refs.title}`]: {
+        [`& .${classNames.title}`]: {
             color: 'inherit',
         },
-        [`& .${refs.message}`]: {
+        [`& .${classNames.message}`]: {
             color: alpha(theme.palette.maskColor.white, 0.8),
             '& svg': {
                 color: theme.palette.maskColor.white,
@@ -105,10 +105,10 @@ export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, {
             theme.palette.mode === 'dark'
                 ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
                 : '0px 4px 30px rgba(0, 0, 0, 0.1)',
-        [`& .${refs.title}`]: {
+        [`& .${classNames.title}`]: {
             color: 'inherit',
         },
-        [`& .${refs.message}`]: {
+        [`& .${classNames.message}`]: {
             color: alpha(theme.palette.maskColor.white, 0.8),
             '& svg': {
                 color: theme.palette.maskColor.white,
@@ -121,10 +121,10 @@ export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, {
         color: theme.palette.maskColor.white,
         boxShadow: `0px 6px 20px ${alpha(theme.palette.maskColor.warn, 0.15)}`,
         backdropFilter: 'blur(16px)',
-        [`& .${refs.title}`]: {
+        [`& .${classNames.title}`]: {
             color: 'inherit',
         },
-        [`& .${refs.message}`]: {
+        [`& .${classNames.message}`]: {
             color: alpha(theme.palette.maskColor.white, 0.8),
             '& svg': {
                 color: theme.palette.maskColor.white,
@@ -145,23 +145,6 @@ export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, {
             borderRadius: 12,
             width: 380,
             flexWrap: 'nowrap !important' as 'nowrap',
-            [`&.${success.ref}`]: {
-                background: MaskColorVar.greenMain,
-                color: MaskColorVar.lightestBackground,
-            },
-            [`&.${error.ref}`]: {
-                background: MaskColorVar.redMain,
-                color: MaskColorVar.lightestBackground,
-                title: {
-                    color: 'inherit',
-                },
-            },
-            [`&.${info.ref}`]: {
-                color: MaskColorVar.lightestBackground,
-            },
-            [`&.${warning.ref}`]: {
-                color: '#ffffff',
-            },
         },
         // eslint-disable-next-line tss-unused-classes/unused-classes
         default: defaultVariant,
@@ -231,16 +214,16 @@ export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarCo
     }
     return (
         <SnackbarContent ref={ref} className={cx(classes.content, classes[props.variant!])}>
-            {variantIcon && <div className={classes.icon}>{variantIcon}</div>}
+            {variantIcon ? <div className={classes.icon}>{variantIcon}</div> : null}
             <div className={classes.texts}>
                 <Typography className={classes.title} variant="h2">
                     {props.title}
                 </Typography>
-                {props.message && (
+                {props.message ? (
                     <Typography className={classes.message} variant="body1">
                         {props.message}
                     </Typography>
-                )}
+                ) : null}
             </div>
             <div className={classes.action}>{renderedAction}</div>
         </SnackbarContent>
@@ -265,9 +248,12 @@ export const CustomSnackbarProvider = memo<
             disableWindowBlurListener
             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             hideIconVariant
+            // this is a false positive, SnackbarProvider won't use it like it is a component.
+            // eslint-disable-next-line react/no-unstable-nested-components
             content={(key, title) => (
                 <CustomSnackbarContent id={key} variant={rest.variant ?? 'default'} title={title} offsetY={offsetY} />
             )}
+            // eslint-disable-next-line react/no-unstable-nested-components
             action={(key) => (
                 <IconButton size="large" onClick={onDismiss(key)} sx={{ color: 'inherit' }}>
                     <CloseIcon color="inherit" />

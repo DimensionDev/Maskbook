@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { EMPTY_LIST, type NextIDPlatform } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 

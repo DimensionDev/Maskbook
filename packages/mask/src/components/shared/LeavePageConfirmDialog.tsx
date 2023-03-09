@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useCallback, useEffect, useState } from 'react'
 import Services from '../../extension/service.js'
-import { CrossIsolationMessages, DashboardRoutes, OpenPageConfirmEvent } from '@masknet/shared-base'
+import { CrossIsolationMessages, DashboardRoutes, type OpenPageConfirmEvent } from '@masknet/shared-base'
 
 type PositionStyle = {
     top?: number

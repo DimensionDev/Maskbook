@@ -1,4 +1,4 @@
-import { cloneElement, PropsWithChildren, ReactElement, useEffect, useRef, useState } from 'react'
+import { cloneElement, type PropsWithChildren, type ReactElement, useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-use'
 import { debounce } from 'lodash-es'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -177,7 +177,7 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
 
     return (
         <>
-            {cloneElement(children as ReactElement<any>, { ref: childrenRef })}
+            {cloneElement(children as ReactElement, { ref: childrenRef })}
             {usePortalShadowRoot((container) => {
                 if (!stepVisible) return null
                 return (

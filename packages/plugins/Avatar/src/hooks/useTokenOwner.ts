@@ -1,7 +1,13 @@
 import { useAsyncRetry } from 'react-use'
-import { isValidAddress, SchemaType } from '@masknet/web3-shared-evm'
+import { isValidAddress, type SchemaType } from '@masknet/web3-shared-evm'
 import { useWeb3Connection } from '@masknet/web3-hooks-base'
-import { EMPTY_LIST, EnhanceableSite, NextIDPlatform, NetworkPluginID, getSiteType } from '@masknet/shared-base'
+import {
+    EMPTY_LIST,
+    type EnhanceableSite,
+    NextIDPlatform,
+    type NetworkPluginID,
+    getSiteType,
+} from '@masknet/shared-base'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
 import { useGetAddress } from './useGetAddress.js'
 

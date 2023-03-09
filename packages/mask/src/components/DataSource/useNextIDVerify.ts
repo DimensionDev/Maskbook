@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { useAsyncFn } from 'react-use'
-import { fromHex, NextIDAction, NextIDPlatform, PersonaInformation, SignType, toBase64 } from '@masknet/shared-base'
+import { fromHex, NextIDAction, type PersonaInformation, SignType, toBase64 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import Services from '../../extension/service.js'
 import { MaskMessages } from '../../utils/index.js'
@@ -11,7 +11,7 @@ export function useNextIDVerify() {
     const verifyPostCollectTimer = useRef<NodeJS.Timer | null>(null)
     const collectVerificationPost = activatedSocialNetworkUI.configuration.nextIDConfig?.collectVerificationPost
     const postMessage = activatedSocialNetworkUI.automation?.nativeCompositionDialog?.appendText
-    const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
+    const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform
 
     return useAsyncFn(
         async (persona?: PersonaInformation, username?: string, verifiedCallback?: () => void | Promise<void>) => {

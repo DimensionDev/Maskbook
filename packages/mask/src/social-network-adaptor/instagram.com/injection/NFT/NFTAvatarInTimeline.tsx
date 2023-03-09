@@ -1,10 +1,16 @@
-import { DOMProxy, LiveSelector, MutationObserverWatcher, UnboundedRegistry } from '@dimensiondev/holoflows-kit'
-import { MaskMessages, NFTAvatarEvent, createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import {
+    DOMProxy,
+    type LiveSelector,
+    MutationObserverWatcher,
+    type UnboundedRegistry,
+} from '@dimensiondev/holoflows-kit'
+import { MaskMessages, type NFTAvatarEvent, createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { NFTBadgeTimeline, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
 import { searchInstagramPostAvatarSelector } from '../../utils/selector.js'
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
+import { noop } from 'lodash-es'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -51,10 +57,10 @@ const TimeLineRainbow = memo(
     },
 )
 
-function _(selector: () => LiveSelector<HTMLImageElement, false>, signal: AbortSignal) {
+function _(selector: () => LiveSelector<HTMLImageElement>, signal: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(selector()).useForeach((element) => {
-            let remove = () => {}
+            let remove = noop
 
             const run = async () => {
                 const href = (element.parentNode as HTMLAnchorElement)?.href

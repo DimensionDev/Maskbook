@@ -3,14 +3,14 @@ import { ProviderState } from '@masknet/web3-state'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     chainResolver,
-    ChainId,
+    type ChainId,
     isValidAddress,
     isValidChainId,
     getInvalidChainId,
     NetworkType,
-    ProviderType,
-    Web3,
-    Web3Provider,
+    type ProviderType,
+    type Web3,
+    type Web3Provider,
     getDefaultChainId,
     getDefaultProviderType,
     getDefaultNetworkType,

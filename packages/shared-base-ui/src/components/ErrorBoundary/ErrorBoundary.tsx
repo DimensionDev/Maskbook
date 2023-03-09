@@ -1,5 +1,5 @@
 import { Component, forwardRef } from 'react'
-import { CrashUIProps, CrashUI } from './CrashUI.js'
+import { type CrashUIProps, CrashUI } from './CrashUI.js'
 import type { ErrorBoundaryError } from './context.js'
 
 const map = new WeakMap<React.ComponentType<any>, React.ForwardRefExoticComponent<any>>()
@@ -36,17 +36,18 @@ export class ErrorBoundary extends Component<Partial<CrashUIProps>> {
         let stack = '<stack not available>'
         let type = 'UnknownError'
         let message = 'unknown error'
+        if (!this.state.error) return { stack, type, message }
         try {
-            stack = String(this.state.error!.stack!) || '<stack not available>'
+            stack = String(this.state.error.stack!) || '<stack not available>'
             stack = stack.replace(/webpack-internal:.+node_modules\//g, 'npm:')
             // remove webpack-internal:///
             stack = stack.replace(/webpack-internal:\/{3}/g, '')
         } catch {}
         try {
-            type = String(this.state.error!.name!) || '<type not available>'
+            type = String(this.state.error.name) || '<type not available>'
         } catch {}
         try {
-            message = String(this.state.error!.message!) || '<message not available>'
+            message = String(this.state.error.message) || '<message not available>'
         } catch {}
         return { stack, type, message }
     }

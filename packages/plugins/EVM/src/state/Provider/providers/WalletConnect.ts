@@ -4,7 +4,7 @@ import type { RequestArguments } from 'web3-core'
 import { defer } from '@masknet/kit'
 import WalletConnect from '@walletconnect/client'
 import type { ITxData } from '@walletconnect/types'
-import { ChainId, chainResolver, EthereumMethodType, isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
+import { type ChainId, chainResolver, EthereumMethodType, isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
 import type { Account } from '@masknet/web3-shared-base'
 import { SharedContextSettings } from '../../../settings/index.js'
 import { BaseProvider } from './Base.js'
@@ -188,7 +188,7 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
         }
     }
 
-    override request<T extends unknown>(requestArguments: RequestArguments): Promise<T> {
+    override request<T>(requestArguments: RequestArguments): Promise<T> {
         switch (requestArguments.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
                 return Promise.resolve(this.connector.chainId) as Promise<T>

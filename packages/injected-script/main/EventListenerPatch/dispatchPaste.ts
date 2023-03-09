@@ -5,7 +5,7 @@ export function dispatchPaste(text: InternalEvents['paste'][0]) {
     const data = new $Content.DataTransfer()
     const e = new $Content.ClipboardEvent('paste', {
         clipboardData: data,
-        // @ts-ignore Firefox only API
+        // @ts-expect-error Firefox only API
         dataType: 'text/plain',
         data: text,
         bubbles: true,

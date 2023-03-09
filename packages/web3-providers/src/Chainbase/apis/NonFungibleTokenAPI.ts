@@ -3,12 +3,11 @@ import {
     createIndicator,
     createNextIndicator,
     createPageable,
-    HubIndicator,
-    HubOptions,
-    NonFungibleAsset,
-    NonFungibleCollection,
-    NonFungibleTokenContract,
-    NonFungibleTokenEvent,
+    type HubOptions,
+    type NonFungibleAsset,
+    type NonFungibleCollection,
+    type NonFungibleTokenContract,
+    type NonFungibleTokenEvent,
     ActivityType,
     scale10,
     SourceType,
@@ -177,7 +176,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
         return this.createNonFungibleAssetFromNFTMetadata(chainId, address, tokenId, metadata)
     }
 
-    async getAssets(account: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {}) {
+    async getAssets(account: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {}) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const tokens = await fetchFromChainbase<NFT[]>(
             urlcat('/v1/account/nfts', {
@@ -195,10 +194,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
         )
     }
 
-    async getCollectionsByKeyword(
-        keyword: string,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
-    ) {
+    async getCollectionsByKeyword(keyword: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {}) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const tokens = await fetchFromChainbase<NFT[]>(
             urlcat('/v1/nft/search', {
@@ -218,7 +214,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
 
     async getContract(
         address: string,
-        { chainId = ChainId.Mainnet }: HubOptions<ChainId, HubIndicator> = {},
+        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined> {
         if (!isValidChainId(chainId)) return
         const metadata = await fetchFromChainbase<NFT_Metadata>(
@@ -235,7 +231,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
     async getEvents(
         address: string,
         tokenId: string,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
+        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const transferEvents = await fetchFromChainbase<NFT_TransferEvent[]>(

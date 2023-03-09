@@ -1,5 +1,4 @@
 import { cache, use } from 'react'
-import type {} from 'react/next'
 import Services from '../../extension/service.js'
 
 const Request = cache(async function (url: string) {

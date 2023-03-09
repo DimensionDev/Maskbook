@@ -1,8 +1,8 @@
 import { memoize } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
-import { Currency, CurrencyAmount, Ether, Percent, Price, Token, TradeType } from '@uniswap/sdk-core'
+import { type Currency, CurrencyAmount, Ether, Percent, type Price, Token, type TradeType } from '@uniswap/sdk-core'
 import type { Trade } from '@uniswap/v2-sdk'
-import { ChainId, formatEthereumAddress, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
+import { type ChainId, formatEthereumAddress, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
 import { isGreaterThan, isSameAddress, pow10, TokenType } from '@masknet/web3-shared-base'
 import { ONE_HUNDRED_PERCENT, ZERO_PERCENT } from '../constants/index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -142,6 +142,7 @@ export function isTradeBetter(
     }
 }
 
+const wrapEtherMemo = memoize((chainId: ChainId) => toUniswapToken(chainId, WNATIVE[chainId]))
 export class ExtendedEther extends Ether {
     public override get wrapped(): Token {
         if (this.chainId in WNATIVE) return ExtendedEther.wrapEther(this.chainId)
@@ -154,7 +155,5 @@ export class ExtendedEther extends Ether {
         return this._cachedEther[chainId] ?? (this._cachedEther[chainId] = new ExtendedEther(chainId))
     }
 
-    public static wrapEther: (chainID: ChainId) => Token = memoize((chainId: ChainId) =>
-        toUniswapToken(chainId, WNATIVE[chainId]),
-    )
+    public static wrapEther: (chainID: ChainId) => Token = wrapEtherMemo
 }

@@ -10,6 +10,7 @@ export default defineConfig({
         alias: {
             '@masknet/base': createURL('./packages/base/src/index.ts'),
             '@masknet/shared-base': createURL('./packages/shared-base/src/index.ts'),
+            '@masknet/web3-modals': createURL('./packages/web3-modals/src/index.ts'),
             '@masknet/web3-helpers': createURL('./packages/web3-helpers/src/index.ts'),
             '@masknet/web3-providers': createURL('./packages/web3-providers/src/index.ts'),
             '@masknet/web3-shared-base': createURL('./packages/web3-shared/base/src/index.ts'),
@@ -20,6 +21,6 @@ export default defineConfig({
             '@masknet/typed-message': createURL('./packages/typed-message/base/src/index.ts'),
             '@masknet/encryption': createURL('./packages/encryption/src/index.ts'),
         },
-        setupFiles: ['./setups/index.ts'],
+        setupFiles: ['./setups/index.ts', './packages/encryption/test-setup.js'],
     },
 })

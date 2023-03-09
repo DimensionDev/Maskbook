@@ -1,7 +1,7 @@
-import React, { createContext, ReactNode, useContext, useState } from 'react'
+import React, { createContext, type ReactNode, useContext, useState, useMemo } from 'react'
 import { isUndefined, omitBy } from 'lodash-es'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import { compose, MaskEvents, NetworkPluginID } from '@masknet/shared-base'
+import { compose, type MaskEvents, type NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
@@ -46,15 +46,14 @@ export function EnvironmentContextProvider({ value, children }: React.ProviderPr
 
 export function NetworkContextProvider({ value, children }: React.ProviderProps<NetworkPluginID>) {
     const [pluginID = value, setPluginID] = useState<NetworkPluginID>()
-    return (
-        <NetworkContext.Provider
-            value={{
-                pluginID,
-                setPluginID,
-            }}>
-            {children}
-        </NetworkContext.Provider>
+    const context = useMemo(
+        () => ({
+            pluginID,
+            setPluginID,
+        }),
+        [pluginID],
     )
+    return <NetworkContext.Provider value={context}>{children}</NetworkContext.Provider>
 }
 
 export function ChainContextProvider({ value, children }: React.ProviderProps<ChainContextGetter>) {
@@ -69,22 +68,35 @@ export function ChainContextProvider({ value, children }: React.ProviderProps<Ch
     const [networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
     const [providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
 
-    return (
-        <ChainContext.Provider
-            value={{
-                ...value,
-                account: account ?? value.account ?? globalAccount,
-                chainId: chainId ?? value.chainId ?? globalChainId,
-                networkType: networkType ?? value.networkType ?? globalNetworkType,
-                providerType: providerType ?? value.providerType ?? globalProviderType,
-                setAccount,
-                setChainId,
-                setNetworkType,
-                setProviderType,
-            }}>
-            {children}
-        </ChainContext.Provider>
+    const context = useMemo(
+        () => ({
+            ...value,
+            account: account ?? value.account ?? globalAccount,
+            chainId: chainId ?? value.chainId ?? globalChainId,
+            networkType: networkType ?? value.networkType ?? globalNetworkType,
+            providerType: providerType ?? value.providerType ?? globalProviderType,
+            setAccount,
+            setChainId,
+            setNetworkType,
+            setProviderType,
+        }),
+        [
+            value,
+            value.account,
+            value.chainId,
+            value.networkType,
+            value.providerType,
+            account,
+            globalAccount,
+            chainId,
+            globalChainId,
+            networkType,
+            globalNetworkType,
+            providerType,
+            globalProviderType,
+        ],
     )
+    return <ChainContext.Provider value={context}>{children}</ChainContext.Provider>
 }
 
 export function Web3ContextProvider({
@@ -106,22 +118,32 @@ export function Web3ContextProvider({
 
 export function ActualNetworkContextProvider({ children }: { children: ReactNode | undefined }) {
     const { pluginID } = useContext(EnvironmentContext)
-    const value = {
-        pluginID,
-        setPluginID: () => {
-            throw new Error('Set pluginID is not allowed.')
-        },
-    }
+    const value = useMemo(
+        () => ({
+            pluginID,
+            setPluginID: () => {
+                throw new Error('Set pluginID is not allowed.')
+            },
+        }),
+        [pluginID],
+    )
     return <NetworkContext.Provider value={value} children={children} />
 }
 
 export function ActualChainContextProvider({ children }: { children: ReactNode | undefined }) {
-    const value = {
-        account: useAccount(),
-        chainId: useChainId(),
-        networkType: useNetworkType(),
-        providerType: useProviderType(),
-    }
+    const account = useAccount()
+    const chainId = useChainId()
+    const networkType = useNetworkType()
+    const providerType = useProviderType()
+    const value = useMemo(
+        () => ({
+            account,
+            chainId,
+            networkType,
+            providerType,
+        }),
+        [account, chainId, networkType, providerType],
+    )
     return <ChainContext.Provider value={value} children={children} />
 }
 

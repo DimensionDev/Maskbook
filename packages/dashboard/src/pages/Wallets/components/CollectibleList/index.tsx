@@ -137,11 +137,11 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
                                     <LoadingBase />
                                 </Stack>
                             )}
-                            {isError && (
+                            {isError ? (
                                 <Stack flexDirection="row" justifyContent="center" pt={3} alignItems="center">
                                     <Button>{t.wallets_reload()}</Button>
                                 </Stack>
-                            )}
+                            ) : null}
                             <ElementAnchor
                                 callback={() => {
                                     if (onRetry) onRetry()

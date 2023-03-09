@@ -26,7 +26,7 @@ export function collectNodeText(node: HTMLElement | null | undefined, options: C
             if (each instanceof HTMLImageElement) {
                 const src = each.getAttribute('src')
                 const alt = each.getAttribute('alt') ?? ''
-                const matched = src?.match(/emoji\/v2\/svg\/([\w\-]+)\.svg/)?.[1]
+                const matched = src?.match(/emoji\/v2\/svg\/([\w-]+)\.svg/)?.[1]
                 if (matched) return collectTwitterEmoji(matched.split('-').map((x) => Number.parseInt(x, 16))) || alt
                 return alt
             }

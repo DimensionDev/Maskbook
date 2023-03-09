@@ -3,7 +3,7 @@ import { Trans } from 'react-i18next'
 import { Result } from 'ts-results-es'
 import {
     useActivatedPluginsSNSAdaptor,
-    Plugin,
+    type Plugin,
     PluginI18NFieldRender,
     usePluginI18NField,
     useCompositionContext,
@@ -179,7 +179,9 @@ const CustomEntry = memo(
                 label={
                     <>
                         <PluginI18NFieldRender field={label} pluginID={id} />
-                        {unstable && <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />}
+                        {unstable ? (
+                            <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />
+                        ) : null}
                     </>
                 }
                 onClick={() => {
@@ -215,7 +217,9 @@ const DialogEntry = memo(
                 label={
                     <>
                         <PluginI18NFieldRender field={label} pluginID={id} />
-                        {unstable && <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />}
+                        {unstable ? (
+                            <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />
+                        ) : null}
                     </>
                 }
                 disabled={props.readonly}

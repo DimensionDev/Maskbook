@@ -3,7 +3,6 @@ import { readFile, writeFile } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
 import builder from 'core-js-builder'
 import { rollup } from 'rollup'
-// @ts-expect-error
 import { loadConfigFile } from 'rollup/loadConfigFile'
 
 let polyfillVersion = '__'
@@ -20,12 +19,7 @@ if ((await readFile(versionFilePath, 'utf-8').catch(() => '')) === polyfillVersi
 
 await builder({
     modules: ['core-js/stable'],
-    targets: [
-        'iOS >= 14.0',
-        // Android
-        'Firefox >= 99',
-        'last 3 Chrome versions',
-    ],
+    targets: ['last 3 Chrome versions', 'last 3 Firefox versions'],
     summary: {
         comment: { size: false, modules: true },
     },

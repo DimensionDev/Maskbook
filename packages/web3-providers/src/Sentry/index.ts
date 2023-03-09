@@ -1,4 +1,4 @@
-import { Breadcrumbs, Event, GlobalHandlers } from '@sentry/browser'
+import { Breadcrumbs, type Event, GlobalHandlers } from '@sentry/browser'
 import {
     getSiteType,
     getAgentType,
@@ -48,7 +48,7 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
                 }),
             ],
             environment: process.env.NODE_ENV,
-            tracesSampleRate: 1.0,
+            tracesSampleRate: 1,
             beforeSend(event) {
                 if (event.exception?.values?.some((x) => IGNORE_ERRORS.some((y) => x.value?.includes(y)))) return null
 

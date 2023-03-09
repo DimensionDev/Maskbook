@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react'
 import { SelectGasSettingsToolbar } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useGasPrice, useNativeTokenPrice, useWallet } from '@masknet/web3-hooks-base'
-import { createNativeToken, GasConfig, isNativeTokenAddress, GasEditor } from '@masknet/web3-shared-evm'
+import { createNativeToken, type GasConfig, isNativeTokenAddress, GasEditor } from '@masknet/web3-shared-evm'
 import { useGasLimit } from './useGasLimit.js'
 import { useTip } from '../../contexts/index.js'
 import { SmartPayBundler } from '@masknet/web3-providers'
@@ -22,7 +22,7 @@ export function GasSettingsBar() {
         chainId,
     })
     const { value: defaultGasPrice = '1' } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const nativeToken = useMemo(() => createNativeToken(chainId!), [chainId])
+    const nativeToken = useMemo(() => createNativeToken(chainId), [chainId])
     const GAS_LIMIT = isNativeToken ? ETH_GAS_LIMIT : ERC20_GAS_LIMIT
     const { value: gasLimit = GAS_LIMIT } = useGasLimit()
 

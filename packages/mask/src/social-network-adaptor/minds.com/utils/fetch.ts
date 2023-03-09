@@ -5,8 +5,7 @@ import {
     makeTypedMessageAnchor,
     makeTypedMessageEmpty,
     makeTypedMessageText,
-    TypedMessage,
-    TypedMessageText,
+    type TypedMessage,
 } from '@masknet/typed-message'
 import { assertNonNull } from '@masknet/kit'
 
@@ -37,14 +36,13 @@ export const postAvatarParser = (node: HTMLElement) => {
     return avatarElement ? avatarElement.src : undefined
 }
 
+function resolveType(content: string) {
+    if (content.startsWith('@')) return 'user'
+    if (content.startsWith('#')) return 'hash'
+    if (content.startsWith('$')) return 'cash'
+    return 'normal'
+}
 export const postContentMessageParser = (node: HTMLElement) => {
-    function resolve(content: string) {
-        if (content.startsWith('@')) return 'user'
-        if (content.startsWith('#')) return 'hash'
-        if (content.startsWith('$')) return 'cash'
-        return 'normal'
-    }
-
     function make(node: Node): TypedMessage | TypedMessage[] {
         if (node.nodeType === Node.TEXT_NODE) {
             if (!node.nodeValue) return makeTypedMessageEmpty()
@@ -54,11 +52,11 @@ export const postContentMessageParser = (node: HTMLElement) => {
             const href = anchor.getAttribute('title') ?? anchor.getAttribute('href')
             const content = anchor.textContent
             if (!content) return makeTypedMessageEmpty()
-            return makeTypedMessageAnchor(resolve(content), href ?? '', content)
+            return makeTypedMessageAnchor(resolveType(content), href ?? '', content)
         } else if (node instanceof HTMLImageElement) {
             const image = node
             const src = image.getAttribute('src')
-            const matched = src?.match(/emoji\/v2\/svg\/([\w\-]+)\.svg/)
+            const matched = src?.match(/emoji\/v2\/svg\/([\w-]+)\.svg/)
             if (!matched) return makeTypedMessageEmpty()
             const points = matched[1].split('-').map((point) => Number.parseInt(point, 16))
             return makeTypedMessageText(String.fromCodePoint(...points))
@@ -66,7 +64,7 @@ export const postContentMessageParser = (node: HTMLElement) => {
             const flattened = flattenDeep(Array.from(node.childNodes, make))
             // conjunct text messages under same node
             if (flattened.every(isTypedMessageText))
-                return makeTypedMessageText((flattened as TypedMessageText[]).map((x) => x.content).join(''))
+                return makeTypedMessageText(flattened.map((x) => x.content).join(''))
             return flattened
         } else return makeTypedMessageEmpty()
     }

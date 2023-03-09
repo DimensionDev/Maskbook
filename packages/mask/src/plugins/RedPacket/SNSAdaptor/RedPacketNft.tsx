@@ -1,8 +1,8 @@
 import { makeStyles, ActionButton, LoadingBase, parseColor, ShadowRootTooltip } from '@masknet/theme'
-import { networkResolver, ChainId } from '@masknet/web3-shared-evm'
+import { networkResolver, type ChainId } from '@masknet/web3-shared-evm'
 import { Card, Typography, Button, Box } from '@mui/material'
 import { useTransactionConfirmDialog } from './context/TokenTransactionConfirmDialogContext.js'
-import { useCallback, useEffect, useMemo, useState, MouseEventHandler, useRef, useLayoutEffect } from 'react'
+import { useCallback, useEffect, useMemo, useState, useRef, useLayoutEffect } from 'react'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { useI18N } from '../locales/index.js'
 import { WalletConnectedBoundary, ChainBoundary, AssetPreviewer, NFTFallbackImage } from '@masknet/shared'
@@ -226,8 +226,8 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         retryAvailability()
     }, [account])
 
-    const outdated = Boolean(availability?.isClaimedAll || availability?.isCompleted || availability?.expired)
-    const { classes, cx } = useStyles({ claimed: Boolean(availability?.isClaimed), outdated })
+    const outdated = !!(availability?.isClaimedAll || availability?.isCompleted || availability?.expired)
+    const { classes, cx } = useStyles({ claimed: !!availability?.isClaimed, outdated })
     // #region on share
     const postLink = usePostLink()
     const shareText = useMemo(() => {
@@ -418,28 +418,6 @@ function OperationFooter({ claimed, onShare, chainId, claim, isClaiming }: Opera
     const { t: i18n } = useBaseI18N()
     const t = useI18N()
 
-    const ObtainButton = (props: { onClick?: MouseEventHandler<HTMLButtonElement> | undefined }) => {
-        return (
-            <WalletConnectedBoundary
-                expectedChainId={chainId}
-                startIcon={<Icons.ConnectWallet size={18} />}
-                classes={{
-                    connectWallet: classes.button,
-                }}
-                ActionButtonProps={{ variant: 'roundedDark' }}>
-                <ActionButton
-                    variant="roundedDark"
-                    loading={isClaiming}
-                    disabled={isClaiming}
-                    onClick={props.onClick}
-                    className={classes.button}
-                    fullWidth>
-                    {isClaiming ? t.claiming() : t.claim()}
-                </ActionButton>
-            </WalletConnectedBoundary>
-        )
-    }
-
     return (
         <Box className={classes.buttonWrapper}>
             <Box sx={{ flex: 1, padding: 1.5 }}>
@@ -459,7 +437,23 @@ function OperationFooter({ claimed, onShare, chainId, claim, isClaiming }: Opera
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         ActionButtonPromiseProps={{ variant: 'roundedDark' }}
                         expectedChainId={chainId}>
-                        <ObtainButton onClick={claim} />
+                        <WalletConnectedBoundary
+                            expectedChainId={chainId}
+                            startIcon={<Icons.ConnectWallet size={18} />}
+                            classes={{
+                                connectWallet: classes.button,
+                            }}
+                            ActionButtonProps={{ variant: 'roundedDark' }}>
+                            <ActionButton
+                                variant="roundedDark"
+                                loading={isClaiming}
+                                disabled={isClaiming}
+                                onClick={claim}
+                                className={classes.button}
+                                fullWidth>
+                                {isClaiming ? t.claiming() : t.claim()}
+                            </ActionButton>
+                        </WalletConnectedBoundary>
                     </ChainBoundary>
                 </Box>
             )}

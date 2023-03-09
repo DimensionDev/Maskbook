@@ -1,7 +1,7 @@
 import { isNil } from 'lodash-es'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { defer } from '@masknet/kit'
-import { ECKeyIdentifier, SignType } from '@masknet/shared-base'
+import { ECKeyIdentifier, type SignType } from '@masknet/shared-base'
 import { SmartPayAccount, Web3 } from '@masknet/web3-providers'
 import {
     ChainId,
@@ -10,7 +10,7 @@ import {
     EthereumMethodType,
     isValidAddress,
     PayloadEditor,
-    TransactionOptions,
+    type TransactionOptions,
     Signer,
 } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../messages.js'

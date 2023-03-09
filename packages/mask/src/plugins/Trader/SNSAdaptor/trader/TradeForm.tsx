@@ -6,10 +6,10 @@ import { SelectTokenChip, TokenSecurityBar, useSelectAdvancedSettings, useTokenS
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel.js'
 import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
-import { ChainId, GasConfig, GasEditor, Transaction } from '@masknet/web3-shared-evm'
+import { type ChainId, type GasConfig, GasEditor, type Transaction } from '@masknet/web3-shared-evm'
 import { rightShift, multipliedBy, isZero, ZERO, formatBalance } from '@masknet/web3-shared-base'
 import { Tune as TuneIcon } from '@mui/icons-material'
-import { TokenPanelType, TradeInfo } from '../../types/index.js'
+import { TokenPanelType, type TradeInfo } from '../../types/index.js'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../../utils/index.js'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo.js'
@@ -327,7 +327,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                 slippageTolerance: currentSlippageSettings.value / 100,
                 transaction: {
                     gas: focusedTrade?.gas.value ?? MIN_GAS_LIMIT,
-                    ...(gasConfig ?? {}),
+                    ...gasConfig,
                 },
             })
 
@@ -396,9 +396,9 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 }}
                             />
                             <Box marginTop="8px">
-                                {isTokenSecurityEnable && tokenSecurityInfo && !error && (
+                                {isTokenSecurityEnable && tokenSecurityInfo && !error ? (
                                     <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
-                                )}
+                                ) : null}
                             </Box>
 
                             <Box marginTop="12px">

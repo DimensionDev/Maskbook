@@ -70,7 +70,7 @@ export const Assets = memo<AssetsProps>(({ network }) => {
                                     <Tab key={key} value={key} label={assetTabsLabel[key]} />
                                 ))}
                         </TabList>
-                        {pluginID === NetworkPluginID.PLUGIN_EVM && network && (
+                        {pluginID === NetworkPluginID.PLUGIN_EVM && network ? (
                             <Button
                                 size="small"
                                 color="secondary"
@@ -92,7 +92,7 @@ export const Assets = memo<AssetsProps>(({ network }) => {
                                     ? t.wallets_add_token()
                                     : t.wallets_assets_custom_collectible()}
                             </Button>
-                        )}
+                        ) : null}
                     </Box>
                     <TabPanel value={AssetTab.Token} key={AssetTab.Token} sx={{ minHeight: 'calc(100% - 48px)' }}>
                         <FungibleTokenTable selectedChainId={network?.chainId} />
@@ -105,9 +105,9 @@ export const Assets = memo<AssetsProps>(({ network }) => {
                     </TabPanel>
                 </TabContext>
             </ContentContainer>
-            {addCollectibleOpen && network && (
+            {addCollectibleOpen && network ? (
                 <AddCollectibleDialog selectedNetwork={network} open onClose={() => setAddCollectibleOpen(false)} />
-            )}
+            ) : null}
         </>
     )
 })

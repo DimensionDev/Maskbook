@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import type { User } from '../types.js'
-import { ImageType, ShowMeta, EssayRSSNode } from './../types.js'
-import { Punk3D, DEFAULT_SET_WORD, MASK_TWITTER, DEFAULT_PUNK_MASK_WORD, PunkIcon } from './../constants.js'
+import { ImageType } from '../types.js'
+import type { User, ShowMeta, EssayRSSNode } from '../types.js'
+import { Punk3D, DEFAULT_SET_WORD, MASK_TWITTER, DEFAULT_PUNK_MASK_WORD, PunkIcon } from '../constants.js'
 import { useUser } from './useUser.js'
 
 export function useEssay(user: User, refresh?: number) {

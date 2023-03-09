@@ -1,13 +1,13 @@
 import urlcat from 'urlcat'
 import { first, uniqWith } from 'lodash-es'
 import {
-    BindingProof,
+    type BindingProof,
     fromHex,
-    NextIDAction,
-    NextIDBindings,
-    NextIDErrorBody,
-    NextIDPayload,
-    NextIDPersonaBindings,
+    type NextIDAction,
+    type NextIDBindings,
+    type NextIDErrorBody,
+    type NextIDPayload,
+    type NextIDPersonaBindings,
     NextIDPlatform,
     toBase64,
 } from '@masknet/shared-base'

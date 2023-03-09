@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { CurrencyType, Price } from '@masknet/web3-shared-base'
+import { CurrencyType, type Price } from '@masknet/web3-shared-base'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import { COINGECKO_URL_BASE } from '../constants.js'
 import type { Category, CoinInfo, Exchange, ThumbCoin, ThumbCollection } from '../types.js'
@@ -66,7 +66,7 @@ export async function getPriceStats(coinId: string, currencyId: string, days: nu
 export async function getTokenPrice(platform_id: string, address: string, currencyType = CurrencyType.USD) {
     const price = await getTokenPrices(platform_id, [address], currencyType)
 
-    return Number(price[address.toLowerCase()][currencyType]) ?? 0
+    return Number(price[address.toLowerCase()][currencyType])
 }
 
 export async function getTokensPrice(listOfAddress: string[], currencyType = CurrencyType.USD) {

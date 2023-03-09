@@ -1,7 +1,7 @@
 import type { AbiItem } from 'web3-utils'
 import { i18NextInstance } from '@masknet/shared-base'
-import { TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId, getITOConstants, TransactionParameter } from '@masknet/web3-shared-evm'
+import { type TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
+import { type ChainId, getITOConstants, type TransactionParameter } from '@masknet/web3-shared-evm'
 import ITO_ABI from '@masknet/web3-contracts/abis/ITO2.json'
 import { Web3StateSettings } from '../../../settings/index.js'
 import type { TransactionDescriptor } from '../types.js'
@@ -14,7 +14,7 @@ export class ITODescriptor extends DescriptorWithTransactionDecodedReceipt imple
         })
         const events = await this.getReceipt(chainId, contractAddress, ITO_ABI as AbiItem[], hash)
 
-        const { to_value, token_address, to_address } = (events?.ClaimSuccess.returnValues ?? {}) as {
+        const { to_value, token_address, to_address } = (events?.ClaimSuccess?.returnValues ?? {}) as {
             to_value: string
             token_address: string
             to_address: string
@@ -29,7 +29,7 @@ export class ITODescriptor extends DescriptorWithTransactionDecodedReceipt imple
         return getTokenAmountDescription(to_value, token)
     }
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
-        const context = context_ as TransactionContext<ChainId, string | undefined>
+        const context = context_ as TransactionContext<ChainId>
         const hub = Web3StateSettings.value.Hub?.getHub?.({
             chainId: context.chainId,
         })

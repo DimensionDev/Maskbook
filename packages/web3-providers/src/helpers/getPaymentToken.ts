@@ -1,7 +1,7 @@
 import {
     APE,
     BUSD,
-    ChainId,
+    type ChainId,
     createNativeToken,
     DAI,
     HUSD,

@@ -22,27 +22,27 @@ export function injectToolboxHintAtTwitter(signal: AbortSignal, category: 'walle
             signal,
         )
 
-    function updateStyle() {
-        const SideBarNativeItem = document.querySelector('[role="banner"] [role="navigation"] > div > div')
-        const SideBarNativeItemText = document.querySelector(
-            '[role="banner"] [role="navigation"] > div > div > div[dir="auto"]',
-        )
-        const SideBarNativeItemIcon = document.querySelector(
-            '[role="banner"] [role="navigation"] > div > div > div:first-child',
-        )
-        const SideBarNativeItemStyle = SideBarNativeItem ? window.getComputedStyle(SideBarNativeItem) : null
-        const SideBarNativeItemTextStyle = SideBarNativeItemText ? window.getComputedStyle(SideBarNativeItemText) : null
-        const SideBarNativeItemIconStyle = SideBarNativeItemIcon ? window.getComputedStyle(SideBarNativeItemIcon) : null
-        SideBarNativeItemPaddingRef.value = SideBarNativeItemStyle?.padding ?? '11px'
-        SideBarNativeItemIconSize.value = SideBarNativeItemIconStyle?.width ?? '24px'
-        SideBarNativeItemTextMarginLeftRef.value = SideBarNativeItemTextStyle?.marginLeft ?? '20px'
-    }
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
         <ToolboxHintAtTwitter category={category} />,
     )
     injectProfile(signal)
 }
 
+function updateStyle() {
+    const SideBarNativeItem = document.querySelector('[role="banner"] [role="navigation"] > div > div')
+    const SideBarNativeItemText = document.querySelector(
+        '[role="banner"] [role="navigation"] > div > div > div[dir="auto"]',
+    )
+    const SideBarNativeItemIcon = document.querySelector(
+        '[role="banner"] [role="navigation"] > div > div > div:first-child',
+    )
+    const SideBarNativeItemStyle = SideBarNativeItem ? window.getComputedStyle(SideBarNativeItem) : null
+    const SideBarNativeItemTextStyle = SideBarNativeItemText ? window.getComputedStyle(SideBarNativeItemText) : null
+    const SideBarNativeItemIconStyle = SideBarNativeItemIcon ? window.getComputedStyle(SideBarNativeItemIcon) : null
+    SideBarNativeItemPaddingRef.value = SideBarNativeItemStyle?.padding ?? '11px'
+    SideBarNativeItemIconSize.value = SideBarNativeItemIconStyle?.width ?? '24px'
+    SideBarNativeItemTextMarginLeftRef.value = SideBarNativeItemTextStyle?.marginLeft ?? '20px'
+}
 export function useSideBarNativeItemStyleVariants() {
     return {
         textMarginLeft: useValueRef(SideBarNativeItemTextMarginLeftRef),

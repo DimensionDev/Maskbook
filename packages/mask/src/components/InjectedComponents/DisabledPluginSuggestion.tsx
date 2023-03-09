@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import {
     BooleanPreference,
-    Plugin,
+    type Plugin,
     PluginI18NFieldRender,
     registeredPlugins,
     useActivatedPluginsSNSAdaptor,
@@ -11,8 +11,8 @@ import { MaskPostExtraInfoWrapper } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme } from '@masknet/theme'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { Box, BoxProps, Button, Skeleton, Typography, useTheme } from '@mui/material'
-import { ReactNode, useCallback } from 'react'
+import { Box, type BoxProps, Button, Skeleton, Typography, useTheme } from '@mui/material'
+import { type ReactNode, useCallback } from 'react'
 import { useAsync } from 'react-use'
 import type { Option } from 'ts-results-es'
 import { useSubscription } from 'use-subscription'

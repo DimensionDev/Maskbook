@@ -1,17 +1,17 @@
 import { memoize } from 'lodash-es'
 import { memoizePromise } from '@masknet/kit'
 import {
-    HubOptions,
-    HubIndicator,
-    FungibleAsset,
-    Pageable,
+    type HubOptions,
+    type HubIndicator,
+    type FungibleAsset,
+    type Pageable,
     TokenType,
     createPageable,
     createIndicator,
-    FungibleToken,
+    type FungibleToken,
     isSameAddress,
     CurrencyType,
-    NonFungibleToken,
+    type NonFungibleToken,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -100,7 +100,7 @@ export class SolanaFungibleAPI
         return splTokens
     }
 
-    async getAsset(account: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId, HubIndicator> = {}) {
+    async getAsset(account: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
         const price = await this.coingecko.getFungibleTokenPrice(chainId, getNativeTokenAddress(), {
             currencyType: CurrencyType.USD,
         })
@@ -117,7 +117,7 @@ export class SolanaFungibleAPI
 
     async getAssets(
         address: string,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
+        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, HubIndicator>> {
         if (!isValidChainId(chainId)) {
             return createPageable([], createIndicator(indicator))

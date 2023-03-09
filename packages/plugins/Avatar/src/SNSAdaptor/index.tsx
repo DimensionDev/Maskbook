@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { Plugin, PluginI18NFieldRender, SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { type Plugin, PluginI18NFieldRender, SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, Web3ContextProvider } from '@masknet/web3-hooks-base'
@@ -10,6 +10,11 @@ import { base } from '../base.js'
 import { setupContext } from '../context.js'
 import { SharedContextSettings } from '../settings.js'
 
+function clickHandler() {
+    CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
+        open: true,
+    })
+}
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
@@ -47,11 +52,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
             return {
                 RenderEntryComponent(EntryComponentProps) {
-                    const clickHandler = () => {
-                        CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
-                            open: true,
-                        })
-                    }
                     return (
                         <ApplicationEntry
                             title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}

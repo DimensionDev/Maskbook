@@ -4,7 +4,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { WalletIcon } from '@masknet/shared'
-import { SourceType, formatInteger, formatMarketCap, formatSupply, TokenType } from '@masknet/web3-shared-base'
+import { type SourceType, formatInteger, formatMarketCap, formatSupply, TokenType } from '@masknet/web3-shared-base'
 import type { Trending } from '../../types/index.js'
 import { useI18N } from '../../../../utils/index.js'
 import { useTrendingOverview } from '../../trending/useTrending.js'
@@ -145,7 +145,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
     const { value: overview } = useTrendingOverview(props.result.pluginID, props.result, chainId)
     const { classes, cx } = useStyles()
     const chain = useNetworkDescriptor(props.result.pluginID ?? NetworkPluginID.PLUGIN_EVM, chainId)
-    const ChainIcon = () => <WalletIcon mainIcon={chain?.icon} size={14} />
+    const ChainIcon = <WalletIcon mainIcon={chain?.icon} size={14} />
     return (
         <Stack>
             <Grid spacing={4} className={classes.gridContainer}>
@@ -170,7 +170,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                         {t('plugin_trader_market_cap')}
                     </Typography>
                     <div className={classes.amountWrapper}>
-                        {overview?.market_cap ? <ChainIcon /> : null}
+                        {overview?.market_cap ? ChainIcon : null}
                         <Typography
                             color="textPrimary"
                             variant="body2"
@@ -184,7 +184,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                         {t('plugin_trader_highest_price')}
                     </Typography>
                     <div className={classes.amountWrapper}>
-                        {overview?.highest_price ? <ChainIcon /> : null}
+                        {overview?.highest_price ? ChainIcon : null}
                         <Typography
                             color="textPrimary"
                             variant="body2"
@@ -199,7 +199,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                         {t('plugin_trader_total_volume')}
                     </Typography>
                     <div className={classes.amountWrapper}>
-                        {overview?.total_volume ? <ChainIcon /> : null}
+                        {overview?.total_volume ? ChainIcon : null}
                         <Typography
                             color="textPrimary"
                             variant="body2"
@@ -214,7 +214,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                         {t('plugin_trader_one_day_average_price')}
                     </Typography>
                     <div className={classes.amountWrapper}>
-                        {overview?.average_price_24h ?? overview?.average_price ? <ChainIcon /> : null}
+                        {overview?.average_price_24h ?? overview?.average_price ? ChainIcon : null}
                         <Typography
                             color="textPrimary"
                             variant="body2"
@@ -229,7 +229,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                         {t('plugin_trader_one_day_traded_volume')}
                     </Typography>
                     <div className={classes.amountWrapper}>
-                        {overview?.volume_24h ?? overview?.volume ? <ChainIcon /> : null}
+                        {overview?.volume_24h ?? overview?.volume ? ChainIcon : null}
                         <Typography
                             color="textPrimary"
                             variant="body2"

@@ -7,7 +7,7 @@ import { TokenIcon } from '@masknet/shared'
 import type { SecurityAPI, TrendingAPI } from '@masknet/web3-providers/types'
 import { Icons } from '@masknet/icons'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { formatCurrency, FungibleToken } from '@masknet/web3-shared-base'
+import { formatCurrency, type FungibleToken } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { DefineMapping, SecurityMessageLevel } from '../constants.js'
 import { TokenPanel } from './TokenPanel.js'
@@ -113,7 +113,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                     </Stack>
                 </Stack>
                 <Stack>
-                    {hasWarningFactor && (
+                    {hasWarningFactor ? (
                         <div
                             style={{
                                 backgroundColor:
@@ -139,7 +139,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                                 {riskyFactors !== 0 ? t.high_risk() : t.medium_risk()}
                             </Typography>
                         </div>
-                    )}
+                    ) : null}
                 </Stack>
             </Stack>
             <Stack spacing={1}>

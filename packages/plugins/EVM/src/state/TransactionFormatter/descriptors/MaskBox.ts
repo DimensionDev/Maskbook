@@ -1,7 +1,7 @@
 import type { AbiItem } from 'web3-utils'
 import { i18NextInstance } from '@masknet/shared-base'
-import { TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId, getMaskBoxConstants, TransactionParameter } from '@masknet/web3-shared-evm'
+import { type TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
+import { type ChainId, getMaskBoxConstants, type TransactionParameter } from '@masknet/web3-shared-evm'
 import MaskBox_ABI from '@masknet/web3-contracts/abis/MaskBox.json'
 import { Web3StateSettings } from '../../../settings/index.js'
 import type { TransactionDescriptor } from '../types.js'
@@ -15,7 +15,7 @@ export class MaskBoxDescriptor extends DescriptorWithTransactionDecodedReceipt i
 
         const events = await this.getReceipt(chainId, contractAddress, MaskBox_ABI as AbiItem[], hash)
 
-        const { amount, token_address } = (events?.ClaimPayment.returnValues ?? {}) as {
+        const { amount, token_address } = (events?.ClaimPayment?.returnValues ?? {}) as {
             amount: string
             token_address: string
         }
@@ -29,7 +29,7 @@ export class MaskBoxDescriptor extends DescriptorWithTransactionDecodedReceipt i
         return getTokenAmountDescription(amount, token)
     }
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
-        const context = context_ as TransactionContext<ChainId, string | undefined>
+        const context = context_ as TransactionContext<ChainId>
 
         const { MASK_BOX_CONTRACT_ADDRESS } = getMaskBoxConstants(context.chainId)
         if (!isSameAddress(context.to, MASK_BOX_CONTRACT_ADDRESS)) return

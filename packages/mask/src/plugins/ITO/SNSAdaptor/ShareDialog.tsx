@@ -1,5 +1,5 @@
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { FungibleToken, formatBalance, isZero } from '@masknet/web3-shared-base'
+import { type FungibleToken, formatBalance, isZero } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import type { BigNumber } from 'bignumber.js'

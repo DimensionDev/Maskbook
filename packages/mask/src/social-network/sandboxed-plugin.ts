@@ -1,7 +1,7 @@
 import { Children, createElement } from 'react'
-import { SiteAdaptorInstance, SiteAdaptorPluginHost } from '@masknet/sandboxed-plugin-runtime/site-adaptor'
+import { type SiteAdaptorInstance, SiteAdaptorPluginHost } from '@masknet/sandboxed-plugin-runtime/site-adaptor'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { Plugin, registerPlugin } from '@masknet/plugin-infra'
+import { type Plugin, registerPlugin } from '@masknet/plugin-infra'
 import type { PluginID } from '@masknet/shared-base'
 import { Flags } from '../../shared/flags.js'
 import { hmr } from '../../utils-pure/index.js'
@@ -48,7 +48,6 @@ function __builtInPluginInfraBridgeCallback__(this: SiteAdaptorPluginHost, id: s
 
     const base: Plugin.Shared.Definition = {
         enableRequirement: {
-            architecture: { web: true, app: true },
             networks: { type: 'opt-out', networks: {} },
             target: 'beta',
         },

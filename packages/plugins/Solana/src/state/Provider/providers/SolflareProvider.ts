@@ -1,4 +1,4 @@
-import type { PublicKey, Transaction } from '@solana/web3.js'
+import type { Transaction } from '@solana/web3.js'
 import { injectedSolflareProvider } from '@masknet/injected-script'
 import { PhantomMethodType, ProviderType } from '@masknet/web3-shared-solana'
 import type { SolanaProvider } from '../types.js'
@@ -13,9 +13,7 @@ export class SolflareProvider extends BaseInjectedProvider implements SolanaProv
         const { signature } = (await this.bridge.request({
             method: PhantomMethodType.SIGN_MESSAGE,
             params: [new TextEncoder().encode(message)],
-        })) as {
-            signature: string
-        }
+        })) as any
         return signature
     }
 
@@ -23,10 +21,7 @@ export class SolflareProvider extends BaseInjectedProvider implements SolanaProv
         const { signature, publicKey } = (await this.bridge.request({
             method: PhantomMethodType.SIGN_TRANSACTION,
             params: [transaction],
-        })) as {
-            signature: Buffer
-            publicKey: PublicKey
-        }
+        })) as any
         transaction.addSignature(publicKey, signature)
         return transaction
     }

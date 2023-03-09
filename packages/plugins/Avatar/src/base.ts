@@ -1,6 +1,6 @@
 import { PLUGIN_ID } from './constants.js'
 import { languages } from './locales/languages.js'
-import { Plugin, CurrentSNSNetwork } from '@masknet/plugin-infra'
+import { type Plugin, CurrentSNSNetwork } from '@masknet/plugin-infra'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
@@ -10,7 +10,6 @@ export const base: Plugin.Shared.Definition = {
     },
     publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
     enableRequirement: {
-        architecture: { app: true, web: true },
         networks: {
             type: 'opt-in',
             networks: {

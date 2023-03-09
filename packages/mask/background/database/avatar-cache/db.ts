@@ -1,6 +1,6 @@
-import { openDB, DBSchema } from 'idb/with-async-ittr'
-import { ECKeyIdentifier, Identifier, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
-import { createDBAccess, createTransaction, IDBPSafeTransaction } from '../utils/openDB.js'
+import { openDB, type DBSchema } from 'idb/with-async-ittr'
+import { ECKeyIdentifier, Identifier, type PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import { createDBAccess, createTransaction, type IDBPSafeTransaction } from '../utils/openDB.js'
 
 const pendingUpdate = new Map<IdentifierWithAvatar, Partial<AvatarMetadataRecord>>()
 let pendingUpdateTimer: ReturnType<typeof setTimeout> | null
@@ -55,7 +55,7 @@ export async function storeAvatarDB(
  * Read avatar out
  */
 export async function queryAvatarDB(
-    t: IDBPSafeTransaction<AvatarDBSchema, ['avatars'], 'readonly'>,
+    t: IDBPSafeTransaction<AvatarDBSchema, ['avatars']>,
     id: IdentifierWithAvatar,
 ): Promise<ArrayBuffer | null> {
     const result = await t.objectStore('avatars').get(id.toText())
@@ -90,7 +90,7 @@ function scheduleAvatarMetaUpdate(id: IdentifierWithAvatar, meta: Partial<Avatar
  * @internal
  */
 export async function queryAvatarOutdatedDB(
-    t: IDBPSafeTransaction<AvatarDBSchema, ['metadata'], 'readonly'>,
+    t: IDBPSafeTransaction<AvatarDBSchema, ['metadata']>,
     attribute: 'lastUpdateTime' | 'lastAccessTime',
     deadline: Date = new Date(Date.now() - 1000 * 60 * 60 * 24 * (attribute === 'lastAccessTime' ? 14 : 7)),
 ) {
@@ -113,7 +113,7 @@ export async function queryAvatarOutdatedDB(
  * @internal
  */
 export async function isAvatarOutdatedDB(
-    t: IDBPSafeTransaction<AvatarDBSchema, ['metadata'], 'readonly'>,
+    t: IDBPSafeTransaction<AvatarDBSchema, ['metadata']>,
     identifier: IdentifierWithAvatar,
     attribute: 'lastUpdateTime' | 'lastAccessTime',
     deadline: Date = new Date(Date.now() - 1000 * 60 * 60 * 24 * (attribute === 'lastAccessTime' ? 30 : 7)),

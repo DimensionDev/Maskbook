@@ -8,7 +8,6 @@ import type { LegacyWalletRecord } from '../database/types.js'
 import { fromHex, toHex } from '@masknet/shared-base'
 import { isSameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { LegacyWalletRecordOutDB } from './helpers.js'
-import { hasNativeAPI } from '../../../../shared/native-rpc/index.js'
 
 function sortWallet(a: LegacyWalletRecord, b: LegacyWalletRecord) {
     if (a.updatedAt > b.updatedAt) return -1
@@ -19,7 +18,6 @@ function sortWallet(a: LegacyWalletRecord, b: LegacyWalletRecord) {
 }
 
 export async function getLegacyWallets() {
-    if (hasNativeAPI) return []
     const wallets = await getAllWalletRecords()
     return wallets.filter((x) => x._private_key_ || x.mnemonic.length)
 }
@@ -103,10 +101,11 @@ async function recoverWalletFromPrivateKey(privateKey: string) {
         privateKeyInHex: privateKey.startsWith('0x') ? privateKey : `0x${privateKey}`,
         mnemonic: [],
     }
-    function privateKeyVerify(key: string) {
-        if (!/[\da-f]{64}/i.test(key)) return false
-        const k = new BigNumber(key, 16)
-        const n = new BigNumber('fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141', 16)
-        return !k.isZero() && k.isLessThan(n)
-    }
+}
+
+function privateKeyVerify(key: string) {
+    if (!/[\da-f]{64}/i.test(key)) return false
+    const k = new BigNumber(key, 16)
+    const n = new BigNumber('fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141', 16)
+    return !k.isZero() && k.isLessThan(n)
 }

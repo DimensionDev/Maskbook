@@ -15,11 +15,14 @@ export async function getUserSettings() {
         query.addEventListener('success', (event) => {
             if (!event.target) reject('Failed to get user settings.')
 
-            const event_ = event as unknown as TwitterBaseAPI.Event<{
-                local: TwitterBaseAPI.UserSettings
-            }>
+            const event_ = event as unknown as TwitterBaseAPI.Event<
+                | {
+                      local: TwitterBaseAPI.UserSettings
+                  }
+                | undefined
+            >
 
-            resolve(event_.target.result.local)
+            resolve(event_.target.result?.local)
         })
         query.addEventListener('error', (error) => {
             reject(error)

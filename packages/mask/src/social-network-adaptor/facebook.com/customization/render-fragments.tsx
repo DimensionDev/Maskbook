@@ -1,4 +1,4 @@
-import { DefaultRenderFragments, RenderFragmentsContextType } from '@masknet/typed-message-react'
+import { DefaultRenderFragments, type RenderFragmentsContextType } from '@masknet/typed-message-react'
 import { memo } from 'react'
 import { Link } from '@mui/material'
 import { useTagEnhancer } from '../../../../shared-ui/TypedMessageRender/Components/Text.js'

@@ -1,7 +1,7 @@
 import { chunk, first, flatten } from 'lodash-es'
 import stringify from 'json-stable-stringify'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ChainId, getTrendingConstants } from '@masknet/web3-shared-evm'
+import { type ChainId, getTrendingConstants } from '@masknet/web3-shared-evm'
 import { fetchJSON } from '../../entry-helpers.js'
 
 interface Block {
@@ -88,8 +88,7 @@ export async function fetchBlockNumbersByTimestamps(chainId: ChainId, timestamps
         data.filter(Boolean).map((result) =>
             Object.keys(result!).map((x) => ({
                 timestamp: Number(x.split('t')[1]),
-                // @ts-ignore
-                blockNumber: first(result[x])!.number,
+                blockNumber: first(result![x])!.number,
             })),
         ),
     )

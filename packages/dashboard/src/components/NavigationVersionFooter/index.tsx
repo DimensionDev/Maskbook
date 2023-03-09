@@ -11,6 +11,6 @@ const VersionContainer = styled('div')(() => ({
 
 export const NavigationVersionFooter = memo(() => {
     const t = useDashboardI18N()
-    const version = globalThis.browser?.runtime.getManifest()?.version ?? process.env.VERSION
-    return <VersionContainer>{version && t.version_of_stable({ version })}</VersionContainer>
+    const version = process.env.VERSION
+    return <VersionContainer>{version ? version : t.version_of_stable({ version })}</VersionContainer>
 })

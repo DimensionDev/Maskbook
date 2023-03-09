@@ -30,8 +30,7 @@ export const postEditorDraftContentSelector = () => {
     return querySelector<HTMLElement>('m-composer__modal m-composer__textarea textarea.m-composerTextarea__message')
 }
 
-export const handleSelector = () =>
-    querySelector<HTMLScriptElement, true>('.m-sidebarNavigation ul > li:nth-child(8) a span')
+export const handleSelector = () => querySelector<HTMLScriptElement>('.m-sidebarNavigation ul > li:nth-child(8) a span')
 
 export const selfInfoSelectors = () => ({
     handle: handleSelector().map((x) => x.innerText.replace(/@/, '').trim()),
@@ -49,7 +48,7 @@ export const composeButtonSelector = () =>
         [
             '.m-sidebarNavigation__item m-sidebarNavigation__item--compose',
             '.m-sidebarNavigation__item--compose a', // legacy
-        ].join(),
+        ].join(','),
         true,
     )
 
@@ -76,7 +75,7 @@ export const postContentSelector = () =>
             'm-activityv2 m-activityv2__content .m-activityContentText__body > m-readmore > span:first-child',
             'm-activity:not(.m-activity--minimalMode) m-activity__content .m-activityContent__messageWrapper > span:first-child',
             'm-activity:not(.m-activity--minimalMode) m-activity__content .m-activityContent__mediaDescriptionText',
-        ].join(),
+        ].join(','),
     )
 
 export const searchMindsProfileCover = () => querySelector('div[data-cy="data-minds-channel-banner"]')

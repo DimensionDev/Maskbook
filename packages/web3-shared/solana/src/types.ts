@@ -34,7 +34,6 @@ export enum ProviderType {
 // Learn more at https://docs.phantom.app/integrating/extension-and-mobile-browser/detecting-the-provider
 export enum PhantomMethodType {
     CONNECT = 'connect',
-    DISCONNECT = 'connect',
     SIGN_MESSAGE = 'signMessage',
     SIGN_TRANSACTION = 'signTransaction',
     SIGN_TRANSACTIONS = 'signAllTransactions',

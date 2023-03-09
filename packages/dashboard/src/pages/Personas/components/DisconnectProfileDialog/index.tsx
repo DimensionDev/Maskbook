@@ -79,7 +79,7 @@ export const DisconnectProfileDialog = ({
                         ))}
                     </Stack>
                 )}
-                {currentStep === steps.action && profileIdentifier && (
+                {currentStep === steps.action && profileIdentifier ? (
                     <Box>
                         <Box textAlign="center" py={2}>
                             <Icons.Warning className={classes.svg} size={64} />
@@ -106,7 +106,7 @@ export const DisconnectProfileDialog = ({
                             </Button>
                         </Stack>
                     </Box>
-                )}
+                ) : null}
             </DialogContent>
         </MaskDialog>
     )

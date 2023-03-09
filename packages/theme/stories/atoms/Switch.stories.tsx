@@ -1,4 +1,4 @@
-import { Switch as MuiSwitch, FormControlLabel, SwitchProps } from '@mui/material'
+import { Switch as MuiSwitch, FormControlLabel, type SwitchProps } from '@mui/material'
 import { story } from '../utils/index.js'
 
 function C(props: SwitchProps) {

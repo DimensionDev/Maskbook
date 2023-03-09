@@ -22,7 +22,6 @@ export function composeTransformers(): ComposedTransformers {
 
     let composedTransformer: Transformer | undefined
     function composed(message: TypedMessage, context: TransformationContext) {
-        // eslint-disable-next-line unicorn/no-array-reduce
         return [...transformers].sort((a, b) => b[1] - a[1]).reduce((p, [c]) => c(p, context), message)
     }
 

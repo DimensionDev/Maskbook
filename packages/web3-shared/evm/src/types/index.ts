@@ -240,7 +240,7 @@ export interface Web3Provider {
         payload: JsonRpcPayload,
         callback: (error: Error | null, response?: JsonRpcResponse) => void,
     ): Promise<JsonRpcResponse>
-    request<T extends unknown>(requestArguments: RequestArguments): Promise<T>
+    request<T>(requestArguments: RequestArguments): Promise<T>
 
     on(name: 'connect', listener: (connectInfo: { chainId: string }) => void): Web3Provider
     on(name: 'disconnect', listener: (error: { message: string; code: number; data?: unknown }) => void): Web3Provider

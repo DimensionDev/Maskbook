@@ -1,9 +1,14 @@
 import type { AbiItem } from 'web3-utils'
 import { i18NextInstance } from '@masknet/shared-base'
-import { ChainId, getNftRedPacketConstant, getRedPacketConstants, TransactionParameter } from '@masknet/web3-shared-evm'
+import {
+    type ChainId,
+    getNftRedPacketConstant,
+    getRedPacketConstants,
+    type TransactionParameter,
+} from '@masknet/web3-shared-evm'
 import HappyRedPacketV4ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import NftRedPacketABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
-import { isSameAddress, TransactionContext } from '@masknet/web3-shared-base'
+import { isSameAddress, type TransactionContext } from '@masknet/web3-shared-base'
 import type { TransactionDescriptor } from '../types.js'
 import { Web3StateSettings } from '../../../settings/index.js'
 import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } from '../utils.js'
@@ -15,7 +20,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
         })
         const events = await this.getReceipt(chainId, contractAddress, HappyRedPacketV4ABI as AbiItem[], hash)
 
-        const { claimed_value, token_address } = (events?.ClaimSuccess.returnValues ?? {}) as {
+        const { claimed_value, token_address } = (events?.ClaimSuccess?.returnValues ?? {}) as {
             claimed_value: string
             token_address: string
         }
@@ -35,7 +40,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
         })
         const events = await this.getReceipt(chainId, contractAddress, HappyRedPacketV4ABI as AbiItem[], hash)
 
-        const { remaining_balance, token_address } = (events?.RefundSuccess.returnValues ?? {}) as {
+        const { remaining_balance, token_address } = (events?.RefundSuccess?.returnValues ?? {}) as {
             token_address: string
             remaining_balance: string
         }
@@ -52,7 +57,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
     async getClaimedNFTSymbol(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
         const events = await this.getReceipt(chainId, contractAddress, NftRedPacketABI as AbiItem[], hash)
 
-        const { token_address } = (events?.ClaimSuccess.returnValues ?? {}) as {
+        const { token_address } = (events?.ClaimSuccess?.returnValues ?? {}) as {
             token_address: string
         }
 
@@ -73,7 +78,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
 
     // TODO: 6002: avoid using i18n text in a service. delegate it to ui.
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
-        const context = context_ as TransactionContext<ChainId, string | undefined>
+        const context = context_ as TransactionContext<ChainId>
 
         const {
             HAPPY_RED_PACKET_ADDRESS_V1,

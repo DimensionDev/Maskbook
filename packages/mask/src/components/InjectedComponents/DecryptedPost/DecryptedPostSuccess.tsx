@@ -5,7 +5,7 @@ import { SelectProfileDialog } from '../SelectPeopleDialog.js'
 import { makeStyles } from '@masknet/theme'
 import { Link } from '@mui/material'
 import type { TypedMessage } from '@masknet/typed-message'
-import { EMPTY_LIST, ProfileIdentifier } from '@masknet/shared-base'
+import { EMPTY_LIST, type ProfileIdentifier } from '@masknet/shared-base'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage.js'
 import { DecryptedUI_PluginRendererWithSuggestion } from '../DecryptedPostMetadataRender.js'
 import { PostInfoContext, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
@@ -83,9 +83,9 @@ const DecryptPostSuccessAppendShare = memo(function DecryptPostSuccessAppendShar
             <Link color="primary" onClick={() => setShowDialog(true)} className={classes.addRecipientsLink}>
                 {t('decrypted_postbox_add_recipients')}
             </Link>
-            {showDialog && (
+            {showDialog ? (
                 <AppendShareDetail whoAmI={props.whoAmI} onClose={() => setShowDialog(false)} recipients={recipients} />
-            )}
+            ) : null}
         </>
     ) : null
     return <DecryptPostSuccessBase {...props}>{rightActions}</DecryptPostSuccessBase>

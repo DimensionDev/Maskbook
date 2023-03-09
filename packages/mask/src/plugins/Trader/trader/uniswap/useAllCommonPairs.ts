@@ -45,7 +45,7 @@ export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currenc
             // each base against all bases
             ...basePairs,
         ]
-            .filter((tokens): tokens is [Token, Token] => Boolean(tokens[0] && tokens[1]))
+            .filter((tokens): tokens is [Token, Token] => !!(tokens[0] && tokens[1]))
             .filter(([t0, t1]) => t0.address !== t1.address)
             .filter(([tokenA, tokenB]) => {
                 if (!chainIdValid) return true

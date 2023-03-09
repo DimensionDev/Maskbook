@@ -1,5 +1,5 @@
 import bs58 from 'bs58'
-import { PublicKey, Transaction } from '@solana/web3.js'
+import { PublicKey, type Transaction } from '@solana/web3.js'
 import { injectedPhantomProvider } from '@masknet/injected-script'
 import { PhantomMethodType, ProviderType } from '@masknet/web3-shared-solana'
 import type { SolanaProvider } from '../types.js'

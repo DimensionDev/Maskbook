@@ -1,10 +1,10 @@
 import { BigNumber } from 'bignumber.js'
-import { FungibleAsset, leftShift, multipliedBy, TokenType, Transaction } from '@masknet/web3-shared-base'
+import { type FungibleAsset, leftShift, multipliedBy, TokenType, type Transaction } from '@masknet/web3-shared-base'
 import { ChainId, getTokenConstant, SchemaType, formatEthereumAddress, isValidAddress } from '@masknet/web3-shared-evm'
 import {
-    ZerionAddressPosition,
+    type ZerionAddressPosition,
     ZerionRBDTransactionType,
-    ZerionTransactionItem,
+    type ZerionTransactionItem,
     ZerionTransactionStatus,
 } from './types.js'
 
@@ -14,13 +14,14 @@ export function isValidAsset(data: ZerionAddressPosition) {
     return isValidAddress(address)
 }
 
+function isNativeToken(symbol: string) {
+    return ['ETH', 'BNB', 'MATIC', 'ARETH', 'AETH', 'ONE', 'ASTR', 'XDAI'].includes(symbol)
+}
 export function formatAsset(chainId: ChainId, data: ZerionAddressPosition): FungibleAsset<ChainId, SchemaType> {
     const { asset, chain, quantity } = data
     const { address: address_, decimals } = asset.implementations[chain]
     const balance = leftShift(quantity, decimals).toNumber()
     const price = asset.price?.value ?? 0
-    const isNativeToken = (symbol: string) =>
-        ['ETH', 'BNB', 'MATIC', 'ARETH', 'AETH', 'ONE', 'ASTR', 'XDAI'].includes(symbol)
     const address = isNativeToken(asset.symbol) ? getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS', '') : address_
 
     return {

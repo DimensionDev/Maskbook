@@ -1,21 +1,21 @@
 import { memoize } from 'lodash-es'
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
-import { AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
+import { type AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
 import { delay } from '@masknet/kit'
 import {
     AddressType,
     SchemaType,
-    ChainId,
+    type ChainId,
     createContract,
     createWeb3Provider,
     createWeb3Request,
     isValidAddress,
-    Web3Provider,
-    Transaction,
-    TransactionDetailed,
-    TransactionReceipt,
-    Block,
+    type Web3Provider,
+    type Transaction,
+    type TransactionDetailed,
+    type TransactionReceipt,
+    type Block,
     isEmptyHex,
     getTransactionStatusType,
     EthereumMethodType,
@@ -26,17 +26,17 @@ import {
     createNativeToken,
     getTokenConstant,
     getEthereumConstant,
-    TransactionSignature,
+    type TransactionSignature,
     ProviderURL,
     getAverageBlockDelay,
 } from '@masknet/web3-shared-evm'
 import {
-    FungibleToken,
-    NonFungibleCollection,
-    NonFungibleToken,
-    NonFungibleTokenContract,
-    NonFungibleTokenMetadata,
-    TransactionStatusType,
+    type FungibleToken,
+    type NonFungibleCollection,
+    type NonFungibleToken,
+    type NonFungibleTokenContract,
+    type NonFungibleTokenMetadata,
+    type TransactionStatusType,
     createNonFungibleToken,
     createNonFungibleTokenCollection,
     createNonFungibleTokenContract,
@@ -305,7 +305,7 @@ export class Web3API
         if (actualSchema === SchemaType.ERC1155) {
             const contract = this.getERC1155Contract(chainId, address)
             // the owner has at least 1 token
-            return toNumber((await contract?.methods.balanceOf(owner, tokenId).call()) ?? 0) > 0 ?? false
+            return toNumber((await contract?.methods.balanceOf(owner, tokenId).call()) ?? 0) > 0
         }
 
         // ERC721
@@ -522,9 +522,7 @@ export class Web3API
                 contractERC721?.methods.symbol().call() ?? EMPTY_STRING,
             ])
 
-            const [name, symbol] = results.map((result) =>
-                result.status === 'fulfilled' ? result.value : '',
-            ) as string[]
+            const [name, symbol] = results.map((result) => (result.status === 'fulfilled' ? result.value : ''))
 
             return createNonFungibleTokenContract(
                 chainId,
@@ -542,7 +540,7 @@ export class Web3API
             contract?.methods.symbol().call() ?? EMPTY_STRING,
         ])
 
-        const [name, symbol] = results.map((result) => (result.status === 'fulfilled' ? result.value : '')) as string[]
+        const [name, symbol] = results.map((result) => (result.status === 'fulfilled' ? result.value : ''))
 
         return createNonFungibleTokenContract<ChainId, SchemaType.ERC721>(
             chainId,
@@ -565,7 +563,7 @@ export class Web3API
         // ERC721
         const contract = this.getERC721Contract(chainId, address)
         const results = await Promise.allSettled([contract?.methods.name().call() ?? EMPTY_STRING])
-        const [name] = results.map((result) => (result.status === 'fulfilled' ? result.value : '')) as string[]
+        const [name] = results.map((result) => (result.status === 'fulfilled' ? result.value : ''))
         return createNonFungibleTokenCollection(chainId, address, name ?? 'Unknown Token', '')
     }
 }

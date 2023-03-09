@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useI18N } from '../../../utils/index.js'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { PersonaSelectPanel, PositionOption } from './PersonaSelectPanel.js'
+import { PersonaSelectPanel, type PositionOption } from './PersonaSelectPanel.js'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 
 type PositionStyle = {

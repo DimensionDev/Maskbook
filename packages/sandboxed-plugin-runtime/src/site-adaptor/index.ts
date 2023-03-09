@@ -1,5 +1,5 @@
 import { PluginRuntime } from '../runtime/runtime.js'
-import { BasicHostHooks, BasicHostInstance, PluginRunner } from '../runtime/runner.js'
+import { type BasicHostHooks, type BasicHostInstance, PluginRunner } from '../runtime/runner.js'
 import { getURL } from '../utils/url.js'
 import { addPeerDependencies } from '../peer-dependencies/index.js'
 import { addPeerDependenciesDOM, createI18nHooksAndTranslate } from '../peer-dependencies-dom/index.js'
@@ -58,7 +58,7 @@ export class SiteAdaptorPluginHost extends PluginRunner<SiteAdaptorHostHooks, Si
                 if (!data) return null
                 if (!('text' in data))
                     throw new TypeError('registerMetadataBadgeRender must return an object with text.')
-                const { text, tooltip } = data as any
+                const { text, tooltip } = data
                 // assert
                 Children.only(text)
                 tooltip && Children.only(tooltip)

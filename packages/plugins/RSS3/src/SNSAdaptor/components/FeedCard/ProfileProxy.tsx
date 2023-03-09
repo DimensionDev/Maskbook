@@ -1,0 +1,113 @@
+import { Icons } from '@masknet/icons'
+import { Image } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
+import { RSS3BaseAPI } from '@masknet/web3-providers/types'
+import { Typography } from '@mui/material'
+import type { FC } from 'react'
+import { Translate } from '../../../locales/i18n_generated.js'
+import { useAddressLabel } from '../../hooks/index.js'
+import { CardFrame, type FeedCardProps } from '../base.js'
+import { CardType } from '../share.js'
+import { Label } from './common.js'
+
+const useStyles = makeStyles<void, 'body'>()((theme, _, refs) => ({
+    summary: {
+        color: theme.palette.maskColor.third,
+    },
+    body: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: theme.spacing(1.5),
+        gap: theme.spacing(2),
+    },
+    verbose: {
+        [`.${refs.body}`]: {
+            height: 186,
+            justifyContent: 'center',
+        },
+    },
+
+    user: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    name: {
+        color: theme.palette.maskColor.main,
+        fontWeight: 700,
+        marginLeft: theme.spacing(1),
+    },
+    image: {
+        height: 32,
+        width: 32,
+        borderRadius: '50%',
+        overflow: 'hidden',
+    },
+    avatar: {
+        height: 32,
+        width: 32,
+    },
+}))
+
+const { Tag, Type } = RSS3BaseAPI
+export function isProfileProxyFeed(feed: RSS3BaseAPI.Web3Feed): feed is RSS3BaseAPI.ProfileLinkFeed {
+    return feed.tag === Tag.Social && feed.type === Type.Proxy
+}
+
+interface ProfileProxyCardProps extends Omit<FeedCardProps, 'feed'> {
+    feed: RSS3BaseAPI.ProfileLinkFeed
+}
+
+/**
+ * ProfileProxyCard
+ * Including:
+ *
+ * - ProfileProxy
+ */
+export const ProfileProxyCard: FC<ProfileProxyCardProps> = ({ feed, className, ...rest }) => {
+    const { classes, cx } = useStyles()
+
+    const action = feed.actions[0]
+    const metadata = action.metadata
+
+    const user = useAddressLabel(feed.owner)
+
+    return (
+        <CardFrame
+            type={CardType.ProfileProxy}
+            feed={feed}
+            className={cx(className, rest.verbose ? classes.verbose : null)}
+            {...rest}>
+            <Typography className={classes.summary}>
+                <Translate.profile_proxy
+                    values={{
+                        user,
+                        platform: feed.platform!,
+                    }}
+                    components={{
+                        user: <Label />,
+                        platform: <Label />,
+                    }}
+                />
+            </Typography>
+            {metadata ? (
+                <div className={cx(classes.body)}>
+                    <div className={classes.user}>
+                        <Image
+                            className={classes.avatar}
+                            classes={{
+                                container: classes.image,
+                            }}
+                            height={32}
+                            width={32}
+                            src={`https://cdn.stamp.fyi/avatar/${feed.owner}`}
+                        />
+                        <Typography className={classes.name}>{user}</Typography>
+                    </div>
+                    <Icons.RSS3ProfileLink height={18} width="auto" />
+                </div>
+            ) : null}
+        </CardFrame>
+    )
+}

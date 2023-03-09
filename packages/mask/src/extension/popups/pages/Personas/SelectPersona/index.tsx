@@ -56,7 +56,7 @@ const SelectPersona = memo(() => {
                 <Button
                     variant="contained"
                     className={cx(classes.button, classes.secondaryButton)}
-                    disabled={personas && personas.length >= MAX_PERSONA_LIMIT}
+                    disabled={!!(personas && personas.length >= MAX_PERSONA_LIMIT)}
                     onClick={() => {
                         browser.tabs.create({
                             active: true,

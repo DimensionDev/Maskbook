@@ -1,4 +1,4 @@
-import { Children, FC, useState, HTMLProps, ReactElement } from 'react'
+import { Children, type FC, useState, type HTMLProps, type ReactElement } from 'react'
 import { makeStyles } from '../../UIHelper/makeStyles.js'
 import { MaskColorVar } from '../../CSSVariables/index.js'
 
@@ -80,6 +80,7 @@ export const FolderTabs: FC<FolderTabsProps> = ({ children: childNodes, defaultV
         return (
             <button
                 key={label}
+                type="button"
                 tabIndex={index === 0 ? 0 : -1}
                 role="tab"
                 className={cx(classes.tab, selected ? classes.selected : null)}

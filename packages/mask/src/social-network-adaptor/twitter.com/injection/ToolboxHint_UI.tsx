@@ -5,6 +5,7 @@ import GuideStep from '../../../components/GuideStep/index.js'
 import { useI18N } from '../../../utils/index.js'
 import { useThemeSettings } from '../../../components/DataSource/useActivatedUI.js'
 import { ButtonStyle } from '../constant.js'
+import { useMemo } from 'react'
 
 const twitterBreakPoint = 1265
 const Container = styled('div')`
@@ -40,21 +41,31 @@ export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application'
     const { textMarginLeft, itemPadding, iconSize } = useSideBarNativeItemStyleVariants()
     const themeSettings = useThemeSettings()
     const buttonStyle = ButtonStyle[themeSettings.size]
+    const Typography = useMemo(() => {
+        return ({ children }: React.PropsWithChildren<{}>) => (
+            <Text fontSize={buttonStyle.iconSize} marginLeft={textMarginLeft ?? '20px'}>
+                {children}
+            </Text>
+        )
+    }, [buttonStyle.iconSize, textMarginLeft])
+    const ListItemButton = useMemo(() => {
+        return (
+            props: React.PropsWithChildren<{
+                onClick?: React.MouseEventHandler<HTMLDivElement>
+            }>,
+        ) => (
+            <ListItem style={{ padding: `6px ${itemPadding ?? '11px'}` }} onClick={props.onClick}>
+                {props.children}
+            </ListItem>
+        )
+    }, [itemPadding])
     return (
         <ToolboxHintUnstyled
             iconSize={Number(iconSize.replace('px', '')) - 1}
             mini={mini}
             ListItemIcon={Icon}
-            Typography={({ children }) => (
-                <Text fontSize={buttonStyle.iconSize} marginLeft={textMarginLeft ?? '20px'}>
-                    {children}
-                </Text>
-            )}
-            ListItemButton={({ children, onClick }) => (
-                <ListItem style={{ padding: `6px ${itemPadding ?? '11px'}` }} onClick={onClick}>
-                    {children}
-                </ListItem>
-            )}
+            Typography={Typography}
+            ListItemButton={ListItemButton}
             Container={Container}
             category={props.category}
         />

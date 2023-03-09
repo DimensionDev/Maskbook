@@ -1,9 +1,9 @@
 import { useAsyncRetry } from 'react-use'
-import { asyncIteratorToArray, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { asyncIteratorToArray, EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import {
     CurrencyType,
     currySameAddress,
-    HubIndicator,
+    type HubIndicator,
     isSameAddress,
     leftShift,
     minus,

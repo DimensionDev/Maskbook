@@ -1,13 +1,12 @@
 import { consistentPersonaDBWriteAccess } from '../../database/persona/db.js'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { cleanAvatarDB } from '../../database/avatar-cache/cleanup.js'
-import { hasNativeAPI } from '../../../shared/native-rpc/index.js'
 import { hmr } from '../../../utils-pure/index.js'
 
 const { signal } = hmr(import.meta.webpackHot)
-if (process.env.architecture === 'web') {
+try {
     cleanProfileWithNoLinkedPersona(signal)
-}
+} catch {}
 
 async function cleanRelationDB(anotherList: Set<ProfileIdentifier>) {
     await consistentPersonaDBWriteAccess(async (t) => {
@@ -19,8 +18,6 @@ async function cleanRelationDB(anotherList: Set<ProfileIdentifier>) {
 }
 
 async function cleanProfileWithNoLinkedPersona(signal: AbortSignal) {
-    if (hasNativeAPI) return // we don't do database house keeping work on mobile
-
     const timeout = setTimeout(cleanProfileWithNoLinkedPersona, 1000 * 60 * 60 * 24 /** 1 day */, signal)
     signal.addEventListener('abort', () => clearTimeout(timeout))
 

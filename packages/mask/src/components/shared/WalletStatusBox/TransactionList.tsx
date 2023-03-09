@@ -1,4 +1,4 @@
-import { FC, forwardRef, useCallback, useMemo, useState, useEffect } from 'react'
+import { type FC, forwardRef, useCallback, useMemo, useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
 import { noop } from 'lodash-es'
 import format from 'date-fns/format'
@@ -6,9 +6,14 @@ import { Icons } from '@masknet/icons'
 import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { isSameAddress, RecentTransactionComputed, TransactionStatusType, Transaction } from '@masknet/web3-shared-base'
+import {
+    isSameAddress,
+    type RecentTransactionComputed,
+    TransactionStatusType,
+    type Transaction,
+} from '@masknet/web3-shared-base'
 import { getContractOwnerDomain } from '@masknet/web3-shared-evm'
-import { Grid, GridProps, Link, List, ListItem, ListProps, Stack, Typography } from '@mui/material'
+import { Grid, type GridProps, Link, List, ListItem, type ListProps, Stack, Typography } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({

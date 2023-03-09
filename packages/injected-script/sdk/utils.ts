@@ -1,4 +1,4 @@
-import { CustomEventId, InternalEvents, encodeEvent } from '../shared/index.js'
+import { CustomEventId, type InternalEvents, encodeEvent } from '../shared/index.js'
 
 export function sendEvent<K extends keyof InternalEvents>(name: K, ...params: InternalEvents[K]) {
     document.dispatchEvent(
@@ -9,7 +9,7 @@ export function sendEvent<K extends keyof InternalEvents>(name: K, ...params: In
         }),
     )
 }
-const promisePool = new Map<number, [resolve: Function, reject: Function]>()
+const promisePool = new Map<number, [resolve: (value: any) => void, reject: (reason?: any) => void]>()
 let id = 1
 export function createPromise<T>(callback: (id: number) => void) {
     return new Promise<T>((resolve, reject) => {

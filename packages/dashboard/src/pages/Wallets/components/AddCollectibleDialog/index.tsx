@@ -1,4 +1,4 @@
-import { FormEvent, memo, useCallback, useEffect, useState } from 'react'
+import { type FormEvent, memo, useCallback, useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { EthereumAddress } from 'wallet.ts'

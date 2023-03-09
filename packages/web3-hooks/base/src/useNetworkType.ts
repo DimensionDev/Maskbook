@@ -1,6 +1,6 @@
 import { useSubscription } from 'use-subscription'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { UNDEFINED, NetworkPluginID } from '@masknet/shared-base'
+import { UNDEFINED, type NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from './useWeb3State.js'
 import { useDefaultNetworkType } from './useDefaultNetworkType.js'
 

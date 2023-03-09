@@ -14,13 +14,13 @@ import {
     decodeAddress,
     isNativeTokenAddress,
     ProviderType,
-    SchemaType,
-    TransactionReceipt,
-    TransactionSignature,
+    type SchemaType,
+    type TransactionReceipt,
+    type TransactionSignature,
 } from '@masknet/web3-shared-solana'
 import {
-    BlockResponse,
-    Connection as SolConnection,
+    type BlockResponse,
+    type Connection as SolConnection,
     PublicKey,
     sendAndConfirmRawTransaction,
     SystemProgram,

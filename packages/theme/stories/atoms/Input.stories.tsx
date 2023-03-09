@@ -1,4 +1,4 @@
-import { InputBase as MuiInput, TextFieldProps } from '@mui/material'
+import { InputBase as MuiInput, type TextFieldProps } from '@mui/material'
 import { story, MuiArgs, matrix } from '../utils/index.js'
 
 const { meta, of } = story(MuiInput)

@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { range } from 'lodash-es'
-import { FC, Children, useState, useRef, CSSProperties, HTMLProps, useEffect } from 'react'
+import { type FC, Children, useState, useRef, type CSSProperties, type HTMLProps, useEffect } from 'react'
 
 const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
     container: {},

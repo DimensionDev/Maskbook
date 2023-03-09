@@ -2,7 +2,13 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { head, unionWith } from 'lodash-es'
 import { createContainer } from 'unstated-next'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { ECKeyIdentifier, EMPTY_LIST, isSameProfile, PersonaInformation, ProfileIdentifier } from '@masknet/shared-base'
+import {
+    ECKeyIdentifier,
+    EMPTY_LIST,
+    isSameProfile,
+    type PersonaInformation,
+    ProfileIdentifier,
+} from '@masknet/shared-base'
 import { currentPersonaIdentifier } from '../../../../../../shared/legacy-settings/settings.js'
 import Services from '../../../../service.js'
 import { MaskMessages } from '../../../../../utils/index.js'
@@ -18,7 +24,9 @@ function useSSRPersonaInformation() {
             .then(() => set(false))
     }, [])
     const [useServerSnapshot, set] = useState(true)
-    useEffect(() => void initialPersonaInformation ?? revalidate(), [])
+    useEffect(() => {
+        initialPersonaInformation ?? revalidate()
+    }, [])
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(revalidate), [])
 
     return {

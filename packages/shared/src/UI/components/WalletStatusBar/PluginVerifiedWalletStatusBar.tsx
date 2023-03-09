@@ -1,4 +1,4 @@
-import { memo, PropsWithChildren, useCallback, useMemo, useState } from 'react'
+import { memo, type PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { first, omit } from 'lodash-es'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -6,7 +6,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { alpha, Box, Button, Divider, MenuItem, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales/index.js'
 import { Action } from './Action.js'
-import { BindingProof, NetworkPluginID, isDashboardPage } from '@masknet/shared-base'
+import { type BindingProof, type NetworkPluginID, isDashboardPage } from '@masknet/shared-base'
 import {
     useChainContext,
     useNetworkContext,

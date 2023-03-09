@@ -2,9 +2,9 @@ import {
     createIndicator,
     createPageable,
     CurrencyType,
-    FungibleAsset,
-    FungibleToken,
-    HubOptions,
+    type FungibleAsset,
+    type FungibleToken,
+    type HubOptions,
     multipliedBy,
     toFixed,
     formatBalance,
@@ -12,7 +12,7 @@ import {
 import type { AbiItem } from 'web3-utils'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import type { BalanceChecker } from '@masknet/web3-contracts/types/BalanceChecker.js'
-import { ChainId, createContract, getEthereumConstant, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, createContract, getEthereumConstant, type SchemaType } from '@masknet/web3-shared-evm'
 import type { FungibleTokenAPI } from '../../entry-types.js'
 import { Web3API } from '../../EVM/index.js'
 import { EMPTY_LIST } from '@masknet/shared-base'

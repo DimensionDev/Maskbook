@@ -1,5 +1,5 @@
 import type { TransactionChecker, TransactionStatusType } from '@masknet/web3-shared-base'
-import { ChainId, Transaction, getTransactionStatusType } from '@masknet/web3-shared-evm'
+import { type ChainId, type Transaction, getTransactionStatusType } from '@masknet/web3-shared-evm'
 import { Web3StateSettings } from '../../../settings/index.js'
 
 export class ReceiptChecker implements TransactionChecker<ChainId, Transaction> {

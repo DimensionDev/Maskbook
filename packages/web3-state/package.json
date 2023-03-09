@@ -22,6 +22,6 @@
     "web3-core-helpers": "1.8.0"
   },
   "devDependencies": {
-    "mock-socket": "^9.1.5"
+    "mock-socket": "^9.2.1"
   }
 }

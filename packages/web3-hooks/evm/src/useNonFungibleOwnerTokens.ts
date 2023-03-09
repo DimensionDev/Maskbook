@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
+import { type ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { isSameAddress, type NonFungibleToken } from '@masknet/web3-shared-base'
 import { useWeb3Connection, useNonFungibleAssets } from '@masknet/web3-hooks-base'
 
 import { useERC721TokenContract } from './useERC721TokenContract.js'
@@ -54,7 +54,7 @@ export function useNonFungibleOwnerTokens(
 
         const listOfPairs = (await Promise.allSettled(allRequest))
             .map((x) => (x.status === 'fulfilled' ? x.value : undefined))
-            .filter((value) => value) as Array<[string, string]>
+            .filter(Boolean) as Array<[string, string]>
 
         if (!listOfPairs.length) return
 

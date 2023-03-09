@@ -3,10 +3,10 @@ import {
     createIndicator,
     createNextIndicator,
     createPageable,
-    FungibleAsset,
-    HubIndicator,
-    HubOptions,
-    Pageable,
+    type FungibleAsset,
+    type HubIndicator,
+    type HubOptions,
+    type Pageable,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -65,9 +65,9 @@ export class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<Chai
     }
 
     async getFungibleTokenPrice(chainId: ChainId, address: string) {
-        if (isNativeTokenAddress(address) || !isValidAddress(address) || !isValidChainId(chainId)) return undefined
+        if (isNativeTokenAddress(address) || !isValidAddress(address) || chainId !== ChainId.Mainnet) return undefined
         const data = await fetchFromChainbase<FT_Price>(
-            urlcat('/v1/token/price', { chain_id: chainId, contract_address: address }),
+            urlcat('/v1/token/price', { chain_id: ChainId.Mainnet, contract_address: address }),
         )
 
         return data?.price

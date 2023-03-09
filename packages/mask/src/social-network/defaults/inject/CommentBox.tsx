@@ -1,7 +1,7 @@
 import { memo, useCallback, useContext } from 'react'
 import { type PostInfo, usePostInfoDetails, PostInfoContext } from '@masknet/plugin-infra/content-script'
-import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { CommentBox, CommentBoxProps } from '../../../components/InjectedComponents/CommentBox.js'
+import { type DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { CommentBox, type CommentBoxProps } from '../../../components/InjectedComponents/CommentBox.js'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { makeStyles } from '@masknet/theme'
 import { MaskMessages } from '../../../utils/messages.js'
@@ -23,7 +23,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
     useCustomStyles: (props?: any) => {
         classes: Record<T, string>
     } = makeStyles()({}) as any,
-    mountPointCallback?: (node: DOMProxy<HTMLElement, HTMLSpanElement, HTMLSpanElement>) => void,
+    mountPointCallback?: (node: DOMProxy) => void,
 ) {
     const CommentBoxUI = memo(function CommentBoxUI({ dom }: { dom: HTMLElement | null }) {
         const info = useContext(PostInfoContext)

@@ -167,8 +167,8 @@
     "wallets_assets_price": "crwdns1753:0crwdne1753:0",
     "wallets_assets_value": "crwdns1755:0crwdne1755:0",
     "wallets_assets_operation": "crwdns1757:0crwdne1757:0",
-    "wallets_assets_more_expand": "crwdns18526:0{{direction}}crwdne18526:0",
-    "wallets_assets_more_collapse": "crwdns18528:0{{direction}}crwdne18528:0",
+    "wallets_assets_more_expand": "crwdns18526:0{{- direction}}crwdne18526:0",
+    "wallets_assets_more_collapse": "crwdns18528:0{{- direction}}crwdne18528:0",
     "wallets_assets_more_show_all": "crwdns18530:0crwdne18530:0",
     "wallets_address": "crwdns1759:0crwdne1759:0",
     "wallets_receive_tips": "crwdns1761:0{{chainName}}crwdne1761:0",
@@ -394,5 +394,6 @@
     "recovery_smart_pay_wallet_description_one": "crwdns19437:0{{count}}crwdne19437:0",
     "recovery_smart_pay_wallet_description_other": "crwdns19439:0{{count}}crwdne19439:0",
     "welcome_request_to_collect": "crwdns19511:0crwdne19511:0",
+    "wallet_history_no_data": "crwdns19885:0crwdne19885:0",
     "welcome_agreement_policy": "crwdns19513:0crwdne19513:0"
 }

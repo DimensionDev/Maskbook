@@ -1,7 +1,7 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
-import { CrossIsolationMessages, CompositionDialogEvent } from '@masknet/shared-base'
+import { CrossIsolationMessages, type CompositionDialogEvent } from '@masknet/shared-base'
 import { i18n } from '../../../../shared-ui/locales_legacy/index.js'
-import { makeTypedMessageText, SerializableTypedMessages } from '@masknet/typed-message'
+import { makeTypedMessageText, type SerializableTypedMessages } from '@masknet/typed-message'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
 
 const nativeComposeButtonSelector = () =>
@@ -54,6 +54,7 @@ export async function taskOpenComposeBoxFacebook(
     // the indicator only available when compose dialog opened successfully
     const composeIndicator = nativeComposeDialogIndicatorSelector().evaluate()
     if (!composeIndicator) {
+        // eslint-disable-next-line no-alert
         alert(i18n.t('automation_request_click_post_button'))
         return
     }

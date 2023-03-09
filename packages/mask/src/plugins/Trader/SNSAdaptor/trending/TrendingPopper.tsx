@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useLocation, useWindowScroll } from 'react-use'
-import { ClickAwayListener, PopperProps, Fade } from '@mui/material'
+import { ClickAwayListener, type PopperProps, Fade } from '@mui/material'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -60,7 +60,7 @@ export function TrendingPopper({ children, ...rest }: TrendingPopperProps) {
             setBadgeBounding(ev.badgeBounding)
             setAddress(ev.address ?? '')
             setIdentity(ev.identity)
-            setIsNFTProjectPopper(Boolean(ev.isCollectionProjectPopper))
+            setIsNFTProjectPopper(!!ev.isCollectionProjectPopper)
             setActive(true)
         })
     }, [position.y])

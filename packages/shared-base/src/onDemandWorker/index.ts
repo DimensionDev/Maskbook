@@ -1,54 +1,17 @@
-/**
- * A Worker-like class that create/destroy Worker on demand.
- *
- * The worker passed in MUST post a message "Alive" to notify the OnDemandWorker it is ready to receive message.
- * This "Alive" MUST be the first message.
- */
-export interface OnDemandWorker extends Worker {
-    /**
-     * How many million seconds after no activity should the internal worker be terminated?
-     *
-     * @default 15 minute
-     */
-    inactiveTimeToTerminate: number
-    /**
-     * Terminate the internal worker now.
-     */
-    terminate(): void
-    /**
-     * Reset the timer of the worker status check.
-     */
-    keepAlive(): void
-    /**
-     * Register a callback for Worker terminated.
-     * @param callback Callback
-     */
-    onTerminated(callback: () => void): () => void
-    addEventListener<K extends keyof OnDemandWorkerEventMap>(
-        type: K,
-        listener: (this: OnDemandWorker, ev: OnDemandWorkerEventMap[K]) => any,
-        options?: boolean | AddEventListenerOptions,
-    ): void
-    removeEventListener<K extends keyof OnDemandWorkerEventMap>(
-        type: K,
-        listener: (this: OnDemandWorker, ev: OnDemandWorkerEventMap[K]) => any,
-        options?: boolean | EventListenerOptions,
-    ): void
-}
 export interface OnDemandWorkerEventMap extends WorkerEventMap {
     terminated: Event
 }
 
-// Implementation detail
 /**
  * A Worker-like class that create/destroy Worker on demand.
  *
  * The worker passed in MUST post a message "Alive" to notify the OnDemandWorker it is ready to receive message.
  * This "Alive" MUST be the first message.
  */
-export class OnDemandWorker extends EventTarget implements OnDemandWorker {
+export class OnDemandWorker extends EventTarget {
     protected readonly __init: WorkerConstructorParameters
     protected worker?: Worker = undefined
+    protected inactiveTimeToTerminate = 15 * 60 * 1000
     /**
      * A Worker-like class that create/destroy Worker on demand.
      *
@@ -58,7 +21,6 @@ export class OnDemandWorker extends EventTarget implements OnDemandWorker {
     constructor(...init: WorkerConstructorParameters) {
         super()
         this.__init = init
-        this.inactiveTimeToTerminate = 15 * 60 * 1000
         this.log(init[1]?.name ?? 'anonymous Worker', 'created with', ...init)
     }
     protected watchUsage() {
@@ -109,6 +71,21 @@ export class OnDemandWorker extends EventTarget implements OnDemandWorker {
         this.addEventListener('terminated', callback, { once: true })
         return () => this.removeEventListener('terminated', callback)
     }
+
+    override addEventListener<K extends keyof OnDemandWorkerEventMap>(
+        type: K,
+        listener: (this: OnDemandWorker, ev: OnDemandWorkerEventMap[K]) => any,
+        options?: boolean | AddEventListenerOptions,
+    ): void {
+        super.addEventListener(type, listener as any, options)
+    }
+    override removeEventListener<K extends keyof OnDemandWorkerEventMap>(
+        type: K,
+        listener: (this: OnDemandWorker, ev: OnDemandWorkerEventMap[K]) => any,
+        options?: boolean | EventListenerOptions,
+    ): void {
+        super.removeEventListener(type, listener as any, options)
+    }
     postMessage(message: any, transfer: Transferable[]): void
     postMessage(message: any, options?: StructuredSerializeOptions): void
     postMessage(...args: [any, any]) {
@@ -130,7 +107,7 @@ function throws() {
 }
 
 function cloneEvent(e: MessageEvent | ErrorEvent) {
-    // @ts-ignore
-    return new e.constructor(e.type, e)
+    if (e instanceof MessageEvent) return new MessageEvent(e.type, { data: e.data })
+    return new ErrorEvent(e.type, e)
 }
 type WorkerConstructorParameters = [stringUrl: string | URL, options?: WorkerOptions]

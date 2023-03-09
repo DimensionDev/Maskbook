@@ -2,7 +2,7 @@ import { ChainId, chainResolver, isNativeTokenAddress, NetworkType } from '@mask
 import { safeUnreachable } from '@masknet/kit'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants/index.js'
 import { PluginTraderRPC } from '../../messages.js'
-import { SwapQuoteResponse, TradeStrategy } from '../../types/index.js'
+import { type SwapQuoteResponse, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from '../0x/useSlippageTolerance.js'
 import { useChainContext, useCustomBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'

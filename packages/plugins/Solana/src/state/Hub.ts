@@ -1,6 +1,12 @@
 import type { CurrencyType, SourceType } from '@masknet/web3-shared-base'
 import { HubState } from '@masknet/web3-state'
-import { isValidChainId, getDefaultChainId, ChainId, GasOption, SchemaType } from '@masknet/web3-shared-solana'
+import {
+    isValidChainId,
+    getDefaultChainId,
+    type ChainId,
+    type GasOption,
+    type SchemaType,
+} from '@masknet/web3-shared-solana'
 import type { Plugin } from '@masknet/plugin-infra'
 import type { Subscription } from 'use-subscription'
 import { createHub } from './Hub/hub.js'

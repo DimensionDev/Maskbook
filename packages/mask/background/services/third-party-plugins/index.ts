@@ -1,13 +1,13 @@
 import { fetchText } from '@masknet/web3-providers/helpers'
 import type { Storage } from 'webextension-polyfill'
-// TODO: those types are defined in the plugin/External
-type MaskSDK_SNS_ContextIdentifier = string
-type Manifest = any
 
 import {
     constructThirdPartyRequestPermissionURL,
     ThirdPartyPluginPermission,
 } from '../../../shared/definitions/routes.js'
+// TODO: those types are defined in the plugin/External
+type MaskSDK_SNS_ContextIdentifier = string
+type Manifest = any
 
 export async function fetchManifest(addr: string): Promise<Manifest> {
     const text = await fetchText(addr + 'mask-manifest.json')

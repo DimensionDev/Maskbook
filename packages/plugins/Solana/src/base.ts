@@ -1,12 +1,12 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import {
     CHAIN_DESCRIPTORS,
-    ChainId,
+    type ChainId,
     NETWORK_DESCRIPTORS,
-    NetworkType,
+    type NetworkType,
     PROVIDER_DESCRIPTORS,
-    ProviderType,
-    SchemaType,
+    type ProviderType,
+    type SchemaType,
 } from '@masknet/web3-shared-solana'
 import { languages } from './locales/languages.js'
 import { PLUGIN_DESCRIPTION, PLUGIN_ID, PLUGIN_NAME } from './constants.js'
@@ -17,7 +17,6 @@ export const base: Plugin.Shared.Definition<ChainId, SchemaType, ProviderType, N
     description: { fallback: PLUGIN_DESCRIPTION },
     publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
     enableRequirement: {
-        architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
     },

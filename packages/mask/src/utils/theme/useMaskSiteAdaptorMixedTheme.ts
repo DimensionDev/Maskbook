@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
+import { type Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { MaskDarkTheme, MaskLightTheme } from '@masknet/theme'
 import { ThemeMode } from '@masknet/web3-shared-base'

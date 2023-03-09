@@ -74,7 +74,7 @@ export const TipsRealmContent: FC<Plugin.SNSAdaptor.TipsRealmOptions> = ({
 }) => {
     const t = useI18N()
     const { classes, cx } = useStyles({ buttonSize })
-    const lastStep = useTipsUserGuide(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite)
+    const lastStep = useTipsUserGuide(activatedSocialNetworkUI.networkIdentifier)
     const myIdentity = useLastRecognizedIdentity()
 
     if (!identity || identity.userId === myIdentity?.identifier?.userId) return null

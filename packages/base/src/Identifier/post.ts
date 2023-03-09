@@ -24,6 +24,8 @@ export class PostIdentifier extends Identifier {
 
         if (!id.has(identifier)) id.set(identifier, Object.create(null))
         const idCache = id.get(identifier)!
+        // return the cache to keep the object identity
+        // eslint-disable-next-line no-constructor-return
         if (idCache[postID]) return idCache[postID]
 
         banSlash(postID)

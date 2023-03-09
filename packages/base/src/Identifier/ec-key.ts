@@ -35,6 +35,8 @@ export class ECKeyIdentifier extends Identifier {
         publicKey = String(publicKey).replace(/\|/g, '/')
         if (curve !== 'secp256k1') throw new Error('Only secp256k1 is supported')
 
+        // return the cache to keep the object identity
+        // eslint-disable-next-line no-constructor-return
         if (k256Cache[publicKey]) return k256Cache[publicKey]
 
         super()
@@ -61,5 +63,4 @@ Object.freeze(ECKeyIdentifier.prototype)
 Object.freeze(ECKeyIdentifier)
 
 export type PersonaIdentifier = ECKeyIdentifier
-// eslint-disable-next-line no-redeclare
 export const PersonaIdentifier = [ECKeyIdentifier]

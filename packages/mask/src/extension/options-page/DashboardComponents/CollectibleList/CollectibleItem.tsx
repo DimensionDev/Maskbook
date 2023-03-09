@@ -1,8 +1,8 @@
-import { forwardRef, HTMLProps, memo } from 'react'
+import { forwardRef, type HTMLProps, memo } from 'react'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
 import { Checkbox, Radio, Skeleton, Typography } from '@mui/material'
-import { CollectibleCard, CollectibleCardProps } from './CollectibleCard.js'
+import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {

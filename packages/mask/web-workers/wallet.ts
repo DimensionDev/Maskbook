@@ -15,7 +15,7 @@ async function load() {
         return import('@dimensiondev/mask-wallet-core/bundle')
     } else {
         const { default: init, ...rest } = await import('@dimensiondev/mask-wallet-core/web')
-        // @ts-expect-error
+        // @ts-expect-error typing error
         await init()
         return rest
     }

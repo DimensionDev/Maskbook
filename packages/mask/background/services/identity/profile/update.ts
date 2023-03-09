@@ -1,10 +1,10 @@
 import {
     decompressK256Key,
-    ECKeyIdentifier,
+    type ECKeyIdentifier,
     NextIDAction,
-    PersonaIdentifier,
+    type PersonaIdentifier,
     ProfileIdentifier,
-    ProfileInformationFromNextID,
+    type ProfileInformationFromNextID,
     RelationFavor,
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -17,9 +17,9 @@ import {
     createProfileDB,
     deleteProfileDB,
     detachProfileDB,
-    LinkedProfileDetails,
-    PersonaRecord,
-    ProfileRecord,
+    type LinkedProfileDetails,
+    type PersonaRecord,
+    type ProfileRecord,
     queryProfileDB,
     queryProfilesDB,
 } from '../../../database/persona/db.js'
@@ -40,11 +40,6 @@ export async function updateProfileInfo(identifier: ProfileIdentifier, data: Upd
         await consistentPersonaDBWriteAccess((t) => createOrUpdateProfileDB(rec, t))
     }
     if (data.avatarURL) await storeAvatar(identifier, data.avatarURL)
-}
-
-export function mobile_removeProfile(id: ProfileIdentifier): Promise<void> {
-    if (process.env.architecture !== 'app') throw new TypeError('This function is only available in app')
-    return consistentPersonaDBWriteAccess((t) => deleteProfileDB(id, t))
 }
 
 export async function detachProfileWithNextID(

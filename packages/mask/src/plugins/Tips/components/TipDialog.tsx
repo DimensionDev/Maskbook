@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { useAsync, useBoolean, useUpdateEffect } from 'react-use'
+import { SmartPayBundler } from '@masknet/web3-providers'
 import { ChainBoundary, InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
 import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -18,7 +19,6 @@ import { NetworkSection } from './NetworkSection/index.js'
 import { NFTSection } from './NFTSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
 import { TokenSection } from './TokenSection/index.js'
-import { SmartPayBundler } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -173,7 +173,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                         expectedChainId={chainId}>
                         <ChainBoundary
                             expectedPluginID={expectedPluginID}
-                            expectedChainId={chainId!}
+                            expectedChainId={chainId}
                             noSwitchNetworkTip
                             switchChainWithoutPopup
                             ActionButtonPromiseProps={{

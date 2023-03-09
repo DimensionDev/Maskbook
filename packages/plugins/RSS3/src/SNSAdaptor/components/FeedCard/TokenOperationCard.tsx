@@ -9,7 +9,7 @@ import { Translate } from '../../../locales/i18n_generated.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardType } from '../share.js'
-import { CardFrame, FeedCardProps } from '../base.js'
+import { CardFrame, type FeedCardProps } from '../base.js'
 import { formatValue, Label } from './common.js'
 
 const useStyles = makeStyles<void, 'tokenIcon' | 'verboseToken'>()((theme, _, refs) => ({
@@ -94,13 +94,13 @@ export const TokenOperationCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) =>
                         values={{
                             from,
                             to,
-                            value: formatValue(metadata!),
+                            value: formatValue(metadata),
                             symbol: metadata!.symbol,
                             context,
                         }}
                         components={{
-                            from: <Label title={action.address_from!} />,
-                            to: <Label title={action.address_to!} />,
+                            from: <Label title={action.address_from} />,
+                            to: <Label title={action.address_to} />,
                             bold: <Label />,
                         }}
                     />
@@ -109,13 +109,13 @@ export const TokenOperationCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) =>
                         values={{
                             from,
                             to,
-                            value: formatValue(metadata!),
+                            value: formatValue(metadata),
                             symbol: metadata!.symbol,
                             context,
                         }}
                         components={{
-                            from: <Label title={action.address_from!} />,
-                            to: <Label title={action.address_to!} />,
+                            from: <Label title={action.address_from} />,
+                            to: <Label title={action.address_to} />,
                             bold: <Label />,
                         }}
                     />

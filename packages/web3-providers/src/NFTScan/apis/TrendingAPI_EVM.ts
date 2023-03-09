@@ -3,11 +3,11 @@ import { compact } from 'lodash-es'
 import {
     TokenType,
     SourceType,
-    NonFungibleCollectionOverview,
-    NonFungibleTokenActivity,
+    type NonFungibleCollectionOverview,
+    type NonFungibleTokenActivity,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
+import { type ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import { COIN_RECOMMENDATION_SIZE } from '../../Trending/constants.js'
 import type { EVM, Response } from '../types/index.js'
 import { fetchFromNFTScanV2, getContractSymbol, createNonFungibleAsset } from '../helpers/EVM.js'
@@ -65,7 +65,7 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
             }),
         })
         if (!response?.data) return
-        return response.data.map((x) => createNonFungibleAsset(chainId as ChainId, x))
+        return response.data.map((x) => createNonFungibleAsset(chainId, x))
     }
 
     async getCoinActivities(

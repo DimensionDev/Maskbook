@@ -11,5 +11,6 @@
     "game_list_play_evm_error": "请连接一个EVM钱包。",
     "game_share_btn": "分享",
     "game_share_title": "分享",
-    "game_dialog_info": "分享这个游戏到 Twitter"
+    "game_dialog_info": "分享这个游戏到 Twitter",
+    "game_share_text": "我在Twitter上由玩由 @NonFFriendx x {{snsId}}提供的 {{name}} 。\n安装Mask Network插件mask.io 并加入我！\n $t(mask:hash_tag) #NFF #NFTgame\n{{share_Twitter}}"
 }

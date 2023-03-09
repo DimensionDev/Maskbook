@@ -7,7 +7,7 @@ import {
     isEC_Public_JsonWebKey,
     PostIVIdentifier,
     ProfileIdentifier,
-    RelationFavor,
+    type RelationFavor,
 } from '@masknet/shared-base'
 import __ from 'elliptic'
 import { Convert } from 'pvtsutils'
@@ -145,8 +145,8 @@ export async function normalizeBackupVersion2(item: BackupJSONFileVersion2): Pro
 
     for (const wallet of wallets || []) {
         if (wallet.privateKey?.d && !wallet.publicKey) {
-            // @ts-ignore
-            const ec = new (__.ec || __.default.ec)('secp256k1') as __.ec
+            // @ts-expect-error cjs-esm interop
+            const ec = new (__.ec || __.default.ec)('secp256k1')
             const key = ec.keyFromPrivate(wallet.privateKey.d)
             const hexPub = key.getPublic('hex').slice(2)
             const hexX = hexPub.slice(0, hexPub.length / 2)

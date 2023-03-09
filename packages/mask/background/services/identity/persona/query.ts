@@ -1,65 +1,29 @@
 import { first, omit, orderBy } from 'lodash-es'
-import type { MobilePersona } from '@masknet/public-api'
 import {
     ECKeyIdentifierFromJsonWebKey,
-    EC_Public_JsonWebKey,
+    type EC_Public_JsonWebKey,
     fromBase64URL,
     isEC_Private_JsonWebKey,
-    NextIDPlatform,
-    PersonaIdentifier,
-    PersonaInformation,
-    ProfileIdentifier,
+    type NextIDPlatform,
+    type PersonaIdentifier,
+    type PersonaInformation,
+    type ProfileIdentifier,
 } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
 import {
     createPersonaDBReadonlyAccess,
-    PersonaRecord,
     queryPersonaDB,
     queryPersonasDB,
     queryProfileDB,
 } from '../../../database/persona/db.js'
-import { queryPersonasDB as queryPersonasFromIndexedDB } from '../../../database/persona/web.js'
 import { toPersonaInformation } from '../../__utils__/convert.js'
-import { personaRecordToMobilePersona } from './mobile.js'
 import * as bip39 from 'bip39'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from './utils.js'
 import { bufferToHex, privateToPublic, publicToAddress } from 'ethereumjs-util'
 import { decode } from '@msgpack/msgpack'
 import { decodeArrayBuffer } from '@masknet/kit'
-export { queryPersonaDB }
-
-export async function mobile_queryPersonaRecordsFromIndexedDB() {
-    if (process.env.architecture !== 'app') throw new Error('This function is only available in app')
-    return queryPersonasFromIndexedDB()
-}
-
-export async function mobile_queryPersonas(options: {
-    hasPrivateKey?: boolean
-    network?: string
-    identifier?: PersonaIdentifier
-}): Promise<MobilePersona[]> {
-    if (process.env.architecture !== 'app') throw new Error('This function is only available in app')
-
-    const { hasPrivateKey, identifier, network } = options
-    const result: PersonaRecord[] = []
-
-    if (identifier === undefined) {
-        result.push(...(await queryPersonasDB({ hasPrivateKey })))
-    } else {
-        const persona = await queryPersonaDB(identifier)
-        persona && result.push(persona)
-    }
-
-    return result
-        .filter((x) => {
-            if (!x.privateKey && hasPrivateKey) return false
-            if (network && ![...x.linkedProfiles.keys()].some((x) => x.network === network)) return false
-            return true
-        })
-        .map((x) => personaRecordToMobilePersona(x))
-}
 
 export async function queryOwnedPersonaInformation(initializedOnly: boolean): Promise<PersonaInformation[]> {
     let result: Promise<PersonaInformation[]>
@@ -146,3 +110,5 @@ export async function querySocialIdentity(
         binding: first(personaBindings),
     }
 }
+
+export { queryPersonaDB } from '../../../database/persona/db.js'

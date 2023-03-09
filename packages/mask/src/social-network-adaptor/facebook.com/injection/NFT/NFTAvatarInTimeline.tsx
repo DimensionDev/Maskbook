@@ -1,11 +1,17 @@
-import { DOMProxy, LiveSelector, MutationObserverWatcher, UnboundedRegistry } from '@dimensiondev/holoflows-kit'
-import { MaskMessages, NFTAvatarEvent, createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import {
+    DOMProxy,
+    type LiveSelector,
+    MutationObserverWatcher,
+    type UnboundedRegistry,
+} from '@dimensiondev/holoflows-kit'
+import { MaskMessages, type NFTAvatarEvent, createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { searchFaceBookPostAvatarOnMobileSelector, searchFaceBookPostAvatarSelector } from '../../utils/selector.js'
 import { NFTBadgeTimeline, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
 import { isMobileFacebook } from '../../utils/isMobile.js'
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
+import { noop } from 'lodash-es'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -68,10 +74,10 @@ function getFacebookId(element: HTMLElement | SVGElement) {
     return url.pathname.replace('/', '')
 }
 
-function _(selector: () => LiveSelector<HTMLElement | SVGElement, false>, signal: AbortSignal) {
+function _(selector: () => LiveSelector<HTMLElement | SVGElement>, signal: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(selector()).useForeach((element, key) => {
-            let remove = () => {}
+            let remove = noop
 
             const run = async () => {
                 const facebookId = getFacebookId(element)

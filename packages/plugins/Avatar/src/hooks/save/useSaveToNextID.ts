@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { BindingProof, ECKeyIdentifier, NetworkPluginID, getEnhanceableSiteType } from '@masknet/shared-base'
+import { type BindingProof, type ECKeyIdentifier, NetworkPluginID, getEnhanceableSiteType } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { useSaveAddress } from './useSaveAddress.js'
 import type { NextIDAvatarMeta } from '../../types.js'

@@ -1,13 +1,15 @@
-import React, { PropsWithChildren, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { I18nextProvider, initReactI18next, type I18nextProviderProps } from 'react-i18next'
 import { i18NextInstance } from '@masknet/shared-base'
 
 initReactI18next.init(i18NextInstance)
-export function I18NextProviderHMR(props: PropsWithChildren<I18nextProviderProps>): JSX.Element {
-    return I18nextProvider(props) as any
-}
+export const I18NextProviderHMR = process.env.NODE_ENV === 'development' ? I18NextProvider_dev : I18nextProvider
 
-function I18NextProvider_dev({ i18n, defaultNS, children }: React.PropsWithChildren<I18nextProviderProps>) {
+function I18NextProvider_dev({
+    i18n,
+    defaultNS,
+    children,
+}: React.PropsWithChildren<I18nextProviderProps>): JSX.Element {
     const [ns, setNS] = useState(defaultNS)
 
     useEffect(() => {
@@ -21,14 +23,9 @@ function I18NextProvider_dev({ i18n, defaultNS, children }: React.PropsWithChild
     useEffect(() => {
         if (ns === 'HMR') setNS('')
     }, [ns])
-    return I18nextProvider({
-        i18n,
-        defaultNS,
-        children,
-    })
+    return (
+        <I18nextProvider i18n={i18n} defaultNS={defaultNS}>
+            {children}
+        </I18nextProvider>
+    )
 }
-
-// @ts-expect-error
-if (process.env.NODE_ENV === 'development') I18NextProviderHMR = I18NextProvider_dev
-// @ts-expect-error
-else I18NextProviderHMR = I18nextProvider

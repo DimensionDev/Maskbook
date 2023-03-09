@@ -12,10 +12,8 @@ Extra:
 
 ## Supporting browsers
 
-- Safari 14.5+ (Released on Sept 2020)
 - Chrome Last 2 versions (about 3 months)
 - Firefox Last 2 versions (about 3 months)
-- GeckoView 99 (last updated at 4/5/2022).
 
 ## Targeting ES Syntax and APIs
 
@@ -27,14 +25,6 @@ Extra:
 Those features are not easy to polyfill.
 
 - ES2017: SharedArrayBuffer and Atomics
-- ES2018: - (Syntax) RegExp Lookbehind Assertions (Safari not supported)
-- ES2020:
-  - BigInt64Array (requires Safari 15)
-  - BigUint64Array (requires Safari 15)
-  - DataView.prototype.getBigInt64 (requires Safari 15)
-  - DataView.prototype.getBigUint64 (requires Safari 15)
-- ES2022:
-  - Class initialization block (Safari not supported)
 
 ## Web APIs and Intl APIs
 

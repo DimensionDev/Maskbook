@@ -1,4 +1,4 @@
-import { FC, useCallback, useRef } from 'react'
+import { type FC, useCallback, useRef } from 'react'
 import { noop } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'
@@ -17,7 +17,7 @@ export type NFTKeyPair = [address: string, tokenId: string]
 
 interface Props {
     selectable?: boolean
-    tokens: Array<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID>>
+    tokens: Web3Helper.NonFungibleAssetScope[]
     selectedPairs?: NFTKeyPair[]
     onChange?: (id: string | null, contractAddress?: string) => void
     limit?: number

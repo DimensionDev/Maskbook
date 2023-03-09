@@ -24,7 +24,7 @@ export const ChangeNetworkTip = memo<ChangeNetworkTipProps>(({ chainId }) => {
             {t.wallets_assets_token_sent_not_connect_tip({
                 chainName: targetNetwork?.name ?? 'Unknown Network',
             })}{' '}
-            {NetworkIconClickBait && providerDescriptor && targetNetwork && (
+            {NetworkIconClickBait && providerDescriptor && targetNetwork ? (
                 <NetworkIconClickBait network={targetNetwork} provider={providerDescriptor}>
                     <Link
                         sx={{ cursor: 'pointer', color: MaskColorVar.white, textDecoration: 'underline' }}
@@ -32,7 +32,7 @@ export const ChangeNetworkTip = memo<ChangeNetworkTipProps>(({ chainId }) => {
                         {t.wallets_assets_token_sent_switch_network_tip()}
                     </Link>
                 </NetworkIconClickBait>
-            )}
+            ) : null}
         </Typography>
     )
 })

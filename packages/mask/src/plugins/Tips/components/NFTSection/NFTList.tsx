@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react'
+import { type FC, useCallback } from 'react'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'
@@ -171,11 +171,11 @@ export const NFTList: FC<Props> = ({
                     </Tooltip>
                 )
             })}
-            {loadError && !loadFinish && tokens.length && (
+            {loadError && !loadFinish && tokens.length ? (
                 <Stack py={1} style={{ gridColumnStart: 1, gridColumnEnd: 6 }}>
                     <RetryHint hint={false} retry={nextPage} />
                 </Stack>
-            )}
+            ) : null}
             <Stack py={1} style={{ gridColumnStart: 1, gridColumnEnd: 6 }}>
                 <ElementAnchor
                     callback={() => {

@@ -6,12 +6,12 @@ import {
     ListItemText,
     ListItemIcon,
     Collapse,
-    Theme,
+    type Theme,
     useMediaQuery,
     styled,
     listItemClasses,
     listItemIconClasses,
-    ListItemProps,
+    type ListItemProps,
     listItemTextClasses,
     useTheme,
 } from '@mui/material'
@@ -120,7 +120,7 @@ export function Navigation({ onClose }: NavigationProps) {
 
     return (
         <List onClick={() => onClose?.()}>
-            {isLargeScreen && (
+            {isLargeScreen ? (
                 <LogoItem>
                     {mode === 'dark' ? (
                         <Icons.MaskBanner width={130} height={40} />
@@ -128,7 +128,7 @@ export function Navigation({ onClose }: NavigationProps) {
                         <Icons.Mask width={130} height={40} />
                     )}
                 </LogoItem>
-            )}
+            ) : null}
             <ListItemLink to={DashboardRoutes.Personas}>
                 <ListItemIcon>
                     {useMatch(DashboardRoutes.Personas) ? (

@@ -68,7 +68,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                     <Typography className={classes.subtitle}>{t.token_info_token_name()}</Typography>
                     <Typography className={classes.cardValue}>
                         {tokenSecurity.token_symbol}
-                        {tokenSecurity.token_name && `(${tokenSecurity.token_name})`}{' '}
+                        {tokenSecurity.token_name ? `(${tokenSecurity.token_name})` : null}{' '}
                     </Typography>
                 </Stack>
                 <Stack direction="row" justifyContent="space-between">
@@ -98,7 +98,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                                 ? formatEthereumAddress(tokenSecurity.creator_address ?? '', 4)
                                 : DEFAULT_PLACEHOLDER}
                         </Typography>
-                        {tokenSecurity.creator_address && (
+                        {tokenSecurity.creator_address ? (
                             <Link
                                 lineHeight="14px"
                                 href={explorerResolver.addressLink(
@@ -111,7 +111,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                                     style={{ color: theme.palette.text.strong, width: 18, height: 18, marginTop: 2 }}
                                 />
                             </Link>
-                        )}
+                        ) : null}
                     </Stack>
                 </Stack>
                 <Stack direction="row" justifyContent="space-between">
@@ -122,7 +122,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                                 ? formatEthereumAddress(tokenSecurity.owner_address ?? '', 4)
                                 : DEFAULT_PLACEHOLDER}
                         </Typography>
-                        {tokenSecurity.owner_address && (
+                        {tokenSecurity.owner_address ? (
                             <Link
                                 lineHeight="14px"
                                 href={explorerResolver.addressLink(tokenSecurity.chainId, tokenSecurity.owner_address)}
@@ -130,7 +130,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                                 rel="noopener noreferrer">
                                 <Icons.LinkOut size={14} color={theme.palette.text.strong} />
                             </Link>
-                        )}
+                        ) : null}
                     </Stack>
                 </Stack>
                 <Stack direction="row" justifyContent="space-between">

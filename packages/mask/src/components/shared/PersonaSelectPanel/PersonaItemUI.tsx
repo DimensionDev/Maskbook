@@ -1,13 +1,13 @@
 import { useMemo } from 'react'
 import { Avatar, Box, Stack, Typography } from '@mui/material'
 import {
-    BindingProof,
+    type BindingProof,
     resolveNextIDIdentityToProfile,
-    ECKeyIdentifier,
+    type ECKeyIdentifier,
     formatPersonaFingerprint,
     isSamePersona,
     isSameProfile,
-    PersonaInformation,
+    type PersonaInformation,
 } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
@@ -23,7 +23,7 @@ export interface PersonaNextIDMixture {
 
 interface PersonaItemProps extends withClasses<'checked' | 'unchecked'> {
     data: PersonaNextIDMixture
-    onCopy: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
+    onCopy: (e: React.MouseEvent<HTMLElement>) => void
     onClick: () => void
     currentPersona?: PersonaNextIDMixture
     currentPersonaIdentifier?: ECKeyIdentifier
@@ -78,7 +78,7 @@ export const PersonaItemUI = (props: PersonaItemProps) => {
     return (
         <Stack direction="row" alignItems="center" gap={1} onClick={onClick}>
             <Box flexGrow={0} position="relative">
-                {data.avatar && (
+                {data.avatar ? (
                     <Avatar
                         src={data.avatar}
                         sx={{
@@ -88,7 +88,7 @@ export const PersonaItemUI = (props: PersonaItemProps) => {
                             borderRadius: '50%',
                         }}
                     />
-                )}
+                ) : null}
                 {!data.avatar && <Icons.MenuPersonasActive size={30} />}
                 {isSamePersona(currentPersonaIdentifier, data.persona) && <Box className={classes.indicator} />}
             </Box>

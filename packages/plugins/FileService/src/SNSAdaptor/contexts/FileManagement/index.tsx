@@ -5,11 +5,11 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { noop, omit } from 'lodash-es'
 import {
     createContext,
-    Dispatch,
-    FC,
+    type Dispatch,
+    type FC,
     memo,
-    PropsWithChildren,
-    SetStateAction,
+    type PropsWithChildren,
+    type SetStateAction,
     useCallback,
     useContext,
     useMemo,

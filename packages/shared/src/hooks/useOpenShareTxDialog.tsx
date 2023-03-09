@@ -4,7 +4,7 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { explorerResolver } from '@masknet/web3-shared-evm'
 import { Done as DoneIcon } from '@mui/icons-material'
 import { Link, Typography } from '@mui/material'
-import { FC, memo, useCallback } from 'react'
+import { type FC, memo, useCallback } from 'react'
 import { useShowConfirm } from '../contexts/common/index.js'
 import { useSharedI18N } from '../locales/index.js'
 

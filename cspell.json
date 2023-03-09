@@ -4,6 +4,9 @@
     "dictionaries": ["typescript", "node", "html", "css", "fonts"],
     "ignorePaths": [
         "./packages/web3-contracts/types/**",
+        "./packages/app/src/styles/index.css",
+        "./packages/app/tailwind.config.cjs",
+        "./packages/app/postcss.config.cjs",
         ".github",
         ".gitignore",
         ".prettierignore",
@@ -335,6 +338,8 @@
         "gorli",
         "gusd",
         "heco",
+        "headlessui",
+        "heroicons",
         "hookform",
         "horiz",
         "huobi",

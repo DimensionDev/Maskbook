@@ -1,4 +1,4 @@
-import { memo, ReactElement, SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
+import { memo, type ReactElement, type SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ChevronDown } from 'react-feather'
@@ -20,7 +20,7 @@ import {
 import {
     formatBalance,
     formatCurrency,
-    FungibleAsset,
+    type FungibleAsset,
     isGreaterThan,
     isGreaterThanOrEqualTo,
     isLessThan,
@@ -804,7 +804,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                 i18nKey="popups_wallet_gas_fee_settings_usd"
                                 values={{
                                     usd: formatCurrency(
-                                        formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
+                                        formatGweiToEther(Number(maxPriorityFeePerGas))
                                             .times(etherPrice)
                                             .times(gasLimit),
                                         'USD',
@@ -841,9 +841,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                 shouldUnescape
                                 values={{
                                     usd: formatCurrency(
-                                        formatGweiToEther(Number(maxFeePerGas) ?? 0)
-                                            .times(etherPrice)
-                                            .times(gasLimit),
+                                        formatGweiToEther(Number(maxFeePerGas)).times(etherPrice).times(gasLimit),
                                         'USD',
                                         { onlyRemainTwoDecimal: true },
                                     ),

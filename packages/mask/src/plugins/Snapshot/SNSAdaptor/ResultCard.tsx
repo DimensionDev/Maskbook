@@ -182,6 +182,7 @@ function Content() {
                     onClick={() => {
                         const csv = parse(dataForCsv)
                         const link = document.createElement('a')
+                        // TODO: use URL.createObjectURL instead
                         link.setAttribute('href', `data:text/csv;charset=utf-8,${csv}`)
                         link.setAttribute('download', `snapshot-report-${identifier.id}.csv`)
                         document.body.appendChild(link)

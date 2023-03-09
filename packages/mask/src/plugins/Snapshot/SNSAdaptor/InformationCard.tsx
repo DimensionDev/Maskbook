@@ -80,7 +80,7 @@ export function InformationCard(props: InformationCardProps) {
             <InfoField title={t('plugin_snapshot_info_strategy')} classes={{ field: classes.info }}>
                 <Box sx={{ display: 'flex' }}>
                     {strategies
-                        .filter((strategy) => Boolean(strategy.params.address))
+                        .filter((strategy) => !!strategy.params.address)
                         .map((strategy, i) => (
                             <Link
                                 key={i}

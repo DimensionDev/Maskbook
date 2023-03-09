@@ -1,16 +1,16 @@
 import { cloneElement, useCallback, useReducer } from 'react'
 import { cloneDeep, merge } from 'lodash-es'
 import {
-    DialogProps,
+    type DialogProps,
     Dialog,
     IconButton,
     DialogContent,
     Typography,
-    SvgIconProps,
-    IconButtonProps,
+    type SvgIconProps,
+    type IconButtonProps,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Theme, ThemeOptions, ThemeProvider } from '@mui/material/styles'
+import { type Theme, type ThemeOptions, ThemeProvider } from '@mui/material/styles'
 import { Close as CloseIcon } from '@mui/icons-material'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useMatchXS } from '../../../utils/index.js'
@@ -262,7 +262,7 @@ export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
         <ThemeProvider theme={dialogTheme}>
             <DialogContent className={classes.wrapper}>
                 <section className={classes.header}>
-                    {icon && cloneElement(icon, { width: 64, height: 64, stroke: iconColor })}
+                    {icon ? cloneElement(icon, { width: 64, height: 64, stroke: iconColor }) : null}
                     <Typography className={classes.primary} variant="h5">
                         {primary}
                     </Typography>

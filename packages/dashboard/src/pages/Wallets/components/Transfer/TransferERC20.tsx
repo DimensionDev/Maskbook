@@ -20,7 +20,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { MaskColorVar, MaskTextField } from '@masknet/theme'
 import {
     TokenType,
-    FungibleToken,
+    type FungibleToken,
     isGreaterThan,
     isZero,
     multipliedBy,
@@ -32,15 +32,15 @@ import {
 import {
     SchemaType,
     formatWeiToEther,
-    ChainId,
+    type ChainId,
     chainResolver,
     explorerResolver,
     isValidAddress,
     NetworkType,
     isNativeTokenAddress,
     DepositPaymaster,
-    EIP1559GasConfig,
     addGasMargin,
+    type EIP1559GasConfig,
 } from '@masknet/web3-shared-evm'
 import { Tune as TuneIcon } from '@mui/icons-material'
 import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'

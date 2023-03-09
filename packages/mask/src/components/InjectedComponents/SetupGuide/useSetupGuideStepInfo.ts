@@ -3,7 +3,7 @@ import { useAsyncRetry } from 'react-use'
 import {
     EnhanceableSite,
     isSameProfile,
-    PersonaIdentifier,
+    type PersonaIdentifier,
     ProfileIdentifier,
     resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'

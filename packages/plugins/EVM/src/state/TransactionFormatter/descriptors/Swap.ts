@@ -3,10 +3,10 @@ import { first, last } from 'lodash-es'
 import { i18NextInstance } from '@masknet/shared-base'
 import UniswapV3MulticallFunctionExactInputABI from '@masknet/web3-contracts/abis/UniswapV3MulticallFunctionExactInput.json'
 import UniswapV3MulticallFunctionExactInputSingleABI from '@masknet/web3-contracts/abis/UniswapV3MulticallFunctionExactInputSingle.json'
-import { TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
+import { type TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
 import {
     ChainId,
-    TransactionParameter,
+    type TransactionParameter,
     getTraderConstants,
     isNativeTokenAddress,
     getTokenConstant,
@@ -17,7 +17,7 @@ import { getTokenAmountDescription } from '../utils.js'
 
 export class SwapDescriptor implements TransactionDescriptor {
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
-        const context = context_ as TransactionContext<ChainId, string | undefined>
+        const context = context_ as TransactionContext<ChainId>
         const hub = Web3StateSettings.value.Hub?.getHub?.({
             chainId: context.chainId,
         })
@@ -37,7 +37,7 @@ export class SwapDescriptor implements TransactionDescriptor {
             const parameters = method.parameters
 
             if (method.name === 'swapExactETHForTokens' && parameters?.path && parameters.amountOutMin) {
-                const outputToken = await hub?.getFungibleToken?.(last(parameters!.path) ?? '', {
+                const outputToken = await hub?.getFungibleToken?.(last(parameters.path) ?? '', {
                     chainId: context.chainId,
                 })
                 return {
@@ -52,7 +52,7 @@ export class SwapDescriptor implements TransactionDescriptor {
                         successfulDescription: `Swap ${getTokenAmountDescription(
                             context.value,
                             nativeToken,
-                        )} for ${getTokenAmountDescription(parameters!.amountOutMin, outputToken)} successfully.`,
+                        )} for ${getTokenAmountDescription(parameters.amountOutMin, outputToken)} successfully.`,
                         failedDescription: `Failed to swap ${outputToken?.symbol ?? ''}.`,
                     },
                 }
@@ -64,7 +64,7 @@ export class SwapDescriptor implements TransactionDescriptor {
                 parameters?.amountOutMin &&
                 parameters?.amountIn
             ) {
-                const outputToken = await hub?.getFungibleToken?.(first(parameters!.path) ?? '', {
+                const outputToken = await hub?.getFungibleToken?.(first(parameters.path) ?? '', {
                     chainId: context.chainId,
                 })
                 return {
@@ -72,14 +72,14 @@ export class SwapDescriptor implements TransactionDescriptor {
                     title: 'Swap Token',
                     tokenInAddress: outputToken?.address,
                     tokenInAmount: parameters?.amountIn,
-                    description: `Swap ${getTokenAmountDescription(parameters!.amountIn, outputToken)} for ${
+                    description: `Swap ${getTokenAmountDescription(parameters.amountIn, outputToken)} for ${
                         nativeToken?.symbol ?? ''
                     }.`,
                     snackbar: {
                         successfulDescription: `Swap ${getTokenAmountDescription(
-                            parameters!.amountIn,
+                            parameters.amountIn,
                             outputToken,
-                        )} for ${getTokenAmountDescription(parameters!.amountOutMin, nativeToken)} successfully.`,
+                        )} for ${getTokenAmountDescription(parameters.amountOutMin, nativeToken)} successfully.`,
                         failedDescription: `Failed to swap ${nativeToken?.symbol ?? ''}.`,
                     },
                 }
@@ -91,11 +91,11 @@ export class SwapDescriptor implements TransactionDescriptor {
                 parameters?.amountIn &&
                 parameters?.amountOutMin
             ) {
-                const tokenIn = await hub?.getFungibleToken?.(first(parameters!.path) ?? '', {
+                const tokenIn = await hub?.getFungibleToken?.(first(parameters.path) ?? '', {
                     chainId: context.chainId,
                 })
 
-                const tokenOut = await hub?.getFungibleToken?.(last(parameters!.path) ?? '', {
+                const tokenOut = await hub?.getFungibleToken?.(last(parameters.path) ?? '', {
                     chainId: context.chainId,
                 })
 
@@ -103,15 +103,15 @@ export class SwapDescriptor implements TransactionDescriptor {
                     chainId: context.chainId,
                     title: 'Swap Token',
                     tokenInAddress: tokenIn?.address,
-                    tokenInAmount: parameters!.amountIn,
-                    description: `Swap ${getTokenAmountDescription(parameters!.amountIn, tokenIn)} for ${
+                    tokenInAmount: parameters.amountIn,
+                    description: `Swap ${getTokenAmountDescription(parameters.amountIn, tokenIn)} for ${
                         tokenOut?.symbol ?? ''
                     }.`,
                     snackbar: {
                         successfulDescription: `Swap ${getTokenAmountDescription(
-                            parameters!.amountIn,
+                            parameters.amountIn,
                             tokenIn,
-                        )} for ${getTokenAmountDescription(parameters!.amountOutMin, tokenOut)} successfully.`,
+                        )} for ${getTokenAmountDescription(parameters.amountOutMin, tokenOut)} successfully.`,
                         failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                     },
                 }
@@ -125,25 +125,25 @@ export class SwapDescriptor implements TransactionDescriptor {
                 parameters?.fromTokenAmount &&
                 parameters?.minReturnAmount
             ) {
-                const tokenIn = isSameAddress(parameters!.fromToken, DODO_ETH_ADDRESS)
+                const tokenIn = isSameAddress(parameters.fromToken, DODO_ETH_ADDRESS)
                     ? nativeToken
-                    : await hub?.getFungibleToken?.(parameters!.fromToken ?? '', { chainId: context.chainId })
-                const tokenOut = isSameAddress(parameters!.toToken, DODO_ETH_ADDRESS)
+                    : await hub?.getFungibleToken?.(parameters.fromToken ?? '', { chainId: context.chainId })
+                const tokenOut = isSameAddress(parameters.toToken, DODO_ETH_ADDRESS)
                     ? nativeToken
-                    : await hub?.getFungibleToken?.(parameters!.toToken ?? '', { chainId: context.chainId })
+                    : await hub?.getFungibleToken?.(parameters.toToken ?? '', { chainId: context.chainId })
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
                     tokenInAddress: tokenIn?.address,
-                    tokenInAmount: parameters!.fromTokenAmount,
-                    description: `Swap ${getTokenAmountDescription(parameters!.fromTokenAmount, tokenIn)} for ${
+                    tokenInAmount: parameters.fromTokenAmount,
+                    description: `Swap ${getTokenAmountDescription(parameters.fromTokenAmount, tokenIn)} for ${
                         tokenOut?.symbol ?? ''
                     }.`,
                     snackbar: {
                         successfulDescription: `Swap ${getTokenAmountDescription(
-                            parameters!.fromTokenAmount,
+                            parameters.fromTokenAmount,
                             tokenIn,
-                        )} for ${getTokenAmountDescription(parameters!.minReturnAmount, tokenOut)} successfully.`,
+                        )} for ${getTokenAmountDescription(parameters.minReturnAmount, tokenOut)} successfully.`,
                         failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                     },
                 }
@@ -156,7 +156,7 @@ export class SwapDescriptor implements TransactionDescriptor {
                 parameters?.fromTokenAmount &&
                 parameters?.minReturnAmount
             ) {
-                const tokenIn = await hub?.getFungibleToken?.(parameters!.fromToken ?? '', {
+                const tokenIn = await hub?.getFungibleToken?.(parameters.fromToken ?? '', {
                     chainId: context.chainId,
                 })
                 const tokenOut = nativeToken
@@ -164,15 +164,15 @@ export class SwapDescriptor implements TransactionDescriptor {
                     chainId: context.chainId,
                     title: 'Swap Token',
                     tokenInAddress: tokenIn?.address,
-                    tokenInAmount: parameters!.fromTokenAmount,
-                    description: `Swap ${getTokenAmountDescription(parameters!.fromTokenAmount, tokenIn)} for ${
+                    tokenInAmount: parameters.fromTokenAmount,
+                    description: `Swap ${getTokenAmountDescription(parameters.fromTokenAmount, tokenIn)} for ${
                         tokenOut?.symbol ?? ''
                     }.`,
                     snackbar: {
                         successfulDescription: `Swap ${getTokenAmountDescription(
-                            parameters!.fromTokenAmount,
+                            parameters.fromTokenAmount,
                             tokenIn,
-                        )} for ${getTokenAmountDescription(parameters!.minReturnAmount, tokenOut)} successfully.`,
+                        )} for ${getTokenAmountDescription(parameters.minReturnAmount, tokenOut)} successfully.`,
                         failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                     },
                 }
@@ -245,7 +245,7 @@ export class SwapDescriptor implements TransactionDescriptor {
                         successfulDescription: `Swap ${getTokenAmountDescription(
                             parameters.inputTokenAmount,
                             tokenIn,
-                        )} for ${getTokenAmountDescription(parameters!.minOutputTokenAmount, tokenOut)} successfully.`,
+                        )} for ${getTokenAmountDescription(parameters.minOutputTokenAmount, tokenOut)} successfully.`,
                         failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                     },
                 }
@@ -278,7 +278,7 @@ export class SwapDescriptor implements TransactionDescriptor {
                         successfulDescription: `Swap ${getTokenAmountDescription(
                             parameters._amount,
                             tokenIn,
-                        )} for ${getTokenAmountDescription(parameters!._minReturn, tokenOut)} successfully.`,
+                        )} for ${getTokenAmountDescription(parameters._minReturn, tokenOut)} successfully.`,
                         failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                     },
                 }
@@ -374,7 +374,7 @@ export class SwapDescriptor implements TransactionDescriptor {
                         successfulDescription: `Swap ${getTokenAmountDescription(
                             parameters.sellAmount,
                             tokenIn,
-                        )} for ${getTokenAmountDescription(parameters!.minBuyAmount, tokenOut)} successfully.`,
+                        )} for ${getTokenAmountDescription(parameters.minBuyAmount, tokenOut)} successfully.`,
                         failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                     },
                 }
@@ -414,7 +414,7 @@ export class SwapDescriptor implements TransactionDescriptor {
                 parameters?.amountOutMin &&
                 parameters?.path
             ) {
-                const tokenIn = await hub?.getFungibleToken?.(first(parameters!.path) ?? '', {
+                const tokenIn = await hub?.getFungibleToken?.(first(parameters.path) ?? '', {
                     chainId: context.chainId,
                 })
                 const tokenOut = nativeToken
@@ -423,15 +423,15 @@ export class SwapDescriptor implements TransactionDescriptor {
                     chainId: context.chainId,
                     title: 'Swap Token',
                     tokenInAddress: tokenIn?.address,
-                    tokenInAmount: parameters!.amountIn,
-                    description: `Swap ${getTokenAmountDescription(parameters!.amountIn, tokenIn)} for ${
+                    tokenInAmount: parameters.amountIn,
+                    description: `Swap ${getTokenAmountDescription(parameters.amountIn, tokenIn)} for ${
                         tokenOut?.symbol ?? ''
                     }.`,
                     snackbar: {
                         successfulDescription: `Swap ${getTokenAmountDescription(
-                            parameters!.amountIn,
+                            parameters.amountIn,
                             tokenIn,
-                        )} for ${getTokenAmountDescription(parameters!.amountOutMin, tokenOut)} successfully.`,
+                        )} for ${getTokenAmountDescription(parameters.amountOutMin, tokenOut)} successfully.`,
                         failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                     },
                 }

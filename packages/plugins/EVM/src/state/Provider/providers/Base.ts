@@ -9,7 +9,7 @@ import {
     createWeb3,
     createWeb3Provider,
     ChainId,
-    ProviderType,
+    type ProviderType,
     ProviderURL,
     EthereumMethodType,
 } from '@masknet/web3-shared-evm'
@@ -126,10 +126,7 @@ export class BaseProvider implements EVM_Provider {
 
     // A provider should at least implement a RPC request method.
     // Then it can be used to create an external provider for web3js.
-    async request<T extends unknown>(
-        requestArguments: RequestArguments,
-        options?: ProviderOptions<ChainId>,
-    ): Promise<T> {
+    async request<T>(requestArguments: RequestArguments, options?: ProviderOptions<ChainId>): Promise<T> {
         throw new Error('Method not implemented.')
     }
 

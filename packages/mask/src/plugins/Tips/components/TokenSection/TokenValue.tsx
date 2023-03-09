@@ -1,4 +1,4 @@
-import { FC, HTMLProps, useMemo } from 'react'
+import { type FC, type HTMLProps, useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { useChainContext, useFungibleTokenPrice, useNetworkContext } from '@masknet/web3-hooks-base'
 import { TokenIcon } from '@masknet/shared'

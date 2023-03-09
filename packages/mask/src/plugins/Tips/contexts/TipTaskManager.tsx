@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from 'react'
+import { type FC, useCallback, useEffect, useState } from 'react'
 import { isEqual } from 'lodash-es'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'

@@ -2,8 +2,8 @@ import type { PayloadParserResult } from './index.js'
 import type { PayloadParseResult } from '../payload/index.js'
 import { CryptoException, PayloadException, assertArray, assertUint8Array } from '../types/index.js'
 import { andThenAsync, CheckedError, decompressK256Raw, OptionalResult } from '@masknet/base'
-import { Ok, Result } from 'ts-results-es'
-import { EC_Key, EC_KeyCurveEnum } from '../payload/types.js'
+import { Ok, type Result } from 'ts-results-es'
+import { type EC_Key, EC_KeyCurveEnum } from '../payload/types.js'
 import { decodeMessagePackF, assertIVLengthEq16, importAES, importEC_Key } from '../utils/index.js'
 import { safeUnreachable } from '@masknet/kit'
 import { parseSignatureContainer } from './SignatureContainer.js'
@@ -79,12 +79,12 @@ async function parseEncryption(encryption: unknown): Promise<PayloadParseResult.
         if (typeof item !== 'object' || item === null) return {}
         return Object.fromEntries(await Promise.all(Object.entries(item).map(parseAuthorEphemeralPublicKey)))
     }
-    async function parseAuthorEphemeralPublicKey([key, value]: [string | number, unknown]) {
-        const isEnumLike = Number.parseInt(key.toString(), 10)
-        if (!Number.isNaN(isEnumLike)) key = isEnumLike
-        const result = await importAsymmetryKey(key, value, 'authorEphemeralPublicKey')
-        return [key, result] as const
-    }
+}
+async function parseAuthorEphemeralPublicKey([key, value]: [string | number, unknown]) {
+    const isEnumLike = Number.parseInt(key.toString(), 10)
+    if (!Number.isNaN(isEnumLike)) key = isEnumLike
+    const result = await importAsymmetryKey(key, value, 'authorEphemeralPublicKey')
+    return [key, result] as const
 }
 async function parseAES(aes: unknown) {
     return andThenAsync(assertUint8Array(aes, 'aes', CryptoException.InvalidCryptoKey), importAES256)

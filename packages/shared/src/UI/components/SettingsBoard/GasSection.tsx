@@ -5,7 +5,7 @@ import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { GasOptionType, isZero, plus, formatCurrency } from '@masknet/web3-shared-base'
-import { ChainId, formatGweiToWei, formatWeiToGwei, Transaction } from '@masknet/web3-shared-evm'
+import { type ChainId, formatGweiToWei, formatWeiToGwei, type Transaction } from '@masknet/web3-shared-evm'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { GasOptionSelector } from './GasOptionSelector.js'
 import { SettingsContext } from './Context.js'
@@ -60,9 +60,7 @@ export function GasSection(props: GasSectionProps) {
     if (pluginID !== NetworkPluginID.PLUGIN_EVM) return null
 
     const isEIP1559 = Others?.chainResolver.isSupport(chainId as ChainId, 'EIP1559')
-    const suggestedMaxFeePerGas = gasOptions?.[gasOptionType ?? GasOptionType.NORMAL].suggestedMaxFeePerGas as
-        | string
-        | undefined
+    const suggestedMaxFeePerGas = gasOptions?.[gasOptionType ?? GasOptionType.NORMAL].suggestedMaxFeePerGas
     const suggestedMaxPriorityFeePerGas =
         gasOptions?.[gasOptionType ?? GasOptionType.NORMAL].suggestedMaxPriorityFeePerGas
     const baseFeePerGas = gasOptions?.[GasOptionType.FAST].baseFeePerGas ?? '0'

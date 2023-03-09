@@ -22,7 +22,7 @@ import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js
 
 function getStyleProps() {
     const EMPTY_STYLE = {} as CSSStyleDeclaration
-    const eleTab = searchProfileTabSelector().evaluate()?.querySelector<Element>('div > div')
+    const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div > div')
     const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
     const paddingEle = searchProfileTabSelector().evaluate()
     const paddingCss = paddingEle ? window.getComputedStyle(paddingEle) : EMPTY_STYLE
@@ -112,7 +112,7 @@ function tabClickHandler() {
 }
 
 async function hideTwitterActivatedContent() {
-    const eleTab = searchProfileTabSelector().evaluate()?.querySelector<Element>('div > div')
+    const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div > div')
     const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
     if (!eleTab) return
     const style = window.getComputedStyle(eleTab)
@@ -147,7 +147,7 @@ async function hideTwitterActivatedContent() {
 }
 
 function resetTwitterActivatedContent() {
-    const eleTab = searchProfileTabSelector().evaluate()?.querySelector<Element>('div > div')
+    const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div > div')
     const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
     if (!eleTab) return
 

@@ -7,7 +7,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useTelemetry } from '@masknet/web3-telemetry/hooks'
 import { NetworkPluginID, ProofType } from '@masknet/shared-base'
 import {
-    Web3,
+    type Web3,
     ChainId,
     ChainId as EVM_ChainId,
     ProviderType as EVM_ProviderType,
@@ -75,7 +75,8 @@ export function ConnectionContent(props: ConnectionContentProps) {
                 },
             },
         )
-        window.alert(estimatedGas)
+        // eslint-disable-next-line no-alert
+        alert(estimatedGas)
     }, [web3, connection])
 
     const onTransferCallback = useCallback(() => {
@@ -211,8 +212,8 @@ export function ConnectionContent(props: ConnectionContentProps) {
                         return ''
                 }
             }
-
-            window.alert(`Signed: ${await sign()}`)
+            // eslint-disable-next-line no-alert
+            alert(`Signed: ${await sign()}`)
         },
         [chainId, connection],
     )

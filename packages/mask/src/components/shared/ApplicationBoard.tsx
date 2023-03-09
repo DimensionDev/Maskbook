@@ -1,4 +1,4 @@
-import { useState, useContext, createContext, PropsWithChildren, useMemo, useRef } from 'react'
+import { useState, useContext, createContext, type PropsWithChildren, useMemo, useRef } from 'react'
 import { useTimeout } from 'react-use'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography } from '@mui/material'
@@ -8,7 +8,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { MaskMessages, useI18N } from '../../utils/index.js'
-import { Application, getUnlistedApp } from './ApplicationSettingPluginList.js'
+import { type Application, getUnlistedApp } from './ApplicationSettingPluginList.js'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea.js'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus.js'
@@ -122,7 +122,7 @@ function ApplicationBoardContent(props: Props) {
                 .sort((a, b) => {
                     return (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0)
                 })
-                .filter((x) => Boolean(x.entry.RenderEntryComponent)),
+                .filter((x) => !!x.entry.RenderEntryComponent),
         [snsAdaptorPlugins, currentWeb3Network, chainId, account],
     )
     const recommendFeatureAppList = applicationList
@@ -136,7 +136,7 @@ function ApplicationBoardContent(props: Props) {
     // #endregion
     const { classes, cx } = useStyles({
         shouldScroll: listedAppList.length > 12,
-        isCarouselReady: Boolean(isCarouselReady()),
+        isCarouselReady: !!isCarouselReady(),
     })
 
     useMountReport(TelemetryAPI.EventID.AccessApplicationBoard)
@@ -286,21 +286,32 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
     const { isSNSConnectToCurrentPersona, currentPersonaPublicKey, currentSNSConnectedPersonaPublicKey } =
         ApplicationCurrentStatus ?? {}
 
+    const Context = useMemo(
+        () => ({
+            personaAction: personaConnectStatus.action,
+            isPersonaCreated: personaConnectStatus.hasPersona,
+            isPersonaConnected: personaConnectStatus.connected,
+            isNextIDVerify: personaConnectStatus.verified,
+            isSNSConnectToCurrentPersona,
+            shouldDisplayTooltipHint:
+                ApplicationCurrentStatus?.isSNSConnectToCurrentPersona === false && personaConnectStatus.connected,
+            shouldVerifyNextId: !!(!personaConnectStatus.verified && ApplicationCurrentStatus),
+            currentPersonaPublicKey,
+            currentSNSConnectedPersonaPublicKey,
+            isLoading: personaStatusLoading || personaAgainstSNSConnectStatusLoading,
+        }),
+        [
+            ApplicationCurrentStatus,
+            personaStatusLoading,
+            personaAgainstSNSConnectStatusLoading,
+            personaConnectStatus.action,
+            personaConnectStatus.hasPersona,
+            personaConnectStatus.connected,
+            personaConnectStatus.verified,
+        ],
+    )
     return (
-        <ApplicationEntryStatusContext.Provider
-            value={{
-                personaAction: personaConnectStatus.action,
-                isPersonaCreated: personaConnectStatus.hasPersona,
-                isPersonaConnected: personaConnectStatus.connected,
-                isNextIDVerify: personaConnectStatus.verified,
-                isSNSConnectToCurrentPersona,
-                shouldDisplayTooltipHint:
-                    ApplicationCurrentStatus?.isSNSConnectToCurrentPersona === false && personaConnectStatus.connected,
-                shouldVerifyNextId: Boolean(!personaConnectStatus.verified && ApplicationCurrentStatus),
-                currentPersonaPublicKey,
-                currentSNSConnectedPersonaPublicKey,
-                isLoading: personaStatusLoading || personaAgainstSNSConnectStatusLoading,
-            }}>
+        <ApplicationEntryStatusContext.Provider value={Context}>
             {props.children}
         </ApplicationEntryStatusContext.Provider>
     )

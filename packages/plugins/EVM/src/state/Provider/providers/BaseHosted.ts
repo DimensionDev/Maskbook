@@ -3,15 +3,15 @@ import type { RequestArguments } from 'web3-core'
 import { toHex } from 'web3-utils'
 import { delay } from '@masknet/kit'
 import { Web3 } from '@masknet/web3-providers'
-import { EMPTY_LIST, StorageObject } from '@masknet/shared-base'
-import { ProviderOptions, Wallet, isSameAddress } from '@masknet/web3-shared-base'
+import { EMPTY_LIST, type StorageObject } from '@masknet/shared-base'
+import { type ProviderOptions, type Wallet, isSameAddress } from '@masknet/web3-shared-base'
 import {
-    ChainId,
+    type ChainId,
     getDefaultChainId,
     isValidAddress,
     formatEthereumAddress,
     PayloadEditor,
-    ProviderType,
+    type ProviderType,
 } from '@masknet/web3-shared-evm'
 import { SharedContextSettings } from '../../../settings/index.js'
 import { BaseProvider } from './Base.js'
@@ -222,10 +222,7 @@ export class BaseHostedProvider extends BaseProvider implements EVM_Provider {
         await this.walletStorage?.chainId.setValue(chainId)
     }
 
-    override async request<T extends unknown>(
-        requestArguments: RequestArguments,
-        options?: ProviderOptions<ChainId>,
-    ): Promise<T> {
+    override async request<T>(requestArguments: RequestArguments, options?: ProviderOptions<ChainId>): Promise<T> {
         return Web3.getWeb3Provider(options?.chainId || this.hostedChainId).request<T>(
             PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
         )

@@ -1,5 +1,5 @@
 import { Fragment, useContext, useEffect, useReducer } from 'react'
-import { extractTextFromTypedMessage, TypedMessage } from '@masknet/typed-message'
+import { extractTextFromTypedMessage, type TypedMessage } from '@masknet/typed-message'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 
 import Services, { GeneratorServices } from '../../../extension/service.js'
@@ -146,7 +146,7 @@ export function DecryptPost(props: DecryptPostProps) {
             )
         })
         return () => signal.abort()
-    }, [deconstructedPayload, postBy, postMetadataImages.join(), whoAmI, mentionedLinks.join()])
+    }, [deconstructedPayload, postBy, postMetadataImages.join(','), whoAmI, mentionedLinks.join(',')])
 
     if (!deconstructedPayload && progress.every((x) => x.progress.internal)) return null
     return (

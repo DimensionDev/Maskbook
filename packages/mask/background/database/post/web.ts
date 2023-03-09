@@ -1,8 +1,8 @@
 import {
-    AESCryptoKey,
-    AESJsonWebKey,
+    type AESCryptoKey,
+    type AESJsonWebKey,
     ECKeyIdentifier,
-    PersonaIdentifier,
+    type PersonaIdentifier,
     PostIdentifier,
     PostIVIdentifier,
     ProfileIdentifier,
@@ -42,10 +42,7 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                         const id = PostIdentifier.from(each.identifier)
                         if (id.some) {
                             const { postId, identifier } = id.val
-                            each.identifier = new PostIVIdentifier(
-                                (identifier as ProfileIdentifier).network,
-                                postId,
-                            ).toText()
+                            each.identifier = new PostIVIdentifier(identifier.network, postId).toText()
                             await store.add(each)
                         }
                     }
@@ -74,7 +71,7 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                             foundAt: new Date(0),
                             recipientGroups: [],
                         }
-                        await cursor.update(next as PostDB_HistoryTypes.Version3PostRecord as any)
+                        await cursor.update(next satisfies PostDB_HistoryTypes.Version3PostRecord as any)
                     }
                 }
 

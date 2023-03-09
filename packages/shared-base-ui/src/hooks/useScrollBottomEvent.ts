@@ -1,4 +1,4 @@
-import { useLayoutEffect, RefObject, useCallback } from 'react'
+import { useLayoutEffect, type RefObject, useCallback } from 'react'
 import { debounce } from 'lodash-es'
 
 export function useScrollBottomEvent(ref: RefObject<HTMLDivElement | HTMLUListElement>, cb: () => void) {

@@ -8,6 +8,7 @@
     "module": "None",
     "moduleResolution": "Classic",
     "resolveJsonModule": false,
+    "verbatimModuleSyntax": false,
     "outFile": "../dist/public-api"
   },
   "include": ["./"],

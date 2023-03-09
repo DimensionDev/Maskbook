@@ -2,8 +2,8 @@ import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { BigNumber } from 'bignumber.js'
-import { Currency, CurrencyAmount, TradeType } from '@uniswap/sdk-core'
-import { encodeRouteToPath, Route, Trade } from '@uniswap/v3-sdk'
+import { type Currency, CurrencyAmount, TradeType } from '@uniswap/sdk-core'
+import { encodeRouteToPath, type Route, Trade } from '@uniswap/v3-sdk'
 import { useQuoterContract } from '../../contracts/uniswap/useQuoterContract.js'
 import { useAllV3Routes } from './useAllV3Routes.js'
 import { DEFAULT_MULTICALL_GAS_LIMIT } from '../../constants/index.js'
@@ -62,7 +62,10 @@ export function useV3BestTradeExactIn(
         loading: quotesLoading,
         error: quotesError,
         retry: quotesRetry,
-    } = useAsyncRetry(() => quotesCallback(quotesCalls), [quoterContract, quotesCalls.map((x) => x.join()).join()])
+    } = useAsyncRetry(
+        () => quotesCallback(quotesCalls),
+        [quoterContract, quotesCalls.map((x) => x.join(',')).join(',')],
+    )
 
     const asyncBestTrade = (() => {
         if (!amountIn || !currencyOut || pluginID !== NetworkPluginID.PLUGIN_EVM) {
@@ -81,7 +84,6 @@ export function useV3BestTradeExactIn(
         }
         const { bestRoute, amountOut } = quotesResults
             .filter((x) => x.succeed)
-            // eslint-disable-next-line unicorn/no-array-reduce
             .reduce(
                 (
                     currentBest: {
@@ -188,7 +190,10 @@ export function useV3BestTradeExactOut(
         loading: quotesLoading,
         error: quotesError,
         retry: quotesRetry,
-    } = useAsyncRetry(() => quotesCallback(quotesCalls), [quotesCallback, quotesCalls.map((x) => x.join()).join()])
+    } = useAsyncRetry(
+        () => quotesCallback(quotesCalls),
+        [quotesCallback, quotesCalls.map((x) => x.join(',')).join(',')],
+    )
     const asyncBestTrade = (() => {
         if (
             !amountOut ||
@@ -211,7 +216,6 @@ export function useV3BestTradeExactOut(
         }
         const { bestRoute, amountIn } = quotesResults
             .filter((x) => x.succeed)
-            // eslint-disable-next-line unicorn/no-array-reduce
             .reduce(
                 (
                     currentBest: {

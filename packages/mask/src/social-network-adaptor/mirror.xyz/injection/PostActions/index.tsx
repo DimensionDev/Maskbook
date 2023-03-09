@@ -2,7 +2,7 @@ import { noop } from 'lodash-es'
 import { Plugin } from '@masknet/plugin-infra'
 import {
     createInjectHooksRenderer,
-    PostInfo,
+    type PostInfo,
     PostInfoProvider,
     useActivatedPluginsSNSAdaptor,
     usePostInfoDetails,

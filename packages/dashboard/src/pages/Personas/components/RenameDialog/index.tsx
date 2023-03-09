@@ -1,4 +1,4 @@
-import { FormEvent, memo, useCallback } from 'react'
+import { type FormEvent, memo, useCallback } from 'react'
 import { MaskDialog, MaskTextField } from '@masknet/theme'
 import { Button, DialogActions, DialogContent } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales/index.js'

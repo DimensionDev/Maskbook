@@ -51,7 +51,7 @@ export function getMirrorUserId(href?: string) {
     const pageType = getMirrorPageType(url)
 
     // If dashboard, get from local storage
-    if (pageType === MirrorPageType.Dashboard) return localStorage.getItem('mirror.userAddress') as string | null
+    if (pageType === MirrorPageType.Dashboard) return localStorage.getItem('mirror.userAddress')
 
     let tempURL = url
     if (pageType === MirrorPageType.Collection) {

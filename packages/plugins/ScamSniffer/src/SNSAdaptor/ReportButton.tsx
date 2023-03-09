@@ -39,7 +39,7 @@ const ReportButton = () => {
         links,
         content: message.some ? message.val : null,
     }
-    const handleClick = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
         setSending(true)
         await PluginScamRPC.sendReportScam({
             slug: 'report_button',

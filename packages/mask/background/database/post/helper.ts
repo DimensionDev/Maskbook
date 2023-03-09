@@ -1,6 +1,6 @@
 import type { AESCryptoKey, PostIVIdentifier } from '@masknet/shared-base'
 import { CryptoKeyToJsonWebKey } from '../../../utils-pure/index.js'
-import { withPostDBTransaction, queryPostDB, createPostDB, updatePostDB, PostRecord } from './index.js'
+import { withPostDBTransaction, queryPostDB, createPostDB, updatePostDB, type PostRecord } from './index.js'
 
 export async function savePostKeyToDB(
     id: PostIVIdentifier,

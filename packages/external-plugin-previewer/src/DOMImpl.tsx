@@ -1,5 +1,5 @@
 import { setDOMImpl } from 'ef.js'
-import { attachReactTreeToMountedRoot_noHost, ReactRootShadowed } from '@masknet/theme'
+import { attachReactTreeToMountedRoot_noHost, type ReactRootShadowed } from '@masknet/theme'
 import * as Components from './Components/index.js'
 import { RenderContext } from './RenderContext.js'
 

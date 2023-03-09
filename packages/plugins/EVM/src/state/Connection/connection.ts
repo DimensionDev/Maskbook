@@ -1,5 +1,5 @@
 import { first, identity, pickBy } from 'lodash-es'
-import { AbiItem, toHex } from 'web3-utils'
+import { toHex, type AbiItem } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
@@ -17,27 +17,27 @@ import {
     EthereumMethodType,
     ProviderType,
     SchemaType,
-    Transaction,
+    type Transaction,
     createContract,
     createWeb3,
     createWeb3Provider,
     isNativeTokenAddress,
-    UserOperation,
-    AddressType,
+    type UserOperation,
+    type AddressType,
     ContractTransaction,
     AccountTransaction,
     PayloadEditor,
-    TransactionReceipt,
+    type TransactionReceipt,
 } from '@masknet/web3-shared-evm'
 import {
-    Account,
-    ConnectionOptions,
-    FungibleToken,
-    NonFungibleToken,
-    NonFungibleCollection,
-    NonFungibleTokenContract,
+    type Account,
+    type ConnectionOptions,
+    type FungibleToken,
+    type NonFungibleToken,
+    type NonFungibleCollection,
+    type NonFungibleTokenContract,
     TransactionStatusType,
-    Wallet,
+    type Wallet,
 } from '@masknet/web3-shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
@@ -69,7 +69,7 @@ class Connection implements EVM_Connection {
 
     // Hijack RPC requests and process them with koa like middleware
     private get hijackedRequest() {
-        return <T extends unknown>(requestArguments: RequestArguments, initial?: EVM_ConnectionOptions) => {
+        return <T>(requestArguments: RequestArguments, initial?: EVM_ConnectionOptions) => {
             return new Promise<T>(async (resolve, reject) => {
                 const options = this.getOptions(initial)
                 const context = createContext(this, requestArguments, options)

@@ -21,7 +21,7 @@ export function usePriceLineChart(
     useLineChart(svgRef, data, dimension, id, {
         color,
         tickFormat: `${sign},.2s`,
-        formatTooltip: (value: number) =>
+        formatTooltip: (value) =>
             sign.match(/^[A-Za-z]{3}$/) ? formatCurrency(value, sign) : `${sign} ${value.toFixed(2)}`,
     })
 }

@@ -4,7 +4,7 @@ import {
     imports,
     type Module,
     Evaluators,
-    VirtualModuleRecord,
+    type VirtualModuleRecord,
     type ExportAllBinding,
     type ExportBinding,
 } from '@masknet/compartment'
@@ -45,9 +45,11 @@ export class PluginRuntime {
         this.#moduleMap.set(moduleName, {
             bindings: keys.map((key) => ({ export: key })),
             execute: (redEnvironment) => {
-                this.#membrane.execute(() => (redNamespace: any) => {
+                function copyNamespace(redNamespace: any) {
                     for (const k of keys) redEnvironment[k] = redNamespace[k]
-                })(blueNamespace)
+                }
+                Object.freeze(copyNamespace)
+                this.#membrane.execute(() => copyNamespace)(blueNamespace)
             },
         })
     }

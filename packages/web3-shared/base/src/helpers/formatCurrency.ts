@@ -76,7 +76,7 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD', options
         })
     }
 
-    const isDigitalCurrency = Boolean(!isIntlCurrencyValid && symbol)
+    const isDigitalCurrency = !!(!isIntlCurrencyValid && symbol)
     const digitalCurrencyModifierValues = digitalCurrencyModifier(
         formatter.formatToParts(
             bn.isZero() ? 0 : bn.lt(sixDecimalBoundary) ? sixDecimalBoundary.toNumber() : bn.toNumber(),

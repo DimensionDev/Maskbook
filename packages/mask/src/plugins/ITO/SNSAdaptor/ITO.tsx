@@ -4,10 +4,17 @@ import {
     isNativeTokenAddress,
     explorerResolver,
     chainResolver,
-    ChainId,
-    SchemaType,
+    type ChainId,
+    type SchemaType,
 } from '@masknet/web3-shared-evm'
-import { isZero, ZERO, isGreaterThan, isSameAddress, formatBalance, FungibleToken } from '@masknet/web3-shared-base'
+import {
+    isZero,
+    ZERO,
+    isGreaterThan,
+    isSameAddress,
+    formatBalance,
+    type FungibleToken,
+} from '@masknet/web3-shared-base'
 import { Box, Card, Link, Typography } from '@mui/material'
 import {
     SOCIAL_MEDIA_NAME,
@@ -33,7 +40,7 @@ import { useDestructCallback } from './hooks/useDestructCallback.js'
 import { useIfQualified } from './hooks/useIfQualified.js'
 import { usePoolTradeInfo } from './hooks/usePoolTradeInfo.js'
 import { checkRegionRestrict, decodeRegionCode, useIPRegion } from './hooks/useRegion.js'
-import { ITO_Status, JSON_PayloadInMask } from '../types.js'
+import { ITO_Status, type JSON_PayloadInMask } from '../types.js'
 import { StyledLinearProgress } from './StyledLinearProgress.js'
 import { SwapGuide, SwapStatus } from './SwapGuide.js'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
@@ -281,7 +288,7 @@ export function ITO(props: ITO_Props) {
     // #region buy info
     const { value: tradeInfo, loading: loadingTradeInfo, retry: retryPoolTradeInfo } = usePoolTradeInfo(pid, account)
     const isBuyer =
-        chainId === payload.chain_id && (isGreaterThan(availability?.swapped ?? 0, 0) || Boolean(availability?.claimed))
+        chainId === payload.chain_id && (isGreaterThan(availability?.swapped ?? 0, 0) || !!availability?.claimed)
 
     const successShareText = t(
         isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
@@ -460,7 +467,7 @@ export function ITO(props: ITO_Props) {
                 new BigNumber(availability?.swapped || 0).isGreaterThan(0) ? (
                     <Typography className={classes.footerInfo}>
                         {t('plugin_ito_wait_unlock_time', {
-                            unlockTime: formatDateTime(unlockTime!, 'yyyy-MM-dd HH:mm'),
+                            unlockTime: formatDateTime(unlockTime, 'yyyy-MM-dd HH:mm'),
                         })}
                     </Typography>
                 ) : null}

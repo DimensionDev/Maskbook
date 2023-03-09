@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { memoizePromise } from '@masknet/kit'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
-import { memoize } from 'lodash-es'
+import { memoize, noop } from 'lodash-es'
 import Services from '../../../extension/service.js'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { startWatch } from '../../../utils/watcher.js'
@@ -25,7 +25,7 @@ function _(main: () => LiveSelector<HTMLElement, true>, size: number, signal: Ab
     // To reproduce, open a profile and switch to another profile.
     startWatch(
         new MutationObserverWatcher(main()).useForeach((ele, _, meta) => {
-            let remover = () => {}
+            let remover = noop
             const remove = () => remover()
             const check = () => {
                 ifUsingMask(
@@ -65,7 +65,7 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
         .enableSingleMode()
     ifUsingMask(post.author.getCurrentValue()).then(add, remove)
     post.author.subscribe(() => ifUsingMask(post.author.getCurrentValue()).then(add, remove))
-    let remover = () => {}
+    let remover = noop
     function add() {
         if (signal?.aborted) return
         const node = ls.evaluate()

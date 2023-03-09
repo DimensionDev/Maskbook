@@ -7,7 +7,7 @@ export function toBips(bips: number) {
     return new BigNumber(bips).dividedBy(BIPS_BASE)
 }
 
-export function isNativeTokenWrapper(trade: TradeComputed<unknown> | null): trade is TradeComputed<NativeTokenWrapper> {
+export function isNativeTokenWrapper(trade: TradeComputed | null): trade is TradeComputed<NativeTokenWrapper> {
     const trade_ = trade as TradeComputed<NativeTokenWrapper> | null
     return trade_?.trade_?.isNativeTokenWrapper ?? false
 }

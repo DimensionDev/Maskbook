@@ -63,7 +63,7 @@ export const Header = memo(({ title, subtitle, action }: HeaderProps) => {
                     {action.name}
                 </Action>
             </TitleContainer>
-            {subtitle && <Subtitle variant="h5">{subtitle}</Subtitle>}
+            {subtitle ? <Subtitle variant="h5">{subtitle}</Subtitle> : null}
         </HeaderContainer>
     )
 })

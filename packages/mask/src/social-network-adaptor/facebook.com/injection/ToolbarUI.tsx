@@ -1,13 +1,16 @@
 import { styled, ListItemButton, Typography, ListItemIcon, useMediaQuery } from '@mui/material'
 import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled.js'
+import { useMemo } from 'react'
 
 const fbBreakPoint = 700 /** px */
 
-const Container = styled('div')<{
-    hasTopNavBar: boolean
-}>`
-    padding: 0 ${(props) => (props.hasTopNavBar ? '8px' : '4px')};
+const Container = styled('div')`
+    padding: 0 4px;
 `
+const ContainerHasNavBar = styled('div')`
+    padding: 0 8px;
+`
+
 const Item = styled(ListItemButton)`
     border-radius: 8px;
     padding-left: 10px;
@@ -28,24 +31,26 @@ const Icon = styled(ListItemIcon)<{
         min-width: ${(props) => (props.hasTopNavBar ? '36px' : 'auto')};
     }
 `
-
 export function ToolboxAtFacebook(props: {
     category: 'wallet' | 'application'
     hasTopNavBar: boolean
     hasSpecificLeftRailStartBar: boolean
 }) {
     const isSmall = useMediaQuery(`(max-height: ${fbBreakPoint}px)`)
+    const ListItemIcon = useMemo(() => {
+        return ({ children }: React.PropsWithChildren<{}>) => (
+            <Icon hasTopNavBar={props.hasTopNavBar} hasSpecificLeftRailStartBar={props.hasSpecificLeftRailStartBar}>
+                {children}
+            </Icon>
+        )
+    }, [props.hasTopNavBar, props.hasSpecificLeftRailStartBar])
     return (
         <ToolboxHintUnstyled
             iconSize={isSmall || !props.hasTopNavBar || !props.hasSpecificLeftRailStartBar ? 24 : 32}
-            Container={({ children }) => <Container hasTopNavBar={props.hasTopNavBar}>{children}</Container>}
+            Container={props.hasTopNavBar ? ContainerHasNavBar : Container}
             ListItemButton={Item}
             Typography={Text}
-            ListItemIcon={({ children }) => (
-                <Icon hasTopNavBar={props.hasTopNavBar} hasSpecificLeftRailStartBar={props.hasSpecificLeftRailStartBar}>
-                    {children}
-                </Icon>
-            )}
+            ListItemIcon={ListItemIcon}
             category={props.category}
         />
     )

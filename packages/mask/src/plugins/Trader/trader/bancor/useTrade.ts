@@ -1,6 +1,6 @@
 import { useTraderConstants, ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../../messages.js'
-import { SwapBancorRequest, TradeStrategy } from '../../types/index.js'
+import { type SwapBancorRequest, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { leftShift } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'

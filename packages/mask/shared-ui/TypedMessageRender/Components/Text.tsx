@@ -1,4 +1,4 @@
-import { memo, PropsWithChildren, useCallback } from 'react'
+import { memo, type PropsWithChildren, useCallback } from 'react'
 import { Typography, Link as MaterialLink } from '@mui/material'
 import type { RenderFragmentsContextType } from '@masknet/typed-message-react'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'

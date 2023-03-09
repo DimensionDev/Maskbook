@@ -20,12 +20,12 @@ import {
 } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
-    ChainId,
+    type ChainId,
     DepositPaymaster,
     formatEtherToGwei,
     formatWeiToEther,
     formatWeiToGwei,
-    GasConfig,
+    type GasConfig,
     GasEditor,
 } from '@masknet/web3-shared-evm'
 import { Typography, MenuItem, Box } from '@mui/material'

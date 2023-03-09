@@ -14,7 +14,7 @@ export namespace RedPacketBaseAPI {
         /** Get non-fungible collections owned by the given account. */
         getCollectionsByOwner?: (
             account: string,
-            options?: HubOptions<ChainId, HubIndicator>,
+            options?: HubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, HubIndicator>>
     }
 }

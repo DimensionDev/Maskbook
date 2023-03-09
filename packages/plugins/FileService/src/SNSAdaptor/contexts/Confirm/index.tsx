@@ -1,6 +1,6 @@
 import { createUITaskManager } from '@masknet/shared'
 import { useContext } from 'react'
-import { ConfirmDialog, ConfirmDialogProps } from './ConfirmDialog.js'
+import { ConfirmDialog, type ConfirmDialogProps } from './ConfirmDialog.js'
 
 const { TaskManagerContext, TaskManagerProvider: ConfirmProvider } = createUITaskManager<ConfirmDialogProps, boolean>(
     ConfirmDialog,

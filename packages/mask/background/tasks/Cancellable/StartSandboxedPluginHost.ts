@@ -1,7 +1,7 @@
 import { None, Result, Some } from 'ts-results-es'
 import type { PluginID } from '@masknet/shared-base'
-import { Plugin, registerPlugin } from '@masknet/plugin-infra'
-import { BackgroundInstance, BackgroundPluginHost } from '@masknet/sandboxed-plugin-runtime/background'
+import { type Plugin, registerPlugin } from '@masknet/plugin-infra'
+import { type BackgroundInstance, BackgroundPluginHost } from '@masknet/sandboxed-plugin-runtime/background'
 import { hmr } from '../../../utils-pure/index.js'
 import { Flags } from '../../../shared/flags.js'
 import { createPluginDatabase } from '../../database/plugin-db/index.js'
@@ -40,7 +40,6 @@ function __builtInPluginInfraBridgeCallback__(this: BackgroundPluginHost, id: st
 
     const base: Plugin.Shared.Definition = {
         enableRequirement: {
-            architecture: { web: true, app: true },
             networks: { type: 'opt-out', networks: {} },
             target: 'beta',
         },

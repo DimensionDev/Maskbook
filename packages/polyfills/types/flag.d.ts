@@ -1,10 +1,13 @@
 /// <reference path="./env.d.ts" />
 declare module NodeJS {
     interface ProcessEnv {
-        readonly NODE_ENV: 'development' | 'production'
-        readonly engine: 'chromium' | 'firefox' | 'safari'
+        readonly NODE_ENV: 'development' | 'production' | 'test'
+        /**
+         * @deprecated In the SPA build target, the same build of the code might run in multiple environments.
+         * Therefore you should use feature detection to check the environment.
+         */
+        readonly engine: 'chromium' | 'firefox'
         readonly channel: 'stable' | 'beta' | 'insider'
-        readonly architecture: 'web' | 'app'
         readonly manifest: '2' | '3'
         readonly shadowRootMode: 'open' | 'closed'
 

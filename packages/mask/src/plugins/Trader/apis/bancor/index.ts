@@ -19,7 +19,7 @@ const roundDecimal = (value: number | string | undefined, decimals: number) => {
 const getTargetAmount = async (
     request: SwapBancorRequest,
 ): Promise<ExpectedTargetAmountResponse | BancorApiErrorResponse> => {
-    const baseUrl = BANCOR_API_BASE_URL[request.chainId!]
+    const baseUrl = BANCOR_API_BASE_URL[request.chainId]
     const url = urlcat(baseUrl, '/pricing/target-amount', {
         source_dlt_type: 'ethereum',
         source_dlt_id: request.fromToken?.address,
@@ -33,7 +33,7 @@ const getTargetAmount = async (
 const getSourceAmount = async (
     request: SwapBancorRequest,
 ): Promise<ExpectedSourceAmountResponse | BancorApiErrorResponse> => {
-    const baseUrl = BANCOR_API_BASE_URL[request.chainId!]
+    const baseUrl = BANCOR_API_BASE_URL[request.chainId]
     const url = urlcat(baseUrl, '/pricing/source-amount', {
         source_dlt_type: 'ethereum',
         source_dlt_id: toChecksumAddress(request.fromToken?.address),

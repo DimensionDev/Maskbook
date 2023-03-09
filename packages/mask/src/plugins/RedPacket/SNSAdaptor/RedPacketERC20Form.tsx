@@ -1,16 +1,16 @@
-import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { type ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { omit } from 'lodash-es'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import {
-    FungibleToken,
+    type FungibleToken,
     isGreaterThan,
     isZero,
     multipliedBy,
     rightShift,
     formatBalance,
 } from '@masknet/web3-shared-base'
-import { ChainId, GasConfig, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
+import { type ChainId, type GasConfig, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { MenuItem, Select, Box, InputBase, Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
@@ -28,7 +28,7 @@ import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18n } from '../../../utils/index.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
-import { RedPacketSettings, useCreateParams } from './hooks/useCreateCallback.js'
+import { type RedPacketSettings, useCreateParams } from './hooks/useCreateCallback.js'
 import { useAsync } from 'react-use'
 import { SmartPayBundler } from '@masknet/web3-providers'
 
@@ -156,7 +156,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
 
         if (!isDivisible)
             return t.indivisible({
-                symbol: token.symbol!,
+                symbol: token.symbol,
                 amount: formatBalance(1, token.decimals),
             })
         return ''
@@ -176,7 +176,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const creatingParams = useMemo(
         () => ({
             duration,
-            isRandom: Boolean(isRandom),
+            isRandom: !!isRandom,
             name: senderName,
             message: message || t.best_wishes(),
             shares: shares || 0,

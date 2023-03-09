@@ -4,11 +4,11 @@
 import {
     AsyncCall,
     AsyncGeneratorCall,
-    AsyncCallOptions,
-    CallbackBasedChannel,
-    EventBasedChannel,
-    AsyncVersionOf,
-    AsyncGeneratorVersionOf,
+    type AsyncCallOptions,
+    type CallbackBasedChannel,
+    type EventBasedChannel,
+    type AsyncVersionOf,
+    type AsyncGeneratorVersionOf,
 } from 'async-call-rpc/full'
 import { WebExtensionMessage, MessageTarget, assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { serializer } from '@masknet/shared-base'

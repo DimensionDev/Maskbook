@@ -1,8 +1,8 @@
 import type { TypedMessage } from '@masknet/typed-message'
-import { Result, Ok, Err, Some, Option, None } from 'ts-results-es'
+import { type Result, Ok, Err, Some, type Option, None } from 'ts-results-es'
 import type { ReactElement, ReactNode } from 'react'
 import z_schema from 'z-schema'
-import draft, { enableMapSet, Draft } from 'immer'
+import draft, { enableMapSet, type Draft } from 'immer'
 
 const metadataSchemaStore = new Map<string, object>()
 export function getKnownMetadataKeys() {

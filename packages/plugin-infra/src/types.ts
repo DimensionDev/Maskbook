@@ -2,7 +2,7 @@ import type React from 'react'
 import type { Option, Result } from 'ts-results-es'
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-/* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
+/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import type {
     BindingProof,
@@ -172,11 +172,6 @@ export namespace Plugin.Shared {
         /** Get all wallets */
         wallets: Subscription<Wallet[]>
 
-        /** Native platform type */
-        nativeType?: 'Android' | 'iOS'
-        /** Native API supported */
-        hasNativeAPI: boolean
-
         /** Open Dashboard with a new window */
         openDashboard(route?: DashboardRoutes, search?: string): Promise<any>
 
@@ -296,9 +291,7 @@ export namespace Plugin.Shared {
      * This part is shared between Dashboard, SNSAdaptor and Worker part
      * which you should include the information above in those three parts.
      */
-    export interface DefinitionDeferred<Context extends Shared.SharedContext = Shared.SharedContext>
-        extends Definition,
-            Utilities {
+    export interface DefinitionDeferred<Context extends SharedContext = SharedContext> extends Definition, Utilities {
         /**
          * This function is called when the plugin is initialized.
          *
@@ -328,7 +321,6 @@ export namespace Plugin.Shared {
      */
     export interface EnableRequirement {
         target: ReleaseStages
-        architecture: Record<'app' | 'web', boolean>
         /** The SNS Network this plugin supports. */
         networks: SupportedNetworksDeclare
         /** The Web3 Network this plugin supports */
@@ -847,6 +839,14 @@ export namespace Plugin.SNSAdaptor {
         }
     }
 
+    export interface SettingsTabUIProps {
+        onClose: () => void
+        onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
+        bindingWallets?: BindingProof[]
+        currentPersona?: ECKeyIdentifier
+        pluginID: PluginID
+    }
+
     export interface SettingTab {
         ID: PluginID
         /**
@@ -860,13 +860,7 @@ export namespace Plugin.SNSAdaptor {
         priority: number
 
         UI?: {
-            TabContent: InjectUI<{
-                onClose: () => void
-                onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
-                bindingWallets?: BindingProof[]
-                currentPersona?: ECKeyIdentifier
-                pluginID: PluginID
-            }>
+            TabContent: InjectUI<SettingsTabUIProps>
         }
     }
 
@@ -1218,6 +1212,8 @@ export enum CurrentSNSNetwork {
     Twitter = 2,
     Instagram = 3,
     Minds = 4,
+
+    __SPA__ = 99,
 }
 
 export interface IdentityResolved {
@@ -1242,7 +1238,7 @@ export namespace Plugin.__Host {
          */
         minimalMode: EnabledStatusReporter
 
-        addI18NResource(pluginID: string, resources: Plugin.Shared.I18NResource): void
+        addI18NResource(pluginID: string, resources: Shared.I18NResource): void
 
         createContext(id: string, signal: AbortSignal): Context
 

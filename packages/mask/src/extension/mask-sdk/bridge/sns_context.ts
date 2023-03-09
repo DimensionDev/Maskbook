@@ -38,7 +38,7 @@ function __validateRemoteContext() {
         const challenge = Math.random()
         const f = ExternalPluginMessages.pong.on((i) => {
             if (i !== challenge) return
-            resolve(currentSNSContext!)
+            resolve(currentSNSContext)
             f()
         })
         ExternalPluginMessages.ping.sendToContentScripts({

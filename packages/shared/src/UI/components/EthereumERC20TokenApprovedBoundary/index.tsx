@@ -1,6 +1,6 @@
 import { unreachable } from '@masknet/kit'
 import { TokenIcon } from '@masknet/shared'
-import { ActionButton, ActionButtonProps, makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { ActionButton, type ActionButtonProps, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'

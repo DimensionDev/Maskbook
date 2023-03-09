@@ -1,6 +1,6 @@
 import { first, identity, pickBy } from 'lodash-es'
 import type { BlockObject, MutateOptions, QueryOptions } from '@blocto/fcl'
-import { AddressType, ChainId, ProviderType, SchemaType, TransactionReceipt } from '@masknet/web3-shared-flow'
+import { AddressType, ChainId, ProviderType, type SchemaType, type TransactionReceipt } from '@masknet/web3-shared-flow'
 import type {
     Account,
     FungibleToken,
@@ -11,7 +11,7 @@ import type {
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
-import { PartialRequired, toHex } from '@masknet/shared-base'
+import { type PartialRequired, toHex } from '@masknet/shared-base'
 import { FlowWeb3 } from '@masknet/web3-providers'
 import { Providers } from '../Provider/provider.js'
 import type { FlowConnection, FlowConnectionOptions } from './types.js'

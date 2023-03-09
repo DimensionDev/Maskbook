@@ -26,7 +26,6 @@ const withErrorMiddleware =
     async (res: Response) => {
         const result = await handler(res)
         if (!res.ok) {
-            // eslint-disable-next-line no-throw-literal
             throw { status: res.status, ...result }
         }
         return result
@@ -38,8 +37,10 @@ const fetchBase = <T = any>(
     handler: (res: Response) => Promise<T> = (res) => res.json(),
 ) => fetch(input, init).then(withErrorMiddleware<T>(handler))
 
-const fetchBaseInstance = (baseURL: string) => (input: RequestInfo, init?: RequestInit) =>
-    fetchBase(`${baseURL}/${input}`, init)
+const fetchBaseInstance = (baseURL: string) => (input: RequestInfo, init?: RequestInit) => {
+    // TODO: handle the rest properties on input?
+    return fetchBase(`${baseURL}/${typeof input === 'string' ? input : input.url}`, init)
+}
 
 const fetchBackupInstance = fetchBaseInstance(BASE_RUL)
 

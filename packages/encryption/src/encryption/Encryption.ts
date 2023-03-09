@@ -1,22 +1,22 @@
 import { encodeArrayBuffer, unreachable } from '@masknet/kit'
-import { AESCryptoKey, EC_Public_CryptoKey, PostIVIdentifier, ProfileIdentifier } from '@masknet/base'
+import { type AESCryptoKey, type EC_Public_CryptoKey, PostIVIdentifier, type ProfileIdentifier } from '@masknet/base'
 import {
     isTypedMessageText,
     encodeTypedMessageToDeprecatedFormat,
     encodeTypedMessageToDocument,
-    SerializableTypedMessages,
+    type SerializableTypedMessages,
 } from '@masknet/typed-message'
-import { None, Option, Some } from 'ts-results-es'
-import { EC_Key, encodePayload, PayloadWellFormed } from '../payload/index.js'
+import { None, type Option, Some } from 'ts-results-es'
+import { type EC_Key, encodePayload, type PayloadWellFormed } from '../payload/index.js'
 import { encryptWithAES } from '../utils/index.js'
 
 import {
     EncryptError,
     EncryptErrorReasons,
-    EncryptIO,
-    EncryptOptions,
-    EncryptResult,
-    EncryptTargetE2E,
+    type EncryptIO,
+    type EncryptOptions,
+    type EncryptResult,
+    type EncryptTargetE2E,
 } from './EncryptionTypes.js'
 import { createEphemeralKeysMap, fillIV } from './utils.js'
 import { v37_addReceiver } from './v37-ecdh.js'

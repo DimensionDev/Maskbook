@@ -44,7 +44,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface DescriptionCardProps {
-    asset: Web3Helper.NonFungibleAssetScope<void>
+    asset: Web3Helper.NonFungibleAssetScope
 }
 
 export function DescriptionCard(props: DescriptionCardProps) {

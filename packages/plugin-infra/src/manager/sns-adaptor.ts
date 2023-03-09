@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { unreachable } from '@masknet/kit'
-import { NetworkPluginID, ValueRefWithReady } from '@masknet/shared-base'
+import { type NetworkPluginID, ValueRefWithReady } from '@masknet/shared-base'
 import { createManager } from './manage.js'
 import { getPluginDefine } from './store.js'
 import type { CurrentSNSNetwork, Plugin } from '../types.js'

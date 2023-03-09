@@ -6,9 +6,9 @@ import {
     EncryptError,
     EncryptErrorReasons,
     type EncryptionResultE2E,
-    EncryptionResultE2EMap,
+    type EncryptionResultE2EMap,
 } from './EncryptionTypes.js'
-import { createEphemeralKeysMap, fillIV } from './utils.js'
+import { type createEphemeralKeysMap, fillIV } from './utils.js'
 
 /** @internal */
 export async function v37_addReceiver(

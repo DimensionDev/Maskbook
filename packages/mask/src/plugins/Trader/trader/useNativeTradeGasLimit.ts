@@ -1,6 +1,6 @@
 import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
-import { ChainId, ContractTransaction } from '@masknet/web3-shared-evm'
+import { type ChainId, ContractTransaction } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworkContext, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useNativeTokenWrapperContract } from '@masknet/web3-hooks-evm'

@@ -1,7 +1,12 @@
 import { useState, useCallback, useMemo } from 'react'
 import type { AbiOutput } from 'web3-utils'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId, ContractTransaction, decodeOutputString, UnboxTransactionObject } from '@masknet/web3-shared-evm'
+import {
+    type ChainId,
+    ContractTransaction,
+    decodeOutputString,
+    type UnboxTransactionObject,
+} from '@masknet/web3-shared-evm'
 import { useChainContext, useWeb3, useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { BaseContract, NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import type { Multicall } from '@masknet/web3-contracts/types/Multicall.js'
@@ -223,7 +228,7 @@ export function useMulticallStateDecoded<
                 return { succeed: false, gasUsed, value: null, error }
             }
         })
-    }, [web3, contracts.map((x) => x.options.address).join(), names.join(), state])
+    }, [web3, contracts.map((x) => x.options.address).join(','), names.join(','), state])
 }
 // #endregion
 
@@ -242,7 +247,7 @@ export function useSingleContractMultipleData<T extends BaseContract, K extends 
             gasLimit,
             contract.methods[names[i]](...data).encodeABI() as string,
         ])
-    }, [contract?.options.address, names.join(), callDatas.flatMap((x) => x).join()])
+    }, [contract?.options.address, names.join(','), callDatas.flatMap((x) => x).join(',')])
     const [state, callback] = useMulticallCallback(chainId, blockNumber)
     const results = useMulticallStateDecoded(
         Array.from({ length: calls.length }, () => contract as T),
@@ -268,7 +273,7 @@ export function useMultipleContractSingleData<T extends BaseContract, K extends 
                 gasLimit,
                 contract.methods[names[i]](...callData).encodeABI() as string,
             ]),
-        [contracts.map((x) => x.options.address).join(), names.join(), callData.join()],
+        [contracts.map((x) => x.options.address).join(','), names.join(','), callData.join(',')],
     )
 
     const [state, callback] = useMulticallCallback(chainId, blockNumber)
@@ -290,7 +295,12 @@ export function useMultipleContractMultipleData<T extends BaseContract, K extend
                 gasLimit,
                 contract.methods[names[i]](callDatas[i]).encodeABI() as string,
             ]),
-        [contracts.map((x) => x.options.address).join(), names.join(), callDatas.flatMap((x) => x).join(), gasLimit],
+        [
+            contracts.map((x) => x.options.address).join(','),
+            names.join(','),
+            callDatas.flatMap((x) => x).join(','),
+            gasLimit,
+        ],
     )
     const [state, callback] = useMulticallCallback(chainId)
     const results = useMulticallStateDecoded(contracts, names, state, chainId)

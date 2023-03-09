@@ -3,7 +3,7 @@ import { fetchText } from '../../entry-helpers.js'
 
 function getScriptURL(content: string, name: string) {
     const matchURL = new RegExp(
-        `https://abs.twimg.com/responsive-web/\(client-web|client-web-\\w+\)\{1\}/${escapeRegExp(
+        `https://abs.twimg.com/responsive-web/(client-web|client-web-\\w+){1}/${escapeRegExp(
             `${name}.`,
         )}\\w+${escapeRegExp('.js')}`,
         'm',

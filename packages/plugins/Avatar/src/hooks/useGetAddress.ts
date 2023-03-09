@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useWeb3State } from '@masknet/web3-hooks-base'
-import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
+import { type EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { NFT_AVATAR_DB_NAME } from '../constants.js'
 import type { AddressStorageV1, AddressStorageV2 } from '../types.js'
 

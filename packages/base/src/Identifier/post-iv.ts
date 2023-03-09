@@ -19,6 +19,8 @@ export class PostIVIdentifier extends Identifier {
         postIV = String(postIV)
 
         const networkCache = (id[network] ??= {})
+        // return the cache to keep the object identity
+        // eslint-disable-next-line no-constructor-return
         if (networkCache[postIV]) return networkCache[postIV]
 
         banSlash(network)

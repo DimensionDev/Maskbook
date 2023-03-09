@@ -1,4 +1,4 @@
-import { FC, HTMLProps, useCallback } from 'react'
+import { type FC, type HTMLProps, useCallback } from 'react'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'

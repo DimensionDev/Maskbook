@@ -231,12 +231,9 @@ export const GasSetting1559 = memo(() => {
             if (value?.formatterTransaction._tx.maxFeePerGas && value?.formatterTransaction._tx.maxPriorityFeePerGas) {
                 setValue(
                     'maxPriorityFeePerGas',
-                    fromWei(toFixed(value.formatterTransaction._tx.maxPriorityFeePerGas as string), 'gwei'),
+                    fromWei(toFixed(value.formatterTransaction._tx.maxPriorityFeePerGas), 'gwei'),
                 )
-                setValue(
-                    'maxFeePerGas',
-                    fromWei(toFixed(value.formatterTransaction._tx.maxFeePerGas as string), 'gwei'),
-                )
+                setValue('maxFeePerGas', fromWei(toFixed(value.formatterTransaction._tx.maxFeePerGas), 'gwei'))
             } else {
                 setOption(1)
             }
@@ -406,7 +403,7 @@ export const GasSetting1559 = memo(() => {
                             i18nKey="popups_wallet_gas_fee_settings_usd"
                             values={{
                                 usd: formatCurrency(
-                                    formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
+                                    formatGweiToEther(Number(maxPriorityFeePerGas))
                                         .times(nativeTokenPrice)
                                         .times(gasLimit),
                                     'USD',
@@ -446,9 +443,7 @@ export const GasSetting1559 = memo(() => {
                             i18nKey="popups_wallet_gas_fee_settings_usd"
                             values={{
                                 usd: formatCurrency(
-                                    formatGweiToEther(Number(maxFeePerGas) ?? 0)
-                                        .times(nativeTokenPrice)
-                                        .times(gasLimit),
+                                    formatGweiToEther(Number(maxFeePerGas)).times(nativeTokenPrice).times(gasLimit),
                                     'USD',
                                     { onlyRemainTwoDecimal: true },
                                 ),

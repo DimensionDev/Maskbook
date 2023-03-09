@@ -5,12 +5,12 @@ import { toolboxInSidebarSelector, toolboxInSidebarSelectorWithNoLeftRailStart }
 import { ToolboxAtFacebook } from './ToolbarUI.js'
 
 export function injectToolboxHintAtFacebook(signal: AbortSignal, category: 'wallet' | 'application') {
-    const hasSpecificLeftRailStartBar = Boolean(document.querySelector<HTMLElement>('#ssrb_left_rail_start'))
+    const hasSpecificLeftRailStartBar = !!document.querySelector<HTMLElement>('#ssrb_left_rail_start')
     const watcher = new MutationObserverWatcher(
         hasSpecificLeftRailStartBar ? toolboxInSidebarSelector() : toolboxInSidebarSelectorWithNoLeftRailStart(),
     )
     startWatch(watcher, signal)
-    const hasTopNavBar = Boolean(document.querySelector<HTMLElement>('#ssrb_top_nav_start ~ [role="banner"]'))
+    const hasTopNavBar = !!document.querySelector<HTMLElement>('#ssrb_top_nav_start ~ [role="banner"]')
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
         <ToolboxAtFacebook
             category={category}

@@ -1,5 +1,5 @@
 import { first } from 'lodash-es'
-import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { delay } from '@masknet/kit'
 import { TWITTER_RESERVED_SLUGS } from '@masknet/injected-script/shared'
 import { ProfileIdentifier } from '@masknet/shared-base'

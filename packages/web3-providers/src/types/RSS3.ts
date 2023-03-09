@@ -113,6 +113,21 @@ export namespace RSS3BaseAPI {
         tokens: [TransactionMetadata, TransactionMetadata]
     }
 
+    /**
+     * `bridge` indicates an action of bridging assets from blockchain A to blockchain B.
+     * action `deposit` refers to depositing tokens into blockchain A's bridge
+     * action `withdraw` refers to withdrawing tokens from blockchain B's bridge
+     */
+    interface BridgeMetadata {
+        token: TransactionMetadata
+        action: 'deposit' | 'withdraw'
+        target_network: {
+            name: string
+            symbol: string
+            chain_id: number
+        }
+    }
+
     interface CollectibleMetadata {
         id: string
         value: string
@@ -143,6 +158,28 @@ export namespace RSS3BaseAPI {
         attributes: Attribute[]
         description: string
         contract_address: string
+    }
+    interface ApprovalBaseMetadata {
+        name: string
+        action: 'approve' | 'revoke'
+        /** NFT or Token symbol */
+        symbol: string
+        collection: string
+        contract_address: string
+    }
+    interface TokenApprovalMetadata extends ApprovalBaseMetadata {
+        /** approve amount */
+        value: string
+        value_display: string
+        decimals: number
+        standard: 'ERC-20'
+        /** TODO */
+        image: string
+    }
+    interface CollectibleApprovalMetadata extends ApprovalBaseMetadata {
+        standard: 'ERC-721' | 'ERC-1155'
+        contract_address: string
+        collection: string
     }
     export interface PostMetadata {
         title?: string
@@ -183,6 +220,10 @@ export namespace RSS3BaseAPI {
         /** unknown type, it could possibly be profile avatar url */
         profile_uri: string[]
         action: 'create' | 'update'
+    }
+    // TODO No official documentation
+    interface ProxyMetadata extends Omit<ProfileMetadata, 'action'> {
+        action: 'appoint'
     }
     export interface FollowMetadata extends Partial<Omit<ProfileMetadata, 'expire_at'>> {}
     interface LaunchMetadata {
@@ -236,6 +277,8 @@ export namespace RSS3BaseAPI {
             [Type.Transfer]: TransactionMetadata
             [Type.Mint]: MintMetadata
             [Type.Burn]: TransactionMetadata
+            [Type.Approval]: TokenApprovalMetadata
+            [Type.Bridge]: BridgeMetadata
         }
         [Tag.Exchange]: {
             [Type.Deposit]: TransactionMetadata
@@ -244,6 +287,7 @@ export namespace RSS3BaseAPI {
             [Type.Liquidity]: LiquidityMetadata
         }
         [Tag.Collectible]: {
+            [Type.Approval]: CollectibleApprovalMetadata
             [Type.Transfer]: TransactionMetadata
             [Type.Trade]: TradeMetadata
             [Type.Mint]: MintMetadata
@@ -259,6 +303,7 @@ export namespace RSS3BaseAPI {
             [Type.Profile]: ProfileMetadata
             [Type.Follow]: FollowMetadata
             [Type.Unfollow]: FollowMetadata
+            [Type.Proxy]: ProxyMetadata
         }
         [Tag.Donation]: {
             [Type.Launch]: LaunchMetadata
@@ -343,6 +388,7 @@ export namespace RSS3BaseAPI {
     }
 
     export enum Type {
+        Approval = 'approval',
         Transfer = 'transfer',
         Mint = 'mint',
         Burn = 'burn',
@@ -350,12 +396,14 @@ export namespace RSS3BaseAPI {
         Deposit = 'deposit',
         Swap = 'swap',
         Liquidity = 'liquidity',
+        Bridge = 'bridge',
         Trade = 'trade',
         Poap = 'poap',
         Post = 'post',
         Revise = 'revise',
         Comment = 'comment',
         Share = 'share',
+        Proxy = 'proxy',
         Profile = 'profile',
         Follow = 'follow',
         Unfollow = 'unfollow',
@@ -459,9 +507,14 @@ export namespace RSS3BaseAPI {
 
     /** For feed cards */
     export type TokenOperationFeed = Web3FeedGeneric<Tag.Transaction, Type.Transfer | Type.Burn | Type.Mint>
+    export type TokenBridgeFeed = Web3FeedGeneric<Tag.Transaction, Type.Bridge>
     export type TokenSwapFeed = Web3FeedGeneric<Tag.Exchange, Type.Swap>
     export type LiquidityFeed = Web3FeedGeneric<Tag.Exchange, Type.Liquidity>
-    export type CollectibleFeed = Web3FeedGeneric<Tag.Collectible>
+    export type CollectibleFeed = Web3FeedGeneric<
+        Tag.Collectible,
+        Type.Transfer | Type.Trade | Type.Mint | Type.Burn | Type.Poap
+    >
+    export type CollectibleApprovalFeed = Web3FeedGeneric<Tag.Collectible, Type.Approval>
     export type CollectibleMintFeed = Web3FeedGeneric<Tag.Collectible, Type.Mint>
     export type CollectibleTradeFeed = Web3FeedGeneric<Tag.Collectible, Type.Trade>
     export type CollectibleTransferFeed = Web3FeedGeneric<Tag.Collectible, Type.Transfer>
@@ -471,9 +524,11 @@ export namespace RSS3BaseAPI {
     export type CommentFeed = Web3FeedGeneric<Tag.Social, Type.Comment>
     export type ProfileFeed = Web3FeedGeneric<Tag.Social, Type.Profile>
     export type ProfileLinkFeed = Web3FeedGeneric<Tag.Social, Type.Follow | Type.Unfollow>
+    export type ProfileProxyFeed = Web3FeedGeneric<Tag.Social, Type.Proxy>
     export type GovernanceFeed = Web3FeedGeneric<Tag.Governance, Type.Propose | Type.Vote>
     export type VoteFeed = Web3FeedGeneric<Tag.Governance, Type.Vote>
     export type ProposeFeed = Web3FeedGeneric<Tag.Governance, Type.Propose>
+    export type TokenApprovalFeed = Web3FeedGeneric<Tag.Transaction, Type.Approval>
 
     export interface Web3FeedResponse {
         total: number

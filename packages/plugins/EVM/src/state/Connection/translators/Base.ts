@@ -7,8 +7,8 @@ import {
     chainResolver,
     formatWeiToGwei,
     PayloadEditor,
-    Translator,
-    ConnectionContext,
+    type Translator,
+    type ConnectionContext,
 } from '@masknet/web3-shared-evm'
 import { Web3StateSettings } from '../../../settings/index.js'
 
@@ -23,7 +23,7 @@ export class Base implements Translator<ConnectionContext> {
             if (config.gas && !context.owner) {
                 config.gas = toHex(
                     BigNumber.max(
-                        toHex(addGasMargin(config.gas as string).toFixed()),
+                        toHex(addGasMargin(config.gas).toFixed()),
                         context.chainId === ChainId.Optimism ? 25000 : 21000,
                     ).toFixed(),
                 )
@@ -43,7 +43,7 @@ export class Base implements Translator<ConnectionContext> {
                     slowOption?.suggestedMaxFeePerGas &&
                     normalOption &&
                     isLessThan(
-                        config.maxPriorityFeePerGas ? formatWeiToGwei(config.maxPriorityFeePerGas as string) : 0,
+                        config.maxPriorityFeePerGas ? formatWeiToGwei(config.maxPriorityFeePerGas) : 0,
                         slowOption.suggestedMaxPriorityFeePerGas,
                     )
                 ) {

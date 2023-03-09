@@ -1,5 +1,5 @@
 import { useBlockie } from '@masknet/web3-hooks-base'
-import { Avatar, AvatarProps } from '@mui/material'
+import { Avatar, type AvatarProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({

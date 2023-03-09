@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import { useCallback } from 'react'
 import { useContainer } from 'unstated-next'
 import { makeStyles, ActionButton } from '@masknet/theme'
@@ -241,7 +240,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                 </Typography>
                             </Box>
                         </Box>
-                        {isAllowanceEnough && (
+                        {isAllowanceEnough ? (
                             <Box className={classes.section} display="flex" alignItems="center">
                                 <Typography className={classes.title} color="textPrimary">
                                     Gas Fee:
@@ -253,7 +252,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                     />
                                 </Box>
                             </Box>
-                        )}
+                        ) : null}
                     </Box>
                 </Box>
             </DialogContent>

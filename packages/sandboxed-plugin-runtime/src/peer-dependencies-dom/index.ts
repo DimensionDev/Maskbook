@@ -20,34 +20,34 @@ function esModuleInterop(object: any) {
     return { default: object, ...object }
 }
 
-export function createI18nHooksAndTranslate(id: string) {
-    function createProxy(initValue: (key: string) => any) {
-        function set(key: string) {
-            const value = initValue(key)
-            Object.defineProperty(container, key, { value, configurable: true })
-            return value
-        }
-        const container = {
-            __proto__: new Proxy(
-                { __proto__: null },
-                {
-                    get(_, key) {
-                        if (typeof key === 'symbol') return undefined
-                        return set(key)
-                    },
-                },
-            ),
-        }
-        return new Proxy(container, {
-            getPrototypeOf: () => null,
-            setPrototypeOf: (_, v) => v === null,
-            getOwnPropertyDescriptor: (_, key) => {
-                if (typeof key === 'symbol') return undefined
-                if (!(key in container)) set(key)
-                return Object.getOwnPropertyDescriptor(container, key)
-            },
-        })
+function createProxy(initValue: (key: string) => any) {
+    function set(key: string) {
+        const value = initValue(key)
+        Object.defineProperty(container, key, { value, configurable: true })
+        return value
     }
+    const container = {
+        __proto__: new Proxy(
+            { __proto__: null },
+            {
+                get(_, key) {
+                    if (typeof key === 'symbol') return undefined
+                    return set(key)
+                },
+            },
+        ),
+    }
+    return new Proxy(container, {
+        getPrototypeOf: () => null,
+        setPrototypeOf: (_, v) => v === null,
+        getOwnPropertyDescriptor: (_, key) => {
+            if (typeof key === 'symbol') return undefined
+            if (!(key in container)) set(key)
+            return Object.getOwnPropertyDescriptor(container, key)
+        },
+    })
+}
+export function createI18nHooksAndTranslate(id: string) {
     return {
         useI18N() {
             const { t } = useTranslation(id)

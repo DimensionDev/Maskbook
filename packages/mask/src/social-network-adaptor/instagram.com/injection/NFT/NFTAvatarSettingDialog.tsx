@@ -52,7 +52,8 @@ export function NFTAvatarSettingDialog() {
                 )
 
                 if (!avatarInfo) {
-                    window.alert('Sorry, failed to save NFT Avatar. Please set again.')
+                    // eslint-disable-next-line no-alert
+                    alert('Sorry, failed to save NFT Avatar. Please set again.')
                     setOpen(false)
                     return
                 }
@@ -63,7 +64,8 @@ export function NFTAvatarSettingDialog() {
                 setOpen(false)
             } catch (error) {
                 if (error instanceof Error) {
-                    window.alert(error.message)
+                    // eslint-disable-next-line no-alert
+                    alert(error.message)
                     return
                 }
             }

@@ -1,4 +1,4 @@
-import { ReverseAddressProps, ReversedAddress } from '@masknet/shared'
+import { type ReverseAddressProps, ReversedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
@@ -10,6 +10,7 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: theme.spacing(1),
         fontWeight: 700,
         marginRight: theme.spacing(1),
+        whiteSpace: 'nowrap',
         '&:first-of-type': {
             marginLeft: 0,
         },

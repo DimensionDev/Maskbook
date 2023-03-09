@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { FungibleToken, ZERO } from '@masknet/web3-shared-base'
+import { type ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { type FungibleToken, ZERO } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { TradeProvider } from '@masknet/public-api'
@@ -10,7 +10,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 
 // Only Support EVM ERC20
 export function useTradeApproveComputed(
-    trade: TradeComputed<unknown> | null,
+    trade: TradeComputed | null,
     provider?: TradeProvider,
     token?: Web3Helper.FungibleTokenAll,
 ) {

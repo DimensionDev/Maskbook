@@ -10,7 +10,6 @@ export const base: Plugin.Shared.Definition<ChainId> = {
     description: { fallback: 'View trending of cryptocurrencies, swap ERC20 tokens in various DEX markets.' },
     publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
     enableRequirement: {
-        architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
         web3: {

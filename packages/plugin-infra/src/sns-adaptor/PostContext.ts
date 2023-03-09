@@ -1,10 +1,10 @@
 import { createContext, createElement, useContext } from 'react'
-import { Subscription, useSubscription } from 'use-subscription'
+import { type Subscription, useSubscription } from 'use-subscription'
 import type { Some } from 'ts-results-es'
 import {
     ObservableMap,
     ObservableSet,
-    PostIVIdentifier,
+    type PostIVIdentifier,
     ValueRef,
     type PostIdentifier,
     type ProfileIdentifier,
@@ -33,8 +33,8 @@ export interface PostContextCoAuthor {
 }
 
 export interface PostContextComment {
-    readonly commentsSelector: LiveSelector<HTMLElement, false>
-    readonly commentBoxSelector: LiveSelector<HTMLElement, false>
+    readonly commentsSelector: LiveSelector<HTMLElement>
+    readonly commentBoxSelector: LiveSelector<HTMLElement>
 }
 export interface PostContextCreation extends PostContextAuthor {
     readonly rootElement: DOMProxy
@@ -109,7 +109,7 @@ export function PostInfoProvider(props: React.PropsWithChildren<{ post: PostInfo
 export const usePostInfoDetails: {
     // Change to use* when https://github.com/microsoft/TypeScript/issues/44643 fixed
     [key in keyof PostInfo]: () => PostInfo[key] extends ValueRef<infer T>
-        ? T extends Function
+        ? T extends (...args: any) => any
             ? T
             : Readonly<T>
         : PostInfo[key] extends ObservableSet<infer T>
@@ -150,6 +150,6 @@ function isSubscription(x: any): x is Subscription<any> {
     return (
         typeof x === 'object' &&
         x !== null &&
-        Boolean((x as Subscription<any>).getCurrentValue && (x as Subscription<any>).subscribe)
+        !!((x as Subscription<any>).getCurrentValue && (x as Subscription<any>).subscribe)
     )
 }

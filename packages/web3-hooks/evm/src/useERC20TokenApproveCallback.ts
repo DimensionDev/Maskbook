@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
-import { NetworkPluginID, TimeoutController } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { isLessThan, toFixed, isZero } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext, useWeb3Connection, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
@@ -70,7 +70,7 @@ export function useERC20TokenApproveCallback(
             })
 
             const receipt = await connection.confirmTransaction(hash, {
-                signal: new TimeoutController(5 * 60 * 1000).signal,
+                signal: AbortSignal.timeout(5 * 60 * 1000),
             })
 
             if (receipt) {

@@ -3,7 +3,13 @@ import { useAsync, useUnmount, useUpdateEffect } from 'react-use'
 import { delay } from '@masknet/kit'
 import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
 import { formatBalance, isSameAddress, isZero, minus, toFixed } from '@masknet/web3-shared-base'
-import { addGasMargin, ChainId, DepositPaymaster, EIP1559GasConfig, GasConfig } from '@masknet/web3-shared-evm'
+import {
+    addGasMargin,
+    ChainId,
+    DepositPaymaster,
+    type EIP1559GasConfig,
+    type GasConfig,
+} from '@masknet/web3-shared-evm'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
@@ -23,7 +29,7 @@ import { isNativeTokenWrapper } from '../../helpers/index.js'
 import { PluginTraderMessages } from '../../messages.js'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { useTradeCallback } from '../../trader/useTradeCallback.js'
-import { TokenPanelType, TradeInfo } from '../../types/index.js'
+import { TokenPanelType, type TradeInfo } from '../../types/index.js'
 import { ConfirmDialog } from './ConfirmDialog.js'
 import { useSortedTrades } from './hooks/useSortedTrades.js'
 import { useUpdateBalance } from './hooks/useUpdateBalance.js'
@@ -197,7 +203,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                 })
             }
         },
-        [excludeTokens.join(), chainId],
+        [excludeTokens.join(','), chainId],
     )
     // #endregion
 

@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom'
 import { noop } from 'lodash-es'
 import { ShadowRootStyleProvider } from './ShadowRootStyleProvider.js'
-import { shadowEnvironmentMountingRoots, WrapJSX } from './ShadowRootSetup.js'
+import { shadowEnvironmentMountingRoots, type WrapJSX } from './ShadowRootSetup.js'
 
 export interface AttachInShadowRootOptions {
     /** Root tag. @default "main" */
@@ -40,7 +40,7 @@ function attachReactTreeToMountedRoot(
     const key = options.key || 'main'
 
     if (shadow.querySelector(`${tag}.${key}`)) {
-        console.error('Tried to create root in', shadow, 'with key', key, ' which is already used. Skip rendering.')
+        console.error('Tried to create root in', shadow, 'with key', key, 'which is already used. Skip rendering.')
         return {
             destroy: noop,
             render: noop,

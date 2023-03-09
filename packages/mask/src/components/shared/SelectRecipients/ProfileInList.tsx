@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { useSnackbarCallback } from '@masknet/shared'
-import { formatPersonaFingerprint, ProfileInformationFromNextID } from '@masknet/shared-base'
+import { formatPersonaFingerprint, type ProfileInformationFromNextID } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Checkbox, ListItem, ListItemAvatar, ListItemText } from '@mui/material'
 import { truncate } from 'lodash-es'
@@ -161,7 +161,7 @@ export function ProfileInList(props: ProfileInListProps) {
                             textToHighlight={textToHighlight}
                         />
                         <Icons.Copy className={classes.actionIcon} onClick={onCopyPubkey} />
-                        {profile.fromNextID && <Icons.NextIDMini className={classes.badge} />}
+                        {profile.fromNextID ? <Icons.NextIDMini className={classes.badge} /> : null}
                     </div>
                 }
             />

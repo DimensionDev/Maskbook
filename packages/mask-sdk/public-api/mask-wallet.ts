@@ -17,7 +17,7 @@ declare namespace Mask.Ethereum {
          */
         request(args: RequestArguments): Promise<unknown>
         /** @deprecated Use request */
-        sendAsync(request: Object, callback: Function): void
+        sendAsync(request: object, callback: (result: any) => void): void
         /** @deprecated Use request */
         send(...args: unknown[]): unknown
     }

@@ -2,7 +2,13 @@ import { clone, first } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import { ECKeyIdentifier, getSiteType, mapSubscription, mergeSubscription, StorageObject } from '@masknet/shared-base'
+import {
+    type ECKeyIdentifier,
+    getSiteType,
+    mapSubscription,
+    mergeSubscription,
+    type StorageObject,
+} from '@masknet/shared-base'
 import type { Account, WalletProvider, ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
 
 export interface ProviderStorage<Account, ProviderType extends string> {
@@ -62,6 +68,9 @@ export class ProviderState<
     }
 
     async setup() {
+        await this.storage.account.initializedPromise
+        await this.storage.providerType.initializedPromise
+
         await this.setupSubscriptions()
         await this.setupProviders()
     }

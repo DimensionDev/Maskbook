@@ -1,5 +1,5 @@
-declare const Gun: typeof import('gun')
 import { gunServers } from './server.js'
+declare const Gun: typeof import('gun')
 
 export type GunRoot = ReturnType<typeof createGun>
 let gun: GunRoot | undefined
@@ -7,7 +7,7 @@ export function getGunInstance(): GunRoot {
     if (gun) return gun
     return (gun = createGun())
 }
-export const OnCloseEvent = new Set<Function>()
+export const OnCloseEvent = new Set<() => void>()
 
 function createGun() {
     class WebSocket extends globalThis.WebSocket {

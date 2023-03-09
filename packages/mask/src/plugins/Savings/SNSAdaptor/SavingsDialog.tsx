@@ -5,11 +5,11 @@ import type { AbiItem } from 'web3-utils'
 import { DialogActions, DialogContent, Tab } from '@mui/material'
 import { EMPTY_LIST, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
-import { ChainId, createContract, getAaveConstants, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { InjectedDialog, PluginWalletStatusBar, ChainBoundary, NetworkTab } from '@masknet/shared'
+import { ChainId, createContract, getAaveConstants, type SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { InjectedDialog, PluginWalletStatusBar, NetworkTab } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
 import { AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext.js'
-import { SavingsProtocol, TabType } from '../types.js'
+import { type SavingsProtocol, TabType } from '../types.js'
 import { SavingsTable } from './SavingsTable.js'
 import { SavingsFormDialog } from './SavingsForm.js'
 import type { AaveProtocolDataProvider } from '@masknet/web3-contracts/types/AaveProtocolDataProvider.js'
@@ -36,7 +36,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         zIndex: 2,
     },
     tableTabWrapper: {
-        padding: theme.spacing(2),
+        padding: theme.spacing(1, 2),
     },
     tab: {
         height: 36,
@@ -68,6 +68,14 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         '::-webkit-scrollbar': {
             display: 'none',
         },
+    },
+    dialogRoot: {
+        height: 620,
+        minWidth: 400,
+        width: 600,
+        boxShadow: 'none',
+        backgroundImage: 'none',
+        maxWidth: 'none',
     },
 }))
 
@@ -148,6 +156,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                 <TabContext value={currentTab}>
                     <InjectedDialog
                         open={open}
+                        classes={{ paper: classes.dialogRoot }}
                         title={t('plugin_savings')}
                         onClose={() => {
                             onClose?.()
@@ -170,7 +179,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                             tabPanel: classes.tabPanel,
                                             indicator: classes.indicator,
                                         }}
-                                        chains={chains.filter(Boolean) as ChainId[]}
+                                        chains={chains.filter(Boolean)}
                                         pluginID={NetworkPluginID.PLUGIN_EVM}
                                     />
                                 </div>
@@ -198,12 +207,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                         </DialogContent>
 
                         <DialogActions style={{ padding: 0, position: 'sticky', bottom: 0 }}>
-                            <PluginWalletStatusBar>
-                                <ChainBoundary
-                                    expectedChainId={chainId}
-                                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                />
-                            </PluginWalletStatusBar>
+                            <PluginWalletStatusBar />
                         </DialogActions>
                     </InjectedDialog>
                 </TabContext>

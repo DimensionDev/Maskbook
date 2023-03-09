@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material'
-import { SelectNftContractDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
+import { type SelectNftContractDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { useSharedI18N } from '../../../locales/index.js'
@@ -69,7 +69,7 @@ export interface ERC721TokenSelectPanelProps {
 export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const { onContractChange, collection, label, chainId = ChainId.Mainnet, balance } = props
     const t = useSharedI18N()
-    const { classes, cx } = useStyles({ hasIcon: Boolean(collection?.iconURL) })
+    const { classes, cx } = useStyles({ hasIcon: !!collection?.iconURL })
     const { Others } = useWeb3State()
 
     const { setDialog: setNftContractDialog } = useRemoteControlledDialog(

@@ -1,6 +1,6 @@
 import { createUITaskManager } from '@masknet/shared'
 import { useContext } from 'react'
-import { TipsTransaction, TipsTransactionProps } from '../components/TipsTransaction/index.js'
+import { TipsTransaction, type TipsTransactionProps } from '../components/TipsTransaction/index.js'
 
 const { TaskManagerContext, TaskManagerProvider: TipsTransactionProvider } = createUITaskManager<
     TipsTransactionProps,

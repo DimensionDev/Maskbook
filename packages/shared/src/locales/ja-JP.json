@@ -1,1 +1,7 @@
-{}
+{
+    "create_persona_title": "ペルソナ",
+    "create_persona_action": "ペルソナを作成",
+    "snackbar_done": "完了",
+    "wallet_balance": "残高",
+    "balance": "残高"
+}

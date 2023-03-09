@@ -4,12 +4,13 @@ import { Box, Button, Portal, Typography } from '@mui/material'
 import React, {
     cloneElement,
     createContext,
-    PropsWithChildren,
-    ReactElement,
+    type PropsWithChildren,
+    type ReactElement,
     useContext,
     useEffect,
     useRef,
     useState,
+    useMemo,
 } from 'react'
 import { usePluginGuideRecord } from './usePluginGuideRecord.js'
 
@@ -134,7 +135,7 @@ export function PluginGuide({ children, arrow = true, disabled = false, step }: 
 
     return (
         <>
-            {cloneElement(children as ReactElement<any>, { ref: childrenRef })}
+            {cloneElement(children as ReactElement, { ref: childrenRef })}
             {usePortalShadowRoot((container) => {
                 if (!open) return null
                 return (
@@ -224,17 +225,18 @@ export function PluginGuideProvider({
 }>) {
     const { guides, totalStep, onFinish, storageKey = 'default', pluginID } = value
     const { currentStep, finished, nextStep } = usePluginGuideRecord(pluginID, totalStep, storageKey, onFinish)
-    return (
-        <PluginGuideContext.Provider
-            value={{
-                title: guides[currentStep - 1]?.title,
-                actionText: guides[currentStep - 1]?.actionText,
-                finished,
-                currentStep,
-                totalStep,
-                nextStep,
-            }}>
-            {children}
-        </PluginGuideContext.Provider>
+    const title = guides[currentStep - 1]?.title
+    const actionText = guides[currentStep - 1]?.actionText
+    const context = useMemo(
+        () => ({
+            title,
+            actionText,
+            finished,
+            currentStep,
+            totalStep,
+            nextStep,
+        }),
+        [title, actionText, finished, currentStep, totalStep, nextStep],
     )
+    return <PluginGuideContext.Provider value={context}>{children}</PluginGuideContext.Provider>
 }

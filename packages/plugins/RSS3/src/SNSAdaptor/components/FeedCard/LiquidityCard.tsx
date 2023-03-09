@@ -8,7 +8,7 @@ import { Translate } from '../../../locales/i18n_generated.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardType } from '../share.js'
-import { CardFrame, FeedCardProps } from '../base.js'
+import { CardFrame, type FeedCardProps } from '../base.js'
 import { formatValue, Label } from './common.js'
 
 const useStyles = makeStyles<void, 'tokenIcon' | 'supply' | 'withdraw' | 'horizonCenter'>()((theme, _, refs) => ({
@@ -108,7 +108,7 @@ export const LiquidityCard: FC<TokenFeedCardProps> = ({ feed, className, ...rest
                                     context: metadata?.action!,
                                 }}
                                 components={{
-                                    user: <Label title={action.address_from!} />,
+                                    user: <Label title={action.address_from} />,
                                     platform: <Label />,
                                     bold: <Label />,
                                 }}

@@ -1,4 +1,4 @@
-import { CurrentSNSNetwork, Plugin } from '@masknet/plugin-infra'
+import { CurrentSNSNetwork, type Plugin } from '@masknet/plugin-infra'
 import { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { languages } from './locales/languages.js'
@@ -11,7 +11,6 @@ export const base: Plugin.Shared.Definition = {
     },
     publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
     enableRequirement: {
-        architecture: { app: true, web: true },
         networks: {
             type: 'opt-out',
             networks: {

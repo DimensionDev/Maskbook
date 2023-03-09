@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Connection } from './useWeb3Connection.js'
 
@@ -16,5 +16,5 @@ export function useNonFungibleTokens<S extends 'all' | void = void, T extends Ne
         return Promise.all(
             listOfPairs?.map((x) => connection.getNonFungibleToken(x[0], x[1], undefined, options)) ?? [],
         )
-    }, [connection, listOfPairs?.join()])
+    }, [connection, listOfPairs?.join(',')])
 }

@@ -3,7 +3,7 @@ import { EthereumAddress } from 'wallet.ts'
 import { toHex } from 'web3-utils'
 import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { GasConfig, TransactionEventType } from '@masknet/web3-shared-evm'
+import { type GasConfig, TransactionEventType } from '@masknet/web3-shared-evm'
 import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
 
 export function useNativeTransferCallback() {

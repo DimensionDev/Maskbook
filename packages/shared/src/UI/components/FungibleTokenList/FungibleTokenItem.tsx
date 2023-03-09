@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo } from 'react'
 import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
-import { formatBalance, FungibleToken } from '@masknet/web3-shared-base'
+import { formatBalance, type FungibleToken } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { TokenIcon } from '../TokenIcon/index.js'
 import { Icons } from '@masknet/icons'
@@ -111,7 +111,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
         const token = data.dataSet[index]
         const onSelect = data.onSelect
 
-        const { chainId, address, name, symbol, decimals, logoURL, balance } = token!
+        const { chainId, address, name, symbol, decimals, logoURL, balance } = token
 
         const isBlocked = useTokenBlocked(address)
         const isTrust = useTokenTrusted(address, token.chainId)
@@ -159,10 +159,10 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     <SettingSwitch
                         disabled={source === 'official-native' && mode === TokenListMode.Manage}
                         classes={{ root: classes.switch }}
-                        onClick={async (event) => {
+                        onChange={async (event) => {
                             event.stopPropagation()
                             event.preventDefault()
-                            onTrustOrBlockTokenToLocal(event as any)
+                            onTrustOrBlockTokenToLocal(event)
                         }}
                         size="small"
                         checked={!isBlocked}
@@ -204,7 +204,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     button
                     className={`${classes.list} dashboard token-list`}
                     onClick={handleTokenSelect}
-                    disabled={selected && mode === TokenListMode.List}>
+                    disabled={!!(selected && mode === TokenListMode.List)}>
                     <ListItemIcon>
                         <TokenIcon
                             className={classes.icon}
@@ -227,12 +227,12 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                                     rel="noopener noreferrer">
                                     <Icons.PopupLink size={18} className={classes.link} />
                                 </Link>
-                                {isTrust && (
+                                {isTrust ? (
                                     <span className={classes.byUser}>
                                         <span className={classes.bull}>&bull;</span>
                                         {t.erc20_token_add_by_user()}
                                     </span>
-                                )}
+                                ) : null}
                             </span>
                         </Typography>
                         <Typography

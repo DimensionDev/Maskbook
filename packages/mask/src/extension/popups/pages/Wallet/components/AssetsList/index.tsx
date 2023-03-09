@@ -1,7 +1,7 @@
 import { memo, useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useContainer } from 'unstated-next'
-import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
+import { type ChainId, isNativeTokenAddress, type SchemaType } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
 import { List, ListItem, ListItemText, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -9,7 +9,7 @@ import { Icons } from '@masknet/icons'
 import { TokenIcon, FormattedBalance } from '@masknet/shared'
 import { WalletContext } from '../../hooks/useWalletContext.js'
 import { isNaN } from 'lodash-es'
-import { formatBalance, FungibleAsset, isGreaterThanOrEqualTo, isLessThan } from '@masknet/web3-shared-base'
+import { formatBalance, type FungibleAsset, isGreaterThanOrEqualTo, isLessThan } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({

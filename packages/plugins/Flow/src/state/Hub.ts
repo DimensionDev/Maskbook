@@ -2,7 +2,13 @@ import type { Plugin } from '@masknet/plugin-infra'
 import type { Subscription } from 'use-subscription'
 import { HubState } from '@masknet/web3-state'
 import type { CurrencyType, SourceType } from '@masknet/web3-shared-base'
-import { isValidChainId, getDefaultChainId, ChainId, GasOption, SchemaType } from '@masknet/web3-shared-flow'
+import {
+    isValidChainId,
+    getDefaultChainId,
+    type ChainId,
+    type GasOption,
+    type SchemaType,
+} from '@masknet/web3-shared-flow'
 import { createHub } from './Hub/hub.js'
 
 export class Hub extends HubState<ChainId, SchemaType, GasOption> {

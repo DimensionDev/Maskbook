@@ -5,7 +5,13 @@ import { Typography, Link } from '@mui/material'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
-import { NonFungibleTokenEvent, formatBalance, isZero, isValidTimestamp, ActivityType } from '@masknet/web3-shared-base'
+import {
+    type NonFungibleTokenEvent,
+    formatBalance,
+    isZero,
+    isValidTimestamp,
+    ActivityType,
+} from '@masknet/web3-shared-base'
 import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -100,33 +106,29 @@ export function ActivityCard(props: ActivityCardProps) {
                     {type}
                 </Typography>
                 {![ActivityType.Mint, ActivityType.CancelOffer].includes(type) &&
-                    activity.priceInToken &&
-                    !isZero(activity.priceInToken.amount) && (
-                        <div className={classes.salePrice}>
-                            {(activity.paymentToken?.logoURL && (
-                                <img
-                                    width={24}
-                                    height={24}
-                                    src={activity.priceInToken.token.logoURL}
-                                    alt={activity.priceInToken.token.symbol}
-                                />
-                            )) || (
-                                <Typography className={classes.fallbackSymbol}>
-                                    {activity.priceInToken.token.symbol || activity.priceInToken.token.name}
-                                </Typography>
-                            )}
-                            <Typography className={classes.salePriceText}>
-                                {formatBalance(
-                                    activity.priceInToken.amount,
-                                    activity.priceInToken.token.decimals || 18,
-                                    2,
-                                )}
+                activity.priceInToken &&
+                !isZero(activity.priceInToken.amount) ? (
+                    <div className={classes.salePrice}>
+                        {(activity.paymentToken?.logoURL && (
+                            <img
+                                width={24}
+                                height={24}
+                                src={activity.priceInToken.token.logoURL}
+                                alt={activity.priceInToken.token.symbol}
+                            />
+                        )) || (
+                            <Typography className={classes.fallbackSymbol}>
+                                {activity.priceInToken.token.symbol || activity.priceInToken.token.name}
                             </Typography>
-                        </div>
-                    )}
+                        )}
+                        <Typography className={classes.salePriceText}>
+                            {formatBalance(activity.priceInToken.amount, activity.priceInToken.token.decimals || 18, 2)}
+                        </Typography>
+                    </div>
+                ) : null}
             </div>
             <div className={classes.flex}>
-                {activity.send && (
+                {activity.send ? (
                     <Typography className={classes.textBase}>
                         {t.plugin_collectible_from()}
                         <strong title={activity.send.address}>
@@ -136,9 +138,9 @@ export function ActivityCard(props: ActivityCardProps) {
                                   (activity.send.address ? Others?.formatAddress(activity.send.address, 4) : '-')}
                         </strong>
                     </Typography>
-                )}
+                ) : null}
                 <Typography className={classes.textBase}>
-                    {activity.receive && activity.from?.address && (
+                    {activity.receive && activity.from?.address ? (
                         <>
                             {t.plugin_collectible_to()}
                             <strong title={activity.receive.address}>
@@ -150,19 +152,19 @@ export function ActivityCard(props: ActivityCardProps) {
                                           : '-')}
                             </strong>
                         </>
-                    )}
+                    ) : null}
                     {isValidTimestamp(activity.timestamp) &&
-                        formatDistanceToNowStrict(new Date(activity.timestamp!), {
+                        formatDistanceToNowStrict(new Date(activity.timestamp), {
                             addSuffix: true,
                         })}
-                    {activity.hash && (
+                    {activity.hash ? (
                         <Link
                             className={classes.link}
                             href={Others?.explorerResolver.transactionLink?.(activity.chainId, activity.hash) ?? ''}
                             target="_blank">
                             <Icons.LinkOut className={classes.linkOut} size={16} />
                         </Link>
-                    )}
+                    ) : null}
                 </Typography>
             </div>
         </div>

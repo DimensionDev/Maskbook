@@ -12,14 +12,18 @@ export const DEBUG_INFO = {
     Dirty: process.env.DIRTY,
 }
 
+function onNewBugIssue() {
+    return openWindow(makeNewBugIssueURL())
+}
 export const DebugInfo = () => {
     const { t } = useI18N()
-    const onNewBugIssue = () => openWindow(makeNewBugIssueURL())
 
     return (
         <>
             <pre>{map(DEBUG_INFO, (value, key) => `${key}: ${value}`).join('\n')}</pre>
-            <button onClick={onNewBugIssue}>{t('debug_new_bug_issue')}</button>
+            <button type="button" onClick={onNewBugIssue}>
+                {t('debug_new_bug_issue')}
+            </button>
         </>
     )
 }

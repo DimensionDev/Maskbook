@@ -4,23 +4,20 @@ import { SOR } from '@balancer-labs/sor'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, ProviderURL, getTraderConstants } from '@masknet/web3-shared-evm'
-import { BALANCER_MAX_NO_POOLS, BALANCER_SOR_GAS_PRICE, BALANCER_SWAP_TYPE } from '../../constants/index.js'
+import { BALANCER_MAX_NO_POOLS, BALANCER_SOR_GAS_PRICE, type BALANCER_SWAP_TYPE } from '../../constants/index.js'
 import type { Route } from '../../types/index.js'
 
 // #region create cached SOR
-const createSOR_ = memoize(
-    (chainId: ChainId) => {
-        return new SOR(
-            // we choose a fixed provider cause it's only used here.
-            new JsonRpcProvider(ProviderURL.from(chainId)),
-            BALANCER_SOR_GAS_PRICE,
-            BALANCER_MAX_NO_POOLS,
-            chainId,
-            '',
-        )
-    },
-    (chainId: ChainId) => String(chainId),
-)
+const createSOR_ = memoize((chainId: ChainId) => {
+    return new SOR(
+        // we choose a fixed provider cause it's only used here.
+        new JsonRpcProvider(ProviderURL.from(chainId)),
+        BALANCER_SOR_GAS_PRICE,
+        BALANCER_MAX_NO_POOLS,
+        chainId,
+        '',
+    )
+}, String)
 
 function createSOR(chainId: ChainId) {
     const sor = createSOR_(chainId)

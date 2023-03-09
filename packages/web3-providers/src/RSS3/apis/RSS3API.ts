@@ -1,9 +1,9 @@
 import RSS3 from 'rss3-next'
 import urlcat, { query } from 'urlcat'
-import { createIndicator, createNextIndicator, createPageable, HubOptions } from '@masknet/web3-shared-base'
+import { createIndicator, createNextIndicator, createPageable, type HubOptions } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { RSS3_FEED_ENDPOINT, RSS3_LEGACY_ENDPOINT, RSS3_ENDPOINT, NameServiceToChainMap } from '../constants.js'
-import { RSS3NameServiceResponse, RSS3ProfilesResponse, TAG, TYPE } from '../types.js'
+import { type RSS3NameServiceResponse, type RSS3ProfilesResponse, TAG, TYPE } from '../types.js'
 import { normalizedFeed } from '../helpers.js'
 import { fetchJSON } from '../../entry-helpers.js'
 import { RSS3BaseAPI } from '../../entry-types.js'
@@ -43,7 +43,7 @@ export class RSS3API implements RSS3BaseAPI.Provider {
         }
         rss3.files.set(Object.assign(file, { [key]: value }))
         await rss3.files.sync()
-        return value as T
+        return value
     }
     async getDonations(address: string, { indicator, size = 100 }: HubOptions<ChainId> = {}) {
         if (!address) return createPageable([], createIndicator(indicator))

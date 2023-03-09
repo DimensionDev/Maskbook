@@ -1,11 +1,5 @@
 import { decodeArrayBuffer } from '@masknet/kit'
-import type { MobilePersona } from '@masknet/public-api'
-import {
-    ECKeyIdentifierFromJsonWebKey,
-    EC_JsonWebKey,
-    isEC_Private_JsonWebKey,
-    PersonaIdentifier,
-} from '@masknet/shared-base'
+import { ECKeyIdentifierFromJsonWebKey, isEC_Private_JsonWebKey, type PersonaIdentifier } from '@masknet/shared-base'
 import { decode } from '@msgpack/msgpack'
 import { MaskMessages } from '../../../../shared/messages.js'
 import {
@@ -17,7 +11,6 @@ import {
     updatePersonaDB,
     queryPersonasDB,
 } from '../../../database/persona/db.js'
-import { personaRecordToMobilePersona } from './mobile.js'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord, validateMnemonic } from './utils.js'
 
 export async function deletePersona(id: PersonaIdentifier, confirm: 'delete even with private' | 'safe delete') {
@@ -83,19 +76,6 @@ export async function loginExistPersonaByPrivateKey(privateKeyString: string): P
         return identifier
     }
 
-    return null
-}
-
-export async function mobile_queryPersonaByPrivateKey(privateKeyString: string): Promise<MobilePersona | null> {
-    if (process.env.architecture !== 'app') throw new Error('This function is only available in app')
-    const privateKey = decode(decodeArrayBuffer(privateKeyString)) as EC_JsonWebKey
-    const identifier = await ECKeyIdentifierFromJsonWebKey(privateKey)
-
-    const persona = await queryPersonaDB(identifier, undefined, true)
-    if (persona) {
-        await loginPersona(persona.identifier)
-        return personaRecordToMobilePersona(persona)
-    }
     return null
 }
 

@@ -3,13 +3,13 @@ import { uniqWith } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     attemptUntil,
-    DomainResult,
-    EOAResult,
-    FungibleTokenResult,
+    type DomainResult,
+    type EOAResult,
+    type FungibleTokenResult,
     isSameAddress,
-    NonFungibleCollectionResult,
-    NonFungibleTokenResult,
-    SearchResult,
+    type NonFungibleCollectionResult,
+    type NonFungibleTokenResult,
+    type SearchResult,
     SearchResultType,
     SourceType,
 } from '@masknet/web3-shared-base'
@@ -387,10 +387,10 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             | FungibleTokenResult<ChainId, SchemaType>
             | NonFungibleTokenResult<ChainId, SchemaType>
             | NonFungibleCollectionResult<ChainId, SchemaType>
-        > = ([] = specificResult_.map((x) => {
+        > = specificResult_.map((x) => {
             const r = normalResult.find((y) => y.id === x.id && y.source === x.source)
             return { ...x, rank: r?.rank }
-        }))
+        })
 
         return uniqWith(specificResult.concat(normalResult), (a, b) => a.id === b.id)
     }

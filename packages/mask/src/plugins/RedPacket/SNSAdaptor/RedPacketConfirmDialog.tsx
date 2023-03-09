@@ -4,7 +4,7 @@ import { useChainContext, useBalance, useWeb3, useNativeToken, useNativeTokenAdd
 import {
     chainResolver,
     explorerResolver,
-    GasConfig,
+    type GasConfig,
     isNativeTokenAddress,
     useRedPacketConstants,
 } from '@masknet/web3-shared-evm'
@@ -13,7 +13,7 @@ import { makeStyles, ActionButton } from '@masknet/theme'
 import { Launch as LaunchIcon } from '@mui/icons-material'
 import { FormattedBalance, useOpenShareTxDialog, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { useI18N } from '../locales/index.js'
-import { RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback.js'
+import { type RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback.js'
 import { useTransactionValue } from '@masknet/web3-hooks-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { formatBalance, isSameAddress } from '@masknet/web3-shared-base'
@@ -123,7 +123,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         // the settings is not available
         if (!settings?.token) return
 
-        const CreationSuccess = (events?.CreationSuccess.returnValues ?? {}) as {
+        const CreationSuccess = (events?.CreationSuccess?.returnValues ?? {}) as {
             creation_time: string
             creator: string
             id: string
@@ -132,7 +132,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         }
 
         // the events log is not available
-        if (!events?.CreationSuccess.returnValues.id) return
+        if (!events?.CreationSuccess?.returnValues.id) return
 
         payload.current.sender = {
             address: account,
@@ -149,7 +149,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         payload.current.token = settings.token
 
         const record: RedPacketRecord = {
-            id: receipt.transactionHash!,
+            id: receipt.transactionHash,
             from: '',
             password: privateKey,
             contract_version,

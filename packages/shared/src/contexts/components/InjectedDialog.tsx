@@ -2,14 +2,14 @@
 import { EnhanceableSite, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
 import { omit } from 'lodash-es'
-import { Cx, makeStyles, useDialogStackActor, usePortalShadowRoot } from '@masknet/theme'
+import { type Cx, makeStyles, useDialogStackActor, usePortalShadowRoot } from '@masknet/theme'
 import {
     Dialog,
     DialogActions,
-    DialogClassKey,
+    type DialogClassKey,
     DialogContent,
-    DialogContentProps,
-    DialogProps,
+    type DialogContentProps,
+    type DialogProps,
     DialogTitle,
     IconButton,
     Stack,
@@ -248,9 +248,9 @@ export function InjectedDialog(props: InjectedDialogProps) {
                                 {titleTail}
                             </Stack>
                             {/* If you want to apply different size gaps between rows, then consider using actual rows for the job, since you cannot apply different widths to different gaps  */}
-                            {titleTabs && <Stack className={dialogGap} />}
-                            {titleTabs && <Stack className={dialogTitleTabs}>{titleTabs}</Stack>}
-                            {networkTabs && <Stack className={dialogNetworkTabs}>{networkTabs}</Stack>}
+                            {titleTabs ? <Stack className={dialogGap} /> : null}
+                            {titleTabs ? <Stack className={dialogTitleTabs}>{titleTabs}</Stack> : null}
+                            {networkTabs ? <Stack className={dialogNetworkTabs}>{networkTabs}</Stack> : null}
                         </DialogTitle>
                     ) : null}
 

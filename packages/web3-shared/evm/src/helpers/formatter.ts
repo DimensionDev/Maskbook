@@ -37,8 +37,9 @@ export function formatTokenId(tokenId = '', size_ = 4) {
     return `${prefix}${head}...${tail}`
 }
 
-export function formatDomainName(domain: string, size = 18) {
-    if (!domain || !isValidDomain(domain)) return domain
+export function formatDomainName(domain: string, size = 18, invalidIgnore?: boolean) {
+    if (!domain) return domain
+    if (!isValidDomain(domain) && !invalidIgnore) return domain
     if (domain.length <= size) return domain
     const name = domain.split('.')[0]
     // xxx.yyy.eth

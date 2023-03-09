@@ -1,7 +1,7 @@
 import type { FC, HTMLProps } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ChainId, formatTokenId, SchemaType } from '@masknet/web3-shared-evm'
-import { List, ListItem, ListProps, Typography } from '@mui/material'
+import { type ChainId, formatTokenId, type SchemaType } from '@masknet/web3-shared-evm'
+import { List, ListItem, type ListProps, Typography } from '@mui/material'
 import { AssetPreviewer } from '@masknet/shared'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { useI18N } from '../locales/index.js'
@@ -99,7 +99,7 @@ export const NftItem: FC<NftItemProps> = ({ collection, tokenId, className, clai
                 url={asset?.metadata?.imageURL || asset?.metadata?.mediaURL}
             />
             <Typography className={classes.name}>{formatTokenId(tokenId, 2)}</Typography>
-            {claimed && <Typography className={classes.claimedBadge}>{t.claimed({ amount: '' })}</Typography>}
+            {claimed ? <Typography className={classes.claimedBadge}>{t.claimed({ amount: '' })}</Typography> : null}
         </div>
     )
 }
