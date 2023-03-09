@@ -1,18 +1,13 @@
 import type { NonFungibleTokenAPI } from '../entry-types.js'
-import { type Web3Helper } from '@masknet/web3-helpers'
 import { type HubOptions } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { fetchFromSimpleHash, createNonFungibleAsset, resolveChain } from './helpers.js'
+import { type Asset } from './type.js'
 
-export class SimpleHashProviderAPI
-    implements NonFungibleTokenAPI.Provider<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-{
-    getAsset(
-        address: string,
-        tokenId: string,
-        { networkPluginId = NetworkPluginID.PLUGIN_EVM, chainId = ChainId.Mainnet }: HubOptions<Web3Helper.ChainIdAll>,
-    ) {
-        const path = '/api/v0/nfts/ethereum/'
-        return
+export class SimpleHashProviderAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+        const path = `/api/v0/nfts/${resolveChain(chainId)}/${address}/${tokenId}`
+        const response = await fetchFromSimpleHash<Asset>(path)
+        return createNonFungibleAsset(response)
     }
 }
