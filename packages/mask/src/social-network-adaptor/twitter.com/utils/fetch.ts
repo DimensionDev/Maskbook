@@ -38,7 +38,7 @@ export const getPostId = (node: HTMLElement) => {
     } else if (timeNode) {
         // Quoted tweet in timeline has no a status link to detail page,
         // so use the timestamp as post id instead
-        pid = timeNode.getAttribute('datetime')!
+        pid = `timestamp-keccak256:${keccak256(timeNode.getAttribute('datetime')!)}`
     } else {
         pid = `keccak256:${keccak256(node.innerText)}`
     }

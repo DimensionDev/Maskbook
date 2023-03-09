@@ -1,7 +1,7 @@
 import { CssBaseline, type Theme, ThemeProvider } from '@mui/material'
 import { type MaskIconPalette, MaskIconPaletteContext } from '@masknet/icons'
-import { CustomSnackbarProvider } from '../Components/index.js'
 import { compose } from '@masknet/shared-base'
+import { CustomSnackbarProvider } from '../Components/index.js'
 
 export interface MaskThemeProvider extends React.PropsWithChildren<{}> {
     useTheme(): Theme
