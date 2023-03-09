@@ -55,7 +55,7 @@ export function getFacebookId() {
     if (!node?.href) return ''
 
     try {
-        const url = new URL(node.href)
+        const url = new URL(node.href, location.href)
         if (url.pathname === '/profile.php') return url.searchParams.get(isMobileFacebook ? 'lst' : 'id')
         return url.pathname.replaceAll('/', '')
     } catch {
