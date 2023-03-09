@@ -27,6 +27,8 @@ export function SourceProviderIcon(props: SourceProviderIconProps) {
             return <Icons.LooksRare size={size} />
         case SourceType.X2Y2:
             return <Icons.X2Y2 size={size} />
+        case SourceType.SimpleHash:
+            return <Icons.SimpleHash size={size} />
         default:
             return <></>
     }

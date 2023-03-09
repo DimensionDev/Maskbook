@@ -14,11 +14,11 @@ export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
     })
 }
 
-export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, SchemaType> {
-    const chainId = resolveChainId(asset.chain) ?? ChainId.Mainnet
+export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, SchemaType> | undefined {
+    const chainId = resolveChainId(asset.chain)
     const address = asset.contract_address
     const schema = asset.contract.type === 'ERC721' ? SchemaType.ERC721 : SchemaType.ERC1155
-
+    if (!chainId || !address) return
     return {
         id: address,
         chainId,
@@ -74,7 +74,7 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
     }
 }
 
-export function resolveChainId(chain: string): ChainId {
+export function resolveChainId(chain: string): ChainId | undefined {
     // Some of the `chainResolver.chainId()` results do not match.
     switch (chain) {
         case 'ethereum':
@@ -92,11 +92,11 @@ export function resolveChainId(chain: string): ChainId {
         case 'bsc':
             return ChainId.BSC
         default:
-            return ChainId.Mainnet
+            return undefined
     }
 }
 
-export function resolveChain(chainId: ChainId): string {
+export function resolveChain(chainId: ChainId): string | undefined {
     switch (chainId) {
         case ChainId.Mainnet:
             return 'ethereum'
@@ -113,6 +113,6 @@ export function resolveChain(chainId: ChainId): string {
         case ChainId.BSC:
             return 'bsc'
         default:
-            return 'ethereum'
+            return undefined
     }
 }
