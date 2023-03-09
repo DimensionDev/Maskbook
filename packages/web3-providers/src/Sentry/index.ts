@@ -27,9 +27,6 @@ const IGNORE_ERRORS = [
     'ResizeObserver loop limit exceeded',
 ]
 
-const DEVICE_SEED = createDeviceSeed()
-const DEVICE_FINGERPRINT = createDeviceFingerprint()
-
 export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
     constructor() {
         Sentry.init({
@@ -75,8 +72,8 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         Sentry.setTag('channel', process.env.channel)
         Sentry.setTag('version', process.env.VERSION)
         Sentry.setTag('ua', navigator.userAgent)
-        Sentry.setTag('device_seed', DEVICE_SEED)
-        Sentry.setTag('device_fingerprint', DEVICE_FINGERPRINT)
+        Sentry.setTag('device_seed', createDeviceSeed())
+        Sentry.setTag('device_fingerprint', createDeviceFingerprint())
         Sentry.setTag('engine', process.env.engine)
         Sentry.setTag('build_date', process.env.BUILD_DATE)
         Sentry.setTag('branch_name', process.env.BRANCH_NAME)
