@@ -67,30 +67,22 @@ function getTweetNode(node: HTMLElement) {
 
     return root
 }
+const shouldSkipDecrypt = (node: HTMLElement, tweetNode: HTMLElement) => {
+    const isCardNode = node.matches('[data-testid="card.wrapper"]')
+    const hasTextNode = !!tweetNode.querySelector(
+        [
+            '[data-testid="tweet"] div[lang]',
+            '[data-testid="tweet"] + div div[lang]', // detailed
+        ].join(','),
+    )
+
+    // if a text node already exists, it's not going to decrypt the card node
+    return isCardNode && hasTextNode
+}
 function registerPostCollectorInner(
     postStore: Next.CollectingCapabilities.PostsProvider['posts'],
     cancel: AbortSignal,
 ) {
-    const getTweetNode = (node: HTMLElement) => {
-        // retweet(quoted tweet) in new twitter
-        const root = node.closest<HTMLDivElement>('div[role="link"]')
-        // then normal tweet
-        return root || node.closest<HTMLDivElement>('article > div')
-    }
-
-    const shouldSkipDecrypt = (node: HTMLElement, tweetNode: HTMLElement) => {
-        const isCardNode = node.matches('[data-testid="card.wrapper"]')
-        const hasTextNode = !!tweetNode.querySelector(
-            [
-                '[data-testid="tweet"] div[lang]',
-                '[data-testid="tweet"] + div div[lang]', // detailed
-            ].join(),
-        )
-
-        // if a text node already exists, it's not going to decrypt the card node
-        return isCardNode && hasTextNode
-    }
-
     const updateProfileInfo = memoize(
         (info: PostInfo) => {
             const currentProfile = getCurrentIdentifier()
