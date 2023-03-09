@@ -42,7 +42,8 @@ function isQuotedTweet(tweetNode: HTMLElement | null) {
 }
 
 function isDetailTweet(tweetNode: HTMLElement) {
-    const isDetail = !!tweetNode.querySelector('a[role="link"] time[datetime]')
+    // We can see the retweets status in detail tweet.
+    const isDetail = !!tweetNode.querySelector('a[role="link"][href$=retweets]')
     return isDetail
 }
 
@@ -52,13 +53,14 @@ function registerPostCollectorInner(
 ) {
     const getTweetNode = (node: HTMLElement) => {
         // retweet(quoted tweet) in new twitter
-        let root = node.closest<HTMLDivElement>('div[role="link"]')
+        const root = node.closest<HTMLDivElement>('div[role="link"]')
         // then normal tweet
-        root = root || node.closest<HTMLDivElement>('article > div')
-        if (!root) return null
+        return root || node.closest<HTMLDivElement>('article > div')
+    }
 
+    const shouldSkipDecrypt = (node: HTMLElement, tweetNode: HTMLElement) => {
         const isCardNode = node.matches('[data-testid="card.wrapper"]')
-        const hasTextNode = !!root.querySelector(
+        const hasTextNode = !!tweetNode.querySelector(
             [
                 '[data-testid="tweet"] div[lang]',
                 '[data-testid="tweet"] + div div[lang]', // detailed
@@ -66,9 +68,7 @@ function registerPostCollectorInner(
         )
 
         // if a text node already exists, it's not going to decrypt the card node
-        if (isCardNode && hasTextNode) return null
-
-        return root
+        return isCardNode && hasTextNode
     }
 
     const updateProfileInfo = memoize(
@@ -89,7 +89,7 @@ function registerPostCollectorInner(
     new IntervalWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
-            if (!tweetNode) return
+            if (!tweetNode || shouldSkipDecrypt(node, tweetNode)) return
             const refs = createRefsForCreatePostContext()
             let actionsElementProxy: DOMProxy | undefined = undefined
             const actionsInjectPoint = getPostActionsNode(proxy.current)
@@ -137,7 +137,9 @@ function registerPostCollectorInner(
         .assignKeys((node) => {
             const tweetNode = getTweetNode(node)
             const parentTweetNode = isQuotedTweet(tweetNode) ? getParentTweetNode(tweetNode!) : null
-            if (!tweetNode) return `keccak256:${utils.keccak256(node.innerText)}`
+            if (!tweetNode || shouldSkipDecrypt(node, tweetNode)) {
+                return `keccak256:${utils.keccak256(node.innerText)}`
+            }
             const parentTweetId = parentTweetNode ? getPostId(parentTweetNode) : ''
             const tweetId = getPostId(tweetNode)
             // To distinguish tweet nodes between timeline and detail page
