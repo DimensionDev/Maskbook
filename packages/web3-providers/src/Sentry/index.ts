@@ -28,6 +28,11 @@ const IGNORE_ERRORS = [
     'https://scam.mask.r2d2.to',
     // RSS3 domain query
     'https://rss3.domains/name',
+    // CDN
+    'cdninstagram.com',
+    'fbcdn.net',
+    'imgix.net',
+    // misc
     'At least one of the attempts fails.',
     'Extension context invalidated.',
     '[object Promise]',
