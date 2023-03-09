@@ -17,6 +17,13 @@ const IGNORE_ERRORS = [
     // Twitter Assets
     'https://t.co',
     'https://pbs.twimg.com',
+    'https://abs.twimg.com',
+    'https://twitter.com',
+    // source code
+    'https://maskbook.pages.dev',
+    // KV
+    'https://kv.r2d2.to/api/com.maskbook.pets',
+    'https://kv.r2d2.to/api/com.maskbook.user',
     // ScamDB
     'https://scam.mask.r2d2.to',
     // RSS3 domain query
