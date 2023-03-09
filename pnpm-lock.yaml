@@ -3449,9 +3449,15 @@ importers:
       '@dimensiondev/mask-wallet-core':
         specifier: 0.1.0-20211013082857-eb62e5f
         version: 0.1.0-20211013082857-eb62e5f(protobufjs@6.11.2)
+      '@dimensiondev/metamask-extension-provider':
+        specifier: ^3.0.6-20221105074301-8806fca
+        version: 3.0.6-20221105074301-8806fca
       '@masknet/icons':
         specifier: workspace:^
         version: link:../icons
+      '@masknet/injected-script':
+        specifier: workspace:^
+        version: link:../injected-script
       '@masknet/public-api':
         specifier: workspace:^
         version: link:../public-api
@@ -3488,6 +3494,9 @@ importers:
       '@metaplex/js':
         specifier: ^4.11.7
         version: 4.11.7(@metaplex-foundation/mpl-auction@0.0.2)(@metaplex-foundation/mpl-core@0.0.2)(@metaplex-foundation/mpl-metaplex@0.0.5)(@metaplex-foundation/mpl-token-metadata@1.1.0)(@metaplex-foundation/mpl-token-vault@0.0.2)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)
+      '@project-serum/sol-wallet-adapter':
+        specifier: ^0.2.6
+        version: 0.2.6(patch_hash=dl5wqnnaxjm7biesxtvdpr7gpe)(@solana/web3.js@1.44.2)
       '@servie/events':
         specifier: ^3.0.0
         version: 3.0.0
@@ -3509,15 +3518,27 @@ importers:
       '@types/socket.io-client':
         specifier: ^1.4.36
         version: 1.4.36
+      '@walletconnect/client':
+        specifier: 1.7.8
+        version: 1.7.8(patch_hash=2krbsxzv524dzcdemy7vploqza)
+      '@walletconnect/types':
+        specifier: ^1.7.8
+        version: 1.7.8
       bignumber.js:
         specifier: 9.1.0
         version: 9.1.0
       bloom-filters:
         specifier: ^3.0.0
         version: 3.0.0(patch_hash=2etetjrjxbcye2oktxqpij75ey)
+      bs58:
+        specifier: ^4.0.1
+        version: 4.0.1
       date-fns:
         specifier: ^2.29.3
         version: 2.29.3
+      fortmatic:
+        specifier: ^2.2.1
+        version: 2.2.1(patch_hash=tb3oevqnvhntsyfyhi2z6spuea)
       fuse.js:
         specifier: 6.6.2
         version: 6.6.2(patch_hash=b2o4qvyfvxmpo7347sqko6h22a)
@@ -3570,6 +3591,9 @@ importers:
       '@sentry/types':
         specifier: ^7.40.0
         version: 7.40.0
+      '@types/bs58':
+        specifier: ^4.0.1
+        version: 4.0.1
       '@types/json-stable-stringify':
         specifier: ^1.0.34
         version: 1.0.34

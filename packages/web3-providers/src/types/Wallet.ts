@@ -56,7 +56,7 @@ export namespace WalletAPI {
         account?: string
     }
 
-    export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
+    export interface Provider<ChainId, ProviderType, Web3Provider, Web3> {
         readonly emitter: Emitter<ProviderEvents<ChainId, ProviderType>>
 
         readonly subscription: {
