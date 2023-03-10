@@ -35,7 +35,11 @@ const URLS = Object.keys(RULES) as unknown as Array<keyof typeof RULES>
 
 function openCaches(key: string) {
     if ('caches' in globalThis) {
-        return caches.open(key)
+        try {
+            return caches.open(key)
+        } catch {
+            return
+        }
     }
     return
 }
