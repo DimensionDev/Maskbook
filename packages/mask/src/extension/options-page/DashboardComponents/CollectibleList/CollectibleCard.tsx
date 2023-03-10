@@ -3,10 +3,10 @@ import { Card, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useWeb3State, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, type Wallet } from '@masknet/shared-base'
 import { AssetPreviewer, ImageIcon } from '@masknet/shared'
 import { NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
-import type { SourceType, Wallet } from '@masknet/web3-shared-base'
+import type { SourceType } from '@masknet/web3-shared-base'
 import { ActionsBarNFT } from '../ActionsBarNFT.js'
 
 const useStyles = makeStyles()((theme) => ({

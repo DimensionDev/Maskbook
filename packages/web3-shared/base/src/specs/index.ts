@@ -1457,7 +1457,7 @@ export interface TransactionWatcherState<ChainId, Transaction> {
         status: TransactionStatusType,
     ) => Promise<void>
 }
-export interface ProviderState<ChainId, ProviderType, NetworkType, WalletProvider> {
+export interface ProviderState<ChainId, ProviderType, NetworkType> {
     ready: boolean
     readyPromise: Promise<void>
 
@@ -1478,7 +1478,7 @@ export interface ProviderState<ChainId, ProviderType, NetworkType, WalletProvide
     untilReady: (providerType: ProviderType) => Promise<void>
 
     /** Get a registered wallet provider. */
-    getWalletProvider: (providerType: ProviderType) => WalletProvider | undefined
+    getWalletProvider: <T>(providerType: ProviderType) => T | undefined
 
     /** Connect with the provider and set chain id. */
     connect: (
@@ -1619,7 +1619,6 @@ export interface Web3State<
     TransactionParameter,
     Web3,
     Web3Provider,
-    WalletProvider,
 > {
     AddressBook?: AddressBookState<ChainId>
     BalanceNotifier?: BalanceNotifierState<ChainId>
@@ -1648,7 +1647,7 @@ export interface Web3State<
         Web3,
         Web3Provider
     >
-    Provider?: ProviderState<ChainId, ProviderType, NetworkType, WalletProvider>
+    Provider?: ProviderState<ChainId, ProviderType, NetworkType>
     Others?: OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
     Storage?: Web3StorageServiceState
 }

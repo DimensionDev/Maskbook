@@ -105,13 +105,7 @@ export declare namespace Web3Helper {
 
     export type Web3ProviderState<T extends NetworkPluginID = never> = T extends never
         ? never
-        : ProviderState<
-              Definition[T]['ChainId'],
-              Definition[T]['ProviderType'],
-              Definition[T]['NetworkType'],
-              Definition[T]['Web3Provider'],
-              Definition[T]['Web3']
-          >
+        : ProviderState<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['NetworkType']>
 
     export type Web3ConnectionState<T extends NetworkPluginID = never> = T extends never
         ? never
@@ -200,12 +194,6 @@ export declare namespace Web3Helper {
     export type TransactionParameterAll = Definition[NetworkPluginID]['TransactionParameter']
     export type Web3All = Definition[NetworkPluginID]['Web3']
     export type Web3ProviderAll = Definition[NetworkPluginID]['Web3Provider']
-    export type WalletProviderAll = WalletProvider<
-        Definition[NetworkPluginID]['ChainId'],
-        Definition[NetworkPluginID]['ProviderType'],
-        Definition[NetworkPluginID]['Web3Provider'],
-        Definition[NetworkPluginID]['Web3']
-    >
 
     export type FungibleTokenAll = FungibleToken<
         Definition[NetworkPluginID]['ChainId'],
@@ -395,17 +383,6 @@ export declare namespace Web3Helper {
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
     > = S extends 'all' ? Web3ProviderAll : Definition[T]['Web3Provider']
-    export type WalletProviderScope<
-        S extends 'all' | void = void,
-        T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all'
-        ? WalletProviderAll
-        : WalletProvider<
-              Definition[T]['ChainId'],
-              Definition[T]['ProviderType'],
-              Definition[T]['Web3Provider'],
-              Definition[T]['Web3']
-          >
     export type Web3StateScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,

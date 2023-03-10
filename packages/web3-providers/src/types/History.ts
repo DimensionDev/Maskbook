@@ -1,4 +1,5 @@
-import type { Transaction, HubOptions, Pageable } from '@masknet/web3-shared-base'
+import type { Pageable } from '@masknet/shared-base'
+import type { Transaction, HubOptions } from '@masknet/web3-shared-base'
 
 export namespace HistoryAPI {
     export enum TransactionType {

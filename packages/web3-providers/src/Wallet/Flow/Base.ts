@@ -1,11 +1,10 @@
 import { Emitter } from '@servie/events'
-import type { Account, ProviderEvents, ProviderOptions, Wallet } from '@masknet/web3-shared-base'
-import { EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
+import { EMPTY_LIST, createConstantSubscription, type Account, type Wallet } from '@masknet/shared-base'
 import { ChainId, type ProviderType, type Web3, type Web3Provider } from '@masknet/web3-shared-flow'
 import type { WalletAPI } from '../../entry-types.js'
 
 export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {
-    emitter = new Emitter<ProviderEvents<ChainId, ProviderType>>()
+    emitter = new Emitter<WalletAPI.ProviderEvents<ChainId, ProviderType>>()
 
     get subscription() {
         return {
@@ -59,10 +58,10 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
     switchChain(chainId?: ChainId): Promise<void> {
         throw new Error('Method not implemented.')
     }
-    createWeb3(options?: ProviderOptions<ChainId>): Web3 {
+    createWeb3(options?: WalletAPI.ProviderOptions<ChainId>): Web3 {
         throw new Error('Method not implemented.')
     }
-    createWeb3Provider(options?: ProviderOptions<ChainId>): Web3Provider {
+    createWeb3Provider(options?: WalletAPI.ProviderOptions<ChainId>): Web3Provider {
         throw new Error('Method not implemented.')
     }
     connect(chainId?: ChainId): Promise<Account<ChainId>> {

@@ -409,7 +409,6 @@ export namespace Plugin.SNSAdaptor {
         TransactionParameter = unknown,
         Web3 = unknown,
         Web3Provider = unknown,
-        WalletProvider = unknown,
     > extends Shared.DefinitionDeferred<SNSAdaptorContext> {
         /** This UI will be rendered for each post found. */
         PostInspector?: InjectUI<{}>
@@ -448,8 +447,7 @@ export namespace Plugin.SNSAdaptor {
             TransactionSignature,
             TransactionParameter,
             Web3,
-            Web3Provider,
-            WalletProvider
+            Web3Provider
         >
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         readonly CompositionDialogEntry?: CompositionDialogEntry
@@ -925,8 +923,7 @@ export namespace Plugin.Dashboard {
             TransactionSignature,
             TransactionParameter,
             Web3,
-            Web3Provider,
-            WalletProvider
+            Web3Provider
         >
         /** Plugin DO NOT need to define this. This will be auto set by the plugin host. */
         __general_ui__?: GeneralUI.DefinitionDeferred

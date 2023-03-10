@@ -24,13 +24,7 @@ export class ProviderState<
     NetworkType extends string,
     Web3Provider,
     Web3,
-> implements
-        Web3ProviderState<
-            ChainId,
-            ProviderType,
-            NetworkType,
-            WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
-        >
+> implements Web3ProviderState<ChainId, ProviderType, NetworkType>
 {
     protected site = getSiteType()
 

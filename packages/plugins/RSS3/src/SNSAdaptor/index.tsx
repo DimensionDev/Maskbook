@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { Box } from '@mui/material'
-import { NetworkPluginID, type SocialAccount, type SocialIdentity, type SocialAddressType } from '@masknet/shared-base'
+import { NetworkPluginID, type SocialAccount, type SocialIdentity, SocialAddressType } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useMountReport } from '@masknet/web3-telemetry/hooks'
 import { RSS3BaseAPI, TelemetryAPI } from '@masknet/web3-providers/types'

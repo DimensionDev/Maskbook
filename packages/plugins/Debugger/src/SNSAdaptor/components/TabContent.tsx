@@ -1,5 +1,6 @@
 import { makeStyles } from '@masknet/theme'
-import { useSocialAccountsAll, type SocialAccount, type SocialIdentity } from '@masknet/web3-hooks-base'
+import { type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
+import { useSocialAccountsAll } from '@masknet/web3-hooks-base'
 import { List, ListItem, ListItemText, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
