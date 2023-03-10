@@ -132,6 +132,6 @@ async function registerPostCollectorInner(
 export const PostProviderMirror: Next.CollectingCapabilities.PostsProvider = {
     posts: creator.EmptyPostProviderState(),
     start(cancel) {
-        registerPostCollectorInner(this.posts, cancel)
+        // registerPostCollectorInner(this.posts, cancel)
     },
 }
