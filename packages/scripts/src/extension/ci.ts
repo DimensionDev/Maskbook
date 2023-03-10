@@ -1,5 +1,5 @@
 #!/usr/bin/env ts-node
-import { buildWebpackFlag } from './normal.js'
+import { buildBaseExtension, buildWebpackFlag } from './normal.js'
 import { series, parallel, type TaskFunction, src, dest } from 'gulp'
 import { ROOT_PATH, task } from '../utils/index.js'
 import { codegen } from '../codegen/index.js'
@@ -15,8 +15,9 @@ export const ciBuild: TaskFunction = series(
         return buildSandboxedPluginConfigurable(fileURLToPath(BUILD_PATH), true)
     },
     // We need to build a version in serial to prepare the webpack cache.
-    buildTarget('Chromium', getPreset(Preset.Chromium), 'MaskNetwork.chromium.zip'),
+    buildBaseExtension,
     parallel(
+        zipTo(BUILD_PATH, 'MaskNetwork.chromium.zip'),
         buildTarget(
             'Firefox',
             { ...getPreset(Preset.Firefox), outputPath: 'build-firefox' },
