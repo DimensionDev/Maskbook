@@ -29,7 +29,9 @@ const IGNORE_ERRORS = [
     // RSS3 domain query
     'https://rss3.domains/name',
     // CDN
+    /* cspell:disable-next-line */
     'cdninstagram.com',
+    /* cspell:disable-next-line */
     'fbcdn.net',
     'imgix.net',
     // misc
