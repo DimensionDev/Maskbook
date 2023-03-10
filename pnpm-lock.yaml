@@ -2931,6 +2931,9 @@ importers:
 
   packages/shared-base:
     dependencies:
+      '@dimensiondev/mask-wallet-core':
+        specifier: 0.1.0-20211013082857-eb62e5f
+        version: 0.1.0-20211013082857-eb62e5f(protobufjs@6.11.2)
       '@masknet/base':
         specifier: workspace:^
         version: link:../base
@@ -3443,9 +3446,6 @@ importers:
       '@bonfida/spl-name-service':
         specifier: ^0.1.50
         version: 0.1.50(@solana/buffer-layout@4.0.0)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)(bn.js@5.2.1)(borsh@0.7.0)
-      '@dimensiondev/mask-wallet-core':
-        specifier: 0.1.0-20211013082857-eb62e5f
-        version: 0.1.0-20211013082857-eb62e5f(protobufjs@6.11.2)
       '@dimensiondev/metamask-extension-provider':
         specifier: ^3.0.6-20221105074301-8806fca
         version: 3.0.6-20221105074301-8806fca

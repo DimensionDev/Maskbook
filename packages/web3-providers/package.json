@@ -32,7 +32,6 @@
   },
   "dependencies": {
     "@bonfida/spl-name-service": "^0.1.50",
-    "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
     "@dimensiondev/metamask-extension-provider": "^3.0.6-20221105074301-8806fca",
     "@masknet/icons": "workspace:^",
     "@masknet/shared-base": "workspace:^",
