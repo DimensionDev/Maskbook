@@ -30,8 +30,13 @@ const IGNORE_ERRORS = [
 
 export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
     constructor() {
+        const release =
+            process.env.channel === 'stable' && process.env.NODE_ENV === 'production'
+                ? `mask-${process.env.VERSION}`
+                : undefined
         Sentry.init({
             dsn: process.env.MASK_SENTRY_DSN,
+            release,
             defaultIntegrations: false,
             integrations: [
                 // global error and unhandledrejection event
