@@ -41,6 +41,7 @@ const IGNORE_ERRORS = [
     'Extension context invalidated.',
     '[object Promise]',
     'ResizeObserver loop limit exceeded',
+    'User rejected the request.',
 ]
 
 const DEVICE_SEED = createDeviceSeed()
