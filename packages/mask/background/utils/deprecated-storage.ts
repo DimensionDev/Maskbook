@@ -28,7 +28,11 @@ class MutexStorage<T> {
             const run = async () => {
                 try {
                     this.lock()
-                    const stored = await timeout(browser.storage.local.get(key), 3000, `Get ${key} timeout.`)
+                    const stored = await timeout(
+                        browser.storage.local.get(key),
+                        5000,
+                        `Get ${key} timeout in mutx storage.`,
+                    )
                     callback(null, stored?.[key] as T)
                 } catch (error) {
                     callback(error)
@@ -49,7 +53,11 @@ class MutexStorage<T> {
             const run = async () => {
                 try {
                     this.lock()
-                    await timeout(browser.storage.local.set({ [key]: value }), 3000, `Set ${key} to ${value} timeout.`)
+                    await timeout(
+                        browser.storage.local.set({ [key]: value }),
+                        5000,
+                        `Set ${key} to ${value} timeout in mutx storage.`,
+                    )
                     callback(null)
                 } catch (error) {
                     callback(error)
