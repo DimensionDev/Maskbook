@@ -11,6 +11,7 @@ const features = {
 }
 async function createRequest(screenName: string) {
     const { bearerToken, csrfToken, queryId } = await getTokens('UserByScreenName')
+    if (!queryId) return undefined
     const url = urlcat('https://twitter.com/i/api/graphql/:queryId/UserByScreenName', {
         queryId,
         variables: JSON.stringify({
@@ -35,6 +36,7 @@ async function createRequest(screenName: string) {
 
 export async function getUserViaWebAPI(screenName: string, times = 0): Promise<TwitterBaseAPI.User | null> {
     const request = await createRequest(screenName)
+    if (!request) return null
     const response = await fetchCached(request)
     if (!response.ok) {
         if (times >= 3) return null
@@ -61,6 +63,7 @@ export async function getUserViaWebAPI(screenName: string, times = 0): Promise<T
 
 export async function staleUserViaWebAPI(screenName: string): Promise<TwitterBaseAPI.User | null> {
     const request = await createRequest(screenName)
+    if (!request) return null
     const response = await staleCached(request)
     if (!response?.ok) return null
 
