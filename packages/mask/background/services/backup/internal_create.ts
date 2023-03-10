@@ -1,7 +1,7 @@
 import { None, Some } from 'ts-results-es'
 import { timeout } from '@masknet/kit'
 import type { PersonaIdentifier } from '@masknet/shared-base'
-import { activatedPluginsWorker, Plugin } from '@masknet/plugin-infra/background-worker'
+import { activatedPluginsWorker, type Plugin } from '@masknet/plugin-infra/background-worker'
 import { createEmptyNormalizedBackup, type NormalizedBackup } from '@masknet/backup-format'
 import { queryPersonasDB, queryProfilesDB, queryRelations } from '../../database/persona/db.js'
 import { queryPostsDB } from '../../database/post/index.js'
