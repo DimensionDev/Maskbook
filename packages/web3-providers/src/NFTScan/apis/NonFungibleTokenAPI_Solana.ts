@@ -4,7 +4,6 @@ import {
     createIndicator,
     createNextIndicator,
     createPageable,
-    type HubIndicator,
     type HubOptions,
     type NonFungibleCollection,
     type NonFungibleTokenContract,
@@ -57,7 +56,7 @@ export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Pr
         name: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
     ) {
-        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
+        if (!isValidChainId(chainId) || !name) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = urlcat('/api/sol/assets/collection/:name', {
             name,
             collection: name,
@@ -71,24 +70,6 @@ export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Pr
             createIndicator(indicator),
             response?.data.next ? createNextIndicator(indicator, response?.data.next) : undefined,
         )
-    }
-
-    async getCollectionsByKeyword(
-        keyword: string,
-        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
-    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, HubIndicator>> {
-        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
-        const path = '/api/sol/collections/filters'
-        const response = await fetchFromNFTScanV2<Response<Solana.Collection[]>>(chainId, path, {
-            method: 'POST',
-            body: JSON.stringify({
-                symbol: keyword,
-                offset: (indicator?.index ?? 0) * size,
-                limit: size.toString(),
-            }),
-        })
-        const collections = response?.data.map((x) => createNonFungibleCollection(chainId, x)) ?? EMPTY_LIST
-        return createPageable(collections, createIndicator(indicator))
     }
 
     async getCollection(
