@@ -135,7 +135,7 @@ export default class FortmaticProvider extends BaseProvider implements EVM_Provi
 
     override async disconnect() {
         try {
-            await timeout(this.logout(), 3000)
+            await timeout(this.logout(), 3000, 'Timeout to logout fortmatic account.')
         } catch {
             // do nothing
         } finally {

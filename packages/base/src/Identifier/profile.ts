@@ -38,8 +38,8 @@ export class ProfileIdentifier extends Identifier {
         // eslint-disable-next-line no-constructor-return
         if (networkCache[userID]) return networkCache[userID]
 
-        banSlash(network)
-        banSlash(userID)
+        banSlash(network, 'ProfileIdentifier.network')
+        banSlash(userID, 'ProfileIdentifier.userID')
         super()
         this.network = network
         this.userId = userID

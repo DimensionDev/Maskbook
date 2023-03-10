@@ -28,7 +28,7 @@ export class PostIdentifier extends Identifier {
         // eslint-disable-next-line no-constructor-return
         if (idCache[postID]) return idCache[postID]
 
-        banSlash(postID)
+        banSlash(postID, 'PostIdentifier.postID')
         super()
         this.identifier = identifier
         this.postID = postID

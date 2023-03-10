@@ -36,7 +36,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         const computed = getComputedUserSettings()
 
         try {
-            const userSettings = await timeout(getUserSettings(), 5000)
+            const userSettings = await timeout(getUserSettings(), 5000, 'Timeout to get twitter user settings.')
 
             return {
                 ...defaults,
