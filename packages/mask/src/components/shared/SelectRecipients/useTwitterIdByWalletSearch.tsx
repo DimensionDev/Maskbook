@@ -23,11 +23,15 @@ export function useTwitterIdByWalletSearch(
         const linkedTwitterNames = proofs.map((x) => x.identity)
         return {
             nickname: proofs[0].identity,
-            identifier: ProfileIdentifier.of('twitter.com', proofs[0].identity).unwrap(),
+            identifier: ProfileIdentifier.of('twitter.com', proofs[0].identity).expect(
+                `${proofs[0].identity} should be a valid user id`,
+            ),
             walletAddress: type === NextIDPlatform.Ethereum ? value : undefined,
             fromNextID: true,
             linkedTwitterNames,
-            linkedPersona: ECKeyIdentifier.fromHexPublicKeyK256(binding.persona).unwrap(),
+            linkedPersona: ECKeyIdentifier.fromHexPublicKeyK256(binding.persona).expect(
+                `${binding.persona} should be a valid hex public key in k256`,
+            ),
         }
     })
     return compact(nextIdAccounts)

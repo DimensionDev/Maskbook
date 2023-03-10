@@ -65,7 +65,7 @@ Object.freeze(Identifier)
  * If you want to use it, you must first convert to something else
  * @internal
  */
-export function banSlash(input: string | undefined | null) {
+export function banSlash(input: string | undefined | null, source?: string) {
     if (!input) return
-    if (input.includes('/')) throw new TypeError(`Cannot contain / in a part of identifier: ${input}`)
+    if (input.includes('/')) throw new TypeError(`Cannot contain / in a part of identifier (${source}): ${input}`)
 }
