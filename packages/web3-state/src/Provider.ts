@@ -133,7 +133,7 @@ export class ProviderState<
                 })
 
                 try {
-                    await provider.setup()
+                    await provider.setup(this.context)
                 } catch {
                     // ignore setup errors
                 }

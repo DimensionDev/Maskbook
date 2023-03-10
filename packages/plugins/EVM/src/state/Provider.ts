@@ -1,5 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ProviderState } from '@masknet/web3-state'
+import { EVM_Providers } from '@masknet/web3-providers'
 import { type ECKeyIdentifier, mapSubscription, mergeSubscription } from '@masknet/shared-base'
 import { type Account, isSameAddress } from '@masknet/web3-shared-base'
 import {
@@ -16,11 +17,10 @@ import {
     getDefaultNetworkType,
     getDefaultProviderType,
 } from '@masknet/web3-shared-evm'
-import { Providers } from './Provider/provider.js'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
     constructor(context: Plugin.Shared.SharedUIContext) {
-        super(context, Providers, {
+        super(context, EVM_Providers, {
             isSameAddress,
             isValidAddress,
             isValidChainId,

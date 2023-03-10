@@ -3,7 +3,7 @@ import { type ChainId, ProviderType, type Web3, type Web3Provider } from '@maskn
 import { BaseInjectedProvider } from './BaseInjected.js'
 import type { WalletAPI } from '../../entry-types.js'
 
-export class Coin98Provider
+export class EVM_Coin98Provider
     extends BaseInjectedProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {

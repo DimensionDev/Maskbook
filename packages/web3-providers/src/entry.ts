@@ -95,6 +95,9 @@ export const TheGraphDomain = new TheGraphDomainAPI()
 export const RedPacket = new RedPacketAPI()
 export const TheGraphRedPacket = new TheGraphRedPacketAPI()
 
+// Wallet Providers
+export * from './Wallet/index.js'
+
 // Etherscan
 export const EtherscanExplorer = new EtherscanExplorerAPI()
 export const EtherscanRedPacket = new EtherscanRedPacketAPI()
