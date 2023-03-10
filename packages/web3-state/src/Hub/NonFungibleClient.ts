@@ -89,13 +89,26 @@ export class HubStateNonFungibleClient<ChainId, SchemaType> extends HubStateBase
     }
 
     async getNonFungibleAssetsByCollection(
-        address: string,
+        id: string,
         initial?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
         const options = this.getOptions(initial)
         const providers = this.getProviders(initial)
         return attemptUntil(
-            providers.map((x) => () => x.getAssetsByCollection?.(address, options)),
+            providers.map((x) => () => x.getAssetsByCollection?.(id, options)),
+            createPageable(EMPTY_LIST, createIndicator(options.indicator)),
+        )
+    }
+
+    async getNonFungibleAssetsByCollectionAndOwner(
+        collectionId: string,
+        owner: string,
+        initial?: HubOptions<ChainId>,
+    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
+        const options = this.getOptions(initial)
+        const providers = this.getProviders(initial)
+        return attemptUntil(
+            providers.map((x) => () => x.getAssetsByCollectionAndOwner?.(collectionId, owner, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
         )
     }

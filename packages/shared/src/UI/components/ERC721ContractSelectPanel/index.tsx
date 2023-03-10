@@ -97,7 +97,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
                 <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
                     {label ?? t.select_an_nft()}
                 </Typography>
-                {!collection?.address || !Others?.isValidAddress(collection.address) ? null : (
+                {(!collection?.address || !Others?.isValidAddress(collection.address)) && !collection?.id ? null : (
                     <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
                         {t.wallet_balance()}: {balance ? balance : '0'}
                     </Typography>

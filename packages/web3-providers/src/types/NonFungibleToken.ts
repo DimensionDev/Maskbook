@@ -99,6 +99,12 @@ export namespace NonFungibleTokenAPI {
             address: string,
             options?: HubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
+        /** Get non-fungible assets of the given collection and owner. */
+        getAssetsByCollectionAndOwner?: (
+            collectionId: string,
+            owner: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
         /** Get non-fungible collection stats */
         getStats?: (
             address: string,

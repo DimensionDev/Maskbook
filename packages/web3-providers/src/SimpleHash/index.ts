@@ -8,6 +8,7 @@ import {
     type NonFungibleAsset,
     type NonFungibleCollection,
     createIndicator,
+    createNextIndicator,
     type Pageable,
 } from '@masknet/web3-shared-base'
 import { ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
@@ -39,8 +40,8 @@ export class SimpleHashProviderAPI implements NonFungibleTokenAPI.Provider<Chain
             contract_addresses: '',
         })
 
-        const response = await fetchFromSimpleHash<Asset[]>(path)
-        const assets = response.map((x) => createNonFungibleAsset(x)).filter(Boolean) as Array<
+        const response = await fetchFromSimpleHash<{ nfts: Asset[] }>(path)
+        const assets = response.nfts.map((x) => createNonFungibleAsset(x)).filter(Boolean) as Array<
             NonFungibleAsset<ChainId, SchemaType>
         >
 
@@ -68,5 +69,36 @@ export class SimpleHashProviderAPI implements NonFungibleTokenAPI.Provider<Chain
         >
 
         return createPageable(collections, createIndicator(indicator))
+    }
+
+    async getAssetsByCollectionAndOwner(
+        collectionId: string,
+        owner: string,
+        { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {},
+    ) {
+        const chain = resolveChain(chainId)
+        if (!chain || !isValidChainId(chainId) || !collectionId || !owner)
+            return createPageable(EMPTY_LIST, createIndicator(indicator))
+
+        const path = urlcat('/api/v0/nfts/owners', {
+            chains: chain,
+            wallet_addresses: owner,
+            collection_ids: collectionId,
+            cursor: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,
+        })
+
+        const response = await fetchFromSimpleHash<{ nfts: Asset[]; next_cursor: string }>(path)
+
+        const assets = response.nfts.map((x) => createNonFungibleAsset(x)).filter(Boolean) as Array<
+            NonFungibleAsset<ChainId, SchemaType>
+        >
+
+        const x = createPageable(
+            assets,
+            createIndicator(indicator),
+            response.next_cursor ? createNextIndicator(indicator, response.next_cursor) : undefined,
+        )
+
+        return x
     }
 }

@@ -4,31 +4,32 @@ import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Hub } from './useWeb3Hub.js'
 
-export function useNonFungibleAssetsByCollection<
+export function useNonFungibleAssetsByCollectionAndOwner<
     S extends 'all' | void = void,
     T extends NetworkPluginID = NetworkPluginID,
->(id?: string, pluginID?: T, options?: Web3Helper.Web3HubOptionsScope<S, T>) {
+>(collectionId?: string, owner?: string, pluginID?: T, options?: Web3Helper.Web3HubOptionsScope<S, T>) {
     const [assets, setAssets] = useState<Array<Web3Helper.NonFungibleAssetScope<S, T>>>(EMPTY_LIST)
     const [done, setDone] = useState(false)
     const [loading, toggleLoading] = useState(false)
     const [error, setError] = useState<string>()
     const hub = useWeb3Hub(pluginID, options)
-
+    console.log({ collectionId, owner })
     // create iterator
     const iterator = useMemo(() => {
-        if (!hub?.getNonFungibleAssetsByCollection) return
+        if (!hub?.getNonFungibleAssetsByCollectionAndOwner) return
 
         setAssets(EMPTY_LIST)
         setDone(false)
 
         return pageableToIterator(async (indicator) => {
-            return hub.getNonFungibleAssetsByCollection!(id ?? '', {
+            console.log({ indicator })
+            return hub.getNonFungibleAssetsByCollectionAndOwner!(collectionId ?? '', owner ?? '', {
                 indicator,
                 size: 50,
                 ...options,
             })
         })
-    }, [hub?.getNonFungibleAssetsByCollection, id, JSON.stringify(options)])
+    }, [hub?.getNonFungibleAssetsByCollectionAndOwner, collectionId, JSON.stringify(options)])
 
     const next = useCallback(async () => {
         if (!iterator || done) return

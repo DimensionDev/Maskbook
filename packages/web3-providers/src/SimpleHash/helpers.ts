@@ -87,6 +87,7 @@ export function createNonFungibleCollection(
 
     if (!isValidChainId(chainId)) return
     return {
+        id: collection.id,
         chainId,
         name: collection.name,
         slug: collection.name,
@@ -94,6 +95,7 @@ export function createNonFungibleCollection(
         balance: collection.distinct_nfts_owned,
         iconURL: collection.image_url,
         ownersTotal: collection.total_quantity,
+        source: SourceType.SimpleHash,
     }
 }
 

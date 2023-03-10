@@ -57,7 +57,7 @@ export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Pr
         name: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
     ) {
-        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
+        if (!isValidChainId(chainId) || !name) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = urlcat('/api/sol/assets/collection/:name', {
             name,
             collection: name,

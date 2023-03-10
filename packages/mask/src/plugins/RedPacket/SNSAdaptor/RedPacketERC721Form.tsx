@@ -14,7 +14,6 @@ import {
     SelectGasSettingsToolbar,
     useAvailableBalance,
 } from '@masknet/shared'
-import { useNonFungibleOwnerTokens } from '@masknet/web3-hooks-evm'
 import {
     type ChainId,
     type SchemaType,
@@ -27,8 +26,15 @@ import { SelectNftTokenDialog, type OrderedERC721Token } from './SelectNftTokenD
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog.js'
 import { NFTSelectOption } from '../types.js'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
-import { useChainContext, useNativeToken, useNativeTokenPrice, useWallet } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useNativeToken,
+    useNativeTokenPrice,
+    useWallet,
+    useNonFungibleAssetsByCollectionAndOwner,
+} from '@masknet/web3-hooks-base'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
+import { SourceType } from '@masknet/web3-shared-base'
 import type { NonFungibleToken, NonFungibleCollection } from '@masknet/web3-shared-base'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { useAsync } from 'react-use'
@@ -265,15 +271,31 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
 
     const { isAvailableGasBalance } = useAvailableBalance('', gasOption, { chainId })
 
-    const { value: _tokenDetailedOwnerList = EMPTY_LIST } = useNonFungibleOwnerTokens(
-        !collection || collection.assets?.length ? '' : collection?.address ?? '',
+    const {
+        value: assets_ = EMPTY_LIST,
+        done,
+        next,
+        error: loadError,
+    } = useNonFungibleAssetsByCollectionAndOwner(
+        collection?.assets?.length
+            ? ''
+            : collection?.source === SourceType.SimpleHash
+            ? collection?.id
+            : collection?.address,
         account,
-        chainId,
+        NetworkPluginID.PLUGIN_EVM,
+        {
+            chainId,
+            size: 50,
+        },
     )
+    useEffect(() => {
+        next()
+    }, [assets_.length])
 
-    const tokenDetailedOwnerList = (collection?.assets ?? _tokenDetailedOwnerList ?? EMPTY_LIST).map(
-        (v, index) => ({ ...v, index } as OrderedERC721Token),
-    )
+    const assets = collection?.assets?.length ? collection?.assets : assets_
+
+    const tokenDetailedOwnerList = assets.map((v, index) => ({ ...v, index } as OrderedERC721Token))
 
     const balance = tokenDetailedOwnerList.length
     const removeToken = useCallback(

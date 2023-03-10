@@ -412,6 +412,7 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     slug: string
     symbol?: string
     description?: string
+    id?: string
     address?: string
     schema?: SchemaType
     iconURL?: string | null
@@ -1315,7 +1316,13 @@ export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = Hu
 export interface HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
     /** Get non-fungible assets of the given collection. */
     getNonFungibleAssetsByCollection?: (
-        address: string,
+        id: string,
+        initial?: Web3HubOptions,
+    ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
+    /** Get non-fungible assets of the given collection and owner. */
+    getNonFungibleAssetsByCollectionAndOwner?: (
+        collectionId: string,
+        owner: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
     /** Get a non-fungible token owner address. */

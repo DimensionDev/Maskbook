@@ -51,13 +51,13 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
     }
 
     async getAssetsByCollection(
-        address: string,
+        id: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
     ) {
-        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
-        const path = urlcat('/api/v2/assets/:address', {
-            address,
-            contract_address: address,
+        if (!isValidChainId(chainId) || !id) return createPageable(EMPTY_LIST, createIndicator(indicator))
+        const path = urlcat('/api/v2/assets/:id', {
+            id,
+            contract_address: id,
             show_attribute: true,
             limit: size,
             cursor: indicator?.id,
