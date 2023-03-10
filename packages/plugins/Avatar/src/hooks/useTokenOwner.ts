@@ -7,8 +7,8 @@ import {
     NextIDPlatform,
     type NetworkPluginID,
     getSiteType,
+    type SocialIdentity,
 } from '@masknet/shared-base'
-import type { SocialIdentity } from '@masknet/web3-shared-base'
 import { useGetAddress } from './useGetAddress.js'
 
 export function useCheckTokenOwner(

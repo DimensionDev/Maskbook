@@ -1,5 +1,6 @@
 import urlcat from 'urlcat'
-import { createIndicator, createPageable, type HubOptions, SourceType, TokenType } from '@masknet/web3-shared-base'
+import { createIndicator, createPageable } from '@masknet/shared-base'
+import { type HubOptions, SourceType, TokenType } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { RSS3_LEGACY_ENDPOINT } from '../constants.js'
 import { fetchJSON } from '../../entry-helpers.js'

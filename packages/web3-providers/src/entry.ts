@@ -97,6 +97,9 @@ export const RedPacket = new RedPacketAPI()
 export const TheGraphRedPacket = new TheGraphRedPacketAPI()
 export const SimpleHash = new SimpleHashProviderAPI()
 
+// Wallet Providers
+export * from './Wallet/index.js'
+
 // Etherscan
 export const EtherscanExplorer = new EtherscanExplorerAPI()
 export const EtherscanRedPacket = new EtherscanRedPacketAPI()

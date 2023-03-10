@@ -1,20 +1,22 @@
 import urlcat from 'urlcat'
 import { GraphQLClient } from 'graphql-request'
 import type { Variables } from 'graphql-request/dist/types.js'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     createIndicator,
     createNextIndicator,
     createPageable,
+    type PageIndicator,
+    type Pageable,
+    EMPTY_LIST,
+} from '@masknet/shared-base'
+import {
     CurrencyType,
-    type HubIndicator,
     type HubOptions,
     type NonFungibleAsset,
     type NonFungibleCollection,
     type NonFungibleTokenEvent,
     type NonFungibleTokenOrder,
     OrderSide,
-    type Pageable,
     SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
@@ -236,7 +238,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         }
     }
 
-    private createPageable<T>(items: T[], indicator?: HubIndicator) {
+    private createPageable<T>(items: T[], indicator?: PageIndicator) {
         return createPageable(
             items,
             createIndicator(indicator),

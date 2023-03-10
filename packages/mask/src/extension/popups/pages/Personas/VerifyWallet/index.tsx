@@ -2,10 +2,17 @@ import urlcat from 'urlcat'
 import { memo, useEffect } from 'react'
 import { useAsync, useAsyncFn, useLocation } from 'react-use'
 import { useNavigate } from 'react-router-dom'
-import { NextIDAction, NextIDPlatform, PopupRoutes, NetworkPluginID, SignType } from '@masknet/shared-base'
+import {
+    NextIDAction,
+    NextIDPlatform,
+    PopupRoutes,
+    NetworkPluginID,
+    SignType,
+    type Account,
+} from '@masknet/shared-base'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
-import { type Account, isSameAddress } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { useReverseAddress, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { type ChainId, EthereumMethodType, providerResolver, ProviderType } from '@masknet/web3-shared-evm'
 import { SignSteps, Steps } from '../../../../../components/shared/VerifyWallet/Steps.js'

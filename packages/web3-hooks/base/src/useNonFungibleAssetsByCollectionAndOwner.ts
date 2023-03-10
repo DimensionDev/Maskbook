@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { pageableToIterator } from '@masknet/web3-shared-base'
-import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, type NetworkPluginID, pageableToIterator } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Hub } from './useWeb3Hub.js'
 

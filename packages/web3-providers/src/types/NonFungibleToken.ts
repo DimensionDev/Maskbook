@@ -1,13 +1,12 @@
+import type { PageIndicator, Pageable } from '@masknet/shared-base'
 import type {
     NonFungibleAsset,
-    Pageable,
     OrderSide,
     NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenOrder,
     NonFungibleTokenEvent,
     HubOptions,
-    HubIndicator,
     NonFungibleTokenRarity,
     NonFungibleTokenStats,
     PriceInToken,
@@ -61,7 +60,7 @@ export namespace NonFungibleTokenAPI {
         price_symbol: string
         collections_with_same_name: []
     }
-    export interface Provider<ChainId, SchemaType, Indicator = HubIndicator> {
+    export interface Provider<ChainId, SchemaType, Indicator = PageIndicator> {
         /** Get balance of a fungible token owned by the given account. */
         getBalance?: (account: string, options?: HubOptions<ChainId, Indicator>) => Promise<number>
         /** Get owner address. */

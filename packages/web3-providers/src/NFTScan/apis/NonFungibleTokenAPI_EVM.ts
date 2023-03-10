@@ -1,15 +1,17 @@
 import urlcat from 'urlcat'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     createIndicator,
     createNextIndicator,
     createPageable,
-    type HubIndicator,
+    type PageIndicator,
+    type Pageable,
+    EMPTY_LIST,
+} from '@masknet/shared-base'
+import {
     type HubOptions,
     type NonFungibleCollection,
     type NonFungibleTokenContract,
     type NonFungibleTokenEvent,
-    type Pageable,
 } from '@masknet/web3-shared-base'
 import { ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import { EVM, type PageableResponse, type Response } from '../types/index.js'
@@ -74,7 +76,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
     async getCollectionsByOwner(
         account: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
-    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, HubIndicator>> {
+    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>> {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = urlcat('/api/v2/account/own/all/:from', {
             from: account,

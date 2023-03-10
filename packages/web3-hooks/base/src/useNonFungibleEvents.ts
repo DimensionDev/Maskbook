@@ -1,8 +1,7 @@
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID, PageIndicator } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
-import type { HubIndicator } from '@masknet/web3-shared-base'
 import { usePageableAsync } from './usePageableAsync.js'
 
 export function useNonFungibleEvents<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
@@ -18,7 +17,7 @@ export function useNonFungibleEvents<S extends 'all' | void = void, T extends Ne
     })
 
     return usePageableAsync(
-        async (nextIndicator?: HubIndicator) => {
+        async (nextIndicator?: PageIndicator) => {
             if (!hub) return
             return hub.getNonFungibleTokenEvents?.(address ?? '', id ?? '', { ...options, indicator: nextIndicator })
         },

@@ -3,11 +3,11 @@ import { groupBy, first, compact, uniq } from 'lodash-es'
 import {
     type SocialAddress,
     type SocialIdentity,
-    type IdentityServiceState as Web3SocialIdentityState,
-    SocialAddressType,
     type SocialAccount,
-} from '@masknet/web3-shared-base'
-import { EMPTY_LIST } from '@masknet/shared-base'
+    SocialAddressType,
+    EMPTY_LIST,
+} from '@masknet/shared-base'
+import { type IdentityServiceState as Web3SocialIdentityState } from '@masknet/web3-shared-base'
 
 export class IdentityServiceState<ChainId> implements Web3SocialIdentityState<ChainId> {
     protected cache = new LRU<string, Promise<Array<SocialAddress<ChainId>>>>({

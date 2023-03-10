@@ -2,7 +2,6 @@ import { first, identity, pickBy } from 'lodash-es'
 import type { BlockObject, MutateOptions, QueryOptions } from '@blocto/fcl'
 import { AddressType, ChainId, ProviderType, type SchemaType, type TransactionReceipt } from '@masknet/web3-shared-flow'
 import type {
-    Account,
     FungibleToken,
     NonFungibleToken,
     NonFungibleCollection,
@@ -11,9 +10,8 @@ import type {
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
-import { type PartialRequired, toHex } from '@masknet/shared-base'
-import { FlowWeb3 } from '@masknet/web3-providers'
-import { Providers } from '../Provider/provider.js'
+import { type Account, type PartialRequired, toHex } from '@masknet/shared-base'
+import { FlowProviders, FlowWeb3 } from '@masknet/web3-providers'
 import type { FlowConnection, FlowConnectionOptions } from './types.js'
 import { Web3StateSettings } from '../../settings/index.js'
 
@@ -40,7 +38,7 @@ class Connection implements FlowConnection {
 
     private _getWeb3Provider(initial?: FlowConnectionOptions) {
         const options = this.getOptions(initial)
-        return Providers[options.providerType]
+        return FlowProviders[options.providerType]
     }
 
     getWeb3(initial?: FlowConnectionOptions) {
@@ -246,7 +244,7 @@ class Connection implements FlowConnection {
     }
     async switchChain(chainId: ChainId, initial?: FlowConnectionOptions): Promise<void> {
         const options = this.getOptions(initial)
-        await Providers[options.providerType].switchChain(chainId)
+        await FlowProviders[options.providerType].switchChain(chainId)
     }
     async signMessage(type: string, message: string, initial?: FlowConnectionOptions) {
         const options = this.getOptions(initial)

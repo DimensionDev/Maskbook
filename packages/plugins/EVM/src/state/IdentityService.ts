@@ -1,7 +1,6 @@
 import { compact, first, uniqBy } from 'lodash-es'
 import type { Plugin } from '@masknet/plugin-infra'
 import { IdentityServiceState } from '@masknet/web3-state'
-import { type SocialIdentity, type SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import {
     NetworkPluginID,
     EMPTY_LIST,
@@ -11,6 +10,9 @@ import {
     createLookupTableResolver,
     PluginID,
     type BindingProof,
+    type SocialIdentity,
+    type SocialAddress,
+    SocialAddressType,
 } from '@masknet/shared-base'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { ENS, Lens, MaskX, NextIDProof, NextIDStorage, RSS3, SpaceID, Twitter } from '@masknet/web3-providers'

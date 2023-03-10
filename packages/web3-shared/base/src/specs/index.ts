@@ -6,35 +6,24 @@ import type {
     EnhanceableSite,
     ExtensionSite,
     NetworkPluginID,
-    NextIDPersonaBindings,
     NextIDPlatform,
     BindingProof,
-    ProfileIdentifier,
     Proof,
+    Account,
+    Wallet,
+    Color,
+    Pageable,
+    PageIndicator,
+    SocialAddress,
+    SocialIdentity,
+    SocialAccount,
 } from '@masknet/shared-base'
-import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
     ReturnChainResolver,
     ReturnExplorerResolver,
     ReturnNetworkResolver,
     ReturnProviderResolver,
 } from '../helpers/index.js'
-
-export interface Pageable<Item, Indicator = unknown> {
-    /** the indicator of the current page */
-    indicator: Indicator
-    /** the indicator of the next page */
-    nextIndicator?: Indicator
-    /** items data */
-    data: Item[]
-}
-
-export type Color =
-    | `rgb(${number}, ${number}, ${number})`
-    | `rgba(${number}, ${number}, ${number}, ${number})`
-    | `#${string}${string}${string}${string}${string}${string}`
-    | `#${string}${string}${string}`
-    | `hsl(${number}, ${number}%, ${number}%)`
 
 export enum CurrencyType {
     NATIVE = 'native',
@@ -146,21 +135,6 @@ export enum TransactionDescriptorType {
     RETRY = 'retry',
 }
 
-export enum SocialAddressType {
-    Address = 'Address',
-    ENS = 'ENS',
-    SPACE_ID = 'SPACE_ID',
-    RSS3 = 'RSS3',
-    SOL = 'SOL',
-    NEXT_ID = 'NEXT_ID',
-    CyberConnect = 'CyberConnect',
-    Leaderboard = '.eth Leaderboard',
-    Sybil = 'Sybil',
-    TwitterBlue = 'TwitterBlue',
-    Mask = 'Mask Network',
-    Lens = 'Lens',
-}
-
 export enum StorageProviderType {
     NextID = 'NextID',
     // RSS3 File API
@@ -197,58 +171,6 @@ export interface Identity {
     nickname?: string
     avatarURL?: string
     link?: string
-}
-
-export interface SocialIdentity {
-    /** The identifier of the social account */
-    identifier?: ProfileIdentifier
-    /** The avatar image link of the social account */
-    avatar?: string
-    /** The bio content of the social account */
-    bio?: string
-    /** The nickname of the social account */
-    nickname?: string
-    /** The homepage link of the social account */
-    homepage?: string
-    /** Has a NextID binding or not */
-    hasBinding?: boolean
-    /** The public key of persona in hex */
-    publicKey?: string
-    /** Is own user account identity */
-    isOwner?: boolean
-    /** All bindings of the persona  **/
-    binding?: NextIDPersonaBindings
-}
-
-/**
- * The smallest unit of a social account. This type only for internal usage.
- * The SocialAccount serves for UI usage.
- */
-export interface SocialAddress<ChainId> {
-    /** The ID of a plugin that the address belongs to */
-    pluginID: NetworkPluginID
-    /** The chain id that the address belongs to, default support all chains */
-    chainId?: ChainId
-    /** The data source type */
-    type: SocialAddressType
-    /** The address in hex string */
-    address: string
-    /** A human readable address title */
-    label: string
-    /** Last updated timestamp (unix timestamp) */
-    updatedAt?: string
-    /** Create timestamp (unix timestamp) */
-    createdAt?: string
-}
-
-/**
- * The social account that merged from multiple social addresses.
- * This type only for UI usage.
- */
-export interface SocialAccount<ChainId> extends Omit<SocialAddress<ChainId>, 'type'> {
-    supportedAddressTypes?: SocialAddressType[]
-    /** The chain ids that the address supported, default support all chains */
-    supportedChainIds?: ChainId[]
 }
 
 export type Price = {
@@ -813,37 +735,6 @@ export interface AddressName {
     resolvedAddress?: string
 }
 
-export interface Wallet {
-    id: string
-    /** User define wallet name. Default address.prefix(6) */
-    name: string
-    /** The address of wallet */
-    address: string
-    /** true: Mask Wallet, false: External Wallet */
-    hasStoredKeyInfo: boolean
-    /** true: Derivable Wallet. false: UnDerivable Wallet */
-    hasDerivationPath: boolean
-    /** yep: removable, nope: unremovable */
-    configurable?: boolean
-    /** the derivation path when wallet was created */
-    derivationPath?: string
-    /** the derivation path when wallet last was derived */
-    latestDerivationPath?: string
-    /** the internal presentation of mask wallet sdk */
-    storedKeyInfo?: api.IStoredKeyInfo
-    /** the Mask SDK stored key info */
-    /** record created at */
-    createdAt: Date
-    /** record updated at */
-    updatedAt: Date
-    /** an abstract wallet has a owner */
-    owner?: string
-    /** an abstract wallet has been deployed */
-    deployed?: boolean
-    /** persona identifier */
-    identifier?: string
-}
-
 export interface Transaction<ChainId, SchemaType> {
     id: string
     chainId: ChainId
@@ -901,11 +792,6 @@ export interface TokenList<ChainId, SchemaType> {
     tokens: Array<Token<ChainId, SchemaType>>
 }
 
-export interface Account<ChainId> {
-    account: string
-    chainId: ChainId
-}
-
 export interface BalanceEvent<ChainId> {
     /** Emit if the balance of the account updated. */
     update: [Account<ChainId>]
@@ -914,17 +800,6 @@ export interface BalanceEvent<ChainId> {
 export interface BlockNumberEvent<ChainId> {
     /** Emit if the balance of the chain updated. */
     update: [ChainId]
-}
-
-export interface ProviderEvents<ChainId, ProviderType> {
-    /** Emit when the chain id changed. */
-    chainId: [string]
-    /** Emit when the accounts changed. */
-    accounts: [string[]]
-    /** Emit when the site connects with a provider. */
-    connect: [Account<ChainId>]
-    /** Emit when the site disconnect with a provider. */
-    disconnect: [ProviderType]
 }
 
 export interface RecognizableError extends Error {
@@ -936,64 +811,6 @@ export interface WatchEvents<ChainId, Transaction> {
     error: [RecognizableError, JsonRpcPayload]
     /** Emit when the watched transaction status updated. */
     progress: [ChainId, string, TransactionStatusType, Transaction | undefined]
-}
-
-export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
-    readonly emitter: Emitter<ProviderEvents<ChainId, ProviderType>>
-
-    readonly subscription: {
-        account: Subscription<string>
-        chainId: Subscription<ChainId>
-        wallets: Subscription<Wallet[]>
-    }
-
-    /** Get to know whether the provider is ready. */
-    readonly ready: boolean
-    /** Keep waiting until the provider is ready. */
-    readonly readyPromise: Promise<void>
-    /** connection status */
-    readonly connected: boolean
-    /** async setup tasks */
-    setup(): Promise<void>
-    /** Add a new wallet. */
-    addWallet(wallet: Wallet): Promise<void>
-    /** Update a wallet. */
-    updateWallet(address: string, wallet: Wallet): Promise<void>
-    /** Add or update a new wallet on demand. */
-    updateOrAddWallet(wallet: Wallet): Promise<void>
-    /** Rename a wallet */
-    renameWallet(address: string, name: string): Promise<void>
-    /** Remove a wallet */
-    removeWallet(address: string, password?: string | undefined): Promise<void>
-    /** Update a bunch of wallets. */
-    updateWallets(wallets: Wallet[]): Promise<void>
-    /** Remove a bunch of wallets. */
-    removeWallets(wallets: Wallet[]): Promise<void>
-    /** Switch to the designate account. */
-    switchAccount(account?: string): Promise<void>
-    /** Switch to the designate chain. */
-    switchChain(chainId?: ChainId): Promise<void>
-    /** Create an instance from the network SDK. */
-    createWeb3(options?: ProviderOptions<ChainId>): Web3
-    /** Create an instance that implement the wallet protocol. */
-    createWeb3Provider(options?: ProviderOptions<ChainId>): Web3Provider
-    /** Create the connection. */
-    connect(
-        chainId?: ChainId,
-        address?: string,
-        owner?: {
-            account: string
-            identifier?: ECKeyIdentifier
-        },
-        silent?: boolean,
-    ): Promise<Account<ChainId>>
-    /** Dismiss the connection. */
-    disconnect(): Promise<void>
-}
-
-export interface ProviderOptions<ChainId> {
-    chainId: ChainId
-    account?: string
 }
 
 export interface TransactionChecker<ChainId, Transaction> {
@@ -1241,14 +1058,7 @@ export interface Connection<
     cancelTransaction(hash: string, config: Transaction, initial?: Web3ConnectionOptions): Promise<void>
 }
 
-export interface HubIndicator {
-    /** The id of the page (cursor). */
-    id: string
-    /** The index number of the page. */
-    index: number
-}
-
-export interface HubOptions<ChainId, Indicator = HubIndicator> {
+export interface HubOptions<ChainId, Indicator = PageIndicator> {
     /** The user account as the API parameter */
     account?: string
     /** The chain id as the API parameter */
@@ -1650,7 +1460,7 @@ export interface TransactionWatcherState<ChainId, Transaction> {
         status: TransactionStatusType,
     ) => Promise<void>
 }
-export interface ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
+export interface ProviderState<ChainId, ProviderType, NetworkType> {
     ready: boolean
     readyPromise: Promise<void>
 
@@ -1669,11 +1479,6 @@ export interface ProviderState<ChainId, ProviderType, NetworkType, Web3Provider,
     isReady: (providerType: ProviderType) => boolean
     /** Wait until a provider ready */
     untilReady: (providerType: ProviderType) => Promise<void>
-
-    /** Get a registered wallet provider. */
-    getWalletProvider: (
-        providerType: ProviderType,
-    ) => WalletProvider<ChainId, ProviderType, Web3Provider, Web3> | undefined
 
     /** Connect with the provider and set chain id. */
     connect: (
@@ -1842,7 +1647,7 @@ export interface Web3State<
         Web3,
         Web3Provider
     >
-    Provider?: ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3>
+    Provider?: ProviderState<ChainId, ProviderType, NetworkType>
     Others?: OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
     Storage?: Web3StorageServiceState
 }

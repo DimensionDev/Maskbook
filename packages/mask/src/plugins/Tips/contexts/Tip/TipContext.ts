@@ -1,7 +1,8 @@
 import { noop } from 'lodash-es'
 import { createContext, type Dispatch, type SetStateAction } from 'react'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { type NonFungibleTokenContract, type SocialAccount, TokenType } from '@masknet/web3-shared-base'
+import { type SocialAccount } from '@masknet/shared-base'
+import { type NonFungibleTokenContract, TokenType } from '@masknet/web3-shared-base'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import type { ValidationTuple } from '../../types/index.js'
 

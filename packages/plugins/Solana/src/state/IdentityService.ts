@@ -1,7 +1,6 @@
 import { compact } from 'lodash-es'
 import type { Plugin } from '@masknet/plugin-infra'
-import { type SocialIdentity, type SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, type SocialIdentity, type SocialAddress, SocialAddressType } from '@masknet/shared-base'
 import { IdentityServiceState } from '@masknet/web3-state'
 import { type ChainId, isValidAddress } from '@masknet/web3-shared-solana'
 import { SolanaRPC } from '../messages.js'

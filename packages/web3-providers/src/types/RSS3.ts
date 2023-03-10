@@ -1,5 +1,6 @@
 import type RSS3 from 'rss3-next'
-import type { HubOptions, Pageable } from '@masknet/web3-shared-base'
+import type { Pageable } from '@masknet/shared-base'
+import type { HubOptions } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
 /**

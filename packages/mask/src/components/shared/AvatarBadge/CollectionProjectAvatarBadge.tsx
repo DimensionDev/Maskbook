@@ -1,7 +1,7 @@
 import { type FC, useEffect, useRef } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import type { SocialIdentity } from '@masknet/web3-shared-base'
+import type { SocialIdentity } from '@masknet/shared-base'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import { IconButton, type IconButtonProps } from '@mui/material'
 import { PluginTraderMessages } from '../../../plugins/Trader/messages.js'

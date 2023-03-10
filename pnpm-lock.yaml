@@ -1285,9 +1285,6 @@ importers:
       '@masknet/web3-helpers':
         specifier: workspace:^
         version: link:../web3-helpers
-      '@masknet/web3-providers':
-        specifier: workspace:^
-        version: link:../web3-providers
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../web3-shared/base
@@ -2934,6 +2931,9 @@ importers:
 
   packages/shared-base:
     dependencies:
+      '@dimensiondev/mask-wallet-core':
+        specifier: 0.1.0-20211013082857-eb62e5f
+        version: 0.1.0-20211013082857-eb62e5f(protobufjs@6.11.2)
       '@masknet/base':
         specifier: workspace:^
         version: link:../base
@@ -3449,9 +3449,18 @@ importers:
       '@dimensiondev/mask-wallet-core':
         specifier: 0.1.0-20211013082857-eb62e5f
         version: 0.1.0-20211013082857-eb62e5f(protobufjs@6.11.2)
+      '@dimensiondev/metamask-extension-provider':
+        specifier: ^3.0.6-20221105074301-8806fca
+        version: 3.0.6-20221105074301-8806fca
       '@masknet/icons':
         specifier: workspace:^
         version: link:../icons
+      '@masknet/injected-script':
+        specifier: workspace:^
+        version: link:../injected-script
+      '@masknet/plugin-infra':
+        specifier: workspace:^
+        version: link:../plugin-infra
       '@masknet/public-api':
         specifier: workspace:^
         version: link:../public-api
@@ -3488,6 +3497,12 @@ importers:
       '@metaplex/js':
         specifier: ^4.11.7
         version: 4.11.7(@metaplex-foundation/mpl-auction@0.0.2)(@metaplex-foundation/mpl-core@0.0.2)(@metaplex-foundation/mpl-metaplex@0.0.5)(@metaplex-foundation/mpl-token-metadata@1.1.0)(@metaplex-foundation/mpl-token-vault@0.0.2)(@solana/spl-token@0.1.8)(@solana/web3.js@1.44.2)
+      '@project-serum/sol-wallet-adapter':
+        specifier: ^0.2.6
+        version: 0.2.6(patch_hash=dl5wqnnaxjm7biesxtvdpr7gpe)(@solana/web3.js@1.44.2)
+      '@servie/events':
+        specifier: ^3.0.0
+        version: 3.0.0
       '@solana/buffer-layout':
         specifier: ^4.0.0
         version: 4.0.0
@@ -3506,15 +3521,27 @@ importers:
       '@types/socket.io-client':
         specifier: ^1.4.36
         version: 1.4.36
+      '@walletconnect/client':
+        specifier: 1.7.8
+        version: 1.7.8(patch_hash=2krbsxzv524dzcdemy7vploqza)
+      '@walletconnect/types':
+        specifier: ^1.7.8
+        version: 1.7.8
       bignumber.js:
         specifier: 9.1.0
         version: 9.1.0
       bloom-filters:
         specifier: ^3.0.0
         version: 3.0.0(patch_hash=2etetjrjxbcye2oktxqpij75ey)
+      bs58:
+        specifier: ^4.0.1
+        version: 4.0.1
       date-fns:
         specifier: ^2.29.3
         version: 2.29.3
+      fortmatic:
+        specifier: ^2.2.1
+        version: 2.2.1(patch_hash=tb3oevqnvhntsyfyhi2z6spuea)
       fuse.js:
         specifier: 6.6.2
         version: 6.6.2(patch_hash=b2o4qvyfvxmpo7347sqko6h22a)
@@ -3539,6 +3566,9 @@ importers:
       urlcat:
         specifier: ^2.0.4
         version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+      use-subscription:
+        specifier: ^1.8.0
+        version: 1.8.0(react@0.0.0-experimental-d1e35c703-20221110)
       uuid:
         specifier: ^9.0.0
         version: 9.0.0
@@ -3564,15 +3594,18 @@ importers:
       '@sentry/types':
         specifier: ^7.40.0
         version: 7.40.0
+      '@types/bs58':
+        specifier: ^4.0.1
+        version: 4.0.1
       '@types/json-stable-stringify':
         specifier: ^1.0.34
         version: 1.0.34
+      '@types/use-subscription':
+        specifier: ^1.0.0
+        version: 1.0.0
 
   packages/web3-shared/base:
     dependencies:
-      '@dimensiondev/mask-wallet-core':
-        specifier: 0.1.0-20211013082857-eb62e5f
-        version: 0.1.0-20211013082857-eb62e5f(protobufjs@6.11.2)
       '@masknet/public-api':
         specifier: workspace:^
         version: link:../../public-api
@@ -3582,9 +3615,6 @@ importers:
       '@servie/events':
         specifier: ^3.0.0
         version: 3.0.0
-      '@types/use-subscription':
-        specifier: ^1.0.0
-        version: 1.0.0
       bignumber.js:
         specifier: 9.1.0
         version: 9.1.0
@@ -3594,16 +3624,19 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-d1e35c703-20221110)(react@0.0.0-experimental-d1e35c703-20221110)
-      reconnecting-websocket:
-        specifier: ^4.4.0
-        version: 4.4.0
       urlcat:
         specifier: ^2.0.4
         version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+      use-subscription:
+        specifier: ^1.8.0
+        version: 1.8.0(react@0.0.0-experimental-d1e35c703-20221110)
       web3-core-helpers:
         specifier: 1.8.0
         version: 1.8.0
     devDependencies:
+      '@types/use-subscription':
+        specifier: ^1.0.0
+        version: 1.0.0
       mock-socket:
         specifier: ^9.2.1
         version: 9.2.1
@@ -28828,10 +28861,6 @@ packages:
     dependencies:
       resolve: 1.22.1
 
-  /reconnecting-websocket@4.4.0:
-    resolution: {integrity: sha512-D2E33ceRPga0NvTDhJmphEgJ7FUYF0v4lr1ki0csq06OdlxKfugGzN0dSkxM/NfqCxYELK4KcaTOUOjTV6Dcng==}
-    dev: false
-
   /redent@1.0.0:
     resolution: {integrity: sha512-qtW5hKzGQZqKoh6JNSD+4lfitfPKGz42e6QwiRmPM5mmKtR0N41AbJRYu0xJi7nhOJ4WDgRkKvAk6tw4WIwR4g==}
     engines: {node: '>=0.10.0'}
@@ -34837,7 +34866,6 @@ time:
   /react-virtualized-auto-sizer@1.0.7: '2022-09-12T02:25:50.256Z'
   /react-window@1.8.8: '2022-10-31T15:24:03.173Z'
   /react@0.0.0-experimental-d1e35c703-20221110: '2022-11-10T16:15:08.818Z'
-  /reconnecting-websocket@4.4.0: '2020-02-07T06:47:15.475Z'
   /regenerator-runtime@0.13.11: '2022-11-14T18:15:22.830Z'
   /rehype-raw@6.1.1: '2021-12-30T12:01:42.673Z'
   /remark-gfm@3.0.1: '2021-11-03T18:15:59.082Z'

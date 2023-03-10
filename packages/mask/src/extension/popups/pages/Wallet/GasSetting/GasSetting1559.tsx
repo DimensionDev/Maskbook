@@ -1,21 +1,19 @@
 import { z as zod } from 'zod'
+import { toHex, fromWei } from 'web3-utils'
 import { memo, useEffect, useMemo, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { Controller, useForm } from 'react-hook-form'
+import { Trans } from 'react-i18next'
 import { BigNumber } from 'bignumber.js'
 import { isEmpty } from 'lodash-es'
 import { makeStyles } from '@masknet/theme'
 import { formatGweiToEther, formatGweiToWei, formatWeiToEther, formatWeiToGwei } from '@masknet/web3-shared-evm'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
-import { useI18N } from '../../../../../utils/index.js'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Typography } from '@mui/material'
-import { StyledInput } from '../../../components/StyledInput/index.js'
 import { LoadingButton } from '@mui/lab'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { toHex, fromWei } from 'web3-utils'
 import {
     formatCurrency,
     GasOptionType,
@@ -29,7 +27,9 @@ import {
     TransactionDescriptorType,
 } from '@masknet/web3-shared-base'
 import { useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/web3-hooks-base'
-import { Trans } from 'react-i18next'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
+import { useI18N } from '../../../../../utils/index.js'
+import { StyledInput } from '../../../components/StyledInput/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     options: {

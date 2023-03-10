@@ -3,11 +3,11 @@ import { groupBy, toPairs } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
 import { TokenMenuList, AccountIcon, AddressItem, useTokenMenuCollectionList } from '@masknet/shared'
-import { isSameAddress } from '@masknet/web3-shared-base'
-import type { SearchResultType, SocialAccount } from '@masknet/web3-shared-base'
-import { useSharedI18N } from '../../../locales/index.js'
+import type { SocialAccount } from '@masknet/shared-base'
+import { type SearchResultType, isSameAddress } from '@masknet/web3-shared-base'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { Divider, Typography, MenuItem } from '@mui/material'
+import { useSharedI18N } from '../../../locales/index.js'
 
 const MENU_ITEM_HEIGHT = 40
 const MENU_LIST_PADDING = 8

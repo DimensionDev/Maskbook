@@ -1,20 +1,17 @@
 import urlcat from 'urlcat'
-import type { NonFungibleTokenAPI } from '../entry-types.js'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import {
-    type HubOptions,
+    EMPTY_LIST,
     createPageable,
-    type HubIndicator,
-    type NonFungibleAsset,
-    type NonFungibleCollection,
+    type Pageable,
+    type PageIndicator,
     createIndicator,
     createNextIndicator,
-    type Pageable,
-} from '@masknet/web3-shared-base'
+} from '@masknet/shared-base'
+import { type HubOptions, type NonFungibleAsset, type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import { fetchFromSimpleHash, createNonFungibleAsset, resolveChain, createNonFungibleCollection } from './helpers.js'
-
 import { type Asset, type Collection } from './type.js'
+import type { NonFungibleTokenAPI } from '../entry-types.js'
 
 export class SimpleHashProviderAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
@@ -80,7 +77,7 @@ export class SimpleHashProviderAPI implements NonFungibleTokenAPI.Provider<Chain
     async getCollectionsByOwner(
         account: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
-    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, HubIndicator>> {
+    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>> {
         const chain = resolveChain(chainId)
         if (!chain || !account || !isValidChainId(chainId)) {
             return createPageable(EMPTY_LIST, createIndicator(indicator))
