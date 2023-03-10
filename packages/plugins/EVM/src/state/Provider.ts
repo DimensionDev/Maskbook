@@ -1,8 +1,8 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ProviderState } from '@masknet/web3-state'
 import { EVM_Providers } from '@masknet/web3-providers'
-import { type ECKeyIdentifier, mapSubscription, mergeSubscription } from '@masknet/shared-base'
-import { type Account, isSameAddress } from '@masknet/web3-shared-base'
+import { type ECKeyIdentifier, mapSubscription, mergeSubscription, type Account } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     type ChainId,
     isValidAddress,

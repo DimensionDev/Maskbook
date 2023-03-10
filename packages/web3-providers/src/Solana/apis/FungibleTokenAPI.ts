@@ -1,13 +1,10 @@
 import { memoize } from 'lodash-es'
 import { memoizePromise } from '@masknet/kit'
+import { type PageIndicator, type Pageable, createPageable, createIndicator, EMPTY_LIST } from '@masknet/shared-base'
 import {
     type HubOptions,
-    type HubIndicator,
     type FungibleAsset,
-    type Pageable,
     TokenType,
-    createPageable,
-    createIndicator,
     type FungibleToken,
     isSameAddress,
     CurrencyType,
@@ -20,7 +17,6 @@ import {
     isValidChainId,
     getNativeTokenAddress,
 } from '@masknet/web3-shared-solana'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { CoinGeckoPriceAPI_Solana } from '../../CoinGecko/index.js'
 import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants.js'
 import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers.js'
@@ -118,7 +114,7 @@ export class SolanaFungibleAPI
     async getAssets(
         address: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
-    ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, HubIndicator>> {
+    ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, PageIndicator>> {
         if (!isValidChainId(chainId)) {
             return createPageable([], createIndicator(indicator))
         }

@@ -4,6 +4,7 @@ import type { RequestArguments } from 'web3-core'
 import { defer } from '@masknet/kit'
 import WalletConnect from '@walletconnect/client'
 import type { ITxData } from '@walletconnect/types'
+import type { Account } from '@masknet/shared-base'
 import {
     type ChainId,
     chainResolver,
@@ -13,7 +14,6 @@ import {
     type Web3Provider,
     type Web3,
 } from '@masknet/web3-shared-evm'
-import type { Account } from '@masknet/web3-shared-base'
 import { BaseProvider } from './Base.js'
 import type { WalletAPI } from '../../entry-types.js'
 

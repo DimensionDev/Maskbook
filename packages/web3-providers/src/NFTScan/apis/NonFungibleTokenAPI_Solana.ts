@@ -1,15 +1,17 @@
 import urlcat from 'urlcat'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     createIndicator,
     createNextIndicator,
     createPageable,
-    type HubIndicator,
+    type PageIndicator,
+    type Pageable,
+    EMPTY_LIST,
+} from '@masknet/shared-base'
+import {
     type HubOptions,
     type NonFungibleCollection,
     type NonFungibleTokenContract,
     type NonFungibleTokenEvent,
-    type Pageable,
 } from '@masknet/web3-shared-base'
 import { ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-solana'
 import {
@@ -76,7 +78,7 @@ export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Pr
     async getCollectionsByKeyword(
         keyword: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
-    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, HubIndicator>> {
+    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>> {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = '/api/sol/collections/filters'
         const response = await fetchFromNFTScanV2<Response<Solana.Collection[]>>(chainId, path, {

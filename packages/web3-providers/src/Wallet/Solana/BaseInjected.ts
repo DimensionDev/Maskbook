@@ -1,6 +1,5 @@
-import { isExtensionSiteType } from '@masknet/shared-base'
+import { isExtensionSiteType, type Account } from '@masknet/shared-base'
 import type { InjectedProvider } from '@masknet/injected-script'
-import type { Account, ProviderOptions } from '@masknet/web3-shared-base'
 import { ChainId, type ProviderType, type Web3, type Web3Provider } from '@masknet/web3-shared-solana'
 import { BaseProvider } from './Base.js'
 import type { WalletAPI } from '../../entry-types.js'
@@ -48,7 +47,7 @@ export class BaseInjectedProvider
         this.emitter.emit('disconnect', this.providerType)
     }
 
-    override createWeb3Provider(options?: ProviderOptions<ChainId>) {
+    override createWeb3Provider(options?: WalletAPI.ProviderOptions<ChainId>) {
         if (!this.bridge) throw new Error('Failed to detect in-page provider.')
         return this.bridge as unknown as Web3Provider
     }

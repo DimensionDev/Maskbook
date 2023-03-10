@@ -2,6 +2,7 @@ import { compact, debounce, first, isEqual, uniqWith } from 'lodash-es'
 import {
     createSubscriptionFromValueRef,
     CrossIsolationMessages,
+    type Wallet,
     type ECKeyIdentifier,
     EMPTY_LIST,
     ExtensionSite,
@@ -9,7 +10,7 @@ import {
     PopupRoutes,
     ValueRef,
 } from '@masknet/shared-base'
-import { isSameAddress, type Wallet } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { SmartPayBundler, SmartPayOwner } from '@masknet/web3-providers'
 import {
     ChainId,

@@ -13,6 +13,9 @@ import type {
     Proof,
     Account,
     Wallet,
+    Color,
+    Pageable,
+    PageIndicator,
 } from '@masknet/shared-base'
 import type {
     ReturnChainResolver,
@@ -20,22 +23,6 @@ import type {
     ReturnNetworkResolver,
     ReturnProviderResolver,
 } from '../helpers/index.js'
-
-export interface Pageable<Item, Indicator = unknown> {
-    /** the indicator of the current page */
-    indicator: Indicator
-    /** the indicator of the next page */
-    nextIndicator?: Indicator
-    /** items data */
-    data: Item[]
-}
-
-export type Color =
-    | `rgb(${number}, ${number}, ${number})`
-    | `rgba(${number}, ${number}, ${number}, ${number})`
-    | `#${string}${string}${string}${string}${string}${string}`
-    | `#${string}${string}${string}`
-    | `hsl(${number}, ${number}%, ${number}%)`
 
 export enum CurrencyType {
     NATIVE = 'native',
@@ -1135,14 +1122,7 @@ export interface Connection<
     cancelTransaction(hash: string, config: Transaction, initial?: Web3ConnectionOptions): Promise<void>
 }
 
-export interface HubIndicator {
-    /** The id of the page (cursor). */
-    id: string
-    /** The index number of the page. */
-    index: number
-}
-
-export interface HubOptions<ChainId, Indicator = HubIndicator> {
+export interface HubOptions<ChainId, Indicator = PageIndicator> {
     /** The user account as the API parameter */
     account?: string
     /** The chain id as the API parameter */

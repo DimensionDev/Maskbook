@@ -2,8 +2,8 @@ import { omit, uniqWith } from 'lodash-es'
 import type { RequestArguments } from 'web3-core'
 import { toHex } from 'web3-utils'
 import { delay } from '@masknet/kit'
-import { EMPTY_LIST, type StorageObject } from '@masknet/shared-base'
-import { type ProviderOptions, type Wallet, isSameAddress } from '@masknet/web3-shared-base'
+import { EMPTY_LIST, type StorageObject, type Wallet } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     type ChainId,
     getDefaultChainId,
@@ -226,7 +226,10 @@ export class BaseHostedProvider
         await this.walletStorage?.chainId.setValue(chainId)
     }
 
-    override async request<T>(requestArguments: RequestArguments, options?: ProviderOptions<ChainId>): Promise<T> {
+    override async request<T>(
+        requestArguments: RequestArguments,
+        options?: WalletAPI.ProviderOptions<ChainId>,
+    ): Promise<T> {
         return this.Web3.getWeb3Provider(options?.chainId || this.hostedChainId).request<T>(
             PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
         )

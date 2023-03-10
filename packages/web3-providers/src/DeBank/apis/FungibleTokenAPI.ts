@@ -1,18 +1,13 @@
 import urlcat from 'urlcat'
 import { unionWith } from 'lodash-es'
-import {
-    createPageable,
-    type HubOptions,
-    createIndicator,
-    isSameAddress,
-    type FungibleToken,
-} from '@masknet/web3-shared-base'
+import { type HubOptions, isSameAddress, type FungibleToken } from '@masknet/web3-shared-base'
+import { createPageable, createIndicator } from '@masknet/shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { formatAssets, resolveDeBankAssetId } from '../helpers.js'
 import type { WalletTokenRecord } from '../types.js'
 import { fetchJSON, getNativeAssets } from '../../entry-helpers.js'
-import type { FungibleTokenAPI } from '../../entry-types.js'
 import { ContractFungibleTokenAPI } from '../../Contracts/index.js'
+import type { FungibleTokenAPI } from '../../entry-types.js'
 
 const DEBANK_OPEN_API = 'https://debank-proxy.r2d2.to'
 

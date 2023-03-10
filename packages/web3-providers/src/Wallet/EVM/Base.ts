@@ -3,7 +3,6 @@ import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
 import { delay } from '@masknet/kit'
 import { Emitter } from '@servie/events'
-import type { Account, ProviderEvents, ProviderOptions, Wallet } from '@masknet/web3-shared-base'
 import {
     chainResolver,
     createWeb3,
@@ -16,7 +15,7 @@ import {
     type Web3,
 } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
-import { EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
+import { type Account, type Wallet, EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
 import type { WalletAPI } from '../../entry-types.js'
 
 export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {
@@ -24,7 +23,7 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
 
     constructor(protected providerType: ProviderType) {}
 
-    emitter = new Emitter<ProviderEvents<ChainId, ProviderType>>()
+    emitter = new Emitter<WalletAPI.ProviderEvents<ChainId, ProviderType>>()
 
     get subscription() {
         return {
@@ -134,17 +133,17 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
 
     // A provider should at least implement a RPC request method.
     // Then it can be used to create an external provider for web3js.
-    async request<T>(requestArguments: RequestArguments, options?: ProviderOptions<ChainId>): Promise<T> {
+    async request<T>(requestArguments: RequestArguments, options?: WalletAPI.ProviderOptions<ChainId>): Promise<T> {
         throw new Error('Method not implemented.')
     }
 
     // Create a web3 instance from the external provider by default.
-    createWeb3(options?: ProviderOptions<ChainId>) {
+    createWeb3(options?: WalletAPI.ProviderOptions<ChainId>) {
         return createWeb3(this.createWeb3Provider(options))
     }
 
     // Create an external provider from the basic request method.
-    createWeb3Provider(options?: ProviderOptions<ChainId>) {
+    createWeb3Provider(options?: WalletAPI.ProviderOptions<ChainId>) {
         return createWeb3Provider((requestArguments: RequestArguments) => this.request(requestArguments, options))
     }
 

@@ -3,13 +3,15 @@ import type { Subscription } from 'use-subscription'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import {
+    type Account,
     type ECKeyIdentifier,
     getSiteType,
     mapSubscription,
     mergeSubscription,
     type StorageObject,
 } from '@masknet/shared-base'
-import type { Account, WalletProvider, ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
+import type { ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
+import type { WalletAPI } from '@masknet/web3-providers/types'
 
 export interface ProviderStorage<Account, ProviderType extends string> {
     account: Account
@@ -22,7 +24,13 @@ export class ProviderState<
     NetworkType extends string,
     Web3Provider,
     Web3,
-> implements Web3ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3>
+> implements
+        Web3ProviderState<
+            ChainId,
+            ProviderType,
+            NetworkType,
+            WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
+        >
 {
     protected site = getSiteType()
 
@@ -34,7 +42,7 @@ export class ProviderState<
 
     constructor(
         protected context: Plugin.Shared.SharedUIContext,
-        protected providers: Record<ProviderType, WalletProvider<ChainId, ProviderType, Web3Provider, Web3>>,
+        protected providers: Record<ProviderType, WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>>,
         protected options: {
             isValidAddress(a?: string): boolean
             isValidChainId(a?: number): boolean
@@ -97,7 +105,7 @@ export class ProviderState<
             Object.entries(this.providers).map(async (entry) => {
                 const [providerType, provider] = entry as [
                     ProviderType,
-                    WalletProvider<ChainId, ProviderType, Web3Provider, Web3>,
+                    WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>,
                 ]
 
                 provider.emitter.on('chainId', async (chainId) => {

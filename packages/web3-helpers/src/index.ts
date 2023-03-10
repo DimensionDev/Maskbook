@@ -1,4 +1,4 @@
-import { type NetworkPluginID } from '@masknet/shared-base'
+import { type NetworkPluginID, type PageIndicator } from '@masknet/shared-base'
 import type {
     Connection,
     ConnectionOptions,
@@ -13,7 +13,6 @@ import type {
     FungibleAsset,
     NonFungibleAsset,
     RecentTransaction,
-    HubIndicator,
     FungibleTokenSecurity,
     NonFungibleTokenActivity,
     NonFungibleTokenSecurity,
@@ -24,7 +23,6 @@ import type {
     FungibleTokenResult,
     NonFungibleTokenResult,
     NonFungibleCollection,
-    WalletProvider,
 } from '@masknet/web3-shared-base'
 import type * as EVM from '@masknet/web3-shared-evm'
 import type * as Flow from '@masknet/web3-shared-flow'
@@ -154,7 +152,7 @@ export declare namespace Web3Helper {
               Definition[T]['Web3'],
               Definition[T]['Web3Provider']
           >
-    export type Web3HubOptions<T extends NetworkPluginID = never, Indicator = HubIndicator> = T extends never
+    export type Web3HubOptions<T extends NetworkPluginID = never, Indicator = PageIndicator> = T extends never
         ? never
         : HubOptions<Definition[T]['ChainId'], Indicator>
 
@@ -466,7 +464,7 @@ export declare namespace Web3Helper {
     export type Web3HubOptionsScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
-        Indicator = HubIndicator,
+        Indicator = PageIndicator,
     > = S extends 'all' ? Web3HubOptionsAll : HubOptions<Definition[T]['ChainId'], Indicator>
     export type Web3HubScope<
         S extends 'all' | void = void,

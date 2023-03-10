@@ -2,8 +2,8 @@ import base58 from 'bs58'
 import type { Transaction } from '@solana/web3.js'
 import Wallet from '@project-serum/sol-wallet-adapter'
 import { type ChainId, ProviderType, type Web3Provider, type Web3 } from '@masknet/web3-shared-solana'
-import type { WalletAPI } from '../../entry-types.js'
 import { BaseProvider } from './Base.js'
+import type { WalletAPI } from '../../entry-types.js'
 
 export class SolletProvider
     extends BaseProvider

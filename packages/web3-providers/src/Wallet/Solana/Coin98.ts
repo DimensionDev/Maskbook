@@ -1,10 +1,10 @@
 import { first } from 'lodash-es'
 import type { Transaction } from '@solana/web3.js'
 import { injectedCoin98SolanaProvider } from '@masknet/injected-script'
-import type { Account } from '@masknet/web3-shared-base'
+import type { Account } from '@masknet/shared-base'
 import { type ChainId, Coin98MethodType, ProviderType, type Web3Provider, type Web3 } from '@masknet/web3-shared-solana'
-import type { WalletAPI } from '../../entry-types.js'
 import { BaseInjectedProvider } from './BaseInjected.js'
+import type { WalletAPI } from '../../entry-types.js'
 
 export class SolanaCoin98Provider
     extends BaseInjectedProvider

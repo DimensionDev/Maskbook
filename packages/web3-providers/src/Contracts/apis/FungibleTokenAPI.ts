@@ -1,6 +1,6 @@
+import { uniq } from 'lodash-es'
+import type { AbiItem } from 'web3-utils'
 import {
-    createIndicator,
-    createPageable,
     CurrencyType,
     type FungibleAsset,
     type FungibleToken,
@@ -9,15 +9,13 @@ import {
     toFixed,
     formatBalance,
 } from '@masknet/web3-shared-base'
-import type { AbiItem } from 'web3-utils'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import type { BalanceChecker } from '@masknet/web3-contracts/types/BalanceChecker.js'
+import { createIndicator, createPageable, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, createContract, getEthereumConstant, type SchemaType } from '@masknet/web3-shared-evm'
 import type { FungibleTokenAPI } from '../../entry-types.js'
 import { Web3API } from '../../EVM/index.js'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { CoinGeckoPriceEVM } from '../../entry.js'
-import { uniq } from 'lodash-es'
 
 export class ContractFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, SchemaType> {
     private web3 = new Web3API()

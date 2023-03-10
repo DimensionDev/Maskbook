@@ -10,7 +10,6 @@ import {
     type Web3,
 } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra'
-import type { ProviderOptions } from '@masknet/web3-shared-base'
 import { BaseProvider } from './Base.js'
 import type { WalletAPI } from '../../entry-types.js'
 
@@ -49,12 +48,15 @@ export class BaseInjectedProvider
         this.emitter.emit('disconnect', this.providerType)
     }
 
-    override createWeb3Provider(options?: ProviderOptions<ChainId>) {
+    override createWeb3Provider(options?: WalletAPI.ProviderOptions<ChainId>) {
         if (!this.bridge) throw new Error('Failed to detect in-page provider.')
         return this.bridge as unknown as Web3Provider
     }
 
-    override async request<T>(requestArguments: RequestArguments, options?: ProviderOptions<ChainId>): Promise<T> {
+    override async request<T>(
+        requestArguments: RequestArguments,
+        options?: WalletAPI.ProviderOptions<ChainId>,
+    ): Promise<T> {
         const provider = this.createWeb3Provider(options)
         return provider.request(requestArguments)
     }

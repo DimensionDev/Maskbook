@@ -7,8 +7,8 @@ import {
     type Web3,
     type Web3Provider,
 } from '@masknet/web3-shared-solana'
-import type { WalletAPI } from '../../entry-types.js'
 import { BaseInjectedProvider } from './BaseInjected.js'
+import type { WalletAPI } from '../../entry-types.js'
 
 export class SolflareProvider
     extends BaseInjectedProvider

@@ -3603,9 +3603,6 @@ importers:
 
   packages/web3-shared/base:
     dependencies:
-      '@dimensiondev/mask-wallet-core':
-        specifier: 0.1.0-20211013082857-eb62e5f
-        version: 0.1.0-20211013082857-eb62e5f(protobufjs@6.11.2)
       '@masknet/public-api':
         specifier: workspace:^
         version: link:../../public-api
