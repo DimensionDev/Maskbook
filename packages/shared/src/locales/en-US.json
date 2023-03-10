@@ -185,5 +185,6 @@
     "persona_boundary_verify_persona": "Verify your Twitter ID",
     "applications_create_persona_title": "Persona",
     "applications_create_persona_hint": "Please create a Persona and verify your account to use this function.",
-    "applications_create_persona_action": "Create persona"
+    "applications_create_persona_action": "Create persona",
+    "lens_follow": "Follow"
 }
