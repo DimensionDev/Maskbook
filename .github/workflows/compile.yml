@@ -60,6 +60,7 @@ jobs:
         with:
           environment: production
           sourcemaps: ./build
+          version_prefix: mask-
       - name: Upload `MaskNetwork.chromium.zip`
         uses: actions/upload-artifact@v3
         with:
