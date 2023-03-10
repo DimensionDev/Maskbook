@@ -31,7 +31,7 @@ class MutexStorage<T> {
                     const stored = await timeout(
                         browser.storage.local.get(key),
                         5000,
-                        `Get ${key} timeout in mutx storage.`,
+                        `Get ${key} timeout in mutex storage.`,
                     )
                     callback(null, stored?.[key] as T)
                 } catch (error) {
@@ -56,7 +56,7 @@ class MutexStorage<T> {
                     await timeout(
                         browser.storage.local.set({ [key]: value }),
                         5000,
-                        `Set ${key} to ${value} timeout in mutx storage.`,
+                        `Set ${key} to ${value} timeout in mutex storage.`,
                     )
                     callback(null)
                 } catch (error) {
