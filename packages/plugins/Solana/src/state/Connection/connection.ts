@@ -1,3 +1,4 @@
+import { identity, pickBy } from 'lodash-es'
 import { SolanaProviders, SolanaWeb3 } from '@masknet/web3-providers'
 import type {
     FungibleToken,
@@ -30,7 +31,6 @@ import type { Account, PartialRequired } from '@masknet/shared-base'
 import { Web3StateSettings } from '../../settings/index.js'
 import { createTransferInstruction, getOrCreateAssociatedTokenAccount } from './spl-token/index.js'
 import type { SolanaConnection, SolanaConnectionOptions } from './types.js'
-import { identity, pickBy } from 'lodash-es'
 
 class Connection implements SolanaConnection {
     private connections: Map<ChainId, SolConnection> = new Map()

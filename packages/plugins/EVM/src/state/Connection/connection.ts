@@ -97,7 +97,7 @@ class Connection implements EVM_Connection {
                                     break
                                 default: {
                                     const provider =
-                                        Providers[
+                                        EVM_Providers[
                                             PayloadEditor.fromPayload(context.request).readonly
                                                 ? ProviderType.MaskWallet
                                                 : options.providerType

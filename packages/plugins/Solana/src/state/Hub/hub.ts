@@ -1,4 +1,4 @@
-import { mixin } from '@masknet/shared-base'
+import { mixin, type Pageable } from '@masknet/shared-base'
 import { HubStateBaseClient, HubStateFungibleClient, HubStateNonFungibleClient } from '@masknet/web3-state'
 import {
     CoinGeckoPriceSolana,
@@ -13,7 +13,6 @@ import {
     type CurrencyType,
     type GasOptionType,
     type HubOptions,
-    type Pageable,
     SourceType,
     type Transaction,
 } from '@masknet/web3-shared-base'

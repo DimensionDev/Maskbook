@@ -7,11 +7,13 @@ import { SolanaCoin98Provider } from './Coin98.js'
 import type { WalletAPI } from '../../entry-types.js'
 
 export interface SolanaProvider extends WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {
-    /** Sign message. */
+    /** Sign message */
     signMessage(message: string): Promise<string>
-    /** Sign a transaction. */
+    /** Verify signature */
+    verifyMessage(message: string, signature: string): Promise<boolean>
+    /** Sign a transaction */
     signTransaction(transaction: Transaction): Promise<Transaction>
-    /** Sign multiple transactions. */
+    /** Sign multiple transactions */
     signTransactions(transactions: Transaction[]): Promise<Transaction[]>
 }
 
