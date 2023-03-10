@@ -15,10 +15,13 @@ import {
     type Web3Provider,
     type Web3,
 } from '@masknet/web3-shared-evm'
+import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
 import type { WalletAPI } from '../../entry-types.js'
 
 export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {
+    protected context: Plugin.SNSAdaptor.SNSAdaptorContext | undefined
+
     constructor(protected providerType: ProviderType) {}
 
     emitter = new Emitter<ProviderEvents<ChainId, ProviderType>>()
@@ -45,7 +48,8 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
         return Promise.resolve()
     }
 
-    setup(): Promise<void> {
+    setup(context: Plugin.SNSAdaptor.SNSAdaptorContext): Promise<void> {
+        this.context = context
         throw new Error('Method not implemented.')
     }
 

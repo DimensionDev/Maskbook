@@ -14,7 +14,6 @@ import {
     type Web3,
 } from '@masknet/web3-shared-evm'
 import type { Account } from '@masknet/web3-shared-base'
-import { SharedContextSettings } from '../../../settings/index.js'
 import { BaseProvider } from './Base.js'
 import type { WalletAPI } from '../../entry-types.js'
 
@@ -81,11 +80,11 @@ export default class WalletConnectProvider
         const connector = new WalletConnect({
             bridge: 'https://bridge.walletconnect.org',
             qrcodeModal: {
-                open(uri: string, callback) {
-                    SharedContextSettings.value.openWalletConnectDialog(uri, callback)
+                open: (uri: string, callback) => {
+                    this.context?.openWalletConnectDialog(uri, callback)
                 },
-                close() {
-                    SharedContextSettings.value.closeWalletConnectDialog()
+                close: () => {
+                    this.context?.closeWalletConnectDialog()
                 },
             },
         })

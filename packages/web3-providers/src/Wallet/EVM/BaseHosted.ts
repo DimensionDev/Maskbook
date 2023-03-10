@@ -14,6 +14,8 @@ import {
     type Web3Provider,
     type Web3,
 } from '@masknet/web3-shared-evm'
+import type { Plugin } from '@masknet/plugin-infra/content-script'
+import { Web3API } from '../../EVM/index.js'
 import { BaseProvider } from './Base.js'
 import type { WalletAPI } from '../../entry-types.js'
 
@@ -21,6 +23,8 @@ export class BaseHostedProvider
     extends BaseProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
+    private Web3 = new Web3API()
+
     private walletStorage:
         | StorageObject<{
               account: string
@@ -42,8 +46,8 @@ export class BaseHostedProvider
         super(providerType)
     }
 
-    override async setup() {
-        const { storage: walletStorage } = SharedContextSettings.value
+    override async setup(context: Plugin.SNSAdaptor.SNSAdaptorContext) {
+        const { storage: walletStorage } = context
             .createKVStorage('memory', {})
             .createSubScope(`${this.providerType}_hosted`, {
                 account: this.options.getDefaultAccount(),
@@ -226,7 +230,7 @@ export class BaseHostedProvider
     }
 
     override async request<T>(requestArguments: RequestArguments, options?: ProviderOptions<ChainId>): Promise<T> {
-        return Web3.getWeb3Provider(options?.chainId || this.hostedChainId).request<T>(
+        return this.Web3.getWeb3Provider(options?.chainId || this.hostedChainId).request<T>(
             PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
         )
     }

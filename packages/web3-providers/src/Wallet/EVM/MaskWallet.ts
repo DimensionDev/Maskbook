@@ -19,8 +19,8 @@ import {
     type Web3,
     type Web3Provider,
 } from '@masknet/web3-shared-evm'
+import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { BaseContractWalletProvider } from './BaseContractWallet.js'
-import { SharedContextSettings } from '../../../settings/index.js'
 import type { WalletAPI } from '../../entry-types.js'
 
 export class MaskWalletProvider
@@ -44,8 +44,8 @@ export class MaskWalletProvider
         return this.subscription.wallets.getCurrentValue()
     }
 
-    override async setup() {
-        await super.setup()
+    override async setup(context: Plugin.SNSAdaptor.SNSAdaptorContext) {
+        await super.setup(context)
 
         this.subscription?.wallets?.subscribe(async () => {
             const primaryWallet = first(this.wallets)
@@ -57,12 +57,12 @@ export class MaskWalletProvider
         })
 
         const update = debounce(async () => {
-            const wallets = SharedContextSettings.value.wallets.getCurrentValue()
+            const wallets = context.wallets.getCurrentValue()
 
             // speed up first paint
             this.ref.value = uniqWith([...wallets, ...super.wallets], (a, b) => isSameAddress(a.address, b.address))
 
-            const allPersonas = SharedContextSettings.value.allPersonas?.getCurrentValue() ?? []
+            const allPersonas = context.allPersonas?.getCurrentValue() ?? []
             const chainId = await SmartPayBundler.getSupportedChainId()
             const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
                 ...wallets.map((x) => x.address),
@@ -100,20 +100,20 @@ export class MaskWalletProvider
         }, 1000)
 
         update()
-        SharedContextSettings.value.wallets.subscribe(update)
-        SharedContextSettings.value.allPersonas?.subscribe(update)
+        context.wallets.subscribe(update)
+        context.allPersonas?.subscribe(update)
         CrossIsolationMessages.events.renameWallet.on(update)
     }
 
     override async addWallet(wallet: Wallet): Promise<void> {
-        await SharedContextSettings.value.addWallet(wallet.address, wallet)
+        await this.context?.addWallet(wallet.address, wallet)
     }
 
     override async removeWallet(address: string, password?: string | undefined): Promise<void> {
         const scWallets = this.wallets.filter((x) => isSameAddress(x.owner, address))
         if (scWallets.length) await super.removeWallets(scWallets)
         await super.removeWallet(address, password)
-        await SharedContextSettings.value.removeWallet(address, password)
+        await this.context?.removeWallet(address, password)
     }
 
     override async renameWallet(address: string, name: string) {
@@ -136,7 +136,7 @@ export class MaskWalletProvider
                 await this.switchAccount(address, owner)
                 await this.switchChain(chainId)
 
-                if (siteType) await SharedContextSettings.value.recordConnectedSites(siteType, true)
+                if (siteType) await this.context?.recordConnectedSites(siteType, true)
 
                 return {
                     account: address,
@@ -150,14 +150,11 @@ export class MaskWalletProvider
             }
         }
 
-        await SharedContextSettings.value.openPopupWindow(
-            this.wallets.length ? PopupRoutes.SelectWallet : PopupRoutes.Wallet,
-            {
-                chainId,
-            },
-        )
+        await this.context?.openPopupWindow(this.wallets.length ? PopupRoutes.SelectWallet : PopupRoutes.Wallet, {
+            chainId,
+        })
 
-        const account = first(await SharedContextSettings.value.selectAccount())
+        const account = first(await this.context?.selectAccount())
         if (!account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}`)
 
         // switch account
@@ -178,7 +175,7 @@ export class MaskWalletProvider
             await this.switchChain(chainId)
         }
 
-        if (siteType) await SharedContextSettings.value.recordConnectedSites(siteType, true)
+        if (siteType) await this.context?.recordConnectedSites(siteType, true)
 
         return {
             chainId,
@@ -188,6 +185,6 @@ export class MaskWalletProvider
 
     override async disconnect() {
         const siteType = getSiteType()
-        if (siteType) await SharedContextSettings.value.recordConnectedSites(siteType, false)
+        if (siteType) await this.context?.recordConnectedSites(siteType, false)
     }
 }

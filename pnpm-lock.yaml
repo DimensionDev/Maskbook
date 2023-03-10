@@ -1285,9 +1285,6 @@ importers:
       '@masknet/web3-helpers':
         specifier: workspace:^
         version: link:../web3-helpers
-      '@masknet/web3-providers':
-        specifier: workspace:^
-        version: link:../web3-providers
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../web3-shared/base
@@ -3458,6 +3455,9 @@ importers:
       '@masknet/injected-script':
         specifier: workspace:^
         version: link:../injected-script
+      '@masknet/plugin-infra':
+        specifier: workspace:^
+        version: link:../plugin-infra
       '@masknet/public-api':
         specifier: workspace:^
         version: link:../public-api

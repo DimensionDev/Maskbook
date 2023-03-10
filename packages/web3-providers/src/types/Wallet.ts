@@ -1,6 +1,7 @@
 import type { Subscription } from 'use-subscription'
 import type { Emitter } from '@servie/events'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
+import type { Plugin } from '@masknet/plugin-infra/content-script'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 
 export namespace WalletAPI {
@@ -72,7 +73,7 @@ export namespace WalletAPI {
         /** connection status */
         readonly connected: boolean
         /** async setup tasks */
-        setup(): Promise<void>
+        setup(context: Plugin.SNSAdaptor.SNSAdaptorContext): Promise<void>
         /** Add a new wallet. */
         addWallet(wallet: Wallet): Promise<void>
         /** Update a wallet. */

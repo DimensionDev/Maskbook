@@ -3,7 +3,7 @@ import { ECKeyIdentifier, type StorageItem } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { type ProviderType, isValidAddress, type ChainId, type Web3Provider, type Web3 } from '@masknet/web3-shared-evm'
-import { SharedContextSettings } from '../../../settings/index.js'
+import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { BaseHostedProvider } from './BaseHosted.js'
 import type { WalletAPI } from '../../entry-types.js'
 
@@ -25,18 +25,16 @@ export class BaseContractWalletProvider
         super(providerType)
     }
 
-    override async setup() {
-        await super.setup()
+    override async setup(context: Plugin.SNSAdaptor.SNSAdaptorContext) {
+        await super.setup(context)
 
-        const { storage } = SharedContextSettings.value
-            .createKVStorage('memory', {})
-            .createSubScope(`${this.providerType}_owner`, {
-                value: {
-                    account: this.options.getDefaultAccount(),
-                    // empty string means EOA signer
-                    identifier: '',
-                },
-            })
+        const { storage } = context.createKVStorage('memory', {}).createSubScope(`${this.providerType}_owner`, {
+            value: {
+                account: this.options.getDefaultAccount(),
+                // empty string means EOA signer
+                identifier: '',
+            },
+        })
 
         this.ownerStorage = storage.value
 
