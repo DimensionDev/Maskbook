@@ -1,8 +1,14 @@
 import { fetchJSON } from '../entry-helpers.js'
 import { SIMPLE_HASH_URL } from './constants.js'
-import { type Asset } from './type.js'
-import { type NonFungibleAsset, TokenType, scale10, SourceType } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, chainResolver, WNATIVE, isValidDomain } from '@masknet/web3-shared-evm'
+import { type Asset, type Collection } from './type.js'
+import {
+    type NonFungibleAsset,
+    TokenType,
+    scale10,
+    SourceType,
+    type NonFungibleCollection,
+} from '@masknet/web3-shared-base'
+import { ChainId, SchemaType, chainResolver, WNATIVE, isValidDomain, isValidChainId } from '@masknet/web3-shared-evm'
 import { createPermalink } from '../NFTScan/helpers/EVM.js'
 import { getAssetFullName } from '../helpers/getAssetFullName.js'
 
@@ -18,7 +24,7 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
     const chainId = resolveChainId(asset.chain)
     const address = asset.contract_address
     const schema = asset.contract.type === 'ERC721' ? SchemaType.ERC721 : SchemaType.ERC1155
-    if (!chainId || !address) return
+    if (!chainId || !isValidChainId(chainId) || !address) return
     return {
         id: address,
         chainId,
@@ -71,6 +77,23 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
             createdAt: new Date(asset.created_date).getTime(),
         },
         source: SourceType.SimpleHash,
+    }
+}
+
+export function createNonFungibleCollection(
+    collection: Collection,
+): NonFungibleCollection<ChainId, SchemaType> | undefined {
+    const chainId = resolveChainId(collection.chain)
+
+    if (!isValidChainId(chainId)) return
+    return {
+        chainId,
+        name: collection.name,
+        slug: collection.name,
+        schema: SchemaType.ERC721,
+        balance: collection.distinct_nfts_owned,
+        iconURL: collection.image_url,
+        ownersTotal: collection.total_quantity,
     }
 }
 

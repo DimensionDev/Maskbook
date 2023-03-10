@@ -1,11 +1,19 @@
 import urlcat from 'urlcat'
 import type { NonFungibleTokenAPI } from '../entry-types.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { type HubOptions, createPageable, type NonFungibleAsset, createIndicator } from '@masknet/web3-shared-base'
+import {
+    type HubOptions,
+    createPageable,
+    type HubIndicator,
+    type NonFungibleAsset,
+    type NonFungibleCollection,
+    createIndicator,
+    type Pageable,
+} from '@masknet/web3-shared-base'
 import { ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
-import { fetchFromSimpleHash, createNonFungibleAsset, resolveChain } from './helpers.js'
+import { fetchFromSimpleHash, createNonFungibleAsset, resolveChain, createNonFungibleCollection } from './helpers.js'
 
-import { type Asset } from './type.js'
+import { type Asset, type Collection } from './type.js'
 
 export class SimpleHashProviderAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
@@ -37,5 +45,28 @@ export class SimpleHashProviderAPI implements NonFungibleTokenAPI.Provider<Chain
         >
 
         return createPageable(assets, indicator)
+    }
+
+    async getCollectionsByOwner(
+        account: string,
+        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
+    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, HubIndicator>> {
+        const chain = resolveChain(chainId)
+        if (!chain || !account || !isValidChainId(chainId)) {
+            return createPageable(EMPTY_LIST, createIndicator(indicator))
+        }
+
+        const path = urlcat('/api/v0/nfts/collections_by_wallets', {
+            chains: chain,
+            wallet_addresses: account,
+        })
+
+        const response = await fetchFromSimpleHash<{ collections: Collection[] }>(path)
+
+        const collections = response.collections.map((x) => createNonFungibleCollection(x)).filter(Boolean) as Array<
+            NonFungibleCollection<ChainId, SchemaType>
+        >
+
+        return createPageable(collections, createIndicator(indicator))
     }
 }

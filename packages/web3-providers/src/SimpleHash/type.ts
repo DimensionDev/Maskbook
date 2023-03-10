@@ -20,6 +20,10 @@ export interface Asset {
             marketplace_name: string
             verified: boolean
         }>
+        distinct_nfts_owned: number
+        total_copies_owned: number
+        distinct_owner_count: number
+        distinct_nft_count: number
         name: string
         top_contracts: string[] // ["ethereum.0x18487d2cac946c7fe800855c4039aac210f68baa"]
         total_quantity: number
@@ -53,6 +57,26 @@ export interface Asset {
     }
     owners: Array<{
         owner_address: string
+    }>
+}
+
+// Todo: contract address will be added in SimpleHash v1 release.
+// Todo: Asking SimpleHash to add schema in SimpleHash v1 release.
+export interface Collection {
+    // Todo: the collection id key name may change in SimpleHash v1 release.
+    id: string
+    name: string
+    image_url: string
+    chain: string
+    distinct_nfts_owned: number // owner balance
+    total_copies_owned: number
+    distinct_owner_count: number
+    distinct_nft_count: number
+    total_quantity: number
+    floor_prices: Array<{
+        marketplace_id: string // opensea
+        marketplace_name: string // Opensea
+        payment_token: PaymentToken
     }>
 }
 
