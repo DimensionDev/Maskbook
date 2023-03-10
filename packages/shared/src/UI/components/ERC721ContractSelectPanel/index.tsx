@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material'
 import { type SelectNftContractDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
-import type { NonFungibleCollection } from '@masknet/web3-shared-base'
+import { type NonFungibleCollection, SourceType } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { useSharedI18N } from '../../../locales/index.js'
 
@@ -97,7 +97,9 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
                 <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
                     {label ?? t.select_an_nft()}
                 </Typography>
-                {(!collection?.address || !Others?.isValidAddress(collection.address)) && !collection?.id ? null : (
+                {!collection?.address ||
+                !Others?.isValidAddress(collection.address) ||
+                (collection.source === SourceType.SimpleHash && !collection?.id) ? null : (
                     <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
                         {t.wallet_balance()}: {balance ? balance : '0'}
                     </Typography>

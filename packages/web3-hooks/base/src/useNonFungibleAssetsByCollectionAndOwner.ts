@@ -58,7 +58,7 @@ export function useNonFungibleAssetsByCollectionAndOwner<
             setDone(true)
         }
         toggleLoading(false)
-        setAssets((pred) => [...pred, ...batchResult].sort((a, b) => Number(a.tokenId) - Number(b.tokenId)))
+        setAssets((pred) => [...pred, ...batchResult].sort((a, b) => (a.tokenId > b.tokenId ? 1 : -1)))
     }, [iterator, done])
 
     // Execute once after next update

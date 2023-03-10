@@ -7,7 +7,7 @@ import { useWeb3Hub } from './useWeb3Hub.js'
 export function useNonFungibleAssetsByCollection<
     S extends 'all' | void = void,
     T extends NetworkPluginID = NetworkPluginID,
->(id?: string, pluginID?: T, options?: Web3Helper.Web3HubOptionsScope<S, T>) {
+>(address?: string, pluginID?: T, options?: Web3Helper.Web3HubOptionsScope<S, T>) {
     const [assets, setAssets] = useState<Array<Web3Helper.NonFungibleAssetScope<S, T>>>(EMPTY_LIST)
     const [done, setDone] = useState(false)
     const [loading, toggleLoading] = useState(false)
@@ -22,13 +22,13 @@ export function useNonFungibleAssetsByCollection<
         setDone(false)
 
         return pageableToIterator(async (indicator) => {
-            return hub.getNonFungibleAssetsByCollection!(id ?? '', {
+            return hub.getNonFungibleAssetsByCollection!(address ?? '', {
                 indicator,
                 size: 50,
                 ...options,
             })
         })
-    }, [hub?.getNonFungibleAssetsByCollection, id, JSON.stringify(options)])
+    }, [hub?.getNonFungibleAssetsByCollection, address, JSON.stringify(options)])
 
     const next = useCallback(async () => {
         if (!iterator || done) return

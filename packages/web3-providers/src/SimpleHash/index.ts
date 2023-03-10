@@ -122,12 +122,10 @@ export class SimpleHashProviderAPI implements NonFungibleTokenAPI.Provider<Chain
             NonFungibleAsset<ChainId, SchemaType>
         >
 
-        const x = createPageable(
+        return createPageable(
             assets,
             createIndicator(indicator),
             response.next_cursor ? createNextIndicator(indicator, response.next_cursor) : undefined,
         )
-
-        return x
     }
 }
