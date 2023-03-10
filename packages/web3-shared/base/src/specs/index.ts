@@ -1316,7 +1316,7 @@ export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = Hu
 export interface HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
     /** Get non-fungible assets of the given collection. */
     getNonFungibleAssetsByCollection?: (
-        id: string,
+        address: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
     /** Get non-fungible assets of the given collection and owner. */
