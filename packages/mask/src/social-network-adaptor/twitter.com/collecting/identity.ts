@@ -1,6 +1,4 @@
 import { first } from 'lodash-es'
-import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { delay } from '@masknet/kit'
 import { TWITTER_RESERVED_SLUGS } from '@masknet/injected-script/shared'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { Twitter } from '@masknet/web3-providers'
@@ -8,82 +6,27 @@ import type { SocialNetworkUI as Next } from '@masknet/types'
 import { creator } from '../../../social-network/index.js'
 import { twitterBase } from '../base.js'
 import { isMobileTwitter } from '../utils/isMobile.js'
-import {
-    searchSelfAvatarSelector,
-    searchSelfHandleSelector,
-    searchSelfNicknameSelector,
-    searchWatcherAvatarSelector,
-    selfInfoSelectors,
-} from '../utils/selector.js'
-
-function collectSelfInfo() {
-    const handle = selfInfoSelectors().handle.evaluate()
-    const nickname = selfInfoSelectors().name.evaluate()
-    const avatar = selfInfoSelectors().userAvatar.evaluate()
-
-    return { handle, nickname, avatar }
-}
-
-function getNickname(nickname?: string) {
-    const nicknameNode = searchSelfNicknameSelector().closest<HTMLDivElement>(1).evaluate()
-    let _nickname = ''
-    if (!nicknameNode?.childNodes.length) return nickname
-
-    for (const child of nicknameNode.childNodes) {
-        const ele = child as HTMLDivElement
-        if (ele.tagName === 'IMG') {
-            _nickname += ele.getAttribute('alt') ?? ''
-        }
-        if (ele.tagName === 'SPAN') {
-            _nickname += ele.textContent?.trim()
-        }
-    }
-
-    return _nickname ?? nickname
-}
 
 function resolveLastRecognizedIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
     const assign = async () => {
-        await delay(2000)
-
-        const selfInfo = collectSelfInfo()
-        const avatar = (searchSelfAvatarSelector().evaluate()?.getAttribute('src') || selfInfo.avatar) ?? ''
-        const handle = searchSelfHandleSelector().evaluate()?.textContent?.trim()?.replace(/^@/, '') || selfInfo.handle
-        const nickname = getNickname(selfInfo.nickname) ?? ''
-
-        if (handle) {
+        const settings = await Twitter.getSettings()
+        const user = await Twitter.getUserByScreenName(settings.screen_name)
+        const identifier = ProfileIdentifier.of(twitterBase.networkIdentifier, settings?.screen_name).unwrapOr(
+            undefined,
+        )
+        if (identifier && !ref.value.identifier)
             ref.value = {
-                avatar,
-                nickname,
-                identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
+                avatar: user?.legacy?.profile_image_url_https,
+                nickname: user?.legacy?.name,
+                identifier,
                 isOwner: true,
             }
-        }
     }
-
-    const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
-        new MutationObserverWatcher(selector)
-            .addListener('onAdd', () => assign())
-            .addListener('onChange', () => assign())
-            .startWatch(
-                {
-                    childList: true,
-                    subtree: true,
-                    attributes: true,
-                    attributeFilter: ['src'],
-                },
-                cancel,
-            )
-    }
-
     assign()
-
     window.addEventListener('locationchange', assign, { signal: cancel })
-    createWatcher(searchSelfHandleSelector())
-    createWatcher(searchWatcherAvatarSelector())
 }
 
 function resolveLastRecognizedIdentityMobileInner(
