@@ -57,13 +57,14 @@ export async function detachProfileWithNextID(
     })
     MaskMessages.events.ownProofChanged.sendToAll(undefined)
 }
+const err = 'resolveUnknownLegacyIdentity should not be called on localhost'
 /**
  * In older version of Mask, identity is marked as `ProfileIdentifier(network, '$unknown')` or `ProfileIdentifier(network, '$self')`. After upgrading to the newer version of Mask, Mask will try to find the current user in that network and call this function to replace old identifier into a "resolved" identity.
  * @param identifier The resolved identity
  */
 export async function resolveUnknownLegacyIdentity(identifier: ProfileIdentifier): Promise<void> {
-    const unknown = ProfileIdentifier.of(identifier.network, '$unknown').unwrap()
-    const self = ProfileIdentifier.of(identifier.network, '$self').unwrap()
+    const unknown = ProfileIdentifier.of(identifier.network, '$unknown').expect(err)
+    const self = ProfileIdentifier.of(identifier.network, '$self').expect(err)
 
     const records = await queryProfilesDB({ identifiers: [unknown, self] })
     if (!records.length) return

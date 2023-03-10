@@ -263,7 +263,9 @@ export async function queryPostPagedDB(
         if (!cursor.value.postBy) continue
         if (!options.userIds.includes(cursor.value.postBy.userId)) continue
 
-        const postIdentifier = PostIVIdentifier.from(cursor.value.identifier).unwrap()
+        const postIdentifier = PostIVIdentifier.from(cursor.value.identifier).expect(
+            `data stored in the post database should be a valid PostIVIdentifier, but found ${cursor.value.identifier}`,
+        )
         if (postIdentifier.network !== options.network) continue
 
         if (firstRecord && options.after) {
@@ -298,7 +300,9 @@ function postOutDB(db: LatestPostDBRecord): PostRecord {
         }
     }
     return {
-        identifier: PostIVIdentifier.from(identifier).unwrap(),
+        identifier: PostIVIdentifier.from(identifier).expect(
+            `data stored in the post database should be a valid PostIVIdentifier, but found ${identifier}`,
+        ),
         postBy: ProfileIdentifier.of(postBy?.network, postBy?.userId).unwrapOr(undefined),
         recipients,
         foundAt,

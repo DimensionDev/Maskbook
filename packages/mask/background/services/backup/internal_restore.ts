@@ -194,8 +194,8 @@ async function restorePlugins(backup: NormalizedBackup.Data['plugins']) {
             continue
         }
 
-        const f = plugin.backup?.onRestore
-        if (!f) {
+        const onRestore = plugin.backup?.onRestore
+        if (!onRestore) {
             console.warn(
                 `[@masknet/plugin-infra] Found a backup of plugin ${plugin.ID} but it did not register a onRestore callback.`,
                 item,
@@ -205,10 +205,12 @@ async function restorePlugins(backup: NormalizedBackup.Data['plugins']) {
         works.add(
             // eslint-disable-next-line @typescript-eslint/no-loop-func
             (async () => {
-                const x = await f(item)
-                if (x.err)
-                    console.error(`[@masknet/plugin-infra] Plugin ${plugin.ID} failed to restore its backup.`, item)
-                return x.unwrap()
+                const result = await onRestore(item)
+                if (result.err) {
+                    const msg = `[@masknet/plugin-infra] Plugin ${plugin.ID} failed to restore its backup.`
+                    console.error(msg, item)
+                    throw new Error(msg, { cause: result.err })
+                }
             })(),
         )
     }
