@@ -162,7 +162,6 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
             },
             options.chainId === ChainId.Mainnet
                 ? [
-                      SimpleHash,
                       X2Y2,
                       NFTScanNonFungibleTokenEVM,
                       ZerionNonFungibleToken,
@@ -175,9 +174,9 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                       GoPlusAuthorization,
                       Rabby,
                       R2D2TokenList,
+                      SimpleHash,
                   ]
                 : [
-                      SimpleHash,
                       NFTScanNonFungibleTokenEVM,
                       ZerionNonFungibleToken,
                       Rarible,
@@ -189,6 +188,7 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                       GoPlusAuthorization,
                       Rabby,
                       R2D2TokenList,
+                      SimpleHash,
                   ],
             initial,
         )
