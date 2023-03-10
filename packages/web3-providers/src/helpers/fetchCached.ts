@@ -14,7 +14,7 @@ const RULES = {
     'https://vcent-agent.r2d2.to': Duration.SHORT,
     'https://rss3.domains/name': Duration.SHORT,
     // avatar on RSS3 kv queries
-    'https://kv.r2d2.to/api/com.maskbook': Duration.SHORT,
+    'https://kv.r2d2.to/api/com.maskbook': Duration.LONG,
     'https://discovery.attrace.com': Duration.SHORT,
     // mask-x
     'https://7x16bogxfb.execute-api.us-east-1.amazonaws.com': Duration.SHORT,
