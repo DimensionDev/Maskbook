@@ -1,4 +1,4 @@
-import { ChainId, ProviderType, type Web3, type Web3Provider } from '@masknet/web3-shared-evm'
+import { type ChainId, ProviderType, type Web3, type Web3Provider } from '@masknet/web3-shared-evm'
 import { NoneProvider } from './None.js'
 import { MetaMaskProvider } from './MetaMask.js'
 import WalletConnectProvider from './WalletConnect.js'

@@ -184,10 +184,6 @@ export class ProviderState<
         return this.providers[providerType].readyPromise
     }
 
-    getWalletProvider(providerType: ProviderType) {
-        return this.providers[providerType]
-    }
-
     async connect(
         providerType: ProviderType,
         chainId: ChainId,

@@ -1477,9 +1477,6 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
     /** Wait until a provider ready */
     untilReady: (providerType: ProviderType) => Promise<void>
 
-    /** Get a registered wallet provider. */
-    getWalletProvider: <T>(providerType: ProviderType) => T | undefined
-
     /** Connect with the provider and set chain id. */
     connect: (
         providerType: ProviderType,

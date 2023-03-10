@@ -17,6 +17,7 @@ import {
 } from '@masknet/shared-base'
 import { useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
+import { EVM_Providers } from '@masknet/web3-providers'
 import { formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils/index.js'
 import { PersonaContext } from '../hooks/usePersonaContext.js'
@@ -125,7 +126,7 @@ const Logout = memo(() => {
             }
 
             if (manageWallets.length) {
-                const maskProvider = Provider?.getWalletProvider(ProviderType.MaskWallet)
+                const maskProvider = EVM_Providers[ProviderType.MaskWallet]
                 await maskProvider?.removeWallets(manageWallets)
             }
         }
