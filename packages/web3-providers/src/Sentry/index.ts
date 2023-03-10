@@ -7,7 +7,7 @@ import {
     createDeviceFingerprint,
     isDeviceOnWhitelist,
 } from '@masknet/shared-base'
-import { formatMask } from '@masknet/web3-shared-base'
+import { removeSensitiveTelemetryInfo } from '@masknet/web3-shared-base'
 import { TelemetryAPI } from '../types/Telemetry.js'
 
 const IGNORE_ERRORS = [
@@ -55,11 +55,11 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
                 }
 
                 event.exception?.values?.forEach((error) => {
-                    error.value = formatMask(error.value)
+                    error.value = removeSensitiveTelemetryInfo(error.value)
                 })
 
                 if (event.message) {
-                    event.message = formatMask(event.message)
+                    event.message = removeSensitiveTelemetryInfo(event.message)
                 }
 
                 return event
