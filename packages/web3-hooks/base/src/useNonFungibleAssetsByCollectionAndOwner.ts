@@ -13,7 +13,7 @@ export function useNonFungibleAssetsByCollectionAndOwner<
     const [loading, toggleLoading] = useState(false)
     const [error, setError] = useState<string>()
     const hub = useWeb3Hub(pluginID, options)
-    console.log({ collectionId, owner })
+
     // create iterator
     const iterator = useMemo(() => {
         if (!hub?.getNonFungibleAssetsByCollectionAndOwner) return
@@ -22,7 +22,6 @@ export function useNonFungibleAssetsByCollectionAndOwner<
         setDone(false)
 
         return pageableToIterator(async (indicator) => {
-            console.log({ indicator })
             return hub.getNonFungibleAssetsByCollectionAndOwner!(collectionId ?? '', owner ?? '', {
                 indicator,
                 size: 50,
