@@ -98,6 +98,12 @@ export namespace NonFungibleTokenAPI {
             address: string,
             options?: HubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
+        /** Get non-fungible assets of the given collection and owner. */
+        getAssetsByCollectionAndOwner?: (
+            collectionId: string,
+            owner: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
         /** Get non-fungible collection stats */
         getStats?: (
             address: string,
@@ -136,11 +142,6 @@ export namespace NonFungibleTokenAPI {
         /** Get non-fungible collections owned by the given account. */
         getCollectionsByOwner?: (
             account: string,
-            options?: HubOptions<ChainId, Indicator>,
-        ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, Indicator>>
-        /** Get non-fungible collections search by given keyword */
-        getCollectionsByKeyword?: (
-            keyword: string,
             options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, Indicator>>
 

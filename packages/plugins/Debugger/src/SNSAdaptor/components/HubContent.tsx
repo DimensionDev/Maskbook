@@ -62,7 +62,6 @@ export function HubContent(props: HubContentProps) {
         ['getNonFungibleTokenSecurity', [chainId, address]],
         ['getNonFungibleTokenContract', [address]],
         ['getNonFungibleCollectionsByOwner', [account]],
-        ['getNonFungibleCollectionsByKeyword', [keyword]],
         ['getNonFungibleTokenEvents', [address, tokenId]],
         ['getNonFungibleTokenOffers', [address, tokenId]],
         ['getNonFungibleTokenListings', [address, tokenId]],

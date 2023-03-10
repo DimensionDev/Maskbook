@@ -236,6 +236,7 @@ export const resolveSourceTypeName = createLookupTableResolver<SourceType, strin
         [SourceType.NFTX]: 'NFTX',
         [SourceType.Etherscan]: 'Etherscan',
         [SourceType.CryptoPunks]: 'CryptoPunks',
+        [SourceType.SimpleHash]: 'SimpleHash',
     },
     (providerType) => {
         throw new Error(`Unknown source type: ${providerType}.`)

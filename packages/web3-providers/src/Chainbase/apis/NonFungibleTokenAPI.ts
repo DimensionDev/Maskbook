@@ -191,24 +191,6 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
         )
     }
 
-    async getCollectionsByKeyword(keyword: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {}) {
-        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
-        const tokens = await fetchFromChainbase<NFT[]>(
-            urlcat('/v1/nft/search', {
-                chain_id: chainId,
-                name: keyword,
-                page: (indicator?.index ?? 0) + 1,
-            }),
-        )
-        if (!tokens) return createPageable(EMPTY_LIST, createIndicator(indicator))
-        const assets = tokens.map((x) => this.createNonFungibleCollectionFromNFT(chainId, x))
-        return createPageable(
-            assets,
-            createIndicator(indicator),
-            assets.length ? createNextIndicator(indicator) : undefined,
-        )
-    }
-
     async getContract(
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
