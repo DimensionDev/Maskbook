@@ -1414,11 +1414,6 @@ export interface HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions =
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>>
-    /** Get non-fungible tokens search by the give keyword. */
-    getNonFungibleCollectionsByKeyword?: (
-        keyword: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>>
     getNonFungibleRarity?: (
         address: string,
         tokenId: string,

@@ -200,18 +200,6 @@ export class HubStateNonFungibleClient<ChainId, SchemaType> extends HubStateBase
         )
     }
 
-    async getNonFungibleCollectionsByKeyword(
-        keyword: string,
-        initial?: HubOptions<ChainId>,
-    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>> {
-        const options = this.getOptions(initial)
-        const providers = this.getProviders(initial)
-        return attemptUntil(
-            providers.map((x) => () => x.getCollectionsByKeyword?.(keyword, options)),
-            createPageable(EMPTY_LIST, createIndicator(options.indicator)),
-        )
-    }
-
     async getNonFungibleTokenSecurity(
         chainId: ChainId,
         address: string,

@@ -86,27 +86,6 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
         return createPageable(collections, createIndicator(indicator))
     }
 
-    async getCollectionsByKeyword(
-        keyword: string,
-        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
-    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, HubIndicator>> {
-        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
-        const path = '/api/v2/collections/filters'
-        const response = await fetchFromNFTScanV2<Response<NonFungibleTokenAPI.Collection[]>>(chainId, path, {
-            method: 'POST',
-            body: JSON.stringify({
-                name: keyword,
-                symbol: '',
-                limit: size.toString(),
-                offset: (indicator?.index ?? 0) * size,
-                contract_address_list: [],
-            }),
-        })
-        const collections =
-            response?.data.map((x) => createNonFungibleCollectionFromCollection(chainId, x)) ?? EMPTY_LIST
-        return createPageable(collections, createIndicator(indicator))
-    }
-
     async getCollectionRaw(
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},

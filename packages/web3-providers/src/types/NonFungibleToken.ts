@@ -145,11 +145,6 @@ export namespace NonFungibleTokenAPI {
             account: string,
             options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, Indicator>>
-        /** Get non-fungible collections search by given keyword */
-        getCollectionsByKeyword?: (
-            keyword: string,
-            options?: HubOptions<ChainId, Indicator>,
-        ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, Indicator>>
 
         /** Place a bid on a token. */
         createBuyOrder?: (/** TODO: add parameters */) => Promise<void>
