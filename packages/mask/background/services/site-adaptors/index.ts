@@ -6,4 +6,4 @@ export {
     getSitesWithoutPermission,
 } from './connect.js'
 export { openProfilePage, openShareLink } from './open-page.js'
-export { setupSite, connectSite } from './connect.js'
+export { hasSetup, setupSite, connectSite } from './connect.js'

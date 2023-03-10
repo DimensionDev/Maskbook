@@ -90,10 +90,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.collecting.currentVisitingIdentityProvider?.start(signal)
 
     ui.injection.pageInspector?.(signal)
-    if (Flags.toolbox_enabled) {
-        ui.injection.toolbox?.(signal, 'wallet')
-        ui.injection.toolbox?.(signal, 'application')
-    }
+    ui.injection.toolbox?.(signal, 'wallet')
+    ui.injection.toolbox?.(signal, 'application')
     ui.injection.newPostComposition?.start?.(signal)
     ui.injection.searchResult?.(signal)
     ui.injection.userBadge?.(signal)
@@ -131,7 +129,15 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     const allPersonaSub = createSubscriptionFromAsync(
         () => Services.Identity.queryOwnedPersonaInformation(true),
         [],
-        MaskMessages.events.currentPersonaIdentifier.on,
+        (x) => {
+            const clearCurrentPersonaIdentifier = MaskMessages.events.currentPersonaIdentifier.on(x)
+            const clearOwnPersonaChanged = MaskMessages.events.ownPersonaChanged.on(x)
+
+            return () => {
+                clearCurrentPersonaIdentifier()
+                clearOwnPersonaChanged()
+            }
+        },
         signal,
     )
 
@@ -270,7 +276,10 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             const { persona, status }: SetupGuideContext = JSON.parse(id || '{}')
             if (persona && status && !started) {
                 started = true
-                ui.injection.setupWizard?.(signal, ECKeyIdentifier.from(persona).unwrap())
+                ui.injection.setupWizard?.(
+                    signal,
+                    ECKeyIdentifier.from(persona).expect(`${persona} should be a valid ECKeyIdentifier`),
+                )
             }
         }
         currentSetupGuideStatus[network].addListener(onStatusUpdate)

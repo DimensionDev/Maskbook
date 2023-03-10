@@ -134,6 +134,7 @@ export interface InputTokenPanelUIProps extends withClasses<'root'> {
     tokenValueUSD: string
     onAmountChange: (amount: string) => void
     SelectTokenChip?: Partial<SelectTokenChipProps>
+    isAvailableBalance?: boolean
 }
 
 export const InputTokenPanelUI = memo<InputTokenPanelUIProps>(
@@ -146,6 +147,7 @@ export const InputTokenPanelUI = memo<InputTokenPanelUIProps>(
         SelectTokenChip: SelectTokenChipProps,
         maxAmount,
         tokenValueUSD,
+        isAvailableBalance,
     }) => {
         const isDashboard = isDashboardPage()
         const { t } = useI18N()
@@ -195,7 +197,10 @@ export const InputTokenPanelUI = memo<InputTokenPanelUIProps>(
                     <>
                         <Box className={classes.action}>
                             <Typography className={classes.balance}>
-                                {isNativeTokenAddress(token?.address) ? t('available_balance') : t('wallet_balance')}:
+                                {isAvailableBalance || isNativeTokenAddress(token?.address)
+                                    ? t('available_balance')
+                                    : t('wallet_balance')}
+                                :
                                 <Typography component="span" className={classes.amount} color="primary">
                                     <FormattedBalance
                                         value={balance}

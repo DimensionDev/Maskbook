@@ -603,7 +603,13 @@ class Connection implements EVM_Connection {
 
     getTransactionReceipt(hash: string, initial?: EVM_ConnectionOptions) {
         const options = this.getOptions(initial)
-        return Web3.getTransactionReceipt(options.chainId, hash)
+        return this.hijackedRequest<TransactionReceipt | null>(
+            {
+                method: EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
+                params: [hash],
+            },
+            options,
+        )
     }
 
     async getTransactionStatus(hash: string, initial?: EVM_ConnectionOptions): Promise<TransactionStatusType> {

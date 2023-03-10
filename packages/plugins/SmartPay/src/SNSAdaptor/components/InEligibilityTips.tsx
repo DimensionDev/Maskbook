@@ -61,7 +61,7 @@ export const InEligibilityTips = memo(() => {
                     components={{
                         Link: (
                             <Link
-                                href="https://twitter.com/realMaskNetwork"
+                                href="https://forms.gle/HpzvPVj1MUQmw5Rp9"
                                 rel="noopener noreferrer"
                                 target="_blank"
                             />

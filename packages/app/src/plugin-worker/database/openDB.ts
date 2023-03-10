@@ -12,7 +12,6 @@ import type {
     IDBPCursorWithValue,
     IDBPCursor,
 } from 'idb/with-async-ittr'
-import fixSafari from 'safari-14-idb-fix'
 
 export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSchema>>) {
     let db: IDBPDatabase<DBSchema> | undefined = undefined
@@ -24,7 +23,6 @@ export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSc
         db = undefined
     }
     return async () => {
-        await fixSafari()
         if (db) {
             try {
                 // try if the db still open

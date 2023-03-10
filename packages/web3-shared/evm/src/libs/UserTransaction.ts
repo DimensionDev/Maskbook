@@ -3,7 +3,7 @@ import { isUndefined, omitBy } from 'lodash-es'
 import type Web3 from 'web3'
 import * as ABICoder from 'web3-eth-abi'
 import { type AbiItem, hexToBytes, keccak256, padLeft, toHex, toNumber } from 'web3-utils'
-import type { ECKeyIdentifier } from '@masknet/base'
+import type { ECKeyIdentifier } from '@masknet/shared-base'
 import { isGreaterThan, multipliedBy, toFixed } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import EntryPointABI from '@masknet/web3-contracts/abis/EntryPoint.json'
@@ -176,17 +176,8 @@ export class UserTransaction {
             this.userOperation.initCode = overrides.initCode
         }
 
-        const {
-            initCode,
-            nonce,
-            sender,
-            callData,
-            callGas,
-            preVerificationGas,
-            maxFeePerGas,
-            maxPriorityFeePerGas,
-            paymaster,
-        } = this.userOperation
+        const { initCode, nonce, sender, callData, callGas, preVerificationGas, maxFeePerGas, maxPriorityFeePerGas } =
+            this.userOperation
 
         // add sender
         if (!isEmptyHex(initCode) && !isValidAddress(sender)) {

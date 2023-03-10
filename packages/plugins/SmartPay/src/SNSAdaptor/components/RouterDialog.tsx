@@ -1,10 +1,7 @@
 import { Icons } from '@masknet/icons'
-import {
-    useAllPersonas,
-    useCurrentPersonaInformation,
-    useLastRecognizedIdentity,
-} from '@masknet/plugin-infra/content-script'
+import { useAllPersonas, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog } from '@masknet/shared'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { useWallets } from '@masknet/web3-hooks-base'
@@ -47,9 +44,8 @@ export function RouterDialog() {
     const navigate = useNavigate()
     const personas = useAllPersonas()
     const wallets = useWallets()
-    const currentPersona = useCurrentPersonaInformation()
 
-    const { signer, setSigner } = SmartPayContext.useContainer()
+    const { setSigner } = SmartPayContext.useContainer()
 
     const { setDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDescriptionDialogEvent)
 
@@ -65,11 +61,15 @@ export function RouterDialog() {
         })
     })
 
+    const { open: openOfCross, closeDialog: closeOfCross } = useRemoteControlledDialog(
+        CrossIsolationMessages.events.smartPayDialogEvent,
+    )
+
     const lastRecognizedIdentity = useLastRecognizedIdentity()
 
     // #region query white list
     const { loading: queryVerifyLoading } = useAsync(async () => {
-        if (!lastRecognizedIdentity?.identifier?.userId) return
+        if (!lastRecognizedIdentity?.identifier?.userId || !open) return
         const chainId = await SmartPayBundler.getSupportedChainId()
         const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
             ...wallets.filter((x) => !x.owner).map((x) => x.address),
@@ -94,11 +94,12 @@ export function RouterDialog() {
     const handleClose = useCallback(() => {
         if (state?.canBack) return navigate(-1)
         closeDialog()
+        closeOfCross()
     }, [state])
 
     return (
         <InjectedDialog
-            open={open}
+            open={open || openOfCross}
             onClose={handleClose}
             title={title}
             titleTail={<Icons.Questions onClick={() => setDialog({ open: true })} />}>

@@ -20,7 +20,6 @@ const ControlContainer = styled('div')(
     justify-content: center;
     grid-template-columns: repeat(2, 180px);
     gap: 24px;
-    /* TODO: mobile */
     width: 584px;
 `,
 )
@@ -34,7 +33,6 @@ const AlertContainer = styled('div')(
 
 const PrivateKeyInput = styled(FilledInput)(
     ({ theme }) => `
-    /* TODO: mobile */
     width: 582px;
     height: 182px;
     margin-top: ${theme.spacing(3)};
@@ -43,7 +41,6 @@ const PrivateKeyInput = styled(FilledInput)(
 
 const PasswordInput = styled(FilledInput)(
     ({ theme }) => `
-    /* TODO: mobile */
     width: 582px;
     margin-top: ${theme.spacing(3)};
 `,
@@ -57,7 +54,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         padding: 0,
         marginTop: theme.spacing(3),
-        /* TODO: mobile */
         width: 582,
     },
 }))

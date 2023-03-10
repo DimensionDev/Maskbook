@@ -43,15 +43,15 @@ export function queryRemoteI18NBundle(
     _updater: (lang: string) => Promise<Array<[namespace: string, lang: string, json: object]>>,
 ) {
     const updater: typeof _updater & { [cache]?: DebouncedFunc<() => Promise<void>> } = _updater as any
-    const closure = (updater[cache] ??= debounce(async () => {
+    const update = (updater[cache] ??= debounce(async () => {
         const result = await updater(i18NextInstance.language)
         for (const [ns, lang, json] of result) {
             i18NextInstance.addResourceBundle(lang, ns, json, true, true)
         }
     }, 1500))
-    closure()
-    i18NextInstance.on('languageChanged', closure)
-    return () => i18NextInstance.off('languageChanged', closure)
+    update()
+    i18NextInstance.on('languageChanged', update)
+    return () => i18NextInstance.off('languageChanged', update)
 }
 
 export type { TOptions as TranslateOptions } from 'i18next'

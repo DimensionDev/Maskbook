@@ -1,13 +1,12 @@
+import { useLayoutEffect, useRef, useState } from 'react'
 import formatDateTime from 'date-fns/format'
 import isAfter from 'date-fns/isAfter'
 import isValidDate from 'date-fns/isValid'
 import { Icons } from '@masknet/icons'
 import { Markdown, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Box, CardContent, CardHeader, Paper, Tab, Typography } from '@mui/material'
-import { SUPPORTED_PROVIDERS } from '../../constants.js'
 import { CollectiblePaper } from './CollectiblePaper.js'
 import { LinkingAvatar } from '../Shared/LinkingAvatar.js'
 import { AboutTab } from './tabs/AboutTab.js'
@@ -16,8 +15,6 @@ import { DetailsTab } from './tabs/DetailsTab.js'
 import { OffersTab } from './tabs/OffersTab.js'
 import { Context } from '../Context/index.js'
 import { useI18N } from '../../locales/i18n_generated.js'
-import { useSwitcher } from '../hooks/useSwitcher.js'
-import { useLayoutEffect, useRef, useState } from 'react'
 
 const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) => {
     return {
@@ -133,15 +130,6 @@ export function Collectible(props: CollectibleProps) {
         }
     }, [])
 
-    // #region provider switcher
-    const CollectibleProviderSwitcher = useSwitcher(
-        sourceType,
-        setSourceType,
-        SUPPORTED_PROVIDERS,
-        resolveSourceTypeName,
-        true,
-    )
-    // #endregion
     if (asset.loading)
         return (
             <Box

@@ -1,26 +1,5 @@
 import { type BackupPreview, generateBackupRAW, getBackupPreviewInfo } from '@masknet/backup-format'
 import { createNewBackup } from './internal_create.js'
-
-export interface MobileBackupOptions {
-    noPosts?: boolean
-    noWallets?: boolean
-    noPersonas?: boolean
-    noProfiles?: boolean
-    hasPrivateKeyOnly?: boolean
-}
-export async function mobile_generateBackupJSON(options: MobileBackupOptions): Promise<unknown> {
-    if (process.env.architecture !== 'app') throw new TypeError('This function is only available in app environment')
-    const { hasPrivateKeyOnly, noPersonas, noPosts, noProfiles, noWallets } = options
-    const backup = await createNewBackup({
-        hasPrivateKeyOnly,
-        noPersonas,
-        noPosts,
-        noProfiles,
-        noWallets,
-    })
-    return generateBackupRAW(backup)
-}
-
 export async function generateBackupPreviewInfo(): Promise<BackupPreview> {
     // can we avoid create a full backup?
     const backup = await createNewBackup({ allProfile: true })

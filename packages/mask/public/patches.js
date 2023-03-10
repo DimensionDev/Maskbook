@@ -1,8 +1,6 @@
 // Fix for globalThis !== window in content script in Firefox
 {
     const fix = () => {
-        // Do not apply fix for iOS
-        if (typeof webkit === 'object' && webkit.messageHandlers) return
         // MV3 service worker
         if (typeof window === 'undefined') return
         // In the content script, globalThis !== window.
@@ -66,7 +64,6 @@
                 }
                 Object.defineProperties(desc.value, desc2)
                 try {
-                    // ? For unknown reason this fail for some objects on Safari.
                     desc.value.prototype = value.prototype
                 } catch {}
             }

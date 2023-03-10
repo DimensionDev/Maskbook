@@ -98,7 +98,6 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
             getSocialIdentity: reject,
             getThemeSettings: () => ({ color: '', mode: ThemeMode.Light, size: FontSize.Normal }),
             getWallets: reject,
-            hasNativeAPI: false,
             hasPaymentPassword: reject,
             lastRecognizedProfile: createConstantSubscription(undefined),
             openDashboard: reject,

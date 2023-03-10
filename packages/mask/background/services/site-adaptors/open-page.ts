@@ -7,7 +7,11 @@ export async function openProfilePage(network: string, userId?: string) {
     const worker = definedSiteAdaptors.get(network)
     if (!worker) return
 
-    const url = worker?.getProfilePage?.(ProfileIdentifier.of(network, userId).unwrap())
+    const url = worker?.getProfilePage?.(
+        ProfileIdentifier.of(network, userId).expect(
+            `${network} and ${userId} should compose a valid ProfileIdentifier`,
+        ),
+    )
     if (!url) return
 
     if (!(await requestSiteAdaptorsPermission([worker]))) return

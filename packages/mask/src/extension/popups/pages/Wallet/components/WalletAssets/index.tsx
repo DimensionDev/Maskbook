@@ -12,6 +12,7 @@ import { WalletContext } from '../../hooks/useWalletContext.js'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
 import { Navigator } from '../../../../components/Navigator/index.js'
 import { useWallet } from '@masknet/web3-hooks-base'
+import { useMount } from 'react-use'
 
 const useStyles = makeStyles()({
     content: {
@@ -73,6 +74,11 @@ enum WalletTabs {
 export const WalletAssets = memo(() => {
     const navigate = useNavigate()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const { refreshAssets } = useContainer(WalletContext)
+
+    useMount(() => {
+        refreshAssets()
+    })
     return wallet ? <WalletAssetsUI onAddTokenClick={() => navigate(PopupRoutes.AddToken)} /> : null
 })
 

@@ -4,10 +4,9 @@ import { MaskMessages, createReactRootShadowed, startWatch } from '../../../../u
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { postAvatarSelector } from '../../utils/selector.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
-import { noop } from 'lodash-es'
 
 function getUserId(ele: HTMLElement) {
-    const attribute = ele?.dataset.testid || ''
+    const attribute = ele.dataset.testid || ''
     if (attribute.endsWith('unknown')) {
         return ele?.querySelector('a[href][role=link]')?.getAttribute('href')?.slice(1)
     }
@@ -17,8 +16,7 @@ function getUserId(ele: HTMLElement) {
 function inject(selector: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(selector()).useForeach((ele) => {
-            let remover = noop
-            const remove = () => remover()
+            let remover: () => void | undefined
 
             const run = async () => {
                 const userId = getUserId(ele)
@@ -64,7 +62,7 @@ function inject(selector: () => LiveSelector<HTMLElement>, signal: AbortSignal) 
             return {
                 onNodeMutation: run,
                 onTargetChanged: run,
-                onRemove: remove,
+                onRemove: () => remover?.(),
             }
         }),
         signal,

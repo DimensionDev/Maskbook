@@ -1,16 +1,16 @@
-import urlcat from 'urlcat'
-import { memo, useCallback, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { delay } from '@masknet/kit'
+import { DashboardRoutes, EnhanceableSite } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, Checkbox, FormControlLabel, FormGroup } from '@mui/material'
+import { memo, useCallback, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import urlcat from 'urlcat'
 import { Services } from '../../API.js'
 import { FooterLine } from '../../components/FooterLine/index.js'
 import { HeaderLine } from '../../components/HeaderLine/index.js'
 import { TermsAgreedContext } from '../../hooks/useTermsAgreed.js'
 import { DashboardTrans, useDashboardI18N } from '../../locales/index.js'
 import { Article } from './Article.js'
-import { delay } from '@masknet/kit'
 
 const useStyles = makeStyles()((theme) => ({
     page: {
@@ -83,15 +83,21 @@ export default memo(function Welcome() {
         }
         setAgreed(true)
         const from = params.get('from')
-        if (from && from !== DashboardRoutes.Personas) {
+        const hasRedirect = from && from !== DashboardRoutes.Personas
+        if (hasRedirect) {
             const search = params.get('search')
             navigate(urlcat(from, search ? new URLSearchParams(search).entries() : {}))
         }
 
-        const url = await Services.SocialNetwork.setupSite('twitter.com', false)
+        // warm up, otherwise we can't access correct value from userGuideStatus
+        await Services.SocialNetwork.hasSetup(EnhanceableSite.Twitter)
+        const hasSetup = await Services.SocialNetwork.hasSetup(EnhanceableSite.Twitter)
+
+        const url = await Services.SocialNetwork.setupSite(EnhanceableSite.Twitter, false)
         if (!url) return
-        if (from === DashboardRoutes.Setup) return
-        if (from && from !== DashboardRoutes.Personas) {
+        if (hasRedirect && (hasSetup || from === DashboardRoutes.Setup)) return
+
+        if (hasRedirect) {
             // Delay opening sns page to let use realize the route has changed that happened above
             await delay(300)
             browser.tabs.create({

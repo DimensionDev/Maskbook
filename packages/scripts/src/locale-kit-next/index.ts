@@ -75,7 +75,7 @@ export async function syncLanguages() {
         const map: Record<string, string> = {}
         for (const { input, generator } of config) {
             const { namespace } = generator
-            map[`/[DimensionDev.Maskbook] develop/${input.slice(2).replace('en-US', '%locale%')}`] = namespace
+            map[`${input.slice('./packages/'.length).replace('en-US', '%locale%')}`] = namespace
         }
         const code = await prettier(`${basicHeader}\nexport default ${JSON.stringify(map)}`)
         await writeFile(new URL('packages/mask/background/services/helper/i18n-cache-query-list.ts', ROOT_PATH), code, {

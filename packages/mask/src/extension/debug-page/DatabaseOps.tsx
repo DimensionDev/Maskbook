@@ -1,4 +1,5 @@
 import { openDB, wrap } from 'idb/with-async-ittr'
+import { timeout } from '@masknet/kit'
 import { __DEBUG__ONLY__enableCryptoKeySerialization, serializer } from '@masknet/shared-base'
 import type { BackupFormat, Instance, ObjectStore } from './types.js'
 import { useI18N } from '../../utils/index.js'
@@ -40,7 +41,7 @@ async function onClear() {
     await Promise.all(
         databases.map(async ({ name }) => {
             if (!name) return
-            await timeout(wrap(indexedDB.deleteDatabase(name)), 500)
+            await timeout(wrap(indexedDB.deleteDatabase(name)), 500, `Timeout to delete database: ${name}.`)
         }),
     )
 }
@@ -85,10 +86,6 @@ function download(name: string, part: BlobPart) {
     element.click()
 }
 
-function timeout<T>(promise: PromiseLike<T>, time: number): Promise<T | undefined> {
-    return Promise.race([promise, new Promise<undefined>((resolve) => setTimeout(() => resolve(undefined), time))])
-}
-
 async function restoreAll(parsed: BackupFormat) {
     for (const { name, version, stores } of parsed.instances) {
         const db = await openDB(name, version, {
@@ -131,7 +128,7 @@ async function backupAll() {
     const instances: BackupFormat['instances'] = []
     for (const { name, version } of databases) {
         if (!name || !version) continue
-        const db = await timeout(openDB(name, version), 500)
+        const db = await timeout(openDB(name, version), 500, `Timeout to open database ${name}_${version}.`)
         if (db === undefined) {
             continue
         }

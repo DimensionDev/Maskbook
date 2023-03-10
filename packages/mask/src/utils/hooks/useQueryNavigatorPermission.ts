@@ -1,7 +1,6 @@
 /** This file is published under MIT License */
 import { useEffect, useState } from 'react'
 import { hasIn } from 'lodash-es'
-import { Flags } from '../../../shared/index.js'
 
 const q = ['query', 'request', 'revoke'] as const
 
@@ -26,8 +25,8 @@ export function useQueryNavigatorPermission(needRequest: boolean, name: Permissi
     const [permission, updatePermission] = useState<PermissionState>('prompt')
 
     useEffect(() => {
-        // TODO: Only camera related APi need to check Flags.has_no_WebRTC
-        if (!needRequest || permission !== 'prompt' || Flags.has_no_WebRTC) return
+        // TODO: Only camera related APi need to check navigator?.permissions?.query
+        if (!needRequest || permission !== 'prompt' || !globalThis?.navigator?.permissions?.query) return
         let permissionStatus: PermissionStatus
 
         const handleChange = function (this: PermissionStatus) {

@@ -1,6 +1,5 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { PageHeader } from '../components/PageHeader/index.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
@@ -148,7 +147,6 @@ const WalletRecovery = memo(() => {
     ) : (
         <>
             <div className={classes.container}>
-                <PageHeader title={t('popups_wallet_recovered')} />
                 <div style={{ padding: 6 }}>
                     {value?.wallets.map((wallet) => {
                         return (

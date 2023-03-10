@@ -48,15 +48,7 @@ function modify_2(manifest: ManifestV2, flags: NormalizedFlags, computedFlags: C
         // TODO: To make `browser.tabs.executeScript` run on Firefox, we need an extra permission "tabs".
         // Switch to browser.userScripts (Firefox only) API can resolve the problem.
         manifest.permissions.push('tabs')
-
-        if (flags.architecture === 'app') {
-            manifest.permissions.push('nativeMessaging', 'nativeMessagingFromContent', 'geckoViewAddons')
-            manifest.applications = { gecko: { id: 'info@dimension.im' } }
-        }
     }
-
-    // Grant all URL permissions on App
-    if (flags.architecture === 'app') manifest.permissions.push('<all_urls>')
 
     if (String(computedFlags.sourceMapKind).includes('eval')) {
         // TODO: enable TrustedTypes for production build.

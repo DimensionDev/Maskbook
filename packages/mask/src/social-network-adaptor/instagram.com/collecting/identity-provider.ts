@@ -22,7 +22,7 @@ export const IdentityProviderInstagram: SocialNetworkUI.CollectingCapabilities.I
 
 async function query(): Promise<null | IdentityResolved> {
     const db = await openDB('redux', 1, {
-        upgrade: () => {
+        upgrade: (db) => {
             db.createObjectStore('paths')
         },
     })
