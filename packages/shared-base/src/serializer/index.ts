@@ -59,7 +59,11 @@ function setup() {
     )
 
     typeson.register({
-        Identifier: [(x) => x instanceof Identifier, (x: Identifier) => x.toText(), (x) => Identifier.from(x).unwrap()],
+        Identifier: [
+            (x) => x instanceof Identifier,
+            (x: Identifier) => x.toText(),
+            (x) => Identifier.from(x).expect(`${x} should be a Identifier`),
+        ],
         Response: [...responseRegedit],
         Request: [...requestRegedit],
     })

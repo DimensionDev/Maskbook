@@ -82,7 +82,9 @@ export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
         const personaConnectedProfile = persona?.linkedProfiles.find((x) =>
             isSameProfile(
                 x.identifier,
-                ProfileIdentifier.of(activatedSocialNetworkUI.networkIdentifier, username).unwrap(),
+                ProfileIdentifier.of(activatedSocialNetworkUI.networkIdentifier, username).expect(
+                    `${username} should be a valid user id`,
+                ),
             ),
         )
         if (!personaConnectedProfile) return composeInfo(SetupGuideStep.FindUsername, 'doing')

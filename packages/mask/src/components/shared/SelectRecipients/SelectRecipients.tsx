@@ -80,7 +80,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
             const newItem = {
                 ...item,
                 nickname: x,
-                identifier: ProfileIdentifier.of('twitter.com', x).unwrap(),
+                identifier: ProfileIdentifier.of('twitter.com', x).expect(`${x} should be a valid user id`),
             }
             rpc.attachNextIDPersonaToProfile(newItem, whoAmI)
         })

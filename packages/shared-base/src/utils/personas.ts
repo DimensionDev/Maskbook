@@ -44,11 +44,14 @@ function isSameIdentity<T extends Identifier>(
 
 export function isSamePersona(...personas: Array<PersonaIdentifier | PersonaInformation | string | undefined>) {
     return isSameIdentity((i) => {
-        if (i.startsWith('ec_key:')) return ECKeyIdentifier.from(i).unwrap()
+        if (i.startsWith('ec_key:')) return ECKeyIdentifier.from(i).expect(`${i} should be a valid ECKeyIdentifier`)
         return new ECKeyIdentifier('secp256k1', i)
     }, ...personas)
 }
 
 export function isSameProfile(...profiles: Array<ProfileIdentifier | ProfileInformation | string | undefined>) {
-    return isSameIdentity((i) => ProfileIdentifier.from(i).unwrap(), ...profiles)
+    return isSameIdentity(
+        (i) => ProfileIdentifier.from(i).expect(`${i} should be a valid ProfileIdentifier`),
+        ...profiles,
+    )
 }

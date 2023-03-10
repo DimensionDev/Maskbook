@@ -194,8 +194,8 @@ async function restorePlugins(backup: NormalizedBackup.Data['plugins']) {
             continue
         }
 
-        const f = plugin.backup?.onRestore
-        if (!f) {
+        const onRestore = plugin.backup?.onRestore
+        if (!onRestore) {
             console.warn(
                 `[@masknet/plugin-infra] Found a backup of plugin ${plugin} but it did not register a onRestore callback.`,
                 item,
@@ -204,9 +204,11 @@ async function restorePlugins(backup: NormalizedBackup.Data['plugins']) {
         }
         works.add(
             (async () => {
-                const x = await f(item)
-                if (x.err) console.error(`[@masknet/plugin-infra] Plugin ${plugin} failed to restore its backup.`, item)
-                return x.unwrap()
+                const result = await onRestore(item)
+                if (result.err) {
+                    const msg = `[@masknet/plugin-infra] Plugin ${plugin.ID} failed to restore its backup.`
+                    throw new Error(msg, { cause: result.err })
+                }
             })(),
         )
     }

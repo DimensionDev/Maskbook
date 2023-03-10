@@ -278,7 +278,10 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             const { persona, status }: SetupGuideContext = JSON.parse(id || '{}')
             if (persona && status && !started) {
                 started = true
-                ui.injection.setupWizard?.(signal, ECKeyIdentifier.from(persona).unwrap())
+                ui.injection.setupWizard?.(
+                    signal,
+                    ECKeyIdentifier.from(persona).expect(`${persona} should be a valid ECKeyIdentifier`),
+                )
             }
         }
         currentSetupGuideStatus[network].addListener(onStatusUpdate)

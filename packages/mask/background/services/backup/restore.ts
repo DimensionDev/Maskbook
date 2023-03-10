@@ -143,7 +143,7 @@ export async function getUnconfirmedBackup(id: string): Promise<
         const personaAddresses = compact(
             [...backup.personas.values()].map((x) => {
                 if (x.privateKey.some) {
-                    const privateKey = x.privateKey.unwrap()
+                    const privateKey = x.privateKey.val
                     if (!privateKey.d) return
                     return bufferToHex(publicToAddress(privateToPublic(Buffer.from(fromBase64URL(privateKey.d)))))
                 }

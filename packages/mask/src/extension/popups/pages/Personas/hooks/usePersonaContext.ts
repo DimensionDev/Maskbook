@@ -56,12 +56,12 @@ function usePersonaContext() {
         const remoteProfiles = proofs
             .filter((x) => !!NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP[x.platform])
             .map<Account>((x) => {
+                const network = NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP[x.platform]
                 return {
                     ...x,
-                    identifier: ProfileIdentifier.of(
-                        NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP[x.platform],
-                        x.identity,
-                    ).unwrap(),
+                    identifier: ProfileIdentifier.of(network, x.identity).expect(
+                        `${network} and ${x.identity} should compose a valid ProfileIdentifier`,
+                    ),
                 }
             })
 

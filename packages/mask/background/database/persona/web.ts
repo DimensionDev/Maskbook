@@ -452,7 +452,9 @@ export async function updateProfileDB(
         : undefined
 
     if (oldLinkedPersona && updating.linkedPersona && oldLinkedPersona !== updating.linkedPersona) {
-        const oldIdentifier = ProfileIdentifier.from(old.identifier).unwrap()
+        const oldIdentifier = ProfileIdentifier.from(old.identifier).expect(
+            `old data in the profile database should be a valid ProfileIdentifier, but found ${old.identifier}`,
+        )
         const oldLinkedPersona = await queryPersonaByProfileDB(oldIdentifier, t)
 
         if (oldLinkedPersona) {
@@ -677,7 +679,9 @@ function profileOutDB({ network, ...x }: ProfileRecordDB): ProfileRecord {
     }
     return {
         ...x,
-        identifier: ProfileIdentifier.from(x.identifier).unwrap(),
+        identifier: ProfileIdentifier.from(x.identifier).expect(
+            `data stored in the profile database should be a valid ProfileIdentifier, but found ${x.identifier}`,
+        ),
         linkedPersona: x.linkedPersona
             ? new ECKeyIdentifier(
                   x.linkedPersona.curve,
@@ -696,7 +700,9 @@ function personaRecordToDB(x: PersonaRecord): PersonaRecordDB {
 }
 function personaRecordOutDB(x: PersonaRecordDB): PersonaRecord {
     Reflect.deleteProperty(x, 'hasPrivateKey' as keyof typeof x)
-    const identifier = ECKeyIdentifier.from(x.identifier).unwrap()
+    const identifier = ECKeyIdentifier.from(x.identifier).expect(
+        `data stored in the profile database should be a valid ECKeyIdentifier, but found ${x.identifier}`,
+    )
 
     const obj: PersonaRecord = {
         ...x,
@@ -722,8 +728,12 @@ function relationRecordToDB(x: Omit<RelationRecord, 'network'>): RelationRecordD
 function relationRecordOutDB(x: RelationRecordDB): RelationRecord {
     return {
         ...x,
-        profile: ProfileIdentifier.from(x.profile).unwrap(),
-        linked: ECKeyIdentifier.from(x.linked).unwrap(),
+        profile: ProfileIdentifier.from(x.profile).expect(
+            `data stored in the profile database should be a valid ProfileIdentifier, but found ${x.profile}`,
+        ),
+        linked: ECKeyIdentifier.from(x.linked).expect(
+            `data stored in the profile database should be a valid ECKeyIdentifier, but found ${x.linked}`,
+        ),
     }
 }
 
