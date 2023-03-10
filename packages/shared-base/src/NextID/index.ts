@@ -30,5 +30,7 @@ export function resolveNextIDIdentityToProfile(nextIDIdentity: string, platform:
     const network = resolveNextIDPlatformToNetwork(platform)
     if (!network) return
 
-    return ProfileIdentifier.of(network, nextIDIdentity).unwrap()
+    return ProfileIdentifier.of(network, nextIDIdentity).expect(
+        `${network} and ${nextIDIdentity} should compose a valid ProfileIdentifier`,
+    )
 }

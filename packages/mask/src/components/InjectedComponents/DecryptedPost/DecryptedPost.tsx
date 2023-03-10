@@ -66,10 +66,10 @@ export function DecryptPost(props: DecryptPostProps) {
 
     useEffect(() => {
         function setCommentFns(iv: Uint8Array, message: TypedMessage) {
-            postInfo.encryptComment.value = async (comment) =>
-                Services.Crypto.encryptComment(iv, extractTextFromTypedMessage(message).unwrap(), comment)
+            const text = extractTextFromTypedMessage(message).expect('TypedMessage should have one or more text part')
+            postInfo.encryptComment.value = async (comment) => Services.Crypto.encryptComment(iv, text, comment)
             postInfo.decryptComment.value = async (encryptedComment) =>
-                Services.Crypto.decryptComment(iv, extractTextFromTypedMessage(message).unwrap(), encryptedComment)
+                Services.Crypto.decryptComment(iv, text, encryptedComment)
         }
         const signal = new AbortController()
         const postURL = postInfo.url.getCurrentValue()?.toString()
