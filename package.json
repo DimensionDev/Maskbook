@@ -42,7 +42,6 @@
     "@mui/lab": "5.0.0-alpha.102",
     "@mui/material": "5.10.8",
     "@mui/system": "5.10.8",
-    "@sentry/cli": "^2.14.4",
     "@types/masknet__global-types": "workspace:^",
     "@types/react": "18.0.28",
     "@types/react-dom": "^18.0.11",
@@ -109,7 +108,7 @@
       "i18next-translation-parser": "see https://github.com/i18next/i18next-translation-parser/issues/11 we manually pin the commit",
       "@ethersproject/providers": "@balancer-labs/sor is pinning a lower version which breaks the type check"
     },
-    "onlyBuiltDependencies": ["@sentry/cli"],
+    "onlyBuiltDependencies": [],
     "peerDependencyRules": {
       "ignoreMissing": [
         "react",

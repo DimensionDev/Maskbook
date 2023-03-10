@@ -1,7 +1,6 @@
 lockfileVersion: '6.0'
 
-onlyBuiltDependencies:
-  - '@sentry/cli'
+onlyBuiltDependencies: []
 
 overrides:
   '@types/node': 18.11.9
@@ -26,81 +25,81 @@ patchedDependencies:
   gulp@4.0.2:
     hash: 2y5kpiugqogdejwrac5fzdim7y
     path: patches/gulp@4.0.2.patch
-  ipfs-http-client@57.0.3:
-    hash: 7oiabyd5hzeabolk22o64jpd4i
-    path: patches/ipfs-http-client@57.0.3.patch
   urlcat@2.0.4:
     hash: fggwetex7eobhq3hztj4obsulu
     path: patches/urlcat@2.0.4.patch
-  '@emotion/use-insertion-effect-with-fallbacks@1.0.0':
-    hash: ewwh6qko3asynoh7f6o5yjipdy
-    path: patches/@emotion__use-insertion-effect-with-fallbacks@1.0.0.patch
-  '@emotion/cache@11.10.3':
-    hash: anquw7u43yedhv6g6kmhzkdhze
-    path: patches/@emotion__cache@11.10.3.patch
-  '@emotion/react@11.10.4':
-    hash: obcydjbogyjam4qag626nceajy
-    path: patches/@emotion__react@11.10.4.patch
   '@ethersphere/bee-js@5.0.0':
     hash: g3xomw7pzn5koufm6j4gkm6n5m
     path: patches/@ethersphere__bee-js@5.0.0.patch
-  react-devtools-inline@4.26.1:
-    hash: fpee2mntbhrd2bberabvpkyh5q
-    path: patches/react-devtools-inline@4.26.1.patch
-  micromark@3.1.0:
-    hash: w5le45vl373yc24qnd4o3e4hz4
-    path: patches/micromark@3.1.0.patch
-  '@mui/base@5.0.0-alpha.100':
-    hash: cc7k56pam6cgsdxwjuynldgftq
-    path: patches/@mui__base@5.0.0-alpha.100.patch
-  micromark-util-symbol@1.0.1:
-    hash: jkhnsgx77ffpyllfnod5pyn4ue
-    path: patches/micromark-util-symbol@1.0.1.patch
-  '@hookform/resolvers@2.9.10':
-    hash: dqqyd5a3hlw75qwefcjrgni3fy
-    path: patches/@hookform__resolvers@2.9.10.patch
-  '@types/react-avatar-editor@13.0.0':
-    hash: 6wzwgbn4gsisp2tjbg76iifhqq
-    path: patches/@types__react-avatar-editor@13.0.0.patch
-  web3@1.8.0:
-    hash: dcxxuqxbti2wcxbar42oow5yze
-    path: patches/web3@1.8.0.patch
-  fuse.js@6.6.2:
-    hash: b2o4qvyfvxmpo7347sqko6h22a
-    path: patches/fuse.js@6.6.2.patch
+  ipfs-http-client@57.0.3:
+    hash: 7oiabyd5hzeabolk22o64jpd4i
+    path: patches/ipfs-http-client@57.0.3.patch
+  '@emotion/cache@11.10.3':
+    hash: anquw7u43yedhv6g6kmhzkdhze
+    path: patches/@emotion__cache@11.10.3.patch
+  '@emotion/use-insertion-effect-with-fallbacks@1.0.0':
+    hash: ewwh6qko3asynoh7f6o5yjipdy
+    path: patches/@emotion__use-insertion-effect-with-fallbacks@1.0.0.patch
   '@ceramicnetwork/rpc-transport@0.3.1':
     hash: subw5upjv36ceix3wmw66isn6u
     path: patches/@ceramicnetwork__rpc-transport@0.3.1.patch
-  '@project-serum/sol-wallet-adapter@0.2.6':
-    hash: dl5wqnnaxjm7biesxtvdpr7gpe
-    path: patches/@project-serum__sol-wallet-adapter@0.2.6.patch
+  '@mui/base@5.0.0-alpha.100':
+    hash: cc7k56pam6cgsdxwjuynldgftq
+    path: patches/@mui__base@5.0.0-alpha.100.patch
+  '@emotion/react@11.10.4':
+    hash: obcydjbogyjam4qag626nceajy
+    path: patches/@emotion__react@11.10.4.patch
+  react-devtools-inline@4.26.1:
+    hash: fpee2mntbhrd2bberabvpkyh5q
+    path: patches/react-devtools-inline@4.26.1.patch
+  '@hookform/resolvers@2.9.10':
+    hash: dqqyd5a3hlw75qwefcjrgni3fy
+    path: patches/@hookform__resolvers@2.9.10.patch
+  micromark-util-symbol@1.0.1:
+    hash: jkhnsgx77ffpyllfnod5pyn4ue
+    path: patches/micromark-util-symbol@1.0.1.patch
+  micromark@3.1.0:
+    hash: w5le45vl373yc24qnd4o3e4hz4
+    path: patches/micromark@3.1.0.patch
+  web3@1.8.0:
+    hash: dcxxuqxbti2wcxbar42oow5yze
+    path: patches/web3@1.8.0.patch
+  '@types/react-avatar-editor@13.0.0':
+    hash: 6wzwgbn4gsisp2tjbg76iifhqq
+    path: patches/@types__react-avatar-editor@13.0.0.patch
+  fuse.js@6.6.2:
+    hash: b2o4qvyfvxmpo7347sqko6h22a
+    path: patches/fuse.js@6.6.2.patch
   rss3-next@0.6.17:
     hash: db27yqpr4wdtpwfyvaxcqd4jpi
     path: patches/rss3-next@0.6.17.patch
+  '@project-serum/sol-wallet-adapter@0.2.6':
+    hash: dl5wqnnaxjm7biesxtvdpr7gpe
+    path: patches/@project-serum__sol-wallet-adapter@0.2.6.patch
   '@types/react-highlight-words@0.16.4':
     hash: cu6glh5cl4qvdid3ys3m6a2f7e
     path: patches/@types__react-highlight-words@0.16.4.patch
-  reflect-metadata@0.1.13:
-    hash: pnra5xi77mqlyipflqvcm4z6ga
-    path: patches/reflect-metadata@0.1.13.patch
-  '@walletconnect/client@1.7.8':
-    hash: 2krbsxzv524dzcdemy7vploqza
-    path: patches/@walletconnect__client@1.7.8.patch
   fortmatic@2.2.1:
     hash: tb3oevqnvhntsyfyhi2z6spuea
     path: patches/fortmatic@2.2.1.patch
-  '@sentry/core@7.37.2':
-    hash: rklncqa6modgoos6z6mwlg3pli
-    path: patches/@sentry__core@7.37.2.patch
+  '@walletconnect/client@1.7.8':
+    hash: 2krbsxzv524dzcdemy7vploqza
+    path: patches/@walletconnect__client@1.7.8.patch
   bloom-filters@3.0.0:
     hash: 2etetjrjxbcye2oktxqpij75ey
     path: patches/bloom-filters@3.0.0.patch
-  web3-core@1.8.0:
-    hash: ie6z5nhvcuo3lg2pk6xeacwpbi
-    path: patches/web3-core@1.8.0.patch
+  '@sentry/core@7.37.2':
+    hash: rklncqa6modgoos6z6mwlg3pli
+    path: patches/@sentry__core@7.37.2.patch
+  reflect-metadata@0.1.13:
+    hash: pnra5xi77mqlyipflqvcm4z6ga
+    path: patches/reflect-metadata@0.1.13.patch
   '@cyberlab/cyberconnect@4.2.2':
     hash: 7wgc4b53ygfwefhtjbh3dydjgy
     path: patches/@cyberlab__cyberconnect@4.2.2.patch
+  web3-core@1.8.0:
+    hash: ie6z5nhvcuo3lg2pk6xeacwpbi
+    path: patches/web3-core@1.8.0.patch
   arweave@1.11.4:
     hash: lwxdtt2msovfmigiutpkaty3lq
     path: patches/arweave@1.11.4.patch
@@ -154,9 +153,6 @@ importers:
       '@mui/system':
         specifier: 5.10.8
         version: 5.10.8(@emotion/react@11.10.4)(@emotion/styled@11.10.4)(@types/react@18.0.25)(react@0.0.0-experimental-d1e35c703-20221110)
-      '@sentry/cli':
-        specifier: ^2.14.4
-        version: 2.14.4
       '@types/masknet__global-types':
         specifier: workspace:^
         version: link:packages/polyfills/types
@@ -9729,22 +9725,6 @@ packages:
       '@sentry/types': 7.37.2
       '@sentry/utils': 7.37.2
       tslib: 1.14.1
-
-  /@sentry/cli@2.14.4:
-    resolution: {integrity: sha512-PPtb5qA2sKnYvj2QBBGOrla4kyG6AqOTVaELoc80mZgZ+yDjuaPH/Xmbg/K+rzZyypVlv4XleTtju44830Q/SA==}
-    engines: {node: '>= 10'}
-    hasBin: true
-    requiresBuild: true
-    dependencies:
-      https-proxy-agent: 5.0.1
-      node-fetch: 2.6.9
-      progress: 2.0.3
-      proxy-from-env: 1.1.0
-      which: 2.0.2
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
-    dev: false
 
   /@sentry/core@5.30.0:
     resolution: {integrity: sha512-TmfrII8w1PQZSZgPpUESqjB+jC6MvZJZdLtE/0hZ+SrnKhW3x5WlYLvTXZpcWePYBku7rl2wn1RZu6uT0qCTeg==}
@@ -27814,11 +27794,6 @@ packages:
     resolution: {integrity: sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A==}
     engines: {node: '>= 0.6.0'}
 
-  /progress@2.0.3:
-    resolution: {integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==}
-    engines: {node: '>=0.4.0'}
-    dev: false
-
   /promievent@0.1.5:
     resolution: {integrity: sha512-Yqve4y2sFIz5hHmVpoZWXNayROyAyf3KWeEHZPh60yYiVpmHMKuJt6UoLbs6pC8uEMdFkqukz97mQXaAkHDPAw==}
 
@@ -27936,10 +27911,6 @@ packages:
     dependencies:
       forwarded: 0.2.0
       ipaddr.js: 1.9.1
-
-  /proxy-from-env@1.1.0:
-    resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
-    dev: false
 
   /prr@1.0.1:
     resolution: {integrity: sha512-yPw4Sng1gWghHQWj0B3ZggWUm4qVbPwPFcRG8KyxiU7J2OHFSoEHKS+EZ3fv5l1t9CyCiop6l/ZYeWbrgoQejw==}
@@ -34707,7 +34678,6 @@ time:
   /@rollup/plugin-replace@5.0.2: '2022-12-17T15:03:40.788Z'
   /@scamsniffer/detector@0.0.21: '2022-08-15T06:05:49.379Z'
   /@sentry/browser@7.37.2: '2023-02-13T15:34:12.301Z'
-  /@sentry/cli@2.14.4: '2023-03-06T18:09:22.759Z'
   /@sentry/types@7.40.0: '2023-03-01T18:20:53.302Z'
   /@servie/events@3.0.0: '2021-04-13T22:43:08.067Z'
   /@siddomains/sidjs@0.1.16: '2022-09-19T12:14:28.552Z'
