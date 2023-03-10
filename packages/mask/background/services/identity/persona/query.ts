@@ -8,10 +8,10 @@ import {
     type PersonaIdentifier,
     type PersonaInformation,
     type ProfileIdentifier,
+    type SocialIdentity,
 } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { NextIDProof } from '@masknet/web3-providers'
-import type { SocialIdentity } from '@masknet/web3-shared-base'
 import {
     createPersonaDBReadonlyAccess,
     queryPersonaDB,

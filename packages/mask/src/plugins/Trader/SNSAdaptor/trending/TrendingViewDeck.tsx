@@ -1,3 +1,5 @@
+import { useCallback, useContext, useRef, useState } from 'react'
+import { first, last } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { PluginTransakMessages, useTransakAllowanceCoin } from '@masknet/plugin-transak'
@@ -15,13 +17,14 @@ import {
     EMPTY_LIST,
     type EnhanceableSite,
     CrossIsolationMessages,
+    type SocialIdentity,
 } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { MaskColors, MaskDarkTheme, MaskLightTheme, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { SourceType, TokenType, formatCurrency, type SocialIdentity } from '@masknet/web3-shared-base'
+import { SourceType, TokenType, formatCurrency } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import {
     Avatar,
@@ -34,8 +37,6 @@ import {
     Typography,
     useTheme,
 } from '@mui/material'
-import { first, last } from 'lodash-es'
-import { useCallback, useContext, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { ContentTabs, type Currency, type Stat } from '../../types/index.js'
 import { PriceChanged } from './PriceChanged.js'

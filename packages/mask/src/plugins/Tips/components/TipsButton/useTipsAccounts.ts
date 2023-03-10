@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { isSameAddress, SocialAddressType } from '@masknet/web3-shared-base'
+import { EMPTY_LIST, SocialAddressType } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { useSocialAccountsAll } from '@masknet/web3-hooks-base'
 import { useTipsSetting } from '../../hooks/useTipsSetting.js'
 

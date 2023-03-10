@@ -12,11 +12,10 @@ import {
     Signer,
     type Transaction,
 } from '@masknet/web3-shared-evm'
-import { Web3 } from '@masknet/web3-providers'
+import { EVM_Providers, Web3 } from '@masknet/web3-providers'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet as WalletContract } from '@masknet/web3-contracts/types/Wallet.js'
 import { SharedContextSettings } from '../../../settings/index.js'
-import { Providers } from '../../Provider/provider.js'
 import type { BaseContractWalletProvider } from '../../Provider/providers/BaseContractWallet.js'
 
 export class ContractWallet implements Middleware<ConnectionContext> {
@@ -117,7 +116,7 @@ export class ContractWallet implements Middleware<ConnectionContext> {
             return
         }
 
-        const provider = Providers[context.providerType] as BaseContractWalletProvider | undefined
+        const provider = EVM_Providers[context.providerType] as BaseContractWalletProvider | undefined
 
         // not a SC wallet provider
         if (!provider?.ownerAccount && !context.owner) {

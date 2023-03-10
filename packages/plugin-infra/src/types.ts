@@ -22,6 +22,9 @@ import type {
     SignType,
     NFTAvatarEvent,
     ValueRefWithReady,
+    Wallet,
+    SocialAccount,
+    SocialIdentity,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -30,10 +33,7 @@ import type {
     NetworkDescriptor,
     ProviderDescriptor,
     SearchResult,
-    SocialAccount,
-    SocialIdentity,
     ThemeSettings,
-    Wallet,
     Web3EnableRequirement,
     Web3State,
     Web3UI,
@@ -409,6 +409,7 @@ export namespace Plugin.SNSAdaptor {
         TransactionParameter = unknown,
         Web3 = unknown,
         Web3Provider = unknown,
+        WalletProvider = unknown,
     > extends Shared.DefinitionDeferred<SNSAdaptorContext> {
         /** This UI will be rendered for each post found. */
         PostInspector?: InjectUI<{}>
@@ -447,7 +448,8 @@ export namespace Plugin.SNSAdaptor {
             TransactionSignature,
             TransactionParameter,
             Web3,
-            Web3Provider
+            Web3Provider,
+            WalletProvider
         >
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         readonly CompositionDialogEntry?: CompositionDialogEntry
@@ -900,6 +902,7 @@ export namespace Plugin.Dashboard {
         TransactionParameter = unknown,
         Web3 = unknown,
         Web3Provider = unknown,
+        WalletProvider = unknown,
     > extends Shared.DefinitionDeferred<DashboardContext> {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
@@ -922,7 +925,8 @@ export namespace Plugin.Dashboard {
             TransactionSignature,
             TransactionParameter,
             Web3,
-            Web3Provider
+            Web3Provider,
+            WalletProvider
         >
         /** Plugin DO NOT need to define this. This will be auto set by the plugin host. */
         __general_ui__?: GeneralUI.DefinitionDeferred

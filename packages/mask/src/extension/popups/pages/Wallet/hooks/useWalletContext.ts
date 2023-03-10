@@ -2,13 +2,8 @@ import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { createContainer } from 'unstated-next'
 import { useChainContext, useRecentTransactions, useFungibleAssets, useWallets } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import {
-    type FungibleAsset,
-    isSameAddress,
-    type RecentTransactionComputed,
-    type Wallet,
-} from '@masknet/web3-shared-base'
+import { NetworkPluginID, type Wallet } from '@masknet/shared-base'
+import { type FungibleAsset, isSameAddress, type RecentTransactionComputed } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
 
 function useWalletContext() {

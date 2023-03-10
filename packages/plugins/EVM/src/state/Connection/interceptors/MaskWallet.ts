@@ -1,5 +1,5 @@
 import { toHex } from 'web3-utils'
-import type { Wallet } from '@masknet/web3-shared-base'
+import type { Wallet } from '@masknet/shared-base'
 import {
     type ConnectionContext,
     EthereumMethodType,
@@ -8,9 +8,13 @@ import {
     isValidAddress,
     ChainId,
 } from '@masknet/web3-shared-evm'
-import { Providers } from '../../Provider/provider.js'
+import { EVM_Providers } from '@masknet/web3-providers'
 
 export class MaskWallet implements Middleware<ConnectionContext> {
+    private get walletProvider() {
+        return EVM_Providers[ProviderType.MaskWallet]
+    }
+
     async fn(context: ConnectionContext, next: () => Promise<void>) {
         if (!context.writeable) {
             await next()
@@ -28,7 +32,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                 break
             case EthereumMethodType.MASK_WALLETS:
                 try {
-                    context.write(Providers[ProviderType.MaskWallet].subscription.wallets.getCurrentValue())
+                    context.write(this.walletProvider.subscription.wallets.getCurrentValue())
                 } catch (error) {
                     context.abort(context)
                 }
@@ -36,7 +40,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
             case EthereumMethodType.MASK_ADD_WALLET:
                 try {
                     if (!context.wallet) throw new Error('No wallet to be added.')
-                    await Providers[ProviderType.MaskWallet].addWallet(context.wallet)
+                    await this.walletProvider.addWallet(context.wallet)
                     context.write()
                 } catch (error) {
                     context.abort(context)
@@ -45,7 +49,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
             case EthereumMethodType.MASK_ADD_OR_UPDATE_WALLET:
                 try {
                     if (!context.wallet) throw new Error('No wallet to be added.')
-                    await Providers[ProviderType.MaskWallet].updateOrAddWallet(context.wallet)
+                    await this.walletProvider.updateOrAddWallet(context.wallet)
                     context.write()
                 } catch (error) {
                     context.abort(context)
@@ -55,7 +59,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                 try {
                     const [address, updates] = context.requestArguments.params as [string, Wallet]
                     if (!isValidAddress(address)) throw new Error('Not a valid wallet address.')
-                    await Providers[ProviderType.MaskWallet].updateWallet(address, updates)
+                    await this.walletProvider.updateWallet(address, updates)
                     context.write()
                 } catch (error) {
                     context.abort(context)
@@ -65,7 +69,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                 try {
                     const [address, name] = context.requestArguments.params as [string, string]
                     if (!isValidAddress(address)) throw new Error('Not a valid wallet address.')
-                    await Providers[ProviderType.MaskWallet].renameWallet(address, name)
+                    await this.walletProvider.renameWallet(address, name)
                     context.write()
                 } catch (error) {
                     context.abort(context)
@@ -75,7 +79,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                 try {
                     const [address, password] = context.requestArguments.params as [string, string | undefined]
                     if (!isValidAddress(address)) throw new Error('Not a valid wallet address.')
-                    await Providers[ProviderType.MaskWallet].removeWallet(address, password)
+                    await this.walletProvider.removeWallet(address, password)
                     context.write()
                 } catch (error) {
                     context.abort(context)
@@ -85,7 +89,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                 try {
                     const wallets = context.requestArguments.params as Wallet[]
                     if (wallets.some((x) => !isValidAddress(x.address))) throw new Error('Not a valid wallet address.')
-                    await Providers[ProviderType.MaskWallet].updateWallets(wallets)
+                    await this.walletProvider.updateWallets(wallets)
                     context.write()
                 } catch (error) {
                     context.abort(context)
@@ -95,7 +99,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                 try {
                     const wallets = context.requestArguments.params as Wallet[]
                     if (wallets.some((x) => !isValidAddress(x.address))) throw new Error('Not a valid wallet address.')
-                    await Providers[ProviderType.MaskWallet].removeWallets(wallets)
+                    await this.walletProvider.removeWallets(wallets)
                     context.write()
                 } catch (error) {
                     context.abort(context)

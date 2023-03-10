@@ -3,7 +3,7 @@ import { toHex, type AbiItem } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import type { ECKeyIdentifier, PartialRequired, Proof } from '@masknet/shared-base'
+import type { ECKeyIdentifier, PartialRequired, Proof, Account, Wallet } from '@masknet/shared-base'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
 import type { ERC1155 } from '@masknet/web3-contracts/types/ERC1155.js'
@@ -30,18 +30,15 @@ import {
     type TransactionReceipt,
 } from '@masknet/web3-shared-evm'
 import {
-    type Account,
     type ConnectionOptions,
     type FungibleToken,
     type NonFungibleToken,
     type NonFungibleCollection,
     type NonFungibleTokenContract,
     TransactionStatusType,
-    type Wallet,
 } from '@masknet/web3-shared-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVM_Providers, Web3 } from '@masknet/web3-providers'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
-import { Providers } from '../Provider/provider.js'
 import { dispatch } from './composer.js'
 import { createContext } from './context.js'
 import type { EVM_Connection, EVM_ConnectionOptions } from './types.js'
@@ -477,7 +474,7 @@ class Connection implements EVM_Connection {
     }
     async switchChain(chainId: ChainId, initial?: EVM_ConnectionOptions): Promise<void> {
         const options = this.getOptions(initial)
-        await Providers[options.providerType].switchChain(chainId)
+        await EVM_Providers[options.providerType].switchChain(chainId)
     }
     async getNativeTokenBalance(initial?: EVM_ConnectionOptions): Promise<string> {
         const options = this.getOptions(initial)

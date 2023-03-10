@@ -4,8 +4,8 @@ import { Box } from '@mui/material'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { useMountReport } from '@masknet/web3-telemetry/hooks'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { SocialAddressType, SearchResultType } from '@masknet/web3-shared-base'
-import { NetworkPluginID, parseURLs } from '@masknet/shared-base'
+import { SearchResultType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, parseURLs, SocialAddressType } from '@masknet/shared-base'
 import {
     type Plugin,
     usePostInfoDetails,

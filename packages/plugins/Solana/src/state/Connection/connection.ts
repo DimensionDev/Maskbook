@@ -1,6 +1,5 @@
-import { SolanaWeb3 } from '@masknet/web3-providers'
+import { SolanaProviders, SolanaWeb3 } from '@masknet/web3-providers'
 import type {
-    Account,
     FungibleToken,
     NonFungibleToken,
     NonFungibleCollection,
@@ -27,9 +26,8 @@ import {
     Transaction,
 } from '@solana/web3.js'
 import type { Plugin } from '@masknet/plugin-infra'
-import type { PartialRequired } from '@masknet/shared-base'
+import type { Account, PartialRequired } from '@masknet/shared-base'
 import { Web3StateSettings } from '../../settings/index.js'
-import { Providers } from '../Provider/provider.js'
 import { createTransferInstruction, getOrCreateAssociatedTokenAccount } from './spl-token/index.js'
 import type { SolanaConnection, SolanaConnectionOptions } from './types.js'
 import { identity, pickBy } from 'lodash-es'
@@ -59,7 +57,7 @@ class Connection implements SolanaConnection {
 
     private _getWeb3Provider(initial?: SolanaConnectionOptions) {
         const options = this.getOptions(initial)
-        return Providers[options.providerType]
+        return SolanaProviders[options.providerType]
     }
 
     private async _attachRecentBlockHash(transaction: Transaction, initial?: SolanaConnectionOptions) {
@@ -226,7 +224,7 @@ class Connection implements SolanaConnection {
     }
     async switchChain(chainId: ChainId, initial?: SolanaConnectionOptions) {
         const options = this.getOptions(initial)
-        await Providers[options.providerType].switchChain(chainId)
+        await SolanaProviders[options.providerType].switchChain(chainId)
     }
     getNativeToken(initial?: SolanaConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.getOptions(initial)

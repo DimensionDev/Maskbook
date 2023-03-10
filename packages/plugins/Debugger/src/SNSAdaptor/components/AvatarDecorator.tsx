@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { SocialAccount, SocialIdentity } from '@masknet/web3-shared-base'
+import type { SocialAccount, SocialIdentity } from '@masknet/shared-base'
 
 interface AvatarDecoratorProps {
     identity?: SocialIdentity
