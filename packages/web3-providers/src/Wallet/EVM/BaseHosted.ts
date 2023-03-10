@@ -46,25 +46,22 @@ export class BaseHostedProvider
         super(providerType)
     }
 
-    override async setup(context: Plugin.SNSAdaptor.SNSAdaptorContext) {
-        const { storage: walletStorage } = context
-            .createKVStorage('memory', {})
-            .createSubScope(`${this.providerType}_hosted`, {
-                account: this.options.getDefaultAccount(),
-                chainId: this.options.getDefaultChainId(),
-                wallets: [] as Wallet[],
-            })
-        this.walletStorage = walletStorage
+    override async setup(context?: Plugin.SNSAdaptor.SNSAdaptorContext) {
+        this.walletStorage = context?.createKVStorage('memory', {}).createSubScope(`${this.providerType}_hosted`, {
+            account: this.options.getDefaultAccount(),
+            chainId: this.options.getDefaultChainId(),
+            wallets: [] as Wallet[],
+        }).storage
 
-        await this.walletStorage.account.initializedPromise
-        await this.walletStorage.chainId.initializedPromise
-        await this.walletStorage.wallets.initializedPromise
+        await this.walletStorage?.account.initializedPromise
+        await this.walletStorage?.chainId.initializedPromise
+        await this.walletStorage?.wallets.initializedPromise
 
         await this.onAccountChanged()
         await this.onChainChanged()
 
-        this.walletStorage.account.subscription.subscribe(this.onAccountChanged.bind(this))
-        this.walletStorage.chainId.subscription.subscribe(this.onChainChanged.bind(this))
+        this.walletStorage?.account.subscription.subscribe(this.onAccountChanged.bind(this))
+        this.walletStorage?.chainId.subscription.subscribe(this.onChainChanged.bind(this))
     }
 
     protected get options() {

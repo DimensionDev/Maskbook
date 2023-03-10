@@ -15,19 +15,21 @@ export class OperaProvider
     extends BaseInjectedProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
+    private isOpera() {
+        return navigator.userAgent.includes('OPR/')
+    }
+
     constructor() {
         super(ProviderType.Opera, injectedOperaProvider)
     }
 
     override get ready() {
-        const isOpera = navigator.userAgent.includes('OPR/')
-        if (!isOpera) return true
+        if (!this.isOpera) return true
         return super.ready
     }
 
     override get readyPromise() {
-        const isOpera = navigator.userAgent.includes('OPR/')
-        if (!isOpera) return Promise.resolve(undefined)
+        if (!this.isOpera) return Promise.resolve(undefined)
         return super.readyPromise
     }
 

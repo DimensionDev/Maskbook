@@ -25,20 +25,18 @@ export class BaseContractWalletProvider
         super(providerType)
     }
 
-    override async setup(context: Plugin.SNSAdaptor.SNSAdaptorContext) {
+    override async setup(context?: Plugin.SNSAdaptor.SNSAdaptorContext) {
         await super.setup(context)
 
-        const { storage } = context.createKVStorage('memory', {}).createSubScope(`${this.providerType}_owner`, {
+        this.ownerStorage = context?.createKVStorage('memory', {}).createSubScope(`${this.providerType}_owner`, {
             value: {
                 account: this.options.getDefaultAccount(),
                 // empty string means EOA signer
                 identifier: '',
             },
-        })
+        })?.storage.value
 
-        this.ownerStorage = storage.value
-
-        await this.ownerStorage.initializedPromise
+        await this.ownerStorage?.initializedPromise
 
         this.subscription.wallets?.subscribe(async () => {
             if (!this.hostedAccount) return

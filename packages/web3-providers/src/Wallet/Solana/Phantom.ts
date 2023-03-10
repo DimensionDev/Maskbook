@@ -17,10 +17,12 @@ export class PhantomProvider
 {
     constructor() {
         super(ProviderType.Phantom, injectedPhantomProvider)
-        injectedPhantomProvider.untilAvailable().then(async () => {
-            await injectedPhantomProvider.connect({
-                onlyIfTrusted: true,
-            })
+    }
+
+    override async setup(): Promise<void> {
+        await injectedPhantomProvider.untilAvailable()
+        await injectedPhantomProvider.connect({
+            onlyIfTrusted: true,
         })
     }
 

@@ -73,7 +73,7 @@ export namespace WalletAPI {
         /** connection status */
         readonly connected: boolean
         /** async setup tasks */
-        setup(context: Plugin.SNSAdaptor.SNSAdaptorContext): Promise<void>
+        setup(context?: Plugin.SNSAdaptor.SNSAdaptorContext): Promise<void>
         /** Add a new wallet. */
         addWallet(wallet: Wallet): Promise<void>
         /** Update a wallet. */

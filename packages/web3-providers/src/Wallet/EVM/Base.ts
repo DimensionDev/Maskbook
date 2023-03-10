@@ -48,8 +48,10 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
         return Promise.resolve()
     }
 
-    setup(context: Plugin.SNSAdaptor.SNSAdaptorContext): Promise<void> {
-        this.context = context
+    setup(context?: Plugin.SNSAdaptor.SNSAdaptorContext): Promise<void> {
+        if (context) {
+            this.context = context
+        }
         throw new Error('Method not implemented.')
     }
 

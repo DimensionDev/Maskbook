@@ -9,6 +9,7 @@ import {
     type Web3Provider,
     type Web3,
 } from '@masknet/web3-shared-evm'
+import type { Plugin } from '@masknet/plugin-infra'
 import type { ProviderOptions } from '@masknet/web3-shared-base'
 import { BaseProvider } from './Base.js'
 import type { WalletAPI } from '../../entry-types.js'
@@ -19,10 +20,6 @@ export class BaseInjectedProvider
 {
     constructor(protected override providerType: ProviderType, protected bridge: InjectedProvider) {
         super(providerType)
-
-        bridge.on('accountsChanged', this.onAccountsChanged.bind(this))
-        bridge.on('chainChanged', this.onChainChanged.bind(this))
-        bridge.on('disconnect', this.onDisconnect.bind(this))
     }
 
     override get ready() {
@@ -32,6 +29,12 @@ export class BaseInjectedProvider
     override get readyPromise() {
         if (isEthereumInjected()) return this.bridge.untilAvailable().then(() => undefined)
         return Promise.reject(new Error('Not available on extension site.'))
+    }
+
+    override async setup(context?: Plugin.SNSAdaptor.SNSAdaptorContext | undefined) {
+        this.bridge.on('accountsChanged', this.onAccountsChanged.bind(this))
+        this.bridge.on('chainChanged', this.onChainChanged.bind(this))
+        this.bridge.on('disconnect', this.onDisconnect.bind(this))
     }
 
     protected onAccountsChanged(accounts: string[]) {

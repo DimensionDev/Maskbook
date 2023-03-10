@@ -44,7 +44,7 @@ export class MaskWalletProvider
         return this.subscription.wallets.getCurrentValue()
     }
 
-    override async setup(context: Plugin.SNSAdaptor.SNSAdaptorContext) {
+    override async setup(context?: Plugin.SNSAdaptor.SNSAdaptorContext) {
         await super.setup(context)
 
         this.subscription?.wallets?.subscribe(async () => {
@@ -57,12 +57,12 @@ export class MaskWalletProvider
         })
 
         const update = debounce(async () => {
-            const wallets = context.wallets.getCurrentValue()
+            const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
 
             // speed up first paint
             this.ref.value = uniqWith([...wallets, ...super.wallets], (a, b) => isSameAddress(a.address, b.address))
 
-            const allPersonas = context.allPersonas?.getCurrentValue() ?? []
+            const allPersonas = this.context?.allPersonas?.getCurrentValue() ?? []
             const chainId = await SmartPayBundler.getSupportedChainId()
             const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
                 ...wallets.map((x) => x.address),
@@ -100,8 +100,8 @@ export class MaskWalletProvider
         }, 1000)
 
         update()
-        context.wallets.subscribe(update)
-        context.allPersonas?.subscribe(update)
+        this.context?.wallets.subscribe(update)
+        this.context?.allPersonas?.subscribe(update)
         CrossIsolationMessages.events.renameWallet.on(update)
     }
 

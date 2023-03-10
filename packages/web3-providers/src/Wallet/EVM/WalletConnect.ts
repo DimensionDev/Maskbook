@@ -48,14 +48,6 @@ export default class WalletConnectProvider
     private connectorId = 0
     private connector: WalletConnect = this.createConnector()
 
-    constructor() {
-        super(ProviderType.WalletConnect)
-    }
-
-    override get connected() {
-        return this.connector.connected
-    }
-
     /**
      * The ongoing walletconnect connection which the listeners use to resolve later.
      */
@@ -63,6 +55,14 @@ export default class WalletConnectProvider
         resolve: (account: Account<ChainId>) => void
         reject: (error: unknown) => void
     } | null = null
+
+    constructor() {
+        super(ProviderType.WalletConnect)
+    }
+
+    override get connected() {
+        return this.connector.connected
+    }
 
     private createConnector() {
         // disable legacy listeners
