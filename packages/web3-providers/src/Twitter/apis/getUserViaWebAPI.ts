@@ -11,7 +11,7 @@ const features = {
 }
 async function createRequest(screenName: string) {
     const { bearerToken, csrfToken, queryId } = await getTokens('UserByScreenName')
-    if (!queryId) return undefined
+    if (!queryId) return
     const url = urlcat('https://twitter.com/i/api/graphql/:queryId/UserByScreenName', {
         queryId,
         variables: JSON.stringify({
