@@ -21,7 +21,7 @@ export class PostIVIdentifier extends Identifier {
         const networkCache = (id[network] ??= {})
         if (networkCache[postIV]) return networkCache[postIV]
 
-        banSlash(network)
+        banSlash(network, 'PostIVIdentifier.network')
         super()
         this.network = network
         this.postIV = postIV

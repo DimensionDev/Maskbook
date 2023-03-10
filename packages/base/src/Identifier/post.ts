@@ -26,7 +26,7 @@ export class PostIdentifier extends Identifier {
         const idCache = id.get(identifier)!
         if (idCache[postID]) return idCache[postID]
 
-        banSlash(postID)
+        banSlash(postID, 'PostIdentifier.postID')
         super()
         this.identifier = identifier
         this.postID = postID

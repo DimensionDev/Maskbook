@@ -36,8 +36,8 @@ export class ProfileIdentifier extends Identifier {
         const networkCache = (id[network] ??= {})
         if (networkCache[userID]) return networkCache[userID]
 
-        banSlash(network)
-        banSlash(userID)
+        banSlash(network, 'ProfileIdentifier.network')
+        banSlash(userID, 'ProfileIdentifier.userID')
         super()
         this.network = network
         this.userId = userID
