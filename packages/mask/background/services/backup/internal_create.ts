@@ -4,7 +4,7 @@ import { None, Some } from 'ts-results-es'
 import { queryPersonasDB, queryProfilesDB, queryRelations } from '../../database/persona/db.js'
 import { queryPostsDB } from '../../database/post/index.js'
 import { timeout } from '@masknet/kit'
-import { activatedPluginsWorker } from '@masknet/plugin-infra/background-worker'
+import { activatedPluginsWorker, Plugin } from '@masknet/plugin-infra/background-worker'
 import { internal_wallet_backup } from './internal_wallet_backup.js'
 
 /** @internal */
@@ -140,12 +140,12 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
         const plugins = Object.create(null) as Record<string, unknown>
         const allPlugins = [...activatedPluginsWorker]
 
-        async function backup(plugin: typeof allPlugins[0]): Promise<void> {
+        async function backup(plugin: Plugin.Worker.Definition): Promise<void> {
             const backupCreator = plugin.backup?.onBackup
             if (!backupCreator) return
 
             async function backupPlugin() {
-                const result = await timeout(backupCreator!(), 3000)
+                const result = await timeout(backupCreator!(), 3000, 'Timeout to backup creator.')
                 if (result.none) return
                 // We limit the plugin contributed backups must be simple objects.
                 // We may allow plugin to store binary if we're moving to binary backup format like MessagePack.

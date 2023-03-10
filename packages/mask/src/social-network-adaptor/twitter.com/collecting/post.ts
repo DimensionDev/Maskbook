@@ -229,10 +229,12 @@ function collectLinks(
         if (seen.has(x.href)) continue
         seen.add(x.href)
         info.postMetadataMentionedLinks.set(x, x.href)
-        Services.Helper.resolveTCOLink(x.href).then((val) => {
-            if (cancel?.aborted) return
-            if (!val) return
-            info.postMetadataMentionedLinks.set(x, val)
-        })
+        Services.Helper.resolveTCOLink(x.href)
+            .then((val) => {
+                if (cancel?.aborted) return
+                if (!val) return
+                info.postMetadataMentionedLinks.set(x, val)
+            })
+            .catch(() => {})
     }
 }

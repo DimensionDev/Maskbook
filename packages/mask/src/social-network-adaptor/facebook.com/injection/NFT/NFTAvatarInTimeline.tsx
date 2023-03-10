@@ -53,7 +53,7 @@ const TimelineRainbow = memo(
 function getFacebookId(element: HTMLElement | SVGElement) {
     const node = (isMobileFacebook ? element.firstChild : element.parentNode?.parentNode) as HTMLLinkElement
     if (!node) return ''
-    const url = new URL(node.href)
+    const url = new URL(node.href, location.href)
 
     if (url.pathname === '/profile.php' && url.searchParams.get('id')) {
         return url.searchParams.get(isMobileFacebook ? 'lst' : 'id')

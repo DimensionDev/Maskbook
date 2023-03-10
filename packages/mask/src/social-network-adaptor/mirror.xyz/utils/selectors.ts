@@ -22,12 +22,12 @@ export const postsContentSelector = () =>
     querySelectorAll(
         [
             // In Entries
-            '#__next > div:nth-child(2) > div > div:not([class]) > div:not(footer)',
+            '[id="__next"] > div:nth-child(2) > div > div:not([class]) > div:not(footer)',
             // In collection
-            '#__next > div:nth-child(2) > div > div > div > a:has(footer)',
+            '[id="__next"] > div:nth-child(2) > div > div > div > a:has(footer)',
             // In Entry detail
-            '#__next > div:nth-child(2) > div:has([class]):not(footer):has(p)',
-        ].join(),
+            '[id="__next"] > div:nth-child(2) > div:has([class]):not(footer):has(p)',
+        ].join(','),
     ).filter((x) => x.childNodes.length !== 0)
 
 export const themeSelector: () => LiveSelector<E, true> = () => querySelector<E>('[data-theme]')
