@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Trans } from 'react-i18next'
-import type { Plugin } from '@masknet/plugin-infra'
+import { Plugin } from '@masknet/plugin-infra'
 import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
@@ -8,6 +8,13 @@ import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { base } from '../base.js'
 import { setupContext } from './context.js'
 import { Web3ProfileDialog } from './components/Web3ProfileDialog.js'
+import { ShadowRootTooltip } from '@masknet/theme'
+
+const LensIconSizeMap: Record<Plugin.SNSAdaptor.LensSlot, number> = {
+    [Plugin.SNSAdaptor.LensSlot.Post]: 18,
+    [Plugin.SNSAdaptor.LensSlot.ProfileName]: 20,
+    [Plugin.SNSAdaptor.LensSlot.Sidebar]: 16,
+}
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -88,6 +95,22 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
         },
     ],
+    Lens: {
+        ID: `${base.ID}_lens`,
+        UI: {
+            Content({ identity, slot, onStatusUpdate }) {
+                useEffect(() => {
+                    onStatusUpdate?.(false)
+                }, [onStatusUpdate])
+
+                return (
+                    <ShadowRootTooltip title={identity?.userId}>
+                        <Icons.Lens size={LensIconSizeMap[slot]} />
+                    </ShadowRootTooltip>
+                )
+            },
+        },
+    },
 }
 
 export default sns

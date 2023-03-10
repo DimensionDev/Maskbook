@@ -1,25 +1,29 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useState, useRef, useLayoutEffect, useContext } from 'react'
+import { useState, useRef, useLayoutEffect, useContext, DetailedHTMLProps, HTMLAttributes } from 'react'
 import { createPortal } from 'react-dom'
 import { DisableShadowRootContext } from './Contexts.js'
 import { ShadowRootStyleProvider } from './ShadowRootStyleProvider.js'
 
+type RootElement = HTMLDivElement | HTMLSpanElement
+
+interface Props extends DetailedHTMLProps<HTMLAttributes<RootElement>, RootElement> {
+    /** Tag name */
+    rootElement?: 'div' | 'span' | (() => RootElement)
+}
+
 /**
  * Render it's children inside a ShadowRoot to provide style isolation.
  */
-export function ShadowRootIsolation({
-    children,
-    ...props
-}: React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>) {
+export function ShadowRootIsolation({ children, rootElement = 'div', ...props }: Props) {
     const disabled = useRef(useContext(DisableShadowRootContext)).current
 
     if (disabled) return <span {...props}>{children}</span>
 
-    const [dom, setDOM] = useState<HTMLSpanElement | null>()
+    const [dom, setDOM] = useState<RootElement | null>()
 
-    const container = useRef<HTMLDivElement>()
+    const container = useRef<RootElement>()
     if (!container.current) {
-        container.current = document.createElement('div')
+        container.current = typeof rootElement === 'function' ? rootElement() : document.createElement(rootElement)
     }
     useLayoutEffect(() => {
         if (!dom) return

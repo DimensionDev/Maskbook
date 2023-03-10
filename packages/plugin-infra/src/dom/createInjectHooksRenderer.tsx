@@ -12,7 +12,8 @@ type Raw<T> = Plugin.InjectUIRaw<T>
 export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared.Definition, PropsType extends object>(
     usePlugins: () => readonly PluginDefinition[],
     pickInjectorHook: (plugin: PluginDefinition) => undefined | Inject<PropsType>,
-    PluginWrapperComponent?: PluginWrapperComponent<PluginDefinition>,
+    PluginWrapperComponent?: PluginWrapperComponent<PluginDefinition> | undefined,
+    rootElement?: 'div' | 'span' | (() => HTMLDivElement | HTMLSpanElement),
 ) {
     function usePluginWrapperProvider(element: JSX.Element | null, plugin: PluginDefinition) {
         const [ref, setRef] = useState<PluginWrapperMethods | null>(null)
@@ -49,7 +50,7 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
         const allPlugins = usePlugins()
         const availablePlugins = getAvailablePlugins<PluginDefinition>(allPlugins)
         const all = availablePlugins.filter(pickInjectorHook).map((plugin) => (
-            <ShadowRootIsolation key={plugin.ID} data-plugin={plugin.ID}>
+            <ShadowRootIsolation key={plugin.ID} data-plugin={plugin.ID} rootElement={rootElement}>
                 <SinglePluginWithinErrorBoundary plugin={plugin} props={props} />
             </ShadowRootIsolation>
         ))
