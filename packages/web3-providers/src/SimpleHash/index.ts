@@ -38,14 +38,43 @@ export class SimpleHashProviderAPI implements NonFungibleTokenAPI.Provider<Chain
             chains: chain,
             wallet_addresses: account,
             contract_addresses: '',
+            cursor: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,
         })
 
-        const response = await fetchFromSimpleHash<{ nfts: Asset[] }>(path)
+        const response = await fetchFromSimpleHash<{ next_cursor: string; nfts: Asset[] }>(path)
         const assets = response.nfts.map((x) => createNonFungibleAsset(x)).filter(Boolean) as Array<
             NonFungibleAsset<ChainId, SchemaType>
         >
 
-        return createPageable(assets, indicator)
+        return createPageable(
+            assets,
+            indicator,
+            response.next_cursor ? createNextIndicator(indicator, response.next_cursor) : undefined,
+        )
+    }
+
+    async getAssetsByCollection(address: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {}) {
+        const chain = resolveChain(chainId)
+        if (!chain || !address || !isValidChainId(chainId)) {
+            return createPageable(EMPTY_LIST, createIndicator(indicator))
+        }
+
+        const path = urlcat(`/api/v0/nfts/${chain}/:address`, {
+            address,
+            cursor: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,
+        })
+
+        const response = await fetchFromSimpleHash<{ next_cursor: string; nfts: Asset[] }>(path)
+
+        const assets = response.nfts.map((x) => createNonFungibleAsset(x)).filter(Boolean) as Array<
+            NonFungibleAsset<ChainId, SchemaType>
+        >
+
+        return createPageable(
+            assets,
+            createIndicator(indicator),
+            response.next_cursor ? createNextIndicator(indicator, response.next_cursor) : undefined,
+        )
     }
 
     async getCollectionsByOwner(
