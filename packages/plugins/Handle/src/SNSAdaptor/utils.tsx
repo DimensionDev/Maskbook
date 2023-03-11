@@ -1,22 +1,19 @@
 import { createLookupTableResolver, NextIDPlatform } from '@masknet/shared-base'
-import { Icons } from '@masknet/icons'
-import type { ReactNode } from 'react'
+import { GeneratedIcon, Icons } from '@masknet/icons'
 
-export const resolveNextIDPlatformIcon = createLookupTableResolver<NextIDPlatform, ReactNode>(
+export const resolveNextIDPlatformIcon = createLookupTableResolver<NextIDPlatform, GeneratedIcon | null>(
     {
-        [NextIDPlatform.Ethereum]: <></>,
-        [NextIDPlatform.NextID]: <></>,
-        [NextIDPlatform.GitHub]: <Icons.GitHub width={20} height={20} />,
-        [NextIDPlatform.Keybase]: <Icons.Keybase width={20} height={20} />,
-        [NextIDPlatform.Twitter]: <Icons.TwitterRoundBlackWhite width={20} height={20} />,
-        [NextIDPlatform.ENS]: <></>,
-        [NextIDPlatform.RSS3]: <></>,
-        [NextIDPlatform.LENS]: <Icons.LensBlackWhite width={20} height={20} />,
-        [NextIDPlatform.REDDIT]: <Icons.RedditRoundBlackWhite width={20} height={20} />,
-        [NextIDPlatform.SYBIL]: <></>,
-        [NextIDPlatform.EthLeaderboard]: <></>,
+        [NextIDPlatform.Ethereum]: Icons.ETH,
+        [NextIDPlatform.NextID]: null,
+        [NextIDPlatform.GitHub]: Icons.GitHub,
+        [NextIDPlatform.Keybase]: Icons.Keybase,
+        [NextIDPlatform.Twitter]: Icons.TwitterRound,
+        [NextIDPlatform.ENS]: Icons.ENS,
+        [NextIDPlatform.RSS3]: null,
+        [NextIDPlatform.LENS]: Icons.Lens,
+        [NextIDPlatform.REDDIT]: Icons.RedditRound,
+        [NextIDPlatform.SYBIL]: null,
+        [NextIDPlatform.EthLeaderboard]: null,
     },
-    () => {
-        return <></>
-    },
+    null,
 )

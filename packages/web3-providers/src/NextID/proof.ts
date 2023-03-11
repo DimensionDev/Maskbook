@@ -227,6 +227,67 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         )
     }
 
+    async queryAllENS(address: string) {
+        const response = await fetchJSON<{
+            data: {
+                identity: {
+                    identity: {
+                        uuid: string
+                        platform: 'ethereum'
+                        identity: string
+                        displayName: string
+                        ownedBy: string | null
+                        nft: Array<{
+                            uuid: string
+                            id: string
+                        }>
+                    }
+                }
+            }
+        }>(RELATION_SERVICE_URL, {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify({
+                operationName: 'GET_PROFILES_QUERY',
+                variables: { platform: 'ethereum', identity: address.toLowerCase() },
+                query: `
+                    query GET_PROFILES_QUERY($platform: String, $identity: String) {
+                      identity(platform: $platform, identity: $identity) {
+                        uuid
+                        platform
+                        identity
+                        displayName
+                        ownedBy {
+                          uuid
+                          platform
+                          identity
+                          displayName
+                        }
+                        nft(category: ["ENS"]) {
+                          uuid
+                          category
+                          chain
+                          id
+                        }
+                      }
+                    }
+                `,
+            }),
+        })
+
+        const rawData = response.data.identity.neighborWithTraversal
+            .map((x) => createBindingProofFromProfileQuery(x.to.platform, x.source, x.to.identity, x.to.displayName))
+            .concat(
+                response.data.identity.neighborWithTraversal.map((x) =>
+                    createBindingProofFromProfileQuery(x.from.platform, x.source, x.from.identity, x.to.displayName),
+                ),
+            )
+
+        return uniqWith(rawData, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
+            (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
+        )
+    }
+
     async createPersonaPayload(
         personaPublicKey: string,
         action: NextIDAction,
@@ -282,7 +343,7 @@ function createBindingProofFromProfileQuery(
     source: NextIDPlatform,
     identity: string,
     name: string,
-) {
+): BindingProof {
     return {
         platform,
         source,
@@ -292,5 +353,5 @@ function createBindingProofFromProfileQuery(
         invalid_reason: '',
         last_checked_at: '',
         is_valid: true,
-    } as BindingProof
+    }
 }
