@@ -14,11 +14,12 @@ import type { BalanceChecker } from '@masknet/web3-contracts/types/BalanceChecke
 import { createIndicator, createPageable, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, createContract, getEthereumConstant, type SchemaType } from '@masknet/web3-shared-evm'
 import { Web3API } from './Web3API.js'
+import { CoinGeckoPriceAPI_EVM } from '../../../CoinGecko/index.js'
 import type { FungibleTokenAPI as FungibleTokenBaseAPI } from '../../../entry-types.js'
-import { CoinGeckoPriceEVM } from '../../../entry.js'
 
 export class FungibleTokenAPI implements FungibleTokenBaseAPI.Provider<ChainId, SchemaType> {
     private web3 = new Web3API()
+    private coingecko = new CoinGeckoPriceAPI_EVM()
 
     private createWeb3(chainId: ChainId) {
         return this.web3.getWeb3(chainId)
@@ -36,7 +37,7 @@ export class FungibleTokenAPI implements FungibleTokenBaseAPI.Provider<ChainId, 
     }
 
     async createAssets(fungibleToken: FungibleToken<ChainId, SchemaType>, chainId: ChainId, balance: number) {
-        const price = await CoinGeckoPriceEVM.getFungibleTokenPrice(chainId, fungibleToken.address)
+        const price = await this.coingecko.getFungibleTokenPrice(chainId, fungibleToken.address)
 
         return {
             ...fungibleToken,

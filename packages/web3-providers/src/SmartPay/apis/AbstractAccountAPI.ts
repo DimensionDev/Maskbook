@@ -12,9 +12,9 @@ import {
 } from '@masknet/web3-shared-evm'
 import type { ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
+import { Web3API } from '../../Connection/index.js'
 import { SmartPayBundlerAPI } from './BundlerAPI.js'
 import { SmartPayOwnerAPI } from './OwnerAPI.js'
-import { Web3API } from '../../Connection/index.js'
 import type { AbstractAccountAPI } from '../../entry-types.js'
 
 export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPluginID.PLUGIN_EVM> {
