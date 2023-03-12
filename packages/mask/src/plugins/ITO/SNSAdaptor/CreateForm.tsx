@@ -178,8 +178,6 @@ export function CreateForm(props: CreateFormProps) {
     const [endTime, setEndTime] = useState(origin?.endTime || new Date())
     const [unlockTime, setUnlockTime] = useState(origin?.unlockTime || new Date())
 
-    const GMT = (new Date().getTimezoneOffset() / 60) * -1
-
     // amount for displaying
     const inputTokenAmount = formatAmount(tokenAndAmount?.amount || '0', tokenAndAmount?.token?.decimals)
 
@@ -273,6 +271,17 @@ export function CreateForm(props: CreateFormProps) {
         onChangePoolSettings,
         DEFAULT_QUALIFICATION2_ADDRESS,
     ])
+
+    useEffect(() => {
+        const date = new Date()
+        setMessage('')
+        setTotalOfPerWallet('')
+        setAdvanceSettingData({})
+        setStartTime(date)
+        setEndTime(date)
+        setUnlockTime(date)
+        setQualificationAddress('')
+    }, [chainId])
 
     const validationMessage = useMemo(() => {
         if (tokenAndAmounts.length === 0) return t('plugin_ito_error_enter_amount_and_token')
