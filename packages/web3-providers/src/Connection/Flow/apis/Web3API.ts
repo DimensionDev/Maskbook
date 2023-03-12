@@ -27,7 +27,7 @@ import {
     type NonFungibleCollection,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
-import type { Web3BaseAPI } from '../../entry-types.js'
+import type { Web3BaseAPI } from '../../../entry-types.js'
 
 const createWeb3SDK = memoize(
     (chainId: ChainId) => createClient(chainId),

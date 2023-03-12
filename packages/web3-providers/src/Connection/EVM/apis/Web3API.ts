@@ -58,8 +58,8 @@ import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import ERC1155ABI from '@masknet/web3-contracts/abis/ERC1155.json'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
-import type { Web3BaseAPI } from '../../entry-types.js'
-import { fetchJSON } from '../../entry-helpers.js'
+import type { Web3BaseAPI } from '../../../entry-types.js'
+import { fetchJSON } from '../../../entry-helpers.js'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)

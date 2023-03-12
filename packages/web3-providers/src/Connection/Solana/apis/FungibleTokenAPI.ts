@@ -17,12 +17,12 @@ import {
     isValidChainId,
     getNativeTokenAddress,
 } from '@masknet/web3-shared-solana'
-import { CoinGeckoPriceAPI_Solana } from '../../CoinGecko/index.js'
+import { CoinGeckoPriceAPI_Solana } from '../../../CoinGecko/index.js'
 import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants.js'
 import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers.js'
 import type { GetBalanceResponse, GetProgramAccountsResponse, RaydiumTokenList } from '../types.js'
-import type { FungibleTokenAPI, TokenListAPI } from '../../entry-types.js'
-import { fetchJSON } from '../../entry-helpers.js'
+import type { FungibleTokenAPI, TokenListAPI } from '../../../entry-types.js'
+import { fetchJSON } from '../../../entry-helpers.js'
 
 const fetchTokenList = memoizePromise(
     memoize,

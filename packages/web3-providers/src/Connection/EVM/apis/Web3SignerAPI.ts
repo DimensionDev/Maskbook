@@ -2,7 +2,7 @@ import { SignTypedDataVersion, personalSign, signTypedData } from '@metamask/eth
 import type { Transaction } from '@masknet/web3-shared-evm'
 import { SignType, toHex } from '@masknet/shared-base'
 import { Web3API } from './Web3API.js'
-import type { SignerAPI } from '../../entry-types.js'
+import type { SignerAPI } from '../../../entry-types.js'
 
 export class Web3SignerAPI implements SignerAPI.Provider {
     private web3 = new Web3API()

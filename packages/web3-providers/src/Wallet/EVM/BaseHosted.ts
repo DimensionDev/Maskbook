@@ -2,6 +2,7 @@ import { omit, uniqWith } from 'lodash-es'
 import type { RequestArguments } from 'web3-core'
 import { toHex } from 'web3-utils'
 import { delay } from '@masknet/kit'
+import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST, type StorageObject, type Wallet } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
@@ -14,8 +15,7 @@ import {
     type Web3Provider,
     type Web3,
 } from '@masknet/web3-shared-evm'
-import type { Plugin } from '@masknet/plugin-infra/content-script'
-import { Web3API } from '../../EVM/index.js'
+import { Web3API } from '../../Connection/index.js'
 import { BaseProvider } from './Base.js'
 import type { WalletAPI } from '../../entry-types.js'
 
