@@ -13,11 +13,11 @@ import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import type { BalanceChecker } from '@masknet/web3-contracts/types/BalanceChecker.js'
 import { createIndicator, createPageable, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, createContract, getEthereumConstant, type SchemaType } from '@masknet/web3-shared-evm'
-import { Web3API } from '../../Connection/index.js'
-import type { FungibleTokenAPI } from '../../entry-types.js'
-import { CoinGeckoPriceEVM } from '../../entry.js'
+import { Web3API } from './Web3API.js'
+import type { FungibleTokenAPI as FungibleTokenBaseAPI } from '../../../entry-types.js'
+import { CoinGeckoPriceEVM } from '../../../entry.js'
 
-export class ContractFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, SchemaType> {
+export class FungibleTokenAPI implements FungibleTokenBaseAPI.Provider<ChainId, SchemaType> {
     private web3 = new Web3API()
 
     private createWeb3(chainId: ChainId) {
