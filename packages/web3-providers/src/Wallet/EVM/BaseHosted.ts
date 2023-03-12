@@ -15,7 +15,7 @@ import {
     type Web3,
 } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
-import { Web3API } from '../../EVM/index.js'
+import { Web3API } from '../../Connection/EVM/index.js'
 import { BaseProvider } from './Base.js'
 import type { WalletAPI } from '../../entry-types.js'
 

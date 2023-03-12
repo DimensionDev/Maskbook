@@ -3,7 +3,7 @@ import type { FeeHistoryResult } from 'web3-eth'
 import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
 import { type ChainId, chainResolver, type GasOption } from '@masknet/web3-shared-evm'
 import { Web3API } from './Web3API.js'
-import type { GasOptionAPI } from '../../entry-types.js'
+import type { GasOptionAPI } from '../../../entry-types.js'
 
 export class Web3GasOptionAPI implements GasOptionAPI.Provider<ChainId, GasOption> {
     static HISTORICAL_BLOCKS = 4

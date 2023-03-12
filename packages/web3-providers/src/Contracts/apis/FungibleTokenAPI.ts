@@ -14,7 +14,7 @@ import type { BalanceChecker } from '@masknet/web3-contracts/types/BalanceChecke
 import { createIndicator, createPageable, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, createContract, getEthereumConstant, type SchemaType } from '@masknet/web3-shared-evm'
 import type { FungibleTokenAPI } from '../../entry-types.js'
-import { Web3API } from '../../EVM/index.js'
+import { Web3API } from '../../Connection/EVM/index.js'
 import { CoinGeckoPriceEVM } from '../../entry.js'
 
 export class ContractFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, SchemaType> {

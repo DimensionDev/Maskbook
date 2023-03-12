@@ -26,7 +26,7 @@ import {
     WNATIVE,
 } from '@masknet/web3-shared-evm'
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
-import { Web3API } from '../../EVM/index.js'
+import { Web3API } from '../../Connection/EVM/index.js'
 import type { EVM } from '../types/EVM.js'
 import { resolveNFTScanHostName } from './utils.js'
 import { getAssetFullName } from '../../helpers/getAssetFullName.js'
