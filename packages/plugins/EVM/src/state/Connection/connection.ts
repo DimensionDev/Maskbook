@@ -38,10 +38,9 @@ import {
 } from '@masknet/web3-shared-base'
 import { EVM_Providers, Web3 } from '@masknet/web3-providers'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
-import { dispatch } from './composer.js'
+import { Web3StateSettings } from '../../settings/index.js'
 import { createContext } from './context.js'
 import type { EVM_Connection, EVM_ConnectionOptions } from './types.js'
-import { Web3StateSettings } from '../../settings/index.js'
 
 class Connection implements EVM_Connection {
     constructor(
@@ -68,7 +67,7 @@ class Connection implements EVM_Connection {
         return <T>(requestArguments: RequestArguments, initial?: EVM_ConnectionOptions) => {
             return new Promise<T>(async (resolve, reject) => {
                 const options = this.getOptions(initial)
-                const context = createContext(this, requestArguments, options)
+                const context = createContext(Web3StateSettings.value, this, requestArguments, options)
 
                 try {
                     await dispatch(context, async () => {
