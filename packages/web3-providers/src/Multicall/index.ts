@@ -12,7 +12,7 @@ import {
     type UnboxTransactionObject,
 } from '@masknet/web3-shared-evm'
 import { CONSERVATIVE_BLOCK_GAS_LIMIT, DEFAULT_GAS_LIMIT, DEFAULT_GAS_REQUIRED } from './constants.js'
-import { Web3API } from '../Connection/EVM/index.js'
+import { Web3API } from '../Connection/index.js'
 import type { MulticallBaseAPI } from '../entry-types.js'
 
 export class MulticallAPI implements MulticallBaseAPI.Provider {

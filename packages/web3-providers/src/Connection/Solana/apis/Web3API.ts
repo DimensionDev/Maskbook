@@ -27,9 +27,9 @@ import {
     createNonFungibleToken,
 } from '@masknet/web3-shared-base'
 import { type Connection, PublicKey, type TransactionResponse, sendAndConfirmRawTransaction } from '@solana/web3.js'
-import { MagicEdenAPI } from '../../MagicEden/index.js'
-import { SolanaFungibleAPI } from '../../Solana/index.js'
-import type { Web3BaseAPI } from '../../entry-types.js'
+import { MagicEdenAPI } from '../../../MagicEden/index.js'
+import { SolanaFungibleAPI } from './FungibleTokenAPI.js'
+import type { Web3BaseAPI } from '../../../entry-types.js'
 
 const createWeb3SDK = memoize(
     (chainId: ChainId) => createClient(chainId),

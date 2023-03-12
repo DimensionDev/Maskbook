@@ -10,8 +10,8 @@ import {
     isValidChainId,
 } from '@masknet/web3-shared-flow'
 import { type FungibleAsset, CurrencyType, rightShift, type HubOptions } from '@masknet/web3-shared-base'
-import { CoinGeckoPriceAPI_EVM } from '../../CoinGecko/index.js'
-import type { FungibleTokenAPI, TokenListAPI } from '../../entry-types.js'
+import { CoinGeckoPriceAPI_EVM } from '../../../CoinGecko/index.js'
+import type { FungibleTokenAPI, TokenListAPI } from '../../../entry-types.js'
 
 const CoinGeckoPriceEVM = new CoinGeckoPriceAPI_EVM()
 
