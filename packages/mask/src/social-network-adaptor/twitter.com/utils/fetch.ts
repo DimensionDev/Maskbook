@@ -35,7 +35,10 @@ export const postNameParser = (node: HTMLElement) => {
     const name = collectNodeText(
         tweetElement.querySelector<HTMLElement>('a:not([target]) > div > div[dir="auto"] > span'),
     )
-    const handle = collectNodeText(tweetElement.querySelector<HTMLElement>('a[tabindex="-1"] span'))
+
+    const handle = collectNodeText(
+        tweetElement.querySelector<HTMLElement>('[data-testid="User-Names"] a[tabindex="-1"] > div > span'),
+    )
 
     if (name && handle) {
         return {
@@ -43,11 +46,18 @@ export const postNameParser = (node: HTMLElement) => {
             handle: handle.slice(1),
         }
     }
+
     const quotedTweetName = collectNodeText(
-        tweetElement.querySelector<HTMLElement>('div[role="link"] div[dir="auto"] > span'),
+        tweetElement
+            .querySelector('[data-testid="UserAvatar-Container-unknown"]')
+            ?.parentElement?.querySelector('div:nth-child(2) > span > span'),
     )
     const quotedTweetHandle = collectNodeText(
-        tweetElement.querySelector<HTMLElement>('div[role="link"] div[dir="ltr"] > span'),
+        tweetElement
+            .querySelector('[data-testid="UserAvatar-Container-unknown"]')
+            ?.parentNode?.parentNode?.parentNode?.parentNode?.firstElementChild?.nextElementSibling?.querySelector(
+                'span',
+            ),
     )
 
     if (quotedTweetName && quotedTweetHandle) {
