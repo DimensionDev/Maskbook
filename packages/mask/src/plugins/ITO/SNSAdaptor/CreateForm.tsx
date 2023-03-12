@@ -7,7 +7,6 @@ import { isGreaterThan, isZero, type FungibleToken, leftShift } from '@masknet/w
 import {
     TokenIcon,
     PluginWalletStatusBar,
-    ChainBoundary,
     WalletConnectedBoundary,
     DateTimePanel,
     EthereumERC20TokenApprovedBoundary,
@@ -457,25 +456,21 @@ export function CreateForm(props: CreateFormProps) {
             ) : null}
 
             <PluginWalletStatusBar className={classes.controller}>
-                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
-                    <WalletConnectedBoundary expectedChainId={chainId}>
-                        <EthereumERC20TokenApprovedBoundary
-                            amount={inputTokenAmount}
-                            spender={ITO2_CONTRACT_ADDRESS}
-                            token={
-                                tokenAndAmount?.token?.schema === SchemaType.ERC20 ? tokenAndAmount.token : undefined
-                            }>
-                            <ActionButton
-                                fullWidth
-                                variant="contained"
-                                size="medium"
-                                disabled={!!validationMessage}
-                                onClick={onNext}>
-                                {validationMessage || t('plugin_ito_next')}
-                            </ActionButton>
-                        </EthereumERC20TokenApprovedBoundary>
-                    </WalletConnectedBoundary>
-                </ChainBoundary>
+                <WalletConnectedBoundary expectedChainId={chainId}>
+                    <EthereumERC20TokenApprovedBoundary
+                        amount={inputTokenAmount}
+                        spender={ITO2_CONTRACT_ADDRESS}
+                        token={tokenAndAmount?.token?.schema === SchemaType.ERC20 ? tokenAndAmount.token : undefined}>
+                        <ActionButton
+                            fullWidth
+                            variant="contained"
+                            size="medium"
+                            disabled={!!validationMessage}
+                            onClick={onNext}>
+                            {validationMessage || t('plugin_ito_next')}
+                        </ActionButton>
+                    </EthereumERC20TokenApprovedBoundary>
+                </WalletConnectedBoundary>
             </PluginWalletStatusBar>
         </>
     )
