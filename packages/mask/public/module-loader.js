@@ -1,6 +1,6 @@
 {
     const modules = new Map()
-    globalThis.__mask__module__define__ = function define(id, module) {
+    globalThis.__mask__module__define__ ??= function define(id, module) {
         if (modules.has(id)) throw new TypeError(`Module ${id} is already defined.`)
         modules.set(id, module)
     }
@@ -12,7 +12,7 @@
     const isMV3Worker = isWorker && typeof chrome === 'object'
 
     const protocol = 'mask-modules:'
-    globalThis.__mask__module__reflection__ = async function (specifier) {
+    globalThis.__mask__module__reflection__ ??= async function (specifier) {
         specifier = String(specifier)
 
         const spec = new URL(specifier)

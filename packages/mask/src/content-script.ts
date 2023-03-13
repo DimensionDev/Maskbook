@@ -1,6 +1,8 @@
-import { Flags } from '@masknet/flags'
-import './setup.ui.js'
+// Note: due to race condition between the navigation event and the executeScript,
+// the content script might be injected twice.
 
-if (Flags.mask_SDK_ready) {
-    import('./extension/mask-sdk/index.js')
+const loaded = Symbol.for('mask_init_content_script')
+if (!Reflect.get(globalThis, loaded)) {
+    Reflect.set(globalThis, loaded, true)
+    import(/* webpackMode: 'eager' */ './setup.ui.js')
 }
