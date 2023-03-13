@@ -1,23 +1,20 @@
+import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { asyncIteratorToArray, EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
+import { noop, unionWith } from 'lodash-es'
 import {
-    CurrencyType,
-    currySameAddress,
-    type HubIndicator,
-    isSameAddress,
-    leftShift,
-    minus,
+    asyncIteratorToArray,
+    EMPTY_LIST,
     pageableToIterator,
-    toZero,
-} from '@masknet/web3-shared-base'
+    type PageIndicator,
+    type NetworkPluginID,
+} from '@masknet/shared-base'
+import { CurrencyType, currySameAddress, isSameAddress, leftShift, minus, toZero } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
 import { useWeb3State } from './useWeb3State.js'
 import { useTrustedFungibleTokens } from './useTrustedFungibleTokens.js'
 import { useBlockedFungibleTokens } from './useBlockedFungibleTokens.js'
-import { noop, unionWith } from 'lodash-es'
-import { useEffect } from 'react'
 
 export function useFungibleAssets<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
@@ -35,7 +32,7 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
 
         const isTrustedToken = currySameAddress(trustedTokens.map((x) => x.address))
         const isBlockedToken = currySameAddress(blockedTokens.map((x) => x.address))
-        const iterator = pageableToIterator(async (indicator?: HubIndicator) => {
+        const iterator = pageableToIterator(async (indicator?: PageIndicator) => {
             if (!hub.getFungibleAssets) return
             return hub.getFungibleAssets(account, {
                 indicator,
@@ -43,7 +40,7 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
             })
         })
 
-        const trustedAssetsIterator = pageableToIterator(async (indicator?: HubIndicator) => {
+        const trustedAssetsIterator = pageableToIterator(async (indicator?: PageIndicator) => {
             if (!hub.getTrustedFungibleAssets) return
             return hub.getTrustedFungibleAssets(account, trustedTokens, { indicator, size: 50 })
         })

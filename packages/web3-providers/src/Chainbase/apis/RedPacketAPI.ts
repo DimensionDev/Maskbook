@@ -1,12 +1,12 @@
 import urlcat from 'urlcat'
+import { type Transaction } from '@masknet/web3-shared-base'
 import {
-    type Transaction,
+    asyncIteratorToArray,
     createIndicator,
     createNextIndicator,
     createPageable,
     pageableToIterator,
-} from '@masknet/web3-shared-base'
-import { asyncIteratorToArray } from '@masknet/shared-base'
+} from '@masknet/shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TRANSACTIONS_BY_CONTRACT_METHOD_ENDPOINT, MAX_SIZE_PER_PAGE } from '../constants.js'
 import type { Tx } from '../types.js'

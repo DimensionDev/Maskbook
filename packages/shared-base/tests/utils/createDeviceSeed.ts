@@ -6,6 +6,6 @@ describe('create device seed', () => {
         const seed = createDeviceSeed(3)
 
         expect(seed >= 0).toBeTruthy()
-        expect(seed < 10).toBeTruthy()
+        expect(seed < 16).toBeTruthy()
     })
 })

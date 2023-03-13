@@ -1,7 +1,7 @@
-import type { HubIndicator, Pageable } from '@masknet/web3-shared-base'
 import { type DependencyList, useCallback, useEffect, useState } from 'react'
 import { useAsyncRetry, useList } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import type { PageIndicator, Pageable } from '@masknet/shared-base'
 
 export type AsyncStatePageable<T> = Omit<AsyncStateRetry<T>, 'value'> & {
     value: T[]
@@ -10,11 +10,11 @@ export type AsyncStatePageable<T> = Omit<AsyncStateRetry<T>, 'value'> & {
 }
 
 export const usePageableAsync = <T>(
-    fn: (nextIndicator?: HubIndicator) => Promise<Pageable<T> | undefined>,
+    fn: (nextIndicator?: PageIndicator) => Promise<Pageable<T> | undefined>,
     deps: DependencyList = [],
     key?: string,
 ): AsyncStatePageable<T> => {
-    const [indicator, setIndicator] = useState<HubIndicator | undefined>()
+    const [indicator, setIndicator] = useState<PageIndicator | undefined>()
     const [list, { push, clear }] = useList<T>()
 
     useEffect(() => clear(), [key])
@@ -31,7 +31,7 @@ export const usePageableAsync = <T>(
         if (state.error) {
             state.retry()
         } else {
-            setIndicator(stateNextIndicator as HubIndicator)
+            setIndicator(stateNextIndicator as PageIndicator)
         }
     }, [...deps, state, stateNextIndicator])
 

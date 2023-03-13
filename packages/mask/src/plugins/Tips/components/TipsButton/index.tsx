@@ -2,8 +2,13 @@ import { type FC, type HTMLProps, type MouseEventHandler, useCallback, useEffect
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
-import { type ProfileIdentifier, NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
-import { type SocialAccount, SocialAddressType } from '@masknet/web3-shared-base'
+import {
+    type ProfileIdentifier,
+    NetworkPluginID,
+    EMPTY_LIST,
+    type SocialAccount,
+    SocialAddressType,
+} from '@masknet/shared-base'
 import {
     useCurrentVisitingIdentity,
     useSocialIdentityByUserId,

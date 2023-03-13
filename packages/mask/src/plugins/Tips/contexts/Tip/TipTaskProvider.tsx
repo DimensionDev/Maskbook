@@ -12,9 +12,10 @@ import {
 } from 'react'
 import { useSubscription } from 'use-subscription'
 import { useFungibleToken, useNonFungibleTokenContract, useChainContext } from '@masknet/web3-hooks-base'
-import { isSameAddress, type SocialAccount, TokenType } from '@masknet/web3-shared-base'
+import { isSameAddress, TokenType } from '@masknet/web3-shared-base'
 import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, type SocialAccount } from '@masknet/shared-base'
+import { useAvailableBalance } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { getStorage } from '../../storage/index.js'
 import type { TipTask } from '../../types/index.js'
@@ -25,7 +26,6 @@ import { useTokenTip } from './useTokenTip.js'
 import { useRecipientValidate } from './useRecipientValidate.js'
 import { useTipValidate } from './useTipValidate.js'
 import { TargetRuntimeContext } from '../TargetRuntimeContext.js'
-import { useAvailableBalance } from '@masknet/shared'
 
 interface Props {
     task: TipTask

@@ -2,9 +2,6 @@ import {
     type HubOptions,
     type NonFungibleAsset,
     attemptUntil,
-    type Pageable,
-    createPageable,
-    createIndicator,
     type NonFungibleCollection,
     type NonFungibleTokenRarity,
     type NonFungibleTokenEvent,
@@ -16,7 +13,7 @@ import {
     type NonFungibleContractSpender,
     type PriceInToken,
 } from '@masknet/web3-shared-base'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { type Pageable, createPageable, createIndicator, EMPTY_LIST } from '@masknet/shared-base'
 import type { AuthorizationAPI, NonFungibleTokenAPI, TokenListAPI } from '@masknet/web3-providers/types'
 import { HubStateBaseClient } from '../Hub.js'
 
@@ -96,6 +93,19 @@ export class HubStateNonFungibleClient<ChainId, SchemaType> extends HubStateBase
         const providers = this.getProviders(initial)
         return attemptUntil(
             providers.map((x) => () => x.getAssetsByCollection?.(address, options)),
+            createPageable(EMPTY_LIST, createIndicator(options.indicator)),
+        )
+    }
+
+    async getNonFungibleAssetsByCollectionAndOwner(
+        collectionId: string,
+        owner: string,
+        initial?: HubOptions<ChainId>,
+    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
+        const options = this.getOptions(initial)
+        const providers = this.getProviders(initial)
+        return attemptUntil(
+            providers.map((x) => () => x.getAssetsByCollectionAndOwner?.(collectionId, owner, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
         )
     }
@@ -183,18 +193,6 @@ export class HubStateNonFungibleClient<ChainId, SchemaType> extends HubStateBase
         const providers = this.getProviders(initial)
         return attemptUntil(
             providers.map((x) => () => x.getCollectionsByOwner?.(account, options)),
-            createPageable(EMPTY_LIST, createIndicator(options.indicator)),
-        )
-    }
-
-    async getNonFungibleCollectionsByKeyword(
-        keyword: string,
-        initial?: HubOptions<ChainId>,
-    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>> {
-        const options = this.getOptions(initial)
-        const providers = this.getProviders(initial)
-        return attemptUntil(
-            providers.map((x) => () => x.getCollectionsByKeyword?.(keyword, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
         )
     }

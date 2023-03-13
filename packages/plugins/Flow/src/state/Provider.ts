@@ -15,11 +15,11 @@ import {
     getDefaultProviderType,
     getDefaultNetworkType,
 } from '@masknet/web3-shared-flow'
-import { Providers } from './Provider/provider.js'
+import { FlowProviders } from '@masknet/web3-providers'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
     constructor(override context: Plugin.Shared.SharedUIContext) {
-        super(context, Providers, {
+        super(context, FlowProviders, {
             isSameAddress,
             isValidChainId,
             getInvalidChainId,

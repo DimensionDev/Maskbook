@@ -6,18 +6,17 @@ import { makeStyles } from '@masknet/theme'
 import { BigNumber } from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../utils/index.js'
 import { RemindDialog } from './RemindDialog.js'
-import { ShareDialog } from './ShareDialog.js'
 import { SwapDialog, type SwapDialogProps } from './SwapDialog.js'
 import { UnlockDialog } from './UnlockDialog.js'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { TransactionConfirmDialogProvider } from './context/TokenTransactionConfirmDialogContext.js'
 
 export enum SwapStatus {
     Remind = 0,
     Swap = 1,
-    Share = 2,
-    Unlock = 3,
+    Unlock = 2,
 }
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -74,16 +73,16 @@ export function SwapGuide(props: SwapGuideProps) {
         [SwapStatus.Remind]: t('plugin_ito_dialog_swap_reminder_title'),
         [SwapStatus.Unlock]: t('plugin_ito_dialog_swap_unlock_title'),
         [SwapStatus.Swap]: t('plugin_ito_dialog_swap_title', { token: payload.token.symbol }),
-        [SwapStatus.Share]: t('plugin_ito_dialog_swap_share_title'),
     }
 
     const closeDialog = useCallback(() => {
         setTokenAmount(initAmount)
-        return status === SwapStatus.Share ? onCloseShareDialog() : onClose()
+        onClose()
     }, [status, initAmount, onCloseShareDialog, onClose, setTokenAmount])
 
     useEffect(() => {
-        onUpdate(isBuyer ? SwapStatus.Share : SwapStatus.Remind)
+        if (isBuyer) return
+        onUpdate(SwapStatus.Remind)
     }, [account, isBuyer, chainId, payload.chain_id])
 
     return (
@@ -110,29 +109,21 @@ export function SwapGuide(props: SwapGuideProps) {
                             )
                         case SwapStatus.Swap:
                             return (
-                                <SwapDialog
-                                    account={account}
-                                    initAmount={initAmount}
-                                    tokenAmount={tokenAmount}
-                                    maxSwapAmount={maxSwapAmount}
-                                    setTokenAmount={setTokenAmount}
-                                    setActualSwapAmount={setActualSwapAmount}
-                                    payload={payload}
-                                    token={payload.token}
-                                    exchangeTokens={exchangeTokens}
-                                    setStatus={onUpdate}
-                                    chainId={chainId}
-                                />
-                            )
-                        case SwapStatus.Share:
-                            return (
-                                <ShareDialog
-                                    shareSuccessText={shareSuccessText}
-                                    poolName={payload.message}
-                                    token={payload.token}
-                                    actualSwapAmount={actualSwapAmount}
-                                    onClose={onCloseShareDialog}
-                                />
+                                <TransactionConfirmDialogProvider>
+                                    <SwapDialog
+                                        account={account}
+                                        initAmount={initAmount}
+                                        tokenAmount={tokenAmount}
+                                        maxSwapAmount={maxSwapAmount}
+                                        setTokenAmount={setTokenAmount}
+                                        successShareText={shareSuccessText}
+                                        setActualSwapAmount={setActualSwapAmount}
+                                        payload={payload}
+                                        token={payload.token}
+                                        exchangeTokens={exchangeTokens}
+                                        chainId={chainId}
+                                    />
+                                </TransactionConfirmDialogProvider>
                             )
                         default:
                             return null

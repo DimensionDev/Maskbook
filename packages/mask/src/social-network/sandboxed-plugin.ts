@@ -3,7 +3,7 @@ import { type SiteAdaptorInstance, SiteAdaptorPluginHost } from '@masknet/sandbo
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { type Plugin, registerPlugin } from '@masknet/plugin-infra'
 import type { PluginID } from '@masknet/shared-base'
-import { Flags } from '../../shared/flags.js'
+import { Flags } from '@masknet/flags'
 import { hmr } from '../../utils-pure/index.js'
 import { createHostAPIs } from '../../shared/sandboxed-plugin/host-api.js'
 

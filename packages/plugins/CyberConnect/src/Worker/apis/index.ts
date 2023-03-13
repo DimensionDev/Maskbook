@@ -2,9 +2,9 @@ import {
     createIndicator,
     createNextIndicator,
     createPageable,
-    type HubIndicator,
+    type PageIndicator,
     type Pageable,
-} from '@masknet/web3-shared-base'
+} from '@masknet/shared-base'
 import { PageSize, ProfileTab } from '../../constants.js'
 
 export interface IQuery {
@@ -80,7 +80,7 @@ export async function fetchFollowers(
     category: ProfileTab,
     address: string,
     size: number,
-    indicator?: HubIndicator,
+    indicator?: PageIndicator,
 ): Promise<Pageable<IFollowIdentity>> {
     const data = {
         query: `query FullIdentityQuery {

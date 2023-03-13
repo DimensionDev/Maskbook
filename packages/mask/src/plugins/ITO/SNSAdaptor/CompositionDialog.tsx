@@ -1,5 +1,5 @@
 import { useActivatedPlugin, useCompositionContext } from '@masknet/plugin-infra/content-script'
-import { InjectedDialog, type InjectedDialogProps, useOpenShareTxDialog, NetworkTab } from '@masknet/shared'
+import { InjectedDialog, type InjectedDialogProps, NetworkTab } from '@masknet/shared'
 import { PluginID, EMPTY_LIST, EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import {
     useChainContext,
@@ -15,7 +15,11 @@ import { DialogContent } from '@mui/material'
 import { omit, set } from 'lodash-es'
 import { useCallback, useState } from 'react'
 import Web3Utils from 'web3-utils'
-import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
+import {
+    useCurrentIdentity,
+    useCurrentLinkedPersona,
+    useLastRecognizedIdentity,
+} from '../../../components/DataSource/useActivatedUI.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useI18N } from '../../../utils/index.js'
@@ -120,15 +124,11 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     // #region blocking
     const [{ loading: filling }, fillCallback] = useFillCallback(poolSettings)
-    const openShareTxDialog = useOpenShareTxDialog()
     const fill = useCallback(async () => {
         const result = await fillCallback()
         if (!result || result instanceof Error) return
         const { receipt, settings } = result
         if (!receipt.transactionHash) return
-        await openShareTxDialog({
-            hash: receipt.transactionHash,
-        })
         // no contract is available
         if (!ITO2_CONTRACT_ADDRESS) return
 
@@ -172,7 +172,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         setPoolSettings(undefined)
         onCreateOrSelect(payload)
         onClose()
-    }, [ITO2_CONTRACT_ADDRESS, fillCallback, openShareTxDialog])
+    }, [ITO2_CONTRACT_ADDRESS, fillCallback])
     // #endregion
 
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
@@ -182,10 +182,11 @@ export function CompositionDialog(props: CompositionDialogProps) {
     // #region tabs
 
     const currentIdentity = useCurrentIdentity()
-
+    const lastRecognized = useLastRecognizedIdentity()
     const { value: linkedPersona } = useCurrentLinkedPersona()
 
-    const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
+    const senderName =
+        lastRecognized.identifier?.userId ?? currentIdentity?.identifier.userId ?? linkedPersona?.nickname
     const onCreateOrSelect = useCallback(
         async (payload: JSON_PayloadInMask) => {
             if (!payload.password) {

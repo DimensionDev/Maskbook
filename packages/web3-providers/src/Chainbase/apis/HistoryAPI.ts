@@ -1,13 +1,6 @@
 import urlcat from 'urlcat'
-import {
-    createIndicator,
-    createNextIndicator,
-    createPageable,
-    type HubOptions,
-    type Pageable,
-    type Transaction,
-} from '@masknet/web3-shared-base'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { type HubOptions, type Transaction } from '@masknet/web3-shared-base'
+import { createIndicator, createNextIndicator, createPageable, type Pageable, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, isValidChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import type { Tx } from '../types.js'
 import { fetchFromChainbase } from '../helpers.js'

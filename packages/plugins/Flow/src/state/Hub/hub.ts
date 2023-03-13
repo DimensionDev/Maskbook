@@ -1,14 +1,8 @@
-import { mixin } from '@masknet/shared-base'
+import { mixin, type Pageable } from '@masknet/shared-base'
 import { HubStateBaseClient, HubStateFungibleClient, HubStateNonFungibleClient } from '@masknet/web3-state'
 import { AlchemyFlow, FlowFungible } from '@masknet/web3-providers'
 import type { FungibleTokenAPI, NonFungibleTokenAPI } from '@masknet/web3-providers/types'
-import {
-    SourceType,
-    type CurrencyType,
-    type HubOptions,
-    type Pageable,
-    type Transaction,
-} from '@masknet/web3-shared-base'
+import { SourceType, type CurrencyType, type HubOptions, type Transaction } from '@masknet/web3-shared-base'
 import { ChainId, type SchemaType } from '@masknet/web3-shared-flow'
 import type { FlowHub } from './types.js'
 

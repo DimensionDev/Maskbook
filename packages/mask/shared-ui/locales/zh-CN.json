@@ -564,7 +564,6 @@
     "plugin_ito_dialog_swap_title": "兑换 {{token}}",
     "plugin_ito_dialog_swap_reminder_title": "兑换提醒",
     "plugin_ito_dialog_swap_unlock_title": "提前解锁代币",
-    "plugin_ito_dialog_swap_share_title": "分享",
     "plugin_ito_dialog_swap_exchange": "以兑换",
     "plugin_ito_dialog_swap_panel_title": "兑换",
     "plugin_ito_dialog_swap_exceed_wallet_limit": "超过单个钱包限制",

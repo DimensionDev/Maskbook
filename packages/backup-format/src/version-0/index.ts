@@ -49,9 +49,10 @@ export async function normalizeBackupVersion0(file: BackupJSONFileVersion0): Pro
     }
     backup.personas.set(persona.identifier, persona)
 
-    if (username && username !== '$unknown' && username !== '$local') {
+    const identifier = ProfileIdentifier.of('facebook.com', username)
+    if (identifier.some) {
         const profile: NormalizedBackup.ProfileBackup = {
-            identifier: ProfileIdentifier.of('facebook.com', username).unwrap(),
+            identifier: identifier.val,
             linkedPersona: Some(persona.identifier),
             createdAt: None,
             updatedAt: None,

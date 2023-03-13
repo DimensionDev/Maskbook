@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { SocialAddressType } from '@masknet/web3-shared-base'
+import { SocialAddressType } from '@masknet/shared-base'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { Typography } from '@mui/material'

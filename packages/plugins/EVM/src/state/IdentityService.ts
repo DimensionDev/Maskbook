@@ -1,7 +1,6 @@
-import { compact, uniqBy } from 'lodash-es'
+import { compact, first, uniqBy } from 'lodash-es'
 import type { Plugin } from '@masknet/plugin-infra'
 import { IdentityServiceState } from '@masknet/web3-state'
-import { type SocialIdentity, type SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import {
     NetworkPluginID,
     EMPTY_LIST,
@@ -11,6 +10,9 @@ import {
     createLookupTableResolver,
     PluginID,
     type BindingProof,
+    type SocialIdentity,
+    type SocialAddress,
+    SocialAddressType,
 } from '@masknet/shared-base'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { ENS, Lens, MaskX, NextIDProof, NextIDStorage, RSS3, SpaceID, Twitter } from '@masknet/web3-providers'
@@ -24,6 +26,7 @@ const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/
 const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/
 const LENS_RE = /[^\s()[\]]{1,256}\.lens\b/i
 const LENS_URL_RE = /https?:\/\/.+\/(\w+\.lens)/
+const LENS_DOMAIN_RE = /[a-z][\d_a-z]{4,25}\.lens/
 
 function getENSNames(userId: string, nickname: string, bio: string) {
     return [userId.match(ENS_RE), nickname.match(ENS_RE), bio.match(ENS_RE)].flatMap((result) => result ?? [])
@@ -31,8 +34,8 @@ function getENSNames(userId: string, nickname: string, bio: string) {
 
 function getLensNames(nickname: string, bio: string, homepage: string) {
     const homepageNames = homepage.match(LENS_URL_RE)
-    const names = [nickname.match(LENS_RE), bio.match(LENS_RE)].map((result) => result?.[0] ?? '').filter(Boolean)
-    return homepageNames === null || !homepageNames?.[1] ? names : [...names, homepageNames[1]]
+    const names = [nickname.match(LENS_RE), bio.match(LENS_RE)].map((result) => result?.[0] ?? '')
+    return [...names, homepageNames?.[1]].map((x) => first(x?.match(LENS_DOMAIN_RE)) ?? '').filter(Boolean)
 }
 
 function getSIDNames(userId: string, nickname: string, bio: string) {

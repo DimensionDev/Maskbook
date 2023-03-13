@@ -22,6 +22,9 @@ import type {
     SignType,
     NFTAvatarEvent,
     ValueRefWithReady,
+    Wallet,
+    SocialAccount,
+    SocialIdentity,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -30,10 +33,7 @@ import type {
     NetworkDescriptor,
     ProviderDescriptor,
     SearchResult,
-    SocialAccount,
-    SocialIdentity,
     ThemeSettings,
-    Wallet,
     Web3EnableRequirement,
     Web3State,
     Web3UI,
@@ -900,6 +900,7 @@ export namespace Plugin.Dashboard {
         TransactionParameter = unknown,
         Web3 = unknown,
         Web3Provider = unknown,
+        WalletProvider = unknown,
     > extends Shared.DefinitionDeferred<DashboardContext> {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>

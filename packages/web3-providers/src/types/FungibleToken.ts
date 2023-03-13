@@ -1,14 +1,8 @@
-import type {
-    FungibleAsset,
-    Pageable,
-    HubOptions,
-    HubIndicator,
-    FungibleTokenStats,
-    FungibleToken,
-} from '@masknet/web3-shared-base'
+import type { PageIndicator, Pageable } from '@masknet/shared-base'
+import type { FungibleAsset, HubOptions, FungibleTokenStats, FungibleToken } from '@masknet/web3-shared-base'
 
 export namespace FungibleTokenAPI {
-    export interface Provider<ChainId, SchemaType, Indicator = HubIndicator> {
+    export interface Provider<ChainId, SchemaType, Indicator = PageIndicator> {
         /** Get fungible token price. */
         getPrice?: (address: string, options?: HubOptions<ChainId, Indicator>) => Promise<number>
         /** Get fungible asset. */

@@ -24,6 +24,7 @@ import {
     DeBankGasOption,
     DeBankFungibleToken,
     DeBankHistory,
+    SimpleHash,
 } from '@masknet/web3-providers'
 import type {
     AuthorizationAPI,
@@ -36,13 +37,11 @@ import type {
 import {
     SourceType,
     type HubOptions,
-    type Pageable,
     type CurrencyType,
     type Transaction,
     attemptUntil,
-    createPageable,
-    createIndicator,
 } from '@masknet/web3-shared-base'
+import { type Pageable, createPageable, createIndicator } from '@masknet/shared-base'
 import { ChainId, chainResolver, type SchemaType } from '@masknet/web3-shared-evm'
 import { Web3StateSettings } from '../../settings/index.js'
 import type { EVM_Hub } from './types.js'
@@ -157,6 +156,7 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                 [SourceType.GoPlus]: GoPlusAuthorization,
                 [SourceType.Rabby]: Rabby,
                 [SourceType.R2D2]: R2D2TokenList,
+                [SourceType.SimpleHash]: SimpleHash,
             },
             options.chainId === ChainId.Mainnet
                 ? [
@@ -172,6 +172,7 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                       GoPlusAuthorization,
                       Rabby,
                       R2D2TokenList,
+                      SimpleHash,
                   ]
                 : [
                       NFTScanNonFungibleTokenEVM,
@@ -185,6 +186,7 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                       GoPlusAuthorization,
                       Rabby,
                       R2D2TokenList,
+                      SimpleHash,
                   ],
             initial,
         )

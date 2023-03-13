@@ -15,17 +15,34 @@ const IGNORE_ERRORS = [
     'yb0w3z63oa',
     // Twitter Identity API
     'mr8asf7i4h',
+    // NextID
+    'https://proof-service.next.id/v1/proof',
     // Twitter Assets
     'https://t.co',
     'https://pbs.twimg.com',
+    'https://abs.twimg.com',
+    'https://twitter.com',
+    // source code
+    'https://maskbook.pages.dev',
+    // KV
+    'https://kv.r2d2.to/api/com.maskbook.pets',
+    'https://kv.r2d2.to/api/com.maskbook.user',
     // ScamDB
     'https://scam.mask.r2d2.to',
     // RSS3 domain query
     'https://rss3.domains/name',
+    // CDN
+    /* cspell:disable-next-line */
+    'cdninstagram.com',
+    /* cspell:disable-next-line */
+    'fbcdn.net',
+    'imgix.net',
+    // misc
     'At least one of the attempts fails.',
     'Extension context invalidated.',
     '[object Promise]',
     'ResizeObserver loop limit exceeded',
+    'User rejected the request.',
 ]
 
 export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {

@@ -2,9 +2,8 @@ import urlcat from 'urlcat'
 import { uniqBy } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import getUnixTime from 'date-fns/getUnixTime'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { createPageable, createIndicator, createNextIndicator, EMPTY_LIST } from '@masknet/shared-base'
 import {
-    createPageable,
     CurrencyType,
     type NonFungibleToken,
     type NonFungibleCollection,
@@ -15,8 +14,6 @@ import {
     TokenType,
     type HubOptions,
     createNonFungibleTokenContract,
-    createIndicator,
-    createNextIndicator,
     type NonFungibleAsset,
     type NonFungibleTokenStats,
     formatPercentage,

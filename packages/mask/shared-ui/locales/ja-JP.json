@@ -1,4 +1,9 @@
 {
+    "promote": "🎭🎭🎭 平文に飽きた？暗号化されたメッセージを友達に送ってみよう。Mask.ioをインストールして、最初の暗号化されたツイートを送信してみましょう。",
+    "promote_red_packet": "🧧:🧧:🧧 トークンやNFTを使って友達にLucky Dropを送り、今すぐ喜びを分かち合ってみてください。Mask.ioをインストールして、最初のLucky Dropを送信してみましょう。",
+    "more": "その他",
+    "gas_price": "ガス価格",
+    "sign": "サイン",
     "add_token": "トークンを追加",
     "additional_post_box__encrypted_post_pre": "#mask_io で復号しましょう！ {{encrypted}}",
     "additional_post_box__steganography_post_pre": "この投稿は #mask_io によって暗号化されています。 📪🔑 mask.io をインストールして復号しましょう！ ([I:b]) {{random}}",
@@ -143,7 +148,6 @@
     "plugin_ito_dialog_swap_title": "{{token}} をスワップ",
     "plugin_ito_dialog_swap_reminder_title": "スワップリマインダー",
     "plugin_ito_dialog_swap_unlock_title": "事前にトークンをアンロックする",
-    "plugin_ito_dialog_swap_share_title": "共有",
     "plugin_ito_dialog_swap_exchange": "交換する",
     "plugin_ito_dialog_swap_panel_title": "スワップ",
     "plugin_ito_dialog_swap_exceed_wallet_limit": "一つのウォレットの限度を超えています",

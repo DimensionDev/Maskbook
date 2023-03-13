@@ -1,13 +1,12 @@
 import urlcat from 'urlcat'
+import { NetworkPluginID, createLookupTableResolver, NextIDPlatform, SocialAddressType } from '@masknet/shared-base'
 import {
     type ChainDescriptor,
     CurrencyType,
     type NetworkDescriptor,
     type ProviderDescriptor,
-    SocialAddressType,
     SourceType,
 } from '../specs/index.js'
-import { NetworkPluginID, createLookupTableResolver, NextIDPlatform } from '@masknet/shared-base'
 
 export interface ExplorerRoutes {
     addressPathname?: string
@@ -237,6 +236,7 @@ export const resolveSourceTypeName = createLookupTableResolver<SourceType, strin
         [SourceType.NFTX]: 'NFTX',
         [SourceType.Etherscan]: 'Etherscan',
         [SourceType.CryptoPunks]: 'CryptoPunks',
+        [SourceType.SimpleHash]: 'SimpleHash',
     },
     (providerType) => {
         throw new Error(`Unknown source type: ${providerType}.`)

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
-import type { SocialAccount } from '@masknet/web3-shared-base'
+import type { SocialAccount } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 /**

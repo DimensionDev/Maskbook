@@ -1,8 +1,6 @@
 import { useCallback } from 'react'
 import { IconButton, MenuItem } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { MoreHoriz as MoreHorizIcon } from '@mui/icons-material'
-import { useI18N } from '../../../utils/index.js'
 import { useMenu } from '@masknet/shared'
 import { useModal } from '../DashboardDialogs/Base.js'
 import {
@@ -11,8 +9,11 @@ import {
 } from '../DashboardDialogs/Wallet/index.js'
 import { useChainIdValid } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NonFungibleAsset, Wallet } from '@masknet/web3-shared-base'
+import type { Wallet } from '@masknet/shared-base'
+import type { NonFungibleAsset } from '@masknet/web3-shared-base'
 import { type ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { MoreHoriz as MoreHorizIcon } from '@mui/icons-material'
+import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     more: {

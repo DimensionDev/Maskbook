@@ -1,12 +1,13 @@
 import { Trash2 as TrashIcon } from 'react-feather'
+import { Trans } from 'react-i18next'
 import { Button, Box, type BoxProps } from '@mui/material'
 import { type SchemaType, isNativeTokenAddress, type ChainId } from '@masknet/web3-shared-evm'
+import { makeStyles } from '@masknet/theme'
 import { useSnackbarCallback, DebounceButton } from '@masknet/shared'
+import type { Wallet } from '@masknet/shared-base'
+import type { FungibleToken, NonFungibleToken } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils/index.js'
 import { DashboardDialogCore, DashboardDialogWrapper, type WrappedDialogProps } from '../Base.js'
-import { makeStyles } from '@masknet/theme'
-import type { FungibleToken, NonFungibleToken, Wallet } from '@masknet/web3-shared-base'
-import { Trans } from 'react-i18next'
 
 export function DashboardWalletHideTokenConfirmDialog(
     props: WrappedDialogProps<{

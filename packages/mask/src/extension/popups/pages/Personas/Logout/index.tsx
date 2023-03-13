@@ -1,22 +1,29 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
+import { useAsyncFn } from 'react-use'
+import { useNavigate } from 'react-router-dom'
 import { first } from 'lodash-es'
 import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
+import { LoadingButton } from '@mui/lab'
 import { Button, Typography } from '@mui/material'
+import {
+    PopupRoutes,
+    formatPersonaFingerprint,
+    type PersonaInformation,
+    NetworkPluginID,
+    type Wallet,
+} from '@masknet/shared-base'
+import { useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { EVM_Providers } from '@masknet/web3-providers'
+import { formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils/index.js'
-import { useAsyncFn } from 'react-use'
 import { PersonaContext } from '../hooks/usePersonaContext.js'
 import Services from '../../../../service.js'
-import { LoadingButton } from '@mui/lab'
-import { useNavigate } from 'react-router-dom'
-import { PopupRoutes, formatPersonaFingerprint, type PersonaInformation, NetworkPluginID } from '@masknet/shared-base'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
-import { useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
-import { isSameAddress, type Wallet } from '@masknet/web3-shared-base'
-import { formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 
@@ -119,7 +126,7 @@ const Logout = memo(() => {
             }
 
             if (manageWallets.length) {
-                const maskProvider = Provider?.getWalletProvider(ProviderType.MaskWallet)
+                const maskProvider = EVM_Providers[ProviderType.MaskWallet]
                 await maskProvider?.removeWallets(manageWallets)
             }
         }
