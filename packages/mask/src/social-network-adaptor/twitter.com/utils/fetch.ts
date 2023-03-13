@@ -69,8 +69,13 @@ export const postNameParser = (node: HTMLElement) => {
         ),
     )
     const quotedTweetHandle = collectNodeText(
-        tweetElement.querySelector<HTMLElement>('div[role="link"] div[tabindex="-1"] div div > span'),
+        tweetElement
+            .querySelector('[data-testid="UserAvatar-Container-unknown"]')
+            ?.parentNode?.parentNode?.parentNode?.parentNode?.firstElementChild?.nextElementSibling?.querySelector(
+                'span',
+            ),
     )
+
     // quoted post matched
     return {
         name: quotedTweetName || '',
