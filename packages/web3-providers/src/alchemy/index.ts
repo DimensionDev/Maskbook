@@ -155,18 +155,22 @@ function createNftToken_EVM(
             name: asset?.metadata?.name ?? asset?.title,
             symbol: '',
             description: asset.description,
-            imageURL: resolveIPFSLinkFromURL(
-                asset?.metadata?.image ||
-                    asset?.metadata?.image_url ||
-                    asset?.media?.[0]?.gateway ||
-                    asset?.metadata?.animation_url ||
-                    '',
+            imageURL: decodeURIComponent(
+                resolveIPFSLinkFromURL(
+                    asset?.metadata?.image ||
+                        asset?.metadata?.image_url ||
+                        asset?.media?.[0]?.gateway ||
+                        asset?.metadata?.animation_url ||
+                        '',
+                ),
             ),
-            mediaURL: resolveIPFSLinkFromURL(
-                asset?.media?.[0]?.gateway ??
-                    asset?.media?.[0]?.raw ??
-                    asset?.metadata?.image_url ??
-                    asset?.metadata?.image,
+            mediaURL: decodeURIComponent(
+                resolveIPFSLinkFromURL(
+                    asset?.media?.[0]?.gateway ??
+                        asset?.media?.[0]?.raw ??
+                        asset?.metadata?.image_url ??
+                        asset?.metadata?.image,
+                ),
             ),
         },
         contract: {
@@ -208,13 +212,15 @@ function createNFTAsset_EVM(
             name: metaDataResponse?.metadata?.name ?? metaDataResponse?.title,
             symbol: '',
             description: metaDataResponse.description,
-            imageURL: resolveIPFSLinkFromURL(
-                metaDataResponse?.metadata?.image ||
-                    metaDataResponse?.media?.[0]?.gateway ||
-                    metaDataResponse?.media?.[0]?.raw ||
-                    '',
+            imageURL: decodeURIComponent(
+                resolveIPFSLinkFromURL(
+                    metaDataResponse?.metadata?.image ||
+                        metaDataResponse?.media?.[0]?.gateway ||
+                        metaDataResponse?.media?.[0]?.raw ||
+                        '',
+                ),
             ),
-            mediaURL: resolveIPFSLinkFromURL(metaDataResponse?.media?.[0]?.gateway),
+            mediaURL: decodeURIComponent(resolveIPFSLinkFromURL(metaDataResponse?.media?.[0]?.gateway)),
         },
         contract: {
             chainId,
