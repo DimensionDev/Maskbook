@@ -68,7 +68,6 @@
 
       "@masknet/app": ["./packages/app/src"],
       "@masknet/backup-format": ["./packages/backup-format/src"],
-      "@masknet/configuration": ["./packages/configuration/src"],
       "@masknet/dashboard": ["./packages/dashboard/src"],
       "@masknet/encryption": ["./packages/encryption/src"],
       "@masknet/external-plugin-previewer": ["./packages/external-plugin-previewer/src"],
