@@ -699,11 +699,7 @@ importers:
         specifier: ^0.16.0
         version: 0.16.0
 
-  packages/flags:
-    dependencies:
-      urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+  packages/flags: {}
 
   packages/gun-utils:
     dependencies:
