@@ -477,12 +477,6 @@ importers:
 
   packages/config: {}
 
-  packages/configuration:
-    dependencies:
-      urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
-
   packages/dashboard:
     dependencies:
       '@hookform/resolvers':
@@ -705,6 +699,12 @@ importers:
         specifier: ^0.16.0
         version: 0.16.0
 
+  packages/flags:
+    dependencies:
+      urlcat:
+        specifier: ^2.0.4
+        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
+
   packages/gun-utils:
     dependencies:
       event-iterator:
@@ -773,6 +773,9 @@ importers:
       '@masknet/external-plugin-previewer':
         specifier: workspace:^
         version: link:../external-plugin-previewer
+      '@masknet/flags':
+        specifier: workspace:^
+        version: link:../flags
       '@masknet/gun-utils':
         specifier: workspace:^
         version: link:../gun-utils
