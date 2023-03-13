@@ -29,14 +29,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     return (
                         <ApplicationEntry
                             {...props}
-                            disabled={disabled}
+                            disabled
                             title={name}
                             icon={icon}
                             onClick={props.onClick ? () => props.onClick?.(openDialog) : openDialog}
                         />
                     )
                 },
-                appBoardSortingDefaultPriority: 11,
+                appBoardSortingDefaultPriority: 16,
                 marketListSortingPriority: 12,
                 icon,
                 description: <Trans i18nKey="plugin_game_description" />,
