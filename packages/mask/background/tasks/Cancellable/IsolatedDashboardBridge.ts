@@ -1,5 +1,5 @@
 import { Environment, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import { Flags } from '../../../shared/flags.js'
+import { Flags } from '@masknet/flags'
 import { hmr } from '../../../utils-pure/index.js'
 
 let disconnected = false

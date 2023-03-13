@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginID } from '@masknet/shared-base'
-import { Flags } from '../../../shared/index.js'
+import { Flags } from '@masknet/flags'
 
 export const base: Plugin.Shared.Definition = {
     ID: PluginID.External,
