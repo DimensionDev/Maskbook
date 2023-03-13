@@ -1,5 +1,5 @@
 import { useActivatedPlugin, useCompositionContext } from '@masknet/plugin-infra/content-script'
-import { InjectedDialog, type InjectedDialogProps, useOpenShareTxDialog, NetworkTab } from '@masknet/shared'
+import { InjectedDialog, type InjectedDialogProps, NetworkTab } from '@masknet/shared'
 import { PluginID, EMPTY_LIST, EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import {
     useChainContext,
@@ -120,15 +120,11 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     // #region blocking
     const [{ loading: filling }, fillCallback] = useFillCallback(poolSettings)
-    const openShareTxDialog = useOpenShareTxDialog()
     const fill = useCallback(async () => {
         const result = await fillCallback()
         if (!result || result instanceof Error) return
         const { receipt, settings } = result
         if (!receipt.transactionHash) return
-        await openShareTxDialog({
-            hash: receipt.transactionHash,
-        })
         // no contract is available
         if (!ITO2_CONTRACT_ADDRESS) return
 
@@ -172,7 +168,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         setPoolSettings(undefined)
         onCreateOrSelect(payload)
         onClose()
-    }, [ITO2_CONTRACT_ADDRESS, fillCallback, openShareTxDialog])
+    }, [ITO2_CONTRACT_ADDRESS, fillCallback])
     // #endregion
 
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
