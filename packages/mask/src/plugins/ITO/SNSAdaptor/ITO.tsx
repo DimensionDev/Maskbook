@@ -16,13 +16,7 @@ import {
     type FungibleToken,
 } from '@masknet/web3-shared-base'
 import { Box, Card, Link, Typography } from '@mui/material'
-import {
-    SOCIAL_MEDIA_NAME,
-    TokenIcon,
-    useOpenShareTxDialog,
-    ChainBoundary,
-    WalletConnectedBoundary,
-} from '@masknet/shared'
+import { SOCIAL_MEDIA_NAME, TokenIcon, ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
 import { BigNumber } from 'bignumber.js'
@@ -329,22 +323,7 @@ export function ITO(props: ITO_Props) {
         retryAvailability()
     }, [retryPoolTradeInfo, retryAvailability])
 
-    // #region claim
     const [{ loading: isClaiming }, claimCallback] = useClaimCallback([pid], payload.contract_address)
-    const openShareTxDialog = useOpenShareTxDialog()
-    const claim = useCallback(async () => {
-        const hash = await claimCallback()
-        if (typeof hash !== 'string') return
-        openShareTxDialog({
-            hash,
-            buttonLabel: t('dismiss'),
-            onShare() {
-                window.location.reload()
-            },
-        })
-    }, [claimCallback, openShareTxDialog, t])
-
-    // #endregion
 
     const shareText = t(
         isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
@@ -503,7 +482,7 @@ export function ITO(props: ITO_Props) {
                     variant="roundedDark"
                     fullWidth
                     loading={isClaiming}
-                    onClick={claim}
+                    onClick={claimCallback}
                     disabled={isClaiming}
                     className={classes.actionButton}>
                     {isClaiming ? t('plugin_ito_claiming') : t('plugin_ito_claim')}

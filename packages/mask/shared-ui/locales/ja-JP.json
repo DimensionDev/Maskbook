@@ -148,7 +148,6 @@
     "plugin_ito_dialog_swap_title": "{{token}} をスワップ",
     "plugin_ito_dialog_swap_reminder_title": "スワップリマインダー",
     "plugin_ito_dialog_swap_unlock_title": "事前にトークンをアンロックする",
-    "plugin_ito_dialog_swap_share_title": "共有",
     "plugin_ito_dialog_swap_exchange": "交換する",
     "plugin_ito_dialog_swap_panel_title": "スワップ",
     "plugin_ito_dialog_swap_exceed_wallet_limit": "一つのウォレットの限度を超えています",

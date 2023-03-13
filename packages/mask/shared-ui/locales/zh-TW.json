@@ -243,7 +243,6 @@
     "plugin_ito_dialog_swap_title": "交換 {{token}}",
     "plugin_ito_dialog_swap_reminder_title": "交換提醒",
     "plugin_ito_dialog_swap_unlock_title": "事先解鎖代幣",
-    "plugin_ito_dialog_swap_share_title": "分享",
     "plugin_ito_dialog_swap_exchange": "以換取",
     "plugin_ito_dialog_swap_panel_title": "交換",
     "plugin_ito_dialog_swap_exceed_wallet_limit": "超過單個錢包限制",

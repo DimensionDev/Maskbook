@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { BigNumber } from 'bignumber.js'
-import { openWindow } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
     useSelectFungibleToken,
-    useOpenShareTxDialog,
     FungibleTokenInput,
     WalletConnectedBoundary,
     EthereumERC20TokenApprovedBoundary,
@@ -17,21 +15,16 @@ import {
     type FungibleToken,
     currySameAddress,
     formatBalance,
+    TokenType,
 } from '@masknet/web3-shared-base'
-import {
-    type ChainId,
-    SchemaType,
-    isNativeTokenAddress,
-    useTokenConstants,
-    explorerResolver,
-} from '@masknet/web3-shared-evm'
+import { useChainContext, useFungibleToken, useFungibleTokenBalance, useWeb3State } from '@masknet/web3-hooks-base'
+import { type ChainId, SchemaType, isNativeTokenAddress, useTokenConstants } from '@masknet/web3-shared-evm'
 import { Slider, Typography } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
 import type { JSON_PayloadInMask } from '../types.js'
 import { useQualificationVerify } from './hooks/useQualificationVerify.js'
 import { useSwapCallback } from './hooks/useSwapCallback.js'
-import { SwapStatus } from './SwapGuide.js'
-import { useChainContext, useFungibleToken, useFungibleTokenBalance, useWeb3State } from '@masknet/web3-hooks-base'
+import { useTransactionConfirmDialog } from './context/TokenTransactionConfirmDialogContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {},
@@ -75,9 +68,9 @@ export interface SwapDialogProps extends withClasses<'root'> {
     initAmount: BigNumber
     tokenAmount: BigNumber
     maxSwapAmount: BigNumber
+    successShareText: string | undefined
     setTokenAmount: React.Dispatch<React.SetStateAction<BigNumber>>
     setActualSwapAmount: React.Dispatch<React.SetStateAction<BigNumber.Value>>
-    setStatus: (status: SwapStatus) => void
     chainId: ChainId
     account: string
     token: FungibleToken<ChainId, SchemaType>
@@ -92,13 +85,14 @@ export function SwapDialog(props: SwapDialogProps) {
         maxSwapAmount,
         setTokenAmount,
         setActualSwapAmount,
-        setStatus,
+        successShareText,
         account,
         token,
         exchangeTokens,
     } = props
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const openTransactionConfirmDialog = useTransactionConfirmDialog()
     const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { classes } = useStyles(undefined, { props })
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
@@ -172,25 +166,23 @@ export function SwapDialog(props: SwapDialogProps) {
         swapToken ? swapToken : { address: NATIVE_TOKEN_ADDRESS },
         qualificationInfo?.isQualificationHasLucky,
     )
-    const openShareTxDialog = useOpenShareTxDialog()
     const onSwap = useCallback(async () => {
         const receipt = await swapCallback()
         if (typeof receipt?.transactionHash === 'string') {
-            await openShareTxDialog({
-                hash: receipt.transactionHash,
-            })
             const { to_value } = (receipt.events?.SwapSuccess?.returnValues ?? {}) as {
                 to_value: string
             }
+            openTransactionConfirmDialog({
+                shareText: successShareText ?? '',
+                amount: formatBalance(to_value, payload.token?.decimals, 2),
+                token: payload.token,
+                tokenType: TokenType.Fungible,
+            })
             setActualSwapAmount(to_value)
-            setStatus(SwapStatus.Share)
-            setTimeout(() => {
-                openWindow(explorerResolver.transactionLink(chainId, receipt.transactionHash))
-            }, 2000)
         }
         if (payload.token.schema !== SchemaType.ERC20) return
         await Token?.addToken?.(account, payload.token)
-    }, [swapCallback, payload.token, Token, account])
+    }, [swapCallback, payload.token, Token, account, successShareText])
 
     const validationMessage = useMemo(() => {
         if (swapAmount.isZero() || tokenAmount.isZero() || swapAmount.dividedBy(ratio).isLessThan(1))
