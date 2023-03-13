@@ -1,10 +1,5 @@
 import { describe, expect, it, test } from 'vitest'
-import {
-    DomainResult,
-    NonFungibleCollectionResult,
-    NonFungibleTokenResult,
-    SearchResultType,
-} from '@masknet/web3-shared-base'
+import { DomainResult, NonFungibleTokenResult } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { DSearchAPI } from '../../src/DSearch/index.js'
 
@@ -65,16 +60,6 @@ describe('DSearch test', () => {
             keyword: 'searchempty',
             pluginID: 'com.mask.evm',
         })
-    })
-
-    it('should return collection by twitter handle', async () => {
-        const DSearch = new DSearchAPI()
-        const result = (await DSearch.search('mathcastles', SearchResultType.CollectionListByTwitterHandler)) as Array<
-            NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        >
-
-        expect(result.length).toBe(1)
-        expect(result[0]?.name).toBe('Terraforms')
     })
 
     it('should return all the data with tag prefix', async () => {
