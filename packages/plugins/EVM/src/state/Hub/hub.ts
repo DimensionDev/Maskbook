@@ -298,7 +298,7 @@ class Hub implements EVM_Hub {
         })
 
         // only the first page is available
-        if ((options.indicator ?? 0) > 0) return createPageable(EMPTY_LIST, createIndicator(options.indicator))
+        if ((options.indicator?.index ?? 0) > 0) return createPageable(EMPTY_LIST, createIndicator(options.indicator))
 
         const providers = this.getProviders<FungibleTokenAPI.Provider<ChainId, SchemaType>>(
             {
