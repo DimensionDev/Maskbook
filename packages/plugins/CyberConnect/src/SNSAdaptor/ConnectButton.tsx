@@ -111,26 +111,18 @@ export default function ConnectButton({
         })
     }, [web3, myAddress])
 
-    const handleClick = useCallback(() => {
+    const handleClick = useCallback(async () => {
         if (!ccInstance) return
         setLoading(true)
 
         if (!isFollowing) {
-            ccInstance
-                .connect(address)
-                .then(() => {
-                    setFollowing(true)
-                    refreshFollowList()
-                })
-                .finally(() => setLoading(false))
+            await ccInstance.connect(address)
+            setFollowing(true)
+            refreshFollowList()
         } else {
-            ccInstance
-                .disconnect(address)
-                .then(() => {
-                    setFollowing(false)
-                    refreshFollowList()
-                })
-                .finally(() => setLoading(false))
+            await ccInstance.disconnect(address)
+            setFollowing(false)
+            refreshFollowList()
         }
     }, [ccInstance, myAddress, isFollowing])
 
