@@ -8,22 +8,29 @@ import { startWatch } from '../../../../utils/watcher.js'
 import { querySelectorAll } from '../../utils/selector.js'
 
 const selector = () => {
-    // [href^="/search"] is a hash tag
-    return querySelectorAll<HTMLElement>(
-        '[data-testid=sidebarColumn] [data-testid=UserCell] div > a[role=link]:not([tabindex]):not([href^="/search"]) [dir]:last-of-type',
-    )
+    return querySelectorAll<HTMLElement>('[data-testid=conversation] div:not([tabindex]) div[dir] + div[dir]')
 }
 
 /**
- * Inject on sidebar user cell
+ * Inject on conversation, including both DM drawer and message page (/messages/xxx)
  */
-export function injectLensOnUserCell(signal: AbortSignal) {
+export function injectLensOnConversation(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())
     startWatch(watcher, signal)
     watcher.useForeach((node, _, proxy) => {
-        const userId = node.closest('[role=link]')?.getAttribute('href')?.slice(1)
+        const spans = node
+            .closest('[data-testid=conversation]')
+            ?.querySelectorAll<HTMLElement>('[tabindex] [dir] span:not([data-testid=tweetText])')
+        if (!spans) return
+        const userId = [...spans].reduce((id, node) => {
+            if (id) return id
+            if (node.textContent?.match(/@\w/)) {
+                return node.textContent.trim().slice(1)
+            }
+            return ''
+        }, '')
         if (!userId) return
-        createReactRootShadowed(proxy.afterShadow, { signal }).render(<UserCellLensSlot userId={userId} />)
+        createReactRootShadowed(proxy.afterShadow, { signal }).render(<ConversationLensSlot userId={userId} />)
     })
 }
 
@@ -58,7 +65,7 @@ const createRootElement = () => {
     return span
 }
 
-function UserCellLensSlot({ userId }: Props) {
+function ConversationLensSlot({ userId }: Props) {
     const [disabled, setDisabled] = useState(true)
     const { classes, cx } = useStyles()
 
