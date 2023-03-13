@@ -8,6 +8,8 @@ import { useI18N } from '../../locales'
 import type { SecurityAPI } from '@masknet/web3-providers'
 import { GoPlusLabs } from '@masknet/web3-providers'
 import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
+import { useNetworkDescriptors } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -47,6 +49,12 @@ function getChainName(chain?: SecurityAPI.SupportedChain<ChainId>) {
     return chainResolver.chainName(chain.chainId) ?? chain.name
 }
 
+const unIntegrationChainLogos: Record<number, URL> = {
+    128: new URL('../../assets/chain-heco.png', import.meta.url),
+    66: new URL('../../assets/chain-okex.png', import.meta.url),
+    25: new URL('../../assets/chain-cronos.png', import.meta.url),
+}
+
 export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
     const t = useI18N()
     const { classes } = useStyles()
@@ -56,31 +64,40 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
 
     const onClose = () => setAnchorEl(null)
     const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
-
-    const { value: supportedChains = [] } = useAsync(GoPlusLabs.getSupportedChain, [])
+    const networks = useNetworkDescriptors(NetworkPluginID.PLUGIN_EVM)
+    const { value: supportedChains = [] } = useAsync(async () => {
+        const chains = await GoPlusLabs.getSupportedChain()
+        return chains.map((x) => {
+            const network = networks.find((n) => n.chainId === x.chainId)
+            const icon: URL | undefined = unIntegrationChainLogos[x.chainId]
+            return { ...x, icon, ...network }
+        })
+    }, [networks])
 
     const menuElements = useMemo(() => {
         if (!supportedChains.length) return
         setSelectedChain(supportedChains[0])
         return (
-            supportedChains.map((chain) => {
-                return (
-                    <MenuItem
-                        key={chain.chainId}
-                        onClick={() => {
-                            setSelectedChain(chain)
-                            onClose()
-                        }}>
-                        <Typography sx={{ marginLeft: 1 }}>{getChainName(chain)}</Typography>
-                    </MenuItem>
-                )
-            }) ?? []
+            supportedChains
+                .filter((x) => x.icon)
+                .map((chain) => {
+                    return (
+                        <MenuItem
+                            key={chain.chainId}
+                            onClick={() => {
+                                setSelectedChain(chain)
+                                onClose()
+                            }}>
+                            <Typography sx={{ marginLeft: 1 }}>{getChainName(chain)}</Typography>
+                        </MenuItem>
+                    )
+                }) ?? []
         )
     }, [supportedChains.length])
 
     return (
         <Stack direction="row" spacing={1}>
-            <Box width={110} height={48}>
+            <Box width={140} height={48}>
                 <Button onClick={onOpen} variant="outlined" className={classes.selectedButton}>
                     <Stack display="inline-flex" direction="row" justifyContent="space-between" width="100%">
                         <Typography fontSize={16}>{getChainName(selectedChain)}</Typography>
