@@ -155,8 +155,8 @@ function createNftToken_EVM(
             name: asset?.metadata?.name ?? asset?.title,
             symbol: '',
             description: asset.description,
-            imageURL: decodeURIComponent(
-                resolveIPFSLinkFromURL(
+            imageURL: resolveIPFSLinkFromURL(
+                decodeURIComponent(
                     asset?.metadata?.image ||
                         asset?.metadata?.image_url ||
                         asset?.media?.[0]?.gateway ||
@@ -164,8 +164,8 @@ function createNftToken_EVM(
                         '',
                 ),
             ),
-            mediaURL: decodeURIComponent(
-                resolveIPFSLinkFromURL(
+            mediaURL: resolveIPFSLinkFromURL(
+                decodeURIComponent(
                     asset?.media?.[0]?.gateway ??
                         asset?.media?.[0]?.raw ??
                         asset?.metadata?.image_url ??
@@ -212,15 +212,15 @@ function createNFTAsset_EVM(
             name: metaDataResponse?.metadata?.name ?? metaDataResponse?.title,
             symbol: '',
             description: metaDataResponse.description,
-            imageURL: decodeURIComponent(
-                resolveIPFSLinkFromURL(
+            imageURL: resolveIPFSLinkFromURL(
+                decodeURIComponent(
                     metaDataResponse?.metadata?.image ||
                         metaDataResponse?.media?.[0]?.gateway ||
                         metaDataResponse?.media?.[0]?.raw ||
                         '',
                 ),
             ),
-            mediaURL: decodeURIComponent(resolveIPFSLinkFromURL(metaDataResponse?.media?.[0]?.gateway)),
+            mediaURL: resolveIPFSLinkFromURL(decodeURIComponent(metaDataResponse?.media?.[0]?.gateway)),
         },
         contract: {
             chainId,
