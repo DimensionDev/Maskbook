@@ -4,10 +4,12 @@ import type { TwitterBaseAPI } from '../../entry-types.js'
 import { fetchCached, staleCached } from '../../entry-helpers.js'
 
 const features = {
+    responsive_web_twitter_blue_verified_badge_is_enabled: true,
+    responsive_web_graphql_exclude_directive_enabled: false,
     verified_phone_label_enabled: false,
-    responsive_web_graphql_timeline_navigation_enabled: false,
-    responsive_web_twitter_blue_verified_badge_is_enabled: false,
     responsive_web_twitter_blue_new_verification_copy_is_enabled: false,
+    responsive_web_graphql_skip_user_profile_image_extensions_enabled: false,
+    responsive_web_graphql_timeline_navigation_enabled: true,
 }
 async function createRequest(screenName: string) {
     const { bearerToken, csrfToken, queryId } = await getTokens('UserByScreenName')
