@@ -79,7 +79,7 @@ const useStyles = makeStyles()((theme) => ({
         color: '#1C68F3',
         display: 'flex',
         alignItems: 'center',
-        wordBreak: 'break-all',
+        wordBreak: 'break-word',
     },
     personaContainer: {
         display: 'flex',
@@ -225,7 +225,7 @@ export const LogoutUI = memo<LogoutUIProps>(
                                     addresses: manageWallets.map((x) => formatEthereumAddress(x.address, 4)).join(','),
                                     persona: selectedPersona?.nickname ?? '',
                                 }}
-                                components={{ span: <Typography component="span" sx={{ wordBreak: 'break-all' }} /> }}
+                                components={{ span: <Typography component="span" sx={{ wordBreak: 'break-word' }} /> }}
                             />
                         </Typography>
                     ) : null}
