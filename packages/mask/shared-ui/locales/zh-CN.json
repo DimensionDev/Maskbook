@@ -899,7 +899,7 @@
     "popups_twitter_id": "Twitter ID",
     "popups_persona_logout": "登出",
     "popups_persona_disconnect_tip": "身份登出后，您所关联的社交网络账户将不能解密过去的加密消息。 如果您需要重新使用您的身份，您可以使用您的身份助记词，身份私钥，本地或云端备份进行恢复。",
-    "popups_persona_disconnect_manage_wallet_warning": "请注意: 该身份 {{persona}} 是您 SmartPay 钱包 <span>{{addresses}}</span> 的管理账户。 如果退出身份账户, 您将无法使用 SmartPay 钱包进行任何交易。",
+    "popups_persona_disconnect_manage_wallet_warning": "请注意: \n该身份 {{persona}} 是您 SmartPay 钱包 <span>{{addresses}}</span> 的管理账户。 如果退出身份账户, 您将无法使用 SmartPay 钱包进行任何交易。",
     "popups_persona_persona_name_exists": "此身份名称已存在",
     "popups_persona_sign_request_title": "签名请求",
     "popups_persona_sign_request_message": "信息",
