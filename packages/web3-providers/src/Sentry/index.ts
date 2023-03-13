@@ -7,7 +7,7 @@ import {
     createDeviceFingerprint,
     isDeviceOnWhitelist,
 } from '@masknet/shared-base'
-import { formatMask } from '@masknet/web3-shared-base'
+import { removeSensitiveTelemetryInfo } from '@masknet/web3-shared-base'
 import { TelemetryAPI } from '../types/Telemetry.js'
 
 const IGNORE_ERRORS = [
@@ -47,8 +47,15 @@ const IGNORE_ERRORS = [
 
 export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
     constructor() {
+        const release =
+            process.env.channel === 'stable' && process.env.NODE_ENV === 'production'
+                ? process.env.COMMIT_HASH === 'N/A'
+                    ? `mask-${process.env.VERSION}-reproducible`
+                    : `mask-${process.env.COMMIT_HASH}`
+                : undefined
         Sentry.init({
             dsn: process.env.MASK_SENTRY_DSN,
+            release,
             defaultIntegrations: false,
             integrations: [
                 // global error and unhandledrejection event
@@ -72,11 +79,11 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
                 }
 
                 event.exception?.values?.forEach((error) => {
-                    error.value = formatMask(error.value)
+                    error.value = removeSensitiveTelemetryInfo(error.value)
                 })
 
                 if (event.message) {
-                    event.message = formatMask(event.message)
+                    event.message = removeSensitiveTelemetryInfo(event.message)
                 }
 
                 return event
@@ -94,10 +101,7 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         Sentry.setTag('device_seed', createDeviceSeed())
         Sentry.setTag('device_fingerprint', createDeviceFingerprint())
         Sentry.setTag('engine', process.env.engine)
-        Sentry.setTag('build_date', process.env.BUILD_DATE)
         Sentry.setTag('branch_name', process.env.BRANCH_NAME)
-        Sentry.setTag('commit_date', process.env.COMMIT_DATE)
-        Sentry.setTag('commit_hash', process.env.COMMIT_HASH)
     }
 
     // The sentry needs to be opened at the runtime.

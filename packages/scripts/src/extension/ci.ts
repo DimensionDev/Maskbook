@@ -1,26 +1,23 @@
 #!/usr/bin/env ts-node
 import { buildBaseExtension, buildWebpackFlag } from './normal.js'
-import { series, parallel, TaskFunction, src, dest } from 'gulp'
+import { series, parallel, type TaskFunction, src, dest } from 'gulp'
 import { ROOT_PATH, task } from '../utils/index.js'
 import { codegen } from '../codegen/index.js'
 import { fileURLToPath } from 'url'
 import { buildSandboxedPluginConfigurable } from '../projects/sandboxed-plugins.js'
 import { join } from 'path'
-import { BuildFlagsExtended, getPreset, Preset } from './flags.js'
+import { type BuildFlagsExtended, getPreset, Preset } from './flags.js'
 
 const BUILD_PATH = new URL('build/', ROOT_PATH)
 export const ciBuild: TaskFunction = series(
     codegen,
-    // The base version need to be build in serial in order to prepare webpack cache.
-    buildBaseExtension,
     function buildSandboxedPlugin() {
         return buildSandboxedPluginConfigurable(fileURLToPath(BUILD_PATH), true)
     },
+    // We need to build a version in serial to prepare the webpack cache.
+    buildBaseExtension,
     parallel(
-        parallel(
-            // Chrome version is the same with base version
-            zipTo(BUILD_PATH, 'MaskNetwork.chromium.zip'),
-        ),
+        zipTo(BUILD_PATH, 'MaskNetwork.chromium.zip'),
         buildTarget(
             'Firefox',
             { ...getPreset(Preset.Firefox), outputPath: 'build-firefox' },
@@ -64,6 +61,7 @@ function zipTo(absBuildDir: URL, fileName: string): TaskFunction {
             artifactsDir: fileURLToPath(ROOT_PATH),
             filename: fileName,
             overwriteDest: true,
+            ignoreFiles: ['*/*.map'],
         })
     }
     f.displayName = `Build extension zip at ${fileName}`
