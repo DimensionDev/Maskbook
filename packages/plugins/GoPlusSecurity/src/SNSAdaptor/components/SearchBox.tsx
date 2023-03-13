@@ -74,7 +74,6 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
         })
     }, [networks])
 
-    console.log(supportedChains)
     const menuElements = useMemo(() => {
         if (!supportedChains.length) return
         setSelectedChain(supportedChains[0])
