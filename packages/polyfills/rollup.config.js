@@ -7,14 +7,6 @@ import { fileURLToPath } from 'node:url'
 
 export default [
     {
-        input: fileURLToPath(new URL('./ecmascript-intl/index.ts', import.meta.url)),
-        output: {
-            file: 'intl.js',
-            format: 'iife',
-        },
-        plugins: plugins(),
-    },
-    {
         input: fileURLToPath(new URL('./web-apis/index.ts', import.meta.url)),
         output: {
             file: 'dom.js',

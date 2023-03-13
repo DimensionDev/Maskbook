@@ -10,4 +10,4 @@ Sentry.BrowserClient.__proto__.prototype.setupIntegrations.call({
     },
 })
 
-void 0
+undefined

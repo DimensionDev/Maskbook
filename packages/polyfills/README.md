@@ -6,10 +6,6 @@
 - DOM: `dist/dom.js` should be used in normal Web page.
 - Worker: `dist/worker.js` should be used in Web Workers.
 
-Extra:
-
-- Intl: `dist/intl.js` provides polyfill for ES Intl API.
-
 ## Supporting browsers
 
 - Chrome Last 2 versions (about 3 months)

@@ -11,4 +11,4 @@ if (typeof trustedTypes === 'object' && location.protocol.includes('extension'))
     }
 }
 
-null
+undefined
