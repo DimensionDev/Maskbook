@@ -53,6 +53,7 @@ jobs:
       - run: npx gulp build-ci
       - name: Create Sentry release
         uses: getsentry/action-release@v1
+        if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/released'
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: mask-network
