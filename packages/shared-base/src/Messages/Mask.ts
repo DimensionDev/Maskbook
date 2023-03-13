@@ -33,6 +33,7 @@ export interface MaskSNSEvents {
     NFTAvatarTimelineUpdated: NFTAvatarEvent
     nftAvatarSettingDialogUpdated: NFTAvatarSettingDialogEvent
     Native_visibleSNS_currentDetectedProfileUpdated: ProfileIdentifier
+    profileTabActive: { active: boolean }
 }
 
 export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, MaskSNSEvents {
