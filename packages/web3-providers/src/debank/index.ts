@@ -15,7 +15,7 @@ import { getAllEVMNativeAssets } from '../helpers'
 import { unionWith } from 'lodash-unified'
 
 const DEBANK_API = 'https://api.debank.com'
-const DEBANK_OPEN_API = 'https://openapi.debank.com'
+const DEBANK_OPEN_API = 'https://debank-proxy.r2d2.to'
 
 /**
  * Debank's data might be outdated, like gas price for aurora which requires 1 Gwei at least
@@ -67,15 +67,14 @@ export class DeBankAPI
     }
 
     async getAssets(address: string, options?: HubOptions<ChainId>) {
-        const response = await global.r2d2Fetch(
-            urlcat(DEBANK_OPEN_API, '/v1/user/token_list', {
-                id: address.toLowerCase(),
-                is_all: true,
-                has_balance: true,
-            }),
-        )
-        const result = (await response.json()) as WalletTokenRecord[] | undefined
         try {
+            const response = await global.r2d2Fetch(
+                urlcat(DEBANK_OPEN_API, '/v1/user/all_token_list', {
+                    id: address.toLowerCase(),
+                    is_all: false,
+                }),
+            )
+            const result = (await response.json()) as WalletTokenRecord[] | undefined
             return createPageable(
                 unionWith(
                     formatAssets(
