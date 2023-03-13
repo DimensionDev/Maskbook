@@ -19,7 +19,6 @@ const Refresh = styled('div')(
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    /* TODO: Mobile */
     width: 584px;
     margin: ${theme.spacing(2, 0)};
     font-size: ${theme.typography.fontSize};
@@ -44,14 +43,12 @@ const ControlContainer = styled('div')(
     justify-content: center;
     grid-template-columns: repeat(2, 180px);
     gap: 24px;
-    /* TODO: Mobile */
     width: 584px;
 `,
 )
 
 const AlertContainer = styled('div')(
     ({ theme }) => `
-    /* TODO: Mobile */
     width: 676px;
     margin-top: ${theme.spacing(7)};
     color: ${MaskColorVar.textSecondary};
@@ -60,7 +57,6 @@ const AlertContainer = styled('div')(
 
 const PrivateKeyInput = styled(FilledInput)(
     ({ theme }) => `
-    /* TODO: Mobile */
     width: 582px;
     height: 182px;
     margin-top: ${theme.spacing(3)};

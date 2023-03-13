@@ -1,6 +1,7 @@
 import RSS3 from 'rss3-next'
 import urlcat, { query } from 'urlcat'
-import { createIndicator, createNextIndicator, createPageable, type HubOptions } from '@masknet/web3-shared-base'
+import { type HubOptions } from '@masknet/web3-shared-base'
+import { createIndicator, createNextIndicator, createPageable } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { RSS3_FEED_ENDPOINT, RSS3_LEGACY_ENDPOINT, RSS3_ENDPOINT, NameServiceToChainMap } from '../constants.js'
 import { type RSS3NameServiceResponse, type RSS3ProfilesResponse, TAG, TYPE } from '../types.js'

@@ -1,16 +1,16 @@
+import { intersectionWith, first } from 'lodash-es'
+import { useAsync } from 'react-use'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import {
     useLastRecognizedIdentity,
     useCurrentPersonaInformation,
     useAllPersonas,
 } from '@masknet/plugin-infra/content-script'
-import { NextIDPlatform, type PersonaInformation } from '@masknet/shared-base'
+import { NextIDPlatform, type PersonaInformation, type Wallet } from '@masknet/shared-base'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { isSameAddress, type Wallet } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
-import { intersectionWith, first } from 'lodash-es'
-import { useAsync } from 'react-use'
-import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 
 export function useQueryQualifications(): AsyncState<{
     hasVerifiedPersona: boolean

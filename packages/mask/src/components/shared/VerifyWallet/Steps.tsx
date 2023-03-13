@@ -1,5 +1,11 @@
+import { useEffect } from 'react'
+import { Trans } from 'react-i18next'
 import { makeStyles, usePopupCustomSnackbar, ActionButton } from '@masknet/theme'
-import { CurrentWalletBox } from './CurrentWalletBox.js'
+import { ImageIcon } from '@masknet/shared'
+import type { Account } from '@masknet/shared-base'
+import { Typography } from '@mui/material'
+import type { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { LoadingButton } from '@mui/lab'
 import {
     step1ActiveIcon,
     stepSuccessIcon,
@@ -9,14 +15,8 @@ import {
     step2DisableIcon,
     step2ActiveIcon,
 } from './constants.js'
-import { ImageIcon } from '@masknet/shared'
-import { Typography } from '@mui/material'
-import { useEffect } from 'react'
 import { useI18N } from '../../../utils/index.js'
-import type { Account } from '@masknet/web3-shared-base'
-import type { ChainId, ProviderType } from '@masknet/web3-shared-evm'
-import { LoadingButton } from '@mui/lab'
-import { Trans } from 'react-i18next'
+import { CurrentWalletBox } from './CurrentWalletBox.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

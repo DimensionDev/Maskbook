@@ -1,8 +1,5 @@
 import urlcat from 'urlcat'
 import {
-    createIndicator,
-    createNextIndicator,
-    createPageable,
     type HubOptions,
     type NonFungibleAsset,
     type NonFungibleCollection,
@@ -13,7 +10,7 @@ import {
     SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { createIndicator, createNextIndicator, createPageable, EMPTY_LIST } from '@masknet/shared-base'
 import {
     ChainId,
     createNativeToken,
@@ -187,24 +184,6 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
         )
         if (!tokens) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const assets = tokens.map((x) => this.createNonFungibleTokenAssetFromNFT(chainId, x))
-        return createPageable(
-            assets,
-            createIndicator(indicator),
-            assets.length ? createNextIndicator(indicator) : undefined,
-        )
-    }
-
-    async getCollectionsByKeyword(keyword: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {}) {
-        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
-        const tokens = await fetchFromChainbase<NFT[]>(
-            urlcat('/v1/nft/search', {
-                chain_id: chainId,
-                name: keyword,
-                page: (indicator?.index ?? 0) + 1,
-            }),
-        )
-        if (!tokens) return createPageable(EMPTY_LIST, createIndicator(indicator))
-        const assets = tokens.map((x) => this.createNonFungibleCollectionFromNFT(chainId, x))
         return createPageable(
             assets,
             createIndicator(indicator),

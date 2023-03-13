@@ -23,7 +23,7 @@ export class PostIVIdentifier extends Identifier {
         // eslint-disable-next-line no-constructor-return
         if (networkCache[postIV]) return networkCache[postIV]
 
-        banSlash(network)
+        banSlash(network, 'PostIVIdentifier.network')
         super()
         this.network = network
         this.postIV = postIV

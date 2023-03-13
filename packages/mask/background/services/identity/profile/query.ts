@@ -1,4 +1,3 @@
-import type { MobileProfile } from '@masknet/public-api'
 import type { ProfileIdentifier, ProfileInformation } from '@masknet/shared-base'
 import {
     createPersonaDBReadonlyAccess,
@@ -7,40 +6,12 @@ import {
     queryProfilesDB,
 } from '../../../database/persona/db.js'
 import { hasLocalKeyOf } from '../../../database/persona/helper.js'
-import { queryProfilesDB as queryProfilesFromIndexedDB } from '../../../database/persona/web.js'
 import { toProfileInformation } from '../../__utils__/convert.js'
-import { profileRecordToMobileProfile } from './mobile.js'
 
 export interface MobileQueryProfilesOptions {
     network?: string
     identifiers?: ProfileIdentifier[]
 }
-export async function mobile_queryProfiles(options: MobileQueryProfilesOptions): Promise<MobileProfile[]> {
-    if (process.env.architecture !== 'app') throw new TypeError('This function is only available in app')
-
-    const { network, identifiers } = options
-    const result = await queryProfilesDB({ network, identifiers })
-    return result.map(profileRecordToMobileProfile)
-}
-
-export async function mobile_queryOwnedProfiles(network?: string): Promise<MobileProfile[]> {
-    let result: ProfileRecord[]
-    await createPersonaDBReadonlyAccess(async (t) => {
-        const personas = await queryPersonasDB({ hasPrivateKey: true }, t)
-        const profiles = personas
-            .filter((x) => !x.uninitialized)
-            .flatMap((x) => [...x.linkedProfiles.keys()])
-            .filter((x) => (network ? x.network === network : true))
-        result = await queryProfilesDB({ identifiers: profiles })
-    })
-    return result!.map(profileRecordToMobileProfile)
-}
-
-export async function mobile_queryProfileRecordFromIndexedDB() {
-    if (process.env.architecture !== 'app') throw new TypeError('This function is only available in app')
-    return queryProfilesFromIndexedDB({})
-}
-
 export async function queryProfilesInformation(identifiers: ProfileIdentifier[]): Promise<ProfileInformation[]> {
     const profiles = await queryProfilesDB({ identifiers })
     return toProfileInformation(profiles).mustNotAwaitThisWithInATransaction

@@ -15,7 +15,7 @@ export class MaskBoxDescriptor extends DescriptorWithTransactionDecodedReceipt i
 
         const events = await this.getReceipt(chainId, contractAddress, MaskBox_ABI as AbiItem[], hash)
 
-        const { amount, token_address } = (events?.ClaimPayment.returnValues ?? {}) as {
+        const { amount, token_address } = (events?.ClaimPayment?.returnValues ?? {}) as {
             amount: string
             token_address: string
         }

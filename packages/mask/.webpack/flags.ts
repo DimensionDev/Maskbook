@@ -6,15 +6,7 @@ export type { BuildFlags } from '../../scripts/src/extension/flags'
 
 export type NormalizedFlags = Required<BuildFlags>
 export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
-    const {
-        mode,
-        profiling = false,
-        engine,
-        architecture,
-        manifest = 2,
-        readonlyCache = false,
-        channel = 'stable',
-    } = flags
+    const { mode, profiling = false, engine, manifest = 2, readonlyCache = false, channel = 'stable' } = flags
     let {
         hmr = mode === 'development',
         reactRefresh = hmr,
@@ -31,8 +23,8 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
     // CSP of Twitter bans connection to the HMR server and blocks the app to start.
     if (engine === 'firefox') hmr = false
 
-    // React Devtools integration is not supported in Firefox or App yet.
-    if (engine !== 'chromium' || architecture === 'app') devtools = false
+    // React Devtools integration is not supported in Firefox yet.
+    if (engine !== 'chromium') devtools = false
 
     if (mode === 'production') hmr = false
     if (!hmr) reactRefresh = false
@@ -43,7 +35,6 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         outputPath,
         // Runtime
         manifest,
-        architecture,
         engine,
         // DX
         hmr,
@@ -60,7 +51,6 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
 export interface ComputedFlags {
     lockdown: boolean
     sourceMapKind: Configuration['devtool']
-    supportDynamicImport: boolean
     reactProductionProfiling: boolean
 }
 
@@ -77,9 +67,8 @@ export function computedBuildFlags(flags: Required<BuildFlags>): ComputedFlags {
         if (process.env.CI) sourceMapKind = false
     }
 
-    const supportDynamicImport = !(flags.engine === 'safari' && flags.architecture === 'app')
     const reactProductionProfiling = flags.mode === 'production' && flags.profiling
-    return { sourceMapKind, lockdown, supportDynamicImport, reactProductionProfiling }
+    return { sourceMapKind, lockdown, reactProductionProfiling }
 }
 
 export function computeCacheKey(flags: Required<BuildFlags>, computedFlags: ComputedFlags) {
@@ -87,7 +76,6 @@ export function computeCacheKey(flags: Required<BuildFlags>, computedFlags: Comp
         '1',
         'node' + process.version,
         flags.mode,
-        computedFlags.supportDynamicImport, // it will generate different code
         computedFlags.reactProductionProfiling, // it will affect module resolution of react-dom
         flags.devtools, // it will affect module resolution of react-refresh-webpack-plugin/client/ReactRefreshEntry.js
         flags.reactRefresh, // it will affect all TSX files

@@ -1,1 +1,6 @@
-{}
+{
+    "button_log_in": "로그인",
+    "button_log_out": "로그아웃",
+    "button_sign_up": "가입하기",
+    "card_state_text_no_profile": "프로필 없음"
+}

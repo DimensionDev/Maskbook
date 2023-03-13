@@ -1,6 +1,7 @@
 export * from './asyncIterator.js'
 export * from './isPopupPage.js'
 export * from './isDashboardPage.js'
+export * from './isDeviceOnWhitelist.js'
 export * from './getLocalImplementation.js'
 export * from './markdown.js'
 export * from './mixin.js'
@@ -10,6 +11,8 @@ export * from './ValueRef.js'
 export * from './resolve.js'
 export * from './compose.js'
 export * from './createLookupTableResolver.js'
+export * from './createDeviceFingerprint.js'
+export * from './createDeviceSeed.js'
 
 export enum SignType {
     Message = 'message',

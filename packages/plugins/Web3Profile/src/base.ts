@@ -8,7 +8,6 @@ export const base: Plugin.Shared.Definition = {
     description: { fallback: PLUGIN_DESCRIPTION },
     publisher: { name: { fallback: '' }, link: '' },
     enableRequirement: {
-        architecture: { app: false, web: true },
         networks: {
             type: 'opt-in',
             networks: {

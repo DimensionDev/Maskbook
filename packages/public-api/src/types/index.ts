@@ -68,43 +68,6 @@ export interface PersonaRecord {
     uninitialized?: boolean
 }
 
-export type MobileRecipientReason =
-    | { type: 'auto-share'; at: number }
-    | { type: 'direct'; at: number }
-    | { type: 'group'; group: any; at: number }
-
-export interface MobileRecipientDetail {
-    reason: MobileRecipientReason[]
-}
-
-export interface MobilePostRecord {
-    /**
-     * For old data stored before version 3, this identifier may be ProfileIdentifier.unknown
-     */
-    postBy: string
-    identifier: string
-    postCryptoKey?: object
-    /**
-     * Receivers
-     */
-    recipients: Record<string, MobileRecipientDetail>
-    /** @deprecated */
-    recipientGroups?: unknown
-    /**
-     * When does Mask find this post.
-     * For your own post, it is when Mask created this post.
-     * For others post, it is when you see it first time.
-     */
-    foundAt: number
-    encryptBy?: string
-    /** The URL of this post */
-    url?: string
-    /** Summary of this post (maybe front 20 chars). */
-    summary?: string
-    /** Interested metadata contained in this post. */
-    interestedMeta?: ReadonlyMap<string, unknown>
-}
-
 export interface ProfileRecord {
     identifier: string
     nickname?: string
@@ -125,9 +88,4 @@ export interface RelationRecord {
     linked: string
     network: string
     favor: RelationFavor
-}
-
-export type PageOption = {
-    pageSize: number
-    pageOffset: number
 }

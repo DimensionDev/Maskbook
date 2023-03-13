@@ -22,6 +22,14 @@ export function useThemeFacebookVariant(baseTheme: Theme) {
             theme.shape.borderRadius = 15
             theme.breakpoints.values = { xs: 0, sm: 687, md: 1024, lg: 1280, xl: 1920 }
             theme.components = theme.components || {}
+            theme.components.MuiTypography = {
+                styleOverrides: {
+                    root: {
+                        // cspell:ignore SFNS
+                        fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', sans-serif",
+                    },
+                },
+            }
             theme.components.MuiPaper = {
                 defaultProps: {
                     elevation: 0,

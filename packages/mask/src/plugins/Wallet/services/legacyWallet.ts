@@ -8,7 +8,6 @@ import type { LegacyWalletRecord } from '../database/types.js'
 import { fromHex, toHex } from '@masknet/shared-base'
 import { isSameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { LegacyWalletRecordOutDB } from './helpers.js'
-import { hasNativeAPI } from '../../../../shared/native-rpc/index.js'
 
 function sortWallet(a: LegacyWalletRecord, b: LegacyWalletRecord) {
     if (a.updatedAt > b.updatedAt) return -1
@@ -19,7 +18,6 @@ function sortWallet(a: LegacyWalletRecord, b: LegacyWalletRecord) {
 }
 
 export async function getLegacyWallets() {
-    if (hasNativeAPI) return []
     const wallets = await getAllWalletRecords()
     return wallets.filter((x) => x._private_key_ || x.mnemonic.length)
 }

@@ -24,7 +24,6 @@ import { AstarAPI } from './Astar/index.js'
 import { GoPlusLabsAPI, GoPlusAuthorizationAPI } from './GoPlusLabs/index.js'
 import { NextIDProofAPI, NextIDStorageAPI } from './NextID/index.js'
 import { AlchemyEVM_API, AlchemyFlowAPI } from './Alchemy/index.js'
-import { Web3API, Web3GasOptionAPI } from './EVM/index.js'
 import { MagicEdenAPI } from './MagicEden/index.js'
 import { CoinMarketCapTrendingAPI } from './CoinMarketCap/index.js'
 import { UniswapAPI } from './Uniswap/index.js'
@@ -38,8 +37,6 @@ import {
     ChainbaseDomainAPI,
     ChainbaseRedPacketAPI,
 } from './Chainbase/index.js'
-import { SolanaFungibleAPI, SolanaNonFungibleAPI } from './Solana/index.js'
-import { FlowFungibleAPI } from './Flow/index.js'
 import { CloudflareAPI } from './Cloudflare/index.js'
 import { MirrorAPI } from './Mirror/index.js'
 import { MindsAPI } from './Minds/index.js'
@@ -51,9 +48,16 @@ import { NomicsAPI } from './Nomics/index.js'
 import { DSearchAPI } from './DSearch/index.js'
 import { MulticallAPI } from './Multicall/index.js'
 import { LensAPI } from './Lens/index.js'
-import { Web3SignerAPI } from './EVM/apis/Web3SignerAPI.js'
-import { FlowWeb3API } from './Flow/apis/Web3API.js'
-import { SolanaWeb3API } from './Solana/apis/Web3API.js'
+import { Web3SignerAPI } from './Connection/EVM/apis/Web3SignerAPI.js'
+import {
+    Web3API,
+    Web3GasOptionAPI,
+    FlowWeb3API,
+    FlowFungibleAPI,
+    SolanaWeb3API,
+    SolanaFungibleAPI,
+    SolanaNonFungibleAPI,
+} from './Connection/index.js'
 import { SentryAPI } from './Sentry/index.js'
 import { TheGraphDomainAPI, TheGraphRedPacketAPI } from './TheGraph/index.js'
 import { ENS_API } from './ENS/index.js'
@@ -61,6 +65,7 @@ import { SpaceID_API } from './SpaceID/index.js'
 import { BonfidaAPI } from './Bonfida/index.js'
 import { RedPacketAPI } from './RedPacket/index.js'
 import { SmartPayOwnerAPI } from './SmartPay/apis/OwnerAPI.js'
+import { SimpleHashProviderAPI } from './SimpleHash/index.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
@@ -77,9 +82,6 @@ export const Instagram = new InstagramAPI()
 export const DSearch = new DSearchAPI()
 export const MetaSwap = new MetaSwapAPI()
 export const AstarGas = new AstarAPI()
-export const Web3 = new Web3API()
-export const Web3GasOption = new Web3GasOptionAPI()
-export const Web3Signer = new Web3SignerAPI()
 export const Nomics = new NomicsAPI()
 export const CoinMarketCap = new CoinMarketCapTrendingAPI()
 export const Uniswap = new UniswapAPI()
@@ -94,6 +96,24 @@ export const Sentry = new SentryAPI()
 export const TheGraphDomain = new TheGraphDomainAPI()
 export const RedPacket = new RedPacketAPI()
 export const TheGraphRedPacket = new TheGraphRedPacketAPI()
+export const SimpleHash = new SimpleHashProviderAPI()
+
+// Wallet
+export * from './Wallet/index.js'
+
+// EVM Connection
+export const Web3 = new Web3API()
+export const Web3GasOption = new Web3GasOptionAPI()
+export const Web3Signer = new Web3SignerAPI()
+
+// Flow Connection
+export const FlowWeb3 = new FlowWeb3API()
+export const FlowFungible = new FlowFungibleAPI()
+
+// Solana Connection
+export const SolanaWeb3 = new SolanaWeb3API()
+export const SolanaFungible = new SolanaFungibleAPI()
+export const SolanaNonFungible = new SolanaNonFungibleAPI()
 
 // Etherscan
 export const EtherscanExplorer = new EtherscanExplorerAPI()
@@ -134,15 +154,6 @@ export const DeBankHistory = new DeBankHistoryAPI()
 // Alchemy
 export const AlchemyEVM = new AlchemyEVM_API()
 export const AlchemyFlow = new AlchemyFlowAPI()
-
-// Flow RPC
-export const FlowWeb3 = new FlowWeb3API()
-export const FlowFungible = new FlowFungibleAPI()
-
-// Solana RPC
-export const SolanaWeb3 = new SolanaWeb3API()
-export const SolanaFungible = new SolanaFungibleAPI()
-export const SolanaNonFungible = new SolanaNonFungibleAPI()
 
 // NFTScan
 export const NFTScanTrending_EVM = new NFTScanTrendingAPI_EVM()

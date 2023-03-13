@@ -2,8 +2,8 @@ import * as bip39 from 'bip39'
 import { first, last, omit } from 'lodash-es'
 import { toBuffer } from 'ethereumjs-util'
 import { Web3Signer } from '@masknet/web3-providers'
-import type { SignType } from '@masknet/shared-base'
-import { type Wallet, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
+import type { SignType, Wallet } from '@masknet/shared-base'
+import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { MAX_DERIVE_COUNT } from '@masknet/plugin-wallet'
 import * as database from './database/index.js'
@@ -37,7 +37,7 @@ export {
 // locker
 export { isLocked, lockWallet, unlockWallet } from './locker.js'
 
-export async function getWallet(address?: string) {
+export async function getWallet(address: string) {
     const wallet = await database.getWallet(address)
     if (!wallet?.hasStoredKeyInfo) return null
     return sanitizeWallet(wallet)

@@ -15,11 +15,11 @@ import {
     getDefaultNetworkType,
     getDefaultProviderType,
 } from '@masknet/web3-shared-solana'
-import { Providers } from './Provider/provider.js'
+import { SolanaProviders } from '@masknet/web3-providers'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
     constructor(override context: Plugin.Shared.SharedUIContext) {
-        super(context, Providers, {
+        super(context, SolanaProviders, {
             isSameAddress,
             isValidChainId,
             getInvalidChainId,

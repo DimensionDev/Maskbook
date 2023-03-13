@@ -146,6 +146,7 @@ export async function send(payload: JsonRpcPayload, options?: TransactionOptions
                 owner: options?.owner,
                 identifier: options?.identifier,
                 paymentToken: options?.paymentToken,
+                allowMaskAsGas: options?.allowMaskAsGas,
             })
             UNCONFIRMED_CALLBACK_MAP.set(editor.pid!, callback)
             if (options?.popupsWindow) openPopupWindow()

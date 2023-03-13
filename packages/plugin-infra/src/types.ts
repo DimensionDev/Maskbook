@@ -22,6 +22,9 @@ import type {
     SignType,
     NFTAvatarEvent,
     ValueRefWithReady,
+    Wallet,
+    SocialAccount,
+    SocialIdentity,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -30,15 +33,12 @@ import type {
     NetworkDescriptor,
     ProviderDescriptor,
     SearchResult,
-    SocialAccount,
-    SocialIdentity,
     ThemeSettings,
-    Wallet,
     Web3EnableRequirement,
     Web3State,
     Web3UI,
 } from '@masknet/web3-shared-base'
-import type { ChainId as ChainIdEVM, TransactionOptions } from '@masknet/web3-shared-evm'
+import type { TransactionOptions } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { CompositionType } from './entry-content-script.js'
 
@@ -163,19 +163,10 @@ export namespace Plugin.Shared {
 
     export interface SharedUIContext extends SharedContext {
         allPersonas?: Subscription<PersonaInformation[]>
-        /** The selected account of Mask Wallet */
-        account: Subscription<string>
-        /** The selected chainId of Mask Wallet */
-        chainId: Subscription<ChainIdEVM>
         /** The selected persona */
         currentPersona: Subscription<PersonaIdentifier | undefined>
         /** Get all wallets */
         wallets: Subscription<Wallet[]>
-
-        /** Native platform type */
-        nativeType?: 'Android' | 'iOS'
-        /** Native API supported */
-        hasNativeAPI: boolean
 
         /** Open Dashboard with a new window */
         openDashboard(route?: DashboardRoutes, search?: string): Promise<any>
@@ -326,7 +317,6 @@ export namespace Plugin.Shared {
      */
     export interface EnableRequirement {
         target: ReleaseStages
-        architecture: Record<'app' | 'web', boolean>
         /** The SNS Network this plugin supports. */
         networks: SupportedNetworksDeclare
         /** The Web3 Network this plugin supports */
@@ -910,6 +900,7 @@ export namespace Plugin.Dashboard {
         TransactionParameter = unknown,
         Web3 = unknown,
         Web3Provider = unknown,
+        WalletProvider = unknown,
     > extends Shared.DefinitionDeferred<DashboardContext> {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>

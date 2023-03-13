@@ -1,5 +1,10 @@
-import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
-import type { SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
+import {
+    EMPTY_LIST,
+    type NetworkPluginID,
+    type SocialIdentity,
+    type SocialAddress,
+    type SocialAddressType,
+} from '@masknet/shared-base'
 import { useSocialAddresses } from './useSocialAddresses.js'
 import { useSocialAccountsFrom } from './useSocialAccountsFrom.js'
 

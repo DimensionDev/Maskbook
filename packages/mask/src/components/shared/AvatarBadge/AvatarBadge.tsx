@@ -1,6 +1,6 @@
-import type { SocialIdentity } from '@masknet/web3-shared-base'
-import type { IconButtonProps } from '@mui/material'
 import type { FC } from 'react'
+import type { IconButtonProps } from '@mui/material'
+import type { SocialIdentity } from '@masknet/shared-base'
 import { useCollectionByTwitterHandler } from '../../../plugins/Trader/trending/useTrending.js'
 import { CollectionProjectAvatarBadge } from './CollectionProjectAvatarBadge.js'
 import { ProfileAvatarBadge } from './ProfileAvatarBadge.js'

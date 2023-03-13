@@ -14,7 +14,6 @@ import { useDashboardI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        // TODO: mobile
         width: 380,
         marginTop: theme.spacing(1.5),
     },
@@ -76,6 +75,5 @@ const Container = styled('div')`
 `
 
 const FormContainer = styled(FormControl)`
-    // TODO: mobile
     width: 380px;
 `

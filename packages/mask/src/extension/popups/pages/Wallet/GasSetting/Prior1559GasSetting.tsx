@@ -2,6 +2,7 @@ import { memo, useEffect, useMemo, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { Controller, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import { Trans } from 'react-i18next'
 import { BigNumber } from 'bignumber.js'
 import { isEmpty } from 'lodash-es'
 import { toHex } from 'web3-utils'
@@ -24,7 +25,6 @@ import { useI18N } from '../../../../../utils/index.js'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
-import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()((theme) => ({
     options: {

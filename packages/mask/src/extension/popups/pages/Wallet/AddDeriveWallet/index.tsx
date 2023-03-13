@@ -12,7 +12,6 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 import { DeriveWalletTable } from '../components/DeriveWalletTable/index.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
-import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -126,10 +125,8 @@ const AddDeriveWallet = memo(() => {
                 ),
         )
 
-        if (!currentMaskWalletAccountSettings.value) {
-            await connection?.connect({ account: firstWallet })
-            await WalletRPC.resolveMaskAccount([{ address: firstWallet }])
-        }
+        await connection?.connect({ account: firstWallet })
+        await WalletRPC.resolveMaskAccount([{ address: firstWallet }])
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [mnemonic, walletName, wallets.length, connection])
 

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
-import type { SocialIdentity } from '@masknet/web3-shared-base'
+import type { SocialIdentity } from '@masknet/shared-base'
 import type { IdentityResolved } from '../types.js'
 import { useSNSAdaptorContext } from './SNSAdaptorContext.js'
 

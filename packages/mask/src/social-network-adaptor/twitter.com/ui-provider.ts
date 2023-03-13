@@ -225,7 +225,9 @@ const twitterUI: SocialNetworkUI.Definition = {
                     IdentityProviderTwitter.recognized.value.identifier?.userId ||
                     globalUIState.profiles.value?.[0].identifier.userId
                 if (!id) throw new Error('Cannot figure out password')
-                return ProfileIdentifier.of(EnhanceableSite.Twitter, id).unwrap().toText()
+                return ProfileIdentifier.of(EnhanceableSite.Twitter, id)
+                    .expect(`${id} should be a valid user id`)
+                    .toText()
             },
         },
     },

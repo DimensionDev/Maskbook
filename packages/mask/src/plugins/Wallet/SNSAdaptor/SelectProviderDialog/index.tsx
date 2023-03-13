@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { delay } from '@masknet/kit'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
@@ -10,7 +10,6 @@ import { useNetworkDescriptor, useWeb3State, useWeb3UI } from '@masknet/web3-hoo
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
-import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc/index.js'
 import { PluginProviderRender } from './PluginProviderRender.js'
 import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 
@@ -50,12 +49,6 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     )
     // #endregion
 
-    // #region native app
-    useEffect(() => {
-        if (!open) return
-        if (hasNativeAPI) nativeAPI?.api.misc_openCreateWalletView()
-    }, [open])
-    // #endregion
     const site = getSiteType()
     const networks = getRegisteredWeb3Networks()
     const providers = getRegisteredWeb3Providers()
@@ -105,8 +98,6 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
             isDashboard ? providers.filter((x) => x.providerAdaptorPluginID === NetworkPluginID.PLUGIN_EVM) : providers,
         [isDashboard, networks],
     )
-    if (hasNativeAPI) return null
-
     return (
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>

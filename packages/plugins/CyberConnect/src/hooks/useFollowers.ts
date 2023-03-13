@@ -1,7 +1,7 @@
-import { pageableToIterator } from '@masknet/web3-shared-base'
+import { useMemo } from 'react'
+import { pageableToIterator } from '@masknet/shared-base'
 import { PluginCyberConnectRPC } from '../messages.js'
 import type { ProfileTab } from '../constants.js'
-import { useMemo } from 'react'
 
 export function useFollowers(tab: ProfileTab, address?: string, size = 50) {
     return useMemo(() => {

@@ -1,6 +1,3 @@
-import { type BindingProof, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext } from '@masknet/web3-hooks-base'
 import { first, noop } from 'lodash-es'
 import {
     createContext,
@@ -13,9 +10,11 @@ import {
     useMemo,
     useState,
 } from 'react'
+import { type BindingProof, EMPTY_LIST, NextIDPlatform, type SocialIdentity } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { PFP_TYPE, type SelectTokenInfo } from '../../types.js'
 import { isValidAddress } from '@masknet/web3-shared-evm'
-import type { SocialIdentity } from '@masknet/web3-shared-base'
 
 interface AvatarManagementContextOptions {
     targetAccount: string

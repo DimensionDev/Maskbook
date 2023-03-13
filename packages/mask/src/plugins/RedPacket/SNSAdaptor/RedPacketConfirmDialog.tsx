@@ -91,7 +91,10 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         gasOption?.gasCurrency,
     )
     const isWaitGasBeMinus = (!estimateGasFee || loadingBalance) && isNativeToken
-    const isBalanceInsufficient = new BigNumber(transactionValue).isLessThanOrEqualTo(0)
+
+    const isBalanceInsufficient =
+        isSameAddress(gasOption?.gasCurrency, nativeToken?.address) &&
+        new BigNumber(transactionValue).isLessThanOrEqualTo(0)
     const total = isNativeToken ? (isBalanceInsufficient ? '0' : transactionValue) : (settings?.total as string)
     const formatTotal = formatBalance(total, settings?.token?.decimals ?? 18, isNativeToken ? 3 : 0)
     const formatAvg = formatBalance(
@@ -120,7 +123,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         // the settings is not available
         if (!settings?.token) return
 
-        const CreationSuccess = (events?.CreationSuccess.returnValues ?? {}) as {
+        const CreationSuccess = (events?.CreationSuccess?.returnValues ?? {}) as {
             creation_time: string
             creator: string
             id: string
@@ -129,7 +132,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         }
 
         // the events log is not available
-        if (!events?.CreationSuccess.returnValues.id) return
+        if (!events?.CreationSuccess?.returnValues.id) return
 
         payload.current.sender = {
             address: account,

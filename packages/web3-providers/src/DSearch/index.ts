@@ -30,19 +30,19 @@ import {
     isValidDomain as isValidDomainSolana,
     isZeroAddress as isZeroAddressSolana,
 } from '@masknet/web3-shared-solana'
-import { fetchJSON } from '../helpers/fetchJSON.js'
 import { CoinGeckoSearchAPI } from '../CoinGecko/apis/DSearchAPI.js'
 import { CoinMarketCapSearchAPI } from '../CoinMarketCap/apis/DSearchAPI.js'
 import { NFTScanCollectionSearchAPI, NFTScanSearchAPI } from '../NFTScan/index.js'
-import type { DSearchBaseAPI } from '../types/DSearch.js'
-import { getHandlers } from './rules.js'
-import { DSEARCH_BASE_URL } from './constants.js'
 import { CoinGeckoTrendingAPI } from '../CoinGecko/apis/TrendingAPI.js'
+import type { DSearchBaseAPI } from '../types/DSearch.js'
+import { fetchJSON } from '../helpers/fetchJSON.js'
 import { RSS3API } from '../RSS3/index.js'
-import { PlatformToChainIdMap } from '../RSS3/constants.js'
 import { ENS_API } from '../ENS/index.js'
 import { SpaceID_API } from '../SpaceID/index.js'
 import { NextIDProofAPI } from '../NextID/proof.js'
+import { PlatformToChainIdMap } from '../RSS3/constants.js'
+import { getHandlers } from './rules.js'
+import { DSEARCH_BASE_URL } from './constants.js'
 
 const isValidAddress = (address?: string): boolean => {
     return isValidAddressEVM(address) || isValidAddressFlow(address) || isValidAddressSolana(address)

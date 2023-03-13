@@ -1,4 +1,5 @@
-import type { Transaction, HubOptions, Pageable, HubIndicator, NonFungibleCollection } from '@masknet/web3-shared-base'
+import type { Pageable, PageIndicator } from '@masknet/shared-base'
+import type { Transaction, HubOptions, NonFungibleCollection } from '@masknet/web3-shared-base'
 
 export namespace RedPacketBaseAPI {
     export interface Provider<ChainId, SchemaType> {
@@ -15,6 +16,6 @@ export namespace RedPacketBaseAPI {
         getCollectionsByOwner?: (
             account: string,
             options?: HubOptions<ChainId>,
-        ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, HubIndicator>>
+        ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>>
     }
 }

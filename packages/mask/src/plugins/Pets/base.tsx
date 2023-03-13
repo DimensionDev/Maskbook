@@ -12,7 +12,6 @@ export const base: Plugin.Shared.Definition = {
     },
     publisher: { name: { fallback: '' }, link: 'https://github.com/HelloWeb3Team' },
     enableRequirement: {
-        architecture: { app: false, web: true },
         networks: { type: 'opt-in', networks: { [CurrentSNSNetwork.Twitter]: true } },
         web3: {
             [NetworkPluginID.PLUGIN_EVM]: {

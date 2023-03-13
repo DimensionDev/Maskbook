@@ -1,13 +1,48 @@
 import { Breadcrumbs, type Event, GlobalHandlers } from '@sentry/browser'
-import { getSiteType, getAgentType, getExtensionId } from '@masknet/shared-base'
+import {
+    getSiteType,
+    getAgentType,
+    getExtensionId,
+    createDeviceSeed,
+    createDeviceFingerprint,
+    isDeviceOnWhitelist,
+} from '@masknet/shared-base'
 import { formatMask } from '@masknet/web3-shared-base'
 import { TelemetryAPI } from '../types/Telemetry.js'
 
 const IGNORE_ERRORS = [
+    // Twitter NFT Avatar API
+    'yb0w3z63oa',
+    // Twitter Identity API
+    'mr8asf7i4h',
+    // NextID
+    'https://proof-service.next.id/v1/proof',
+    // Twitter Assets
+    'https://t.co',
+    'https://pbs.twimg.com',
+    'https://abs.twimg.com',
+    'https://twitter.com',
+    // source code
+    'https://maskbook.pages.dev',
+    // KV
+    'https://kv.r2d2.to/api/com.maskbook.pets',
+    'https://kv.r2d2.to/api/com.maskbook.user',
+    // ScamDB
+    'https://scam.mask.r2d2.to',
+    // RSS3 domain query
+    'https://rss3.domains/name',
+    // CDN
+    /* cspell:disable-next-line */
+    'cdninstagram.com',
+    /* cspell:disable-next-line */
+    'fbcdn.net',
+    'imgix.net',
+    // misc
     'At least one of the attempts fails.',
     'Extension context invalidated.',
     '[object Promise]',
     'ResizeObserver loop limit exceeded',
+    'User rejected the request.',
 ]
 
 export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
@@ -52,8 +87,17 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         Sentry.setTag('agent', getAgentType())
         Sentry.setTag('site', getSiteType())
         Sentry.setTag('extension_id', getExtensionId())
+        Sentry.setTag('channel', process.env.channel)
         Sentry.setTag('version', process.env.VERSION)
         Sentry.setTag('ua', navigator.userAgent)
+        Sentry.setTag('device_ab', isDeviceOnWhitelist(50))
+        Sentry.setTag('device_seed', createDeviceSeed())
+        Sentry.setTag('device_fingerprint', createDeviceFingerprint())
+        Sentry.setTag('engine', process.env.engine)
+        Sentry.setTag('build_date', process.env.BUILD_DATE)
+        Sentry.setTag('branch_name', process.env.BRANCH_NAME)
+        Sentry.setTag('commit_date', process.env.COMMIT_DATE)
+        Sentry.setTag('commit_hash', process.env.COMMIT_HASH)
     }
 
     // The sentry needs to be opened at the runtime.

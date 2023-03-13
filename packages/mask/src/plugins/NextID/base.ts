@@ -10,7 +10,6 @@ export const base: Plugin.Shared.Definition = {
     description: { fallback: PLUGIN_DESCRIPTION },
     publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
     enableRequirement: {
-        architecture: { app: false, web: true },
         networks: {
             type: 'opt-in',
             networks: {

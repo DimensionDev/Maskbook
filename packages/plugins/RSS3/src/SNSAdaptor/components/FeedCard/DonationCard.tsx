@@ -120,7 +120,9 @@ export const DonationCard: FC<DonationCardProps> = ({ feed, actionIndex, classNa
 
     const [index, setIndex] = useState(0)
     const activeActionIndex = actionIndex ?? index
-    const action = feed.actions[activeActionIndex]
+    // Might mixin a transaction action
+    const availableActions = feed.actions.filter((x) => x.metadata?.title)
+    const action = availableActions[activeActionIndex]
     const metadata = action.metadata
 
     const user = useAddressLabel(feed.owner)
@@ -176,14 +178,14 @@ export const DonationCard: FC<DonationCardProps> = ({ feed, actionIndex, classNa
                     }}
                 />
             </Typography>
-            {feed.actions.length > 1 ? (
+            {availableActions.length > 1 ? (
                 <Slider className={classes.content} onUpdate={setIndex}>
-                    {feed.actions.map((action, index) => (
+                    {availableActions.map((action, index) => (
                         <CardBody key={index} metadata={action.metadata!} />
                     ))}
                 </Slider>
             ) : (
-                <CardBody className={classes.content} metadata={feed.actions[0].metadata!} />
+                <CardBody className={classes.content} metadata={availableActions[0].metadata!} />
             )}
         </CardFrame>
     )

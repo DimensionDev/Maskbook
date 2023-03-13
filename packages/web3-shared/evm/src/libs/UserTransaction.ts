@@ -176,17 +176,8 @@ export class UserTransaction {
             this.userOperation.initCode = overrides.initCode
         }
 
-        const {
-            initCode,
-            nonce,
-            sender,
-            callData,
-            callGas,
-            preVerificationGas,
-            maxFeePerGas,
-            maxPriorityFeePerGas,
-            paymaster,
-        } = this.userOperation
+        const { initCode, nonce, sender, callData, callGas, preVerificationGas, maxFeePerGas, maxPriorityFeePerGas } =
+            this.userOperation
 
         // add sender
         if (!isEmptyHex(initCode) && !isValidAddress(sender)) {

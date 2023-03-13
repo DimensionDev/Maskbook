@@ -1,15 +1,17 @@
 import urlcat from 'urlcat'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     createIndicator,
     createNextIndicator,
     createPageable,
-    type HubIndicator,
+    type PageIndicator,
+    type Pageable,
+    EMPTY_LIST,
+} from '@masknet/shared-base'
+import {
     type HubOptions,
     type NonFungibleCollection,
     type NonFungibleTokenContract,
     type NonFungibleTokenEvent,
-    type Pageable,
 } from '@masknet/web3-shared-base'
 import { ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import { EVM, type PageableResponse, type Response } from '../types/index.js'
@@ -54,7 +56,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
         address: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
     ) {
-        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
+        if (!isValidChainId(chainId) || !address) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = urlcat('/api/v2/assets/:address', {
             address,
             contract_address: address,
@@ -74,7 +76,7 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
     async getCollectionsByOwner(
         account: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
-    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, HubIndicator>> {
+    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>> {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const path = urlcat('/api/v2/account/own/all/:from', {
             from: account,
@@ -83,27 +85,6 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
         })
         const response = await fetchFromNFTScanV2<Response<EVM.AssetsGroup[]>>(chainId, path)
         const collections = response?.data.map((x) => createNonFungibleCollectionFromGroup(chainId, x)) ?? EMPTY_LIST
-        return createPageable(collections, createIndicator(indicator))
-    }
-
-    async getCollectionsByKeyword(
-        keyword: string,
-        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
-    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, HubIndicator>> {
-        if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
-        const path = '/api/v2/collections/filters'
-        const response = await fetchFromNFTScanV2<Response<NonFungibleTokenAPI.Collection[]>>(chainId, path, {
-            method: 'POST',
-            body: JSON.stringify({
-                name: keyword,
-                symbol: '',
-                limit: size.toString(),
-                offset: (indicator?.index ?? 0) * size,
-                contract_address_list: [],
-            }),
-        })
-        const collections =
-            response?.data.map((x) => createNonFungibleCollectionFromCollection(chainId, x)) ?? EMPTY_LIST
         return createPageable(collections, createIndicator(indicator))
     }
 

@@ -14,6 +14,7 @@ export enum ExchangeTokenAndAmountActionType {
     REMOVE = 1,
     UPDATE_AMOUNT = 2,
     UPDATE_TOKEN = 3,
+    CLEAR = 4,
 }
 
 export type ExchangeTokenAndAmountAction =
@@ -37,6 +38,9 @@ export type ExchangeTokenAndAmountAction =
           token?: FungibleToken<ChainId, SchemaType>
           key: string
       }
+    | {
+          type: ExchangeTokenAndAmountActionType.CLEAR
+      }
 
 function reducer(
     state: ExchangeTokenAndAmountState[],
@@ -58,6 +62,19 @@ function reducer(
             return state.map((item) => (item.key === action.key ? { ...item, amount: action.amount } : item))
         case ExchangeTokenAndAmountActionType.UPDATE_TOKEN:
             return state.map((item) => (item.key === action.key ? { ...item, token: action.token } : item))
+        case ExchangeTokenAndAmountActionType.CLEAR:
+            return [
+                {
+                    key: uuid(),
+                    amount: '',
+                    token: undefined,
+                },
+                {
+                    key: uuid(),
+                    amount: '',
+                    token: undefined,
+                },
+            ]
         default:
             return state
     }

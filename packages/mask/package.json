@@ -139,7 +139,6 @@
     "react-window": "^1.8.8",
     "remarkable": "^2.0.1",
     "rss3-next": "^0.6.17",
-    "safari-14-idb-fix": "^3.0.0",
     "scrypt-js": "^3.0.1",
     "socket.io-client": "2.4.0",
     "stream-browserify": "^3.0.0",
@@ -172,7 +171,7 @@
     "source-map-loader": "^4.0.1",
     "svgo-loader": "^4.0.0",
     "swc-loader": "^0.2.3",
-    "webpack": "^5.75.0",
+    "webpack": "^5.76.0",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.11.1",
     "webpack-target-webextension": "^1.0.4"

@@ -21,6 +21,6 @@ export async function fetch(input: RequestInfo | URL, init?: RequestInit, fetche
         hasError = true
         throw error
     } finally {
-        if (hasError) captureFetchException(new Request(input, init), response)
+        if (hasError) await captureFetchException(new Request(input, init), response)
     }
 }

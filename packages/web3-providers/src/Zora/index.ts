@@ -1,20 +1,22 @@
 import urlcat from 'urlcat'
 import { GraphQLClient } from 'graphql-request'
 import type { Variables } from 'graphql-request/dist/types.js'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     createIndicator,
     createNextIndicator,
     createPageable,
+    type PageIndicator,
+    type Pageable,
+    EMPTY_LIST,
+} from '@masknet/shared-base'
+import {
     CurrencyType,
-    type HubIndicator,
     type HubOptions,
     type NonFungibleAsset,
     type NonFungibleCollection,
     type NonFungibleTokenEvent,
     type NonFungibleTokenOrder,
     OrderSide,
-    type Pageable,
     SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
@@ -29,7 +31,7 @@ import {
     type TransferEventProperty,
     type V3AskEventProperty,
 } from './types.js'
-import { GetCollectionsByKeywordQuery, GetEventsQuery, GetTokenQuery } from './queries.js'
+import { GetEventsQuery, GetTokenQuery } from './queries.js'
 import { ZORA_MAINNET_GRAPHQL_URL } from './constants.js'
 import type { NonFungibleTokenAPI } from '../entry-types.js'
 import { getAssetFullName, resolveActivityType } from '../entry-helpers.js'
@@ -236,7 +238,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         }
     }
 
-    private createPageable<T>(items: T[], indicator?: HubIndicator) {
+    private createPageable<T>(items: T[], indicator?: PageIndicator) {
         return createPageable(
             items,
             createIndicator(indicator),
@@ -320,19 +322,5 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         )
         const orders = events.length ? events.map((x) => this.createNonFungibleOrderFromEvent(chainId, x)) : EMPTY_LIST
         return this.createPageable(orders, indicator)
-    }
-
-    async getCollectionsByKeyword(keyword: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {}) {
-        const response = await this.request<{
-            search: {
-                nodes: Collection[]
-            }
-        }>(chainId, GetCollectionsByKeywordQuery, {
-            keyword,
-        })
-        const collections = response?.search.nodes
-        if (!collections?.length) return createPageable(EMPTY_LIST, createIndicator(indicator))
-        const collections_ = collections.map((x) => this.createNonFungibleCollectionFromCollection(chainId, x))
-        return this.createPageable(collections_, indicator)
     }
 }

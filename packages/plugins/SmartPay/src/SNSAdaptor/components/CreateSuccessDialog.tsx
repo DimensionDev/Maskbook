@@ -44,7 +44,14 @@ export function CreateSuccessDialog({ open, onClose, address, owner }: CreateSuc
     const { classes } = useStyles()
 
     return usePortalShadowRoot((container) => (
-        <Dialog container={container} open={open} onClose={onClose} classes={{ paper: classes.paper }}>
+        <Dialog
+            container={container}
+            open={open}
+            onClose={(_, reason) => {
+                if (reason === 'backdropClick') return
+                onClose()
+            }}
+            classes={{ paper: classes.paper }}>
             <DialogContent className={classes.content}>
                 <Icons.FillSuccess size={50} />
 

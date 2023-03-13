@@ -1,11 +1,11 @@
 import urlcat from 'urlcat'
+import { BigNumber } from 'bignumber.js'
 import { ChainId, type TransactionReceipt } from '@masknet/web3-shared-evm'
 import { EMPTY_LIST, type Proof } from '@masknet/shared-base'
+import { Web3API } from '../../Connection/index.js'
 import { FunderAPI } from '../../types/Funder.js'
-import { Web3API } from '../../EVM/index.js'
 import { fetchJSON } from '../../entry-helpers.js'
 import { FUNDER_PROD } from '../constants.js'
-import { BigNumber } from 'bignumber.js'
 
 export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     private web3 = new Web3API()
@@ -21,7 +21,7 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     async getRemainFrequency(handler: string) {
         try {
             const result = await this.getWhiteList(handler)
-            if (!result.totalCount || result.twitterHandler !== handler) return 0
+            if (!result.totalCount || result.twitterHandler !== handler.toLowerCase()) return 0
             return BigNumber.max(result.totalCount - result.usedCount, 0).toNumber()
         } catch {
             return 0
@@ -64,7 +64,7 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     async verify(handler: string) {
         try {
             const result = await this.getWhiteList(handler)
-            return result.twitterHandler === handler && result.usedCount < result.totalCount
+            return result.twitterHandler === handler.toLowerCase() && result.usedCount < result.totalCount
         } catch {
             return false
         }

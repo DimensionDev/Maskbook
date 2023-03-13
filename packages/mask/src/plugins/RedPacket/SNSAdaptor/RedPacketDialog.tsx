@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { compact } from 'lodash-es'
 import Web3Utils from 'web3-utils'
-import { NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import {
     useChainContext,
     useWeb3Connection,
@@ -73,12 +73,12 @@ interface RedPacketDialogProps {
     open: boolean
     onClose: () => void
     isOpenFromApplicationBoard?: boolean
+    source?: PluginID
 }
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
     const t = useI18N()
     const { t: i18n } = useBaseI18N()
-    const [open, setOpen] = useState(false)
     const [showHistory, setShowHistory] = useState(false)
     const [gasOption, setGasOption] = useState<GasConfig>()
     const { pluginID } = useNetworkContext()
@@ -154,8 +154,13 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const onBack = useCallback(() => {
         if (step === CreateRedPacketPageStep.ConfirmPage) setStep(CreateRedPacketPageStep.NewRedPacketPage)
-        if (step === CreateRedPacketPageStep.NewRedPacketPage) onClose()
-    }, [step])
+        if (step === CreateRedPacketPageStep.NewRedPacketPage) {
+            onClose()
+            if (props.source === PluginID.SmartPay) {
+                CrossIsolationMessages.events.smartPayDialogEvent.sendToAll({ open: true })
+            }
+        }
+    }, [step, props.source])
     const onNext = useCallback(() => {
         if (step === CreateRedPacketPageStep.NewRedPacketPage) setStep(CreateRedPacketPageStep.ConfirmPage)
     }, [step])

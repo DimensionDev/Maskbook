@@ -77,6 +77,10 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
         setSelectedTokensAddress(exchangeTokenArray.map((x) => x.token?.address ?? ''))
     }, [exchangeTokenArray, onTokenAmountChange])
 
+    useEffect(() => {
+        dispatchExchangeTokenArray({ type: ExchangeTokenAndAmountActionType.CLEAR })
+    }, [chainId])
+
     return (
         <>
             {exchangeTokenArray.map((item, idx) => {

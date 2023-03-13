@@ -14,7 +14,7 @@ const RULES = {
     'https://vcent-agent.r2d2.to': Duration.SHORT,
     'https://rss3.domains/name': Duration.SHORT,
     // avatar on RSS3 kv queries
-    'https://kv.r2d2.to/api/com.maskbook': Duration.SHORT,
+    'https://kv.r2d2.to/api/com.maskbook': Duration.LONG,
     'https://discovery.attrace.com': Duration.SHORT,
     // mask-x
     'https://7x16bogxfb.execute-api.us-east-1.amazonaws.com': Duration.SHORT,
@@ -22,16 +22,27 @@ const RULES = {
     'https://mr8asf7i4h.execute-api.us-east-1.amazonaws.com': Duration.SHORT,
     // coingecko
     'https://coingecko-agent.r2d2.to/api/v3': Duration.SHORT,
-    // chainbase ENS
+    // chainbase
     'https://chainbase-proxy.r2d2.to/v1/ens': Duration.SHORT,
+    'https://chainbase-proxy.r2d2.to/v1/space-id': Duration.SHORT,
     // Mask Search List
     'https://dsearch.mask.r2d2.to': Duration.MEDIUM,
     // Smart Pay
     'https://9rh2q3tdqj.execute-api.ap-east-1.amazonaws.com': Duration.LONG,
-    'https://uldpla73li.execute-api.ap-east-1.amazonaws.com': Duration.LONG,
-    'https://api.thegraph.com/subgraphs/name/dimensiondev/paygas-x-subgraph': Duration.LONG,
+    'https://uldpla73li.execute-api.ap-east-1.amazonaws.com': Duration.SHORT,
 }
 const URLS = Object.keys(RULES) as unknown as Array<keyof typeof RULES>
+
+function openCaches(key: string) {
+    if ('caches' in globalThis) {
+        try {
+            return caches.open(key)
+        } catch {
+            return
+        }
+    }
+    return
+}
 
 export async function fetchCached(
     input: RequestInfo | URL,
@@ -54,8 +65,8 @@ export async function fetchCached(
     if (!rule) return next(request, init)
 
     // hit a cached request
-    const cache = await caches.open(rule)
-    const hit = await cache.match(request)
+    const cache = await openCaches(rule)
+    const hit = await cache?.match(request)
     const date = hit?.headers.get('x-cache-date')
 
     if (hit && date) {
@@ -68,7 +79,7 @@ export async function fetchCached(
     const { ok, status, statusText, body, headers } = response.clone()
 
     if (ok && status === 200 && body) {
-        await cache.put(
+        await cache?.put(
             request.clone(),
             new Response(body, {
                 status,
@@ -94,10 +105,10 @@ export async function staleCached(info: RequestInfo | URL, init?: RequestInit): 
     const rule = URLS.find((x) => url.includes(x))
     if (!rule) return
 
-    const cache = await caches.open(rule)
-    const hit = await cache.match(request)
+    const cache = await openCaches(rule)
+    const hit = await cache?.match(request)
     if (!hit) return
 
-    await cache.delete(request)
+    await cache?.delete(request)
     return hit
 }

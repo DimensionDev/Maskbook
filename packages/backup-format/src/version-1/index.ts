@@ -38,7 +38,9 @@ export async function normalizeBackupVersion1(file: BackupJSONFileVersion1): Pro
 
     const { whoami, people } = file
     for (const { network, publicKey, userId, nickname, localKey, privateKey } of [...whoami, ...(people || [])]) {
-        const identifier = ProfileIdentifier.of(network, userId).unwrap()
+        const identifier = ProfileIdentifier.of(network, userId).expect(
+            `backup should not contain invalid identifier parts ${network} and ${userId}`,
+        )
         const profile: NormalizedBackup.ProfileBackup = {
             identifier,
             nickname: nickname ? Some(nickname) : None,

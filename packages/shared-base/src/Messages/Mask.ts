@@ -1,7 +1,7 @@
 import type { Appearance, LanguageOptions } from '@masknet/public-api'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { ProfileIdentifier, PersonaIdentifier } from '@masknet/base'
-import type { NetworkPluginID } from '../Plugin/index.js'
+import type { NetworkPluginID, PluginID } from '../Plugin/index.js'
 import type { PersonaInformation, RelationFavor } from '../Persona/type.js'
 import type { EnhanceableSite, ExtensionSite } from '../Site/index.js'
 
@@ -19,12 +19,6 @@ export interface MaskSettingsEvents {
     languageSettings: LanguageOptions
     currentPersonaIdentifier: string
 }
-
-export interface MaskMobileOnlyEvents {
-    mobile_app_suspended: void
-    mobile_app_resumed: void
-}
-
 export interface MaskSNSEvents {
     // TODO: Maybe in-page UI related messages should use Context instead of messages?
     autoPasteFailed: AutoPasteFailedEvent
@@ -39,7 +33,7 @@ export interface MaskSNSEvents {
     Native_visibleSNS_currentDetectedProfileUpdated: ProfileIdentifier
 }
 
-export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, MaskSNSEvents {
+export interface MaskEvents extends MaskSettingsEvents, MaskSNSEvents {
     /** value is "bulkKey" */
     legacySettings_bulkDiscoverNS: string
     /** emit when the settings changed. */
@@ -53,6 +47,7 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     relationsChanged: RelationChangedEvent[]
     pluginMinimalModeChanged: [id: string, newStatus: boolean]
     hostPermissionChanged: void
+    personasChanged: void
 
     requestExtensionPermission: RequestExtensionPermissionEvent
     personaSignRequest: PersonaSignRequestEvent
@@ -171,10 +166,15 @@ export interface RestoreSuccessEvent {
 
 export interface redpacketDialogEvent {
     open: boolean
+    source?: PluginID
 }
 
-export interface OwnerDeletionEvent {
-    owner: string
+export interface SmartPayDialogEvent {
+    open: boolean
+}
+
+export interface RenameWalletEvent {
+    address?: string
 }
 
 export interface ProfileNFTsPageEvent {

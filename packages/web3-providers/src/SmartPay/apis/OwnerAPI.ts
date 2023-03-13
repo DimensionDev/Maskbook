@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { compact, first, unionBy, unionWith } from 'lodash-es'
+import { compact, first, unionBy } from 'lodash-es'
 import { type AbiItem, padLeft, toHex } from 'web3-utils'
 import {
     type ChainId,
@@ -10,22 +10,22 @@ import {
     isValidAddress,
 } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import { LOG_ROOT, MAX_ACCOUNT_LENGTH, THE_GRAPH_PROD } from '../constants.js'
 import { SmartPayBundlerAPI } from './BundlerAPI.js'
 import { SmartPayFunderAPI } from './FunderAPI.js'
 import { MulticallAPI } from '../../Multicall/index.js'
-import { Web3API } from '../../EVM/index.js'
+import { Web3API } from '../../Connection/index.js'
 import type { OwnerAPI } from '../../entry-types.js'
 import { fetchJSON } from '../../entry-helpers.js'
 
-type OwnerChangedRecord = {
+type OwnerShip = {
     address: string
-    oldOwner: string
-    newOwner: string
-    blockNumber: string
+    owner: string
+    id: string
+    creator: string
 }
 
 export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGIN_EVM> {
@@ -119,54 +119,27 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
     }
 
     private async getAccountsFromTheGraph(chainId: ChainId, owner: string) {
-        const allSettled = await Promise.allSettled([
-            fetchJSON<{
-                data: {
-                    ownerChangeds: OwnerChangedRecord[]
-                }
-            }>(THE_GRAPH_PROD, {
-                method: 'POST',
-                body: JSON.stringify({
-                    query: `{
-                    ownerChangeds(where: { newOwner: "${owner}" }) {
-                        address
-                        oldOwner
-                        newOwner
-                        blockNumber
+        const response = await fetchJSON<{
+            data: {
+                ownerShips: OwnerShip[]
+            }
+        }>(THE_GRAPH_PROD, {
+            method: 'POST',
+            body: JSON.stringify({
+                query: `{
+                    ownerShips(where: { owner: "${owner}" }) {
+                      id
+                      address
+                      owner
+                      creator
                     }
                 }`,
-                }),
             }),
-            fetchJSON<{
-                data: {
-                    ownerChangeds: OwnerChangedRecord[]
-                }
-            }>(THE_GRAPH_PROD, {
-                method: 'POST',
-                body: JSON.stringify({
-                    query: `{
-                    ownerChangeds(where: { oldOwner: "${owner}" }) {
-                        address
-                        oldOwner
-                        newOwner
-                        blockNumber
-                    }
-                }`,
-                }),
-            }),
-        ])
+        })
 
-        const [newOwnerRecords, oldOwnerRecords] = allSettled.map((x) =>
-            x.status === 'fulfilled' ? x.value.data.ownerChangeds : [],
+        return response.data.ownerShips.map((x) =>
+            this.createContractAccount(chainId, x.address, x.owner, '', true, true),
         )
-
-        return unionWith(newOwnerRecords, (a, b) => isSameAddress(a.address, b.address))
-            .filter((x) => {
-                const target = oldOwnerRecords.find((y) => y.oldOwner === x.newOwner)
-                // The address has been change owner
-                return !(target && isGreaterThan(target.blockNumber, x.blockNumber))
-            })
-            .map((x) => this.createContractAccount(chainId, x.address, owner, '', true, true))
     }
 
     /**

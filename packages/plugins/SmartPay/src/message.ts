@@ -1,6 +1,5 @@
 import { createPluginMessage, type PluginMessageEmitter } from '@masknet/plugin-infra'
-import type { PersonaInformation } from '@masknet/shared-base'
-import type { Wallet } from '@masknet/web3-shared-base'
+import type { PersonaInformation, Wallet } from '@masknet/shared-base'
 import { PLUGIN_ID } from './constants.js'
 
 type SmartPayDescriptionDialogEvent = { open: boolean }
