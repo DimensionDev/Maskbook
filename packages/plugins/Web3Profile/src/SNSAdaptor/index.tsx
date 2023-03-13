@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Trans } from 'react-i18next'
 import { Plugin } from '@masknet/plugin-infra'
-import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
+import { PluginID, CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
@@ -9,6 +9,8 @@ import { base } from '../base.js'
 import { setupContext } from './context.js'
 import { Web3ProfileDialog } from './components/Web3ProfileDialog.js'
 import { ShadowRootTooltip } from '@masknet/theme'
+import { useAsync } from 'react-use'
+import { NextIDProof } from '@masknet/web3-providers'
 
 const LensIconSizeMap: Record<Plugin.SNSAdaptor.LensSlot, number> = {
     [Plugin.SNSAdaptor.LensSlot.Post]: 18,
@@ -99,12 +101,20 @@ const sns: Plugin.SNSAdaptor.Definition = {
         ID: `${base.ID}_lens`,
         UI: {
             Content({ identity, slot, onStatusUpdate }) {
+                const { value: data = EMPTY_LIST } = useAsync(async () => {
+                    if (!identity?.userId) return
+                    return NextIDProof.queryAllLens(identity?.userId)
+                }, [identity?.userId])
+
+                const hasLens = !data.length
                 useEffect(() => {
-                    onStatusUpdate?.(false)
-                }, [onStatusUpdate])
+                    onStatusUpdate?.(hasLens)
+                }, [onStatusUpdate, hasLens])
+
+                if (!data?.length) return null
 
                 return (
-                    <ShadowRootTooltip title={identity?.userId}>
+                    <ShadowRootTooltip title={data[0].lens}>
                         <Icons.Lens size={LensIconSizeMap[slot]} />
                     </ShadowRootTooltip>
                 )
