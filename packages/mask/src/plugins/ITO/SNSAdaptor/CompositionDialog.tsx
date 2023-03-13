@@ -15,7 +15,11 @@ import { DialogContent } from '@mui/material'
 import { omit, set } from 'lodash-es'
 import { useCallback, useState } from 'react'
 import Web3Utils from 'web3-utils'
-import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
+import {
+    useCurrentIdentity,
+    useCurrentLinkedPersona,
+    useLastRecognizedIdentity,
+} from '../../../components/DataSource/useActivatedUI.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useI18N } from '../../../utils/index.js'
@@ -178,10 +182,11 @@ export function CompositionDialog(props: CompositionDialogProps) {
     // #region tabs
 
     const currentIdentity = useCurrentIdentity()
-
+    const lastRecognized = useLastRecognizedIdentity()
     const { value: linkedPersona } = useCurrentLinkedPersona()
 
-    const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
+    const senderName =
+        lastRecognized.identifier?.userId ?? currentIdentity?.identifier.userId ?? linkedPersona?.nickname
     const onCreateOrSelect = useCallback(
         async (payload: JSON_PayloadInMask) => {
             if (!payload.password) {
