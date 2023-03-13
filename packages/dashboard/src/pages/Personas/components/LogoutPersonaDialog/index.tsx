@@ -60,14 +60,16 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(
                         {t.personas_logout_warning()}
                     </Typography>
                     {manageWallets.length ? (
-                        <Typography color="error" variant="body2" fontSize={13} sx={{ wordBreak: 'break-all' }}>
+                        <Typography color="error" variant="body2" fontSize={13} sx={{ wordBreak: 'break-word' }}>
                             <DashboardTrans.personas_logout_manage_wallet_warning
                                 values={{
                                     persona: nickname ?? '',
                                     addresses: manageWallets.map((x) => formatEthereumAddress(x.address, 4)).join(','),
                                 }}
                                 components={{
-                                    span: <Typography component="span" sx={{ wordBreak: 'break-all', fontSize: 12 }} />,
+                                    span: (
+                                        <Typography component="span" sx={{ wordBreak: 'break-word', fontSize: 12 }} />
+                                    ),
                                 }}
                             />
                         </Typography>
