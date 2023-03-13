@@ -17,8 +17,11 @@ import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab'
 
 function getStyleProps() {
     const EMPTY_STYLE = {} as CSSStyleDeclaration
-    const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
+    const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div > div') as Element
     const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
+    const paddingEle = searchProfileTabSelector().evaluate()
+    const paddingCss = paddingEle ? window.getComputedStyle(paddingEle) : EMPTY_STYLE
+
     const eleNewTweetButton = searchNewTweetButtonSelector().evaluate()
     const newTweetButtonColorStyle = eleNewTweetButton ? window.getComputedStyle(eleNewTweetButton) : EMPTY_STYLE
     const eleBackButton = searchAppBarBackSelector().evaluate()
@@ -29,7 +32,8 @@ function getStyleProps() {
         font: style.font,
         fontSize: style.fontSize,
         padding: style.paddingBottom,
-        height: style.height,
+        paddingX: paddingCss.paddingLeft || '16px',
+        height: style.height || '53px',
         hover: backButtonColorStyle.color,
         line: newTweetButtonColorStyle.backgroundColor,
     }
@@ -54,7 +58,8 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'center',
             alignItems: 'center',
             textAlign: 'center',
-            padding: theme.spacing(0, props.padding),
+            paddingLeft: props.paddingX,
+            paddingRight: props.paddingX,
             color: props.color,
             font: props.font,
             fontSize: props.fontSize,
@@ -82,20 +87,21 @@ const useStyles = makeStyles()((theme) => {
 
 function tabClickHandler() {
     MaskMessages.events.profileTabUpdated.sendToLocal({ show: false })
+    MaskMessages.events.profileTabActive.sendToLocal({ active: false })
     resetTwitterActivatedContent()
 }
 
 async function hideTwitterActivatedContent() {
-    const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
+    const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div > div') as Element
     const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
     if (!eleTab) return
     const style = window.getComputedStyle(eleTab)
     // hide the activated indicator
     const tabList = searchProfileTabListSelector().evaluate()
     tabList.map((v) => {
-        const _v = v.querySelector('div') as HTMLDivElement
+        const _v = v.querySelector('div > div') as HTMLDivElement
         _v.style.color = style.color
-        const line = v.querySelector('div > div') as HTMLDivElement
+        const line = v.querySelector('div > div > div') as HTMLDivElement
         line.style.display = 'none'
         v.addEventListener('click', tabClickHandler)
     })
@@ -113,14 +119,14 @@ async function hideTwitterActivatedContent() {
 }
 
 function resetTwitterActivatedContent() {
-    const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
+    const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div > div') as Element
     const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
     if (!eleTab) return
     const tabList = searchProfileTabListSelector().evaluate()
     tabList.map((v) => {
-        const _v = v.querySelector('div') as HTMLDivElement
+        const _v = v.querySelector('div > div') as HTMLDivElement
         _v.style.color = ''
-        const line = v.querySelector('div > div') as HTMLDivElement
+        const line = v.querySelector('div > div > div') as HTMLDivElement
         line.style.display = ''
         v.removeEventListener('click', tabClickHandler)
     })
