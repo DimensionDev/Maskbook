@@ -286,24 +286,24 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
 
             <Box style={{ width: '100%' }}>
                 <PluginWalletStatusBar>
-                    <ChainBoundary
-                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                        expectedChainId={chainId}
-                        forceShowingWrongNetworkButton>
-                        <WalletConnectedBoundary expectedChainId={chainId}>
-                            <EthereumERC20TokenApprovedBoundary
-                                onlyInfiniteUnlock
-                                amount={totalAmount.toFixed()}
-                                classes={{ container: classes.unlockContainer }}
-                                ActionButtonProps={{
-                                    size: 'medium',
-                                }}
-                                token={
-                                    token?.schema === SchemaType.ERC20 && totalAmount.gt(0) && !validationMessage
-                                        ? token
-                                        : undefined
-                                }
-                                spender={HAPPY_RED_PACKET_ADDRESS_V4}>
+                    <WalletConnectedBoundary expectedChainId={chainId}>
+                        <EthereumERC20TokenApprovedBoundary
+                            onlyInfiniteUnlock
+                            amount={totalAmount.toFixed()}
+                            classes={{ container: classes.unlockContainer }}
+                            ActionButtonProps={{
+                                size: 'medium',
+                            }}
+                            token={
+                                token?.schema === SchemaType.ERC20 && totalAmount.gt(0) && !validationMessage
+                                    ? token
+                                    : undefined
+                            }
+                            spender={HAPPY_RED_PACKET_ADDRESS_V4}>
+                            <ChainBoundary
+                                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                                expectedChainId={chainId}
+                                forceShowingWrongNetworkButton>
                                 <ActionButton
                                     size="medium"
                                     className={classes.button}
@@ -312,9 +312,9 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                                     onClick={onClick}>
                                     {validationMessage || gasValidationMessage || t.next()}
                                 </ActionButton>
-                            </EthereumERC20TokenApprovedBoundary>
-                        </WalletConnectedBoundary>
-                    </ChainBoundary>
+                            </ChainBoundary>
+                        </EthereumERC20TokenApprovedBoundary>
+                    </WalletConnectedBoundary>
                 </PluginWalletStatusBar>
             </Box>
         </>

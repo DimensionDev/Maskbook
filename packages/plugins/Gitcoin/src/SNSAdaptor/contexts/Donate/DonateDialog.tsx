@@ -243,16 +243,16 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
             </DialogContent>
             <DialogActions className={classes.actions}>
                 <PluginWalletStatusBar>
-                    <ChainBoundary
-                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                        switchChainWithoutPopup
-                        expectedChainId={chainId}>
-                        <WalletConnectedBoundary expectedChainId={chainId}>
-                            <EthereumERC20TokenApprovedBoundary
-                                classes={{ button: classes.button }}
-                                amount={total.toFixed(0)}
-                                spender={BULK_CHECKOUT_ADDRESS}
-                                token={token.schema === SchemaType.ERC20 ? token : undefined}>
+                    <WalletConnectedBoundary expectedChainId={chainId}>
+                        <EthereumERC20TokenApprovedBoundary
+                            classes={{ button: classes.button }}
+                            amount={total.toFixed(0)}
+                            spender={BULK_CHECKOUT_ADDRESS}
+                            token={token.schema === SchemaType.ERC20 ? token : undefined}>
+                            <ChainBoundary
+                                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                                switchChainWithoutPopup
+                                expectedChainId={chainId}>
                                 <ActionButton
                                     className={classes.button}
                                     loading={loading}
@@ -263,9 +263,9 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
                                     onClick={donate}>
                                     {validationMessage || t.donate()}
                                 </ActionButton>
-                            </EthereumERC20TokenApprovedBoundary>
-                        </WalletConnectedBoundary>
-                    </ChainBoundary>
+                            </ChainBoundary>
+                        </EthereumERC20TokenApprovedBoundary>
+                    </WalletConnectedBoundary>
                 </PluginWalletStatusBar>
             </DialogActions>
         </InjectedDialog>
