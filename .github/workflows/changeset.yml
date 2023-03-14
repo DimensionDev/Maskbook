@@ -24,6 +24,7 @@ jobs:
         uses: DimensionDev/github-token-action@latest
         with:
             registry: true
+      - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
       - uses: changesets/action@v1
         with:

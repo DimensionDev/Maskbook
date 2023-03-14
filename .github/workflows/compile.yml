@@ -46,6 +46,7 @@ jobs:
           restore-keys: |
               extension-${{ hashFiles('pnpm-lock.yaml') }}
               extension-
+      - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
       - run: npx gulp build-ci
       - name: Upload `MaskNetwork.chromium.zip`
