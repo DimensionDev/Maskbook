@@ -466,17 +466,15 @@ export function CreateForm(props: CreateFormProps) {
             ) : null}
 
             <PluginWalletStatusBar className={classes.controller}>
-                <ChainBoundary
-                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                    expectedChainId={chainId}
-                    switchChainWithoutPopup>
-                    <WalletConnectedBoundary expectedChainId={chainId}>
-                        <EthereumERC20TokenApprovedBoundary
-                            amount={inputTokenAmount}
-                            spender={ITO2_CONTRACT_ADDRESS}
-                            token={
-                                tokenAndAmount?.token?.schema === SchemaType.ERC20 ? tokenAndAmount.token : undefined
-                            }>
+                <WalletConnectedBoundary expectedChainId={chainId}>
+                    <EthereumERC20TokenApprovedBoundary
+                        amount={inputTokenAmount}
+                        spender={ITO2_CONTRACT_ADDRESS}
+                        token={tokenAndAmount?.token?.schema === SchemaType.ERC20 ? tokenAndAmount.token : undefined}>
+                        <ChainBoundary
+                            expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                            expectedChainId={chainId}
+                            switchChainWithoutPopup>
                             <ActionButton
                                 fullWidth
                                 variant="contained"
@@ -485,9 +483,9 @@ export function CreateForm(props: CreateFormProps) {
                                 onClick={onNext}>
                                 {validationMessage || t('plugin_ito_next')}
                             </ActionButton>
-                        </EthereumERC20TokenApprovedBoundary>
-                    </WalletConnectedBoundary>
-                </ChainBoundary>
+                        </ChainBoundary>
+                    </EthereumERC20TokenApprovedBoundary>
+                </WalletConnectedBoundary>
             </PluginWalletStatusBar>
         </>
     )

@@ -182,28 +182,28 @@ export function TraderStateBar({
                 actualPluginID={actualPluginID}
                 onClick={isPopup ? openSelectWalletPopup : undefined}>
                 <WalletConnectedBoundary offChain expectedChainId={chainId}>
-                    <ChainBoundary expectedChainId={chainId} expectedPluginID={pluginID} switchChainWithoutPopup>
-                        <EthereumERC20TokenApprovedBoundary
-                            onlyInfiniteUnlock
-                            spender={approveAddress}
-                            amount={approveAmount.toFixed()}
-                            classes={{ container: classes.unlockContainer }}
-                            contractName={focusedTrade?.provider ? resolveTradeProviderName(focusedTrade.provider) : ''}
-                            infiniteUnlockContent={t('plugin_trader_unlock_symbol', {
-                                symbol: approveToken?.symbol,
-                            })}
-                            token={
-                                !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
-                                approveToken?.schema === SchemaType.ERC20 &&
-                                !!approveAmount.toNumber()
-                                    ? approveToken
-                                    : undefined
-                            }
-                            ActionButtonProps={{
-                                color: 'primary',
-                                style: { borderRadius: 8 },
-                                size: 'medium',
-                            }}>
+                    <EthereumERC20TokenApprovedBoundary
+                        onlyInfiniteUnlock
+                        spender={approveAddress}
+                        amount={approveAmount.toFixed()}
+                        classes={{ container: classes.unlockContainer }}
+                        contractName={focusedTrade?.provider ? resolveTradeProviderName(focusedTrade.provider) : ''}
+                        infiniteUnlockContent={t('plugin_trader_unlock_symbol', {
+                            symbol: approveToken?.symbol,
+                        })}
+                        token={
+                            !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
+                            approveToken?.schema === SchemaType.ERC20 &&
+                            !!approveAmount.toNumber()
+                                ? approveToken
+                                : undefined
+                        }
+                        ActionButtonProps={{
+                            color: 'primary',
+                            style: { borderRadius: 8 },
+                            size: 'medium',
+                        }}>
+                        <ChainBoundary expectedChainId={chainId} expectedPluginID={pluginID} switchChainWithoutPopup>
                             <TokenSecurityBoundary
                                 tokenInfo={{
                                     name: tokenSecurityInfo?.token_name ?? '--',
@@ -231,8 +231,8 @@ export function TraderStateBar({
                                     {validationMessage || nativeWrapMessage}
                                 </ActionButton>
                             </TokenSecurityBoundary>
-                        </EthereumERC20TokenApprovedBoundary>
-                    </ChainBoundary>
+                        </ChainBoundary>
+                    </EthereumERC20TokenApprovedBoundary>
                 </WalletConnectedBoundary>
             </PluginWalletStatusBar>
         </Box>
