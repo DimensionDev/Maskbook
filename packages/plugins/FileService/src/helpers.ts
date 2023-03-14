@@ -1,16 +1,17 @@
+import { encodeArrayBuffer, encodeText } from '@masknet/kit'
+import { createLookupTableResolver } from '@masknet/shared-base'
+import { openWindow } from '@masknet/shared-base-ui'
 import type { TypedMessage } from '@masknet/typed-message'
 import { createTypedMessageMetadataReader } from '@masknet/typed-message-react'
-import { META_KEY_1, META_KEY_2, META_KEY_3 } from './constants.js'
-import { FileInfo, FileInfoV1, Provider } from './types.js'
+import isBefore from 'date-fns/isBefore'
+import { isNil } from 'lodash-es'
+import type { Result } from 'ts-results-es'
+import urlcat from 'urlcat'
+import { META_KEY_1, META_KEY_2, META_KEY_3, RECOVERY_PAGE } from './constants.js'
 import schemaV1 from './schema-v1.json'
 import schemaV2 from './schema-v2.json'
 import schemaV3 from './schema-v3.json'
-import type { Result } from 'ts-results-es'
-import { isNil } from 'lodash-es'
-import { encodeArrayBuffer, encodeText } from '@masknet/kit'
-import { createLookupTableResolver } from '@masknet/shared-base'
-import urlcat from 'urlcat'
-import { openWindow } from '@masknet/shared-base-ui'
+import { FileInfo, FileInfoV1, Provider } from './types.js'
 
 // Note: if the latest version has been changed, please update packages/mask/src/components/CompositionDialog/useSubmit.ts
 const reader_v1 = createTypedMessageMetadataReader<FileInfoV1>(META_KEY_1, schemaV1)
@@ -60,7 +61,12 @@ export function makeFileKey(length = 16) {
 
 export function downloadFile(file: FileInfo) {
     const gateway = resolveGatewayAPI(file.provider)
-    const link = urlcat(gateway, '/:txId', { txId: file.landingTxID })
+    let link = urlcat(gateway, '/:txId', { txId: file.landingTxID })
+    if (isBefore(file.createdAt, new Date(2022, 8, 1))) {
+        link = urlcat(RECOVERY_PAGE, {
+            url: encodeURIComponent(link),
+        })
+    }
     openWindow(file.key ? `${link}#${file.key}` : link)
 }
 
