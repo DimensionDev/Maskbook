@@ -281,7 +281,11 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
                             {attributes.map((attribute) => (
                                 <div className={classes.attribute} key={attribute.trait_type}>
                                     <Typography className={classes.attributeType}>{attribute.trait_type}</Typography>
-                                    <Typography className={classes.attributeValue}>{attribute.value}</Typography>
+                                    <Typography className={classes.attributeValue}>
+                                        {typeof attribute.value === 'string'
+                                            ? attribute.value
+                                            : attribute.value.map((x) => x.uri).join(',')}
+                                    </Typography>
                                 </div>
                             ))}
                         </div>
