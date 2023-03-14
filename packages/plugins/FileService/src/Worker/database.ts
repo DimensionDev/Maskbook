@@ -33,7 +33,7 @@ export async function getAllFiles() {
     for await (const { value } of Database.iterate('file')) {
         files.push(value)
     }
-    return files.sort((a, b) => compareDesc(a.createdAt, b.createdAt))
+    return files.sort((a, b) => compareDesc(new Date(a.createdAt), new Date(b.createdAt)))
 }
 
 export async function getRecentFiles() {

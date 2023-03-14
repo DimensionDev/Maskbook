@@ -3,7 +3,7 @@ import { createLookupTableResolver } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import type { TypedMessage } from '@masknet/typed-message'
 import { createTypedMessageMetadataReader } from '@masknet/typed-message-react'
-import isBefore from 'date-fns/isBefore'
+import isAfter from 'date-fns/isAfter'
 import { isNil } from 'lodash-es'
 import type { Result } from 'ts-results-es'
 import urlcat from 'urlcat'
@@ -62,7 +62,7 @@ export function makeFileKey(length = 16) {
 export function downloadFile(file: FileInfo) {
     const gateway = resolveGatewayAPI(file.provider)
     let link = urlcat(gateway, '/:txId', { txId: file.landingTxID })
-    if (isBefore(file.createdAt, new Date(2022, 8, 1))) {
+    if (isAfter(new Date(2022, 8, 1), new Date(file.createdAt))) {
         link = urlcat(RECOVERY_PAGE, {
             url: encodeURIComponent(link),
         })
