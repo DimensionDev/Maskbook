@@ -5,6 +5,11 @@ export function formatPersonaFingerprint(fingerprint: string, size = 0) {
     if (size === 0) return fingerprint
     return `${fingerprint.slice(0, Math.max(0, 2 + size))}...${fingerprint.slice(-size)}`
 }
+export function formatPersonaFingerprint2(fingerprint: string) {
+    if (fingerprint.length <= 26) return fingerprint
+    return `${fingerprint.slice(0, 17)}...${fingerprint.slice(-9)}`
+}
+
 export const MAX_PERSONA_LIMIT = 10
 
 export const MAX_PERSONA_NAME_LENGTH = 12

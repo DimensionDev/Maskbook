@@ -4,9 +4,9 @@ import { StyledInput } from '../StyledInput/index.js'
 import { Icons } from '@masknet/icons'
 
 export const PasswordField = memo(
-    forwardRef<{}, TextFieldProps>((props, ref) => {
+    forwardRef<{}, TextFieldProps & { show?: boolean }>((props, ref) => {
         const [showPassword, setShowPassword] = useState(false)
-
+        const { show = true } = props
         return (
             <StyledInput
                 {...props}
@@ -15,14 +15,16 @@ export const PasswordField = memo(
                 InputProps={{
                     endAdornment: (
                         <InputAdornment position="end">
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={() => setShowPassword(!showPassword)}
-                                onMouseDown={(event) => event.preventDefault()}
-                                edge="end"
-                                size="small">
-                                {showPassword ? <Icons.EyeOff /> : <Icons.Eye />}
-                            </IconButton>
+                            {show ? (
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    onMouseDown={(event) => event.preventDefault()}
+                                    edge="end"
+                                    size="small">
+                                    {showPassword ? <Icons.EyeOff /> : <Icons.Eye />}
+                                </IconButton>
+                            ) : null}
                         </InputAdornment>
                     ),
                 }}
