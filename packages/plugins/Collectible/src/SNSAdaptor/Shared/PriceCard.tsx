@@ -20,11 +20,11 @@ const useStyles = makeStyles()((theme) => ({
     },
     textBase: {
         fontSize: 14,
-        color: theme.palette.maskColor.publicSecond,
+        color: theme.palette.maskColor.publicMain,
         '& > strong': {
-            color: theme.palette.maskColor.publicMain,
-            margin: '0 2px',
+            margin: '0 1px',
         },
+        lineHeight: 1,
     },
     priceZone: {
         display: 'flex',
@@ -58,30 +58,18 @@ export function PriceCard(props: PriceCardProps) {
     const t = useI18N()
     const { classes } = useStyles()
 
-    if (!topOffer && orders.error)
-        return (
-            <div className={classes.wrapper}>
-                <div className={classes.priceZone}>
-                    <div className={classes.offerBox}>
-                        <Typography textAlign="center" fontSize={12} fontWeight={700}>
-                            {t.load_failed()}
-                        </Typography>
-                    </div>
-                    <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} />
-                </div>
-            </div>
-        )
+    if (!topOffer && orders.error) return null
 
     if (!topOffer && !orders.loading)
         return (
             <div className={classes.wrapper}>
                 <div className={classes.priceZone}>
                     <div className={classes.offerBox}>
-                        <Typography textAlign="left" fontSize={12} fontWeight={700}>
-                            {t.plugin_collectible_nft_offers_switch_source()}
+                        <Typography textAlign="left" fontSize={14} fontWeight={400}>
+                            {t.plugin_collectible_no_offer()}
                         </Typography>
                     </div>
-                    <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} />
+                    {sourceType ? <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} /> : null}
                 </div>
             </div>
         )
@@ -95,16 +83,20 @@ export function PriceCard(props: PriceCardProps) {
                     <PriceLoadingSkeleton />
                 ) : (
                     <div className={classes.offerBox}>
-                        {(topOffer?.priceInToken?.token.logoURL && (
-                            <img width={18} height={18} src={topOffer.priceInToken.token.logoURL} alt="" />
-                        )) ||
+                        {topOffer?.priceInToken?.token.symbol.toUpperCase() === 'ETH' ? (
+                            <Icons.ETH size={18} />
+                        ) : (
+                            (topOffer?.priceInToken?.token.logoURL && (
+                                <img width={18} height={18} src={topOffer.priceInToken.token.logoURL} alt="" />
+                            )) ||
                             (topOffer?.priceInToken?.token.symbol.toUpperCase() === 'WETH' ? (
                                 <Icons.WETH size={18} />
                             ) : (
                                 <Typography className={classes.fallbackSymbol}>
                                     {topOffer?.priceInToken?.token.symbol || topOffer?.priceInToken?.token.name}
                                 </Typography>
-                            ))}
+                            ))
+                        )}
                         <Typography className={classes.textBase}>
                             <strong style={{ fontSize: '18px', lineHeight: '18px' }}>
                                 {formatBalance(
@@ -122,7 +114,9 @@ export function PriceCard(props: PriceCardProps) {
                         ) : null}
                     </div>
                 )}
-                <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} />
+                {topOffer?.source ? (
+                    <SourceProviderSwitcher selected={topOffer?.source} onSelect={setSourceType} />
+                ) : null}
             </div>
         </div>
     )
@@ -130,7 +124,7 @@ export function PriceCard(props: PriceCardProps) {
 
 function PriceLoadingSkeleton() {
     return (
-        <Stack gap={0.5} direction="row">
+        <Stack gap={0.5} direction="row" height={24} alignItems="center">
             <Skeleton variant="circular" animation="wave" sx={{ bgColor: 'grey.100' }} width={18} height={18} />
             <Skeleton
                 variant="rectangular"
