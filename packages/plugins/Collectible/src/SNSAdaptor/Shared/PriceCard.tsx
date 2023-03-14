@@ -67,7 +67,7 @@ export function PriceCard(props: PriceCardProps) {
                             {t.load_failed()}
                         </Typography>
                     </div>
-                    <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} />
+                    {sourceType ? <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} /> : null}
                 </div>
             </div>
         )
@@ -81,7 +81,7 @@ export function PriceCard(props: PriceCardProps) {
                             {t.plugin_collectible_nft_offers_switch_source()}
                         </Typography>
                     </div>
-                    <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} />
+                    {sourceType ? <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} /> : null}
                 </div>
             </div>
         )
@@ -122,7 +122,9 @@ export function PriceCard(props: PriceCardProps) {
                         ) : null}
                     </div>
                 )}
-                <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} />
+                {topOffer?.source ? (
+                    <SourceProviderSwitcher selected={topOffer?.source} onSelect={setSourceType} />
+                ) : null}
             </div>
         </div>
     )
