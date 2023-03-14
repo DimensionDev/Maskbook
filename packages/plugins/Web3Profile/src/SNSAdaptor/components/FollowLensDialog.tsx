@@ -8,7 +8,7 @@ import { Lens } from '@masknet/web3-providers'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Button, CircularProgress, DialogContent, Typography } from '@mui/material'
 import { useState } from 'react'
-import { useAsync } from 'react-use'
+import { useAsync, useHover } from 'react-use'
 import { Translate, useI18N } from '../../locales/i18n_generated.js'
 import { getLensterLink } from '../../utils.js'
 import { HandlerDescription } from './HandlerDescription.js'
@@ -68,6 +68,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function FollowLensDialog() {
     const t = useI18N()
+
     const [handle, setHandle] = useState('')
     const { classes } = useStyles()
     const wallet = useWallet()
@@ -84,10 +85,28 @@ export function FollowLensDialog() {
         },
     )
 
-    const { value: profile, loading } = useAsync(async () => {
-        if (!handle || !open) return
-        return Lens.getProfileByHandle(handle)
-    }, [handle, open])
+    const { value, loading } = useAsync(async () => {
+        if (!handle || !open || !open) return
+        const profile = await Lens.getProfileByHandle(handle)
+
+        if (!profile) return
+        const isFollowing = await Lens.queryFollowStatus(account, profile.id)
+
+        return {
+            profile,
+            isFollowing,
+        }
+    }, [handle, open, account])
+
+    const { isFollowing, profile } = value ?? {}
+
+    const [element] = useHover((isHovering) => {
+        return (
+            <Button variant="roundedContained" className={classes.followAction}>
+                {isFollowing ? (isHovering ? t.unfollow() : t.following_action()) : t.follow()}
+            </Button>
+        )
+    })
 
     return (
         <InjectedDialog
@@ -116,9 +135,7 @@ export function FollowLensDialog() {
                             />
                         </Typography>
                         <Box className={classes.actions}>
-                            <Button variant="roundedContained" className={classes.followAction}>
-                                {t.follow()}
-                            </Button>
+                            {element}
                             <Button
                                 variant="roundedOutlined"
                                 href={profile?.handle ? getLensterLink(profile.handle) : '#'}

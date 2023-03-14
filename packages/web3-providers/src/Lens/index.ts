@@ -41,21 +41,24 @@ export class LensAPI implements LensBaseAPI.Provider {
 
         const { data } = await fetchJSON<{ data: { doesFollow: LensBaseAPI.DoesFollow[] } }>(LENS_ROOT_API, {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify({
                 query: `query DoesFollow {
-            doesFollow(request: {
-              followInfos: [
-                {
-                  followerAddress: "${address}", 
-                  profileId: "${profileId}"
+                    doesFollow(request: {
+                      followInfos: [
+                        {
+                          followerAddress: "${address}", 
+                          profileId: "${profileId}"
+                        }
+                      ]
+                }) {
+                  followerAddress
+                  profileId
+                  follows
                 }
-              ]
-            }) {
-              followerAddress
-              profileId
-              follows
-            }
-          }`,
+              }`,
             }),
         })
 
