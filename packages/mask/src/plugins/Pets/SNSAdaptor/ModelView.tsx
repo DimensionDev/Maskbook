@@ -1,5 +1,4 @@
 import type { FC, HTMLProps } from 'react'
-import { AssetPreviewer } from '@masknet/shared'
 
 interface ModelViewProps extends HTMLProps<HTMLDivElement> {
     source: string
@@ -10,7 +9,7 @@ const ModelView: FC<ModelViewProps> = ({ source, ...rest }) => {
 
     return (
         <div {...rest}>
-            <AssetPreviewer url={source} />
+            <iframe src={source} />
         </div>
     )
 }
