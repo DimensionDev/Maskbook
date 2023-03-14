@@ -47,6 +47,7 @@ export class BaseHostedProvider
     }
 
     override async setup(context?: Plugin.SNSAdaptor.SNSAdaptorContext) {
+        await super.setup(context)
         this.walletStorage = context?.createKVStorage('memory', {}).createSubScope(`${this.providerType}_hosted`, {
             account: this.options.getDefaultAccount(),
             chainId: this.options.getDefaultChainId(),
