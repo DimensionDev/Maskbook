@@ -2127,6 +2127,9 @@ importers:
       '@masknet/web3-modals':
         specifier: workspace:^
         version: link:../../web3-modals
+      '@masknet/web3-providers':
+        specifier: workspace:^
+        version: link:../../web3-providers
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../../web3-shared/base
