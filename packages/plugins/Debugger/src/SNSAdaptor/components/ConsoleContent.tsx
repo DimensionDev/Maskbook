@@ -16,7 +16,7 @@ import {
     useCurrentVisitingSocialIdentity,
     useThemeSettings,
 } from '@masknet/plugin-infra/content-script'
-import { isDeviceOnWhitelist , CrossIsolationMessages } from '@masknet/shared-base'
+import { isDeviceOnWhitelist, CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 
 export interface ConsoleContentProps {
