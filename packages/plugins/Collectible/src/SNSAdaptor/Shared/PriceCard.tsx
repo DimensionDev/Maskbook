@@ -63,7 +63,7 @@ export function PriceCard(props: PriceCardProps) {
             <div className={classes.wrapper}>
                 <div className={classes.priceZone}>
                     <div className={classes.offerBox}>
-                        <Typography textAlign="center" fontSize={12} fontWeight={700}>
+                        <Typography textAlign="center" fontSize={14} fontWeight={400}>
                             {t.load_failed()}
                         </Typography>
                     </div>
@@ -77,8 +77,8 @@ export function PriceCard(props: PriceCardProps) {
             <div className={classes.wrapper}>
                 <div className={classes.priceZone}>
                     <div className={classes.offerBox}>
-                        <Typography textAlign="left" fontSize={12} fontWeight={700}>
-                            {t.plugin_collectible_nft_offers_switch_source()}
+                        <Typography textAlign="left" fontSize={14} fontWeight={400}>
+                            {t.plugin_collectible_no_offer()}
                         </Typography>
                     </div>
                     {sourceType ? <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} /> : null}
