@@ -1,4 +1,4 @@
-export function formatMask(text?: string) {
+export function removeSensitiveTelemetryInfo(text?: string) {
     if (!text) return text
     return text
         .replaceAll(/\b0x[\da-f]{40}\b/gi, '[ethereum address]')
