@@ -58,19 +58,7 @@ export function PriceCard(props: PriceCardProps) {
     const t = useI18N()
     const { classes } = useStyles()
 
-    if (!topOffer && orders.error)
-        return (
-            <div className={classes.wrapper}>
-                <div className={classes.priceZone}>
-                    <div className={classes.offerBox}>
-                        <Typography textAlign="center" fontSize={14} fontWeight={400}>
-                            {t.load_failed()}
-                        </Typography>
-                    </div>
-                    {sourceType ? <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} /> : null}
-                </div>
-            </div>
-        )
+    if (!topOffer && orders.error) return null
 
     if (!topOffer && !orders.loading)
         return (
