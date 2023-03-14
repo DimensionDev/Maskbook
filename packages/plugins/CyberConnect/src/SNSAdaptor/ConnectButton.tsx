@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAccount, useCurrentWeb3NetworkPluginID, useWeb3 } from '@masknet/plugin-infra/web3'
@@ -93,7 +93,6 @@ export default function ConnectButton({
     const { classes, cx } = useStyles()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const myAddress = useAccount()
-    const [cc, setCC] = useState<CyberConnect | null>(null)
     const [isFollowing, setFollowing] = useState(false)
     const [isLoading, setLoading] = useState(false)
     const blockChainNetwork = useCurrentWeb3NetworkPluginID()
@@ -103,36 +102,29 @@ export default function ConnectButton({
         setFollowing(res.data.followStatus.isFollowing)
     }, [address, myAddress])
 
-    useEffect(() => {
+    const ccInstance = useMemo(() => {
         if (!web3?.eth.currentProvider) return
-        const ccInstance = new CyberConnect({
+        return new CyberConnect({
             provider: web3.eth.currentProvider,
             namespace: 'Mask',
             env: process.env.NODE_ENV === 'production' ? Env.PRODUCTION : Env.STAGING,
         })
-
-        setCC(ccInstance)
     }, [web3, myAddress])
 
-    const handleClick = useCallback(() => {
-        if (!cc) return
+    const handleClick = useCallback(async () => {
+        if (!ccInstance) return
         setLoading(true)
+
         if (!isFollowing) {
-            cc.connect(address)
-                .then(() => {
-                    setFollowing(true)
-                    refreshFollowList()
-                })
-                .finally(() => setLoading(false))
+            await ccInstance.connect(address)
+            setFollowing(true)
+            refreshFollowList()
         } else {
-            cc.disconnect(address)
-                .then(() => {
-                    setFollowing(false)
-                    refreshFollowList()
-                })
-                .finally(() => setLoading(false))
+            await ccInstance.disconnect(address)
+            setFollowing(false)
+            refreshFollowList()
         }
-    }, [cc, myAddress, isFollowing])
+    }, [ccInstance, myAddress, isFollowing])
 
     if (!myAddress)
         return (
