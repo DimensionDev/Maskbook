@@ -46,7 +46,7 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(
             return wallets.filter((x) => x.identifier === identifier.toText())
         }, [wallets, identifier])
 
-        const onComfirm = useCallback(async () => {
+        const onConfirm = useCallback(async () => {
             if (manageWallets.length && password) {
                 const verified = await PluginServices.Wallet.verifyPassword(password)
                 if (!verified) {
@@ -151,7 +151,7 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(
                     </Button>
                     <LoadingButton
                         color="error"
-                        onClick={onComfirm}
+                        onClick={onConfirm}
                         sx={{ minWidth: 150, flex: 1 }}
                         variant="contained">
                         {t.personas_logout()}
