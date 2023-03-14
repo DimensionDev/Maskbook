@@ -177,6 +177,11 @@ export interface RenameWalletEvent {
     address?: string
 }
 
+export interface FollowLensDialogEvent {
+    open: boolean
+    handle: string
+}
+
 export interface ProfileNFTsPageEvent {
     show: boolean
 }

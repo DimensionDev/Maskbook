@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
+import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     useBalance,
@@ -16,7 +16,8 @@ import {
     useCurrentVisitingSocialIdentity,
     useThemeSettings,
 } from '@masknet/plugin-infra/content-script'
-import { isDeviceOnWhitelist } from '@masknet/shared-base'
+import { isDeviceOnWhitelist , CrossIsolationMessages } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 
 export interface ConsoleContentProps {
     onClose?: () => void
@@ -42,6 +43,8 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const currentVisitingSocialIdentity = useCurrentVisitingSocialIdentity()
     const themeSettings = useThemeSettings()
+
+    const { setDialog } = useRemoteControlledDialog(CrossIsolationMessages.events.followLensDialogEvent)
 
     const table: Array<{ name: string; content: JSX.Element }> = [
         {
@@ -125,6 +128,22 @@ export function ConsoleContent(props: ConsoleContentProps) {
             content: (
                 <Typography variant="body2" style={{ width: 280, wordBreak: 'break-all' }}>
                     {currentVisitingSocialIdentity?.value?.publicKey}
+                </Typography>
+            ),
+        },
+        {
+            name: 'Follow Lens Dialog',
+            content: (
+                <Typography>
+                    <Button
+                        onClick={() =>
+                            setDialog({
+                                open: true,
+                                handle: 'binrui.lens',
+                            })
+                        }>
+                        Click
+                    </Button>
                 </Typography>
             ),
         },

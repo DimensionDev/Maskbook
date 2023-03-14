@@ -8,6 +8,7 @@ import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { base } from '../base.js'
 import { setupContext } from './context.js'
 import { Web3ProfileDialog } from './components/Web3ProfileDialog.js'
+import { FollowLensDialog } from './components/FollowLensDialog.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -16,7 +17,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
 
     GlobalInjection: function Component() {
-        return <Web3ProfileDialog />
+        return (
+            <>
+                <Web3ProfileDialog />
+                <FollowLensDialog />
+            </>
+        )
     },
     ApplicationEntries: [
         (() => {

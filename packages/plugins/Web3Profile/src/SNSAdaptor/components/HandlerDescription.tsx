@@ -1,0 +1,83 @@
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { WalletIcon } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { makeStyles } from '@masknet/theme'
+import {
+    useChainContext,
+    useNetworkContext,
+    useProviderDescriptor,
+    useReverseAddress,
+    useWallet,
+    useWeb3State,
+} from '@masknet/web3-hooks-base'
+import { ProviderType } from '@masknet/web3-shared-evm'
+import { Box, Button, Typography } from '@mui/material'
+import { memo, useMemo } from 'react'
+import { useI18N } from '../../locales/i18n_generated.js'
+
+const useStyles = makeStyles()((theme) => ({
+    container: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        background: theme.palette.maskColor.bg,
+        borderRadius: 8,
+        padding: theme.spacing(1.5),
+    },
+    description: {
+        display: 'flex',
+        columnGap: 4,
+    },
+    name: {
+        fontWeight: 700,
+        fontSize: 14,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.main,
+    },
+    address: {
+        fontWeight: 700,
+        fontSize: 14,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.second,
+    },
+}))
+
+export interface HandlerDescriptionProps extends withClasses<'container'> {}
+
+export const HandlerDescription = memo((props) => {
+    const t = useI18N()
+    const { classes } = useStyles(undefined, { props })
+    const { pluginID } = useNetworkContext()
+    const wallet = useWallet()
+    const { account, providerType } = useChainContext()
+    const { Others } = useWeb3State()
+
+    const { value: domain } = useReverseAddress(pluginID, account)
+
+    const providerDescriptor = useProviderDescriptor()
+
+    const walletName = useMemo(() => {
+        if (domain) return domain
+        if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet?.name
+        return providerDescriptor?.name
+    }, [account, domain, providerType, wallet?.name, providerDescriptor?.name, Others?.formatAddress])
+
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
+
+    return (
+        <Box className={classes.container}>
+            <Box className={classes.description}>
+                <WalletIcon size={36} mainIcon={providerDescriptor.icon} />
+                <Box>
+                    <Typography className={classes.name}>{walletName}</Typography>
+                    <Typography className={classes.address}>{Others?.formatAddress(account, 4)}</Typography>
+                </Box>
+            </Box>
+            <Button variant="text" onClick={openSelectProviderDialog}>
+                {t.wallet_status_button_change()}
+            </Button>
+        </Box>
+    )
+})
