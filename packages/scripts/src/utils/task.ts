@@ -1,4 +1,4 @@
-import { series, TaskFunction } from 'gulp'
+import { series, type TaskFunction } from 'gulp'
 import { shell } from './run.js'
 import { awaitChildProcess } from './awaitChildProcess.js'
 

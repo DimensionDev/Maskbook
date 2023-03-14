@@ -4,9 +4,9 @@ import { buildInjectedScript, watchInjectedScript } from '../projects/injected-s
 import { buildMaskSDK, watchMaskSDK } from '../projects/mask-sdk.js'
 import { buildPolyfill } from '../projects/polyfill.js'
 import { buildGun } from '../projects/gun.js'
-import { parallel, series, TaskFunction } from 'gulp'
+import { parallel, series, type TaskFunction } from 'gulp'
 import { buildSentry } from '../projects/sentry.js'
-import { BuildFlagsExtended, getPreset, Preset } from './flags.js'
+import { type BuildFlagsExtended, getPreset, Preset } from './flags.js'
 
 export function buildWebpackFlag(name: string, args: BuildFlagsExtended) {
     const f = () => awaitChildProcess(webpack(args))

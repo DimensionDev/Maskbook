@@ -22,84 +22,84 @@ patchedDependencies:
   '@uniswap/v3-sdk@3.9.0':
     hash: i674dmxu47nk67u5bur7yueebu
     path: patches/@uniswap__v3-sdk@3.9.0.patch
-  ipfs-http-client@57.0.3:
-    hash: 7oiabyd5hzeabolk22o64jpd4i
-    path: patches/ipfs-http-client@57.0.3.patch
   gulp@4.0.2:
     hash: 2y5kpiugqogdejwrac5fzdim7y
     path: patches/gulp@4.0.2.patch
-  '@ceramicnetwork/rpc-transport@0.3.1':
-    hash: subw5upjv36ceix3wmw66isn6u
-    path: patches/@ceramicnetwork__rpc-transport@0.3.1.patch
-  '@emotion/use-insertion-effect-with-fallbacks@1.0.0':
-    hash: ewwh6qko3asynoh7f6o5yjipdy
-    path: patches/@emotion__use-insertion-effect-with-fallbacks@1.0.0.patch
-  '@emotion/cache@11.10.3':
-    hash: anquw7u43yedhv6g6kmhzkdhze
-    path: patches/@emotion__cache@11.10.3.patch
   urlcat@2.0.4:
     hash: fggwetex7eobhq3hztj4obsulu
     path: patches/urlcat@2.0.4.patch
-  '@emotion/react@11.10.4':
-    hash: obcydjbogyjam4qag626nceajy
-    path: patches/@emotion__react@11.10.4.patch
   '@ethersphere/bee-js@5.0.0':
     hash: g3xomw7pzn5koufm6j4gkm6n5m
     path: patches/@ethersphere__bee-js@5.0.0.patch
-  micromark@3.1.0:
-    hash: w5le45vl373yc24qnd4o3e4hz4
-    path: patches/micromark@3.1.0.patch
-  react-devtools-inline@4.26.1:
-    hash: fpee2mntbhrd2bberabvpkyh5q
-    path: patches/react-devtools-inline@4.26.1.patch
-  micromark-util-symbol@1.0.1:
-    hash: jkhnsgx77ffpyllfnod5pyn4ue
-    path: patches/micromark-util-symbol@1.0.1.patch
-  '@hookform/resolvers@2.9.10':
-    hash: dqqyd5a3hlw75qwefcjrgni3fy
-    path: patches/@hookform__resolvers@2.9.10.patch
-  '@types/react-avatar-editor@13.0.0':
-    hash: 6wzwgbn4gsisp2tjbg76iifhqq
-    path: patches/@types__react-avatar-editor@13.0.0.patch
+  ipfs-http-client@57.0.3:
+    hash: 7oiabyd5hzeabolk22o64jpd4i
+    path: patches/ipfs-http-client@57.0.3.patch
+  '@emotion/cache@11.10.3':
+    hash: anquw7u43yedhv6g6kmhzkdhze
+    path: patches/@emotion__cache@11.10.3.patch
+  '@emotion/use-insertion-effect-with-fallbacks@1.0.0':
+    hash: ewwh6qko3asynoh7f6o5yjipdy
+    path: patches/@emotion__use-insertion-effect-with-fallbacks@1.0.0.patch
+  '@ceramicnetwork/rpc-transport@0.3.1':
+    hash: subw5upjv36ceix3wmw66isn6u
+    path: patches/@ceramicnetwork__rpc-transport@0.3.1.patch
   '@mui/base@5.0.0-alpha.100':
     hash: cc7k56pam6cgsdxwjuynldgftq
     path: patches/@mui__base@5.0.0-alpha.100.patch
+  '@emotion/react@11.10.4':
+    hash: obcydjbogyjam4qag626nceajy
+    path: patches/@emotion__react@11.10.4.patch
+  react-devtools-inline@4.26.1:
+    hash: fpee2mntbhrd2bberabvpkyh5q
+    path: patches/react-devtools-inline@4.26.1.patch
+  '@hookform/resolvers@2.9.10':
+    hash: dqqyd5a3hlw75qwefcjrgni3fy
+    path: patches/@hookform__resolvers@2.9.10.patch
+  micromark-util-symbol@1.0.1:
+    hash: jkhnsgx77ffpyllfnod5pyn4ue
+    path: patches/micromark-util-symbol@1.0.1.patch
+  micromark@3.1.0:
+    hash: w5le45vl373yc24qnd4o3e4hz4
+    path: patches/micromark@3.1.0.patch
   web3@1.8.0:
     hash: dcxxuqxbti2wcxbar42oow5yze
     path: patches/web3@1.8.0.patch
+  '@types/react-avatar-editor@13.0.0':
+    hash: 6wzwgbn4gsisp2tjbg76iifhqq
+    path: patches/@types__react-avatar-editor@13.0.0.patch
   fuse.js@6.6.2:
     hash: b2o4qvyfvxmpo7347sqko6h22a
     path: patches/fuse.js@6.6.2.patch
   rss3-next@0.6.17:
     hash: db27yqpr4wdtpwfyvaxcqd4jpi
     path: patches/rss3-next@0.6.17.patch
+  '@project-serum/sol-wallet-adapter@0.2.6':
+    hash: dl5wqnnaxjm7biesxtvdpr7gpe
+    path: patches/@project-serum__sol-wallet-adapter@0.2.6.patch
   '@types/react-highlight-words@0.16.4':
     hash: cu6glh5cl4qvdid3ys3m6a2f7e
     path: patches/@types__react-highlight-words@0.16.4.patch
   fortmatic@2.2.1:
     hash: tb3oevqnvhntsyfyhi2z6spuea
     path: patches/fortmatic@2.2.1.patch
-  reflect-metadata@0.1.13:
-    hash: pnra5xi77mqlyipflqvcm4z6ga
-    path: patches/reflect-metadata@0.1.13.patch
-  '@project-serum/sol-wallet-adapter@0.2.6':
-    hash: dl5wqnnaxjm7biesxtvdpr7gpe
-    path: patches/@project-serum__sol-wallet-adapter@0.2.6.patch
+  '@walletconnect/client@1.7.8':
+    hash: 2krbsxzv524dzcdemy7vploqza
+    path: patches/@walletconnect__client@1.7.8.patch
   bloom-filters@3.0.0:
     hash: 2etetjrjxbcye2oktxqpij75ey
     path: patches/bloom-filters@3.0.0.patch
   '@sentry/core@7.37.2':
     hash: rklncqa6modgoos6z6mwlg3pli
     path: patches/@sentry__core@7.37.2.patch
-  web3-core@1.8.0:
-    hash: ie6z5nhvcuo3lg2pk6xeacwpbi
-    path: patches/web3-core@1.8.0.patch
-  '@walletconnect/client@1.7.8':
-    hash: 2krbsxzv524dzcdemy7vploqza
-    path: patches/@walletconnect__client@1.7.8.patch
+  reflect-metadata@0.1.13:
+    hash: pnra5xi77mqlyipflqvcm4z6ga
+    path: patches/reflect-metadata@0.1.13.patch
   '@cyberlab/cyberconnect@4.2.2':
     hash: 7wgc4b53ygfwefhtjbh3dydjgy
     path: patches/@cyberlab__cyberconnect@4.2.2.patch
+  web3-core@1.8.0:
+    hash: ie6z5nhvcuo3lg2pk6xeacwpbi
+    path: patches/web3-core@1.8.0.patch
   arweave@1.11.4:
     hash: lwxdtt2msovfmigiutpkaty3lq
     path: patches/arweave@1.11.4.patch

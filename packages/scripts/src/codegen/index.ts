@@ -1,5 +1,5 @@
 import { getProcessLock, watchTask } from '../utils/index.js'
-import { series, parallel, TaskFunction } from 'gulp'
+import { series, parallel, type TaskFunction } from 'gulp'
 import { i18nCodegen, i18nCodegenWatch } from './i18n-codegen.js'
 import { typescriptWatch } from './typescript.js'
 import { resourceCopy, resourceCopyWatch } from './resource-files.js'

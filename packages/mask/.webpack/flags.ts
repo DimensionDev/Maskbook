@@ -58,6 +58,8 @@ export function computedBuildFlags(flags: Required<BuildFlags>): ComputedFlags {
     const lockdown = flags.engine === 'chromium'
 
     let sourceMapKind: Configuration['devtool'] = false
+    if (flags.mode === 'production') sourceMapKind = 'source-map'
+
     if (flags.sourceMapPreference) {
         if (flags.manifest === 3) sourceMapKind = 'inline-cheap-source-map'
         else sourceMapKind = 'eval-cheap-source-map'

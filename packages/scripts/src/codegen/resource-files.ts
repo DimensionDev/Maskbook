@@ -1,6 +1,6 @@
 import { watchTask } from '../utils/index.js'
 import { fileURLToPath } from 'url'
-import { src, dest, watch, parallel, TaskFunction } from 'gulp'
+import { src, dest, watch, parallel, type TaskFunction } from 'gulp'
 
 const Shared = fileURLToPath(new URL('../../../shared/', import.meta.url))
 const Flow = fileURLToPath(new URL('../../../plugins/Flow/', import.meta.url))
