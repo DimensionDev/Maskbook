@@ -7,7 +7,7 @@ import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Button, CircularProgress, DialogContent, Typography } from '@mui/material'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useAsync, useHover } from 'react-use'
 import { Translate, useI18N } from '../../locales/i18n_generated.js'
 import { getLensterLink } from '../../utils.js'
@@ -64,6 +64,11 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 24,
         width: '100%',
     },
+    tips: {
+        marginBottom: theme.spacing(3),
+        color: theme.palette.maskColor.main,
+        fontSize: 14,
+    },
 }))
 
 export function FollowLensDialog() {
@@ -72,7 +77,7 @@ export function FollowLensDialog() {
     const [handle, setHandle] = useState('')
     const { classes } = useStyles()
     const wallet = useWallet()
-    const { account } = useChainContext()
+    const { account, chainId } = useChainContext()
 
     const { open, closeDialog } = useRemoteControlledDialog(
         CrossIsolationMessages.events.followLensDialogEvent,
@@ -102,11 +107,21 @@ export function FollowLensDialog() {
 
     const [element] = useHover((isHovering) => {
         return (
-            <Button variant="roundedContained" className={classes.followAction}>
+            <Button
+                variant="roundedContained"
+                className={classes.followAction}
+                disabled={!!wallet?.owner || chainId !== ChainId.Matic}>
                 {isFollowing ? (isHovering ? t.unfollow() : t.following_action()) : t.follow()}
             </Button>
         )
     })
+
+    const tips = useMemo(() => {
+        if (wallet?.owner) return t.follow_wallet_tips()
+        else if (chainId !== ChainId.Matic) return t.follow_chain_tips()
+
+        return t.follow_gas_tips()
+    }, [wallet?.owner, chainId])
 
     return (
         <InjectedDialog
@@ -152,6 +167,7 @@ export function FollowLensDialog() {
                                 hideRiskWarningConfirmed
                                 expectedChainId={ChainId.Matic}
                                 ActionButtonProps={{ variant: 'roundedContained' }}>
+                                <Typography className={classes.tips}>{tips}</Typography>
                                 <HandlerDescription />
                             </WalletConnectedBoundary>
                         </Box>
