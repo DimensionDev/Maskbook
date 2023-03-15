@@ -1,4 +1,4 @@
-import { cloneElement, PropsWithChildren, ReactElement, useEffect, useRef, useState } from 'react'
+import { cloneElement, PropsWithChildren, ReactElement, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-use'
 import { debounce } from 'lodash-es'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -114,9 +114,10 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
 
     const stepVisible = isCurrentStep && !finished && !!clientRect?.top && !!clientRect.left
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         document.body.style.overflow = stepVisible ? 'hidden' : ''
         document.documentElement.style.overflow = stepVisible ? 'hidden' : ''
+        // TODO Anyone could explain this?
         document.body.style.paddingLeft = 'calc(100vw - 100%)'
     }, [stepVisible])
 
@@ -153,7 +154,6 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
         return () => observer.disconnect()
     }, [])
 
-    // const inserted = childrenRef.current ? document.body.contains(childrenRef.current) : false
     useEffect(() => {
         const setGuideStepRect = () => {
             if (!inserted) return
