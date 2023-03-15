@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo, useState } from 'react'
-import { makeStyles } from '@masknet/theme'
+import { MaskColorVar, makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Button, Typography, Box, List, ListItem, Stack, Link } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
@@ -8,7 +8,7 @@ import { PersonaContext } from '../hooks/usePersonaContext.js'
 import Services from '../../../../service.js'
 import { LoadingButton } from '@mui/lab'
 import { useNavigate } from 'react-router-dom'
-import { PopupRoutes, type PersonaInformation, NetworkPluginID, formatPersonaFingerprint2 } from '@masknet/shared-base'
+import { PopupRoutes, type PersonaInformation, NetworkPluginID, formatPersonaFingerprint } from '@masknet/shared-base'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useChainContext, useWallet, useWallets, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
@@ -239,20 +239,20 @@ const useWalletsStyles = makeStyles<{ length: number }>()((theme, props) => ({
         padding: '8px 16px',
         display: 'flex',
         gap: 20,
-        backgroundColor: '#F7F9FA',
+        backgroundColor: MaskColorVar.publicBackground,
         borderRadius: 8,
     },
     nickname: {
         lineHeight: '16px',
         fontWeight: 600,
         fontSize: 14,
-        color: '#1C68F3',
+        color: theme.palette.maskColor.primary,
     },
     finger: {
         lineHeight: '16px',
         fontWeight: 400,
         fontSize: 12,
-        color: '#1C68F3',
+        color: theme.palette.maskColor.primary,
     },
     wallets: {
         gridGap: '12px 12px',
@@ -265,7 +265,7 @@ const useWalletsStyles = makeStyles<{ length: number }>()((theme, props) => ({
         padding: '8px',
         display: 'flex',
         gap: 8,
-        backgroundColor: '#F7F9FA',
+        backgroundColor: MaskColorVar.publicBackground,
         borderRadius: 8,
         flexDirection: 'row',
         alignItems: 'center',
@@ -299,7 +299,7 @@ function ManageWallet({ manageWallets }: ManageWalletProps) {
                         {selectedPersona?.nickname}
                     </Typography>
                     <Typography variant="caption" className={classes.finger}>
-                        {formatPersonaFingerprint2(selectedPersona?.identifier.rawPublicKey ?? '')}
+                        {formatPersonaFingerprint(selectedPersona?.identifier.rawPublicKey ?? '')}
                     </Typography>
                 </Stack>
             </Box>

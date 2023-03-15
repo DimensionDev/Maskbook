@@ -1,8 +1,8 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
-import { DashboardRoutes, PersonaIdentifier, formatPersonaFingerprint2 } from '@masknet/shared-base'
-import { MaskDialog, makeStyles } from '@masknet/theme'
+import { DashboardRoutes, PersonaIdentifier, formatPersonaFingerprint } from '@masknet/shared-base'
+import { MaskColorVar, MaskDialog, makeStyles } from '@masknet/theme'
 import { useChainContext, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { LoadingButton } from '@mui/lab'
@@ -167,20 +167,20 @@ const useStyles = makeStyles<{ length: number }>()((theme, props) => ({
         padding: '8px 16px',
         display: 'flex',
         gap: 20,
-        backgroundColor: '#F7F9FA',
+        backgroundColor: MaskColorVar.publicBackground,
         borderRadius: 8,
     },
     nickname: {
         lineHeight: '16px',
         fontWeight: 600,
         fontSize: 14,
-        color: '#1C68F3',
+        color: MaskColorVar.primary,
     },
     finger: {
         lineHeight: '16px',
         fontWeight: 400,
         fontSize: 12,
-        color: '#1C68F3',
+        color: MaskColorVar.primary,
     },
     wallets: {
         gridGap: '12px 12px',
@@ -193,7 +193,7 @@ const useStyles = makeStyles<{ length: number }>()((theme, props) => ({
         padding: '8px',
         display: 'flex',
         gap: 8,
-        backgroundColor: '#F7F9FA',
+        backgroundColor: MaskColorVar.publicBackground,
         borderRadius: 8,
         flexDirection: 'row',
         alignItems: 'center',
@@ -229,7 +229,7 @@ function ManageWallet(props: ManageWalletProps) {
                         {currentPersona?.nickname}
                     </Typography>
                     <Typography variant="caption" className={classes.finger}>
-                        {formatPersonaFingerprint2(currentPersona?.identifier.rawPublicKey ?? '')}
+                        {formatPersonaFingerprint(currentPersona?.identifier.rawPublicKey ?? '')}
                     </Typography>
                 </Stack>
             </Box>

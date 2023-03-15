@@ -14,20 +14,18 @@ const PasswordField = forwardRef(({ show = true, ...props }: PasswordFieldProps,
             type={showPassword ? 'text' : 'password'}
             InputProps={{
                 ...props.InputProps,
-                endAdornment: (
+                endAdornment: show ? (
                     <InputAdornment position="end">
-                        {show ? (
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={() => setShowPassword(!showPassword)}
-                                onMouseDown={(event) => event.preventDefault()}
-                                edge="end"
-                                size="small">
-                                {showPassword ? <Icons.EyeOff /> : <Icons.Eye />}
-                            </IconButton>
-                        ) : null}
+                        <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={() => setShowPassword(!showPassword)}
+                            onMouseDown={(event) => event.preventDefault()}
+                            edge="end"
+                            size="small">
+                            {showPassword ? <Icons.EyeOff /> : <Icons.Eye />}
+                        </IconButton>
                     </InputAdornment>
-                ),
+                ) : null,
             }}
         />
     )
