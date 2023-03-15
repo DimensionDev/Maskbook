@@ -46,7 +46,6 @@ jobs:
         uses: DimensionDev/github-token-action@latest
         with:
             registry: true
-      - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
       - run: npx gulp codegen
       - run: npx gulp typescript
@@ -63,7 +62,6 @@ jobs:
         uses: DimensionDev/github-token-action@latest
         with:
             registry: true
-      - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
       - run: npx gulp codegen
       - run: npx gulp polyfill
@@ -91,7 +89,6 @@ jobs:
           path: ./.eslintcache
           key: linter-${{ steps.get-date.outputs.date }}
           restore-keys: linter-
-      - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
       - name: Run Eslint
         run: |
