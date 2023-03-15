@@ -55,7 +55,9 @@ function createERC721Token(
     tokenId: string,
     asset?: RaribleNFTItemMapResponse,
 ): NonFungibleAsset<ChainId, SchemaType> {
-    const imageURL = resolveIPFSLinkFromURL(asset?.meta?.image?.url.ORIGINAL ?? asset?.meta?.image?.url.PREVIEW ?? '')
+    const imageURL = decodeURIComponent(
+        resolveIPFSLinkFromURL(asset?.meta?.image?.url.ORIGINAL ?? asset?.meta?.image?.url.PREVIEW ?? ''),
+    )
     return createNonFungibleToken(
         ChainId.Mainnet,
         tokenAddress,
@@ -115,8 +117,8 @@ function createERC721Asset(
             name: asset.meta?.name ?? '',
             symbol: '',
             description: asset.meta?.description,
-            imageURL: asset.meta?.image?.url.ORIGINAL,
-            mediaURL: asset?.meta?.animation?.url.ORIGINAL,
+            imageURL: decodeURIComponent(asset.meta?.image?.url.ORIGINAL ?? ''),
+            mediaURL: decodeURIComponent(asset?.meta?.animation?.url.ORIGINAL ?? ''),
         },
         contract: {
             chainId,

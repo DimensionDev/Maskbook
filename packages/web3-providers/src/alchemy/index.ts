@@ -156,17 +156,21 @@ function createNftToken_EVM(
             symbol: '',
             description: asset.description,
             imageURL: resolveIPFSLinkFromURL(
-                asset?.metadata?.image ||
-                    asset?.metadata?.image_url ||
-                    asset?.media?.[0]?.gateway ||
-                    asset?.metadata?.animation_url ||
-                    '',
+                decodeURIComponent(
+                    asset?.metadata?.image ||
+                        asset?.metadata?.image_url ||
+                        asset?.media?.[0]?.gateway ||
+                        asset?.metadata?.animation_url ||
+                        '',
+                ),
             ),
             mediaURL: resolveIPFSLinkFromURL(
-                asset?.media?.[0]?.gateway ??
-                    asset?.media?.[0]?.raw ??
-                    asset?.metadata?.image_url ??
-                    asset?.metadata?.image,
+                decodeURIComponent(
+                    asset?.media?.[0]?.gateway ??
+                        asset?.media?.[0]?.raw ??
+                        asset?.metadata?.image_url ??
+                        asset?.metadata?.image,
+                ),
             ),
         },
         contract: {
@@ -209,12 +213,14 @@ function createNFTAsset_EVM(
             symbol: '',
             description: metaDataResponse.description,
             imageURL: resolveIPFSLinkFromURL(
-                metaDataResponse?.metadata?.image ||
-                    metaDataResponse?.media?.[0]?.gateway ||
-                    metaDataResponse?.media?.[0]?.raw ||
-                    '',
+                decodeURIComponent(
+                    metaDataResponse?.metadata?.image ||
+                        metaDataResponse?.media?.[0]?.gateway ||
+                        metaDataResponse?.media?.[0]?.raw ||
+                        '',
+                ),
             ),
-            mediaURL: resolveIPFSLinkFromURL(metaDataResponse?.media?.[0]?.gateway),
+            mediaURL: resolveIPFSLinkFromURL(decodeURIComponent(metaDataResponse?.media?.[0]?.gateway)),
         },
         contract: {
             chainId,
