@@ -11,7 +11,7 @@ const useWalletsStyles = makeStyles<{ length: number }>()((theme, props) => ({
         padding: '8px 16px',
         display: 'flex',
         gap: 20,
-        backgroundColor: MaskColorVar.publicBackground,
+        backgroundColor: MaskColorVar.primaryBackground2,
         borderRadius: 8,
     },
     nickname: {
@@ -37,7 +37,7 @@ const useWalletsStyles = makeStyles<{ length: number }>()((theme, props) => ({
         padding: '8px',
         display: 'flex',
         gap: 8,
-        backgroundColor: MaskColorVar.publicBackground,
+        backgroundColor: MaskColorVar.primaryBackground2,
         borderRadius: 8,
         flexDirection: 'row',
         alignItems: 'center',
