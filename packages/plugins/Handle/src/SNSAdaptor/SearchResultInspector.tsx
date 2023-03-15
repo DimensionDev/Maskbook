@@ -1,24 +1,17 @@
+import { Icons } from '@masknet/icons'
+import { useSnackbarCallback } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { ScopedDomainsContainer, useWeb3State } from '@masknet/web3-hooks-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { Box, Link, Typography } from '@mui/material'
 import { useContext, useEffect } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { ScopedDomainsContainer, useWeb3State } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useSnackbarCallback } from '@masknet/shared'
-import { Box, Typography, Link, Box, Typography, Link } from '@mui/material'
-import {
-    ENSProvider,
-    ENSContext,
-    type SearchResultInspectorProps,
-    ENSProvider,
-    ENSContext,
-    type SearchResultInspectorProps,
-} from './context.js'
-import { SocialAccountList } from './SocialAccountList.js'
-import { makeStyles } from '@masknet/theme'
-import { Icons } from '@masknet/icons'
+import { SuffixToChainIconMap } from '../constants.js'
 import { useI18N } from '../locales/index.js'
 import { PluginHeader } from './PluginHeader.js'
-import { SuffixToChainIconMap } from '../constants.js'
+import { SocialAccountList } from './SocialAccountList.js'
+import { ENSContext, ENSProvider, type SearchResultInspectorProps } from './context.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

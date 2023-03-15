@@ -5,7 +5,7 @@ import { encodeText } from '@masknet/kit'
 import type Transaction from 'arweave/web/lib/transaction.js'
 import type { JWKInterface } from 'arweave/web/lib/wallet.js'
 import { fetchText } from '@masknet/web3-providers/helpers'
-import { LANDING_PAGE, MESON_PREFIX } from '../constants.js'
+import { LANDING_PAGE, MESON_PREFIX, Provider } from '../constants.js'
 import { sign } from './remote-signing.js'
 import TOKEN from './arweave-token.json'
 import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types.js'
@@ -48,7 +48,7 @@ class ArweaveAgent implements ProviderAgent {
         const encodedMetadata = JSON.stringify({
             name: metadata.name,
             size: metadata.size,
-            provider: 'arweave',
+            provider: Provider.Arweave,
             link: `${linkPrefix}/${metadata.txId}`,
             signed: await makeFileKeySigned(metadata.key),
             createdAt: new Date().toISOString(),

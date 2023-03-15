@@ -6,6 +6,7 @@ import { Typography } from '@mui/material'
 import type { PropsWithChildren } from 'react'
 
 interface StyleProps {
+    isMenuScroll?: boolean
     hidden?: boolean
 }
 
