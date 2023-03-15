@@ -43,12 +43,18 @@ for (const optionsObj of options) {
     const ecmascript = await readFile(polyfill, 'utf-8')
     const libRuntime = await readFile(fileURLToPath(new URL('./dist/lib-runtime.js', import.meta.url)), 'utf-8')
 
-    await writeFile(polyfill, `${ecmascript};${libRuntime};`)
+    await writeFile(
+        polyfill,
+        `if (!globalThis[Symbol.for('mask_init_polyfill')]) {
+globalThis[Symbol.for('mask_init_polyfill')] = true;
+${ecmascript};
+${libRuntime};
+}`,
+    )
 }
 
 await normalize(new URL('./dist/dom.js', import.meta.url))
 await normalize(new URL('./dist/ecmascript.js', import.meta.url))
-await normalize(new URL('./dist/intl.js', import.meta.url))
 await normalize(new URL('./dist/worker.js', import.meta.url))
 
 await writeFile(versionFilePath, polyfillVersion)

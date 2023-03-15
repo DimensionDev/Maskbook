@@ -28,7 +28,10 @@ jobs:
         id: get-date
         run: echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
         shell: bash
+      # note: required by sentry
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: pnpm/action-setup@v2
       - uses: actions/setup-node@v3
         with:
@@ -46,8 +49,21 @@ jobs:
           restore-keys: |
               extension-${{ hashFiles('pnpm-lock.yaml') }}
               extension-
+      - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
       - run: npx gulp build-ci
+      - name: Create Sentry release
+        uses: getsentry/action-release@v1
+        if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/released'
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: mask-network
+          SENTRY_PROJECT: mask-network
+        with:
+          environment: production
+          sourcemaps: ./build
+          version_prefix: mask-
+          ignore_missing: true
       - name: Upload `MaskNetwork.chromium.zip`
         uses: actions/upload-artifact@v3
         with:

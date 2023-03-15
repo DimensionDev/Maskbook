@@ -3,9 +3,8 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { NETWORK } from './types.js'
 
 export const RSS3_LEGACY_ENDPOINT = 'https://hub.pass3.me'
-export const RSS3_FEED_ENDPOINT = 'https://pregod.rss3.dev/v1/notes/'
-
 export const RSS3_ENDPOINT = 'https://pregod.rss3.dev/v1'
+export const RSS3_FEED_ENDPOINT = 'https://pregod.rss3.dev/v1/notes/'
 
 export const NETWORK_PLUGIN = {
     [NetworkPluginID.PLUGIN_EVM]: 'ethereum',

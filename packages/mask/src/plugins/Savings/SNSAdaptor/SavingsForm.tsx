@@ -225,24 +225,24 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
 
     const buttonDom = useMemo(() => {
         return (
-            <ChainBoundary
-                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+            <WalletConnectedBoundary
                 expectedChainId={chainId}
-                noSwitchNetworkTip
-                switchChainWithoutPopup
-                ActionButtonPromiseProps={{
-                    fullWidth: true,
-                    classes: { root: classes.button, disabled: classes.disabledButton },
-                }}>
-                <WalletConnectedBoundary
-                    expectedChainId={chainId}
-                    ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
-                    classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
-                    {tab === TabType.Deposit ? (
-                        <EthereumERC20TokenApprovedBoundary
-                            amount={approvalData?.approveAmount.toFixed() ?? ''}
-                            token={approvalData?.approveToken}
-                            spender={approvalData?.approveAddress}>
+                ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
+                classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
+                {tab === TabType.Deposit ? (
+                    <EthereumERC20TokenApprovedBoundary
+                        amount={approvalData?.approveAmount.toFixed() ?? ''}
+                        token={approvalData?.approveToken}
+                        spender={approvalData?.approveAddress}>
+                        <ChainBoundary
+                            expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                            expectedChainId={chainId}
+                            noSwitchNetworkTip
+                            switchChainWithoutPopup
+                            ActionButtonPromiseProps={{
+                                fullWidth: true,
+                                classes: { root: classes.button, disabled: classes.disabledButton },
+                            }}>
                             <ActionButtonPromise
                                 fullWidth
                                 color="primary"
@@ -257,8 +257,18 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                                 noUpdateEffect
                                 executor={executor}
                             />
-                        </EthereumERC20TokenApprovedBoundary>
-                    ) : (
+                        </ChainBoundary>
+                    </EthereumERC20TokenApprovedBoundary>
+                ) : (
+                    <ChainBoundary
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        expectedChainId={chainId}
+                        noSwitchNetworkTip
+                        switchChainWithoutPopup
+                        ActionButtonPromiseProps={{
+                            fullWidth: true,
+                            classes: { root: classes.button, disabled: classes.disabledButton },
+                        }}>
                         <ActionButtonPromise
                             fullWidth
                             init={
@@ -275,9 +285,9 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                             noUpdateEffect
                             executor={executor}
                         />
-                    )}
-                </WalletConnectedBoundary>
-            </ChainBoundary>
+                    </ChainBoundary>
+                )}
+            </WalletConnectedBoundary>
         )
     }, [executor, validationMessage, needsSwap, protocol, tab, approvalData, chainId])
 

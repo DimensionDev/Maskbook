@@ -69,7 +69,9 @@ const patchedSource = files
 
 const result = `(() => {
 ${init.toString().replace('// Source Code Here', patchedSource)};
-globalThis.Gun = ${init.name}().Gun;
+if (!globalThis.Gun) {
+    globalThis.Gun = ${init.name}().Gun;
+}
 })();
 undefined;
 `

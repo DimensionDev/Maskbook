@@ -58,7 +58,7 @@ export function AboutTab(props: AboutTabProps) {
                 <div className={classes.basic}>
                     <FigureCard hideSubTitle asset={asset.value} />
                 </div>
-                <PriceCard topOffer={topOffer} asset={asset.value} />
+                <PriceCard topOffer={topOffer} />
             </div>
         </CollectibleCard>
     )

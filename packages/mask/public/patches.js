@@ -1,5 +1,6 @@
-// Fix for globalThis !== window in content script in Firefox
-{
+if (!globalThis[Symbol.for('mask_init_patch')]) {
+    globalThis[Symbol.for('mask_init_patch')] = true
+    // Fix for globalThis !== window in content script in Firefox
     const fix = () => {
         // MV3 service worker
         if (typeof window === 'undefined') return
@@ -77,4 +78,4 @@
     }
 }
 
-null
+undefined

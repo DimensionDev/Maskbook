@@ -1,4 +1,4 @@
-import { series, TaskFunction } from 'gulp'
+import { series, type TaskFunction } from 'gulp'
 import { createBuildStorybook6, fromNPMTask, PKG_PATH, task } from '../utils/index.js'
 import { codegen } from '../codegen/index.js'
 import { buildSPA } from '../projects/app.js'

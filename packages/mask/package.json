@@ -20,6 +20,7 @@
     "@masknet/dashboard": "workspace:^",
     "@masknet/encryption": "workspace:^",
     "@masknet/external-plugin-previewer": "workspace:^",
+    "@masknet/flags": "workspace:^",
     "@masknet/gun-utils": "workspace:^",
     "@masknet/icons": "workspace:^",
     "@masknet/injected-script": "workspace:^",
