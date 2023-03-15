@@ -3,6 +3,7 @@ import type { ScopedStorage, EnhanceableSite } from '@masknet/shared-base'
 import { NonFungibleToken, isSameAddress } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useSubscription } from 'use-subscription'
+import { useCallback } from 'react'
 
 interface StorageValue {
     addedTokens: Array<NonFungibleToken<ChainId, SchemaType>>
@@ -26,7 +27,7 @@ export function getStorage() {
 }
 
 export const TIPS_GUIDE_TOTAL = 1
-export const TIPS_GUIDE_INIT = 0
+export const TIPS_GUIDE_INIT = 1
 
 export function getTokens() {
     return storage.storage.addedTokens.value
@@ -48,13 +49,30 @@ export function finishUserGuide(site: EnhanceableSite) {
     storage.storage.userGuide.setValue({ ...settings, [site]: TIPS_GUIDE_TOTAL })
 }
 
-export const useTipsUserGuide = (site?: EnhanceableSite) => {
+export const useTipsUserGuide = (site: EnhanceableSite) => {
     const settings = useSubscription(storage?.storage?.userGuide.subscription)
 
-    if (!site) return { finished: true, step: TIPS_GUIDE_INIT }
+    const setStep = useCallback(
+        (to: number) => {
+            storage.storage.userGuide.setValue({
+                ...settings,
+                [site]: to,
+            })
+        },
+        [settings, site],
+    )
+
+    const nextStep = useCallback(() => {
+        storage.storage.userGuide.setValue({
+            ...settings,
+            [site]: settings[site]! + 1,
+        })
+    }, [settings, site])
 
     return {
         finished: settings[site] === TIPS_GUIDE_TOTAL,
         step: settings[site] ?? TIPS_GUIDE_INIT,
+        setStep,
+        nextStep,
     }
 }

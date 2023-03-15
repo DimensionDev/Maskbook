@@ -6,8 +6,8 @@ import React, {
     createContext,
     PropsWithChildren,
     ReactElement,
-    useContext,
     useEffect,
+    useLayoutEffect,
     useRef,
     useState,
 } from 'react'
@@ -79,35 +79,41 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface GuideStepProps extends PropsWithChildren<{}> {
     step: number
+    totalStep: number
     arrow?: boolean
-    disabled?: boolean
+    finished?: boolean
+    currentStep: number
+    title: string
+    actionText: string
+    onNext?: () => void
 }
 
-export function PluginGuide({ children, arrow = true, disabled = false, step }: GuideStepProps) {
+export function PluginGuide({
+    children,
+    step,
+    totalStep,
+    arrow = true,
+    finished = false,
+    title,
+    actionText,
+    currentStep,
+    onNext,
+}: GuideStepProps) {
     const { classes, cx } = useStyles()
     const childrenRef = useRef<HTMLElement>()
 
     const [clientRect, setClientRect] = useState<any>({})
     const [open, setOpen] = useState(false)
     const [bottomAvailable, setBottomAvailable] = useState(true)
-    const { nextStep, currentStep, finished, title, actionText, totalStep } = useContext(PluginGuideContext)
 
-    useEffect(() => {
-        if (disabled || finished || step !== currentStep) return
-        setOpen(true)
-    }, [currentStep])
+    const stepVisible = !finished && currentStep === step && !!clientRect?.top && !!clientRect.left
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         document.body.style.overflow = open ? 'hidden' : ''
     }, [open])
 
-    const onNext = () => {
-        setOpen(false)
-        nextStep()
-    }
-
     useEffect(() => {
-        if (disabled || finished) return
+        if (finished) return
 
         const onResize = () => {
             const cr = childrenRef.current?.getBoundingClientRect()
@@ -116,7 +122,7 @@ export function PluginGuide({ children, arrow = true, disabled = false, step }: 
                 const bottomAvailable = window.innerHeight - cr.height - cr.top > 200
                 setBottomAvailable(bottomAvailable)
                 if (!cr.width) {
-                    setClientRect({ ...cr, top: 30, left: 'calc(100vw - 300px)' })
+                    setClientRect({ ...cr.toJSON(), top: 30, left: 'calc(100vw - 300px)' })
                 } else {
                     setClientRect(cr)
                 }
@@ -136,7 +142,7 @@ export function PluginGuide({ children, arrow = true, disabled = false, step }: 
         <>
             {cloneElement(children as ReactElement<any>, { ref: childrenRef })}
             {usePortalShadowRoot((container) => {
-                if (!open) return null
+                if (!stepVisible) return null
                 return (
                     <Portal container={container}>
                         <div
