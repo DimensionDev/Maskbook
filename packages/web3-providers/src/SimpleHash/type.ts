@@ -78,6 +78,7 @@ export interface Collection {
         marketplace_name: string // Opensea
         payment_token: PaymentToken
     }>
+    top_contracts: string[] // ["ethereum.0x18487d2cac946c7fe800855c4039aac210f68baa"]
 }
 
 interface PaymentToken {
