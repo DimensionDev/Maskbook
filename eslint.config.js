@@ -470,6 +470,7 @@ export default [
     {
         files: ['packages/**/*.ts', 'packages/**/*.tsx'],
         languageOptions: {
+            // Note: --cache is not supported yet if parser is an object https://github.com/eslint/eslint/issues/16875
             parser: TypescriptParser,
             parserOptions: {
                 ecmaVersion: 'latest',
