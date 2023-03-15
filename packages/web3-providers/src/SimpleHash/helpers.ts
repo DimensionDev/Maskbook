@@ -96,6 +96,7 @@ export function createNonFungibleCollection(
         iconURL: collection.image_url,
         ownersTotal: collection.total_quantity,
         source: SourceType.SimpleHash,
+        address: collection.top_contracts?.[0]?.split('.')?.[1] ?? '',
     }
 }
 
