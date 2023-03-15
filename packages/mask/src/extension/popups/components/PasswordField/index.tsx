@@ -24,7 +24,7 @@ export const PasswordField = memo(
                                     size="small">
                                     {showPassword ? <Icons.EyeOff /> : <Icons.Eye />}
                                 </IconButton>
-                            ) : null}
+                            ) : undefined}
                         </InputAdornment>
                     ),
                 }}
