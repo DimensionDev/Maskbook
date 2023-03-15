@@ -90,5 +90,6 @@ export * from './NFTBadgeTimeline.js'
 export * from './NFTBadgeTweet.js'
 export * from './NFTImage.js'
 export * from './RainbowBox.js'
+export * from './NFTAvatarSquare.js'
 
 export default sns
