@@ -46,6 +46,7 @@ jobs:
           restore-keys: |
             netlify-${{ hashFiles('pnpm-lock.yaml') }}
             netlify-
+      - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
       - run: npx gulp build-ci-netlify
       - name: Deploy to Netlify
