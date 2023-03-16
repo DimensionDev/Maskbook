@@ -800,6 +800,8 @@
     "popups_log_out": "로그아웃",
     "popups_following_permissions": "플러그인 ({{pluginName}})( {{pluginURL}} 에 호스팅됩니다) 아래의 권한을 요청합니다.",
     "popups_permissions": "사용 권한",
+    "popups_sites": "사이트",
+    "popups_mask_requests_permission": "Mask가 아래 권한을 요청합니다.",
     "popups_welcome": "환영합니다",
     "popups_wallet_token": "토큰",
     "popups_wallet_go_back": "돌아가기",
