@@ -76,11 +76,7 @@ export function usePendingTransactions() {
                     removeRecentTx(tx.id)
                 }}
             />
-        ) : (
-            <Typography className={classes.noPendingTransactions}>
-                {t('wallet_status_no_pending_transactions')}
-            </Typography>
-        )
+        ) : null
 
     return { summary, transactionList }
 }
