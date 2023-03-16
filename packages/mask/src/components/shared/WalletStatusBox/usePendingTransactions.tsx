@@ -20,11 +20,6 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'default',
         color: theme.palette.maskColor.warn,
     },
-    noPendingTransactions: {
-        padding: theme.spacing(1, 0),
-        lineHeight: '18px',
-        fontWeight: 700,
-    },
     clearAll: {
         cursor: 'pointer',
         color: theme.palette.mode === 'light' ? MaskColorVar.blue : theme.palette.common.white,
