@@ -2587,6 +2587,9 @@ importers:
       '@masknet/theme':
         specifier: workspace:^
         version: link:../../theme
+      '@masknet/web3-contracts':
+        specifier: workspace:^
+        version: link:../../web3-contracts
       '@masknet/web3-hooks-base':
         specifier: workspace:^
         version: link:../../web3-hooks/base
@@ -2620,6 +2623,9 @@ importers:
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-d1e35c703-20221110)
+      web3-utils:
+        specifier: 1.8.0
+        version: 1.8.0
 
   packages/plugins/template:
     dependencies:

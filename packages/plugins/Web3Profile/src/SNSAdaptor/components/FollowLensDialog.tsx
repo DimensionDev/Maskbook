@@ -3,7 +3,7 @@ import { InjectedDialog, WalletConnectedBoundary } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Button, CircularProgress, DialogContent, Typography } from '@mui/material'
@@ -11,6 +11,7 @@ import { useMemo, useState } from 'react'
 import { useAsync, useHover } from 'react-use'
 import { Translate, useI18N } from '../../locales/i18n_generated.js'
 import { getLensterLink } from '../../utils.js'
+import { useFollow } from '../hooks/Lens/useFollow.js'
 import { HandlerDescription } from './HandlerDescription.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -79,6 +80,7 @@ export function FollowLensDialog() {
     const wallet = useWallet()
     const { account, chainId } = useChainContext()
 
+    const connection = useWeb3Connection()
     const { open, closeDialog } = useRemoteControlledDialog(
         CrossIsolationMessages.events.followLensDialogEvent,
         (ev) => {
@@ -105,12 +107,15 @@ export function FollowLensDialog() {
 
     const { isFollowing, profile } = value ?? {}
 
+    const [{ loading: followLoading }, handleFollow] = useFollow(profile?.id)
+
     const [element] = useHover((isHovering) => {
         return (
             <Button
                 variant="roundedContained"
                 className={classes.followAction}
-                disabled={!!wallet?.owner || chainId !== ChainId.Matic}>
+                disabled={!!wallet?.owner || chainId !== ChainId.Matic}
+                onClick={handleFollow}>
                 {isFollowing ? (isHovering ? t.unfollow() : t.following_action()) : t.follow()}
             </Button>
         )
@@ -142,11 +147,11 @@ export function FollowLensDialog() {
                         <Typography className={classes.followers}>
                             <Translate.followers
                                 components={{ strong: <strong /> }}
-                                values={{ followers: profile?.stats?.totalFollowers ?? '0' }}
+                                values={{ followers: String(profile?.stats?.totalFollowers ?? '0') }}
                             />
                             <Translate.following
                                 components={{ strong: <strong /> }}
-                                values={{ following: profile?.stats?.totalFollowing ?? '0' }}
+                                values={{ following: String(profile?.stats?.totalFollowing ?? '0') }}
                             />
                         </Typography>
                         <Box className={classes.actions}>
