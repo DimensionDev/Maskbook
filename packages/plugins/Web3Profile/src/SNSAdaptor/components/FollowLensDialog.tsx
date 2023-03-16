@@ -3,7 +3,7 @@ import { InjectedDialog, WalletConnectedBoundary } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { useChainContext, useWallet, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Button, CircularProgress, DialogContent, Typography } from '@mui/material'
@@ -80,7 +80,6 @@ export function FollowLensDialog() {
     const wallet = useWallet()
     const { account, chainId } = useChainContext()
 
-    const connection = useWeb3Connection()
     const { open, closeDialog } = useRemoteControlledDialog(
         CrossIsolationMessages.events.followLensDialogEvent,
         (ev) => {

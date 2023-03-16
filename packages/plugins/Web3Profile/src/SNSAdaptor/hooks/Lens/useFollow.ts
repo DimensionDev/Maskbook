@@ -6,7 +6,7 @@ import {
     ContractTransaction,
     encodeTypedData,
     splitSignature,
-    useLensConstatns,
+    useLensConstants,
 } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
@@ -20,8 +20,8 @@ export function useFollow(profileId?: string) {
     const connection = useWeb3Connection()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [, handleQueryAuthenticate] = useQueryAuthenticate(account)
-    const { LENSHUB_PROXY_CONTRACT_ADDRESS } = useLensConstatns(chainId)
-    const lensHub = useContract<LensHub>(chainId, LENSHUB_PROXY_CONTRACT_ADDRESS, LensHubABI as AbiItem[])
+    const { LENS_HUB_PROXY_CONTRACT_ADDRESS } = useLensConstants(chainId)
+    const lensHub = useContract<LensHub>(chainId, LENS_HUB_PROXY_CONTRACT_ADDRESS, LensHubABI as AbiItem[])
 
     return useAsyncFn(async () => {
         if (!profileId || !connection || chainId !== ChainId.Matic) return
@@ -52,7 +52,7 @@ export function useFollow(profileId?: string) {
         const hash = await connection.sendTransaction(tx)
         const receipt = await connection.getTransactionReceipt(hash)
 
-        // TODO: toast
+        // TODO: callback
         if (receipt) {
         }
     }, [handleQueryAuthenticate, profileId, connection, account, chainId])
