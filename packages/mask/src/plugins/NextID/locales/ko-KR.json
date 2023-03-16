@@ -1,1 +1,25 @@
-{}
+{
+    "wallet": "월렛",
+    "persona": "페르소나",
+    "unsupported_network": "지원되지 않는 네트워크",
+    "connect_wallet__other_user_tip_intro": "월렛을 찾을 수 없습니다.",
+    "connect_wallet_other_user_tip1": "1. 사용자의 트윗 페이지로 전환하고 뒤로가기",
+    "connect_wallet_other_user_tip2": "2. 마스크 확장을 설치하도록 사용자를 초대하고 인증 트윗을 게시합니다.",
+    "connect_wallet_other_user_instruction": "해당 사용자가 아직 월렛을 연결하지 않았을 수 있습니다. 다음과 같이 시도할 수 있습니다:",
+    "connect_wallet_tip": "이 웹3 섹션에서는 Mask Network를 설치한 친구에게 팁을 받기 위한 주소, NFT 컬렉션, 기부 기록 및 기타 온체인 정보를 보여줄 수 있습니다.",
+    "verify_wallet_intro": "월렛 인증",
+    "verify_wallet": "웹3 탭에서는 Mask 확장을 설치한 친구에게 팁, NFT 컬렉션, 기부 기록 및 기타 온체인 피드를 받기 위한 지갑 주소를 보여줄 수 있습니다.",
+    "verify_Twitter_ID_intro": "트위터 ID 인증",
+    "verify_Twitter_ID": "웹3 체험을 향상하기 위해 Next.ID로 트위터 ID를 인증하세요.",
+    "verify_other_Twitter_ID_intro": "해당 사용자가 월렛을 연결하지 않습니다.",
+    "verify_Twitter_ID_button": "트위터 ID 인증",
+    "verify_wallet_button": "월렛 인증",
+    "add_wallet_button": "월렛 추가",
+    "verify_wallet_dialog_title": "월렛 인증",
+    "bind_wallet_bound_error": "이미 연결된 주소입니다.",
+    "mask_network": "Mask Network",
+    "create_persona_intro": "Web3 프로필로 페르소나를 맏드세요.",
+    "add_wallet_intro": "Web3 탭에서는 Mask 확장 기능을 설치한 친구에게 NFT 컬렉션, 기부 기록 및 기타 온체인 피드에 대한 지갑 주소를 표시할 수 있습니다.",
+    "others_lack_wallet": "해당 사용자가 이것을 설치하지 않습니다.",
+    "enable_plugin": "특정 콘텐츠를 보려면 DAPP을 열어야 합니다"
+}
