@@ -297,21 +297,16 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             return identities
         }
 
-        const allSettledTwitterHandler = await Promise.allSettled(
+        const allSettledIsVerified = await Promise.allSettled(
             uniqBy(identities, (x) => x.address.toLowerCase()).map(async (x) => {
-                const bindingProofs = await NextIDProof.queryProfilesByRelationService(x.address)
-                return bindingProofs.find((x) => x.platform === NextIDPlatform.Twitter)?.identity
+                return NextIDProof.verifyTwitterHandlerByAddress(x.address, identity.identifier?.userId ?? '')
             }),
         )
 
-        const twitterHandlerList = allSettledTwitterHandler
-            .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
-            .filter(Boolean)
+        const isVerified = allSettledIsVerified
+            .flatMap((x) => (x.status === 'fulfilled' ? x.value : false))
+            .every(Boolean)
 
-        const isTwitterHandlerMatched = twitterHandlerList.some(
-            (x) => x && x.toLowerCase() === identity.identifier?.userId.toLowerCase(),
-        )
-
-        return isTwitterHandlerMatched ? identities : EMPTY_LIST
+        return isVerified ? identities : EMPTY_LIST
     }
 }
