@@ -115,7 +115,6 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const stepVisible = isCurrentStep && !finished && !!clientRect?.top && !!clientRect.left
 
     useEffect(() => {
-        // document.body.style.overflow = stepVisible && Number.parseInt(currentStep, 10) === total ? 'hidden' : ''
         document.documentElement.style.overflow =
             stepVisible && Number.parseInt(currentStep, 10) === total ? 'hidden' : ''
         document.documentElement.style.paddingLeft = 'calc(100vw - 100%)'
