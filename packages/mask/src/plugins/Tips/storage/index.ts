@@ -7,19 +7,27 @@ import { useCallback } from 'react'
 
 interface StorageValue {
     addedTokens: Array<NonFungibleToken<ChainId, SchemaType>>
-    userGuide: Partial<Record<EnhanceableSite, number>>
 }
 
 export const storageDefaultValue = {
-    userGuide: {},
     publicKey: null as null | string,
     addedTokens: [],
 }
 
-let storage: ScopedStorage<StorageValue> = null!
+interface GuideStorage {
+    userGuide: Partial<Record<EnhanceableSite, number>>
+}
 
-export function setupStorage(_: typeof storage) {
+export const guideStorageDefaultValue = {
+    userGuide: {},
+}
+
+let storage: ScopedStorage<StorageValue> = null!
+let guideStorage: ScopedStorage<GuideStorage> = null!
+
+export function setupStorage(_: typeof storage, _guideStorage: typeof guideStorage) {
     storage = _
+    guideStorage = _guideStorage
 }
 
 export function getStorage() {
@@ -45,16 +53,16 @@ export function deleteToken(address: string, tokenId: string) {
 }
 
 export function finishUserGuide(site: EnhanceableSite) {
-    const settings = storage.storage.userGuide.value
-    storage.storage.userGuide.setValue({ ...settings, [site]: TIPS_GUIDE_TOTAL })
+    const settings = guideStorage.storage.userGuide.value
+    guideStorage.storage.userGuide.setValue({ ...settings, [site]: TIPS_GUIDE_TOTAL })
 }
 
 export const useTipsUserGuide = (site: EnhanceableSite) => {
-    const settings = useSubscription(storage?.storage?.userGuide.subscription)
+    const settings = useSubscription(guideStorage?.storage?.userGuide.subscription)
 
     const setStep = useCallback(
         (to: number) => {
-            storage.storage.userGuide.setValue({
+            guideStorage.storage.userGuide.setValue({
                 ...settings,
                 [site]: to,
             })
@@ -63,7 +71,7 @@ export const useTipsUserGuide = (site: EnhanceableSite) => {
     )
 
     const nextStep = useCallback(() => {
-        storage.storage.userGuide.setValue({
+        guideStorage.storage.userGuide.setValue({
             ...settings,
             [site]: settings[site]! + 1,
         })
