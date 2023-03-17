@@ -83,7 +83,10 @@ export const profileMenuButtonSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [aria-haspopup="menu"][data-testid="userActions"]')
 
 export const searchEditProfileSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] a[href="/settings/profile"]')
+    querySelector<E>('[data-testid="primaryColumn"] [data-testid^="UserAvatar-Container-"]')
+        .closest(1)
+        .querySelector('a[href="/settings/profile"]')
+
 export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = true) =>
     querySelector<HTMLDivElement, SingleMode>(
         [
@@ -266,7 +269,10 @@ export const searchSelfAvatarSelector = () => {
 
 // #region twitter nft avatar
 export const searchProfileAvatarSelector = () => {
-    return querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(5)
+    return querySelector<E>('[data-testid="Profile_Save_Button"]')
+        .closest<E>(8)
+        .querySelector('[data-testid="UserAvatar-Container-unknown"]')
+        .closest<E>(3)
 }
 
 export const searchProfileAvatarParentSelector = () =>
