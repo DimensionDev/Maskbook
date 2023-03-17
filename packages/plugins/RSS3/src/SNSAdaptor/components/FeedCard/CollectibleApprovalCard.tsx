@@ -52,7 +52,8 @@ export const CollectibleApprovalCard: FC<CollectibleApprovalFeedCardProps> = ({ 
     const { verbose } = rest
     const { classes, cx } = useStyles()
 
-    const { metadata } = feed.actions[0]
+    const action = feed.actions[0]
+    const metadata = action.metadata
 
     const owner = useFeedOwner()
     const user = useAddressLabel(owner.address)
@@ -64,7 +65,7 @@ export const CollectibleApprovalCard: FC<CollectibleApprovalFeedCardProps> = ({ 
                     values={{
                         user,
                         collection: metadata?.collection!,
-                        contract: formatEthereumAddress(metadata?.contract_address!, 4),
+                        contract: formatEthereumAddress(action.address_to!, 4),
                         context: metadata?.action,
                     }}
                     components={{

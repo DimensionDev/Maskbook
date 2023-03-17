@@ -2,7 +2,7 @@ import { Image, Markdown } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
-import { Typography } from '@mui/material'
+import { Link, Typography } from '@mui/material'
 import { type FC, useCallback } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
@@ -10,6 +10,7 @@ import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
 import { Label } from './common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles<void, 'title' | 'image' | 'content' | 'info' | 'body' | 'center'>()((theme, _, refs) => ({
     summary: {
@@ -29,10 +30,26 @@ const useStyles = makeStyles<void, 'title' | 'image' | 'content' | 'info' | 'bod
         [`& + .${refs.info}`]: {
             marginLeft: theme.spacing(1.5),
         },
+        img: {
+            objectFit: 'cover',
+        },
+    },
+    playButton: {
+        color: theme.palette.maskColor.main,
+        width: 64,
+        height: 64,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: theme.palette.maskColor.bg,
+        [`& + .${refs.info}`]: {
+            marginLeft: theme.spacing(1.5),
+        },
     },
     body: {
         display: 'flex',
         flexDirection: 'row',
+        marginTop: theme.spacing(0.5),
         [`.${refs.image}`]: {
             width: 64,
             aspectRatio: '1 / 1',
@@ -126,6 +143,8 @@ export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
         [action.platform, action.related_urls?.[0]],
     )
 
+    const media = metadata?.media?.[0]
+
     return (
         <CardFrame
             type={cardTypeMap[type]}
@@ -145,13 +164,21 @@ export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
                 />
             </Typography>
             <div className={classes.body}>
-                {metadata?.media?.[0].mime_type.startsWith('image/') ? (
+                {media?.mime_type.startsWith('image/') ? (
                     <Image
                         classes={{ container: classes.image }}
-                        src={metadata.media[0].address}
+                        src={media.address}
                         height={imageSize}
                         width={imageSize}
                     />
+                ) : media?.mime_type.startsWith('video/') ? (
+                    <Link
+                        className={classes.playButton}
+                        href={media.address}
+                        target="_blank"
+                        onClick={(evt) => evt.stopPropagation()}>
+                        <Icons.Play size={64} />
+                    </Link>
                 ) : null}
                 <div className={cx(classes.info, metadata?.title || rest.verbose ? null : classes.center)}>
                     {metadata?.title ? <Typography className={classes.title}>{metadata.title}</Typography> : null}
