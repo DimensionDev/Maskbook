@@ -1,11 +1,12 @@
 import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled.js'
 import { useSideBarNativeItemStyleVariants } from './ToolboxHint.js'
-import { styled, ListItemButton, Typography, ListItemIcon, Box, debounce } from '@mui/material'
+import { styled, ListItemButton, Typography, ListItemIcon, Box } from '@mui/material'
 import GuideStep from '../../../components/GuideStep/index.js'
 import { useI18N } from '../../../utils/index.js'
 import { useThemeSettings } from '../../../components/DataSource/useActivatedUI.js'
 import { ButtonStyle } from '../constant.js'
 import { useEffect, useMemo, useState } from 'react'
+import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { searchHomeLinkName } from '../utils/selector.js'
 
 const Container = styled('div')`
@@ -33,7 +34,6 @@ const Icon = styled(ListItemIcon)`
 `
 
 export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application' }) {
-    const [mini, setMini] = useState(false)
     const { textMarginLeft, itemPadding, iconSize } = useSideBarNativeItemStyleVariants()
     const themeSettings = useThemeSettings()
     const buttonStyle = ButtonStyle[themeSettings.size]
@@ -45,17 +45,19 @@ export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application'
         )
     }, [buttonStyle.iconSize, textMarginLeft])
 
-    const handlerWatcher = () => {
-        setMini(!searchHomeLinkName().evaluate())
-    }
+    const [mini, setMini] = useState(false)
 
-    const onResize = debounce(handlerWatcher, 500)
     useEffect(() => {
-        window.addEventListener('resize', onResize)
-        return () => window.removeEventListener('resize', onResize)
-    }, [])
+        const abortController = new AbortController()
+        const watch = new MutationObserverWatcher(searchHomeLinkName()).startWatch(
+            { childList: true, subtree: true },
+            abortController.signal,
+        )
+        watch.addListener('onAdd', () => setMini(false), { signal: abortController.signal })
+        watch.addListener('onRemove', () => setMini(true), { signal: abortController.signal })
 
-    onResize()
+        return () => abortController.abort()
+    })
 
     const ListItemButton = useMemo(() => {
         return (
