@@ -91,7 +91,7 @@ export const TokenApprovalCard: FC<TokenApprovalFeedCardProps> = ({ feed, ...res
                             user,
                             amount: isGreaterThan(metadata!.value, '1e+10') ? 'infinite' : metadata?.value_display!,
                             symbol: metadata!.symbol!,
-                            contract: formatEthereumAddress(metadata?.contract_address!, 4),
+                            contract: formatEthereumAddress(action.address_to!, 4),
                             context: metadata!.action,
                         }}
                         components={{
