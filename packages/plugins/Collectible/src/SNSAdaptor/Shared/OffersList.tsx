@@ -9,6 +9,7 @@ import { useI18N } from '../../locales/i18n_generated.js'
 import { SourceProviderSwitcher, RetryHint } from '@masknet/shared'
 import { Context } from '../Context/index.js'
 import type { AsyncStatePageable } from '@masknet/web3-hooks-base'
+import { useMemo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -36,7 +37,14 @@ export interface OffersListProps {
 
 export function OffersList(props: OffersListProps) {
     const { offers } = props
-    const _offers = offers.value ?? EMPTY_LIST
+
+    const _offers = useMemo(
+        () =>
+            (offers.value ?? EMPTY_LIST).sort((a, b) => {
+                return a.createdAt! > b.createdAt! ? -1 : 0
+            }),
+        [offers.value],
+    )
 
     const { classes } = useStyles()
     const t = useI18N()
@@ -84,7 +92,7 @@ export function OffersListWrapper(props: OffersListProps) {
     return (
         <div>
             <Box mb={2}>
-                <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} />
+                <SourceProviderSwitcher selected={sourceType!} onSelect={setSourceType} />
             </Box>
             <OffersList offers={props.offers} />
         </div>
