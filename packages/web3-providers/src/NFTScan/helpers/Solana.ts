@@ -33,6 +33,7 @@ export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, 
     return fetchJSON<T>(urlcat(NFTSCAN_URL, pathname), {
         ...init,
         headers: {
+            'content-type': 'application/json',
             ...init?.headers,
             'x-app-chainid': 'solana',
         },
