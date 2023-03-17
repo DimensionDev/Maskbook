@@ -293,7 +293,6 @@
     "wallet_status_button_copy_address": "Copy Address",
     "wallet_transfer_account": "Transfer Account",
     "wallet_transfer_receiving_account": "Receiving Account",
-    "wallet_status_no_pending_transactions": "Your transactions will appear here...",
     "wallet_transfer_to_address": "To Address",
     "wallet_transfer_send": "Send",
     "wallet_transfer_1559_placeholder": "Ens or Address(0x...)",
