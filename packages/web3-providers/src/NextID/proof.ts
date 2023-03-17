@@ -11,7 +11,12 @@ import {
     NextIDPlatform,
     toBase64,
 } from '@masknet/shared-base'
-import { PROOF_BASE_URL_PROD, RELATION_SERVICE_URL, PROOF_BASE_URL_DEV } from './constants.js'
+import {
+    PROOF_BASE_URL_PROD,
+    RELATION_SERVICE_URL,
+    PROOF_BASE_URL_DEV,
+    TWITTER_HANDLER_VERIFY_URL,
+} from './constants.js'
 import { staleNextIDCached } from './helpers.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
 import { fetchJSON } from '../entry-helpers.js'
@@ -252,6 +257,23 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                   uuid: response.uuid,
               }
             : null
+    }
+
+    async verifyTwitterHandlerByAddress(address: string, handler: string): Promise<boolean> {
+        const response = await fetchJSON<{
+            statusCode: number
+            data?: string[]
+            error?: string
+        }>(
+            urlcat(TWITTER_HANDLER_VERIFY_URL, '/v1/relation/handles', {
+                wallet: address.toLowerCase(),
+                isVerified: true,
+            }),
+        )
+
+        if (response.error || !handler || !address) return false
+
+        return Boolean(response.data?.includes(handler))
     }
 }
 

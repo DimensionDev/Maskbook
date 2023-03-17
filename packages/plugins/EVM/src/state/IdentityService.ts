@@ -287,9 +287,26 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             this.getSocialAddressesFromMaskX(identity),
             this.getSocialAddressFromLens(identity),
         ])
-        const identities = allSettled
+        const identities_ = allSettled
             .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
             .filter(Boolean) as Array<SocialAddress<ChainId>>
-        return uniqBy(identities, (x) => [x.type, x.label, x.address.toLowerCase()].join('_'))
+
+        const identities = uniqBy(identities_, (x) => [x.type, x.label, x.address.toLowerCase()].join('_'))
+
+        if (!getNextIDPlatform() && !(process.env.channel === 'stable' && process.env.NODE_ENV === 'production')) {
+            return identities
+        }
+
+        const allSettledIsVerified = await Promise.allSettled(
+            uniqBy(identities, (x) => x.address.toLowerCase()).map(async (x) => {
+                return NextIDProof.verifyTwitterHandlerByAddress(x.address, identity.identifier?.userId ?? '')
+            }),
+        )
+
+        const isVerified = allSettledIsVerified
+            .flatMap((x) => (x.status === 'fulfilled' ? x.value : false))
+            .every(Boolean)
+
+        return isVerified ? identities : EMPTY_LIST
     }
 }
