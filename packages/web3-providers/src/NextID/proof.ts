@@ -273,7 +273,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
         if (response.error || !handler || !address) return false
 
-        return Boolean(response.data?.includes(handler))
+        return response.data?.includes(handler) || response.data?.length === 0
     }
 }
 
