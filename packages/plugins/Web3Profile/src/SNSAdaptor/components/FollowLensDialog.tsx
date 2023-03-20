@@ -8,7 +8,7 @@ import { Lens } from '@masknet/web3-providers'
 import { FollowModuleType } from '@masknet/web3-providers/types'
 import { formatBalance, isLessThan } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { Avatar, Box, Button, CircularProgress, DialogContent, Typography } from '@mui/material'
+import { Avatar, Box, Button, buttonClasses, CircularProgress, DialogContent, Typography } from '@mui/material'
 import { first } from 'lodash-es'
 import { useMemo, useState } from 'react'
 import { useAsyncRetry, useHover } from 'react-use'
@@ -62,6 +62,11 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.publicMain,
         '&:hover': {
             backgroundColor: '#A1FE27',
+            color: theme.palette.maskColor.publicMain,
+        },
+        [`&.${buttonClasses.disabled}`]: {
+            background: '#A1FE27',
+            opacity: 0.6,
             color: theme.palette.maskColor.publicMain,
         },
     },

@@ -3,7 +3,7 @@ import { useChainContext, useWeb3, useWeb3Connection } from '@masknet/web3-hooks
 import { Lens } from '@masknet/web3-providers'
 import { ChainId, ContractTransaction, createContract, encodeTypedData, splitSignature } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
-import LensFollowNFTABI from '@masknet/web3-contracts/abis/LensFollowNFT.json'
+import LensFollowNftABI from '@masknet/web3-contracts/abis/LensFollowNFT.json'
 import type { LensFollowNFT } from '@masknet/web3-contracts/types/LensFollowNFT.js'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
 import { type AbiItem } from 'web3-utils'
@@ -36,7 +36,7 @@ export function useUnfollow(profileId?: string, onSuccess?: () => void) {
         const followNFTContract = createContract<LensFollowNFT>(
             web3,
             typedData.typedData.domain.verifyingContract,
-            LensFollowNFTABI as AbiItem[],
+            LensFollowNftABI as AbiItem[],
         )
         const tx = await new ContractTransaction(followNFTContract).fillAll(
             followNFTContract?.methods.burnWithSig(tokenId, [v, r, s, deadline]),
