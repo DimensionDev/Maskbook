@@ -9,7 +9,7 @@ import { MaskColorVar } from '@masknet/theme'
 import { Link } from '@mui/material'
 import { base } from '../base.js'
 import { TipTaskManager } from '../contexts/index.js'
-import { setupStorage, storageDefaultValue } from '../storage/index.js'
+import { guideStorageDefaultValue, setupStorage, storageDefaultValue } from '../storage/index.js'
 import { TipsEntranceDialog } from './TipsEntranceDialog.js'
 import { TipsRealmContent } from './components/TipsRealmContent/index.js'
 import { SharedContextSettings } from '../settings/index.js'
@@ -17,7 +17,9 @@ import { SharedContextSettings } from '../settings/index.js'
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(_, context) {
-        setupStorage(context.createKVStorage('memory', storageDefaultValue))
+        const storage = context.createKVStorage('memory', storageDefaultValue)
+        const guideStorage = context.createKVStorage('persistent', guideStorageDefaultValue)
+        setupStorage(storage, guideStorage)
         SharedContextSettings.value = context
     },
     ApplicationEntries: [

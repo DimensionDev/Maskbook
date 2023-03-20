@@ -3,9 +3,9 @@ import { MaskTextField, type MaskTextFieldProps } from '@masknet/theme'
 import { IconButton, InputAdornment } from '@mui/material'
 import { Icons } from '@masknet/icons'
 
-export type PasswordFieldProps = Exclude<MaskTextFieldProps, 'type'>
+export type PasswordFieldProps = Exclude<MaskTextFieldProps, 'type'> & { show?: boolean }
 
-const PasswordField = forwardRef((props: PasswordFieldProps, ref: ForwardedRef<any>) => {
+const PasswordField = forwardRef(({ show = true, ...props }: PasswordFieldProps, ref: ForwardedRef<any>) => {
     const [showPassword, setShowPassword] = useState(false)
     return (
         <MaskTextField
@@ -14,7 +14,7 @@ const PasswordField = forwardRef((props: PasswordFieldProps, ref: ForwardedRef<a
             type={showPassword ? 'text' : 'password'}
             InputProps={{
                 ...props.InputProps,
-                endAdornment: (
+                endAdornment: show ? (
                     <InputAdornment position="end">
                         <IconButton
                             aria-label="toggle password visibility"
@@ -25,7 +25,7 @@ const PasswordField = forwardRef((props: PasswordFieldProps, ref: ForwardedRef<a
                             {showPassword ? <Icons.EyeOff /> : <Icons.Eye />}
                         </IconButton>
                     </InputAdornment>
-                ),
+                ) : null,
             }}
         />
     )

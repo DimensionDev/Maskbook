@@ -163,7 +163,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
         <MenuItem onClick={() => navigate(DashboardRoutes.Settings, { state: { open: 'setting' } })}>
             <MenuText>{t.settings_global_backup_title()}</MenuText>
         </MenuItem>,
-        <MenuItem onClick={logoutConfirmedPasswordCallback} style={{ color: MaskColorVar.redMain }}>
+        <MenuItem onClick={() => setLogoutDialogOpen(true)} style={{ color: MaskColorVar.redMain }}>
             <MenuText>{t.personas_logout()}</MenuText>
         </MenuItem>,
     )

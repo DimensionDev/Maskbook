@@ -2,6 +2,7 @@ import type RSS3 from 'rss3-next'
 import type { Pageable } from '@masknet/shared-base'
 import type { HubOptions } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import type { MimeType } from '@masknet/shared-base'
 
 /**
  * Conform to the RFC3339 Datetime format.
@@ -56,7 +57,7 @@ export namespace RSS3BaseAPI {
         standard?: string
     }
     export interface Attribute {
-        value: string
+        value: string | Array<{ type: MimeType; uri: string }>
         trait_type: string
     }
     // TODO remove

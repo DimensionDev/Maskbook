@@ -45,7 +45,7 @@ export interface FileInfo {
      * Before v3, it's Date
      * Since v3, it's number
      */
-    createdAt: number
+    createdAt: number | string
 
     key: string | undefined
     /** Doesn't exist in uploading file info */

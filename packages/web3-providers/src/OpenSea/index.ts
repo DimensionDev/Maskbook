@@ -94,11 +94,13 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
             ),
             symbol: asset.asset_contract.symbol,
             description: asset.description,
-            imageURL:
+            imageURL: decodeURIComponent(
                 asset.image_url ?? asset.image_preview_url ?? asset.image_original_url ?? asset.animation_url ?? '',
-            mediaURL:
+            ),
+            mediaURL: decodeURIComponent(
                 asset?.animation_url ??
-                resolveIPFS_URL(asset?.image_original_url ?? asset?.image_preview_url ?? asset?.image_url ?? ''),
+                    resolveIPFS_URL(asset?.image_original_url ?? asset?.image_preview_url ?? asset?.image_url ?? ''),
+            ),
         },
         contract: {
             chainId,
@@ -115,8 +117,9 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
             name: asset.collection.name,
             slug: asset.collection.slug,
             description: asset.collection.description,
-            iconURL:
+            iconURL: decodeURIComponent(
                 asset.collection.image_url ?? asset.collection.largeImage_url ?? asset.collection.featured_image_url,
+            ),
             verified: ['approved', 'verified'].includes(asset.collection?.safelist_request_status ?? ''),
             createdAt: getUnixTime(new Date(asset.collection.created_date)),
         },

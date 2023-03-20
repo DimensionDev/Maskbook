@@ -239,8 +239,8 @@ export const searchSelfHandleSelector = () => {
     return querySelector<HTMLSpanElement>(
         [
             '[data-testid="SideNav_AccountSwitcher_Button"] [tabindex="-1"] [dir="ltr"] span',
-            '#layers [role="group"] [role="dialog"] [role="link"] [dir="ltr"] span', // sidebar opened in mobile
-        ].join(','),
+            '#layers [role="group"] [role="dialog"] [tabindex="-1"] [dir="ltr"] > span', // sidebar opened in mobile
+        ].join(),
     )
 }
 
@@ -248,8 +248,8 @@ export const searchSelfNicknameSelector = () => {
     return querySelector<HTMLSpanElement>(
         [
             '[data-testid="SideNav_AccountSwitcher_Button"] [dir="auto"] span span',
-            '#layers [role="group"] [role="dialog"] [role="link"] span span', // sidebar opened in mobile
-        ].join(','),
+            '#layers [role="group"] [role="dialog"] [role="link"] span > span', // sidebar opened in mobile
+        ].join(),
     )
 }
 

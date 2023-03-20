@@ -14,13 +14,22 @@ const supportSources: SocialAddressType[] = [
     SocialAddressType.TwitterBlue,
     SocialAddressType.SOL,
 ]
+
+/**
+ * Get Tips accounts, removing the hidden ones,
+ * and put the default one at the front.
+ */
 export function useTipsAccounts(identity: IdentityResolved | undefined, personaPubkey: string | undefined) {
     const { value: TipsSetting } = useTipsSetting(personaPubkey)
     const { value: socialAccounts = EMPTY_LIST } = useSocialAccountsAll(identity, supportSources)
 
-    const hiddenAddresses = TipsSetting?.hiddenAddresses
     return useMemo(() => {
-        if (!hiddenAddresses?.length) return socialAccounts
-        return socialAccounts.filter((x) => !hiddenAddresses.some((y) => isSameAddress(y, x.address)))
-    }, [socialAccounts, hiddenAddresses])
+        if (!TipsSetting) return socialAccounts
+        const { hiddenAddresses, defaultAddress } = TipsSetting
+        const list = defaultAddress
+            ? socialAccounts.sort((a) => (isSameAddress(a.address, defaultAddress) ? -1 : 1))
+            : socialAccounts
+        if (!hiddenAddresses?.length) return list
+        return list.filter((x) => !hiddenAddresses.some((y) => isSameAddress(y, x.address)))
+    }, [socialAccounts, TipsSetting])
 }
