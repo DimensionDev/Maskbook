@@ -3,8 +3,8 @@ import { useRef, useState, useEffect } from 'react'
 import { useAsync, useAsyncRetry, useAsyncFn } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { DSearch } from '@masknet/web3-providers'
-import { TokenType, NonFungibleTokenActivity, SearchResultType } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { TokenType, type NonFungibleTokenActivity, SearchResultType } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'
@@ -91,12 +91,9 @@ export function useTrendingById(
         return PluginTraderRPC.getCoinTrending(result, currency).catch(() => null)
     }, [chainId, JSON.stringify(result), currency?.id])
 
-    const { value: detailedToken } = useFungibleToken(
-        NetworkPluginID.PLUGIN_EVM,
-        trending?.coin.contract_address,
-        undefined,
-        { chainId: trending?.coin.chainId as ChainId },
-    )
+    const { value: detailedToken } = useFungibleToken(result.pluginID, trending?.coin.contract_address, undefined, {
+        chainId: trending?.coin.chainId as ChainId,
+    })
 
     if (loading) {
         return {
