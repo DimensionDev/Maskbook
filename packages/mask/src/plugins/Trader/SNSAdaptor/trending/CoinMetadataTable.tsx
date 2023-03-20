@@ -20,7 +20,8 @@ import { ContractSection } from './ContractSection.js'
 import type { CommunityType } from '../../types/index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ContractItem } from './ContractItem.js'
-import { useLayoutEffect } from 'react'
+import { useEffect } from 'react'
+import { useWindowScroll } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -94,6 +95,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
     const { trending } = props
     const { t } = useI18N()
     const { classes } = useStyles()
+    const position = useWindowScroll()
 
     const metadataLinks = [[t('plugin_trader_website'), trending.coin.home_urls]] as Array<
         [string, string[] | undefined]
@@ -131,13 +133,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
         },
     )
 
-    const hiddenMenu = () => {
-        closeMenu()
-    }
-    useLayoutEffect(() => {
-        window.addEventListener('scroll', hiddenMenu, false)
-        return () => window.removeEventListener('scroll', hiddenMenu, false)
-    })
+    useEffect(() => closeMenu(), [position])
 
     return (
         <Stack>
