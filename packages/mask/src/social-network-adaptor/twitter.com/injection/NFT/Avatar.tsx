@@ -39,8 +39,7 @@ function inject(selector: () => LiveSelector<HTMLElement>, signal: AbortSignal) 
                         {info.isTwitterNFT ? (
                             <NFTAvatarMiniClip
                                 identity={activatedSocialNetworkUI.collecting.identityProvider?.recognized.value}
-                                width={info.width}
-                                height={info.height}
+                                size={info.width}
                                 screenName={userId}
                             />
                         ) : (

@@ -1,4 +1,6 @@
 import { makeStyles } from '@masknet/theme'
+import { useMemo } from 'react'
+import { v4 as uuid } from 'uuid'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -17,19 +19,19 @@ interface NFTAvatarSquareProps {
     stroke: string
     strokeWidth: number
     fontSize: number
-    text: string
+    name: string
     price: string
     width: number
-    id: string
-    hasRainbow?: boolean
     borderSize?: number
+    id?: string
 }
 
 export function NFTAvatarSquare(props: NFTAvatarSquareProps) {
     const { classes } = useStyles()
-    const { stroke, strokeWidth, fontSize, text, width, id, price, hasRainbow = true, borderSize = 2 } = props
+    const { stroke, strokeWidth, fontSize, name, width, price, borderSize = 2 } = props
+    const id = useMemo(() => props.id ?? uuid(), [props.id])
 
-    const avatarSize = hasRainbow ? width - borderSize : width
+    const avatarSize = width - borderSize
     const R = avatarSize / 2
 
     return (
@@ -70,7 +72,7 @@ export function NFTAvatarSquare(props: NFTAvatarSquareProps) {
                     <text x="0%" textAnchor="middle" fontFamily="sans-serif" fill={`url(#${id}-gradient)`}>
                         <textPath xlinkHref={`#${id}-path-name`} startOffset="50%" rotate="auto">
                             <tspan fontWeight="bold" fontSize={fontSize}>
-                                {text}
+                                {name}
                             </tspan>
                         </textPath>
                     </text>

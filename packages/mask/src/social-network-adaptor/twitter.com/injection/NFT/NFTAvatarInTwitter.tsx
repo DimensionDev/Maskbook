@@ -70,7 +70,7 @@ interface NFTAvatarInTwitterProps {
     signal: AbortSignal
 }
 
-function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
+export function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const { t } = useI18N()
     const rainBowElement = useRef<Element | null>()
     const borderElement = useRef<Element | null>()

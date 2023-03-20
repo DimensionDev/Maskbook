@@ -1,12 +1,7 @@
 import { useMemo } from 'react'
 import { v4 as uuid } from 'uuid'
 import { makeStyles } from '@masknet/theme'
-import { useNFT } from '../hooks/index.js'
 import { useNFTContainerAtTwitter } from '../hooks/useNFTContainerAtTwitter.js'
-import { formatPrice, formatText } from '../utils/index.js'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { useChainContext } from '@masknet/web3-hooks-base'
 import type { IdentityResolved } from '@masknet/plugin-infra/content-script'
 
 // from twitter page
@@ -15,12 +10,15 @@ const ViewBoxHeight = 188
 
 interface NFTAvatarClipProps extends withClasses<'root' | 'text' | 'icon'> {
     id?: string
-    width: number
-    height: number
-    screenName?: string
+    size: number
     className?: string
-    viewBoxHeight?: number
+    name: string
+    price: string
     viewBoxWidth?: number
+    viewBoxHeight?: number
+}
+interface NFTAvatarMiniClipProps extends Omit<NFTAvatarClipProps, 'name' | 'price'> {
+    screenName?: string
     identity?: IdentityResolved
 }
 
@@ -125,26 +123,15 @@ function Text(props: TextProps) {
 }
 
 export function NFTAvatarClip(props: NFTAvatarClipProps) {
-    const { width, height, viewBoxHeight = ViewBoxHeight, viewBoxWidth = ViewBoxWidth, screenName } = props
+    const { size, viewBoxHeight = ViewBoxHeight, viewBoxWidth = ViewBoxWidth, name, price } = props
     const id = useMemo(() => props.id ?? uuid(), [props.id])
     const { classes, cx } = useStyles(undefined, { props })
-    const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName)
-    const { account } = useChainContext()
-    const { value = { amount: '0', symbol: 'ETH', name: '', slug: '' }, loading: loadingNFT } = useNFT(
-        account,
-        avatarMetadata?.address,
-        avatarMetadata?.token_id,
-        NetworkPluginID.PLUGIN_EVM,
-        ChainId.Mainnet,
-    )
-    const { amount, name, symbol, slug } = value
-    if (!avatarMetadata?.address || !avatarMetadata?.token_id) return null
 
     return (
         <svg
             className={classes.root}
-            width={width}
-            height={height}
+            width={size}
+            height={size}
             id={id}
             viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}>
             <defs>
@@ -171,13 +158,7 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
                         xlinkHref={`#${id}-name-path`}
                         fill={`url(#${id}-gradient)`}
                         dominantBaseline={process.env.engine === 'firefox' ? 'text-before-edge' : 'mathematical'}
-                        text={
-                            loading || loadingNFT
-                                ? 'loading...'
-                                : `${formatText(name, avatarMetadata?.token_id ?? '')} ${
-                                      slug?.toLowerCase() === 'ens' ? 'ENS' : ''
-                                  }`
-                        }
+                        text={name}
                     />
                 </g>
                 <g className={classes.price}>
@@ -185,7 +166,7 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
                         fill={`url(#${id}-gradient)`}
                         xlinkHref={`#${id}-price-path`}
                         dominantBaseline={process.env.engine === 'firefox' ? 'central' : 'mathematical'}
-                        text={loading || loadingNFT ? '' : formatPrice(amount, symbol)}
+                        text={price}
                     />
                 </g>
             </g>
@@ -193,16 +174,8 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
     )
 }
 
-export function NFTAvatarMiniClip(props: NFTAvatarClipProps) {
-    const {
-        width,
-        height,
-        viewBoxHeight = ViewBoxHeight,
-        viewBoxWidth = ViewBoxWidth,
-        screenName,
-        className,
-        identity,
-    } = props
+export function NFTAvatarMiniClip(props: NFTAvatarMiniClipProps) {
+    const { size, viewBoxHeight = ViewBoxHeight, viewBoxWidth = ViewBoxWidth, screenName, className, identity } = props
     const id = useMemo(() => props.id ?? uuid(), [props.id])
     const { classes, cx } = useStyles(undefined, { props })
     const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName ?? identity?.identifier?.userId)
@@ -212,15 +185,15 @@ export function NFTAvatarMiniClip(props: NFTAvatarClipProps) {
     return (
         <svg
             className={cx(classes.root, className)}
-            width={width}
-            height={height}
+            width={size}
+            height={size}
             id={id}
             viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}>
             <defs>
                 <BorderPath id={`${id}-border-path`} />
             </defs>
             <clipPath id={`${id}-clip-path`}>
-                <BorderPath id={id} transform={`scale(${width / viewBoxWidth})`} />
+                <BorderPath id={id} transform={`scale(${size / viewBoxWidth})`} />
             </clipPath>
             <g>
                 <use xlinkHref={`#${id}-border-path`} className={classes.miniBorder} />
