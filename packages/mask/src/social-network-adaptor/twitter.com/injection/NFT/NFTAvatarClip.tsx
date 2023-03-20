@@ -53,7 +53,7 @@ const useStyles = makeStyles()(() => ({
 interface NFTAvatarClipInTwitterProps {
     signal: AbortSignal
 }
-function NFTAvatarClipInTwitter(props: NFTAvatarClipInTwitterProps) {
+export function NFTAvatarClipInTwitter(props: NFTAvatarClipInTwitterProps) {
     const { classes } = useStyles()
     const windowSize = useWindowSize()
     const location = useLocation()
@@ -107,6 +107,7 @@ function NFTAvatarClipInTwitter(props: NFTAvatarClipInTwitterProps) {
     }, [])
 
     if (isZero(size) || !identity.identifier) return null
+    console.log(avatarType)
     return (
         <>
             {avatarType !== AvatarType.AVATAR_CIRCLE ? (
