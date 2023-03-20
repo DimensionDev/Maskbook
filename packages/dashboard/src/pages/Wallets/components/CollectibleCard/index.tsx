@@ -36,6 +36,9 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: 186,
         backgroundColor: theme.palette.mode === 'dark' ? MaskColorVar.lineLight : '#f6f6f7',
+        img: {
+            objectFit: 'contain !important' as 'contain',
+        },
     },
     description: {
         flex: 1,
