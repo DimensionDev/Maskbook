@@ -1,6 +1,7 @@
 import { SourceType } from '@masknet/web3-shared-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId as ChainId_Solana } from '@masknet/web3-shared-solana'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 export const CURRENCIES_MAP: Record<SourceType, undefined | TrendingAPI.Currency[]> = {
@@ -48,6 +49,34 @@ export const CURRENCIES_MAP: Record<SourceType, undefined | TrendingAPI.Currency
             name: 'Arbitrum',
             symbol: 'Arbitrum',
             description: 'Arbitrum',
+        },
+        {
+            id: 'solana',
+            chainId: ChainId_Solana.Mainnet,
+            name: '\u25CE',
+            symbol: '\u25CE',
+            description: 'Solana',
+        },
+        {
+            id: 'optimism',
+            chainId: ChainId.Optimism,
+            name: 'Optimism',
+            symbol: 'Optimism',
+            description: 'Optimism',
+        },
+        {
+            id: 'avalanche',
+            chainId: ChainId.Avalanche,
+            name: 'Avalanche',
+            symbol: 'Avalanche',
+            description: 'Avalanche',
+        },
+        {
+            id: 'moonbeam',
+            chainId: ChainId.Moonbeam,
+            name: 'Moonbeam',
+            symbol: 'Moonbeam',
+            description: 'Moonbeam',
         },
     ],
     [SourceType.UniswapInfo]: undefined,
