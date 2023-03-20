@@ -117,6 +117,7 @@ export function GasSection(props: GasSectionProps) {
                     />
                 ) : gasOptions ? (
                     <GasForm
+                        defaultGasLimit={customPrice}
                         disableGasLimit={disableGasLimit}
                         chainId={chainId as ChainId}
                         transaction={transaction as Transaction}

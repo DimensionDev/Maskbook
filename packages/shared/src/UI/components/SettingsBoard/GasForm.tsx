@@ -70,6 +70,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface GasFormProps {
+    defaultGasLimit: string
     chainId: ChainId
     transaction: Transaction
     disableGasLimit?: boolean
@@ -82,6 +83,7 @@ export interface GasFormProps {
 
 export function GasForm(props: GasFormProps) {
     const {
+        defaultGasLimit,
         chainId,
         transaction,
         transactionOptions,
@@ -233,7 +235,7 @@ export function GasForm(props: GasFormProps) {
                                 inputProps={{
                                     pattern: '^[0-9]*[.,]?[0-9]*$',
                                 }}
-                                value={gasLimit}
+                                value={isZero(gasLimit) ? defaultGasLimit : gasLimit}
                                 label={
                                     <Typography className={classes.caption}>
                                         {t.gas_settings_label_gas_limit()}
