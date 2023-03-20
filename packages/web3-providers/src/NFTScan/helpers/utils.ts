@@ -21,7 +21,7 @@ export function resolveNFTScanHostName(pluginId: NetworkPluginID, chainId: Web3H
         case ChainId.Optimism:
             return 'https://optimism.nftscan.com'
         case ChainId.xDai:
-            return 'https://cronos.nftscan.com'
+            return 'https://gnosis.nftscan.com'
         case ChainId.Moonbeam:
             return 'https://moonbeam.nftscan.com'
         default:

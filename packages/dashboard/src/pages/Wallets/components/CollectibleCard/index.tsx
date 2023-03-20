@@ -105,6 +105,9 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ asset, onSend }) =>
         return Others?.explorerResolver.nonFungibleTokenLink(asset.chainId, asset.address, asset.tokenId)
     }, [currentPluginId, asset.chainId, asset.address, asset.tokenId])
 
+    // NFTScan can't recognize address uppercase
+    const link = (asset.link ?? nftLink)?.toLowerCase()
+
     return (
         <Box className={`${classes.container} ${isHovering || isHoveringTooltip ? classes.hover : ''}`} ref={ref}>
             <div className={classes.card}>
@@ -112,7 +115,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ asset, onSend }) =>
                     target={asset.link ?? nftLink ? '_blank' : '_self'}
                     rel="noopener noreferrer"
                     className={classes.linkWrapper}
-                    href={asset.link ?? nftLink}>
+                    href={link}>
                     <div className={classes.blocker} />
                     <div className={classes.mediaContainer}>
                         <AssetPreviewer
@@ -159,3 +162,5 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ asset, onSend }) =>
         </Box>
     )
 })
+
+CollectibleCard.displayName = 'CollectibleCard'
