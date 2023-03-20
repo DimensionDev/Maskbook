@@ -61,7 +61,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedChain }) =>
             [...trustedOwnNonFungibleTokens, ...value],
             (x) => x?.contract?.address.toLowerCase() + x?.tokenId,
         ).filter((x) => (selectedChain ? x.chainId === selectedChain.chainId : true))
-    }, [value.length, trustedNonFungibleTokens.length, selectedChain?.chainId])
+    }, [value.length, trustedNonFungibleTokens, selectedChain?.chainId])
 
     useEffect(() => {
         if (next) next()
