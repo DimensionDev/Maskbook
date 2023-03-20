@@ -1,10 +1,16 @@
 import type { PersonaIdentifier, PersonaInformation, ProfileInformation } from '../index.js'
 import { ECKeyIdentifier, ProfileIdentifier, Identifier } from '../index.js'
 
-export function formatPersonaFingerprint(fingerprint: string, size = 0) {
-    if (size === 0) return fingerprint
+export function formatPersonaFingerprint(fingerprint: string, size?: number) {
+    if (!size) {
+        if (fingerprint.length <= 26) return fingerprint
+        return `${fingerprint.slice(0, 17)}...${fingerprint.slice(-9)}`
+    }
+
+    if (size <= 0) return fingerprint
     return `${fingerprint.slice(0, Math.max(0, 2 + size))}...${fingerprint.slice(-size)}`
 }
+
 export const MAX_PERSONA_LIMIT = 10
 
 export const MAX_PERSONA_NAME_LENGTH = 12
@@ -44,11 +50,14 @@ function isSameIdentity<T extends Identifier>(
 
 export function isSamePersona(...personas: Array<PersonaIdentifier | PersonaInformation | string | undefined>) {
     return isSameIdentity((i) => {
-        if (i.startsWith('ec_key:')) return ECKeyIdentifier.from(i).unwrap()
+        if (i.startsWith('ec_key:')) return ECKeyIdentifier.from(i).expect(`${i} should be a valid ECKeyIdentifier`)
         return new ECKeyIdentifier('secp256k1', i)
     }, ...personas)
 }
 
 export function isSameProfile(...profiles: Array<ProfileIdentifier | ProfileInformation | string | undefined>) {
-    return isSameIdentity((i) => ProfileIdentifier.from(i).unwrap(), ...profiles)
+    return isSameIdentity(
+        (i) => ProfileIdentifier.from(i).expect(`${i} should be a valid ProfileIdentifier`),
+        ...profiles,
+    )
 }

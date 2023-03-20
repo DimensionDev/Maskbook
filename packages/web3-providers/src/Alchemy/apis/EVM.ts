@@ -63,8 +63,8 @@ function createNonFungibleToken(
                 tokenId,
             ),
             description: asset.metadata.description || asset.description,
-            imageURL: resolveResourceURL(imageURL),
-            mediaURL: resolveResourceURL(mediaURL),
+            imageURL: resolveResourceURL(decodeURIComponent(imageURL)),
+            mediaURL: resolveResourceURL(decodeURIComponent(mediaURL)),
         },
         contract: {
             chainId,
@@ -106,11 +106,12 @@ function createNonFungibleAsset(
             name: getAssetFullName(metaDataResponse.contract?.address, contractName, metaDataResponse.title, tokenId),
             symbol: contractMetadataResponse?.contractMetadata?.symbol ?? '',
             description: metaDataResponse.description,
-            imageURL:
+            imageURL: decodeURIComponent(
                 metaDataResponse.metadata?.image ||
-                metaDataResponse.media?.[0]?.gateway ||
-                metaDataResponse.media?.[0]?.raw,
-            mediaURL: metaDataResponse.media?.[0]?.gateway,
+                    metaDataResponse.media?.[0]?.gateway ||
+                    metaDataResponse.media?.[0]?.raw,
+            ),
+            mediaURL: decodeURIComponent(metaDataResponse.media?.[0]?.gateway),
         },
         contract: {
             chainId,

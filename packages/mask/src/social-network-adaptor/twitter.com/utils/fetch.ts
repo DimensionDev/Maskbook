@@ -50,10 +50,10 @@ export const getPostId = (node: HTMLElement) => {
 
 export const postNameParser = (node: HTMLElement) => {
     const tweetElement = node.querySelector<HTMLElement>('[data-testid="tweet"]') ?? node
-    const name = collectNodeText(tweetElement.querySelector<HTMLElement>('[data-testid="User-Names"] a div div > span'))
-    // Note: quoted tweet has no [data-testid="User-Names"]
+    const name = collectNodeText(tweetElement.querySelector<HTMLElement>('[data-testid^="User-Name"] a div div > span'))
+    // Note: quoted tweet has no [data-testid^="User-Name"]
     const handle = collectNodeText(
-        tweetElement.querySelector<HTMLElement>('[data-testid="User-Names"] a[tabindex="-1"] span'),
+        tweetElement.querySelector<HTMLElement>('[data-testid^="User-Name"] a[tabindex="-1"] span'),
     )
 
     // post matched, return the result
@@ -69,8 +69,13 @@ export const postNameParser = (node: HTMLElement) => {
         ),
     )
     const quotedTweetHandle = collectNodeText(
-        tweetElement.querySelector<HTMLElement>('div[role="link"] div[tabindex="-1"] div div > span'),
+        tweetElement
+            .querySelector('[data-testid="UserAvatar-Container-unknown"]')
+            ?.parentNode?.parentNode?.parentNode?.parentNode?.firstElementChild?.nextElementSibling?.querySelector(
+                'span',
+            ),
     )
+
     // quoted post matched
     return {
         name: quotedTweetName || '',
