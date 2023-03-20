@@ -119,7 +119,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
             progress.transaction,
             progress.txHash,
         )
-        if (!computed) return
+        if (!computed || computed.title === 'followWithSig' || computed.title === 'burnWithSig') return
 
         showSingletonSnackbar(computed.title, {
             ...resolveSnackbarConfig(progress.status),

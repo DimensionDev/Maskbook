@@ -191,4 +191,50 @@ export class LensAPI implements LensBaseAPI.Provider {
 
         return data.createFollowTypedData
     }
+
+    async createUnfollowTypedData(profileId: string, options?: { token: string }) {
+        if (!profileId) return
+        const { data } = await fetchJSON<{ data: { createUnfollowTypedData: LensBaseAPI.CreateUnfollowTypedData } }>(
+            LENS_ROOT_API,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': options?.token ? `Bearer ${options.token}` : '',
+                },
+                body: JSON.stringify({
+                    query: `mutation CreateUnfollowTypedData {
+                      createUnfollowTypedData(request:{
+                        profile: "${profileId}"
+                      }) {
+                        id
+                        expiresAt
+                        typedData {
+                          types {
+                            BurnWithSig {
+                              name
+                              type
+                            }
+                          }
+                          domain {
+                            version
+                            chainId
+                            name
+                            verifyingContract
+                          }
+                          value {
+                            nonce
+                            deadline
+                            tokenId
+                          }
+                        }
+                      }
+                    }  
+                `,
+                }),
+            },
+        )
+
+        return data.createUnfollowTypedData
+    }
 }

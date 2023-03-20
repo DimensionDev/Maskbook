@@ -55,6 +55,30 @@ export namespace LensBaseAPI {
         }
     }
 
+    export interface CreateUnfollowTypedData {
+        id: string
+        expiresAt: string
+        typedData: {
+            domain: {
+                name: string
+                chainId: number
+                version: string
+                verifyingContract: string
+            }
+            types: {
+                BurnWithSig: Array<{
+                    name: string
+                    type: string
+                }>
+            }
+            value: {
+                nonce: number
+                deadline: number
+                tokenId: string
+            }
+        }
+    }
+
     export interface Provider {
         getProfileByHandle: (handle: string) => Promise<Profile>
     }

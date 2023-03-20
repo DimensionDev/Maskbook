@@ -2,16 +2,17 @@ import { Icons } from '@masknet/icons'
 import { InjectedDialog, WalletConnectedBoundary } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Button, CircularProgress, DialogContent, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
-import { useAsync, useHover } from 'react-use'
+import { useAsyncRetry, useHover } from 'react-use'
 import { Translate, useI18N } from '../../locales/i18n_generated.js'
 import { getLensterLink } from '../../utils.js'
 import { useFollow } from '../hooks/Lens/useFollow.js'
+import { useUnfollow } from '../hooks/Lens/useUnfollow.js'
 import { HandlerDescription } from './HandlerDescription.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -91,7 +92,7 @@ export function FollowLensDialog() {
         },
     )
 
-    const { value, loading } = useAsync(async () => {
+    const { value, loading, retry } = useAsyncRetry(async () => {
         if (!handle || !open || !open) return
         const profile = await Lens.getProfileByHandle(handle)
 
@@ -106,17 +107,19 @@ export function FollowLensDialog() {
 
     const { isFollowing, profile } = value ?? {}
 
-    const [{ loading: followLoading }, handleFollow] = useFollow(profile?.id)
+    const [{ loading: followLoading }, handleFollow] = useFollow(profile?.id, retry)
+    const [{ loading: unfollowLoading }, handleUnfollow] = useUnfollow(profile?.id, retry)
 
     const [element] = useHover((isHovering) => {
         return (
-            <Button
+            <ActionButton
                 variant="roundedContained"
                 className={classes.followAction}
-                disabled={!!wallet?.owner || chainId !== ChainId.Matic}
-                onClick={handleFollow}>
+                disabled={!!wallet?.owner || chainId !== ChainId.Matic || followLoading || unfollowLoading}
+                loading={followLoading || unfollowLoading}
+                onClick={isFollowing ? handleUnfollow : handleFollow}>
                 {isFollowing ? (isHovering ? t.unfollow() : t.following_action()) : t.follow()}
-            </Button>
+            </ActionButton>
         )
     })
 

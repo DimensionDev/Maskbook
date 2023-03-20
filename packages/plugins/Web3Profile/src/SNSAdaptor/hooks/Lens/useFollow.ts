@@ -16,7 +16,7 @@ import type { LensHub } from '@masknet/web3-contracts/types/LensHub.js'
 import { type AbiItem } from 'web3-utils'
 import { type NetworkPluginID } from '@masknet/shared-base'
 
-export function useFollow(profileId?: string) {
+export function useFollow(profileId?: string, onSuccess?: () => void) {
     const connection = useWeb3Connection()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [, handleQueryAuthenticate] = useQueryAuthenticate(account)
@@ -50,10 +50,12 @@ export function useFollow(profileId?: string) {
         )
 
         const hash = await connection.sendTransaction(tx)
-        const receipt = await connection.getTransactionReceipt(hash)
+        const result = await connection.confirmTransaction(hash, {
+            signal: AbortSignal.timeout(3 * 60 * 1000),
+        })
 
-        // TODO: callback
-        if (receipt) {
-        }
-    }, [handleQueryAuthenticate, profileId, connection, account, chainId])
+        if (!result.status) return
+
+        onSuccess?.()
+    }, [handleQueryAuthenticate, profileId, connection, account, chainId, onSuccess])
 }
