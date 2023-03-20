@@ -35,6 +35,7 @@ export * from './types/Telemetry.js'
 export * from './types/RedPacket.js'
 export * from './types/NameService.js'
 export * from './types/Wallet.js'
+export * from './types/Lens.js'
 
 // Implementations
 export * from './DeBank/types.js'

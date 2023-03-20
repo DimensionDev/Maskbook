@@ -42,9 +42,14 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface HandlerDescriptionProps extends withClasses<'container'> {}
+export interface HandlerDescriptionProps extends withClasses<'container'> {
+    profile?: {
+        avatar?: string
+        handle: string
+    }
+}
 
-export const HandlerDescription = memo((props) => {
+export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
     const t = useI18N()
     const { classes } = useStyles(undefined, { props })
     const { pluginID } = useNetworkContext()
@@ -52,15 +57,23 @@ export const HandlerDescription = memo((props) => {
     const { account, providerType } = useChainContext()
     const { Others } = useWeb3State()
 
-    const { value: domain } = useReverseAddress(pluginID, account)
-
+    const { value: domain } = useReverseAddress(pluginID, props.profile?.handle ? account : undefined)
     const providerDescriptor = useProviderDescriptor()
 
     const walletName = useMemo(() => {
+        if (props.profile?.handle) return props.profile.handle
         if (domain) return domain
         if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet?.name
         return providerDescriptor?.name
-    }, [account, domain, providerType, wallet?.name, providerDescriptor?.name, Others?.formatAddress])
+    }, [
+        account,
+        domain,
+        providerType,
+        wallet?.name,
+        providerDescriptor?.name,
+        Others?.formatAddress,
+        props.profile?.handle,
+    ])
 
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
@@ -69,7 +82,16 @@ export const HandlerDescription = memo((props) => {
     return (
         <Box className={classes.container}>
             <Box className={classes.description}>
-                <WalletIcon size={36} mainIcon={providerDescriptor.icon} />
+                <WalletIcon
+                    size={36}
+                    mainIcon={
+                        props.profile
+                            ? props.profile.avatar
+                                ? new URL(props.profile.avatar)
+                                : new URL('../assets/Lens.png', import.meta.url)
+                            : providerDescriptor.icon
+                    }
+                />
                 <Box>
                     <Typography className={classes.name}>{walletName}</Typography>
                     <Typography className={classes.address}>{Others?.formatAddress(account, 4)}</Typography>

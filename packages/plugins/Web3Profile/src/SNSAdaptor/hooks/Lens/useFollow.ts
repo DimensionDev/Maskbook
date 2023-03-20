@@ -15,8 +15,9 @@ import LensHubABI from '@masknet/web3-contracts/abis/LensHub.json'
 import type { LensHub } from '@masknet/web3-contracts/types/LensHub.js'
 import { type AbiItem } from 'web3-utils'
 import { type NetworkPluginID } from '@masknet/shared-base'
+import { type FollowModuleTypedData } from '@masknet/web3-providers/types'
 
-export function useFollow(profileId?: string, onSuccess?: () => void) {
+export function useFollow(profileId?: string, followModule?: FollowModuleTypedData, onSuccess?: () => void) {
     const connection = useWeb3Connection()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [, handleQueryAuthenticate] = useQueryAuthenticate(account)
@@ -27,7 +28,7 @@ export function useFollow(profileId?: string, onSuccess?: () => void) {
         if (!profileId || !connection || chainId !== ChainId.Matic) return
         const token = await handleQueryAuthenticate()
         if (!token) return
-        const typedData = await Lens.createFollowTypedData(profileId, { token })
+        const typedData = await Lens.createFollowTypedData(profileId, { token, followModule })
 
         if (!typedData) return
 

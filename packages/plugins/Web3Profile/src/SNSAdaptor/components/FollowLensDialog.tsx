@@ -1,12 +1,15 @@
 import { Icons } from '@masknet/icons'
 import { InjectedDialog, WalletConnectedBoundary } from '@masknet/shared'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleTokenBalance, useWallet } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
+import { FollowModuleType } from '@masknet/web3-providers/types'
+import { formatBalance, isLessThan } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Button, CircularProgress, DialogContent, Typography } from '@mui/material'
+import { first } from 'lodash-es'
 import { useMemo, useState } from 'react'
 import { useAsyncRetry, useHover } from 'react-use'
 import { Translate, useI18N } from '../../locales/i18n_generated.js'
@@ -48,9 +51,9 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 398,
     },
     actions: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
-        columnGap: 12,
+        display: 'flex',
+        flexDirection: 'column',
+        rowGap: 12,
         width: '100%',
         marginTop: 24,
     },
@@ -92,33 +95,99 @@ export function FollowLensDialog() {
         },
     )
 
+    // #region profile information
     const { value, loading, retry } = useAsyncRetry(async () => {
         if (!handle || !open || !open) return
         const profile = await Lens.getProfileByHandle(handle)
 
         if (!profile) return
         const isFollowing = await Lens.queryFollowStatus(account, profile.id)
+        const defaultProfile = await Lens.queryDefaultProfileByAddress(account)
+
+        const profiles = await Lens.queryProfilesByAddress(account)
 
         return {
             profile,
             isFollowing,
+            defaultProfile: defaultProfile ?? first(profiles),
         }
     }, [handle, open, account])
 
-    const { isFollowing, profile } = value ?? {}
+    const { isFollowing, profile, defaultProfile } = value ?? {}
 
-    const [{ loading: followLoading }, handleFollow] = useFollow(profile?.id, retry)
+    const followModule = useMemo(() => {
+        if (profile?.followModule?.type === FollowModuleType.ProfileFollowModule && defaultProfile) {
+            return {
+                profileFollowModule: {
+                    profileId: defaultProfile.id,
+                },
+            }
+        } else if (profile?.followModule?.type === FollowModuleType.FeeFollowModule && profile.followModule.amount) {
+            return {
+                feeFollowModule: {
+                    currency: profile.followModule.amount.asset.address,
+                    value: profile.followModule.amount.value,
+                },
+            }
+        }
+        return
+    }, [profile, defaultProfile])
+    // #endregion
+
+    // #region follow and unfollow event handler
+    const [{ loading: followLoading }, handleFollow] = useFollow(profile?.id, followModule, retry)
     const [{ loading: unfollowLoading }, handleUnfollow] = useUnfollow(profile?.id, retry)
+    // #endregion
+
+    const { value: feeTokenBalance, loading: getBalanceLoading } = useFungibleTokenBalance(
+        NetworkPluginID.PLUGIN_EVM,
+        profile?.followModule?.amount?.asset.address ?? '',
+    )
+
+    const disabled = useMemo(() => {
+        if (
+            !!wallet?.owner ||
+            chainId !== ChainId.Matic ||
+            followLoading ||
+            unfollowLoading ||
+            (profile?.followModule?.type === FollowModuleType.ProfileFollowModule && !defaultProfile) ||
+            (profile?.followModule?.type === FollowModuleType.FeeFollowModule &&
+                profile.followModule.amount &&
+                (!feeTokenBalance ||
+                    isLessThan(
+                        formatBalance(feeTokenBalance, profile.followModule.amount.asset.decimals),
+                        profile.followModule.amount.value,
+                    ))) ||
+            profile?.followModule?.type === FollowModuleType.RevertFollowModule
+        )
+            return true
+        return false
+    }, [wallet?.owner, chainId, followLoading, unfollowLoading, feeTokenBalance, profile?.followModule])
 
     const [element] = useHover((isHovering) => {
+        const getButtonText = () => {
+            if (isFollowing) {
+                return isHovering ? t.unfollow() : t.following_action()
+            } else if (
+                profile?.followModule?.type === FollowModuleType.FeeFollowModule &&
+                profile.followModule.amount
+            ) {
+                return t.follow_for_fees({
+                    value: profile.followModule.amount.value,
+                    symbol: profile.followModule.amount.asset.symbol,
+                })
+            }
+
+            return t.follow()
+        }
         return (
             <ActionButton
                 variant="roundedContained"
                 className={classes.followAction}
-                disabled={!!wallet?.owner || chainId !== ChainId.Matic || followLoading || unfollowLoading}
+                disabled={disabled}
                 loading={followLoading || unfollowLoading}
                 onClick={isFollowing ? handleUnfollow : handleFollow}>
-                {isFollowing ? (isHovering ? t.unfollow() : t.following_action()) : t.follow()}
+                {getButtonText()}
             </ActionButton>
         )
     })
@@ -126,9 +195,21 @@ export function FollowLensDialog() {
     const tips = useMemo(() => {
         if (wallet?.owner) return t.follow_wallet_tips()
         else if (chainId !== ChainId.Matic) return t.follow_chain_tips()
-
+        else if (profile?.followModule?.type === FollowModuleType.ProfileFollowModule && !defaultProfile)
+            return t.follow_with_profile_tips()
+        else if (
+            profile?.followModule?.type === FollowModuleType.FeeFollowModule &&
+            profile.followModule.amount &&
+            (!feeTokenBalance ||
+                isLessThan(
+                    formatBalance(feeTokenBalance, profile.followModule.amount.asset.decimals),
+                    profile.followModule.amount.value,
+                ))
+        )
+            return t.follow_with_charge_tips()
+        else if (profile?.followModule?.type === FollowModuleType.RevertFollowModule) return t.follow_with_revert_tips()
         return t.follow_gas_tips()
-    }, [wallet?.owner, chainId])
+    }, [wallet?.owner, chainId, profile, feeTokenBalance])
 
     return (
         <InjectedDialog
@@ -137,13 +218,19 @@ export function FollowLensDialog() {
             title={t.lens()}
             classes={{ dialogTitle: classes.dialogTitle, paper: classes.dialogContent }}>
             <DialogContent sx={{ padding: 3 }}>
-                {loading ? (
+                {loading || getBalanceLoading ? (
                     <Box display="flex" justifyContent="center" alignItems="center" minHeight={342}>
                         <CircularProgress />
                     </Box>
                 ) : (
                     <Box className={classes.container}>
-                        <Avatar src={profile?.picture.original.url} sx={{ width: 64, height: 64 }} />
+                        <Avatar
+                            src={
+                                profile?.picture?.original.url ??
+                                new URL('../assets/Lens.png', import.meta.url).toString()
+                            }
+                            sx={{ width: 64, height: 64 }}
+                        />
                         <Typography className={classes.name}>{profile?.name}</Typography>
                         <Typography className={classes.handle}>@{profile?.handle}</Typography>
                         <Typography className={classes.followers}>
@@ -175,7 +262,16 @@ export function FollowLensDialog() {
                                 expectedChainId={ChainId.Matic}
                                 ActionButtonProps={{ variant: 'roundedContained' }}>
                                 <Typography className={classes.tips}>{tips}</Typography>
-                                <HandlerDescription />
+                                <HandlerDescription
+                                    profile={
+                                        defaultProfile
+                                            ? {
+                                                  avatar: defaultProfile.picture?.original.url,
+                                                  handle: defaultProfile.handle,
+                                              }
+                                            : undefined
+                                    }
+                                />
                             </WalletConnectedBoundary>
                         </Box>
                     </Box>

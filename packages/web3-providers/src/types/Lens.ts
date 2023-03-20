@@ -1,10 +1,26 @@
+export enum FollowModuleType {
+    FeeFollowModule = 'FeeFollowModule',
+    ProfileFollowModule = 'ProfileFollowModule',
+    RevertFollowModule = 'RevertFollowModule',
+}
+
+export type FollowModuleTypedData = {
+    profileFollowModule?: {
+        profileId: string
+    }
+    feeFollowModule?: {
+        currency: string
+        value: string
+    }
+}
+
 export namespace LensBaseAPI {
     export interface Profile {
         id: string
         handle: string
         ownedBy: string
         name: string
-        picture: {
+        picture?: {
             original: {
                 url: string
             }
@@ -12,6 +28,20 @@ export namespace LensBaseAPI {
         stats: {
             totalFollowers: number
             totalFollowing: number
+        }
+        followModule?: {
+            type: FollowModuleType
+            contractAddress?: string
+            amount?: {
+                asset: {
+                    name: string
+                    symbol: string
+                    decimals: number
+                    address: string
+                }
+                value: string
+            }
+            recipient: string
         }
     }
 

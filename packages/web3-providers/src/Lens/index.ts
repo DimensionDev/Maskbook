@@ -1,7 +1,7 @@
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { fetchJSON } from '../entry-helpers.js'
-import type { LensBaseAPI } from '../types/Lens.js'
+import type { FollowModuleTypedData, LensBaseAPI } from '../entry-types.js'
 import { LENS_ROOT_API } from './constants.js'
 
 export class LensAPI implements LensBaseAPI.Provider {
@@ -29,11 +29,146 @@ export class LensAPI implements LensBaseAPI.Provider {
                         totalFollowers
                         totalFollowing
                       }
+                      followModule {
+                        ... on FeeFollowModuleSettings {
+                          type
+                          contractAddress
+                          amount {
+                            asset {
+                              name
+                              symbol
+                              decimals
+                              address
+                            }
+                            value
+                          }
+                          recipient
+                        }
+                        ... on ProfileFollowModuleSettings {
+                         type
+                        }
+                        ... on RevertFollowModuleSettings {
+                         type
+                        }
+                      }
                     }
                   }`,
             }),
         })
         return data.profile
+    }
+
+    async queryDefaultProfileByAddress(address: string) {
+        if (!isValidAddress(address)) return
+        const { data } = await fetchJSON<{ data: { defaultProfile?: LensBaseAPI.Profile } }>(LENS_ROOT_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: `query DefaultProfile {
+                  defaultProfile(request: { ethereumAddress: "${address}"}) {
+                    id
+                    name
+                    ownedBy
+                    handle
+                    picture {
+                      ... on MediaSet {
+                        original {
+                          url
+                          mimeType
+                        }
+                      }
+                    }
+                    stats {
+                      totalFollowers
+                      totalFollowing
+                    }
+                    followModule {
+                      ... on FeeFollowModuleSettings {
+                        type
+                        contractAddress
+                        amount {
+                          asset {
+                            name
+                            symbol
+                            decimals
+                            address
+                          }
+                          value
+                        }
+                        recipient
+                      }
+                      ... on ProfileFollowModuleSettings {
+                       type
+                      }
+                      ... on RevertFollowModuleSettings {
+                       type
+                      }
+                    }
+                  }
+                }`,
+            }),
+        })
+        return data.defaultProfile
+    }
+
+    async queryProfilesByAddress(address: string) {
+        if (!isValidAddress(address)) return []
+        const { data } = await fetchJSON<{ data: { profiles: { items: LensBaseAPI.Profile[] } } }>(LENS_ROOT_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: `query Profiles {
+                profiles(request: { ownedBy: ["${address}"], limit: 10 }) {
+                  items {
+                    id
+                    name
+                    picture {
+                      ... on MediaSet {
+                        original {
+                          url
+                          mimeType
+                        }
+                      }
+                    }
+                    handle
+                    ownedBy
+                    stats {
+                      totalFollowers
+                      totalFollowing
+                     
+                    }
+                    followModule {
+                      ... on FeeFollowModuleSettings {
+                        type
+                        amount {
+                          asset {
+                            symbol
+                            name
+                            decimals
+                            address
+                          }
+                          value
+                        }
+                        recipient
+                      }
+                      ... on ProfileFollowModuleSettings {
+                       type
+                      }
+                      ... on RevertFollowModuleSettings {
+                       type
+                      }
+                    }
+                  }
+                }
+              }`,
+            }),
+        })
+
+        return data.profiles.items
     }
 
     async queryFollowStatus(address: string, profileId: string) {
@@ -139,11 +274,11 @@ export class LensAPI implements LensBaseAPI.Provider {
         return data.refresh
     }
 
-    // TODO: follow module
     async createFollowTypedData(
         profileId: string,
         options?: {
             token: string
+            followModule?: FollowModuleTypedData
         },
     ) {
         if (!profileId) return
@@ -158,7 +293,9 @@ export class LensAPI implements LensBaseAPI.Provider {
                 body: JSON.stringify({
                     query: `mutation CreateFollowTypedData {
                       createFollowTypedData(
-                        request: { follow: [{ profile: "${profileId}", followModule: null }] }
+                        request: { follow: [{ profile: "${profileId}", followModule: ${
+                        options?.followModule ? options.followModule : null
+                    } }] }
                       ) {
                         id
                         expiresAt
