@@ -197,7 +197,6 @@ function NFTAvatarInFacebook() {
     return (
         <NFTBadge
             nftInfo={nftInfo}
-            avatar={avatar}
             size={size}
             classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
         />

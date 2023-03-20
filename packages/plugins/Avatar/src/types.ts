@@ -49,6 +49,7 @@ export interface NFTInfo {
     owner?: string
     slug?: string
     permalink?: string
+    tokenId: string
 }
 
 export enum PFP_TYPE {

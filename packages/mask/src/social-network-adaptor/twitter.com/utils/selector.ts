@@ -311,7 +311,10 @@ export const searchTwitterAvatarLinkSelector: () => LiveSelector<E, true> = () =
 
 export const searchTwitterAvatarSelector = () =>
     querySelector<E>('a[href$="/photo"]').querySelector('img').closest<E>(1)
+
 // #endregion
+
+export const searchTwitterSquareAvatarSelector = () => querySelector<E>('a[href$="/nft"] > div img')
 
 // #region twitter avatar
 export const searchUseCellSelector = () => querySelector<E>('[data-testid="UserCell"]')

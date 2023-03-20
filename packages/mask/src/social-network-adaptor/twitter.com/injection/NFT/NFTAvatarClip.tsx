@@ -13,26 +13,18 @@ import {
     useNFTContainerAtTwitter,
 } from '@masknet/plugin-avatar'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
-import {
-    searchTwitterAvatarNFTLinkSelector,
-    searchTwitterAvatarNFTSelector,
-    searchTwitterAvatarNFTStyleSelector,
-} from '../../utils/selector.js'
+import { searchTwitterAvatarNFTLinkSelector, searchTwitterAvatarNFTSelector } from '../../utils/selector.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { NFTAvatarInTwitter } from './NFTAvatarInTwitter.js'
-
-enum AvatarType {
-    AVATAR_SQUARE = 'shape-square',
-    AVATAR_CLIP = 'shape-hex',
-    AVATAR_CIRCLE = 'circle',
-}
+import { getAvatarType } from '../../utils/useAvatarType.js'
+import { AvatarType } from '../../constant.js'
 
 export function injectNFTAvatarClipInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarNFTSelector()).useForeach((ele, _, proxy) => {
         const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
-        root.render(<NFTAvatarClipInTwitter signal={signal} />)
+        const avatarType = getAvatarType()
+        if (avatarType === AvatarType.AVATAR_CLIP) root.render(<NFTAvatarClipInTwitter signal={signal} />)
         return () => root.destroy()
     })
     startWatch(watcher, signal)
@@ -53,7 +45,7 @@ const useStyles = makeStyles()(() => ({
 interface NFTAvatarClipInTwitterProps {
     signal: AbortSignal
 }
-function NFTAvatarClipInTwitter(props: NFTAvatarClipInTwitterProps) {
+export function NFTAvatarClipInTwitter(props: NFTAvatarClipInTwitterProps) {
     const { classes } = useStyles()
     const windowSize = useWindowSize()
     const location = useLocation()
@@ -62,9 +54,10 @@ function NFTAvatarClipInTwitter(props: NFTAvatarClipInTwitterProps) {
 
     const size = useMemo(() => {
         const ele = searchTwitterAvatarNFTSelector().evaluate()?.closest('a')?.querySelector('img')
+        console.log('')
+        console.log(ele)
         if (!ele) return 0
-        const style = window.getComputedStyle(ele)
-        return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
+        return ele.clientWidth
     }, [windowSize, location])
 
     const identity = useCurrentVisitingIdentity()
@@ -95,30 +88,13 @@ function NFTAvatarClipInTwitter(props: NFTAvatarClipInTwitterProps) {
         }
     }, [location.pathname])
 
-    const avatarType = useMemo(() => {
-        const dom = searchTwitterAvatarNFTStyleSelector().evaluate()
-        if (!dom) return AvatarType.AVATAR_CIRCLE
-        const styles = window.getComputedStyle(dom)
-        return styles.clipPath.includes('#shape-square')
-            ? AvatarType.AVATAR_SQUARE
-            : styles.clipPath.includes('#shape-hex')
-            ? AvatarType.AVATAR_CLIP
-            : AvatarType.AVATAR_CIRCLE
-    }, [])
-
     if (isZero(size) || !identity.identifier) return null
     return (
-        <>
-            {avatarType !== AvatarType.AVATAR_CIRCLE ? (
-                <NFTAvatarClipOrSquareInTwitter
-                    screenName={identity.identifier.userId}
-                    size={size}
-                    avatarType={avatarType}
-                />
-            ) : (
-                <NFTAvatarInTwitter signal={props.signal} />
-            )}
-        </>
+        <NFTAvatarClipOrSquareInTwitter
+            screenName={identity.identifier.userId}
+            size={size}
+            avatarType={AvatarType.AVATAR_CLIP}
+        />
     )
 }
 
@@ -127,7 +103,7 @@ interface NFTAvatarClipOrSquareProps {
     size: number
     avatarType: AvatarType
 }
-function NFTAvatarClipOrSquareInTwitter({ screenName, size, avatarType }: NFTAvatarClipOrSquareProps) {
+export function NFTAvatarClipOrSquareInTwitter({ screenName, size, avatarType }: NFTAvatarClipOrSquareProps) {
     const { classes } = useStyles()
     const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName)
     const { account } = useChainContext()
@@ -156,7 +132,7 @@ function NFTAvatarClipOrSquareInTwitter({ screenName, size, avatarType }: NFTAva
     return (
         <>
             {avatarType === AvatarType.AVATAR_SQUARE ? (
-                <NFTAvatarSquare stroke="black" strokeWidth={14} fontSize={9} name={name} price={price} width={size} />
+                <NFTAvatarSquare stroke="black" strokeWidth={20} fontSize={9} name={name} price={price} size={size} />
             ) : avatarType === AvatarType.AVATAR_CLIP ? (
                 <NFTAvatarClip
                     size={size}

@@ -114,7 +114,6 @@ function NFTAvatarInInstagram() {
         <NFTBadge
             nftInfo={nftInfo}
             hasRainbow={false}
-            avatar={avatar}
             size={size}
             classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
         />

@@ -7,11 +7,11 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'unset',
     },
     name: {
-        transform: 'translate(0px, 3px)',
+        transform: 'translate(0px, 8px)',
         background: 'linear-gradient(270deg, #24FF00 0%, #00E4C9 102.63%)',
     },
     price: {
-        transform: 'translate(0px, -1px)',
+        transform: 'translate(0px, -5px)',
         background: 'linear-gradient(270deg, #24FF00 0%, #00E4C9 102.63%)',
     },
 }))
@@ -21,21 +21,23 @@ interface NFTAvatarSquareProps {
     fontSize: number
     name: string
     price: string
-    width: number
+    size: number
     borderSize?: number
     id?: string
 }
 
 export function NFTAvatarSquare(props: NFTAvatarSquareProps) {
     const { classes } = useStyles()
-    const { stroke, strokeWidth, fontSize, name, width, price, borderSize = 2 } = props
+    const { stroke, strokeWidth, fontSize, name, size, price, borderSize = 2 } = props
     const id = useMemo(() => props.id ?? uuid(), [props.id])
 
-    const avatarSize = width - borderSize
+    const avatarSize = size - borderSize
     const R = avatarSize / 2
 
+    if (size <= borderSize) return null
+
     return (
-        <svg className={classes.root} width="100%" height="100%" viewBox={`0 0 ${avatarSize} ${avatarSize}`} id={id}>
+        <svg className={classes.root} width="100%" height="100%" viewBox={`0 0 ${size} ${size}`} id={id}>
             <defs>
                 <path
                     id={`${id}-path-name`}

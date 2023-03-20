@@ -28,3 +28,9 @@ export const TipButtonStyle: Record<FontSize, TipButtonProps> = {
     [FontSize.Large]: { buttonSize: 35, iconSize: 22 },
     [FontSize.X_Large]: { buttonSize: 38, iconSize: 24 },
 }
+
+export enum AvatarType {
+    AVATAR_SQUARE = 'shape-square',
+    AVATAR_CLIP = 'shape-hex',
+    AVATAR_CIRCLE = 'circle',
+}
