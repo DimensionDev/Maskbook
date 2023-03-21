@@ -16,7 +16,8 @@ import {
     useCurrentVisitingSocialIdentity,
     useThemeSettings,
 } from '@masknet/plugin-infra/content-script'
-import { isDeviceOnWhitelist } from '@masknet/shared-base'
+import { isDeviceOnWhitelist, CrossIsolationMessages } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 
 export interface ConsoleContentProps {
     onClose?: () => void
@@ -42,6 +43,8 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const currentVisitingSocialIdentity = useCurrentVisitingSocialIdentity()
     const themeSettings = useThemeSettings()
+
+    const { setDialog } = useRemoteControlledDialog(CrossIsolationMessages.events.followLensDialogEvent)
 
     const table: Array<{ name: string; content: JSX.Element }> = [
         {

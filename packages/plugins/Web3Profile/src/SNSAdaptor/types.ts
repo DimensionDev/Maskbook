@@ -109,3 +109,14 @@ export interface UnlistedConfig {
         }
     }
 }
+
+export interface LensTokenStorageType {
+    accessToken?: {
+        token: string
+        expireDate: Date
+    }
+    refreshToken?: {
+        token: string
+        expireDate: Date
+    }
+}
