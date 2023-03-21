@@ -267,7 +267,10 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     }, [executor, validationMessage, needsSwap, protocol, tab, approvalData, chainId])
 
     return (
-        <InjectedDialog title={t('plugin_savings')} open onClose={onClose}>
+        <InjectedDialog
+            title={tab === TabType.Deposit ? t('plugin_savings_deposit') : t('plugin_savings_withdraw')}
+            open
+            onClose={onClose}>
             <DialogContent className={classes.containerWrap}>
                 <div style={{ padding: '0 15px' }}>
                     {needsSwap ? null : (
