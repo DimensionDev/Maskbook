@@ -3,7 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import { Button, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FungibleTokenList } from '@masknet/shared'
-import { useBlockedFungibleTokens } from '@masknet/web3-hooks-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import {
+    useFungibleTokensFromTokenList,
+    useFungibleAssets,
+    useNetworkContext,
+    useChainContext,
+    useBlockedFungibleTokens,
+} from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useRowSize } from '../../../../../../../shared/src/hooks/useRowSize.js'
@@ -51,13 +58,23 @@ const AddToken = memo(() => {
     const navigate = useNavigate()
     const blackList = useBlockedFungibleTokens()
     const rowSize = useRowSize()
+    const { pluginID } = useNetworkContext()
+    const { chainId } = useChainContext()
 
     useTitle(t('add_token'))
+
+    const { value: fungibleTokens = EMPTY_LIST } = useFungibleTokensFromTokenList(pluginID, { chainId })
+
+    const { value: fungibleAssets = EMPTY_LIST } = useFungibleAssets(pluginID, undefined, {
+        chainId,
+    })
 
     return (
         <>
             <div className={classes.content}>
                 <FungibleTokenList
+                    fungibleTokens={fungibleTokens}
+                    fungibleAssets={fungibleAssets}
                     classes={{ channel: classes.channel, listBox: classes.listBox }}
                     blacklist={blackList.map((x) => x.address)}
                     FixedSizeListProps={{ height: 340, itemSize: rowSize + 16, className: classes.wrapper }}

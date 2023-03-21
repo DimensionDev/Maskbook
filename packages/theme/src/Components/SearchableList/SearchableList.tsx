@@ -1,4 +1,4 @@
-import { type ReactNode, useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { FixedSizeList, type FixedSizeListProps, type ListChildComponentProps } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-es'
@@ -13,8 +13,6 @@ export interface MaskSearchableListProps<T> extends withClasses<'listBox'> {
     data: T[]
     /** The identity of list data item for remove duplicates item */
     itemKey?: keyof T
-    /** Intermediate state when data is loaded */
-    placeholder?: ReactNode
     /** The key of list item for search */
     searchKey?: string[]
     /** Renderer for each list item */
@@ -51,7 +49,6 @@ export interface MaskSearchableListProps<T> extends withClasses<'listBox'> {
 export function SearchableList<T extends {}>({
     itemKey,
     data,
-    placeholder,
     onSelect,
     onSearch,
     disableSearch,
@@ -130,8 +127,7 @@ export function SearchableList<T extends {}>({
                     />
                 </Box>
             )}
-            {placeholder}
-            {!placeholder && readyToRenderData.length === 0 && (
+            {readyToRenderData.length === 0 && (
                 <Stack
                     height={windowHeight}
                     justifyContent="center"
@@ -141,7 +137,7 @@ export function SearchableList<T extends {}>({
                     <EmptyResult />
                 </Stack>
             )}
-            {!placeholder && readyToRenderData.length !== 0 && (
+            {readyToRenderData.length !== 0 && (
                 <div className={classes.listBox}>
                     <FixedSizeList
                         className={classes.list}

@@ -17,11 +17,9 @@ import { useSharedI18N } from '../../../locales/index.js'
 import {
     useBlockedFungibleTokens,
     useNetworkContext,
-    useFungibleAssets,
     useFungibleToken,
     useFungibleTokenBalance,
     useFungibleTokensBalance,
-    useFungibleTokensFromTokenList,
     useTrustedFungibleTokens,
     useWeb3State,
     useAccount,
@@ -58,6 +56,8 @@ export interface FungibleTokenListProps<T extends NetworkPluginID> extends withC
     FixedSizeListProps?: Partial<MaskFixedSizeListProps>
     SearchTextFieldProps?: MaskTextFieldProps
     enableManage?: boolean
+    fungibleTokens: Web3Helper.FungibleTokenScope[]
+    fungibleAssets: Web3Helper.FungibleAssetScope[]
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -106,6 +106,8 @@ export const FungibleTokenList = forwardRef(
             FixedSizeListProps,
             selectedTokens = EMPTY_LIST,
             enableManage = false,
+            fungibleTokens,
+            fungibleAssets,
         } = props
 
         const t = useSharedI18N()
@@ -140,7 +142,7 @@ export const FungibleTokenList = forwardRef(
         const account = useAccount(pluginID)
         const chainId = props.chainId
         const { Token, Others } = useWeb3State<'all'>(pluginID)
-        const { value: fungibleTokens = EMPTY_LIST, error } = useFungibleTokensFromTokenList(pluginID, { chainId })
+
         const trustedFungibleTokens = useTrustedFungibleTokens(pluginID, undefined, chainId)
         const blockedFungibleTokens = useBlockedFungibleTokens(pluginID)
         const nativeToken = useMemo(() => Others?.chainResolver.nativeCurrency(chainId), [chainId])
@@ -164,10 +166,6 @@ export const FungibleTokenList = forwardRef(
                 filteredFungibleTokens.map((x) => x.address),
                 { account, chainId },
             )
-
-        const { value: fungibleAssets = EMPTY_LIST } = useFungibleAssets(pluginID, undefined, {
-            chainId,
-        })
 
         // To avoid SearchableList re-render, reduce the dep
         const sortedFungibleTokensForManage = useMemo(() => {
@@ -318,29 +316,6 @@ export const FungibleTokenList = forwardRef(
         })
         // #endregion
 
-        const getPlaceholder = () => {
-            if (modeTransition) return <Content height={FixedSizeListProps?.height} message={t.token_list_loading()} />
-
-            // Add token in dashboard, includeTokens is empty
-            if (Object.keys(fungibleTokensBalance).length === 0 && includeTokens?.length === 0 && !searchedToken)
-                return null
-
-            if (
-                (Object.keys(fungibleTokensBalance).length === 0 || loadingFungibleTokensBalance) &&
-                !searchedToken &&
-                !keyword
-            )
-                return <Content height={FixedSizeListProps?.height} message={t.erc20_token_list_loading()} />
-
-            if (searchingToken)
-                return <Content height={FixedSizeListProps?.height} message={t.erc20_search_token_loading()} />
-
-            if (searchedTokenAddress && !searchedToken)
-                return <Content height={FixedSizeListProps?.height} message={t.erc20_search_not_token_found()} />
-
-            return null
-        }
-
         const itemRender = useMemo(() => {
             return getFungibleTokenItem<T>(
                 (address) => {
@@ -415,7 +390,6 @@ export const FungibleTokenList = forwardRef(
                     itemKey="address"
                     classes={{ listBox: classes.listBox }}
                     itemRender={itemRender}
-                    placeholder={getPlaceholder()}
                     FixedSizeListProps={FixedSizeListProps}
                     SearchFieldProps={SearchFieldProps}
                 />
