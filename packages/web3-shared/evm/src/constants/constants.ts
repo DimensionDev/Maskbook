@@ -23,6 +23,7 @@ import Pet from '@masknet/web3-constants/evm/pet.json'
 import SmartPay from '@masknet/web3-constants/evm/smart-pay.json'
 import ENS from '@masknet/web3-constants/evm/ens.json'
 import GoPlusLabs from '@masknet/web3-constants/evm/gopluslabs.json'
+import Lens from '@masknet/web3-constants/evm/lens.json'
 
 import {
     transformAllHook,
@@ -162,3 +163,8 @@ export const useSmartPayConstants = transformAllHook(getSmartPayConstants)
 
 export const getENSConstants = transformAll(ChainId, ENS)
 export const getGoPlusLabsConstants = transformAll(ChainId, GoPlusLabs)
+
+export const getLensConstant = transform(ChainId, Lens)
+export const getLensConstants = transformAll(ChainId, Lens)
+export const useLensConstant = transformHook(getLensConstants)
+export const useLensConstants = transformAllHook(getLensConstants)
