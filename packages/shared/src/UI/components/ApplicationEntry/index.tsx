@@ -96,11 +96,21 @@ interface ApplicationEntryProps {
     recommendFeature?: Plugin.SNSAdaptor.ApplicationEntry['recommendFeature']
     iconFilterColor?: string
     tooltipHint?: string | React.ReactElement
+    secondTitle?: React.ReactNode
     onClick: () => void
 }
 
 export function ApplicationEntry(props: ApplicationEntryProps) {
-    const { title, onClick, disabled = false, icon, tooltipHint, recommendFeature, iconFilterColor } = props
+    const {
+        title,
+        onClick,
+        secondTitle,
+        disabled = false,
+        icon,
+        tooltipHint,
+        recommendFeature,
+        iconFilterColor,
+    } = props
     const { classes } = useStyles({ disabled, iconFilterColor })
     const jsx = recommendFeature ? (
         <div
@@ -115,6 +125,9 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
             <div className={classes.recommendFeatureAppIconWrapper}>{icon}</div>
             <div>
                 <Typography className={classes.recommendFeatureAppListItemName}>{title}</Typography>
+                {secondTitle ? (
+                    <Typography className={classes.recommendFeatureAppListItemDescription}>{secondTitle}</Typography>
+                ) : null}
                 <Typography className={classes.recommendFeatureAppListItemDescription}>
                     {recommendFeature.description}
                 </Typography>
@@ -128,6 +141,11 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
             <Typography className={classes.title} color="textPrimary">
                 {title}
             </Typography>
+            {secondTitle ? (
+                <Typography variant="body2" color="textSecondary">
+                    {secondTitle}
+                </Typography>
+            ) : null}
         </div>
     )
     return tooltipHint ? (
