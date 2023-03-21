@@ -73,7 +73,6 @@ export const useStyles = makeStyles()((theme, props) => ({
         margin: '0 5px 0 0',
     },
     button: { width: '100%' },
-    disabledButton: {},
     connectWallet: {
         marginTop: 0,
     },
