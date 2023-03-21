@@ -1,5 +1,5 @@
 import { Image } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -77,6 +77,9 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center'>()((t
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'space-between',
+        flexGrow: 0,
+        flexShrink: 0,
+        overflow: 'hidden',
     },
     attributeType: {
         color: theme.palette.maskColor.second,
@@ -88,6 +91,9 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center'>()((t
         color: theme.palette.maskColor.main,
         fontSize: 14,
         fontWeight: 700,
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
     },
 }))
 
@@ -277,12 +283,23 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
                     </div>
                     {verbose && attributes?.length ? (
                         <div className={classes.attributes}>
-                            {attributes.map((attribute) => (
-                                <div className={classes.attribute} key={attribute.trait_type}>
-                                    <Typography className={classes.attributeType}>{attribute.trait_type}</Typography>
-                                    <Typography className={classes.attributeValue}>{attribute.value}</Typography>
-                                </div>
-                            ))}
+                            {attributes.map((attribute) => {
+                                const value =
+                                    typeof attribute.value === 'string'
+                                        ? attribute.value
+                                        : attribute.value.map((x) => x.uri).join('\n')
+
+                                return (
+                                    <div className={classes.attribute} key={attribute.trait_type}>
+                                        <Typography className={classes.attributeType}>
+                                            {attribute.trait_type}
+                                        </Typography>
+                                        <TextOverflowTooltip title={value} as={ShadowRootTooltip}>
+                                            <Typography className={classes.attributeValue}>{value}</Typography>
+                                        </TextOverflowTooltip>
+                                    </div>
+                                )
+                            })}
                         </div>
                     ) : null}
                 </div>

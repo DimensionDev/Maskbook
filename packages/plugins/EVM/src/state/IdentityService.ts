@@ -292,21 +292,22 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             .filter(Boolean) as Array<SocialAddress<ChainId>>
 
         const identities = uniqBy(identities_, (x) => [x.type, x.label, x.address.toLowerCase()].join('_'))
-
-        if (!getNextIDPlatform() && !(process.env.channel === 'stable' && process.env.NODE_ENV === 'production')) {
+        if (!getNextIDPlatform() || !(process.env.channel === 'stable' && process.env.NODE_ENV === 'production')) {
             return identities
         }
 
-        const allSettledIsVerified = await Promise.allSettled(
+        const allSettledIdentitiesVerified = await Promise.allSettled(
             uniqBy(identities, (x) => x.address.toLowerCase()).map(async (x) => {
-                return NextIDProof.verifyTwitterHandlerByAddress(x.address, identity.identifier?.userId ?? '')
+                const isVerified = await NextIDProof.verifyTwitterHandlerByAddress(
+                    x.address,
+                    identity.identifier?.userId ?? '',
+                )
+                return { ...x, isVerified }
             }),
         )
 
-        const isVerified = allSettledIsVerified
-            .flatMap((x) => (x.status === 'fulfilled' ? x.value : false))
-            .every(Boolean)
-
-        return isVerified ? identities : EMPTY_LIST
+        return allSettledIdentitiesVerified
+            .flatMap((x) => (x.status === 'fulfilled' && x.value.isVerified ? x.value : undefined))
+            .filter(Boolean) as Array<SocialAddress<ChainId>>
     }
 }

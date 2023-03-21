@@ -23,7 +23,6 @@ const useStyles = makeStyles<void, 'icon'>()((theme, _, refs) => ({
     helpIcon: {
         width: 18,
         height: 18,
-        color: theme.palette.maskColor?.second,
     },
 }))
 

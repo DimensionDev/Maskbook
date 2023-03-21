@@ -1,4 +1,4 @@
-import { cloneElement, type PropsWithChildren, type ReactElement, useEffect, useRef, useState } from 'react'
+import { cloneElement, type PropsWithChildren, type ReactElement, useEffect, useRef, useState, useMemo } from 'react'
 import { useLocation } from 'react-use'
 import { debounce } from 'lodash-es'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -103,7 +103,7 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const { t } = useI18N()
     const { classes, cx } = useStyles()
     const childrenRef = useRef<HTMLElement>()
-    const [clientRect, setClientRect] = useState<DOMRect | undefined>()
+    const [clientRect, setClientRect] = useState<DOMRect>()
     const [bottomAvailable, setBottomAvailable] = useState(true)
     const { networkIdentifier } = activatedSocialNetworkUI
     const currentStep = useValueRef(userGuideStatus[networkIdentifier])
@@ -115,10 +115,10 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const stepVisible = isCurrentStep && !finished && !!clientRect?.top && !!clientRect.left
 
     useEffect(() => {
-        document.body.style.overflow = stepVisible ? 'hidden' : ''
-        document.documentElement.style.overflow = stepVisible ? 'hidden' : ''
-        document.body.style.paddingLeft = 'calc(100vw - 100%)'
-    }, [stepVisible])
+        document.documentElement.style.overflow =
+            stepVisible && Number.parseInt(currentStep, 10) === total ? 'hidden' : ''
+        document.documentElement.style.paddingLeft = 'calc(100vw - 100%)'
+    }, [stepVisible, currentStep])
 
     const onSkip = () => {
         sayHelloShowed[networkIdentifier].value = true
@@ -153,7 +153,6 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
         return () => observer.disconnect()
     }, [])
 
-    // const inserted = childrenRef.current ? document.body.contains(childrenRef.current) : false
     useEffect(() => {
         const setGuideStepRect = () => {
             if (!inserted) return
@@ -175,6 +174,12 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
         }
     }, [childrenRef.current, inserted, currentStep, history])
 
+    const scrollWidth = useMemo(() => {
+        if (stepVisible && Number.parseInt(currentStep, 10) === total) return 0
+        const cWidth = document.documentElement.clientWidth || document.body.clientWidth
+        return window.innerWidth - cWidth
+    }, [stepVisible, currentStep])
+
     return (
         <>
             {cloneElement(children as ReactElement, { ref: childrenRef })}
@@ -189,7 +194,7 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
                                 }
                                 style={{
                                     top: clientRect.top,
-                                    left: clientRect.left,
+                                    left: clientRect.left - scrollWidth,
                                 }}>
                                 <Box
                                     className={classes.target}
