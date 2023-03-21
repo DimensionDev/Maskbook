@@ -34,6 +34,7 @@ export function pasteInstagram(url: string) {
 export function inputText(text: string) {
     sendEvent('input', text)
 }
+
 export function hookInputUploadOnce(
     format: string,
     fileName: string,
@@ -43,50 +44,53 @@ export function hookInputUploadOnce(
     sendEvent('hookInputUploadOnce', format, fileName, Array.from(image), triggerOnActiveElementNow)
 }
 
-if (typeof document !== 'object') {
-    // eslint-disable-next-line no-debugger
-    debugger
-    throw new Error('This script should not be included in the Manifest V3 background')
+if (typeof location === 'object' && location.protocol.includes('extension')) {
+    console.warn(
+        'This package is not expected to be imported in background script or the extension script. Please check your code.',
+    )
 }
-globalThis?.document?.addEventListener?.(CustomEventId, (e) => {
-    const r = decodeEvent((e as CustomEvent).detail)
-    if (r[1].length < 1) return
 
-    switch (r[0]) {
-        case 'resolvePromise':
-            return resolvePromise(...r[1])
-        case 'rejectPromise':
-            return rejectPromise(...r[1])
+export function setup() {
+    document.addEventListener(CustomEventId, (e) => {
+        const r = decodeEvent((e as CustomEvent).detail)
+        if (r[1].length < 1) return
 
-        case 'web3BridgeEmitEvent':
-            const [pathname, eventName, data] = r[1]
-            const provider = [
-                injectedCoin98EVMProvider,
-                injectedCoin98SolanaProvider,
-                injectedPhantomProvider,
-                injectedMetaMaskProvider,
-                injectedMathWalletProvider,
-                injectedWalletLinkProvider,
-                injectedOperaProvider,
-                injectedCloverProvider,
-            ].find((x) => x.pathname === pathname)
+        switch (r[0]) {
+            case 'resolvePromise':
+                return resolvePromise(...r[1])
+            case 'rejectPromise':
+                return rejectPromise(...r[1])
 
-            provider?.emit(eventName, data)
-            return
+            case 'web3BridgeEmitEvent':
+                const [pathname, eventName, data] = r[1]
+                const provider = [
+                    injectedCoin98EVMProvider,
+                    injectedCoin98SolanaProvider,
+                    injectedPhantomProvider,
+                    injectedMetaMaskProvider,
+                    injectedMathWalletProvider,
+                    injectedWalletLinkProvider,
+                    injectedOperaProvider,
+                    injectedCloverProvider,
+                ].find((x) => x.pathname === pathname)
 
-        case 'web3BridgeBindEvent':
-        case 'web3BridgeSendRequest':
-        case 'web3BridgeExecute':
-        case 'web3UntilBridgeOnline':
-        case 'web3BridgePrimitiveAccess':
-        case 'input':
-        case 'paste':
-        case 'pasteImage':
-        case 'instagramUpload':
-        case 'hookInputUploadOnce':
-            break
-        default:
-            const neverEvent: never = r[0]
-            console.log('[@masknet/injected-script]', neverEvent, 'not handled')
-    }
-})
+                provider?.emit(eventName, data)
+                return
+
+            case 'web3BridgeBindEvent':
+            case 'web3BridgeSendRequest':
+            case 'web3BridgeExecute':
+            case 'web3UntilBridgeOnline':
+            case 'web3BridgePrimitiveAccess':
+            case 'input':
+            case 'paste':
+            case 'pasteImage':
+            case 'instagramUpload':
+            case 'hookInputUploadOnce':
+                break
+            default:
+                const neverEvent: never = r[0]
+                console.log('[@masknet/injected-script]', neverEvent, 'not handled')
+        }
+    })
+}
