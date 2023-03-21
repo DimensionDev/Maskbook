@@ -240,7 +240,7 @@ export const searchSelfHandleSelector = () => {
         [
             '[data-testid="SideNav_AccountSwitcher_Button"] [tabindex="-1"] [dir="ltr"] span',
             '#layers [role="group"] [role="dialog"] [tabindex="-1"] [dir="ltr"] > span', // sidebar opened in mobile
-        ].join(),
+        ].join(','),
     )
 }
 
@@ -249,7 +249,7 @@ export const searchSelfNicknameSelector = () => {
         [
             '[data-testid="SideNav_AccountSwitcher_Button"] [dir="auto"] span span',
             '#layers [role="group"] [role="dialog"] [role="link"] span > span', // sidebar opened in mobile
-        ].join(),
+        ].join(','),
     )
 }
 

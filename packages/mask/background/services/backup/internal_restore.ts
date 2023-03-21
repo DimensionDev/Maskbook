@@ -203,7 +203,6 @@ async function restorePlugins(backup: NormalizedBackup.Data['plugins']) {
             continue
         }
         works.add(
-            // eslint-disable-next-line @typescript-eslint/no-loop-func
             (async () => {
                 const result = await onRestore(item)
                 if (result.err) {
