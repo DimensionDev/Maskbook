@@ -48,7 +48,7 @@ export class GasEditor {
                     toHex(this.EIP1559GasOptionConfig.maxPriorityFeePerGas) ||
                     toHex(config?.maxPriorityFeePerGas || '1'),
                 gasCurrency: this.EIP1559GasOptionConfig?.gasCurrency || fallback?.gasCurrency,
-                gas: toHex(this.EIP1559GasOptionConfig.gas || fallback?.gas || '0'),
+                gas: this.EIP1559GasOptionConfig.gas ? toHex(this.EIP1559GasOptionConfig.gas) : undefined,
             }
         }
 
