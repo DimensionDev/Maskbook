@@ -1,4 +1,4 @@
-import { useCallback, type FC, useState, useMemo } from 'react'
+import { type FC, useState, useMemo } from 'react'
 import {
     useNetworkContext,
     useNativeTokenAddress,
@@ -90,10 +90,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
     const rowSize = useRowSize()
-    const [currentModeRef, setCurrentModeRef] = useState<{
-        updateMode(mode: TokenListMode): void
-        getCurrentMode(): TokenListMode
-    }>()
+    const [mode, setMode] = useState(TokenListMode.List)
 
     const nativeTokenAddress = useNativeTokenAddress(currentPluginID)
 
@@ -105,14 +102,6 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
         chainId,
     })
 
-    const onRefChange = useCallback(
-        (node: { updateMode(mode: TokenListMode): void; getCurrentMode(): TokenListMode }) => {
-            if (!node) return
-            setCurrentModeRef(node)
-        },
-        [],
-    )
-
     const FixedSizeListProps = useMemo(
         () => ({ itemSize: rowSize + 22, height: isMdScreen ? 300 : 428, className: classes.wrapper }),
         [rowSize, isMdScreen],
@@ -122,13 +111,9 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
             titleBarIconStyle={isDashboard ? 'close' : 'back'}
             open={open}
             onClose={() => {
-                currentModeRef?.getCurrentMode() === TokenListMode.List
-                    ? onClose?.()
-                    : currentModeRef?.updateMode(TokenListMode.List)
+                mode === TokenListMode.List ? onClose?.() : setMode(TokenListMode.List)
             }}
-            title={
-                currentModeRef?.getCurrentMode() === TokenListMode.Manage ? t.manage_token_list() : t.select_token()
-            }>
+            title={title ? title : mode === TokenListMode.Manage ? t.manage_token_list() : t.select_token()}>
             <DialogContent classes={{ root: classes.content }}>
                 {loadingTokens || loadingAssets ? (
                     <Stack
@@ -144,7 +129,8 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
                     </Stack>
                 ) : (
                     <FungibleTokenList
-                        ref={onRefChange}
+                        mode={mode}
+                        setMode={setMode}
                         pluginID={currentPluginID}
                         fungibleTokens={fungibleTokens}
                         fungibleAssets={fungibleAssets}
