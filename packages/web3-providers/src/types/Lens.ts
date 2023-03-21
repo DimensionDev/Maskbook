@@ -111,5 +111,19 @@ export namespace LensBaseAPI {
 
     export interface Provider {
         getProfileByHandle: (handle: string) => Promise<Profile>
+        queryDefaultProfileByAddress: (address: string) => Promise<Profile | undefined>
+        queryProfilesByAddress: (address: string) => Promise<Profile[]>
+        queryFollowStatus: (address: string, profileId: string) => Promise<boolean | undefined>
+        queryChallenge: (address: string) => Promise<string>
+        authenticate: (address: string, signature: string) => Promise<Authenticate | undefined>
+        refresh: (refreshToken: string) => Promise<Authenticate | undefined>
+        createFollowTypedData: (
+            profileId: string,
+            options?: { token: string; followModule?: FollowModuleTypedData },
+        ) => Promise<CreateFollowTypedData | undefined>
+        createUnfollowTypedData: (
+            profileId: string,
+            options?: { token: string },
+        ) => Promise<CreateUnfollowTypedData | undefined>
     }
 }
