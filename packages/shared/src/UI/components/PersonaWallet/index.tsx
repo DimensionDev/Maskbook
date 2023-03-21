@@ -1,8 +1,7 @@
 import { Icons } from '@masknet/icons'
-import { PersonaInformation, formatPersonaFingerprint } from '@masknet/shared-base'
+import { type PersonaInformation, formatPersonaFingerprint, type Wallet } from '@masknet/shared-base'
 import { MaskColorVar, makeStyles } from '@masknet/theme'
 import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
-import type { Wallet } from '@masknet/web3-shared-base'
 import { Box, Stack, Typography, ListItem, List, Link } from '@mui/material'
 import { FormattedAddress } from '../../../index.js'
 

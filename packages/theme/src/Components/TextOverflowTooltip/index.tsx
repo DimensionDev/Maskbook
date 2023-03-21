@@ -1,5 +1,5 @@
-import { Tooltip as MuiTooltip, TooltipProps } from '@mui/material'
-import { cloneElement, FC, memo, ReactElement, useLayoutEffect, useRef, useState } from 'react'
+import { Tooltip as MuiTooltip, type TooltipProps } from '@mui/material'
+import { cloneElement, type FC, memo, type ReactElement, useLayoutEffect, useRef, useState } from 'react'
 import type { ShadowRootTooltip } from '../../entry.js'
 
 interface TextOverflowTooltipProps extends TooltipProps {

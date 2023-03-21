@@ -1,8 +1,7 @@
 import type RSS3 from 'rss3-next'
-import type { Pageable } from '@masknet/shared-base'
+import type { Pageable, MimeType } from '@masknet/shared-base'
 import type { HubOptions } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import type { MimeType } from '@masknet/shared-base'
 
 /**
  * Conform to the RFC3339 Datetime format.
