@@ -47,8 +47,8 @@ export interface FungibleTokenListProps<T extends NetworkPluginID> extends withC
     SearchTextFieldProps?: MaskTextFieldProps
     enableManage?: boolean
     fungibleTokens: Web3Helper.FungibleTokenScope[]
-    setMode(mode: TokenListMode): void
-    mode: TokenListMode
+    setMode?(mode: TokenListMode): void
+    mode?: TokenListMode
     fungibleAssets: Web3Helper.FungibleAssetScope[]
 }
 
@@ -95,7 +95,7 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
         fungibleTokens,
         fungibleAssets,
         setMode,
-        mode,
+        mode = TokenListMode.List,
     } = props
 
     const t = useSharedI18N()
@@ -354,7 +354,7 @@ export const FungibleTokenList = function <T extends NetworkPluginID>(props: Fun
             />
             {mode === TokenListMode.List && enableManage ? (
                 <Box className={classes.bar}>
-                    <ManageTokenListBar onClick={() => setMode(TokenListMode.Manage)} />
+                    <ManageTokenListBar onClick={() => setMode?.(TokenListMode.Manage)} />
                 </Box>
             ) : null}
         </Stack>
