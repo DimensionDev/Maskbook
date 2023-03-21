@@ -4,7 +4,7 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import isBefore from 'date-fns/isBefore'
 import add from 'date-fns/add'
 import { useAsyncFn } from 'react-use'
-import { context } from '../../context.js'
+import { context, lensTokenStorage as storage } from '../../context.js'
 
 export function useQueryAuthenticate(address: string) {
     const { chainId } = useChainContext()
@@ -13,27 +13,13 @@ export function useQueryAuthenticate(address: string) {
     return useAsyncFn(async () => {
         if (!address || !connection || chainId !== ChainId.Matic) return
 
-        const { storage } = context.createKVStorage('persistent', {}).createSubScope<{
-            accessToken?: {
-                token: string
-                expireDate: Date
-            }
-            refreshToken?: {
-                token: string
-                expireDate: Date
-            }
-        }>('LensToken', {})
-
-        await storage.accessToken?.initializedPromise
-        await storage.refreshToken?.initializedPromise
-
         if (storage.accessToken?.value?.token && isBefore(new Date(), storage.accessToken.value.expireDate)) {
             return storage.accessToken.value.token
         } else if (storage.refreshToken?.value?.token && isBefore(new Date(), storage.refreshToken.value.expireDate)) {
             const authenticate = await Lens.refresh(storage.refreshToken.value.token)
             if (!authenticate) return
             // Only reset accessToken
-            storage.accessToken?.setValue({
+            await storage.accessToken?.setValue({
                 token: authenticate.accessToken,
                 expireDate: add(new Date(), { minutes: 30 }),
             })
@@ -53,12 +39,12 @@ export function useQueryAuthenticate(address: string) {
          * refreshToken - This lasts 7 days to allow you to keep them logged in and generate a new accessToken when they come back without them having to sign a challenge again.
          */
 
-        storage.accessToken?.setValue({
+        await storage.accessToken?.setValue({
             token: authenticate.accessToken,
             expireDate: add(new Date(), { minutes: 30 }),
         })
 
-        storage.refreshToken?.setValue({
+        await storage.refreshToken?.setValue({
             token: authenticate.refreshToken,
             expireDate: add(new Date(), { days: 7 }),
         })
