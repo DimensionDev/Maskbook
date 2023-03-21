@@ -3,7 +3,7 @@ import { useAsync, useAsyncFn } from 'react-use'
 import type { AbiItem } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
 import { isLessThan, rightShift, ZERO, formatBalance, formatCurrency, isPositive } from '@masknet/web3-shared-base'
-import { LoadingBase, makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles, ActionButton } from '@masknet/theme'
 import {
     createContract,
     SchemaType,
@@ -27,7 +27,6 @@ import {
     TokenIcon,
     useOpenShareTxDialog,
     PluginWalletStatusBar,
-    ActionButtonPromise,
     ChainBoundary,
     WalletConnectedBoundary,
     EthereumERC20TokenApprovedBoundary,
@@ -206,7 +205,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         chain: chainResolver.chainName(chainId),
         account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
     })
-    const [, executor] = useAsyncFn(async () => {
+    const [{ loading: loadingExecution }, executor] = useAsyncFn(async () => {
         if (!web3) return
         const methodName = tab === TabType.Deposit ? 'deposit' : 'withdraw'
         const hash = await protocol[methodName](account, chainId, web3, tokenAmount)
@@ -243,20 +242,16 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                                 fullWidth: true,
                                 classes: { root: classes.button, disabled: classes.disabledButton },
                             }}>
-                            <ActionButtonPromise
+                            <ActionButton
                                 fullWidth
                                 color="primary"
-                                init={
-                                    validationMessage || t('plugin_savings_deposit') + ' ' + protocol.bareToken.symbol
-                                }
-                                waiting={t('plugin_savings_process_deposit')}
-                                failed={t('failed')}
-                                failedOnClick="use executor"
-                                complete={t('done')}
                                 disabled={validationMessage !== '' && !needsSwap}
-                                noUpdateEffect
-                                executor={executor}
-                            />
+                                onClick={executor}>
+                                {loadingExecution
+                                    ? t('plugin_savings_process_deposit')
+                                    : validationMessage ||
+                                      t('plugin_savings_deposit') + ' ' + protocol.bareToken.symbol}
+                            </ActionButton>
                         </ChainBoundary>
                     </EthereumERC20TokenApprovedBoundary>
                 ) : (
@@ -269,22 +264,17 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                             fullWidth: true,
                             classes: { root: classes.button, disabled: classes.disabledButton },
                         }}>
-                        <ActionButtonPromise
+                        <ActionButton
                             fullWidth
-                            init={
-                                needsSwap
-                                    ? 'Swap ' + protocol.bareToken.symbol
-                                    : validationMessage ||
-                                      t('plugin_savings_withdraw') + ' ' + protocol.stakeToken.symbol
-                            }
-                            waiting={t('plugin_savings_process_withdraw')}
-                            failed={t('failed')}
-                            failedOnClick="use executor"
-                            complete={t('done')}
-                            disabled={validationMessage !== ''}
-                            noUpdateEffect
-                            executor={executor}
-                        />
+                            color="primary"
+                            disabled={validationMessage !== '' && !needsSwap}
+                            onClick={executor}>
+                            {loadingExecution
+                                ? t('plugin_savings_process_withdraw')
+                                : needsSwap
+                                ? 'Swap ' + protocol.bareToken.symbol
+                                : validationMessage || t('plugin_savings_withdraw') + ' ' + protocol.stakeToken.symbol}
+                        </ActionButton>
                     </ChainBoundary>
                 )}
             </WalletConnectedBoundary>
