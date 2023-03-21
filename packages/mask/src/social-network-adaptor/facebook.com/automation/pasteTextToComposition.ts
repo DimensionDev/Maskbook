@@ -23,8 +23,9 @@ export async function pasteTextToCompositionFacebook(
 
     const activated = new LiveSelector().querySelectorAll<HTMLDivElement | HTMLTextAreaElement>(
         // cspell:disable-next-line
-        isMobileFacebook ? 'form textarea' : 'div[role=presentation] .notranslate[aria-describedby]',
+        isMobileFacebook ? 'form textarea' : 'div[role=presentation]  div[role=textbox]',
     )
+
     if (isMobileFacebook) activated.filter((x) => x.getClientRects().length > 0)
 
     // Select element with fb customize background image.
