@@ -12,6 +12,7 @@ import { PluginServices, Services } from '../../../../API.js'
 import { DashboardTrans, useDashboardI18N } from '../../../../locales/index.js'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import PasswordField from '../../../../components/PasswordField/index.js'
+import { LoadingButton } from '@mui/lab'
 
 export interface LogoutPersonaDialogProps {
     open: boolean
