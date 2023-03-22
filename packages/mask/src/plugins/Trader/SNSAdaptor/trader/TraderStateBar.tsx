@@ -203,7 +203,7 @@ export function TraderStateBar({
                             style: { borderRadius: 8 },
                             size: 'medium',
                         }}>
-                        <ChainBoundary expectedChainId={chainId} expectedPluginID={pluginID} switchChainWithoutPopup>
+                        <ChainBoundary expectedChainId={chainId} expectedPluginID={pluginID}>
                             <TokenSecurityBoundary
                                 tokenInfo={{
                                     name: tokenSecurityInfo?.token_name ?? '--',

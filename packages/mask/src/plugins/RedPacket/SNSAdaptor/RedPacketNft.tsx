@@ -433,7 +433,6 @@ function OperationFooter({ claimed, onShare, chainId, claim, isClaiming }: Opera
             {claimed ? null : (
                 <Box sx={{ flex: 1, padding: 1.5 }}>
                     <ChainBoundary
-                        switchChainWithoutPopup
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         ActionButtonPromiseProps={{ variant: 'roundedDark' }}
                         expectedChainId={chainId}>
