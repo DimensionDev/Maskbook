@@ -50,12 +50,14 @@ import type { ERC20Bytes32 } from '@masknet/web3-contracts/types/ERC20Bytes32.js
 import type { ERC165 } from '@masknet/web3-contracts/types/ERC165.js'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
 import type { ERC1155 } from '@masknet/web3-contracts/types/ERC1155.js'
+import type { CryptoPunks } from '@masknet/web3-contracts/types/CryptoPunks.js'
 import type { BalanceChecker } from '@masknet/web3-contracts/types/BalanceChecker.js'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import ERC165ABI from '@masknet/web3-contracts/abis/ERC165.json'
 import ERC20Bytes32ABI from '@masknet/web3-contracts/abis/ERC20Bytes32.json'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import ERC1155ABI from '@masknet/web3-contracts/abis/ERC1155.json'
+import CryptoPunksABI from '@masknet/web3-contracts/abis/CryptoPunks.json'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
 import type { Web3BaseAPI } from '../../../entry-types.js'
@@ -113,6 +115,9 @@ export class Web3API
 
     getERC165Contract(chainId: ChainId, address: string) {
         return this.getWeb3Contract<ERC165>(chainId, address, ERC165ABI as AbiItem[])
+    }
+    getCryptoPunksContract(chainId: ChainId, address: string) {
+        return this.getWeb3Contract<CryptoPunks>(chainId, address, CryptoPunksABI as AbiItem[])
     }
 
     async getFungibleTokensBalance(
@@ -288,9 +293,14 @@ export class Web3API
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) return ''
 
-        // ERC721
-        const contract = this.getERC721Contract(chainId, address)
-        return (await contract?.methods.ownerOf(tokenId).call()) ?? ''
+        try {
+            // ERC721
+            const contract = this.getERC721Contract(chainId, address)
+            return (await contract?.methods.ownerOf(tokenId).call()) ?? ''
+        } catch {
+            const cryptoPunksContract = this.getCryptoPunksContract(chainId, address)
+            return (await cryptoPunksContract?.methods.punkIndexToAddress(tokenId).call()) ?? ''
+        }
     }
     async getNonFungibleTokenOwnership(
         chainId: ChainId,
