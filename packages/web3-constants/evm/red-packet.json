@@ -22,8 +22,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V2": {
@@ -49,8 +47,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V3": {
@@ -76,8 +72,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V4": {
@@ -103,8 +97,6 @@
         "Aurora": "0x19f179D7e0D7d9F9d5386afFF64271D98A91615B",
         "Aurora_Testnet": "0xdB93cCd481012bB5D1E2c8d0aF7C5f2940c00fdC",
         "Conflux": "0x96c7d011cdfd467f551605f0f5fce279f86f4186",
-        "Harmony": "0xab7b1be4233a04e5c43a810e75657eced8e5463b",
-        "Harmony_Test": "0x96c7d011cdfd467f551605f0f5fce279f86f4186",
         "Astar": "0x2cF46Db820e279c5fBF778367D49d9C931D54524"
     },
     "HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT": {
@@ -130,8 +122,6 @@
         "Aurora": 57552338,
         "Aurora_Testnet": 77918765,
         "Conflux": 37670572,
-        "Harmony": 24134162,
-        "Harmony_Test": 22701101,
         "Astar": 910985
     }
 }

@@ -76,7 +76,6 @@ export const resolveNetworkOnRabby = createLookupTableResolver<NetworkType, stri
         [NetworkType.Avalanche]: 'avax',
         [NetworkType.Fantom]: 'ftm',
         [NetworkType.Aurora]: 'aurora',
-        [NetworkType.Harmony]: 'hmy',
         [NetworkType.Fuse]: '',
         [NetworkType.Metis]: '',
         [NetworkType.Boba]: '',

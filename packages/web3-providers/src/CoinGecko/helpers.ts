@@ -17,7 +17,6 @@ export const resolveCoinGeckoChainId = createLookupTableResolver<string, Web3Hel
         conflux: ChainId.Conflux,
         fantom: ChainId.Fantom,
         fuse: ChainId.Fuse,
-        'harmony-shard-0': ChainId.Harmony,
         moonbeam: ChainId.Moonbeam,
         'optimistic-ethereum': ChainId.Optimism,
         xdai: ChainId.xDai,

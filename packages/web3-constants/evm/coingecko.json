@@ -22,8 +22,6 @@
         "Aurora": "aurora",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "harmony-shard-0",
-        "Harmony_Test": "",
         "Astar": "astar"
     },
     "COIN_ID": {
@@ -49,8 +47,6 @@
         "Aurora": "ethereum",
         "Aurora_Testnet": "",
         "Conflux": "conflux-token",
-        "Harmony": "harmony",
-        "Harmony_Test": "",
         "Astar": "astar"
     }
 }
