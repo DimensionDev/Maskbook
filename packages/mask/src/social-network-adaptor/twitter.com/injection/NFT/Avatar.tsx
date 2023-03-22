@@ -7,11 +7,9 @@ import { NFTAvatarMiniClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvat
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 
 function getTwitterId(ele: HTMLElement) {
-    const twitterIdNode = (ele.firstChild?.nextSibling as HTMLElement).querySelector(
-        '[dir="ltr"] > span',
-    ) as HTMLSpanElement
-    if (!twitterIdNode) return
-    return twitterIdNode.innerText.trim().replace('@', '')
+    const attribute = ele.dataset.testid || ''
+    if (attribute.endsWith('unknown')) return ele.querySelector('a[href][role=link]')?.getAttribute('href')?.slice(1)
+    return attribute.split('-').pop()
 }
 
 function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
@@ -19,14 +17,12 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
         new MutationObserverWatcher(main()).useForeach((ele, _, meta) => {
             let remover = () => {}
             const remove = () => remover()
-
             const run = async () => {
                 const twitterId = getTwitterId(ele)
                 if (!twitterId) return
 
-                const info = getInjectNodeInfo(ele.firstChild as HTMLElement)
+                const info = getInjectNodeInfo(ele as HTMLElement)
                 if (!info) return
-
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: 'closed' } })
                 proxy.realCurrent = info.element.firstChild as HTMLElement
 
