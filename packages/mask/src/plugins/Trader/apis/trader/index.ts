@@ -52,13 +52,6 @@ export async function getEVMAvailableTraderProviders(networkType?: NetworkType) 
             return [TradeProvider.DODO, TradeProvider.WANNASWAP, TradeProvider.TRISOLARIS]
         case NetworkType.Astar:
             return [TradeProvider.ARTHSWAP, TradeProvider.VERSA, TradeProvider.ASTAREXCHANGE, TradeProvider.YUMISWAP]
-        case NetworkType.Harmony:
-            return [
-                TradeProvider.SUSHISWAP,
-                TradeProvider.VENOMSWAP,
-                TradeProvider.OPENSWAP,
-                TradeProvider.DEFIKINGDOMS,
-            ]
         case NetworkType.Boba:
         case NetworkType.Fuse:
         case NetworkType.Metis:

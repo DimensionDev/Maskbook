@@ -30,7 +30,6 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Optimism,
                     ChainId.Avalanche,
                     ChainId.Aurora,
-                    ChainId.Harmony,
                     ChainId.Conflux,
                     ChainId.Astar,
                 ],

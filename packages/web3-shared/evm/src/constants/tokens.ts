@@ -86,5 +86,4 @@ export const WNATIVE_ONLY: ERC20AgainstToken = {
     [ChainId.Optimism]: [WNATIVE[ChainId.Optimism]],
     [ChainId.Optimism_Goerli]: [WNATIVE[ChainId.Optimism_Goerli]],
     [ChainId.Astar]: [WNATIVE[ChainId.Astar]],
-    [ChainId.Harmony]: [WNATIVE[ChainId.Harmony]],
 }
