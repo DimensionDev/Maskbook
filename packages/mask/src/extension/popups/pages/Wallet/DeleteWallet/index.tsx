@@ -8,7 +8,7 @@ import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { FormattedAddress } from '@masknet/shared'
+import { ManageWallet } from '@masknet/shared'
 import { useWallet, useWallets, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
@@ -148,36 +148,7 @@ const DeleteWallet = memo(() => {
                     <Icons.Warning size={48} />
                     <Typography className={classes.title}>{t('delete_wallet')}</Typography>
                 </div>
-                <div className={classes.info}>
-                    <div className={classes.iconContainer}>
-                        <Icons.Wallet />
-                    </div>
-                    <div>
-                        <Typography className={classes.name}>{wallet?.name}</Typography>
-                        <Typography className={classes.address}>
-                            <FormattedAddress address={wallet?.address} size={10} formatter={formatEthereumAddress} />
-                        </Typography>
-                    </div>
-                </div>
-                {manageWallets.map((x, index) => {
-                    return (
-                        <div className={classes.info} key={index}>
-                            <div className={classes.iconContainer}>
-                                <Icons.SmartPay />
-                            </div>
-                            <div>
-                                <Typography className={classes.name}>{x?.name}</Typography>
-                                <Typography className={classes.address}>
-                                    <FormattedAddress
-                                        address={x?.address}
-                                        size={10}
-                                        formatter={formatEthereumAddress}
-                                    />
-                                </Typography>
-                            </div>
-                        </div>
-                    )
-                })}
+                <ManageWallet manageWallets={manageWallets} name={wallet?.name} address={wallet?.address} />
                 {manageWallets.length && wallet?.address ? (
                     <>
                         <Typography className={classes.tip}>

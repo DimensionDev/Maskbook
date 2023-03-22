@@ -54,9 +54,11 @@ const useWalletsStyles = makeStyles<{ length: number }>()((theme, props) => ({
 interface ManageWalletProps {
     manageWallets: Wallet[]
     persona?: PersonaInformation
+    name?: string
+    address?: string
 }
 
-export function ManageWallet({ manageWallets, persona }: ManageWalletProps) {
+export function ManageWallet({ manageWallets, persona, name, address }: ManageWalletProps) {
     const { classes } = useWalletsStyles({ length: manageWallets.length })
 
     return (
@@ -67,10 +69,10 @@ export function ManageWallet({ manageWallets, persona }: ManageWalletProps) {
                 </Box>
                 <Stack justifyContent="center">
                     <Typography variant="body1" className={classes.nickname}>
-                        {persona?.nickname}
+                        {persona?.nickname || name}
                     </Typography>
                     <Typography variant="caption" className={classes.finger}>
-                        {formatPersonaFingerprint(persona?.identifier.rawPublicKey ?? '')}
+                        {formatPersonaFingerprint(persona?.identifier.rawPublicKey || address || '')}
                     </Typography>
                 </Stack>
             </Box>
