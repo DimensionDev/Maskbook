@@ -71,31 +71,6 @@ const useStyles = makeStyles()({
         lineHeight: '20px',
         backgroundColor: '#FF5F5F',
     },
-    info: {
-        display: 'flex',
-        backgroundColor: '#F7F9FA',
-        borderRadius: 8,
-        padding: '8px 16px',
-        marginBottom: 12,
-    },
-    iconContainer: {
-        display: 'flex',
-        alignItems: 'center',
-        marginRight: 20,
-    },
-    name: {
-        display: 'flex',
-        alignItems: 'center',
-        color: '#1C68F3',
-        fontWeight: 500,
-    },
-    address: {
-        fontSize: 12,
-        color: '#1C68F3',
-        display: 'flex',
-        alignItems: 'center',
-        wordBreak: 'break-all',
-    },
 })
 
 const DeleteWallet = memo(() => {
