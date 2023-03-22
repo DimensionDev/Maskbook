@@ -475,6 +475,8 @@
     "plugin_savings_operation": "Operation",
     "plugin_savings_amount": "Amount",
     "plugin_savings_deposit": "Deposit",
+    "plugin_savings_swap_token": "Swap {{token}}",
+    "plugin_savings_withdraw_token": "Withdraw {{token}}",
     "plugin_savings_withdraw": "Withdraw",
     "plugin_savings_process_deposit": "Processing Deposit",
     "plugin_savings_process_withdraw": "Processing Withdrawal",

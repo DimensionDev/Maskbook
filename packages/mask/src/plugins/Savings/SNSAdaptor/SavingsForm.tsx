@@ -250,8 +250,9 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                     <ActionButtonPromise
                         init={
                             needsSwap
-                                ? 'Swap ' + protocol.bareToken.symbol
-                                : validationMessage || t('plugin_savings_withdraw') + ' ' + protocol.stakeToken.symbol
+                                ? t('plugin_savings_swap_token', { token: protocol.bareToken.symbol })
+                                : validationMessage ||
+                                  t('plugin_savings_withdraw_token', { token: protocol.stakeToken.symbol })
                         }
                         waiting={t('plugin_savings_process_withdraw')}
                         failed={t('failed')}
