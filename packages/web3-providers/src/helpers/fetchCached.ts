@@ -27,6 +27,9 @@ const RULES = {
     'https://chainbase-proxy.r2d2.to/v1/space-id': Duration.SHORT,
     // Mask Search List
     'https://dsearch.mask.r2d2.to': Duration.MEDIUM,
+    // Mask Token List
+    'https://tokens.r2d2.to': Duration.LONG,
+    'https://debank-proxy.r2d2.to/v1/user/all_token_list': Duration.LONG,
     // Smart Pay
     'https://9rh2q3tdqj.execute-api.ap-east-1.amazonaws.com': Duration.LONG,
     'https://uldpla73li.execute-api.ap-east-1.amazonaws.com': Duration.SHORT,

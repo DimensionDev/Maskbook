@@ -29,8 +29,6 @@
     "erc20_token_list_loading": "正在加载代币列表...",
     "erc20_search_token_loading": "正在加载代币...",
     "erc20_token_add_by_user": "由用户添加",
-    "erc20_search_not_token_found": "没有任何结果或合约地址不符合查询标准。",
-    "erc20_search_empty_result": "没有任何结果。",
     "erc20_search_wrong_address": "请输入有效的代币合约地址",
     "erc20_manage_token_list": "编辑代币列表",
     "address_viewer_binding_rules_title": "NFT 相册按如下规则展示 NFT：",
