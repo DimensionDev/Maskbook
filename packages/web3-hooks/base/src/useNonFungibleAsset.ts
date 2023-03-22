@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
@@ -17,7 +17,7 @@ export function useNonFungibleAsset<S extends 'all' | void = void, T extends Net
     })
 
     return useAsyncRetry<Web3Helper.NonFungibleAssetScope<S, T> | undefined>(async () => {
-        if (!hub || !address || !id) return
+        if (!hub || !address || (!id && pluginID !== NetworkPluginID.PLUGIN_SOLANA)) return
         return hub.getNonFungibleAsset?.(address ?? '', id ?? '', options)
     }, [address, id, hub, JSON.stringify(options)])
 }
