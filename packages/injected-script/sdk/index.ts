@@ -43,12 +43,12 @@ export function hookInputUploadOnce(
     sendEvent('hookInputUploadOnce', format, fileName, Array.from(image), triggerOnActiveElementNow)
 }
 
-if (typeof document !== 'object') {
-    // eslint-disable-next-line no-debugger
-    debugger
-    throw new Error('This script should not be included in the Manifest V3 background')
+if (typeof location === 'object' && location.protocol.includes('extension')) {
+    console.warn(
+        'This package is not expected to be imported in background script or the extension script. Please check your code.',
+    )
 }
-globalThis?.document?.addEventListener?.(CustomEventId, (e) => {
+globalThis.document?.addEventListener?.(CustomEventId, (e) => {
     const r = decodeEvent((e as CustomEvent).detail)
     if (r[1].length < 1) return
 

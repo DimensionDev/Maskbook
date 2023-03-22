@@ -3,6 +3,7 @@ import { sha3 } from 'web3-utils'
 
 function createCanvasFingerprint() {
     if (process.env.NODE_ENV === 'test') return ''
+    if (typeof document === 'undefined') return ''
 
     const canvas = document.createElement('canvas')
     const context = canvas.getContext('2d')

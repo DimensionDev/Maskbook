@@ -53,6 +53,10 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
                     ? `mask-${process.env.VERSION}-reproducible`
                     : `mask-${process.env.COMMIT_HASH}`
                 : undefined
+        if (typeof Sentry === 'undefined') {
+            console.warn('Sentry is not defined')
+            return
+        }
         Sentry.init({
             dsn: process.env.MASK_SENTRY_DSN,
             release,
