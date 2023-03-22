@@ -16,7 +16,11 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center'>()((t
         color: theme.palette.maskColor.third,
     },
     verbose: {},
-    image: {},
+    image: {
+        img: {
+            objectFit: 'cover',
+        },
+    },
     center: {},
     body: {
         display: 'flex',
@@ -30,6 +34,8 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center'>()((t
             display: 'block',
             [`.${refs.image}`]: {
                 width: 552,
+                height: 'auto',
+                aspectRatio: 'auto',
             },
             [`.${refs.info}`]: {
                 marginLeft: 0,
@@ -38,6 +44,7 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center'>()((t
         },
         [`.${refs.image}`]: {
             width: 64,
+            height: 64,
             aspectRatio: '1 / 1',
             borderRadius: 8,
             overflow: 'hidden',
@@ -257,7 +264,8 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
         return { summary: '', cardType: CardType.CollectibleIn }
     }, [feed, user])
 
-    const imageSize = verbose ? '100%' : 64
+    const imageWidth = verbose ? '100%' : 64
+    const imageHeight = verbose ? 'auto' : 64
     const attributes = metadata && 'attributes' in metadata ? metadata.attributes?.filter((x) => x.trait_type) : []
 
     return (
@@ -272,8 +280,8 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
                     <Image
                         classes={{ container: classes.image }}
                         src={metadata.image}
-                        height={imageSize}
-                        width={imageSize}
+                        width={imageWidth}
+                        height={imageHeight}
                     />
                     <div className={classes.info}>
                         {verbose ? null : <Typography className={classes.title}>{metadata.name}</Typography>}
@@ -284,10 +292,9 @@ export const CollectibleCard: FC<CollectibleCardProps> = ({ feed, ...rest }) => 
                     {verbose && attributes?.length ? (
                         <div className={classes.attributes}>
                             {attributes.map((attribute) => {
-                                const value =
-                                    typeof attribute.value === 'string'
-                                        ? attribute.value
-                                        : attribute.value.map((x) => x.uri).join('\n')
+                                const value = Array.isArray(attribute.value)
+                                    ? attribute.value.map((x) => x.uri).join('\n')
+                                    : attribute.value
 
                                 return (
                                     <div className={classes.attribute} key={attribute.trait_type}>

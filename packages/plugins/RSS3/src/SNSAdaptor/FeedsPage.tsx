@@ -23,6 +23,9 @@ const useStyles = makeStyles()((theme) => ({
         height: 300,
         flexDirection: 'column',
     },
+    loading: {
+        color: theme.palette.maskColor.main,
+    },
 }))
 
 export interface FeedPageProps {
@@ -85,7 +88,9 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
                 {feeds.map((feed, index) => (
                     <FeedCard key={index} className={classes.feedCard} feed={feed} />
                 ))}
-                <ElementAnchor callback={next}>{loading ? <LoadingBase /> : null}</ElementAnchor>
+                <ElementAnchor callback={next}>
+                    {loading ? <LoadingBase className={classes.loading} /> : null}
+                </ElementAnchor>
             </FeedDetailsProvider>
         </FeedOwnerContext.Provider>
     )

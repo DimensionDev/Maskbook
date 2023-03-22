@@ -106,7 +106,7 @@ export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
                 <Translate.note
                     values={{
                         user,
-                        platform: feed.platform!,
+                        platform: action.platform!,
                         context: 'comment',
                     }}
                     components={{
