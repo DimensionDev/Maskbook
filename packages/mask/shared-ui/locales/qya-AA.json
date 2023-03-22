@@ -475,6 +475,8 @@
     "plugin_savings_operation": "crwdns13260:0crwdne13260:0",
     "plugin_savings_amount": "crwdns13262:0crwdne13262:0",
     "plugin_savings_deposit": "crwdns13264:0crwdne13264:0",
+    "plugin_savings_swap_token": "crwdns19937:0{{token}}crwdne19937:0",
+    "plugin_savings_withdraw_token": "crwdns19939:0{{token}}crwdne19939:0",
     "plugin_savings_withdraw": "crwdns13266:0crwdne13266:0",
     "plugin_savings_process_deposit": "crwdns13268:0crwdne13268:0",
     "plugin_savings_process_withdraw": "crwdns13270:0crwdne13270:0",
