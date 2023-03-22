@@ -3,6 +3,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { VerifiedUser as VerifiedUserIcon } from '@mui/icons-material'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { isENSContractAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -75,7 +76,11 @@ export function FigureCard(props: FigureCardProps) {
                             root: classes.image,
                             fallbackImage: classes.fallbackImage,
                         }}
-                        url={asset.metadata?.imageURL}
+                        url={
+                            isENSContractAddress(asset.contract?.address || '')
+                                ? new URL('./ensCard.svg', import.meta.url).toString()
+                                : asset.metadata?.imageURL
+                        }
                         fallbackImage={NFTFallbackImage}
                     />
                 </div>
