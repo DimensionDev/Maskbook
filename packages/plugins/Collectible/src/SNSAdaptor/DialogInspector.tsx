@@ -43,8 +43,9 @@ export function DialogInspector(props: DialogInspectorProps) {
         if (!tokenAddress || !tokenId) return null
     }
 
+    // Solana NFT has no token id.
     if (pluginID === NetworkPluginID.PLUGIN_SOLANA) {
-        if (!tokenId) return null
+        if (!tokenAddress) return null
     }
 
     if (pluginID === NetworkPluginID.PLUGIN_FLOW) {
@@ -58,7 +59,7 @@ export function DialogInspector(props: DialogInspectorProps) {
                     parentPluginID,
                     pluginID,
                     chainId,
-                    tokenId: tokenId!,
+                    tokenId: tokenId ?? '0',
                     tokenAddress: tokenAddress!,
                     ownerAddress,
                     origin: originType,
