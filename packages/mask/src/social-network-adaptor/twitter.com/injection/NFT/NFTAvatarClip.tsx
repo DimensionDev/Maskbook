@@ -89,6 +89,7 @@ export function NFTAvatarClipInTwitter(props: NFTAvatarClipInTwitterProps) {
     }, [location.pathname])
 
     if (isZero(size) || !identity.identifier) return null
+    console.log(avatarType)
     return (
         <NFTAvatarClipOrSquareInTwitter
             screenName={identity.identifier.userId}
