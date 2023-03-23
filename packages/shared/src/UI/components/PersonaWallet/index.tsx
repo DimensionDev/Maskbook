@@ -4,6 +4,7 @@ import { MaskColorVar, makeStyles } from '@masknet/theme'
 import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { Box, Stack, Typography, ListItem, List, Link } from '@mui/material'
 import { FormattedAddress } from '../../../index.js'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 
 const useWalletsStyles = makeStyles<{ length: number }>()((theme, props) => ({
     persona: {
@@ -72,7 +73,11 @@ export function ManageWallet({ manageWallets, persona, name, address }: ManageWa
                         {persona?.nickname || name}
                     </Typography>
                     <Typography variant="caption" className={classes.finger}>
-                        {formatPersonaFingerprint(persona?.identifier.rawPublicKey || address || '')}
+                        {persona?.identifier.rawPublicKey ? (
+                            formatPersonaFingerprint(persona?.identifier.rawPublicKey || '')
+                        ) : (
+                            <FormattedAddress address={address} size={10} formatter={formatEthereumAddress} />
+                        )}
                     </Typography>
                 </Stack>
             </Box>
