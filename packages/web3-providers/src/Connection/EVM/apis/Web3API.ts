@@ -29,6 +29,7 @@ import {
     type TransactionSignature,
     ProviderURL,
     getAverageBlockDelay,
+    isCryptoPunksContractAddress,
 } from '@masknet/web3-shared-evm'
 import {
     type FungibleToken,
@@ -293,14 +294,15 @@ export class Web3API
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) return ''
 
-        try {
-            // ERC721
-            const contract = this.getERC721Contract(chainId, address)
-            return (await contract?.methods.ownerOf(tokenId).call()) ?? ''
-        } catch {
+        // CRYPTOPUNKS
+        if (isCryptoPunksContractAddress(address)) {
             const cryptoPunksContract = this.getCryptoPunksContract(chainId, address)
             return (await cryptoPunksContract?.methods.punkIndexToAddress(tokenId).call()) ?? ''
         }
+
+        // ERC721
+        const contract = this.getERC721Contract(chainId, address)
+        return (await contract?.methods.ownerOf(tokenId).call()) ?? ''
     }
     async getNonFungibleTokenOwnership(
         chainId: ChainId,
