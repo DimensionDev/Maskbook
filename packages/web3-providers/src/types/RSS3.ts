@@ -10,6 +10,10 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 type RFC3339Datetime = string
 /** URL */
 type URLString = string
+/**
+ * 2023-01-31 03:32:59 +0000 GMT
+ */
+type ISO8601Datetime = string
 
 export namespace RSS3BaseAPI {
     export interface GeneralAsset {
@@ -126,6 +130,15 @@ export namespace RSS3BaseAPI {
             name: string
             symbol: string
             chain_id: number
+        }
+    }
+
+    interface StakingMetadata {
+        token: TransactionMetadata
+        action: 'stake' | 'unstake' | 'claim'
+        period: {
+            start: ISO8601Datetime
+            end: ISO8601Datetime
         }
     }
 
@@ -278,12 +291,14 @@ export namespace RSS3BaseAPI {
             [Type.Burn]: TransactionMetadata
             [Type.Approval]: TokenApprovalMetadata
             [Type.Bridge]: BridgeMetadata
+            [Type.Staking]: StakingMetadata
         }
         [Tag.Exchange]: {
             [Type.Deposit]: TransactionMetadata
             [Type.Withdraw]: TransactionMetadata
             [Type.Swap]: SwapMetadata
             [Type.Liquidity]: LiquidityMetadata
+            [Type.Staking]: StakingMetadata
         }
         [Tag.Collectible]: {
             [Type.Approval]: CollectibleApprovalMetadata
@@ -411,6 +426,7 @@ export namespace RSS3BaseAPI {
         Vote = 'vote',
         Launch = 'launch',
         Donate = 'donate',
+        Staking = 'staking',
     }
 
     export enum AssetType {
@@ -511,6 +527,7 @@ export namespace RSS3BaseAPI {
     export type TokenBridgeFeed = Web3FeedGeneric<Tag.Transaction, Type.Bridge>
     export type TokenSwapFeed = Web3FeedGeneric<Tag.Exchange, Type.Swap>
     export type LiquidityFeed = Web3FeedGeneric<Tag.Exchange, Type.Liquidity>
+    export type StakingFeed = Web3FeedGeneric<Tag.Exchange, Type.Staking>
     export type CollectibleFeed = Web3FeedGeneric<
         Tag.Collectible,
         Type.Transfer | Type.Trade | Type.Mint | Type.Burn | Type.Poap

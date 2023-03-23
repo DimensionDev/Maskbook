@@ -15,6 +15,8 @@ import { isTokenBridgeFeed, TokenBridgeCard } from './TokenBridgeCard.js'
 import { isTokenOperationFeed, TokenOperationCard } from './TokenOperationCard.js'
 import { isTokenSwapFeed, TokenSwapCard } from './TokenSwapCard.js'
 import { isVoteFeed, VoteCard } from './VoteCard.js'
+import { UnknownCard } from './UnknownCard.js'
+import { StakingCard, isStakingFeed } from './StakingCard.js'
 
 export const FeedCard = memo(({ feed, ...rest }: FeedCardProps) => {
     if (isTokenOperationFeed(feed)) return <TokenOperationCard feed={feed} {...rest} />
@@ -22,6 +24,8 @@ export const FeedCard = memo(({ feed, ...rest }: FeedCardProps) => {
     if (isTokenSwapFeed(feed)) return <TokenSwapCard feed={feed} {...rest} />
 
     if (isLiquidityFeed(feed)) return <LiquidityCard feed={feed} {...rest} />
+
+    if (isStakingFeed(feed)) return <StakingCard feed={feed} {...rest} />
 
     if (isCollectibleFeed(feed)) return <CollectibleCard feed={feed} {...rest} />
 
@@ -46,6 +50,10 @@ export const FeedCard = memo(({ feed, ...rest }: FeedCardProps) => {
     if (isTokenBridgeFeed(feed)) return <TokenBridgeCard feed={feed} {...rest} />
 
     if (isProfileProxyFeed(feed)) return <ProfileProxyCard feed={feed} {...rest} />
+
+    if (process.env.NODE_ENV === 'development') {
+        return <UnknownCard feed={feed} {...rest} />
+    }
 
     return null
 })
