@@ -16,3 +16,8 @@ export const enum RoutePaths {
     Exit = '/exit',
     Terms = '/terms',
 }
+
+export const enum Provider {
+    IPFS = 'ipfs',
+    Arweave = 'arweave',
+}

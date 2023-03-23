@@ -29,8 +29,6 @@
     "erc20_token_list_loading": "Loading token lists...",
     "erc20_search_token_loading": "Loading token...",
     "erc20_token_add_by_user": "Added by user",
-    "erc20_search_not_token_found": "No results or contract address does not meet the query criteria.",
-    "erc20_search_empty_result": "No results",
     "erc20_search_wrong_address": "Enter valid token address",
     "erc20_manage_token_list": "Manage Token Lists",
     "address_viewer_binding_rules_title": "The NFT gallery will show NFTs as below rules:",
@@ -187,5 +185,6 @@
     "persona_boundary_verify_persona": "Verify your Twitter ID",
     "applications_create_persona_title": "Persona",
     "applications_create_persona_hint": "Please create a Persona and verify your account to use this function.",
-    "applications_create_persona_action": "Create persona"
+    "applications_create_persona_action": "Create persona",
+    "lens_follow": "Follow"
 }

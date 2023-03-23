@@ -43,6 +43,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         height: 282,
+        padding: theme.spacing(4),
     },
     loadingText: {
         marginTop: theme.spacing(1),

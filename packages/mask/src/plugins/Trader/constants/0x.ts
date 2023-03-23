@@ -14,7 +14,6 @@ export const ZRX_BASE_URL: Record<NetworkType, string> = {
     [NetworkType.Boba]: '',
     [NetworkType.Fuse]: '',
     [NetworkType.Metis]: '',
-    [NetworkType.Harmony]: '',
     [NetworkType.Conflux]: '',
     [NetworkType.Astar]: '',
     [NetworkType.Moonbeam]: '',

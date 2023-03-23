@@ -472,6 +472,8 @@ export namespace Plugin.SNSAdaptor {
         // }
         /** This UI will be rendered components on the tips realm */
         TipsRealm?: TipsRealm
+        /** This UI will be rendered components on the tips realm */
+        Lens?: LensWidget
         /** This UI will be rendered as plugin wrapper page */
         wrapperProps?: PluginWrapperProps
         /**
@@ -739,6 +741,30 @@ export namespace Plugin.SNSAdaptor {
              * The injected Tips Content component
              */
             Content: InjectUI<TipsRealmOptions>
+        }
+    }
+
+    export enum LensSlot {
+        ProfileName = 'profile-name',
+        Post = 'post',
+        Sidebar = 'sidebar',
+    }
+
+    export interface LensOptions {
+        identity?: ProfileIdentifier
+        slot: LensSlot
+        accounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
+        /** To update enabled/disabled status */
+        onStatusUpdate?(disabled: boolean): void
+    }
+
+    export interface LensWidget {
+        ID: string
+        UI?: {
+            /**
+             * The injected Lens Content component
+             */
+            Content: InjectUI<LensOptions>
         }
     }
 

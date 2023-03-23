@@ -1,11 +1,17 @@
-import { useCallback, type FC, useState, useMemo } from 'react'
-import { useNetworkContext, useNativeTokenAddress } from '@masknet/web3-hooks-base'
+import { type FC, useState, useMemo } from 'react'
+import {
+    useNetworkContext,
+    useNativeTokenAddress,
+    useFungibleTokensFromTokenList,
+    useFungibleAssets,
+} from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite, isDashboardPage, type NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import { DialogContent, type Theme, useMediaQuery } from '@mui/material'
+
+import { DialogContent, type Theme, useMediaQuery, Stack, Typography } from '@mui/material'
 import { useBaseUIRuntime } from '../base/index.js'
 import { InjectedDialog } from '../components/index.js'
 import { useRowSize } from '../../hooks/useRowSize.js'
@@ -36,6 +42,10 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isDashboard }) => 
     wrapper: {
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(6),
+    },
+    prompt: {
+        marginTop: 13,
+        fontSize: 14,
     },
 }))
 
@@ -80,59 +90,66 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
     const rowSize = useRowSize()
-    const [currentModeRef, setCurrentModeRef] = useState<{
-        updateMode(mode: TokenListMode): void
-        getCurrentMode(): TokenListMode
-    }>()
+    const [mode, setMode] = useState(TokenListMode.List)
 
     const nativeTokenAddress = useNativeTokenAddress(currentPluginID)
 
-    const onRefChange = useCallback(
-        (node: { updateMode(mode: TokenListMode): void; getCurrentMode(): TokenListMode }) => {
-            if (!node) return
-            setCurrentModeRef(node)
-        },
-        [],
-    )
+    const { value: fungibleTokens = EMPTY_LIST, loading: loadingTokens } = useFungibleTokensFromTokenList(pluginID, {
+        chainId,
+    })
+
+    const { value: fungibleAssets = EMPTY_LIST, loading: loadingAssets } = useFungibleAssets(pluginID, undefined, {
+        chainId,
+    })
 
     const FixedSizeListProps = useMemo(
         () => ({ itemSize: rowSize + 22, height: isMdScreen ? 300 : 428, className: classes.wrapper }),
         [rowSize, isMdScreen],
     )
-
     return (
         <InjectedDialog
             titleBarIconStyle={isDashboard ? 'close' : 'back'}
             open={open}
             onClose={() => {
-                currentModeRef?.getCurrentMode() === TokenListMode.List
-                    ? onClose?.()
-                    : currentModeRef?.updateMode(TokenListMode.List)
+                mode === TokenListMode.List ? onClose?.() : setMode(TokenListMode.List)
             }}
-            title={
-                currentModeRef?.getCurrentMode() === TokenListMode.List
-                    ? title ?? t.select_token()
-                    : t.manage_token_list()
-            }>
+            title={title ? title : mode === TokenListMode.Manage ? t.manage_token_list() : t.select_token()}>
             <DialogContent classes={{ root: classes.content }}>
-                <FungibleTokenList
-                    ref={onRefChange}
-                    pluginID={currentPluginID}
-                    chainId={chainId}
-                    tokens={tokens ?? []}
-                    whitelist={whitelist}
-                    enableManage={enableManage}
-                    blacklist={
-                        disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
-                    }
-                    disableSearch={disableSearchBar}
-                    selectedTokens={selectedTokens}
-                    onSelect={onSubmit}
-                    FixedSizeListProps={FixedSizeListProps}
-                    SearchTextFieldProps={{
-                        InputProps: { classes: { root: classes.search } },
-                    }}
-                />
+                {loadingTokens || loadingAssets ? (
+                    <Stack
+                        height={500}
+                        width={'100%'}
+                        justifyContent="center"
+                        alignContent="center"
+                        alignItems="center"
+                        marginTop="18px"
+                        marginBottom="48px">
+                        <LoadingBase size={33} />
+                        <Typography className={classes.prompt}>{t.loading()}</Typography>
+                    </Stack>
+                ) : (
+                    <FungibleTokenList
+                        mode={mode}
+                        setMode={setMode}
+                        pluginID={currentPluginID}
+                        fungibleTokens={fungibleTokens}
+                        fungibleAssets={fungibleAssets}
+                        chainId={chainId}
+                        tokens={tokens ?? []}
+                        whitelist={whitelist}
+                        enableManage={enableManage}
+                        blacklist={
+                            disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
+                        }
+                        disableSearch={disableSearchBar}
+                        selectedTokens={selectedTokens}
+                        onSelect={onSubmit}
+                        FixedSizeListProps={FixedSizeListProps}
+                        SearchTextFieldProps={{
+                            InputProps: { classes: { root: classes.search } },
+                        }}
+                    />
+                )}
             </DialogContent>
         </InjectedDialog>
     )

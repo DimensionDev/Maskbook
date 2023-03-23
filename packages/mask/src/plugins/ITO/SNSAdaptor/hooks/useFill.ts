@@ -53,9 +53,9 @@ type paramsObjType = {
 
 export function useFillCallback(poolSettings?: PoolSettings) {
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
-    const { contract: ITO_Contract } = useITO_Contract(chainId)
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: poolSettings?.token?.chainId })
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: poolSettings?.token?.chainId })
+    const { contract: ITO_Contract } = useITO_Contract(poolSettings?.token?.chainId)
     const paramResult = useFillParams(poolSettings)
 
     const [state, fillCallback] = useAsyncFn(async () => {
@@ -67,7 +67,9 @@ export function useFillCallback(poolSettings?: PoolSettings) {
 
         const { params, paramsObj } = paramResult
 
-        if (!checkParams(paramsObj)) return
+        if (!checkParams(paramsObj) || !poolSettings.token?.chainId) return
+
+        if (poolSettings.token?.chainId !== chainId) await connection?.switchChain?.(poolSettings.token?.chainId)
 
         // error: unable to sign password
         let signedPassword = ''

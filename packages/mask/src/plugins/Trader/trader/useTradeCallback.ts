@@ -105,10 +105,6 @@ export function useTradeCallback(
             return uniswapV2Like
         case TradeProvider.TRISOLARIS:
             return uniswapV2Like
-        case TradeProvider.VENOMSWAP:
-            return uniswapV2Like
-        case TradeProvider.OPENSWAP:
-            return uniswapV2Like
         case TradeProvider.MDEX:
             return uniswapV2Like
         case TradeProvider.ARTHSWAP:
@@ -118,8 +114,6 @@ export function useTradeCallback(
         case TradeProvider.ASTAREXCHANGE:
             return uniswapV2Like
         case TradeProvider.YUMISWAP:
-            return uniswapV2Like
-        case TradeProvider.DEFIKINGDOMS:
             return uniswapV2Like
         case TradeProvider.ZRX:
             return zrx

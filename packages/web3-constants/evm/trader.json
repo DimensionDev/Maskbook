@@ -22,8 +22,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "UNISWAP_V2_FACTORY_ADDRESS": {
@@ -49,8 +47,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "UNISWAP_V2_THEGRAPH": {
@@ -76,8 +72,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "UNISWAP_V2_INIT_CODE_HASH": {
@@ -103,8 +97,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "UNISWAP_SWAP_ROUTER_ADDRESS": {
@@ -130,8 +122,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "UNISWAP_V3_FACTORY_ADDRESS": {
@@ -157,8 +147,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "UNISWAP_V3_QUOTER_ADDRESS": {
@@ -184,8 +172,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "UNISWAP_V3_THEGRAPH": {
@@ -211,8 +197,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "UNISWAP_V3_INIT_CODE_HASH": {
@@ -238,8 +222,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "SUSHISWAP_ROUTER_ADDRESS": {
@@ -265,8 +247,6 @@
         "Aurora": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
-        "Harmony_Test": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
         "Astar": ""
     },
     "SUSHISWAP_FACTORY_ADDRESS": {
@@ -292,8 +272,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
-        "Harmony_Test": "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
         "Astar": ""
     },
     "SUSHISWAP_THEGRAPH": {
@@ -319,8 +297,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "SUSHISWAP_INIT_CODE_HASH": {
@@ -346,8 +322,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303",
-        "Harmony_Test": "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303",
         "Astar": ""
     },
     "QUICKSWAP_ROUTER_ADDRESS": {
@@ -373,8 +347,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "QUICKSWAP_FACTORY_ADDRESS": {
@@ -400,8 +372,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "QUICKSWAP_THEGRAPH": {
@@ -427,8 +397,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "QUICKSWAP_INIT_CODE_HASH": {
@@ -454,8 +422,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "PANCAKESWAP_ROUTER_ADDRESS": {
@@ -481,8 +447,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "PANCAKESWAP_FACTORY_ADDRESS": {
@@ -508,8 +472,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "PANCAKESWAP_THEGRAPH": {
@@ -535,8 +497,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "PANCAKESWAP_INIT_CODE_HASH": {
@@ -562,8 +522,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "BALANCER_ETH_ADDRESS": {
@@ -589,8 +547,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "BALANCER_EXCHANGE_PROXY_ADDRESS": {
@@ -616,8 +572,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "BALANCER_POOLS_URL": {
@@ -643,8 +597,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "DODO_ETH_ADDRESS": {
@@ -670,8 +622,6 @@
         "Aurora": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "DODO_EXCHANGE_PROXY_ADDRESS": {
@@ -697,8 +647,6 @@
         "Aurora": "0x335aC99bb3E51BDbF22025f092Ebc1Cf2c5cC619",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "BANCOR_ETH_ADDRESS": {
@@ -724,8 +672,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "ZERO_X_ETH_ADDRESS": {
@@ -751,8 +697,6 @@
         "Aurora": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
         "Aurora_Testnet": "",
         "Conflux": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-        "Harmony": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-        "Harmony_Test": "",
         "Astar": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
     },
     "BANCOR_EXCHANGE_PROXY_ADDRESS": {
@@ -778,8 +722,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "TRADERJOE_ROUTER_ADDRESS": {
@@ -805,8 +747,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "TRADERJOE_FACTORY_ADDRESS": {
@@ -832,8 +772,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "TRADERJOE_THEGRAPH": {
@@ -859,8 +797,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "TRADERJOE_INIT_CODE_HASH": {
@@ -886,8 +822,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "OPENOCEAN_ETH_ADDRESS": {
@@ -913,8 +847,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "OPENOCEAN_EXCHANGE_PROXY_ADDRESS": {
@@ -940,8 +872,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "PANGOLIN_ROUTER_ADDRESS": {
@@ -967,8 +897,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "PANGOLIN_FACTORY_ADDRESS": {
@@ -994,8 +922,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "PANGOLIN_THEGRAPH": {
@@ -1021,8 +947,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "PANGOLIN_INIT_CODE_HASH": {
@@ -1048,8 +972,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "WANNASWAP_ROUTER_V2_ADDRESS": {
@@ -1075,8 +997,6 @@
         "Aurora": "0xa3a1eF5Ae6561572023363862e238aFA84C72ef5",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "WANNASWAP_ROUTER_ADDRESS": {
@@ -1102,8 +1022,6 @@
         "Aurora": "0x8f1E0Cf0f9f269Bc977C38635E560aa5b0E63323",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "WANNASWAP_FACTORY_ADDRESS": {
@@ -1129,8 +1047,6 @@
         "Aurora": "0x7928D4FeA7b2c90C732c10aFF59cf403f0C38246",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "WANNASWAP_THEGRAPH": {
@@ -1156,8 +1072,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "WANNASWAP_INIT_CODE_HASH": {
@@ -1183,8 +1097,6 @@
         "Aurora": "0xa06b8b0642cf6a9298322d0c8ac3c68c291ca24dc66245cf23aa2abc33b57e21",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "TRISOLARIS_ROUTER_ADDRESS": {
@@ -1210,8 +1122,6 @@
         "Aurora": "0x2CB45Edb4517d5947aFdE3BEAbF95A582506858B",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "TRISOLARIS_FACTORY_ADDRESS": {
@@ -1237,8 +1147,6 @@
         "Aurora": "0xc66F594268041dB60507F00703b152492fb176E7",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "TRISOLARIS_THEGRAPH": {
@@ -1264,8 +1172,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "TRISOLARIS_INIT_CODE_HASH": {
@@ -1291,8 +1197,6 @@
         "Aurora": "0x754e1d90e536e4c1df81b7f030f47b4ca80c87120e145c294f098c83a6cb5ace",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "MDEX_ROUTER_ADDRESS": {
@@ -1318,8 +1222,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "MDEX_FACTORY_ADDRESS": {
@@ -1345,8 +1247,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "MDEX_THEGRAPH": {
@@ -1372,8 +1272,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "MDEX_INIT_CODE_HASH": {
@@ -1399,8 +1297,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "JUGGLERRED_INIT_CODE_HASH": {
@@ -1426,8 +1322,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "JUGGLERRED_ROUTER_ADDRESS": {
@@ -1453,8 +1347,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "JUGGLERRED_FACTORY_ADDRESS": {
@@ -1480,8 +1372,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "JUGGLERRED_THEGRAPH": {
@@ -1507,8 +1397,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "VENOMSWAP_ROUTER_ADDRESS": {
@@ -1534,8 +1422,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "0xf012702a5f0e54015362cbca26a26fc90aa832a3",
-        "Harmony_Test": "0x8e9A3cE409B13ef459fE4448aE97a79d6Ecd8b4b",
         "Astar": ""
     },
     "VENOMSWAP_FACTORY_ADDRESS": {
@@ -1561,8 +1447,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "0x7D02c116b98d0965ba7B642ace0183ad8b8D2196",
-        "Harmony_Test": "0x066bafafC84607a956967F6f050bD14A8347952F",
         "Astar": ""
     },
     "VENOMSWAP_THEGRAPH": {
@@ -1588,8 +1472,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "VENOMSWAP_INIT_CODE_HASH": {
@@ -1615,8 +1497,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "0x162f79e638367cd45a118c778971dfd8d96c625d2798d3b71994b035cfe9b6dc",
-        "Harmony_Test": "0x162f79e638367cd45a118c778971dfd8d96c625d2798d3b71994b035cfe9b6dc",
         "Astar": ""
     },
     "OPENSWAP_ROUTER_ADDRESS": {
@@ -1642,8 +1522,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "0x2F99992024DCC51324BA4956bB1c510F36FA54F5",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "OPENSWAP_FACTORY_ADDRESS": {
@@ -1669,8 +1547,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "0x5d2F9817303b940C9bB4F47C8C566c5C034d9848",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "OPENSWAP_THEGRAPH": {
@@ -1696,8 +1572,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "OPENSWAP_INIT_CODE_HASH": {
@@ -1723,8 +1597,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "0x613b6eaa34b43dcb7eb8881dd4b5af85805be104d5f2f385304ffa8bda5e219c",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "DEFIKINGDOMS_ROUTER_ADDRESS": {
@@ -1750,8 +1622,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "0x24ad62502d1C652Cc7684081169D04896aC20f30",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "DEFIKINGDOMS_FACTORY_ADDRESS": {
@@ -1777,8 +1647,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "0x9014B937069918bd319f80e8B3BB4A2cf6FAA5F7",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "DEFIKINGDOMS_THEGRAPH": {
@@ -1804,8 +1672,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "DEFIKINGDOMS_INIT_CODE_HASH": {
@@ -1831,8 +1697,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "0xf1c21a825f13eff153022ddea53156462dd79972b6f88adf06f79ca8b042c3c1",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "ARTHSWAP_ROUTER_ADDRESS": {
@@ -1858,8 +1722,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": "0xE915D2393a08a00c5A463053edD31bAe2199b9e7"
     },
     "ARTHSWAP_FACTORY_ADDRESS": {
@@ -1885,8 +1747,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": "0xA9473608514457b4bF083f9045fA63ae5810A03E"
     },
     "ARTHSWAP_THEGRAPH": {
@@ -1912,8 +1772,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "ARTHSWAP_INIT_CODE_HASH": {
@@ -1939,8 +1797,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": "0x613b36de6401276e4d938ad0db4063490e66bb3ab2e4aec17cab78a15ea7a0b6"
     },
     "VERSA_ROUTER_ADDRESS": {
@@ -1966,8 +1822,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": "0xDAC282cA5534DC5936165197263E5f08b2C4577c"
     },
     "VERSA_FACTORY_ADDRESS": {
@@ -1993,8 +1847,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": "0x4346A7C8C39Bf91b8a80933c2fdb10d815c401dB"
     },
     "VERSA_THEGRAPH": {
@@ -2020,8 +1872,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "VERSA_INIT_CODE_HASH": {
@@ -2047,8 +1897,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": "0xd85454abf78812c626635684bd82ec9bbcf160e8f7b0cfb33b5fd6f4db851b88"
     },
     "ASTAREXCHANGE_ROUTER_ADDRESS": {
@@ -2074,8 +1922,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": "0xD38F0bC4a0728d2a1fCAaFa364F7c8422Ba1CD14"
     },
     "ASTAREXCHANGE_FACTORY_ADDRESS": {
@@ -2101,8 +1947,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": "0x95f506E72777efCB3C54878bB4160b00Cd11cd84"
     },
     "ASTAREXCHANGE_THEGRAPH": {
@@ -2128,8 +1972,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "ASTAREXCHANGE_INIT_CODE_HASH": {
@@ -2155,8 +1997,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": "0xc2cba59c13ce63f268e47d20538deaff688bc65268a5214b851a42ba61d73118"
     },
     "YUMISWAP_ROUTER_ADDRESS": {
@@ -2182,8 +2022,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": "0xa4183Dca1d46580970d19CB25f4735065018e4E9"
     },
     "YUMISWAP_FACTORY_ADDRESS": {
@@ -2209,8 +2047,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": "0xD3CFB8A232Ad5D0A7ABc817ae3BD1F3E7AE4b5E0"
     },
     "YUMISWAP_THEGRAPH": {
@@ -2236,8 +2072,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "YUMISWAP_INIT_CODE_HASH": {
@@ -2263,8 +2097,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": "0xa40fa53e635b27774c3263c392063fc460318850b3a47e9d53f199b16e18bb23"
     }
 }

@@ -46,6 +46,7 @@ import { injectAvatar } from './injection/Avatar/index.js'
 import { injectPluginSettingsDialogAtTwitter } from './injection/PluginSettingsDialog.js'
 import { injectNFTSquareAvatarInTwitter } from './injection/NFT/NFTAvatarSquare.js'
 import { injectNFTCircleAvatarInTwitter } from './injection/NFT/NFTAvatarCircleInTwitter.js'
+import { injectLens } from './injection/Lens/index.js'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -208,6 +209,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         openNFTAvatarSettingDialog,
         avatar: injectAvatar,
         tips: injectTips,
+        lens: injectLens,
         profileCard: injectProfileCardHolder,
         PluginSettingsDialog: injectPluginSettingsDialogAtTwitter,
     },

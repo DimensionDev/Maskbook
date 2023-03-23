@@ -137,6 +137,7 @@ export namespace SocialNetworkUI {
             avatarCircleNFT?(signal: AbortSignal): void
             avatar?(signal: AbortSignal): void
             tips?(signal: AbortSignal): void
+            lens?(signal: AbortSignal): void
             profileCard?(signal: AbortSignal): void
         }
         export interface NewPostComposition {

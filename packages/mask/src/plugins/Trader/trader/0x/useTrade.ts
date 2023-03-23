@@ -28,7 +28,6 @@ export function getNativeTokenLabel(networkType: NetworkType) {
         case NetworkType.Metis:
         case NetworkType.Avalanche:
         case NetworkType.Optimism:
-        case NetworkType.Harmony:
         case NetworkType.Conflux:
         case NetworkType.Astar:
         case NetworkType.Moonbeam:

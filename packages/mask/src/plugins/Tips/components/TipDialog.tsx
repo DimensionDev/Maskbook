@@ -30,6 +30,7 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         display: 'flex',
         flexDirection: 'column',
+        flexShrink: 0,
         flexBasis: '100%',
         '&::-webkit-scrollbar': {
             display: 'none',

@@ -7,7 +7,6 @@ import { isGreaterThan, isZero, type FungibleToken, leftShift } from '@masknet/w
 import {
     TokenIcon,
     PluginWalletStatusBar,
-    ChainBoundary,
     WalletConnectedBoundary,
     DateTimePanel,
     EthereumERC20TokenApprovedBoundary,
@@ -471,19 +470,14 @@ export function CreateForm(props: CreateFormProps) {
                         amount={inputTokenAmount}
                         spender={ITO2_CONTRACT_ADDRESS}
                         token={tokenAndAmount?.token?.schema === SchemaType.ERC20 ? tokenAndAmount.token : undefined}>
-                        <ChainBoundary
-                            expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                            expectedChainId={chainId}
-                            switchChainWithoutPopup>
-                            <ActionButton
-                                fullWidth
-                                variant="contained"
-                                size="medium"
-                                disabled={!!validationMessage}
-                                onClick={onNext}>
-                                {validationMessage || t('plugin_ito_next')}
-                            </ActionButton>
-                        </ChainBoundary>
+                        <ActionButton
+                            fullWidth
+                            variant="contained"
+                            size="medium"
+                            disabled={!!validationMessage}
+                            onClick={onNext}>
+                            {validationMessage || t('plugin_ito_next')}
+                        </ActionButton>
                     </EthereumERC20TokenApprovedBoundary>
                 </WalletConnectedBoundary>
             </PluginWalletStatusBar>

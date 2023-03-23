@@ -22,8 +22,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "LIDO_REFERRAL_ADDRESS": {
@@ -49,8 +47,6 @@
         "Aurora": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "Aurora_Testnet": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     }
 }

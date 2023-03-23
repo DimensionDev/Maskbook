@@ -100,7 +100,7 @@ export const TokenTransactionConfirmModal: FC<TokenTransactionConfirmModalProps>
     const { classes } = useStyles()
     const t = useSharedI18N()
     confirmText = confirmText || 'Confirm'
-    const isTokenTip = tokenType === TokenType.Fungible
+    const isToken = tokenType === TokenType.Fungible
     const { value: nonFungibleToken } = useNonFungibleAsset(
         undefined,
         nonFungibleTokenAddress,
@@ -121,7 +121,7 @@ export const TokenTransactionConfirmModal: FC<TokenTransactionConfirmModalProps>
             onClose={onClose}
             {...rest}>
             <DialogContent className={classes.content}>
-                {isTokenTip ? (
+                {isToken ? (
                     <Box>
                         <TokenIcon
                             className={classes.tokenIcon}

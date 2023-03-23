@@ -56,7 +56,7 @@ export namespace RSS3BaseAPI {
         standard?: string
     }
     export interface Attribute {
-        value: string | Array<{ type: MimeType; uri: string }>
+        value: string | number | Array<{ type: MimeType; uri: string }>
         trait_type: string
     }
     // TODO remove
@@ -189,13 +189,11 @@ export namespace RSS3BaseAPI {
         author: string[]
         created_at?: string
         target_url?: string
-        media: [
-            {
-                /** URL */
-                address: string
-                mime_type: 'image/png' | string
-            },
-        ]
+        media: Array<{
+            /** URL */
+            address: string
+            mime_type: 'image/png' | string
+        }>
         type_on_platform: Type[]
     }
     interface CommentMetadata extends PostMetadata {

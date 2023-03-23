@@ -103,6 +103,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.userAvatar?.(signal)
     ui.injection.profileAvatar?.(signal)
     ui.injection.tips?.(signal)
+    ui.injection.lens?.(signal)
 
     ui.injection.enhancedProfileNFTAvatar?.(signal)
     ui.injection.openNFTAvatar?.(signal)

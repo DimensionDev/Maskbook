@@ -22,8 +22,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "EP_CONTRACT_ADDRESS": {
@@ -49,8 +47,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "CREATE2_FACTORY_CONTRACT_ADDRESS": {
@@ -76,8 +72,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "PAYMASTER_NATIVE_CONTRACT_ADDRESS": {
@@ -103,8 +97,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "PAYMASTER_MASK_CONTRACT_ADDRESS": {
@@ -130,8 +122,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "PAYMASTER_MINIMAL_STAKE_AMOUNT": {
@@ -157,8 +147,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "PAYMASTER_UNSTAKE_DELAY": {
@@ -184,8 +172,6 @@
         "Aurora": 0,
         "Aurora_Testnet": 0,
         "Conflux": 0,
-        "Harmony": 0,
-        "Harmony_Test": 0,
         "Astar": 0
     },
     "PAYMENT_TOKEN_ADDRESS": {
@@ -211,8 +197,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     }
 }

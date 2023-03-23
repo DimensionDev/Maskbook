@@ -2,7 +2,13 @@ import { EthereumAddress } from 'wallet.ts'
 import { getEnumAsArray } from '@masknet/kit'
 import { isPopupPage } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { getENSConstants, getRedPacketConstants, getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
+import {
+    getCryptoPunksConstants,
+    getENSConstants,
+    getRedPacketConstants,
+    getTokenConstant,
+    ZERO_ADDRESS,
+} from '../constants/index.js'
 import { ChainId, NetworkType, ProviderType } from '../types/index.js'
 
 export function isEmptyHex(hex?: string): hex is undefined {
@@ -89,4 +95,9 @@ export function getMaskTokenAddress(chainId = ChainId.Mainnet) {
 export function isENSContractAddress(contract_address: string) {
     const { ENS_CONTRACT_ADDRESS } = getENSConstants()
     return isSameAddress(contract_address, ENS_CONTRACT_ADDRESS)
+}
+
+export function isCryptoPunksContractAddress(contract_address: string) {
+    const { CRYPTOPUNKS_CONTRACT_ADDRESS } = getCryptoPunksConstants()
+    return isSameAddress(contract_address, CRYPTOPUNKS_CONTRACT_ADDRESS)
 }

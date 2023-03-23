@@ -14,6 +14,7 @@ import { Label } from './common.js'
 const useStyles = makeStyles<void, 'body'>()((theme, _, refs) => ({
     summary: {
         color: theme.palette.maskColor.third,
+        fontSize: 14,
         display: 'flex',
         alignItems: 'center',
     },
@@ -39,6 +40,7 @@ const useStyles = makeStyles<void, 'body'>()((theme, _, refs) => ({
     name: {
         color: theme.palette.maskColor.main,
         fontWeight: 700,
+        fontSize: 14,
         marginLeft: theme.spacing(1),
     },
     image: {
@@ -108,9 +110,9 @@ export const ProfileLinkCard: FC<ProfileLinkCardProps> = ({ feed, className, ...
                         context: feed.type,
                     }}
                     components={{
-                        user: <Label title={user} />,
-                        other: <Label title={other} />,
-                        platform: <Label />,
+                        user: <Label title={user} fontSize={14} />,
+                        other: <Label title={other} fontSize={14} />,
+                        platform: <Label fontSize={14} />,
                     }}
                 />
             </Typography>

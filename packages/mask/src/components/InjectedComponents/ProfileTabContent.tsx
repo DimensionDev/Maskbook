@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useUpdateEffect } from 'react-use'
+import { useAsync, useUpdateEffect } from 'react-use'
 import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import {
@@ -18,6 +18,7 @@ import {
     useCurrentPersonaConnectStatus,
     useSocialAccountsBySettings,
     TokenWithSocialGroupMenu,
+    SocialAccountList,
 } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform, PluginID } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskDarkTheme, MaskTabList, useTabs } from '@masknet/theme'
@@ -42,6 +43,7 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
 import Services from '../../extension/service.js'
 import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
+import { NextIDProof } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -293,6 +295,11 @@ function Content(props: ProfileTabContentProps) {
 
     const { value: identity } = useSocialIdentityByUserId(currentVisitingUserId)
 
+    const { value: nextIdBindings = EMPTY_LIST } = useAsync(async () => {
+        if (!selectedAddress) return EMPTY_LIST
+        return NextIDProof.queryProfilesByRelationService(selectedAddress)
+    }, [selectedAddress])
+
     if (hidden) return null
 
     const keyword = trendingResult?.address || trendingResult?.name
@@ -443,6 +450,7 @@ function Content(props: ProfileTabContentProps) {
                                     fromSocialCard
                                 />
                             </ThemeProvider>
+                            <SocialAccountList nextIdBindings={nextIdBindings} />
                         </div>
                         <div className={classes.settingItem}>
                             <Typography

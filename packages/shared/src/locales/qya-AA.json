@@ -29,8 +29,6 @@
     "erc20_token_list_loading": "crwdns10623:0crwdne10623:0",
     "erc20_search_token_loading": "crwdns10625:0crwdne10625:0",
     "erc20_token_add_by_user": "crwdns18558:0crwdne18558:0",
-    "erc20_search_not_token_found": "crwdns10627:0crwdne10627:0",
-    "erc20_search_empty_result": "crwdns18518:0crwdne18518:0",
     "erc20_search_wrong_address": "crwdns18520:0crwdne18520:0",
     "erc20_manage_token_list": "crwdns18522:0crwdne18522:0",
     "address_viewer_binding_rules_title": "crwdns10781:0crwdne10781:0",
@@ -187,5 +185,6 @@
     "persona_boundary_verify_persona": "crwdns19749:0crwdne19749:0",
     "applications_create_persona_title": "crwdns19751:0crwdne19751:0",
     "applications_create_persona_hint": "crwdns19753:0crwdne19753:0",
-    "applications_create_persona_action": "crwdns19755:0crwdne19755:0"
+    "applications_create_persona_action": "crwdns19755:0crwdne19755:0",
+    "lens_follow": "crwdns19945:0crwdne19945:0"
 }

@@ -62,8 +62,6 @@ compileConstants(join(__dirname, 'evm'), [
     'Aurora',
     'Aurora_Testnet',
     'Conflux',
-    'Harmony',
-    'Harmony_Test',
     'Astar',
 ])
 

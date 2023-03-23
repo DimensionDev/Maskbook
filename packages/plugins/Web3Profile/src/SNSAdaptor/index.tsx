@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Trans } from 'react-i18next'
-import type { Plugin } from '@masknet/plugin-infra'
-import { PluginID, CrossIsolationMessages } from '@masknet/shared-base'
+import { type Plugin } from '@masknet/plugin-infra'
+import { PluginID, CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
@@ -9,6 +9,10 @@ import { base } from '../base.js'
 import { setupContext, setupStorage } from './context.js'
 import { Web3ProfileDialog } from './components/Web3ProfileDialog.js'
 import { FollowLensDialog } from './components/FollowLensDialog.js'
+import { useAsync } from 'react-use'
+import { NextIDProof } from '@masknet/web3-providers'
+import { LensBadge } from './components/LensBadge.js'
+import { LensPopup } from './components/LensPopup.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -22,6 +26,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             <>
                 <Web3ProfileDialog />
                 <FollowLensDialog />
+                <LensPopup />
             </>
         )
     },
@@ -95,6 +100,26 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
         },
     ],
+    Lens: {
+        ID: `${base.ID}_lens`,
+        UI: {
+            Content({ identity, slot, onStatusUpdate }) {
+                const { value: accounts = EMPTY_LIST } = useAsync(async () => {
+                    if (!identity?.userId) return
+                    return NextIDProof.queryAllLens(identity?.userId)
+                }, [identity?.userId])
+
+                const hasLens = !accounts.length
+                useEffect(() => {
+                    onStatusUpdate?.(hasLens)
+                }, [onStatusUpdate, hasLens])
+
+                if (!accounts.length) return null
+
+                return <LensBadge slot={slot} accounts={accounts} />
+            },
+        },
+    },
 }
 
 export default sns

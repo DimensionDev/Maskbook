@@ -22,8 +22,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "UNISWAP_V2_HEALTH_URL": {
@@ -49,8 +47,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "ETHEREUM_BLOCKS_SUBGRAPH_URL": {
@@ -76,8 +72,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     }
 }

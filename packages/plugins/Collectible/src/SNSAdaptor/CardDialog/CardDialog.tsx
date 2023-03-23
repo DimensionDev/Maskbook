@@ -44,7 +44,7 @@ export function CardDialog(props: CardDialogProps) {
     }
 
     if (pluginID === NetworkPluginID.PLUGIN_SOLANA) {
-        if (!tokenId) return null
+        if (!tokenAddress) return null
     }
 
     return (

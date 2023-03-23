@@ -22,8 +22,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "BULK_CHECKOUT_ADDRESS": {
@@ -49,8 +47,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "GITCOIN_ETH_ADDRESS": {
@@ -76,8 +72,6 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Harmony": "",
-        "Harmony_Test": "",
         "Astar": ""
     },
     "TOKEN_LIST": {
@@ -133,8 +127,6 @@
         "Aurora": [],
         "Aurora_Testnet": [],
         "Conflux": [],
-        "Harmony": [],
-        "Harmony_Test": [],
         "Astar": []
     }
 }

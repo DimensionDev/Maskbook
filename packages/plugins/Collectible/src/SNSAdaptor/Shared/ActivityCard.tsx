@@ -57,6 +57,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     textBase: {
         display: 'flex',
+        fontSize: 14,
         alignItems: 'center',
         whiteSpace: 'nowrap',
         lineHeight: '18px',

@@ -122,6 +122,7 @@ export const EtherscanRedPacket = new EtherscanRedPacketAPI()
 // NextID
 export const NextIDProof = new NextIDProofAPI()
 export const NextIDStorage = new NextIDStorageAPI()
+export type { LensAccount } from './NextID/index.js'
 
 // GoPlusLabs
 export const GoPlusLabs = new GoPlusLabsAPI()
