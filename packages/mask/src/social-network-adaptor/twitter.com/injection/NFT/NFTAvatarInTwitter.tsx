@@ -1,13 +1,8 @@
 import { createReactRootShadowed, MaskMessages, startWatch, useI18N } from '../../../../utils/index.js'
-import {
-    searchAvatarMetaSelector,
-    searchAvatarSelector,
-    searchTwitterAvatarLinkSelector,
-    searchTwitterAvatarSelector,
-} from '../../utils/selector.js'
+import { searchAvatarMetaSelector, searchAvatarSelector, searchTwitterAvatarSelector } from '../../utils/selector.js'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import {
@@ -17,33 +12,25 @@ import {
     useWallet,
     useNFT,
     useSaveNFTAvatar,
-    useNFTContainerAtTwitter,
-    rainbowBorderKeyFrames,
-    type NextIDAvatarMeta,
     type AvatarMetaDB,
 } from '@masknet/plugin-avatar'
-import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use'
+import { useAsync, useLocation, useWindowSize } from 'react-use'
 import { useChainContext, useWeb3Hub } from '@masknet/web3-hooks-base'
 import { Box, Typography } from '@mui/material'
 import { AssetPreviewer, useShowConfirm } from '@masknet/shared'
-import {
-    NetworkPluginID,
-    type EnhanceableSite,
-    type NFTAvatarEvent,
-    CrossIsolationMessages,
-} from '@masknet/shared-base'
+import { NetworkPluginID, type EnhanceableSite, type NFTAvatarEvent } from '@masknet/shared-base'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 import { Twitter } from '@masknet/web3-providers'
 import { getAvatarType } from '../../utils/useAvatarType.js'
+import { useInjectedCSS } from './useInjectedCSS.js'
+import { useUpdatedAvatar } from './useUpdatedAvatar.js'
 import { AvatarType } from '../../constant.js'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector()).useForeach((ele, _, proxy) => {
         const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
         const avatarType = getAvatarType()
-        console.log('avatarType', avatarType)
-        if (!avatarType) root.render(<NFTAvatarInTwitter signal={signal} />)
-        if (avatarType === AvatarType.AVATAR_CIRCLE) root.render(<NFTCircleAvatarInTwitter />)
+        if (avatarType === AvatarType.Default) root.render(<NFTAvatarInTwitter signal={signal} />)
         return () => root.destroy()
     })
     startWatch(watcher, signal)
@@ -115,39 +102,6 @@ export function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
             },
             props.signal,
         )
-
-    if (!showAvatar) return null
-    return (
-        <NFTBadge
-            nftInfo={nftInfo}
-            borderSize={5}
-            hasRainbow
-            size={size}
-            width={15}
-            classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
-        />
-    )
-}
-
-function NFTCircleAvatarInTwitter() {
-    const windowSize = useWindowSize()
-    const _location = useLocation()
-    const { classes } = useStyles()
-    const [updatedAvatar, setUpdatedAvatar] = useState(false)
-    console.log('111111')
-    const size = useMemo(() => {
-        const ele = searchTwitterAvatarSelector().evaluate()?.querySelector('img')
-        if (ele) {
-            const style = window.getComputedStyle(ele)
-            return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
-        }
-        return 0
-    }, [windowSize, _location])
-
-    const { showAvatar, nftInfo, nftAvatar } = useCircleAvatarFromTwitter(size)
-
-    useInjectedCSS(showAvatar, updatedAvatar)
-    useUpdatedAvatar(showAvatar, nftAvatar)
 
     if (!showAvatar) return null
     return (
@@ -275,110 +229,4 @@ function useNFTCircleAvatar(size: number) {
         nftInfo,
         loading: loadingWallet || loadingNFTInfo,
     }
-}
-
-function useCircleAvatarFromTwitter(size: number) {
-    const identity = useCurrentVisitingIdentity()
-    const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(identity.identifier?.userId || '')
-    const { account } = useChainContext()
-    const { value = { amount: '0', symbol: 'ETH', name: '', slug: '', tokenId: '' }, loading: loadingNFT } = useNFT(
-        account,
-        avatarMetadata?.address,
-        avatarMetadata?.token_id,
-        NetworkPluginID.PLUGIN_EVM,
-        ChainId.Mainnet,
-    )
-
-    return {
-        showAvatar: Boolean(
-            size && value && !loading && !loadingNFT && avatarMetadata?.address && avatarMetadata?.token_id,
-        ),
-        nftInfo: value,
-        nftAvatar: undefined,
-    }
-}
-
-function useInjectedCSS(showAvatar: boolean, updatedAvatar: boolean) {
-    const rainBowElement = useRef<Element | null>()
-    const borderElement = useRef<Element | null>()
-    useEffect(() => {
-        if (!showAvatar || !updatedAvatar) return
-        const linkDom = searchTwitterAvatarLinkSelector().evaluate()
-
-        if (linkDom?.firstElementChild && linkDom.childNodes.length === 4) {
-            const linkParentDom = linkDom.closest('div')
-
-            if (linkParentDom) linkParentDom.style.overflow = 'visible'
-
-            // create rainbow shadow border
-            if (linkDom.lastElementChild?.tagName !== 'STYLE') {
-                borderElement.current = linkDom.firstElementChild
-                // remove useless border
-                linkDom.removeChild(linkDom.firstElementChild)
-                const style = document.createElement('style')
-                style.innerText = `
-                ${rainbowBorderKeyFrames.styles}
-
-                .rainbowBorder {
-                    box-shadow: 0px 4px 6px rgba(0, 255, 41, 0.2);
-                    border: 0 solid #00f8ff;
-                }
-            `
-                rainBowElement.current = linkDom.firstElementChild.nextElementSibling
-                linkDom.firstElementChild.nextElementSibling?.classList.add('rainbowBorder')
-                linkDom.appendChild(style)
-            }
-        }
-
-        return () => {
-            if (linkDom?.lastElementChild?.tagName === 'STYLE') {
-                linkDom.removeChild(linkDom.lastElementChild)
-            }
-
-            if (borderElement.current && linkDom?.firstElementChild !== borderElement.current) {
-                linkDom?.insertBefore(borderElement.current, linkDom.firstChild)
-            }
-            if (rainBowElement.current) {
-                rainBowElement.current.classList.remove('rainbowBorder')
-            }
-        }
-    }, [location.pathname, showAvatar, updatedAvatar])
-}
-
-function useUpdatedAvatar(showAvatar: boolean, nftAvatar?: NextIDAvatarMeta) {
-    useUpdateEffect(() => {
-        if (!showAvatar) return
-
-        const linkParentDom = searchTwitterAvatarLinkSelector().evaluate()?.closest('div')
-        if (!linkParentDom) return
-
-        const handler = (event: MouseEvent) => {
-            if (!nftAvatar?.tokenId || !nftAvatar?.address) return
-            event.stopPropagation()
-            event.preventDefault()
-            if (!nftAvatar.pluginId || !nftAvatar.chainId) return
-            CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
-                open: true,
-                pluginID: nftAvatar.pluginId,
-                chainId: nftAvatar.chainId,
-                tokenId: nftAvatar.tokenId,
-                tokenAddress: nftAvatar.address,
-                ownerAddress: nftAvatar.ownerAddress,
-                origin: 'pfp',
-            })
-        }
-
-        const clean = () => {
-            linkParentDom.removeEventListener('click', handler, true)
-        }
-
-        if (!nftAvatar) {
-            clean()
-            return
-        }
-
-        linkParentDom.addEventListener('click', handler, true)
-
-        return clean
-    }, [nftAvatar, showAvatar])
 }

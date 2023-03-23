@@ -30,7 +30,8 @@ export const TipButtonStyle: Record<FontSize, TipButtonProps> = {
 }
 
 export enum AvatarType {
-    AVATAR_SQUARE = 'shape-square',
-    AVATAR_CLIP = 'shape-hex',
-    AVATAR_CIRCLE = 'circle',
+    Square = 'shape-square',
+    Clip = 'shape-hex',
+    Circle = 'circle',
+    Default = 'default',
 }

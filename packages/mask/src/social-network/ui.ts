@@ -109,6 +109,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.postAndReplyNFTAvatar?.(signal)
     ui.injection.avatarClipNFT?.(signal)
     ui.injection.avatarSquareNFT?.(signal)
+    ui.injection.avatarCircleNFT?.(signal)
 
     ui.injection.avatar?.(signal)
     ui.injection.profileCard?.(signal)

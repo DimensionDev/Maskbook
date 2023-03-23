@@ -24,7 +24,7 @@ export function injectNFTAvatarClipInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarNFTSelector()).useForeach((ele, _, proxy) => {
         const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
         const avatarType = getAvatarType()
-        if (avatarType === AvatarType.AVATAR_CLIP) root.render(<NFTAvatarClipInTwitter signal={signal} />)
+        if (avatarType === AvatarType.Clip) root.render(<NFTAvatarClipInTwitter signal={signal} />)
         return () => root.destroy()
     })
     startWatch(watcher, signal)
@@ -46,7 +46,6 @@ interface NFTAvatarClipInTwitterProps {
     signal: AbortSignal
 }
 export function NFTAvatarClipInTwitter(props: NFTAvatarClipInTwitterProps) {
-    const { classes } = useStyles()
     const windowSize = useWindowSize()
     const location = useLocation()
     const borderElement = useRef<Element | null>()
@@ -54,8 +53,6 @@ export function NFTAvatarClipInTwitter(props: NFTAvatarClipInTwitterProps) {
 
     const size = useMemo(() => {
         const ele = searchTwitterAvatarNFTSelector().evaluate()?.closest('a')?.querySelector('img')
-        console.log('')
-        console.log(ele)
         if (!ele) return 0
         return ele.clientWidth
     }, [windowSize, location])
@@ -89,12 +86,12 @@ export function NFTAvatarClipInTwitter(props: NFTAvatarClipInTwitterProps) {
     }, [location.pathname])
 
     if (isZero(size) || !identity.identifier) return null
-    console.log(avatarType)
+
     return (
         <NFTAvatarClipOrSquareInTwitter
             screenName={identity.identifier.userId}
             size={size}
-            avatarType={AvatarType.AVATAR_CLIP}
+            avatarType={AvatarType.Clip}
         />
     )
 }
@@ -132,9 +129,9 @@ export function NFTAvatarClipOrSquareInTwitter({ screenName, size, avatarType }:
 
     return (
         <>
-            {avatarType === AvatarType.AVATAR_SQUARE ? (
+            {avatarType === AvatarType.Square ? (
                 <NFTAvatarSquare stroke="black" strokeWidth={20} fontSize={9} name={name} price={price} size={size} />
-            ) : avatarType === AvatarType.AVATAR_CLIP ? (
+            ) : avatarType === AvatarType.Clip ? (
                 <NFTAvatarClip
                     size={size}
                     classes={{ root: classes.root, text: classes.text, icon: classes.icon }}

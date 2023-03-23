@@ -309,8 +309,10 @@ export const searchProfileSetAvatarSelector = () =>
 export const searchTwitterAvatarLinkSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector('div  a')
 
-export const searchTwitterAvatarSelector = () =>
-    querySelector<E>('a[href$="/photo"]').querySelector('img').closest<E>(1)
+export const searchTwitterAvatarSelector = () => querySelector<E>('a[href$="/nft"]').querySelector('img').closest<E>(1)
+
+export const searchTwitterCircleAvatarSelector = () =>
+    querySelector<E>('a[href$="/nft"]').querySelector('img').closest<E>(1)
 
 // #endregion
 

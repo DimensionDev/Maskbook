@@ -5,7 +5,6 @@ import {
     searchTwitterSquareAvatarSelector,
 } from '../../utils/selector.js'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo, useRef } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { rainbowBorderKeyFrames } from '@masknet/plugin-avatar'
@@ -18,35 +17,11 @@ export function injectNFTSquareAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterSquareAvatarSelector()).useForeach((ele, _, proxy) => {
         const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
         const avatarType = getAvatarType()
-        if (avatarType === AvatarType.AVATAR_SQUARE) root.render(<NFTSquareAvatarInTwitter signal={signal} />)
+        if (avatarType === AvatarType.Square) root.render(<NFTSquareAvatarInTwitter signal={signal} />)
         return () => root.destroy()
     })
     startWatch(watcher, signal)
 }
-
-const useStyles = makeStyles()(() => ({
-    root: {
-        transform: 'scale(1.022)',
-        position: 'absolute',
-        textAlign: 'center',
-        color: 'white',
-        zIndex: 2,
-        width: '100%',
-        height: '100%',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-    },
-    text: {
-        fontSize: '20px !important',
-        fontWeight: 700,
-    },
-    icon: {
-        width: '19px !important',
-        height: '19px !important',
-    },
-}))
 
 interface NFTAvatarInTwitterProps {
     signal: AbortSignal
@@ -67,8 +42,6 @@ function NFTSquareAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         const style = window.getComputedStyle(ele)
         return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
     }, [windowSize, location])
-
-    const { classes } = useStyles()
 
     useEffect(() => {
         const linkDom = searchTwitterAvatarLinkSelector().evaluate()
@@ -118,7 +91,7 @@ function NFTSquareAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         <NFTAvatarClipOrSquareInTwitter
             screenName={identity.identifier?.userId}
             size={size}
-            avatarType={AvatarType.AVATAR_SQUARE}
+            avatarType={AvatarType.Square}
         />
     )
 }
