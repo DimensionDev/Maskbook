@@ -14,6 +14,9 @@ const useStyles = makeStyles()((theme) => ({
         transform: 'translate(0px, -5px)',
         background: 'linear-gradient(270deg, #24FF00 0%, #00E4C9 102.63%)',
     },
+    border: {
+        transform: 'translate(1px, 1px)',
+    },
 }))
 interface NFTAvatarSquareProps {
     stroke: string
@@ -70,6 +73,18 @@ export function NFTAvatarSquare(props: NFTAvatarSquareProps) {
                     stroke={stroke}
                     strokeWidth={strokeWidth}
                 />
+                <g className={classes.border}>
+                    <rect
+                        x={0}
+                        y={0}
+                        rx={5}
+                        width={avatarSize}
+                        height={avatarSize}
+                        fill="none"
+                        stroke="#24FF00"
+                        strokeWidth={2}
+                    />
+                </g>
                 <g className={classes.name}>
                     <text x="0%" textAnchor="middle" fontFamily="sans-serif" fill={`url(#${id}-gradient)`}>
                         <textPath xlinkHref={`#${id}-path-name`} startOffset="50%" rotate="auto">
