@@ -1,10 +1,10 @@
+import type { FC } from 'react'
 import { Plugin } from '@masknet/plugin-infra'
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
-import { PluginGuide, PluginGuideProvider } from '@masknet/shared'
-import { EnhanceableSite, PluginID } from '@masknet/shared-base'
+import { PluginGuide } from '@masknet/shared'
+import type { EnhanceableSite } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Stack } from '@mui/material'
-import type { FC } from 'react'
 import { activatedSocialNetworkUI } from '../../../../../social-network/ui.js'
 import { TipButton } from '../../../components/index.js'
 import { useI18N } from '../../../locales/index.js'
@@ -74,7 +74,7 @@ export const TipsRealmContent: FC<Plugin.SNSAdaptor.TipsRealmOptions> = ({
 }) => {
     const t = useI18N()
     const { classes, cx } = useStyles({ buttonSize })
-    const lastStep = useTipsUserGuide(activatedSocialNetworkUI.networkIdentifier)
+    const userGuide = useTipsUserGuide(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite)
     const myIdentity = useLastRecognizedIdentity()
 
     if (!identity || identity.userId === myIdentity?.identifier?.userId) return null
@@ -99,33 +99,27 @@ export const TipsRealmContent: FC<Plugin.SNSAdaptor.TipsRealmOptions> = ({
     )
 
     if (slot === TipsSlot.MirrorMenu) {
+        const { finished, step, nextStep } = userGuide
         return (
-            <PluginGuideProvider
-                value={{
-                    pluginID: PluginID.Tips,
-                    storageKey: EnhanceableSite.Mirror,
-                    // Work for migrate from old tips guide setting
-                    totalStep: lastStep.finished ? 0 : 1,
-                    guides: [
-                        {
-                            title: t.tips_guide_description(),
-                            actionText: t.tips_guide_action(),
-                        },
-                    ],
-                }}>
-                <PluginGuide step={1}>
-                    <Stack
-                        display="flex"
-                        width="38px"
-                        height="38px"
-                        position="relative"
-                        top={0}
-                        alignItems="center"
-                        justifyContent="center">
-                        {button}
-                    </Stack>
-                </PluginGuide>
-            </PluginGuideProvider>
+            <PluginGuide
+                step={1}
+                totalStep={1}
+                finished={finished}
+                currentStep={step}
+                onNext={nextStep}
+                title={t.tips_guide_description()}
+                actionText={t.tips_guide_action()}>
+                <Stack
+                    display="flex"
+                    width="38px"
+                    height="38px"
+                    position="relative"
+                    top={0}
+                    alignItems="center"
+                    justifyContent="center">
+                    {button}
+                </Stack>
+            </PluginGuide>
         )
     }
 

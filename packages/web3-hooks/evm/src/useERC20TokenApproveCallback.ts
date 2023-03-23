@@ -25,11 +25,9 @@ export function useERC20TokenApproveCallback(
     callback?: () => void,
     tokenChainId?: ChainId,
 ) {
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
-        chainId: tokenChainId,
-    })
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: tokenChainId })
-    const erc20Contract = useERC20TokenContract(chainId, address)
+    const erc20Contract = useERC20TokenContract(tokenChainId, address)
 
     // read the approved information from the chain
     const {
@@ -37,13 +35,13 @@ export function useERC20TokenApproveCallback(
         loading: loadingBalance,
         error: errorBalance,
         retry: revalidateBalance,
-    } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address, { chainId })
+    } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address, { chainId: tokenChainId })
     const {
         value: allowance = '0',
         loading: loadingAllowance,
         error: errorAllowance,
         retry: revalidateAllowance,
-    } = useERC20TokenAllowance(address, spender, { chainId })
+    } = useERC20TokenAllowance(address, spender, { chainId: tokenChainId })
 
     // the computed approve state
     const approveStateType = useMemo(() => {
@@ -65,8 +63,12 @@ export function useERC20TokenApproveCallback(
                 return
             }
 
+            if (tokenChainId !== chainId) {
+                await connection?.switchChain?.(tokenChainId ?? chainId)
+            }
+
             const hash = await connection?.approveFungibleToken(address, spender, useExact ? amount : MaxUint256, {
-                chainId,
+                chainId: tokenChainId,
             })
 
             const receipt = await connection.confirmTransaction(hash, {
@@ -79,7 +81,7 @@ export function useERC20TokenApproveCallback(
                 revalidateAllowance()
             }
         },
-        [account, amount, spender, address, erc20Contract, approveStateType, connection, chainId],
+        [account, amount, spender, address, erc20Contract, approveStateType, connection, tokenChainId, chainId],
     )
 
     const resetCallback = useCallback(() => {

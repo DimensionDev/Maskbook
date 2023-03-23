@@ -1,1 +1,9 @@
-{}
+{
+    "add_wallet": "월렛 추가",
+    "add_wallet_tips": "팁을 받기를 위해 월렛을 추가하세요.",
+    "tips": "팁",
+    "tip_to": "받는 사람",
+    "cancel": "취소",
+    "confirm": "확인",
+    "copy_success": "복사 완료"
+}

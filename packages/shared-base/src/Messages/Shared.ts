@@ -18,6 +18,7 @@ import type {
     PersonaBindFinishEvent,
     SmartPayDialogEvent,
     RenameWalletEvent,
+    FollowLensDialogEvent,
 } from './Mask.js'
 
 /**
@@ -51,6 +52,7 @@ export interface CrossIsolationEvents {
     avatarSettingDialogEvent: AvatarSettingDialogEvent
     redpacketDialogEvent: redpacketDialogEvent
     smartPayDialogEvent: SmartPayDialogEvent
+    followLensDialogEvent: FollowLensDialogEvent
     /** emit when open new page . */
     openPageConfirm: OpenPageConfirmEvent
     /**

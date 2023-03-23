@@ -29,6 +29,13 @@ async function fetchContent(url?: string) {
     return fetchText(url)
 }
 
+function getAPIScriptURL(content: string) {
+    const matches = content.match(/api:"(\w+)",/)
+    if (!matches) return
+    const url = `https://abs.twimg.com/responsive-web/client-web/api.${matches[1]}a.js`
+    return url
+}
+
 export async function getTokens(operationName?: string) {
     const indexContent = await fetchContent('https://twitter.com')
     const swContent = await fetchContent('https://twitter.com/sw.js')
@@ -37,8 +44,9 @@ export async function getTokens(operationName?: string) {
         fetchContent(getScriptURL(indexContent ?? '', 'main')),
         fetchContent(getScriptURL(swContent ?? '', 'main')),
         fetchContent(getScriptURL(swContent ?? '', 'bundle.UserNft')),
+        fetchContent(getAPIScriptURL(indexContent ?? '')),
     ])
-    const [mainContentPrimary, mainContentSecondary, nftContent] = allSettled.map((x) =>
+    const [mainContentPrimary, mainContentSecondary, nftContent, apiContent] = allSettled.map((x) =>
         x.status === 'fulfilled' ? x.value ?? '' : '',
     )
     const mainContent = mainContentPrimary || mainContentSecondary
@@ -46,7 +54,7 @@ export async function getTokens(operationName?: string) {
     const queryToken = getScriptContentMatched(nftContent ?? '', /{\s?id:\s?"([\w-]+)"/)
     const csrfToken = getCSRFToken()
     const queryId = operationName
-        ? getScriptContentMatched(mainContent ?? '', new RegExp(`queryId:"([^"]+)",operationName:"${operationName}"`))
+        ? getScriptContentMatched(apiContent ?? '', new RegExp(`queryId:"([^"]+)",operationName:"${operationName}"`))
         : undefined
 
     return {

@@ -1,13 +1,14 @@
 import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled.js'
 import { useSideBarNativeItemStyleVariants } from './ToolboxHint.js'
-import { styled, ListItemButton, Typography, ListItemIcon, useMediaQuery, Box } from '@mui/material'
+import { styled, ListItemButton, Typography, ListItemIcon, Box } from '@mui/material'
 import GuideStep from '../../../components/GuideStep/index.js'
 import { useI18N } from '../../../utils/index.js'
 import { useThemeSettings } from '../../../components/DataSource/useActivatedUI.js'
 import { ButtonStyle } from '../constant.js'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { searchHomeLinkName } from '../utils/selector.js'
 
-const twitterBreakPoint = 1265
 const Container = styled('div')`
     cursor: pointer;
     padding: 4px 0;
@@ -18,10 +19,6 @@ const ListItem = styled(ListItemButton)`
     &:hover {
         background: rgba(15, 20, 25, 0.1);
         ${({ theme }) => (theme.palette.mode === 'dark' ? 'background: rgba(217, 217, 217, 0.1);' : '')}
-    }
-    /* twitter break point */
-    @media screen and (max-width: ${twitterBreakPoint}px) {
-        height: 50px;
     }
 `
 const Text = styled(Typography)`
@@ -37,7 +34,6 @@ const Icon = styled(ListItemIcon)`
 `
 
 export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application' }) {
-    const mini = useMediaQuery(`(max-width: ${twitterBreakPoint}px)`)
     const { textMarginLeft, itemPadding, iconSize } = useSideBarNativeItemStyleVariants()
     const themeSettings = useThemeSettings()
     const buttonStyle = ButtonStyle[themeSettings.size]
@@ -48,6 +44,21 @@ export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application'
             </Text>
         )
     }, [buttonStyle.iconSize, textMarginLeft])
+
+    const [mini, setMini] = useState(false)
+
+    useEffect(() => {
+        const abortController = new AbortController()
+        const watch = new MutationObserverWatcher(searchHomeLinkName()).startWatch(
+            { childList: true, subtree: true },
+            abortController.signal,
+        )
+        watch.addListener('onAdd', () => setMini(false), { signal: abortController.signal })
+        watch.addListener('onRemove', () => setMini(true), { signal: abortController.signal })
+
+        return () => abortController.abort()
+    })
+
     const ListItemButton = useMemo(() => {
         return (
             props: React.PropsWithChildren<{

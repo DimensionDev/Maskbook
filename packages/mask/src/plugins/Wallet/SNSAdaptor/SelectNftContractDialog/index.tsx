@@ -6,6 +6,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
+import { SourceType } from '@masknet/web3-shared-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { useChainContext, useNonFungibleCollections } from '@masknet/web3-hooks-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -126,6 +127,8 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
 
     const { value: collections = [], loading } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
         chainId,
+        // Todo: remove this line, after SimpleHash can recognize ERC721 Collections.
+        sourceType: SourceType.NFTScan,
     })
 
     const collectionsFiltered = collections.filter((x) => x.schema === SchemaType.ERC721)

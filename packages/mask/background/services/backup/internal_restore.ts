@@ -203,12 +203,10 @@ async function restorePlugins(backup: NormalizedBackup.Data['plugins']) {
             continue
         }
         works.add(
-            // eslint-disable-next-line @typescript-eslint/no-loop-func
             (async () => {
                 const result = await onRestore(item)
                 if (result.err) {
                     const msg = `[@masknet/plugin-infra] Plugin ${plugin.ID} failed to restore its backup.`
-                    console.error(msg, item)
                     throw new Error(msg, { cause: result.err })
                 }
             })(),

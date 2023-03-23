@@ -1,5 +1,7 @@
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { isValidAddress } from '@masknet/web3-shared-evm'
 import { fetchJSON } from '../entry-helpers.js'
-import type { LensBaseAPI } from '../types/Lens.js'
+import type { FollowModuleTypedData, LensBaseAPI } from '../entry-types.js'
 import { LENS_ROOT_API } from './constants.js'
 
 export class LensAPI implements LensBaseAPI.Provider {
@@ -15,10 +17,361 @@ export class LensAPI implements LensBaseAPI.Provider {
                       id
                       handle
                       ownedBy
+                      name
+                      picture {
+                        ...on MediaSet {
+                            original {
+                                url
+                            }
+                        }
+                      }
+                      stats {
+                        totalFollowers
+                        totalFollowing
+                      }
+                      followModule {
+                        ... on FeeFollowModuleSettings {
+                          type
+                          contractAddress
+                          amount {
+                            asset {
+                              name
+                              symbol
+                              decimals
+                              address
+                            }
+                            value
+                          }
+                          recipient
+                        }
+                        ... on ProfileFollowModuleSettings {
+                         type
+                        }
+                        ... on RevertFollowModuleSettings {
+                         type
+                        }
+                      }
                     }
                   }`,
             }),
         })
         return data.profile
+    }
+
+    async queryDefaultProfileByAddress(address: string) {
+        if (!isValidAddress(address)) return
+        const { data } = await fetchJSON<{ data: { defaultProfile?: LensBaseAPI.Profile } }>(LENS_ROOT_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: `query DefaultProfile {
+                  defaultProfile(request: { ethereumAddress: "${address}"}) {
+                    id
+                    name
+                    ownedBy
+                    handle
+                    picture {
+                      ... on MediaSet {
+                        original {
+                          url
+                          mimeType
+                        }
+                      }
+                    }
+                    stats {
+                      totalFollowers
+                      totalFollowing
+                    }
+                    followModule {
+                      ... on FeeFollowModuleSettings {
+                        type
+                        contractAddress
+                        amount {
+                          asset {
+                            name
+                            symbol
+                            decimals
+                            address
+                          }
+                          value
+                        }
+                        recipient
+                      }
+                      ... on ProfileFollowModuleSettings {
+                       type
+                      }
+                      ... on RevertFollowModuleSettings {
+                       type
+                      }
+                    }
+                  }
+                }`,
+            }),
+        })
+        return data.defaultProfile
+    }
+
+    async queryProfilesByAddress(address: string) {
+        if (!isValidAddress(address)) return []
+        const { data } = await fetchJSON<{ data: { profiles: { items: LensBaseAPI.Profile[] } } }>(LENS_ROOT_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: `query Profiles {
+                profiles(request: { ownedBy: ["${address}"], limit: 10 }) {
+                  items {
+                    id
+                    name
+                    picture {
+                      ... on MediaSet {
+                        original {
+                          url
+                          mimeType
+                        }
+                      }
+                    }
+                    handle
+                    ownedBy
+                    stats {
+                      totalFollowers
+                      totalFollowing
+                     
+                    }
+                    followModule {
+                      ... on FeeFollowModuleSettings {
+                        type
+                        amount {
+                          asset {
+                            symbol
+                            name
+                            decimals
+                            address
+                          }
+                          value
+                        }
+                        recipient
+                      }
+                      ... on ProfileFollowModuleSettings {
+                       type
+                      }
+                      ... on RevertFollowModuleSettings {
+                       type
+                      }
+                    }
+                  }
+                }
+              }`,
+            }),
+        })
+
+        return data.profiles.items
+    }
+
+    async queryFollowStatus(address: string, profileId: string) {
+        if (!isValidAddress(address) || !profileId) return false
+
+        const { data } = await fetchJSON<{ data: { doesFollow: LensBaseAPI.DoesFollow[] } }>(LENS_ROOT_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: `query DoesFollow {
+                    doesFollow(request: {
+                      followInfos: [
+                        {
+                          followerAddress: "${address}", 
+                          profileId: "${profileId}"
+                        }
+                      ]
+                }) {
+                  followerAddress
+                  profileId
+                  follows
+                }
+              }`,
+            }),
+        })
+
+        if (!data.doesFollow.length) return false
+
+        const result: LensBaseAPI.DoesFollow | undefined = data.doesFollow.find((x) =>
+            isSameAddress(x.followerAddress, address),
+        )
+
+        return result?.follows
+    }
+
+    async queryChallenge(address: string) {
+        if (!isValidAddress(address)) return ''
+        const { data } = await fetchJSON<{ data: { challenge: LensBaseAPI.Challenge } }>(LENS_ROOT_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: `query Challenge {
+                  challenge(request: { address: "${address}" }) {
+                    text
+                  }
+                }`,
+            }),
+        })
+
+        return data.challenge.text
+    }
+
+    async authenticate(address: string, signature: string) {
+        if (!isValidAddress(address) || !signature) return
+        const { data } = await fetchJSON<{ data: { authenticate: LensBaseAPI.Authenticate } }>(LENS_ROOT_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: `mutation Authenticate {
+                  authenticate(
+                    request: {
+                      address: "${address}"
+                      signature: "${signature}"
+                    }
+                  ) {
+                    accessToken
+                    refreshToken
+                  }
+                }
+                `,
+            }),
+        })
+
+        return data.authenticate
+    }
+
+    async refresh(refreshToken: string) {
+        if (!refreshToken) return
+        const { data } = await fetchJSON<{ data: { refresh: LensBaseAPI.Authenticate } }>(LENS_ROOT_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: `mutation Refresh {
+                  refresh(request: {
+                    refreshToken: "${refreshToken}"
+                  }) {
+                    accessToken
+                    refreshToken
+                  }
+                }
+              `,
+            }),
+        })
+
+        return data.refresh
+    }
+
+    async createFollowTypedData(
+        profileId: string,
+        options?: {
+            token: string
+            followModule?: FollowModuleTypedData
+        },
+    ) {
+        if (!profileId) return
+        const { data } = await fetchJSON<{ data: { createFollowTypedData: LensBaseAPI.CreateFollowTypedData } }>(
+            LENS_ROOT_API,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': options?.token ? `Bearer ${options.token}` : '',
+                },
+                body: JSON.stringify({
+                    query: `mutation CreateFollowTypedData {
+                      createFollowTypedData(
+                        request: { follow: [{ profile: "${profileId}", followModule: ${
+                        options?.followModule ? options.followModule : null
+                    } }] }
+                      ) {
+                        id
+                        expiresAt
+                        typedData {
+                          domain {
+                            name
+                            chainId
+                            version
+                            verifyingContract
+                          }
+                          types {
+                            FollowWithSig {
+                              name
+                              type
+                            }
+                          }
+                          value {
+                            nonce
+                            deadline
+                            profileIds
+                            datas
+                          }
+                        }
+                      }
+                    }  
+                  `,
+                }),
+            },
+        )
+
+        return data.createFollowTypedData
+    }
+
+    async createUnfollowTypedData(profileId: string, options?: { token: string }) {
+        if (!profileId) return
+        const { data } = await fetchJSON<{ data: { createUnfollowTypedData: LensBaseAPI.CreateUnfollowTypedData } }>(
+            LENS_ROOT_API,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': options?.token ? `Bearer ${options.token}` : '',
+                },
+                body: JSON.stringify({
+                    query: `mutation CreateUnfollowTypedData {
+                      createUnfollowTypedData(request:{
+                        profile: "${profileId}"
+                      }) {
+                        id
+                        expiresAt
+                        typedData {
+                          types {
+                            BurnWithSig {
+                              name
+                              type
+                            }
+                          }
+                          domain {
+                            version
+                            chainId
+                            name
+                            verifyingContract
+                          }
+                          value {
+                            nonce
+                            deadline
+                            tokenId
+                          }
+                        }
+                      }
+                    }  
+                `,
+                }),
+            },
+        )
+
+        return data.createUnfollowTypedData
     }
 }

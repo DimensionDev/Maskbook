@@ -20,6 +20,8 @@ import { ContractSection } from './ContractSection.js'
 import type { CommunityType } from '../../types/index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ContractItem } from './ContractItem.js'
+import { useEffect } from 'react'
+import { useWindowScroll } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -63,6 +65,11 @@ const useStyles = makeStyles()((theme) => ({
         '&::-webkit-scrollbar': {
             display: 'none',
         },
+        background: theme.palette.maskColor.bottom,
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
+                : '0px 4px 30px rgba(0, 0, 0, 0.1)',
     },
 }))
 
@@ -88,6 +95,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
     const { trending } = props
     const { t } = useI18N()
     const { classes } = useStyles()
+    const position = useWindowScroll()
 
     const metadataLinks = [[t('plugin_trader_website'), trending.coin.home_urls]] as Array<
         [string, string[] | undefined]
@@ -101,7 +109,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
         },
     ]
 
-    const [menu, openMenu] = useMenuConfig(
+    const [menu, openMenu, closeMenu] = useMenuConfig(
         contracts.map((x) => (
             <ContractItem
                 key={x.chainId}
@@ -112,6 +120,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
             />
         )),
         {
+            anchorSibling: false,
             anchorOrigin: {
                 vertical: 'bottom',
                 horizontal: 'center',
@@ -123,6 +132,8 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
             classes: { paper: classes.menu },
         },
     )
+
+    useEffect(() => closeMenu(), [position])
 
     return (
         <Stack>

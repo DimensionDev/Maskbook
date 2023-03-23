@@ -75,8 +75,12 @@ function createAsset(chainId: ChainId, asset: RaribleNFTItemMapResponse): NonFun
             chainId,
             name: getAssetFullName(asset.contract.split(':')[1], '', asset.meta?.name, asset.tokenId),
             description: asset.meta?.description,
-            imageURL: asset.meta?.content?.find((x) => x['@type'] === 'IMAGE' && x.representation === 'PREVIEW')?.url,
-            mediaURL: asset.meta?.content?.find((x) => x['@type'] === 'IMAGE' && x.representation === 'ORIGINAL')?.url,
+            imageURL: decodeURIComponent(
+                asset.meta?.content?.find((x) => x['@type'] === 'IMAGE' && x.representation === 'PREVIEW')?.url ?? '',
+            ),
+            mediaURL: decodeURIComponent(
+                asset.meta?.content?.find((x) => x['@type'] === 'IMAGE' && x.representation === 'ORIGINAL')?.url ?? '',
+            ),
         },
         contract: {
             chainId,
@@ -89,7 +93,9 @@ function createAsset(chainId: ChainId, asset: RaribleNFTItemMapResponse): NonFun
             name: asset.meta?.name ?? '',
             slug: asset.meta?.name ?? '',
             description: asset.meta?.description,
-            iconURL: asset.meta?.content?.find((x) => x['@type'] === 'IMAGE' && x.representation === 'PREVIEW')?.url,
+            iconURL: decodeURIComponent(
+                asset.meta?.content?.find((x) => x['@type'] === 'IMAGE' && x.representation === 'PREVIEW')?.url ?? '',
+            ),
             verified: !asset.deleted,
             createdAt: new Date(asset.mintedAt).getTime(),
         },
