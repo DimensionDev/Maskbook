@@ -14,7 +14,7 @@ import {
 import { ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import { fetchFromSimpleHash, createNonFungibleAsset, resolveChain, createNonFungibleCollection } from './helpers.js'
 
-import { type Asset, type Collection } from './type.js'
+import type { Asset, Collection } from './type.js'
 
 export class SimpleHashProviderAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {

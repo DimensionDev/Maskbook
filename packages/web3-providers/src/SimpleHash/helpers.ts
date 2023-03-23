@@ -1,6 +1,6 @@
 import { fetchJSON } from '../entry-helpers.js'
 import { SIMPLE_HASH_URL } from './constants.js'
-import { type Asset, type Collection } from './type.js'
+import type { Asset, Collection } from './type.js'
 import {
     type NonFungibleAsset,
     TokenType,
