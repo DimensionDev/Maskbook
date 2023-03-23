@@ -20,7 +20,7 @@
     "liquidity$collect": "crwdns19039:0{{user}}crwdnd19039:0{{platform}}crwdne19039:0",
     "liquidity$remove": "crwdns19041:0{{user}}crwdnd19041:0{{platform}}crwdne19041:0",
     "liquidity$borrow": "crwdns19043:0{{user}}crwdnd19043:0{{platform}}crwdne19043:0",
-    "token_value": "crwdns18947:0{{- value}}crwdnd18947:0{{symbol}}crwdne18947:0",
+    "token_value": "crwdns18947:0{{- value}}crwdnd18947:0{{- symbol}}crwdne18947:0",
     "token_swap$normal": "crwdns18949:0{{user}}crwdnd18949:0{{platform}}crwdne18949:0",
     "token_swap$verbose": "crwdns18951:0{{user}}crwdnd18951:0{{- from_value}}crwdnd18951:0{{from_symbol}}crwdnd18951:0{{- to_value}}crwdnd18951:0{{to_symbol}}crwdnd18951:0{{platform}}crwdne18951:0",
     "token_swap_pair": "crwdns18953:0{{- from_value}}crwdnd18953:0{{from_symbol}}crwdnd18953:0{{- to_value}}crwdnd18953:0{{to_symbol}}crwdne18953:0",
