@@ -1,8 +1,8 @@
 import { AvatarType } from '../constant.js'
 import { searchTwitterAvatarNFTStyleSelector } from './selector.js'
 
-export function getAvatarType() {
-    const dom = searchTwitterAvatarNFTStyleSelector().evaluate()
+export function getAvatarType(ele?: HTMLElement) {
+    const dom = ele ?? searchTwitterAvatarNFTStyleSelector().evaluate()
     if (!dom) return AvatarType.Default
     const styles = window.getComputedStyle(dom)
     return styles.clipPath.includes('#shape-square')

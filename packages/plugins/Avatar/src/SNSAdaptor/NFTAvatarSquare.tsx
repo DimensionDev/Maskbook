@@ -1,6 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { useMemo } from 'react'
 import { v4 as uuid } from 'uuid'
+import { useNFTContainerAtTwitter } from '../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -103,6 +104,29 @@ export function NFTAvatarSquare(props: NFTAvatarSquareProps) {
                         </textPath>
                     </text>
                 </g>
+            </g>
+        </svg>
+    )
+}
+
+interface NFTAvatarMiniSquareProps extends withClasses<'root'> {
+    screenName: string
+    size: number
+    id?: string
+    className?: string
+}
+export function NFTAvatarMiniSquare(props: NFTAvatarMiniSquareProps) {
+    const { size, screenName, className } = props
+    const id = useMemo(() => props.id ?? uuid(), [props.id])
+    const { classes, cx } = useStyles(undefined, { props })
+    const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName)
+
+    if (loading || !avatarMetadata?.address || !avatarMetadata?.token_id) return null
+
+    return (
+        <svg className={cx(classes.root, className)} width={size} height={size} id={id} viewBox={`0 0 ${size} ${size}`}>
+            <g className={classes.border}>
+                <rect x={0} y={0} rx={5} width={size} height={size} fill="none" stroke="#24FF00" strokeWidth={2} />
             </g>
         </svg>
     )

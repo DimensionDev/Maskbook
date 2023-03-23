@@ -4,6 +4,7 @@ import { MaskMessages, createReactRootShadowed, startWatch } from '../../../../u
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { postAvatarSelector } from '../../utils/selector.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
+import { AvatarType } from '../../constant.js'
 
 function getUserId(ele: HTMLElement) {
     const attribute = ele.dataset.testid || ''
@@ -36,7 +37,7 @@ function inject(selector: () => LiveSelector<HTMLElement>, signal: AbortSignal) 
                             top: 0,
                             zIndex: 2,
                         }}>
-                        {info.isTwitterNFT ? (
+                        {info.avatarType === AvatarType.Clip ? (
                             <NFTAvatarMiniClip
                                 identity={activatedSocialNetworkUI.collecting.identityProvider?.recognized.value}
                                 size={info.width}

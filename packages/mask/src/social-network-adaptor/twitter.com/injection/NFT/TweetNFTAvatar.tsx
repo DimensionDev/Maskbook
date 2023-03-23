@@ -1,10 +1,11 @@
 import { DOMProxy, type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { NFTBadgeTweet, NFTAvatarMiniClip, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
+import { NFTBadgeTweet, NFTAvatarMiniClip, RSS3_KEY_SNS, NFTAvatarMiniSquare } from '@masknet/plugin-avatar'
 import { MaskMessages, createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { searchRetweetAvatarSelector, searchTweetAvatarSelector } from '../../utils/selector.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 import { noop } from 'lodash-es'
+import { AvatarType } from '../../constant.js'
 
 function _(main: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
     startWatch(
@@ -21,10 +22,18 @@ function _(main: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
                 const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
                 root.render(
                     <div style={{ position: 'absolute', top: 0, left: 0, zIndex: 2 }}>
-                        {info.isTwitterNFT ? (
+                        {info.avatarType === AvatarType.Clip ? (
                             <NFTAvatarMiniClip
                                 identity={activatedSocialNetworkUI.collecting.identityProvider?.recognized.value}
                                 size={info.width}
+                            />
+                        ) : info.avatarType === AvatarType.Square ? (
+                            <NFTAvatarMiniSquare
+                                screenName={
+                                    activatedSocialNetworkUI.collecting.identityProvider?.recognized.value.identifier
+                                        ?.userId || ''
+                                }
+                                size={info.height}
                             />
                         ) : (
                             <NFTBadgeTweet
