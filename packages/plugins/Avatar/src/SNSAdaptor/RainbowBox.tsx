@@ -41,8 +41,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { width, height, radius = '10
         justifyContent: 'center',
         alignItems: 'center',
         lineHeight: 0,
-        border: `${size}px solid`,
-        background: '#00E4C9',
+        border: `${size}px solid #24FF00`,
     },
 }))
 

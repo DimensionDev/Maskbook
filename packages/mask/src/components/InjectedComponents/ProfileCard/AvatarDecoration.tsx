@@ -23,7 +23,7 @@ export const AvatarDecoration: FC<Props> = ({ clipPathId, userId, className, siz
     const avatarId = Twitter.getAvatarId(user.legacy?.profile_image_url_https)
 
     return user.has_nft_avatar ? (
-        <NFTAvatarMiniClip identity={identity} className={className} id={clipPathId} size={size} screenName={userId} />
+        <NFTAvatarMiniClip className={className} id={clipPathId} size={size} screenName={userId} />
     ) : (
         <NFTBadgeTimeline
             timelineUpdated={MaskMessages.events.NFTAvatarTimelineUpdated}

@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 import { v4 as uuid } from 'uuid'
 import { makeStyles } from '@masknet/theme'
 import { useNFTContainerAtTwitter } from '../hooks/useNFTContainerAtTwitter.js'
-import type { IdentityResolved } from '@masknet/plugin-infra/content-script'
 
 // from twitter page
 const ViewBoxWidth = 200
@@ -18,8 +17,7 @@ interface NFTAvatarClipProps extends withClasses<'root' | 'text' | 'icon'> {
     viewBoxHeight?: number
 }
 interface NFTAvatarMiniClipProps extends Omit<NFTAvatarClipProps, 'name' | 'price'> {
-    screenName?: string
-    identity?: IdentityResolved
+    screenName: string
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -32,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 
     borderPath: {
-        transform: 'scale(0.98, 1.035) translate(3px, -2px)',
+        transform: 'scale(0.98, 1.035) translate(2px, -3px)',
         strokeWidth: 3,
         fill: 'none',
         stroke: '#00E4C9',
@@ -175,10 +173,10 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
 }
 
 export function NFTAvatarMiniClip(props: NFTAvatarMiniClipProps) {
-    const { size, viewBoxHeight = ViewBoxHeight, viewBoxWidth = ViewBoxWidth, screenName, className, identity } = props
+    const { size, viewBoxHeight = ViewBoxHeight, viewBoxWidth = ViewBoxWidth, screenName, className } = props
     const id = useMemo(() => props.id ?? uuid(), [props.id])
     const { classes, cx } = useStyles(undefined, { props })
-    const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName ?? identity?.identifier?.userId)
+    const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName)
 
     if (loading || !avatarMetadata?.address || !avatarMetadata?.token_id) return null
 

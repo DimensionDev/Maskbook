@@ -1,10 +1,9 @@
 import { DOMProxy, type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { NFTBadgeTimeline, NFTAvatarMiniClip, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
-import { MaskMessages, createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { postAvatarSelector } from '../../utils/selector.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
-import { AvatarType } from '../../constant.js'
+import { MiniAvatarBorder } from './MiniAvatarBorder.js'
 
 function getUserId(ele: HTMLElement) {
     const attribute = ele.dataset.testid || ''
@@ -37,22 +36,17 @@ function inject(selector: () => LiveSelector<HTMLElement>, signal: AbortSignal) 
                             top: 0,
                             zIndex: 2,
                         }}>
-                        {info.avatarType === AvatarType.Clip ? (
-                            <NFTAvatarMiniClip
-                                identity={activatedSocialNetworkUI.collecting.identityProvider?.recognized.value}
-                                size={info.width}
-                                screenName={userId}
-                            />
-                        ) : (
-                            <NFTBadgeTimeline
-                                timelineUpdated={MaskMessages.events.NFTAvatarTimelineUpdated}
-                                userId={userId}
-                                avatarId={info.avatarId}
-                                width={info.width - 4}
-                                height={info.height - 4}
-                                snsKey={RSS3_KEY_SNS.TWITTER}
-                            />
-                        )}
+                        <MiniAvatarBorder
+                            avatarType={info.avatarType}
+                            size={info.width}
+                            screenName={
+                                userId ||
+                                activatedSocialNetworkUI.collecting.identityProvider?.recognized.value.identifier
+                                    ?.userId ||
+                                ''
+                            }
+                            avatarId={info.avatarId}
+                        />
                     </div>,
                 )
                 remover = root.destroy
