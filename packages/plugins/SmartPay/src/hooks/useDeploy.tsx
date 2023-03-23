@@ -60,6 +60,7 @@ export function useDeploy(
         try {
             if (
                 !chainId ||
+                !lastRecognizedIdentity?.isOwner ||
                 !lastRecognizedIdentity?.identifier?.userId ||
                 !signAccount?.address ||
                 !contractAccount ||
@@ -181,7 +182,7 @@ export function useDeploy(
         chainId,
         connection,
         signAccount,
-        lastRecognizedIdentity?.identifier,
+        lastRecognizedIdentity,
         signWallet,
         signPersona,
         contractAccount,
