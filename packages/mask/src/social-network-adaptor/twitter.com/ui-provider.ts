@@ -44,6 +44,7 @@ import { injectProfileCover } from './injection/ProfileCover.js'
 import { injectProfileCardHolder } from './injection/ProfileCard/index.js'
 import { injectAvatar } from './injection/Avatar/index.js'
 import { injectPluginSettingsDialogAtTwitter } from './injection/PluginSettingsDialog.js'
+import { injectLens } from './injection/Lens/index.js'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -204,6 +205,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         openNFTAvatarSettingDialog,
         avatar: injectAvatar,
         tips: injectTips,
+        lens: injectLens,
         profileCard: injectProfileCardHolder,
         PluginSettingsDialog: injectPluginSettingsDialogAtTwitter,
     },

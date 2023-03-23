@@ -1,25 +1,26 @@
-import urlcat from 'urlcat'
-import { first, uniqWith } from 'lodash-es'
 import {
-    type BindingProof,
+    NextIDPlatform,
     fromHex,
+    toBase64,
+    type BindingProof,
     type NextIDAction,
     type NextIDBindings,
     type NextIDErrorBody,
+    type NextIDIdentity,
     type NextIDPayload,
     type NextIDPersonaBindings,
-    NextIDPlatform,
-    toBase64,
 } from '@masknet/shared-base'
+import { first, uniqWith } from 'lodash-es'
+import urlcat from 'urlcat'
+import { fetchJSON } from '../entry-helpers.js'
+import type { NextIDBaseAPI } from '../entry-types.js'
 import {
+    PROOF_BASE_URL_DEV,
     PROOF_BASE_URL_PROD,
     RELATION_SERVICE_URL,
-    PROOF_BASE_URL_DEV,
     TWITTER_HANDLER_VERIFY_URL,
 } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
-import type { NextIDBaseAPI } from '../entry-types.js'
-import { fetchJSON } from '../entry-helpers.js'
 
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
@@ -39,6 +40,15 @@ interface CreatePayloadResponse {
     sign_payload: string
     uuid: string
     created_at: string
+}
+
+/**
+ * Lens account queried from next id
+ */
+export interface LensAccount {
+    lens: string
+    displayName: string
+    address: string
 }
 
 const getPersonaQueryURL = (platform: string, identity: string) =>
@@ -181,8 +191,8 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 identity: {
                     neighborWithTraversal: Array<{
                         source: NextIDPlatform
-                        to: { platform: NextIDPlatform; displayName: string; identity: string }
-                        from: { platform: NextIDPlatform; displayName: string; identity: string }
+                        to: NextIDIdentity
+                        from: NextIDIdentity
                     }>
                 }
             }
@@ -225,6 +235,70 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return uniqWith(rawData, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
             (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
         )
+    }
+
+    async queryAllLens(twitterId: string): Promise<LensAccount[]> {
+        const response = await fetchJSON<{
+            data: {
+                identity: {
+                    uuid: string
+                    platform: 'twitter'
+                    identity: string
+                    displayName: string
+                    neighborWithTraversal: Array<{
+                        source: NextIDPlatform
+                        from: NextIDIdentity
+                        to: NextIDIdentity
+                    }>
+                }
+            }
+        }>(RELATION_SERVICE_URL, {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify({
+                operationName: 'GET_PROFILES_QUERY',
+                variables: { platform: 'twitter', identity: twitterId.toLowerCase() },
+                query: `
+                    query GET_PROFILES_QUERY($platform: String, $identity: String) {
+                      identity(platform: $platform, identity: $identity) {
+                        uuid
+                        platform
+                        identity
+                        displayName
+                        neighborWithTraversal(depth: 5) {
+                          source
+                          from {
+                            uuid
+                            platform
+                            identity
+                            displayName
+                          }
+                          to {
+                            uuid
+                            platform
+                            identity
+                            displayName
+                          }
+                        }
+                      }
+                    }
+                `,
+            }),
+        })
+
+        const connections = response.data.identity.neighborWithTraversal.filter((x) => {
+            return (
+                x.source === NextIDPlatform.LENS &&
+                x.from.platform === NextIDPlatform.Ethereum &&
+                x.to.platform === NextIDPlatform.LENS
+            )
+        })
+
+        return connections.map((x) => ({
+            lens: x.to.identity,
+            displayName: x.to.displayName,
+            address: x.from.identity,
+        }))
     }
 
     async createPersonaPayload(
@@ -282,7 +356,7 @@ function createBindingProofFromProfileQuery(
     source: NextIDPlatform,
     identity: string,
     name: string,
-) {
+): BindingProof {
     return {
         platform,
         source,
@@ -292,5 +366,5 @@ function createBindingProofFromProfileQuery(
         invalid_reason: '',
         last_checked_at: '',
         is_valid: true,
-    } as BindingProof
+    }
 }

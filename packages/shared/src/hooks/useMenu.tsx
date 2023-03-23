@@ -21,7 +21,7 @@ export function useMenu(...elements: Array<JSX.Element | null>) {
     return useMenuConfig(elements, {})
 }
 
-export interface useMenuConfig extends Partial<MenuProps> {
+export interface MenuConfigOptions extends Partial<MenuProps> {
     anchorSibling?: boolean
     useShadowRoot?: boolean
 }
@@ -38,7 +38,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function useMenuConfig(
     elements: Array<JSX.Element | null>,
-    config: useMenuConfig,
+    config: MenuConfigOptions,
     ref?: MutableRefObject<HTMLDivElement | null>,
 ): [
     menu: React.ReactElement,
@@ -58,6 +58,7 @@ export function useMenuConfig(
         createElement(
             useShadowRoot ? ShadowRootMenu : Menu,
             {
+                ...menuProps,
                 PaperProps: menuProps?.PaperProps,
                 classes: { paper: classes.menu, ...menuProps.classes },
                 MenuListProps: menuProps?.MenuListProps,
