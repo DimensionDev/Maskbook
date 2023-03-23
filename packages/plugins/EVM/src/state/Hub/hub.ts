@@ -1,4 +1,4 @@
-import { EMPTY_LIST, mixin } from '@masknet/shared-base'
+import { EMPTY_LIST, isDeviceOnWhitelist, mixin } from '@masknet/shared-base'
 import { HubStateBaseClient, HubStateFungibleClient, HubStateNonFungibleClient } from '@masknet/web3-state'
 import {
     AlchemyEVM,
@@ -24,6 +24,7 @@ import {
     DeBankGasOption,
     DeBankFungibleToken,
     DeBankHistory,
+    SimpleHash,
 } from '@masknet/web3-providers'
 import type {
     AuthorizationAPI,
@@ -158,11 +159,13 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                 [SourceType.GoPlus]: GoPlusAuthorization,
                 [SourceType.Rabby]: Rabby,
                 [SourceType.R2D2]: R2D2TokenList,
+                [SourceType.SimpleHash]: SimpleHash,
             },
             options.chainId === ChainId.Mainnet
                 ? [
                       X2Y2,
-                      NFTScanNonFungibleTokenEVM,
+                      isDeviceOnWhitelist(50) ? NFTScanNonFungibleTokenEVM : SimpleHash,
+                      isDeviceOnWhitelist(50) ? SimpleHash : NFTScanNonFungibleTokenEVM,
                       ZerionNonFungibleToken,
                       Rarible,
                       OpenSea,
@@ -175,7 +178,8 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                       R2D2TokenList,
                   ]
                 : [
-                      NFTScanNonFungibleTokenEVM,
+                      isDeviceOnWhitelist(50) ? NFTScanNonFungibleTokenEVM : SimpleHash,
+                      isDeviceOnWhitelist(50) ? SimpleHash : NFTScanNonFungibleTokenEVM,
                       ZerionNonFungibleToken,
                       Rarible,
                       AlchemyEVM,
