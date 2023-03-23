@@ -505,7 +505,9 @@ export namespace RSS3BaseAPI {
         | Web3FeedGeneric<Tag.Transaction>
 
     /** For feed cards */
-    export type TokenOperationFeed = Web3FeedGeneric<Tag.Transaction, Type.Transfer | Type.Burn | Type.Mint>
+    export type TokenOperationFeed =
+        | Web3FeedGeneric<Tag.Transaction, Type.Transfer | Type.Burn | Type.Mint>
+        | Web3FeedGeneric<Tag.Exchange, Type.Deposit | Type.Withdraw>
     export type TokenBridgeFeed = Web3FeedGeneric<Tag.Transaction, Type.Bridge>
     export type TokenSwapFeed = Web3FeedGeneric<Tag.Exchange, Type.Swap>
     export type LiquidityFeed = Web3FeedGeneric<Tag.Exchange, Type.Liquidity>
