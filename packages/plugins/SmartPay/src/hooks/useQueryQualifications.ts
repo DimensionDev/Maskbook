@@ -23,7 +23,7 @@ export function useQueryQualifications(): AsyncState<{
     const personas = useAllPersonas()
 
     return useAsync(async () => {
-        if (!currentIdentity?.identifier?.userId || (!currentPersona && !wallets.length))
+        if (!currentIdentity?.identifier?.userId || (!currentPersona && !wallets.length) || !currentIdentity.isOwner)
             return {
                 hasVerifiedPersona: false,
             }

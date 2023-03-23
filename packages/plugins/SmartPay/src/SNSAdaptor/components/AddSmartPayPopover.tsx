@@ -142,7 +142,7 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
     useUpdateEffect(() => {
         if (!open) return
         retry()
-    }, [open, retry])
+    }, [open])
 
     return usePortalShadowRoot((container) => (
         <Popover
