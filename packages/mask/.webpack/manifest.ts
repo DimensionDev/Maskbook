@@ -31,11 +31,6 @@ function modify(manifest: ManifestV2 | ManifestV3, flags: NormalizedFlags, compu
         stableDevelopmentExtensionID(manifest)
     }
 
-    // TODO: remove this, Just for test
-    if (flags.mode === 'production') {
-        stableDevelopmentExtensionID(manifest)
-    }
-
     if (flags.devtools) {
         manifest.devtools_page = 'devtools-background.html'
     }
