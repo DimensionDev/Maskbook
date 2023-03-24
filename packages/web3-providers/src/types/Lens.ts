@@ -14,6 +14,17 @@ export type FollowModuleTypedData = {
     }
 }
 
+export enum ProxyActionType {
+    ProxyActionError = 'ProxyActionError',
+    ProxyActionQueued = 'ProxyActionQueued',
+    ProxyActionStatusResult = 'ProxyActionStatusResult',
+}
+
+export enum BroadcastType {
+    RelayerResult = 'RelayerResult',
+    RelayError = 'RelayError',
+}
+
 export namespace LensBaseAPI {
     export interface Profile {
         id: string
@@ -109,6 +120,38 @@ export namespace LensBaseAPI {
         }
     }
 
+    export interface ProxyActionError {
+        reason: string
+        lastKnownTxId: string
+        __typename: ProxyActionType.ProxyActionError
+    }
+
+    export interface ProxyActionQueued {
+        queuedAt: string
+        __typename: ProxyActionType.ProxyActionQueued
+    }
+
+    export interface ProxyActionStatusResult {
+        txHash: string
+        txId: string
+        status: string
+        __typename: ProxyActionType.ProxyActionStatusResult
+    }
+
+    export type ProxyActionStatus = ProxyActionError | ProxyActionQueued | ProxyActionStatusResult
+
+    export interface RelayerResult {
+        txHash: string
+        __typename: BroadcastType.RelayerResult
+    }
+
+    export interface RelayError {
+        reason: string
+        __typename: BroadcastType.RelayError
+    }
+
+    export type Broadcast = RelayerResult | RelayError
+
     export interface Provider {
         getProfileByHandle: (handle: string) => Promise<Profile>
         queryDefaultProfileByAddress: (address: string) => Promise<Profile | undefined>
@@ -119,11 +162,21 @@ export namespace LensBaseAPI {
         refresh: (refreshToken: string) => Promise<Authenticate | undefined>
         createFollowTypedData: (
             profileId: string,
-            options?: { token: string; followModule?: FollowModuleTypedData },
+            options: { token: string; followModule?: FollowModuleTypedData },
         ) => Promise<CreateFollowTypedData | undefined>
         createUnfollowTypedData: (
             profileId: string,
-            options?: { token: string },
+            options: { token: string },
         ) => Promise<CreateUnfollowTypedData | undefined>
+        followWithProxyAction: (profileId: string, options: { token: string }) => Promise<string | undefined>
+        queryProxyStatus: (proxyActionId: string, options: { token: string }) => Promise<ProxyActionStatus | undefined>
+        broadcast: (
+            id: string,
+            signatue: string,
+            options: {
+                token: string
+                fetcher: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
+            },
+        ) => Promise<Broadcast | undefined>
     }
 }

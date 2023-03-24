@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
+import { Table, TableBody, TableCell, TableRow, Typography, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     useBalance,
@@ -128,6 +128,22 @@ export function ConsoleContent(props: ConsoleContentProps) {
             content: (
                 <Typography variant="body2" style={{ width: 280, wordBreak: 'break-all' }}>
                     {currentVisitingSocialIdentity?.value?.publicKey}
+                </Typography>
+            ),
+        },
+        {
+            name: 'Follow Lens Dialog',
+            content: (
+                <Typography>
+                    <Button
+                        onClick={() =>
+                            setDialog({
+                                open: true,
+                                handle: 'binrui.lens',
+                            })
+                        }>
+                        Click
+                    </Button>
                 </Typography>
             ),
         },
