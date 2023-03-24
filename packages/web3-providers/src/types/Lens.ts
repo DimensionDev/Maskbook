@@ -172,7 +172,7 @@ export namespace LensBaseAPI {
         queryProxyStatus: (proxyActionId: string, options: { token: string }) => Promise<ProxyActionStatus | undefined>
         broadcast: (
             id: string,
-            signatue: string,
+            signature: string,
             options: {
                 token: string
                 fetcher: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
