@@ -60,19 +60,7 @@ export function PriceCard(props: PriceCardProps) {
 
     if (!topOffer && orders.error) return null
 
-    if (!topOffer && !orders.loading)
-        return (
-            <div className={classes.wrapper}>
-                <div className={classes.priceZone}>
-                    <div className={classes.offerBox}>
-                        <Typography textAlign="left" fontSize={14} fontWeight={400}>
-                            {t.plugin_collectible_no_offer()}
-                        </Typography>
-                    </div>
-                    {sourceType ? <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} /> : null}
-                </div>
-            </div>
-        )
+    if (!topOffer && !orders.loading) return null
 
     const priceUSD = formatCurrency(topOffer?.price?.usd ?? 0, 'USD', { onlyRemainTwoDecimal: true })
 
