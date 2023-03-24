@@ -13,7 +13,6 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                 type: 'exact',
                 filter: (data: SearchResult<ChainId, SchemaType>, keyword: string) => {
                     if (data.type !== SearchResultType.FungibleToken) return false
-
                     if (
                         data.alias
                             ?.filter((x) => !x.isPin)
@@ -101,7 +100,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                 },
             },
         ],
-        type: SearchResultType.FungibleToken,
+        types: [SearchResultType.FungibleToken],
     },
     {
         rules: [
@@ -109,7 +108,11 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                 key: 'token',
                 type: 'exact',
                 filter: (data: SearchResult<ChainId, SchemaType>, keyword: string) => {
-                    if (data.type !== SearchResultType.NonFungibleToken) return false
+                    if (
+                        data.type !== SearchResultType.NonFungibleCollection &&
+                        data.type !== SearchResultType.NonFungibleToken
+                    )
+                        return false
 
                     return (
                         isSameAddress(data.address, keyword) ||
@@ -175,7 +178,11 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                 ) {
                     const data = compact<T>(
                         all.map((x) => {
-                            if (x.type !== SearchResultType.NonFungibleToken) return
+                            if (
+                                x.type !== SearchResultType.NonFungibleCollection &&
+                                x.type !== SearchResultType.NonFungibleToken
+                            )
+                                return
                             return {
                                 ...x,
                                 __name: x.name?.replace(/\s/g, ''),
@@ -199,7 +206,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                 },
             },
         ],
-        type: SearchResultType.NonFungibleToken,
+        types: [SearchResultType.NonFungibleToken, SearchResultType.NonFungibleCollection],
     },
     {
         rules: [
@@ -212,6 +219,6 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                 },
             },
         ],
-        type: SearchResultType.CollectionListByTwitterHandler,
+        types: [SearchResultType.CollectionListByTwitterHandler],
     },
 ]
