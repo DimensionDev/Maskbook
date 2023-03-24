@@ -1,1 +1,5 @@
-{}
+{
+    "promote": "트위터에서 토큰을 즉식적으로 거래합니다. Mask.io 설치하여 멀티체인 Dex를 탐색해 보세요.",
+    "account_promote$twitter": "@$t(mask:twitter_account) 팔로우하여 트위터에서 크립토를 거래하세요.",
+    "account_promote$facebook": "@$t(mask:facebook_account) 팔로우하여 페이스북에서 크립토를 거래하세요."
+}
