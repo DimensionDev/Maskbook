@@ -7,12 +7,15 @@ import LensFollowNftABI from '@masknet/web3-contracts/abis/LensFollowNFT.json'
 import type { LensFollowNFT } from '@masknet/web3-contracts/types/LensFollowNFT.js'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
 import { type AbiItem } from 'web3-utils'
+import { BroadcastType } from '@masknet/web3-providers/types'
+import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 export function useUnfollow(profileId?: string, onSuccess?: () => void) {
     const connection = useWeb3Connection()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [, handleQueryAuthenticate] = useQueryAuthenticate(account)
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const { fetchJSON } = useSNSAdaptorContext()
 
     return useAsyncFn(async () => {
         if (!profileId || !connection || chainId !== ChainId.Matic) return
@@ -33,18 +36,25 @@ export function useUnfollow(profileId?: string, onSuccess?: () => void) {
         const { v, r, s } = splitSignature(signature)
         const { tokenId, deadline } = typedData.typedData.value
 
-        const followNFTContract = createContract<LensFollowNFT>(
-            web3,
-            typedData.typedData.domain.verifyingContract,
-            LensFollowNftABI as AbiItem[],
-        )
-        const tx = await new ContractTransaction(followNFTContract).fillAll(
-            followNFTContract?.methods.burnWithSig(tokenId, [v, r, s, deadline]),
-            { from: account },
-        )
+        let hash: string | undefined
+        try {
+            const broadcast = await Lens.broadcast(typedData.id, signature, { token, fetcher: fetchJSON })
+            if (broadcast?.__typename === BroadcastType.RelayError) throw new Error(broadcast.reason)
+            else hash = broadcast?.txHash
+        } catch {
+            const followNFTContract = createContract<LensFollowNFT>(
+                web3,
+                typedData.typedData.domain.verifyingContract,
+                LensFollowNftABI as AbiItem[],
+            )
+            const tx = await new ContractTransaction(followNFTContract).fillAll(
+                followNFTContract?.methods.burnWithSig(tokenId, [v, r, s, deadline]),
+                { from: account },
+            )
+            hash = await connection.sendTransaction(tx)
+        }
 
-        const hash = await connection.sendTransaction(tx)
-
+        if (!hash) return
         const result = await connection.confirmTransaction(hash, {
             signal: AbortSignal.timeout(3 * 60 * 1000),
         })
@@ -52,5 +62,5 @@ export function useUnfollow(profileId?: string, onSuccess?: () => void) {
         if (!result.status) return
 
         onSuccess?.()
-    }, [handleQueryAuthenticate, chainId, profileId, web3, account, onSuccess, connection])
+    }, [handleQueryAuthenticate, chainId, profileId, web3, account, onSuccess, connection, fetchJSON])
 }

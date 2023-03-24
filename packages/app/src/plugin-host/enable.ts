@@ -103,6 +103,7 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
             openDashboard: reject,
             openPopupConnectWindow: reject,
             openPopupWindow: reject,
+            fetchJSON: reject,
             openWalletConnectDialog: reject,
             ownPersonaChanged: emptyEventRegistry,
             ownProofChanged: emptyEventRegistry,

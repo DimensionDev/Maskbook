@@ -39,7 +39,7 @@ export const RestPartOfPluginUIContextShared: Omit<
     openPopupWindow: Services.Helper.openPopupWindow,
     closePopupWindow: Services.Helper.removePopupWindow,
     openPopupConnectWindow: Services.Helper.openPopupConnectWindow,
-
+    fetchJSON: Services.Helper.fetchJSON,
     openWalletConnectDialog: (uri: string, callback: () => void) => {
         const onClose = (ev: WalletConnectQRCodeDialogEvent) => {
             if (ev.open) return
