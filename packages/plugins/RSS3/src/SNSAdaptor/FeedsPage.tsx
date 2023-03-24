@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react'
 import { range } from 'lodash-es'
 import { Icons } from '@masknet/icons'
-import { ElementAnchor } from '@masknet/shared'
+import { ElementAnchor, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { ScopedDomainsContainer, useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
@@ -38,7 +38,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
     const { classes } = useStyles()
     const { Others } = useWeb3State()
 
-    const { feeds, loading: loadingFeeds, next } = useFeeds(address, tag)
+    const { feeds, loading: loadingFeeds, error, next } = useFeeds(address, tag)
 
     const { value: reversedName, loading: loadingENS } = useReverseAddress(undefined, address)
     const { getDomain } = ScopedDomainsContainer.useContainer()
@@ -58,6 +58,15 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
             ownerDisplay,
         }
     }, [address, name, Others?.formatDomainName])
+
+    if (error && !feeds.length)
+        return (
+            <Box p={2} boxSizing="border-box">
+                <Box mt="100px" color={(theme) => theme.palette.maskColor.main}>
+                    <RetryHint retry={next} />
+                </Box>
+            </Box>
+        )
 
     if ((loading && !feeds.length) || !feedOwner) {
         return (
