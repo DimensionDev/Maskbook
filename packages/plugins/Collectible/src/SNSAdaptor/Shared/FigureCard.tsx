@@ -1,6 +1,6 @@
 import { AssetPreviewer, NFTFallbackImage } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import { VerifiedUser as VerifiedUserIcon } from '@mui/icons-material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isENSContractAddress } from '@masknet/web3-shared-evm'
@@ -54,6 +54,20 @@ const useStyles = makeStyles()((theme) => ({
     unset: {
         color: 'unset',
     },
+    name: {
+        color: theme.palette.maskColor.white,
+        fontSize: 18,
+        fontWeight: 700,
+        wordBreak: 'break-word',
+        padding: theme.spacing(2),
+    },
+    nameBox: {
+        position: 'absolute',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
+    },
 }))
 
 export interface FigureCardProps {
@@ -84,10 +98,17 @@ export function FigureCard(props: FigureCardProps) {
                         fallbackImage={NFTFallbackImage}
                     />
                 </div>
+                {isENSContractAddress(asset.contract?.address || '') ? (
+                    <Stack className={classes.nameBox}>
+                        <Typography className={classes.name}>{asset.metadata?.name}</Typography>
+                    </Stack>
+                ) : null}
             </div>
-            <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
-                {asset.metadata?.name ?? '-'}
-            </Typography>
+            {isENSContractAddress(asset.contract?.address || '') ? null : (
+                <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
+                    {asset.metadata?.name ?? '-'}
+                </Typography>
+            )}
             {!hideSubTitle && (
                 <div className={classes.nameLgBox}>
                     <Typography className={classes.nameLg}>{asset.collection?.name}</Typography>
