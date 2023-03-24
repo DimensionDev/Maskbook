@@ -58,6 +58,9 @@ export interface Asset {
     owners: Array<{
         owner_address: string
     }>
+    previews: {
+        image_large_url?: string
+    }
 }
 
 // Todo: contract address will be added in SimpleHash v1 release.
