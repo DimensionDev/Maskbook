@@ -87,8 +87,8 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             opacity: 0.5,
         },
         fallbackImage: {
-            width: 30,
-            height: 30,
+            width: '100%',
+            height: '100%',
         },
         image: {
             background: 'transparent !important',
