@@ -4,11 +4,11 @@ import { max, pickBy } from 'lodash-es'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { searchFacebookAvatarOnMobileSelector, searchFacebookAvatarSelector } from '../../utils/selector.js'
 import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils/index.js'
-import { type EnhanceableSite, type NFTAvatarEvent, NetworkPluginID } from '@masknet/shared-base'
+import { type NFTAvatarEvent, NetworkPluginID } from '@masknet/shared-base'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
-import type { AvatarMetaDB } from '@masknet/plugin-avatar'
+import { useSaveFirefly, type AvatarMetaDB, type NextIDAvatarMeta } from '@masknet/plugin-avatar'
 import { getAvatarId } from '../../utils/user.js'
-import { useNFT, useNFTAvatar, useSaveNFTAvatar, NFTBadge, RSS3_KEY_SNS, useWallet } from '@masknet/plugin-avatar'
+import { useNFT, useNFTAvatar, NFTBadge, RSS3_KEY_SNS, useWallet } from '@masknet/plugin-avatar'
 import { makeStyles } from '@masknet/theme'
 import { isMobileFacebook } from '../../utils/isMobile.js'
 import { InMemoryStorages } from '../../../../../shared/index.js'
@@ -77,7 +77,7 @@ function NFTAvatarInFacebook() {
     )
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
-    const saveNFTAvatar = useSaveNFTAvatar()
+    const saveNFTAvatar = useSaveFirefly(NetworkPluginID.PLUGIN_EVM)
 
     const windowSize = useWindowSize()
     const showAvatar = useMemo(() => {
@@ -119,12 +119,10 @@ function NFTAvatarInFacebook() {
         if (!identity.identifier) return
         if (NFTEvent?.address && NFTEvent?.tokenId && NFTEvent?.avatarId) {
             try {
-                const avatarInfo = await saveNFTAvatar(
-                    account,
-                    { ...NFTEvent, avatarId: getAvatarId(identity.avatar ?? '') } as AvatarMetaDB,
-                    identity.identifier.network as EnhanceableSite,
-                    RSS3_KEY_SNS.FACEBOOK,
-                )
+                const avatarInfo = await saveNFTAvatar(identity.identifier.userId, account, {
+                    ...NFTEvent,
+                    avatarId: getAvatarId(identity.avatar ?? ''),
+                } as NextIDAvatarMeta)
                 if (!avatarInfo) {
                     setNFTEvent(undefined)
                     setAvatar(undefined)
@@ -145,20 +143,15 @@ function NFTAvatarInFacebook() {
             }
         } else if (storages.address.value && storages.userId.value && storages.tokenId.value) {
             try {
-                const avatarInfo = await saveNFTAvatar(
-                    account,
-                    {
-                        userId: storages.userId.value,
-                        tokenId: storages.tokenId.value,
-                        address: storages.address.value,
-                        avatarId: getAvatarId(identity.avatar ?? ''),
-                        chainId: storages.chainId.value,
-                        pluginID: storages.pluginID.value,
-                        schema: storages.schema.value,
-                    } as AvatarMetaDB,
-                    identity.identifier.network as EnhanceableSite,
-                    RSS3_KEY_SNS.FACEBOOK,
-                )
+                const avatarInfo = await saveNFTAvatar(storages.userId.value, account, {
+                    userId: storages.userId.value,
+                    tokenId: storages.tokenId.value,
+                    address: storages.address.value,
+                    avatarId: getAvatarId(identity.avatar ?? ''),
+                    chainId: storages.chainId.value,
+                    pluginID: storages.pluginID.value,
+                    schema: storages.schema.value,
+                } as unknown as NextIDAvatarMeta)
                 if (!avatarInfo) {
                     clearStorages()
                     setAvatar(undefined)

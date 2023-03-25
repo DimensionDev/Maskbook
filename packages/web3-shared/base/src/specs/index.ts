@@ -141,6 +141,8 @@ export enum StorageProviderType {
     RSS3 = 'RSS3',
     // KV storage powered by CloudFlare
     KV = 'kv',
+
+    Firefly = 'firefly',
 }
 
 export enum FontSize {
@@ -1263,6 +1265,8 @@ export interface Storage {
     set<T>(key: string, value: T): Promise<void>
     delete?(key: string): Promise<void>
     clearAll?(): Promise<void>
+    getData?<T>(): Promise<T>
+    setData?<T>(value: T): Promise<void>
 }
 
 export interface SettingsState {
@@ -1334,6 +1338,8 @@ export interface Web3StorageServiceState {
         platform: NextIDPlatform,
         signerOrPublicKey: string | ECKeyIdentifier,
     ) => Storage
+
+    createFireflyStorage: (namespace: string, userId: string, address: string) => Storage
 }
 
 export interface IdentityServiceState<ChainId> {

@@ -2,7 +2,7 @@ import { StorageProviderType } from '@masknet/web3-shared-base'
 import type { ECKeyIdentifier, NextIDPlatform } from '@masknet/shared-base'
 import { StorageState } from '@masknet/web3-state'
 import { unreachable } from '@masknet/kit'
-import { KVStorage, RSS3Storage, NextIDStorage } from '@masknet/shared'
+import { KVStorage, RSS3Storage, NextIDStorage, FireflyStorage } from '@masknet/shared'
 import { SharedContextSettings, Web3StateSettings } from '../../settings/index.js'
 
 function createStorage(
@@ -10,6 +10,8 @@ function createStorage(
     options: {
         namespace: string
         platform?: NextIDPlatform
+        userId?: string
+        address?: string
         signerOrPublicKey?: string | ECKeyIdentifier
     },
 ) {
@@ -25,6 +27,10 @@ function createStorage(
                 options.platform,
                 options.signerOrPublicKey,
                 SharedContextSettings.value.signWithPersona,
+            )
+        case StorageProviderType.Firefly:
+            return new FireflyStorage(options.namespace, options.userId || '', options.address || '', () =>
+                Web3StateSettings.value.Connection?.getConnection?.(),
             )
         default:
             unreachable(providerType)

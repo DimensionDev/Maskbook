@@ -66,6 +66,7 @@ import { BonfidaAPI } from './Bonfida/index.js'
 import { RedPacketAPI } from './RedPacket/index.js'
 import { SmartPayOwnerAPI } from './SmartPay/apis/OwnerAPI.js'
 import { SimpleHashProviderAPI } from './SimpleHash/index.js'
+import { FireflyAPI } from './firefly/index.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
@@ -184,3 +185,6 @@ export const SmartPayBundler = new SmartPayBundlerAPI()
 export const SmartPayFunder = new SmartPayFunderAPI()
 export const SmartPayOwner = new SmartPayOwnerAPI()
 export const SmartPayAccount = new SmartPayAccountAPI()
+
+// Firefly
+export const Firefly = new FireflyAPI()

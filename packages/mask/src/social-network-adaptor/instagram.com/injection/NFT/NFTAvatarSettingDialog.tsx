@@ -2,15 +2,15 @@ import { useCallback, useState } from 'react'
 import { useMount } from 'react-use'
 import { MaskMessages, useI18N } from '../../../../utils/index.js'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
-import { toPNG, NFTAvatar, RSS3_KEY_SNS, useSaveNFTAvatar } from '@masknet/plugin-avatar'
+import { toPNG, NFTAvatar, useSaveFirefly, type NextIDAvatarMeta, type SelectTokenInfo } from '@masknet/plugin-avatar'
 import { getAvatarId } from '../../utils/user.js'
 import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Instagram } from '@masknet/web3-providers'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import type { SelectTokenInfo } from '@masknet/plugin-avatar'
-import type { EnhanceableSite } from '@masknet/shared-base'
+
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()(() => ({
@@ -24,7 +24,7 @@ export function NFTAvatarSettingDialog() {
     const { account } = useChainContext()
     const identity = useCurrentVisitingIdentity()
     const { pluginID } = useNetworkContext()
-    const saveNFTAvatar = useSaveNFTAvatar()
+    const saveNFTAvatar = useSaveFirefly(NetworkPluginID.PLUGIN_EVM)
 
     const onChange = useCallback(
         async (info: SelectTokenInfo) => {
@@ -35,21 +35,15 @@ export function NFTAvatarSettingDialog() {
                 if (!image || !account) return
                 const { profile_pic_url_hd } = await Instagram.uploadUserAvatar(image, identity.identifier.userId)
                 const avatarId = getAvatarId(profile_pic_url_hd)
-                const avatarInfo = await saveNFTAvatar(
-                    account,
-                    {
-                        address: info.token.contract.address,
-                        userId: identity.identifier.userId,
-                        tokenId: info.token.tokenId,
-                        avatarId,
-                        chainId: (info.token.chainId ?? ChainId.Mainnet) as ChainId,
-                        schema: (info.token.schema ?? SchemaType.ERC721) as SchemaType,
-                        pluginId: info.pluginID,
-                    },
-                    identity.identifier.network as EnhanceableSite,
-                    RSS3_KEY_SNS.INSTAGRAM,
-                    pluginID,
-                )
+                const avatarInfo = await saveNFTAvatar(identity.identifier.userId, account, {
+                    address: info.token.contract.address,
+                    userId: identity.identifier.userId,
+                    tokenId: info.token.tokenId,
+                    avatarId,
+                    chainId: (info.token.chainId ?? ChainId.Mainnet) as ChainId,
+                    schema: (info.token.schema ?? SchemaType.ERC721) as SchemaType,
+                    pluginId: info.pluginID,
+                } as NextIDAvatarMeta)
 
                 if (!avatarInfo) {
                     // eslint-disable-next-line no-alert

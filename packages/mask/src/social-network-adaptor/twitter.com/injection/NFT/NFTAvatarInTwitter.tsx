@@ -17,19 +17,15 @@ import {
     usePersonaNFTAvatar,
     useWallet,
     useNFT,
-    useSaveNFTAvatar,
+    useSaveFirefly,
+    type NextIDAvatarMeta,
 } from '@masknet/plugin-avatar'
 import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use'
 import { useChainContext, useWeb3Hub } from '@masknet/web3-hooks-base'
 import { Box, Typography } from '@mui/material'
 import { AssetPreviewer, useShowConfirm } from '@masknet/shared'
-import type { AvatarMetaDB } from '@masknet/plugin-avatar'
-import {
-    NetworkPluginID,
-    type EnhanceableSite,
-    type NFTAvatarEvent,
-    CrossIsolationMessages,
-} from '@masknet/shared-base'
+
+import { NetworkPluginID, type NFTAvatarEvent, CrossIsolationMessages } from '@masknet/shared-base'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 import { Twitter } from '@masknet/web3-providers'
 
@@ -115,7 +111,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
     const openConfirmDialog = useShowConfirm()
-    const saveNFTAvatar = useSaveNFTAvatar()
+    const saveNFTAvatar = useSaveFirefly(NetworkPluginID.PLUGIN_EVM)
     const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
 
     // After the avatar is set, it cannot be saved immediately,
@@ -136,15 +132,10 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
             return
         }
 
-        const avatar = await saveNFTAvatar(
-            account,
-            {
-                ...NFTEvent,
-                avatarId: Twitter.getAvatarId(identity.avatar ?? ''),
-            } as AvatarMetaDB,
-            identity.identifier.network as EnhanceableSite,
-            RSS3_KEY_SNS.TWITTER,
-        ).catch((error) => {
+        const avatar = await saveNFTAvatar(identity.identifier.userId, account, {
+            ...NFTEvent,
+            avatarId: Twitter.getAvatarId(identity.avatar ?? ''),
+        } as NextIDAvatarMeta).catch((error) => {
             setNFTEvent(undefined)
             // eslint-disable-next-line no-alert
             alert(error.message)

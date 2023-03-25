@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useWeb3State } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID, EnhanceableSite } from '@masknet/shared-base'
+import { type NetworkPluginID, EnhanceableSite } from '@masknet/shared-base'
 import { NFT_AVATAR_DB_NAME } from '../../constants.js'
 import type { AddressStorageV2 } from '../../types.js'
 
@@ -8,9 +8,11 @@ export function useSaveAddress(pluginID?: NetworkPluginID) {
     const { Storage } = useWeb3State(pluginID)
 
     return useCallback(
-        async (userId: string, pluginID: NetworkPluginID, account: string, network: EnhanceableSite) => {
+        async (userId: string, pluginID: NetworkPluginID, account: string, network?: EnhanceableSite) => {
             if (!Storage) return
-            const addressStorage = Storage.createKVStorage(`${NFT_AVATAR_DB_NAME}_${network}`)
+            const addressStorage = Storage.createKVStorage(
+                `${NFT_AVATAR_DB_NAME}_${network ?? EnhanceableSite.Twitter}`,
+            )
             if (!addressStorage) return
 
             const prevData = (await addressStorage.get<AddressStorageV2>(userId).catch(() => ({}))) as
