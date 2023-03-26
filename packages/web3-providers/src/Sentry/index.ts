@@ -212,6 +212,19 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         if (this.status === 'off') return
         if (process.env.NODE_ENV === 'development') {
             console.log(`[LOG EVENT]: ${JSON.stringify(this.createEvent(options))}`)
+
+            const event = this.createEvent(options)
+
+            const transaction = Sentry.startTransaction({
+                name: options.eventID,
+            })
+            const span = transaction.startChild({
+                data: options,
+                op: options.eventType,
+                description: event.message,
+            })
+            span.finish()
+            transaction.finish()
         } else {
             Sentry.captureEvent(this.createEvent(options))
         }
