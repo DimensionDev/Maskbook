@@ -15,7 +15,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const links = usePostInfoDetails.mentionedLinks()
         const link = uniq(links).find(checkUrl)
         const asset = getAssetInfoFromURL(link)
-        return asset ? <Renderer chainId={asset?.chain_id} projectId={asset.project_id} /> : null
+        return asset?.project_id ? <Renderer chainId={asset.chain_id} projectId={asset.project_id} /> : null
     },
     DecryptedInspector(props) {
         const collectibleUrl = getRelevantUrl(extractTextFromTypedMessage(props.message).unwrapOr(''))
