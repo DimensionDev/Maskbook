@@ -6,8 +6,8 @@ import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
 import { Button, MenuItem, Typography, alpha } from '@mui/material'
-import { debounce } from 'lodash-es'
-import { type HTMLProps, useEffect, useRef, useState } from 'react'
+import { debounce, uniqBy } from 'lodash-es'
+import { type HTMLProps, useEffect, useMemo, useRef, useState } from 'react'
 import { useWindowScroll } from 'react-use'
 import { SocialTooltip } from './SocialTooltip.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
@@ -26,6 +26,7 @@ const useStyles = makeStyles()((theme) => {
             boxSizing: 'border-box',
             backgroundColor: alpha(theme.palette.common.white, 0.4),
             borderRadius: 8,
+            minWidth: 'auto',
             '&:hover': {
                 backgroundColor: alpha(theme.palette.common.white, 0.4),
             },
@@ -37,6 +38,7 @@ const useStyles = makeStyles()((theme) => {
             marginLeft: '-3.5px',
             ':nth-of-type(1)': {
                 zIndex: 3,
+                marginLeft: 0,
             },
             ':nth-of-type(2)': {
                 zIndex: 2,
@@ -73,7 +75,8 @@ const useStyles = makeStyles()((theme) => {
             boxSizing: 'border-box',
             maxHeight: 296,
             borderRadius: 16,
-            padding: theme.spacing(1.5),
+            padding: theme.spacing(1.5, 0, 1.5, 1.5),
+            paddingRight: 0,
             translate: theme.spacing(1.9, 1),
             background: theme.palette.maskColor.white,
             scrollbarColor: `${theme.palette.maskColor.secondaryLine} ${theme.palette.maskColor.secondaryLine}`,
@@ -176,7 +179,6 @@ export function SocialAccountList({ nextIdBindings, ...rest }: SocialAccountList
             }),
         {
             hideBackdrop: true,
-            disablePortal: true,
             anchorSibling: false,
             anchorOrigin: {
                 vertical: 'bottom',
@@ -198,17 +200,22 @@ export function SocialAccountList({ nextIdBindings, ...rest }: SocialAccountList
 
     useEffect(closeMenu, [position])
 
+    const platformIcons = useMemo(() => {
+        return uniqBy(nextIdBindings, (x) => x.platform)
+            .sort((x) => (x.platform === NextIDPlatform.LENS ? -1 : 0))
+            .map((x) => resolveNextIDPlatformIcon(x.platform))
+            .filter(isNonNull)
+            .slice(0, 3)
+    }, [nextIdBindings])
+
+    if (!platformIcons.length) return null
+
     return (
         <div {...rest}>
             <Button variant="text" onClick={openMenu} className={classes.iconStack} disableRipple>
-                {nextIdBindings
-                    .sort((x) => (x.platform === NextIDPlatform.LENS ? -1 : 0))
-                    .map((x) => resolveNextIDPlatformIcon(x.platform))
-                    .filter(isNonNull)
-                    .slice(0, 3)
-                    .map((Icon, index) => (
-                        <Icon key={index} className={classes.icon} size={20} />
-                    ))}
+                {platformIcons.map((Icon, index) => (
+                    <Icon key={index} className={classes.icon} size={20} />
+                ))}
             </Button>
             {menu}
         </div>
