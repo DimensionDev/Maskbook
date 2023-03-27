@@ -2,7 +2,7 @@ import { StorageProviderType } from '@masknet/web3-shared-base'
 import type { ECKeyIdentifier, NextIDPlatform } from '@masknet/shared-base'
 import { StorageState } from '@masknet/web3-state'
 import { unreachable } from '@masknet/kit'
-import { KVStorage, RSS3Storage, NextIDStorage } from '@masknet/shared'
+import { KVStorage, RSS3Storage, NextIDStorage, StringStorage } from '@masknet/shared'
 import { SharedContextSettings, Web3StateSettings } from '../../settings/index.js'
 
 function createStorage(
@@ -10,6 +10,7 @@ function createStorage(
     options: {
         namespace: string
         platform?: NextIDPlatform
+        address?: string
         signerOrPublicKey?: string | ECKeyIdentifier
     },
 ) {
@@ -25,6 +26,10 @@ function createStorage(
                 options.platform,
                 options.signerOrPublicKey,
                 SharedContextSettings.value.signWithPersona,
+            )
+        case StorageProviderType.String:
+            return new StringStorage(options.namespace, options.address || '', () =>
+                Web3StateSettings.value.Connection?.getConnection?.(),
             )
         default:
             unreachable(providerType)

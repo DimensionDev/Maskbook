@@ -144,7 +144,7 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                 startAdornment={<Typography className={cx(classes.label, classes.title)}>{label}</Typography>}
                 endAdornment={
                     <Box className={classes.control} justifyContent={disableBalance ? 'flex-end' : undefined}>
-                        <Typography className={classes.label} display="flex" alignItems="center">
+                        <Typography className={classes.label} display="flex" alignItems="center" component="div">
                             {!disableBalance ? (
                                 <>
                                     {isNative ? t.available_balance() : t.balance()}:

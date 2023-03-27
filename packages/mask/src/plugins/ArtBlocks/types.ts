@@ -21,7 +21,7 @@ export interface Project {
     pricePerTokenInWei: string
     currencyAddress: string
     currencySymbol: string
-    scriptJSON: string
+    scriptJSON: string | null
     name: string
     royaltyPercentage: string
     invocations: string

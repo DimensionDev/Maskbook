@@ -11,14 +11,15 @@ import {
     usePersonaNFTAvatar,
     useWallet,
     useNFT,
-    useSaveNFTAvatar,
-    type AvatarMetaDB,
+    type NextIDAvatarMeta,
+    useSaveStringStorage,
 } from '@masknet/plugin-avatar'
 import { useAsync, useLocation, useWindowSize } from 'react-use'
 import { useChainContext, useWeb3Hub } from '@masknet/web3-hooks-base'
 import { Box, Typography } from '@mui/material'
 import { AssetPreviewer, useShowConfirm } from '@masknet/shared'
-import { NetworkPluginID, type EnhanceableSite, type NFTAvatarEvent } from '@masknet/shared-base'
+
+import { NetworkPluginID, type NFTAvatarEvent } from '@masknet/shared-base'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 import { Twitter } from '@masknet/web3-providers'
 import { getAvatarType } from '../../utils/useAvatarType.js'
@@ -145,7 +146,7 @@ function useNFTCircleAvatar(size: number) {
     )
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
     const openConfirmDialog = useShowConfirm()
-    const saveNFTAvatar = useSaveNFTAvatar()
+    const saveNFTAvatar = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)
     const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
 
     // After the avatar is set, it cannot be saved immediately,
@@ -166,15 +167,10 @@ function useNFTCircleAvatar(size: number) {
             return
         }
 
-        const avatar = await saveNFTAvatar(
-            account,
-            {
-                ...NFTEvent,
-                avatarId: Twitter.getAvatarId(identity.avatar ?? ''),
-            } as AvatarMetaDB,
-            identity.identifier.network as EnhanceableSite,
-            RSS3_KEY_SNS.TWITTER,
-        ).catch((error) => {
+        const avatar = await saveNFTAvatar(identity.identifier.userId, account, {
+            ...NFTEvent,
+            avatarId: Twitter.getAvatarId(identity.avatar ?? ''),
+        } as NextIDAvatarMeta).catch((error) => {
             setNFTEvent(undefined)
             // eslint-disable-next-line no-alert
             alert(error.message)

@@ -19,13 +19,11 @@ const useStyles = makeStyles()({
 
 interface Props extends HTMLProps<HTMLDivElement> {}
 
-const ETH_GAS_LIMIT = 21000
-
 export const TokenSection: FC<Props> = ({ className, ...rest }) => {
     const { classes, cx } = useStyles()
     const { token, setToken, amount, setAmount, isAvailableBalance, balance } = useTip()
     const { pluginID } = useNetworkContext()
-    const { account, chainId } = useChainContext()
+    const { chainId } = useChainContext()
 
     // balance
 

@@ -141,6 +141,8 @@ export enum StorageProviderType {
     RSS3 = 'RSS3',
     // KV storage powered by CloudFlare
     KV = 'kv',
+
+    String = 'String',
 }
 
 export enum FontSize {
@@ -1334,6 +1336,8 @@ export interface Web3StorageServiceState {
         platform: NextIDPlatform,
         signerOrPublicKey: string | ECKeyIdentifier,
     ) => Storage
+
+    createStringStorage: (namespace: string, address: string) => Storage
 }
 
 export interface IdentityServiceState<ChainId> {
