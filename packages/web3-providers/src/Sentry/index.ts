@@ -1,3 +1,4 @@
+import '@sentry/tracing'
 import { Breadcrumbs, Event, GlobalHandlers } from '@sentry/browser'
 import {
     getSiteType,
@@ -213,7 +214,15 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         if (process.env.NODE_ENV === 'development') {
             console.log(`[LOG EVENT]: ${JSON.stringify(this.createEvent(options))}`)
         } else {
-            Sentry.captureEvent(this.createEvent(options))
+            const transaction = Sentry.startTransaction({
+                name: options.eventID,
+            })
+            const span = transaction.startChild({
+                op: 'task',
+                description: this.createEvent(options).message,
+            })
+            span.finish()
+            transaction.finish()
         }
     }
 
