@@ -75,7 +75,8 @@ const useStyles = makeStyles()((theme) => {
             boxSizing: 'border-box',
             maxHeight: 296,
             borderRadius: 16,
-            padding: theme.spacing(1.5),
+            padding: theme.spacing(1.5, 0, 1.5, 1.5),
+            paddingRight: 0,
             translate: theme.spacing(1.9, 1),
             background: theme.palette.maskColor.white,
             scrollbarColor: `${theme.palette.maskColor.secondaryLine} ${theme.palette.maskColor.secondaryLine}`,
@@ -178,7 +179,6 @@ export function SocialAccountList({ nextIdBindings, ...rest }: SocialAccountList
             }),
         {
             hideBackdrop: true,
-            disablePortal: true,
             anchorSibling: false,
             anchorOrigin: {
                 vertical: 'bottom',
