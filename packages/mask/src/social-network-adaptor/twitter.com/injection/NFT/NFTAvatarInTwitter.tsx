@@ -89,20 +89,22 @@ export function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
         if (!avatar || !nftAvatar?.avatarId) return
         setUpdatedAvatar(!!nftAvatar?.avatarId && Twitter.getAvatarId(avatar ?? '') === nftAvatar.avatarId)
     }
-
-    new MutationObserverWatcher(searchAvatarMetaSelector())
-        .addListener('onAdd', handlerWatcher)
-        .addListener('onChange', handlerWatcher)
-        .startWatch(
-            {
-                childList: true,
-                subtree: true,
-                attributes: true,
-                attributeFilter: ['src'],
-            },
-            props.signal,
-        )
-
+    useEffect(() => {
+        const abortController = new AbortController()
+        new MutationObserverWatcher(searchAvatarMetaSelector())
+            .addListener('onAdd', handlerWatcher)
+            .addListener('onChange', handlerWatcher)
+            .startWatch(
+                {
+                    childList: true,
+                    subtree: true,
+                    attributes: true,
+                    attributeFilter: ['src'],
+                },
+                abortController.signal,
+            )
+        return () => abortController.abort()
+    }, [handlerWatcher])
     if (!showAvatar) return null
     return (
         <NFTBadge
