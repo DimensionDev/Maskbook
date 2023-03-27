@@ -12,7 +12,7 @@ import {
     useNFT,
     useNFTContainerAtTwitter,
 } from '@masknet/plugin-avatar'
-import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { createReactRootShadowed, startWatch, useI18N } from '../../../../utils/index.js'
 import { searchTwitterAvatarNFTLinkSelector, searchTwitterAvatarNFTSelector } from '../../utils/selector.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -102,6 +102,7 @@ interface NFTAvatarClipOrSquareProps {
     avatarType: AvatarType
 }
 export function NFTAvatarClipOrSquareInTwitter({ screenName, size, avatarType }: NFTAvatarClipOrSquareProps) {
+    const { t } = useI18N()
     const { classes } = useStyles()
     const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName)
     const { account } = useChainContext()
@@ -114,14 +115,14 @@ export function NFTAvatarClipOrSquareInTwitter({ screenName, size, avatarType }:
     )
 
     const name = useMemo(() => {
-        if (loading || loadingNFT) return 'Loading...'
+        if (loading || loadingNFT) return t('loading')
         return `${formatText(value.name, avatarMetadata?.token_id ?? '')} ${
             value.slug?.toLowerCase() === 'ens' ? 'ENS' : ''
         }`
     }, [JSON.stringify(value), loading, loadingNFT, avatarMetadata?.token_id])
 
     const price = useMemo(() => {
-        if (loading || loadingNFT) return 'Loading...'
+        if (loading || loadingNFT) return t('loading')
         return formatPrice(value.amount, value.symbol)
     }, [JSON.stringify(value), loading, loadingNFT])
 
