@@ -30,12 +30,12 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         display: 'flex',
         flexDirection: 'column',
-        flexBasis: '100%',
+        flexShrink: 1,
+        flexGrow: 1,
         '&::-webkit-scrollbar': {
             display: 'none',
         },
         padding: 0,
-        height: 528,
     },
     recipient: {
         margin: theme.spacing(1, 2, 0),

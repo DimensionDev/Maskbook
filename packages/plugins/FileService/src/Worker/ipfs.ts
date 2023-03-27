@@ -2,7 +2,7 @@ import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeText } from '@masknet/kit'
 import { create, type IPFSHTTPClient } from 'ipfs-http-client'
 import { isEmpty } from 'lodash-es'
-import { LANDING_PAGE } from '../constants.js'
+import { LANDING_PAGE, Provider } from '../constants.js'
 import urlcat from 'urlcat'
 import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types.js'
 import { makeFileKeySigned } from '../helpers.js'
@@ -47,7 +47,7 @@ class IPFSAgent implements ProviderAgent {
         const encodedMetadata = JSON.stringify({
             name: metadata.name,
             size: metadata.size,
-            provider: 'ipfs',
+            provider: Provider.IPFS,
             link: urlcat(linkPrefix, '/:txId', { txId: metadata.txId }),
             signed: await makeFileKeySigned(metadata.key),
             createdAt: new Date().toISOString(),

@@ -276,7 +276,7 @@ export class LensAPI implements LensBaseAPI.Provider {
 
     async createFollowTypedData(
         profileId: string,
-        options?: {
+        options: {
             token: string
             followModule?: FollowModuleTypedData
         },
@@ -329,7 +329,7 @@ export class LensAPI implements LensBaseAPI.Provider {
         return data.createFollowTypedData
     }
 
-    async createUnfollowTypedData(profileId: string, options?: { token: string }) {
+    async createUnfollowTypedData(profileId: string, options: { token: string }) {
         if (!profileId) return
         const { data } = await fetchJSON<{ data: { createUnfollowTypedData: LensBaseAPI.CreateUnfollowTypedData } }>(
             LENS_ROOT_API,
@@ -373,5 +373,102 @@ export class LensAPI implements LensBaseAPI.Provider {
         )
 
         return data.createUnfollowTypedData
+    }
+
+    async followWithProxyAction(profileId: string, options: { token: string }) {
+        if (!profileId) return
+        const { data } = await fetchJSON<{ data: { proxyAction: string } }>(LENS_ROOT_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': options?.token ? `Bearer ${options.token}` : '',
+            },
+            body: JSON.stringify({
+                query: `mutation ProxyAction {
+                  proxyAction(request: { follow: { freeFollow: { profileId: "${profileId}" } } })
+                }
+                `,
+            }),
+        })
+
+        return data.proxyAction
+    }
+
+    async queryProxyStatus(proxyActionId: string, options: { token: string }) {
+        if (!proxyActionId) return
+        const { data } = await fetchJSON<{ data: { proxyActionStatus: LensBaseAPI.ProxyActionStatus } }>(
+            LENS_ROOT_API,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': options?.token ? `Bearer ${options.token}` : '',
+                },
+                body: JSON.stringify({
+                    query: `query ProxyStatus {
+                      proxyActionStatus(proxyActionId: "${proxyActionId}") {
+                        ... on ProxyActionError{
+                          reason
+                          lastKnownTxId
+                          __typename
+                        }
+                        ... on ProxyActionStatusResult {
+                          txHash
+                          txId
+                          status
+                          __typename
+                        }
+                        ... on ProxyActionQueued {
+                          queuedAt
+                          __typename
+                        }
+                      }
+                    }`,
+                }),
+            },
+        )
+
+        return data.proxyActionStatus
+    }
+
+    async broadcast(
+        id: string,
+        signature: string,
+        options?: {
+            token: string
+            fetcher: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
+        },
+    ) {
+        if (!id || !options?.token || !signature) return
+        const { data } = await options.fetcher<{ data: { broadcast: LensBaseAPI.Broadcast } }>(LENS_ROOT_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': options?.token ? `Bearer ${options.token}` : '',
+            },
+            body: JSON.stringify({
+                query: `mutation Broadcast {
+                      broadcast(
+                        request: {
+                          id: "${id}"
+                          signature: "${signature}"
+                        }
+                      ) {
+                        ... on RelayerResult {
+                          txHash
+                          __typename
+                        }
+                        ... on RelayError {
+                          reason
+                          __typename
+                        }
+                        __typename
+                      }
+                    }
+                    `,
+            }),
+        })
+
+        return data.broadcast
     }
 }

@@ -66,6 +66,7 @@ import { BonfidaAPI } from './Bonfida/index.js'
 import { RedPacketAPI } from './RedPacket/index.js'
 import { SmartPayOwnerAPI } from './SmartPay/apis/OwnerAPI.js'
 import { SimpleHashProviderAPI } from './SimpleHash/index.js'
+import { StringStorageAPI } from './StringStorage/index.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
@@ -122,6 +123,7 @@ export const EtherscanRedPacket = new EtherscanRedPacketAPI()
 // NextID
 export const NextIDProof = new NextIDProofAPI()
 export const NextIDStorage = new NextIDStorageAPI()
+export type { LensAccount } from './NextID/index.js'
 
 // GoPlusLabs
 export const GoPlusLabs = new GoPlusLabsAPI()
@@ -183,3 +185,6 @@ export const SmartPayBundler = new SmartPayBundlerAPI()
 export const SmartPayFunder = new SmartPayFunderAPI()
 export const SmartPayOwner = new SmartPayOwnerAPI()
 export const SmartPayAccount = new SmartPayAccountAPI()
+
+// Firefly
+export const StringStorage = new StringStorageAPI()

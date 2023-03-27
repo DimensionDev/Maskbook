@@ -43,8 +43,11 @@ const useStyles = makeStyles<void, 'tokenIcon' | 'verboseToken'>()((theme, _, re
 }))
 
 const { Tag, Type } = RSS3BaseAPI
+type Type = RSS3BaseAPI.Type
 export function isTokenOperationFeed(feed: RSS3BaseAPI.Web3Feed): feed is RSS3BaseAPI.TokenOperationFeed {
-    return feed.tag === Tag.Transaction && [Type.Transfer, Type.Burn, Type.Mint].includes(feed.type)
+    const isTxTag = feed.tag === Tag.Transaction && [Type.Transfer, Type.Burn, Type.Mint].includes(feed.type)
+    const isExchangeTag = feed.tag === Tag.Exchange && [Type.Deposit, Type.Withdraw].includes(feed.type)
+    return isTxTag || isExchangeTag
 }
 
 interface TokenFeedCardProps extends Omit<FeedCardProps, 'feed'> {
@@ -54,10 +57,19 @@ interface TokenFeedCardProps extends Omit<FeedCardProps, 'feed'> {
 const cardTypeMap: Partial<Record<RSS3BaseAPI.Type, CardType>> = {
     [Type.Burn]: CardType.TokenBurn,
     [Type.Mint]: CardType.TokenMint,
+    [Type.Withdraw]: CardType.TokenIn,
+    [Type.Deposit]: CardType.TokenOut,
 }
-const contextMap: Partial<Record<RSS3BaseAPI.Type, RSS3BaseAPI.Type.Burn | RSS3BaseAPI.Type.Mint>> = {
+const contextMap: Partial<
+    Record<
+        RSS3BaseAPI.Type,
+        RSS3BaseAPI.Type.Burn | RSS3BaseAPI.Type.Mint | RSS3BaseAPI.Type.Withdraw | RSS3BaseAPI.Type.Deposit
+    >
+> = {
     [Type.Burn]: Type.Burn,
     [Type.Mint]: Type.Mint,
+    [Type.Withdraw]: Type.Withdraw,
+    [Type.Deposit]: Type.Deposit,
 }
 
 /**
@@ -96,6 +108,9 @@ export const TokenOperationCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) =>
                             to,
                             value: formatValue(metadata),
                             symbol: metadata!.symbol,
+                            /* eslint-disable-next-line  @typescript-eslint/ban-ts-comment */
+                            // @ts-ignore
+                            exchange: action.platform!,
                             context,
                         }}
                         components={{
@@ -111,6 +126,7 @@ export const TokenOperationCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) =>
                             to,
                             value: formatValue(metadata),
                             symbol: metadata!.symbol,
+                            exchange: action.platform!,
                             context,
                         }}
                         components={{

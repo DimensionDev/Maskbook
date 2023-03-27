@@ -8,7 +8,7 @@ import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { FormattedAddress } from '@masknet/shared'
+import { ManageWallet } from '@masknet/shared'
 import { useWallet, useWallets, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
@@ -71,31 +71,6 @@ const useStyles = makeStyles()({
         lineHeight: '20px',
         backgroundColor: '#FF5F5F',
     },
-    info: {
-        display: 'flex',
-        backgroundColor: '#F7F9FA',
-        borderRadius: 8,
-        padding: '8px 16px',
-        marginBottom: 12,
-    },
-    iconContainer: {
-        display: 'flex',
-        alignItems: 'center',
-        marginRight: 20,
-    },
-    name: {
-        display: 'flex',
-        alignItems: 'center',
-        color: '#1C68F3',
-        fontWeight: 500,
-    },
-    address: {
-        fontSize: 12,
-        color: '#1C68F3',
-        display: 'flex',
-        alignItems: 'center',
-        wordBreak: 'break-all',
-    },
 })
 
 const DeleteWallet = memo(() => {
@@ -148,36 +123,7 @@ const DeleteWallet = memo(() => {
                     <Icons.Warning size={48} />
                     <Typography className={classes.title}>{t('delete_wallet')}</Typography>
                 </div>
-                <div className={classes.info}>
-                    <div className={classes.iconContainer}>
-                        <Icons.Wallet />
-                    </div>
-                    <div>
-                        <Typography className={classes.name}>{wallet?.name}</Typography>
-                        <Typography className={classes.address}>
-                            <FormattedAddress address={wallet?.address} size={10} formatter={formatEthereumAddress} />
-                        </Typography>
-                    </div>
-                </div>
-                {manageWallets.map((x, index) => {
-                    return (
-                        <div className={classes.info} key={index}>
-                            <div className={classes.iconContainer}>
-                                <Icons.SmartPay />
-                            </div>
-                            <div>
-                                <Typography className={classes.name}>{x?.name}</Typography>
-                                <Typography className={classes.address}>
-                                    <FormattedAddress
-                                        address={x?.address}
-                                        size={10}
-                                        formatter={formatEthereumAddress}
-                                    />
-                                </Typography>
-                            </div>
-                        </div>
-                    )
-                })}
+                <ManageWallet manageWallets={manageWallets} name={wallet?.name} address={wallet?.address} />
                 {manageWallets.length && wallet?.address ? (
                     <>
                         <Typography className={classes.tip}>

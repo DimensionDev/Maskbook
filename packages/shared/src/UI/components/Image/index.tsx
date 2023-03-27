@@ -99,7 +99,7 @@ export function Image({
                 width={size}
                 height={size}
                 {...rest}
-                src={fallback?.toString() ?? (theme.palette.mode === 'dark' ? MASK_DARK_FALLBACK : MASK_LIGHT_FALLBACK)}
+                src={fallback?.toString() ?? new URL('./ens.svg', import.meta.url).toString()}
                 className={cx(classes.image, classes.failImage, classes.fallbackImage)}
             />
         </div>

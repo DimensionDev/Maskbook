@@ -31,6 +31,7 @@ export function ENSProvider({ children, result }: PropsWithChildren<SearchResult
         if (nextIdBindings_) return nextIdBindings_
         return reversedAddress ? NextIDProof.queryProfilesByRelationService(reversedAddress) : EMPTY_LIST
     }, [reversedAddress, JSON.stringify(nextIdBindings_)])
+
     const context = useMemo(
         () => ({
             reversedAddress,

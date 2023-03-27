@@ -1,10 +1,13 @@
-import type { FC, HTMLProps } from 'react'
 import { Icons } from '@masknet/icons'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { PluginID, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
+import { SocialAccountList } from '@masknet/shared'
+import { EMPTY_LIST, PluginID, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { NextIDProof } from '@masknet/web3-providers'
+import type { FC, HTMLProps } from 'react'
+import { useAsync } from 'react-use'
 import { TipButton } from '../../../plugins/Tips/components/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { ProfileBar } from './ProfileBar.js'
@@ -19,16 +22,18 @@ const useStyles = makeStyles()((theme) => {
         profileBar: {
             width: '100%',
         },
-        settingItem: {
+        operations: {
             display: 'flex',
             alignItems: 'center',
             marginLeft: 'auto',
         },
         gearIcon: {
+            marginLeft: theme.spacing(1),
             color: theme.palette.text.primary,
             cursor: 'pointer',
         },
         tipButton: {
+            marginLeft: theme.spacing(1),
             width: 40,
             height: 40,
             borderRadius: 40,
@@ -68,6 +73,11 @@ export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
         })
     }
 
+    const { value: nextIdBindings = EMPTY_LIST } = useAsync(async () => {
+        if (!address) return EMPTY_LIST
+        return NextIDProof.queryProfilesByRelationService(address)
+    }, [address])
+
     return (
         <div className={cx(classes.title, className)} {...rest}>
             <ProfileBar
@@ -77,9 +87,10 @@ export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
                 socialAccounts={socialAccounts}
                 address={address}
                 onAddressChange={onAddressChange}>
-                <div className={classes.settingItem}>
+                <div className={classes.operations}>
+                    <SocialAccountList nextIdBindings={nextIdBindings} />
                     {identity.identifier?.userId === me?.identifier?.userId ? (
-                        <Icons.Gear onClick={handleOpenDialog} className={classes.gearIcon} />
+                        <Icons.Gear className={classes.gearIcon} onClick={handleOpenDialog} />
                     ) : (
                         <TipButton className={classes.tipButton} receiver={identity.identifier} />
                     )}

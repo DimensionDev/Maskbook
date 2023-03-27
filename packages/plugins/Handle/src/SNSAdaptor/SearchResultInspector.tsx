@@ -1,27 +1,18 @@
+import { Icons } from '@masknet/icons'
+import { SocialAccountList, useSnackbarCallback } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { ScopedDomainsContainer, useWeb3State } from '@masknet/web3-hooks-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { Box, Link, Typography } from '@mui/material'
 import { useContext, useEffect } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { openWindow } from '@masknet/shared-base-ui'
-import { resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
-import { ScopedDomainsContainer, useWeb3State } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useSnackbarCallback } from '@masknet/shared'
-import { Box, Typography, Link, alpha } from '@mui/material'
-import { ENSProvider, ENSContext, type SearchResultInspectorProps } from './context.js'
-import { SocialAccountList } from './SocialAccountList.js'
-import { SocialTooltip } from './SocialTooltip.js'
-import { makeStyles } from '@masknet/theme'
-import { Icons } from '@masknet/icons'
-import { useI18N } from '../locales/index.js'
-import { resolveNextIDPlatformIcon } from './utils.js'
-import { PluginHeader } from './PluginHeader.js'
 import { SuffixToChainIconMap } from '../constants.js'
+import { useI18N } from '../locales/index.js'
+import { PluginHeader } from './PluginHeader.js'
+import { ENSContext, ENSProvider, type SearchResultInspectorProps } from './context.js'
 
-interface StyleProps {
-    isMenuScroll?: boolean
-}
-
-const useStyles = makeStyles<StyleProps>()((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             padding: theme.spacing(0, 2),
@@ -48,52 +39,10 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
             fontSize: 14,
             lineHeight: '18px',
         },
-        nextIdVerified: {
-            display: 'flex',
-            alignItems: 'center',
-            marginBottom: 12,
-        },
-        socialName: {
-            color: theme.palette.maskColor.dark,
-            whiteSpace: 'nowrap',
-            maxWidth: 85,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            fontWeight: 400,
-            marginLeft: 4,
-            fontSize: 14,
-        },
-        rightSpace: {
-            marginRight: 6,
-        },
         link: {
             display: 'flex',
             alignItems: 'center',
             textDecoration: 'none !important',
-        },
-        linkOutIcon: {
-            color: theme.palette.maskColor.dark,
-            cursor: 'pointer',
-        },
-        bindingsWrapper: {
-            display: 'flex',
-            width: 520,
-            alignItems: 'center',
-            overflow: 'hidden',
-        },
-        badge: {
-            display: 'flex',
-            marginRight: 12,
-            alignItems: 'center',
-            width: 130,
-            justifyContent: 'space-between',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            cursor: 'pointer',
-            height: 36,
-            padding: theme.spacing(0, 1),
-            background: alpha(theme.palette.common.white, 0.5),
-            borderRadius: 8,
         },
         reversedAddressIcon: {
             marginRight: 2,
@@ -101,12 +50,15 @@ const useStyles = makeStyles<StyleProps>()((theme) => {
             cursor: 'pointer',
             color: theme.palette.maskColor.secondaryDark,
         },
+        accounts: {
+            marginLeft: 'auto',
+        },
     }
 })
 
 export function SearchResultInspectorContent() {
     const t = useI18N()
-    const { classes, cx } = useStyles({})
+    const { classes } = useStyles()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { reversedAddress, nextIdBindings, domain } = useContext(ENSContext)
     const [, copyToClipboard] = useCopyToClipboard()
@@ -115,7 +67,6 @@ export function SearchResultInspectorContent() {
         deps: [],
         successText: t.wallets_address_copied(),
     })
-    const isShowSocialAccountList = nextIdBindings.length > 3
     const suffix = domain ? domain.split('.').pop()! : undefined
     const ChainIcon = suffix ? SuffixToChainIconMap[suffix] ?? Icons.ETH : null
 
@@ -153,32 +104,8 @@ export function SearchResultInspectorContent() {
                             </Typography>
                         ) : null}
                     </div>
+                    <SocialAccountList nextIdBindings={nextIdBindings} className={classes.accounts} />
                 </section>
-                {nextIdBindings?.[0]?.identity ? (
-                    <div className={classes.nextIdVerified}>
-                        <section className={classes.bindingsWrapper}>
-                            {nextIdBindings.map((x, i) => (
-                                <SocialTooltip key={i} platform={x.source}>
-                                    <div
-                                        className={classes.badge}
-                                        onClick={() =>
-                                            openWindow(resolveNextIDPlatformLink(x.platform, x.identity, x.name))
-                                        }>
-                                        <div className={classes.link}>
-                                            {resolveNextIDPlatformIcon(x.platform)}
-                                            <Typography className={cx(classes.socialName, classes.rightSpace)}>
-                                                {x.name}
-                                            </Typography>
-                                        </div>
-                                        <Icons.LinkOut size={20} className={classes.linkOutIcon} />
-                                    </div>
-                                </SocialTooltip>
-                            ))}
-                        </section>
-
-                        {isShowSocialAccountList ? <SocialAccountList nextIdBindings={nextIdBindings} /> : null}
-                    </div>
-                ) : null}
             </Box>
         </>
     )

@@ -24,7 +24,7 @@ import SmartPay from '@masknet/web3-constants/evm/smart-pay.json'
 import ENS from '@masknet/web3-constants/evm/ens.json'
 import GoPlusLabs from '@masknet/web3-constants/evm/gopluslabs.json'
 import Lens from '@masknet/web3-constants/evm/lens.json'
-
+import CryptoPunks from '@masknet/web3-constants/evm/cryptopunks.json'
 import {
     transformAllHook,
     transformHook,
@@ -168,3 +168,5 @@ export const getLensConstant = transform(ChainId, Lens)
 export const getLensConstants = transformAll(ChainId, Lens)
 export const useLensConstant = transformHook(getLensConstants)
 export const useLensConstants = transformAllHook(getLensConstants)
+
+export const getCryptoPunksConstants = transformAll(ChainId, CryptoPunks)

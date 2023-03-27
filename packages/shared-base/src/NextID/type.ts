@@ -17,6 +17,13 @@ export enum NextIDPlatform {
     EthLeaderboard = 'ethLeaderboard',
 }
 
+export interface NextIDIdentity {
+    uuid: string
+    platform: NextIDPlatform
+    identity: string
+    displayName: string
+}
+
 export interface NextIDErrorBody {
     message?: string
 }

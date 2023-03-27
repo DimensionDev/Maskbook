@@ -37,13 +37,13 @@ interface CollectibleProps {
     chainId?: ChainId
 }
 
-export function Collectible(props: CollectibleProps) {
+export function Collectible({ projectId, chainId: projectChainId }: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: props?.chainId })
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: projectChainId })
     const [tabIndex, setTabIndex] = useState(0)
 
-    const { value, loading, error } = useFetchProject(props.projectId, chainId)
+    const { value, loading, error } = useFetchProject(projectId, chainId)
     const project = value?.projects[0]
 
     if (loading) return <Typography align="center">{t('loading')}</Typography>

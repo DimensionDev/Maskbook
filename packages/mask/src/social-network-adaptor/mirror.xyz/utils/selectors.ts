@@ -7,7 +7,7 @@ export const querySelector = <T extends E, SingleMode extends boolean = true>(se
     return (singleMode ? ls.enableSingleMode() : ls) as LiveSelector<T, SingleMode>
 }
 
-const querySelectorAll = <T extends E>(selector: string) => {
+export const querySelectorAll = <T extends E>(selector: string) => {
     return new LiveSelector().querySelectorAll<T>(selector)
 }
 

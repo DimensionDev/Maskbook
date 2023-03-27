@@ -42,7 +42,8 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        height: 282,
+        height: '100%',
+        padding: theme.spacing(4),
     },
     loadingText: {
         marginTop: theme.spacing(1),
