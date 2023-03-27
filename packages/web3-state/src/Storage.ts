@@ -23,8 +23,8 @@ export class StorageState implements Web3StorageServiceState {
         return this.createStorage(StorageProviderType.RSS3, { namespace })
     }
 
-    createFireflyStorage(namespace: string, userId: string, address: string) {
-        return this.createStorage(StorageProviderType.Firefly, { namespace, userId, address })
+    createStringStorage(namespace: string, userId: string, address: string) {
+        return this.createStorage(StorageProviderType.String, { namespace, userId, address })
     }
 
     createNextIDStorage(proofIdentity: string, platform: NextIDPlatform, signerOrPublicKey: string | ECKeyIdentifier) {

@@ -4,7 +4,7 @@ import type { TwitterBaseAPI } from '@masknet/web3-providers/types'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { AllChainsNonFungibleToken, NextIDAvatarMeta } from '../../types.js'
 import { useSaveToNextID } from './useSaveToNextID.js'
-import { useSaveFirefly } from '../firefly/useSaveFirefly.js'
+import { useSaveStringStorage } from '../index.js'
 
 export type AvatarInfo = TwitterBaseAPI.AvatarInfo & {
     avatarId: string
@@ -12,7 +12,7 @@ export type AvatarInfo = TwitterBaseAPI.AvatarInfo & {
 
 export function useSave(pluginID: NetworkPluginID) {
     const saveToNextID = useSaveToNextID()
-    const saveToFirefly = useSaveFirefly(pluginID)
+    const saveToStringStorage = useSaveStringStorage(pluginID)
 
     return useAsyncFn(
         async (
@@ -41,8 +41,8 @@ export function useSave(pluginID: NetworkPluginID) {
                 return saveToNextID(info, account, persona, proof)
             }
 
-            return saveToFirefly(data.userId, account, info)
+            return saveToStringStorage(data.userId, account, info)
         },
-        [saveToNextID, saveToFirefly, pluginID],
+        [saveToNextID, saveToStringStorage, pluginID],
     )
 }

@@ -17,8 +17,8 @@ import {
     usePersonaNFTAvatar,
     useWallet,
     useNFT,
-    useSaveFirefly,
     type NextIDAvatarMeta,
+    useSaveStringStorage,
 } from '@masknet/plugin-avatar'
 import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use'
 import { useChainContext, useWeb3Hub } from '@masknet/web3-hooks-base'
@@ -111,7 +111,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
     const openConfirmDialog = useShowConfirm()
-    const saveNFTAvatar = useSaveFirefly(NetworkPluginID.PLUGIN_EVM)
+    const saveNFTAvatar = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)
     const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
 
     // After the avatar is set, it cannot be saved immediately,

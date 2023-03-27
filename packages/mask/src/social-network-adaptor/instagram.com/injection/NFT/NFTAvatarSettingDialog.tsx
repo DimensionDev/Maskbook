@@ -2,7 +2,13 @@ import { useCallback, useState } from 'react'
 import { useMount } from 'react-use'
 import { MaskMessages, useI18N } from '../../../../utils/index.js'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
-import { toPNG, NFTAvatar, useSaveFirefly, type NextIDAvatarMeta, type SelectTokenInfo } from '@masknet/plugin-avatar'
+import {
+    toPNG,
+    NFTAvatar,
+    type NextIDAvatarMeta,
+    type SelectTokenInfo,
+    useSaveStringStorage,
+} from '@masknet/plugin-avatar'
 import { getAvatarId } from '../../utils/user.js'
 import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
@@ -24,7 +30,7 @@ export function NFTAvatarSettingDialog() {
     const { account } = useChainContext()
     const identity = useCurrentVisitingIdentity()
     const { pluginID } = useNetworkContext()
-    const saveNFTAvatar = useSaveFirefly(NetworkPluginID.PLUGIN_EVM)
+    const saveNFTAvatar = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)
 
     const onChange = useCallback(
         async (info: SelectTokenInfo) => {

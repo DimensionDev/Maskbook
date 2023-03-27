@@ -5,15 +5,15 @@ import { useSaveAddress } from '../index.js'
 import type { NextIDAvatarMeta } from '../../types.js'
 import { PLUGIN_NAME } from '../../constants.js'
 
-export function useSaveFirefly(pluginID: NetworkPluginID) {
+export function useSaveStringStorage(pluginID: NetworkPluginID) {
     const { Storage } = useWeb3State(pluginID)
     const saveAddress = useSaveAddress()
 
     return useCallback(
         async (userId: string, address: string, nft: NextIDAvatarMeta) => {
             if (!Storage) return
-            const fireflyStorage = Storage.createFireflyStorage(PLUGIN_NAME, userId, address)
-            await fireflyStorage.setData?.<NextIDAvatarMeta>(nft)
+            const stringStorage = Storage.createStringStorage(PLUGIN_NAME, userId, address)
+            await stringStorage.setData?.<string>(JSON.stringify(nft))
             await saveAddress(nft.userId, pluginID, address, getEnhanceableSiteType())
             return nft
         },

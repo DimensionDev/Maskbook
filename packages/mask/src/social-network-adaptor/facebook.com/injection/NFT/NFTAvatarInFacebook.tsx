@@ -6,7 +6,7 @@ import { searchFacebookAvatarOnMobileSelector, searchFacebookAvatarSelector } fr
 import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils/index.js'
 import { type NFTAvatarEvent, NetworkPluginID } from '@masknet/shared-base'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
-import { useSaveFirefly, type AvatarMetaDB, type NextIDAvatarMeta } from '@masknet/plugin-avatar'
+import { type AvatarMetaDB, type NextIDAvatarMeta } from '@masknet/plugin-avatar'
 import { getAvatarId } from '../../utils/user.js'
 import { useNFT, useNFTAvatar, NFTBadge, RSS3_KEY_SNS, useWallet } from '@masknet/plugin-avatar'
 import { makeStyles } from '@masknet/theme'
@@ -77,7 +77,7 @@ function NFTAvatarInFacebook() {
     )
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
-    const saveNFTAvatar = useSaveFirefly(NetworkPluginID.PLUGIN_EVM)
+    const saveNFTAvatar = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)
 
     const windowSize = useWindowSize()
     const showAvatar = useMemo(() => {

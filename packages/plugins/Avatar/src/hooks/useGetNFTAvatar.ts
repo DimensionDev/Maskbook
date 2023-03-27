@@ -4,10 +4,10 @@ import { type EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { NFT_AVATAR_METADATA_STORAGE, type RSS3_KEY_SNS } from '../constants.js'
 import type { NextIDAvatarMeta } from '../types.js'
 import { useGetAddress } from './useGetAddress.js'
-import { useGetNFTAvatarFromFirefly } from './firefly/useGetNFTAvtarFromFirefly.js'
+import { useGetNFTAvatarFromStorage } from './storage/useGetNFTAvtarFromStorage.js'
 
 export function useGetNFTAvatar() {
-    const getNFTAvatarFromFirefly = useGetNFTAvatarFromFirefly()
+    const getNFTAvatarFromStorage = useGetNFTAvatarFromStorage()
     const { Storage } = useWeb3State()
     const getAddress = useGetAddress()
     return useCallback(
@@ -20,8 +20,8 @@ export function useGetNFTAvatar() {
                     userId,
                 )
             }
-            return getNFTAvatarFromFirefly(userId, addressStorage.address)
+            return getNFTAvatarFromStorage(userId, addressStorage.address)
         },
-        [getNFTAvatarFromFirefly, getAddress, Storage],
+        [getNFTAvatarFromStorage, getAddress, Storage],
     )
 }

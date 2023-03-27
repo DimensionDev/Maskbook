@@ -142,7 +142,7 @@ export enum StorageProviderType {
     // KV storage powered by CloudFlare
     KV = 'kv',
 
-    Firefly = 'firefly',
+    String = 'String',
 }
 
 export enum FontSize {
@@ -1339,7 +1339,7 @@ export interface Web3StorageServiceState {
         signerOrPublicKey: string | ECKeyIdentifier,
     ) => Storage
 
-    createFireflyStorage: (namespace: string, userId: string, address: string) => Storage
+    createStringStorage: (namespace: string, userId: string, address: string) => Storage
 }
 
 export interface IdentityServiceState<ChainId> {
