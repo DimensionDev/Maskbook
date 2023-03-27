@@ -11,7 +11,6 @@ export class StringStorage implements Storage {
 
     constructor(
         private namespace: string,
-        private userId: string,
         private address: string,
         private getConnection?: () => Web3Helper.Web3Connection<NetworkPluginID> | undefined,
     ) {
@@ -31,35 +30,29 @@ export class StringStorage implements Storage {
     }
 
     private getKey() {
-        return `${this.namespace}-${getSiteType()}-${this.userId}-${this.address}`
+        return `${this.namespace}-${getSiteType()}-${this.address}`
     }
 
-    async get<T = string>(key: string) {
-        let value = this.cache?.get(key)
+    async get<T>(key: string) {
+        const cacheKey = `${this.getKey()}-${key}`
+        let value = this.cache?.get(cacheKey)
         if (value) return value as T
-        value = await StringStorageAPI.get(this.namespace, this.userId, this.address)
-        this.cache?.set(key, value)
+        value = await StringStorageAPI.get(this.namespace, key, this.address)
+        this.cache?.set(cacheKey, value)
         return value as T
     }
 
-    async getData<T = string>() {
-        return this.get<T>(this.getKey())
+    async has(key: string) {
+        return !!this.get(key)
     }
 
-    async has() {
-        return !!this.getData()
-    }
-
-    async set<T = string>(key: string, value: T) {
+    async set<T>(key: string, value: T) {
         const connection = this.getConnection?.()
-        const signature = await connection?.signMessage(SignType.Message, JSON.stringify(value))
+        const signature = await connection?.signMessage(SignType.Message, value as string)
         if (!signature) throw new Error('Failed to sign payload')
-        await StringStorageAPI.set(this.namespace, this.userId, this.address, value as string, signature)
-        this.cache?.delete(key)
+        await StringStorageAPI.set(this.namespace, key, this.address, value as string, signature)
+        const cacheKey = `${this.getKey()}-${key}`
+        this.cache?.delete(cacheKey)
         return
-    }
-
-    async setData<T = string>(value: T) {
-        await this.set<T>(this.getKey(), value)
     }
 }

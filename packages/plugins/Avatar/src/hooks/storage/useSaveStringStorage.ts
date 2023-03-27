@@ -12,8 +12,8 @@ export function useSaveStringStorage(pluginID: NetworkPluginID) {
     return useCallback(
         async (userId: string, address: string, nft: NextIDAvatarMeta) => {
             if (!Storage) return
-            const stringStorage = Storage.createStringStorage(PLUGIN_NAME, userId, address)
-            await stringStorage.setData?.<string>(JSON.stringify(nft))
+            const stringStorage = Storage.createStringStorage(PLUGIN_NAME, address)
+            await stringStorage.set?.<string>(userId, JSON.stringify(nft))
             await saveAddress(nft.userId, pluginID, address, getEnhanceableSiteType())
             return nft
         },

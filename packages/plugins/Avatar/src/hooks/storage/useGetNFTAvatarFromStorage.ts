@@ -8,8 +8,8 @@ export function useGetNFTAvatarFromStorage() {
     return useCallback(
         async (userId: string, address: string) => {
             if (!Storage) return
-            const stringStorage = Storage.createStringStorage(PLUGIN_NAME, userId, address)
-            const data = await stringStorage.getData?.<string>()
+            const stringStorage = Storage.createStringStorage(PLUGIN_NAME, address)
+            const data = await stringStorage.get?.<string>(userId)
             if (!data) return
             return JSON.parse(data)
         },

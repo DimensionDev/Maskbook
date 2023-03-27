@@ -10,7 +10,6 @@ function createStorage(
     options: {
         namespace: string
         platform?: NextIDPlatform
-        userId?: string
         address?: string
         signerOrPublicKey?: string | ECKeyIdentifier
     },
@@ -29,7 +28,7 @@ function createStorage(
                 SharedContextSettings.value.signWithPersona,
             )
         case StorageProviderType.String:
-            return new StringStorage(options.namespace, options.userId || '', options.address || '', () =>
+            return new StringStorage(options.namespace, options.address || '', () =>
                 Web3StateSettings.value.Connection?.getConnection?.(),
             )
         default:

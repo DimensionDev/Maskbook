@@ -1265,8 +1265,6 @@ export interface Storage {
     set<T>(key: string, value: T): Promise<void>
     delete?(key: string): Promise<void>
     clearAll?(): Promise<void>
-    getData?<T>(): Promise<T>
-    setData?<T>(value: T): Promise<void>
 }
 
 export interface SettingsState {
@@ -1339,7 +1337,7 @@ export interface Web3StorageServiceState {
         signerOrPublicKey: string | ECKeyIdentifier,
     ) => Storage
 
-    createStringStorage: (namespace: string, userId: string, address: string) => Storage
+    createStringStorage: (namespace: string, address: string) => Storage
 }
 
 export interface IdentityServiceState<ChainId> {
