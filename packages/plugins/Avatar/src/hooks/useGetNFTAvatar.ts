@@ -4,7 +4,7 @@ import { type EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { NFT_AVATAR_METADATA_STORAGE, type RSS3_KEY_SNS } from '../constants.js'
 import type { NextIDAvatarMeta } from '../types.js'
 import { useGetAddress } from './useGetAddress.js'
-import { useGetNFTAvatarFromStorage } from './storage/useGetNFTAvtarFromStorage.js'
+import { useGetNFTAvatarFromStorage } from './storage/useGetNFTAvatarFromStorage.js'
 
 export function useGetNFTAvatar() {
     const getNFTAvatarFromStorage = useGetNFTAvatarFromStorage()
