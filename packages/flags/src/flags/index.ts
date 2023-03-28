@@ -58,7 +58,6 @@ export const flags = {
     i18nTranslationHotUpdate: true,
     sandboxedPluginRuntime: insiderOnly,
 
-    /* cspell:disable-next-line */
     simplehash_ab_percentage: 50,
 } as const
 

@@ -62,14 +62,12 @@ export class RemoteFlags<T extends Record<string, unknown>> extends Flags<T> {
     }
 
     override get accessor(): Readonly<T> {
-        const lastFetchResult = this.lastFetchResult
-
         return new Proxy(this.defaults, {
-            get(target, key, receiver) {
-                if (has(lastFetchResult?.flags, key)) return lastFetchResult?.flags?.[key as string]
-                return super.accessor[key]
+            get: (target, key, receiver) => {
+                if (has(this.lastFetchResult?.flags, key)) return this.lastFetchResult?.flags?.[key as string]
+                return Reflect.get(target, key, receiver)
             },
-            set(target, key, value, receiver) {
+            set: (target, key, value, receiver) => {
                 throw new Error('Not allowed')
             },
         })
@@ -87,12 +85,15 @@ export class RemoteFlags<T extends Record<string, unknown>> extends Flags<T> {
         const lastStorageResult = this.lastStorageResult
 
         if (
-            lastFetchResult?.timestamp &&
-            lastStorageResult?.timestamp &&
-            lastStorageResult.timestamp < lastFetchResult.timestamp
+            (lastFetchResult?.timestamp && !lastStorageResult?.timestamp) ||
+            (lastFetchResult?.timestamp &&
+                lastStorageResult?.timestamp &&
+                lastStorageResult.timestamp < lastFetchResult.timestamp)
         ) {
+            console.log('[RemoteFlags] sync from remote')
             localStorage.setItem(this.KEY, JSON.stringify(lastFetchResult))
         } else if (lastStorageResult?.timestamp) {
+            console.log('[RemoteFlags] sync from storage')
             this.lastFetchResult = lastStorageResult
         }
     }
@@ -118,7 +119,7 @@ export class RemoteFlags<T extends Record<string, unknown>> extends Flags<T> {
      */
     async fetchAndActive() {
         // Prevent fetching too frequently
-        if (!this.isLastFetchResultFresh) return
+        if (this.isLastFetchResultFresh) return
 
         this.lastFetchResult = {
             flags: await this.fetch(),
