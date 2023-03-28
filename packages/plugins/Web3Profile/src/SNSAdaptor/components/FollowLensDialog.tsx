@@ -107,9 +107,9 @@ export function FollowLensDialog() {
 
         if (!profile) return
         const isFollowing = await Lens.queryFollowStatus(account, profile.id)
-        const defaultProfile = await Lens.queryDefaultProfileByAddress('0xF892E8E12a2196854E67787E77659412000F9440')
+        const defaultProfile = await Lens.queryDefaultProfileByAddress(account)
 
-        const profiles = await Lens.queryProfilesByAddress('0xF892E8E12a2196854E67787E77659412000F9440')
+        const profiles = await Lens.queryProfilesByAddress(account)
 
         return {
             profile,
