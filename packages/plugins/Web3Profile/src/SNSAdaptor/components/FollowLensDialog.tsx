@@ -213,7 +213,10 @@ export function FollowLensDialog() {
         )
             return t.follow_with_charge_tips()
         else if (profile?.followModule?.type === FollowModuleType.RevertFollowModule) return t.follow_with_revert_tips()
-        return t.follow_gas_tips()
+        else if (!defaultProfile) {
+            return t.follow_gas_tips()
+        }
+        return
     }, [wallet?.owner, chainId, profile, feeTokenBalance])
 
     return (
@@ -266,7 +269,7 @@ export function FollowLensDialog() {
                                 hideRiskWarningConfirmed
                                 expectedChainId={ChainId.Matic}
                                 ActionButtonProps={{ variant: 'roundedContained' }}>
-                                <Typography className={classes.tips}>{tips}</Typography>
+                                {tips ? <Typography className={classes.tips}>{tips}</Typography> : null}
                                 <HandlerDescription
                                     profile={
                                         defaultProfile

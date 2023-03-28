@@ -152,7 +152,7 @@ export class ProviderState<
 
         if (accountCopied.account !== '' && !this.options.isValidAddress(accountCopied.account))
             delete accountCopied.account
-        if (!accountCopied.chainId || !this.options.isValidChainId(accountCopied.chainId)) {
+        if (accountCopied.chainId && !this.options.isValidChainId(accountCopied.chainId)) {
             accountCopied.chainId = this.options.getInvalidChainId()
         }
 
