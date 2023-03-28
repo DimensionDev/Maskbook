@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../../utils/index.js'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import Services from '../../../../service.js'
@@ -79,18 +79,16 @@ const WalletRecovery = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const location = useLocation()
-    const navigate = useNavigate()
 
     const web3State = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection()
     const currentPersona = useValueRef(currentPersonaIdentifier)
 
-    const backupId = new URLSearchParams(location.search).get('backupId')
-
     const { loading, value } = useAsync(async () => {
+        const backupId = new URLSearchParams(location.search).get('backupId')
         if (backupId) return Services.Backup.getUnconfirmedBackup(backupId)
         return undefined
-    }, [backupId])
+    }, [])
 
     const { hasPassword, loading: getHasPasswordLoading } = useHasPassword()
 
@@ -118,16 +116,20 @@ const WalletRecovery = memo(() => {
     const onSubmit = handleSubmit(handleSetPassword)
 
     const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
+        const backupId = new URLSearchParams(location.search).get('backupId')
         // If the payment password does not exist, set it first
         if (!hasPassword) {
             await onSubmit()
         }
 
         if (backupId) {
-            const json = await Services.Backup.getUnconfirmedBackup(backupId)
-            if (json) {
-                await Services.Backup.restoreUnconfirmedBackup({ id: backupId, action: 'confirm' })
-                const wallet = first(json.wallets)
+            if (value) {
+                await Services.Backup.restoreUnconfirmedBackup({
+                    id: backupId,
+                    action: 'confirm',
+                    countOfSmartPay: value.wallets.filter((x) => x.isSmartPay).length,
+                })
+                const wallet = first(value.wallets)
 
                 // Set default wallet
                 if (wallet) {
@@ -139,7 +141,7 @@ const WalletRecovery = memo(() => {
             }
         }
         await Services.Helper.removePopupWindow()
-    }, [onSubmit, hasPassword, currentPersona, backupId, web3State])
+    }, [onSubmit, hasPassword, currentPersona, web3State, value])
 
     useTitle(t('popups_recovery_wallet'))
     return loading || getHasPasswordLoading ? (

@@ -9,6 +9,7 @@ import {
     getSiteType,
     PopupRoutes,
     ValueRef,
+    isExtensionSiteType,
 } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { SmartPayBundler, SmartPayOwner } from '@masknet/web3-providers'
@@ -63,41 +64,43 @@ export class MaskWalletProvider
             // speed up first paint
             this.ref.value = uniqWith([...wallets, ...super.wallets], (a, b) => isSameAddress(a.address, b.address))
 
-            const allPersonas = this.context?.allPersonas?.getCurrentValue() ?? []
-            const chainId = await SmartPayBundler.getSupportedChainId()
-            const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
-                ...wallets.map((x) => x.address),
-                ...compact(allPersonas.map((x) => x.address)),
-            ])
+            const isRecovery = isExtensionSiteType() && location.href.includes(PopupRoutes.WalletRecovered)
+            if (!isRecovery) {
+                const allPersonas = this.context?.allPersonas?.getCurrentValue() ?? []
+                const chainId = await SmartPayBundler.getSupportedChainId()
+                const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
+                    ...wallets.map((x) => x.address),
+                    ...compact(allPersonas.map((x) => x.address)),
+                ])
 
-            const now = new Date()
-            const smartPayWallets = accounts
-                .filter((x) => x.deployed)
-                .map((x) => ({
-                    id: x.address,
-                    name: super.wallets.find((item) => isSameAddress(item.address, x.address))?.name ?? 'Smart Pay',
-                    address: x.address,
-                    hasDerivationPath: false,
-                    hasStoredKeyInfo: false,
-                    configurable: true,
-                    createdAt: now,
-                    updatedAt: now,
-                    owner: x.owner,
-                    deployed: x.deployed,
-                    identifier: allPersonas
-                        .find((persona) => isSameAddress(x.owner, persona.address))
-                        ?.identifier.toText(),
-                }))
+                const now = new Date()
+                const smartPayWallets = accounts
+                    .filter((x) => x.deployed)
+                    .map((x) => ({
+                        id: x.address,
+                        name: super.wallets.find((item) => isSameAddress(item.address, x.address))?.name ?? 'Smart Pay',
+                        address: x.address,
+                        hasDerivationPath: false,
+                        hasStoredKeyInfo: false,
+                        configurable: true,
+                        createdAt: now,
+                        updatedAt: now,
+                        owner: x.owner,
+                        deployed: x.deployed,
+                        identifier: allPersonas
+                            .find((persona) => isSameAddress(x.owner, persona.address))
+                            ?.identifier.toText(),
+                    }))
 
-            const result = uniqWith([...wallets, ...super.wallets, ...smartPayWallets], (a, b) =>
-                isSameAddress(a.address, b.address),
-            )
+                const result = uniqWith([...wallets, ...super.wallets, ...smartPayWallets], (a, b) =>
+                    isSameAddress(a.address, b.address),
+                )
 
-            if (!isEqual(result, super.wallets)) {
-                await this.updateWallets(result)
+                if (!isEqual(result, super.wallets)) {
+                    await this.updateWallets(result)
+                }
+                this.ref.value = result
             }
-
-            this.ref.value = result
         }, 1000)
 
         update()
