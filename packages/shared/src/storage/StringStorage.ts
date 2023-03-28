@@ -1,6 +1,6 @@
 import LRU from 'lru-cache'
 import type { Storage } from '@masknet/web3-shared-base'
-import { type NetworkPluginID, SignType, getSiteType } from '@masknet/shared-base'
+import { type NetworkPluginID, SignType } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { StringStorage as StringStorageAPI } from '@masknet/web3-providers'
 
@@ -30,7 +30,7 @@ export class StringStorage implements Storage {
     }
 
     private getKey() {
-        return `${this.namespace}-${getSiteType()}-${this.address}`
+        return `${this.namespace}-${this.address}`
     }
 
     async get<T>(key: string) {
