@@ -1,6 +1,7 @@
 import urlcat from 'urlcat'
 import LRUCache from 'lru-cache'
 import { first } from 'lodash-es'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, formatEthereumAddress, isValidAddress, isValidChainId, isValidDomain } from '@masknet/web3-shared-evm'
 import { formatAddress } from '@masknet/web3-shared-solana'
 import type { ENSRecord } from '../types.js'
@@ -28,6 +29,8 @@ export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
         const response = await fetchFromChainbase<ENSRecord[]>(
             urlcat(`/v1/${chainId !== ChainId.BSC ? 'ens' : 'space-id'}/reverse`, { chain_id: chainId, address }),
         )
+
+        if (!isSameAddress(response?.[0]?.address, address)) return
 
         const name = first(response)?.name
         if (!name) return
