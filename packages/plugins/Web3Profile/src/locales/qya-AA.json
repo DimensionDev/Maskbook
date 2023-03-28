@@ -23,6 +23,7 @@
     "follow_wallet_tips": "crwdns19927:0crwdne19927:0",
     "follow_chain_tips": "crwdns19929:0crwdne19929:0",
     "follow_gas_tips": "crwdns19931:0crwdne19931:0",
+    "plugin_wallet_disconnect": "crwdns19967:0crwdne19967:0",
     "wallet_status_button_change": "crwdns18034:0crwdne18034:0",
     "plugin_wallet_on_connect": "crwdns18036:0crwdne18036:0",
     "wallet_verify_has_bound": "crwdns18038:0{{currentPersona}}crwdne18038:0",
