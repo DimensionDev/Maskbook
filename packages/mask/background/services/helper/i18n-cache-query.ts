@@ -1,4 +1,4 @@
-import { Flags } from '../../../shared/flags.js'
+import { Flags } from '@masknet/flags'
 import list from './i18n-cache-query-list.js'
 
 export type Bundle = [namespace: string, lang: string, json: object]

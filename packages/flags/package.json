@@ -1,0 +1,16 @@
+{
+  "name": "@masknet/flags",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "mask-src": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "devDependencies": {
+    "urlcat": "^2.0.4"
+  }
+}

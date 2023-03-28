@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback, forwardRef, useImperativeHandle, useMemo } from 'react'
+import { useDebounce } from 'react-use'
 import type { InputBaseComponentProps } from '@mui/material'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { useDebounce } from 'react-use'
 import {
     Typography,
     Popover,
@@ -13,9 +13,9 @@ import {
     InputAdornment,
     FilledInput,
 } from '@mui/material'
+import { Flags } from '@masknet/flags'
 
 import { useI18N } from '../../../utils/index.js'
-import { Flags } from '../../../../shared/index.js'
 import { useRegionList } from './hooks/useRegion.js'
 import type { RegionCode } from './hooks/useRegion.js'
 

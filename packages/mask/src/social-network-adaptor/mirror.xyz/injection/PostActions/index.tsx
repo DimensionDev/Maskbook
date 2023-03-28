@@ -9,7 +9,7 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { useWeb3State, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { Flags } from '../../../../../shared/index.js'
+import { Flags } from '@masknet/flags'
 import { createReactRootShadowed } from '../../../../utils/index.js'
 
 const ActionsRenderer = createInjectHooksRenderer(

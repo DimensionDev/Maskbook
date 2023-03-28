@@ -1,6 +1,6 @@
 import { noop } from 'lodash-es'
 import { MaskMessages } from '../../../shared/messages.js'
-import { Flags } from '../../../shared/flags.js'
+import { Flags } from '@masknet/flags'
 import { hmr } from '../../../utils-pure/index.js'
 import type { ExtensionTypes, WebNavigation } from 'webextension-polyfill'
 

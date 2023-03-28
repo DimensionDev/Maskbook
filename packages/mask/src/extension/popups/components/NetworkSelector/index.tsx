@@ -7,9 +7,9 @@ import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainIcon, useMenuConfig, WalletIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
+import { Flags } from '@masknet/flags'
 import type { NetworkDescriptor } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { Flags } from '../../../../../shared/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
