@@ -281,6 +281,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                         waiting={t('plugin_savings_process_withdraw')}
                         failed={t('failed')}
                         failedOnClick="use executor"
+                        className={classes.button}
                         complete={t('done')}
                         disabled={validationMessage !== ''}
                         noUpdateEffect
