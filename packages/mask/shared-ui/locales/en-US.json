@@ -336,7 +336,7 @@
     "plugin_wallet_snackbar_failed": "Transaction Failed",
     "plugin_wallet_snackbar_swap_successful": "Successfully swapped Token",
     "plugin_wallet_snackbar_swap_token": "Swap Token",
-    "plugin_wallet_suppport_chains_tips": "The chains supported by {{provider}} are {{chains}}.",
+    "plugin_wallet_support_chains_tips": "The chains supported by {{provider}} are {{chains}}.",
     "plugin_wallet_choose_network": "Choose Network",
     "plugin_wallet_connect_fortmatic": "Connect Fortmatic",
     "plugin_wallet_connect_with": "Connect with",

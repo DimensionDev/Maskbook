@@ -134,14 +134,14 @@ export function PluginProviderRender({
     const { t } = useI18N()
     const snsPlugins = useActivatedPluginsSNSAdaptor('any')
     const dashboardPlugins = useActivatedPluginsDashboard()
-    const [selectChainDialogOpen, setSelelctChainDialogOpen] = useState(false)
+    const [selectChainDialogOpen, setSelectChainDialogOpen] = useState(false)
 
     const fortmaticProviderDescriptor = providers.find((x) => x.type === ProviderType.Fortmatic)
 
     const [{ error }, handleClick] = useAsyncFn(
         async (provider: Web3Helper.ProviderDescriptorAll, fortmaticChainId?: Web3Helper.ChainIdAll) => {
             if (provider.type === ProviderType.Fortmatic && !fortmaticChainId) {
-                setSelelctChainDialogOpen(true)
+                setSelectChainDialogOpen(true)
                 return
             }
             const target = [...snsPlugins, ...dashboardPlugins].find(
@@ -189,7 +189,7 @@ export function PluginProviderRender({
 
                                 return (
                                     <ShadowRootTooltip
-                                        title={t('plugin_wallet_suppport_chains_tips', {
+                                        title={t('plugin_wallet_support_chains_tips', {
                                             provider: provider.name,
                                             chains: supportChains.join(supportChains.length > 1 ? ', ' : ''),
                                         })}
@@ -229,7 +229,7 @@ export function PluginProviderRender({
                 <Dialog
                     container={container}
                     open={selectChainDialogOpen}
-                    onClose={() => setSelelctChainDialogOpen(false)}>
+                    onClose={() => setSelectChainDialogOpen(false)}>
                     <DialogTitle
                         sx={{
                             whiteSpace: 'nowrap',
@@ -239,7 +239,7 @@ export function PluginProviderRender({
                         }}>
                         <IconButton
                             className={classes.dialogCloseButton}
-                            onClick={() => setSelelctChainDialogOpen(false)}>
+                            onClick={() => setSelectChainDialogOpen(false)}>
                             <DialogDismissIconUI />
                         </IconButton>
                         <Typography className={classes.dialogTitle}>{t('plugin_wallet_connect_fortmatic')}</Typography>
