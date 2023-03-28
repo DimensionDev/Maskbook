@@ -10,8 +10,11 @@ export function useFeeds(address?: string, tag?: RSS3BaseAPI.Tag) {
     const [finished, setFinished] = useState(false)
 
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<Error>()
     const loadingRef = useRef(false)
-    loadingRef.current = loading
+    useEffect(() => {
+        loadingRef.current = loading
+    }, [loading])
 
     const load = useCallback(async () => {
         if (loadingRef.current || !address) {
@@ -19,27 +22,33 @@ export function useFeeds(address?: string, tag?: RSS3BaseAPI.Tag) {
             return
         }
         setLoading(true)
-        const { data, nextIndicator } = await RSS3.getAllNotes(
-            address,
-            { tag },
-            {
-                indicator: indicatorRef.current,
-                size: 20,
-            },
-        )
-        setLoading(false)
-        indicatorRef.current = nextIndicator
+        try {
+            const { data, nextIndicator } = await RSS3.getAllNotes(
+                address,
+                { tag },
+                {
+                    indicator: indicatorRef.current,
+                    size: 20,
+                },
+            )
+            setError(undefined)
+            setLoading(false)
+            indicatorRef.current = nextIndicator
 
-        if (!data.length) {
-            setFinished(true)
-            return
+            if (!data.length) {
+                setFinished(true)
+                return
+            }
+            setFeeds((oldList) => uniqBy([...oldList, ...data], (x) => x.timestamp))
+        } catch (error) {
+            loadingRef.current = false
+            setError(error as Error)
         }
-        setFeeds((oldList) => uniqBy([...oldList, ...data], (x) => x.timestamp))
     }, [address, tag])
 
     useEffect(() => {
         load()
     }, [load])
 
-    return { feeds, loading, finished, load, next: load }
+    return { feeds, loading, error, finished, load, next: load }
 }

@@ -1,8 +1,8 @@
 import { FormattedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress, formatWeiToEther, chainResolver, explorerResolver } from '@masknet/web3-shared-evm'
-import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { type NetworkPluginID } from '@masknet/shared-base'
 import { OpenInNew } from '@mui/icons-material'
 import { Typography, Box, Link } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
@@ -44,14 +44,11 @@ interface DetailsViewProps {
     project: Project
 }
 
-export function DetailsView(props: DetailsViewProps) {
+export function DetailsView({ project }: DetailsViewProps) {
     const { classes } = useStyles()
-    const { project } = props
     const { t } = useI18N()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
-    const artistName = ` ${project.artistName}`
     const invocations = `${project.invocations} of ${project.maxInvocations}`
     const price = `${formatWeiToEther(new BigNumber(project.pricePerTokenInWei))} `
 
@@ -76,7 +73,7 @@ export function DetailsView(props: DetailsViewProps) {
                         rel="noopener noreferrer"
                         target="_blank"
                         title={resolveUserLinkOnArtBlocks(chainId, project.artistAddress)}>
-                        {artistName}
+                        {` ${project.artistName}`}
                     </Link>
                     &nbsp;&bull;&nbsp;
                     <Link href={project.website} rel="noopener noreferrer" target="_blank" title={project.website}>
@@ -107,10 +104,12 @@ export function DetailsView(props: DetailsViewProps) {
                     <Typography variant="body2">{t('plugin_artblocks_license_row')} </Typography>
                     <Typography variant="body2">{project.license}</Typography>
                 </Box>
-                <Box className={classes.meta_row}>
-                    <Typography variant="body2">{t('plugin_artblocks_library_row')}</Typography>
-                    <Typography variant="body2">{JSON.parse(project.scriptJSON).type}</Typography>
-                </Box>
+                {project.scriptJSON ? (
+                    <Box className={classes.meta_row}>
+                        <Typography variant="body2">{t('plugin_artblocks_library_row')}</Typography>
+                        <Typography variant="body2">{JSON.parse(project.scriptJSON).type}</Typography>
+                    </Box>
+                ) : null}
             </Box>
             <Box className={classes.container}>
                 <Typography variant="body1" sx={{ marginBottom: 1 }}>

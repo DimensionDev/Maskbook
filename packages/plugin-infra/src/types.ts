@@ -177,6 +177,8 @@ export namespace Plugin.Shared {
         /** Close popup window */
         closePopupWindow(): Promise<void>
 
+        /** Fetch json from background */
+        fetchJSON<T>(input: RequestInfo | URL, init?: RequestInit): Promise<T>
         /** Open popup connect window */
         openPopupConnectWindow(): Promise<void>
 

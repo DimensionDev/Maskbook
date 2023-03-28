@@ -3,9 +3,8 @@ import { NetworkPluginID, type BindingProof, type ECKeyIdentifier } from '@maskn
 import type { TwitterBaseAPI } from '@masknet/web3-providers/types'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { AllChainsNonFungibleToken, NextIDAvatarMeta } from '../../types.js'
-import { useSaveKV } from './useSaveKV.js'
 import { useSaveToNextID } from './useSaveToNextID.js'
-import { useSaveToRSS3 } from './useSaveToRSS3.js'
+import { useSaveStringStorage } from '../index.js'
 
 export type AvatarInfo = TwitterBaseAPI.AvatarInfo & {
     avatarId: string
@@ -13,8 +12,7 @@ export type AvatarInfo = TwitterBaseAPI.AvatarInfo & {
 
 export function useSave(pluginID: NetworkPluginID) {
     const saveToNextID = useSaveToNextID()
-    const saveToRSS3 = useSaveToRSS3()
-    const saveToKV = useSaveKV(pluginID)
+    const saveToStringStorage = useSaveStringStorage(pluginID)
 
     return useAsyncFn(
         async (
@@ -39,24 +37,12 @@ export function useSave(pluginID: NetworkPluginID) {
                 schema: (token.contract?.schema ?? SchemaType.ERC721) as SchemaType,
             }
 
-            try {
-                switch (pluginID) {
-                    case NetworkPluginID.PLUGIN_EVM: {
-                        if (isBindAccount) {
-                            const result = await saveToNextID(info, account, persona, proof)
-                            return result
-                        }
-                        const result = await saveToRSS3(info, account)
-                        return result
-                    }
-                    default:
-                        const result = await saveToKV(info, account, persona, proof)
-                        return result
-                }
-            } catch {
-                return
+            if (isBindAccount && NetworkPluginID.PLUGIN_EVM) {
+                return saveToNextID(info, account, persona, proof)
             }
+
+            return saveToStringStorage(data.userId, account, info)
         },
-        [saveToNextID, saveToRSS3, pluginID],
+        [saveToNextID, saveToStringStorage, pluginID],
     )
 }

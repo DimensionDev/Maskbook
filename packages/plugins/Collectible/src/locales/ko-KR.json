@@ -1,1 +1,9 @@
-{}
+{
+    "plugin_collectible_nft_details": "NFT 세부 정보",
+    "plugin_collectible_description_title": "설명",
+    "plugin_collectible_top_offer": "최고 오버",
+    "plugin_collectible_time_left": "남은 시간",
+    "plugin_collectible_you": "You",
+    "plugin_collectible_done": "완료",
+    "plugin_collectible_retry": "다시 시도"
+}

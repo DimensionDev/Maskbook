@@ -7,6 +7,8 @@ export class StorageState implements Web3StorageServiceState {
             providerType: StorageProviderType,
             options: {
                 namespace: string
+                userId?: string
+                address?: string
                 platform?: NextIDPlatform
                 signerOrPublicKey?: string | ECKeyIdentifier
             },
@@ -19,6 +21,10 @@ export class StorageState implements Web3StorageServiceState {
 
     createRSS3Storage(namespace: string) {
         return this.createStorage(StorageProviderType.RSS3, { namespace })
+    }
+
+    createStringStorage(namespace: string, address: string) {
+        return this.createStorage(StorageProviderType.String, { namespace, address })
     }
 
     createNextIDStorage(proofIdentity: string, platform: NextIDPlatform, signerOrPublicKey: string | ECKeyIdentifier) {

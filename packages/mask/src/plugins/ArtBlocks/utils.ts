@@ -1,12 +1,12 @@
 import { parseURLs } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { artBlocksHostnames, artBlocksPathnameRegexMatcher } from './constants.js'
+import { artBlocksHostnames, artBlocksPathnameRegex } from './constants.js'
 
 export function checkUrl(url: string): boolean {
     const protocol = 'https://'
-    const _url = new URL(url.startsWith(protocol) ? url : protocol + url)
+    const _url = new URL(/^https?:\/\//.test(url) ? url : protocol + url)
 
-    return artBlocksHostnames.includes(_url.hostname) && artBlocksPathnameRegexMatcher.test(_url.pathname)
+    return artBlocksHostnames.includes(_url.hostname) && artBlocksPathnameRegex.test(_url.pathname)
 }
 
 export function getRelevantUrl(textContent: string) {
@@ -18,12 +18,12 @@ export function getAssetInfoFromURL(url?: string) {
     if (!url) return null
     const _url = new URL(url)
 
-    const artBlocksMatched = _url.pathname.match(artBlocksPathnameRegexMatcher)
+    const matches = _url.pathname.match(artBlocksPathnameRegex)
 
-    if (artBlocksMatched) {
+    if (matches) {
         return {
             chain_id: _url.host.includes('artist-staging') ? ChainId.Ropsten : ChainId.Mainnet,
-            project_id: artBlocksMatched[1],
+            project_id: matches[1] ?? matches[2],
         }
     }
 
