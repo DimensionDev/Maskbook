@@ -1,10 +1,11 @@
 import type { Storage } from '@masknet/web3-shared-base'
 import { type ECKeyIdentifier, fromHex, type NextIDPlatform, SignType, toBase64 } from '@masknet/shared-base'
-import { NextIDStorage as NextIDStorageProvider } from '@masknet/web3-providers'
+import { NextIDStorageAPI } from '../NextID/kv.js'
 
 export class NextIDStorage implements Storage {
     private publicKeyAsHex = ''
     private signer: ECKeyIdentifier | null = null
+    private nextIDStorage = new NextIDStorageAPI()
     constructor(
         private proofIdentity: string, // proof identity as key
         private platform: NextIDPlatform, // proof platform
@@ -29,7 +30,7 @@ export class NextIDStorage implements Storage {
     }
 
     async get<T>(key: string) {
-        const response = await NextIDStorageProvider.getByIdentity<T>(
+        const response = await this.nextIDStorage.getByIdentity<T>(
             this.publicKeyAsHex,
             this.platform,
             this.proofIdentity,
@@ -42,7 +43,7 @@ export class NextIDStorage implements Storage {
     }
 
     async getAll<T>(key: string) {
-        const response = await NextIDStorageProvider.getAllByIdentity<T>(this.platform, this.proofIdentity, key)
+        const response = await this.nextIDStorage.getAllByIdentity<T>(this.platform, this.proofIdentity, key)
 
         if (!response.ok) return
 
@@ -52,7 +53,7 @@ export class NextIDStorage implements Storage {
     async set<T>(key: string, value: T) {
         if (!this.signer) throw new Error('signer is requirement when set data to NextID Storage')
 
-        const payload = await NextIDStorageProvider.getPayload(
+        const payload = await this.nextIDStorage.getPayload(
             this.publicKeyAsHex,
             this.platform,
             this.proofIdentity, // identity
@@ -65,7 +66,7 @@ export class NextIDStorage implements Storage {
         const signature = await this.signWithPersona?.(SignType.Message, payload.val.signPayload, this.signer, true)
         if (!signature) throw new Error('Failed to sign payload.')
 
-        await NextIDStorageProvider.set(
+        await this.nextIDStorage.set(
             payload.val.uuid,
             this.publicKeyAsHex,
             toBase64(fromHex(signature)),

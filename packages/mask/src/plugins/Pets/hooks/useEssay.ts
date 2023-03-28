@@ -6,15 +6,17 @@ import { ImageType } from '../types.js'
 import type { User, ShowMeta, EssayRSSNode } from '../types.js'
 import { Punk3D, DEFAULT_SET_WORD, MASK_TWITTER, DEFAULT_PUNK_MASK_WORD, PunkIcon } from '../constants.js'
 import { useUser } from './useUser.js'
+import { parseJSON } from '@masknet/web3-providers'
 
 export function useEssay(user: User, refresh?: number) {
     const { Storage } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { value } = useAsync(async () => {
         if (!Storage || !user.address) return null
-        const storage = Storage.createRSS3Storage(user.address)
-        const data = await storage.get<EssayRSSNode>('_pet')
-
-        return data?.essay.userId === user.userId ? data.essay : null
+        const storage = Storage.createStringStorage('Pets', user.address)
+        const data = await storage.get<string>('_pet')
+        if (!data) return null
+        const result = parseJSON<EssayRSSNode>(data)
+        return result?.essay.userId === user.userId ? result.essay : null
     }, [user, refresh])
 
     return value
