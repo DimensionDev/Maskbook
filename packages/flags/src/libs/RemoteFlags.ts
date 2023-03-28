@@ -22,7 +22,7 @@ export class RemoteFlags<T extends object> extends Flags<T> {
         private remoteFlagsURL: string,
         defaults: T,
         private initials?: {
-            // this time to live duration for remote flags
+            // the valid duration for remote fetched flags
             fetchTTL?: number
             // the valid duration for local storage flags
             storageTTL?: number
