@@ -15,6 +15,9 @@ export enum NextIDPlatform {
     REDDIT = 'reddit',
     SYBIL = 'sybil',
     EthLeaderboard = 'ethLeaderboard',
+    SpaceId = 'space_id',
+    Farcaster = 'farcaster',
+    Bit = 'dotbit',
 }
 
 export interface NextIDIdentity {
