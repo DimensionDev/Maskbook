@@ -4,6 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { AssetPreviewer, NetworkIcon } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { CrossIsolationMessages, type NetworkPluginID } from '@masknet/shared-base'
+import { isENSContractAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -25,8 +26,8 @@ const useStyles = makeStyles()((theme) => ({
     fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',
-        width: 30,
-        height: 30,
+        width: '100%',
+        height: '100%',
     },
     blocker: {
         position: 'absolute',
@@ -55,6 +56,7 @@ export function CollectibleCard({ className, pluginID, asset }: CollectibleCardP
         })
     }, [pluginID, asset.chainId, asset.tokenId, asset.address])
 
+    const imageURL = asset.metadata?.imageURL ?? asset.metadata?.mediaURL
     return (
         <Box className={cx(classes.root, className)} onClick={onClick}>
             <div className={classes.blocker} />
@@ -65,6 +67,13 @@ export function CollectibleCard({ className, pluginID, asset }: CollectibleCardP
                     }}
                     url={asset.metadata?.imageURL ?? asset.metadata?.mediaURL}
                     icon={pluginID ? <NetworkIcon pluginID={pluginID} chainId={asset.chainId} /> : null}
+                    fallbackImage={
+                        !imageURL && asset.collection?.name.includes('.lens')
+                            ? new URL('../assets/lens.svg', import.meta.url)
+                            : !imageURL && isENSContractAddress(asset.contract?.address || '')
+                            ? new URL('../assets/ens.svg', import.meta.url)
+                            : undefined
+                    }
                 />
             </Card>
         </Box>
