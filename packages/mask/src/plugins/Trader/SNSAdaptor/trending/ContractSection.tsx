@@ -35,12 +35,11 @@ export const ContractSection = ({
     }, [address])
 
     const chain = useNetworkDescriptor(pluginID ?? NetworkPluginID.PLUGIN_EVM, chainId)
-    const ChainIcon = <WalletIcon mainIcon={chain?.icon} size={14} />
 
     return (
         <Stack direction="row" gap={0.5} display="flex" alignItems="center" justifyContent="flex-end">
             {chain ? (
-                ChainIcon
+                <WalletIcon mainIcon={chain?.icon} size={14} />
             ) : iconURL ? (
                 <TokenIcon
                     logoURL={iconURL}
