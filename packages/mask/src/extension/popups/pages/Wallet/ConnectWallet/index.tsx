@@ -142,11 +142,7 @@ const ConnectWalletPage = memo(() => {
                     .filter((x) => (x.enableRequirements?.supportedExtensionSites ?? []).includes(ExtensionSite.Popup))
                     .map((provider) => {
                         return ProviderIconClickBait ? (
-                            <ProviderIconClickBait
-                                key={provider.ID}
-                                network={network}
-                                provider={provider}
-                                onClick={onClick}>
+                            <ProviderIconClickBait key={provider.ID} provider={provider} onClick={onClick}>
                                 {createProvider(provider)}
                             </ProviderIconClickBait>
                         ) : (

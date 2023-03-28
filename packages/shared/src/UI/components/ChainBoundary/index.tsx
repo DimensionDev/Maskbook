@@ -165,7 +165,9 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                 {...props.ActionButtonPromiseProps}>
                 {t.plugin_wallet_change_wallet()}
             </ActionButton>,
-            actualProviderType === ProviderType.WalletConnect ? t.plugin_wallet_connect_tips() : '',
+            actualProviderType === ProviderType.WalletConnect
+                ? t.plugin_wallet_connect_tips()
+                : t.plugin_wallet_not_support_network(),
         )
     }
 
