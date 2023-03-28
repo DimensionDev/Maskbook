@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { useChainDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
+import { useNetworkDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { FormattedAddress, TokenIcon, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -28,7 +28,7 @@ export const ContractSection = ({
     const theme = useTheme()
     const { Others } = useWeb3State(pluginID)
     const [, copyToClipboard] = useCopyToClipboard()
-    const chain = useChainDescriptor(pluginID, chainId)
+    const chain = useNetworkDescriptor(pluginID ?? NetworkPluginID.PLUGIN_EVM, chainId)
 
     const onCopyAddress = useSnackbarCallback(async () => {
         if (!address) return
@@ -37,8 +37,8 @@ export const ContractSection = ({
 
     return (
         <Stack direction="row" gap={0.5} display="flex" alignItems="center" justifyContent="flex-end">
-            {chain?.nativeCurrency?.logoURL ? (
-                <WalletIcon size={16} mainIcon={new URL(chain?.nativeCurrency.logoURL)} />
+            {chain ? (
+                <WalletIcon mainIcon={chain?.icon} size={14} />
             ) : iconURL ? (
                 <TokenIcon
                     logoURL={iconURL}
