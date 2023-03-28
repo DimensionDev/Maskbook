@@ -336,8 +336,9 @@
     "plugin_wallet_snackbar_failed": "Transaction Failed",
     "plugin_wallet_snackbar_swap_successful": "Successfully swapped Token",
     "plugin_wallet_snackbar_swap_token": "Swap Token",
+    "plugin_wallet_support_chains_tips": "The chains supported by {{provider}} are {{chains}}.",
     "plugin_wallet_choose_network": "Choose Network",
-    "plugin_wallet_choose_wallet": "Choose Wallet",
+    "plugin_wallet_connect_fortmatic": "Connect Fortmatic",
     "plugin_wallet_connect_with": "Connect with",
     "plugin_wallet_connect_with_retry": "Try Again",
     "plugin_wallet_connected_with": "Connected with",
@@ -391,6 +392,7 @@
     "plugin_wallet_switch_network_under_going": "Switching to {{network}}",
     "plugin_wallet_connect_tips": "Please switch to this network in the mobile\napplication wallet you are connected to.",
     "plugin_wallet_not_support_network": "This network is not supported yet.",
+
     "plugin_wallet_connect_network": "Change to {{network}}",
     "plugin_wallet_not_available_on": "Not available on {{network}} Network.",
     "plugin_wallet_connect_wallet": "Connect Wallet",

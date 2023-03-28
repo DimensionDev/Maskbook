@@ -278,6 +278,9 @@ export const resolveNextID_NetworkPluginID = createLookupTableResolver<NextIDPla
         [NextIDPlatform.REDDIT]: undefined,
         [NextIDPlatform.SYBIL]: undefined,
         [NextIDPlatform.EthLeaderboard]: undefined,
+        [NextIDPlatform.SpaceId]: NetworkPluginID.PLUGIN_EVM,
+        [NextIDPlatform.Farcaster]: undefined,
+        [NextIDPlatform.Bit]: undefined,
     },
     () => {
         return undefined
@@ -297,6 +300,9 @@ export const resolveNextIDPlatformName = createLookupTableResolver<NextIDPlatfor
         [NextIDPlatform.REDDIT]: 'Reddit',
         [NextIDPlatform.SYBIL]: 'Sybil',
         [NextIDPlatform.EthLeaderboard]: 'EthLeaderboard',
+        [NextIDPlatform.SpaceId]: 'SpaceId',
+        [NextIDPlatform.Farcaster]: 'Farcaster',
+        [NextIDPlatform.Bit]: 'Bit',
     },
     () => {
         return ''
@@ -327,6 +333,12 @@ export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, ident
             return 'https://sybil.org/'
         case NextIDPlatform.EthLeaderboard:
             return 'https://ethleaderboard.xyz/'
+        case NextIDPlatform.SpaceId:
+            return `https://bscscan.com/address/${identifier}`
+        case NextIDPlatform.Farcaster:
+            return `https://warpcast.com/${identifier}`
+        case NextIDPlatform.Bit:
+            return `https://bit.cc/${name}`
         default:
             return ''
     }

@@ -25,3 +25,5 @@ export const RetryHint = memo<RetryHintProps>(({ retry, hint = true, ButtonProps
         </Stack>
     )
 })
+
+RetryHint.displayName = 'RetryHint'
