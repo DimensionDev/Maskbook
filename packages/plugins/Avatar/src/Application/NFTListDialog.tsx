@@ -144,7 +144,7 @@ export const NFTListDialog: FC = () => {
         next: nextPage,
         error: loadError,
         retry,
-    } = useNonFungibleAssets(selectedPluginId, {
+    } = useNonFungibleAssets(selectedPluginId, undefined, {
         chainId: actualChainId,
         account: selectedAccount,
     })

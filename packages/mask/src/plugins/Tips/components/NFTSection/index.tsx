@@ -99,7 +99,7 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
         next,
         loading,
         error: loadError,
-    } = useNonFungibleAssets(pluginID, { chainId })
+    } = useNonFungibleAssets(pluginID, undefined, { chainId })
 
     const isEvm = pluginID === NetworkPluginID.PLUGIN_EVM
     const tokens = useMemo(() => {

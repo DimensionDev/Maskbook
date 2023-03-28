@@ -9,6 +9,7 @@ import { useWeb3State } from './useWeb3State.js'
 
 export function useNonFungibleAssets<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
+    schemaType?: Web3Helper.SchemaTypeScope<S, T>,
     options?: Web3Helper.Web3HubOptionsScope<S, T>,
 ) {
     const [assets, setAssets] = useState<Array<Web3Helper.NonFungibleAssetScope<S, T>>>(EMPTY_LIST)

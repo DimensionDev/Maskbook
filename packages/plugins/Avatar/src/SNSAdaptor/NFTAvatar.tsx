@@ -109,7 +109,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
         done: loadFinish,
         next: nextPage,
         error: loadError,
-    } = useNonFungibleAssets(pluginID, { chainId, account })
+    } = useNonFungibleAssets(pluginID, undefined, { chainId, account })
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return

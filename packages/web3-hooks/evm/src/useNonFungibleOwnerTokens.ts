@@ -17,10 +17,14 @@ export function useNonFungibleOwnerTokens(
     const nonFungibleTokenContract = useERC721TokenContract(chainId, contractAddress ?? '')
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
 
-    const { value: collectibles_ = EMPTY_LIST, done: loadFinish } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, {
-        chainId,
-        account: ownerAccount,
-    })
+    const { value: collectibles_ = EMPTY_LIST, done: loadFinish } = useNonFungibleAssets(
+        NetworkPluginID.PLUGIN_EVM,
+        SchemaType.ERC721,
+        {
+            chainId,
+            account: ownerAccount,
+        },
+    )
 
     const collectibles = collectibles_
         ?.filter((x) => isSameAddress(contractAddress, x.address))
