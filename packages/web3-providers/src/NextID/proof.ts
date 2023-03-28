@@ -203,21 +203,73 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 operationName: 'GET_PROFILES_QUERY',
                 variables: { platform: 'ethereum', identity: address.toLowerCase() },
                 query: `
-                    query GET_PROFILES_QUERY($platform: String, $identity: String) {                    
-                        identity(platform: $platform, identity: $identity) {                                   
+                    query GET_PROFILES_QUERY($platform: String, $identity: String) {
+                        identity(platform: $platform, identity: $identity) {
                             neighborWithTraversal(depth: 5) {
                                 source
                                 to {
                                     platform
                                     identity
-                                    displayName                                                                                                        
-                                }        
+                                    displayName
+                                }
                                 from {
                                     platform
                                     identity
-                                    displayName                                                                                                        
-                                }                                                                                          
-                            }                          
+                                    displayName
+                                }
+                            }
+                        }
+                    }
+                `,
+            }),
+        })
+
+        const rawData = response.data.identity.neighborWithTraversal
+            .map((x) => createBindingProofFromProfileQuery(x.to.platform, x.source, x.to.identity, x.to.displayName))
+            .concat(
+                response.data.identity.neighborWithTraversal.map((x) =>
+                    createBindingProofFromProfileQuery(x.from.platform, x.source, x.from.identity, x.to.displayName),
+                ),
+            )
+
+        return uniqWith(rawData, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
+            (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
+        )
+    }
+
+    async queryProfilesByTwitterId(twitterId: string) {
+        const response = await fetchJSON<{
+            data: {
+                identity: {
+                    neighborWithTraversal: Array<{
+                        source: NextIDPlatform
+                        to: NextIDIdentity
+                        from: NextIDIdentity
+                    }>
+                }
+            }
+        }>(RELATION_SERVICE_URL, {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify({
+                operationName: 'GET_PROFILES_QUERY',
+                variables: { platform: 'twitter', identity: twitterId.toLowerCase() },
+                query: `
+                    query GET_PROFILES_QUERY($platform: String, $identity: String) {
+                        identity(platform: $platform, identity: $identity) {
+                            neighborWithTraversal(depth: 5) {
+                                source
+                                to {
+                                    platform
+                                    identity
+                                    displayName
+                                }
+                                from {
+                                    platform
+                                    identity
+                                    displayName
+                                }
+                            }
                         }
                     }
                 `,

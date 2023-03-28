@@ -296,9 +296,9 @@ function Content(props: ProfileTabContentProps) {
     const { value: identity } = useSocialIdentityByUserId(currentVisitingUserId)
 
     const { value: nextIdBindings = EMPTY_LIST } = useAsync(async () => {
-        if (!selectedAddress) return EMPTY_LIST
-        return NextIDProof.queryProfilesByRelationService(selectedAddress)
-    }, [selectedAddress])
+        if (!currentVisitingUserId) return EMPTY_LIST
+        return NextIDProof.queryProfilesByTwitterId(currentVisitingUserId)
+    }, [currentVisitingUserId])
 
     if (hidden) return null
 
