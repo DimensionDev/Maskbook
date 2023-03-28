@@ -336,11 +336,11 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         }
 
         if (!result.length) {
-            for (const { rules, type } of getHandlers<ChainId, SchemaType>()) {
+            for (const { rules, types } of getHandlers<ChainId, SchemaType>()) {
                 for (const rule of rules) {
                     if (!['token', 'twitter'].includes(rule.key)) continue
 
-                    const filtered = tokens.filter((x) => (type ? type === x.type : true))
+                    const filtered = tokens.filter((x) => (types ? types.includes(x.type) : true))
                     if (rule.type === 'exact') {
                         const item = filtered.find((x) => rule.filter?.(x, name, filtered))
                         if (item) result = [...result, { ...item, keyword: name }]
@@ -388,7 +388,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             | NonFungibleTokenResult<ChainId, SchemaType>
             | NonFungibleCollectionResult<ChainId, SchemaType>
         > = specificResult_.map((x) => {
-            const r = normalResult.find((y) => y.id === x.id && y.source === x.source)
+            const r = normalTokens.find((y) => isSameAddress(y.address, x.address) && x.chainId === y.chainId)
             return { ...x, rank: r?.rank }
         })
 

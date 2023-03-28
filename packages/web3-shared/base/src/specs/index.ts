@@ -624,7 +624,7 @@ export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId
 }
 
 export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
-    type: SearchResultType.NonFungibleToken
+    type: SearchResultType.NonFungibleToken | SearchResultType.NonFungibleCollection
     id?: string
     address: string
     rank?: number

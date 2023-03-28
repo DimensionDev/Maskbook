@@ -15,6 +15,6 @@ export interface Rule<ChainId, SchemaType> {
 }
 
 export interface Handler<ChainId, SchemaType> {
-    type: SearchResultType
+    types: SearchResultType[]
     rules: Array<Rule<ChainId, SchemaType>>
 }
