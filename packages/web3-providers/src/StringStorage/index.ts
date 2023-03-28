@@ -1,7 +1,6 @@
 import urlcat from 'urlcat'
 import { FIREFLY_API_URL } from './constants.js'
 import { fetchJSON } from '../entry-helpers.js'
-import { EnhanceableSite, getSiteType } from '@masknet/shared-base'
 import type { StringStorageBaseAPI } from '../types/StringStorage.js'
 
 interface responseData {
@@ -10,8 +9,7 @@ interface responseData {
     message: string
     metaData: StringStorageBaseAPI.MetaData
 }
-const genKey = (namespace: string, userId: string) =>
-    `${namespace}-${(getSiteType() || EnhanceableSite.Twitter).replace('.com', '')}-${userId}`
+const genKey = (namespace: string, userId: string) => `${namespace}-${userId}`
 
 export class StringStorageAPI implements StringStorageBaseAPI.Provider {
     async get(namespace: string, userId: string, address: string) {
