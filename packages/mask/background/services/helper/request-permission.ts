@@ -1,5 +1,4 @@
 import type { Permissions } from 'webextension-polyfill'
-import { Flags } from '@masknet/flags'
 import { getPermissionRequestURL } from '../../../shared/definitions/routes.js'
 import { MaskMessages } from '../../../shared/messages.js'
 import type { SiteAdaptor } from '../../../shared/site-adaptors/types.js'
