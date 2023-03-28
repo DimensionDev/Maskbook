@@ -340,7 +340,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                 for (const rule of rules) {
                     if (!['token', 'twitter'].includes(rule.key)) continue
 
-                    const filtered = tokens.filter((x) => (type ? types.includes(x.type) : true))
+                    const filtered = tokens.filter((x) => (types ? types.includes(x.type) : true))
                     if (rule.type === 'exact') {
                         const item = filtered.find((x) => rule.filter?.(x, name, filtered))
                         if (item) result = [...result, { ...item, keyword: name }]
