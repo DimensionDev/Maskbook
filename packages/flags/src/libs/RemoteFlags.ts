@@ -1,21 +1,25 @@
 import urlcat from 'urlcat'
-import { get, has } from 'lodash-es'
+import { has } from 'lodash-es'
 import { Flags } from './Flags.js'
 
-interface FetchResult<T extends object> {
+interface FetchResult<T extends Record<string, unknown>> {
     flags?: T
     timestamp: number
 }
 
-export class RemoteFlags<T extends object> extends Flags<T> {
+export class RemoteFlags<T extends Record<string, unknown>> extends Flags<T> {
     private readonly KEY = 'mask-last-fetch-result'
 
     private lastFetchResult: FetchResult<T> | null = null
 
     private get lastStorageResult() {
-        const json = localStorage.getItem(this.KEY)
-        const result: FetchResult<T> | null = json ? JSON.parse(json) : null
-        return result
+        try {
+            const json = localStorage.getItem(this.KEY)
+            const result: FetchResult<T> | null = json ? JSON.parse(json) : null
+            return result
+        } catch (error) {
+            return null
+        }
     }
 
     constructor(
@@ -57,12 +61,12 @@ export class RemoteFlags<T extends object> extends Flags<T> {
         return this.lastStorageResult?.timestamp ?? 0
     }
 
-    override get accessor() {
+    override get accessor(): Readonly<T> {
         const lastFetchResult = this.lastFetchResult
 
         return new Proxy(this.defaults, {
             get(target, key, receiver) {
-                if (has(lastFetchResult?.flags, key)) return get(lastFetchResult?.flags, key)
+                if (has(lastFetchResult?.flags, key)) return lastFetchResult?.flags?.[key as string]
                 return super.accessor[key]
             },
             set(target, key, value, receiver) {
