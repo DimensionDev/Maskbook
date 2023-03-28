@@ -154,6 +154,7 @@
     "plugin_wallet_nft_approving_all": "crwdns18928:0{{symbol}}crwdne18928:0",
     "plugin_wallet_approve_all_nft_successfully": "crwdns18930:0{{symbol}}crwdne18930:0",
     "plugin_wallet_fail_to_load_nft_contract": "crwdns18932:0crwdne18932:0",
+    "plugin_wallet_change_wallet": "crwdns19965:0crwdne19965:0",
     "save": "crwdns18802:0crwdne18802:0",
     "cancel": "crwdns18804:0crwdne18804:0",
     "add_wallet": "crwdns18806:0crwdne18806:0",
