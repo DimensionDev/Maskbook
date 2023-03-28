@@ -2,7 +2,15 @@ import { useState, useMemo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import type { AbiItem } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
-import { isLessThan, rightShift, ZERO, formatBalance, formatCurrency, isPositive } from '@masknet/web3-shared-base'
+import {
+    isLessThan,
+    rightShift,
+    ZERO,
+    formatBalance,
+    formatCurrency,
+    isPositive,
+    isZero,
+} from '@masknet/web3-shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import {
     createContract,
@@ -230,10 +238,26 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                 ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
                 classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
                 {tab === TabType.Deposit ? (
-                    <EthereumERC20TokenApprovedBoundary
-                        amount={approvalData?.approveAmount.toFixed() ?? ''}
-                        token={approvalData?.approveToken}
-                        spender={approvalData?.approveAddress}>
+                    inputTokenBalance && !isZero(inputTokenBalance) ? (
+                        <EthereumERC20TokenApprovedBoundary
+                            amount={approvalData?.approveAmount.toFixed() ?? ''}
+                            token={approvalData?.approveToken}
+                            spender={approvalData?.approveAddress}>
+                            <ActionButtonPromise
+                                className={classes.button}
+                                init={
+                                    validationMessage || t('plugin_savings_deposit') + ' ' + protocol.bareToken.symbol
+                                }
+                                waiting={t('plugin_savings_process_deposit')}
+                                failed={t('failed')}
+                                failedOnClick="use executor"
+                                complete={t('done')}
+                                disabled={validationMessage !== '' && !needsSwap}
+                                noUpdateEffect
+                                executor={executor}
+                            />
+                        </EthereumERC20TokenApprovedBoundary>
+                    ) : (
                         <ActionButtonPromise
                             className={classes.button}
                             init={validationMessage || t('plugin_savings_deposit') + ' ' + protocol.bareToken.symbol}
@@ -245,7 +269,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                             noUpdateEffect
                             executor={executor}
                         />
-                    </EthereumERC20TokenApprovedBoundary>
+                    )
                 ) : (
                     <ActionButtonPromise
                         init={
@@ -265,8 +289,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                 )}
             </WalletConnectedBoundary>
         )
-    }, [executor, validationMessage, needsSwap, protocol, tab, approvalData, chainId])
-
+    }, [executor, validationMessage, needsSwap, protocol, tab, approvalData, chainId, inputTokenBalance])
     return (
         <InjectedDialog
             title={tab === TabType.Deposit ? t('plugin_savings_deposit') : t('plugin_savings_withdraw')}
