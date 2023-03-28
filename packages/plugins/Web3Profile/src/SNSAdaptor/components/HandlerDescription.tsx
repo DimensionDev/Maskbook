@@ -10,6 +10,7 @@ import {
     useWallet,
     useWeb3State,
 } from '@masknet/web3-hooks-base'
+import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useMemo } from 'react'
@@ -39,6 +40,9 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.maskColor.second,
+    },
+    avatar: {
+        objectFit: 'cover',
     },
 }))
 
@@ -79,15 +83,17 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
+    const avatarUrl = resolveIPFS_URL(props.profile?.avatar)
     return (
         <Box className={classes.container}>
             <Box className={classes.description}>
                 <WalletIcon
                     size={36}
+                    classes={{ mainIcon: classes.avatar }}
                     mainIcon={
                         props.profile
-                            ? props.profile.avatar
-                                ? new URL(props.profile.avatar)
+                            ? avatarUrl
+                                ? new URL(avatarUrl)
                                 : new URL('../assets/Lens.png', import.meta.url)
                             : providerDescriptor.icon
                     }
@@ -98,7 +104,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
                 </Box>
             </Box>
             <Button variant="text" onClick={openSelectProviderDialog}>
-                {t.wallet_status_button_change()}
+                {props.profile ? t.plugin_wallet_disconnect() : t.wallet_status_button_change()}
             </Button>
         </Box>
     )

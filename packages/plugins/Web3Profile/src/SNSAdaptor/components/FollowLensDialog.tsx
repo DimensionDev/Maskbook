@@ -107,9 +107,9 @@ export function FollowLensDialog() {
 
         if (!profile) return
         const isFollowing = await Lens.queryFollowStatus(account, profile.id)
-        const defaultProfile = await Lens.queryDefaultProfileByAddress(account)
+        const defaultProfile = await Lens.queryDefaultProfileByAddress('0xF892E8E12a2196854E67787E77659412000F9440')
 
-        const profiles = await Lens.queryProfilesByAddress(account)
+        const profiles = await Lens.queryProfilesByAddress('0xF892E8E12a2196854E67787E77659412000F9440')
 
         return {
             profile,
@@ -213,7 +213,10 @@ export function FollowLensDialog() {
         )
             return t.follow_with_charge_tips()
         else if (profile?.followModule?.type === FollowModuleType.RevertFollowModule) return t.follow_with_revert_tips()
-        return t.follow_gas_tips()
+        else if (!defaultProfile) {
+            return t.follow_gas_tips()
+        }
+        return
     }, [wallet?.owner, chainId, profile, feeTokenBalance])
 
     return (
@@ -266,7 +269,7 @@ export function FollowLensDialog() {
                                 hideRiskWarningConfirmed
                                 expectedChainId={ChainId.Matic}
                                 ActionButtonProps={{ variant: 'roundedContained' }}>
-                                <Typography className={classes.tips}>{tips}</Typography>
+                                {tips ? <Typography className={classes.tips}>{tips}</Typography> : null}
                                 <HandlerDescription
                                     profile={
                                         defaultProfile
