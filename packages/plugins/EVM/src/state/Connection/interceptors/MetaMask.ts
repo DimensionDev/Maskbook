@@ -14,6 +14,14 @@ export class MetaMask implements Middleware<ConnectionContext> {
                     params: [...context.requestArguments.params.slice(0, 2), ''],
                 }
                 break
+            case EthereumMethodType.ETH_SEND_TRANSACTION:
+                const currentChainId = await context.connection.getChainId()
+                if (currentChainId !== context.chainId) {
+                    await context.connection.connect({
+                        chainId: context.chainId,
+                    })
+                }
+                break
             default:
                 break
         }

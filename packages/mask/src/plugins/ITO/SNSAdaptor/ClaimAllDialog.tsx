@@ -266,10 +266,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                 </DialogContent>
                 <DialogActions style={{ padding: 0 }}>
                     <PluginWalletStatusBar className={classes.actionButtonWrapper}>
-                        <ChainBoundary
-                            expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                            expectedChainId={chainId}
-                            noSwitchNetworkTip>
+                        <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
                             {swappedTokens?.length ? (
                                 <WalletConnectedBoundary expectedChainId={chainId}>
                                     <ActionButton

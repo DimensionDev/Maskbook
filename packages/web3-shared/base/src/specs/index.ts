@@ -1667,7 +1667,6 @@ export interface NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType> {
 }
 
 export interface ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType> {
-    network: NetworkDescriptor<ChainId, NetworkType>
     provider: ProviderDescriptor<ChainId, ProviderType>
     children?: React.ReactNode
     onClick?: (

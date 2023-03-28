@@ -174,8 +174,6 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                         <ChainBoundary
                             expectedPluginID={expectedPluginID}
                             expectedChainId={chainId}
-                            noSwitchNetworkTip
-                            switchChainWithoutPopup
                             ActionButtonPromiseProps={{
                                 fullWidth: true,
                             }}>

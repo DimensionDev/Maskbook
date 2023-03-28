@@ -13,6 +13,7 @@ import {
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAsync } from 'react-use'
 import { SmartPayBundler } from '@masknet/web3-providers'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     button: {
@@ -66,7 +67,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
             </ActionButton>
         )
 
-    if (!approved && !hideRiskWarningConfirmed)
+    if (!approved && !hideRiskWarningConfirmed && pluginID === NetworkPluginID.PLUGIN_EVM)
         return (
             <ActionButton
                 className={buttonClass}
