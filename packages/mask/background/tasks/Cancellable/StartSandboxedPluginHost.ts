@@ -3,7 +3,7 @@ import type { PluginID } from '@masknet/shared-base'
 import { Plugin, registerPlugin } from '@masknet/plugin-infra'
 import { BackgroundInstance, BackgroundPluginHost } from '@masknet/sandboxed-plugin-runtime/background'
 import { hmr } from '../../../utils-pure/index.js'
-import { Flags } from '../../../shared/flags.js'
+import { Flags } from '@masknet/flags'
 import { createPluginDatabase } from '../../database/plugin-db/index.js'
 import { createHostAPIs } from '../../../shared/sandboxed-plugin/host-api.js'
 

@@ -109,6 +109,7 @@ export const CURRENCIES_MAP: Record<SourceType, undefined | TrendingAPI.Currency
     [SourceType.NFTX]: undefined,
     [SourceType.Etherscan]: undefined,
     [SourceType.CryptoPunks]: undefined,
+    [SourceType.SimpleHash]: undefined,
 }
 
 /**

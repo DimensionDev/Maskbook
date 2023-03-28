@@ -61,6 +61,7 @@ import { SpaceID_API } from './SpaceID/index.js'
 import { BonfidaAPI } from './Bonfida/index.js'
 import { RedPacketAPI } from './RedPacket/index.js'
 import { SmartPayOwnerAPI } from './SmartPay/apis/OwnerAPI.js'
+import { SimpleHashProviderAPI } from './SimpleHash/index.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
@@ -94,6 +95,7 @@ export const Sentry = new SentryAPI()
 export const TheGraphDomain = new TheGraphDomainAPI()
 export const RedPacket = new RedPacketAPI()
 export const TheGraphRedPacket = new TheGraphRedPacketAPI()
+export const SimpleHash = new SimpleHashProviderAPI()
 
 // Etherscan
 export const EtherscanExplorer = new EtherscanExplorerAPI()

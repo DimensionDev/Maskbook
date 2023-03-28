@@ -219,17 +219,21 @@ function ContractListItem(props: ContractListItemProps) {
                 </Typography>
                 {collection.balance ? <Typography className={classes.balance}>{collection.balance}</Typography> : null}
             </ListItem>
-            <div className={classes.address}>
-                <Typography onClick={() => onSubmit(collection, collection.balance)} className={classes.addressText}>
-                    {collection.address}
-                </Typography>
-                <Link
-                    href={explorerResolver.addressLink(collection.chainId, collection.address ?? '')}
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    <OpenInNewIcon className={classes.openIcon} fontSize="small" />
-                </Link>
-            </div>
+            {collection.address ? (
+                <div className={classes.address}>
+                    <Typography
+                        onClick={() => onSubmit(collection, collection.balance)}
+                        className={classes.addressText}>
+                        {collection.address}
+                    </Typography>
+                    <Link
+                        href={explorerResolver.addressLink(collection.chainId, collection.address ?? '')}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        <OpenInNewIcon className={classes.openIcon} fontSize="small" />
+                    </Link>
+                </div>
+            ) : null}
         </div>
     )
 }

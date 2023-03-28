@@ -20,7 +20,10 @@ export function useNonFungibleOwnerTokens(
     const { value: collectibles_ = EMPTY_LIST, done: loadFinish } = useNonFungibleAssets(
         NetworkPluginID.PLUGIN_EVM,
         SchemaType.ERC721,
-        { chainId, account: ownerAccount },
+        {
+            chainId,
+            account: ownerAccount,
+        },
     )
 
     const collectibles = collectibles_

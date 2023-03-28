@@ -29,7 +29,7 @@ import {
     TransferEventProperty,
     V3AskEventProperty,
 } from './types.js'
-import { GetCollectionsByKeywordQuery, GetEventsQuery, GetTokenQuery } from './queries.js'
+import { GetEventsQuery, GetTokenQuery } from './queries.js'
 import { ZORA_MAINNET_GRAPHQL_URL } from './constants.js'
 import type { NonFungibleTokenAPI } from '../entry-types.js'
 import { getAssetFullName, resolveActivityType } from '../entry-helpers.js'
@@ -325,22 +325,5 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         )
         const orders = events.length ? events.map((x) => this.createNonFungibleOrderFromEvent(chainId, x)) : EMPTY_LIST
         return this.createPageable(orders, indicator)
-    }
-
-    async getCollectionsByKeyword(
-        keyword: string,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
-    ) {
-        const response = await this.request<{
-            search: {
-                nodes: Collection[]
-            }
-        }>(chainId, GetCollectionsByKeywordQuery, {
-            keyword,
-        })
-        const collections = response?.search.nodes
-        if (!collections?.length) return createPageable(EMPTY_LIST, createIndicator(indicator))
-        const collections_ = collections.map((x) => this.createNonFungibleCollectionFromCollection(chainId, x))
-        return this.createPageable(collections_, indicator)
     }
 }

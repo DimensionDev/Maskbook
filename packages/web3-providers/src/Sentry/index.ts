@@ -1,3 +1,4 @@
+import '@sentry/tracing'
 import { Breadcrumbs, Event, GlobalHandlers } from '@sentry/browser'
 import {
     getSiteType,
@@ -5,6 +6,7 @@ import {
     getExtensionId,
     createDeviceSeed,
     createDeviceFingerprint,
+    isDeviceOnWhitelist,
 } from '@masknet/shared-base'
 import { formatMask } from '@masknet/web3-shared-base'
 import { TelemetryAPI } from '../types/Telemetry.js'
@@ -44,9 +46,6 @@ const IGNORE_ERRORS = [
     'User rejected the request.',
 ]
 
-const DEVICE_SEED = createDeviceSeed()
-const DEVICE_FINGERPRINT = createDeviceFingerprint()
-
 export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
     constructor() {
         Sentry.init({
@@ -65,7 +64,7 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
                 }),
             ],
             environment: process.env.NODE_ENV,
-            tracesSampleRate: 1.0,
+            tracesSampleRate: 0.1,
             beforeSend(event) {
                 if (event.exception?.values?.some((x) => IGNORE_ERRORS.some((y) => x.value?.includes(y)))) return null
 
@@ -92,8 +91,9 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         Sentry.setTag('channel', process.env.channel)
         Sentry.setTag('version', process.env.VERSION)
         Sentry.setTag('ua', navigator.userAgent)
-        Sentry.setTag('device_seed', DEVICE_SEED)
-        Sentry.setTag('device_fingerprint', DEVICE_FINGERPRINT)
+        Sentry.setTag('device_ab', isDeviceOnWhitelist(50))
+        Sentry.setTag('device_seed', createDeviceSeed())
+        Sentry.setTag('device_fingerprint', createDeviceFingerprint())
         Sentry.setTag('engine', process.env.engine)
         Sentry.setTag('build_date', process.env.BUILD_DATE)
         Sentry.setTag('branch_name', process.env.BRANCH_NAME)
@@ -214,7 +214,15 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
         if (process.env.NODE_ENV === 'development') {
             console.log(`[LOG EVENT]: ${JSON.stringify(this.createEvent(options))}`)
         } else {
-            Sentry.captureEvent(this.createEvent(options))
+            const transaction = Sentry.startTransaction({
+                name: options.eventID,
+            })
+            const span = transaction.startChild({
+                op: 'task',
+                description: this.createEvent(options).message,
+            })
+            span.finish()
+            transaction.finish()
         }
     }
 

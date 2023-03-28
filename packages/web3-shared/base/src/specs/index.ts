@@ -92,6 +92,7 @@ export enum SourceType {
     NFTX = 'NFTX',
     Etherscan = 'Etherscan',
     CryptoPunks = 'CryptoPunks',
+    SimpleHash = 'SimpleHash',
 
     // Rarity
     RaritySniper = 'RaritySniper',
@@ -411,6 +412,7 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     slug: string
     symbol?: string
     description?: string
+    id?: string
     address?: string
     schema?: SchemaType
     iconURL?: string | null
@@ -698,7 +700,7 @@ export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId
 }
 
 export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
-    type: SearchResultType.NonFungibleToken
+    type: SearchResultType.NonFungibleToken | SearchResultType.NonFungibleCollection
     id?: string
     address: string
     rank?: number
@@ -1317,6 +1319,12 @@ export interface HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions =
         address: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
+    /** Get non-fungible assets of the given collection and owner. */
+    getNonFungibleAssetsByCollectionAndOwner?: (
+        collectionId: string,
+        owner: string,
+        initial?: Web3HubOptions,
+    ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
     /** Get a non-fungible token owner address. */
     getNonFungibleTokenOwner?: (address: string, tokenId: string, initial?: Web3HubOptions) => Promise<string>
     /** Get a non-fungible token floor price. */
@@ -1404,11 +1412,6 @@ export interface HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions =
     /** Get non-fungible collections owned by the given account. */
     getNonFungibleCollectionsByOwner?: (
         account: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>>
-    /** Get non-fungible tokens search by the give keyword. */
-    getNonFungibleCollectionsByKeyword?: (
-        keyword: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>>
     getNonFungibleRarity?: (

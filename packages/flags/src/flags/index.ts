@@ -1,5 +1,5 @@
-export const is_iOSApp = process.env.engine === 'safari' && process.env.architecture === 'app'
-export const isAndroidApp = process.env.architecture === 'app' && process.env.engine === 'firefox'
+const is_iOSApp = process.env.engine === 'safari' && process.env.architecture === 'app'
+const isAndroidApp = process.env.architecture === 'app' && process.env.engine === 'firefox'
 
 const appOnly = process.env.architecture === 'app'
 const devOnly = process.env.NODE_ENV === 'development'
@@ -8,7 +8,7 @@ const insiderOnly = process.env.channel === 'insider' || devOnly
 const betaOrInsiderOnly = insiderOnly || process.env.channel === 'beta'
 
 // TODO: In future, we can turn this object into a Proxy to receive flags from remote
-export const Flags = {
+export const flags = {
     /** @deprecated */
     userGuideLevel: 'v2',
     isolated_dashboard_bridge_enabled: false,
@@ -57,8 +57,10 @@ export const Flags = {
     v37PayloadDefaultEnabled: false, // new Date() > new Date('2022-07-01'),
     i18nTranslationHotUpdate: true,
     sandboxedPluginRuntime: insiderOnly,
+
+    simplehash_ab_percentage: 50,
 } as const
 
 if (process.env.NODE_ENV === 'development') {
-    console.log('Mask Network starts with flags:', Flags)
+    console.log('Mask Network starts with flags:', flags)
 }

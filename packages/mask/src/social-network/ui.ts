@@ -16,7 +16,7 @@ import {
     ValueRef,
 } from '@masknet/shared-base'
 import type { ThemeSettings } from '@masknet/web3-shared-base'
-import { Flags } from '../../shared/index.js'
+import { Flags } from '@masknet/flags'
 import { SetupGuideContext, SetupGuideStep } from '../../shared/legacy-settings/types.js'
 import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../shared/legacy-settings/settings.js'
 import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'

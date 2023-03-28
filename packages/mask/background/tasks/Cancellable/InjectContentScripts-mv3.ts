@@ -1,5 +1,5 @@
 import { noop } from 'lodash-es'
-import { Flags } from '../../../shared/flags.js'
+import { Flags } from '@masknet/flags'
 import { hmr } from '../../../utils-pure/index.js'
 import {
     fetchInjectContentScriptList,

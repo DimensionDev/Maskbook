@@ -1,7 +1,7 @@
 /** This file is published under MIT License */
 import { useEffect, useState } from 'react'
 import { hasIn } from 'lodash-es'
-import { Flags } from '../../../shared/index.js'
+import { Flags } from '@masknet/flags'
 
 const q = ['query', 'request', 'revoke'] as const
 
