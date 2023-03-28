@@ -4,6 +4,7 @@ export interface Asset {
     collection: {
         banner_image_url: string
         collection_id: number
+        spam_score?: number
         description: string
         discord_url: string
         floor_prices: Array<{
@@ -67,6 +68,7 @@ export interface Collection {
     id: string
     name: string
     image_url: string
+    spam_score?: number
     chain: string
     distinct_nfts_owned: number // owner balance
     total_copies_owned: number
