@@ -1,10 +1,9 @@
 import { useCallback } from 'react'
 import { Box, Card } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { AssetPreviewer, NetworkIcon } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { CrossIsolationMessages, type NetworkPluginID } from '@masknet/shared-base'
-import { isENSContractAddress } from '@masknet/web3-shared-evm'
+import { TokenImage } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -20,12 +19,6 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         zIndex: 1,
         backgroundColor: theme.palette.mode === 'light' ? '#F7F9FA' : '#2F3336',
-        width: '100%',
-        height: '100%',
-    },
-    fallbackImage: {
-        minHeight: '0 !important',
-        maxWidth: 'none',
         width: '100%',
         height: '100%',
     },
@@ -56,25 +49,11 @@ export function CollectibleCard({ className, pluginID, asset }: CollectibleCardP
         })
     }, [pluginID, asset.chainId, asset.tokenId, asset.address])
 
-    const imageURL = asset.metadata?.imageURL ?? asset.metadata?.mediaURL
     return (
         <Box className={cx(classes.root, className)} onClick={onClick}>
             <div className={classes.blocker} />
             <Card className={classes.card}>
-                <AssetPreviewer
-                    classes={{
-                        fallbackImage: classes.fallbackImage,
-                    }}
-                    url={asset.metadata?.imageURL ?? asset.metadata?.mediaURL}
-                    icon={pluginID ? <NetworkIcon pluginID={pluginID} chainId={asset.chainId} /> : null}
-                    fallbackImage={
-                        !imageURL && asset.collection?.name.includes('.lens')
-                            ? new URL('../assets/lens.svg', import.meta.url)
-                            : !imageURL && isENSContractAddress(asset.contract?.address || '')
-                            ? new URL('../assets/ens.svg', import.meta.url)
-                            : undefined
-                    }
-                />
+                <TokenImage asset={asset} pluginID={pluginID} />
             </Card>
         </Box>
     )
