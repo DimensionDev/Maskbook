@@ -1,7 +1,8 @@
+import type { Permissions } from 'webextension-polyfill'
+import { Flags } from '@masknet/flags'
 import { getPermissionRequestURL } from '../../../shared/definitions/routes.js'
 import { MaskMessages } from '../../../shared/messages.js'
 import type { SiteAdaptor } from '../../../shared/site-adaptors/types.js'
-import type { Permissions } from 'webextension-polyfill'
 
 export async function requestExtensionPermission(permission: Permissions.Permissions): Promise<boolean> {
     if (await browser.permissions.contains(permission)) return true
