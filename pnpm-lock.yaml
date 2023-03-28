@@ -559,7 +559,11 @@ importers:
         specifier: ^0.16.0
         version: 0.16.0
 
-  packages/flags: {}
+  packages/flags:
+    devDependencies:
+      urlcat:
+        specifier: ^2.0.4
+        version: 2.0.4_fggwetex7eobhq3hztj4obsulu
 
   packages/gun-utils:
     dependencies:
@@ -32195,7 +32199,6 @@ packages:
 
   /urlcat/2.0.4_fggwetex7eobhq3hztj4obsulu:
     resolution: {integrity: sha512-12c4Vi40DHVdZ/8mOLjZjp0asCzM6hi8Gj116fpImRP1FN4gBMCtMi9XhLNOmre/FEQYNqHbZmX8iyYAtIcy8Q==}
-    dev: false
     patched: true
 
   /use-subscription/1.6.0:
