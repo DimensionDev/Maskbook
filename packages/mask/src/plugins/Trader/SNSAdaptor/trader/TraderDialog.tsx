@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import {
     PluginID,
@@ -84,12 +84,12 @@ export function TraderDialog() {
     const tradeRef = useRef<TraderRef>(null)
     const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
     const { pluginID } = useNetworkContext()
+    const { chainId, setChainId } = useChainContext()
     const { Others } = useWeb3State()
     const chainIdList = traderDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const { chainId, setChainId } = useChainContext()
     const chainIdValid = useChainIdValid(pluginID, chainId)
     const [defaultCoins, setDefaultCoins] = useState<
         | {
@@ -109,33 +109,37 @@ export function TraderDialog() {
     const defaultInputCoin = defaultCoins?.defaultInputCoin
     const defaultOutputCoin = defaultCoins?.defaultOutputCoin
 
+    const inputFungibleToken = useMemo(
+        () =>
+            Others?.createFungibleToken(
+                chainId,
+                Others.isNativeTokenAddress(defaultInputCoin?.address) ? SchemaType.Native : SchemaType.ERC20,
+                defaultInputCoin?.address ?? '',
+                defaultInputCoin?.name ?? '',
+                defaultInputCoin?.symbol ?? '',
+                defaultInputCoin?.decimals ?? 0,
+            ),
+        [chainId],
+    )
+
+    const outputFungibleToken = useMemo(
+        () =>
+            Others?.createFungibleToken(
+                chainId,
+                Others.isNativeTokenAddress(defaultOutputCoin?.address) ? SchemaType.Native : SchemaType.ERC20,
+                defaultOutputCoin?.address ?? '',
+                defaultOutputCoin?.name ?? '',
+                defaultOutputCoin?.symbol ?? '',
+                defaultOutputCoin?.decimals ?? 0,
+            ),
+        [chainId],
+    )
+
     // TODO: Other network schema support
-    const { value: inputToken } = useFungibleToken(
-        pluginID,
-        defaultInputCoin?.address,
-        Others?.createFungibleToken(
-            chainId,
-            Others.isNativeTokenAddress(defaultInputCoin?.address) ? SchemaType.Native : SchemaType.ERC20,
-            defaultInputCoin?.address ?? '',
-            defaultInputCoin?.name ?? '',
-            defaultInputCoin?.symbol ?? '',
-            defaultInputCoin?.decimals ?? 0,
-        ),
-    )
-
-    const { value: outputToken } = useFungibleToken(
-        pluginID,
-        defaultOutputCoin?.address,
-        Others?.createFungibleToken(
-            chainId,
-            Others.isNativeTokenAddress(defaultOutputCoin?.address) ? SchemaType.Native : SchemaType.ERC20,
-            defaultOutputCoin?.address ?? '',
-            defaultOutputCoin?.name ?? '',
-            defaultOutputCoin?.symbol ?? '',
-            defaultOutputCoin?.decimals ?? 0,
-        ),
-    )
-
+    const { value: inputToken } = useFungibleToken(pluginID, defaultInputCoin?.address, inputFungibleToken, { chainId })
+    const { value: outputToken } = useFungibleToken(pluginID, defaultOutputCoin?.address, outputFungibleToken, {
+        chainId,
+    })
     // #region update default input or output token
 
     useEffect(() => {
@@ -143,7 +147,6 @@ export function TraderDialog() {
             setOpen(open)
             if (traderProps) {
                 const { defaultInputCoin, defaultOutputCoin } = traderProps
-
                 setDefaultCoins({
                     defaultInputCoin,
                     defaultOutputCoin,
@@ -151,7 +154,7 @@ export function TraderDialog() {
                 if (traderProps.chainId) setChainId(traderProps.chainId as Web3Helper.ChainIdAll)
             }
         })
-    }, [chainId])
+    }, [])
     // #endregion
 
     useEffect(() => {
