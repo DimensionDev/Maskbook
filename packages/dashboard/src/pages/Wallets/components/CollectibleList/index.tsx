@@ -50,7 +50,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedChain }) =>
         done,
         next,
         error,
-    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
+    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, {
         account,
         chainId: selectedChain?.chainId as ChainId,
     })

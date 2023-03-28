@@ -99,7 +99,7 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
         next,
         loading,
         error: loadError,
-    } = useNonFungibleAssets(pluginID, undefined, { chainId })
+    } = useNonFungibleAssets(pluginID, { chainId })
 
     const isEvm = pluginID === NetworkPluginID.PLUGIN_EVM
     const tokens = useMemo(() => {
@@ -137,6 +137,7 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
                                     classes={{ root: classes.collectibleList }}
                                     retry={next}
                                     collectibles={tokens}
+                                    pluginID={pluginID}
                                     loading={loading}
                                     columns={4}
                                     selectable

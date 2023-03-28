@@ -102,7 +102,7 @@ export function CollectionList({ socialAccount, persona, profile, gridProps = EM
         next: nextPage,
         error,
         retry: retryFetchCollectible,
-    } = useNonFungibleAssets(socialAccount.pluginID, undefined, { account })
+    } = useNonFungibleAssets(socialAccount.pluginID, { account })
 
     const userId = profile?.identifier?.userId.toLowerCase()
 
