@@ -240,6 +240,11 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         },
         [JSON.stringify(identity), isCollectionProjectPopper, badgeBounding],
     )
+
+    const floorPrice =
+        trending.dataProvider === SourceType.CoinMarketCap
+            ? last(stats)?.[1] ?? market?.current_price
+            : market?.current_price
     return (
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.cardHeader}>
@@ -341,12 +346,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             lineHeight="24px"
                                             color={theme.palette.maskColor.dark}>
                                             {isNFT ? `${t('plugin_trader_floor_price')}: ` : null}
-                                            {formatCurrency(
-                                                (trending.dataProvider === SourceType.CoinMarketCap
-                                                    ? last(stats)?.[1] ?? market.current_price
-                                                    : market.current_price) ?? 0,
-                                                isNFT ? market.price_symbol : 'USD',
-                                            )}
+                                            {floorPrice
+                                                ? formatCurrency(floorPrice, isNFT ? market.price_symbol : 'USD')
+                                                : '--'}
                                         </Typography>
                                     ) : (
                                         <Typography fontSize={14} fontWeight={500} lineHeight="24px">
