@@ -460,3 +460,11 @@ export function resolveResourceURL(url: string | undefined) {
     if (isArweaveResource(url)) return resolveArweaveURL(url)
     return resolveIPFS_URL(url)
 }
+
+export function resolveImageURL(image?: string, name?: string, isENS?: boolean) {
+    if (!image) {
+        if (name?.includes('.lens')) return new URL('./lens.svg', import.meta.url).toString()
+        if (isENS) return new URL('./ens.svg', import.meta.url).toString()
+    }
+    return image
+}

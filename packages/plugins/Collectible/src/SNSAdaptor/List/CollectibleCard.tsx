@@ -3,7 +3,7 @@ import { Box, Card } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { CrossIsolationMessages, type NetworkPluginID } from '@masknet/shared-base'
-import { TokenImage } from '@masknet/shared'
+import { AssetPreviewer, NetworkIcon } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -19,6 +19,12 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         zIndex: 1,
         backgroundColor: theme.palette.mode === 'light' ? '#F7F9FA' : '#2F3336',
+        width: '100%',
+        height: '100%',
+    },
+    fallbackImage: {
+        minHeight: '0 !important',
+        maxWidth: 'none',
         width: '100%',
         height: '100%',
     },
@@ -53,7 +59,13 @@ export function CollectibleCard({ className, pluginID, asset }: CollectibleCardP
         <Box className={cx(classes.root, className)} onClick={onClick}>
             <div className={classes.blocker} />
             <Card className={classes.card}>
-                <TokenImage asset={asset} pluginID={pluginID} />
+                <AssetPreviewer
+                    classes={{
+                        fallbackImage: classes.fallbackImage,
+                    }}
+                    url={asset.metadata?.imageURL ?? asset.metadata?.mediaURL}
+                    icon={pluginID ? <NetworkIcon pluginID={pluginID} chainId={asset.chainId} /> : null}
+                />
             </Card>
         </Box>
     )

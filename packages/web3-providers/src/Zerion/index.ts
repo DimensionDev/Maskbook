@@ -10,8 +10,16 @@ import {
     scale10,
     GasOptionType,
     toFixed,
+    resolveImageURL,
 } from '@masknet/web3-shared-base'
-import { ChainId, createNativeToken, type GasOption, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    createNativeToken,
+    type GasOption,
+    SchemaType,
+    isValidChainId,
+    isENSContractAddress,
+} from '@masknet/web3-shared-evm'
 import type { ZerionNonFungibleTokenItem, ZerionNonFungibleCollection, ZerionCoin } from './types.js'
 import { formatAsset, formatTransactions, isValidAsset } from './helpers.js'
 import {
@@ -99,7 +107,14 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
         if (!address || !tokenId) return
         return ZERION_NFT_DETAIL_URL + `${address}:${tokenId}`
     }
+
     createNonFungibleTokenAssetFromNFT(chainId: ChainId, nft: ZerionNonFungibleTokenItem) {
+        const name = getAssetFullName(
+            nft.asset.contract_address,
+            nft.asset.collection.name,
+            nft.asset.name,
+            nft.asset.token_id,
+        )
         return {
             chainId,
             id: `${chainId}_${nft.asset.contract_address}_${nft.asset.token_id}`,
@@ -116,14 +131,13 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
             },
             metadata: {
                 chainId,
-                name: getAssetFullName(
-                    nft.asset.contract_address,
-                    nft.asset.collection.name,
-                    nft.asset.name,
-                    nft.asset.token_id,
-                ),
+                name,
                 symbol: nft.asset.symbol,
-                imageURL: nft.asset.preview.url,
+                imageURL: resolveImageURL(
+                    nft.asset.preview.url,
+                    name,
+                    isENSContractAddress(nft.asset.contract_address),
+                ),
                 mediaURL: nft.asset.detail.url,
                 mediaType: nft.asset.detail.meta.type,
                 source: SourceType.Zerion,

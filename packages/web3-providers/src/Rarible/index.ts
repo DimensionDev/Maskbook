@@ -18,8 +18,9 @@ import {
     CurrencyType,
     scale10,
     SourceType,
+    resolveImageURL,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, isENSContractAddress, isValidChainId } from '@masknet/web3-shared-evm'
 import { RaribleEventType, type RaribleOrder, type RaribleHistory, type RaribleNFTItemMapResponse } from './types.js'
 import { RaribleURL } from './constants.js'
 import { getPaymentToken, getAssetFullName, resolveActivityType, fetchJSON } from '../entry-helpers.js'
@@ -62,21 +63,28 @@ function createRaribleLink(address: string, tokenId: string) {
 }
 
 function createAsset(chainId: ChainId, asset: RaribleNFTItemMapResponse): NonFungibleAsset<ChainId, SchemaType.ERC721> {
+    const address = asset.contract.split(':')[1]
+    const name = getAssetFullName(address, '', asset.meta?.name, asset.tokenId)
     return {
         id: asset.id || asset.contract,
         chainId,
         tokenId: asset.tokenId,
         type: TokenType.NonFungible,
-        address: asset.contract.split(':')[1],
+        address,
         schema: SchemaType.ERC721,
         creator: createAccount(first(asset.creators)?.account),
         traits: asset?.meta?.attributes.map(({ key, value }) => ({ type: key, value })) ?? [],
         metadata: {
             chainId,
-            name: getAssetFullName(asset.contract.split(':')[1], '', asset.meta?.name, asset.tokenId),
+            name,
             description: asset.meta?.description,
-            imageURL: decodeURIComponent(
-                asset.meta?.content?.find((x) => x['@type'] === 'IMAGE' && x.representation === 'PREVIEW')?.url ?? '',
+            imageURL: resolveImageURL(
+                decodeURIComponent(
+                    asset.meta?.content?.find((x) => x['@type'] === 'IMAGE' && x.representation === 'PREVIEW')?.url ??
+                        '',
+                ),
+                name,
+                isENSContractAddress(address),
             ),
             mediaURL: decodeURIComponent(
                 asset.meta?.content?.find((x) => x['@type'] === 'IMAGE' && x.representation === 'ORIGINAL')?.url ?? '',
@@ -85,7 +93,7 @@ function createAsset(chainId: ChainId, asset: RaribleNFTItemMapResponse): NonFun
         contract: {
             chainId,
             schema: SchemaType.ERC721,
-            address: asset.contract.split(':')[1],
+            address,
             name: '',
         },
         collection: {
