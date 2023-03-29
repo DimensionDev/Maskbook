@@ -59,8 +59,11 @@ const useStyles = makeStyles()((theme) => {
                 background: theme.palette.maskColor.publicBg,
             },
             marginBottom: 6,
+            '&:last-of-type': {
+                marginBottom: 0,
+            },
         },
-        menuItemNextIdIcon: {
+        linkIcon: {
             display: 'flex',
             marginLeft: 'auto',
         },
@@ -160,8 +163,8 @@ export function SocialAccountList({ nextIdBindings, ...rest }: SocialAccountList
                                     {t.lens_follow()}
                                 </Button>
                             ) : (
-                                <div className={classes.menuItemNextIdIcon}>
-                                    <Icons.LinkOut size={20} className={classes.linkOutIcon} />
+                                <div className={classes.linkIcon}>
+                                    <Icons.LinkOut size={16} className={classes.linkOutIcon} />
                                 </div>
                             )}
                         </MenuItem>
