@@ -12,9 +12,12 @@ const LensIconSizeMap: Record<Plugin.SNSAdaptor.LensSlot, number> = {
     [Plugin.SNSAdaptor.LensSlot.Sidebar]: 16,
 }
 
-const useStyles = makeStyles()((theme) => ({
-    badge: {},
-}))
+const useStyles = makeStyles()({
+    badge: {
+        padding: 0,
+        verticalAlign: 'baseline',
+    },
+})
 interface Props {
     slot: Plugin.SNSAdaptor.LensSlot
     accounts: LensAccount[]
