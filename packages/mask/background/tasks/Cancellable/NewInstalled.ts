@@ -1,5 +1,5 @@
-import { DashboardRoutes } from '@masknet/shared-base'
 import type { Runtime } from 'webextension-polyfill'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { hmr } from '../../../utils-pure/index.js'
 import { getOriginsWithoutPermission } from '../../services/site-adaptors/connect.js'
 

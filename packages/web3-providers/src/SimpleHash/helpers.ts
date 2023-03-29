@@ -24,7 +24,7 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
     const chainId = resolveChainId(asset.chain)
     const address = asset.contract_address
     const schema = asset.contract.type === 'ERC721' ? SchemaType.ERC721 : SchemaType.ERC1155
-    if (!chainId || !isValidChainId(chainId) || !address) return
+    if (!chainId || !isValidChainId(chainId) || !address || asset.collection.spam_score === 100) return
     return {
         id: address,
         chainId,
@@ -56,8 +56,8 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
                 : getAssetFullName(asset.contract_address, asset.contract.name, asset.name, asset.token_id),
             symbol: asset.contract.symbol,
             description: asset.description,
-            imageURL: asset.image_url,
-            mediaURL: asset.image_url,
+            imageURL: asset.image_url || asset.previews.image_large_url,
+            mediaURL: asset.image_url || asset.previews.image_large_url,
         },
         contract: {
             chainId,
@@ -85,7 +85,7 @@ export function createNonFungibleCollection(
 ): NonFungibleCollection<ChainId, SchemaType> | undefined {
     const chainId = resolveChainId(collection.chain)
 
-    if (!isValidChainId(chainId)) return
+    if (!isValidChainId(chainId) || collection.spam_score === 100) return
     return {
         id: collection.id,
         chainId,

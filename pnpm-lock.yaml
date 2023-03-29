@@ -276,7 +276,7 @@ importers:
         version: 3.0.2
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@5.1.0-dev.20230308)
+        version: 10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@4.9.5)
       typescript:
         specifier: 5.1.0-dev.20230308
         version: 5.1.0-dev.20230308
@@ -699,7 +699,11 @@ importers:
         specifier: ^0.16.0
         version: 0.16.0
 
-  packages/flags: {}
+  packages/flags:
+    devDependencies:
+      urlcat:
+        specifier: ^2.0.4
+        version: 2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu)
 
   packages/gun-utils:
     dependencies:
@@ -1689,6 +1693,9 @@ importers:
       '@dimensiondev/metamask-extension-provider':
         specifier: ^3.0.6-20221105074301-8806fca
         version: 3.0.6-20221105074301-8806fca
+      '@masknet/flags':
+        specifier: workspace:^
+        version: link:../../flags
       '@masknet/icons':
         specifier: workspace:^
         version: link:../../icons
@@ -3602,6 +3609,9 @@ importers:
       '@sentry/browser':
         specifier: 7.37.2
         version: 7.37.2
+      '@sentry/tracing':
+        specifier: ^7.45.0
+        version: 7.45.0
       '@sentry/types':
         specifier: ^7.40.0
         version: 7.40.0
@@ -9765,6 +9775,16 @@ packages:
       '@scure/base': 1.1.1
     dev: false
 
+  /@sentry-internal/tracing@7.45.0:
+    resolution: {integrity: sha512-0aIDY2OvUX7k2XHaimOlWkboXoQvJ9dEKvfpu0Wh0YxfUTGPa+wplUdg3WVdkk018sq1L11MKmj4MPZyYUvXhw==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/core': 7.45.0
+      '@sentry/types': 7.45.0
+      '@sentry/utils': 7.45.0
+      tslib: 1.14.1
+    dev: true
+
   /@sentry/browser@7.37.2:
     resolution: {integrity: sha512-UvKfpx6+BUdV+rGAXqDBznagfz44Ut+x2h/i0OZPNCEpXaH9KAQOlv06I66861aXiucWFRb1lAMrN4+cE9aJIg==}
     engines: {node: '>=8'}
@@ -9794,6 +9814,15 @@ packages:
       '@sentry/utils': 7.37.2
       tslib: 1.14.1
     patched: true
+
+  /@sentry/core@7.45.0:
+    resolution: {integrity: sha512-xJfdTS4lRmHvZI/A5MazdnKhBJFkisKu6G9EGNLlZLre+6W4PH5sb7QX4+xoBdqG7v10Jvdia112vi762ojO2w==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/types': 7.45.0
+      '@sentry/utils': 7.45.0
+      tslib: 1.14.1
+    dev: true
 
   /@sentry/hub@5.30.0:
     resolution: {integrity: sha512-2tYrGnzb1gKz2EkMDQcfLrDTvmGcQPuWxLnJKXJvYTQDGLlEvi2tWz1VIHjunmOvJrB5aIQLhm+dcMRwFZDCqQ==}
@@ -9849,6 +9878,13 @@ packages:
       tslib: 1.14.1
     dev: false
 
+  /@sentry/tracing@7.45.0:
+    resolution: {integrity: sha512-FsoFmZPzTBGvWeJH73NxSF1ot61Zw3aIZo5XolengiKnRmcrQOFxebtMKBiZ61QBRYGqsm5uT7QB7zITU6Ikgg==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry-internal/tracing': 7.45.0
+    dev: true
+
   /@sentry/types@5.30.0:
     resolution: {integrity: sha512-R8xOqlSTZ+htqrfteCWU5Nk0CDN5ApUTvrlvBuiH1DyP6czDZ4ktbZB0hAgBlVcK0U+qpD3ag3Tqqpa5Q67rPw==}
     engines: {node: '>=6'}
@@ -9860,6 +9896,11 @@ packages:
 
   /@sentry/types@7.40.0:
     resolution: {integrity: sha512-dIbqBenbmDx1F8pvfC11C88J83ecwumUhV+YOIxcmVd1fmlPF2hXWZ01+NTkTDkCu341sJx4wPQogByFy8FwGA==}
+    engines: {node: '>=8'}
+    dev: true
+
+  /@sentry/types@7.45.0:
+    resolution: {integrity: sha512-iFt7msfUK8LCodFF3RKUyaxy9tJv/gpWhzxUFyNxtuVwlpmd+q6mtsFGn8Af3pbpm8A+MKyz1ebMwXj0PQqknw==}
     engines: {node: '>=8'}
     dev: true
 
@@ -9877,6 +9918,14 @@ packages:
     dependencies:
       '@sentry/types': 7.37.2
       tslib: 1.14.1
+
+  /@sentry/utils@7.45.0:
+    resolution: {integrity: sha512-aTY7qqtNUudd09SH5DVSKMm3iQ6ZeWufduc0I9bPZe6UMM09BDc4KmjmrzRkdQ+VaOmHo7+v+HZKQk5f+AbuTQ==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/types': 7.45.0
+      tslib: 1.14.1
+    dev: true
 
   /@servie/events@3.0.0:
     resolution: {integrity: sha512-Zd79bWhTuG8NvPgSiOcivorJIDg+goMw76TIqYTIR5ua5HOEkS29fmIh2VVSeDeabNF6z8ceTwzB0pSh/BhXyw==}
@@ -21401,7 +21450,7 @@ packages:
       solc: 0.7.3(debug@4.3.4)
       source-map-support: 0.5.21
       stacktrace-parser: 0.1.10
-      ts-node: 10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@5.1.0-dev.20230308)
+      ts-node: 10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@4.9.5)
       tsort: 0.0.1
       typescript: 5.1.0-dev.20230308
       undici: 5.20.0
@@ -23325,7 +23374,7 @@ packages:
       pretty-format: 28.1.3
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@5.1.0-dev.20230308)
+      ts-node: 10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@4.9.5)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -27375,7 +27424,7 @@ packages:
     dependencies:
       lilconfig: 2.0.6
       postcss: 8.4.21
-      ts-node: 10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@5.1.0-dev.20230308)
+      ts-node: 10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@4.9.5)
       yaml: 1.10.2
     dev: false
 
@@ -27393,7 +27442,7 @@ packages:
     dependencies:
       lilconfig: 2.0.6
       postcss: 8.4.21
-      ts-node: 10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@5.1.0-dev.20230308)
+      ts-node: 10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@4.9.5)
       yaml: 2.1.3
     dev: false
 
@@ -31700,7 +31749,6 @@ packages:
       typescript: 4.9.5
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: true
 
   /ts-node@10.9.1(@swc/core@1.3.37)(@types/node@18.11.9)(typescript@5.1.0-dev.20230308):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
@@ -32085,7 +32133,6 @@ packages:
     resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
     engines: {node: '>=4.2.0'}
     hasBin: true
-    dev: true
 
   /typescript@5.1.0-dev.20230308:
     resolution: {integrity: sha512-CSITPpBYNdPYujl36d9VhNNCLE+isuwm/ArFbYgPsWsLniLCcfBl+NcaOkVqyjV0XEjP+uN1yywiglCkEzed1w==}
@@ -32536,7 +32583,6 @@ packages:
 
   /urlcat@2.0.4(patch_hash=fggwetex7eobhq3hztj4obsulu):
     resolution: {integrity: sha512-12c4Vi40DHVdZ/8mOLjZjp0asCzM6hi8Gj116fpImRP1FN4gBMCtMi9XhLNOmre/FEQYNqHbZmX8iyYAtIcy8Q==}
-    dev: false
     patched: true
 
   /use-subscription@1.6.0(react@0.0.0-experimental-d1e35c703-20221110):
@@ -34724,6 +34770,7 @@ time:
   /@rollup/plugin-replace@5.0.2: '2022-12-17T15:03:40.788Z'
   /@scamsniffer/detector@0.0.21: '2022-08-15T06:05:49.379Z'
   /@sentry/browser@7.37.2: '2023-02-13T15:34:12.301Z'
+  /@sentry/tracing@7.45.0: '2023-03-24T09:06:39.014Z'
   /@sentry/types@7.40.0: '2023-03-01T18:20:53.302Z'
   /@servie/events@3.0.0: '2021-04-13T22:43:08.067Z'
   /@siddomains/sidjs@0.1.16: '2022-09-19T12:14:28.552Z'
