@@ -161,7 +161,8 @@ export interface SettingsUpdateEvent {
 }
 
 export interface RestoreSuccessEvent {
-    wallets: string[]
+    wallets?: string[]
+    count?: number
 }
 
 export interface redpacketDialogEvent {

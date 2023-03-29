@@ -19,10 +19,8 @@ import {
 } from '../../database/post/index.js'
 import type { LatestRecipientDetailDB, LatestRecipientReasonDB } from '../../database/post/dbType.js'
 import { internal_wallet_restore } from './internal_wallet_restore.js'
-import { queryOwnedPersonaInformation } from '../identity/index.js'
-import { compact } from 'lodash-es'
 
-export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
+export async function restoreNormalizedBackup(backup: NormalizedBackup.Data, countOfSmartPay?: number) {
     const { plugins, posts, wallets } = backup
 
     {
@@ -45,9 +43,8 @@ export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
     await delay(backup.personas.size + backup.profiles.size)
 
     if (backup.personas.size || backup.profiles.size) MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
-    const personas = await queryOwnedPersonaInformation(true)
     MaskMessages.events.restoreSuccess.sendToAll({
-        wallets: compact([...wallets.map((x) => x.address), ...personas.map((x) => x.address)]),
+        count: countOfSmartPay,
     })
 }
 

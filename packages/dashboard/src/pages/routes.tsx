@@ -24,17 +24,26 @@ export function Pages() {
     const t = useDashboardI18N()
     const { showSnackbar } = useCustomSnackbar()
     const restoreCallback = useCallback(
-        async ({ wallets }: RestoreSuccessEvent) => {
-            const chainId = await SmartPayBundler.getSupportedChainId()
-            const accounts = await SmartPayOwner.getAccountsByOwners(chainId, wallets)
-            const deployedWallet = accounts.filter((x) => x.deployed)
-            if (!deployedWallet.length) return
-            showSnackbar(t.recovery_smart_pay_wallet_title(), {
-                variant: 'success',
-                message: t.recovery_smart_pay_wallet_description({
-                    count: deployedWallet.length,
-                }),
-            })
+        async ({ wallets, count }: RestoreSuccessEvent) => {
+            if (count) {
+                showSnackbar(t.recovery_smart_pay_wallet_title(), {
+                    variant: 'success',
+                    message: t.recovery_smart_pay_wallet_description({
+                        count,
+                    }),
+                })
+            } else if (wallets) {
+                const chainId = await SmartPayBundler.getSupportedChainId()
+                const accounts = await SmartPayOwner.getAccountsByOwners(chainId, wallets)
+                const deployedWallet = accounts.filter((x) => x.deployed)
+                if (!deployedWallet.length) return
+                showSnackbar(t.recovery_smart_pay_wallet_title(), {
+                    variant: 'success',
+                    message: t.recovery_smart_pay_wallet_description({
+                        count: deployedWallet.length,
+                    }),
+                })
+            }
         },
         [t, showSnackbar],
     )
