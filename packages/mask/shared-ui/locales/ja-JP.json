@@ -96,6 +96,8 @@
     "auto_paste_failed_snackbar_action": "方法を確認",
     "auto_paste_failed_snackbar_action_close": "閉じる",
     "connect_your_wallet": "ウォレットを接続します",
+    "connected_wallet_settings": "接続済みウォレットの設定",
+    "compose_encrypt_method_text": "テキスト",
     "automation_request_click_post_button": "[公開] ボタンをクリックして編集ダイアログを開きます。",
     "cancel": "取り消す",
     "comment_box__placeholder": "コメントを暗号化するには…",
