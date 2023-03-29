@@ -12,11 +12,7 @@ const cache = new LRU<string, NextIDAvatarMeta>({
     ttl: 60 * 1000,
 })
 
-type GetNFTAvatar = (
-    userId?: string,
-    network?: EnhanceableSite,
-    snsKey?: RSS3_KEY_SNS,
-) => Promise<AvatarMetaDB | undefined>
+type GetNFTAvatar = (userId?: string, network?: EnhanceableSite) => Promise<AvatarMetaDB | undefined>
 
 export function usePersonaNFTAvatar(userId: string, avatarId: string, persona: string, snsKey: RSS3_KEY_SNS) {
     const getNFTAvatar = useGetNFTAvatar()
@@ -25,25 +21,19 @@ export function usePersonaNFTAvatar(userId: string, avatarId: string, persona: s
         if (!userId) return
         const key = `${userId}-${getSiteType()}`
         if (!cache.has(key)) {
-            const nftAvatar = await getNFTAvatarForCache(userId, snsKey, avatarId, persona, getNFTAvatar)
+            const nftAvatar = await getNFTAvatarForCache(userId, avatarId, persona, getNFTAvatar)
             if (nftAvatar) cache.set(key, nftAvatar)
         }
         return cache.get(key)
     }, [userId, persona, snsKey, getNFTAvatar, avatarId])
 }
 
-async function getNFTAvatarForCache(
-    userId: string,
-    snsKey: RSS3_KEY_SNS,
-    avatarId: string,
-    persona: string,
-    fn: GetNFTAvatar,
-) {
+async function getNFTAvatarForCache(userId: string, avatarId: string, persona: string, fn: GetNFTAvatar) {
     const avatarMetaFromPersona = await getNFTAvatarByUserId(userId, avatarId, persona)
     if (avatarMetaFromPersona) return avatarMetaFromPersona
     const siteType = getEnhanceableSiteType()
     if (!siteType) return
-    const avatarMeta = await fn(userId, siteType, snsKey)
+    const avatarMeta = await fn(userId, siteType)
     if (!avatarMeta) return
     if (avatarId && avatarId !== avatarMeta.avatarId) return
     if (avatarMeta.pluginId === NetworkPluginID.PLUGIN_SOLANA) {
