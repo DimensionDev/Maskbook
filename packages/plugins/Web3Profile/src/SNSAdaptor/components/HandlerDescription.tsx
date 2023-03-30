@@ -83,7 +83,11 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
-    const avatarUrl = resolveIPFS_URL(props.profile?.avatar)
+    const avatarUrl = useMemo(() => {
+        if (!props.profile?.avatar) return
+        return resolveIPFS_URL(props.profile?.avatar)
+    }, [props.profile?.avatar])
+
     return (
         <Box className={classes.container}>
             <Box className={classes.description}>

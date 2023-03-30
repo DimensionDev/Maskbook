@@ -6,7 +6,7 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useFungibleTokenBalance, useWallet } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
 import { FollowModuleType } from '@masknet/web3-providers/types'
-import { formatBalance, isLessThan } from '@masknet/web3-shared-base'
+import { formatBalance, isLessThan, resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Button, buttonClasses, CircularProgress, DialogContent, Typography } from '@mui/material'
 import { first } from 'lodash-es'
@@ -219,6 +219,11 @@ export function FollowLensDialog() {
         return
     }, [wallet?.owner, chainId, profile, feeTokenBalance])
 
+    const avatar = useMemo(() => {
+        if (!profile?.picture?.original) return
+        return resolveIPFS_URL(profile?.picture?.original.url)
+    }, [profile?.picture?.original])
+
     return (
         <InjectedDialog
             open={open}
@@ -233,10 +238,7 @@ export function FollowLensDialog() {
                 ) : (
                     <Box className={classes.container}>
                         <Avatar
-                            src={
-                                profile?.picture?.original.url ??
-                                new URL('../assets/Lens.png', import.meta.url).toString()
-                            }
+                            src={avatar ?? new URL('../assets/Lens.png', import.meta.url).toString()}
                             sx={{ width: 64, height: 64 }}
                         />
                         <Typography className={classes.name}>{profile?.name}</Typography>
