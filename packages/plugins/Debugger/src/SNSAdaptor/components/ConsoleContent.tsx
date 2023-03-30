@@ -139,7 +139,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                         onClick={() =>
                             setDialog({
                                 open: true,
-                                handle: 'gho.lens',
+                                handle: 'lowenwen.lens',
                             })
                         }>
                         Click

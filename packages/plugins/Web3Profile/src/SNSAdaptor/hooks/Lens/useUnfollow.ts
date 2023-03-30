@@ -82,11 +82,12 @@ export function useUnfollow(profileId?: string, onSuccess?: () => void) {
 
             onSuccess?.()
         } catch (error) {
-            showSingletonSnackbar(t.unfollow_lens_handle(), {
-                processing: false,
-                variant: 'error',
-                message: t.network_error(),
-            })
+            if (error instanceof Error && !error.message.includes('Transaction was rejected'))
+                showSingletonSnackbar(t.unfollow_lens_handle(), {
+                    processing: false,
+                    variant: 'error',
+                    message: t.network_error(),
+                })
         }
     }, [
         handleQueryAuthenticate,

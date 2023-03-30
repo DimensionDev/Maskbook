@@ -43,6 +43,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     avatar: {
         objectFit: 'cover',
+        borderRadius: 99,
     },
 }))
 
@@ -93,7 +94,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
             <Box className={classes.description}>
                 <WalletIcon
                     size={36}
-                    classes={{ mainIcon: classes.avatar }}
+                    classes={{ mainIcon: props.profile ? classes.avatar : undefined }}
                     mainIcon={
                         props.profile
                             ? avatarUrl

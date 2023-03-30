@@ -132,11 +132,7 @@ export function useFollow(profileId?: string, followModule?: FollowModuleTypedDa
                 onSuccess?.()
             }
         } catch (error) {
-            if (
-                error instanceof Error &&
-                !error.message.includes('Transsaction was rejected') &&
-                error.message.includes('')
-            )
+            if (error instanceof Error && !error.message.includes('Transaction was rejected'))
                 showSingletonSnackbar(t.follow_lens_handle(), {
                     processing: false,
                     variant: 'error',

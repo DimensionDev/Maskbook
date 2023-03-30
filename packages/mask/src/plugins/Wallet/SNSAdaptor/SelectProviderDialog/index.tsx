@@ -5,7 +5,7 @@ import { DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
 import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { getRegisteredWeb3Networks, getRegisteredWeb3Providers } from '@masknet/plugin-infra'
+import { getRegisteredWeb3Providers } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
@@ -37,7 +37,6 @@ export function SelectProviderDialog() {
     )
     // #endregion
 
-    const networks = getRegisteredWeb3Networks()
     const providers = getRegisteredWeb3Providers()
 
     const onProviderIconClicked = useCallback(
@@ -71,16 +70,12 @@ export function SelectProviderDialog() {
     const selectedProviders = useMemo(
         () =>
             isDashboard ? providers.filter((x) => x.providerAdaptorPluginID === NetworkPluginID.PLUGIN_EVM) : providers,
-        [isDashboard, networks],
+        [isDashboard],
     )
     return (
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
-                <PluginProviderRender
-                    networks={networks}
-                    providers={selectedProviders}
-                    onProviderIconClicked={onProviderIconClicked}
-                />
+                <PluginProviderRender providers={selectedProviders} onProviderIconClicked={onProviderIconClicked} />
             </DialogContent>
         </InjectedDialog>
     )
