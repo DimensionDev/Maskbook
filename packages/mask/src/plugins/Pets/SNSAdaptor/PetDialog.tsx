@@ -12,7 +12,6 @@ import { useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { usePetConstants } from '@masknet/web3-shared-evm'
 import type { ConfigRSSNode } from '../types.js'
-import { parseJSON } from '@masknet/web3-providers'
 
 enum PetFriendNFTStep {
     SetFriendNFT = 'set',
@@ -30,9 +29,7 @@ export function PetDialog() {
     useAsync(async () => {
         if (!Storage) return
         const storage = Storage.createStringStorage('Pets', NFTS_BLOCK_ADDRESS)
-        const data = await storage.get<string>('_pet_nfts')
-        if (!data) return
-        const result = parseJSON<ConfigRSSNode>(data)
+        const result = await storage.get<ConfigRSSNode>('_pet_nfts')
         setConfigNFTs(result?.essay)
     }, [Storage, NFTS_BLOCK_ADDRESS])
 

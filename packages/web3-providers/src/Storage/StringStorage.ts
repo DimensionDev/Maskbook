@@ -48,7 +48,7 @@ export class StringStorage implements Storage {
 
     async set<T>(key: string, value: T) {
         const connection = this.getConnection?.()
-        const signature = await connection?.signMessage(SignType.Message, value as string)
+        const signature = await connection?.signMessage(SignType.Message, JSON.stringify(value))
         if (!signature) throw new Error('Failed to sign payload')
         await this.stringStorage.set(this.namespace, key, this.address, value as string, signature)
         const cacheKey = `${this.getKey()}-${key}`
