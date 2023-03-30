@@ -146,6 +146,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             setImageError(true)
             return
         }
+        if (!user) return
         setLoading(true)
         const chosenToken = collection.tokens.find((item) => item?.metadata?.imageURL === metaData.image)
         const meta = {
@@ -159,9 +160,8 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             if (!Storage) return
             const kvStorage = Storage.createKVStorage(PetsPluginID)
             await kvStorage.set(user.userId, user.address)
-            const signature = await connection?.signMessage('message', user.userId, { account: user.address })
-            const storage = Storage.createRSS3Storage(user.address)
-            storage.set('_pet', { address: user.address, signature, essay: meta })
+            const storage = Storage.createStringStorage('Pets', user.address)
+            storage.set('pet', { address: user.address, essay: meta })
             closeDialogHandle()
         } catch {
             showSnackbar(t.pets_dialog_fail(), { variant: 'error' })
@@ -171,6 +171,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     }
 
     const onCollectionChange = (v: string) => {
+        if (!user) return
         const matched = nfts.find((item) => item.name === v)
         if (matched) {
             setCollection(matched)
@@ -187,6 +188,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     }
 
     const onImageChange = (v: OwnerERC721TokenInfo | null) => {
+        if (!user) return
         setTokenInfoSelect(v)
         setInputTokenName(v?.metadata?.name ?? '')
         setMetaData({

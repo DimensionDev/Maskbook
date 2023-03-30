@@ -5,10 +5,11 @@ import Checkbox from '@mui/material/Checkbox'
 import type { ScamResult } from '@scamsniffer/detector'
 import { PluginScamRPC } from '../messages.js'
 import { useAsync } from 'react-use'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useI18N } from '../locales/i18n_generated.js'
 import urlcat from 'urlcat'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -64,6 +65,7 @@ const ScamAlert = ({ result }: { result: ScamResult }) => {
     const { classes } = useStyles()
     const [autoReport, setAutoReport] = useState(false)
     const t = useI18N()
+    const { Storage } = useWeb3State()
 
     useEffect(() => {
         if (autoReport) {
@@ -71,10 +73,14 @@ const ScamAlert = ({ result }: { result: ScamResult }) => {
         }
     }, [autoReport, result])
 
-    const handleClick = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-        setAutoReport(checked)
-        PluginScamRPC.enableAutoReport(checked)
-    }
+    const handleClick = useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+            if (!Storage) return
+            setAutoReport(checked)
+            PluginScamRPC.enableAutoReport(checked, Storage)
+        },
+        [Storage],
+    )
 
     const openTwitter = () => {
         const link = urlcat('https://twitter.com', '/:username', { username: result.twitterUsername })
@@ -86,9 +92,13 @@ const ScamAlert = ({ result }: { result: ScamResult }) => {
     }
 
     useAsync(async () => {
-        const enabled = await PluginScamRPC.isAutoReportEnabled()
+        if (!Storage) {
+            setAutoReport(false)
+            return
+        }
+        const enabled = await PluginScamRPC.isAutoReportEnabled(Storage)
         setAutoReport(enabled)
-    }, [])
+    }, [Storage])
     return (
         <div className={classes.root}>
             <div className={classes.scam}>

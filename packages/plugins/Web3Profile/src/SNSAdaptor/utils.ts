@@ -7,7 +7,7 @@ import {
     type PersonaInformation,
     EMPTY_LIST,
 } from '@masknet/shared-base'
-import { AlchemyEVM, NextIDStorage, RSS3 } from '@masknet/web3-providers'
+import { AlchemyEVM, NextIDStorageProvider, RSS3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { type ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from '../constants.js'
@@ -146,7 +146,7 @@ export const getNFTList = async (walletList: WalletTypes[], chainIds: ChainId[])
 export const getUnlistedConfig = async (publicKey: string): Promise<UnlistedConfig | undefined> => {
     if (!publicKey) return
 
-    const res = await NextIDStorage.get<PersonaKV>(publicKey)
+    const res = await NextIDStorageProvider.get<PersonaKV>(publicKey)
     if (!res.proofs) return
 
     const wallets: UnlistedConfig['wallets'] = {}

@@ -10,10 +10,9 @@ export function useGameList() {
 
     const { value } = useAsync(async () => {
         if (!Storage) return EMPTY_LIST
-        const storage = Storage.createRSS3Storage(GAME_CONFIG_ADDRESS)
+        const storage = Storage.createStringStorage('Game', GAME_CONFIG_ADDRESS)
         const config = await storage.get<GameRSSNode>('_nff_game_list')
         if (!config) return EMPTY_LIST
-
         return Object.values(config.games) as GameInfo[]
     }, [GAME_CONFIG_ADDRESS, Storage])
 

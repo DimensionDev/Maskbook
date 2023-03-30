@@ -11,9 +11,8 @@ import {
 import { ZoraAPI } from './Zora/index.js'
 import { EtherscanExplorerAPI, EtherscanRedPacketAPI } from './Etherscan/index.js'
 import { RiskWarningAPI } from './RiskWarning/index.js'
-import { RSS3API } from './RSS3/index.js'
 import { TwitterAPI } from './Twitter/index.js'
-import { R2D2KeyValueAPI, R2D2DomainAPI, R2D2TokenListAPI } from './R2D2/index.js'
+import { R2D2DomainAPI, R2D2TokenListAPI } from './R2D2/index.js'
 import { InstagramAPI } from './Instagram/index.js'
 import { DeBankFungibleTokenAPI, DeBankGasOptionAPI, DeBankHistoryAPI } from './DeBank/index.js'
 import { ZerionAPI, ZerionGasAPI, ZerionNonFungibleTokenAPI, ZerionTrendingAPI } from './Zerion/index.js'
@@ -66,7 +65,7 @@ import { BonfidaAPI } from './Bonfida/index.js'
 import { RedPacketAPI } from './RedPacket/index.js'
 import { SmartPayOwnerAPI } from './SmartPay/apis/OwnerAPI.js'
 import { SimpleHashProviderAPI } from './SimpleHash/index.js'
-import { StringStorageAPI } from './StringStorage/index.js'
+import { RSS3API } from './RSS3/index.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
@@ -122,7 +121,7 @@ export const EtherscanRedPacket = new EtherscanRedPacketAPI()
 
 // NextID
 export const NextIDProof = new NextIDProofAPI()
-export const NextIDStorage = new NextIDStorageAPI()
+export const NextIDStorageProvider = new NextIDStorageAPI()
 export type { LensAccount } from './NextID/index.js'
 
 // GoPlusLabs
@@ -137,15 +136,11 @@ export const CoinGeckoPriceSolana = new CoinGeckoPriceAPI_Solana()
 // R2D2
 export const R2D2TokenList = new R2D2TokenListAPI()
 export const R2D2Domain = new R2D2DomainAPI()
-export const R2D2KeyValue = new R2D2KeyValueAPI()
 
 // Name Service
 export const ENS = new ENS_API()
 export const SpaceID = new SpaceID_API()
 export const Bonfida = new BonfidaAPI()
-
-// RSS3
-export const RSS3 = new RSS3API()
 
 // Debank
 export const DeBankGasOption = new DeBankGasOptionAPI()
@@ -186,5 +181,8 @@ export const SmartPayFunder = new SmartPayFunderAPI()
 export const SmartPayOwner = new SmartPayOwnerAPI()
 export const SmartPayAccount = new SmartPayAccountAPI()
 
-// Firefly
-export const StringStorage = new StringStorageAPI()
+export * from './Storage/index.js'
+
+// RSS3
+export const RSS3 = new RSS3API()
+export * from './helpers/parseJSON.js'
