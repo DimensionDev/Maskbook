@@ -15,7 +15,6 @@ import {
     scale10,
     SourceType,
     TokenType,
-    resolveImageURL,
 } from '@masknet/web3-shared-base'
 import {
     type ChainId,
@@ -25,6 +24,7 @@ import {
     SchemaType,
     WNATIVE,
     isValidDomain,
+    resolveImageURL,
 } from '@masknet/web3-shared-evm'
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
 import { Web3API } from '../../Connection/index.js'
@@ -148,7 +148,7 @@ export function createNonFungibleAsset(
             name,
             symbol,
             description,
-            imageURL: resolveImageURL(mediaURL, name, isENSContractAddress(asset.contract_address)),
+            imageURL: resolveImageURL(mediaURL, name, asset.contract_address),
             mediaURL,
         },
         contract: {

@@ -18,9 +18,8 @@ import {
     CurrencyType,
     scale10,
     SourceType,
-    resolveImageURL,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, isENSContractAddress, isValidChainId } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
 import { RaribleEventType, type RaribleOrder, type RaribleHistory, type RaribleNFTItemMapResponse } from './types.js'
 import { RaribleURL } from './constants.js'
 import { getPaymentToken, getAssetFullName, resolveActivityType, fetchJSON } from '../entry-helpers.js'
@@ -84,7 +83,7 @@ function createAsset(chainId: ChainId, asset: RaribleNFTItemMapResponse): NonFun
                         '',
                 ),
                 name,
-                isENSContractAddress(address),
+                address,
             ),
             mediaURL: decodeURIComponent(
                 asset.meta?.content?.find((x) => x['@type'] === 'IMAGE' && x.representation === 'ORIGINAL')?.url ?? '',

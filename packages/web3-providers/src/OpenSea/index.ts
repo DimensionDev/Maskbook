@@ -20,7 +20,6 @@ import {
     dividedBy,
     resolveIPFS_URL,
     SourceType,
-    resolveImageURL,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -28,7 +27,7 @@ import {
     createNativeToken,
     createERC20Token,
     isValidChainId,
-    isENSContractAddress,
+    resolveImageURL,
 } from '@masknet/web3-shared-evm'
 import {
     type OpenSeaAssetContract,
@@ -110,7 +109,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
                     asset.image_url ?? asset.image_preview_url ?? asset.image_original_url ?? asset.animation_url ?? '',
                 ),
                 name,
-                isENSContractAddress(address),
+                address,
             ),
             mediaURL: decodeURIComponent(
                 asset?.animation_url ??

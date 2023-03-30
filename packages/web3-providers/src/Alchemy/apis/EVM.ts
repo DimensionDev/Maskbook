@@ -7,13 +7,12 @@ import {
     resolveResourceURL,
     SourceType,
     TokenType,
-    resolveImageURL,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
     ChainId as ChainId_EVM,
     SchemaType as SchemaType_EVM,
-    isENSContractAddress,
+    resolveImageURL,
 } from '@masknet/web3-shared-evm'
 import { Alchemy_EVM_NetworkMap } from '../constants.js'
 import type {
@@ -68,11 +67,7 @@ function createNonFungibleToken(
             chainId,
             name,
             description: asset.metadata.description || asset.description,
-            imageURL: resolveImageURL(
-                resolveResourceURL(decodeURIComponent(imageURL)),
-                name,
-                isENSContractAddress(contractAddress),
-            ),
+            imageURL: resolveImageURL(resolveResourceURL(decodeURIComponent(imageURL)), name, contractAddress),
             mediaURL: resolveResourceURL(decodeURIComponent(mediaURL)),
         },
         contract: {
@@ -122,7 +117,7 @@ function createNonFungibleAsset(
                         metaDataResponse.media?.[0]?.raw,
                 ),
                 name,
-                isENSContractAddress(metaDataResponse.contract?.address),
+                metaDataResponse.contract?.address,
             ),
             mediaURL: decodeURIComponent(metaDataResponse.media?.[0]?.gateway),
         },

@@ -10,7 +10,6 @@ import {
     scale10,
     GasOptionType,
     toFixed,
-    resolveImageURL,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -18,7 +17,7 @@ import {
     type GasOption,
     SchemaType,
     isValidChainId,
-    isENSContractAddress,
+    resolveImageURL,
 } from '@masknet/web3-shared-evm'
 import type { ZerionNonFungibleTokenItem, ZerionNonFungibleCollection, ZerionCoin } from './types.js'
 import { formatAsset, formatTransactions, isValidAsset } from './helpers.js'
@@ -133,11 +132,7 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
                 chainId,
                 name,
                 symbol: nft.asset.symbol,
-                imageURL: resolveImageURL(
-                    nft.asset.preview.url,
-                    name,
-                    isENSContractAddress(nft.asset.contract_address),
-                ),
+                imageURL: resolveImageURL(nft.asset.preview.url, name, nft.asset.contract_address),
                 mediaURL: nft.asset.detail.url,
                 mediaType: nft.asset.detail.meta.type,
                 source: SourceType.Zerion,
