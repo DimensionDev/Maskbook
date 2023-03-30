@@ -282,6 +282,20 @@ export class LensAPI implements LensBaseAPI.Provider {
         },
     ) {
         if (!profileId) return
+
+        let followModule = ''
+        if (options.followModule?.profileFollowModule) {
+            followModule = `followModule: { profileFollowModule: { profileId: "${options.followModule.profileFollowModule.profileId}" } }`
+        } else if (options.followModule?.feeFollowModule) {
+            followModule = `followModule: {
+              feeFollowModule: {
+                amount: {
+                   currency: "${options.followModule.feeFollowModule.currency}",
+                   value: "${options.followModule.feeFollowModule.value}"
+                }
+              }
+            }`
+        }
         const { data } = await fetchJSON<{ data: { createFollowTypedData: LensBaseAPI.CreateFollowTypedData } }>(
             LENS_ROOT_API,
             {
@@ -293,9 +307,7 @@ export class LensAPI implements LensBaseAPI.Provider {
                 body: JSON.stringify({
                     query: `mutation CreateFollowTypedData {
                       createFollowTypedData(
-                        request: { follow: [{ profile: "${profileId}", followModule: ${
-                        options?.followModule ? options.followModule : null
-                    } }] }
+                        request: { follow: [{ profile: "${profileId}", ${followModule} }] }
                       ) {
                         id
                         expiresAt

@@ -21,9 +21,10 @@ import {
     chainResolver,
     createContract,
     isENSContractAddress,
-    isValidDomain,
     SchemaType,
     WNATIVE,
+    isValidDomain,
+    resolveImageURL,
 } from '@masknet/web3-shared-evm'
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
 import { Web3API } from '../../Connection/index.js'
@@ -109,6 +110,9 @@ export function createNonFungibleAsset(
     const owner = asset.owner
     const schema = asset.erc_type === 'erc1155' ? SchemaType.ERC1155 : SchemaType.ERC721
     const symbol = asset.contract_name
+    const name = isValidDomain(asset.name)
+        ? asset.name
+        : getAssetFullName(asset.contract_address, contractName, payload?.name || asset.name, asset.token_id)
 
     return {
         id: asset.contract_address,
@@ -141,12 +145,10 @@ export function createNonFungibleAsset(
             : undefined,
         metadata: {
             chainId,
-            name: isValidDomain(asset.name)
-                ? asset.name
-                : getAssetFullName(asset.contract_address, contractName, payload?.name || asset.name, asset.token_id),
+            name,
             symbol,
             description,
-            imageURL: mediaURL,
+            imageURL: resolveImageURL(mediaURL, name, asset.contract_address),
             mediaURL,
         },
         contract: {

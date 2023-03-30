@@ -11,6 +11,7 @@ const useStyles = makeStyles()((theme) => {
     return {
         list: {
             backgroundColor: isDark ? '#030303' : theme.palette.common.white,
+            maxWidth: 320,
             // Show up to 6 item
             maxHeight: 244,
             overflow: 'auto',
@@ -41,7 +42,10 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.maskColor.main,
             fontWeight: 400,
             marginLeft: theme.spacing(0.5),
-            marginRight: 'auto',
+            marginRight: theme.spacing(2),
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
             flexGrow: 1,
         },
         followButton: {

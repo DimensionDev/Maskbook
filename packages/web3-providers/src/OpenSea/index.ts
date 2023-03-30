@@ -21,7 +21,14 @@ import {
     resolveIPFS_URL,
     SourceType,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, createNativeToken, createERC20Token, isValidChainId } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    SchemaType,
+    createNativeToken,
+    createERC20Token,
+    isValidChainId,
+    resolveImageURL,
+} from '@masknet/web3-shared-evm'
 import {
     type OpenSeaAssetContract,
     type OpenSeaAssetEvent,
@@ -77,25 +84,32 @@ function createAccountLink(account: OpenSeaCustomAccount | undefined) {
 }
 
 function createNFTToken(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungibleToken<ChainId, SchemaType> {
+    const address = asset.token_address ?? asset.asset_contract.address
+    const name = getAssetFullName(
+        address,
+        asset.name ?? asset.collection.name,
+        asset.name ?? asset.collection.name,
+        asset.token_id,
+    )
+
     return {
         id: asset.token_address ?? asset.asset_contract.address,
         chainId,
         type: TokenType.NonFungible,
         schema: asset.asset_contract.schema_name === 'ERC1155' ? SchemaType.ERC1155 : SchemaType.ERC721,
         tokenId: asset.token_id,
-        address: asset.token_address ?? asset.asset_contract.address,
+        address,
         metadata: {
             chainId,
-            name: getAssetFullName(
-                asset.token_address ?? asset.asset_contract.address,
-                asset.name ?? asset.collection.name,
-                asset.name ?? asset.collection.name,
-                asset.token_id,
-            ),
+            name,
             symbol: asset.asset_contract.symbol,
             description: asset.description,
-            imageURL: decodeURIComponent(
-                asset.image_url ?? asset.image_preview_url ?? asset.image_original_url ?? asset.animation_url ?? '',
+            imageURL: resolveImageURL(
+                decodeURIComponent(
+                    asset.image_url ?? asset.image_preview_url ?? asset.image_original_url ?? asset.animation_url ?? '',
+                ),
+                name,
+                address,
             ),
             mediaURL: decodeURIComponent(
                 asset?.animation_url ??
@@ -105,14 +119,14 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
         contract: {
             chainId,
             schema: asset.asset_contract.schema_name === 'ERC1155' ? SchemaType.ERC1155 : SchemaType.ERC721,
-            address: asset.token_address ?? asset.asset_contract.address,
+            address,
             name: asset.name ?? asset.collection.name,
             symbol: asset.asset_contract.symbol,
             owner: asset.owner.address,
             creatorEarning: asset.asset_contract.dev_seller_fee_basis_points.toString(),
         },
         collection: {
-            address: asset.token_address ?? asset.asset_contract.address,
+            address,
             chainId,
             name: asset.collection.name,
             slug: asset.collection.slug,

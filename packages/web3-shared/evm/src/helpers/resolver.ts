@@ -9,6 +9,7 @@ import { keccak256 } from '@ethersproject/keccak256'
 import { toUtf8Bytes } from '@ethersproject/strings'
 import { CHAIN_DESCRIPTORS, NETWORK_DESCRIPTORS, PROVIDER_DESCRIPTORS } from '../constants/index.js'
 import type { ChainId } from '../types/index.js'
+import { isENSContractAddress } from './address.js'
 
 export const chainResolver = createChainResolver(CHAIN_DESCRIPTORS)
 export const explorerResolver = createExplorerResolver(CHAIN_DESCRIPTORS)
@@ -22,4 +23,12 @@ export function getAverageBlockDelay(chainId: ChainId, scale = 1) {
 
 export function resolveNonFungibleTokenIdFromEnsDomain(domain: string): string {
     return new BigNumber(keccak256(toUtf8Bytes(domain.replace(/\.\w+$/, '')))).toFixed()
+}
+
+export function resolveImageURL(image?: string, name?: string, address?: string) {
+    if (!image) {
+        if (name?.includes('.lens')) return new URL('./lens.svg', import.meta.url).toString()
+        if (isENSContractAddress(address || '')) return new URL('./ens.svg', import.meta.url).toString()
+    }
+    return image
 }
