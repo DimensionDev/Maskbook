@@ -337,7 +337,6 @@
     "plugin_wallet_snackbar_swap_successful": "토큰 스왑 성공",
     "plugin_wallet_snackbar_swap_token": "토큰 스왑",
     "plugin_wallet_choose_network": "네트워크 선택",
-    "plugin_wallet_choose_wallet": "월렛 선택",
     "plugin_wallet_connect_with": "연결",
     "plugin_wallet_connect_with_retry": "다시 시도",
     "plugin_wallet_connected_with": "연결",

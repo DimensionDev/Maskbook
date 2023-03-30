@@ -59,8 +59,11 @@ const useStyles = makeStyles()((theme) => {
                 background: theme.palette.maskColor.publicBg,
             },
             marginBottom: 6,
+            '&:last-of-type': {
+                marginBottom: 0,
+            },
         },
-        menuItemNextIdIcon: {
+        linkIcon: {
             display: 'flex',
             marginLeft: 'auto',
         },
@@ -75,22 +78,13 @@ const useStyles = makeStyles()((theme) => {
             boxSizing: 'border-box',
             maxHeight: 296,
             borderRadius: 16,
-            padding: theme.spacing(1.5, 0, 1.5, 1.5),
-            paddingRight: 0,
+            padding: theme.spacing(1.5),
             translate: theme.spacing(1.9, 1),
             background: theme.palette.maskColor.white,
             scrollbarColor: `${theme.palette.maskColor.secondaryLine} ${theme.palette.maskColor.secondaryLine}`,
             scrollbarWidth: 'thin',
             '::-webkit-scrollbar': {
-                backgroundColor: 'transparent',
-                width: 19,
-            },
-            '::-webkit-scrollbar-thumb': {
-                borderRadius: '20px',
-                width: 4,
-                border: '7px solid rgba(0, 0, 0, 0)',
-                backgroundColor: theme.palette.maskColor.secondaryLine,
-                backgroundClip: 'padding-box',
+                display: 'none',
             },
         },
         menuList: {
@@ -169,8 +163,8 @@ export function SocialAccountList({ nextIdBindings, ...rest }: SocialAccountList
                                     {t.lens_follow()}
                                 </Button>
                             ) : (
-                                <div className={classes.menuItemNextIdIcon}>
-                                    <Icons.LinkOut size={20} className={classes.linkOutIcon} />
+                                <div className={classes.linkIcon}>
+                                    <Icons.LinkOut size={16} className={classes.linkOutIcon} />
                                 </div>
                             )}
                         </MenuItem>

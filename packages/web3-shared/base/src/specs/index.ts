@@ -622,7 +622,7 @@ export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId
 }
 
 export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
-    type: SearchResultType.NonFungibleToken
+    type: SearchResultType.NonFungibleToken | SearchResultType.NonFungibleCollection
     id?: string
     address: string
     rank?: number
@@ -1664,7 +1664,6 @@ export interface NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType> {
 }
 
 export interface ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType> {
-    network: NetworkDescriptor<ChainId, NetworkType>
     provider: ProviderDescriptor<ChainId, ProviderType>
     children?: React.ReactNode
     onClick?: (

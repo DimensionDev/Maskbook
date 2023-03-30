@@ -119,7 +119,6 @@ export function OperationFooter({
                     <ChainBoundary
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         expectedChainId={(chainId as ChainId) ?? ChainId.Mainnet}
-                        switchChainWithoutPopup
                         ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                         <WalletConnectedBoundary
                             hideRiskWarningConfirmed

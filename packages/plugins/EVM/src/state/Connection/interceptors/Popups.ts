@@ -9,9 +9,11 @@ import {
     getSmartPayConstants,
     DepositPaymaster,
     PayloadEditor,
+    EthereumMethodType,
+    ProviderType,
 } from '@masknet/web3-shared-evm'
 import { ExtensionSite, getSiteType, isEnhanceableSiteType } from '@masknet/shared-base'
-import { SmartPayBundler, Web3 } from '@masknet/web3-providers'
+import { EVM_Providers, SmartPayBundler, Web3 } from '@masknet/web3-providers'
 import { isGreaterThan, toFixed } from '@masknet/web3-shared-base'
 import { SharedContextSettings } from '../../../settings/index.js'
 
@@ -79,6 +81,11 @@ export class Popups implements Middleware<ConnectionContext> {
     async fn(context: ConnectionContext, next: () => Promise<void>) {
         // Draw the Popups up and wait for user confirmation before publishing risky requests on the network
         if (context.risky && context.writeable) {
+            const currentChainId = await context.connection.getChainId()
+            if (context.method === EthereumMethodType.ETH_SEND_TRANSACTION && currentChainId !== context.chainId) {
+                await EVM_Providers[ProviderType.MaskWallet].switchChain(context.chainId)
+            }
+
             const paymentToken = await this.getPaymentToken(context)
             const options = omitBy<TransactionOptions>(
                 {

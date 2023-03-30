@@ -249,10 +249,7 @@ export const DonateDialog: FC<DonateDialogProps> = memo(({ onSubmit, grant, ...r
                             amount={total.toFixed(0)}
                             spender={BULK_CHECKOUT_ADDRESS}
                             token={token.schema === SchemaType.ERC20 ? token : undefined}>
-                            <ChainBoundary
-                                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                switchChainWithoutPopup
-                                expectedChainId={chainId}>
+                            <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
                                 <ActionButton
                                     className={classes.button}
                                     loading={loading}

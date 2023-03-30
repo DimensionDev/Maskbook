@@ -4,7 +4,8 @@ import { Box, Button, Grid, Typography } from '@mui/material'
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { formatBalance, isZero, rightShift } from '@masknet/web3-shared-base'
-import type { ChainId, Web3 } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
+import type { Web3 } from '@masknet/web3-shared-evm'
 import { ProviderIconURLs } from './IconURL.js'
 import { useI18N } from '../../../utils/index.js'
 import { ProtocolType, type SavingsProtocol, TabType } from '../types.js'
@@ -121,6 +122,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
             traderProps: {
                 defaultInputCoin: sETH,
                 defaultOutputCoin: ETH,
+                chainId: ChainId.Mainnet,
             },
         })
     }, [LDO_PAIRS])

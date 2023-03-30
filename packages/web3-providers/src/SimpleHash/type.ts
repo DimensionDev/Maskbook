@@ -5,6 +5,7 @@ export interface Asset {
         banner_image_url: string
         collection_id: number
         description: string
+        spam_score?: number
         discord_url: string
         floor_prices: Array<{
             marketplace_id: string // opensea
@@ -58,6 +59,9 @@ export interface Asset {
     owners: Array<{
         owner_address: string
     }>
+    previews: {
+        image_large_url?: string
+    }
 }
 
 // Todo: contract address will be added in SimpleHash v1 release.
@@ -65,6 +69,7 @@ export interface Asset {
 export interface Collection {
     // Todo: the collection id key name may change in SimpleHash v1 release.
     id: string
+    spam_score?: number
     name: string
     image_url: string
     chain: string

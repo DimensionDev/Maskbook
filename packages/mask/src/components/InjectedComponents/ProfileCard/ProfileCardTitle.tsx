@@ -73,10 +73,11 @@ export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
         })
     }
 
+    const userId = identity.identifier?.userId
     const { value: nextIdBindings = EMPTY_LIST } = useAsync(async () => {
-        if (!address) return EMPTY_LIST
-        return NextIDProof.queryProfilesByRelationService(address)
-    }, [address])
+        if (!userId) return EMPTY_LIST
+        return NextIDProof.queryProfilesByTwitterId(userId)
+    }, [userId])
 
     return (
         <div className={cx(classes.title, className)} {...rest}>

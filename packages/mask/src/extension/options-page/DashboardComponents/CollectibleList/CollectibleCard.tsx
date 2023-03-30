@@ -79,11 +79,13 @@ export const CollectibleCard = memo(function CollectibleCard({
     const networkDescriptor = useNetworkDescriptor(pluginID)
 
     const networkIcon = useMemo(() => {
+        // None is better than incorrect.
+        if (!pluginID) return
         if (pluginID === NetworkPluginID.PLUGIN_EVM) {
             return NETWORK_DESCRIPTORS.find((network) => network?.chainId === asset.chainId)?.icon
         }
         return networkDescriptor?.icon
-    }, [asset.chainId, pluginID])
+    }, [asset.chainId, pluginID, networkDescriptor?.icon])
 
     const content = (
         <>
@@ -123,3 +125,5 @@ export const CollectibleCard = memo(function CollectibleCard({
         </Link>
     )
 })
+
+CollectibleCard.displayName = 'CollectibleCard'
