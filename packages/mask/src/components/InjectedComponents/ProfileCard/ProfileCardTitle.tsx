@@ -89,7 +89,7 @@ export const ProfileCardTitle: FC<ProfileCardTitleProps> = ({
                 address={address}
                 onAddressChange={onAddressChange}>
                 <div className={classes.operations}>
-                    {nextIdBindings.length ? <SocialAccountList nextIdBindings={nextIdBindings} /> : null}
+                    {nextIdBindings.length ? <SocialAccountList nextIdBindings={nextIdBindings} disablePortal /> : null}
                     {identity.identifier?.userId === me?.identifier?.userId ? (
                         <Icons.Gear className={classes.gearIcon} onClick={handleOpenDialog} />
                     ) : (
