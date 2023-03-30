@@ -23,6 +23,7 @@ const useStyles = makeStyles()({
         padding: '16px 16px 0 16px',
         display: 'flex',
         flexDirection: 'column',
+        maxWidth: 350,
     },
     warning: {
         padding: '27px 0 13px 0',
@@ -42,6 +43,7 @@ const useStyles = makeStyles()({
         fontSize: 12,
         lineHeight: '16px',
         margin: '20px 0',
+        wordWrap: 'break-word',
     },
     label: {
         color: '#1C68F3',

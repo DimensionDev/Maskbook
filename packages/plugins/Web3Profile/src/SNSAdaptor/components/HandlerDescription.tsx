@@ -43,6 +43,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     avatar: {
         objectFit: 'cover',
+        borderRadius: 99,
     },
 }))
 
@@ -83,13 +84,17 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
-    const avatarUrl = resolveIPFS_URL(props.profile?.avatar)
+    const avatarUrl = useMemo(() => {
+        if (!props.profile?.avatar) return
+        return resolveIPFS_URL(props.profile?.avatar)
+    }, [props.profile?.avatar])
+
     return (
         <Box className={classes.container}>
             <Box className={classes.description}>
                 <WalletIcon
                     size={36}
-                    classes={{ mainIcon: classes.avatar }}
+                    classes={{ mainIcon: props.profile ? classes.avatar : undefined }}
                     mainIcon={
                         props.profile
                             ? avatarUrl

@@ -2,14 +2,12 @@ import { compact } from 'lodash-es'
 import { DialogContent, Tab } from '@mui/material'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
-import { PluginWalletStatusBar, InjectedDialog, useSharedI18N, NetworkTab } from '@masknet/shared'
-import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { PluginWalletStatusBar, InjectedDialog, NetworkTab } from '@masknet/shared'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { type ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../locales/index.js'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { ApprovalTokenContent } from './ApprovalTokenContent.js'
 import { ApprovalNFTContent } from './ApprovalNFTContent.js'
 
@@ -123,18 +121,13 @@ interface ApprovalWrapperProps {
 
 function ApprovalWrapper(props: ApprovalWrapperProps) {
     const { tab } = props
-    const t = useSharedI18N()
 
-    const { pluginID } = useNetworkContext()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
     const chainIdList = compact<ChainId>(
         approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? [],
     )
     const { classes } = useStyles()
-    const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
 
     return (
         <div className={classes.approvalWrapper}>

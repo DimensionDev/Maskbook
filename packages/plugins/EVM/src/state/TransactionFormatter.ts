@@ -32,6 +32,7 @@ import { ERC721Descriptor } from './TransactionFormatter/descriptors/ERC721.js'
 import { SwapDescriptor } from './TransactionFormatter/descriptors/Swap.js'
 import { SavingsDescriptor } from './TransactionFormatter/descriptors/Savings.js'
 import { SmartPayDescriptor } from './TransactionFormatter/descriptors/SmartPay.js'
+import { LensDescriptor } from './TransactionFormatter/descriptors/Lens.js'
 
 export class TransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
     private coder = ABICoder as unknown as ABICoder.AbiCoder
@@ -39,6 +40,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
     private descriptors: Record<TransactionDescriptorType, TransactionDescriptor[]> = {
         [TransactionDescriptorType.TRANSFER]: [new TransferTokenDescriptor()],
         [TransactionDescriptorType.INTERACTION]: [
+            new LensDescriptor(),
             new SavingsDescriptor(),
             new ITODescriptor(),
             new GitcoinDescriptor(),

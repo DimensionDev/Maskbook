@@ -203,7 +203,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                 })
             }
         },
-        [excludeTokens.join(','), chainId],
+        [excludeTokens.join(','), chainId, account],
     )
     // #endregion
 

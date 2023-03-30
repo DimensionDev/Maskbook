@@ -18,11 +18,17 @@ import { ProviderIcon } from './ProviderIcon.js'
 import { useI18N } from '../../../../utils/index.js'
 import { useAsyncFn } from 'react-use'
 import { ChainId, NETWORK_DESCRIPTORS as EVM_NETWORK_DESCRIPTORS, ProviderType } from '@masknet/web3-shared-evm'
-import { NETWORK_DESCRIPTORS as SOL_NETWORK_DESCRIPTORS } from '@masknet/web3-shared-solana'
-import { NETWORK_DESCRIPTORS as FLOW_NETWORK_DESCRIPTORS } from '@masknet/web3-shared-flow'
+import {
+    NETWORK_DESCRIPTORS as SOL_NETWORK_DESCRIPTORS,
+    ProviderType as SolProviderType,
+} from '@masknet/web3-shared-solana'
+import {
+    NETWORK_DESCRIPTORS as FLOW_NETWORK_DESCRIPTORS,
+    ProviderType as FlowProviderType,
+} from '@masknet/web3-shared-flow'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon.js'
 import { ImageIcon } from '@masknet/shared'
 const descriptors: Record<
@@ -76,6 +82,10 @@ const useStyles = makeStyles()((theme) => {
             height: '100%',
             fontSize: 36,
             display: 'flex',
+            backgroundColor: theme.palette.maskColor.bottom,
+            '&:hover': {
+                background: theme.palette.maskColor.bg,
+            },
         },
         dialogTitle: {
             fontSize: 18,
@@ -98,20 +108,37 @@ const useStyles = makeStyles()((theme) => {
                 fontSize: 24,
             },
         },
+        list: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gridGap: '12px 12px',
+        },
         listItem: {
             padding: theme.spacing(1.5),
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            rowGap: 12,
         },
         listItemText: {
             fontSize: 12,
             fontWeight: 700,
             color: theme.palette.maskColor.main,
-            marginLeft: 12,
+        },
+        dialogPaper: {
+            margin: 0,
+            maxWidth: 400,
+            background: theme.palette.maskColor.bottom,
+            boxShadow:
+                theme.palette.mode === 'dark'
+                    ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
+                    : '0px 0px 20px rgba(0, 0, 0, 0.05)',
         },
     }
 })
 
 export interface PluginProviderRenderProps {
-    networks: Web3Helper.NetworkDescriptorAll[]
     providers: Web3Helper.ProviderDescriptorAll[]
     onProviderIconClicked: (
         network: Web3Helper.NetworkDescriptorAll,
@@ -125,7 +152,6 @@ export interface PluginProviderRenderProps {
 }
 
 export function PluginProviderRender({
-    networks,
     providers,
     ProviderIconClickBait,
     onProviderIconClicked,
@@ -166,7 +192,17 @@ export function PluginProviderRender({
         [],
     )
 
-    console.log(error)
+    const getTips = useCallback((provider: Web3Helper.ProviderTypeAll) => {
+        if (provider === SolProviderType.Phantom) {
+            return t('plugin_wallet_solana_tips')
+        } else if (provider === FlowProviderType.Blocto) {
+            return t('plugin_wallet_blocto_tips')
+        } else if (provider === ProviderType.Fortmatic) {
+            return t('plugin_wallet_fortmatic_tips')
+        }
+
+        return t('plugin_wallet_support_chains_tips')
+    }, [])
 
     return (
         <>
@@ -182,46 +218,37 @@ export function PluginProviderRender({
                                     ...(z.enableRequirements?.supportedExtensionSites ?? []),
                                 ].includes(siteType)
                             })
-                            .map((provider) => {
-                                const supportChains = networks
-                                    .filter((x) => x.networkSupporterPluginID === provider.providerAdaptorPluginID)
-                                    .map((x) => x.name)
-
-                                return (
-                                    <ShadowRootTooltip
-                                        title={t('plugin_wallet_support_chains_tips', {
-                                            provider: provider.name,
-                                            chains: supportChains.join(supportChains.length > 1 ? ', ' : ''),
-                                        })}
-                                        arrow
-                                        placement="top"
-                                        key={provider.ID}>
-                                        <ListItem
-                                            className={classes.walletItem}
-                                            onClick={() => {
-                                                handleClick(provider)
-                                            }}>
-                                            {ProviderIconClickBait ? (
-                                                <ProviderIconClickBait key={provider.ID} provider={provider}>
-                                                    <ProviderIcon
-                                                        className={classes.providerIcon}
-                                                        icon={provider.icon}
-                                                        name={provider.name}
-                                                        iconFilterColor={provider.iconFilterColor}
-                                                    />
-                                                </ProviderIconClickBait>
-                                            ) : (
+                            .map((provider) => (
+                                <ShadowRootTooltip
+                                    title={getTips(provider.type)}
+                                    arrow
+                                    placement="top"
+                                    key={provider.ID}>
+                                    <ListItem
+                                        className={classes.walletItem}
+                                        onClick={() => {
+                                            handleClick(provider)
+                                        }}>
+                                        {ProviderIconClickBait ? (
+                                            <ProviderIconClickBait key={provider.ID} provider={provider}>
                                                 <ProviderIcon
                                                     className={classes.providerIcon}
                                                     icon={provider.icon}
                                                     name={provider.name}
                                                     iconFilterColor={provider.iconFilterColor}
                                                 />
-                                            )}
-                                        </ListItem>
-                                    </ShadowRootTooltip>
-                                )
-                            })}
+                                            </ProviderIconClickBait>
+                                        ) : (
+                                            <ProviderIcon
+                                                className={classes.providerIcon}
+                                                icon={provider.icon}
+                                                name={provider.name}
+                                                iconFilterColor={provider.iconFilterColor}
+                                            />
+                                        )}
+                                    </ListItem>
+                                </ShadowRootTooltip>
+                            ))}
                     </List>
                 </section>
             </Box>
@@ -229,6 +256,7 @@ export function PluginProviderRender({
                 <Dialog
                     container={container}
                     open={selectChainDialogOpen}
+                    classes={{ paper: classes.dialogPaper }}
                     onClose={() => setSelectChainDialogOpen(false)}>
                     <DialogTitle
                         sx={{
@@ -246,7 +274,7 @@ export function PluginProviderRender({
                     </DialogTitle>
                     <DialogContent sx={{ minWidth: 352 }}>
                         <Typography className={classes.chooseNetwork}>{t('plugin_wallet_choose_network')}</Typography>
-                        <List>
+                        <List className={classes.list}>
                             {EVM_NETWORK_DESCRIPTORS.filter((x) =>
                                 [ChainId.Mainnet, ChainId.BSC].includes(x.chainId),
                             ).map((x) => (
