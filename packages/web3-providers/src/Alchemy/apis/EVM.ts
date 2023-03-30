@@ -8,7 +8,12 @@ import {
     SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { ChainId, ChainId as ChainId_EVM, SchemaType as SchemaType_EVM } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    ChainId as ChainId_EVM,
+    SchemaType as SchemaType_EVM,
+    resolveImageURL,
+} from '@masknet/web3-shared-evm'
 import { Alchemy_EVM_NetworkMap } from '../constants.js'
 import type {
     AlchemyNFT_EVM,
@@ -44,6 +49,12 @@ function createNonFungibleToken(
         asset.metadata.image || asset.metadata.image_url || asset.media?.[0]?.gateway || asset.metadata.animation_url
     const mediaURL =
         asset.media?.[0]?.gateway || asset.media?.[0]?.raw || asset.metadata.image_url || asset.metadata.image
+    const name = getAssetFullName(
+        asset.contract.address,
+        asset.metadata.name || asset.title,
+        asset.metadata.name || asset.title,
+        tokenId,
+    )
     return {
         id: `${contractAddress}_${tokenId}`,
         chainId,
@@ -54,14 +65,9 @@ function createNonFungibleToken(
         link: createNonFungibleTokenLink(chainId, contractAddress, tokenId),
         metadata: {
             chainId,
-            name: getAssetFullName(
-                asset.contract.address,
-                asset.metadata.name || asset.title,
-                asset.metadata.name || asset.title,
-                tokenId,
-            ),
+            name,
             description: asset.metadata.description || asset.description,
-            imageURL: resolveResourceURL(decodeURIComponent(imageURL)),
+            imageURL: resolveImageURL(resolveResourceURL(decodeURIComponent(imageURL)), name, contractAddress),
             mediaURL: resolveResourceURL(decodeURIComponent(mediaURL)),
         },
         contract: {
@@ -90,7 +96,7 @@ function createNonFungibleAsset(
 ): NonFungibleAsset<ChainId_EVM, SchemaType_EVM> {
     const tokenId = formatAlchemyTokenId(metaDataResponse.id.tokenId)
     const contractName = contractMetadataResponse?.contractMetadata.name || metaDataResponse.metadata?.name || ''
-
+    const name = getAssetFullName(metaDataResponse.contract?.address, contractName, metaDataResponse.title, tokenId)
     return {
         id: `${metaDataResponse.contract.address}_${tokenId}`,
         chainId,
@@ -101,13 +107,17 @@ function createNonFungibleAsset(
         address: metaDataResponse.contract?.address,
         metadata: {
             chainId,
-            name: getAssetFullName(metaDataResponse.contract?.address, contractName, metaDataResponse.title, tokenId),
+            name,
             symbol: contractMetadataResponse?.contractMetadata?.symbol ?? '',
             description: metaDataResponse.description,
-            imageURL: decodeURIComponent(
-                metaDataResponse.metadata?.image ||
-                    metaDataResponse.media?.[0]?.gateway ||
-                    metaDataResponse.media?.[0]?.raw,
+            imageURL: resolveImageURL(
+                decodeURIComponent(
+                    metaDataResponse.metadata?.image ||
+                        metaDataResponse.media?.[0]?.gateway ||
+                        metaDataResponse.media?.[0]?.raw,
+                ),
+                name,
+                metaDataResponse.contract?.address,
             ),
             mediaURL: decodeURIComponent(metaDataResponse.media?.[0]?.gateway),
         },
