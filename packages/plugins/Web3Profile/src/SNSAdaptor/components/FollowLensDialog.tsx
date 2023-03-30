@@ -231,7 +231,7 @@ export function FollowLensDialog() {
             title={t.lens()}
             classes={{ dialogTitle: classes.dialogTitle, paper: classes.dialogContent }}>
             <DialogContent sx={{ padding: 3 }}>
-                {loading || getBalanceLoading ? (
+                {!value && (loading || getBalanceLoading) ? (
                     <Box display="flex" justifyContent="center" alignItems="center" minHeight={342}>
                         <CircularProgress />
                     </Box>
