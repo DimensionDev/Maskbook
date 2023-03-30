@@ -17,6 +17,10 @@ const useStyles = makeStyles()({
         padding: 0,
         verticalAlign: 'baseline',
     },
+    badgeAtPost: {
+        position: 'relative',
+        top: -1,
+    },
 })
 interface Props {
     slot: Plugin.SNSAdaptor.LensSlot
@@ -25,7 +29,7 @@ interface Props {
 
 export const LensBadge: FC<Props> = memo(({ slot, accounts }) => {
     const buttonRef = useRef<HTMLButtonElement>(null)
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     useEffect(() => {
         const button = buttonRef.current
@@ -49,7 +53,10 @@ export const LensBadge: FC<Props> = memo(({ slot, accounts }) => {
     }, [accounts])
 
     return (
-        <IconButton disableRipple className={classes.badge} ref={buttonRef}>
+        <IconButton
+            disableRipple
+            className={cx(classes.badge, slot === Plugin.SNSAdaptor.LensSlot.Post ? classes.badgeAtPost : null)}
+            ref={buttonRef}>
             <Icons.Lens size={LensIconSizeMap[slot]} />
         </IconButton>
     )

@@ -5,7 +5,7 @@ import { useMenuConfig, useSharedI18N } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
-import { Button, MenuItem, Typography, alpha } from '@mui/material'
+import { Button, MenuItem, Typography, alpha, type MenuProps } from '@mui/material'
 import { debounce, uniqBy } from 'lodash-es'
 import { type HTMLProps, useEffect, useMemo, useRef, useState } from 'react'
 import { useWindowScroll } from 'react-use'
@@ -19,6 +19,7 @@ const useStyles = makeStyles()((theme) => {
             fontWeight: 400,
             marginLeft: 4,
             fontSize: 14,
+            marginRight: theme.spacing(2),
         },
         iconStack: {
             height: 28,
@@ -108,11 +109,11 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-interface SocialAccountListProps extends HTMLProps<HTMLDivElement> {
+interface SocialAccountListProps extends HTMLProps<HTMLDivElement>, Pick<MenuProps, 'disablePortal'> {
     nextIdBindings: BindingProof[]
 }
 
-export function SocialAccountList({ nextIdBindings, ...rest }: SocialAccountListProps) {
+export function SocialAccountList({ nextIdBindings, disablePortal, ...rest }: SocialAccountListProps) {
     const t = useSharedI18N()
     const { classes, cx } = useStyles()
     const position = useWindowScroll()
@@ -174,6 +175,7 @@ export function SocialAccountList({ nextIdBindings, ...rest }: SocialAccountList
         {
             hideBackdrop: true,
             anchorSibling: false,
+            disablePortal,
             anchorOrigin: {
                 vertical: 'bottom',
                 horizontal: 'right',
