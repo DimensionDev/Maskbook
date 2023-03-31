@@ -23,8 +23,10 @@ export class NFTScanSearchAPI<ChainId, SchemaType> implements DSearchBaseAPI.Dat
         const collectionsURL = urlcat(DSEARCH_BASE_URL, '/non-fungible-collections/nftscan.json', { mode: 'cors' })
         const nfts = fetchJSON<Array<SearchResult<ChainId, SchemaType>>>(nftsURL)
         const collections = fetchJSON<Array<SearchResult<ChainId, SchemaType>>>(collectionsURL)
-
-        return (await Promise.allSettled([nfts, collections])).flatMap((v) =>
+        const collectionsFromSpecialList = await fetchJSON<Array<SearchResult<ChainId, SchemaType>>>(
+            urlcat(DSEARCH_BASE_URL, '/non-fungible-collections/specific-list.json', { mode: 'cors' }),
+        )
+        return (await Promise.allSettled([collectionsFromSpecialList, nfts, collections])).flatMap((v) =>
             v.status === 'fulfilled' && v.value ? v.value : [],
         )
     }
