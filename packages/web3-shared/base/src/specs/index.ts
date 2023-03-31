@@ -137,8 +137,6 @@ export enum TransactionDescriptorType {
 
 export enum StorageProviderType {
     NextID = 'NextID',
-    // RSS3 File API
-    RSS3 = 'RSS3',
     // KV storage powered by CloudFlare
     KV = 'kv',
 
@@ -624,7 +622,7 @@ export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId
 }
 
 export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
-    type: SearchResultType.NonFungibleToken
+    type: SearchResultType.NonFungibleToken | SearchResultType.NonFungibleCollection
     id?: string
     address: string
     rank?: number
@@ -1330,7 +1328,6 @@ export interface Web3StorageServiceState {
         },
     ) => Storage
     createKVStorage: (namespace: string) => Storage
-    createRSS3Storage: (namespace: string) => Storage
     createNextIDStorage: (
         proofIdentity: string,
         platform: NextIDPlatform,
@@ -1667,7 +1664,6 @@ export interface NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType> {
 }
 
 export interface ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType> {
-    network: NetworkDescriptor<ChainId, NetworkType>
     provider: ProviderDescriptor<ChainId, ProviderType>
     children?: React.ReactNode
     onClick?: (

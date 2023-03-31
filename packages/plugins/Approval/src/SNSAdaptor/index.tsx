@@ -7,7 +7,6 @@ import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { base } from '../base.js'
 import { ApprovalDialog } from './ApprovalDialog.js'
 import { Web3ContextProvider, useNetworkContext } from '@masknet/web3-hooks-base'
-import { ChainId } from '@masknet/web3-shared-evm'
 import { PluginID } from '@masknet/shared-base'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -38,7 +37,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 }
                             />
                             {open ? (
-                                <Web3ContextProvider value={{ pluginID, chainId: ChainId.Mainnet }}>
+                                <Web3ContextProvider value={{ pluginID }}>
                                     <ApprovalDialog open onClose={() => setOpen(false)} />
                                 </Web3ContextProvider>
                             ) : null}

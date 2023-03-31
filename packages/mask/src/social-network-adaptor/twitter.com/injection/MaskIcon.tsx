@@ -57,7 +57,7 @@ export function injectMaskUserBadgeAtTwitter(signal: AbortSignal) {
 }
 export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal) {
     const ls = new LiveSelector([post.rootElement])
-        .map((x) => x.current.querySelector<HTMLDivElement>('[data-testid=User-Names]'))
+        .map((x) => x.current.querySelector<HTMLDivElement>('[data-testid=User-Name]'))
         .enableSingleMode()
     ifUsingMask(post.author.getCurrentValue()).then(add, remove)
     post.author.subscribe(() => ifUsingMask(post.author.getCurrentValue()).then(add, remove))

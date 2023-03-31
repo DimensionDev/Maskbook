@@ -250,7 +250,10 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             className={cx(classes.actionButton)}
                             variant="contained"
                             size="small"
-                            onClick={openSelectProviderDialog}>
+                            onClick={() => {
+                                openSelectProviderDialog()
+                                props.closeDialog?.()
+                            }}>
                             {t('wallet_status_button_change')}
                         </Button>
                     </section>

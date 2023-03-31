@@ -1,14 +1,14 @@
 import LRU from 'lru-cache'
 import type { Storage } from '@masknet/web3-shared-base'
-import { type NetworkPluginID, SignType, getSiteType } from '@masknet/shared-base'
+import { type NetworkPluginID, SignType } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { StringStorage as StringStorageAPI } from '@masknet/web3-providers'
+import { StringStorageAPI } from '../StringStorage/index.js'
 
 const caches = new Map<string, LRU<string, unknown>>()
 
 export class StringStorage implements Storage {
     private cache: LRU<string, unknown> | undefined
-
+    private stringStorage = new StringStorageAPI()
     constructor(
         private namespace: string,
         private address: string,
@@ -30,14 +30,14 @@ export class StringStorage implements Storage {
     }
 
     private getKey() {
-        return `${this.namespace}-${getSiteType()}-${this.address}`
+        return `${this.namespace}-${this.address}`
     }
 
     async get<T>(key: string) {
         const cacheKey = `${this.getKey()}-${key}`
         let value = this.cache?.get(cacheKey)
         if (value) return value as T
-        value = await StringStorageAPI.get(this.namespace, key, this.address)
+        value = await this.stringStorage.get(this.namespace, key, this.address)
         this.cache?.set(cacheKey, value)
         return value as T
     }
@@ -48,9 +48,9 @@ export class StringStorage implements Storage {
 
     async set<T>(key: string, value: T) {
         const connection = this.getConnection?.()
-        const signature = await connection?.signMessage(SignType.Message, value as string)
+        const signature = await connection?.signMessage(SignType.Message, JSON.stringify(value))
         if (!signature) throw new Error('Failed to sign payload')
-        await StringStorageAPI.set(this.namespace, key, this.address, value as string, signature)
+        await this.stringStorage.set(this.namespace, key, this.address, value as string, signature)
         const cacheKey = `${this.getKey()}-${key}`
         this.cache?.delete(cacheKey)
         return

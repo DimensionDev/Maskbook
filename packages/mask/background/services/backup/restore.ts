@@ -36,16 +36,21 @@ export interface RestoreUnconfirmedBackupOptions {
      * "wallet" to open the wallet popup to restore the wallet first.
      */
     action: 'confirm' | 'wallet'
+    countOfSmartPay?: number
 }
 
-export async function restoreUnconfirmedBackup({ id, action }: RestoreUnconfirmedBackupOptions): Promise<void> {
+export async function restoreUnconfirmedBackup({
+    id,
+    action,
+    countOfSmartPay,
+}: RestoreUnconfirmedBackupOptions): Promise<void> {
     const backup = unconfirmedBackup.get(id)
     if (!backup) throw new Error('Backup not found')
 
     const granted = await requestHostPermission(backup.settings.grantedHostPermissions)
     if (!granted) return
 
-    if (action === 'confirm') await restoreNormalizedBackup(backup)
+    if (action === 'confirm') await restoreNormalizedBackup(backup, countOfSmartPay)
     else if (action === 'wallet') await openPopupWindow(PopupRoutes.WalletRecovered, { backupId: id })
     else unreachable(action)
 }
@@ -138,6 +143,7 @@ export async function getUnconfirmedBackup(id: string): Promise<
           wallets: Array<{
               address: string
               name: string
+              isSmartPay?: boolean
           }>
       }
 > {
@@ -167,7 +173,7 @@ export async function getUnconfirmedBackup(id: string): Promise<
                 ...wallets,
                 ...smartPayAccounts
                     .filter((x) => x.funded || x.deployed)
-                    .map((x, index) => ({ address: x.address, name: `Smart Pay ${index + 1}` })),
+                    .map((x, index) => ({ address: x.address, name: `Smart Pay ${index + 1}`, isSmartPay: true })),
             ],
         }
     } catch {

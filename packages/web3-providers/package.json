@@ -69,7 +69,6 @@
     "json-stable-stringify": "^1.0.2",
     "lru-cache": "^7.10.1",
     "react-use": "^17.4.0",
-    "rss3-next": "^0.6.17",
     "socket.io-client": "2.4.0",
     "urlcat": "^2.0.4",
     "use-subscription": "^1.8.0",
@@ -83,6 +82,7 @@
   "devDependencies": {
     "@types/bs58": "^4.0.1",
     "@sentry/browser": "7.37.2",
+    "@sentry/tracing": "^7.45.0",
     "@sentry/types": "^7.40.0",
     "@types/json-stable-stringify": "^1.0.34",
     "@types/use-subscription": "^1.0.0"

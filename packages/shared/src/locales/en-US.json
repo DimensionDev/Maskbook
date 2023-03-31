@@ -154,6 +154,7 @@
     "plugin_wallet_nft_approving_all": "Unlocking {{symbol}}...",
     "plugin_wallet_approve_all_nft_successfully": "Unlock {{symbol}} successfully",
     "plugin_wallet_fail_to_load_nft_contract": "Click to retry",
+    "plugin_wallet_change_wallet": "Change Wallet",
     "save": "Save",
     "cancel": "Cancel",
     "add_wallet": "Add Wallet",

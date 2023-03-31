@@ -138,6 +138,7 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
                                     classes={{ root: classes.collectibleList }}
                                     retry={next}
                                     collectibles={tokens}
+                                    pluginID={pluginID}
                                     loading={loading}
                                     columns={4}
                                     selectable

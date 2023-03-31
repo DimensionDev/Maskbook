@@ -1,4 +1,4 @@
-import { type NetworkPluginID, getEnhanceableSiteType } from '@masknet/shared-base'
+import { type NetworkPluginID, getEnhanceableSiteType, EnhanceableSite, getSiteType } from '@masknet/shared-base'
 import { useCallback } from 'react'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { useSaveAddress } from '../index.js'
@@ -12,8 +12,11 @@ export function useSaveStringStorage(pluginID: NetworkPluginID) {
     return useCallback(
         async (userId: string, address: string, nft: NextIDAvatarMeta) => {
             if (!Storage) return
-            const stringStorage = Storage.createStringStorage(PLUGIN_NAME, address)
-            await stringStorage.set?.<string>(userId, JSON.stringify(nft))
+            const stringStorage = Storage.createStringStorage(
+                `${PLUGIN_NAME}-${(getSiteType() || EnhanceableSite.Twitter).replace('.com', '')}`,
+                address,
+            )
+            await stringStorage.set?.(userId, nft)
             await saveAddress(nft.userId, pluginID, address, getEnhanceableSiteType())
             return nft
         },

@@ -1,7 +1,6 @@
 import { first, identity, pickBy } from 'lodash-es'
 import { toHex, type AbiItem } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
-import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import type { ECKeyIdentifier, PartialRequired, Proof, Account, Wallet } from '@masknet/shared-base'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
@@ -102,17 +101,6 @@ class Connection implements EVM_Connection {
                                                 ? ProviderType.MaskWallet
                                                 : options.providerType
                                         ]
-
-                                    // chain switching silently
-                                    if (context.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
-                                        if (options.providerType === ProviderType.MaskWallet) {
-                                            await provider.switchChain(options.chainId)
-                                            // the settings stay in the background, other pages need a delay to sync
-                                            await delay(1500)
-                                        }
-                                        // make sure that the provider is connected before sending the transaction
-                                        await this.Provider?.connect(options.providerType, options.chainId)
-                                    }
 
                                     const web3Provider = provider.createWeb3Provider({
                                         account: options.account,

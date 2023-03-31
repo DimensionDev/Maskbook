@@ -152,7 +152,7 @@ export class ProviderState<
 
         if (accountCopied.account !== '' && !this.options.isValidAddress(accountCopied.account))
             delete accountCopied.account
-        if (!accountCopied.chainId || !this.options.isValidChainId(accountCopied.chainId)) {
+        if (accountCopied.chainId && !this.options.isValidChainId(accountCopied.chainId)) {
             accountCopied.chainId = this.options.getInvalidChainId()
         }
 
@@ -203,7 +203,7 @@ export class ProviderState<
         if (!result.account) throw new Error('Failed to connect provider.')
 
         // switch the sub-network to the expected one
-        if (chainId !== result.chainId) {
+        if (chainId !== result.chainId && providerType !== 'WalletConnect') {
             await Promise.race([
                 (async () => {
                     await delay(30 /* seconds */ * 1000 /* milliseconds */)

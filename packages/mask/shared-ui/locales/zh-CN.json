@@ -336,7 +336,6 @@
     "plugin_wallet_snackbar_swap_successful": "已成功兑换代币",
     "plugin_wallet_snackbar_swap_token": "兑换代币",
     "plugin_wallet_choose_network": "选择网络",
-    "plugin_wallet_choose_wallet": "选择钱包",
     "plugin_wallet_connect_with": "连接到",
     "plugin_wallet_connect_with_retry": "再试一次",
     "plugin_wallet_connected_with": "连接到",

@@ -15,7 +15,7 @@ import {
     SocialAddressType,
 } from '@masknet/shared-base'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
-import { ENS, Lens, MaskX, NextIDProof, NextIDStorage, RSS3, SpaceID, Twitter } from '@masknet/web3-providers'
+import { ENS, Lens, MaskX, NextIDProof, NextIDStorageProvider, RSS3, SpaceID, Twitter } from '@masknet/web3-providers'
 import { MaskX_BaseAPI } from '@masknet/web3-providers/types'
 import { Web3StateSettings } from '../settings/index.js'
 
@@ -141,7 +141,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         const userId = identifier?.userId
         if (!userId || !publicKey) return
 
-        const response = await NextIDStorage.getByIdentity<{ ownerAddress?: string }>(
+        const response = await NextIDStorageProvider.getByIdentity<{ ownerAddress?: string }>(
             publicKey,
             NextIDPlatform.Twitter,
             userId.toLowerCase(),

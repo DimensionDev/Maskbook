@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useAsync } from 'react-use'
 import type { User } from '../types.js'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
@@ -7,14 +7,16 @@ import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 
 export function useUser() {
-    const [user, setUser] = useState<User>({ userId: '', address: '' })
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const whoAmI = useLastRecognizedIdentity()
-    useEffect(() => {
-        if (!(account && whoAmI?.identifier?.userId)) return
-        setUser({ userId: whoAmI.identifier.userId, address: account })
+
+    return useMemo(() => {
+        if (!account || !whoAmI || !whoAmI.identifier || whoAmI.identifier?.userId === '$unknown') return
+        return {
+            userId: whoAmI.identifier.userId,
+            address: account,
+        }
     }, [account, whoAmI])
-    return user
 }
 
 export function useCurrentVisitingUser(flag?: number) {

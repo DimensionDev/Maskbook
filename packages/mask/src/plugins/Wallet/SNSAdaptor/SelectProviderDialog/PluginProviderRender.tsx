@@ -1,15 +1,44 @@
-import { useMemo } from 'react'
-import { first } from 'lodash-es'
-import { Icons } from '@masknet/icons'
-import { ImageIcon } from '@masknet/shared'
-import { getSiteType, type NetworkPluginID } from '@masknet/shared-base'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkIconClickBaitProps, ProviderIconClickBaitProps } from '@masknet/web3-shared-base'
-import { makeStyles } from '@masknet/theme'
-import { Box, List, ListItem, Typography } from '@mui/material'
-import { useI18N } from '../../../../utils/index.js'
+import { type NetworkDescriptor, type ProviderIconClickBaitProps } from '@masknet/web3-shared-base'
+import { makeStyles, ShadowRootTooltip, usePortalShadowRoot } from '@masknet/theme'
+import {
+    alpha,
+    Box,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    List,
+    ListItem,
+    ListItemButton,
+    Typography,
+} from '@mui/material'
 import { ProviderIcon } from './ProviderIcon.js'
+import { useI18N } from '../../../../utils/index.js'
+import { useAsyncFn } from 'react-use'
+import { ChainId, NETWORK_DESCRIPTORS as EVM_NETWORK_DESCRIPTORS, ProviderType } from '@masknet/web3-shared-evm'
+import {
+    NETWORK_DESCRIPTORS as SOL_NETWORK_DESCRIPTORS,
+    ProviderType as SolProviderType,
+} from '@masknet/web3-shared-solana'
+import {
+    NETWORK_DESCRIPTORS as FLOW_NETWORK_DESCRIPTORS,
+    ProviderType as FlowProviderType,
+} from '@masknet/web3-shared-flow'
+import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
+import { useCallback, useState } from 'react'
+import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon.js'
+import { ImageIcon } from '@masknet/shared'
+const descriptors: Record<
+    NetworkPluginID,
+    Array<NetworkDescriptor<Web3Helper.ChainIdAll, Web3Helper.NetworkTypeAll>>
+> = {
+    [NetworkPluginID.PLUGIN_EVM]: EVM_NETWORK_DESCRIPTORS,
+    [NetworkPluginID.PLUGIN_FLOW]: FLOW_NETWORK_DESCRIPTORS,
+    [NetworkPluginID.PLUGIN_SOLANA]: SOL_NETWORK_DESCRIPTORS,
+}
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -29,54 +58,10 @@ const useStyles = makeStyles()((theme) => {
                 marginTop: 0,
             },
         },
-        title: {
-            fontWeight: 'bold',
-            '&:before': {
-                content: 'counter(steps) ". "',
-            },
-        },
-        list: {
-            marginTop: 12,
-            display: 'flex',
-            gridGap: '16px 10.5px',
-            flexWrap: 'wrap',
-        },
-        networkItem: {
-            display: 'flex',
-            flexDirection: 'column',
-            cursor: 'pointer',
-            alignItems: 'center',
-            width: 72,
-            padding: '12px 0px',
-            borderRadius: 12,
-            '&:hover': {
-                background: theme.palette.background.default,
-                '& p': {
-                    fontWeight: 700,
-                },
-            },
-        },
-        iconWrapper: {
-            position: 'relative',
-            cursor: 'pointer',
-            width: 30,
-            height: 30,
-            borderRadius: '50%',
-            backgroundColor: 'transparent',
-        },
-        checkedBadge: {
-            position: 'absolute',
-            right: -5,
-            bottom: 0,
-            backgroundColor: theme.palette.background.paper,
-            borderRadius: '50%',
-            color: theme.palette.maskColor.success,
-        },
         wallets: {
             width: '100%',
             display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            maxHeight: 180,
+            gridTemplateColumns: 'repeat(3, 1fr)',
             gridGap: '12px 12px',
             margin: theme.spacing(2, 0, 0),
             [smallQuery]: {
@@ -86,7 +71,7 @@ const useStyles = makeStyles()((theme) => {
         },
         walletItem: {
             padding: 0,
-            height: 88,
+            height: 122,
             width: '100%',
             display: 'block',
             '& > div': {
@@ -97,90 +82,134 @@ const useStyles = makeStyles()((theme) => {
             height: '100%',
             fontSize: 36,
             display: 'flex',
+            backgroundColor: theme.palette.maskColor.bottom,
+            '&:hover': {
+                background: theme.palette.maskColor.bg,
+            },
         },
-        networkName: {
-            fontSize: 12,
-            marginTop: 12,
-            whiteSpace: 'nowrap',
-            color: theme.palette.text.secondary,
-        },
-        selected: {
-            color: theme.palette.text.primary,
+        dialogTitle: {
+            fontSize: 18,
             fontWeight: 700,
+            color: theme.palette.maskColor.main,
+            textAlign: 'center',
         },
-        disabled: {
-            opacity: 0.5,
-            pointerEvents: 'none',
-            cursor: 'default',
+        chooseNetwork: {
+            fontSize: 14,
+            fontWeight: 700,
+            color: theme.palette.maskColor.main,
+            paddingLeft: 32,
+        },
+        dialogCloseButton: {
+            color: theme.palette.text.primary,
+            padding: 0,
+            width: 24,
+            height: 24,
+            '& > svg': {
+                fontSize: 24,
+            },
+        },
+        list: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gridGap: '12px 12px',
+        },
+        listItem: {
+            padding: theme.spacing(1.5),
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            rowGap: 12,
+        },
+        listItemText: {
+            fontSize: 12,
+            fontWeight: 700,
+            color: theme.palette.maskColor.main,
+        },
+        dialogPaper: {
+            margin: 0,
+            maxWidth: 400,
+            background: theme.palette.maskColor.bottom,
+            boxShadow:
+                theme.palette.mode === 'dark'
+                    ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
+                    : '0px 0px 20px rgba(0, 0, 0, 0.05)',
         },
     }
 })
 
 export interface PluginProviderRenderProps {
-    networks: Web3Helper.NetworkDescriptorAll[]
     providers: Web3Helper.ProviderDescriptorAll[]
-    undeterminedPluginID?: NetworkPluginID
-    undeterminedNetworkID?: string
-    onNetworkIconClicked: (network: Web3Helper.NetworkDescriptorAll) => void
     onProviderIconClicked: (
         network: Web3Helper.NetworkDescriptorAll,
         provider: Web3Helper.ProviderDescriptorAll,
+        isReady?: boolean,
+        downloadLink?: string,
     ) => void
-    NetworkIconClickBait?: React.ComponentType<
-        NetworkIconClickBaitProps<Web3Helper.ChainIdAll, Web3Helper.ProviderTypeAll, Web3Helper.NetworkTypeAll>
-    >
     ProviderIconClickBait?: React.ComponentType<
         ProviderIconClickBaitProps<Web3Helper.ChainIdAll, Web3Helper.ProviderTypeAll, Web3Helper.NetworkTypeAll>
     >
-    supportedNetworkList?: Array<Web3Helper.NetworkDescriptorAll['type']>
 }
 
 export function PluginProviderRender({
-    networks,
     providers,
-    undeterminedPluginID,
-    undeterminedNetworkID,
-    NetworkIconClickBait,
     ProviderIconClickBait,
-    supportedNetworkList,
-    onNetworkIconClicked,
     onProviderIconClicked,
 }: PluginProviderRenderProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
+    const snsPlugins = useActivatedPluginsSNSAdaptor('any')
+    const dashboardPlugins = useActivatedPluginsDashboard()
+    const [selectChainDialogOpen, setSelectChainDialogOpen] = useState(false)
 
-    const selectedNetwork = useMemo(() => {
-        return networks.find((x) => x.ID === undeterminedNetworkID) ?? first(networks)!
-    }, [undeterminedNetworkID, networks.map((x) => x.ID).join(',')])
+    const fortmaticProviderDescriptor = providers.find((x) => x.type === ProviderType.Fortmatic)
+
+    const [{ error }, handleClick] = useAsyncFn(
+        async (provider: Web3Helper.ProviderDescriptorAll, fortmaticChainId?: Web3Helper.ChainIdAll) => {
+            if (provider.type === ProviderType.Fortmatic && !fortmaticChainId) {
+                setSelectChainDialogOpen(true)
+                return
+            }
+            const target = [...snsPlugins, ...dashboardPlugins].find(
+                (x) => x.ID === (provider.providerAdaptorPluginID as string),
+            )
+            if (!target) return
+
+            const connection = target.Web3State?.Connection?.getConnection?.({ providerType: provider.type })
+
+            const chainId =
+                fortmaticChainId ??
+                (provider.type === ProviderType.WalletConnect
+                    ? ChainId.Mainnet
+                    : await connection?.getChainId({ providerType: provider.type }))
+            const networkDescriptor = descriptors[provider.providerAdaptorPluginID].find((x) => x.chainId === chainId)
+
+            if (!chainId || !networkDescriptor) return
+            const isReady = target.Web3State?.Provider?.isReady(provider.type)
+            const downloadLink = target.Web3State?.Others?.providerResolver.providerDownloadLink(provider.type)
+            onProviderIconClicked(networkDescriptor, provider, isReady, downloadLink)
+        },
+        [],
+    )
+
+    const getTips = useCallback((provider: Web3Helper.ProviderTypeAll) => {
+        if (provider === SolProviderType.Phantom) {
+            return t('plugin_wallet_solana_tips')
+        } else if (provider === FlowProviderType.Blocto) {
+            return t('plugin_wallet_blocto_tips')
+        } else if (provider === ProviderType.Fortmatic) {
+            return t('plugin_wallet_fortmatic_tips')
+        }
+
+        return t('plugin_wallet_support_chains_tips')
+    }, [])
 
     return (
         <>
             <Box className={classes.root}>
                 <section className={classes.section}>
-                    <Typography className={classes.title}>{t('plugin_wallet_choose_network')}</Typography>
-                    <List className={classes.list}>
-                        {networks
-                            ?.filter((x) => x.isMainnet)
-                            .map((network, i) => (
-                                <NetworkItem
-                                    key={i}
-                                    disabled={Boolean(
-                                        supportedNetworkList && !supportedNetworkList?.includes(network.type),
-                                    )}
-                                    onNetworkIconClicked={onNetworkIconClicked}
-                                    NetworkIconClickBait={NetworkIconClickBait}
-                                    network={network}
-                                    selected={undeterminedNetworkID === network.ID}
-                                />
-                            ))}
-                    </List>
-                </section>
-                <section className={classes.section}>
-                    <Typography className={classes.title}>{t('plugin_wallet_choose_wallet')}</Typography>
                     <List className={classes.wallets}>
                         {providers
-                            .filter((x) => x.providerAdaptorPluginID === undeterminedPluginID)
-                            .filter((y) => y.enableRequirements?.supportedChainIds?.includes(selectedNetwork.chainId))
                             .filter((z) => {
                                 const siteType = getSiteType()
                                 if (!siteType) return false
@@ -190,78 +219,80 @@ export function PluginProviderRender({
                                 ].includes(siteType)
                             })
                             .map((provider) => (
-                                <ListItem
-                                    className={classes.walletItem}
-                                    key={provider.ID}
-                                    onClick={() => {
-                                        onProviderIconClicked(selectedNetwork, provider)
-                                    }}>
-                                    {ProviderIconClickBait ? (
-                                        <ProviderIconClickBait
-                                            key={provider.ID}
-                                            network={selectedNetwork}
-                                            provider={provider}>
+                                <ShadowRootTooltip
+                                    title={getTips(provider.type)}
+                                    arrow
+                                    placement="top"
+                                    key={provider.ID}>
+                                    <ListItem
+                                        className={classes.walletItem}
+                                        onClick={() => {
+                                            handleClick(provider)
+                                        }}>
+                                        {ProviderIconClickBait ? (
+                                            <ProviderIconClickBait key={provider.ID} provider={provider}>
+                                                <ProviderIcon
+                                                    className={classes.providerIcon}
+                                                    icon={provider.icon}
+                                                    name={provider.name}
+                                                    iconFilterColor={provider.iconFilterColor}
+                                                />
+                                            </ProviderIconClickBait>
+                                        ) : (
                                             <ProviderIcon
                                                 className={classes.providerIcon}
                                                 icon={provider.icon}
                                                 name={provider.name}
                                                 iconFilterColor={provider.iconFilterColor}
                                             />
-                                        </ProviderIconClickBait>
-                                    ) : (
-                                        <ProviderIcon
-                                            className={classes.providerIcon}
-                                            icon={provider.icon}
-                                            name={provider.name}
-                                            iconFilterColor={provider.iconFilterColor}
-                                        />
-                                    )}
-                                </ListItem>
+                                        )}
+                                    </ListItem>
+                                </ShadowRootTooltip>
                             ))}
                     </List>
                 </section>
             </Box>
+            {usePortalShadowRoot((container) => (
+                <Dialog
+                    container={container}
+                    open={selectChainDialogOpen}
+                    classes={{ paper: classes.dialogPaper }}
+                    onClose={() => setSelectChainDialogOpen(false)}>
+                    <DialogTitle
+                        sx={{
+                            whiteSpace: 'nowrap',
+                            display: 'grid',
+                            alignItems: 'center',
+                            gridTemplateColumns: '50px auto 50px',
+                        }}>
+                        <IconButton
+                            className={classes.dialogCloseButton}
+                            onClick={() => setSelectChainDialogOpen(false)}>
+                            <DialogDismissIconUI />
+                        </IconButton>
+                        <Typography className={classes.dialogTitle}>{t('plugin_wallet_connect_fortmatic')}</Typography>
+                    </DialogTitle>
+                    <DialogContent sx={{ minWidth: 352 }}>
+                        <Typography className={classes.chooseNetwork}>{t('plugin_wallet_choose_network')}</Typography>
+                        <List className={classes.list}>
+                            {EVM_NETWORK_DESCRIPTORS.filter((x) =>
+                                [ChainId.Mainnet, ChainId.BSC].includes(x.chainId),
+                            ).map((x) => (
+                                <ListItemButton
+                                    key={x.chainId}
+                                    className={classes.listItem}
+                                    onClick={() => {
+                                        if (!fortmaticProviderDescriptor) return
+                                        handleClick(fortmaticProviderDescriptor, x.chainId)
+                                    }}>
+                                    <ImageIcon icon={x.icon} size={30} iconFilterColor={alpha(x.iconColor, 0.2)} />
+                                    <Typography className={classes.listItemText}>{x.name}</Typography>
+                                </ListItemButton>
+                            ))}
+                        </List>
+                    </DialogContent>
+                </Dialog>
+            ))}
         </>
-    )
-}
-
-interface NetworkItemProps {
-    onNetworkIconClicked: PluginProviderRenderProps['onNetworkIconClicked']
-    NetworkIconClickBait?: PluginProviderRenderProps['NetworkIconClickBait']
-    network: Web3Helper.NetworkDescriptorAll
-    disabled: boolean
-    selected: boolean
-}
-
-function NetworkItem({
-    onNetworkIconClicked,
-    NetworkIconClickBait,
-    network,
-    selected,
-    disabled = false,
-}: NetworkItemProps) {
-    const { classes, cx } = useStyles()
-    const { Others } = useWeb3State<'all'>(network.networkSupporterPluginID)
-    return (
-        <ListItem
-            className={cx(classes.networkItem, disabled ? classes.disabled : '')}
-            key={network.ID}
-            onClick={() => {
-                onNetworkIconClicked(network)
-            }}>
-            <div className={classes.iconWrapper} style={{ boxShadow: `0px 3px 20px -4px ${network.iconColor}` }}>
-                {NetworkIconClickBait ? (
-                    <NetworkIconClickBait network={network}>
-                        <ImageIcon size={30} icon={network.icon} />
-                    </NetworkIconClickBait>
-                ) : (
-                    <ImageIcon size={30} icon={network.icon} />
-                )}
-                {selected ? <Icons.Selected size={12} className={classes.checkedBadge} /> : null}
-            </div>
-            <Typography className={cx(classes.networkName, selected ? classes.selected : '')}>
-                {Others?.chainResolver.chainName(network.chainId)}
-            </Typography>
-        </ListItem>
     )
 }

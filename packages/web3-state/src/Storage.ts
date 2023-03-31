@@ -19,10 +19,6 @@ export class StorageState implements Web3StorageServiceState {
         return this.createStorage(StorageProviderType.KV, { namespace })
     }
 
-    createRSS3Storage(namespace: string) {
-        return this.createStorage(StorageProviderType.RSS3, { namespace })
-    }
-
     createStringStorage(namespace: string, address: string) {
         return this.createStorage(StorageProviderType.String, { namespace, address })
     }

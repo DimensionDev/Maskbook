@@ -154,6 +154,7 @@
     "plugin_wallet_nft_approving_all": "{{symbol}} のロックを解除中...",
     "plugin_wallet_approve_all_nft_successfully": "{{symbol}} のロックを解除しました",
     "plugin_wallet_fail_to_load_nft_contract": "クリックして再試行",
+    "plugin_wallet_change_wallet": "ウォレットを変更",
     "save": "保存",
     "cancel": "キャンセル",
     "add_wallet": "ウォレットを追加",
@@ -184,5 +185,6 @@
     "persona_boundary_verify_persona": "Twitter IDの認証",
     "applications_create_persona_title": "ペルソナ",
     "applications_create_persona_hint": "本機能を利用するには、ペルソナを作成し、アカウントを認証してください。",
-    "applications_create_persona_action": "ペルソナを作成"
+    "applications_create_persona_action": "ペルソナを作成",
+    "lens_follow": "フォロー"
 }

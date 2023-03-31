@@ -8,6 +8,7 @@ export type FollowModuleTypedData = {
     profileFollowModule?: {
         profileId: string
     }
+
     feeFollowModule?: {
         currency: string
         value: string

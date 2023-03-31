@@ -5,9 +5,9 @@ import { useMenuConfig, useSharedI18N } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
-import { Button, MenuItem, Typography, alpha } from '@mui/material'
-import { debounce } from 'lodash-es'
-import { type HTMLProps, useEffect, useRef, useState } from 'react'
+import { Button, MenuItem, Typography, alpha, type MenuProps } from '@mui/material'
+import { debounce, uniqBy } from 'lodash-es'
+import { type HTMLProps, useEffect, useMemo, useRef, useState } from 'react'
 import { useWindowScroll } from 'react-use'
 import { SocialTooltip } from './SocialTooltip.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
@@ -19,6 +19,7 @@ const useStyles = makeStyles()((theme) => {
             fontWeight: 400,
             marginLeft: 4,
             fontSize: 14,
+            marginRight: theme.spacing(2),
         },
         iconStack: {
             height: 28,
@@ -26,6 +27,7 @@ const useStyles = makeStyles()((theme) => {
             boxSizing: 'border-box',
             backgroundColor: alpha(theme.palette.common.white, 0.4),
             borderRadius: 8,
+            minWidth: 'auto',
             '&:hover': {
                 backgroundColor: alpha(theme.palette.common.white, 0.4),
             },
@@ -37,6 +39,7 @@ const useStyles = makeStyles()((theme) => {
             marginLeft: '-3.5px',
             ':nth-of-type(1)': {
                 zIndex: 3,
+                marginLeft: 0,
             },
             ':nth-of-type(2)': {
                 zIndex: 2,
@@ -57,8 +60,11 @@ const useStyles = makeStyles()((theme) => {
                 background: theme.palette.maskColor.publicBg,
             },
             marginBottom: 6,
+            '&:last-of-type': {
+                marginBottom: 0,
+            },
         },
-        menuItemNextIdIcon: {
+        linkIcon: {
             display: 'flex',
             marginLeft: 'auto',
         },
@@ -79,15 +85,7 @@ const useStyles = makeStyles()((theme) => {
             scrollbarColor: `${theme.palette.maskColor.secondaryLine} ${theme.palette.maskColor.secondaryLine}`,
             scrollbarWidth: 'thin',
             '::-webkit-scrollbar': {
-                backgroundColor: 'transparent',
-                width: 19,
-            },
-            '::-webkit-scrollbar-thumb': {
-                borderRadius: '20px',
-                width: 4,
-                border: '7px solid rgba(0, 0, 0, 0)',
-                backgroundColor: theme.palette.maskColor.secondaryLine,
-                backgroundClip: 'padding-box',
+                display: 'none',
             },
         },
         menuList: {
@@ -111,11 +109,11 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-interface SocialAccountListProps extends HTMLProps<HTMLDivElement> {
+interface SocialAccountListProps extends HTMLProps<HTMLDivElement>, Pick<MenuProps, 'disablePortal'> {
     nextIdBindings: BindingProof[]
 }
 
-export function SocialAccountList({ nextIdBindings, ...rest }: SocialAccountListProps) {
+export function SocialAccountList({ nextIdBindings, disablePortal, ...rest }: SocialAccountListProps) {
     const t = useSharedI18N()
     const { classes, cx } = useStyles()
     const position = useWindowScroll()
@@ -166,8 +164,8 @@ export function SocialAccountList({ nextIdBindings, ...rest }: SocialAccountList
                                     {t.lens_follow()}
                                 </Button>
                             ) : (
-                                <div className={classes.menuItemNextIdIcon}>
-                                    <Icons.LinkOut size={20} className={classes.linkOutIcon} />
+                                <div className={classes.linkIcon}>
+                                    <Icons.LinkOut size={16} className={classes.linkOutIcon} />
                                 </div>
                             )}
                         </MenuItem>
@@ -176,8 +174,8 @@ export function SocialAccountList({ nextIdBindings, ...rest }: SocialAccountList
             }),
         {
             hideBackdrop: true,
-            disablePortal: true,
             anchorSibling: false,
+            disablePortal,
             anchorOrigin: {
                 vertical: 'bottom',
                 horizontal: 'right',
@@ -198,17 +196,22 @@ export function SocialAccountList({ nextIdBindings, ...rest }: SocialAccountList
 
     useEffect(closeMenu, [position])
 
+    const platformIcons = useMemo(() => {
+        return uniqBy(nextIdBindings, (x) => x.platform)
+            .sort((x) => (x.platform === NextIDPlatform.LENS ? -1 : 0))
+            .map((x) => resolveNextIDPlatformIcon(x.platform))
+            .filter(isNonNull)
+            .slice(0, 3)
+    }, [nextIdBindings])
+
+    if (!platformIcons.length) return null
+
     return (
         <div {...rest}>
             <Button variant="text" onClick={openMenu} className={classes.iconStack} disableRipple>
-                {nextIdBindings
-                    .sort((x) => (x.platform === NextIDPlatform.LENS ? -1 : 0))
-                    .map((x) => resolveNextIDPlatformIcon(x.platform))
-                    .filter(isNonNull)
-                    .slice(0, 3)
-                    .map((Icon, index) => (
-                        <Icon key={index} className={classes.icon} size={20} />
-                    ))}
+                {platformIcons.map((Icon, index) => (
+                    <Icon key={index} className={classes.icon} size={20} />
+                ))}
             </Button>
             {menu}
         </div>

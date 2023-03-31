@@ -2,9 +2,11 @@ import type { FC, HTMLProps } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { type ChainId, formatTokenId, type SchemaType } from '@masknet/web3-shared-evm'
 import { List, ListItem, type ListProps, Typography } from '@mui/material'
+import { useNonFungibleAsset } from '@masknet/web3-hooks-base'
 import { AssetPreviewer } from '@masknet/shared'
-import type { NonFungibleCollection } from '@masknet/web3-shared-base'
+import { type NonFungibleCollection, SourceType } from '@masknet/web3-shared-base'
 import { useI18N } from '../locales/index.js'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -89,6 +91,13 @@ export const NftItem: FC<NftItemProps> = ({ collection, tokenId, className, clai
     const t = useI18N()
     const { classes, cx } = useStyles()
     const asset = collection?.assets?.find((x) => x.tokenId === tokenId)
+    const { value: simpleHashAsset, loading } = useNonFungibleAsset(
+        NetworkPluginID.PLUGIN_EVM,
+        collection?.source === SourceType.SimpleHash ? collection.address : '',
+        tokenId,
+    )
+
+    if (collection?.source === SourceType.SimpleHash && loading) return null
 
     return (
         <div className={cx(className, classes.nft)} {...rest}>
@@ -96,7 +105,7 @@ export const NftItem: FC<NftItemProps> = ({ collection, tokenId, className, clai
                 classes={{
                     fallbackImage: classes.fallbackImage,
                 }}
-                url={asset?.metadata?.imageURL || asset?.metadata?.mediaURL}
+                url={asset?.metadata?.imageURL || asset?.metadata?.mediaURL || simpleHashAsset?.metadata?.imageURL}
             />
             <Typography className={classes.name}>{formatTokenId(tokenId, 2)}</Typography>
             {claimed ? <Typography className={classes.claimedBadge}>{t.claimed({ amount: '' })}</Typography> : null}

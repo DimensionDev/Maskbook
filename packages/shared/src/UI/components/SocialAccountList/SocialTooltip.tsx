@@ -3,7 +3,7 @@ import { NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { resolveNextIDPlatformName } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
-import type { PropsWithChildren } from 'react'
+import type { ReactElement } from 'react'
 
 interface StyleProps {
     isMenuScroll?: boolean
@@ -25,12 +25,9 @@ const useStyles = makeStyles<StyleProps>()((theme, { hidden = false }) => {
 interface SocialTooltipProps {
     platform?: NextIDPlatform
     hidden?: boolean
+    children: ReactElement
 }
-export function SocialTooltip({
-    children,
-    hidden = false,
-    platform = NextIDPlatform.NextID,
-}: PropsWithChildren<SocialTooltipProps>) {
+export function SocialTooltip({ children, hidden = false, platform = NextIDPlatform.NextID }: SocialTooltipProps) {
     const { classes } = useStyles({ hidden })
     const t = useSharedI18N()
     return (
@@ -43,7 +40,7 @@ export function SocialTooltip({
                     {t.account_icon_tooltips({ source: resolveNextIDPlatformName(platform) })}
                 </Typography>
             }>
-            <div>{children}</div>
+            {children}
         </ShadowRootTooltip>
     )
 }

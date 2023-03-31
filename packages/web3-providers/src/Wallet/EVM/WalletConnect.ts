@@ -159,14 +159,10 @@ export default class WalletConnectProvider
                 })
             } else {
                 await this.logoutClientSide()
-                await this.connector.createSession({
-                    chainId: expectedChainId,
-                })
+                await this.connector.createSession()
             }
         } else {
-            await this.connector.createSession({
-                chainId: expectedChainId,
-            })
+            await this.connector.createSession()
         }
 
         return deferred.finally(() => {
