@@ -151,6 +151,7 @@ export enum SocialAddressType {
     ENS = 'ENS',
     SPACE_ID = 'SPACE_ID',
     RSS3 = 'RSS3',
+    Crossbell = 'Crossbell',
     SOL = 'SOL',
     NEXT_ID = 'NEXT_ID',
     CyberConnect = 'CyberConnect',

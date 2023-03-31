@@ -20,8 +20,7 @@ import { Web3StateSettings } from '../settings/index.js'
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
 const SID_RE = /[^\t\n\v()[\]]{1,256}\.bnb\b/gi
 const ADDRESS_FULL = /0x\w{40,}/i
-const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/
-const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/
+const CROSSBELL_HANDLE_RE = /(?<name>[\w.]+)\.csb/
 const LENS_RE = /[^\s()[\]]{1,256}\.lens\b/i
 const LENS_URL_RE = /https?:\/\/.+\/(\w+\.lens)/
 const LENS_DOMAIN_RE = /[a-z][\d_a-z]{4,25}\.lens/
@@ -40,10 +39,10 @@ function getSIDNames(userId: string, nickname: string, bio: string) {
     return [userId.match(SID_RE), nickname.match(SID_RE), bio.match(SID_RE)].flatMap((result) => result ?? [])
 }
 
-function getRSS3Ids(nickname: string, profileURL: string, bio: string) {
-    return [nickname.match(RSS3_RNS_RE), profileURL.match(RSS3_URL_RE), bio.match(RSS3_URL_RE), bio.match(RSS3_RNS_RE)]
-        .map((result) => result?.groups?.name ?? '')
-        .filter(Boolean)
+function getCrossBellHandles(nickname: string, bio: string) {
+    return [nickname.match(CROSSBELL_HANDLE_RE), bio.match(CROSSBELL_HANDLE_RE)]
+        .map((result) => result?.groups?.name)
+        .filter(Boolean) as string[]
 }
 
 function getAddress(text: string) {
@@ -120,15 +119,16 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         return this.createSocialAddress(SocialAddressType.Address, address)
     }
 
-    /** Read a social address from bio when it contains a RSS3 ID. */
-    private async getSocialAddressFromRSS3({ nickname = '', homepage = '', bio = '' }: SocialIdentity) {
-        const ids = getRSS3Ids(nickname, homepage, bio)
-        if (!ids.length) return
+    /** Read a social address from bio when it contains a csb handle. */
+    private async getSocialAddressFromCrossbell({ nickname = '', bio = '' }: SocialIdentity) {
+        const handles = getCrossBellHandles(nickname, bio)
+        if (!handles.length) return
 
         const allSettled = await Promise.allSettled(
-            ids.map(async (id) => {
-                const info = await RSS3.getNameInfo(id)
-                return this.createSocialAddress(SocialAddressType.RSS3, info?.address ?? '', `${id}.rss3`)
+            handles.map(async (handle) => {
+                const info = await RSS3.getNameInfo(handle)
+                if (!info?.crossbell) return
+                return this.createSocialAddress(SocialAddressType.Crossbell, info.address, info.crossbell)
             }),
         )
         return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean))
@@ -279,7 +279,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             this.getSocialAddressFromENS(identity),
             this.getSocialAddressFromSpaceID(identity),
             this.getSocialAddressFromAvatarNextID(identity),
-            this.getSocialAddressFromRSS3(identity),
+            this.getSocialAddressFromCrossbell(identity),
             this.getSocialAddressFromTwitterBlue(identity),
             this.getSocialAddressesFromNextID(identity),
             this.getSocialAddressesFromMaskX(identity),
