@@ -281,6 +281,7 @@ export const resolveNextID_NetworkPluginID = createLookupTableResolver<NextIDPla
         [NextIDPlatform.SpaceId]: NetworkPluginID.PLUGIN_EVM,
         [NextIDPlatform.Farcaster]: undefined,
         [NextIDPlatform.Bit]: undefined,
+        [NextIDPlatform.Unstoppable]: undefined,
     },
     () => {
         return undefined
@@ -303,6 +304,7 @@ export const resolveNextIDPlatformName = createLookupTableResolver<NextIDPlatfor
         [NextIDPlatform.SpaceId]: 'SpaceId',
         [NextIDPlatform.Farcaster]: 'Farcaster',
         [NextIDPlatform.Bit]: 'Bit',
+        [NextIDPlatform.Unstoppable]: 'Unstoppable',
     },
     () => {
         return ''

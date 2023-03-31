@@ -18,6 +18,14 @@ export enum NextIDPlatform {
     SpaceId = 'space_id',
     Farcaster = 'farcaster',
     Bit = 'dotbit',
+    Unstoppable = 'unstoppabledomains',
+}
+
+export interface NextIDEnsRecord {
+    category: 'ENS'
+    chain: string
+    address: string
+    id: string
 }
 
 export interface NextIDIdentity {
@@ -25,6 +33,7 @@ export interface NextIDIdentity {
     platform: NextIDPlatform
     identity: string
     displayName: string
+    nft: NextIDEnsRecord[]
 }
 
 export interface NextIDErrorBody {
@@ -73,6 +82,8 @@ export interface BindingProof {
      * legacy data
      */
     isPublic?: 0 | 1
+    // Some other related bindings, like some other ens
+    relatedList?: BindingProof[]
 }
 
 interface Pagination {

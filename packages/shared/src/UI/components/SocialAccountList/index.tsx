@@ -38,24 +38,22 @@ const useStyles = makeStyles()((theme) => {
         icon: {
             marginLeft: '-3.5px',
             ':nth-of-type(1)': {
-                zIndex: 3,
+                zIndex: 2,
                 marginLeft: 0,
             },
             ':nth-of-type(2)': {
-                zIndex: 2,
+                zIndex: 1,
             },
             ':nth-of-type(3)': {
-                zIndex: 1,
+                zIndex: 0,
             },
         },
         listItem: {
-            height: 40,
             boxSizing: 'border-box',
             padding: theme.spacing(0.5),
-            display: 'flex',
-            alignItems: 'center',
             borderRadius: 4,
             color: theme.palette.maskColor.dark,
+            display: 'block',
             '&:hover': {
                 background: theme.palette.maskColor.publicBg,
             },
@@ -63,6 +61,22 @@ const useStyles = makeStyles()((theme) => {
             '&:last-of-type': {
                 marginBottom: 0,
             },
+        },
+        content: {
+            whiteSpace: 'nowrap',
+            height: 40,
+            display: 'flex',
+            alignItems: 'center',
+        },
+        related: {
+            whiteSpace: 'break-spaces',
+            lineBreak: 'anywhere',
+        },
+        ens: {
+            whiteSpace: 'nowrap',
+            padding: theme.spacing(0.25, 0.5),
+            marginRight: 6,
+            fontSize: 12,
         },
         linkIcon: {
             display: 'flex',
@@ -144,30 +158,41 @@ export function SocialAccountList({ nextIdBindings, disablePortal, ...rest }: So
                             className={classes.listItem}
                             disabled={false}
                             onClick={() => openWindow(resolveNextIDPlatformLink(x.platform, x.identity, x.name))}>
-                            {Icon ? <Icon size={20} /> : null}
-                            <Typography className={cx(classes.socialName, classes.accountNameInList)}>
-                                {x.name || x.identity}
-                            </Typography>
-                            {x.platform === NextIDPlatform.LENS ? (
-                                <Button
-                                    variant="text"
-                                    className={classes.followButton}
-                                    disableElevation
-                                    onClick={(event) => {
-                                        event.stopPropagation()
-                                        closeMenu()
-                                        CrossIsolationMessages.events.followLensDialogEvent.sendToLocal({
-                                            open: true,
-                                            handle: x.identity,
-                                        })
-                                    }}>
-                                    {t.lens_follow()}
-                                </Button>
-                            ) : (
-                                <div className={classes.linkIcon}>
-                                    <Icons.LinkOut size={16} className={classes.linkOutIcon} />
+                            <div className={classes.content}>
+                                {Icon ? <Icon size={20} /> : null}
+                                <Typography className={cx(classes.socialName, classes.accountNameInList)}>
+                                    {x.name || x.identity}
+                                </Typography>
+                                {x.platform === NextIDPlatform.LENS ? (
+                                    <Button
+                                        variant="text"
+                                        className={classes.followButton}
+                                        disableElevation
+                                        onClick={(event) => {
+                                            event.stopPropagation()
+                                            closeMenu()
+                                            CrossIsolationMessages.events.followLensDialogEvent.sendToLocal({
+                                                open: true,
+                                                handle: x.identity,
+                                            })
+                                        }}>
+                                        {t.lens_follow()}
+                                    </Button>
+                                ) : (
+                                    <div className={classes.linkIcon}>
+                                        <Icons.LinkOut size={16} className={classes.linkOutIcon} />
+                                    </div>
+                                )}
+                            </div>
+                            {x.platform === NextIDPlatform.ENS && x.relatedList?.length ? (
+                                <div className={classes.related}>
+                                    {x.relatedList.map((y) => (
+                                        <Typography component="span" key={y.name} className={classes.ens}>
+                                            {y.name}
+                                        </Typography>
+                                    ))}
                                 </div>
-                            )}
+                            ) : null}
                         </MenuItem>
                     </SocialTooltip>
                 )

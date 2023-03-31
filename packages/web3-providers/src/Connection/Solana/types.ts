@@ -67,3 +67,11 @@ export interface RaydiumTokenList {
     official: SplToken[]
     unOfficial: SplToken[]
 }
+
+export interface MaskToken {
+    address: string
+    name: string
+    symbol: string
+    logoURI: string
+    decimals: number
+}

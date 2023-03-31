@@ -1,0 +1,7 @@
+{
+    "FUNGIBLE_TOKEN_LISTS": {
+        "Mainnet": ["https://tokens.r2d2.to/latest/solana/tokens.json"],
+        "Testnet": [],
+        "Devnet": []
+    }
+}
