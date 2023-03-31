@@ -12,6 +12,12 @@ import { formatMask } from '@masknet/web3-shared-base'
 import { TelemetryAPI } from '../types/Telemetry.js'
 
 const IGNORE_ERRORS = [
+    // FIXME
+    'timeout in mutex storage.',
+
+    // ignore
+    'execution reverted',
+    'Failed to fetch',
     'At least one of the attempts fails.',
     'Extension context invalidated.',
     '[object Promise]',
