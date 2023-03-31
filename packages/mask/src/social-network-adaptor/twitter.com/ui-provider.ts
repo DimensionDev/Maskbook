@@ -15,7 +15,7 @@ import { gotoNewsFeedPageTwitter } from './automation/gotoNewsFeedPage.js'
 import { gotoProfilePageTwitter } from './automation/gotoProfilePage.js'
 import { IdentityProviderTwitter, CurrentVisitingIdentityProviderTwitter } from './collecting/identity.js'
 import { ThemeSettingsProviderTwitter } from './collecting/theme.js'
-import { collectVerificationPost, PostProviderTwitter } from './collecting/post.js'
+import { collectVerificationPost, PostProviderTwitter, getPostIdFromNewPostToast } from './collecting/post.js'
 import { useThemeTwitterVariant } from './customization/custom.js'
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint.js'
 import { i18NOverwriteTwitter } from './customization/i18n.js'
@@ -217,6 +217,7 @@ const twitterUI: SocialNetworkUI.Definition = {
             enable: true,
             platform: NextIDPlatform.Twitter,
             collectVerificationPost,
+            getPostIdFromNewPostToast,
         },
         steganography: {
             // ! Change this might be a breaking change !

@@ -1,3 +1,5 @@
+import { regexMatch } from '../../../utils/utils.js'
+
 export const twitterUrl = {
     hostIdentifier: 'twitter.com',
     hostLeadingUrl: 'https://twitter.com',
@@ -25,4 +27,8 @@ export const canonifyImgUrl = (url: string) => {
         return [pngURL, jpgURL]
     }
     return parsed.href
+}
+
+export const parseId = (t: string) => {
+    return regexMatch(t, /status\/(\d+)/, 1)!
 }

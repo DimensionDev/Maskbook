@@ -1,7 +1,6 @@
 import { keccak256 } from 'web3-utils'
-import { regexMatch } from '../../../utils/utils.js'
 import { flattenDeep } from 'lodash-es'
-import { canonifyImgUrl } from './url.js'
+import { canonifyImgUrl, parseId } from './url.js'
 import {
     makeTypedMessageText,
     makeTypedMessageAnchor,
@@ -13,10 +12,6 @@ import {
     makeTypedMessageImage,
 } from '@masknet/typed-message'
 import { collectNodeText, collectTwitterEmoji } from '../../../utils/index.js'
-
-const parseId = (t: string) => {
-    return regexMatch(t, /status\/(\d+)/, 1)!
-}
 
 /**
  * Get post id from dom, including normal tweet, quoted tweet and retweet one

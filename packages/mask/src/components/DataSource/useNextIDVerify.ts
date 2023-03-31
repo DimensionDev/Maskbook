@@ -9,7 +9,7 @@ import { activatedSocialNetworkUI } from '../../social-network/index.js'
 
 export function useNextIDVerify() {
     const verifyPostCollectTimer = useRef<NodeJS.Timer | null>(null)
-    const collectVerificationPost = activatedSocialNetworkUI.configuration.nextIDConfig?.collectVerificationPost
+    const getPostIdFromNewPostToast = activatedSocialNetworkUI.configuration.nextIDConfig?.getPostIdFromNewPostToast
     const postMessage = activatedSocialNetworkUI.automation?.nativeCompositionDialog?.appendText
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
 
@@ -36,11 +36,10 @@ export function useNextIDVerify() {
 
             const postContent = payload.postContent.replace('%SIG_BASE64%', toBase64(fromHex(signature)))
             postMessage?.(postContent, { recover: false })
-
             await new Promise<void>((resolve, reject) => {
                 verifyPostCollectTimer.current = setInterval(async () => {
-                    const post = collectVerificationPost?.(postContent)
-                    if (post && persona.identifier.publicKeyAsHex) {
+                    const postId = getPostIdFromNewPostToast?.()
+                    if (postId && persona.identifier.publicKeyAsHex) {
                         clearInterval(verifyPostCollectTimer.current!)
                         await NextIDProof.bindProof(
                             payload.uuid,
@@ -51,7 +50,7 @@ export function useNextIDVerify() {
                             payload.createdAt,
                             {
                                 signature,
-                                proofLocation: post.postId,
+                                proofLocation: postId,
                             },
                         )
                         resolve()
