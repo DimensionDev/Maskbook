@@ -33,7 +33,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.Web3Profile size={36} />
-            const name = { i18nKey: '__plugin_name', fallback: 'Web3 Profile' }
+            const name = <Trans ns={PluginID.Web3Profile} i18nKey="web3_profile" />
             const recommendFeature = {
                 description: <Trans i18nKey="plugin_web3_profile_recommend_feature_description" />,
                 backgroundGradient: 'linear-gradient(181.28deg, #6BA3FF 1.76%, #C2E9FB 99.59%)',

@@ -2,9 +2,8 @@ import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shar
 import { memo, useCallback, useEffect } from 'react'
 import { ApplicationEntry, useSharedI18N } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { PLUGIN_ID } from '../../constants.js'
-import { PluginI18NFieldRender, useAllPersonas } from '@masknet/plugin-infra/content-script'
-
+import { useAllPersonas } from '@masknet/plugin-infra/content-script'
+import { Trans } from 'react-i18next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginSmartPayMessages } from '../../message.js'
 import { useWallets } from '@masknet/web3-hooks-base'
@@ -89,12 +88,7 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
         <ApplicationEntry
             {...props}
             icon={<Icons.SmartPay size={36} />}
-            title={
-                <PluginI18NFieldRender
-                    field={{ i18nKey: '__plugin_name', fallback: 'Smart Pay' }}
-                    pluginID={PLUGIN_ID}
-                />
-            }
+            title={<Trans ns={PluginID.SmartPay} i18nKey="__plugin_name" />}
             onClick={() => (props.onClick ? props.onClick() : handleClick())}
         />
     )
