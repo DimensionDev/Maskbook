@@ -328,7 +328,7 @@ export namespace TwitterBaseAPI {
 
     export type Event<T> = {
         target: {
-            result: T
+            result?: T
         }
     }
 
