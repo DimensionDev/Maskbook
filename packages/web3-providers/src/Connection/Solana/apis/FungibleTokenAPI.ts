@@ -1,4 +1,4 @@
-import { memoize } from 'lodash-es'
+import { memoize, uniqBy } from 'lodash-es'
 import { memoizePromise } from '@masknet/kit'
 import { type PageIndicator, type Pageable, createPageable, createIndicator, EMPTY_LIST } from '@masknet/shared-base'
 import {
@@ -15,16 +15,18 @@ import {
     SchemaType,
     createNativeToken,
     isValidChainId,
+    getTokenListConstants,
     getNativeTokenAddress,
+    getTokenConstant,
 } from '@masknet/web3-shared-solana'
 import { CoinGeckoPriceAPI_Solana } from '../../../CoinGecko/index.js'
 import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants.js'
 import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers.js'
-import type { GetBalanceResponse, GetProgramAccountsResponse, RaydiumTokenList } from '../types.js'
+import type { GetBalanceResponse, GetProgramAccountsResponse, RaydiumTokenList, MaskToken } from '../types.js'
 import type { FungibleTokenAPI, TokenListAPI } from '../../../entry-types.js'
 import { fetchJSON } from '../../../entry-helpers.js'
 
-const fetchTokenList = memoizePromise(
+const fetchRayDiumTokenList = memoizePromise(
     memoize,
     async (url: string): Promise<Array<FungibleToken<ChainId, SchemaType>>> => {
         const tokenList = await fetchJSON<RaydiumTokenList>(url, { cache: 'force-cache' })
@@ -45,6 +47,31 @@ const fetchTokenList = memoizePromise(
                 }
             },
         )
+        return tokens
+    },
+    (url) => url,
+)
+
+const fetchMaskTokenList = memoizePromise(
+    memoize,
+    async (url: string): Promise<Array<FungibleToken<ChainId, SchemaType>>> => {
+        const res = await fetchJSON<{ tokens: MaskToken[] }>(url, { cache: 'force-cache' })
+        const nativeAddress = getTokenConstant(ChainId.Mainnet, 'SOL_ADDRESS', '')
+        const tokens: Array<FungibleToken<ChainId, SchemaType>> = res.tokens.map((token) => {
+            if (isSameAddress(token.address, nativeAddress)) return createNativeToken(ChainId.Mainnet)
+
+            return {
+                id: token.address,
+                chainId: ChainId.Mainnet,
+                type: TokenType.Fungible,
+                schema: SchemaType.Fungible,
+                address: token.address,
+                name: token.name,
+                symbol: token.symbol,
+                decimals: token.decimals,
+                logoURL: token.logoURI,
+            }
+        })
         return tokens
     },
     (url) => url,
@@ -132,7 +159,10 @@ export class SolanaFungibleAPI
 
     async getFungibleTokenList(chainId: ChainId, urls?: string[]): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
         if (chainId !== ChainId.Mainnet) return EMPTY_LIST
-        return fetchTokenList(RAYDIUM_TOKEN_LIST)
+        const { FUNGIBLE_TOKEN_LISTS = EMPTY_LIST } = getTokenListConstants(chainId)
+        const maskTokenList = await fetchMaskTokenList(FUNGIBLE_TOKEN_LISTS[0])
+        const rayDiumTokenList = await fetchRayDiumTokenList(RAYDIUM_TOKEN_LIST)
+        return uniqBy([...maskTokenList, ...rayDiumTokenList], (x) => x.address)
     }
 
     async getNonFungibleTokenList(
