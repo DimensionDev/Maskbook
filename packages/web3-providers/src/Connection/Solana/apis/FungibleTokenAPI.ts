@@ -17,6 +17,7 @@ import {
     isValidChainId,
     getTokenListConstants,
     getNativeTokenAddress,
+    getTokenConstant,
 } from '@masknet/web3-shared-solana'
 import { CoinGeckoPriceAPI_Solana } from '../../../CoinGecko/index.js'
 import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants.js'
@@ -55,9 +56,9 @@ const fetchMaskTokenList = memoizePromise(
     memoize,
     async (url: string): Promise<Array<FungibleToken<ChainId, SchemaType>>> => {
         const res = await fetchJSON<{ tokens: MaskToken[] }>(url, { cache: 'force-cache' })
+        const nativeAddress = getTokenConstant(ChainId.Mainnet, 'SOL_ADDRESS', '')
         const tokens: Array<FungibleToken<ChainId, SchemaType>> = res.tokens.map((token) => {
-            if (isSameAddress(token.address, '11111111111111111111111111111111'))
-                return createNativeToken(ChainId.Mainnet)
+            if (isSameAddress(token.address, nativeAddress)) return createNativeToken(ChainId.Mainnet)
 
             return {
                 id: token.address,
