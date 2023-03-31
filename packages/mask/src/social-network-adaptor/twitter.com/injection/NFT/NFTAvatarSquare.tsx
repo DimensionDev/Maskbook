@@ -1,29 +1,12 @@
-import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
-import { searchTwitterAvatarNFTSelector, searchTwitterSquareAvatarSelector } from '../../utils/selector.js'
-import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { searchTwitterAvatarNFTSelector } from '../../utils/selector.js'
 import { useMemo } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { useWindowSize } from 'react-use'
 import { NFTAvatarClipOrSquareInTwitter } from './NFTAvatarClip.js'
-import { getAvatarType } from '../../utils/useAvatarType.js'
 import { AvatarType } from '../../constant.js'
 import { useInjectedCSS } from './useInjectedCSS.js'
 
-export function injectNFTSquareAvatarInTwitter(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchTwitterSquareAvatarSelector()).useForeach((ele, _, proxy) => {
-        const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
-        const avatarType = getAvatarType()
-        if (avatarType === AvatarType.Square) root.render(<NFTSquareAvatarInTwitter signal={signal} />)
-        return () => root.destroy()
-    })
-    startWatch(watcher, signal)
-}
-
-interface NFTAvatarInTwitterProps {
-    signal: AbortSignal
-}
-
-function NFTSquareAvatarInTwitter(props: NFTAvatarInTwitterProps) {
+export function NFTSquareAvatarInTwitter() {
     const identity = useCurrentVisitingIdentity()
 
     const windowSize = useWindowSize()

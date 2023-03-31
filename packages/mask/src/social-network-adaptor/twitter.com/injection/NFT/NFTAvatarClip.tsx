@@ -1,4 +1,3 @@
-import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { isZero } from '@masknet/web3-shared-base'
 import { useEffect, useMemo, useRef } from 'react'
@@ -12,23 +11,12 @@ import {
     useNFT,
     useNFTContainerAtTwitter,
 } from '@masknet/plugin-avatar'
-import { createReactRootShadowed, startWatch, useI18N } from '../../../../utils/index.js'
+import { useI18N } from '../../../../utils/index.js'
 import { searchTwitterAvatarNFTLinkSelector, searchTwitterAvatarNFTSelector } from '../../utils/selector.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { getAvatarType } from '../../utils/useAvatarType.js'
 import { AvatarType } from '../../constant.js'
-
-export function injectNFTAvatarClipInTwitter(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchTwitterAvatarNFTSelector()).useForeach((ele, _, proxy) => {
-        const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
-        const avatarType = getAvatarType()
-        if (avatarType === AvatarType.Clip) root.render(<NFTAvatarClipInTwitter signal={signal} />)
-        return () => root.destroy()
-    })
-    startWatch(watcher, signal)
-}
 
 const useStyles = makeStyles()(() => ({
     root: {

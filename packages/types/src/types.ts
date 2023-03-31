@@ -132,9 +132,6 @@ export namespace SocialNetworkUI {
             /** @deprecated same reason as userAvatar */
             postAndReplyNFTAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as useAvatar */
-            avatarClipNFT?(signal: AbortSignal): void
-            avatarSquareNFT?(signal: AbortSignal): void
-            avatarCircleNFT?(signal: AbortSignal): void
             avatar?(signal: AbortSignal): void
             tips?(signal: AbortSignal): void
             lens?(signal: AbortSignal): void

@@ -30,10 +30,7 @@ export function useUpdatedAvatar(showAvatar: boolean, nftAvatar?: NextIDAvatarMe
             linkParentDom.removeEventListener('click', handler, true)
         }
 
-        if (!nftAvatar) {
-            clean()
-            return
-        }
+        if (!nftAvatar) return
 
         linkParentDom.addEventListener('click', handler, true)
 

@@ -1,5 +1,12 @@
 import { createReactRootShadowed, MaskMessages, startWatch, useI18N } from '../../../../utils/index.js'
-import { searchAvatarMetaSelector, searchAvatarSelector, searchTwitterAvatarSelector } from '../../utils/selector.js'
+import {
+    searchAvatarMetaSelector,
+    searchAvatarSelector,
+    searchTwitterAvatarNFTSelector,
+    searchTwitterAvatarSelector,
+    searchTwitterCircleAvatarSelector,
+    searchTwitterSquareAvatarSelector,
+} from '../../utils/selector.js'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo, useState } from 'react'
@@ -26,8 +33,12 @@ import { getAvatarType } from '../../utils/useAvatarType.js'
 import { useInjectedCSS } from './useInjectedCSS.js'
 import { useUpdatedAvatar } from './useUpdatedAvatar.js'
 import { AvatarType } from '../../constant.js'
+import { NFTSquareAvatarInTwitter } from './NFTAvatarSquare.js'
+import { NFTCircleAvatarInTwitter } from './NFTAvatarCircleInTwitter.js'
+import { NFTAvatarClipInTwitter } from './NFTAvatarClip.js'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
+    // inject default
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector()).useForeach((ele, _, proxy) => {
         const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
         const avatarType = getAvatarType()
@@ -35,6 +46,37 @@ export function injectNFTAvatarInTwitter(signal: AbortSignal) {
         return () => root.destroy()
     })
     startWatch(watcher, signal)
+
+    // inject square
+    const watcherSquare = new MutationObserverWatcher(searchTwitterSquareAvatarSelector()).useForeach(
+        (ele, _, proxy) => {
+            const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
+            const avatarType = getAvatarType()
+            if (avatarType === AvatarType.Square) root.render(<NFTSquareAvatarInTwitter />)
+            return () => root.destroy()
+        },
+    )
+    startWatch(watcherSquare, signal)
+
+    // inject nft circle
+    const watcherNftCircle = new MutationObserverWatcher(searchTwitterCircleAvatarSelector()).useForeach(
+        (ele, _, proxy) => {
+            const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
+            const avatarType = getAvatarType()
+            if (avatarType === AvatarType.Circle) root.render(<NFTCircleAvatarInTwitter />)
+            return () => root.destroy()
+        },
+    )
+    startWatch(watcherNftCircle, signal)
+
+    // inject clip
+    const watcherClip = new MutationObserverWatcher(searchTwitterAvatarNFTSelector()).useForeach((ele, _, proxy) => {
+        const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
+        const avatarType = getAvatarType()
+        if (avatarType === AvatarType.Clip) root.render(<NFTAvatarClipInTwitter signal={signal} />)
+        return () => root.destroy()
+    })
+    startWatch(watcherClip, signal)
 }
 
 const useStyles = makeStyles()(() => ({

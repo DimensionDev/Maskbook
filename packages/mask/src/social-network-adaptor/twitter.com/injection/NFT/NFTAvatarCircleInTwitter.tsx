@@ -1,28 +1,14 @@
-import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { searchTwitterCircleAvatarSelector } from '../../utils/selector.js'
-import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useMemo } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { NFTBadge, useNFT, useNFTContainerAtTwitter } from '@masknet/plugin-avatar'
 import { useLocation, useWindowSize } from 'react-use'
-import { getAvatarType } from '../../utils/useAvatarType.js'
-import { AvatarType } from '../../constant.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useInjectedCSS } from './useInjectedCSS.js'
 import { useUpdatedAvatar } from './useUpdatedAvatar.js'
-
-export function injectNFTCircleAvatarInTwitter(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchTwitterCircleAvatarSelector()).useForeach((ele, _, proxy) => {
-        const root = createReactRootShadowed(proxy.afterShadow, { untilVisible: true, signal })
-        const avatarType = getAvatarType()
-        if (avatarType === AvatarType.Circle) root.render(<NFTCircleAvatarInTwitter signal={signal} />)
-        return () => root.destroy()
-    })
-    startWatch(watcher, signal)
-}
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -48,11 +34,7 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-interface NFTAvatarInTwitterProps {
-    signal: AbortSignal
-}
-
-function NFTCircleAvatarInTwitter(props: NFTAvatarInTwitterProps) {
+export function NFTCircleAvatarInTwitter() {
     const windowSize = useWindowSize()
     const _location = useLocation()
     const { classes } = useStyles()
