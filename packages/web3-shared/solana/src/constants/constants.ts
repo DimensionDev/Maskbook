@@ -1,5 +1,6 @@
 import Chain from '@masknet/web3-constants/solana/chain.json'
 import Token from '@masknet/web3-constants/solana/token.json'
+import TokenList from '@masknet/web3-constants/solana/token-list.json'
 import CoinGecko from '@masknet/web3-constants/solana/coingecko.json'
 import { transformAllHook, transformHook, transformAll, transform } from '@masknet/web3-shared-base'
 import { ChainId } from '../types.js'
@@ -8,6 +9,9 @@ export const getTokenConstant = transform(ChainId, Token)
 export const getTokenConstants = transformAll(ChainId, Token)
 export const useTokenConstants = transformAllHook(getTokenConstants)
 export const useTokenConstant = transformHook(getTokenConstants)
+
+export const getTokenListConstant = transform(ChainId, TokenList)
+export const getTokenListConstants = transformAll(ChainId, TokenList)
 
 export const getChainConstant = transform(ChainId, Chain)
 export const getChainConstants = transformAll(ChainId, Chain)
