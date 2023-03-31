@@ -1,6 +1,7 @@
 import { DOMProxy, DOMProxyEvents, IntervalWatcher } from '@dimensiondev/holoflows-kit'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import { parseId } from '../utils/url.js'
 import {
     isTypedMessageAnchor,
     isTypedMessageText,
@@ -23,7 +24,12 @@ import { twitterBase } from '../base.js'
 import { injectMaskIconToPostTwitter } from '../injection/MaskIcon.js'
 import { twitterShared } from '../shared.js'
 import { getPostId, postContentMessageParser, postImagesParser, postParser } from '../utils/fetch.js'
-import { postsContentSelector, postsImageSelector, timelinePostContentSelector } from '../utils/selector.js'
+import {
+    postsContentSelector,
+    postsImageSelector,
+    timelinePostContentSelector,
+    toastLinkSelector,
+} from '../utils/selector.js'
 import { IdentityProviderTwitter } from './identity.js'
 
 function getPostActionsNode(postNode: HTMLElement | null) {
@@ -154,6 +160,11 @@ export const PostProviderTwitter: Next.CollectingCapabilities.PostsProvider = {
     start(cancel) {
         registerPostCollectorInner(this.posts, cancel)
     },
+}
+
+export function getPostIdFromToast() {
+    const toastLinkNode = toastLinkSelector().evaluate()
+    return toastLinkNode?.href ? parseId(toastLinkNode?.href) : ''
 }
 
 export function collectVerificationPost(keyword: string) {

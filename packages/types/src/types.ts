@@ -286,6 +286,7 @@ export namespace SocialNetworkUI {
             enable?: boolean
             platform: NextIDPlatform
             collectVerificationPost: (keyword: string) => PostIdentifier | null
+            getPostIdFromToast: () => string
         }
         export interface TipsConfig {
             enableUserGuide?: boolean
