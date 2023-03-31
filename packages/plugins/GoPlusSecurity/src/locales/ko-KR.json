@@ -1,1 +1,19 @@
-{}
+{
+    "__plugin_name": "보안 확인",
+    "powered_by_go_plus": "Powered by Go+",
+    "powered_by": "Powered by",
+    "go_plus": "Go+",
+    "high_risk": "높은 리스크",
+    "low_risk": "낮은 리스크",
+    "confirm_swap_risk": "스왑 리스크 확인",
+    "medium_risk": "중간 리스크",
+    "search": "검색",
+    "search_input_placeholder": "토큰 컨트랙트 주소를 입력하세요.",
+    "token_info": "토큰 정보",
+    "more_details": "상세 정보",
+    "security_detection": "보안 탐지",
+    "risky_factors": "{{quantity}} 리스크 인자",
+    "attention_factors": "{{quantity}} 주의 인자",
+    "risky_factor": "{{quantity}} 리스크 인자",
+    "attention_factor": "{{quantity}} 주의 인자"
+}
