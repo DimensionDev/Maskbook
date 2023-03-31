@@ -7,10 +7,11 @@ import { MaskColors, makeStyles } from '@masknet/theme'
 import { resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
 import { Button, MenuItem, Typography, alpha, type MenuProps } from '@mui/material'
 import { debounce, uniqBy } from 'lodash-es'
-import { type HTMLProps, useEffect, useMemo, useRef, useState } from 'react'
-import { useWindowScroll } from 'react-use'
+import { type HTMLProps, useEffect, useMemo, useRef, useState, memo } from 'react'
+import { useAsync, useWindowScroll } from 'react-use'
 import { SocialTooltip } from './SocialTooltip.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
+import { ENS } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -101,7 +102,8 @@ const useStyles = makeStyles()((theme) => {
             paddingRight: theme.spacing(1),
         },
         menu: {
-            width: 320,
+            minWidth: 320,
+            maxWidth: 340,
             boxSizing: 'border-box',
             maxHeight: 296,
             borderRadius: 16,
@@ -134,6 +136,23 @@ const useStyles = makeStyles()((theme) => {
         },
     }
 })
+
+const ENSAddress = memo(({ domain }: { domain: string }) => {
+    const { classes } = useStyles()
+    const { value: address } = useAsync(() => {
+        return ENS.lookup(domain)
+    }, [domain])
+
+    if (!address) return null
+
+    return (
+        <div className={classes.address}>
+            {address}
+            <CopyButton text={address} size={14} className={classes.copyButton} />
+        </div>
+    )
+})
+ENSAddress.displayName = 'ENSAddress'
 
 interface SocialAccountListProps extends HTMLProps<HTMLDivElement>, Pick<MenuProps, 'disablePortal'> {
     nextIdBindings: BindingProof[]
@@ -175,12 +194,7 @@ export function SocialAccountList({ nextIdBindings, disablePortal, ...rest }: So
                                 {Icon ? <Icon size={20} /> : null}
                                 <Typography className={cx(classes.socialName, classes.accountName)} component="div">
                                     {x.name || x.identity}
-                                    {x.platform === NextIDPlatform.ENS ? (
-                                        <div className={classes.address}>
-                                            {x.identity}
-                                            <CopyButton text={x.identity} size={14} className={classes.copyButton} />
-                                        </div>
-                                    ) : null}
+                                    {x.platform === NextIDPlatform.ENS ? <ENSAddress domain={x.identity} /> : null}
                                 </Typography>
                                 {x.platform === NextIDPlatform.LENS ? (
                                     <Button

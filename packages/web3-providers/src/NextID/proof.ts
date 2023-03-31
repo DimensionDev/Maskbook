@@ -471,10 +471,10 @@ function groupEnsBinding(ensList: NextIDEnsRecord[]) {
     return createBindingProofFromProfileQuery(
         NextIDPlatform.ENS,
         NextIDPlatform.ENS,
-        first.address,
+        first.id,
         first.id,
         ensList
             .slice(1)
-            .map((x) => createBindingProofFromProfileQuery(NextIDPlatform.NextID, NextIDPlatform.ENS, x.address, x.id)),
+            .map((x) => createBindingProofFromProfileQuery(NextIDPlatform.NextID, NextIDPlatform.ENS, x.id, x.id)),
     )
 }
