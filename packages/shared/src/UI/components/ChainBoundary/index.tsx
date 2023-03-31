@@ -172,7 +172,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
     }
 
     // Provider is Wallet Connect
-    if (actualProviderType === ProviderType.WalletConnect) {
+    if (actualProviderType === ProviderType.WalletConnect && !isMatched) {
         return renderBox(
             <ActionButton
                 startIcon={

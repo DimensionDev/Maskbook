@@ -22,7 +22,12 @@ import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
 import { useI18N } from '../../../locales/i18n_generated.js'
 
-export function useFollow(profileId?: string, followModule?: FollowModuleTypedData, onSuccess?: () => void) {
+export function useFollow(
+    profileId?: string,
+    followModule?: FollowModuleTypedData,
+    hasDefaultProfile?: boolean,
+    onSuccess?: () => void,
+) {
     const t = useI18N()
     const connection = useWeb3Connection()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -48,7 +53,7 @@ export function useFollow(profileId?: string, followModule?: FollowModuleTypedDa
     const followWithProxyAction = useCallback(
         async (token: string) => {
             try {
-                if (!profileId || chainId !== ChainId.Matic || followModule || !connection) return
+                if (!profileId || chainId !== ChainId.Matic || followModule || !connection || !hasDefaultProfile) return
                 const proxyAction = await Lens.followWithProxyAction(profileId, { token })
                 if (!proxyAction) return
                 for (let i = 0; i < 30; i += 1) {
@@ -75,7 +80,7 @@ export function useFollow(profileId?: string, followModule?: FollowModuleTypedDa
                 return
             }
         },
-        [profileId, chainId, followModule, connection],
+        [profileId, chainId, followModule, connection, hasDefaultProfile],
     )
 
     return useAsyncFn(async () => {
@@ -132,7 +137,11 @@ export function useFollow(profileId?: string, followModule?: FollowModuleTypedDa
                 onSuccess?.()
             }
         } catch (error) {
-            if (error instanceof Error && !error.message.includes('Transaction was rejected'))
+            if (
+                error instanceof Error &&
+                !error.message.includes('Transaction was rejected') &&
+                !error.message.includes('Signature canceled')
+            )
                 showSingletonSnackbar(t.follow_lens_handle(), {
                     processing: false,
                     variant: 'error',
