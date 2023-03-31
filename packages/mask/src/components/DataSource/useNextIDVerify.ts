@@ -9,7 +9,7 @@ import { activatedSocialNetworkUI } from '../../social-network/index.js'
 
 export function useNextIDVerify() {
     const verifyPostCollectTimer = useRef<NodeJS.Timer | null>(null)
-    const getPostIdFromToast = activatedSocialNetworkUI.configuration.nextIDConfig?.getPostIdFromToast
+    const getPostIdFromNewPostToast = activatedSocialNetworkUI.configuration.nextIDConfig?.getPostIdFromNewPostToast
     const postMessage = activatedSocialNetworkUI.automation?.nativeCompositionDialog?.appendText
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
 
@@ -38,7 +38,7 @@ export function useNextIDVerify() {
             postMessage?.(postContent, { recover: false })
             await new Promise<void>((resolve, reject) => {
                 verifyPostCollectTimer.current = setInterval(async () => {
-                    const postId = getPostIdFromToast?.()
+                    const postId = getPostIdFromNewPostToast?.()
                     if (postId && persona.identifier.publicKeyAsHex) {
                         clearInterval(verifyPostCollectTimer.current!)
                         await NextIDProof.bindProof(

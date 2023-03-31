@@ -162,7 +162,7 @@ export const PostProviderTwitter: Next.CollectingCapabilities.PostsProvider = {
     },
 }
 
-export function getPostIdFromToast() {
+export function getPostIdFromNewPostToast() {
     const toastLinkNode = toastLinkSelector().evaluate()
     return toastLinkNode?.href ? parseId(toastLinkNode?.href) : ''
 }
