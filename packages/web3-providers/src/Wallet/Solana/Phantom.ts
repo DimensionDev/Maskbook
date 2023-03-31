@@ -20,6 +20,7 @@ export class PhantomProvider
     }
 
     override async setup(): Promise<void> {
+        if (!injectedPhantomProvider.isReady) return
         await injectedPhantomProvider.untilAvailable()
         await injectedPhantomProvider.connect({
             onlyIfTrusted: true,

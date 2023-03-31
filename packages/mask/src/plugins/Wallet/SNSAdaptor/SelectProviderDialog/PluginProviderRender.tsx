@@ -31,6 +31,7 @@ import { useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { useCallback, useState } from 'react'
 import { DialogDismissIconUI } from '../../../../components/InjectedComponents/DialogDismissIcon.js'
 import { ImageIcon } from '@masknet/shared'
+import { openWindow } from '@masknet/shared-base-ui'
 const descriptors: Record<
     NetworkPluginID,
     Array<NetworkDescriptor<Web3Helper.ChainIdAll, Web3Helper.NetworkTypeAll>>
@@ -175,6 +176,14 @@ export function PluginProviderRender({
             )
             if (!target) return
 
+            const isReady = target.Web3State?.Provider?.isReady(provider.type)
+            const downloadLink = target.Web3State?.Others?.providerResolver.providerDownloadLink(provider.type)
+
+            if (!isReady) {
+                if (downloadLink) openWindow(downloadLink)
+                return
+            }
+
             const connection = target.Web3State?.Connection?.getConnection?.({ providerType: provider.type })
 
             const chainId =
@@ -185,11 +194,10 @@ export function PluginProviderRender({
             const networkDescriptor = descriptors[provider.providerAdaptorPluginID].find((x) => x.chainId === chainId)
 
             if (!chainId || !networkDescriptor) return
-            const isReady = target.Web3State?.Provider?.isReady(provider.type)
-            const downloadLink = target.Web3State?.Others?.providerResolver.providerDownloadLink(provider.type)
+
             onProviderIconClicked(networkDescriptor, provider, isReady, downloadLink)
         },
-        [],
+        [snsPlugins, dashboardPlugins],
     )
 
     const getTips = useCallback((provider: Web3Helper.ProviderTypeAll) => {
