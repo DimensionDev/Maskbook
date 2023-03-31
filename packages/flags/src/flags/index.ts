@@ -3,6 +3,7 @@ const isAndroidApp = process.env.architecture === 'app' && process.env.engine ==
 
 const appOnly = process.env.architecture === 'app'
 const devOnly = process.env.NODE_ENV === 'development'
+const prodOnly = process.env.NODE_ENV === 'production'
 const webOnly = process.env.architecture === 'web' || devOnly
 const insiderOnly = process.env.channel === 'insider' || devOnly
 const betaOrInsiderOnly = insiderOnly || process.env.channel === 'beta'
@@ -59,6 +60,13 @@ export const flags = {
     sandboxedPluginRuntime: insiderOnly,
 
     simplehash_ab_percentage: 50,
+
+    /** The earliest version for the sentry to watch events and exceptions. */
+    sentry_earliest_version: process.env.VERSION,
+    sentry_enabled: prodOnly,
+    sentry_event_enabled: prodOnly,
+    sentry_exception_enabled: prodOnly,
+    sentry_fetch_exception_enabled: prodOnly,
 } as const
 
 if (process.env.NODE_ENV === 'development') {

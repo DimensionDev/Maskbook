@@ -1,3 +1,5 @@
+import { Flags } from '@masknet/flags'
+
 function isIgnoredRequest(request: Request) {
     return [
         // Twitter NFT Avatar API
@@ -54,6 +56,7 @@ export async function captureFetchTransaction(
 ) {
     if (process.env.NODE_ENV === 'development') return
     if (options?.status === 'succeed') return
+    if (!Flags.sentry_fetch_exception_enabled) return
     if (isIgnoredRequest(request)) return
 
     const requestHeaders = getHeaders(request.clone())

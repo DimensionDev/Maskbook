@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest'
-import { getAssetFullName } from '../src/helpers/getAssetFullName.js'
+import { getAssetFullName } from '../../src/helpers/getAssetFullName.js'
 
-describe('helpers', () => {
+describe('getAssetFullName', () => {
     test.each([
         { address: '', contract: 'contract', name: '', tokenId: '', expected: 'contract' },
         { address: '', contract: '', name: '', tokenId: '123', expected: '#123' },
