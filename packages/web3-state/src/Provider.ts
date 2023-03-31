@@ -203,7 +203,7 @@ export class ProviderState<
         if (!result.account) throw new Error('Failed to connect provider.')
 
         // switch the sub-network to the expected one
-        if (chainId !== result.chainId) {
+        if (chainId !== result.chainId && providerType !== 'WalletConnect') {
             await Promise.race([
                 (async () => {
                     await delay(30 /* seconds */ * 1000 /* milliseconds */)

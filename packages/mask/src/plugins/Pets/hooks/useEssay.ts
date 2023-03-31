@@ -11,10 +11,9 @@ export function useEssay(user: User, refresh?: number) {
     const { Storage } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { value } = useAsync(async () => {
         if (!Storage || !user.address) return null
-        const storage = Storage.createRSS3Storage(user.address)
-        const data = await storage.get<EssayRSSNode>('_pet')
-
-        return data?.essay.userId === user.userId ? data.essay : null
+        const storage = Storage.createStringStorage('Pets', user.address)
+        const result = await storage.get<EssayRSSNode>('pet')
+        return result?.essay.userId === user.userId ? result.essay : null
     }, [user, refresh])
 
     return value
@@ -25,7 +24,7 @@ export function useDefaultEssay(user: User) {
     const profileUser = useUser()
     useEffect(() => {
         if (user?.userId || user?.userId !== '$unknown') {
-            const isProfile = user.userId === profileUser.userId
+            const isProfile = user.userId === profileUser?.userId
             const isMASK = user.userId === MASK_TWITTER
             setEssayMeta({
                 image: isMASK ? Punk3D.url : isProfile ? PunkIcon : '',

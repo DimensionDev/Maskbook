@@ -137,8 +137,6 @@ export enum TransactionDescriptorType {
 
 export enum StorageProviderType {
     NextID = 'NextID',
-    // RSS3 File API
-    RSS3 = 'RSS3',
     // KV storage powered by CloudFlare
     KV = 'kv',
 
@@ -1330,7 +1328,6 @@ export interface Web3StorageServiceState {
         },
     ) => Storage
     createKVStorage: (namespace: string) => Storage
-    createRSS3Storage: (namespace: string) => Storage
     createNextIDStorage: (
         proofIdentity: string,
         platform: NextIDPlatform,

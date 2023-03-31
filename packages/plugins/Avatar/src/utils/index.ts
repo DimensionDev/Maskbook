@@ -16,7 +16,7 @@ import {
     NextIDPlatform,
     getSiteType,
 } from '@masknet/shared-base'
-import { NextIDProof, NextIDStorage } from '@masknet/web3-providers'
+import { NextIDProof, NextIDStorageProvider } from '@masknet/web3-providers'
 import type { AllChainsNonFungibleToken, NextIDAvatarMeta } from '../types.js'
 import { PLUGIN_ID } from '../constants.js'
 import { fetchBlob } from '@masknet/web3-providers/helpers'
@@ -101,7 +101,7 @@ async function getAvatarFromNextIDStorage(
     userId: string,
     avatarId?: string,
 ) {
-    const response = await NextIDStorage.getByIdentity<NextIDAvatarMeta>(
+    const response = await NextIDStorageProvider.getByIdentity<NextIDAvatarMeta>(
         persona,
         platform,
         userId.toLowerCase(),

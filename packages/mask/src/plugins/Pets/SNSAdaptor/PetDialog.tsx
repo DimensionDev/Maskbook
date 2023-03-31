@@ -28,9 +28,9 @@ export function PetDialog() {
     const { NFTS_BLOCK_ADDRESS = '' } = usePetConstants()
     useAsync(async () => {
         if (!Storage) return
-        const storage = Storage.createRSS3Storage(NFTS_BLOCK_ADDRESS)
-        const data = await storage.get<ConfigRSSNode>('_pet_nfts')
-        setConfigNFTs(data?.essay)
+        const storage = Storage.createStringStorage('Pets', NFTS_BLOCK_ADDRESS)
+        const result = await storage.get<ConfigRSSNode>('_pet_nfts')
+        setConfigNFTs(result?.essay)
     }, [Storage, NFTS_BLOCK_ADDRESS])
 
     const handleSetDialogClose = () => setStep(PetFriendNFTStep.ShareFriendNFT)

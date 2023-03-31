@@ -62,7 +62,7 @@ export class MaskWalletProvider
             const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
 
             // speed up first paint
-            this.ref.value = uniqWith([...wallets, ...super.wallets], (a, b) => isSameAddress(a.address, b.address))
+            this.ref.value = uniqWith([...super.wallets, ...wallets], (a, b) => isSameAddress(a.address, b.address))
 
             const isRecovery = isExtensionSiteType() && location.href.includes(PopupRoutes.WalletRecovered)
             if (!isRecovery) {
@@ -92,7 +92,7 @@ export class MaskWalletProvider
                             ?.identifier.toText(),
                     }))
 
-                const result = uniqWith([...wallets, ...super.wallets, ...smartPayWallets], (a, b) =>
+                const result = uniqWith([...smartPayWallets, ...super.wallets, ...wallets], (a, b) =>
                     isSameAddress(a.address, b.address),
                 )
 
