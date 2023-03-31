@@ -18,6 +18,7 @@ export enum NextIDPlatform {
     SpaceId = 'space_id',
     Farcaster = 'farcaster',
     Bit = 'dotbit',
+    Unstoppable = 'unstoppabledomains',
 }
 
 export interface NextIDIdentity {
