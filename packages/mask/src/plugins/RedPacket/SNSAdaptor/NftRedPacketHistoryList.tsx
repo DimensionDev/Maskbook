@@ -19,7 +19,7 @@ const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
             width: 568,
             padding: 0,
             boxSizing: 'border-box',
-            height: '100%',
+            height: 474,
             flexDirection: 'column',
             margin: '0 auto',
             overflow: 'auto',
@@ -34,7 +34,7 @@ const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
         placeholder: {
             display: 'flex',
             flexDirection: 'column',
-            height: 240,
+            height: 474,
             justifyContent: 'center',
             alignItems: 'center',
             textAlign: 'center',
@@ -108,7 +108,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
 
     if (loading) {
         return (
-            <Box style={{ height: 240, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
+            <Box style={{ height: 474, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
                 <LoadingBase />
             </Box>
         )

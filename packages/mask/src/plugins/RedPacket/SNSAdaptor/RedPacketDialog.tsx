@@ -36,33 +36,36 @@ import { RedPacketERC20Form } from './RedPacketERC20Form.js'
 import { RedPacketERC721Form } from './RedPacketERC721Form.js'
 import { openComposition } from './openComposition.js'
 
-const useStyles = makeStyles()((theme) => ({
-    dialogContent: {
-        padding: 0,
-        '::-webkit-scrollbar': {
+const useStyles = makeStyles<{ currentTab: 'tokens' | 'collectibles'; showHistory: boolean }>()(
+    (theme, { currentTab, showHistory }) => ({
+        dialogContent: {
+            padding: 0,
+            '::-webkit-scrollbar': {
+                display: 'none',
+            },
+
+            overflowX: 'hidden',
+            overflowY: !showHistory && currentTab === 'tokens' ? 'hidden' : 'auto',
+        },
+        abstractTabWrapper: {
+            width: '100%',
+            paddingBottom: theme.spacing(2),
+        },
+        tab: {
+            height: 36,
+            minHeight: 36,
+        },
+        tabPaper: {
+            backgroundColor: 'inherit',
+        },
+        indicator: {
             display: 'none',
         },
-
-        overflowX: 'hidden',
-    },
-    abstractTabWrapper: {
-        width: '100%',
-        paddingBottom: theme.spacing(2),
-    },
-    tab: {
-        height: 36,
-        minHeight: 36,
-    },
-    tabPaper: {
-        backgroundColor: 'inherit',
-    },
-    indicator: {
-        display: 'none',
-    },
-    tabPanel: {
-        marginTop: 12,
-    },
-}))
+        tabPanel: {
+            marginTop: 12,
+        },
+    }),
+)
 
 enum CreateRedPacketPageStep {
     NewRedPacketPage = 'new',
@@ -84,7 +87,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { pluginID } = useNetworkContext()
 
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
-    const { classes } = useStyles()
+
     const state = useState(DialogTabs.create)
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
@@ -92,6 +95,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
     const approvalDefinition = useActivatedPlugin(PluginID.RedPacket, 'any')
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
+    const { classes } = useStyles({ currentTab, showHistory })
     const chainIdList = compact<ChainId>(
         currentTab === tabs.tokens
             ? approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
@@ -268,7 +272,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                             ? 'calc(100% + 84px)'
                                             : 'auto',
                                     }}>
-                                    <TabPanel value={tabs.tokens} style={{ padding: 0 }}>
+                                    <TabPanel value={tabs.tokens} style={{ padding: 0, height: 474 }}>
                                         <RedPacketERC20Form
                                             origin={settings}
                                             onClose={onClose}
@@ -278,7 +282,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                             onGasOptionChange={handleGasSettingChange}
                                         />
                                     </TabPanel>
-                                    <TabPanel value={tabs.collectibles} style={{ padding: 0 }}>
+                                    <TabPanel
+                                        value={tabs.collectibles}
+                                        style={{ padding: 0, height: openNFTConfirmDialog ? 564 : 474 }}>
                                         <RedPacketERC721Form
                                             openSelectNFTDialog={openSelectNFTDialog}
                                             setOpenSelectNFTDialog={setOpenSelectNFTDialog}

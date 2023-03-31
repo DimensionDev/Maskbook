@@ -284,7 +284,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                 </Box>
             ) : null}
 
-            <Box style={{ width: '100%' }}>
+            <Box style={{ width: '100%', position: 'absolute', bottom: 0 }}>
                 <PluginWalletStatusBar>
                     <WalletConnectedBoundary expectedChainId={chainId}>
                         <EthereumERC20TokenApprovedBoundary

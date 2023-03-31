@@ -105,7 +105,7 @@ export function RouterDialog() {
             titleTail={<Icons.Questions onClick={() => setDialog({ open: true })} />}>
             <DialogContent className={classes.dialogContent}>
                 {queryVerifyLoading ? (
-                    <Box display="flex" justifyContent="center" alignItems="center" minHeight={448}>
+                    <Box display="flex" justifyContent="center" alignItems="center" minHeight={564}>
                         <CircularProgress />
                     </Box>
                 ) : (

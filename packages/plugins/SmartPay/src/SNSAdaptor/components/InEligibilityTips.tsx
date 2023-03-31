@@ -7,7 +7,7 @@ import { SmartPayBanner } from './SmartPayBanner.js'
 const useStyles = makeStyles()((theme) => ({
     dialogContent: {
         padding: theme.spacing(2),
-        minHeight: 484,
+        minHeight: 564,
         boxSizing: 'border-box',
         '::-webkit-scrollbar': {
             backgroundColor: 'transparent',

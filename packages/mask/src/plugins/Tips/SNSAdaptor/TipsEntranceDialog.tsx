@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'space-between',
     },
     dialogPaper: {
-        height: 612,
+        height: 620,
         width: 600,
     },
     dialogContent: {

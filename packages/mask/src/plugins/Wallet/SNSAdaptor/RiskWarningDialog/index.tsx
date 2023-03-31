@@ -17,6 +17,7 @@ const useStyles = makeStyles()((theme) => ({
         paddingBottom: 0,
         paddingLeft: 16,
         paddingRight: 16,
+        height: 472,
         overflowY: 'hidden',
     },
     buttons: {
