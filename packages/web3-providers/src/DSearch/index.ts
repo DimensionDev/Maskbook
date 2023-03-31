@@ -444,9 +444,10 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
      * @returns
      */
     async search<T extends SearchResult<ChainId, SchemaType> = SearchResult<ChainId, SchemaType>>(
-        keyword: string,
+        keyword_: string,
         type?: SearchResultType,
     ): Promise<T[]> {
+        const keyword = keyword_.toLowerCase()
         // filter out 'domain/xxx' or string ends with punctuation marks like 'eth.'
         if (
             keyword.replace(/([#$])?([\s\w+.])+/, '').length > 0 ||
