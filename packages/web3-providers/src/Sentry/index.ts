@@ -44,6 +44,7 @@ const IGNORE_ERRORS = [
     '[object Promise]',
     'ResizeObserver loop limit exceeded',
     'User rejected the request.',
+    'Non-Error promise rejection captured with keys: message',
 ]
 
 export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
