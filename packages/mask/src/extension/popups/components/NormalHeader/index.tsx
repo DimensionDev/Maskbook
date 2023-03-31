@@ -4,7 +4,7 @@ import { memo, useContext } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, useMatch } from 'react-router-dom'
 import { PageTitleContext } from '../../context.js'
 import { PopupRoutes } from '@masknet/shared-base'
 
@@ -68,6 +68,7 @@ export const NormalHeader = memo<NormalHeaderProps>(({ onlyTitle, onClose }) => 
 
     const showClose = location.pathname === PopupRoutes.ConnectWallet && !goBack
 
+    const matchDeleteWallet = useMatch(PopupRoutes.DeleteWallet)
     if (onlyTitle)
         return (
             <Box className={classes.container} style={{ justifyContent: 'center' }}>
@@ -85,7 +86,12 @@ export const NormalHeader = memo<NormalHeaderProps>(({ onlyTitle, onClose }) => 
     }
 
     return (
-        <Box className={classes.container} style={{ justifyContent: showTitle ? 'center' : 'flex-start' }}>
+        <Box
+            className={classes.container}
+            style={{
+                justifyContent: showTitle ? 'center' : 'flex-start',
+                ...(matchDeleteWallet ? { fixed: 0, position: 'fixed', width: '100%', top: 0 } : {}),
+            }}>
             {showTitle ? (
                 <>
                     <Icons.SquareBack className={classes.back} onClick={() => navigate(-1)} />

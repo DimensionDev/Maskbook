@@ -140,7 +140,7 @@ export function FollowLensDialog() {
     // #endregion
 
     // #region follow and unfollow event handler
-    const [{ loading: followLoading }, handleFollow] = useFollow(profile?.id, followModule, retry)
+    const [{ loading: followLoading }, handleFollow] = useFollow(profile?.id, followModule, !!defaultProfile, retry)
     const [{ loading: unfollowLoading }, handleUnfollow] = useUnfollow(profile?.id, retry)
     // #endregion
 
@@ -190,7 +190,7 @@ export function FollowLensDialog() {
                 variant="roundedContained"
                 className={classes.followAction}
                 disabled={disabled}
-                loading={followLoading || unfollowLoading}
+                loading={followLoading || unfollowLoading || loading}
                 onClick={isFollowing ? handleUnfollow : handleFollow}>
                 {getButtonText()}
             </ActionButton>
