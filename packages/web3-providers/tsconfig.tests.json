@@ -5,5 +5,5 @@
     "tsBuildInfoFile": "./dist/tests.tsbuildinfo"
   },
   "include": ["./**/*.test.ts"],
-  "references": [{ "path": "../flags" }, { "path": "./tsconfig.json" }]
+  "references": [{ "path": "./tsconfig.json" }]
 }
