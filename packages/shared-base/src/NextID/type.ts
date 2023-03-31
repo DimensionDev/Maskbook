@@ -21,11 +21,19 @@ export enum NextIDPlatform {
     Unstoppable = 'unstoppabledomains',
 }
 
+export interface NextIDEnsRecord {
+    category: 'ENS'
+    chain: string
+    address: string
+    id: string
+}
+
 export interface NextIDIdentity {
     uuid: string
     platform: NextIDPlatform
     identity: string
     displayName: string
+    nft: NextIDEnsRecord[]
 }
 
 export interface NextIDErrorBody {
@@ -74,6 +82,8 @@ export interface BindingProof {
      * legacy data
      */
     isPublic?: 0 | 1
+    // Some other related bindings, like some other ens
+    relatedList?: BindingProof[]
 }
 
 interface Pagination {
