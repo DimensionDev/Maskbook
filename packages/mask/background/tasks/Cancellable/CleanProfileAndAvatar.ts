@@ -12,10 +12,12 @@ if (process.env.architecture === 'web') {
 async function cleanRelationDB(anotherList: Set<ProfileIdentifier>) {
     await consistentPersonaDBWriteAccess(async (t) => {
         for await (const x of t.objectStore('relations')) {
-            const profileIdentifier = ProfileIdentifier.from(x.value.profile).expect(
-                `${x.value.profile} should be a ProfileIdentifier`,
-            )
-            if (anotherList.has(profileIdentifier)) x.delete()
+            if (!x.value.profile.includes('$unknow')) {
+                const profileIdentifier = ProfileIdentifier.from(x.value.profile).expect(
+                    `${x.value.profile} should be a ProfileIdentifier`,
+                )
+                if (anotherList.has(profileIdentifier)) x.delete()
+            }
         }
     })
 }
