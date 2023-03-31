@@ -1,5 +1,55 @@
+function isIgnoredRequest(request: Request) {
+    return [
+        // Twitter NFT Avatar API
+        'yb0w3z63oa',
+        // Twitter Identity API
+        'mr8asf7i4h',
+        // NextID
+        'https://proof-service.next.id/v1/proof',
+        // Twitter Assets
+        'https://t.co',
+        'https://pbs.twimg.com',
+        'https://abs.twimg.com',
+        'https://twitter.com',
+        // source code
+        'https://maskbook.pages.dev',
+        // KV
+        'https://kv.r2d2.to/api/com.maskbook.pets',
+        'https://kv.r2d2.to/api/com.maskbook.user',
+        // ScamDB
+        'https://scam.mask.r2d2.to',
+        // RSS3 domain query
+        'https://rss3.domains/name',
+        // CDN
+        /* cspell:disable-next-line */
+        'cdninstagram.com',
+        /* cspell:disable-next-line */
+        'fbcdn.net',
+        'imgix.net',
+    ].some((x) => request.url.includes(x))
+}
+
+function getHeaders(requestOrResponse?: Request | Response) {
+    try {
+        if (!requestOrResponse) return 'N/A'
+        return JSON.stringify(Object.fromEntries(requestOrResponse.headers.entries()))
+    } catch {
+        return 'N/A'
+    }
+}
+
+async function getBody(requestOrResponse?: Request | Response) {
+    try {
+        const text = await requestOrResponse?.text()
+        return text ?? 'N/A'
+    } catch {
+        return 'N/A'
+    }
+}
+
 export async function captureFetchException(request: Request, response?: Response) {
     if (process.env.NODE_ENV === 'development') return
+    if (isIgnoredRequest(request)) return
 
     const requestHeaders = getHeaders(request.clone())
     const responseHeaders = getHeaders(response?.clone())
@@ -41,22 +91,4 @@ export async function captureFetchException(request: Request, response?: Respons
 
     span.finish()
     transaction.finish()
-}
-
-function getHeaders(requestOrResponse?: Request | Response) {
-    try {
-        if (!requestOrResponse) return 'N/A'
-        return JSON.stringify(Object.fromEntries(requestOrResponse.headers.entries()))
-    } catch {
-        return 'N/A'
-    }
-}
-
-async function getBody(requestOrResponse?: Request | Response) {
-    try {
-        const text = await requestOrResponse?.text()
-        return text ?? 'N/A'
-    } catch {
-        return 'N/A'
-    }
 }
