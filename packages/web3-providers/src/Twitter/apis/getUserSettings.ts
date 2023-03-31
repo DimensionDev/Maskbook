@@ -19,7 +19,7 @@ export async function getUserSettings() {
                 local: TwitterBaseAPI.UserSettings
             }>
 
-            resolve(event_.target.result.local)
+            resolve(event_.target.result?.local)
         })
         query.addEventListener('error', (error) => {
             reject(error)
