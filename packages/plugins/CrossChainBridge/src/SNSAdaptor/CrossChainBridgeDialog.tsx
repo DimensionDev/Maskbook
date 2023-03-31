@@ -7,7 +7,7 @@ import { InjectedDialog } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
-        maxHeight: 510,
+        height: 532,
         padding: theme.spacing(2),
     },
     bridgeItem: {

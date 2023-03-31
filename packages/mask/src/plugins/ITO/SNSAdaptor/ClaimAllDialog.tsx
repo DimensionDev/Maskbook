@@ -136,7 +136,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            height: 350,
+            height: 438,
         },
 
         lockIcon: {

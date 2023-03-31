@@ -124,7 +124,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         padding: theme.spacing(2),
-        minHeight: 484,
+        minHeight: 564,
         boxSizing: 'border-box',
     },
     bottomFixed: { height: 68, boxSizing: 'border-box' },

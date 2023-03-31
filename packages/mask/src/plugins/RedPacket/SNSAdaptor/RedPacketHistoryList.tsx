@@ -14,8 +14,8 @@ const useStyles = makeStyles()((theme) => {
         root: {
             display: 'flex',
             padding: 0,
+            height: 474,
             boxSizing: 'border-box',
-            height: '100%',
             flexDirection: 'column',
             margin: '0 auto',
             overflow: 'auto',
@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => {
         placeholder: {
             display: 'flex',
             flexDirection: 'column',
-            height: 240,
+            height: 474,
             justifyContent: 'center',
             alignItems: 'center',
             textAlign: 'center',
@@ -57,7 +57,7 @@ export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
 
     if (loading) {
         return (
-            <Box style={{ height: 240, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
+            <Box style={{ height: 474, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
                 <LoadingBase />
             </Box>
         )

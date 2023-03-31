@@ -38,7 +38,7 @@ const useStyles = makeStyles<{
             gridTemplateRows: '100px',
             gridGap: 10,
             justifyContent: 'space-between',
-            height: 320,
+            height: 386,
             width: props.shouldScroll && process.env.engine !== 'firefox' ? 583 : 570,
             scrollbarColor: `${theme.palette.maskColor.secondaryLine} ${theme.palette.maskColor.secondaryLine}`,
             scrollbarWidth: 'thin',

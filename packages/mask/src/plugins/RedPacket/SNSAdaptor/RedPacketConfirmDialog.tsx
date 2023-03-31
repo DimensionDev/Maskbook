@@ -39,6 +39,7 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.background.default,
         color: theme.palette.text.primary,
         padding: theme.spacing(1.2),
+        marginTop: 108,
         marginBottom: theme.spacing(1),
     },
     token: {
