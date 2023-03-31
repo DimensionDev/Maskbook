@@ -51,5 +51,14 @@
     "upload_file_title$failed": "파일 업로드 실패",
     "upload_file_message$failed": "최대 파일 사이즈 10MB를 초과합니다.",
     "save_file_title$success": "파일 저장 성공",
-    "save_file_title$failed": "파일 저장 실패"
+    "save_file_title$failed": "파일 저장 실패",
+    "save_file_message$success": "{{name}} 이미 파일 서비스에 저장되었습니다.",
+    "save_file_message$failed": "파일 저장 실패, 다시 시도 하세요.",
+    "delete_file_title$success": "삭제 성공",
+    "delete_file_title$failed": "삭제 실패",
+    "delete_file_message$success": "파일 {{name}} 삭제 성공",
+    "delete_file_message$failed": "삭제 실패, 다시 시도 하세요.",
+    "upload_tips": "파일 브러우저 버튼을 클릭하여 업로드할 파일을 선택하세요.",
+    "file_chip_single": "첨부 파일: {{name}}{{size}}",
+    "file_chip_multiple": "{{count}} 파일 선택됨"
 }
