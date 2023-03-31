@@ -1,13 +1,7 @@
 import { fetchJSON } from '../entry-helpers.js'
 import { SIMPLE_HASH_URL } from './constants.js'
 import type { Asset, Collection } from './type.js'
-import {
-    type NonFungibleAsset,
-    TokenType,
-    scale10,
-    SourceType,
-    type NonFungibleCollection,
-} from '@masknet/web3-shared-base'
+import { type NonFungibleAsset, TokenType, SourceType, type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, chainResolver, WNATIVE, isValidDomain, isValidChainId } from '@masknet/web3-shared-evm'
 import { createPermalink } from '../NFTScan/helpers/EVM.js'
 import { getAssetFullName } from '../helpers/getAssetFullName.js'
@@ -41,7 +35,7 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
         },
         priceInToken: asset.last_sale
             ? {
-                  amount: scale10(asset.last_sale.total_price, WNATIVE[chainId].decimals).toFixed(),
+                  amount: asset.last_sale.total_price.toString(),
                   // FIXME: cannot get payment token
                   token:
                       asset.last_sale.payment_token?.symbol === 'ETH'
