@@ -1,3 +1,5 @@
+import { Flags } from '@masknet/flags'
+
 function isIgnoredRequest(request: Request) {
     return [
         // Twitter NFT Avatar API
@@ -47,8 +49,14 @@ async function getBody(requestOrResponse?: Request | Response) {
     }
 }
 
-export async function captureFetchException(request: Request, response?: Response) {
+export async function captureFetchTransaction(
+    request: Request,
+    response?: Response,
+    options?: { status?: 'succeed' | 'failed'; startAt?: number; endAt?: number },
+) {
     if (process.env.NODE_ENV === 'development') return
+    if (options?.status === 'succeed') return
+    if (!Flags.sentry_fetch_exception_enabled) return
     if (isIgnoredRequest(request)) return
 
     const requestHeaders = getHeaders(request.clone())
@@ -58,6 +66,9 @@ export async function captureFetchException(request: Request, response?: Respons
 
     const transaction = Sentry.startTransaction({
         name: request.url,
+    })
+    const span = transaction.startChild({
+        op: 'task',
         tags: {
             source: new URL(request.url).host,
             method: request.method.toUpperCase(),
@@ -77,9 +88,9 @@ export async function captureFetchException(request: Request, response?: Respons
             response_status: response?.statusText,
             response_redirected: response?.redirected,
         },
-    })
-    const span = transaction.startChild({
-        op: 'task',
+        status: options?.status,
+        startTimestamp: options?.startAt,
+        endTimestamp: options?.endAt,
         description: [
             `Failed to fetch: ${request.url}`,
             `  with Request Headers: ${requestHeaders}`,

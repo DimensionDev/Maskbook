@@ -1,4 +1,5 @@
 import '@sentry/tracing'
+import { Flags } from '@masknet/flags'
 import { Breadcrumbs, Event, GlobalHandlers } from '@sentry/browser'
 import {
     getSiteType,
@@ -10,8 +11,15 @@ import {
 } from '@masknet/shared-base'
 import { formatMask } from '@masknet/web3-shared-base'
 import { TelemetryAPI } from '../types/Telemetry.js'
+import { isNewerThan } from '../helpers/isNewerThan.js'
 
 const IGNORE_ERRORS = [
+    // FIXME
+    'timeout in mutex storage.',
+
+    // ignore
+    'execution reverted',
+    'Failed to fetch',
     'At least one of the attempts fails.',
     'Extension context invalidated.',
     '[object Promise]',
@@ -40,6 +48,8 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
             environment: process.env.NODE_ENV,
             tracesSampleRate: 0.1,
             beforeSend(event) {
+                if (!isNewerThan(process.env.VERSION, Flags.sentry_earliest_version)) return null
+
                 if (event.exception?.values?.some((x) => IGNORE_ERRORS.some((y) => x.value?.includes(y)))) return null
 
                 if (event.message) {
@@ -185,6 +195,8 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
 
     captureEvent(options: TelemetryAPI.EventOptions) {
         if (this.status === 'off') return
+        if (!Flags.sentry_enabled) return
+        if (!Flags.sentry_event_enabled) return
         if (process.env.NODE_ENV === 'development') {
             console.log(`[LOG EVENT]: ${JSON.stringify(this.createEvent(options))}`)
         } else {
@@ -202,6 +214,8 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
 
     captureException(options: TelemetryAPI.ExceptionOptions) {
         if (this.status === 'off') return
+        if (!Flags.sentry_enabled) return
+        if (!Flags.sentry_exception_enabled) return
         if (process.env.NODE_ENV === 'development') {
             console.log(`[LOG EXCEPTION]: ${JSON.stringify(this.createException(options))}`)
         } else {
