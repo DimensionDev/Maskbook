@@ -1,9 +1,9 @@
 import { Icons } from '@masknet/icons'
 import { isNonNull } from '@masknet/kit'
 import { type BindingProof, NextIDPlatform, CrossIsolationMessages } from '@masknet/shared-base'
-import { useMenuConfig, useSharedI18N } from '@masknet/shared'
+import { CopyButton, useMenuConfig, useSharedI18N } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
-import { makeStyles } from '@masknet/theme'
+import { MaskColors, makeStyles } from '@masknet/theme'
 import { resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
 import { Button, MenuItem, Typography, alpha, type MenuProps } from '@mui/material'
 import { debounce, uniqBy } from 'lodash-es'
@@ -15,11 +15,10 @@ import { resolveNextIDPlatformIcon } from './utils.js'
 const useStyles = makeStyles()((theme) => {
     return {
         socialName: {
-            color: theme.palette.maskColor.dark,
+            color: theme.palette.maskColor.main,
             fontWeight: 400,
             marginLeft: 4,
             fontSize: 14,
-            marginRight: theme.spacing(2),
         },
         iconStack: {
             height: 28,
@@ -52,10 +51,10 @@ const useStyles = makeStyles()((theme) => {
             boxSizing: 'border-box',
             padding: theme.spacing(0.5),
             borderRadius: 4,
-            color: theme.palette.maskColor.dark,
+            color: theme.palette.maskColor.main,
             display: 'block',
             '&:hover': {
-                background: theme.palette.maskColor.publicBg,
+                background: theme.palette.maskColor.bg,
             },
             marginBottom: 6,
             '&:last-of-type': {
@@ -67,6 +66,19 @@ const useStyles = makeStyles()((theme) => {
             height: 40,
             display: 'flex',
             alignItems: 'center',
+        },
+        address: {
+            fontSize: '10px',
+            lineHeight: '10px',
+            color: MaskColors.light.text.secondary,
+            marginTop: 2,
+            display: 'flex',
+            alignItems: 'center',
+        },
+        copyButton: {
+            marginLeft: theme.spacing(0.5),
+            color: MaskColors.light.text.secondary,
+            padding: 0,
         },
         related: {
             whiteSpace: 'break-spaces',
@@ -82,11 +94,11 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             marginLeft: 'auto',
         },
-        accountNameInList: {
-            color: theme.palette.maskColor.dark,
+        accountName: {
+            color: theme.palette.maskColor.main,
             textOverflow: 'ellipsis',
             overflow: 'hidden',
-            marginRight: theme.spacing(1),
+            paddingRight: theme.spacing(1),
         },
         menu: {
             width: 320,
@@ -95,7 +107,7 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: 16,
             padding: theme.spacing(1.5),
             translate: theme.spacing(1.9, 1),
-            background: theme.palette.maskColor.white,
+            background: theme.palette.maskColor.bottom,
             scrollbarColor: `${theme.palette.maskColor.secondaryLine} ${theme.palette.maskColor.secondaryLine}`,
             scrollbarWidth: 'thin',
             '::-webkit-scrollbar': {
@@ -156,12 +168,19 @@ export function SocialAccountList({ nextIdBindings, disablePortal, ...rest }: So
                     <SocialTooltip key={i} platform={x.source} hidden={hideToolTip}>
                         <MenuItem
                             className={classes.listItem}
+                            disableRipple
                             disabled={false}
                             onClick={() => openWindow(resolveNextIDPlatformLink(x.platform, x.identity, x.name))}>
                             <div className={classes.content}>
                                 {Icon ? <Icon size={20} /> : null}
-                                <Typography className={cx(classes.socialName, classes.accountNameInList)}>
+                                <Typography className={cx(classes.socialName, classes.accountName)} component="div">
                                     {x.name || x.identity}
+                                    {x.platform === NextIDPlatform.ENS ? (
+                                        <div className={classes.address}>
+                                            {x.identity}
+                                            <CopyButton text={x.identity} size={14} className={classes.copyButton} />
+                                        </div>
+                                    ) : null}
                                 </Typography>
                                 {x.platform === NextIDPlatform.LENS ? (
                                     <Button

@@ -5,7 +5,7 @@ import ConnectButton from './ConnectButton.js'
 import { useAsyncRetry } from 'react-use'
 import Avatar from 'boring-avatars'
 import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { FormattedAddress, CopyIconLink } from '@masknet/shared'
+import { FormattedAddress, CopyButton } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { TabContext, TabPanel } from '@mui/lab'
 import { useI18N } from '../locales/index.js'
@@ -218,7 +218,7 @@ const Profile = ({ url }: { url: string }) => {
                                 rel="noopener noreferrer">
                                 <Icons.PopupLink className={classes.PopupLink} />
                             </Link>
-                            <CopyIconLink text={identity?.address ?? ''} className={classes.icon} />
+                            {identity?.address ? <CopyButton text={identity.address} className={classes.icon} /> : null}
                         </Stack>
                     </Stack>
 
