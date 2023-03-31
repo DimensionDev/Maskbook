@@ -1,4 +1,4 @@
-import { captureFetchException } from './captureFetchException.js'
+import { captureFetchTransaction } from './captureFetchTransaction.js'
 
 const { fetch: originalFetch } = globalThis
 
@@ -13,6 +13,9 @@ export async function fetch(input: RequestInfo | URL, init?: RequestInit, fetche
     let hasError = false
     let response: Response | undefined
 
+    // log span if request error
+    const startAt = Date.now()
+
     try {
         response = await fetcher(input, init)
         if (!response.ok) hasError = true
@@ -21,6 +24,10 @@ export async function fetch(input: RequestInfo | URL, init?: RequestInit, fetche
         hasError = true
         throw error
     } finally {
-        if (hasError) await captureFetchException(new Request(input, init), response)
+        await captureFetchTransaction(new Request(input, init), response, {
+            status: !hasError ? 'succeed' : 'failed',
+            startAt,
+            endAt: Date.now(),
+        })
     }
 }
