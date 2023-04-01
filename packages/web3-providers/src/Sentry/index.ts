@@ -12,6 +12,7 @@ import {
 import { formatMask } from '@masknet/web3-shared-base'
 import { TelemetryAPI } from '../types/Telemetry.js'
 import { isNewerThan } from '../helpers/isNewerThan.js'
+import { isSameVersion } from '../helpers/isSameVersion.js'
 
 const IGNORE_ERRORS = [
     // FIXME
@@ -55,7 +56,7 @@ export class SentryAPI implements TelemetryAPI.Provider<Event, Event> {
             tracesSampleRate: Flags.sentry_sample_rate,
             beforeSend(event) {
                 if (
-                    process.env.VERSION !== Flags.sentry_earliest_version &&
+                    !isSameVersion(process.env.VERSION, Flags.sentry_earliest_version) &&
                     !isNewerThan(process.env.VERSION, Flags.sentry_earliest_version)
                 )
                     return null
