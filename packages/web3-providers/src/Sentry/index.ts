@@ -18,6 +18,12 @@ const IGNORE_ERRORS = [
     'timeout in mutex storage.',
 
     // ignore
+    "Cannot perform 'getPrototypeOf' on a proxy that has been revoked",
+    'UnknownError: The databases() promise was rejected.',
+    'DataError: Failed to read large IndexedDB value',
+    "Failed to execute 'open' on 'CacheStorage': Unexpected internal error.",
+    'UnknownError: Internal error opening backing store for indexedDB.open.',
+    'TimeoutError: Transaction timed out due to inactivity.',
     'execution reverted',
     'Failed to fetch',
     'At least one of the attempts fails.',
